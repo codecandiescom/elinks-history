@@ -1,3 +1,262 @@
+Thu May  8 21:50:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, main.h, cookies/cookies.c, cookies/cookies.h,
+	dialogs/menu.h, document/html/parser.c, document/html/parser.h,
+	document/html/renderer.h, document/html/tables.c,
+	elusive/layouter/box.h, elusive/parser/syntree.h,
+	globhist/dialogs.c, globhist/globhist.c, globhist/globhist.h,
+	intl/charsets.c, intl/charsets.h, intl/gettext/gettextP.h,
+	intl/gettext/libintl.h, intl/gettext/loadmsgcat.c,
+	intl/gettext/localcharset.c, lowlevel/af_unix.c,
+	lowlevel/af_unix.h, lowlevel/connect.c, lowlevel/home.h,
+	lowlevel/select.c, lowlevel/select.h, lowlevel/sysname.h,
+	lowlevel/timer.h, lowlevel/ttime.h, osdep/os_dep.c,
+	sched/download.h, sched/sched.c, sched/sched.h, sched/session.h,
+	ssl/ssl.h, terminal/kbd.h, terminal/terminal.c,
+	terminal/terminal.h, util/blacklist.h, util/encoding.c,
+	util/error.h, util/string.h:
+
+	Strict prototypes. void func() -> void func(void).  
+
+Thu May  8 21:46:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/urlhist.c, config/urlhist.h, osdep/os_dep.h,
+	protocol/http/auth.h:
+
+	Strict prototypes. void func() -> void func(void).  
+
+Thu May  8 21:42:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/backend/common.h, bookmarks/bookmarks.h,
+	bookmarks/dialogs.c, config/conf.h, config/dialogs.c,
+	config/kbdbind.c, config/kbdbind.h, config/options.c,
+	config/options.h:
+
+	Strict prototypes. void func() -> void func(void).  
+
+Thu May  8 18:13:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* BUGS:
+
+	'The black blocked cursor bug' added. Due to the many bugs that has
+	been found they have been grouped to give a better overview. Hope
+	the groupings are sane enough.  
+
+Thu May  8 15:39:58 2003  Laurent Monin <zas@norz.org>:
+
+	* TODO, src/config/options.c, src/viewer/text/view.c:
+
+	Highlight colour for text matched after a search is now
+	configurable. TODO was updatecd.  
+
+Thu May  8 14:19:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Cleanup and optimization of count_menu_size().  
+
+Thu May  8 14:02:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c, TODO:
+
+	Search string in "Search string not found" error box is now
+	included. TODO was updated.  
+
+Thu May  8 12:44:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	About gg: & co.  
+
+Thu May  8 12:42:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Please maintain proper blanklining.  
+
+Thu May  8 12:41:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Something about modularization and scripting.  
+
+Thu May  8 12:33:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Please maintain proper blanklining.  
+
+Thu May  8 12:11:32 2003  Miciah Dashiel <theweirdo@subdimension.com>:
+
+	* src/document/options.c:
+
+	Check o1->num_links_key == o2->num_links_key in compare_opt so that 
+	document.browse.links.number_keys_select_link doesn't exhibit 
+	seemingly random I'll-work-when-I-want-to behaviour.  
+
+Thu May  8 11:51:33 2003  Miciah Dashiel <theweirdo@subdimension.com>:
+
+	* src/document/options.c:
+
+	Itty-bitty fix that really has no effect:
+	document.browse.links.numbering is a boolean, use get_opt_bool, not
+	get_opt_int, to get its value.  
+
+Thu May  8 11:46:43 2003  Miciah Dashiel <theweirdo@subdimension.com>:
+
+	* src/viewer/text/view.c:
+
+	Fix a logic inversion in jump_to_link_number that pasky made in his
+	2003/05/06 14:52:12 commit when reverting one of zas' clean-ups.  
+
+Thu May  8 11:39:23 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	A new feature was added to BUGS file, now it triggers one ;).  
+
+Thu May  8 11:17:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Some bugs (infinite loop) in menu hotkeys handling were fixed. Code
+	cleanup, mainmenu and menu use the same code now regarding hotkeys,
+	2 new functions were introduced, one for handling hotkeys, the
+	others to handle not_so_hot_keys ;).  
+
+Thu May  8 11:07:29 2003  Miciah Dashiel <theweirdo@subdimension.com>:
+
+	* BUGS, TODO:
+
+	More BUGS and TODO items. Small changes requested by pasky.  
+
+Thu May  8 06:12:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/preface.xml:
+
+	s/elink/elinks/ thanks to witekfl 
+
+Thu May  8 01:30:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.c:
+
+	Oops, forgot to pass length of the string to decode_session_info().  
+
+Thu May  8 01:28:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Typo fix.  
+
+Thu May  8 01:27:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Compilation fix, missing typecast.  
+
+Thu May  8 01:24:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	Minor coding style example correction.  
+
+Thu May  8 01:23:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/hardio.c:
+
+	Debugging code is now cleaner and is useable with hard_read() too.  
+
+Thu May  8 01:20:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Reindented and removed some useless temporary variables (insert
+	param parsing output directly to the struct initial_session_info).  
+
+Thu May  8 01:18:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Tiny cleanup.  
+
+Thu May  8 01:16:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: osdep/os_dep.c, sched/session.c:
+
+	Rewritten open_in_new_tab() functional part to emit EV_INIT instead
+	of EV_RESIZE, removed code duplicate with process_session_info() and
+	make use of struct initial_session_info.  
+
+Thu May  8 01:07:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	read_session_info() -> process_session_info() 
+
+Thu May  8 01:06:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, terminal/terminal.c:
+
+	Store struct initial_session_info directly in ev->b, decoding it
+	ASAP. read_session_info() now takes directly struct
+	initial_session_info.  
+
+Thu May  8 00:57:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: session.c, session.h:
+
+	Introduced struct initial_session_info (being freed by newly
+	introduced free_session_info), which carries the initial session
+	information, converted from the session init string by newly
+	introduced decode_session_info() (moved some code from
+	read_session_info()).  
+
+Thu May  8 00:40:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	read_session_info(): minor reinentation, removed one useless
+	argument.  
+
+Thu May  8 00:38:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	read_session_info() cleanup.  
+
+Thu May  8 00:37:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	check_not_so_hot_keys() was introduced to check keys in menus, this
+	one permits search of the next entry with first letter matching key.
+	The behavior has changed: now selection wraps around the list of
+	entries.  
+
+Thu May  8 00:28:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	XMP tag support, patch by witekfl.  
+
+Wed May  7 23:18:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Hotkeys are now working in main menu. Fix a fix of a cleanup...  
+
+Wed May  7 23:04:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/hardio.c:
+
+	Ooops, incomplete patch, fixed.  
+
+Wed May  7 22:48:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.h:
+
+	A bad patch was reverted, it fixes the bug known as the TODO bug.  
+
 Wed May  7 20:57:20 2003  Laurent Monin <zas@norz.org>:
 
 	* src/terminal/hardio.c:

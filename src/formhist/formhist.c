@@ -1,14 +1,13 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.27 2003/08/22 15:13:17 zas Exp $ */
-
-/* TODO: Remember multiple login for the same form
- * TODO: Password manager GUI (here?) */
+/* $Id: formhist.c,v 1.28 2003/08/29 21:21:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #ifdef FORMS_MEMORY
+
+#include <string.h>
 
 #include "elinks.h"
 
@@ -23,6 +22,10 @@
 #include "util/secsave.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
+
+/* TODO: Remember multiple login for the same form.
+ * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky). */
+
 
 #define FORMHIST_FILENAME		"formhist"
 
@@ -345,9 +348,9 @@ memorize_form(struct session *ses, struct list_head *submit,
 	msg_box(ses->tab->term, NULL, 0,
 		N_("Form memory"), AL_CENTER,
 		N_("Should I remember this login?\n\n"
-			"Please note that passwords will be stored "
-			"obscured (i.e. unencrypted) in a file on your disk.\n\n"
-			"If you are using a valuable password answer NO."),
+		"Please note that passwords will be stored "
+		"obscured (i.e. unencrypted) in a file on your disk.\n\n"
+		"If you are using a valuable password answer NO."),
 		form, 2,
 		N_("Yes"), remember_form, B_ENTER,
 		N_("No"), free_form, NULL);

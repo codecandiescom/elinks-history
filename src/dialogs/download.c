@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.67 2004/11/21 14:53:30 zas Exp $ */
+/* $Id: download.c,v 1.68 2005/02/09 09:32:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,9 +260,15 @@ display_download(struct terminal *term, struct file_download *file_download,
 	add_dlg_button(dlg, _("Background", term), B_ENTER | B_ESC, dlg_undisplay_download, NULL);
 	add_dlg_button(dlg, _("Background with notify", term), B_ENTER | B_ESC, dlg_set_notify, NULL);
 	add_dlg_button(dlg, _("Abort", term), 0, dlg_abort_download, NULL);
-	add_dlg_button(dlg, _("Abort and delete file", term), 0, push_delete_button, NULL);
 
-	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT);
+	/* Downloads scheduled to be opened by external handlers are always
+	 * deleted. */
+	if (!file_download->external_handler) {
+		add_dlg_button(dlg, _("Abort and delete file", term), 0, push_delete_button, NULL);
+		add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT);
+	} else {
+		add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT - 1);
+	}
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

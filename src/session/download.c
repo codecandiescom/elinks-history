@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.341 2005/02/03 22:28:02 jonas Exp $ */
+/* $Id: download.c,v 1.342 2005/02/09 09:32:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,8 +110,6 @@ init_file_download(struct uri *uri, struct session *ses, unsigned char *file, in
 
 	object_nolock(file_download, "file_download"); /* Debugging purpose. */
 	add_to_list(downloads, file_download);
-
-	display_download(ses->tab->term, file_download, ses);
 
 	return file_download;
 }
@@ -753,6 +751,8 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	file_download->last_pos = resume ? (int) buf.st_size : 0;
 
+	display_download(ses->tab->term, file_download, ses);
+
 	load_uri(file_download->uri, ses->referrer, &file_download->download,
 		 PRI_DOWNLOAD, CACHE_MODE_NORMAL, file_download->last_pos);
 }
@@ -823,6 +823,10 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	}
 
 	file_download->external_handler_flags = type_query->external_handler_flags;
+
+	/* Done here and not in init_file_download() so that the external
+	 * handler can become initialized. */
+	display_download(term, file_download, type_query->ses);
 
 	change_connection(&type_query->download, &file_download->download, PRI_DOWNLOAD, 0);
 	done_type_query(type_query);

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.42 2004/04/02 16:35:41 jonas Exp $ */
+/* $Id: task.c,v 1.43 2004/04/02 16:38:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -479,16 +479,17 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	ses->reloadlevel = cache_mode;
 
 	u = translate_url(url, ses->tab->term->cwd);
+	pos = extract_fragment(u);
+
 	if (!u) {
 		struct download stat = { NULL_LIST_HEAD, NULL, NULL,
 					 NULL, NULL, NULL,
 					 S_BAD_URL, PRI_CANCEL, 0 };
 
+		if (pos) mem_free(pos);
 		print_error_dialog(ses, &stat);
 		return;
 	}
-
-	pos = extract_fragment(u);
 
 	if (ses->task.type == task) {
 		if (!strcmp(struri(ses->loading_uri), u)) {

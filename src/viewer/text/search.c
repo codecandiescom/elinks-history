@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.48 2003/10/07 22:10:54 jonas Exp $ */
+/* $Id: search.c,v 1.49 2003/10/10 19:49:12 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,11 +289,8 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	unsigned char *doctmp;
 	int doclen;
 	int found = 0;
-	int reg_extended = get_opt_int("document.browse.search.regex") == 2
-			   ? REG_EXTENDED : 0;
-	int case_insensitive = get_opt_int("document.browse.search.case")
-				? 0 : REG_ICASE;
 	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
+	int regex_flags = REG_NEWLINE;
 	register int i;
 	int reg_err;
 	regex_t regex;
@@ -312,8 +309,13 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	}
 	doc[doclen] = 0;
 
-	reg_err = regcomp(&regex, text,
-			  REG_NEWLINE | case_insensitive | reg_extended);
+	if (get_opt_int("document.browse.search.regex") == 2)
+		regex_flags |= REG_EXTENDED;
+
+	if (!get_opt_bool("document.browse.search.case"))
+		regex_flags |= REG_ICASE;
+
+	reg_err = regcomp(&regex, text, regex_flags);
 	if (reg_err) {
 		/* TODO: error message */
 		regfree(&regex);

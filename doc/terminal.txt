@@ -2,7 +2,7 @@
 
 ELinks uses neither (n)curses nor termcap/terminfo so unless you are using a
 terminal that is known by ELinks and have a built-in configuration (see below
-for a list) you might be required to do a little configuring of how your
+for a list) it might be required that you do a little configuring of how your
 terminal should be handled. The easiest way to do this is using the Terminal
 Options dialog located in the Setup submenu of the Main menu.
 
@@ -14,6 +14,13 @@ For example always setting TERM to xterm-color can lead to problems if you run
 ELinks under the linux console. This is because the linux console does not
 support underlining and ELinks will not know that underlined characters will
 have to be color highlighted so they stand out.
+
+In short, ELinks does not use termcap or terminfo. ELinks uses $TERM, but only
+to distinguish between terminals in its own configuration. That is, you need
+only configure your terminal within ELinks: Go to the Setup menu and select
+Terminal Options. If $TERM is set to 'screen' when you configure ELinks'
+terminal settings, ELinks will remember to use those settings when $TERM is
+'screen'.
 
 
 Options
@@ -104,7 +111,7 @@ submenu in the Main menu the rest can be configured using the Terminal Options
 dialog.
 
 
-Built-in configurations
+Terminal Configurations
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Built-in configurations exists for the following terminals:
@@ -112,3 +119,8 @@ Built-in configurations exists for the following terminals:
 	linux, vt100, vt110, xterm, xterm-color and xterm-256color
 
 The last configuration requires that support for 256 is compiled in.
+
+GNU Screen is VT100-compatible, so select 'VT 100 frames'. GNU Screen also
+supports colors just fine, so select '16 colors'; or if you are running
+Screen within a terminal emulator that supports 256 colors and you have
+compiled both Screen and ELinks to support it, choose '256 colors'.

@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.9 2003/01/02 05:25:15 pasky Exp $ */
+/* $Id: os_dep.h,v 1.10 2003/01/20 13:58:43 pasky Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -29,6 +29,9 @@
 #ifdef __EMX__
 #define strcasecmp stricmp
 #define strncasecmp strnicmp
+#ifndef HAVE_STRCASECMP
+#define HAVE_STRCASECMP
+#endif
 #ifndef HAVE_STRNCASECMP
 #define HAVE_STRNCASECMP
 #endif

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.53 2003/06/10 14:50:55 pasky Exp $ */
+/* $Id: download.c,v 1.54 2003/06/11 05:08:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -684,7 +684,7 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	/* Check if the file already exists (file != ofile). */
 	file = get_unique_name(ofile);
 
-	if (!file || overwrite == 1 || !strcmp(ofile, file)) {
+	if (!file || overwrite == 1 || file == ofile) {
 		/* Still nothing special to do... */
 		if (file != ofile) mem_free(ofile);
 		callback(term, file, data, 0);

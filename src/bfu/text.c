@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.61 2003/11/29 05:21:50 jonas Exp $ */
+/* $Id: text.c,v 1.62 2003/11/29 05:40:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,6 @@ split_lines(struct widget_data *widget_data, int max_width)
 	widget_data->cdata = (unsigned char *) lines;
 	widget_data->info.text.lines = line;
 	widget_data->info.text.max_width = max_width;
-	int_bounds(&widget_data->info.text.current, 0, line);
 
 	return lines;
 }
@@ -152,13 +151,11 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 			return;
 
 		lines = (unsigned char **) widget_data->cdata;
-		current = widget_data->info.text.current;
 
 		/* Make maximum number of lines available */
-		if (widget_data->info.text.lines - current < widget_data->h) {
-			current = widget_data->info.text.lines - widget_data->h;
-			widget_data->info.text.current = current;
-		}
+		int_bounds(&widget_data->info.text.current,
+			   0, widget_data->info.text.lines - widget_data->h);
+		current = widget_data->info.text.current;
 
 		/* Set the current position */
 		text = lines[current];
@@ -243,12 +240,21 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	switch (kbd_action(KM_MAIN, ev, NULL)) {
 		case ACT_UP:
-			current = int_max(current - 1, 0);
+		case ACT_SCROLL_UP:
+			current--;
 			break;
 
 		case ACT_DOWN:
-			if (widget_data->h < lines - current)
-				current = int_min(current + 1, lines);
+		case ACT_SCROLL_DOWN:
+			current++;
+			break;
+
+		case ACT_PAGE_UP:
+			current -= widget_data->h;
+			break;
+
+		case ACT_PAGE_DOWN:
+			current += widget_data->h;
 			break;
 
 		case ACT_HOME:
@@ -262,6 +268,8 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		default:
 			return EVENT_NOT_PROCESSED;
 	}
+
+	int_bounds(&current, 0, lines - widget_data->h);
 
 	if (current != widget_data->info.text.current) {
 		struct terminal *term = dlg_data->win->term;

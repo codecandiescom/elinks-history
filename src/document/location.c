@@ -1,5 +1,5 @@
 /* Locations handling */
-/* $Id: location.c,v 1.9 2002/11/30 21:59:10 pasky Exp $ */
+/* $Id: location.c,v 1.10 2002/12/01 19:44:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,10 @@ copy_location(struct location *dst, struct location *src)
 		nf = mem_alloc(sizeof(struct frame) + strlen(f->vs.url) + 1);
 		if (nf) {
 			nf->name = stracpy(f->name);
+			if (!nf->name) {
+				mem_free(nf);
+				return;
+			}				
 			nf->redirect_cnt = 0;
 			copy_vs(&nf->vs, &f->vs);
 			add_to_list(dst->frames, nf);

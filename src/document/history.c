@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.11 2002/11/30 21:59:10 pasky Exp $ */
+/* $Id: history.c,v 1.12 2002/12/01 19:42:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,7 +146,8 @@ go_back(struct session *ses)
 	}
 	if (fd && fd->f_data && fd->f_data->url) {
 		ses->ref_url = init_str();
-		add_to_str(&ses->ref_url, &l, fd->f_data->url);
+		if (ses->ref_url)
+			add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
 
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL,
@@ -175,7 +176,8 @@ go_unback(struct session *ses)
 	}
 	if (fd && fd->f_data && fd->f_data->url) {
 		ses->ref_url = init_str();
-		add_to_str(&ses->ref_url, &l, fd->f_data->url);
+		if (ses->ref_url)
+			add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
 
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL,

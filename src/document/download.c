@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.51 2002/11/26 17:22:06 zas Exp $ */
+/* $Id: download.c,v 1.52 2002/12/01 19:34:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,7 +92,7 @@ abort_download(struct download *down)
 	if (down->ask) delete_window(down->ask);
 	if (down->stat.state >= 0)
 		change_connection(&down->stat, NULL, PRI_CANCEL);
-	mem_free(down->url);
+	if (down->url) mem_free(down->url);
 
 	if (down->handle != -1) {
 		prealloc_truncate(down->handle, down->last_pos);
@@ -104,7 +104,7 @@ abort_download(struct download *down)
 		mem_free(down->prog);
 	}
 
-	mem_free(down->file);
+	if (down->file) mem_free(down->file);
 	del_from_list(down);
 	mem_free(down);
 }
@@ -607,6 +607,8 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe, int res
 		/* The tilde will be expanded by get_unique_name() */
 		file = get_unique_name(file);
 	}
+	
+	if (!file) return -1;
 
 	h = open(file, O_CREAT | O_WRONLY | (sf && !resume ? O_EXCL : 0),
 		 sf ? 0600 : 0666);
@@ -656,16 +658,17 @@ unsigned char *
 get_temp_name(unsigned char *url)
 {
 	int l, nl;
-	unsigned char *name = init_str();
+	unsigned char *name;
 	unsigned char *fn, *fnn, *fnnn, *s;
 	unsigned char *nm = tempnam(NULL, "links");
 
-
-	if (!nm || !name) {
-		if (name) mem_free(name);
+	if (!nm) return NULL;
+	
+	name = init_str();
+	if (!name) {
+		mem_free(nm);
 		return NULL;
 	}
-
 	nl = 0;
 	add_to_str(&name, &nl, nm);
 	free(nm);

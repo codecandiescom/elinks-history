@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.96 2004/04/13 22:47:32 jonas Exp $ */
+/* $Id: dialogs.c,v 1.97 2004/04/13 23:15:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,8 +30,17 @@ static struct option *
 get_real_opt(unsigned char *base, unsigned char *id)
 {
 	struct option *opt = get_opt_rec_real(config_options, base);
+	struct string translated;
 
-	return (opt ? get_opt_rec_real(opt, id) : NULL);
+	assert(opt);
+
+	if (init_string(&translated)
+	    && add_optname_to_string(&translated, id, strlen(id)))
+		opt = get_opt_rec_real(opt, translated.source);
+
+	done_string(&translated);
+
+	return opt;
 }
 
 
@@ -47,35 +56,24 @@ really_del_ext(void *fcp)
 void
 menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 {
-	struct string translated;
 	struct option *opt = NULL;
 	unsigned char *extension = fcp;
 
 	if (!extension) return;
 
-	if (!init_string(&translated)) {
-		mem_free(extension);
-		return;
-	}
-
-	if (add_optname_to_string(&translated, extension, strlen(extension)))
-		opt = get_real_opt("mime.extension", translated.source);
-
+	opt = get_real_opt("mime.extension", extension);
 	if (!opt) {
-		done_string(&translated);
 		mem_free(extension);
 		return;
 	}
 
-	msg_box(term, getml(translated.source, NULL), MSGBOX_FREE_TEXT,
+	msg_box(term, getml(extension, NULL), MSGBOX_FREE_TEXT,
 		N_("Delete extension"), AL_CENTER,
 		msg_text(term, N_("Delete extension %s -> %s?"),
 			 extension, opt->value.string),
-		translated.source, 2,
+		extension, 2,
 		N_("Yes"), really_del_ext, B_ENTER,
 		N_("No"), NULL, B_ESC);
-
-	mem_free(extension);
 }
 
 
@@ -116,20 +114,14 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	new = (struct extension *) get_dialog_offset(dlg, MIME_WIDGETS_COUNT);
 
 	if (fcp) {
-		struct option *opt = NULL;
-		struct string translated;
-
-		if (init_string(&translated)
-		    && add_optname_to_string(&translated, fcp, strlen(fcp)))
-			opt = get_real_opt("mime.extension", translated.source);
+		struct option *opt = get_real_opt("mime.extension", fcp);
 
 		if (opt) {
 			safe_strncpy(new->ext, fcp, MAX_STR_LEN);
 			safe_strncpy(new->ct, opt->value.string, MAX_STR_LEN);
-			safe_strncpy(new->ext_orig, translated.source, MAX_STR_LEN);
+			safe_strncpy(new->ext_orig, fcp, MAX_STR_LEN);
 		}
 
-		done_string(&translated);
 		mem_free(fcp);
 	}
 

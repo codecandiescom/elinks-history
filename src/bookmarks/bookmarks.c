@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.65 2002/12/20 15:26:28 zas Exp $ */
+/* $Id: bookmarks.c,v 1.66 2003/04/19 12:25:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,12 +108,17 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 	/* Actually add it */
 	/* add_at_pos() is here to add it at the _end_ of the list,
 	 * not vice versa. */
-	if (place)
-	add_at_pos((struct bookmark *) (root ? root->child.prev
-					      : bookmarks.prev),
-		   bm);
-	else
-		add_to_list((root ? root->child : bookmarks), bm);
+	if (place) {
+		if (root)
+			add_at_pos((struct bookmark *) root->child.prev, bm);
+		else
+			add_at_pos((struct bookmark *) bookmarks.prev, bm);
+	} else {
+		if (root)
+			add_to_list(root->child, bm);
+		else
+			add_to_list(bookmarks, bm);
+	}
 	bookmarks_dirty = 1;
 
 	/* Setup box_item */
@@ -134,13 +139,21 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 
 	strcpy(bm->box_item->text, bm->title);
 
-	if (place)
-	add_at_pos((struct listbox_item *) (root ? root->box_item->child.prev
-						 : bookmark_box_items.prev),
-		   bm->box_item);
-	else
-		add_to_list((root ? root->box_item->child : bookmark_box_items),
-			    bm->box_item);
+	if (place) {
+		if (root)
+			add_at_pos((struct listbox_item *)
+					root->box_item->child.prev,
+					bm->box_item);
+		else
+			add_at_pos((struct listbox_item *)
+					bookmark_box_items.prev,
+					bm->box_item);
+	} else {
+		if (root)
+			add_to_list(root->box_item->child, bm->box_item);
+		else
+			add_to_list(bookmark_box_items, bm->box_item);
+	}
 
 	return bm;
 }

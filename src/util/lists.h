@@ -1,9 +1,13 @@
-/* $Id: lists.h,v 1.3 2002/12/21 01:06:17 zas Exp $ */
+/* $Id: lists.h,v 1.4 2003/04/19 12:25:39 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
 
 #include "util/error.h" /* do_not_optimize_here() */
+
+/* BEWARE! You MAY NOT use ternary operator as parameter to there functions,
+ * because they are likely to take & of the parameter. Worst of all, it will
+ * work with gcc. But nowhere else (at least not w/ tcc). */
 
 struct list_head {
 	void *next;

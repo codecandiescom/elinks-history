@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.323 2004/06/12 15:16:50 jonas Exp $ */
+/* $Id: menu.c,v 1.324 2004/06/12 15:25:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -549,34 +549,24 @@ free_history_lists(void)
 }
 
 
-static struct string *
-init_session_info_string(struct string *parameters, int id)
-{
-	int ring = get_opt_int_tree(cmdline_options, "session-ring");
-
-	if (!init_string(parameters)) return NULL;
-
-	add_format_to_string(parameters, "-base-session %d ", id);
-	if (ring) add_format_to_string(parameters, " -session-ring %d ", ring);
-
-	return parameters;
-}
-
-
 void
 open_uri_in_new_window(struct session *ses, struct uri *uri,
 		       enum term_env_type env)
 {
+	int ring = get_opt_int_tree(cmdline_options, "session-ring");
 	struct string parameters;
-	int base_session_id;
+	int id;
 
 	assert(env && ses);
 	if_assert_failed return;
 
-	base_session_id = add_session_info(ses, uri);
-	if (base_session_id < 1) return;
+	id = add_session_info(ses, uri);
+	if (id < 1) return;
 
-	if (!init_session_info_string(&parameters, base_session_id)) return;
+	if (!init_string(&parameters)) return;
+
+	add_format_to_string(&parameters, "-base-session %d ", id);
+	if (ring) add_format_to_string(&parameters, " -session-ring %d ", ring);
 
 	open_new_window(ses->tab->term, path_to_exe, env, parameters.source);
 	done_string(&parameters);

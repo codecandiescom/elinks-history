@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.325 2004/03/31 22:00:51 jonas Exp $ */
+/* $Id: session.c,v 1.326 2004/03/31 22:42:38 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -544,7 +544,7 @@ process_file_requests(struct session *ses)
 	while (more) {
 		more = 0;
 		foreach (ftl, ses->more_files) {
-			unsigned char *referer = NULL;
+			struct uri *referer = NULL;
 
 			if (ftl->req_sent)
 				continue;
@@ -553,7 +553,7 @@ process_file_requests(struct session *ses)
 			if (doc_view && doc_view->document)
 				referer = doc_view->document->uri;
 
-			load_url(ftl->url, referer,
+			load_url(ftl->url, struri(referer),
 				 &ftl->stat, ftl->pri, CACHE_MODE_NORMAL, -1);
 			more = 1;
 		}
@@ -908,7 +908,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 		l->download.end = (void *)doc_end_load;
 		load_url(l->vs.url, ses->ref_url, &l->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
-			unsigned char *referer = NULL;
+			struct uri *referer = NULL;
 
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
@@ -917,7 +917,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 			if (doc_view && doc_view->document)
 				referer = doc_view->document->uri;
 
-			load_url(ftl->url, referer,
+			load_url(ftl->url, struri(referer),
 				 &ftl->stat, ftl->pri, cache_mode, -1);
 		}
 	}
@@ -1010,17 +1010,16 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 }
 
 void
-set_session_referrer(struct session *ses, unsigned char *referrer)
+set_session_referrer(struct session *ses, struct uri *referrer)
 {
 	if (ses->ref_url) mem_free(ses->ref_url);
 
-	if (referrer) {
+	if (referrer && referrer->protocol != PROTOCOL_FILE) {
 		/* Don't set referrer for file protocol */
-		referrer = strncasecmp("file:", referrer, 5)
-			 ? stracpy(referrer) : NULL;
+		ses->ref_url = stracpy(struri(referrer));
+	} else {
+		ses->ref_url = NULL;
 	}
-
-	ses->ref_url = referrer;
 }
 
 void

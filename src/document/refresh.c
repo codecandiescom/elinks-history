@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.18 2004/03/31 22:00:51 jonas Exp $ */
+/* $Id: refresh.c,v 1.19 2004/03/31 22:42:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "document/refresh.h"
 #include "document/view.h"
 #include "lowlevel/select.h"
+#include "protocol/uri.h"
 #include "sched/session.h"
 #include "sched/task.h"
 #include "util/error.h"
@@ -73,7 +74,7 @@ do_document_refresh(void *data)
 		if (!strcasecmp(refresh->url, type_query->url))
 			return;
 
-	if (!strcasecmp(refresh->url, ses->doc_view->document->uri)) {
+	if (!strcasecmp(refresh->url, struri(ses->doc_view->document->uri))) {
 		/* If the refreshing is for the current URI, force a reload. */
 		reload(ses, CACHE_MODE_FORCE_RELOAD);
 	} else {

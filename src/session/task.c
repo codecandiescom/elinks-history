@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.31 2004/03/31 22:00:51 jonas Exp $ */
+/* $Id: task.c,v 1.32 2004/03/31 22:42:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,7 +340,7 @@ do_move(struct session *ses, struct download **stat)
 		else
 			*stat = NULL;
 
-		set_session_referrer(ses, get_cache_uri(ce));
+		set_session_referrer(ses, get_cache_uri_struct(ce));
 
 		switch (task) {
 		case TASK_NONE:
@@ -462,9 +462,10 @@ static void
 do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	      enum task_type task, enum cache_mode cache_mode, int do_referrer)
 {
-	unsigned char *u, *referrer = NULL;
+	unsigned char *u;
 	unsigned char *pos;
 	enum protocol protocol = known_protocol(url, NULL);
+	struct uri *referrer = NULL;
 
 	if (protocol == PROTOCOL_UNKNOWN) {
 		print_unknown_protocol_dialog(ses);

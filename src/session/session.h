@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.102 2004/03/30 23:05:25 jonas Exp $ */
+/* $Id: session.h,v 1.103 2004/03/31 22:42:38 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -16,6 +16,7 @@ struct location;
 struct session_status;
 struct term_event;
 struct terminal;
+struct uri;
 struct window;
 
 /* This is used to pass along the initial session parameters. */
@@ -195,7 +196,7 @@ go_unback(struct session *ses)
 	go_history(ses, cur_loc(ses)->next);
 }
 
-void set_session_referrer(struct session *ses, unsigned char *referrer);
+void set_session_referrer(struct session *ses, struct uri *referrer);
 
 void print_error_dialog(struct session *, struct download *);
 void print_unknown_protocol_dialog(struct session *);

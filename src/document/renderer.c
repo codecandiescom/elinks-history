@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.36 2004/03/31 22:00:51 jonas Exp $ */
+/* $Id: renderer.c,v 1.37 2004/03/31 22:42:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 		fr = cache_entry->frag.next;
 
 		if (list_empty(cache_entry->frag) || fr->offset || !fr->length) {
-			document->title = get_no_post_url(document->uri, NULL);
+			document->title = get_no_post_url(struri(document->uri), NULL);
 
 		} else if (document->options.plain) {
 			render_plain_document(cache_entry, document);

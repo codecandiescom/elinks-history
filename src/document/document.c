@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.54 2004/03/31 22:00:51 jonas Exp $ */
+/* $Id: document.c,v 1.55 2004/03/31 22:42:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "document/options.h"
 #include "document/refresh.h"
 #include "modules/module.h"
+#include "protocol/uri.h"
 #include "terminal/draw.h"
 #include "util/color.h"
 #include "util/lists.h"
@@ -42,7 +43,7 @@ init_document(unsigned char *uristring, struct cache_entry *cache_entry,
 
 	if (!document) return NULL;
 
-	document->uri = stracpy(uristring);
+	document->uri = get_uri(uristring);
 	if (!document->uri) {
 		mem_free(document);
 		return NULL;
@@ -110,13 +111,13 @@ done_document(struct document *document)
 	assertm(!is_object_used(document), "Attempt to free locked formatted data.");
 	if_assert_failed return;
 
-	ce = find_in_cache(document->uri);
+	ce = find_in_cache(struri(document->uri));
 	if (!ce)
 		INTERNAL("no cache entry for document");
 	else
 		object_unlock(ce);
 
-	if (document->uri) mem_free(document->uri);
+	if (document->uri) done_uri(document->uri);
 	if (document->title) mem_free(document->title);
 	if (document->frame_desc) free_frameset_desc(document->frame_desc);
 	if (document->refresh) done_document_refresh(document->refresh);
@@ -184,7 +185,7 @@ get_cached_document(unsigned char *uri, struct document_options *options,
 	struct document *document;
 
 	foreach (document, format_cache) {
-		if (strcmp(document->uri, uri)
+		if (strcmp(struri(document->uri), uri)
 		    || compare_opt(&document->options, options))
 			continue;
 
@@ -238,7 +239,7 @@ shrink_format_cache(int whole)
 
 		/* Destroy obsolete renderer documents which are already
 		 * out-of-sync. */
-		ce = find_in_cache(document->uri);
+		ce = find_in_cache(struri(document->uri));
 		assertm(ce, "cached formatted document has no cache entry");
 		if (ce->id_tag == document->id_tag) continue;
 

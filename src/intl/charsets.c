@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.101 2004/09/15 23:45:09 pasky Exp $ */
+/* $Id: charsets.c,v 1.102 2004/09/16 00:32:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,7 +607,7 @@ convert_string(struct conv_table *convert_table,
 
 	/* Buffer allocation */
 
-	buffer = mem_alloc(ALLOC_GR + !!callback /* trailing \0 */);
+	buffer = mem_alloc(ALLOC_GR + 1 /* trailing \0 */);
 	if (!buffer) return NULL;
 
 	/* Iterate ;-) */

@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.12 2003/06/20 17:30:12 pasky Exp $ */
+/* $Id: version.c,v 1.13 2003/07/26 20:34:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,6 +71,9 @@ get_dyn_full_version(struct terminal *term, int more)
 #endif
 #ifdef HAVE_LUA
 		"Lua", ", ",
+#endif
+#ifdef HAVE_GUILE
+		"Guile", ", ",
 #endif
 #ifdef IPV6
 		"IPv6", ", ",

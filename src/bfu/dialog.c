@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.163 2004/11/17 01:20:39 zas Exp $ */
+/* $Id: dialog.c,v 1.164 2004/11/17 01:23:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,15 +247,18 @@ select_button_by_flag(struct dialog_data *dlg_data, int flag)
 static void
 select_button_by_key(struct dialog_data *dlg_data, struct term_event *ev)
 {
+	unsigned char key;
 	int i;
 
 	if (!check_kbd_label_key(ev)) return;
+
+	key = toupper(get_kbd_key(ev));
 
 	for (i = 0; i < dlg_data->n; i++) {
 		struct widget *widget = &dlg_data->dlg->widgets[i];
 
 		if (widget->type == WIDGET_BUTTON
-		    && toupper(widget->text[0]) == toupper(get_kbd_key(ev))) {
+		    && toupper(widget->text[0]) == key) {
 			select_dlg_item(dlg_data, i);
 			break;
 		}

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.26 2003/12/05 18:08:13 pasky Exp $ */
+/* $Id: cgi.c,v 1.27 2003/12/05 18:11:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,8 @@ set_vars(struct connection *conn, unsigned char *script)
 			break;
 	}
 
-	setenv("HTTP_ACCEPT", "*/*", 1);
+	/* Protection against vim cindent bugs ;-). */
+	setenv("HTTP_ACCEPT", "*/" "*", 1);
 
 	return 0;
 }

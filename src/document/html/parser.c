@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.92 2003/05/12 20:23:58 pasky Exp $ */
+/* $Id: parser.c,v 1.93 2003/05/15 22:28:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2126,13 +2126,16 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	cols = get_num(attr, "cols");
 	if (cols <= 0) cols = HTML_DEFAULT_INPUT_SIZE;
-	cols++;
+	cols++; /* Add 1 column, other browsers may have different
+		   behavior here (mozilla adds 2) --Zas */
+	if (cols > d_opt->xw) cols = d_opt->xw;
+	fc->cols = cols;
+
 	rows = get_num(attr, "rows");
 	if (rows <= 0) rows = 1;
-	if (cols > d_opt->xw) cols = d_opt->xw;
-	if (rows > d_opt->xw) rows = d_opt->xw;
-	fc->cols = cols;
+	if (rows > d_opt->yw) rows = d_opt->yw;
 	fc->rows = rows;
+
 	fc->wrap = has_attr(attr, "wrap");
 	fc->maxlength = get_num(attr, "maxlength");
 	if (fc->maxlength == -1) fc->maxlength = MAXINT;

@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.21 2004/01/18 15:30:18 pasky Exp $ */
+/* $Id: value.c,v 1.22 2004/01/18 15:32:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,9 +95,6 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
 			   unsigned char **string)
 {
-	unsigned char *nstring;
-	int weight;
-
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
 	if (!strncasecmp(*string, "normal", 6)) {

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.70 2003/12/21 14:51:20 zas Exp $ */
+/* $Id: auth.c,v 1.71 2004/03/20 18:32:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,9 +69,9 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
 #define set_auth_user(e, u) \
 	do { \
-		int userlen = int_min((u)->userlen, HTTP_AUTH_USER_MAXLEN - 1); \
+		int userlen = int_min((u)->user.length, HTTP_AUTH_USER_MAXLEN - 1); \
 		if (userlen) \
-			memcpy((e)->user, (u)->user, userlen); \
+			memcpy((e)->user, (u)->user.source, userlen); \
 		(e)->user[userlen] = 0; \
 	} while (0)
 
@@ -167,9 +167,12 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 			}
 		}
 
+		/* FIXME: strcmp() can handle NULL strings so maybe the empty
+		 * check can be removed. --jonas */
 		if (!*entry->user
-		    || (!uri->user || !uri->userlen ||
-			strlcmp(entry->user, -1, uri->user, uri->userlen))) {
+		    || (string_is_empty(&uri->user))
+			|| string_strlcmp(&uri->user, entry->user, -1)) {
+
 			entry->valid = 0;
 			set_auth_user(entry, uri);
 		}
@@ -177,6 +180,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		if (!*entry->password
 		    || (!uri->password || !uri->passwordlen ||
 			strlcmp(entry->password, -1, uri->password, uri->passwordlen))) {
+
 			entry->valid = 0;
 			set_auth_password(entry, uri);
 		}
@@ -218,14 +222,14 @@ find_auth(struct uri *uri)
 	mem_free(newurl);
 
 	/* Check is user/pass info is in url. */
-	if (uri->userlen || uri->passwordlen) {
+	if (!string_is_empty(&uri->user) || uri->passwordlen) {
 		/* If there's no entry a new one is added else if the entry
 		 * does not correspond to any existing one update it with the
 		 * user and password from the uri. */
 		if (!entry
 		    || (auth_entry_has_userinfo(entry)
 		        && !strlcmp(entry->password, -1, uri->password, uri->passwordlen)
-		        && !strlcmp(entry->user, -1, uri->user, uri->userlen))) {
+		        && !string_strlcmp(&uri->user, entry->user, -1))) {
 
 			entry = add_auth_entry(uri, NULL);
 		}

@@ -1,9 +1,9 @@
-/* $Id: uri.h,v 1.49 2003/12/01 14:10:38 pasky Exp $ */
+/* $Id: uri.h,v 1.50 2004/03/20 18:32:45 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
 
-struct string;
+#include "util/string.h"
 
 #define POST_CHAR 1
 
@@ -31,8 +31,7 @@ struct uri {
 	 * PROTOCOL_USER or an uri string should be composed. */
 	int protocollen;
 
-	unsigned char *user;
-	int userlen;
+	struct string user;
 
 	unsigned char *password;
 	int passwordlen;

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.67 2004/03/09 12:24:38 jonas Exp $ */
+/* $Id: string.h,v 1.68 2004/03/20 18:32:46 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -139,6 +139,13 @@ struct string *init_string(struct string *string);
 /* Resets @string and free()s the @source member. */
 void done_string(struct string *string);
 
+#define string_is_empty(string) (!(string)->source || !(string)->length)
+
+#define string_strlcmp(string, str, len) \
+	strlcmp((string)->source, (string)->length, str, len)
+
+#define string_strlcasecmp(string, str, len) \
+	strlcmp((string)->source, (string)->length, str, len)
 
 struct string *add_to_string(struct string *string, unsigned char *text);
 struct string *add_char_to_string(struct string *string, unsigned char character);

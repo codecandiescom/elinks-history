@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.120 2003/12/21 14:56:55 zas Exp $ */
+/* $Id: ftp.c,v 1.121 2004/03/20 18:32:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -280,10 +280,10 @@ ftp_login(struct connection *conn)
 	}
 
 	add_to_string(&cmd, "USER ");
-	if (conn->uri.userlen) {
+	if (!string_is_empty(&conn->uri.user)) {
 		struct uri *uri = &conn->uri;
 
-		add_bytes_to_string(&cmd, uri->user, uri->userlen);
+		add_string_to_string(&cmd, &uri->user);
 	} else {
 		add_to_string(&cmd, "anonymous");
 	}

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.84 2004/02/21 06:29:27 witekfl Exp $ */
+/* $Id: uri.c,v 1.85 2004/03/20 18:32:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,6 +93,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	protocol = known_protocol(uristring, &prefix_end);
 	if (protocol == PROTOCOL_INVALID) return 0;
 
+	set_string_magic(&uri->user);
+
 	known = (protocol != PROTOCOL_UNKNOWN);
 	uri->protocollen = prefix_end - uristring;
 
@@ -137,11 +139,11 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		unsigned char *user_end = strchr(prefix_end, ':');
 
 		if (!user_end || user_end > host_end) {
-			uri->user = prefix_end;
-			uri->userlen = host_end - prefix_end;
+			uri->user.source = prefix_end;
+			uri->user.length = host_end - prefix_end;
 		} else {
-			uri->user = prefix_end;
-			uri->userlen = user_end - prefix_end;
+			uri->user.source = prefix_end;
+			uri->user.length = user_end - prefix_end;
 			uri->password = user_end + 1;
 			uri->passwordlen = host_end - user_end - 1;
 		}
@@ -267,8 +269,8 @@ add_uri_to_string(struct string *string, struct uri *uri,
 			add_to_string(string, "//");
  	}
 
- 	if (wants(URI_USER) && uri->userlen) {
-		add_bytes_to_string(string, uri->user, uri->userlen);
+ 	if (wants(URI_USER) && !string_is_empty(&uri->user)) {
+		add_string_to_string(string, &uri->user);
 
  		if (wants(URI_PASSWORD) && uri->passwordlen) {
 			add_char_to_string(string, ':');

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.366 2004/04/14 19:04:12 jonas Exp $ */
+/* $Id: session.c,v 1.367 2004/04/15 02:24:00 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -651,17 +651,19 @@ copy_session(struct session *old, struct session *new)
  *	1: URI length <int>
  *	2: URI length bytes containing the URI <unsigned char>*
  *
- * SESSION_MAGIC(1, 0) supports multiple URIs and ofcourse magic variables:
+ * SESSION_MAGIC(1, 0) supports multiple URIs, remote opening and magic variables:
  *
  *	0: base-session ID <int>
  *	1: Session magic <int>
+ *	2: Remote <int>
  *	3: NUL terminated URIs <unsigned char>+
  */
 
 struct string *
 create_session_info(struct string *info, int cp, struct list_head *url_list)
 {
-	int numbers[2] = { cp, SESSION_MAGIC(1, 0) };
+	int remote = get_opt_bool_tree(cmdline_options, "remote-session");
+	int numbers[3] = { cp, SESSION_MAGIC(1, 0), remote };
 	unsigned char *number_chars = (unsigned char *) numbers;
 
 	if (init_string(info)
@@ -699,11 +701,16 @@ decode_session_info(const void *pdata)
 	info->base_session = *(data++);
 
 	magic = *(data++);
-	str   = (unsigned char *) data;
-	len  -= 2 * sizeof(int);
 
 	switch (magic) {
 	case SESSION_MAGIC(1, 0):
+		if (len < 3 * sizeof(int)) break;
+
+		info->remote = *(data++);
+
+		str  = (unsigned char *) data;
+		len  -= 3 * sizeof(int);
+
 		/* Extract multiple NUL terminated URIs */
 		while (len > 0) {
 			unsigned char *end = memchr(str, 0, len);
@@ -715,17 +722,23 @@ decode_session_info(const void *pdata)
 			len -= end - str + 1;
 			str  = end + 1;
  		}
-		break;
+		return info;
 
 	default:
 		/* The old format. Extract URI containing @magic bytes */
+		str   = (unsigned char *) data;
+		len  -= 2 * sizeof(int);
+
 		if (magic <= 0 || len <= 0 || magic > len)
-			break;
+			return info;
 
 		add_to_string_list(&info->url_list, str, magic);
+
+		return info;
 	}
 
-	return info;
+	mem_free(info);
+	return NULL;
 }
 
 
@@ -765,13 +778,20 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 	 * with id of base-session (its current document association only,
 	 * rather) to the newly created session. */
 	foreach (s, sessions) {
-		if (s->id == info->base_session) {
+		/* If processing session info from a -remote instance we just
+		 * want to hook up with the master. */
+		if (info->remote && s->tab->term->master) {
+			ses = s;
+			break;
+
+		} else if (s->id == info->base_session) {
 			copy_session(s, ses);
 			break;
 		}
 	}
 
 	if (!list_empty(info->url_list)) {
+		int first = !info->remote;
 		struct string_list_item *str;
 
 		foreach (str, info->url_list) {
@@ -780,15 +800,25 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 			if (!url) continue;
 
-			if (str == (void *) info->url_list.next) {
+			if (first) {
 				/* Open first url. */
 				goto_url_with_hook(ses, url);
+				first = 0;
 			} else {
 				/* Open next ones. */
 				open_url_in_new_tab(ses, url, 1);
 			}
 			mem_free(url);
 		}
+
+	} else if (info->remote) {
+		/* FIXME: This is not perfect. Doing multiple -remote with no
+		 * URLs will make the goto dialogs inaccessible. Maybe we
+		 * should not support this kind of thing or make the window
+		 * focus detecting code more intelligent. --jonas */
+		open_url_in_new_tab(ses, NULL, 0);
+		/* We can't create new window in EV_INIT handler! */
+		register_bottom_half(dialog_goto_url_open, ses);
 
 #ifdef CONFIG_BOOKMARKS
 	} else if (!first_use
@@ -801,8 +831,8 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		unsigned char *h = get_homepage_url();
 
 		if (!h || !*h) {
-			if (get_opt_int("ui.startup_goto_dialog")
-			    && !first_use) {
+			if ((get_opt_int("ui.startup_goto_dialog")
+			    && !first_use)) {
 				/* We can't create new window in EV_INIT
 				 * handler! */
 				register_bottom_half(dialog_goto_url_open, ses);
@@ -812,8 +842,14 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		}
 	}
 
-	free_session_info(info);
-	return 0;
+	{
+		/* If it is a remote session we return non zero so that the
+		 * terminal of the remote session will be destroyed ASAP. */
+		int remote = info->remote;
+
+		free_session_info(info);
+		return remote;
+	}
 }
 
 void

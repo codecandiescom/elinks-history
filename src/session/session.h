@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.116 2004/04/14 19:04:12 jonas Exp $ */
+/* $Id: session.h,v 1.117 2004/04/15 02:24:01 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -23,7 +23,9 @@ struct window;
 struct initial_session_info {
 	/* The session whose state to copy, -1 is none. */
 	int base_session;
-	/* The URL we should load immediatelly (or NULL). */
+	/* Whether to open URLs in the master using -remote */
+	int remote;
+	/* The URL we should load immediatelly. */
 	struct list_head url_list;
 };
 

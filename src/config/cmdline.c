@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.51 2004/04/15 00:55:11 jonas Exp $ */
+/* $Id: cmdline.c,v 1.52 2004/04/15 02:24:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -549,6 +549,10 @@ struct option_info cmdline_options_info[] = {
 	INIT_OPT_BOOL("", N_("Check if ELinks is currently running"),
 		"ping", 0, 0,
 		N_("Checks if ELinks is currently running by trying to connect the interlink socket.")),
+
+	INIT_OPT_BOOL("", N_("Open URLs in an already running ELinks"),
+		"remote-session", 0, 0,
+		N_("Connect to an already running instance if any and open URLs.")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, MAXINT, 0,

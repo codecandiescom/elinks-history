@@ -1,4 +1,4 @@
-/* $Id: main.h,v 1.18 2004/04/15 00:55:11 jonas Exp $ */
+/* $Id: main.h,v 1.19 2004/04/15 02:24:00 jonas Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
@@ -10,6 +10,7 @@ enum retval {
 	RET_SYNTAX,
 	RET_FATAL,
 	RET_PING,
+	RET_REMOTE,
 };
 
 extern enum retval retval;

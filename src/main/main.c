@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.197 2004/04/15 00:55:11 jonas Exp $ */
+/* $Id: main.c,v 1.198 2004/04/15 02:24:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,6 +164,12 @@ init(void)
 	} else if (get_opt_bool_tree(cmdline_options, "ping")) {
 		/* If no instance was running return ping failure */
 		if (fd == -1) retval = RET_PING;
+		terminate = 1;
+
+	} else if (get_opt_bool_tree(cmdline_options, "remote-session")
+		   && fd == -1) {
+		/* The remote session(s) can not be created */
+		retval = RET_REMOTE;
 		terminate = 1;
 
 	} else {

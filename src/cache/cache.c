@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.149 2004/06/07 16:25:59 jonas Exp $ */
+/* $Id: cache.c,v 1.150 2004/06/07 17:39:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -494,11 +494,13 @@ delete_cache_entry(struct cache_entry *cached)
 	del_from_list(cached);
 
 	if (cached->box_item) done_listbox_item(&cache_browser, cached->box_item);
+
 	if (cached->uri) done_uri(cached->uri);
 	if (cached->proxy_uri) done_uri(cached->proxy_uri);
+	if (cached->redirect) done_uri(cached->redirect);
+
 	mem_free_if(cached->head);
 	mem_free_if(cached->last_modified);
-	if (cached->redirect) done_uri(cached->redirect);
 	mem_free_if(cached->ssl_info);
 	mem_free_if(cached->encoding_info);
 	mem_free_if(cached->etag);

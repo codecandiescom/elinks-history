@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.18 2003/05/08 01:06:47 pasky Exp $ */
+/* $Id: terminal.c,v 1.19 2003/05/08 01:30:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,7 +305,7 @@ test_queue:
 		term->cwd[MAX_CWD_LEN - 1] = 0;
 
 		term->environment = *(int *)(iq + evtermcwd_len);
-		ev->b = (long) decode_session_info(iq + evtermcwd1int_len);
+		ev->b = (long) decode_session_info(iq + evtermcwd1int_len, evtermcwd2int_len);
 		r = evtermcwd2int_len + init_len;
 	}
 

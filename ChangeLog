@@ -1,3 +1,145 @@
+Thu Jun  5 21:54:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Try to workaround buggy FreeBSD libc containing namespace-polluting
+	***** like LIST_HEAD or list_head. Should fix bug 193, reported by
+	Jonas.  
+
+Thu Jun  5 16:55:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memlist.c:
+
+	Reverted bad reindentation.  
+
+Thu Jun  5 16:40:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	A useless call to getml() was removed.  
+
+Thu Jun  5 16:39:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: memlist.c, memlist.h:
+
+	Memlist debug now prints file and line.  
+
+Thu Jun  5 15:45:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Entities cache is now enabled (it will perhaps be disabled at
+	0.5pre1 release). Please report any issue.  
+
+Thu Jun  5 15:28:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/colors.c, lowlevel/af_unix.c,
+	lowlevel/signals.c, osdep/os_dep.c, osdep/win32.c, protocol/ftp.c,
+	protocol/url.h, sched/session.c:
+
+	Functions declarations tidyup.  
+
+Thu Jun  5 14:38:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: version.c, bfu/leds.c, bookmarks/bookmarks.c,
+	bookmarks/backend/common.c, config/conf.c, config/kbdbind.c,
+	config/options.c, cookies/cookies.c, dialogs/menu.c,
+	document/html/parser.c, document/html/renderer.c,
+	elusive/layouter/box.c, elusive/parser/syntree.c,
+	elusive/parser/css/scanner.c, elusive/parser/css/tree.c,
+	globhist/globhist.c, intl/charsets.c, intl/gettext/libintl.c,
+	intl/gettext/localealias.c, lowlevel/home.c, lowlevel/select.c,
+	lowlevel/sysname.c, lowlevel/timer.c, lowlevel/ttime.c,
+	osdep/beos.c, osdep/os_dep.c, protocol/mailcap.c,
+	protocol/http/auth.c, sched/download.c, sched/sched.c,
+	sched/session.c, ssl/ssl.c, terminal/kbd.c, terminal/terminal.c,
+	util/blacklist.c, util/error.c, util/memdebug.c, util/string.c:
+
+	type func() -> type func(void) in declarations.  
+
+Thu Jun  5 14:28:02 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/hacking.txt:
+
+	A note about functions without parameters declaration was added.  
+
+Thu Jun  5 14:23:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/: mime.c, mime.h:
+
+	type func() -> type func(void).  
+
+Thu Jun  5 14:18:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/backend/: common.c, common.h, mailcap.c, mimetypes.c:
+
+	type func() -> type func(void).  
+
+Thu Jun  5 14:15:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Spaces fix.  
+
+Thu Jun  5 14:00:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Move out the parsing of optional fields 
+
+Thu Jun  5 13:49:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Nested error() call moved to the caller so less parameters are
+	needed.  
+
+Thu Jun  5 13:06:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	First step of cleaning ups mailcap support. Rework comments.  
+
+Thu Jun  5 12:08:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/memlist.c:
+
+	Errors are now produced in --enable-debug mode if getml() or
+	add_to_ml() are called with a NULL first element.  
+
+Thu Jun  5 04:58:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/msgbox.c:
+
+	Only freeml() if ml is not NULL.  
+
+Thu Jun  5 00:41:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/msgbox.c:
+
+	Free memory list also before the other two possible returns.  
+
+Wed Jun  4 23:23:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/memlist.c:
+
+	Almost complete rewrite of memory list routines. Useless allocation
+	for empty lists were removed. Comments were added.  
+
+Wed Jun  4 22:43:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	-force-html option for compatibility with lynx introduced, doing
+	essentially the same thing as -default-mime-type text/html. Fixes
+	bug 8. Idea by Boris Filipovic <b.filipovic@centrum.cz>.  
+
+Wed Jun  4 22:21:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/Makefile.am:
+
+	Mark man pages as EXTRA_DIST. Fixes problem reported by Raul.  
+
 Wed Jun  4 22:02:13 2003  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/msgbox.c:

@@ -1,18 +1,18 @@
 # French ELinks translation.
 # Fabrice Haberer-Proust <fric@gmx.li>
-# Laurent Monin <zas@norz.org>, 2001 - 2003
+# Laurent Monin <zas@norz.org>, 2001 - 2004
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-30 22:00+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-12-30 23:28+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:308
 msgid "Close"
@@ -2000,7 +2000,6 @@ msgid "Document meta refresh"
 msgstr "Directive meta refresh"
 
 #: src/config/options.inc:302
-#, fuzzy
 msgid ""
 "Automatically follow document-specified refresh directives ('<meta>\n"
 "refresh' tags). Web-page authors use these to instruct the browser\n"
@@ -2009,15 +2008,17 @@ msgid ""
 "Use the document.browse.minimum_refresh_time to control the minimum\n"
 "number of seconds a refresh will take."
 msgstr ""
-"Automatiquement suivre les directives de rafraichissement spécifiées\n"
-"dans le document. Les auteurs de sites web utilisent celles-ci pour\n"
-"indiquer au navigateur de recharger le document à un intervalle donné\n"
-"ou pour charger une nouvelle page."
+"Automatiquement suivre les directives de rafraîchissement ('tags\n"
+"<meta> refresh') spécifiées dans le document.\n"
+"Les auteurs de sites web utilisent celles-ci pour indiquer au\n"
+"navigateur de recharger le document à un intervalle donné\n"
+"ou pour charger une nouvelle page.\n"
+"Utilisez document.browse.minimum_refresh_time pour contrôler le\n"
+"nombre minimum de secondes un rafraîchissement prendra."
 
 #: src/config/options.inc:309
-#, fuzzy
 msgid "Document meta refresh minimum time"
-msgstr "Directive meta refresh"
+msgstr "Temps minimum pour la directive meta refresh"
 
 #: src/config/options.inc:311
 msgid ""
@@ -2026,6 +2027,11 @@ msgid ""
 "unchanged. It can fix going back in history for some sites that\n"
 "use refreshing with zero values."
 msgstr ""
+"Le nombre minimum de millisecondes qui devra passer avant\n"
+"de rafraîchir. Si il vaut zéro le temps spécifié par le document\n"
+"est utilisé tel quel. Cela peut solutionner les problèmes\n"
+"lors d'un retour dans l'historique sur des sites qui utilisent\n"
+"des valeurs nulles pour le rafraîchissement."
 
 #: src/config/options.inc:316
 msgid "Scroll margin"
@@ -2452,13 +2458,12 @@ msgstr ""
 "à une valeur basse, limitant ainsi le besoin de déroulement horizontal."
 
 #: src/config/options.inc:558
-#, fuzzy
 msgid "Default form input size"
-msgstr "Configuration des couleurs par défaut"
+msgstr "Taille par défaut des entrées de formulaire"
 
 #: src/config/options.inc:560
 msgid "Default form input size if none is specified."
-msgstr ""
+msgstr "Taille par défaut des entrées de formulaire si aucune n'est spécifiée."
 
 #: src/config/options.inc:563
 msgid "Plain rendering"
@@ -3470,15 +3475,16 @@ msgstr ""
 "réduire la largeur des bordures en éditant setup.h."
 
 #: src/config/options.inc:1137
-#, fuzzy
 msgid "Underline hotkeys"
-msgstr "Souligner les liens"
+msgstr "Souligner les raccourcis"
 
 #: src/config/options.inc:1139
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
+"Souligner ou non les raccourcis des menus pour les rendre\n"
+"plus visibles. Le soulignement doit être activé pour le terminal."
 
 #: src/config/options.inc:1143
 msgid "Timer options"
@@ -4094,7 +4100,6 @@ msgid "C~lose all tabs but the current"
 msgstr "Fermer les ~autres onglets"
 
 #: src/dialogs/menu.c:352
-#, fuzzy
 msgid "B~ookmark all tabs"
 msgstr "Signets pour t~ous les onglets"
 
@@ -5210,7 +5215,6 @@ msgid "Dumb prefixes."
 msgstr "Préfixes simples."
 
 #: src/protocol/rewrite/rewrite.c:64
-#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"

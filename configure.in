@@ -547,25 +547,26 @@ if test -z "$disable_spidermonkey"; then
 	if test ! -d "$withval"; then
 		withval="";
 	fi
-	for spidermonkeydir in "$withval" "" /usr /usr/local /opt/spidermonkey /opt/js; do
-		if test "$cf_result" = no; then
-			SPIDERMONKEY_LIBS="-ljs"
+	for spidermonkeydir in "$withval" "" /usr /usr/local /opt/spidermonkey /opt/js /usr/include/smjs; do
+		for spidermonkeylib in js smjs; do
+			if test "$cf_result" = no; then
+				SPIDERMONKEY_LIBS="-l$spidermonkeylib"
 
-			if test ! -z "$spidermonkeydir"; then
-				SPIDERMONKEY_LIBS="-L$spidermonkeydir/lib $SPIDERMONKEY_LIBS"
-				SPIDERMONKEY_CFLAGS="-I$spidermonkeydir/include"
+				if test ! -z "$spidermonkeydir"; then
+					SPIDERMONKEY_LIBS="-L$spidermonkeydir/lib $SPIDERMONKEY_LIBS"
+					SPIDERMONKEY_CFLAGS="-I$spidermonkeydir/include -I$spidermonkeydir"
+				fi
+
+				LIBS="$SPIDERMONKEY_LIBS $LIBS_X"
+				CFLAGS="$CFLAGS_X $SPIDERMONKEY_CFLAGS"
+				CPPFLAGS="$CPPFLAGS_X $SPIDERMONKEY_CFLAGS"
+
+				AC_TRY_LINK([#define XP_UNIX
+					     #include <jsapi.h>],
+					    [JS_GetImplementationVersion()],
+					    cf_result=yes, cf_result=no)
 			fi
-
-			LIBS="$SPIDERMONKEY_LIBS $LIBS_X"
-			CFLAGS="$CFLAGS_X $SPIDERMONKEY_CFLAGS"
-			CPPFLAGS="$CPPFLAGS_X $SPIDERMONKEY_CFLAGS"
-
-			AC_TRY_LINK([#define XP_UNIX
-				     #include <jsapi.h>],
-				    [JS_GetImplementationVersion()],
-				    cf_result=yes, cf_result=no)
-		fi
-		
+		done
 	done
 fi
 

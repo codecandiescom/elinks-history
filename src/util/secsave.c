@@ -1,11 +1,12 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.17 2002/06/22 21:20:53 pasky Exp $ */
+/* $Id: secsave.c,v 1.18 2002/06/22 22:39:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

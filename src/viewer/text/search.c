@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.266 2004/08/09 08:47:34 miciah Exp $ */
+/* $Id: search.c,v 1.267 2004/08/09 09:16:02 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -859,7 +859,8 @@ find_next_do(struct session *ses, struct document_view *doc_view, int direction)
 	int step, hit_bottom = 0, hit_top = 0;
 	int height;
 
-	assert(ses && ses->tab && ses->tab->term && doc_view && doc_view->vs && direction);
+	assert(ses && ses->tab && ses->tab->term && doc_view && doc_view->vs
+	       && direction);
 	if_assert_failed return FIND_ERROR_NONE;
 
 	direction *= ses->search_direction;
@@ -884,7 +885,8 @@ find_next_do(struct session *ses, struct document_view *doc_view, int direction)
 	get_search_data(doc_view->document);
 
 	do {
-		if (is_in_range(doc_view->document, p, height, ses->search_word, &min, &max)) {
+		if (is_in_range(doc_view->document, p, height, ses->search_word,
+				&min, &max)) {
 			doc_view->vs->y = p;
 			if (max >= min)
 				doc_view->vs->x = int_min(int_max(doc_view->vs->x,
@@ -930,7 +932,8 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 		case FIND_ERROR_HIT_TOP:
 			hit_top = 1;
 		case FIND_ERROR_HIT_BOTTOM:
-			if (!get_opt_bool("document.browse.search.show_hit_top_bottom"))
+			if (!get_opt_bool("document.browse.search"
+					  ".show_hit_top_bottom"))
 				break;
 
 			message = hit_top
@@ -941,10 +944,12 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 			message = N_("No previous search");
 			break;
 		case FIND_ERROR_NOT_FOUND:
-			switch (get_opt_int("document.browse.search.show_not_found")) {
+			switch (get_opt_int("document.browse.search"
+					    ".show_not_found")) {
 				case 2:
 					message = msg_text(ses->tab->term,
-							   N_("Search string '%s' not found"),
+							   N_("Search string"
+							      "'%s' not found"),
 							   ses->search_word);
 					free_text = 1;
 					break;
@@ -1313,7 +1318,8 @@ link_typeahead_handler(struct input_line *line, int action)
 }
 
 void
-search_typeahead(struct session *ses, struct document_view *doc_view, int action)
+search_typeahead(struct session *ses, struct document_view *doc_view,
+		 int action)
 {
 	unsigned char *prompt = "#";
 	unsigned char *data = NULL;

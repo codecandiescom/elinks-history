@@ -1,3 +1,48 @@
+Tue Apr 20 17:02:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Use int_max() for overlap() macro.  
+
+Tue Apr 20 15:53:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	That hack was a bad idea. It forces too much rerendering ;).  
+
+Tue Apr 20 15:31:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	doc_end_load(): Use ugly hack to force rerendering of document when
+	a requested stylesheet has been loaded.  
+
+Tue Apr 20 15:03:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Make 3 functions static.  
+
+Tue Apr 20 13:48:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hotkey.c:
+
+	Fix compilation due to field name changes made by Jonas in menu
+	stuff. Reported by Stephen Stocker.  
+
+Tue Apr 20 07:45:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	do_lookup(): remove two goto and a label -> code simplification.  
+
+Tue Apr 20 07:35:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	end_dns_lookup(): @q -> @query, already used in other related
+	functions.  
+
 Mon Apr 19 15:56:44 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: bookmarks/dialogs.c, cache/cache.c, config/options.c,

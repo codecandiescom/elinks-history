@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.462 2004/06/10 23:43:28 jonas Exp $ */
+/* $Id: session.c,v 1.463 2004/06/10 23:47:00 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -702,8 +702,6 @@ create_session(struct window *tab, struct initial_session_info *session_info)
 		setup_first_session(ses);
 
 	add_to_list(sessions, ses);
-
-	if (!session_info) return NULL;
 
 	process_session_info(ses, session_info);
 

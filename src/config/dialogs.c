@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.12 2002/12/08 20:41:32 pasky Exp $ */
+/* $Id: dialogs.c,v 1.13 2002/12/08 21:18:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,7 @@ layout_edit_dialog(struct dialog_data *dlg)
 	if (w > term->x - 2 * DIALOG_LB) w = term->x - 2 * DIALOG_LB;
 	if (w < 1) w = 1;
 
-	w = rw = 50;
+	rw = 0;
 
 	dlg_format_text(NULL, term, name, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);

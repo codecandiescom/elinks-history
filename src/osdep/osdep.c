@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.156 2004/12/27 10:38:44 jonas Exp $ */
+/* $Id: osdep.c,v 1.157 2004/12/28 16:53:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,8 +548,11 @@ resize_window(int width, int height, int old_width, int old_height)
 	}
 
 	if (!x_error && status) {
-		width  *= (attributes.width  / old_width);
-		height *= (attributes.height / old_height);
+		double ratio_width = (double) attributes.width  / old_width;
+		double ratio_height = (double) attributes.height / old_height;
+
+		width  = (int) ((double) width * ratio_width);
+		height = (int) ((double) height * ratio_height);
 
 		status = XResizeWindow(display, window, width, height);
 		while (!x_error && !status) {

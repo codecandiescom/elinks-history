@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.34 2003/12/26 09:55:27 jonas Exp $ */
+/* $Id: status.c,v 1.35 2003/12/26 09:56:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,6 +50,9 @@
 	 / ((longlong) (progress)->loaded * 10 / ((progress)->elapsed / 100)) \
 	 * 1000)
 
+#define download_is_progressing(down) \
+	((down) && (down)->state == S_TRANS && ((down)->prg->elapsed / 100))
+
 unsigned char *
 get_stat_msg(struct download *stat, struct terminal *term,
 	     int wide, int full, unsigned char *separator)
@@ -57,8 +60,7 @@ get_stat_msg(struct download *stat, struct terminal *term,
 	struct string msg;
 	int newlines = separator[strlen(separator) - 1] == '\n';
 
-	if (stat->state != S_TRANS || !(stat->prg->elapsed / 100)) {
-
+	if (!download_is_progressing(stat)) {
 		/* DBG("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
 		return stracpy(get_err_msg(stat->state, term));
 	}

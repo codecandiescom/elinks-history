@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.48 2002/11/12 21:57:04 pasky Exp $ */
+/* $Id: download.c,v 1.49 2002/11/23 19:20:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1034,7 +1034,7 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
 
-	ses->tq_goto_position = stracpy(ses->goto_position);
+	ses->tq_goto_position = ses->goto_position ? stracpy(ses->goto_position) : NULL;
 	type_query(ses, ce, ct, assoc);
 	mem_free(ct);
 

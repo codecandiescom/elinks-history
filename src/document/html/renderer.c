@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.43 2002/11/11 23:05:49 pasky Exp $ */
+/* $Id: renderer.c,v 1.44 2002/11/23 19:24:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -777,9 +777,9 @@ x:;
 		}
 
 		part->link_num++;
-		last_link = stracpy(format.link);
-		last_target = stracpy(format.target);
-		last_image = stracpy(format.image);
+		last_link = format.link ? stracpy(format.link) : NULL;
+		last_target = format.target ? stracpy(format.target) : NULL;
+		last_image = format.image ? stracpy(format.image) : NULL;
 		last_form = format.form;
 
 		if (!part->data) goto no_l;
@@ -795,8 +795,8 @@ x:;
 
 		if (!last_form) {
 			link->type = L_LINK;
-			link->where = stracpy(last_link);
-			link->target = stracpy(last_target);
+			link->where = last_link ? stracpy(last_link) : NULL;
+			link->target = last_target ? stracpy(last_target) : NULL;
 			link->name = memacpy(c, l);
 
 		} else {
@@ -820,10 +820,11 @@ x:;
 						link->type = L_BUTTON;
 			}
 			link->form = last_form;
-			link->target = stracpy(last_form->target);
+			link->target = last_form->target ?
+				       stracpy(last_form->target) : NULL;
 		}
 
-		link->where_img = stracpy(last_image);
+		link->where_img = last_image ? stracpy(last_image) : NULL;
 
 		if (link->type != L_FIELD && link->type != L_AREA) {
 			bg = find_nearest_color(&format.clink, 8);
@@ -1020,8 +1021,8 @@ add_frameset_entry(struct frameset_desc *fsd,
 	if (fsd->yp >= fsd->y) return;
 #define TMP fsd->f[fsd->xp + fsd->yp * fsd->x]
 	TMP.subframe = subframe;
-	TMP.name = stracpy(name);
-	TMP.url = stracpy(url);
+	TMP.name = name ? stracpy(name) : NULL;
+	TMP.url = url ? stracpy(url) : NULL;
 #undef TMP
 	fsd->xp++;
 	if (fsd->xp >= fsd->x) {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.68 2002/11/23 12:45:25 zas Exp $ */
+/* $Id: session.c,v 1.69 2002/11/23 19:21:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,7 +488,7 @@ post_yes(struct wtd_data *w)
 	abort_preloading(w->ses);
 	if (w->ses->goto_position) mem_free(w->ses->goto_position);
 
-	w->ses->goto_position = stracpy(w->pos);
+	w->ses->goto_position = w->pos ? stracpy(w->pos) : NULL;
 	w->ses->loading.end = (void (*)(struct status *, void *))w->fn;
 	w->ses->loading.data = w->ses;
 	w->ses->loading_url = stracpy(w->url);
@@ -590,7 +590,7 @@ do_move(struct session *ses, struct status **stat)
 	}
 
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
-		unsigned char *u, *p, *gp;
+		unsigned char *u, *p;
 		enum session_wtd w = ses->wtd;
 
 		if (ses->wtd == WTD_BACK && !have_location(ses))
@@ -608,7 +608,6 @@ do_move(struct session *ses, struct status **stat)
 		/* ^^^^ According to RFC2068 POST must not be redirected to GET, but
 			some BUGGY message boards rely on it :-( */
 
-		gp = stracpy(ses->goto_position);
 		abort_loading(ses);
 		if (have_location(ses))
 			*stat = &cur_loc(ses)->stat;
@@ -620,12 +619,16 @@ do_move(struct session *ses, struct status **stat)
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, ce->url);
 		if (w == WTD_FORWARD || w == WTD_IMGMAP) {
+			unsigned char *gp = ses->goto_position ?
+					    stracpy(ses->goto_position) : NULL;
 			ses_goto(ses, u, ses->wtd_target, PRI_MAIN, NC_CACHE,
 				 w, gp, end_load, 1);
+
+			if (gp) mem_free(gp);
+
 			return 2;
 		}
 
-		if (gp) mem_free(gp);
 		if (w == WTD_BACK || w == WTD_UNBACK) {
 			ses_goto(ses, u, NULL, PRI_MAIN, NC_CACHE,
 				 WTD_RELOAD, NULL, end_load, 1);

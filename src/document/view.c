@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.91 2002/11/14 22:23:21 pasky Exp $ */
+/* $Id: view.c,v 1.92 2002/11/23 19:21:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1675,7 +1675,7 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 	if (strlen(url) >= 4 && !strncasecmp(url, "MAP@", 4)) {
 		/* TODO: Test reload? */
 		goto_imgmap(ses, url + 4, stracpy(url + 4),
-			    stracpy(target));
+			    target ? stracpy(target) : NULL);
 	} else {
 		if (reload) {
 			goto_url_frame_reload(ses, url, target);

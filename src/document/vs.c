@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.4 2002/06/17 07:42:30 pasky Exp $ */
+/* $Id: vs.c,v 1.5 2002/11/23 19:22:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,8 @@ copy_vs(struct view_state *dst, struct view_state *src)
 	memcpy(dst, src, sizeof(struct view_state));
 
 	strcpy(dst->url, src->url);
-	dst->goto_position = stracpy(src->goto_position);
+	dst->goto_position = src->goto_position ?
+			     stracpy(src->goto_position) : NULL;
 	
 	dst->form_info = mem_alloc(src->form_info_len
 				   * sizeof(struct form_state));

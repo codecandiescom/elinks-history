@@ -436,7 +436,7 @@ msgstr "Aggiungi associazione di tasti"
 
 #: src/config/dialogs.c:607
 msgid "Invalid keystroke."
-msgstr "Associazione di tasti non valida."
+msgstr "Combinazione di tasti non valida."
 
 #: src/config/dialogs.c:629
 msgid "Need to select a keymap."

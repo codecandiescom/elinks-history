@@ -102,7 +102,7 @@ David D. Kilzer <ddkilzer@lubricants-oil.com>
 	Part of -no-home support
 	Support for -eval option
 
-David Mediavilla Ezquibela <davidme.forum@bigfoot.com>
+David Mediavilla Ezquibela <r96x6a79yki40001@sneakemail.com>
 	Spanish translation
 	Esperanto hacking
 	Example config file with all links-0.96 keybindings
@@ -417,4 +417,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.108 2002/12/20 23:31:47 pasky Exp $
+$Id: AUTHORS,v 1.109 2003/01/01 00:51:14 pasky Exp $

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.240 2003/07/15 22:18:01 miciah Exp $ */
+/* $Id: options.c,v 1.241 2003/07/15 22:32:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1388,6 +1388,15 @@ register_options(void)
 		"display_sups", 0, 1,
 		N_("Display superscripts (as ^thing)."));
 
+	add_opt_int("document.html", N_("Rendering of hmtl link element"),
+		"link_display", 0, 0, 5, 2,
+		N_("Html link rendering verbosity:\n"
+		"0 nothing\n"
+		"1 title\n"
+		"2 name in addition\n"
+		"3 hreflang in addition\n"
+		"4 type in addition\n"
+		"5 everything"));
 
 
 	add_opt_tree("", N_("MIME"),

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.151 2003/07/15 21:53:17 zas Exp $ */
+/* $Id: parser.c,v 1.152 2003/07/15 22:32:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2429,9 +2429,12 @@ free_cd:
 static void
 html_link(unsigned char *a)
 {
+	int link_display = get_opt_int("document.html.link_display");
 	unsigned char *name = NULL;
 	unsigned char *type = NULL;
 	unsigned char *url;
+
+	if (!link_display) return;
 
 	url = get_url_val(a, "href");
 	if (!url) return;
@@ -2444,7 +2447,7 @@ html_link(unsigned char *a)
 		 * */
 		if (!strncasecmp(type, "text/css", 8) ||
 		    !strncasecmp(type, "image/x-icon", 12))
-			goto free_and_return;
+			if (link_display < 5) goto free_and_return;
 	}
 
 	name = get_attr_val(a, "rel");
@@ -2453,10 +2456,11 @@ html_link(unsigned char *a)
 
 	/* Ignore few annoying links.. */
 	if (name &&
-	    strcasecmp(name, "STYLESHEET") &&
-	    strcasecmp(name, "made") &&
-	    strcasecmp(name, "icon") &&
-	    strcasecmp(name, "SHORTCUT ICON")) {
+	    (link_display >= 5 ||
+	     (strcasecmp(name, "STYLESHEET") &&
+	      strcasecmp(name, "made") &&
+	      strcasecmp(name, "icon") &&
+	      strcasecmp(name, "SHORTCUT ICON")))) {
 		unsigned char *text;
 		int textlen = 0;
 		unsigned char *title;
@@ -2473,26 +2477,37 @@ html_link(unsigned char *a)
 			mem_free(title);
 		}
 
+		if (link_display == 1) goto only_title;
+
 		add_to_str(&text, &textlen, " (");
 		add_to_str(&text, &textlen, name);
 
-		hreflang = get_attr_val(a, "hreflang");
-		if (hreflang) {
-			add_to_str(&text, &textlen, ", ");
-			add_to_str(&text, &textlen, hreflang);
-			mem_free(hreflang);
+		if (link_display >= 3) {
+			hreflang = get_attr_val(a, "hreflang");
+			if (hreflang) {
+				add_to_str(&text, &textlen, ", ");
+				add_to_str(&text, &textlen, hreflang);
+				mem_free(hreflang);
+			}
 		}
 
-		if (type) {
-			add_to_str(&text, &textlen, ", ");
-			add_to_str(&text, &textlen, type);
+		if (link_display >= 4) {
+			if (type) {
+				add_to_str(&text, &textlen, ", ");
+				add_to_str(&text, &textlen, type);
 
+			}
 		}
 		add_chr_to_str(&text, &textlen, ')');
 
+only_title:
 		if (text) {
-			put_link_line("Link: ", text, url, format.target_base);
+			if (*text)
+				put_link_line("Link: ", text, url, format.target_base);
+			else
+				put_link_line("Link: ", name, url, format.target_base);
 			mem_free(text);
+
 		} else {
 			put_link_line("Link: ", name, url, format.target_base);
 		}

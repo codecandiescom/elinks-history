@@ -29,6 +29,8 @@ combinations.
 	When title/status bar is turned off, there's still a blank line on
 top/bottom of screen.
 
-$Id: BUGS,v 1.22 2002/03/28 00:46:26 pasky Exp $
+	Handling of textareas splitted to two pages is just weird.
+
+$Id: BUGS,v 1.23 2002/04/02 12:53:17 pasky Exp $
 
 vim: textwidth=80

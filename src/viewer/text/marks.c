@@ -1,5 +1,5 @@
 /* Marks registry */
-/* $Id: marks.c,v 1.11 2004/09/26 12:13:08 pasky Exp $ */
+/* $Id: marks.c,v 1.12 2004/09/26 14:47:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,8 +71,10 @@ index_from_char(unsigned char mark)
 void
 goto_mark(unsigned char mark, struct view_state *vs)
 {
+#ifdef CONFIG_ECMASCRIPT
 	struct ecmascript_interpreter *ecmascript;
 	int ecmascript_fragile;
+#endif
 	int i;
 
 	if (!is_valid_mark_char(mark))
@@ -85,12 +87,16 @@ goto_mark(unsigned char mark, struct view_state *vs)
 	if (!marks[i] || !compare_uri(marks[i]->uri, vs->uri, 0))
 		return;
 
+#ifdef CONFIG_ECMASCRIPT
 	ecmascript = vs->ecmascript;
 	ecmascript_fragile = vs->ecmascript_fragile;
+#endif
 	destroy_vs(vs, 0);
 	copy_vs(vs, marks[i]);
+#ifdef CONFIG_ECMASCRIPT
 	vs->ecmascript = ecmascript;
 	vs->ecmascript_fragile = ecmascript_fragile;
+#endif
 }
 
 void

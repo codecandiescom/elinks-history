@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.48 2003/05/07 13:56:49 pasky Exp $ */
+/* $Id: session.c,v 1.49 2003/05/07 17:46:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1764,7 +1764,8 @@ get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 	struct f_data_c *fd = current_frame(ses);
 
 	/* Ensure that the title is defined */
-	if (fd) return safe_strncpy(str, fd->f_data->title, str_size);
+	if (fd && fd->f_data->title)
+		return safe_strncpy(str, fd->f_data->title, str_size);
 
 	return NULL;
 }

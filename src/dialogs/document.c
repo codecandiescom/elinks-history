@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.33 2003/05/04 20:42:11 pasky Exp $ */
+/* $Id: document.c,v 1.34 2003/05/07 17:46:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ loc_msg(struct terminal *term, struct location *location,
 
 	add_to_str(&str, &strl, "\n");
 
-	if (frame) {
+	if (frame && frame->f_data->title) {
 		add_to_str(&str, &strl, _("Title", term));
 		add_to_str(&str, &strl, ": ");
 		add_to_str(&str, &strl, frame->f_data->title);

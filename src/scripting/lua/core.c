@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.38 2003/05/04 20:42:12 pasky Exp $ */
+/* $Id: core.c,v 1.39 2003/05/07 17:46:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,7 @@ l_current_title(LS)
 {
 	struct f_data_c *fd = current_frame(lua_ses);
 
-	if (fd)
+	if (fd && fd->f_data->title)
 		lua_pushstring(S, fd->f_data->title);
 	else
 		lua_pushnil(S);

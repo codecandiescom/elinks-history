@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2004/08/15 05:51:12 miciah Exp $
+## $Id: Makefile.am,v 1.8 2004/11/07 00:23:37 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -10,6 +10,7 @@ EXTRA_DIST = \
  elinks-vim.diff \
  elinks.spec.in \
  elinks.vim \
+ js-1.5-rc6a+elinks.patch \
  keybind-full.conf \
  keybind.conf \
  links_wps.zip \

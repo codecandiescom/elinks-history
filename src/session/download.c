@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.163 2003/11/13 22:41:29 pasky Exp $ */
+/* $Id: download.c,v 1.164 2003/11/13 22:42:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,10 +123,11 @@ kill_downloads_to_file(unsigned char *file)
 	struct file_download *file_download;
 
 	foreach (file_download, downloads) {
-		if (!strcmp(file_download->file, file)) {
-			file_download = file_download->prev;
-			abort_download(file_download->next, 0);
-		}
+		if (strcmp(file_download->file, file))
+			continue;
+
+		file_download = file_download->prev;
+		abort_download(file_download->next, 0);
 	}
 }
 

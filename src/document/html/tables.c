@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.57 2003/07/31 15:02:35 zas Exp $ */
+/* $Id: tables.c,v 1.58 2003/07/31 15:40:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -791,7 +791,7 @@ get_cell_width(unsigned char *start, unsigned char *end, int cellpd, int w,
 static inline void
 check_cell_widths(struct table *t)
 {
-	int i, j;
+	register int i, j;
 
 	for (j = 0; j < t->y; j++) for (i = 0; i < t->x; i++) {
 		int min, max;
@@ -841,14 +841,15 @@ static inline void
 dst_width(int *p, int n, int w, int *lim)
 {
 	register int i;
-	int s = 0, d, r;
+	int s = 0, d, r, t;
 
 	for (i = 0; i < n; i++) s += p[i];
 	if (s >= w) return;
 
 again:
-	d = (w - s) / n;
-	r = (w - s) % n;
+	t = w - s;
+	d = t / n;
+	r = t % n;
 	w = 0;
 
 	if (lim) {
@@ -906,7 +907,7 @@ x:
 		return -1;
 
 	} else if (t->rules == R_GROUPS) {
-		int q;
+		register int q;
 
 		for (q = 0; q < t->x; q++)
 			if (CELL(t, q, row)->group)
@@ -961,8 +962,7 @@ get_column_widths(struct table *t)
 			if_assert_failed return -1;
 
 			if (c->colspan == s) {
-				register int k;
-				int p = 0;
+				register int k, p = 0;
 
 				for (k = 1; k < s; k++)
 					p += (get_vline_width(t, i + k) >= 0);
@@ -1201,7 +1201,7 @@ check_table_widths(struct table *t)
 
 	for (j = 0; j < t->y; j++) for (i = 0; i < t->x; i++) {
 		struct table_cell *c = CELL(t, i, j);
-		int k, p = 0;
+		register int k, p = 0;
 
 		if (!c->start) continue;
 
@@ -1316,7 +1316,7 @@ get_table_heights(struct table *t)
 				if (!cell->used || cell->spanned) continue;
 
 				if (cell->rowspan == s) {
-					int k, p = 0;
+					register int k, p = 0;
 
 					for (k = 1; k < s; k++)
 						p += (get_hline_width(t, j + k) >= 0);
@@ -1832,12 +1832,14 @@ again:
 	{
 		int ww = par_format.width - t->rw;
 
-		x = par_format.leftmargin;
 		if (align == AL_CENTER)
 			x = (ww + par_format.leftmargin
-		     	     - par_format.rightmargin) / 2;
+		     	     - par_format.rightmargin) >> 1;
 		else if (align == AL_RIGHT)
 			x = ww - par_format.rightmargin;
+		else
+			x = par_format.leftmargin;
+
 		if (x > ww) x = ww;
 		if (x < 0) x = 0;
 	}

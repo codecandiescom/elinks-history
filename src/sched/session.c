@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.563 2004/09/26 15:03:39 pasky Exp $ */
+/* $Id: session.c,v 1.564 2004/09/28 14:00:49 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -468,7 +468,7 @@ doc_end_load(struct download *stat, struct session *ses)
 			ses->display_timer = -1;
 		}
 
-		draw_formatted(ses, 3);
+		draw_formatted(ses, 2);
 
 		if (get_cmd_opt_bool("auto-submit")) {
 			if (!list_empty(ses->doc_view->document->forms)) {

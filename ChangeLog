@@ -1,3 +1,115 @@
+Wed Oct 13 21:57:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Try to call load_ecmascript_imports() foreach frame in
+	load_frames(), let's see what happens. Suggested by Jonas.  
+
+Wed Oct 13 21:50:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Silence Jonas - small reworking of external snippets references
+	handling and taking care of memory allocaiton failures.  
+
+Wed Oct 13 16:26:11 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/intl/charsets.c:
+
+	Resolve a discrepancy in convert_string when checking whether the
+	character terminating an entity is alphanumeric by using 
+	isasciialpha and isdigit in place of isdigit.  
+
+Wed Oct 13 16:12:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Drop DACT(N_(...)) and use shorter D_(...), defined as (N_(x)).  
+
+Wed Oct 13 15:52:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Change #if 0 added to disable bzip2 code related to bug 517 to more
+	explicit #ifndef BUG_517.  
+
+Wed Oct 13 15:34:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: elinks.h, main.c, cookies/cookies.c, dialogs/info.c,
+	dialogs/menu.c, document/css/README, document/css/apply.c,
+	document/css/parser.c, document/css/stylesheet.c,
+	document/css/stylesheet.h, document/dom/navigator.c,
+	document/dom/node.c, osdep/os2/os2.c, terminal/hardio.c,
+	util/fastfind.c, util/memdebug.c, util/memdebug.h, util/memory.c,
+	util/memory.h, util/scanner.c, util/scanner.h, util/string.c,
+	util/string.h:
+
+	Uniformize debugging macros names: LEAK_DEBUG -> DEBUG_MEMLEAK,
+	COOKIES_DEBUG -> DEBUG_COOKIES, CSS_DEBUG -> DEBUG_CSS, OS2_DEBUG ->
+	DEBUG_OS2, HW_DEBUG -> DEBUG_HARDIO, FASTFIND_DEBUG ->
+	DEBUG_FASTFIND, SCANNER_DEBUG -> DEBUG_SCANNER.  
+
+Wed Oct 13 15:18:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: encoding/bzip2.c, encoding/gzip.c, util/color.inc,
+	util/color_s.inc:
+
+	Drop remaining ELINKS_SMALL, this one was replaced by CONFIG_SMALL.  
+
+Wed Oct 13 10:00:57 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/protocol.c:
+
+	Minor typo fix and reindentation.  
+
+Wed Oct 13 08:28:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Fix buggy #ifdef IPV6 in ftp options.  
+
+Wed Oct 13 08:17:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Assertion was added to catch bug 538.  
+
+Wed Oct 13 00:30:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Some non-javascript scripts use the language attribute. I found a
+	language='vbscript' at
+	http://www.geocities.com/cliktoprogram/vbscript/introduction.html so
+	waste time checking that the language attribute is 'javascript' with
+	optional version digits postfixed (like: 'javascript1.1') 
+
+Wed Oct 13 00:12:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/Makefile.am:
+
+	Stack SUBDIR listing.  
+
+Wed Oct 13 00:09:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, protocol/ftp/ftp.c:
+
+	Move FTP options.  
+
+Tue Oct 12 23:37:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/intl/gettext/plural.y:
+
+	Fix parser generation from plural.y to expect 7 instead of 10
+	shift/reduce conflicts. Patch by Alexey Tourbin <at@altlinux.org>.
+	(bug 537) 
+
+Tue Oct 12 23:32:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Alphabetize entries.  
+
 Tue Oct 12 15:23:26 2004  Laurent Monin <zas@norz.org>:
 
 	* configure.in, src/protocol/Makefile.am, src/protocol/finger.c,

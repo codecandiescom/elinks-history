@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.138 2004/12/19 01:10:55 pasky Exp $ */
+/* $Id: renderer.c,v 1.139 2004/12/19 17:46:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,6 +171,21 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 			 * from it.
 			 *
 			 * Reported as bug 533. */
+			/* Pasky's explanation: If we get the doc in a single
+			 * shot, before calling draw_formatted() we didn't have
+			 * anything additional queued for loading and the cache
+			 * entry was already loaded, so we didn't get
+			 * gradual_loading set. But then while parsing the
+			 * document we got some external references and trying
+			 * to process them right now. Boom.
+			 *
+			 * The obvious solution would be to always call
+			 * draw_formatted() with gradual_loading in
+			 * doc_loading_callback() and if we are sure the
+			 * loading is really over, call it one more time
+			 * without gradual_loading set. I'm not sure about
+			 * the implications though so I won't do it before
+			 * 0.10.0. --pasky */
 			ERROR("The script of %s was lost in too full a cache!",
 			      uristring);
 #endif

@@ -1,3 +1,69 @@
+Thu Jul 11 21:30:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/ssl/ssl.c:
+
+	Attempt to fix segfaults in GNUTLS upon quit.  
+
+Thu Jul 11 21:28:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Fixed displaying of --help.  
+
+Thu Jul 11 21:12:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
+
+	Reverted last patch, it belonged to different branch ;).  
+
+Thu Jul 11 20:59:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
+
+	Introduced home-forget, combines goto-url-home and
+	forget-credentials.  
+
+Thu Jul 11 20:22:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Mentioned that enabling ui.startup_goto_dialog may not be so
+	*excellent* idea and turned it off by default.  
+
+Thu Jul 11 16:16:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Changed ui-colors to disabled by default again; now it'll stay so
+	until colors will be run-time configurable (then this option can
+	disappear completely anyway).  
+
+Thu Jul 11 16:14:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
+	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng, intl/ukrainian.lng, src/config/options.c,
+	src/dialogs/options.c, src/intl/lang_defs.h, src/intl/language.c,
+	src/intl/language.h, src/intl/language.inc,
+	src/protocol/http/http.c:
+
+	Transparent content negotiation (accept-language based on ui
+	language), patch by Fabio Bonelli <fabiobonelli@libero.it>.  
+
+Thu Jul 11 11:14:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/session.c, lowlevel/terminal.c,
+	lowlevel/terminal.h:
+
+	ui.startup_goto_dialog works now, still enabled by default.  
+
 Wed Jul 10 19:04:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/dialog.c:

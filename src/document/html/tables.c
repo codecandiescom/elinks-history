@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.216 2004/06/26 10:45:36 zas Exp $ */
+/* $Id: tables.c,v 1.217 2004/06/26 10:48:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,8 +470,8 @@ parse_table(unsigned char *html, unsigned char *eof,
 	int colspan, rowspan;
 	int group = 0;
 	int i, j, k;
-	int qqq;
 	int c_al = AL_TR, c_val = VALIGN_TR, c_width = WIDTH_AUTO, c_span = 0;
+	int cols, rows;
 	int col = 0, row = -1;
 
 	*end = html;
@@ -727,8 +727,8 @@ qwe:
 			set_td_width(table, col, width, 0);
 	}
 
-	qqq = table->cols;
-	for (i = 1; colspan != -1 ? i < colspan : i < qqq; i++) {
+	cols = table->cols;
+	for (i = 1; colspan != -1 ? i < colspan : i < cols; i++) {
 		struct table_cell *span_cell = new_cell(table, col + i, row);
 
 		if (!span_cell || span_cell->is_used) {
@@ -745,8 +745,8 @@ qwe:
 		span_cell->row = row;
 	}
 
-	qqq = table->rows;
-	for (j = 1; rowspan != -1 ? j < rowspan : j < qqq; j++) {
+	rows = table->rows;
+	for (j = 1; rowspan != -1 ? j < rowspan : j < rows; j++) {
 		for (k = 0; k < i; k++) {
 			struct table_cell *span_cell = new_cell(table, col + k, row + j);
 

@@ -1,5 +1,5 @@
 /* BeOS system-specific routines emulating POSIX. */
-/* $Id: overrides.c,v 1.2 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: overrides.c,v 1.3 2004/06/27 18:34:31 pasky Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -193,7 +193,7 @@ be_select(int n, struct fd_set *rd, struct fd_set *wr, struct fd_set *exc,
 	FD_ZERO(exc);
 	for (i = 0; i < n; i++) if ((i < SHS && FD_ISSET(i, rd)) || FD_ISSET(i, wr)) {
 		for (i = SHS; i < n; i++) FD_CLR(i, rd);
-		return MAXINT;
+		return INT_MAX;
 	}
 	FD_ZERO(&rrd);
 	for (i = SHS; i < n; i++) if (FD_ISSET(i, rd)) FD_SET(i - SHS, &rrd);

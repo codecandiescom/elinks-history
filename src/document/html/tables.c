@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.237 2004/06/27 09:21:04 zas Exp $ */
+/* $Id: tables.c,v 1.238 2004/06/27 18:34:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1023,7 +1023,7 @@ get_column_widths(struct table *table)
 	colspan = 1;
 	do {
 		int col, row;
-		int new_colspan = MAXINT;
+		int new_colspan = INT_MAX;
 
 		for (col = 0; col < table->cols; col++)	for (row = 0; row < table->rows; row++) {
 			struct table_cell *cell = CELL(table, col, row);
@@ -1062,7 +1062,7 @@ get_column_widths(struct table *table)
 			}
 		}
 		colspan = new_colspan;
-	} while (colspan != MAXINT);
+	} while (colspan != INT_MAX);
 
 	return 0;
 }
@@ -1187,11 +1187,11 @@ distribute_widths(struct table *table, int width)
 					} else {
 						widths[col] = 1;
 					}
-					max_widths[col] = MAXINT;
+					max_widths[col] = INT_MAX;
 					break;
 				case 6:
 					widths[col] = 1;
-					max_widths[col] = MAXINT;
+					max_widths[col] = INT_MAX;
 					break;
 				default:
 					INTERNAL("could not expand table");
@@ -1284,7 +1284,7 @@ check_table_widths(struct table *table)
 
 	colspan = 1;
 	do {
-		int new_colspan = MAXINT;
+		int new_colspan = INT_MAX;
 
 		for (col = 0; col < table->cols; col++) for (row = 0; row < table->rows; row++) {
 			struct table_cell *cell = CELL(table, col, row);
@@ -1311,7 +1311,7 @@ check_table_widths(struct table *table)
 			}
 		}
 		colspan = new_colspan;
-	} while (colspan != MAXINT);
+	} while (colspan != INT_MAX);
 
 	width = new_width = 0;
 	for (col = 0; col < table->cols; col++) {
@@ -1376,7 +1376,7 @@ get_table_heights(struct table *table)
 
 	rowspan = 1;
 	do {
-		int new_rowspan = MAXINT;
+		int new_rowspan = INT_MAX;
 
 		for (row = 0; row < table->rows; row++) {
 			for (col = 0; col < table->cols; col++) {
@@ -1403,7 +1403,7 @@ get_table_heights(struct table *table)
 			}
 		}
 		rowspan = new_rowspan;
-	} while (rowspan != MAXINT);
+	} while (rowspan != INT_MAX);
 
 	{
 		struct table_frames table_frames;

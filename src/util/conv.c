@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.59 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: conv.c,v 1.60 2004/06/27 18:34:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,15 +343,15 @@ strtolx(unsigned char *str, unsigned char **end)
 	postfix = toupper(**end);
 	if (postfix == 'K') {
 		(*end)++;
-		if (num < -MAXINT / 1024) return -MAXINT;
-		if (num > MAXINT / 1024) return MAXINT;
+		if (num < -INT_MAX / 1024) return -INT_MAX;
+		if (num > INT_MAX / 1024) return INT_MAX;
 		return num * 1024;
 	}
 
 	if (postfix == 'M') {
 		(*end)++;
-		if (num < -MAXINT / (1024 * 1024)) return -MAXINT;
-		if (num > MAXINT / (1024 * 1024)) return MAXINT;
+		if (num < -INT_MAX / (1024 * 1024)) return -INT_MAX;
+		if (num > INT_MAX / (1024 * 1024)) return INT_MAX;
 		return num * (1024 * 1024);
 	}
 

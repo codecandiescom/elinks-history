@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.76 2004/06/17 10:02:21 zas Exp $ */
+/* $Id: globhist.c,v 1.77 2004/06/27 18:34:30 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -70,7 +70,7 @@ static struct option_info global_history_options[] = {
 		N_("Enable global history (\"history of all pages visited\").")),
 
 	INIT_OPT_INT("document.history.global", N_("Maximum number of entries"),
-		"max_items", 0, 1, MAXINT, 1024,
+		"max_items", 0, 1, INT_MAX, 1024,
 		N_("Maximum number of entries in the global history.")),
 
 	INIT_OPT_INT("document.history.global", N_("Display style"),
@@ -80,7 +80,7 @@ static struct option_info global_history_options[] = {
 		"1 is page titles")),
 
 	INIT_OPT_INT("document.history.global", N_("Auto-save interval"),
-		"write_interval", 0, 0, MAXINT, 300,
+		"write_interval", 0, 0, INT_MAX, 300,
 		N_("Interval at which to write global history to disk if it\n"
 		"has changed (seconds; 0 to disable)")),
 

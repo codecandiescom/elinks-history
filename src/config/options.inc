@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.121 2004/06/24 11:11:06 miciah Exp $ */
+/* $Id: options.inc,v 1.122 2004/06/27 18:34:30 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -347,7 +347,7 @@ struct option_info config_options_info[] = {
 		"number of seconds a refresh will take.")),
 
 	INIT_OPT_INT("document.browse", N_("Document meta refresh minimum time"),
-		"minimum_refresh_time", 0, 0, MAXINT, 1000,
+		"minimum_refresh_time", 0, 0, INT_MAX, 1000,
 		N_("The minimum number of milliseconds that should pass before\n"
 		"refreshing. If set to zero the document refresh time is used\n"
 		"unchanged. It can fix going back in history for some sites that\n"
@@ -403,7 +403,7 @@ struct option_info config_options_info[] = {
 		N_("Memory cache options.")),
 
 	INIT_OPT_LONG("document.cache.memory", N_("Size"),
-		"size", 0, 0, MAXLONG, 1048576,
+		"size", 0, 0, LONG_MAX, 1048576,
 		N_("Memory cache size (in bytes).")),
 
 

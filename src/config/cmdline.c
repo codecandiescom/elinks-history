@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.96 2004/06/26 23:09:10 zas Exp $ */
+/* $Id: cmdline.c,v 1.97 2004/06/27 18:34:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -604,7 +604,7 @@ struct option_info cmdline_options_info[] = {
 		N_("Go and submit the first form you'll stumble upon.")),
 
 	INIT_OPT_INT("", N_("Clone session with given ID"),
-		"base-session", 0, 0, MAXINT, 0,
+		"base-session", 0, 0, INT_MAX, 0,
 		N_("ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it.")),
 
@@ -721,7 +721,7 @@ struct option_info cmdline_options_info[] = {
 		"  xfeDoCommand(openBrowser) -- open new window")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),
-		"session-ring", 0, 0, MAXINT, 0,
+		"session-ring", 0, 0, INT_MAX, 0,
 		N_("ID of session ring this ELinks session should connect to. ELinks\n"
 		"works in so-called session rings, whereby all instances of ELinks\n"
 		"are interconnected and share state (cache, bookmarks, cookies,\n"

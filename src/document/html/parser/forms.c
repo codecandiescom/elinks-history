@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.35 2004/06/23 14:51:45 jonas Exp $ */
+/* $Id: forms.c,v 1.36 2004/06/27 18:34:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,7 +308,7 @@ no_type_attr:
 	if (fc->size > global_doc_opts->box.width)
 		fc->size = global_doc_opts->box.width;
 	fc->maxlength = get_num(a, "maxlength");
-	if (fc->maxlength == -1) fc->maxlength = MAXINT;
+	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
 	if (fc->type == FC_HIDDEN) goto hid;
@@ -710,7 +710,7 @@ pp:
 	}
 
 	fc->maxlength = get_num(attr, "maxlength");
-	if (fc->maxlength == -1) fc->maxlength = MAXINT;
+	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 
 	if (rows > 1) ln_break(1, html_context.line_break_f, f);
 	else put_chrs(" ", 1, html_context.put_chars_f, f);

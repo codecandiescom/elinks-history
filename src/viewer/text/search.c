@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.249 2004/06/26 23:06:35 pasky Exp $ */
+/* $Id: search.c,v 1.250 2004/06/27 18:34:31 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -109,7 +109,7 @@ sort_srch(struct document *document)
 	}
 
 	for (i = 0; i < document->height; i++) {
-		min[i] = MAXINT;
+		min[i] = INT_MAX;
 		max[i] = 0;
 	}
 
@@ -423,7 +423,7 @@ is_in_range(struct document *document, int y, int height,
 	assert(document && text && min && max);
 	if_assert_failed return 0;
 
-	*min = MAXINT, *max = 0;
+	*min = INT_MAX, *max = 0;
 	textlen = strlen(text);
 
 	if (get_range(document, y, height, textlen, &s1, &s2))

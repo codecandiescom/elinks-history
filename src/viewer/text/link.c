@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.268 2004/06/27 14:06:41 pasky Exp $ */
+/* $Id: link.c,v 1.269 2004/06/27 18:34:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -441,7 +441,7 @@ get_link_x_bounds(struct link *link, int y, int *min_x, int *max_x)
 {
 	int point;
 
-	if (min_x) *min_x = MAXINT;
+	if (min_x) *min_x = INT_MAX;
 	if (max_x) *max_x = 0;
 
 	for (point = 0; point < link->npoints; point++) {
@@ -494,7 +494,7 @@ next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir
 	struct document *document;
 	struct view_state *vs;
 	struct link *link;
-	int min_x = MAXINT, max_x = 0;
+	int min_x = INT_MAX, max_x = 0;
 	int min_y, max_y;
 
 	assert(doc_view && doc_view->document && doc_view->vs);
@@ -603,7 +603,7 @@ next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir
 				/* Check if we already aren't past the last
 				 * link on this line. */
 				if (!get_link_x_intersect(document->lines2[y],
-				                          y, x, MAXINT))
+				                          y, x, INT_MAX))
 					last++;
 			}
 		}
@@ -626,7 +626,7 @@ void
 set_pos_x(struct document_view *doc_view, struct link *link)
 {
 	int xm = 0;
-	int xl = MAXINT;
+	int xl = INT_MAX;
 	int i;
 
 	assert(doc_view && link);
@@ -641,7 +641,7 @@ set_pos_x(struct document_view *doc_view, struct link *link)
 		}
 	}
 
-	if (xl != MAXINT)
+	if (xl != INT_MAX)
 		int_bounds(&doc_view->vs->x, xm - doc_view->box.width, xl);
 }
 

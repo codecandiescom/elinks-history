@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.14 2004/06/25 10:52:30 zas Exp $ */
+/* $Id: generic.h,v 1.15 2004/06/27 18:34:31 pasky Exp $ */
 
 #ifndef EL__OSDEP_GENERIC_H
 #define EL__OSDEP_GENERIC_H
@@ -12,19 +12,21 @@
 #endif
 
 
-#ifndef MAXINT
-#ifdef INT_MAX
-#define MAXINT INT_MAX
+#ifndef INT_MAX
+#ifdef MAXINT
+#define INT_MAX MAXINT
 #else
-#define MAXINT 0x7fffffff
+/* XXX: We could use util/types.h to determine something useful? --pasky */
+#define INT_MAX 0x7fffffff
 #endif
 #endif
 
-#ifndef MAXLONG
-#ifdef LONG_MAX
-#define MAXLONG LONG_MAX
+#ifndef LONG_MAX
+#ifdef MAXLONG
+#define LONG_MAX MAXLONG
 #else
-#define MAXLONG 0x7fffffff
+/* XXX: We could use util/types.h to determine something useful? --pasky */
+#define LONG_MAX 0x7fffffff
 #endif
 #endif
 

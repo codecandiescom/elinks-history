@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.153 2004/06/25 16:16:22 jonas Exp $ */
+/* $Id: listbox.c,v 1.154 2004/06/27 18:34:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -613,14 +613,14 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			}
 
 			if (action == ACT_MENU_HOME) {
-				box_sel_move(dlg_item, -MAXINT);
+				box_sel_move(dlg_item, -INT_MAX);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_END) {
-				box_sel_move(dlg_item, MAXINT);
+				box_sel_move(dlg_item, INT_MAX);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;

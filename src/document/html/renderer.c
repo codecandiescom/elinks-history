@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.240 2003/09/07 00:10:15 jonas Exp $ */
+/* $Id: renderer.c,v 1.241 2003/09/07 00:44:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,7 +254,6 @@ set_hchars(struct part *part, int x, int y, int xl,
 		struct screen_char schar = INIT_SCREEN_CHAR(data, attr, 0);
 
 		set_term_color8(&schar, &colors, 8, 16);
-		schar.data = data;
 
 		for (; xl; xl--, x++) {
 			memcpy(&POS(x, y), &schar, sizeof(struct screen_char));
@@ -284,6 +283,7 @@ xset_hchar(struct part *part, int x, int y,
 	if_assert_failed return;
 
 	POS(x, y).data = data;
+	POS(x, y).attr = attr;
 	set_term_color8(&POS(x, y), &colors, 8, 16);
 }
 
@@ -745,7 +745,7 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	}
 }
 
-static void
+static inline void
 put_chars_format_change(struct part *part, unsigned char *color,
 			enum screen_char_attr *attr)
 {
@@ -762,28 +762,28 @@ put_chars_format_change(struct part *part, unsigned char *color,
 	colors.background = format.bg;
 	colors.foreground = format.fg;
 
-	*attr = 0;
+	schar_cache.attr = 0;
 	if (format.attr) {
 		if (format.attr & AT_UNDERLINE) {
-			*attr |= SCREEN_ATTR_UNDERLINE;
+			schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
 		}
 
 		if (format.attr & AT_BOLD) {
-			*attr |= SCREEN_ATTR_BOLD;
+			schar_cache.attr |= SCREEN_ATTR_BOLD;
 		}
 
 		if (format.attr & AT_ITALIC) {
-			*attr |= SCREEN_ATTR_ITALIC;
+			schar_cache.attr |= SCREEN_ATTR_ITALIC;
 		}
 
 		if (format.attr & AT_GRAPHICS) {
-			*attr |= SCREEN_ATTR_FRAME;
+			schar_cache.attr |= SCREEN_ATTR_FRAME;
 		}
 	}
 
 	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-	memset(&schar_cache, 0, sizeof(struct screen_char));
 	set_term_color8(&schar_cache, &colors, 8, 16);
+
 	*color = schar_cache.color;
 	*attr = schar_cache.attr;
 

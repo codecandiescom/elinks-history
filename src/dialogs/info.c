@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.9 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: info.c,v 1.10 2002/05/10 21:38:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,6 +40,9 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 	add_to_strn(&s, _(TEXT(T_FEATURES), term));
 	add_to_strn(&s, ":"
 			" Default"
+#ifdef HAVE_DEBUG
+			" Debug"
+#endif
 #ifdef HAVE_SSL
 			" SSL"
 #endif

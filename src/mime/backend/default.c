@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.26 2003/10/26 14:02:34 jonas Exp $ */
+/* $Id: default.c,v 1.27 2003/10/26 16:47:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "intl/gettext/libintl.h"
 #include "mime/backend/common.h"
 #include "mime/backend/default.h"
 #include "mime/mime.h"
@@ -20,6 +21,75 @@
 #include "util/string.h"
 
 #define BACKEND_NAME	"optionsystem"
+
+static struct option_info default_mime_options[] = {
+	INIT_OPT_TREE("mime", N_("MIME type associations"),
+		"type", OPT_AUTOCREATE,
+		N_("Handler <-> MIME type association. The first sub-tree is the MIME\n"
+		"class while the second sub-tree is the MIME type (ie. image/gif\n"
+		"handler will reside at mime.type.image.gif). Each MIME type option\n"
+		"should contain (case-sensitive) name of the MIME handler (its\n"
+		"properties are stored at mime.handler.<name>).")),
+
+	INIT_OPT_TREE("mime.type", NULL,
+		"_template_", OPT_AUTOCREATE,
+		N_("Handler matching this MIME-type class ('*' is used here in place\n"
+		"of '.').")),
+
+	INIT_OPT_STRING("mime.type._template_", NULL,
+		"_template_", 0, "",
+		N_("Handler matching this MIME-type name ('*' is used here in place\n"
+		"of '.').")),
+
+
+	INIT_OPT_TREE("mime", N_("File type handlers"),
+		"handler", OPT_AUTOCREATE,
+		N_("Handler for certain MIME types (as specified in mime.type.*).\n"
+		"Each handler usually serves family of MIME types (ie. images).")),
+
+	INIT_OPT_TREE("mime.handler", NULL,
+		"_template_", OPT_AUTOCREATE,
+		N_("Description of this handler.")),
+
+	INIT_OPT_TREE("mime.handler._template_", NULL,
+		"_template_", 0,
+		N_("System-specific handler description (ie. unix, unix-xwin, ...).")),
+
+	INIT_OPT_BOOL("mime.handler._template_._template_", N_("Ask before opening"),
+		"ask", 0, 1,
+		N_("Ask before opening.")),
+
+	INIT_OPT_BOOL("mime.handler._template_._template_", N_("Block terminal"),
+		"block", 0, 1,
+		N_("Block the terminal when the handler is running.")),
+
+	INIT_OPT_STRING("mime.handler._template_._template_", N_("Program"),
+		"program", 0, "",
+		N_("External viewer for this file type. '%' in this string will be\n"
+		"substituted by a file name.")),
+
+
+	INIT_OPT_TREE("mime", N_("File extension associations"),
+		"extension", OPT_AUTOCREATE,
+		N_("Extension <-> MIME type association.")),
+
+	INIT_OPT_STRING("mime.extension", NULL,
+		"_template_", 0, "",
+		N_("MIME-type matching this file extension ('*' is used here in place\n"
+		"of '.').")),
+
+#define INIT_OPT_MIME_EXTENSION(extension, type) \
+	INIT_OPT_STRING("mime.extension", NULL, extension, 0, type, NULL)
+
+	INIT_OPT_MIME_EXTENSION("gif",	"image/gif"),
+	INIT_OPT_MIME_EXTENSION("jpg",	"image/jpg"),
+	INIT_OPT_MIME_EXTENSION("jpeg",	"image/jpeg"),
+	INIT_OPT_MIME_EXTENSION("txt",	"text/plain"),
+	INIT_OPT_MIME_EXTENSION("htm",	"text/html"),
+	INIT_OPT_MIME_EXTENSION("html",	"text/html"),
+
+	NULL_OPTION_INFO,
+};
 
 static unsigned char *
 get_content_type_default(unsigned char *extension)
@@ -155,7 +225,7 @@ struct mime_backend default_mime_backend = {
 
 struct module default_mime_module = struct_module(
 	/* name: */		BACKEND_NAME,
-	/* options: */		NULL,
+	/* options: */		default_mime_options,
 	/* hooks: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,

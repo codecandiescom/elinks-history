@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.386 2003/10/25 19:52:11 pasky Exp $ */
+/* $Id: options.c,v 1.387 2003/10/26 16:47:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -510,14 +510,6 @@ register_autocreated_options(void)
 	get_opt_int("terminal.xterm-256color.type") = 1;
 	get_opt_bool("terminal.xterm-256color.colors") = 2;
 	get_opt_int("terminal.xterm-256color.underline") = 1;
-
-	strcpy(get_opt_str("mime.extension.gif"), "image/gif");
-	strcpy(get_opt_str("mime.extension.jpg"), "image/jpeg");
-	strcpy(get_opt_str("mime.extension.jpeg"), "image/jpeg");
-	strcpy(get_opt_str("mime.extension.png"), "image/png");
-	strcpy(get_opt_str("mime.extension.txt"), "text/plain");
-	strcpy(get_opt_str("mime.extension.htm"), "text/html");
-	strcpy(get_opt_str("mime.extension.html"), "text/html");
 
 	strcpy(get_opt_str("protocol.user.mailto.unix"), DEFAULT_AC_OPT_MAILTO);
 	strcpy(get_opt_str("protocol.user.mailto.unix-xwin"),DEFAULT_AC_OPT_MAILTO);

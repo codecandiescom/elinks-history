@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.16 2003/10/25 19:53:48 jonas Exp $ */
+/* $Id: options.inc,v 1.17 2003/10/26 16:47:14 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -629,76 +629,6 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.html", N_("Underline links"),
 		"underline_links", 0, 0,
 		N_("Underline links.")),
-
-	/* Keep options in alphabetical order. */
-
-
-
-	INIT_OPT_TREE("", N_("MIME"),
-		"mime", 0,
-		N_("MIME-related options (handlers of various MIME types).")),
-
-
-	INIT_OPT_STRING("mime", N_("Default MIME-type"),
-		"default_type", 0, "application/octet-stream",
-		N_("Document MIME-type to assume by default (when we are unable to\n"
-		"guess it properly from known information about the document).")),
-
-
-	INIT_OPT_TREE("mime", N_("MIME type associations"),
-		"type", OPT_AUTOCREATE,
-		N_("Handler <-> MIME type association. The first sub-tree is the MIME\n"
-		"class while the second sub-tree is the MIME type (ie. image/gif\n"
-		"handler will reside at mime.type.image.gif). Each MIME type option\n"
-		"should contain (case-sensitive) name of the MIME handler (its\n"
-		"properties are stored at mime.handler.<name>).")),
-
-	INIT_OPT_TREE("mime.type", NULL,
-		"_template_", OPT_AUTOCREATE,
-		N_("Handler matching this MIME-type class ('*' is used here in place\n"
-		"of '.').")),
-
-	INIT_OPT_STRING("mime.type._template_", NULL,
-		"_template_", 0, "",
-		N_("Handler matching this MIME-type name ('*' is used here in place\n"
-		"of '.').")),
-
-
-	INIT_OPT_TREE("mime", N_("File type handlers"),
-		"handler", OPT_AUTOCREATE,
-		N_("Handler for certain MIME types (as specified in mime.type.*).\n"
-		"Each handler usually serves family of MIME types (ie. images).")),
-
-	INIT_OPT_TREE("mime.handler", NULL,
-		"_template_", OPT_AUTOCREATE,
-		N_("Description of this handler.")),
-
-	INIT_OPT_TREE("mime.handler._template_", NULL,
-		"_template_", 0,
-		N_("System-specific handler description (ie. unix, unix-xwin, ...).")),
-
-	INIT_OPT_BOOL("mime.handler._template_._template_", N_("Ask before opening"),
-		"ask", 0, 1,
-		N_("Ask before opening.")),
-
-	INIT_OPT_BOOL("mime.handler._template_._template_", N_("Block terminal"),
-		"block", 0, 1,
-		N_("Block the terminal when the handler is running.")),
-
-	INIT_OPT_STRING("mime.handler._template_._template_", N_("Program"),
-		"program", 0, "",
-		N_("External viewer for this file type. '%' in this string will be\n"
-		"substituted by a file name.")),
-
-
-	INIT_OPT_TREE("mime", N_("File extension associations"),
-		"extension", OPT_AUTOCREATE,
-		N_("Extension <-> MIME type association.")),
-
-	INIT_OPT_STRING("mime.extension", NULL,
-		"_template_", 0, "",
-		N_("MIME-type matching this file extension ('*' is used here in place\n"
-		"of '.').")),
 
 	/* Keep options in alphabetical order. */
 

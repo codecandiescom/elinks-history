@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.30 2003/10/26 14:02:34 jonas Exp $ */
+/* $Id: mime.c,v 1.31 2003/10/26 16:47:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "intl/gettext/libintl.h"
 #include "mime/backend/common.h"
 #include "mime/mime.h"
 #include "modules/module.h"
@@ -19,6 +20,19 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+
+static struct option_info mime_options[] = {
+	INIT_OPT_TREE("", N_("MIME"),
+		"mime", 0,
+		N_("MIME-related options (handlers of various MIME types).")),
+
+	INIT_OPT_STRING("mime", N_("Default MIME-type"),
+		"default_type", 0, "application/octet-stream",
+		N_("Document MIME-type to assume by default (when we are unable to\n"
+		"guess it properly from known information about the document).")),
+
+	NULL_OPTION_INFO,
+};
 
 /* Checks if application/x-<extension> has any handlers. */
 static inline unsigned char *
@@ -147,7 +161,7 @@ static struct module *mime_submodules[] = {
 
 struct module mime_module = struct_module(
 	/* name: */		"mime",
-	/* options: */		NULL,
+	/* options: */		mime_options,
 	/* hooks: */		NULL,
 	/* submodules: */	mime_submodules,
 	/* data: */		NULL,

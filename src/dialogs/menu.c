@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.267 2004/01/07 12:13:37 jonas Exp $ */
+/* $Id: menu.c,v 1.268 2004/01/07 14:41:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,8 +223,8 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 
 #ifdef CONFIG_BOOKMARKS
 	if (!anonymous) {
-		add_to_menu(&menu, N_("Bookm~ark document"), NULL, ACT_ADD_BOOKMARK,
-			    (menu_func) launch_bm_add_doc_dialog, NULL, 0);
+		add_menu_action(&menu, N_("Bookm~ark document"), ACT_ADD_BOOKMARK,
+				NULL, 0);
 	}
 #endif
 
@@ -249,8 +249,8 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 				ACT_TAB_CLOSE_ALL_BUT_CURRENT, NULL, 0);
 #ifdef CONFIG_BOOKMARKS
 		if (!anonymous) {
-			add_to_menu(&menu, N_("B~ookmark all tabs"), "", ACT_ADD_BOOKMARK_TABS,
-				    NULL, NULL, 0);
+			add_menu_action(&menu, N_("B~ookmark all tabs"),
+					ACT_ADD_BOOKMARK_TABS, NULL, 0);
 		}
 #endif
 	}
@@ -287,8 +287,7 @@ static struct menu_item file_menu21[] = {
 	INIT_MENU_ITEM(N_("Sa~ve formatted document"), NULL, ACT_SAVE_FORMATTED,
 			menu_save_formatted, NULL, 0),
 #ifdef CONFIG_BOOKMARKS
-	INIT_MENU_ITEM(N_("Bookm~ark document"), NULL, ACT_ADD_BOOKMARK,
-			launch_bm_add_doc_dialog, NULL, 0),
+	INIT_MENU_ITEM(N_("Bookm~ark document"), NULL, ACT_ADD_BOOKMARK, NULL, NULL, 0),
 #endif
 };
 

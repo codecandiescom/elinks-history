@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.335 2004/01/07 12:13:37 jonas Exp $ */
+/* $Id: view.c,v 1.336 2004/01/07 14:41:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1017,18 +1017,6 @@ quak:
 			case ACT_SAVE_OPTIONS:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					write_config(ses->tab->term);
-				goto x;
-			case ACT_ADD_BOOKMARK:
-#ifdef CONFIG_BOOKMARKS
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					launch_bm_add_doc_dialog(ses->tab->term, NULL, ses);
-#endif
-				goto x;
-			case ACT_ADD_BOOKMARK_LINK:
-#ifdef CONFIG_BOOKMARKS
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					launch_bm_add_link_dialog(ses->tab->term, NULL, ses);
-#endif
 				goto x;
 			case ACT_COOKIES_LOAD:
 #ifdef CONFIG_COOKIES

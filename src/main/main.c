@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.84 2003/05/04 21:45:37 pasky Exp $ */
+/* $Id: main.c,v 1.85 2003/05/04 21:52:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,14 +141,13 @@ sig_segv(struct terminal *t)
 	fprintf(stderr,"\a"); fflush(stderr); sleep(1);	fprintf(stderr,"\a\n");
 
 	/* Rant. */
-	fprintf(stderr,"ELinks crashed. That shouldn't happen. Please report this incident\n");
-	fprintf(stderr,"to developers. Preferrably please include information about what\n");
-	fprintf(stderr,"probably triggered this and the listout below. Note that it does NOT\n");
-	fprintf(stderr,"supercede the gdb output, which is way more useful for developers.\n");
-	fprintf(stderr,"If you would like to help to debug the problem you just uncovered,\n");
-	fprintf(stderr,"please keep the core you just got and send the developers output of\n");
-	fprintf(stderr,"'bt' command entered inside of gdb (which you run as gdb elinks core).\n");
-	fprintf(stderr,"Thanks a lot for your cooperation!\n\n");
+	fprintf(stderr, "ELinks crashed. That shouldn't happen. Please report this incident to\n");
+	fprintf(stderr, "developers. Preferrably please include information about what probably\n");
+	fprintf(stderr, "triggered this and the listout below. Note that it does NOT supercede the gdb\n");
+	fprintf(stderr, "output, which is way more useful for developers. If you would like to help to\n");
+	fprintf(stderr, "debug the problem you just uncovered, please keep the core you just got and\n");
+	fprintf(stderr, "send the developers output of 'bt' command entered inside of gdb (which you run\n");
+	fprintf(stderr, "as gdb elinks core). Thanks a lot for your cooperation!\n\n");
 
 	/* Backtrace. */
 	dump_backtrace(stderr, 1);

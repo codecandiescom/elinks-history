@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.95 2003/11/11 14:26:18 zas Exp $ */
+/* $Id: dialog.c,v 1.96 2003/11/26 22:06:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,10 +37,6 @@
 #include "bfu/inpfield.h"
 #include "bfu/listbox.h"
 #include "bfu/text.h"
-
-
-/* Prototypes */
-void dialog_func(struct window *, struct term_event *, int);
 
 
 struct dialog_data *

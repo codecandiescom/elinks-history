@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.158 2003/07/07 13:14:45 jonas Exp $ */
+/* $Id: http.c,v 1.159 2003/07/07 15:36:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,7 +260,7 @@ check_http_server_bugs(unsigned char *url,
 		mem_free(server);
 		server = get_host_name(url);
 		if (server) {
-			add_blacklist_entry(server, BL_HTTP10);
+			add_blacklist_entry(server, strlen(server), BL_HTTP10);
 			mem_free(server);
 			return 1;
 		}
@@ -356,7 +356,7 @@ http_send_header(struct connection *conn)
 
 	host_data = get_host_name(host);
 	if (host_data) {
-		info->bl_flags = get_blacklist_flags(host_data);
+		info->bl_flags = get_blacklist_flags(host_data, strlen(host_data));
 		mem_free(host_data);
 	}
 
@@ -1094,10 +1094,12 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 		unsigned char *hstr;
 
 		if (!conn->tries && (hstr = get_host_name(host))) {
+			int len = strlen(hstr);
+
 			if (info->bl_flags & BL_NO_CHARSET) {
-				del_blacklist_entry(hstr, BL_NO_CHARSET);
+				del_blacklist_entry(hstr, len, BL_NO_CHARSET);
 			} else {
-				add_blacklist_entry(hstr, BL_NO_CHARSET);
+				add_blacklist_entry(hstr, len, BL_NO_CHARSET);
 				conn->tries = -1;
 			}
 			mem_free(hstr);

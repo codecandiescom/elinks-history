@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.175 2004/11/18 00:31:42 zas Exp $ */
+/* $Id: listbox.c,v 1.176 2004/11/18 00:52:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -572,11 +572,11 @@ mouse_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 }
 
 static t_handler_event_status
-kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
-	    struct term_event *ev)
+kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct widget_data *dlg_item = dlg_data->widgets_data;
-
+	struct term_event *ev = dlg_data->term_event;
+	
 	/* Not a pure listbox, but you're not supposed to use this outside of
 	 * the listbox browser anyway, so what.. */
 

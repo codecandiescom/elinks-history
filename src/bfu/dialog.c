@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.173 2004/11/18 00:31:42 zas Exp $ */
+/* $Id: dialog.c,v 1.174 2004/11/18 00:52:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,11 +250,12 @@ select_button_by_flag(struct dialog_data *dlg_data, int flag)
 
 /* Look up for a button with matching starting letter. */
 static void
-select_button_by_key(struct dialog_data *dlg_data, struct term_event *ev)
+select_button_by_key(struct dialog_data *dlg_data)
 {
 	unsigned char key;
 	int i;
-
+	struct term_event *ev = dlg_data->term_event;
+	
 	if (!check_kbd_label_key(ev)) return;
 
 	key = toupper(get_kbd_key(ev));
@@ -271,15 +272,16 @@ select_button_by_key(struct dialog_data *dlg_data, struct term_event *ev)
 }
 
 static void
-dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
+dialog_ev_kbd(struct dialog_data *dlg_data)
 {
 	struct widget_data *widget_data = selected_widget(dlg_data);
 	struct widget_ops *ops = widget_data->widget->ops;
 	/* XXX: KEYMAP_EDIT ? --pasky */
 	enum menu_action action;
-
+	struct term_event *ev = dlg_data->term_event;
+	
 	/* First let the widget try out. */
-	if (ops->kbd && ops->kbd(dlg_data, widget_data, ev) == EVENT_PROCESSED)
+	if (ops->kbd && ops->kbd(dlg_data, widget_data) == EVENT_PROCESSED)
 		return;
 
 	action = kbd_action(KEYMAP_MENU, ev, NULL);
@@ -323,13 +325,13 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 		redraw_terminal_cls(dlg_data->win->term);
 		break;
 	default:
-		select_button_by_key(dlg_data, ev);
+		select_button_by_key(dlg_data);
 		break;
 	}
 }
 
 static void
-dialog_ev_abort(struct dialog_data *dlg_data, struct term_event *ev)
+dialog_ev_abort(struct dialog_data *dlg_data)
 {
 	int i;
 
@@ -362,14 +364,14 @@ dialog_func(struct window *win, struct term_event *ev)
 	struct dialog_data *dlg_data = win->data;
 
 	dlg_data->win = win;
+	dlg_data->term_event = ev;
 
 	/* Look whether user event handlers can help us.. */
 	if (dlg_data->dlg->handle_event &&
-	    (dlg_data->dlg->handle_event(dlg_data, ev) == EVENT_PROCESSED)) {
+	    (dlg_data->dlg->handle_event(dlg_data) == EVENT_PROCESSED)) {
 		return;
 	}
 
-	dlg_data->term_event = ev;
 	switch (ev->ev) {
 		case EVENT_INIT:
 			dialog_ev_init(dlg_data);
@@ -386,11 +388,11 @@ dialog_func(struct window *win, struct term_event *ev)
 			break;
 
 		case EVENT_KBD:
-			dialog_ev_kbd(dlg_data, ev);
+			dialog_ev_kbd(dlg_data);
 			break;
 
 		case EVENT_ABORT:
-			dialog_ev_abort(dlg_data, ev);
+			dialog_ev_abort(dlg_data);
 			break;
 	}
 }

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.112 2004/11/18 00:31:42 zas Exp $ */
+/* $Id: text.c,v 1.113 2004/11/18 00:52:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,11 +326,11 @@ format_and_display_text(struct widget_data *widget_data,
 }
 
 static t_handler_event_status
-kbd_text(struct dialog_data *dlg_data, struct widget_data *widget_data,
-	 struct term_event *ev)
+kbd_text(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	int current = widget_data->info.text.current;
-
+	struct term_event *ev = dlg_data->term_event;
+	 
 	switch (kbd_action(KEYMAP_MENU, ev, NULL)) {
 		case ACT_MENU_UP:
 			current--;

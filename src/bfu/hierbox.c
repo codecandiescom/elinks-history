@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.193 2004/11/18 00:11:42 zas Exp $ */
+/* $Id: hierbox.c,v 1.194 2004/11/18 00:52:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,7 +145,7 @@ test_search(struct listbox_item *item, void *data_, int *offset)
 }
 
 static t_handler_event_status
-hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
+hierbox_ev_kbd(struct dialog_data *dlg_data)
 {
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
 	struct widget_data *widget_data = dlg_data->widgets_data;
@@ -153,10 +153,11 @@ hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 	struct listbox_data *box;
 	struct listbox_item *selected;
 	enum menu_action action;
-
+	struct term_event *ev = dlg_data->term_event;
+	
 	/* Check if listbox has something to say to this */
 	if (widget->ops->kbd
-	    && widget->ops->kbd(dlg_data, widget_data, ev)
+	    && widget->ops->kbd(dlg_data, widget_data)
 	       == EVENT_PROCESSED)
 		return EVENT_PROCESSED;
 
@@ -229,7 +230,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 }
 
 static t_handler_event_status
-hierbox_ev_init(struct dialog_data *dlg_data, struct term_event *ev)
+hierbox_ev_init(struct dialog_data *dlg_data)
 {
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
 	struct hierbox_dialog_list_item *item;
@@ -251,7 +252,7 @@ hierbox_ev_init(struct dialog_data *dlg_data, struct term_event *ev)
 }
 
 static t_handler_event_status
-hierbox_ev_abort(struct dialog_data *dlg_data, struct term_event *ev)
+hierbox_ev_abort(struct dialog_data *dlg_data)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
@@ -282,14 +283,16 @@ hierbox_ev_abort(struct dialog_data *dlg_data, struct term_event *ev)
  * always first let the listbox catch the keypress and handle it, and if it
  * doesn't care, we pass it on to the button. */
 static t_handler_event_status
-hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
+hierbox_dialog_event_handler(struct dialog_data *dlg_data)
 {
+	struct term_event *ev = dlg_data->term_event;
+
 	switch (ev->ev) {
 		case EVENT_KBD:
-			return hierbox_ev_kbd(dlg_data, ev);
+			return hierbox_ev_kbd(dlg_data);
 
 		case EVENT_INIT:
-			return hierbox_ev_init(dlg_data, ev);
+			return hierbox_ev_init(dlg_data);
 
 		case EVENT_RESIZE:
 		case EVENT_REDRAW:
@@ -297,7 +300,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			return EVENT_NOT_PROCESSED;
 
 		case EVENT_ABORT:
-			return hierbox_ev_abort(dlg_data, ev);
+			return hierbox_ev_abort(dlg_data);
 	}
 
 	return EVENT_NOT_PROCESSED;

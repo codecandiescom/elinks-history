@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.175 2004/11/18 00:31:42 zas Exp $ */
+/* $Id: inpfield.c,v 1.176 2004/11/18 00:52:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,12 +346,12 @@ display_field:
 }
 
 static t_handler_event_status
-kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data,
-	  struct term_event *ev)
+kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct window *win = dlg_data->win;
 	struct terminal *term = win->term;
-
+	struct term_event *ev = dlg_data->term_event;
+	
 	switch (kbd_action(KEYMAP_EDIT, ev, NULL)) {
 		case ACT_EDIT_UP:
 			if (!widget_has_history(widget_data))
@@ -528,13 +528,14 @@ input_line_layouter(struct dialog_data *dlg_data)
 }
 
 static t_handler_event_status
-input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
+input_line_event_handler(struct dialog_data *dlg_data)
 {
 	struct input_line *input_line = dlg_data->dlg->udata;
 	input_line_handler handler = input_line->handler;
 	enum edit_action action;
 	struct widget_data *widget_data = dlg_data->widgets_data;
-
+	struct term_event *ev = dlg_data->term_event;
+	
 	/* Noodle time */
 	switch (ev->ev) {
 	case EVENT_KBD:
@@ -563,7 +564,7 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 		}
 
 		/* First let the input field do its business */
-		kbd_field(dlg_data, widget_data, ev);
+		kbd_field(dlg_data, widget_data);
 		break;
 
 	case EVENT_REDRAW:

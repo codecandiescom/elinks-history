@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.45 2004/11/18 00:23:48 zas Exp $ */
+/* $Id: dialog.h,v 1.46 2004/11/18 00:52:43 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -53,7 +53,7 @@ struct dialog {
 	struct dialog_refresh *refresh;
 
 	void (*layouter)(struct dialog_data *);
-	t_handler_event_status (*handle_event)(struct dialog_data *, struct term_event *);
+	t_handler_event_status (*handle_event)(struct dialog_data *);
 	void (*abort)(struct dialog_data *);
 
 	struct dialog_layout layout;

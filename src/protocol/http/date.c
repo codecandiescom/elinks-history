@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.5 2002/03/19 17:52:36 pasky Exp $ */
+/* $Id: date.c,v 1.6 2002/03/21 18:39:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,8 +169,7 @@ time_t my_timegm(struct tm tm) {
 	/* Following code was borrowed from w3m, and its developers probably
 	 * borrowed it from somewhere else as well, altough they didn't bother
 	 * to mention that. */
-	/* Yes, I've no idea about what this does as well. But it should work
-	 * (tm). --pasky */
+	/* See README.timegm for explanation about how this works. */
 	tm.tm_mon -= 2;
 	if (tm.tm_mon < 0) {
 		tm.tm_mon += 12;

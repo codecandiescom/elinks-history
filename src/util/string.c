@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.96 2004/04/06 09:50:42 zas Exp $ */
+/* $Id: string.c,v 1.97 2004/04/14 19:03:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,9 +254,15 @@ done_string(struct string *string)
 {
 	assertm(string, "[done_string]");
 	if_assert_failed { return; }
-	check_string_magic(string);
 
-	if (string->source) mem_free(string->source);
+	if (string->source) {
+		/* We only check the magic if we have to free anything so
+		 * that done_string() can be called multiple times without
+		 * blowing up something */
+		check_string_magic(string);
+		mem_free(string->source);
+	}
+
 	/* Blast everything including the magic */
 	memset(string, 0, sizeof(struct string));
 }

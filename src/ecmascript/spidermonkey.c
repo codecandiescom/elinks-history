@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.27 2004/09/24 23:33:28 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.28 2004/09/24 23:38:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,43 +58,48 @@ enum prop_type {
 	JSPT_OBJECT,
 };
 
+union prop_union {
+	int number;
+	JSObject *object;
+	unsigned char *string;
+};
+
 #define VALUE_TO_JSVAL_START \
 	enum prop_type prop_type; \
-	JSObject *object = NULL; \
-	unsigned char *string = NULL; \
+	union prop_union p; \
  \
-	if (!JSVAL_IS_INT(id)) \
+	/* Prevent "Unused variable" warnings. */ \
+	if (!JSVAL_IS_INT(id) || (p.string = NULL)) \
 		goto bye;
 
 #define VALUE_TO_JSVAL_END \
-	value_to_jsval(ctx, vp, prop_type, string, object); \
+	value_to_jsval(ctx, vp, prop_type, &p); \
  \
 bye: \
 	return JS_TRUE;
 
 static void
 value_to_jsval(JSContext *ctx, jsval *vp, enum prop_type prop_type,
-	       unsigned char *string, JSObject *object)
+	       union prop_union *prop)
 {
-	if (!string) {
-		*vp = JSVAL_NULL;
-		return;
-	}
-
 	switch (prop_type) {
 	case JSPT_STRING:
 	case JSPT_ASTRING:
-		*vp = STRING_TO_JSVAL(JS_NewStringCopyZ(ctx, string));
+		if (!prop->string) {
+			*vp = JSVAL_NULL;
+			break;
+		}
+		*vp = STRING_TO_JSVAL(JS_NewStringCopyZ(ctx, prop->string));
 		if (prop_type == JSPT_ASTRING)
-			mem_free(string);
+			mem_free(prop->string);
 		break;
 
 	case JSPT_BOOLEAN:
-		*vp = BOOLEAN_TO_JSVAL(atoi(string));
+		*vp = BOOLEAN_TO_JSVAL(atoi(prop->string));
 		break;
 
 	case JSPT_OBJECT:
-		*vp = OBJECT_TO_JSVAL(object);
+		*vp = OBJECT_TO_JSVAL(prop->object);
 		break;
 
 	case JSPT_UNDEF:
@@ -203,14 +208,14 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		/* TODO: It will be a major PITA to implement this properly.
 		 * Well, perhaps not so much if we introduce reference tracking
 		 * for (struct session)? Still... --pasky */
-		string = "0"; prop_type = JSPT_BOOLEAN; break;
-	case JSP_WIN_SELF: object = obj; prop_type = JSPT_OBJECT; break;
+		p.string = "0"; prop_type = JSPT_BOOLEAN; break;
+	case JSP_WIN_SELF: p.object = obj; prop_type = JSPT_OBJECT; break;
 	case JSP_WIN_TOP:
 	{
 		struct document_view *top_view = doc_view->session->doc_view;
 
 		assert(top_view && top_view->ecmascript);
-		object =JS_GetGlobalObject(top_view->ecmascript->backend_data);
+		p.object=JS_GetGlobalObject(top_view->ecmascript->backend_data);
 		prop_type = JSPT_OBJECT;
 		break;
 	}
@@ -265,8 +270,8 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	VALUE_TO_JSVAL_START;
 
 	switch (JSVAL_TO_INT(id)) {
-	case JSP_DOC_TITLE: string = document->title; prop_type = JSPT_STRING; break;
-	case JSP_DOC_URL: string = get_uri_string(document->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
+	case JSP_DOC_TITLE: p.string = document->title; prop_type = JSPT_STRING; break;
+	case JSP_DOC_URL: p.string = get_uri_string(document->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
 	default:
 		INTERNAL("Invalid ID %d in document_get_property().", JSVAL_TO_INT(id));
 		goto bye;
@@ -323,7 +328,7 @@ location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	VALUE_TO_JSVAL_START;
 
 	switch (JSVAL_TO_INT(id)) {
-	case JSP_LOC_HREF: string = get_uri_string(vs->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
+	case JSP_LOC_HREF: p.string = get_uri_string(vs->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
 	default:
 		INTERNAL("Invalid ID %d in location_get_property().", JSVAL_TO_INT(id));
 		goto bye;

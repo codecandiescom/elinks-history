@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.38 2002/05/26 18:54:23 pasky Exp $ */
+/* $Id: options.c,v 1.39 2002/06/01 18:46:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 		*sep = '\0';
 
 		cat = get_opt_rec(tree, name);
-		if (!cat || cat->type != OPT_TREE) {
+		if (!cat || cat->type != OPT_TREE || cat->flags & OPT_HIDDEN) {
 #if 0
 			debug("ERROR in get_opt_rec() crawl: %s (%d) -> %s", name, cat?cat->type:-1, sep + 1);
 #endif

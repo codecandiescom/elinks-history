@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.9 2002/05/26 18:59:16 pasky Exp $ */
+/* $Id: opttypes.c,v 1.10 2002/06/01 18:46:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,9 +43,9 @@ bool_cmd(struct option *o, unsigned char ***argv, int *argc)
 	if (!*argc) return NULL;
 
 	/* Argument is empty or longer than 1 char.. */
-	if (!(*argv)[0][0] || !(*argv)[0][1]) return NULL;
+	if (!(*argv)[0][0] || (*argv)[0][1]) return NULL;
 
-	switch ((*argv)[0][0] == '0') {
+	switch ((*argv)[0][0]) {
 		case '0': *((int *) o->ptr) = 0; break;
 		case '1': *((int *) o->ptr) = 1; break;
 		default: return NULL;

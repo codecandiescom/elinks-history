@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.27 2002/05/26 18:59:16 pasky Exp $ */
+/* $Id: conf.c,v 1.28 2002/06/01 18:46:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,7 +145,7 @@ parse_config_file(unsigned char *name, unsigned char *file,
 				oname = memacpy(optname, optname_l);
 				opt = get_opt_rec(opt_tree, oname);
 
-				if (opt) {
+				if (opt && !(opt->flags & OPT_HIDDEN)) {
 					if (!option_types[opt->type].read(opt, &optval))
 						error = ERROR_VALUE;
 				} else {

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.188 2004/02/03 18:56:24 jonas Exp $ */
+/* $Id: search.c,v 1.189 2004/02/03 18:59:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -743,7 +743,7 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 }
 
 
-void
+static void
 search_for_back(struct session *ses, unsigned char *str)
 {
 	assert(ses && str);
@@ -752,7 +752,7 @@ search_for_back(struct session *ses, unsigned char *str)
 	search_for_do(ses, str, -1);
 }
 
-void
+static void
 search_for(struct session *ses, unsigned char *str)
 {
 	assert(ses && str);

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.275 2003/11/26 17:59:45 pasky Exp $ */
+/* $Id: view.c,v 1.276 2003/11/26 18:14:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1036,8 +1036,7 @@ quak:
 				goto x;
 			case ACT_BOOKMARK_MANAGER:
 #ifdef BOOKMARKS
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					menu_bookmark_manager(ses->tab->term, NULL, ses);
+				menu_bookmark_manager(ses->tab->term, NULL, ses);
 #endif
 				goto x;
 			case ACT_CACHE_MANAGER:

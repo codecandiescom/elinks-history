@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.120 2003/11/16 14:34:32 zas Exp $ */
+/* $Id: menu.c,v 1.121 2003/12/13 01:41:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -746,33 +746,46 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_KBD:
+		{
+			enum keyact action = kbd_action(KM_MENU, ev, NULL);
+
 			if (ev->x == ' '
 			    || ev->x == KBD_ENTER
 			    || ev->x == KBD_DOWN
 			    || ev->x == KBD_UP
 			    || ev->x == KBD_PAGE_DOWN
-			    || ev->x == KBD_PAGE_UP) {
+			    || ev->x == KBD_PAGE_UP
+			    || action == ACT_ENTER
+			    || action == ACT_DOWN
+			    || action == ACT_UP
+			    || action == ACT_PAGE_UP
+			    || action == ACT_PAGE_DOWN) {
 				select_mainmenu(win->term, menu);
 				break;
 			}
 
-			if (ev->x == KBD_LEFT) {
+			if (ev->x == KBD_LEFT
+			    || action == ACT_LEFT) {
 				if (!menu->selected--)
 					menu->selected = menu->ni - 1;
 				s = 1;
 
-			} else if (ev->x == KBD_RIGHT) {
+			} else if (ev->x == KBD_RIGHT
+				   || action == ACT_RIGHT) {
 				if (++menu->selected >= menu->ni)
 					menu->selected = 0;
 				s = 1;
 
 			}
 
-			if (fwd && (ev->x == KBD_LEFT || ev->x == KBD_RIGHT)) {
+			if (fwd
+			    && (ev->x == KBD_LEFT || ev->x == KBD_RIGHT
+				|| action == ACT_LEFT || action == ACT_RIGHT)) {
 				display_mainmenu(win->term, menu);
 				select_mainmenu(win->term, menu);
 				break;
 			}
+		}
 
 			if (ev->x > ' ' && ev->x < 256 &&
 			    check_hotkeys((struct menu_head *)menu, ev->x, win->term))

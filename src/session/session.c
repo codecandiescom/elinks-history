@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.184 2003/10/24 20:46:53 pasky Exp $ */
+/* $Id: session.c,v 1.185 2003/10/24 20:49:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -677,7 +677,8 @@ do_move(struct session *ses, struct download **stat)
 		unsigned char *u;
 		enum task_type task = ses->task;
 
-		if (task == TASK_BACK && !have_location(ses))
+		if ((task == TASK_BACK || task == TASK_UNBACK)
+		    && !have_location(ses))
 			goto b;
 
 		u = join_urls(ses->loading_url, ce->redirect);

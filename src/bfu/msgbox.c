@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.29 2003/06/07 08:16:02 zas Exp $ */
+/* $Id: msgbox.c,v 1.30 2003/06/07 10:20:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,34 +94,37 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	unsigned char *text, void *udata, int buttons, ...)
 {
 	unsigned char **info = NULL;
-	int button;
 	struct dialog *dlg;
 	va_list ap;
+	int button;
 
 	/* Check if the info string is valid */
 	if (!text) return;
+
+	/* Use the align string to determine wether @text should be free()d */
+	if (align & AL_EXTD_TEXT)
+		add_one_to_ml(&ml, text);
 
 	/* What's up with this hack? Allocate a pointer to a pointer ;) */
 	info = mem_alloc(2 * sizeof(unsigned char *));
 	if (!info) {
 		freeml(ml);
-		if (align & AL_EXTD_TEXT)
-			mem_free(text);
 		return;
 	}
 
 	info[0] = text;
 	info[1] = NULL;
 
+	add_one_to_ml(&ml, info);
+
 	dlg = mem_calloc(1, sizeof(struct dialog) +
 			    (buttons + 1) * sizeof(struct widget));
 	if (!dlg) {
-		mem_free(info);
 		freeml(ml);
-		if (align & AL_EXTD_TEXT)
-			mem_free(text);
 		return;
 	}
+
+	add_one_to_ml(&ml, dlg);
 
 	dlg->title = title;
 	dlg->fn = msg_box_fn;
@@ -158,12 +161,6 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	va_end(ap);
 
 	dlg->items[button].type = D_END;
-
-	/* Use the align string to determine wether @text should be free()d */
-	if (align & AL_EXTD_TEXT)
-		add_to_ml(&ml, dlg, text, info, NULL);
-	else
-		add_to_ml(&ml, dlg, info, NULL);
 
 	do_dialog(term, dlg, ml);
 }

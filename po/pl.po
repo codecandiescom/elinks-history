@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "POT-Creation-Date: 2003-11-13 15:33+0100\n"
-"PO-Revision-Date: 2003-11-12 06:00+0200\n"
+"PO-Revision-Date: 2003-11-14 07:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -3851,13 +3851,12 @@ msgid "Link title"
 msgstr "Tytu³ odno¶nika"
 
 #: src/dialogs/document.c:226
-#, fuzzy
 msgid "Link last visit time"
-msgstr "Data ostatniej wizyty"
+msgstr "Data ostatniej wizyty odno¶nika"
 
 #: src/dialogs/document.c:232
 msgid "Link title (from history)"
-msgstr ""
+msgstr "Tytu³ odno¶nika (z historii)"
 
 #: src/dialogs/document.c:263 src/dialogs/document.c:310
 #: src/dialogs/document.c:322
@@ -5245,26 +5244,25 @@ msgstr ""
 "skonfigurowania OpenSSL przez u¿ytkownika."
 
 #: src/ssl/ssl.c:78
-#, fuzzy
 msgid "Client Certificates"
-msgstr "Sprawdzaj certyfikaty"
+msgstr "Certyfikaty klienta"
 
 #
 #: src/ssl/ssl.c:80
-#, fuzzy
 msgid "X509 client certificate options."
-msgstr "Ustawienia interfejsu u¿ytkownika."
+msgstr "Ustawienia dotycz±ce certyfikatów X509."
 
 #: src/ssl/ssl.c:84
 msgid ""
 "Enable or not the sending of X509 client certificates\n"
 "to servers which request them."
 msgstr ""
+"Czy wysy³aæ certyfikaty klienta X509 do serwerów, które "
+"ich za¿±daj±?" 
 
 #: src/ssl/ssl.c:87
-#, fuzzy
 msgid "Certificate File"
-msgstr "pozosta³y czas"
+msgstr "Plik certyfikatów"
 
 #: src/ssl/ssl.c:89
 msgid ""
@@ -5273,6 +5271,9 @@ msgid ""
 "file pointed to by the X509_CLIENT_CERT variable is used\n"
 "instead."
 msgstr ""
+"Po³o¿enie pliku zawieraj±cego certyfikaty klienta i nieszyfrowany "
+"klucz prywatny w formacie PEM. Je¶li nie ustawione, u¿yty bêdzie "
+"plik wskazywany przez zmienn± ¶rodowiskow± X509_CLIENT_CERT."
 
 #: src/ssl/ssl.c:160
 msgid ""

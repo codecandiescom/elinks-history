@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.332 2004/04/01 01:25:45 jonas Exp $ */
+/* $Id: session.c,v 1.333 2004/04/01 01:30:42 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -869,9 +869,9 @@ destroy_session(struct session *ses)
 
 	foreach (tq, ses->tq) {
 		if (tq->ce) object_unlock(tq->ce);
-		if (tq->url) {
+		if (tq->uri) {
 			change_connection(&tq->download, NULL, PRI_CANCEL, 0);
-			mem_free(tq->url);
+			mem_free(tq->uri);
 		}
 		if (tq->goto_position) mem_free(tq->goto_position);
 		if (tq->prog) mem_free(tq->prog);

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.227 2004/04/01 01:09:40 jonas Exp $ */
+/* $Id: download.c,v 1.228 2004/04/01 01:30:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -792,7 +792,7 @@ continue_download(void *data, unsigned char *file)
 	struct tq *tq = data;
 	struct codw_hop *codw_hop;
 
-	if (!tq->url) return;
+	if (!tq->uri) return;
 
 	codw_hop = mem_calloc(1, sizeof(struct codw_hop));
 	if (!codw_hop) {
@@ -802,7 +802,7 @@ continue_download(void *data, unsigned char *file)
 
 	if (tq->prog) {
 		/* FIXME: get_temp_name() calls tempnam(). --Zas */
-		file = get_temp_name(tq->url);
+		file = get_temp_name(tq->uri);
 		if (!file) {
 			mem_free(codw_hop);
 			tp_cancel(tq);
@@ -827,7 +827,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	assert(codw_hop);
 	assert(codw_hop->tq);
-	assert(codw_hop->tq->url && *codw_hop->tq->url);
+	assert(codw_hop->tq->uri && *codw_hop->tq->uri);
 	assert(codw_hop->tq->ses);
 
 	if (!codw_hop->real_file) goto cancel;
@@ -837,7 +837,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	object_nolock(file_download); /* Debugging purpose. */
 
-	file_download->uri = get_uri(codw_hop->tq->url);
+	file_download->uri = get_uri(codw_hop->tq->uri);
 	if (!file_download->uri) goto cancel;
 
 	file_download->file = codw_hop->real_file;
@@ -887,7 +887,7 @@ static void
 tp_free(struct tq *tq)
 {
 	object_unlock(tq->ce);
-	mem_free(tq->url);
+	mem_free(tq->uri);
 	if (tq->goto_position) mem_free(tq->goto_position);
 	if (tq->prog) mem_free(tq->prog);
 	if (tq->target_frame) mem_free(tq->target_frame);
@@ -912,7 +912,7 @@ tp_save(struct tq *tq)
 		mem_free(tq->prog);
 		tq->prog = NULL;
 	}
-	query_file(tq->ses, tq->url, tq, continue_download, tp_cancel, 1);
+	query_file(tq->ses, tq->uri, tq, continue_download, tp_cancel, 1);
 }
 
 
@@ -936,7 +936,7 @@ tp_display(struct tq *tq)
 	unsigned char *target_frame = ses->task.target_frame;
 
 	ses->goto_position = tq->goto_position;
-	ses->loading_uri = tq->url;
+	ses->loading_uri = tq->uri;
 	ses->task.target_frame = tq->target_frame;
 	vs = ses_forward(ses, tq->frame);
 	if (vs) vs->plain = 1;
@@ -985,7 +985,7 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 	if (!content_type) return;
 
 	if (init_string(&filename))
-		add_string_uri_filename_to_string(&filename, tq->url);
+		add_string_uri_filename_to_string(&filename, tq->uri);
 
 	/* @filename.source should be last in the getml()s ! (It terminates the
 	 * pointers list in case of allocation failure.) */
@@ -1086,7 +1086,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 		goto plaintext_follow;
 
 	foreach (tq, ses->tq)
-		if (!strcmp(tq->url, ses->loading_uri))
+		if (!strcmp(tq->uri, ses->loading_uri))
 			goto do_not_follow;
 
 	tq = mem_calloc(1, sizeof(struct tq));
@@ -1094,7 +1094,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	add_to_list(ses->tq, tq);
 	ret = 1;
 
-	tq->url = stracpy(ses->loading_uri);
+	tq->uri = stracpy(ses->loading_uri);
 	change_connection(loading, &tq->download, PRI_MAIN, 0);
 	loading->state = S_OK;
 

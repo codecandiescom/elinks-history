@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.14 2004/04/16 16:36:59 zas Exp $ */
+/* $Id: window.c,v 1.15 2004/05/14 10:24:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,13 +146,8 @@ empty_window_handler(struct window *win, struct term_event *ev, int fwd)
 		case EV_INIT:
 		case EV_RESIZE:
 		case EV_REDRAW:
-		{
-			int x, y;
-
-			get_parent_ptr(win, &x, &y);
-			set_window_ptr(win, x, y);
+			get_parent_ptr(win, &win->x, &win->y);
 			return;
-		}
 		case EV_ABORT:
 			fn(data);
 			return;

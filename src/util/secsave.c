@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.31 2004/02/07 00:58:56 zas Exp $ */
+/* $Id: secsave.c,v 1.32 2004/02/07 01:04:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,19 +40,19 @@
  * If an error is encountered, secure_save_info int field named err is set
  * (automatically if using secure_fp*() functions or by programmer)
  *
- * When secure_close() is called, "filename.tmp_XXXXXX" is closed, and if
- * secure_save_info err field has a value of zero, "filename.tmp_XXXXXX" is
- * renamed to "filename".
+ * When secure_close() is called, "filename.tmp_XXXXXX" is flushed and closed,
+ * and if secure_save_info err field has a value of zero, "filename.tmp_XXXXXX"
+ * is renamed to "filename". If this succeeded, then secure_close() returns 0.
  *
  * WARNING: since rename() is used, any symlink called "filename" may be
  * replaced by a regular file. If destination file isn't a regular file,
-  then secsave is disabled for that file.
+ * then secsave is disabled for that file.
  *
  * If secure_file_saving is unset:
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *
  * No temporary file is created, "filename" is truncated, all operations are
- * done on it, no rename occurs, symlinks are preserved.
+ * done on it, no rename nor flush occur, symlinks are preserved.
  *
  * In both cases:
  * ~~~~~~~~~~~~~

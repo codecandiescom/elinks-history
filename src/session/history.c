@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.73 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: history.c,v 1.74 2004/04/03 20:26:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,8 +75,7 @@ compress_history(struct ses_history *history, struct location *loc)
 
 	if ((current->vs.uri == loc->vs.uri)
 	    || (current->download.cached->redirect
-		&& !strlcasecmp(current->download.cached->redirect, -1,
-				struri(loc->vs.uri), -1))) {
+		&& current->download.cached->redirect == loc->vs.uri)) {
 		del_from_history(history, current);
 		destroy_location(current);
 	}

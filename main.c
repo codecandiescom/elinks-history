@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.11 2002/03/16 17:44:41 pasky Exp $ */
+/* $Id: main.c,v 1.12 2002/03/16 17:51:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 
 #include "af_unix.h"
 #include "cache.h"
-#include "charset.h"
+#include "charsets.h"
 #include "cookies.h"
 #include "dns.h"
 #include "error.h"

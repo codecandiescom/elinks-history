@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.38 2002/03/16 17:44:41 pasky Exp $ */
+/* $Id: view.c,v 1.39 2002/03/16 17:51:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -643,6 +643,12 @@ void init_ctrl(struct form_control *form, struct form_state *fs)
 			fs->value = stracpy(form->default_value);
 			fs->state = form->default_state;
 			fixup_select_state(form, fs);
+			break;
+		case FC_SUBMIT:
+		case FC_IMAGE:
+		case FC_RESET:
+		case FC_HIDDEN:
+			/* Silence compiler warnings. */
 			break;
 	}
 }

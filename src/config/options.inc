@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.92 2004/01/23 20:00:56 jonas Exp $ */
+/* $Id: options.inc,v 1.93 2004/01/24 10:25:10 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -680,7 +680,11 @@ struct option_info config_options_info[] = {
 	INIT_OPT_STRING("protocol.http", N_("User-agent identification"),
 		"user_agent", 0, "ELinks/%v (textmode; %s; %t)",
 		N_("Change the User Agent ID. That means identification string, which\n"
-		"is sent to HTTP server when a document is requested.\n"
+		"is sent to HTTP server when a document is requested. The 'textmode'\n"
+		"token in the first field is our silent attempt to establish this as\n"
+		"a standard for new textmode user agents, so that the webmasters can\n"
+		"have just a single uniform test for these if they are ie. pushing\n"
+		"some lite version to them automagically.\n"
 		"%v in the string means ELinks version\n"
 		"%s in the string means system identification\n"
 		"%t in the string means size of the terminal\n"

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.232 2004/06/27 08:58:15 zas Exp $ */
+/* $Id: tables.c,v 1.233 2004/06/27 09:03:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1257,7 +1257,7 @@ end:
 static void
 check_table_widths(struct table *table)
 {
-	int i, j;
+	int col, row;
 	int colspan;
 	int width, new_width;
 	int max, max_index = 0; /* go away, warning! */
@@ -1265,15 +1265,15 @@ check_table_widths(struct table *table)
 
 	if (!widths) return;
 
-	for (j = 0; j < table->rows; j++) for (i = 0; i < table->cols; i++) {
-		struct table_cell *cell = CELL(table, i, j);
+	for (row = 0; row < table->rows; row++) for (col = 0; col < table->cols; col++) {
+		struct table_cell *cell = CELL(table, col, row);
 		int k, p = 0;
 
 		if (!cell->start) continue;
 
 		for (k = 0; k < cell->colspan; k++) {
-			p += table->cols_widths[i + k] +
-			     (k && get_vline_width(table, i + k) >= 0);
+			p += table->cols_widths[col + k] +
+			     (k && get_vline_width(table, col + k) >= 0);
 		}
 
 		get_cell_width(cell->start, cell->end, table->cellpadding, p, 1, &cell->width,
@@ -1286,24 +1286,24 @@ check_table_widths(struct table *table)
 	do {
 		int new_colspan = MAXINT;
 
-		for (i = 0; i < table->cols; i++) for (j = 0; j < table->rows; j++) {
-			struct table_cell *cell = CELL(table, i, j);
+		for (col = 0; col < table->cols; col++) for (row = 0; row < table->rows; row++) {
+			struct table_cell *cell = CELL(table, col, row);
 
 			if (!cell->start) continue;
 
-			assertm(cell->colspan + i <= table->cols, "colspan out of table");
+			assertm(cell->colspan + col <= table->cols, "colspan out of table");
 			if_assert_failed goto end;
 
 			if (cell->colspan == colspan) {
 				int k, p = 0;
 
 				for (k = 1; k < colspan; k++)
-					p += (get_vline_width(table, i + k) >= 0);
+					p += (get_vline_width(table, col + k) >= 0);
 
-				distribute_values(&widths[i],
+				distribute_values(&widths[col],
 						  colspan,
 						  cell->width - p,
-						  &table->max_cols_widths[i]);
+						  &table->max_cols_widths[col]);
 
 			} else if (cell->colspan > colspan
 				   && cell->colspan < new_colspan) {
@@ -1314,9 +1314,9 @@ check_table_widths(struct table *table)
 	} while (colspan != MAXINT);
 
 	width = new_width = 0;
-	for (i = 0; i < table->cols; i++) {
-		width += table->cols_widths[i];
-		new_width += widths[i];
+	for (col = 0; col < table->cols; col++) {
+		width += table->cols_widths[col];
+		new_width += widths[col];
 	}
 
 	if (new_width > width) {
@@ -1325,10 +1325,10 @@ check_table_widths(struct table *table)
 	}
 
 	max = -1;
-	for (i = 0; i < table->cols; i++)
-		if (table->max_cols_widths[i] > max) {
-			max = table->max_cols_widths[i];
-			max_index = i;
+	for (col = 0; col < table->cols; col++)
+		if (table->max_cols_widths[col] > max) {
+			max = table->max_cols_widths[col];
+			max_index = col;
 		}
 
 	if (max != -1) {

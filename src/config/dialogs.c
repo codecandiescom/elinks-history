@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.104 2003/11/07 22:21:16 jonas Exp $ */
+/* $Id: dialogs.c,v 1.105 2003/11/07 23:51:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,23 +202,21 @@ edit_dialog_layouter(struct dialog_data *dlg_data)
 	int y = -1;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 	struct option *option = dlg_data->dlg->udata;
-	unsigned char *name, *type, *value, *desc;
+	unsigned char *name, *type, *desc;
 
 	name = straconcat(_("Name", term), ": ", option->name, NULL);
 	type = straconcat(_("Type", term), ": ",
 			  _(option_types[option->type].name, term), NULL);
-	value= straconcat(_("Value", term), ": ", NULL);
 	desc = straconcat(_("Description", term), ": \n",
 			  _(option->desc ? option->desc
 				  	 : (unsigned char *) "N/A", term),
 			  NULL);
 
-	if (name && type && value && desc)
-		add_to_ml(&dlg_data->ml, name, type, value, desc, NULL);
+	if (name && type && desc)
+		add_to_ml(&dlg_data->ml, name, type, desc, NULL);
 	else {
 		if (name) mem_free(name);
 		if (type) mem_free(type);
-		if (value) mem_free(value);
 		if (desc) mem_free(desc);
 		return;
 	}
@@ -227,8 +225,8 @@ edit_dialog_layouter(struct dialog_data *dlg_data)
 			w, &rw, dialog_text_color, AL_LEFT);
 	dlg_format_text(NULL, type, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
-	dlg_format_text(NULL, value, 0, &y,
-			w, &rw, dialog_text_color, AL_LEFT);
+	dlg_format_field(NULL, &dlg_data->widgets_data[0],
+			 0, &y, w, &rw, AL_NONE);
 	y++;
 	dlg_format_text(NULL, desc, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
@@ -245,14 +243,8 @@ edit_dialog_layouter(struct dialog_data *dlg_data)
 	dlg_format_text(term, type, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
 
-	/* XXX: We want the field on the same line. Could this be a problem
-	 * with extremely thin terminals? --pasky */
-	rw = 0;
-	dlg_format_text(term, value, dlg_data->x + DIALOG_LB,
-			&y, w, &rw, dialog_text_color, AL_LEFT);
-	y--;
-	dlg_format_field(term, &dlg_data->widgets_data[0], rw + dlg_data->x + DIALOG_LB,
-			 &y, w - rw, NULL, AL_LEFT);
+	dlg_format_field(term, &dlg_data->widgets_data[0],
+			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_NONE);
 
 	y++;
 	dlg_format_text(term, desc, dlg_data->x + DIALOG_LB,
@@ -268,7 +260,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 {
 #define EDIT_WIDGETS_COUNT 3
 	struct dialog *dlg;
-	unsigned char *value;
+	unsigned char *value, *label;
 	struct string tvalue;
 
 	if (!init_string(&tvalue)) return;
@@ -293,15 +285,21 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	safe_strncpy(value, tvalue.source, MAX_STR_LEN);
 	done_string(&tvalue);
 
+	label = straconcat(_("Value", term), ": ", NULL);
+	if (!label) {
+		mem_free(dlg);
+		return;
+	}
+
 	/* FIXME: Compute some meaningful maximal width. --pasky */
-	add_dlg_field(dlg, NULL, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
+	add_dlg_field(dlg, label, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 
-	do_dialog(term, dlg, getml(dlg, NULL));
+	do_dialog(term, dlg, getml(dlg, label, NULL));
 #undef EDIT_WIDGETS_COUNT
 }
 

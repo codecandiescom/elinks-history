@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.95 2003/11/07 22:20:13 jonas Exp $ */
+/* $Id: inpfield.c,v 1.96 2003/11/07 23:51:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,6 +91,19 @@ dlg_format_field(struct terminal *term,
 		if (term) text_color = get_bfu_color(term, "dialog.text");
 
 		dlg_format_text(term, label, x, y, w, rw, text_color, AL_LEFT);
+	}
+
+	/* XXX: We want the field and label on the same line if the terminal
+	 * width allows it. */
+	if (align == AL_NONE && label) {
+		int label_width = strlen(label);
+
+		/* FIXME: Is 5 chars for input field enough? --jonas */
+		if (label_width < w - 5) {
+			(*y)--;
+			w -= label_width;
+			x += label_width;
+		}
 	}
 
 	if (term) {

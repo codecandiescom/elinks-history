@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.75 2003/09/03 22:05:20 jonas Exp $ */
+/* $Id: options.c,v 1.76 2003/09/15 20:50:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,11 +169,31 @@ terminal_options_fn(struct dialog_data *dlg)
 			AL_CENTER);
 }
 
+#define set_term_opt_checkbox(dlg, pos, groupid, groupnum, dataz)	\
+	do {								\
+		(dlg)->items[(pos)].type = D_CHECKBOX;			\
+		(dlg)->items[(pos)].gid = (groupid);			\
+		(dlg)->items[(pos)].gnum = (groupnum);			\
+		(dlg)->items[(pos)].dlen = sizeof(int);			\
+		(dlg)->items[(pos)].data = (unsigned char *) &(dataz);	\
+		(pos)++;						\
+	} while (0)
+
+#define set_term_opt_button(dlg, pos, key, handler, button_text)	\
+	do {								\
+		(dlg)->items[(pos)].type = D_BUTTON;			\
+		(dlg)->items[(pos)].gid = (key);			\
+		(dlg)->items[(pos)].fn = (handler);			\
+		(dlg)->items[(pos)].text = (button_text);		\
+		(pos)++;						\
+	} while (0)
+
 void
 terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct termopt_hop *termopt_hop;
 	struct dialog *d;
+	int pos = 0;
 
 	termopt_hop = mem_calloc(1, sizeof(struct termopt_hop));
 	if (!termopt_hop) return;
@@ -200,81 +220,24 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	d->refresh = (void (*)(void *)) terminal_options_ok;
 	d->refresh_data = termopt_hop;
 
-	d->items[0].type = D_CHECKBOX;
-	d->items[0].gid = 1;
-	d->items[0].gnum = TERM_DUMB;
-	d->items[0].dlen = sizeof(int);
-	d->items[0].data = (unsigned char *) &termopt_hop->type;
+	set_term_opt_checkbox(d, pos, 1, TERM_DUMB, termopt_hop->type);
+	set_term_opt_checkbox(d, pos, 1, TERM_VT100, termopt_hop->type);
+	set_term_opt_checkbox(d, pos, 1, TERM_LINUX, termopt_hop->type);
+	set_term_opt_checkbox(d, pos, 1, TERM_KOI8, termopt_hop->type);
 
-	d->items[1].type = D_CHECKBOX;
-	d->items[1].gid = 1;
-	d->items[1].gnum = TERM_VT100;
-	d->items[1].dlen = sizeof(int);
-	d->items[1].data = (unsigned char *) &termopt_hop->type;
+	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->m11_hack);
+	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->restrict_852);
+	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->block_cursor);
+	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->colors);
+	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->trans);
+	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->underline);
+	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->utf_8_io);
 
-	d->items[2].type = D_CHECKBOX;
-	d->items[2].gid = 1;
-	d->items[2].gnum = TERM_LINUX;
-	d->items[2].dlen = sizeof(int);
-	d->items[2].data = (unsigned char *) &termopt_hop->type;
+	set_term_opt_button(d, pos, B_ENTER, ok_dialog, _("OK", term));
+	set_term_opt_button(d, pos, B_ENTER, terminal_options_save, _("Save", term));
+	set_term_opt_button(d, pos, B_ESC, cancel_dialog, _("Cancel", term));
 
-	d->items[3].type = D_CHECKBOX;
-	d->items[3].gid = 1;
-	d->items[3].gnum = TERM_KOI8;
-	d->items[3].dlen = sizeof(int);
-	d->items[3].data = (unsigned char *) &termopt_hop->type;
-
-	d->items[4].type = D_CHECKBOX;
-	d->items[4].gid = 0;
-	d->items[4].dlen = sizeof(int);
-	d->items[4].data = (unsigned char *) &termopt_hop->m11_hack;
-
-	d->items[5].type = D_CHECKBOX;
-	d->items[5].gid = 0;
-	d->items[5].dlen = sizeof(int);
-	d->items[5].data = (unsigned char *) &termopt_hop->restrict_852;
-
-	d->items[6].type = D_CHECKBOX;
-	d->items[6].gid = 0;
-	d->items[6].dlen = sizeof(int);
-	d->items[6].data = (unsigned char *) &termopt_hop->block_cursor;
-
-	d->items[7].type = D_CHECKBOX;
-	d->items[7].gid = 0;
-	d->items[7].dlen = sizeof(int);
-	d->items[7].data = (unsigned char *) &termopt_hop->colors;
-
-	d->items[8].type = D_CHECKBOX;
-	d->items[8].gid = 0;
-	d->items[8].dlen = sizeof(int);
-	d->items[8].data = (unsigned char *) &termopt_hop->trans;
-
-	d->items[9].type = D_CHECKBOX;
-	d->items[9].gid = 0;
-	d->items[9].dlen = sizeof(int);
-	d->items[9].data = (unsigned char *) &termopt_hop->underline;
-
-	d->items[10].type = D_CHECKBOX;
-	d->items[10].gid = 0;
-	d->items[10].dlen = sizeof(int);
-	d->items[10].data = (unsigned char *) &termopt_hop->utf_8_io;
-
-	d->items[11].type = D_BUTTON;
-	d->items[11].gid = B_ENTER;
-	d->items[11].fn = ok_dialog;
-	d->items[11].text = _("OK", term);
-
-	d->items[12].type = D_BUTTON;
-	d->items[12].gid = B_ENTER;
-	d->items[12].fn = terminal_options_save;
-	d->items[12].text = _("Save", term);
-
-	d->items[13].type = D_BUTTON;
-	d->items[13].gid = B_ESC;
-	d->items[13].fn = cancel_dialog;
-	d->items[13].text = _("Cancel", term);
-
-	d->items[14].type = D_END;
+	d->items[pos].type = D_END;
 
 	do_dialog(term, d, getml(d, termopt_hop, NULL));
 }

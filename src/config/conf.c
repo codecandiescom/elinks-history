@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.87 2003/07/21 05:47:43 jonas Exp $ */
+/* $Id: conf.c,v 1.88 2003/07/21 14:18:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -322,7 +322,7 @@ parse_config_file(struct option *options, unsigned char *name,
 
 				if (!strncmp(file, handler->command, cmdlen)
 				    && WHITECHAR(file[cmdlen])) {
-					struct string mirror2 = { NULL, 0 };
+					struct string mirror2 = NULL_STRING;
 					struct string *m2;
 
 					/* Mirror what we already have */
@@ -333,7 +333,7 @@ parse_config_file(struct option *options, unsigned char *name,
 					} else {
 						m2 = NULL;
 					}
-						
+
 
 					file += cmdlen;
 					err = handler->handler(options,
@@ -478,7 +478,8 @@ smart_config_output_fn(struct string *string, struct option *option,
 	switch (action) {
 		case 0:
 			if (!(comments & 1)) break;
-			add_xchar_to_string(string, ' ', depth * indentation);
+			if (depth)
+				add_xchar_to_string(string, ' ', depth * indentation);
 
 			add_to_string(string, "## ");
 			if (path) {
@@ -499,14 +500,16 @@ smart_config_output_fn(struct string *string, struct option *option,
 
 			l = strlen(option->desc);
 
-			add_xchar_to_string(string, ' ', depth * indentation);
+			if (depth)
+				add_xchar_to_string(string, ' ', depth * indentation);
 			add_to_string(string, "# ");
 
 			for (i = 0; i < l; i++) {
 				if (option->desc[i] == '\n') {
 					add_to_string(string, NEWLINE);
-					add_xchar_to_string(string, ' ',
-							    depth * indentation);
+					if (depth)
+						add_xchar_to_string(string, ' ',
+								    depth * indentation);
 					add_to_string(string, "# ");
 				} else {
 					add_char_to_string(string,
@@ -518,7 +521,8 @@ smart_config_output_fn(struct string *string, struct option *option,
 			break;
 
 		case 2:
-			add_xchar_to_string(string, ' ', depth * indentation);
+			if (depth)
+				add_xchar_to_string(string, ' ', depth * indentation);
 			add_to_string(string, "set ");
 			if (path) {
 				add_to_string(string, path);

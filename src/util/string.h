@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.37 2003/07/21 04:00:39 jonas Exp $ */
+/* $Id: string.h,v 1.38 2003/07/21 14:18:57 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -163,11 +163,30 @@ unsigned char *elinks_stpcpy(unsigned char *, unsigned const char *);
 void *elinks_mempcpy(void *, const void *, size_t);
 #endif
 
+/* String debugging using magic number, it may catches some errors. */
+#ifdef DEBUG
+#define DEBUG_STRING
+#endif
 
 struct string {
+#ifdef DEBUG_STRING
+	int magic;
+#endif
 	unsigned char *source;
 	int length;
 };
+
+
+#ifdef DEBUG_STRING
+#define STR_MAGIC 0x51F151F1
+#define check_magic(x) assertm((x)->magic == STR_MAGIC, "String magic check failed.")
+#define set_magic(x) do { (x)->magic = STR_MAGIC; } while (0)
+#define NULL_STRING { STR_MAGIC, NULL, 0 }
+#else
+#define check_magic(x)
+#define set_magic(x)
+#define NULL_STRING { NULL, 0 }
+#endif
 
 struct string *init_string(struct string *string);
 void done_string(struct string *string);

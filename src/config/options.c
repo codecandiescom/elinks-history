@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.247 2003/07/21 05:58:40 jonas Exp $ */
+/* $Id: options.c,v 1.248 2003/07/21 14:18:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -721,7 +721,7 @@ print_short_help()
 {
 #define ALIGN_WIDTH 20
 	struct option *option;
-	struct string saved = { "", 0 };
+	struct string saved = NULL_STRING;
 	unsigned char align[ALIGN_WIDTH];
 
 	/* Initialize @space used to align captions. */

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.338 2003/10/23 08:50:36 pasky Exp $ */
+/* $Id: options.c,v 1.339 2003/10/23 08:57:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -705,31 +705,31 @@ print_full_help(struct option *tree, unsigned char *path)
 
 		help = gettext_nonempty(option_types[option->type].help_str);
 
+		if (type != OPT_TREE)
+			printf("    %s%s%s %s ",
+				path, saved, option->name, help);
+
 		/* Print the 'title' of each option type. */
 		switch (type) {
 		case OPT_BOOL:
 		case OPT_INT:
 		case OPT_LONG:
-			printf(gettext("    %s%s%s %s (default: %ld)"),
-				path, saved, option->name, help,
+			printf(gettext("(default: %ld)"),
 				(long) option->value.number);
 			break;
 
 		case OPT_STRING:
-			printf(gettext("    %s%s%s %s (default: \"%s\")"),
-				path, saved, option->name, help,
+			printf(gettext("(default: \"%s\")"),
 				option->value.string);
 			break;
 
 		case OPT_ALIAS:
-			printf(gettext("    %s%s%s %s (alias for %s)"),
-				path, saved, option->name, help,
+			printf(gettext("(alias for %s)"),
 				option->value.string);
 			break;
 
 		case OPT_CODEPAGE:
-			printf(gettext("    %s%s%s %s (default: %s)"),
-				path, saved, option->name, help,
+			printf(gettext("(default: %s)"),
 				get_cp_name(option->value.number));
 			break;
 
@@ -737,18 +737,16 @@ print_full_help(struct option *tree, unsigned char *path)
 		{
 			color_t color = option->value.color;
 
-			printf(gettext("    %s%s%s %s (default: #%06x)"),
-			       path, saved, option->name, help, color);
+			printf(gettext("(default: #%06x)"),
+			       color);
 			break;
 		}
 
 		case OPT_COMMAND:
-			printf("    %s%s%s", path, saved, option->name);
 			break;
 
 		case OPT_LANGUAGE:
-			printf(gettext("    %s%s%s %s (default: \"%s\")"),
-				path, saved, option->name, help,
+			printf(gettext("(default: \"%s\")"),
 				language_to_name(option->value.number));
 			break;
 

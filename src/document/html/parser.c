@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.486 2004/08/12 08:40:40 miciah Exp $ */
+/* $Id: parser.c,v 1.487 2004/08/17 08:05:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1267,7 +1267,7 @@ done_html_parser_state(struct html_element *element)
 		/* I've preserved this bit to show an example of the Old Code
 		 * of the Mikulas days (I _HOPE_ it's by Mikulas, at least ;-).
 		 * I think this assert() can never fail, for one. --pasky */
-		assertm(&html_top && (void *)&html_top != (void *)&html_stack,
+		assertm(&html_top && (void *) &html_top != (void *) &html_stack,
 			"html stack trashed");
 		if_assert_failed break;
 #endif

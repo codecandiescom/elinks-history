@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.84 2004/06/17 05:22:49 miciah Exp $ */
+/* $Id: textarea.c,v 1.85 2004/06/17 06:02:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -661,16 +661,6 @@ set_textarea(struct session *ses, struct document_view *doc_view, int kbd)
 	if (link && link->type == LINK_AREA) {
 		struct term_event ev = INIT_TERM_EVENT(EV_KBD, kbd, 0, 0);
 
-		if (field_op(ses, doc_view, link, &ev, 1)
-		    == FRAME_EVENT_REFRESH) {
-			struct terminal *term = ses->tab->term;
-
-			/* FIXME: I am unsure if this is needed. We get here
-			 * called from up() and down() which will both call
-			 * refresh_view() which will redraw all form entries
-			 * and also call redraw_from_window(). --jonas */
-			draw_form_entry(term, doc_view, link);
-			redraw_from_window(ses->tab);
-		}
+		field_op(ses, doc_view, link, &ev, 1);
 	}
 }

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.45 2002/06/10 15:54:51 pasky Exp $ */
+/* $Id: options.c,v 1.46 2002/06/11 20:17:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -834,20 +834,28 @@ register_options()
 
 
 	add_opt_tree("protocol",
-		"user", 0,
+		"user", OPT_AUTOCREATE,
 		"User protocols options.");
 
-	add_opt_ptr("protocol.user",
-		"mailto", 0, OPT_PROGRAM, &mailto_prog,
-		NULL);
+	/* TODO: Only mailto. telnet and tn3270 subtrees will are now. We need
+	 * to rewrite protocols/mailto.c (and, first, rename it ;)). --pasky */
 
-	add_opt_ptr("protocol.user",
-		"telnet", 0, OPT_PROGRAM, &telnet_prog,
-		NULL);
+	/* Basically, it will look like protocol.user.mailto.win32 = "blah" */
 
-	add_opt_ptr("protocol.user",
-		"tn3270", 0, OPT_PROGRAM, &tn3270_prog,
-		NULL);
+	add_opt_tree("protocol.user",
+		"_template_", OPT_AUTOCREATE,
+		"System-specific handlers for these protocols.");
+
+	add_opt_string("protocol.user._template_",
+		"_template_", 0, "",
+		"Handler (external program) for this protocol."
+#if 0
+		"\n"
+		"%h in the string means hostname\n"
+		"%p in the string means port\n"
+		"%s in the string means subject"
+#endif
+		);
 
 
 

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.115 2003/11/16 03:19:47 jonas Exp $ */
+/* $Id: ftp.c,v 1.116 2003/11/26 21:48:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -875,12 +875,11 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 		/* Requested action not taken.
 		 * File unavailable (e.g., file not found, no access). */
 
-		if (!conn->cache) {
+		if (!conn->cache)
 			conn->cache = get_cache_entry(struri(conn->uri));
-			if (!conn->cache) {
-				abort_conn_with_state(conn, S_OUT_OF_MEM);
-				return;
-			}
+		if (!conn->cache) {
+			abort_conn_with_state(conn, S_OUT_OF_MEM);
+			return;
 		}
 
 		if (conn->cache->redirect)
@@ -1111,13 +1110,11 @@ conn_error:
 
 	url = struri(conn->uri);
 
+	if (!conn->cache) conn->cache = get_cache_entry(url);
 	if (!conn->cache) {
-		conn->cache = get_cache_entry(url);
-		if (!conn->cache) {
 out_of_mem:
-			abort_conn_with_state(conn, S_OUT_OF_MEM);
-			return;
-		}
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		return;
 	}
 
 	if (c_i->dir) {

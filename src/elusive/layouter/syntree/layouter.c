@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.12 2003/01/24 11:54:35 pasky Exp $ */
+/* $Id: layouter.c,v 1.13 2003/01/24 14:01:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,7 @@ format_node(struct layouter_state *state, struct syntree_node *node)
 static void
 layout_node(struct layouter_state *state, struct syntree_node *orig_node)
 {
-	struct syntree_layouter_state *pdata = state->data;
+	struct syntree_layouter_state *lstate = state->data;
 	struct syntree_node *node = orig_node;
 	struct list_head *leafs = node->root ? &node->root->leafs : NULL;
 
@@ -133,7 +133,7 @@ layout_node(struct layouter_state *state, struct syntree_node *orig_node)
 
 		/* Mark the last node we processed, so that we can resume from
 		 * here when we'll layout the next fragment. */
-		pdata->last_node = node;
+		lstate->last_node = node;
 
 		box = spawn_box(state);
 		add_property(&box->properties, "display", 7, "block", 5);
@@ -166,7 +166,7 @@ go_on:
 					leafs = &node->root->leafs;
 				else
 					leafs = NULL;
-				pdata->last_node = node;
+				lstate->last_node = node;
 				goto go_on;
 			}
 			continue;
@@ -188,13 +188,13 @@ syntree_init(struct layouter_state *state)
 static void
 syntree_layout(struct layouter_state *state, unsigned char **str, int *len)
 {
-	struct syntree_layouter_state *pdata = state->data;
+	struct syntree_layouter_state *lstate = state->data;
 
 	elusive_parser_parse(state->parser_state, str, len);
 
-	if (pdata->last_node) {
+	if (lstate->last_node) {
 		/* Resume layouting */
-		layout_node(state, pdata->last_node);
+		layout_node(state, lstate->last_node);
 	} else {
 		/* The first layout fragment */
 		layout_node(state, state->parser_state->real_root);

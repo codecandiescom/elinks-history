@@ -61,7 +61,7 @@ end
 #
 # * "PROXY:PORT" - to use the specified proxy
 # * ""		 - to not use any proxy
-# * Qnil	 - to use the default proxies
+# * nil		 - to use the default proxies
 
 def ELinks::proxy_hook(url)
     return nil

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.150 2004/04/01 06:08:56 jonas Exp $ */
+/* $Id: connection.c,v 1.151 2004/04/01 07:53:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -820,7 +820,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		}
 	}
 
-	u = get_proxy(struri(uri));
+	u = get_proxy(uri);
 	if (!u) {
 		if (download) download->end(download, download->data);
 		return -1;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.50 2002/06/17 15:16:54 pasky Exp $ */
+/* $Id: options.c,v 1.51 2002/06/17 16:07:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,6 +56,9 @@ struct list_head *cmdline_options;
  * first category is retrieved from list, taken as a list, second category
  * is retrieved etc. */
 
+/* Ugly kludge */
+static int no_autocreate = 0;
+
 /* Get record of option of given name, or NULL if there's no such option. */
 struct option *
 get_opt_rec(struct list_head *tree, unsigned char *name_)
@@ -94,7 +97,7 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 		}
 	}
 
-	if (cat && cat->flags & OPT_AUTOCREATE) {
+	if (cat && cat->flags & OPT_AUTOCREATE && !no_autocreate) {
 		struct option *template = get_opt_rec(tree, "_template_");
 
 		if (!template) {
@@ -126,6 +129,20 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 
 	mem_free(aname);
 	return NULL;
+}
+
+/* Get record of option of given name, or NULL if there's no such option. But
+ * do not create the option if it doesn't exist and there's autocreation
+ * enabled. */
+struct option *
+get_opt_rec_real(struct list_head *tree, unsigned char *name)
+{
+	struct option *opt;
+
+	no_autocreate = 1;
+	opt = get_opt_rec(tree, name);
+	no_autocreate = 0;
+	return opt;
 }
 
 /* Fetch pointer to value of certain option. It is guaranteed to never return

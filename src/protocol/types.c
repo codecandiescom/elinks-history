@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.28 2002/06/17 15:16:54 pasky Exp $ */
+/* $Id: types.c,v 1.29 2002/06/17 16:07:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,8 +28,6 @@ struct list_head tn3270_prog = { &tn3270_prog, &tn3270_prog };
 struct list_head assoc = { &assoc, &assoc };
 
 
-/* TODO: Maybe we should move this to config/options.c, make it more generic
- * and export it to world? Let's see if anyone will need it. */
 struct option *
 get_real_opt(unsigned char *base, unsigned char *id)
 {
@@ -38,9 +36,7 @@ get_real_opt(unsigned char *base, unsigned char *id)
 
 	if (!name) return NULL;
 
-	get_opt_rec(root_options, base)->flags &= ~OPT_AUTOCREATE;
-	opt = get_opt_rec(root_options, name);
-	get_opt_rec(root_options, base)->flags |= OPT_AUTOCREATE;
+	opt = get_opt_rec_real(root_options, name);
 
 	mem_free(name);
 	return opt;
@@ -851,21 +847,14 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 unsigned char *
 get_prog(unsigned char *progid)
 {
-	/* TODO: Use get_opt_real() - we need to generalize it first. */
 	struct option *opt;
 	unsigned char *name = straconcat("protocol.user", ".", progid, ".",
 					 SYSTEM_STR, NULL);
 
 	if (!name) return NULL;
 
-	/* FIXME: This doesn't work, we need to drop OPT_AUTOCREATE for tree
-	 * protocol.user.progid as well! Let's rewrite this, use some clone of
-	 * get_opt_rec() itself. --pasky */
-
-	get_opt_rec(root_options, "protocol.user")->flags &= ~OPT_AUTOCREATE;
-	opt = get_opt_rec(root_options, name);
-	get_opt_rec(root_options, "protocol.user")->flags |= OPT_AUTOCREATE;
+	opt = get_opt_rec_real(root_options, name);
 
 	mem_free(name);
-	return (unsigned char *) opt->ptr;
+	return (unsigned char *) (opt ? opt->ptr : NULL);
 }

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.31 2002/06/17 08:00:15 pasky Exp $ */
+/* $Id: options.h,v 1.32 2002/06/17 16:07:02 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -76,6 +76,7 @@ extern void delete_option(struct option *);
  * use get_opt_type_tree(cmdline_options). */
 
 extern struct option *get_opt_rec(struct list_head *, unsigned char *);
+extern struct option *get_opt_rec_real(struct list_head *, unsigned char *);
 extern void *get_opt_(unsigned char *, int, struct list_head *, unsigned char *);
 #define get_opt(tree, name) get_opt_(__FILE__, __LINE__, tree, name)
 

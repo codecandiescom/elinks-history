@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.15 2002/06/17 15:16:54 pasky Exp $ */
+/* $Id: options.c,v 1.16 2002/06/17 16:07:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -622,6 +622,9 @@ net_programs(struct terminal *term, void *xxx, void *yyy)
 
 	d->title = TEXT(T_MAIL_AND_TELNET_PROGRAMS);
 	d->fn = netprog_fn;
+
+	/* FIXME: We autocreate stuff here, which is bad. But not worth fixing,
+	 * as this ought to disappear later anyway. --pasky */
 
 	d->items[0].type = D_FIELD;
 	d->items[0].dlen = MAX_STR_LEN;

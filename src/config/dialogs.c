@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.198 2004/11/19 10:04:45 zas Exp $ */
+/* $Id: dialogs.c,v 1.199 2004/11/19 16:22:19 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -13,14 +13,7 @@
 
 #include "elinks.h"
 
-#include "bfu/button.h"
 #include "bfu/dialog.h"
-#include "bfu/hierbox.h"
-#include "bfu/inpfield.h"
-#include "bfu/listbox.h"
-#include "bfu/msgbox.h"
-#include "bfu/style.h"
-#include "bfu/text.h"
 #include "config/conf.h"
 #include "config/dialogs.h"
 #include "config/kbdbind.h"

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.74 2004/11/19 15:53:54 jonas Exp $ */
+/* $Id: dialogs.c,v 1.75 2004/11/19 16:22:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,13 +11,7 @@
 
 #include "elinks.h"
 
-#include "bfu/button.h"
 #include "bfu/dialog.h"
-#include "bfu/hierbox.h"
-#include "bfu/inpfield.h"
-#include "bfu/listbox.h"
-#include "bfu/msgbox.h"
-#include "bfu/text.h"
 #include "cookies/cookies.h"
 #include "cookies/dialogs.h"
 #include "dialogs/edit.h"

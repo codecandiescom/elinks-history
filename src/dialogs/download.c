@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.65 2004/11/19 09:39:25 zas Exp $ */
+/* $Id: download.c,v 1.66 2004/11/19 16:22:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,13 +11,7 @@
 
 #include "elinks.h"
 
-#include "bfu/button.h"
 #include "bfu/dialog.h"
-#include "bfu/hierbox.h"
-#include "bfu/listbox.h"
-#include "bfu/msgbox.h"
-#include "bfu/style.h"
-#include "bfu/text.h"
 #include "dialogs/download.h"
 #include "dialogs/menu.h"
 #include "dialogs/status.h"

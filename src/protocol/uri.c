@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.298 2004/11/10 23:49:34 jonas Exp $ */
+/* $Id: uri.c,v 1.299 2004/12/16 09:52:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,17 +34,7 @@
 static inline int
 end_of_dir(struct uri *uri, unsigned char c)
 {
-	/* Is it correct to assume file:// URIs won't have query parts? What
-	 * about CGI?
-	 *
-	 * Else the problem with handling '?' in file:// URIs is that
-	 * get_extension_from_uri() won't get it right. So maybe a cheap hack
-	 * for that function would do the trick instead.
-	 *
-	 * Reported by Grzegorz Adam Hankiewicz <gradha@titanium.sabren.com>
-	 * Thu, May 27, 2004 on elinks-users mailing list. --jonas */
-	return c == POST_CHAR || c == '#' || c == ';'
-		|| (uri->protocol != PROTOCOL_FILE && c == '?');
+	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
 }
 
 static inline int
@@ -185,11 +175,12 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	} else if (uri->protocol == PROTOCOL_FILE) {
 		int datalen = check_uri_file(prefix_end);
 
-		if (datalen <= 0)
-			datalen = strlen(prefix_end);
-		else if (prefix_end[datalen] == '#') {
+		/* Extract the fragment part. */
+		if (datalen >= 0 && prefix_end[datalen] == '#') {
 			uri->fragment = prefix_end + datalen + 1;
 			uri->fragmentlen = strlen(uri->fragment);
+		} else {
+			datalen = strlen(prefix_end);
 		}
 
 		uri->data = prefix_end;

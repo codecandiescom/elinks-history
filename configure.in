@@ -532,17 +532,12 @@ cf_result="no"
 if test "$disable_openssl" = yes; then
 	cf_result="not used"
 else
-	# Rule number 6.5: do _not_ put ssl headers in yes dir ;-)
-	if test "$openssl_withval" = "yes"; then
-		openssl_withval=""
-	fi
-
 	for ssldir in "$openssl_withval" "" /usr /usr/local/openssl \
 			 /usr/lib/openssl /usr/local/ssl \
 			 /usr/local/www /usr/lib/ssl /usr/local \
 			 /usr/pkg /opt /opt/openssl; do
 		if test "$cf_result" = no; then
-			if test ! -z "$ssldir"; then
+			if test -n "$ssldir"; then
 				LIBS="-L$ssldir/lib -lssl -lcrypto $LIBS_X"
 				CFLAGS="$CFLAGS_X -I$ssldir/include"
 				CPPFLAGS="$CPPFLAGS_X -I$ssldir/include"
@@ -588,6 +583,11 @@ else
 	cf_result="no"
 
 	if test -z "$disable_gnutls"; then
+		# Rule number 6.5: do _not_ put gnutls headers in yes dir ;-)
+		if test "$gnutls_withval" = "yes"; then
+			gnutls_withval=""
+		fi
+
 		# Sure, we maybe _could_ use their macro, but how to ensure
 		# that the ./configure script won't fail if the macro won't be
 		# found..? :( --pasky

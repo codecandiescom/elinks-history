@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.222 2003/12/20 16:59:03 pasky Exp $ */
+/* $Id: http.c,v 1.223 2003/12/20 23:06:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,7 @@
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/session.h"
+#include "ssl/connect.h"
 #include "ssl/ssl.h"
 #include "terminal/terminal.h"
 #include "util/base64.h"
@@ -316,6 +317,7 @@ http_send_header(struct connection *conn)
 	struct uri real_uri;
 	struct uri *uri;
 	unsigned char *optstr;
+	int use_connect;
 
 	set_connection_timeout(conn);
 
@@ -356,8 +358,12 @@ http_send_header(struct connection *conn)
 		return;
 	}
 
+	use_connect = IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && !conn->ssl;
+
 	if (trace) {
 		add_to_string(&header, "TRACE ");
+	} else if (use_connect) {
+		add_to_string(&header, "CONNECT ");
 	} else if (uri->post) {
 		add_to_string(&header, "POST ");
 		conn->unrestartable = 1;
@@ -365,11 +371,30 @@ http_send_header(struct connection *conn)
 		add_to_string(&header, "GET ");
 	}
 
-	if (!IS_PROXY_URI(conn->uri)) {
+	if (!IS_PROXY_URI(conn->uri) || conn->ssl) {
 		add_char_to_string(&header, '/');
 	}
 
-	add_url_to_http_string(&header, conn->uri.data);
+	if (use_connect) {
+		add_uri_host_to_string(&header, uri);
+		if (!uri->port) {
+			add_char_to_string(&header, ':');
+			add_long_to_string(&header, get_protocol_port(uri->protocol));
+		}
+	} else {
+		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->ssl) {
+			struct uri https_real_uri;
+			
+			if (!parse_uri(&https_real_uri, conn->uri.data)) {
+				abort_conn_with_state(conn, S_BAD_URL);
+				return;
+			}
+			add_url_to_http_string(&header, https_real_uri.data);
+		} else {
+			add_url_to_http_string(&header, conn->uri.data);
+		}
+
+	}
 
 	add_to_string(&header, " HTTP/");
 	add_long_to_string(&header, info->sent_version.major);
@@ -1363,7 +1388,22 @@ http_error:
 	     && info->close))
 		rb->close = 1;
 
-	read_http_data(conn, rb);
+	if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && !conn->ssl) {
+#ifdef HAVE_SSL
+		if (init_ssl_connection(conn) == S_SSL_ERROR) {
+			abort_conn_with_state(conn, S_SSL_ERROR);
+			return;
+		}
+
+		conn->conn_info = mem_calloc(1, sizeof(struct conn_info));
+		conn->conn_info->func = http_send_header;
+
+		if (ssl_connect(conn, conn->socket) == -1) return;
+#else
+		abort_conn_with_state(conn, S_NO_SSL);
+#endif
+	} else
+		read_http_data(conn, rb);
 }
 
 static void

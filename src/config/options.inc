@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.40 2003/12/19 16:27:16 pasky Exp $ */
+/* $Id: options.inc,v 1.41 2003/12/20 23:06:20 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -662,6 +662,19 @@ struct option_info config_options_info[] = {
 		"%t in the string means size of the terminal\n"
 		"Use \" \" if you don't want any User-Agent header to be sent at all.")),
 
+
+	INIT_OPT_TREE("protocol", N_("HTTPS"),
+  		"https", 0,
+		N_("HTTPS-specific options.")),
+
+	INIT_OPT_TREE("protocol.https", N_("Proxy configuration"),
+	  	"proxy", 0,
+		N_("HTTPS proxy configuration.")),
+
+	INIT_OPT_STRING("protocol.https.proxy", N_("Host and port-number"),
+	  	"host", 0, "",
+		N_("Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
+		"If it's blank, HTTPS_PROXY environment variable is checked as well.")),
 
 
 	INIT_OPT_TREE("protocol", N_("FTP"),

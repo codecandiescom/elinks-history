@@ -199,6 +199,7 @@ Jan Bobrowski <jb@mohan.krakow.pl>
 
 Jan Sembera <fis@ji.cz>
 	HTTP-auth support fixes and rewrite
+	Some bits of HTTPS support
 
 Jimenez Martinez Angel Luis <al026635@alumail.uji.es>
 	Spanish translation
@@ -427,6 +428,9 @@ Suveg Gabor <gsuveg@sgmobil2000.hu>
 Taniel Kirikal <taniel@colleduc.ee>
 	Estonian translation
 
+Timo Lindfors <lindi@kurp.hut.fi>
+	HTTPS proxy support
+
 Tom Lear <tom@trap.mtview.ca.us>
 	Transparency support
 
@@ -469,4 +473,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.152 2003/12/20 22:42:53 pasky Exp $
+$Id: AUTHORS,v 1.153 2003/12/20 23:06:20 pasky Exp $

@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.6 2003/10/27 15:59:43 pasky Exp $ */
+/* $Id: proxy.c,v 1.7 2003/12/20 23:06:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,11 +47,15 @@ static unsigned char *
 get_proxy_worker(unsigned char *url, unsigned char *proxy)
 {
 	int l = strlen(url);
-	unsigned char *http_proxy, *ftp_proxy, *no_proxy;
+	unsigned char *http_proxy, *https_proxy, *ftp_proxy, *no_proxy;
 
 	http_proxy = get_opt_str("protocol.http.proxy.host");
 	if (!*http_proxy) http_proxy = getenv("HTTP_PROXY");
 	if (!http_proxy || !*http_proxy) http_proxy = getenv("http_proxy");
+
+	https_proxy = get_opt_str("protocol.https.proxy.host");
+	if (!*https_proxy) https_proxy = getenv("HTTPS_PROXY");
+	if (!https_proxy || !*https_proxy) https_proxy = getenv("https_proxy");
 
 	ftp_proxy = get_opt_str("protocol.ftp.proxy.host");
 	if (!*ftp_proxy) ftp_proxy = getenv("FTP_PROXY");
@@ -76,6 +80,18 @@ get_proxy_worker(unsigned char *url, unsigned char *proxy)
 			if (l >= 7 && !strncasecmp(url, "http://", 7)
 			    && !proxy_probe_no_proxy(url + 7, no_proxy))
 				proxy = http_proxy;
+		}
+		
+		if (https_proxy && *https_proxy) {
+			if (!strncasecmp(https_proxy, "http://", 7))
+				https_proxy += 7;
+
+			slash = strchr(https_proxy, '/');
+			if (slash) *slash = 0;
+
+			if (l >= 8 && !strncasecmp(url, "https://", 8)
+			    && !proxy_probe_no_proxy(url + 8, no_proxy))
+				proxy = https_proxy;
 		}
 
 		if (ftp_proxy && *ftp_proxy) {

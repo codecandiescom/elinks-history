@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.73 2004/09/22 23:59:15 pasky Exp $ */
+/* $Id: protocol.c,v 1.74 2004/09/23 11:57:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,7 +214,7 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 		                                          &current_url);
 		if (!redirect_url)
 			return;
-		redirect_uri = get_uri(redirect_url, URI_ORIGINAL);
+		redirect_uri = get_uri(redirect_url, 0);
 		mem_free(redirect_url);
 		if (!redirect_uri)
 			return;

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.82 2004/04/03 17:40:52 jonas Exp $ */
+/* $Id: cache.h,v 1.83 2004/04/22 21:04:34 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -27,43 +27,39 @@ enum cache_mode {
 struct cache_entry {
 	LIST_HEAD(struct cache_entry);
 
-	/* This is indeed maintained by cache.c, not dialogs.c; much easier
-	 * and simpler. */
-	struct listbox_item *box_item;
+	struct list_head frag;		/* -> struct fragment */
 
-	struct list_head frag;
+	struct uri *uri;		/* Identifier for the cached data */
+	struct uri *proxy_uri;		/* Proxy identifier or same as @uri */
+	struct uri *redirect;		/* Location we were redirected to */
 
-	struct uri *uri;
-	struct uri *proxy_uri;
-	struct uri *redirect;
+	unsigned char *head;		/* The protocol header */
+	unsigned char *last_modified;	/* Latest modification date */
+	unsigned char *etag;		/* ETag value from the HTTP header */
+	unsigned char *ssl_info;	/* SSL ciphers used during transfer */
+	unsigned char *encoding_info;	/* Encoding used during transfer */
 
-	unsigned char *head;
-	unsigned char *last_modified;
-	unsigned char *etag;
-	unsigned char *ssl_info;
-	unsigned char *encoding_info;
+	unsigned int id_tag;		/* Change each time entry is modified. */
 
-	unsigned int id_tag; /* Change each time entry is modified. */
+	int length;			/* The expected and complete size */
+	int data_size;			/* The actual size of all fragments */
 
-	int length;
-	int data_size;
-
-	/* Usage count object. */
-	struct object object;
+	struct listbox_item *box_item;	/* Dialog data for cache manager */
+	struct object object;		/* Usage refcount object */
 
 #ifdef HAVE_SCRIPTING
-	unsigned int done_pre_format_html_hook:1;
+	unsigned int done_pre_format_html_hook:1; /* Did scripting? */
 #endif
-	unsigned int redirect_get:1;
-	unsigned int incomplete:1;
-	unsigned int valid:1;
+	unsigned int redirect_get:1;	/* Follow redirect using get method */
+	unsigned int incomplete:1;	/* Has all data been downloaded */
+	unsigned int valid:1;		/* Is cache entry usable */
 
 	/* This is a mark for internal workings of garbage_collection(), whether
 	 * the cache_entry should be busted or not. You are not likely to see
 	 * an entry with this set to 1 in wild nature ;-). */
-	unsigned int gc_target:1;
+	unsigned int gc_target:1;	/* The GC touch of death */
 
-	enum cache_mode cache_mode;
+	enum cache_mode cache_mode;	/* Reload condition */
 };
 
 /* Cache entries lists */

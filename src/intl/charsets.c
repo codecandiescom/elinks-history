@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.100 2004/09/15 23:37:45 pasky Exp $ */
+/* $Id: charsets.c,v 1.101 2004/09/15 23:45:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -598,7 +598,7 @@ convert_string(struct conv_table *convert_table,
 
 	if (!convert_table && !memchr(chars, '&', charslen)) {
 		if (callback) {
-			callback(callback_data, chars, charslen);
+			if (charslen) callback(callback_data, chars, charslen);
 			return NULL;
 		} else {
 			return memacpy(chars, charslen);
@@ -709,7 +709,7 @@ flush:
 	if (length) *length = bufferpos;
 
 	if (callback) {
-		callback(callback_data, buffer, bufferpos);
+		if (bufferpos) callback(callback_data, buffer, bufferpos);
 		mem_free(buffer);
 		return NULL;
 	} else {

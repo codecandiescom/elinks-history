@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.20 2004/04/23 19:26:46 pasky Exp $ */
+/* $Id: libintl.h,v 1.21 2004/09/04 11:19:11 jonas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -118,9 +118,6 @@ do_lookup:
 
 /* no-op - just for marking */
 #define N_(msg) (gettext_noop(msg))
-
-/* Abbreviation for gettext() (if we don't have a terminal) */
-#define G_(msg) (gettext(msg))
 
 /* Languages table lookups. */
 

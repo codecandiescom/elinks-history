@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.51 2004/06/17 10:02:21 zas Exp $ */
+/* $Id: home.c,v 1.52 2004/09/04 11:19:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ test_confdir(unsigned char *home, unsigned char *path,
 	}
 
 	if (error_message) {
-		usrerror(G_(error_message), path, confdir);
+		usrerror(gettext(error_message), path, confdir);
 		sleep(3);
 	}
 
@@ -146,7 +146,7 @@ init_home(void)
 	first_use = 1;
 	elinks_home = get_home();
 	if (!elinks_home) {
-		ERROR(G_("Unable to find or create ELinks config "
+		ERROR(gettext("Unable to find or create ELinks config "
 		      "directory. Please check if you have $HOME "
 		      "variable set correctly and if you have "
 		      "write permission to your home directory."));

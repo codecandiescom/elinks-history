@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.90 2004/07/18 15:53:58 zas Exp $ */
+/* $Id: interlink.c,v 1.91 2004/09/04 11:19:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -333,7 +333,7 @@ af_unix_connection(struct socket_info *info)
 	memset(info->addr, 0, l);
 	ns = accept(info->fd, info->addr, &l);
 	if (ns < 0) {
-		ERROR(G_("accept() failed: %d (%s)"),
+		ERROR(gettext("accept() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		return;
 	}
@@ -373,7 +373,7 @@ bind_to_af_unix(void)
 again:
 	s_info_listen.fd = socket(af, SOCK_STREAM, 0);
 	if (s_info_listen.fd == -1) {
-		ERROR(G_("socket() failed: %d (%s)"),
+		ERROR(gettext("socket() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		goto free_and_error;
 	}
@@ -382,7 +382,7 @@ again:
 
 	if (bind(s_info_listen.fd, s_info_listen.addr, s_info_listen.size) < 0) {
 		if (errno != EADDRINUSE)
-			ERROR(G_("bind() failed: %d (%s)"),
+			ERROR(gettext("bind() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 
 		if (++attempts <= MAX_BIND_TRIES) {
@@ -402,7 +402,7 @@ again:
 	s_info_accept.fd = s_info_listen.fd;
 
 	if (listen(s_info_listen.fd, LISTEN_BACKLOG)) {
-		ERROR(G_("listen() failed: %d (%s)"),
+		ERROR(gettext("listen() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		goto free_and_error;
 	}
@@ -434,7 +434,7 @@ connect_to_af_unix(void)
 
 		s_info_connect.fd = socket(af, SOCK_STREAM, 0);
 		if (s_info_connect.fd == -1) {
-			ERROR(G_("socket() failed: %d (%s)"),
+			ERROR(gettext("socket() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 			break;
 		}
@@ -447,7 +447,7 @@ connect_to_af_unix(void)
 		close(s_info_connect.fd);
 
 		if (saved_errno != ECONNREFUSED && saved_errno != ENOENT) {
-			ERROR(G_("connect() failed: %d (%s)"),
+			ERROR(gettext("connect() failed: %d (%s)"),
 			      saved_errno, (unsigned char *) strerror(saved_errno));
 			break;
 		}

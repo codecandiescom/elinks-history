@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.220 2004/08/14 06:57:39 jonas Exp $ */
+/* $Id: main.c,v 1.221 2004/09/04 11:19:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,7 +124,7 @@ init(void)
 	/* XXX: OS/2 has some stupid bug and the pipe must be created before
 	 * socket :-/. -- Mikulas */
 	if (check_terminal_pipes()) {
-		ERROR(G_("Cannot create a pipe for internal communication."));
+		ERROR(gettext("Cannot create a pipe for internal communication."));
 		retval = RET_FATAL;
 		terminate = 1;
 		return;
@@ -177,14 +177,14 @@ init(void)
 	} else if (remote_session_flags & SES_REMOTE_PING) {
 		/* If no instance was running return ping failure */
 		if (fd == -1) {
-			usrerror(G_("No running ELinks found."));
+			usrerror(gettext("No running ELinks found."));
 			retval = RET_PING;
 		}
 		terminate = 1;
 
 	} else if (remote_session_flags && fd == -1) {
 		/* The remote session(s) can not be created */
-		usrerror(G_("No remote session to connect to."));
+		usrerror(gettext("No remote session to connect to."));
 		retval = RET_REMOTE;
 		terminate = 1;
 
@@ -193,7 +193,7 @@ init(void)
 		struct terminal *term = NULL;
 
 		if (!encode_session_info(&info, &url_list)) {
-			ERROR(G_("Unable to encode session info."));
+			ERROR(gettext("Unable to encode session info."));
 			retval = RET_FATAL;
 			terminate = 1;
 
@@ -210,7 +210,7 @@ init(void)
 			term = attach_terminal(get_input_handle(), get_output_handle(),
 					       get_ctl_handle(), info.source, info.length);
 			if (!term) {
-				ERROR(G_("Unable to attach_terminal()."));
+				ERROR(gettext("Unable to attach_terminal()."));
 				retval = RET_FATAL;
 				terminate = 1;
 			}

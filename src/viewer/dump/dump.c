@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.141 2004/07/30 10:41:11 zas Exp $ */
+/* $Id: dump.c,v 1.142 2004/09/04 11:19:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,10 +76,10 @@ nextfrag:
 			detach_connection(status, dump_pos);
 
 			if (w < 0)
-				ERROR(G_("Can't write to stdout: %s"),
+				ERROR(gettext("Can't write to stdout: %s"),
 				      (unsigned char *) strerror(errno));
 			else
-				ERROR(G_("Can't write to stdout."));
+				ERROR(gettext("Can't write to stdout."));
 
 			retval = RET_ERROR;
 			return 1;
@@ -252,13 +252,13 @@ dump_start(unsigned char *url)
 
 	mem_free_if(wd);
 	if (!*url) {
-		usrerror(G_("URL expected after %s."),
+		usrerror(gettext("URL expected after %s."),
 			get_cmd_opt_int("source")
 			? "-source" : "-dump");
 		goto terminate;
 
 	} else if (!uri || get_protocol_external_handler(uri->protocol)) {
-		usrerror(G_("URL protocol not supported (%s)."), url);
+		usrerror(gettext("URL protocol not supported (%s)."), url);
 		goto terminate;
 	}
 

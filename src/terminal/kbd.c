@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.111 2004/08/03 22:24:17 zas Exp $ */
+/* $Id: kbd.c,v 1.112 2004/09/04 11:19:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -985,7 +985,7 @@ in_kbd(struct itrm *itrm)
 
 	itrm->qlen += r;
 	if (itrm->qlen > IN_BUF_SIZE) {
-		ERROR(G_("Too many bytes read from the itrm!"));
+		ERROR(gettext("Too many bytes read from the itrm!"));
 		itrm->qlen = IN_BUF_SIZE;
 	}
 

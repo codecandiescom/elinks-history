@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.42 2004/02/13 17:11:30 witekfl Exp $ */
+/* $Id: leds.c,v 1.43 2004/04/22 17:46:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
+#ifdef HAVE_TIME_H
 #include <time.h>
+#endif
 
 #include "elinks.h"
 

@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.3 2003/06/05 14:18:37 zas Exp $ */
+/* $Id: mimetypes.c,v 1.4 2003/06/06 12:59:54 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -25,7 +25,7 @@
 #include "util/lists.h"
 #include "util/memory.h"
 
-#define BACKEND_NAME	"mime.types"
+#define BACKEND_NAME	"mimetypes"
 
 struct mimetypes_entry {
 	unsigned char *content_type;

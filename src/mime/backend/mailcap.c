@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.14 2003/06/06 12:46:06 jonas Exp $ */
+/* $Id: mailcap.c,v 1.15 2003/06/06 12:59:54 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -542,7 +542,7 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 
 		handler->program = program;
 		handler->description = entry->description;
-		handler->backend_name = "Mailcap";
+		handler->backend_name = BACKEND_NAME;
 
 		return handler;
 	}

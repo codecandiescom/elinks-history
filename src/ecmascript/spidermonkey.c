@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.100 2004/12/17 14:37:00 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.101 2004/12/17 15:00:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,6 +86,13 @@ union prop_union {
  \
 bye: \
 	return JS_TRUE;
+
+#define P_OBJECT(x) do { p.object = (x); prop_type = JSPT_OBJECT; } while (0)
+#define P_BOOLEAN(x) do { p.boolean = (x); prop_type = JSPT_BOOLEAN; } while (0)
+#define P_STRING(x) do { p.string = (x); prop_type = JSPT_STRING; } while (0)
+#define P_ASTRING(x) do { p.string = (x); prop_type = JSPT_ASTRING; } while (0)
+#define P_INT(x) do { p.number = (x); prop_type = JSPT_INT; } while (0)
+
 
 static void
 value_to_jsval(JSContext *ctx, jsval *vp, enum prop_type prop_type,
@@ -276,7 +283,7 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		/* TODO: Try other lookups (mainly element lookup) until
 		 * something yields data. */
 		if (!obj) goto bye;
-		p.object = obj; prop_type = JSPT_OBJECT;
+		P_OBJECT(obj);
 		goto convert;
 	} else if (!JSVAL_IS_INT(id))
 		goto bye;
@@ -286,10 +293,10 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		/* TODO: It will be a major PITA to implement this properly.
 		 * Well, perhaps not so much if we introduce reference tracking
 		 * for (struct session)? Still... --pasky */
-		p.boolean = 0; prop_type = JSPT_BOOLEAN;
+		P_BOOLEAN(0);
 		break;
 	case JSP_WIN_SELF:
-		p.object = obj; prop_type = JSPT_OBJECT;
+		P_OBJECT(obj);
 		break;
 	case JSP_WIN_PARENT:
 		/* XXX: It would be nice if the following worked, yes.
@@ -344,8 +351,7 @@ found_parent:
 		if (top_view->vs->ecmascript_fragile)
 			ecmascript_reset_state(top_view->vs);
 		if (!top_view->vs->ecmascript) break;
-		p.object = JS_GetGlobalObject(top_view->vs->ecmascript->backend_data);
-		prop_type = JSPT_OBJECT;
+		P_OBJECT(JS_GetGlobalObject(top_view->vs->ecmascript->backend_data));
 		break;
 	}
 	default:
@@ -484,7 +490,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	    && !get_cmd_opt_bool("anonymous")
 	    && can_open_in_new(ses->tab->term)) {
 		open_uri_in_new_window(ses, uri, ENV_ANY);
-		p.boolean = 1; prop_type = JSPT_BOOLEAN;
+		P_BOOLEAN(1);
 	} else {
 		/* When opening a new tab, we might get rerendered, losing our
 		 * context and triggerring a disaster, so postpone that. */
@@ -495,7 +501,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 			deo->uri = get_uri_reference(uri);
 			register_bottom_half((void (*)(void *)) delayed_open,
 			                     deo);
-			p.boolean = 1; prop_type = JSPT_BOOLEAN;
+			P_BOOLEAN(1);
 		}
 	}
 
@@ -553,34 +559,29 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORM_CONTROL_NAME:
-		p.string = fc->name;
-		prop_type = JSPT_STRING;
+		P_STRING(fc->name);
 		break;
 
 	case JSP_FORM_CONTROL_ACTION:
-		p.string = fc->action;
-		prop_type = JSPT_STRING;
+		P_STRING(fc->action);
 		break;
 
 	case JSP_FORM_CONTROL_METHOD:
 		switch (fc->method) {
 		case FORM_METHOD_GET:
-			p.string = "GET";
-			prop_type = JSPT_STRING;
+			P_STRING("GET");
 			goto end;
 
 		case FORM_METHOD_POST:
 		case FORM_METHOD_POST_MP:
 		case FORM_METHOD_POST_TEXT_PLAIN:
-			p.string = "POST";
-			prop_type = JSPT_STRING;
+			P_STRING("POST");
 			goto end;
 		}
 		break;
 
 	case JSP_FORM_CONTROL_TARGET:
-		p.string = fc->target;
-		prop_type = JSPT_STRING;
+		P_STRING(fc->target);
 		break;
 
 	default:
@@ -645,7 +646,7 @@ form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct document_view *doc_view;
 	VALUE_TO_JSVAL_START;
 
-	p.boolean = 0; prop_type = JSPT_BOOLEAN;
+	P_BOOLEAN(0);
 
 	assert(fc);
 
@@ -667,7 +668,7 @@ form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	int link;
 	VALUE_TO_JSVAL_START;
 
-	p.boolean = 0; prop_type = JSPT_BOOLEAN;
+	P_BOOLEAN(0);
 
 	assert(fc);
 	for (link = 0; link < document->nlinks; link++) {
@@ -740,8 +741,7 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		foreach (fc, document->forms)
 			counter++;
 
-		p.number = counter;
-		prop_type = JSPT_INT;
+		P_INT(counter);
 		break;
 	}
 	default:
@@ -774,8 +774,7 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	foreach (fc, document->forms) {
 		counter++;
 		if (counter == index) {
-			p.object = get_form_object(ctx, obj, fc);
-			prop_type = JSPT_OBJECT;
+			P_OBJECT(get_form_object(ctx, obj, fc));
 
 			VALUE_TO_JSVAL_END(rval);
 			/* This returns. */
@@ -805,8 +804,7 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 
 	foreach (fc, document->forms) {
 		if (fc->formname && !strcasecmp(v.string, fc->formname)) {
-			p.object = get_form_object(ctx, obj, fc);
-			prop_type = JSPT_OBJECT;
+			P_OBJECT(get_form_object(ctx, obj, fc));
 
 			VALUE_TO_JSVAL_END(rval);
 			/* This returns. */
@@ -859,8 +857,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			struct string *cookies = send_cookies(vs->uri);
 
 			if (cookies) {
-				p.string = cookies->source;
-				prop_type = JSPT_ASTRING;
+				P_STRING(cookies->source);
 				goto convert;
 			}
 		}
@@ -875,8 +872,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			success = JS_GetProperty(ctx, obj, "forms", &forms);
 			assert(success == JS_TRUE);
 
-			p.object = get_form_object(ctx, JSVAL_TO_OBJECT(forms), fc);
-			prop_type = JSPT_OBJECT;
+			P_OBJECT(get_form_object(ctx, JSVAL_TO_OBJECT(forms), fc));
 			goto convert;
 		}
 		goto bye;
@@ -892,30 +888,26 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			break;
 
 		case REFERER_FAKE:
-			p.string = get_opt_str("protocol.http.referer.fake");
-			prop_type = JSPT_STRING;
+			P_STRING(get_opt_str("protocol.http.referer.fake"));
 			break;
 
 		case REFERER_TRUE:
-			/* XXX: Encode as in add_url_to_http_string() ? --pasky */
+			/* XXX: Encode as in add_url_to_httP_STRING() ? --pasky */
 			if (ses->referrer) {
-				p.string = get_uri_string(ses->referrer, URI_HTTP_REFERRER);
-				prop_type = JSPT_ASTRING;
+				P_ASTRING(get_uri_string(ses->referrer, URI_HTTP_REFERRER));
 			}
 			break;
 
 		case REFERER_SAME_URL:
-			p.string = get_uri_string(document->uri, URI_HTTP_REFERRER);
-			prop_type = JSPT_ASTRING;
+			P_ASTRING(get_uri_string(document->uri, URI_HTTP_REFERRER));
 			break;
 		}
 		break;
 	case JSP_DOC_TITLE:
-		p.string = document->title; prop_type = JSPT_STRING;
+		P_STRING(document->title);
 		break;
 	case JSP_DOC_URL:
-		p.string = get_uri_string(document->uri, URI_ORIGINAL);
-		prop_type = JSPT_ASTRING;
+		P_ASTRING(get_uri_string(document->uri, URI_ORIGINAL));
 		break;
 	default:
 		INTERNAL("Invalid ID %d in document_get_property().", JSVAL_TO_INT(id));
@@ -984,7 +976,7 @@ document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rv
 #endif
 	VALUE_TO_JSVAL_START;
 
-	p.boolean = 0; prop_type = JSPT_BOOLEAN;
+	P_BOOLEAN(0);
 
 	/* XXX: I don't know about you, but I have *ENOUGH* of those 'Undefined
 	 * function' errors, I want to see just the useful ones. So just
@@ -1031,7 +1023,7 @@ location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_LOC_HREF:
-		p.string = get_uri_string(vs->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING;
+		P_ASTRING(get_uri_string(vs->uri, URI_ORIGINAL));
 		break;
 	default:
 		INTERNAL("Invalid ID %d in location_get_property().", JSVAL_TO_INT(id));
@@ -1168,9 +1160,9 @@ unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_UNIBAR_VISIBLE:
 #define unibar_fetch(bar) \
-	p.boolean = status->force_show_##bar##_bar >= 0 \
-	            ? status->force_show_##bar##_bar \
-	            : status->show_##bar##_bar
+	P_BOOLEAN(status->force_show_##bar##_bar >= 0 \
+	          ? status->force_show_##bar##_bar \
+	          : status->show_##bar##_bar)
 		switch (*bar) {
 		case 's':
 			unibar_fetch(status);
@@ -1179,10 +1171,9 @@ unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			unibar_fetch(title);
 			break;
 		default:
-			p.boolean = 0;
+			P_BOOLEAN(0);
 			break;
 		}
-		prop_type = JSPT_BOOLEAN;
 #undef unibar_fetch
 		break;
 	default:

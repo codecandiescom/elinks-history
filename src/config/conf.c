@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.36 2002/06/30 11:49:33 pasky Exp $ */
+/* $Id: conf.c,v 1.37 2002/06/30 15:16:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "bfu/align.h"
 #include "bfu/bfu.h"
 #include "config/conf.h"
+#include "config/kbdbind.h"
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "intl/language.h"
@@ -34,7 +35,8 @@
 
 /* Config file has only very simple grammar:
  * 
- * /set option *= *value;/
+ * /set option *= *value/
+ * /bind keymap *keystroke *= *action/
  * /#.*$/
  * 
  * Where option consists from any number of categories separated by dots and
@@ -44,7 +46,7 @@
  * Value can consist from:
  * - number (it will be converted to int/long)
  * - enum (like on, off; true, fake, last_url; etc ;) - in planning state yet
- * - string - "blah blah"
+ * - string - "blah blah" (keymap, keystroke and action looks like that too)
  * 
  * "set" command is parsed first, and then type-specific function is called,
  * with option as one parameter and value as a second. Usually it just assigns
@@ -77,11 +79,13 @@ skip_white(unsigned char *start, int *line)
 enum parse_error {
 	ERROR_NONE,
 	ERROR_PARSE,
+	ERROR_COMMAND,
 	ERROR_OPTION,
 	ERROR_VALUE,
 };
 
 /* Parse a command. Returns error code. */
+
 enum parse_error
 parse_set(unsigned char **file, int *line)
 {
@@ -89,7 +93,7 @@ parse_set(unsigned char **file, int *line)
 	unsigned char bin;
 
 	*file = skip_white(*file, line);
-	if (!*file) return ERROR_PARSE;
+	if (!**file) return ERROR_PARSE;
 
 	/* Option name */
 	optname = *file;
@@ -100,15 +104,15 @@ parse_set(unsigned char **file, int *line)
 	optname = stracpy(optname);
 	**file = bin;
 
-	/* Equal sign */
 	*file = skip_white(*file, line);
+
+	/* Equal sign */
 	if (**file != '=') { mem_free(optname); return ERROR_PARSE; }
-	(*file)++;
+	(*file)++; /* '=' */
+	*file = skip_white(*file, line);
+	if (!**file) { mem_free(optname); return ERROR_VALUE; }
 
 	/* Option value */
-	*file = skip_white(*file, line);
-	if (!*file) { mem_free(optname); return ERROR_VALUE; }
-
 	{
 		struct option *opt;
 		unsigned char *str;
@@ -134,6 +138,56 @@ parse_set(unsigned char **file, int *line)
 	return ERROR_NONE;
 }
 
+enum parse_error
+parse_bind(unsigned char **file, int *line)
+{
+	unsigned char *keymap, *keystroke, *action;
+	enum parse_error error;
+
+	*file = skip_white(*file, line);
+	if (!*file) return ERROR_PARSE;
+
+	/* Keymap */
+	keymap = option_types[OPT_STRING].read(NULL, file);
+	*file = skip_white(*file, line);
+	if (!keymap || !**file)
+		return ERROR_OPTION;
+
+	/* Keystroke */
+	keystroke = option_types[OPT_STRING].read(NULL, file);
+	*file = skip_white(*file, line);
+	if (!keystroke || !**file) {
+		mem_free(keymap);
+		return ERROR_OPTION;
+	}
+
+	/* Equal sign */
+	*file = skip_white(*file, line);
+	if (**file != '=') {
+		mem_free(keymap); mem_free(keystroke);
+		return ERROR_PARSE;
+	}
+	(*file)++; /* '=' */
+
+	*file = skip_white(*file, line);
+	if (!**file) {
+		mem_free(keymap); mem_free(keystroke);
+		return ERROR_PARSE;
+	}
+
+	/* Action */
+	action = option_types[OPT_STRING].read(NULL, file);
+	if (!action) {
+		mem_free(keymap);
+		return ERROR_VALUE;
+	}
+
+	error = bind_do(keymap, keystroke, action) ? ERROR_VALUE : ERROR_NONE;
+	mem_free(keymap); mem_free(keystroke); mem_free(action);
+	return error;
+}
+
+
 struct parse_handler {
 	unsigned char *command;
 	enum parse_error (*handler)(unsigned char **file, int *line);
@@ -141,9 +195,10 @@ struct parse_handler {
 
 struct parse_handler parse_handlers[] = {
 	{ "set", parse_set },
-/*	{ "bind", parse_bind }, */
+	{ "bind", parse_bind },
 	{ NULL, NULL }
 };
+
 
 void
 parse_config_file(unsigned char *name, unsigned char *file)
@@ -154,6 +209,7 @@ parse_config_file(unsigned char *name, unsigned char *file)
 	unsigned char error_msg[][80] = {
 		"no error",
 		"parse error",
+		"unknown command",
 		"unknown option",
 		"bad value",
 	};
@@ -181,7 +237,7 @@ parse_config_file(unsigned char *name, unsigned char *file)
 			}
 		}
 
-		error = ERROR_OPTION;
+		error = ERROR_COMMAND;
 		/* Jump over this crap we can't understand. */
 		while (!WHITECHAR(*file) && *file != '#' && *file)
 			file++;

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.20 2002/06/29 22:01:22 pasky Exp $ */
+/* $Id: opttypes.c,v 1.21 2002/06/30 15:16:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,6 @@
 
 #include "links.h"
 
-#include "config/kbdbind.h"
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "document/html/colors.h"
@@ -251,6 +250,8 @@ str_rd(struct option *opt, unsigned char **file)
 	unsigned char *str2 = init_str();
 	int str2l = 0;
 
+	/* We're getting used in some parser functions in conf.c as well, and
+	 * that's w/ opt == NULL; so don't rely on opt to point anywhere. */
 	if (*str != '"') return NULL;
 	str++;
 
@@ -270,12 +271,19 @@ str_rd(struct option *opt, unsigned char **file)
 		str++;
 	}
 
-	if (!*str) { mem_free(str2); *file = str; return NULL; }
+	if (!*str) {
+		mem_free(str2);
+		*file = str;
+		return NULL;
+	}
 
 	str++; /* Skip the quote. */
 	*file = str;
 
-	if (opt->max && str2l >= opt->max) { mem_free(str2); return NULL; }
+	if (opt && opt->max && str2l >= opt->max) {
+		mem_free(str2);
+		return NULL;
+	}
 
 	return str2;
 }

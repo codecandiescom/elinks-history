@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.20 2002/06/17 07:42:29 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.21 2002/06/30 15:16:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,22 +182,22 @@ parse_key(unsigned char *s)
 }
 
 static int
-parse_keystroke(unsigned char *s, long *x, long *y)
+parse_keystroke(unsigned char *s, long *key, long *meta)
 {
-	*y = 0;
+	*meta = 0;
 	if (!strncmp(s, "Shift-", 6)) {
-		*y |= KBD_SHIFT;
+		*meta |= KBD_SHIFT;
 		s += 6;
 	} else if (!strncmp(s, "Ctrl-", 5)) {
-		*y |= KBD_CTRL;
+		*meta |= KBD_CTRL;
 		s += 5;
 	} else if (!strncmp(s, "Alt-", 4)) {
-		*y |= KBD_ALT;
+		*meta |= KBD_ALT;
 		s += 4;
 	}
 
-	*x = parse_key(s);
-	return (*x < 0) ? -1 : 0;
+	*key = parse_key(s);
+	return (*key < 0) ? -1 : 0;
 }
 
 static int
@@ -275,72 +275,25 @@ parse_act(unsigned char *s)
  * Config file readers.
  */
 
-/* bind KEYMAP KEYSTROKE ACTION */
+/* Return 0 when ok, something strange otherwise. */
 int
-bind_rd(struct option *o, unsigned char **line)
+bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 {
-#if 0
-	unsigned char *err = NULL;
-	unsigned char *ckmap;
-	unsigned char *ckey;
-	unsigned char *cact;
-	int kmap;
-	long x, y;
-	int act;
+	int keymap_, action_;
+	long key_, meta_;
 
-	ckmap = get_token(&line);
-	ckey = get_token(&line);
-	cact = get_token(&line);
+	keymap_ = parse_keymap(keymap);
+	if (keymap_ < 0) return 1;
 
-	if (!ckmap || !ckey || !cact)
-		err = "Missing arguments";
-	else if ((kmap = parse_keymap(ckmap)) < 0)
-		err = "Unrecognised keymap";
-	else if (parse_keystroke(ckey, &x, &y) < 0)
-		err = "Error parsing keystroke";
-	else if ((act = parse_act(cact)) < 0)
-		err = "Unrecognised action";
-	else
-		add_keybinding(kmap, act, x, y, LUA_NOREF);
+	if (parse_keystroke(keystroke, &key_, &meta_) < 0) return 2;
 
-	if (cact) mem_free(cact);
-	if (ckey) mem_free(ckey);
-	if (ckmap) mem_free(ckmap);
+	action_= parse_act(action);
+	if (action_ < 0) return 3;
 
-	return err;
-#endif
+	add_keybinding(keymap_, action_, key_, meta_, LUA_NOREF);
 	return 0;
 }
 
-/* unbind KEYMAP KEYSTROKE */
-int
-unbind_rd(struct option *o, unsigned char **line)
-{
-#if 0
-	unsigned char *err = NULL;
-	unsigned char *ckmap;
-	unsigned char *ckey;
-	int kmap;
-	long x, y;
-
-	ckmap = get_token(&line);
-	ckey = get_token(&line);
-	if (!ckmap)
-		err = "Missing arguments";
-	else if ((kmap = parse_keymap(ckmap)) < 0)
-		err = "Unrecognised keymap";
-	else if (parse_keystroke(ckey, &x, &y) < 0)
-		err = "Error parsing keystroke";
-	else
-		delete_keybinding(kmap, x, y);
-
-	if (ckey) mem_free(ckey);
-	if (ckmap) mem_free(ckmap);
-
-	return err;
-#endif
-	return 0;
-}
 
 /*
  * Bind to Lua function.
@@ -498,11 +451,4 @@ add_default_keybindings()
 
 	for (kb = default_menu_keymap; kb->x; kb++)
 		add_keybinding(KM_MENU, kb->act, kb->x, kb->y, LUA_NOREF);
-}
-
-void
-i_am_dummy_and_do_nothing_so_remove_me() {
-	parse_keymap("");
-	parse_keystroke("", NULL, NULL);
-	parse_act("");
 }

@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.9 2003/09/29 23:51:55 jonas Exp $ */
+/* $Id: style.c,v 1.10 2003/09/30 00:03:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,21 +29,24 @@ static struct hash *bfu_colors = NULL;
 struct color_pair *
 get_bfu_color(struct terminal *term, unsigned char *stylename)
 {
-	static enum color_mode color_mode;
+	static enum color_mode last_color_mode;
 	struct bfu_color_entry *entry;
 	int stylenamelen;
 	struct hash_item *item;
+	enum color_mode color_mode;
 
 	if (!term) return NULL;
+
+	color_mode = get_opt_int_tree(term->spec, "colors");
 
 	if (!bfu_colors) {
 		/* Initialize the style hash. */
 		bfu_colors = init_hash(8, &strhash);
 		if (!bfu_colors) return NULL;
 
-		color_mode = get_opt_int_tree(term->spec, "colors");
+		last_color_mode = color_mode;
 
-	} else if (get_opt_int_tree(term->spec, "colors") != color_mode) {
+	} else if (color_mode != last_color_mode) {
 		int i;
 
 		/* Change mode by emptying the cache so mono/color colors
@@ -54,7 +57,7 @@ get_bfu_color(struct terminal *term, unsigned char *stylename)
 			del_hash_item(bfu_colors, item->next);
 		}
 
-		color_mode = !color_mode;
+		last_color_mode = color_mode;
 	}
 
 	stylenamelen = strlen(stylename);

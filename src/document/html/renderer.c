@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.289 2003/10/02 15:51:53 zas Exp $ */
+/* $Id: renderer.c,v 1.290 2003/10/03 18:31:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,11 +257,14 @@ get_format_screen_char(struct part *part)
 
 	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
 		struct color_pair colors = INIT_COLOR_PAIR(format.bg, format.fg);
-		enum color_mode cmode = part->document
-				      ? part->document->opt.color_mode : 0;
-		enum color_type type  = (part->document
-					 && part->document->opt.underline)
-				      ? COLOR_DEFAULT : COLOR_ENHANCE;
+		static enum color_mode color_mode;
+		static enum color_type color_type = COLOR_DEFAULT;
+
+		if (part->document) {
+			color_mode = part->document->opt.color_mode;
+			color_type = part->document->opt.underline
+				? COLOR_DEFAULT : COLOR_ENHANCE;
+		}
 
 		schar_cache.attr = 0;
 		if (format.attr) {
@@ -283,7 +286,7 @@ get_format_screen_char(struct part *part)
 		}
 
 		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-		set_term_color(&schar_cache, &colors, type, cmode);
+		set_term_color(&schar_cache, &colors, color_type, color_mode);
 
 		if (d_opt->display_subs) {
 			static int sub = 0;

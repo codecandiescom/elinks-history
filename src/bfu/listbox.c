@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.32 2002/09/17 16:19:48 pasky Exp $ */
+/* $Id: listbox.c,v 1.33 2002/09/17 18:42:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -406,7 +406,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 							       offset, 1,
 							       NULL, NULL);
 			display_dlg_item(dlg, di, 1);
-			return 1;
+			return EVENT_PROCESSED;
 		}
 	}
 #if 0
@@ -414,7 +414,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 		debug("drag");
 	}
 #endif
-	return 0;
+	return EVENT_NOT_PROCESSED;
 }
 
 struct widget_ops listbox_ops = {

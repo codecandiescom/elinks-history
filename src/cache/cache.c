@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.170 2004/07/24 18:52:45 zas Exp $ */
+/* $Id: cache.c,v 1.171 2004/07/25 11:44:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,7 +270,6 @@ add_fragment(struct cache_entry *cached, int offset,
 	     unsigned char *data, int length)
 {
 	struct fragment *f, *nf;
-	int ret = 0;
 	int trunc = 0;
 	int end_offset, f_end_offset;
 
@@ -286,6 +285,8 @@ add_fragment(struct cache_entry *cached, int offset,
 
 	/* Possibly insert the new data in the middle of existing fragment. */
 	foreach (f, cached->frag) {
+		int ret = 0;
+
 		f_end_offset = f->offset + f->length;
 
 		/* No intersection? */
@@ -294,8 +295,6 @@ add_fragment(struct cache_entry *cached, int offset,
 
 		if (end_offset > f_end_offset) {
 			/* Overlap - we end further than original fragment. */
-
-			ret = 1; /* !!! FIXME */
 
 			/* Is intersected area same? Truncate it if not, dunno
 			 * why though :). */
@@ -309,6 +308,8 @@ add_fragment(struct cache_entry *cached, int offset,
 				enlarge_entry(cached, end_offset - f_end_offset);
 				/* ..and length is now total length. */
 				f->length = end_offset - f->offset;
+
+				ret = 1; /* It was enlarged. */
 			} else {
 				/* We will reduce fragment length only to the
 				 * starting non-interjecting size and add new

@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.29 2004/05/25 17:35:45 jonas Exp $ */
+/* $Id: encoding.c,v 1.30 2004/05/25 18:08:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,10 +22,6 @@
 #ifdef HAVE_ZLIB_H
 #include <zlib.h>
 #endif
-
-/* XXX: This seems (b)zlib and OpenSSL are incompatible. Since we don't need
- * OpenSSL here, we try to draw it off the game this way. */
-#define HEADER_SSL_H
 
 #include "elinks.h"
 

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.114 2002/11/21 11:15:03 zas Exp $ */
+/* $Id: options.c,v 1.115 2002/11/29 12:02:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1298,6 +1298,14 @@ register_options()
 		"background", 0, "blue",
 		"Default background color.");
 
+	add_opt_tree("ui.colors.color.dialog",
+		"shadow", 0,
+		"Dialog shadow colors. You need ui.shadows turned on.");
+
+	add_opt_color("ui.colors.color.dialog.shadow",
+		"background", 0, "black",
+		"Default background color.");
+
 
 	add_opt_tree("ui.colors.color",
 		"title", 0,
@@ -1584,6 +1592,14 @@ register_options()
 		"background", 0, "black",
 		"Default background color.");
 
+	add_opt_tree("ui.colors.mono.dialog",
+		"shadow", 0,
+		"Dialog shadow colors. You need ui.shadows turned on.");
+
+	add_opt_color("ui.colors.mono.dialog.shadow",
+		"background", 0, "black",
+		"Default background color.");
+
 
 	add_opt_tree("ui.colors.mono",
 		"title", 0,
@@ -1685,6 +1701,12 @@ register_options()
 		"Language of user interface.");
 
 	add_opt_bool("ui",
+		"shadows", 0, 0,
+		"Make dialogs drop shadows (the shadows are solid, you can\n"
+		"adjust their color by ui.colors.*.dialog.shadow). You may\n"
+		"also want to eliminate the wide borders by adjusting setup.h.");
+
+	add_opt_bool("ui",
 		"show_status_bar", 0, 1,
 		"Show status bar on the screen.");
 
@@ -1694,7 +1716,7 @@ register_options()
 
 	add_opt_bool("ui",
 		"startup_goto_dialog", 0, 0,
-		"Pop up goto dialog on startup when there's no homepage set.\n");
+		"Pop up goto dialog on startup when there's no homepage set.");
 
 	add_opt_bool("ui",
 		"window_title", 0, 1,

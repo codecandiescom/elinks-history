@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.17 2002/09/17 21:43:30 pasky Exp $ */
+/* $Id: dialog.c,v 1.18 2002/11/29 12:02:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "bfu/listbox.h"
 #include "bfu/widget.h"
 #include "config/kbdbind.h"
+#include "config/options.h"
 #include "intl/language.h"
 #include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
@@ -346,4 +347,16 @@ draw_dlg(struct dialog_data *dlg)
 {
 	fill_area(dlg->win->term, dlg->x, dlg->y, dlg->xw, dlg->yw,
 		  get_bfu_color(dlg->win->term, "=dialog"));
+
+	if (get_opt_bool("ui.shadows")) {
+		/* Draw shadow */
+		/* (horizontal) */
+		fill_area(dlg->win->term, dlg->x + 2, dlg->y + dlg->yw,
+			  dlg->xw - 2, 1,
+			  get_bfu_color(dlg->win->term, "=dialog.shadow"));
+		/* (vertical) */
+		fill_area(dlg->win->term, dlg->x + dlg->xw, dlg->y + 1,
+			  2, dlg->yw,
+			  get_bfu_color(dlg->win->term, "=dialog.shadow"));
+	}
 }

@@ -5,47 +5,47 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-01 23:02+0200\n"
+"POT-Creation-Date: 2004-07-02 18:50+0200\n"
 "PO-Revision-Date: 2004-07-01 23:03+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
-#: src/bfu/hierbox.c:342
+#: src/bfu/hierbox.c:338
 msgid "Close"
 msgstr "Fermer"
 
 #. | MSGBOX_SCROLLABLE
-#: src/bfu/hierbox.c:430 src/bfu/hierbox.c:452 src/cache/dialogs.c:169
-#: src/config/dialogs.c:473 src/cookies/dialogs.c:334
+#: src/bfu/hierbox.c:426 src/bfu/hierbox.c:448 src/cache/dialogs.c:197
+#: src/config/dialogs.c:473 src/cookies/dialogs.c:362
 #: src/dialogs/document.c:44 src/dialogs/document.c:223
-#: src/dialogs/download.c:439 src/formhist/dialogs.c:179
-#: src/globhist/dialogs.c:192 src/protocol/auth/dialogs.c:186
+#: src/dialogs/download.c:467 src/formhist/dialogs.c:207
+#: src/globhist/dialogs.c:220 src/protocol/auth/dialogs.c:214
 msgid "Info"
 msgstr "Info"
 
-#: src/bfu/hierbox.c:431
+#: src/bfu/hierbox.c:427
 msgid "Press space to expand this folder."
 msgstr "Pressez espace pour déployer le dossier."
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
-#: src/bfu/hierbox.c:433 src/bfu/hierbox.c:455 src/bfu/hierbox.c:599
+#: src/bfu/hierbox.c:429 src/bfu/hierbox.c:451 src/bfu/hierbox.c:629
 #: src/bfu/inpfield.c:49 src/bfu/inpfield.c:60 src/bfu/inpfield.c:80
-#: src/bfu/msgbox.c:172 src/bookmarks/dialogs.c:206
-#: src/bookmarks/dialogs.c:600 src/config/dialogs.c:61
+#: src/bfu/msgbox.c:172 src/bookmarks/dialogs.c:234
+#: src/bookmarks/dialogs.c:630 src/config/dialogs.c:61
 #: src/config/dialogs.c:106 src/config/dialogs.c:305 src/config/dialogs.c:375
 #: src/config/dialogs.c:405 src/config/dialogs.c:442 src/config/dialogs.c:454
 #: src/config/dialogs.c:665 src/config/dialogs.c:685 src/config/dialogs.c:715
-#: src/cookies/dialogs.c:269 src/dialogs/document.c:50
+#: src/cookies/dialogs.c:297 src/dialogs/document.c:50
 #: src/dialogs/document.c:226 src/dialogs/document.c:287
 #: src/dialogs/document.c:299 src/dialogs/edit.c:99 src/dialogs/info.c:44
 #: src/dialogs/info.c:133 src/dialogs/info.c:153 src/dialogs/menu.c:95
 #: src/dialogs/menu.c:478 src/dialogs/menu.c:526 src/dialogs/options.c:172
-#: src/dialogs/options.c:245 src/formhist/dialogs.c:146 src/mime/dialogs.c:134
-#: src/protocol/auth/dialogs.c:92 src/protocol/user.c:207
+#: src/dialogs/options.c:245 src/formhist/dialogs.c:174 src/mime/dialogs.c:134
+#: src/protocol/auth/dialogs.c:92 src/protocol/user.c:206
 #: src/sched/download.c:236 src/sched/download.c:320 src/sched/download.c:356
 #: src/sched/download.c:503 src/sched/download.c:631 src/sched/error.c:42
 #: src/sched/session.c:240 src/sched/session.c:652 src/sched/session.c:676
@@ -61,66 +61,66 @@ msgstr "Pressez espace pour déployer le dossier."
 msgid "OK"
 msgstr "OK"
 
-#: src/bfu/hierbox.c:561
+#: src/bfu/hierbox.c:557
 #, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "Désolé, mais l'item \"%s\" ne peut être supprimé."
 
-#: src/bfu/hierbox.c:562
+#: src/bfu/hierbox.c:558
 #, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Désolé, mais l'item \"%s\" est actuellement utilisé ailleurs."
 
-#: src/bfu/hierbox.c:565
+#: src/bfu/hierbox.c:561
 #, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Désolé, mais le dossier \"%s\" ne peut être supprimé."
 
-#: src/bfu/hierbox.c:566
+#: src/bfu/hierbox.c:562
 #, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr "Désolé, mais le dossier \"%s\" est actuellement utilisé ailleurs."
 
-#: src/bfu/hierbox.c:596
+#: src/bfu/hierbox.c:626
 msgid "Delete error"
 msgstr "Erreur de suppression"
 
-#: src/bfu/hierbox.c:699
+#: src/bfu/hierbox.c:728
 msgid "Delete marked items"
 msgstr "Supprimer les items sélectionnés"
 
-#: src/bfu/hierbox.c:700
+#: src/bfu/hierbox.c:729
 msgid "Delete marked items?"
 msgstr "Supprimer les items sélectionnés ?"
 
-#: src/bfu/hierbox.c:702 src/bfu/hierbox.c:729 src/bfu/hierbox.c:743
-#: src/bfu/hierbox.c:805 src/config/dialogs.c:643 src/dialogs/menu.c:124
+#: src/bfu/hierbox.c:742 src/bfu/hierbox.c:778 src/bfu/hierbox.c:799
+#: src/bfu/hierbox.c:870 src/config/dialogs.c:643 src/dialogs/menu.c:124
 #: src/formhist/formhist.c:454 src/mime/dialogs.c:75 src/sched/task.c:184
 #: src/terminal/tab.c:195 src/terminal/tab.c:231
 msgid "Yes"
 msgstr "Oui"
 
-#: src/bfu/hierbox.c:703 src/bfu/hierbox.c:730 src/bfu/hierbox.c:744
-#: src/bfu/hierbox.c:806 src/config/dialogs.c:644 src/dialogs/menu.c:125
+#: src/bfu/hierbox.c:743 src/bfu/hierbox.c:779 src/bfu/hierbox.c:800
+#: src/bfu/hierbox.c:871 src/config/dialogs.c:644 src/dialogs/menu.c:125
 #: src/formhist/formhist.c:455 src/mime/dialogs.c:76 src/sched/task.c:185
 #: src/terminal/tab.c:196 src/terminal/tab.c:232
 msgid "No"
 msgstr "Non"
 
-#: src/bfu/hierbox.c:725
+#: src/bfu/hierbox.c:763
 msgid "Delete folder"
 msgstr "Supprimer un dossier"
 
-#: src/bfu/hierbox.c:726
+#: src/bfu/hierbox.c:764
 #, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Supprimer le dossier \"%s\" et son contenu ?"
 
-#: src/bfu/hierbox.c:738
+#: src/bfu/hierbox.c:781
 msgid "Delete item"
 msgstr "Supprimer un item"
 
-#: src/bfu/hierbox.c:739
+#: src/bfu/hierbox.c:782
 #, c-format
 msgid ""
 "Delete \"%s\"?\n"
@@ -131,11 +131,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/bfu/hierbox.c:802
+#: src/bfu/hierbox.c:839
 msgid "Clear all items"
 msgstr "Effacer tous les items"
 
-#: src/bfu/hierbox.c:803
+#: src/bfu/hierbox.c:840
 msgid "Do you really want to remove all items?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les items ?"
 
@@ -149,7 +149,7 @@ msgstr "Saisir un nombre"
 
 #: src/bfu/inpfield.c:57
 #, c-format
-msgid "Number should be in the range from %d to %d."
+msgid "Number should be in a range from %d to %d."
 msgstr "Le nombre doit être compris entre %d et %d."
 
 #: src/bfu/inpfield.c:77
@@ -287,17 +287,82 @@ msgstr "Titre"
 msgid "URL"
 msgstr "URL"
 
-#: src/bookmarks/dialogs.c:205 src/bookmarks/dialogs.c:393
+#. cant_delete_item
+#: src/bookmarks/dialogs.c:118
+#, c-format
+msgid "Sorry, but bookmark \"%s\" cannot be deleted."
+msgstr "Désolé, mais le signet \"%s\" ne peut être supprimé."
+
+#. cant_delete_used_item
+#: src/bookmarks/dialogs.c:120
+#, c-format
+msgid "Sorry, but bookmark \"%s\" is being used by something else."
+msgstr "Désolé, mais le signet \"%s\" est actuellement utilisé ailleurs."
+
+#. cant_delete_folder
+#: src/bookmarks/dialogs.c:122
+#, c-format
+msgid "Sorry, but bookmark's folder \"%s\" cannot be deleted."
+msgstr "Désolé, mais le dossier de signets \"%s\" ne peut être supprimé."
+
+#. cant_delete_used_folder
+#: src/bookmarks/dialogs.c:124
+#, c-format
+msgid "Sorry, but bookmark's folder \"%s\" is being used by something else."
+msgstr ""
+"Désolé, mais le dossier de signets \"%s\" est actuellement utilisé ailleurs."
+
+#. delete_marked_items_title
+#: src/bookmarks/dialogs.c:126
+msgid "Delete marked bookmarks"
+msgstr "Supprimer les signets sélectionnés"
+
+#. delete_marked_items
+#: src/bookmarks/dialogs.c:128
+msgid "Delete marked bookmarks?"
+msgstr "Supprimer les signets sélectionnés ?"
+
+#. delete_folder_title
+#: src/bookmarks/dialogs.c:130
+msgid "Delete bookmark's folder"
+msgstr "Supprimer un dossier de signets"
+
+#. delete_folder
+#: src/bookmarks/dialogs.c:132
+msgid "Delete this folder and all bookmarks in it?"
+msgstr "Supprimer le dossier et tous les signets qu'il contient ?"
+
+#. delete_item_title
+#: src/bookmarks/dialogs.c:134
+msgid "Delete bookmark"
+msgstr "Supprimer un signet"
+
+#. delete_item
+#: src/bookmarks/dialogs.c:136
+msgid "Delete this bookmark?"
+msgstr "Supprimer ce signet ?"
+
+#. clear_all_items_title
+#: src/bookmarks/dialogs.c:138
+msgid "Clear all bookmarks"
+msgstr "Effacer tous les signets"
+
+#. clear_all_items_title
+#: src/bookmarks/dialogs.c:140
+msgid "Do you really want to remove all bookmarks?"
+msgstr "Êtes-vous sûr de vouloir effacer tous les signets ?"
+
+#: src/bookmarks/dialogs.c:233 src/bookmarks/dialogs.c:421
 msgid "Add folder"
 msgstr "Créer dossier"
 
-#: src/bookmarks/dialogs.c:205
+#: src/bookmarks/dialogs.c:233
 msgid "Folder name"
 msgstr "Nom du dossier"
 
-#: src/bookmarks/dialogs.c:206 src/bookmarks/dialogs.c:600
+#: src/bookmarks/dialogs.c:234 src/bookmarks/dialogs.c:630
 #: src/config/dialogs.c:376 src/config/dialogs.c:454 src/config/dialogs.c:715
-#: src/cookies/dialogs.c:270 src/dialogs/edit.c:103 src/dialogs/menu.c:95
+#: src/cookies/dialogs.c:298 src/dialogs/edit.c:103 src/dialogs/menu.c:95
 #: src/dialogs/menu.c:478 src/dialogs/menu.c:526 src/dialogs/options.c:175
 #: src/dialogs/options.c:246 src/mime/dialogs.c:135
 #: src/protocol/auth/dialogs.c:93 src/sched/download.c:547
@@ -309,73 +374,80 @@ msgstr "Nom du dossier"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/bookmarks/dialogs.c:249 src/scripting/lua/core.c:392
+#: src/bookmarks/dialogs.c:277 src/scripting/lua/core.c:392
 msgid "Edit bookmark"
 msgstr "Modifier"
 
-#: src/bookmarks/dialogs.c:389 src/cache/dialogs.c:170
-#: src/globhist/dialogs.c:191 src/protocol/auth/dialogs.c:185
+#: src/bookmarks/dialogs.c:417 src/cache/dialogs.c:198
+#: src/globhist/dialogs.c:219 src/protocol/auth/dialogs.c:213
 msgid "Goto"
 msgstr "Aller à"
 
-#: src/bookmarks/dialogs.c:390 src/config/dialogs.c:331
-#: src/config/dialogs.c:400 src/config/dialogs.c:474 src/cookies/dialogs.c:231
-#: src/cookies/dialogs.c:336
+#: src/bookmarks/dialogs.c:418 src/config/dialogs.c:331
+#: src/config/dialogs.c:400 src/config/dialogs.c:474 src/cookies/dialogs.c:259
+#: src/cookies/dialogs.c:364
 msgid "Edit"
 msgstr "Modifier"
 
-#: src/bookmarks/dialogs.c:391 src/cache/dialogs.c:171
-#: src/config/dialogs.c:476 src/config/dialogs.c:748 src/cookies/dialogs.c:337
-#: src/formhist/dialogs.c:180 src/globhist/dialogs.c:196
-#: src/protocol/auth/dialogs.c:187
+#: src/bookmarks/dialogs.c:419 src/cache/dialogs.c:199
+#: src/config/dialogs.c:476 src/config/dialogs.c:748 src/cookies/dialogs.c:365
+#: src/formhist/dialogs.c:208 src/globhist/dialogs.c:224
+#: src/protocol/auth/dialogs.c:215
 msgid "Delete"
 msgstr "Supprimer"
 
-#: src/bookmarks/dialogs.c:392
+#: src/bookmarks/dialogs.c:420
 msgid "Move"
 msgstr "Déplacer"
 
-#: src/bookmarks/dialogs.c:394 src/config/dialogs.c:475
-#: src/config/dialogs.c:747 src/cookies/dialogs.c:335
+#: src/bookmarks/dialogs.c:422 src/config/dialogs.c:475
+#: src/config/dialogs.c:747 src/cookies/dialogs.c:363
 msgid "Add"
 msgstr "Ajouter"
 
-#: src/bookmarks/dialogs.c:395 src/globhist/dialogs.c:197
+#: src/bookmarks/dialogs.c:423 src/globhist/dialogs.c:225
 #: src/viewer/text/search.c:864 src/viewer/text/search.c:891
 #: src/viewer/text/search.c:915 src/viewer/text/search.c:1408
 msgid "Search"
 msgstr "Chercher"
 
+#: src/bookmarks/dialogs.c:424 src/cookies/dialogs.c:366
+#: src/dialogs/download.c:473 src/dialogs/edit.c:100
+#: src/formhist/dialogs.c:210 src/globhist/dialogs.c:227
+#: src/protocol/auth/dialogs.c:216
+msgid "Clear"
+msgstr "Effacer"
+
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:398 src/config/dialogs.c:477
-#: src/config/dialogs.c:750 src/cookies/dialogs.c:339
-#: src/dialogs/options.c:174 src/formhist/dialogs.c:183
-#: src/globhist/dialogs.c:202 src/sched/download.c:1007
+#: src/bookmarks/dialogs.c:427 src/config/dialogs.c:477
+#: src/config/dialogs.c:750 src/cookies/dialogs.c:367
+#: src/dialogs/options.c:174 src/formhist/dialogs.c:211
+#: src/globhist/dialogs.c:230 src/sched/download.c:1007
 #: src/sched/download.c:1036
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/bookmarks/dialogs.c:404
+#: src/bookmarks/dialogs.c:433
 msgid "Bookmark manager"
 msgstr "Gestionnaire de signets"
 
-#: src/bookmarks/dialogs.c:546
+#: src/bookmarks/dialogs.c:576
 msgid "Search bookmarks"
 msgstr "Recherche parmi les signets"
 
-#: src/bookmarks/dialogs.c:560
+#: src/bookmarks/dialogs.c:590
 msgid "Add bookmark"
 msgstr "Ajouter un signet"
 
-#: src/bookmarks/dialogs.c:591
+#: src/bookmarks/dialogs.c:621
 msgid "Saved session"
 msgstr "Session sauvée"
 
-#: src/bookmarks/dialogs.c:599
+#: src/bookmarks/dialogs.c:629
 msgid "Bookmark tabs"
 msgstr "Signets pour les onglets"
 
-#: src/bookmarks/dialogs.c:599
+#: src/bookmarks/dialogs.c:629
 msgid "Enter folder name"
 msgstr "Entrez un nom de dossier"
 
@@ -427,7 +499,40 @@ msgstr "ID"
 msgid "Header"
 msgstr "En-tête"
 
-#: src/cache/dialogs.c:176
+#. cant_delete_item
+#: src/cache/dialogs.c:159
+#, c-format
+msgid "Sorry, but cache entry \"%s\" cannot be deleted."
+msgstr "Désolé, mais l'entrée de cache \"%s\" ne peut être supprimé."
+
+#. cant_delete_used_item
+#: src/cache/dialogs.c:161
+#, c-format
+msgid "Sorry, but cache entry \"%s\" is being used by something else."
+msgstr ""
+"Désolé, mais l'entrée de cache \"%s\" est actuellement utilisé ailleurs."
+
+#. delete_marked_items_title
+#: src/cache/dialogs.c:167
+msgid "Delete marked cache entries"
+msgstr "Supprimer les entrées de cache sélectionnées"
+
+#. delete_marked_items
+#: src/cache/dialogs.c:169
+msgid "Delete marked cache entries?"
+msgstr "Supprimer les entrées de cache sélectionnées ?"
+
+#. delete_item_title
+#: src/cache/dialogs.c:175
+msgid "Delete cache entry"
+msgstr "Supprimer l'entrée de cache"
+
+#. delete_item
+#: src/cache/dialogs.c:177
+msgid "Delete this cache entry?"
+msgstr "Supprimer cette entrée de cache ?"
+
+#: src/cache/dialogs.c:204
 msgid "Cache manager"
 msgstr "Gestionnaire de cache"
 
@@ -931,7 +1036,7 @@ msgid "N/A"
 msgstr "N/A"
 
 #: src/config/dialogs.c:190 src/config/dialogs.c:206 src/config/dialogs.c:340
-#: src/config/dialogs.c:453 src/cookies/dialogs.c:97 src/cookies/dialogs.c:258
+#: src/config/dialogs.c:453 src/cookies/dialogs.c:97 src/cookies/dialogs.c:286
 #: src/dialogs/edit.c:92 src/scripting/lua/core.c:396
 #: src/scripting/lua/core.c:397 src/scripting/lua/core.c:478
 msgid "Name"
@@ -942,7 +1047,7 @@ msgid "Type"
 msgstr "Type"
 
 #: src/config/dialogs.c:200 src/config/dialogs.c:370 src/cookies/dialogs.c:98
-#: src/cookies/dialogs.c:260
+#: src/cookies/dialogs.c:288
 msgid "Value"
 msgstr "Valeur"
 
@@ -1028,7 +1133,7 @@ msgstr ""
 "Préfixe: Shift, Ctrl, Alt\n"
 "Touche: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
-#: src/config/dialogs.c:749 src/dialogs/info.c:134 src/globhist/dialogs.c:198
+#: src/config/dialogs.c:749 src/dialogs/info.c:134 src/globhist/dialogs.c:226
 msgid "Toggle display"
 msgstr "Commuter affich."
 
@@ -3563,7 +3668,7 @@ msgstr "Texte"
 msgid "Dialog text colors."
 msgstr "Couleurs du texte des dialogues."
 
-#: src/config/options.inc:1088 src/viewer/text/form.c:1337
+#: src/config/options.inc:1088 src/viewer/text/form.c:1339
 msgid "Checkbox"
 msgstr "Case à cocher"
 
@@ -3595,7 +3700,7 @@ msgstr "Bouton sélectionné"
 msgid "Dialog selected button colors."
 msgstr "Couleurs du bouton sélectionné dans les dialogues."
 
-#: src/config/options.inc:1104 src/viewer/text/form.c:1341
+#: src/config/options.inc:1104 src/viewer/text/form.c:1343
 msgid "Text field"
 msgstr "Champ texte"
 
@@ -4223,30 +4328,89 @@ msgstr "Accepter"
 msgid "Reject"
 msgstr "Rejeter"
 
-#: src/cookies/dialogs.c:96 src/cookies/dialogs.c:250
+#: src/cookies/dialogs.c:96 src/cookies/dialogs.c:278
 #: src/dialogs/document.c:113
 msgid "Server"
 msgstr "Serveur"
 
-#: src/cookies/dialogs.c:99 src/cookies/dialogs.c:262
+#: src/cookies/dialogs.c:99 src/cookies/dialogs.c:290
 msgid "Domain"
 msgstr "Domaine"
 
-#: src/cookies/dialogs.c:104 src/cookies/dialogs.c:264
+#: src/cookies/dialogs.c:104 src/cookies/dialogs.c:292
 msgid "Expires"
 msgstr "Expiration"
 
-#: src/cookies/dialogs.c:109 src/cookies/dialogs.c:266
+#: src/cookies/dialogs.c:109 src/cookies/dialogs.c:294
 msgid "Secure"
 msgstr "Sécurisé"
 
-#: src/cookies/dialogs.c:338 src/dialogs/download.c:445 src/dialogs/edit.c:100
-#: src/formhist/dialogs.c:182 src/globhist/dialogs.c:199
-#: src/protocol/auth/dialogs.c:188
-msgid "Clear"
-msgstr "Effacer"
+#. cant_delete_item
+#: src/cookies/dialogs.c:141
+#, c-format
+msgid "Sorry, but cookie \"%s\" cannot be deleted."
+msgstr "Désolé, mais le cookie \"%s\" ne peut être supprimé."
 
-#: src/cookies/dialogs.c:344
+#. cant_delete_used_item
+#: src/cookies/dialogs.c:143
+#, c-format
+msgid "Sorry, but cookie \"%s\" is being used by something else."
+msgstr "Désolé, mais le cookie \"%s\" est actuellement utilisé ailleurs."
+
+#. cant_delete_folder
+#: src/cookies/dialogs.c:145
+#, c-format
+msgid "Sorry, but cookie's folder \"%s\" cannot be deleted."
+msgstr "Désolé, mais le dossier de cookies \"%s\" ne peut être supprimé."
+
+#. cant_delete_used_folder
+#: src/cookies/dialogs.c:147
+#, c-format
+msgid "Sorry, but cookie's folder \"%s\" is being used by something else."
+msgstr ""
+"Désolé, mais le dossier de cookies \"%s\" est actuellement utilisé ailleurs."
+
+#. delete_marked_items_title
+#: src/cookies/dialogs.c:149
+msgid "Delete marked cookies"
+msgstr "Supprimer les cookies sélectionnés"
+
+#. delete_marked_items
+#: src/cookies/dialogs.c:151
+msgid "Delete marked cookies?"
+msgstr "Supprimer les cookies sélectionnés ?"
+
+#. delete_folder_title
+#: src/cookies/dialogs.c:153
+msgid "Delete cookie's folder"
+msgstr "Supprimer un dossier de cookies"
+
+#. delete_folder
+#: src/cookies/dialogs.c:155
+msgid "Delete this folder and all cookies in it?"
+msgstr "Supprimer le dossier \"%s\" et tous les cookies qu'il contient ?"
+
+#. delete_item_title
+#: src/cookies/dialogs.c:157
+msgid "Delete cookie"
+msgstr "Supprimer un cookie"
+
+#. delete_item
+#: src/cookies/dialogs.c:159
+msgid "Delete this cookie?"
+msgstr "Supprimer ce cookie ?"
+
+#. clear_all_items_title
+#: src/cookies/dialogs.c:161
+msgid "Clear all cookies"
+msgstr "Effacer tous les cookies"
+
+#. clear_all_items_title
+#: src/cookies/dialogs.c:163
+msgid "Do you really want to remove all cookies?"
+msgstr "Êtes-vous sûr de vouloir effacer tous les cookies ?"
+
+#: src/cookies/dialogs.c:372
 msgid "Cookie manager"
 msgstr "Gestionnaire de cookies"
 
@@ -4311,16 +4475,59 @@ msgstr "Arrière-plan"
 msgid "Background with notify"
 msgstr "Arrière-plan et notifier"
 
-#: src/dialogs/download.c:265 src/dialogs/download.c:440
+#: src/dialogs/download.c:265 src/dialogs/download.c:468
 msgid "Abort"
 msgstr "Arrêter"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:266 src/dialogs/download.c:443
+#: src/dialogs/download.c:266 src/dialogs/download.c:471
 msgid "Abort and delete file"
 msgstr "Arrêter et supprimer fichier"
 
-#: src/dialogs/download.c:450
+#. cant_delete_item
+#: src/dialogs/download.c:402
+#, c-format
+msgid "Sorry, but download \"%s\" cannot be interrupted."
+msgstr "Désolé, mais le téléchargement \"%s\" ne peut être supprimé."
+
+#. cant_delete_used_item
+#: src/dialogs/download.c:404
+#, c-format
+msgid "Sorry, but download \"%s\" is being used by something else."
+msgstr ""
+"Désolé, mais le téléchargement \"%s\" est actuellement utilisé ailleurs."
+
+#. delete_marked_items_title
+#: src/dialogs/download.c:410
+msgid "Interrupt marked downloads"
+msgstr "Interrompre les téléchargements sélectionnés"
+
+#. delete_marked_items
+#: src/dialogs/download.c:412
+msgid "Interrupt marked downloads?"
+msgstr "Interrompre les téléchargements sélectionnés ?"
+
+#. delete_item_title
+#: src/dialogs/download.c:418
+msgid "Interrupt download"
+msgstr "Interrompre le téléchargement"
+
+#. delete_item
+#: src/dialogs/download.c:420
+msgid "Interrupt this download?"
+msgstr "Interrompre ce téléchargement ?"
+
+#. clear_all_items_title
+#: src/dialogs/download.c:422
+msgid "Interrupt all downloads"
+msgstr "Interrompre tous les téléchargements"
+
+#. clear_all_items_title
+#: src/dialogs/download.c:424
+msgid "Do you really want to interrupt all downloads?"
+msgstr "Interrompre tous les téléchargements en cours ?"
+
+#: src/dialogs/download.c:478
 msgid "Download manager"
 msgstr "Gestionnaire de téléchargements"
 
@@ -4900,11 +5107,53 @@ msgstr "Les formulaires ne sont jamais sauvés pour cette URL."
 msgid "Forms are saved for this URL."
 msgstr "Les formulaires sont sauvés pour cette URL."
 
+#. cant_delete_item
+#: src/formhist/dialogs.c:119
+#, c-format
+msgid "Sorry, but form \"%s\" cannot be deleted."
+msgstr "Désolé, mais le formulaire \"%s\" ne peut être supprimé."
+
+#. cant_delete_used_item
+#: src/formhist/dialogs.c:121
+#, c-format
+msgid "Sorry, but form \"%s\" is being used by something else."
+msgstr "Désolé, mais le formulaire \"%s\" est actuellement utilisé ailleurs."
+
+#. delete_marked_items_title
+#: src/formhist/dialogs.c:127
+msgid "Delete marked forms"
+msgstr "Supprimer les formulaires sélectionnés"
+
+#. delete_marked_items
+#: src/formhist/dialogs.c:129
+msgid "Delete marked forms?"
+msgstr "Supprimer les formulaires sélectionnés ?"
+
+#. delete_item_title
+#: src/formhist/dialogs.c:135
+msgid "Delete form"
+msgstr "Supprimer un formulaire"
+
+#. delete_item
+#: src/formhist/dialogs.c:137
+msgid "Delete this form?"
+msgstr "Supprimer ce formulaire ?"
+
+#. clear_all_items_title
+#: src/formhist/dialogs.c:139
+msgid "Clear all forms"
+msgstr "Effacer tous les formulaires"
+
+#. clear_all_items_title
 #: src/formhist/dialogs.c:141
+msgid "Do you really want to remove all forms?"
+msgstr "Êtes-vous sûr de vouloir effacer tous les formulaires ?"
+
+#: src/formhist/dialogs.c:169
 msgid "Form not saved"
 msgstr "Formulaire non sauvegardé"
 
-#: src/formhist/dialogs.c:142
+#: src/formhist/dialogs.c:170
 msgid ""
 "No saved information for this URL.\n"
 "If you want to save passwords for this URL, enable it by the \"Toggle saving"
@@ -4914,18 +5163,20 @@ msgstr ""
 "Si vous désirez sauver les mots de passe pour cette URL,\n"
 "utilisez le bouton \"Bascule sauvegarde\"."
 
-#: src/formhist/dialogs.c:178 src/protocol/auth/dialogs.c:87
+#: src/formhist/dialogs.c:206 src/protocol/auth/dialogs.c:87
 msgid "Login"
 msgstr "Login"
 
-#: src/formhist/dialogs.c:181
+#: src/formhist/dialogs.c:209
 msgid "Toggle saving"
 msgstr "Bascule sauvegarde"
 
-#: src/formhist/dialogs.c:188
+#: src/formhist/dialogs.c:216
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -4970,15 +5221,58 @@ msgstr "Jamais pour ce site"
 msgid "Forms History"
 msgstr "Mémorisation formulaires"
 
-#: src/globhist/dialogs.c:137
+#. cant_delete_item
+#: src/globhist/dialogs.c:105
+#, c-format
+msgid "Sorry, but history entry \"%s\" cannot be deleted."
+msgstr "Désolé, mais l'entrée d'historique \"%s\" ne peut être supprimée."
+
+#. cant_delete_used_item
+#: src/globhist/dialogs.c:107
+#, c-format
+msgid "Sorry, but history entry \"%s\" is being used by something else."
+msgstr ""
+"Désolé, mais l'entrée d'historique \"%s\" est actuellement utilisée ailleurs."
+
+#. delete_marked_items_title
+#: src/globhist/dialogs.c:113
+msgid "Delete marked history entries"
+msgstr "Supprimer les entrées d'historique sélectionnées"
+
+#. delete_marked_items
+#: src/globhist/dialogs.c:115
+msgid "Delete marked history entries?"
+msgstr "Supprimer les entrées d'historique sélectionnées ?"
+
+#. delete_item_title
+#: src/globhist/dialogs.c:121
+msgid "Delete history entry"
+msgstr "Supprimer une entrée d'historique"
+
+#. delete_item
+#: src/globhist/dialogs.c:123
+msgid "Delete this history entry?"
+msgstr "Supprimer cette entrée d'historique ?"
+
+#. clear_all_items_title
+#: src/globhist/dialogs.c:125
+msgid "Clear all history entries"
+msgstr "Effacer toutes les entrées d'historique"
+
+#. clear_all_items_title
+#: src/globhist/dialogs.c:127
+msgid "Do you really want to remove all history entries?"
+msgstr "Êtes-vous sûr de vouloir effacer toutes les entrées d'historique ?"
+
+#: src/globhist/dialogs.c:165
 msgid "Search history"
 msgstr "Recherche dans l'historique"
 
-#: src/globhist/dialogs.c:194
+#: src/globhist/dialogs.c:222
 msgid "Bookmark"
 msgstr "Signet"
 
-#: src/globhist/dialogs.c:208
+#: src/globhist/dialogs.c:236
 msgid "Global history manager"
 msgstr "Gestionnaire d'historique global"
 
@@ -5286,7 +5580,6 @@ msgstr "Système de configuration"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:687
 msgid "Mailcap"
@@ -5517,7 +5810,50 @@ msgstr "Etat"
 msgid "valid"
 msgstr "valide"
 
+#. cant_delete_item
+#: src/protocol/auth/dialogs.c:175
+#, c-format
+msgid "Sorry, but auth entry \"%s\" cannot be deleted."
+msgstr "Désolé, mais l'authentification \"%s\" ne peut être supprimée."
+
+#. cant_delete_used_item
+#: src/protocol/auth/dialogs.c:177
+#, c-format
+msgid "Sorry, but auth entry \"%s\" is being used by something else."
+msgstr ""
+"Désolé, mais l'authentification \"%s\" est actuellement utilisée ailleurs."
+
+#. delete_marked_items_title
+#: src/protocol/auth/dialogs.c:183
+msgid "Delete marked auth entries"
+msgstr "Supprimer les authentifications sélectionnées"
+
+#. delete_marked_items
+#: src/protocol/auth/dialogs.c:185
+msgid "Delete marked auth entries?"
+msgstr "Supprimer les authentifications sélectionnées ?"
+
+#. delete_item_title
+#: src/protocol/auth/dialogs.c:191
+msgid "Delete auth entry"
+msgstr "Supprimer une authentification"
+
+#. delete_item
 #: src/protocol/auth/dialogs.c:193
+msgid "Delete this auth entry?"
+msgstr "Supprimer cette authentification ?"
+
+#. clear_all_items_title
+#: src/protocol/auth/dialogs.c:195
+msgid "Clear all auth entries"
+msgstr "Effacer toutes les authentifications"
+
+#. clear_all_items_title
+#: src/protocol/auth/dialogs.c:197
+msgid "Do you really want to remove all auth entries?"
+msgstr "Êtes-vous sûr de vouloir effacer toutes les authentifications ?"
+
+#: src/protocol/auth/dialogs.c:221
 msgid "Authentication manager"
 msgstr "Gestionnaire d'authentification"
 
@@ -5639,11 +5975,11 @@ msgstr ""
 msgid "URI rewrite"
 msgstr "Ré-écriture d'URI"
 
-#: src/protocol/user.c:202
+#: src/protocol/user.c:201
 msgid "No program"
 msgstr "Aucun programme"
 
-#: src/protocol/user.c:204
+#: src/protocol/user.c:203
 #, c-format
 msgid "No program specified for protocol %s."
 msgstr "Aucun programme spécifié pour le protocole %s."
@@ -6158,66 +6494,66 @@ msgstr "Erreur lors de l'envoi du formulaire"
 msgid "Could not get file %s: %s"
 msgstr "Impossible d'obtenir le fichier %s: %s"
 
-#: src/viewer/text/form.c:1324
+#: src/viewer/text/form.c:1326
 msgid "Reset form"
 msgstr "Réinitialiser le formulaire"
 
-#: src/viewer/text/form.c:1332
+#: src/viewer/text/form.c:1334
 msgid "Submit form to"
 msgstr "Envoi du formulaire à"
 
-#: src/viewer/text/form.c:1333
+#: src/viewer/text/form.c:1335
 msgid "Post form to"
 msgstr "Transfert du formulaire à"
 
-#: src/viewer/text/form.c:1335
+#: src/viewer/text/form.c:1337
 msgid "Radio button"
 msgstr "Bouton radio"
 
-#: src/viewer/text/form.c:1339
+#: src/viewer/text/form.c:1341
 msgid "Select field"
 msgstr "Liste"
 
-#: src/viewer/text/form.c:1343
+#: src/viewer/text/form.c:1345
 msgid "Text area"
 msgstr "Champ texte multiligne"
 
-#: src/viewer/text/form.c:1345
+#: src/viewer/text/form.c:1347
 msgid "File upload"
 msgstr "Envoi de fichier"
 
-#: src/viewer/text/form.c:1347
+#: src/viewer/text/form.c:1349
 msgid "Password field"
 msgstr "Champ mot de passe"
 
-#: src/viewer/text/form.c:1385
+#: src/viewer/text/form.c:1387
 msgid "name"
 msgstr "Nom"
 
-#: src/viewer/text/form.c:1394
+#: src/viewer/text/form.c:1396
 msgid "value"
 msgstr "Valeur"
 
-#: src/viewer/text/form.c:1402
+#: src/viewer/text/form.c:1404
 msgid "read only"
 msgstr "lecture seule"
 
-#: src/viewer/text/form.c:1413
+#: src/viewer/text/form.c:1415
 #, c-format
 msgid "press %s to navigate"
 msgstr "pressez %s pour naviguer"
 
-#: src/viewer/text/form.c:1415
+#: src/viewer/text/form.c:1417
 #, c-format
 msgid "press %s to edit"
 msgstr "pressez %s pour éditer"
 
-#: src/viewer/text/form.c:1435
+#: src/viewer/text/form.c:1437
 #, c-format
 msgid "press %s to submit to"
 msgstr "pressez %s pour soumettre à"
 
-#: src/viewer/text/form.c:1437
+#: src/viewer/text/form.c:1439
 #, c-format
 msgid "press %s to post to"
 msgstr "pressez %s pour poster à"
@@ -6387,3 +6723,7 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1121
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#, fuzzy
+#~ msgid "Delete cache history"
+#~ msgstr "Recherche dans l'historique"

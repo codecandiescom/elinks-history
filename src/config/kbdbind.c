@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.205 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.206 2004/05/04 01:48:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,12 +258,6 @@ kbd_act_lookup(enum keymap map, int action)
 /*
  * Config file helpers.
  */
-
-struct strtonum {
-	unsigned char *str;
-	long num;
-	unsigned char *desc;
-};
 
 static long
 strtonum(struct strtonum *table, unsigned char *str)
@@ -651,7 +645,7 @@ init_action_listboxes(void)
 		init_list(keymap->child);
 		keymap->visible = 1;
 		keymap->translated = 1;
-		keymap->udata = (void *) i;
+		keymap->udata = &keymap_table[i];
 		keymap->type = BI_FOLDER;
 		keymap->expanded = 0; /* Maybe you would like this being 1? */
 		keymap->depth = 0;
@@ -671,7 +665,7 @@ init_action_listboxes(void)
 			box_item->root = keymap;
 			add_to_list_end(keymap->child, box_item);
 			init_list(box_item->child);
-			box_item->udata = (void *) act->num;
+			box_item->udata = act;
 			box_item->type = BI_FOLDER;
 			box_item->expanded = 1;
 			box_item->visible = 1;

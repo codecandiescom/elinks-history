@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.109 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.110 2004/05/04 01:48:01 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -9,6 +9,12 @@ struct listbox_item;
 #include "config/options.h"
 #include "terminal/terminal.h"
 #include "util/string.h"
+
+struct strtonum {
+	unsigned char *str;
+	long num;
+	unsigned char *desc;
+};
 
 enum keymap {
 	KM_MAIN,

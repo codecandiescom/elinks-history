@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.27 2003/09/03 23:10:32 jonas Exp $ */
+/* $Id: draw.h,v 1.28 2003/09/05 02:01:36 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -30,7 +30,7 @@ struct screen_char {
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */
 /* In the screen image, they have attribute SCREEN_ATTR_FRAME; you should drop them
- * to the image using draw_frame_char(). */
+ * to the image using draw_border_char(). */
 /* TODO: When we'll support internal Unicode, this should be changed to some
  * Unicode sequences. --pasky */
 

@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.21 2002/05/18 23:01:33 pasky Exp $ */
+/* $Id: options.c,v 1.22 2002/05/19 11:06:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,9 +35,6 @@
 
 struct hash *links_options;
 struct hash *html_options;
-
-struct option links_options_list[];
-struct option html_options_list[];
 
 struct hash *all_options[] = { /*links_options*/ NULL, /*html_options*/ NULL, NULL, };
 
@@ -84,12 +81,30 @@ add_opt_rec(struct hash *hash, struct option *option)
 	add_hash_item(hash, stracpy(option->name), aopt);
 }
 
+void
+add_opt(struct hash *hash, unsigned char *name, enum option_flags flags,
+	enum option_type type, int min, int max, void *ptr,
+	unsigned char *desc)
+{
+	struct option *option = mem_alloc(sizeof(struct option));
+
+	option->name = name;
+	option->flags = flags;
+	option->type = type;
+	option->min = min;
+	option->max = max;
+	option->ptr = ptr;
+	option->desc = desc;
+
+	add_hash_item(hash, stracpy(option->name), option);
+}
+
+
+void register_options();
 
 void
 init_options()
 {
-	struct option *opt;
-
 	/* 6 bits == 64 entries; I guess it's the best number for options
 	 * hash. --pasky */
 	links_options = init_hash(6);
@@ -98,11 +113,7 @@ init_options()
 	all_options[0] = links_options;
 	all_options[1] = html_options;
 
-	for (opt = links_options_list; opt->name; opt++)
-		add_opt_rec(links_options, opt);
-
-	for (opt = html_options_list; opt->name; opt++)
-		add_opt_rec(html_options, opt);
+	register_options();
 }
 
 void
@@ -773,459 +784,435 @@ struct http_bugs http_bugs = { 0, 1, 0, 0 };
 	/* No keepalive connection after POST request. Some buggy PHP databases report bad
 	   results if GET wants to retreive data POSTed in the same connection */
 
-
-
-/**********************************************************************
- Options list
-**********************************************************************/
-
-/* Following lists are sorted alphabetically */
-
-struct option links_options_list[] = {
-	/* <optname>, <cfgoptname>,
-	 * <cmdread_cmdline>, <cmdread_file>, <cmdwrite_file>,
-	 * <minval>, <maxval>, <varname>
-	 * <description> */
-
-	{	"accept_language", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING,
-		0, MAX_STR_LEN, accept_language,
-		"Send Accept-Language header." },
+void
+register_options()
+{
+	add_opt(links_options,
+		"accept_language", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_STRING, 0, MAX_STR_LEN, accept_language,
+		"Send Accept-Language header.");
 		
-	{	"accesskey_enter", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &accesskey_enter,
+	add_opt(links_options,
+		"accesskey_enter", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &accesskey_enter,
 		"Automatically follow link / submit form if appropriate accesskey\n"
-		"is pressed - this is standart behaviour, however dangerous." },
+		"is pressed - this is standart behaviour, however dangerous.");
 
-	{	"accesskey_priority", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	0, 2, &accesskey_priority,
+	add_opt(links_options,
+		"accesskey_priority", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, 0, 2, &accesskey_priority,
 		"Priority of 'accesskey' HTML attribute:\n"
 		"0 is first try all normal bindings and if it fails, check accesskey\n"
 		"1 is first try only frame bindings and if it fails, check accesskey\n"
-		"2 is first check accesskey (that can be dangerous)" },
+		"2 is first check accesskey (that can be dangerous)");
 
-	{	"allow_special_files", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &allow_special_files,
+	add_opt(links_options,
+		"allow_special_files", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &allow_special_files,
 		"Allow reading from non-regular files? (DANGEROUS - reading\n"
-		"/dev/urandom or /dev/zero can ruin your day!)" },
+		"/dev/urandom or /dev/zero can ruin your day!)");
 
-	{	"anonymous", OPT_CMDLINE,
-		OPT_BOOL,
-	 	0, 1, &anonymous,
-	      	"Restrict links so that it can run on an anonymous account.\n"
+	add_opt(links_options,
+		"anonymous", OPT_CMDLINE,
+		OPT_BOOL, 0, 1, &anonymous,
+		"Restrict links so that it can run on an anonymous account.\n"
 		"No local file browsing, no downloads. Executing of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
-		"association table." },
+		"association table.");
 
-	{	"assume_codepage", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_CODEPAGE,
-	 	0, 0, &dds.assume_cp,
+	add_opt(links_options,
+		"assume_codepage", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_CODEPAGE, 0, 0, &dds.assume_cp,
 		"Use the given codepage when the webpage did not specify\n"
 		"its codepage.\n"
-		"Default: ISO 8859-1" },
+		"Default: ISO 8859-1");
 
-	{	"async_dns", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &async_lookup,
-		"Use asynchronous DNS resolver?" },
+	add_opt(links_options,
+		"async_dns", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &async_lookup,
+		"Use asynchronous DNS resolver?");
 
-	{	"base_session", OPT_CMDLINE,
-		OPT_INT,
-	 	0, MAXINT, &base_session,
-	 	"Run this links in separate session - instances of links with\n"
-       		"same base_session will connect together and share runtime\n"
-		"informations. By default, base_session is 0." },
+	add_opt(links_options,
+		"base_session", OPT_CMDLINE,
+		OPT_INT, 0, MAXINT, &base_session,
+		"Run this links in separate session - instances of links with\n"
+		"same base_session will connect together and share runtime\n"
+		"informations. By default, base_session is 0.");
 
-	{	"color_dirs", OPT_CMDLINE | OPT_CFGFILE,
-	       	OPT_BOOL,
-		0, 1, &color_dirs,
-		"Highlight directories when listing local disk content?" },
+	add_opt(links_options,
+		"color_dirs", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &color_dirs,
+		"Highlight directories when listing local disk content?");
 
-	{	"cookies_accept", OPT_CMDLINE | OPT_CFGFILE,
-	       	OPT_INT,
-		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, &cookies_accept,
+	add_opt(links_options,
+		"cookies_accept", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, &cookies_accept,
 		"Mode of accepting cookies:\n"
 		"0 is accept no cookies\n"
 		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
-		"2 is accept all cookies" },
+		"2 is accept all cookies");
 
-	{	"cookies_paranoid_security", OPT_CMDLINE | OPT_CFGFILE,
-	       	OPT_BOOL,
-		0, 1, &cookies_paranoid_security,
+	add_opt(links_options,
+		"cookies_paranoid_security", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &cookies_paranoid_security,
 		"When enabled, we'll require three dots in cookies domain for all\n"
 		"non-international domains (instead of just two dots). Please see\n"
-		"code (cookies.c:check_domain_security()) for further description" },
+		"code (cookies.c:check_domain_security()) for further description");
 
-	{	"cookies_save", OPT_CMDLINE | OPT_CFGFILE,
-	       	OPT_BOOL,
-		0, 1, &cookies_save,
-		"Load/save cookies from/to disk?" },
+	add_opt(links_options,
+		"cookies_save", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &cookies_save,
+		"Load/save cookies from/to disk?");
 
-	{	"cookies_resave", OPT_CMDLINE | OPT_CFGFILE,
-	       	OPT_BOOL,
-		0, 1, &cookies_resave,
+	add_opt(links_options,
+		"cookies_resave", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &cookies_resave,
 		"Save cookies after each change in cookies list? No effect when\n"
-		"cookies_save is off." },
+		"cookies_save is off.");
 
-	{	"default_fg", OPT_CMDLINE | OPT_CFGFILE,
-	       	OPT_COLOR,
-		0, 1, &default_fg,
-		"Default foreground color." },
+	add_opt(links_options,
+		"default_fg", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_COLOR, 0, 1, &default_fg,
+		"Default foreground color.");
 
-		/* FIXME - this produces ugly results now */
-#if 0
-	{	"default_bg", OPT_CMDLINE | OPT_CFGFILE,
-	       	OPT_COLOR,
-		0, 1, &default_bg,
-		"Default background color." },
-#endif
+	/* FIXME - this produces ugly results now */
+	add_opt(links_options,
+		"default_bg", /* OPT_CMDLINE | OPT_CFGFILE */ 0,
+		OPT_COLOR, 0, 1, &default_bg,
+		"Default background color.");
 
-	{	"default_link", OPT_CMDLINE | OPT_CFGFILE,
-	       	OPT_COLOR,
-		0, 1, &default_link,
-		"Default link color." },
+	add_opt(links_options,
+		"default_link", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_COLOR, 0, 1, &default_link,
+		"Default link color.");
 
-	{	"default_vlink", OPT_CMDLINE | OPT_CFGFILE,
-	       	OPT_COLOR,
-		0, 1, &default_vlink,
-		"Default vlink color." },
+	add_opt(links_options,
+		"default_vlink", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_COLOR, 0, 1, &default_vlink,
+		"Default vlink color.");
 
-	{	"default_mime_type", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING,
-		0, MAX_STR_LEN, default_mime_type,
+	add_opt(links_options,
+		"default_mime_type", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_STRING, 0, MAX_STR_LEN, default_mime_type,
 		"MIME type for a document we should assume by default (when we are\n"
 		"unable to guess it properly from known informations about the\n"
-		"document)." },
+		"document).");
 
-	{	"download_dir", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING,
-	 	0, MAX_STR_LEN, download_dir,
-		"Default download directory." },
+	add_opt(links_options,
+		"download_dir", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_STRING, 0, MAX_STR_LEN, download_dir,
+		"Default download directory.");
 
-	{	"download_utime", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &download_utime,
-	 	"Set time of downloaded files?" },
+	add_opt(links_options,
+		"download_utime", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &download_utime,
+		"Set time of downloaded files?");
 
-	{	"dump", OPT_CMDLINE,
-		OPT_BOOL,
-	 	0, 1, &dump,
+	add_opt(links_options,
+		"dump", OPT_CMDLINE,
+		OPT_BOOL, 0, 1, &dump,
 		"Write a plain-text version of the given HTML document to\n"
-		"stdout." },
+		"stdout.");
 
-	{	"dump_width", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	40, 512, &dump_width,
-	 	"Size of screen in characters, when dumping a HTML document." },
+	add_opt(links_options,
+		"dump_width", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, 40, 512, &dump_width,
+		"Size of screen in characters, when dumping a HTML document.");
 
-	{	"format_cache_size", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	0, 256, &max_format_cache_entries,
-		"Number of cached formatted pages." },
+	add_opt(links_options,
+		"format_cache_size", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, 0, 256, &max_format_cache_entries,
+		"Number of cached formatted pages.");
 
-	{	"form_submit_auto", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &form_submit_auto,
-		"Automagically submit a form when enter pressed on text field." },
+	add_opt(links_options,
+		"form_submit_auto", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &form_submit_auto,
+		"Automagically submit a form when enter pressed on text field.");
 
-	{	"form_submit_confirm", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &form_submit_confirm,
-		"Ask for confirmation when submitting a form." },
+	add_opt(links_options,
+		"form_submit_confirm", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &form_submit_confirm,
+		"Ask for confirmation when submitting a form.");
 
-	{	"ftp.anonymous_password", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING,
-	 	0, MAX_STR_LEN, default_anon_pass,
-		"FTP anonymous password to be sent." },
+	add_opt(links_options,
+		"ftp.anonymous_password", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_STRING, 0, MAX_STR_LEN, default_anon_pass,
+		"FTP anonymous password to be sent.");
 
-	{	"ftp_proxy", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING,
-	 	0, MAX_STR_LEN, ftp_proxy,
-		"Host and port number (host:port) of the FTP proxy, or blank." },
+	add_opt(links_options,
+		"ftp_proxy", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_STRING, 0, MAX_STR_LEN, ftp_proxy,
+		"Host and port number (host:port) of the FTP proxy, or blank.");
 
-	{	"?", OPT_CMDLINE,
-		OPT_COMMAND,
-	 	0, 0, printhelp_cmd,
-	 	NULL },
+	add_opt(links_options,
+		"?", OPT_CMDLINE,
+		OPT_COMMAND, 0, 0, printhelp_cmd,
+		NULL);
 
-	{	"h", OPT_CMDLINE,
-		OPT_COMMAND,
-	 	0, 0, printhelp_cmd,
-	 	NULL },
+	add_opt(links_options,
+		"h", OPT_CMDLINE,
+		OPT_COMMAND, 0, 0, printhelp_cmd,
+		NULL);
 
-	{	"help", OPT_CMDLINE,
-		OPT_COMMAND,
-		0, 0, printhelp_cmd,
-	 	"Print usage help and exit." },
+	add_opt(links_options,
+		"help", OPT_CMDLINE,
+		OPT_COMMAND, 0, 0, printhelp_cmd,
+		"Print usage help and exit.");
 
-	{	"http_bugs.allow_blacklist", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &http_bugs.allow_blacklist,
-		"Allow blacklist of buggy servers?" },
+	add_opt(links_options,
+		"http_bugs.allow_blacklist", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &http_bugs.allow_blacklist,
+		"Allow blacklist of buggy servers?");
 
-	{	"http_bugs.bug_302_redirect", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &http_bugs.bug_302_redirect,
-		"Broken 302 redirect (violates RFC but compatible with Netscape)?" },
+	add_opt(links_options,
+		"http_bugs.bug_302_redirect", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &http_bugs.bug_302_redirect,
+		"Broken 302 redirect (violates RFC but compatible with Netscape)?");
 
-	{	"http_bugs.bug_post_no_keepalive", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &http_bugs.bug_post_no_keepalive,
-		"No keepalive connection after POST request?" },
+	add_opt(links_options,
+		"http_bugs.bug_post_no_keepalive", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &http_bugs.bug_post_no_keepalive,
+		"No keepalive connection after POST request?");
 
-	{	"http_bugs.http10", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &http_bugs.http10,
-		"Use HTTP/1.0 protocol?" },
+	add_opt(links_options,
+		"http_bugs.http10", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &http_bugs.http10,
+		"Use HTTP/1.0 protocol?");
 
-	{	"http_proxy", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING,
-	 	0, MAX_STR_LEN, http_proxy,
-		"Host and port number (host:port) of the HTTP proxy, or blank." },
+	add_opt(links_options,
+		"http_proxy", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_STRING, 0, MAX_STR_LEN, http_proxy,
+		"Host and port number (host:port) of the HTTP proxy, or blank.");
 
-	{	"http_referer", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	REFERER_NONE, REFERER_TRUE, &referer,
+	add_opt(links_options,
+		"http_referer", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, REFERER_NONE, REFERER_TRUE, &referer,
 		"Mode of sending HTTP referer:\n"
 		"0 is send no referer\n"
 		"1 is send current URL as referer\n"
 		"2 is send fixed fake referer\n"
-		"3 is send previous URL as referer (correct, but insecure)\n" },
+		"3 is send previous URL as referer (correct, but insecure)\n");
 
-		/* XXX: Exception to alphabetical order. */
-	{	"fake_referer", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING,
-	 	0, MAX_STR_LEN, fake_referer,
-		"Fake referer to be sent when http_referer is 3." },
+	/* XXX: Exception to alphabetical order. */
+	add_opt(links_options,
+		"fake_referer", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_STRING, 0, MAX_STR_LEN, fake_referer,
+		"Fake referer to be sent when http_referer is 3.");
 
-		/* XXX: Disable global history if -anonymous is given? */
-	{	"enable_global_history", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &enable_global_history,
-	 	"Enable global history (\"history of all pages visited\")?" },
+	/* XXX: Disable global history if -anonymous is given? */
+	add_opt(links_options,
+		"enable_global_history", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &enable_global_history,
+		"Enable global history (\"history of all pages visited\")?");
 
-	{	"keep_unhistory", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &keep_unhistory,
-	 	"Keep unhistory (\"forward history\")?" },
+	add_opt(links_options,
+		"keep_unhistory", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &keep_unhistory,
+		"Keep unhistory (\"forward history\")?");
 
-	{	"language", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_LANGUAGE,
-	 	0, 0, &current_language,
-		"Language of user interface." },
+	add_opt(links_options,
+		"language", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_LANGUAGE, 0, 0, &current_language,
+		"Language of user interface.");
 
-		/* TODO - this is somehow implemented by ff, but disabled
-		 * for now as it doesn't work. */
-	{	"links_wraparound", /* OPT_CMDLINE | OPT_CFGFILE */ 0,
-		OPT_BOOL,
-	 	0, 1, &links_wraparound,
-	 	"When pressing 'down' on the last link, jump at the first one, and\n"
-		"vice versa." },
+	/* TODO - this is somehow implemented by ff, but disabled
+	 * for now as it doesn't work. */
+	add_opt(links_options,
+		"links_wraparound", /* OPT_CMDLINE | OPT_CFGFILE */ 0,
+		OPT_BOOL, 0, 1, &links_wraparound,
+		"When pressing 'down' on the last link, jump at the first one, and\n"
+		"vice versa.");
 
-	{	"lookup", OPT_CMDLINE,
-		OPT_COMMAND,
-	 	0, 0, lookup_cmd,
-	 	"Make lookup for specified host." },
+	add_opt(links_options,
+		"lookup", OPT_CMDLINE,
+		OPT_COMMAND, 0, 0, lookup_cmd,
+		"Make lookup for specified host.");
 
-	{	"max_connections", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	1, 16, &max_connections,
-		"Maximum number of concurrent connections." },
+	add_opt(links_options,
+		"max_connections", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, 1, 16, &max_connections,
+		"Maximum number of concurrent connections.");
 
-	{	"max_connections_to_host", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	1, 8, &max_connections_to_host,
-		"Maximum number of concurrent connection to a given host." },
+	add_opt(links_options,
+		"max_connections_to_host", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, 1, 8, &max_connections_to_host,
+		"Maximum number of concurrent connection to a given host.");
 
-	{	"memory_cache_size", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	0, MAXINT, &memory_cache_size,
-		"Memory cache size (in kilobytes)." },
+	add_opt(links_options,
+		"memory_cache_size", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, 0, MAXINT, &memory_cache_size,
+		"Memory cache size (in kilobytes).");
 
-	{	"no_connect", OPT_CMDLINE,
-		OPT_BOOL,
-	 	0, 1, &no_connect,
-	 	"Run links as a separate instance - instead of connecting to\n"
-	 	"existing instance." },
+	add_opt(links_options,
+		"no_connect", OPT_CMDLINE,
+		OPT_BOOL, 0, 1, &no_connect,
+		"Run links as a separate instance - instead of connecting to\n"
+		"existing instance.");
 
-	{	"proxy_user", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING,
-		0, MAX_STR_LEN, proxy_user,
-		"Proxy authentication user" },
+	add_opt(links_options,
+		"proxy_user", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_STRING, 0, MAX_STR_LEN, proxy_user,
+		"Proxy authentication user");
 
-	{	"proxy_passwd", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING,
-		0, MAX_STR_LEN, proxy_passwd,
-		"Proxy authentication passwd" },
+	add_opt(links_options,
+		"proxy_passwd", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_STRING, 0, MAX_STR_LEN, proxy_passwd,
+		"Proxy authentication passwd");
 
-	{	"receive_timeout", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	1, 1800, &receive_timeout,
-		"Timeout on receive (in seconds)." },
+	add_opt(links_options,
+		"receive_timeout", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, 1, 1800, &receive_timeout,
+		"Timeout on receive (in seconds).");
 
-	{	"retries", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	1, 16, &max_tries,
-		"Number of tries to estabilish a connection." },
+	add_opt(links_options,
+		"retries", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, 1, 16, &max_tries,
+		"Number of tries to estabilish a connection.");
 
-	{	"secure_save", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-		0, 1, &secure_save,
+	add_opt(links_options,
+		"secure_save", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &secure_save,
 		"First write data to 'file.tmp', rename to 'file' upon\n"
 		"successful finishing this. Note that this relates only to\n"
-       		"config files, not downloaded files. You may want to disable\n"
+		"config files, not downloaded files. You may want to disable\n"
 		"it, if you want some config file with some exotic permissions.\n"
-		"Secure save is automagically disabled if file is symlink."},
+		"Secure save is automagically disabled if file is symlink.");
 
-	{	"show_status_bar", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &show_status_bar,
-		"Show status bar on the screen?" },
+	add_opt(links_options,
+		"show_status_bar", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &show_status_bar,
+		"Show status bar on the screen?");
 
-	{	"show_title_bar", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &show_title_bar,
-		"Show title bar on the screen?" },
+	add_opt(links_options,
+		"show_title_bar", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &show_title_bar,
+		"Show title bar on the screen?");
 
-	{	"source", OPT_CMDLINE,
-		OPT_BOOL,
-	 	0, 1, &source,
-		"Write the given HTML document in source form to stdout." },
+	add_opt(links_options,
+		"source", OPT_CMDLINE,
+		OPT_BOOL, 0, 1, &source,
+		"Write the given HTML document in source form to stdout.");
 
-		/* TODO - this is implemented, but disabled for now as
-		 * it's buggy. */
-	{	"startup_goto_dialog", /* OPT_CMDLINE | OPT_CFGFILE */ 0,
-		OPT_BOOL,
-	 	0, 1, &startup_goto_dialog,
-		"Pop up goto dialog on startup when there's no homepage?" },
+	/* TODO - this is implemented, but disabled for now as
+	 * it's buggy. */
+	add_opt(links_options,
+		"startup_goto_dialog", /* OPT_CMDLINE | OPT_CFGFILE */ 0,
+		OPT_BOOL, 0, 1, &startup_goto_dialog,
+		"Pop up goto dialog on startup when there's no homepage?");
 
-	{	"unrestartable_receive_timeout", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	1, 1800, &unrestartable_receive_timeout,
-		"Timeout on non restartable connections (in seconds)." },
+	add_opt(links_options,
+		"unrestartable_receive_timeout", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, 1, 1800, &unrestartable_receive_timeout,
+		"Timeout on non restartable connections (in seconds).");
 
-	{	"user_agent", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING,
-	 	0, MAX_STR_LEN, user_agent,
-	        "Change the User Agent. That means identification string, which\n"
+	add_opt(links_options,
+		"user_agent", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_STRING, 0, MAX_STR_LEN, user_agent,
+		"Change the User Agent. That means identification string, which\n"
 		"is sent to HTTP server, when a document is requested.\n"
-		"If empty, defaults to: ELinks (<version>; <system_id>; <term_size>)" },
+		"If empty, defaults to: ELinks (<version>; <system_id>; <term_size>)");
 			
-	{	"version", OPT_CMDLINE,
-		OPT_COMMAND,
-	 	0, 0, version_cmd,
-	 	"Print links version information and exit." },
+	add_opt(links_options,
+		"version", OPT_CMDLINE,
+		OPT_COMMAND, 0, 0, version_cmd,
+		"Print links version information and exit.");
 
 	/* config-file-only options */
 
-	{	"terminal", OPT_CFGFILE,
-		OPT_TERM,
-	 	0, 0, NULL,
-		NULL },
+	add_opt(links_options,
+		"terminal", OPT_CFGFILE,
+		OPT_TERM, 0, 0, NULL,
+		NULL);
 
-	{	"terminal2", OPT_CFGFILE,
-		OPT_TERM2,
-	 	0, 0, NULL,
-		NULL },
+	add_opt(links_options,
+		"terminal2", OPT_CFGFILE,
+		OPT_TERM2, 0, 0, NULL,
+		NULL);
 
-	{	"association", OPT_CFGFILE,
-		OPT_MIME_TYPE,
-	 	0, 0, NULL,
-		NULL },
+	add_opt(links_options,
+		"association", OPT_CFGFILE,
+		OPT_MIME_TYPE, 0, 0, NULL,
+		NULL);
 
-	{	"extension", OPT_CFGFILE,
-		OPT_EXTENSION,
-	 	0, 0, NULL,
-		NULL },
+	add_opt(links_options,
+		"extension", OPT_CFGFILE,
+		OPT_EXTENSION, 0, 0, NULL,
+		NULL);
 
-	{	"mailto", OPT_CFGFILE,
-		OPT_PROGRAM,
-	 	0, 0, &mailto_prog,
-		NULL },
+	add_opt(links_options,
+		"mailto", OPT_CFGFILE,
+		OPT_PROGRAM, 0, 0, &mailto_prog,
+		NULL);
 
-	{	"telnet", OPT_CFGFILE,
-		OPT_PROGRAM,
-	 	0, 0, &telnet_prog,
-		NULL },
+	add_opt(links_options,
+		"telnet", OPT_CFGFILE,
+		OPT_PROGRAM, 0, 0, &telnet_prog,
+		NULL);
 
-	{	"tn3270", OPT_CFGFILE,
-		OPT_PROGRAM,
-	 	0, 0, &tn3270_prog,
-		NULL },
+	add_opt(links_options,
+		"tn3270", OPT_CFGFILE,
+		OPT_PROGRAM, 0, 0, &tn3270_prog,
+		NULL);
 
-	{	"bind", OPT_CFGFILE,
-		OPT_KEYBIND,
-	 	0, 0, NULL,
-		NULL },
+	add_opt(links_options,
+		"bind", OPT_CFGFILE,
+		OPT_KEYBIND, 0, 0, NULL,
+		NULL);
 
-	{	"unbind", OPT_CFGFILE,
-		OPT_KEYUNBIND,
-	 	0, 0, NULL,
-		NULL },
+	add_opt(links_options,
+		"unbind", OPT_CFGFILE,
+		OPT_KEYUNBIND, 0, 0, NULL,
+		NULL);
 
-	{	NULL, 0,
-		0,
-	 	0, 0, NULL,
-		NULL },
-};
+	/* HTML options */
 
-struct option html_options_list[] = {
+	add_opt(html_options,
+		"html_assume_codepage", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_CODEPAGE, 0, 0, &dds.assume_cp,
+		"Default document codepage.");
 
-	{	"html_assume_codepage", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_CODEPAGE,
-	 	0, 0, &dds.assume_cp,
-		"Default document codepage." },
+	add_opt(html_options,
+		"html_avoid_dark_on_black", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &dds.avoid_dark_on_black,
+		"Avoid dark colors on black background.");
 
-	{	"html_avoid_dark_on_black", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &dds.avoid_dark_on_black,
-		"Avoid dark colors on black background." },
+	add_opt(html_options,
+		"html_frames", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &dds.frames,
+		"Display frames.");
 
-	{	"html_frames", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &dds.frames,
-		"Display frames." },
+	add_opt(html_options,
+		"html_hard_assume", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &dds.hard_assume,
+		"Ignore charset info sent by server.");
 
-	{	"html_hard_assume", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &dds.hard_assume,
-		"Ignore charset info sent by server." },
+	add_opt(html_options,
+		"html_images", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &dds.images,
+		"Display links to images.");
 
-	{	"html_images", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &dds.images,
-		"Display links to images." },
+	add_opt(html_options,
+		"html_margin", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_INT, 0, 9, &dds.margin,
+		"Text margin.");
 
-	{	"html_margin", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT,
-	 	0, 9, &dds.margin,
-		"Text margin." },
+	add_opt(html_options,
+		"html_numbered_links", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &dds.num_links,
+		"Display links numbered.");
 
-	{	"html_numbered_links", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &dds.num_links,
-		"Display links numbered." },
+	add_opt(html_options,
+		"html_tables", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &dds.tables,
+		"Display tables.");
 
-	{	"html_tables", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &dds.tables,
-		"Display tables." },
+	add_opt(html_options,
+		"html_table_order", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &dds.table_order,
+		"Move by columns in table.");
 
-	{	"html_table_order", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &dds.table_order,
-		"Move by columns in table." },
-
-	{	"html_use_document_colours", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL,
-	 	0, 1, &dds.use_document_colours,
-		"Use colors specified in document." },
-
-	{	NULL, 0,
-		0,
-	 	0, 0, NULL,
-		NULL },
-};
+	add_opt(html_options,
+		"html_use_document_colours", OPT_CMDLINE | OPT_CFGFILE,
+		OPT_BOOL, 0, 1, &dds.use_document_colours,
+		"Use colors specified in document.");
+}

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.26 2003/06/26 21:19:31 pasky Exp $ */
+/* $Id: connection.c,v 1.27 2003/07/02 00:44:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +32,7 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "util/types.h"
 
 
 /* Types and structs */

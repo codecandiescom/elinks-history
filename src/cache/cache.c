@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.34 2003/06/24 14:56:08 zas Exp $ */
+/* $Id: cache.c,v 1.35 2003/07/02 00:44:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "util/types.h"
 
 static INIT_LIST_HEAD(cache);
 

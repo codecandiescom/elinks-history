@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.3 2002/09/01 11:42:00 pasky Exp $ */
+/* $Id: types.h,v 1.4 2003/07/02 00:44:54 jonas Exp $ */
 
 #ifndef EL__UTIL_TYPES_H
 #define EL__UTIL_TYPES_H
@@ -48,5 +48,27 @@ typedef unsigned long long uint32_t;
 #error You have no 32-bit integer type. Get in touch with reality.
 #endif
 #endif
+
+/* Historic relict that even */
+typedef unsigned tcount;
+
+#ifdef HAVE_LONG_LONG
+#define longlong long long
+#else
+#define longlong long
+#endif
+
+/* *_info() types */
+enum info_type {
+	CI_BYTES,
+	CI_FILES,
+	CI_LOCKED,
+	CI_LOADING,
+	CI_TIMERS,
+	CI_TRANSFER,
+	CI_CONNECTING,
+	CI_KEEP,
+	CI_LIST,
+};
 
 #endif

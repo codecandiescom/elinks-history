@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.17 2003/07/02 00:16:03 jonas Exp $ */
+/* $Id: cache.h,v 1.18 2003/07/02 00:44:53 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CACHE_H
 #define EL__DOCUMENT_CACHE_H
@@ -6,6 +6,7 @@
 #include "elinks.h" /* tcount */
 
 #include "util/lists.h"
+#include "util/types.h"
 
 enum cache_mode {
 	NC_ALWAYS_CACHE,

@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.1 2002/06/17 11:23:46 pasky Exp $ */
+/* $Id: memdebug.c,v 1.2 2002/06/17 11:42:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,8 +49,21 @@
 #define AH_SANITY_MAGIC 0xD3BA110C
 
 /* Check for realloc(NULL, size) ?
+ * Glibc realloc() behaves like malloc(size) when passed pointer is NULL.
+ * However, it looks we - for some reason - have DUMMY for this (TODO: we
+ * should probably get rid of it) and behaviour would be inconsistent with
+ * the non-debug one.
+ * Default is defined. */
+#define CHECK_REALLOC_NULL
+
+/* Check for validity of address passed to free() ?
+ * Note that this is VERY slow, as we iterate through whole memory_list each
+ * time. We can't check magics etc, as it would break double free() check.
  * Default is undef. */
-#undef CHECK_REALLOC_NULL
+#undef CHECK_INVALID_FREE
+
+
+/* --------- end of debugger configuration section */
 
 
 struct alloc_header {
@@ -213,6 +226,7 @@ void
 debug_mem_free(unsigned char *file, int line, void *ptr)
 {
 	struct alloc_header *ah;
+	int ok = 1;
 
 	if (ptr == DUMMY) return;
 	if (!ptr) {
@@ -222,7 +236,30 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 		return;
 	}
 
+#ifdef CHECK_INVALID_FREE
+	ok = 0;
+	foreach (ah, memory_list) {
+		if (ah == PTR_BASE2AH(ptr)) {
+			ok = 1;
+			break;
+		}
+	}
+#endif
+
 	ah = PTR_BASE2AH(ptr);
+
+	if (!ok) {
+		/* This will get optimized out when not CHECK_INVALID_FREE. */
+
+		fprintf(stderr, "%p:", PTR_AH2BASE(ah)); fflush(stderr);
+		/* We may core here if really really bad luck. */
+		fprintf(stderr, "%d @ %s:%d", ah->size, ah->file, ah->line);
+
+		errfile = file;
+		errline = line;
+		error("ERROR: invalid address passed to free().");
+		return;
+	}
 
 #ifdef CHECK_AH_SANITY
 	if (bad_ah_sanity(ah, "free()")) force_dump();
@@ -247,8 +284,6 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 	struct alloc_header *ah;
 
 #ifdef CHECK_REALLOC_NULL
-	/* Disabled by default since glibc realloc() behaves like malloc(size)
-	 * when passed pointer is NULL. */
 	if (!ptr) {
 		errfile = file;
 		errline = line;

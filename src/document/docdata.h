@@ -1,8 +1,9 @@
-/* $Id: docdata.h,v 1.2 2003/11/18 22:18:12 pasky Exp $ */
+/* $Id: docdata.h,v 1.3 2003/11/18 22:18:42 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCDATA_H
 #define EL__DOCUMENT_DOCDATA_H
 
+#include "document/document.h"
 #include "util/memory.h"
 
 #define LINES_GRANULARITY	0x7F

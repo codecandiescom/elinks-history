@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.212 2004/05/30 12:42:25 jonas Exp $ */
+/* $Id: uri.c,v 1.213 2004/05/30 21:49:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -362,6 +362,11 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		unsigned char *filename = uri->data;
 		unsigned char *pos;
 
+		assertm(!wants(URI_PATH) || components == URI_PATH,
+			"URI_PATH should be used alone %d", components);
+		assertm(!wants(URI_FILENAME) || components == URI_FILENAME,
+			"URI_FILENAME should be used alone %d", components);
+
 		if (uri->protocol != PROTOCOL_UNKNOWN
 		    && get_protocol_need_slash_after_host(uri->protocol))
 			filename--;
@@ -383,7 +388,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 	if (wants(URI_QUERY) && uri->datalen) {
 		unsigned char *query = memchr(uri->data, '?', uri->datalen);
 
-		assertm(wants(URI_QUERY) == components,
+		assertm(URI_QUERY == components,
 			"URI_QUERY should be used alone %d", components);
 
 		if (!query) return string;

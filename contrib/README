@@ -11,9 +11,13 @@ Files not listed here have description included in their header.
 	Scripts for OS/2 to create Links icon and assign Links as viewer of
 	URLs.
 
+* LinksOS2Icon.zip - Alex Taylor <alex@eddie.cis.uoguelph.ca>
+	Links icons for OS/2 in various sizes and color depths
+
 * dummy-js.diff - Jan Bobrowski <jb@mohan.krakow.pl>
 	Handler for few simple javascript functions.
-	[!UPDATEME!]
+	The patch is no longer updated (thus you won't be able to apply it), as
+	real javascript support should be almost done already.
 
 * colws.diff - <ard@waikato.ac.nz>
 	Show two spaces after full stops/periods, especially when HTML It
@@ -24,4 +28,4 @@ Files not listed here have description included in their header.
 	Fix for arcane (appears to me that everything under HPUX is somewhat
 	arcane ;) handling of pipes in HPUX
 
-$Id: README,v 1.5 2002/04/26 17:49:46 pasky Exp $
+$Id: README,v 1.6 2002/05/12 06:34:22 pasky Exp $

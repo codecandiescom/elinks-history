@@ -244,6 +244,10 @@ Stefan de Groot <stefan@nllinux.nl>
 
 Stepan Roh <stepan@srnet.cz>
 	Set-Cookie expires attribute proper parsing bugfixes
+	Random hacking
+
+Stephane Chazelas <stephane.chazelas@free.fr>
+	Cookies fixes
 
 Suveg Gabor <gsuveg@sgmobil2000.hu>
 	Hungarian translation
@@ -270,4 +274,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.37 2002/03/12 18:18:03 pasky Exp $
+$Id: AUTHORS,v 1.38 2002/03/15 19:08:42 pasky Exp $

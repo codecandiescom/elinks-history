@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.286 2004/10/01 00:42:29 jonas Exp $ */
+/* $Id: search.c,v 1.287 2004/10/04 14:08:29 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1025,17 +1025,21 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 enum typeahead_code {
 	TYPEAHEAD_MATCHED,
 	TYPEAHEAD_ERROR,
+	TYPEAHEAD_ERROR_NO_FURTHER,
 	TYPEAHEAD_CANCEL,
 };
 
 static void
-typeahead_error(struct session *ses, unsigned char *typeahead)
+typeahead_error(struct session *ses, unsigned char *typeahead, int no_further)
 {
-	print_find_error_not_found(ses,
-				   N_("Typeahead"),
-				   N_("Could not find a link"
-				      " with the text '%s'."),
-				   typeahead);
+	unsigned char *message;
+
+	if (no_further)
+		message = N_("No further matches for '%s'.");
+	else
+		message = N_("Could not find a link with the text '%s'.");
+
+	print_find_error_not_found(ses, N_("Typeahead"), message, typeahead);
 }
 
 static inline unsigned char *
@@ -1213,7 +1217,12 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	}
 
 	match = search_link_text(document, current, i, text, direction, offset);
-	if (match < 0) return TYPEAHEAD_ERROR;
+	if (match < 0) {
+		if (i != current)
+			return TYPEAHEAD_ERROR_NO_FURTHER;
+
+		return TYPEAHEAD_ERROR;
+	}
 
 	assert(match >= 0 && match < doc_view->document->nlinks);
 
@@ -1343,8 +1352,12 @@ link_typeahead_handler(struct input_line *line, int action)
 			draw_typeahead_match(ses->tab->term, doc_view, strlen(buffer), offset);
 			return INPUT_LINE_PROCEED;
 
+		case TYPEAHEAD_ERROR_NO_FURTHER:
+			typeahead_error(ses, buffer, 1);
+			return INPUT_LINE_PROCEED;
+
 		case TYPEAHEAD_ERROR:
-			typeahead_error(ses, buffer);
+			typeahead_error(ses, buffer, 0);
 			return INPUT_LINE_REWIND;
 
 		case TYPEAHEAD_CANCEL:

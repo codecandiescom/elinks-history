@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.h,v 1.8 2003/08/02 17:50:10 jonas Exp $ */
+/* $Id: formhist.h,v 1.9 2003/08/02 17:57:05 jonas Exp $ */
 
 #ifndef EL__FORMSMEM_FORMSMEM_H
 #define EL__FORMSMEM_FORMSMEM_H
@@ -20,8 +20,14 @@ struct form_history_item {
  * the given site @url. */
 /* Returns the saved value if present or NULL */
 unsigned char *get_form_history_value(unsigned char *url, unsigned char *name);
+
+/* Queries the user whether to add a new item to the form history containing
+ * the submitted values of the form. */
+/* Returns the form history item's submit list if the item was successfully
+ * added or NULL if not. */
 struct list_head *memorize_form(struct session *ses, struct list_head *submit, struct form_control *frm);
 
+/* Closes down the form history system. */
 void done_form_history(void);
 
 #endif /* EL__FORMSMEM_FORMSMEM_H */

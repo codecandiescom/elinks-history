@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.283 2003/12/02 20:53:17 jonas Exp $ */
+/* $Id: view.c,v 1.284 2003/12/03 13:02:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,22 +269,21 @@ draw_frames(struct session *ses)
 {
 	struct document_view *doc_view, *current_doc_view;
 	int *l;
-	int n, i, d, more;
+	int n, d, more;
 
 	assert(ses && ses->doc_view && ses->doc_view->document);
 	if_assert_failed return;
 
 	if (!document_has_frames(ses->doc_view->document)) return;
+
 	n = 0;
 	foreach (doc_view, ses->scrn_frames) {
 	       doc_view->last_x = doc_view->last_y = -1;
 	       n++;
 	}
 	l = &cur_loc(ses)->vs.current_link;
-	int_lower_bound(l, 0);
-	int_lower_bound(&n, 1);
-	*l %= n;
-	i = *l;
+	*l = int_max(*l, 0) % int_max(n, 1);
+
 	current_doc_view = current_frame(ses);
 	d = 0;
 	do {

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.20 2003/08/01 18:27:26 zas Exp $ */
+/* $Id: form.c,v 1.21 2003/08/01 18:47:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -660,19 +660,84 @@ reset_form(struct document_view *f, int form_num)
 	}
 }
 
+#ifdef FORMS_MEMORY
+static struct list_head *
+memorize_form(struct session *ses, struct list_head *submit,
+	      struct form_control *frm)
+{
+	struct formsmem_data *fm_data;
+	struct list_head *sb;
+	struct submitted_value *sv;
+	int save = 0;
+
+	foreach (sv, *submit) {
+		if (!sv->value || !*sv->value) {
+			save = 0;
+			break;
+		}
+		if (sv->type == FC_PASSWORD) {
+			save = 1;
+			break;
+		}
+	}
+
+	if (!save || form_already_saved(frm->action, submit)) return NULL;
+
+	fm_data = mem_alloc(sizeof(struct formsmem_data));
+	if (!fm_data) goto fail;
+
+	sb = mem_alloc(sizeof(struct list_head));
+	if (!sb) {
+		mem_free(fm_data);
+		goto fail;
+	}
+
+	/* Set up a new list_head, as @submit will be destroyed as soon as
+	 * get_form_url() returns */
+	sb->next = submit->next;
+	sb->prev = submit->prev;
+	((struct submitted_value *) sb->next)->prev = (struct submitted_value *) sb;
+	((struct submitted_value *) sb->prev)->next = (struct submitted_value *) sb;
+
+	fm_data->url = stracpy(frm->action);
+	if (!fm_data->url) {
+		mem_free(fm_data);
+		mem_free(sb);
+		goto fail;
+	}
+
+	fm_data->submit = sb;
+
+	msg_box(ses->tab->term, NULL, 0,
+		N_("Form memory"), AL_CENTER,
+		N_("Should I remember this login?\n\n"
+		   "Please note that passwords will be stored "
+		   "obscured (i.e. unencrypted) in a file on your disk.\n\n"
+		   "If you are using a valuable password answer NO."),
+		fm_data, 2,
+		N_("Yes"), remember_form, B_ENTER,
+		N_("No"), free_form, NULL);
+
+	return sb;
+
+fail:
+	free_succesful_controls(submit);
+	return NULL;
+}
+#endif /* FORMS_MEMORY */
+
+
+
 unsigned char *
 get_form_url(struct session *ses, struct document_view *f,
 	     struct form_control *frm)
 {
-	struct list_head submit, *sb = NULL;
+	struct list_head submit;
+	struct list_head *sb = NULL;
 	struct string data;
 	struct string go;
 	unsigned char bound[BL];
 	int cp_from, cp_to;
-#ifdef FORMS_MEMORY
-	int save = 0;
-	struct submitted_value *sv;
-#endif
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;
@@ -700,61 +765,8 @@ get_form_url(struct session *ses, struct document_view *f,
 	}
 
 #ifdef FORMS_MEMORY
-	foreach(sv, submit) {
-		if (!sv->value || !*sv->value) {
-			save = 0;
-			break;
-		}
-		if (sv->type == FC_PASSWORD) {
-			save = 1;
-			break;
-		}
-	}
-
-	if (save && !form_already_saved(frm->action, &submit)) {
-		struct formsmem_data *fm_data;
-
-		fm_data = mem_alloc(sizeof(struct formsmem_data));
-		if (!fm_data) {
-			free_succesful_controls(&submit);
-			return NULL;
-		}
-
-		sb = mem_alloc(sizeof(struct list_head));
-		if (!sb) {
-			mem_free(fm_data);
-			free_succesful_controls(&submit);
-			return NULL;
-		}
-
-		/* Set up a new list_head, as @submit will be destroyed as soon as
-		 * get_form_url() returns */
-		sb->next = submit.next;
-		sb->prev = submit.prev;
-		((struct submitted_value *) sb->next)->prev = (struct submitted_value *) sb;
-		((struct submitted_value *) sb->prev)->next = (struct submitted_value *) sb;
-
-		fm_data->url = stracpy(frm->action);
-		if (!fm_data->url) {
-			mem_free(fm_data);
-			mem_free(sb);
-			free_succesful_controls(&submit);
-			return NULL;
-		}
-
-		fm_data->submit = sb;
-
-		msg_box(ses->tab->term, NULL, 0,
-			N_("Form memory"), AL_CENTER,
-			N_("Should I remember this login?\n\n"
-			"Please note that passwords will be stored "
-			"obscured (i.e. unencrypted) in a file on your disk.\n\n"
-			"If you are using a valuable password answer NO."),
-			fm_data, 2,
-			N_("Yes"), remember_form, B_ENTER,
-			N_("No"), free_form, NULL);
-	}
-#endif /* FORMS_MEMORY */
+	sb = memorize_form(ses, &submit, frm);
+#endif
 
 	if (!init_string(&go)) return NULL;
 

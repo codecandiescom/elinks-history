@@ -1,3 +1,720 @@
+Sun Jan 18 22:59:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/simplecolors.html:
+
+	Add test cases for short hex colors.  
+
+Sun Jan 18 22:58:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/color.c:
+
+	No need to touch slen.  
+
+Sun Jan 18 22:57:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/color.c:
+
+	Add support for handling the short hexcolor format used by CSS.  
+
+Sun Jan 18 22:48:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Check that hexcolors have the correct length. And disable debug
+	flags.  
+
+Sun Jan 18 22:38:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Add support for scanning CSS strings.  
+
+Sun Jan 18 22:25:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Add CSS_TOKEN_FUNCTION that contains '<ident>(' string.  
+
+Sun Jan 18 21:31:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Remove unused macro.  
+
+Sun Jan 18 21:29:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Add position member for maintaining where in the string the scanner
+	should start scanning next. Well make it easier to debug and also
+	simplifies code.  
+
+Sun Jan 18 21:04:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Ensure that move_to_front in non negative.  
+
+Sun Jan 18 20:51:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Be a little less buggy in scan_css_tokens(). I really hate
+	memmove()s and this lowlevel coding.  
+
+Sun Jan 18 20:15:38 2004  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Sun Jan 18 20:11:05 2004  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update.  
+
+Sun Jan 18 18:21:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, scanner.h, value.c:
+
+	Introduce macro to calculate the length of 'static' strings. They
+	can cause bugs + we are lazy and like simple code.  
+
+Sun Jan 18 18:11:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	Utilize the scanner when parsing font-style values.  
+
+Sun Jan 18 18:06:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	Utilize the scanner when parsing font-* weight values. We should
+	maybe have some get_css_token_number() that can handle both
+	CSS_TOKEN_DIGIT and CSS_TOKEN_PERCENTAGE.  
+
+Sun Jan 18 18:01:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	Utilize the scanner when parsing font-* identifier values.  
+
+Sun Jan 18 17:57:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	css_parse_font_weight_value(): Use token types to see what to do.  
+
+Sun Jan 18 17:54:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Digits can be part of name tokens so check if digit first when
+	scanning.  
+
+Sun Jan 18 17:48:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	Utilize the scanner when parsing text-align values.  
+
+Sun Jan 18 17:43:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: property.h, value.c, value.h:
+
+	Pass the scanners along to the value parsers that will yet only work
+	on the string of the first token. Had to backend color value
+	parsing.  
+
+Sun Jan 18 17:24:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	The scanner is so kind to skip whitespace for us so obsolete
+	skip_whitespace() call.  
+
+Sun Jan 18 17:20:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, value.c, value.h:
+
+	Make css_parse_value() take scanner arg instead of string.  
+
+Sun Jan 18 17:14:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): code simplication.  
+
+Sun Jan 18 17:13:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Move CSS_SCANNER_DEBUG macro to c file.  
+
+Sun Jan 18 17:12:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Group function and macro definitions with the various structs.  
+
+Sun Jan 18 17:09:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Don't use inlined scan table accessors and mutators.  
+
+Sun Jan 18 17:09:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	foreach_values() macro was dropped. Reindentation.  
+
+Sun Jan 18 17:02:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/simplecolors.html:
+
+	This is a descriptive commit message.  
+
+Sun Jan 18 17:00:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	extract_rows_or_cols_values(): check for @number greater than 100 if
+	in percentage.  
+
+Sun Jan 18 16:59:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Fixed superfluous @string shifting in rgb_component_parser(),
+	spotted by Jonas.  
+
+Sun Jan 18 16:59:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Sort alphabetically, spotted by Jonas.  
+
+Sun Jan 18 16:47:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Minor cleanup and fix of scan table initialization.  
+
+Sun Jan 18 16:45:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/property.c:
+
+	Bound css_property_info by CSS_PT_LAST.  
+
+Sun Jan 18 16:44:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c, src/document/css/property.c,
+	src/document/css/property.h, src/document/css/value.c,
+	src/document/css/value.h, test/css/simplecolors.html:
+
+	Support for background property. It is broken in certain testcases
+	but maybe it's scanner bug, I don't know, I'm not in the mood of
+	tracing through 100 inlined scan_css_token() calls.  
+
+Sun Jan 18 16:44:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	extract_rows_or_cols_values(): check for abnormally large @number
+	values and prevent bad things by falling back to wildcard value.  
+
+Sun Jan 18 16:35:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	extract_rows_or_cols_values(): initialize val to -1, use @number
+	directly.  
+
+Sun Jan 18 16:29:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Some now useless initializations were dropped.  
+
+Sun Jan 18 16:26:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Trailing whitespaces cleanup.  
+
+Sun Jan 18 16:25:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.h, scanner.h:
+
+	Improve comment.  
+
+Sun Jan 18 16:24:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Fix typo.  
+
+Sun Jan 18 16:24:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): part of it was moved to
+	extract_rows_or_cols_values(). Use static for these new functions.  
+
+Sun Jan 18 16:22:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Describe (as pasky so gracefully suggested) css_scanner.  
+
+Sun Jan 18 16:12:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): handle returned value as it should, and fix a
+	typo.  
+
+Sun Jan 18 16:12:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Comment struct css_token.  
+
+Sun Jan 18 16:08:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): a part of it was moved to
+	distribute_rows_or_cols_that_left().  
+
+Sun Jan 18 15:59:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Try to make it more clear the difference between char tokens and non
+	char tokens. Non char tokens now start at 256.  
+
+Sun Jan 18 15:59:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): a part of it was moved to
+	distribute_rows_or_cols().  
+
+Sun Jan 18 15:53:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.h:
+
+	Moved CSS_TOKEN_NON_ASCII_END (*shudder*) to the end of the enum,
+	therefore all the other tokens will have sane enum values.  
+
+Sun Jan 18 15:52:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.h:
+
+	CSS_TOKENS makes no sense in arbitrarily-numbered enum, therefore
+	better remove it or it will confuse someone.  
+
+Sun Jan 18 15:47:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	#include elinks.h 
+
+Sun Jan 18 15:46:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): shorter lines by using a macro as @values
+	iterator.  
+
+Sun Jan 18 15:41:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: Makefile.am, css/Makefile.am, css/parser.c,
+	css/scanner.c, css/scanner.h:
+
+	Introduce a CSS token scanner.  It maintains up to 10 tokens at a
+	time to minimize the number of scans.  For scanning a scan table is
+	used (idea by mozilla).  Only used in css_parse_properties() to
+	minimize the impact.  
+
+Sun Jan 18 15:38:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): localize @tmp_val.  
+
+Sun Jan 18 15:34:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): fastmem mode minor optimization, let use
+	alloca() here if possible.  
+
+Sun Jan 18 15:32:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Removed unused variables.  
+
+Sun Jan 18 15:32:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am:
+
+	Removed the circular dependency hack, it results in a circular
+	dependency even here now (dunno what happenned), so maybe it was
+	silently resolved...  
+
+Sun Jan 18 15:32:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): code flow cleanup.  
+
+Sun Jan 18 15:30:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Assert for value_type in value parsers.  
+
+Sun Jan 18 15:29:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: property.c, value.c, value.h:
+
+	font-style and font-weight now uses separate value parsers.  
+
+Sun Jan 18 15:28:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): localize and assert @divisor.  
+
+Sun Jan 18 15:25:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: property.c, value.c, value.h:
+
+	css_property_info.parser is now used instead of css_value_parsers[],
+	which evaporated. Therefore the value parsers are now exported.  
+
+Sun Jan 18 15:25:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): Use a loop instead of a goto, localize @number
+	and @tmp_values.  
+
+Sun Jan 18 15:19:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	css_value_parser_t is now redundant to css_property_value_parser 
+
+Sun Jan 18 15:19:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): Use @tmp variable to cache calculations
+	result.  
+
+Sun Jan 18 15:18:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	css_value_parser_t now takes (struct css_property_info *) as its
+	first argument.  
+
+Sun Jan 18 15:14:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): @nn -> @flag, local.  
+
+Sun Jan 18 15:12:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): some comments were added.  
+
+Sun Jan 18 15:10:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/.vimrc, src/bfu/.vimrc, src/bookmarks/.vimrc,
+	src/bookmarks/backend/.vimrc, src/cache/.vimrc, src/config/.vimrc,
+	src/cookies/.vimrc, src/dialogs/.vimrc, src/document/.vimrc,
+	src/document/html/.vimrc, src/document/plain/.vimrc,
+	src/encoding/.vimrc, src/formhist/.vimrc, src/globhist/.vimrc,
+	src/intl/.vimrc, src/intl/gettext/.vimrc, src/lowlevel/.vimrc,
+	src/mime/.vimrc, src/mime/backend/.vimrc, src/modules/.vimrc,
+	src/osdep/.vimrc, src/osdep/beos/.vimrc, src/osdep/os2/.vimrc,
+	src/osdep/riscos/.vimrc, src/osdep/unix/.vimrc,
+	src/osdep/win32/.vimrc, src/protocol/.vimrc,
+	src/protocol/auth/.vimrc, src/protocol/file/.vimrc,
+	src/protocol/ftp/.vimrc, src/protocol/http/.vimrc,
+	src/protocol/rewrite/.vimrc, src/protocol/smb/.vimrc,
+	src/sched/.vimrc, src/scripting/.vimrc, src/scripting/guile/.vimrc,
+	src/scripting/lua/.vimrc, src/ssl/.vimrc, src/terminal/.vimrc,
+	src/terminal/graphics/.vimrc, src/terminal/text/.vimrc,
+	src/util/.vimrc, src/viewer/.vimrc, src/viewer/dump/.vimrc,
+	src/viewer/graphics/.vimrc, doc/.vimrc, src/viewer/text/.vimrc,
+	doc/book/.vimrc, doc/book/config/.vimrc, doc/book/info/.vimrc,
+	doc/book/intro/.vimrc, doc/book/manpages/.vimrc, doc/man/.vimrc,
+	doc/man/man1/.vimrc, doc/man/man5/.vimrc, doc/tools/.vimrc,
+	po/.vimrc, m4/.vimrc:
+
+	. is now appended to 'runtimepath' instead of setting 'runtimepath'
+	to .,$VIMRUNTIME, therefore evading ~/.vimrc etc.  
+
+Sun Jan 18 15:07:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): @m -> @maxval, @mj -> @maxpos.  
+
+Sun Jan 18 15:06:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: .vimrc, parser.c, value.c, value.h:
+
+	css_parse_value() now takes (struct css_property_info *) instead of
+	{enum css_property_value_type}.  
+
+Sun Jan 18 15:05:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): @q -> @val, @qq -> @tmp_val.  
+
+Sun Jan 18 15:03:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): @oo -> @tmp_values, @n -> @number.  
+
+Sun Jan 18 15:01:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): @o -> @values, @ol -> @values_count.  
+
+Sun Jan 18 14:58:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): @op -> @new_values, @olp -> @new_values_count.  
+
+Sun Jan 18 14:55:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): @ww -> @max_value, @www -> @pixels_per_chars.  
+
+Sun Jan 18 14:53:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/property.h:
+
+	Introduced css_property_info.(parser|parser_data). Unused yet.  
+
+Sun Jan 18 14:52:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): @a -> @str, @aa -> @tmp_str.  
+
+Sun Jan 18 14:50:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_frame_widths(): @d -> @divisor.  
+
+Sun Jan 18 14:43:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, property.c, property.h, value.c:
+
+	CSS_DP_* -> CSS_PT_*, CSS_DV_* -> CSS_VT_* 
+
+Sun Jan 18 14:41:02 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/property.h:
+
+	Clarify {struct css_property} description.  
+
+Sun Jan 18 14:37:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* .cvsignore, autogen.sh, configure:
+
+	Removed ./configure and ./configure-do -> ./configure, therefore
+	restoring the original situation. This solution is not going to fly,
+	./configure gets overwritten by automake rules.  
+
+Sun Jan 18 14:25:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, parser.c, property.h:
+
+	css_property*.property -> .type 
+
+Sun Jan 18 14:23:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: value.c, value.h:
+
+	Tidyup.  
+
+Sun Jan 18 14:23:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, parser.c, parser.h:
+
+	css_parse_decl -> css_parse_properties 
+
+Sun Jan 18 14:22:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, property.h, value.c, value.h:
+
+	css_decl_value -> css_property_value, css_decl_valtype ->
+	css_property_value_type -> css_decl_property -> css_property_type 
+
+Sun Jan 18 14:18:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/property.h:
+
+	Try to clarify more css_property_info.value_type.  
+
+Sun Jan 18 12:54:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.h:
+
+	Update css_parse_decl() description.  
+
+Sun Jan 18 12:50:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Trivial clarification.  
+
+Sun Jan 18 03:01:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, property.c, property.h:
+
+	Remove @namelen from property info struct. It will be useles when we
+	switch to fast find and we do not use it for other string to data
+	mapping structs.  
+
+Sun Jan 18 02:55:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: Makefile.am, css/Makefile.am, css/parser.c,
+	css/property.c, css/property.h:
+
+	Move CSS property info to own file and expose css_property_info[].  
+
+Sun Jan 18 02:40:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	css_parse_decl(): Localize loop variables.  
+
+Sun Jan 18 02:38:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.h:
+
+	css_parse_decl(): Update comment.  
+
+Sun Jan 18 02:36:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Minor cleanup.  
+
+Sun Jan 18 02:33:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	css_parse_decl(): Use while loop. Nothing changed other than
+	indentation and removal of again label.  
+
+Sun Jan 18 02:28:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Fun with gotos so we don't parse declarations recursively anymore.  
+
+Sun Jan 18 01:57:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Add css value type info to property_info struct. ObsoletesM
+	prop2valtype.  
+
+Sun Jan 18 01:50:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, parser.h:
+
+	css_parse_decl(): Don't return anything. Caller can check
+	list_empty() to see if anything was added.  
+
+Sun Jan 18 01:48:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Remove function comment that is also in the header file.  
+
+Sun Jan 18 00:59:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/cmdline.c, config/conf.c, lowlevel/home.c:
+
+	Use the new confdir/conffile option names (config-dir/config-file).  
+
+Sun Jan 18 00:56:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Fixed -confdir/-conffile.  
+
+Sun Jan 18 00:29:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	-confdir -> -config-dir, -conffile -> -config-file, idea by Doug
+	Kearns <djkea2@mugca.its.monash.edu.au>.  
+
+Sun Jan 18 00:17:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	I'm sorry Zas, but you *knew* this is coming. Please split it up.  
+
+Sun Jan 18 00:16:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* .cvsignore, Makefile.am, autogen.sh, configure:
+
+	autoconf ./configure -> ./configure-do. ./configure is for now a
+	trivial wrapper but will do some automagic feature.h rewriting and
+	so. You will need to rm ./configure && cvs up && ./autogen.sh after
+	this commit.  
+
+Sun Jan 18 00:10:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Complete parse_frame_widths() cleanup. Changes made do not affect
+	behavior. Among them, explicit variables names, minor trivial
+	optimizations, got rid of a goto, comments. Sorry, this patch is
+	quite big but concerns only this function, and i did not want to
+	flood with cvs commits ;).  
+
+Sat Jan 17 23:20:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Sat Jan 17 23:16:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
 Sat Jan 17 23:05:53 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/value.c:

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.102 2002/09/18 16:07:01 pasky Exp $ */
+/* $Id: options.c,v 1.103 2002/10/01 15:54:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -596,7 +596,7 @@ register_options()
 	add_opt_bool("document.browse.links",
 		"number_keys_select_link", 0, 0,
 		"Number keys select links rather than specify command prefixes.");
-	
+
 	/* TODO - this is somehow implemented by ff, but disabled
 	 * for now as it doesn't work. */
 	add_opt_bool("document.browse.links",
@@ -613,7 +613,7 @@ register_options()
 		"scroll_margin", 0, 0, 20, 3,
 		"Size of the virtual margin - when you click inside of that margin,\n"
 		"document scrolls in that direction.\n");
-	
+
 	add_opt_bool("document.browse",
 		"table_move_order", 0, 0,
 		"Move by columns in table.");
@@ -681,7 +681,7 @@ register_options()
 		"dirs", 0, "#ffff00",
 		"Default directories color.\n"
 	       	"See document.browse.links.color_dirs option.");
-	
+
 	add_opt_bool("document.colors",
 		"allow_dark_on_black", 0, 0,
 		"Allow dark colors on black background.");
@@ -689,7 +689,7 @@ register_options()
 	add_opt_bool("document.colors",
 		"use_document_colors", 0, 1,
 		"Use colors specified in document.");
-	
+
 
 
 	add_opt_tree("document",
@@ -717,7 +717,7 @@ register_options()
 		"1 is add the suffix .{number} (for example '.1') to the name.");
 
 	add_opt_int("document.download",
-		"notify_bell", 0, 0, 2, 0, 
+		"notify_bell", 0, 0, 2, 0,
 		"Audio notification when download is completed:\n"
 		"0 is never.\n"
 		"1 is when background notification is active.\n"
@@ -928,7 +928,15 @@ register_options()
 	add_opt_tree("protocol",
 		"ftp", 0,
 		"FTP specific options.");
-
+	add_opt_bool("protocol.ftp",
+		"use_pasv", 0, 0,
+		"Use PASV instead of PORT (passive vs active mode, IPv4 only).");
+#ifdef IPV6
+	add_opt_bool("protocol.ftp",
+		"use_epsv", 0, 0,
+		"** Not yet implemented **\n"
+		"Use EPSV instead of EPRT (passive vs active mode, IPv6 only).");
+#endif
 	add_opt_tree("protocol.ftp",
 		"proxy", 0,
 		"FTP proxy configuration.");
@@ -1746,7 +1754,7 @@ register_options()
 		"touch-files", 0, 0,
 		"Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 		"changed when -no-connect is used; has no effect otherwise.");
-	
+
 	add_opt_command_tree(cmdline_options, "",
 		"version", 0, version_cmd,
 		"Print ELinks version information and exit.");

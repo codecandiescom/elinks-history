@@ -1,10 +1,11 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.38 2002/09/17 14:39:25 zas Exp $ */
+/* $Id: ftp.c,v 1.39 2002/10/01 15:54:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,6 +14,7 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+#include <fcntl.h>
 
 /* We need to have it here. Stupid BSD. */
 #include <netinet/in.h>
@@ -50,6 +52,10 @@ struct ftp_connection_info {
 	int has_data;   /* Do we have data socket? */
 	int dpos;
 	int buf_pos;
+	int use_pasv; /* Use PASV (yes or no) */
+#ifdef IPV6
+	int use_epsv; /* Use EPSV */
+#endif
 	unsigned char ftp_buffer[FTP_BUF_SIZE];
 	unsigned char cmd_buffer[1];
 };
@@ -75,11 +81,10 @@ static void got_something_from_data_connection(struct connection *);
 static void ftp_end_request(struct connection *, int);
 static struct ftp_connection_info *add_file_cmd_to_str(struct connection *);
 
-
 /* Returns 0 if there's no numeric response, -1 if error, the positive response
  * number otherwise. */
 static int
-get_ftp_response(struct connection *conn, struct read_buffer *rb, int part)
+get_ftp_response(struct connection *conn, struct read_buffer *rb, int part, unsigned char *ports_info)
 {
 	int pos;
 
@@ -93,6 +98,35 @@ again:
 
 			if (num_end != rb->data + 3 || response < 100)
 				return -1;
+
+			if (response == 227) {
+				unsigned char h1, h2, h3, h4, p1, p2;
+				int ret;
+				unsigned char *begin = strchr(num_end, ',');
+
+				/* find beginning of ports_info */
+				if (begin == NULL)
+					return -1;
+				while (isdigit(*(--begin)));
+				begin++;
+
+				/* %hhd -> unsigned char */
+				ret = sscanf(begin, "%hhd,%hhd,%hhd,%hhd,%hhd,%hhd", &h1, &h2, &h3, &h4, &p1, &p2);
+				if (ret != 6)
+					return -1;
+				ports_info[0] = h1;
+				ports_info[1] = h2;
+				ports_info[2] = h3;
+				ports_info[3] = h4;
+				ports_info[4] = p1;
+				ports_info[5] = p2;
+			}
+
+#ifdef IPV6
+			if (response == 229) {
+			/* TODO: see RFC 2428 */
+			}
+#endif
 
 			if (*num_end == '-') {
 				int i;
@@ -200,7 +234,7 @@ ftp_login(struct connection *conn)
 static void
 ftp_got_info(struct connection *conn, struct read_buffer *rb)
 {
-	int response = get_ftp_response(conn, rb, 0);
+	int response = get_ftp_response(conn, rb, 0, NULL);
 
 	if (response == -1) {
 		abort_conn_with_state(conn, S_FTP_ERROR);
@@ -231,7 +265,7 @@ ftp_got_info(struct connection *conn, struct read_buffer *rb)
 static void
 ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 {
-	int response = get_ftp_response(conn, rb, 0);
+	int response = get_ftp_response(conn, rb, 0, NULL);
 
 	if (response == -1) {
 		abort_conn_with_state(conn, S_FTP_ERROR);
@@ -307,7 +341,7 @@ ftp_pass(struct connection *conn)
 static void
 ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 {
-	int response = get_ftp_response(conn, rb, 0);
+	int response = get_ftp_response(conn, rb, 0, NULL);
 
 	if (response == -1) {
 		abort_conn_with_state(conn, S_FTP_ERROR);
@@ -437,22 +471,33 @@ add_file_cmd_to_str(struct connection *conn)
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
-
 #ifdef IPV6
 	memset(&data_addr, 0, sizeof(struct sockaddr_in6));
 #endif
 	memset(pc, 0, 6);
 
+	if (get_opt_bool("protocol.ftp.use_pasv"))
+		c_i->use_pasv = 1;
+
 #ifdef IPV6
-	if (conn->pf == 2)
+	if (get_opt_bool("protocol.ftp.use_epsv"))
+		c_i->use_epsv = 1;
+
+	if (!c_i->use_epsv && conn->pf == 2) {
 		data_sock = get_pasv6_socket(conn, conn->sock1,
-				(struct sockaddr_storage *) &data_addr);
-	else
+		 	    (struct sockaddr_storage *) &data_addr);
+		if (data_sock < 0)
+			return NULL;
+		conn->sock2 = data_sock;
+	}
 #endif
+
+	if (!c_i->use_pasv && conn->pf != 2) {
 		data_sock = get_pasv_socket(conn, conn->sock1, pc);
-	if (data_sock < 0)
-		return NULL;
-	conn->sock2 = data_sock;
+		if (data_sock < 0)
+			return NULL;
+		conn->sock2 = data_sock;
+	}
 
 	data = get_url_data(conn->url);
 	if (!data) {
@@ -480,10 +525,16 @@ add_file_cmd_to_str(struct connection *conn)
 
 #ifdef IPV6
 		if (conn->pf == 2)
-			add_eprtcmd_to_str(&str, &strl, &data_addr);
+			if (c_i->use_epsv)
+				add_to_str(&str, &strl, "EPSV\r\n");
+			else
+				add_eprtcmd_to_str(&str, &strl, &data_addr);
 		else
 #endif
-			add_portcmd_to_str(&str, &strl, pc);
+			if (c_i->use_pasv)
+				add_to_str(&str, &strl, "PASV\r\n");
+			else
+				add_portcmd_to_str(&str, &strl, pc);
 
 		add_to_str(&str, &strl, "LIST\r\n");
 
@@ -509,10 +560,16 @@ add_file_cmd_to_str(struct connection *conn)
 
 #ifdef IPV6
 		if (conn->pf == 2)
-			add_eprtcmd_to_str(&str, &strl, &data_addr);
+			if (c_i->use_epsv)
+				add_to_str(&str, &strl, "EPSV\r\n");
+			else
+				add_eprtcmd_to_str(&str, &strl, &data_addr);
 		else
 #endif
-			add_portcmd_to_str(&str, &strl, pc);
+			if (c_i->use_pasv)
+				add_to_str(&str, &strl, "PASV\r\n");
+			else
+				add_portcmd_to_str(&str, &strl, pc);
 
 		add_to_str(&str, &strl, "RETR /");
 		add_bytes_to_str(&str, &strl, data, data_end - data);
@@ -626,9 +683,13 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 {
 	struct ftp_connection_info *c_i = conn->info;
 	int response;
+	unsigned char p[14];
+	int fd;
+	struct sockaddr_in serv_addr;
+
 
 	if (c_i->pending_commands > 1) {
-		response = get_ftp_response(conn, rb, 0);
+		response = get_ftp_response(conn, rb, 0, p);
 
 		if (response == -1) {
 			abort_conn_with_state(conn, S_FTP_ERROR);
@@ -640,6 +701,28 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 			setcstate(conn, S_GETH);
 			return;
 		}
+
+		if (response == 227) {
+			/* TODO: move that to ... ?? */
+			fd = socket(PF_INET, SOCK_STREAM, 0);
+			if (fd < 0) {
+				abort_conn_with_state(conn, S_FTP_ERROR);
+				return;
+			}
+			memset((char *)&serv_addr, 0, sizeof(serv_addr));
+			serv_addr.sin_family = AF_INET;
+			serv_addr.sin_addr.s_addr = htonl((p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3]);
+			serv_addr.sin_port = htons((p[4] << 8) + p[5]);
+			connect(fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+			fcntl(fd, F_SETFL, O_NONBLOCK);
+			conn->sock2 = fd;
+		}
+
+#ifdef IPV6
+		if (response == 229) {
+		/* TODO: see RFC 2428 */
+		}
+#endif
 
 		c_i->pending_commands--;
 
@@ -673,7 +756,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 		return;
 	}
 
-	response = get_ftp_response(conn, rb, 2);
+	response = get_ftp_response(conn, rb, 2, NULL);
 
 	if (response == -1) {
 		abort_conn_with_state(conn, S_FTP_ERROR);
@@ -713,7 +796,7 @@ static void
 ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 {
 	struct ftp_connection_info *c_i = conn->info;
-	int response = get_ftp_response(conn, rb, 0);
+	int response = get_ftp_response(conn, rb, 0, NULL);
 
 	if (response == -1) {
 		abort_conn_with_state(conn, S_FTP_ERROR);
@@ -915,14 +998,21 @@ got_something_from_data_connection(struct connection *conn)
 		c_i->has_data = 1;
 
 		set_handlers(conn->sock2, NULL, NULL, NULL, NULL);
-		newsock = accept(conn->sock2, NULL, NULL);
-		if (newsock < 0) {
+		if (c_i->use_pasv
+#ifdef IPV6
+	    	    || c_i->use_epsv
+#endif
+		   )
+			newsock = conn->sock2;
+		else {
+			newsock = accept(conn->sock2, NULL, NULL);
+			if (newsock < 0) {
 error:
-			retry_conn_with_state(conn, -errno);
-			return;
+				retry_conn_with_state(conn, -errno);
+				return;
+			}
+			close(conn->sock2);
 		}
-
-		close(conn->sock2);
 		conn->sock2 = newsock;
 
 		set_handlers(newsock,

@@ -366,6 +366,7 @@ Varga Balázs <vinnui@broadband.hu>
 Witold Filipczyk <juandon@poczta.onet.pl>
 	HTTP code hacking
 	Original decompression (zlib/bzlib) support
+	FTP PASV support
 
 Wojtek Bojdo/l <wojboj@lp.net.pl>
 	Updated Polish localization
@@ -377,4 +378,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.86 2002/09/18 16:35:42 pasky Exp $
+$Id: AUTHORS,v 1.87 2002/10/01 15:54:20 zas Exp $

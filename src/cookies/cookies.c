@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.67 2003/07/09 01:59:56 jonas Exp $ */
+/* $Id: cookies.c,v 1.68 2003/07/21 04:59:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,16 +223,16 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 	cookie->path = parse_http_header_param(str, "path");
 	if (!cookie->path) {
 		unsigned char *path_end;
-		int len = 1;
+		struct string path = { stracpy("/"), 1 };
 
-		cookie->path = stracpy("/");
-		if (!cookie->path) {
+		if (!path.source) {
 			free_cookie(cookie);
 			return 0;
 		}
 
-		add_bytes_to_str(&cookie->path, &len, uri->data, uri->datalen);
+		add_bytes_to_string(&path, uri->data, uri->datalen);
 
+		cookie->path = path.source;
 		for (path_end = cookie->path; *path_end; path_end++) {
 			if (end_of_dir(*path_end)) {
 				*path_end = '\0';
@@ -484,7 +484,7 @@ cookie_expired(struct cookie *c)
 
 
 void
-send_cookies(unsigned char **s, int *l, struct uri *uri)
+send_cookies(struct string *header, struct uri *uri)
 {
 	int nc = 0;
 	struct c_domain *cd;
@@ -526,22 +526,22 @@ send_cookies(unsigned char **s, int *l, struct uri *uri)
 			continue;
 
 		if (!nc) {
-			add_to_str(s, l, "Cookie: ");
+			add_to_string(header, "Cookie: ");
 			nc = 1;
 		} else {
-			add_to_str(s, l, "; ");
+			add_to_string(header, "; ");
 		}
 
-		add_to_str(s, l, c->name);
-		add_chr_to_str(s, l, '=');
-		add_to_str(s, l, c->value);
+		add_to_string(header, c->name);
+		add_char_to_string(header, '=');
+		add_to_string(header, c->value);
 #ifdef COOKIES_DEBUG
 		debug("Cookie: %s=%s", c->name, c->value);
 #endif
 	}
 
 	if (nc)
-		add_to_str(s, l, "\r\n");
+		add_to_string(header, "\r\n");
 
 	if (cookies_dirty && get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
 		save_cookies();

@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.1 2003/12/07 00:50:17 jonas Exp $ */
+/* $Id: rewrite.c,v 1.2 2003/12/07 01:45:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,12 @@ enum uri_rewrite_option {
 static struct option_info uri_rewrite_options[] = {
 	INIT_OPT_TREE("protocol", N_("URI rewriting"),
 		"rewrite", OPT_SORT,
-		N_("Rules for rewriting URIs entered in the goto dialog.")),
+		N_("Rules for rewriting URIs entered in the goto dialog.\n"
+		"It makes it possible to define a set of prefixes that will\n"
+		"be expanded if they match a string entered in the goto dialog\n"
+		"The prefixes can be dumb, meaning that they work only like\n"
+		"URI abbreviations, or smart ones, making it possible to pass\n"
+		"arguments to them like search engine keywords.")),
 
 	INIT_OPT_BOOL("protocol.rewrite", N_("Enable dumb prefixes"),
 		"enable-dumb", 0, 1,

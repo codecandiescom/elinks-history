@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.190 2005/02/16 20:18:30 witekfl Exp $ */
+/* $Id: spidermonkey.c,v 1.191 2005/02/16 20:29:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1561,12 +1561,8 @@ document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rv
 	return JS_TRUE;
 }
 
-static JSBool history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
 
-static const JSFunctionSpec history_funcs[] = {
-	{ "back",		history_back,		0 },
-	{ NULL }
-};
+static JSBool history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
 
 static const JSClass history_class = {
 	"history",
@@ -1574,6 +1570,11 @@ static const JSClass history_class = {
 	JS_PropertyStub, JS_PropertyStub,
 	JS_PropertyStub, JS_PropertyStub,
 	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
+};
+
+static const JSFunctionSpec history_funcs[] = {
+	{ "back",		history_back,		0 },
+	{ NULL }
 };
 
 static JSBool
@@ -1586,6 +1587,7 @@ history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 
 	return JS_TRUE;
 }
+
 
 static JSBool location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 static JSBool location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);

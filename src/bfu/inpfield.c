@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.163 2004/10/10 19:31:31 miciah Exp $ */
+/* $Id: inpfield.c,v 1.164 2004/11/11 19:40:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -425,7 +425,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		case ACT_EDIT_COPY_CLIPBOARD:
 			/* Copy to clipboard */
 			set_clipboard_text(widget_data->cdata);
-			break;	/* We don't need to redraw */
+			return EVENT_PROCESSED;
 
 		case ACT_EDIT_CUT_CLIPBOARD:
 			/* Cut to clipboard */

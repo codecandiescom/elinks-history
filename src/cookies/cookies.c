@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.174 2004/11/10 17:26:27 zas Exp $ */
+/* $Id: cookies.c,v 1.175 2004/11/10 17:43:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -591,17 +591,30 @@ accept_cookie_dialog(struct session *ses, void *data)
 	done_string(&string);
 }
 
-
+/* Check whether domain is matching server
+ * Ie.
+ * example.com matches www.example.com/
+ * example.com doesn't match www.example.com.org/
+ * example.com doesn't match www.example.comm/
+ * example.com doesn't match example.co
+ */
 static int
-is_in_domain(unsigned char *d, unsigned char *s, int sl)
+is_in_domain(unsigned char *domain, unsigned char *server, int server_len)
 {
-	int dl = strlen(d);
+	int domain_len = strlen(domain);
+	int len;
 
-	if (dl > sl) return 0;
-	if (dl == sl) return !strncasecmp(d, s, sl);
-	if (s[sl - dl - 1] != '.') return 0;
+	if (domain_len > server_len)
+		return 0;
 
-	return !strncasecmp(d, s + sl - dl, dl);
+	if (domain_len == server_len)
+		return !strncasecmp(domain, server, server_len);
+
+	len = server_len - domain_len;
+	if (server[len - 1] != '.')
+		return 0;
+
+	return !strncasecmp(domain, server + len, domain_len);
 }
 
 

@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.23 2003/07/30 00:22:41 jonas Exp $ */
+/* $Id: renderer.c,v 1.24 2003/08/23 04:44:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ realloc_lines(struct document *document, int y)
 	for (i = document->y; i <= y; i++) {
 		document->data[i].l = 0;
 		/* This should be sacrified on the altar of clarity. */
-		document->data[i].color = 0;
+		document->data[i].bgcolor = 0;
 		document->data[i].d = NULL;
 	}
 
@@ -100,10 +100,11 @@ realloc_line(struct document *document, int y, int x)
 		document->data[y].dsize = newsize;
 	}
 
-	document->data[y].color = 0;
+	document->data[y].bgcolor = 0;
 
 	for (i = document->data[y].l; i <= x; i++) {
-		document->data[y].d[i].attr = (document->data[y].color << 3);
+		document->data[y].d[i].attr = 0;
+		document->data[y].d[i].color = 0;
 		document->data[y].d[i].data = ' ';
 	}
 

@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.25 2003/07/31 17:29:00 jonas Exp $ */
+/* $Id: colors.c,v 1.26 2003/08/23 04:44:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 
 struct color_spec {
 	char *name;
-	int rgb;
+	color_t rgb;
 };
 
 extern int dump_pos;
@@ -220,59 +220,45 @@ free_colors_lookup(void)
 #endif
 }
 
-#define int2rgb(n, col) (col)->r = (n) / 0x10000,	\
-			(col)->g = (n) / 0x100 % 0x100,	\
-			(col)->b = (n) % 0x100
-
 int
-decode_color(unsigned char *str, struct rgb *col)
+decode_color(unsigned char *str, color_t *color)
 {
 	int slen = strlen(str);
 
 	if (*str == '#' && slen == 7) {
 		unsigned char *end;
-		int ch;
+		color_t string_color;
 
 		errno = 0;
-		ch = strtoul(&str[1], (char **)&end, 16);
+		string_color = strtoul(&str[1], (char **)&end, 16);
 		if (!errno && !*end) {
-			int2rgb(ch, col);
+			*color = string_color;
 			return 0;
 		}
 	} else {
+		register struct color_spec *cs;
+
 #ifndef USE_FASTFIND
-		register struct color_spec *cs = color_specs;
-
-		while (cs->name) {
-			if (!strcasecmp(cs->name, str)) {
-				int2rgb(cs->rgb, col);
-				return 0;
-			}
-			cs++;
-		}
+		for (cs = color_specs; cs->name; cs++)
+			if (!strcasecmp(cs->name, str))
+				break;
 #else
-		struct color_spec *cs;
-
-		cs = (struct color_spec *) fastfind_search(str, slen, ff_info_colors);
-
-		if (cs) {
-			int2rgb(cs->rgb, col);
+		cs = fastfind_search(str, slen, ff_info_colors);
+#endif
+		if (cs && cs->name) {
+			*color = cs->rgb;
 			return 0;
 		}
-#endif
 	}
 
 	return -1; /* Not found */
 }
 
-#undef int2rgb
-
 /* Returns an allocated string containing name of the color or NULL if there's
  * no name for that color. */
 unsigned char *
-get_color_name(struct rgb *col)
+get_color_name(color_t color)
 {
-	int color = col->r * 0x10000 + col->g * 0x100 + col->b;
 	register struct color_spec *cs = color_specs;
 
 	while (cs->name) {
@@ -287,10 +273,18 @@ get_color_name(struct rgb *col)
 /* Translate rgb color to string in #rrggbb format. str should be a pointer to
  * a 8 bytes memory space. */
 void
-color_to_string(struct rgb *color, unsigned char *str)
+color_to_string(color_t color, unsigned char *str)
 {
-	snprintf(str, 8, "#%02x%02x%02x", color->r, color->g, color->b);
+	unsigned char red, green, blue;
+
+	set_rgb_color(color, red, green, blue);
+	snprintf(str, 8, "#%02x%02x%02x", red, green, blue);
 }
+
+struct rgb {
+	unsigned char r, g, b;
+	unsigned char pad;
+};
 
 static struct rgb palette[] = {
 #if defined(PALA)
@@ -365,7 +359,7 @@ static struct rgb bgpalette[] = {
 struct rgb_cache_entry {
 	int color;
 	int l;
-	struct rgb rgb;
+	color_t rgb;
 };
 
 
@@ -395,17 +389,18 @@ color_distance(struct rgb *c1, struct rgb *c2)
 }
 
 unsigned char
-find_nearest_color(struct rgb *rgb, int l)
+find_nearest_color(color_t color, int l)
 {
 #define RGB_HASH_SIZE 4096
-#define HASH_RGB(rgb, l) ((((rgb)->r << 3) + ((rgb)->g << 2) + (rgb)->b + (l)) & (RGB_HASH_SIZE - 1))
+#define HASH_RGB(rgb, l) ((((rgb).r << 3) + ((rgb).g << 2) + (rgb).b + (l)) & (RGB_HASH_SIZE - 1))
 
 	int min_dist, dist, i;
 	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
 	/*static struct rgb_cache_entry rgb_bgcache[RGB_HASH_SIZE];*/
 	struct rgb_cache_entry *rgb_cache = /*l == 8 ? rgb_bgcache :*/ rgb_fgcache;
 	static int cache_init = 0;
-	unsigned char color;
+	unsigned char nearest_color;
+	struct rgb rgb;
 	int h;
 
 	/* We don't ever care about colors while dumping stuff. */
@@ -417,33 +412,30 @@ find_nearest_color(struct rgb *rgb, int l)
 		cache_init = 1;
 	}
 
+	set_rgb_color(color, rgb.r, rgb.g, rgb.b);
 	h = HASH_RGB(rgb, l);
 
 	if (rgb_cache[h].color != -1
 	    && rgb_cache[h].l == l
-	    && rgb_cache[h].rgb.r == rgb->r
-	    && rgb_cache[h].rgb.g == rgb->g
-	    && rgb_cache[h].rgb.b == rgb->b)
+	    && rgb_cache[h].rgb == color)
 		return rgb_cache[h].color;
 
 	min_dist = 0xffffff;
-	color = 0;
+	nearest_color = 0;
 
 	for (i = 0; i < l; i++) {
-		dist = color_distance(rgb, /*l==8 ? &bgpalette[i] :*/ &palette[i]);
+		dist = color_distance(&rgb, /*l==8 ? &bgpalette[i] :*/ &palette[i]);
 		if (dist < min_dist) {
 			min_dist = dist;
-			color = i;
+			nearest_color = i;
 		}
 	}
 
-	rgb_cache[h].color = color;
+	rgb_cache[h].color = nearest_color;
 	rgb_cache[h].l = l;
-	rgb_cache[h].rgb.r = rgb->r;
-	rgb_cache[h].rgb.g = rgb->g;
-	rgb_cache[h].rgb.b = rgb->b;
+	rgb_cache[h].rgb = color;
 
-	return color;
+	return nearest_color;
 
 #undef HASH_RGB
 #undef RGB_HASH_SIZE

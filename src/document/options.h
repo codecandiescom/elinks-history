@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.6 2002/09/10 15:12:14 zas Exp $ */
+/* $Id: options.h,v 1.7 2003/08/23 04:44:57 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -19,10 +19,10 @@ struct document_options {
 	int table_order;
 	int display_subs;
 	int display_sups;
-	struct rgb default_fg;
-	struct rgb default_bg;
-	struct rgb default_link;
-	struct rgb default_vlink;
+	color_t default_fg;
+	color_t default_bg;
+	color_t default_link;
+	color_t default_vlink;
 	unsigned char *framename;
 };
 

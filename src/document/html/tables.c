@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.61 2003/08/23 03:31:42 jonas Exp $ */
+/* $Id: tables.c,v 1.62 2003/08/23 04:44:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@
 struct table_cell {
 	unsigned char *start;
 	unsigned char *end;
-	struct rgb bgcolor;
+	color_t bgcolor;
 	int used;
 	int spanned;
 	int mx, my;
@@ -412,14 +412,14 @@ skip_table(unsigned char *html, unsigned char *eof)
 
 static struct table *
 parse_table(unsigned char *html, unsigned char *eof,
-	    unsigned char **end, struct rgb *bgcolor,
+	    unsigned char **end, color_t bgcolor,
 	    int sh, struct s_e **bad_html, int *bhp)
 {
 	struct table *t;
 	struct table_cell *cell;
 	unsigned char *t_name, *t_attr, *en;
 	unsigned char *lbhp = NULL;
-	struct rgb l_col;
+	color_t l_col = bgcolor;
 	int t_namelen;
 	int p = 0;
 	int l_al = AL_LEFT;
@@ -431,7 +431,6 @@ parse_table(unsigned char *html, unsigned char *eof,
 	int c_al = AL_TR, c_val = VAL_TR, c_width = W_AUTO, c_span = 0;
 	register int x = 0, y = -1;
 
-	memcpy(&l_col, bgcolor, sizeof(struct rgb));
 	*end = html;
 
 	if (bad_html) {
@@ -581,7 +580,7 @@ qwe:
 		if (group) group--;
 		l_al = AL_LEFT;
 		l_val = VAL_MIDDLE;
-		memcpy(&l_col, bgcolor, sizeof(struct rgb));
+		l_col = bgcolor;
 		get_align(t_attr, &l_al);
 		get_valign(t_attr, &l_val);
 		get_bgcolor(t_attr, &l_col);
@@ -659,7 +658,7 @@ nc:
 			cell->valign = t->cols[x].valign;
 	}
 
-	memcpy(&cell->bgcolor, &l_col, sizeof(struct rgb));
+	cell->bgcolor = l_col;
 
 	get_align(t_attr, &cell->align);
 	get_valign(t_attr, &cell->valign);
@@ -1378,10 +1377,8 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 
 				if (cell->b) format.attr |= AT_BOLD;
 
-				memcpy(&format.bg, &cell->bgcolor,
-				       sizeof(struct rgb));
-				memcpy(&par_format.bgcolor, &cell->bgcolor,
-				       sizeof(struct rgb));
+				format.bg = cell->bgcolor;
+				par_format.bgcolor = cell->bgcolor;
  				{
 					int tmpy = t->p->yp + yp;
 
@@ -1454,29 +1451,21 @@ if (H_LINE_X((ii-1), (jj)) >= 0 || H_LINE_X((ii), (jj)) >= 0 || \
 						 3*H_LINE((ii), (jj))+ \
 						 9*H_LINE((ii)-1, (jj))+ \
 						 27*V_LINE((ii),(jj))], \
-				     find_nearest_color(&par_format.bgcolor, 8) << 3, \
-				     SCREEN_ATTR_FRAME)
+				     par_format.bgcolor, SCREEN_ATTR_FRAME)
 
 
 #define draw_frame_hline(xx, yy, ll, ii, jj) \
 if (H_LINE_X((ii), (jj)) >= 0) \
 	xset_hchars(t->p, (xx), (yy), (ll),\
 		    hline_table[H_LINE((ii), (jj))], \
-		    find_nearest_color(&par_format.bgcolor, 8) << 3, \
-		    SCREEN_ATTR_FRAME)
+		    par_format.bgcolor, SCREEN_ATTR_FRAME)
 
 
 #define draw_frame_vline(xx, yy, ll, ii, jj) \
-	if (V_LINE_X((ii), (jj)) >= 0) { \
-		unsigned char data = vline_table[V_LINE((ii), (jj))]; \
-		unsigned char color = find_nearest_color(&par_format.bgcolor, 8) << 3; \
-		unsigned char attr = SCREEN_ATTR_FRAME; \
-		register int qq = 0; \
-		while (qq < (ll)) { \
-			xset_hchar(t->p, (xx), (yy) + qq, data, color, attr); \
-			qq++; \
-		} \
-	}
+	if (V_LINE_X((ii), (jj)) >= 0) \
+		xset_vchars(t->p, (xx), (yy), (ll), \
+			    vline_table[V_LINE((ii), (jj))], \
+			    par_format.bgcolor, SCREEN_ATTR_FRAME)
 
 
 static void
@@ -1638,7 +1627,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct s_e *bad_html;
 	struct node *n, *nn;
 	unsigned char *al;
-	struct rgb bgcolor;
+	color_t bgcolor = par_format.bgcolor;
 	int border, cellsp, vcellpd, cellpd, align;
 	int frame, rules, width, wf;
 	int cye;
@@ -1649,7 +1638,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	int margins;
 
 	table_level++;
-	memcpy(&bgcolor, &par_format.bgcolor, sizeof(struct rgb));
 	get_bgcolor(attr, &bgcolor);
 
 	/* From http://www.w3.org/TR/html4/struct/tables.html#adef-border-TABLE
@@ -1735,7 +1723,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		wf = 1;
 	}
 
-	t = parse_table(html, eof, end, &bgcolor, (p->document || p->xp), &bad_html, &bad_html_n);
+	t = parse_table(html, eof, end, bgcolor, (p->document || p->xp), &bad_html, &bad_html_n);
 	if (!t) {
 		if (bad_html) mem_free(bad_html);
 		goto ret0;

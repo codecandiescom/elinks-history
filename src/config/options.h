@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.62 2003/07/24 00:59:06 pasky Exp $ */
+/* $Id: options.h,v 1.63 2003/08/23 04:44:57 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -80,7 +80,7 @@ union option_value {
 
 	/* The rest is basicly OPT_#{toupper(membername)} */
 
-	struct rgb *color;
+	color_t color;
 	unsigned char *(*command)(struct option *, unsigned char ***, int *);
 
 	/* Each string option get allocated MAX_STR_LEN bytes. Used by
@@ -154,6 +154,7 @@ extern void *get_opt_(struct option *, unsigned char *);
 #define get_opt_char_tree(tree, name) *((unsigned char *) get_opt(tree, name))
 #define get_opt_str_tree(tree, name) ((unsigned char *) get_opt(tree, name))
 #define get_opt_ptr_tree(tree, name) ((void *) get_opt(tree, name))
+#define get_opt_color_tree(tree, name) (*(color_t *) get_opt(tree, name))
 
 #define get_opt_bool(name) get_opt_bool_tree(config_options, name)
 #define get_opt_int(name) get_opt_int_tree(config_options, name)
@@ -161,6 +162,7 @@ extern void *get_opt_(struct option *, unsigned char *);
 #define get_opt_char(name) get_opt_char_tree(config_options, name)
 #define get_opt_str(name) get_opt_str_tree(config_options, name)
 #define get_opt_ptr(name) get_opt_ptr_tree(config_options, name)
+#define get_opt_color(name) get_opt_color_tree(config_options, name)
 
 
 extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
@@ -195,7 +197,7 @@ extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 extern int color_set(struct option *, unsigned char *); /* XXX */
 
 #define add_opt_color_tree(tree, path, capt, name, flags, def, desc) do { \
-	struct rgb *ptr = mem_alloc(sizeof(struct rgb)); \
+	color_t *ptr = mem_alloc(sizeof(color_t)); \
 	color_set(add_opt(tree, path, capt, name, flags, OPT_COLOR, 0, 0, ptr, desc), def); \
 	} while (0)
 

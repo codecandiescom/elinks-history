@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.198 2003/08/23 03:31:42 jonas Exp $ */
+/* $Id: renderer.c,v 1.199 2003/08/23 04:44:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,8 +120,8 @@ realloc_lines(struct part *p, int y)
 
 	for (i = document->y; i <= y; i++) {
 		lines[i].l = 0;
-		lines[i].color = find_nearest_color(&par_format.bgcolor, 8);
 		lines[i].d = NULL;
+		lines[i].bgcolor = par_format.bgcolor;
 	}
 
 	document->y = i;
@@ -135,6 +135,7 @@ realloc_line(struct part *p, int y, int x)
 	int i;
 	int newsize = ALIGN(x + 1);
 	struct line *line;
+	unsigned char color;
 
 	assert(p && p->document);
 	if_assert_failed return 0;
@@ -152,11 +153,12 @@ realloc_line(struct part *p, int y, int x)
 		line->dsize = newsize;
 	}
 
-	line->color = find_nearest_color(&par_format.bgcolor, 8);
+	line->bgcolor = par_format.bgcolor;
+	color = find_nearest_color(line->bgcolor, 8) << 3;
 
 	for (i = line->l; i <= x; i++) {
 		line->d[i].data = ' ';
-		line->d[i].color = (line->color << 3);
+		line->d[i].color = color;
 		line->d[i].attr = 0;
 	}
 
@@ -279,15 +281,19 @@ set_hchars(struct part *part, int x, int y, int xl,
 
 void
 xset_hchar(struct part *part, int x, int y,
-	   unsigned char data, unsigned char color, unsigned char attr)
+	   unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
+	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
+
 	set_hchar(part, x, y, data, color, attr);
 }
 
 void
 xset_hchars(struct part *part, int x, int y, int xl,
-	    unsigned char data, unsigned char color, unsigned char attr)
+	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
+	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
+
 	set_hchars(part, x, y, xl, data, color, attr);
 }
 
@@ -314,6 +320,17 @@ set_hline(struct part *part, int x, int y, unsigned char *chars,
 			POS(x, y).attr = attr;
 			POS(x, y).data = *chars;
 		}
+	}
+}
+
+void
+xset_vchars(struct part *part, int x, int y, int yl,
+	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
+{
+	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
+
+	for (; yl; yl--, y++) {
+		set_hchar(part, x, y, data, color, attr);
 	}
 }
 
@@ -428,7 +445,7 @@ shift_chars(struct part *part, int y, int shift)
 	 * already got that idea; results in even more stains since we probably
 	 * shift chars even on surrounding lines when realigning tables
 	 * maniacally. --pasky */
-	set_hchars(part, 0, y, shift, ' ', part->document->data[y].color << 3, 0);
+	set_hchars(part, 0, y, shift, ' ', find_nearest_color(part->document->data[y].bgcolor, 8) << 3, 0);
 	copy_chars(part, shift, y, len, a);
 	fmem_free(a);
 
@@ -594,7 +611,7 @@ justify_line(struct part *part, int y)
 
 		/* See shift_chars() about why this is broken. */
 		set_hchars(part, 0, y, overlap(par_format), ' ',
-			   part->document->data[y].color << 3, 0);
+			   find_nearest_color(part->document->data[y].bgcolor, 8) << 3, 0);
 
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of
@@ -734,8 +751,7 @@ void
 put_chars(struct part *part, unsigned char *chars, int charslen,
 	  unsigned char attr)
 {
-	static struct text_attrib_beginning ta_cache =
-		{-1, {0, 0, 0}, {0, 0, 0}};
+	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
 	static int bg_cache;
 	static int fg_cache;
 	int bg, fg;
@@ -914,11 +930,11 @@ process_link:
 		link->where_img = last_image ? stracpy(last_image) : NULL;
 
 		if (link->type != L_FIELD && link->type != L_AREA) {
-			bg = find_nearest_color(&format.clink, 8);
-			fg = find_nearest_color(&format.bg, 8);
+			bg = find_nearest_color(format.clink, 8);
+			fg = find_nearest_color(format.bg, 8);
 		} else {
-			fg = find_nearest_color(&format.fg, 8);
-			bg = find_nearest_color(&format.bg, 8);
+			fg = find_nearest_color(format.fg, 8);
+			bg = find_nearest_color(format.bg, 8);
 		}
 		fg = fg_color(fg, bg);
 
@@ -942,8 +958,8 @@ set_link:
 
 format_change:
 
-	bg = find_nearest_color(&format.bg, 8);
-	fg = find_nearest_color(&format.fg, 16);
+	bg = find_nearest_color(format.bg, 8);
+	fg = find_nearest_color(format.fg, 16);
 	fg = fg_color(fg, bg);
 
 	if (format.attr & AT_ITALIC) fg = fg ^ 0x01;
@@ -1383,10 +1399,10 @@ push_base_format(unsigned char *url, struct document_options *opt)
 	format.form = NULL;
 	format.title = NULL;
 
-	memcpy(&format.fg, &opt->default_fg, sizeof(struct rgb));
-	memcpy(&format.bg, &opt->default_bg, sizeof(struct rgb));
-	memcpy(&format.clink, &opt->default_link, sizeof(struct rgb));
-	memcpy(&format.vlink, &opt->default_vlink, sizeof(struct rgb));
+	format.fg = opt->default_fg;
+	format.bg = opt->default_bg;
+	format.clink = opt->default_link;
+	format.vlink = opt->default_vlink;
 
 	format.href_base = stracpy(url);
 	format.target_base = opt->framename ? stracpy(opt->framename) : NULL;
@@ -1406,7 +1422,7 @@ push_base_format(unsigned char *url, struct document_options *opt)
 	par_format.dd_margin = opt->margin;
 	par_format.flags = P_NONE;
 
-	memcpy(&par_format.bgcolor, &opt->default_bg, sizeof(struct rgb));
+	par_format.bgcolor = opt->default_bg;
 
 	html_top.invisible = 0;
 	html_top.name = NULL;
@@ -1548,9 +1564,7 @@ format_html(struct cache_entry *ce, struct document *screen)
 	if (form.action) mem_free(form.action), form.action = NULL;
 	if (form.target) mem_free(form.target), form.target = NULL;
 
-	screen->bgcolor.r = par_format.bgcolor.r;
-	screen->bgcolor.g = par_format.bgcolor.g;
-	screen->bgcolor.b = par_format.bgcolor.b;
+	screen->bgcolor = par_format.bgcolor;
 
 	kill_html_stack_item(html_stack.next);
 
@@ -1784,10 +1798,10 @@ html_interpret(struct session *ses)
 		o.plain = 1;
 	}
 
-	memcpy(&o.default_fg, get_opt_ptr("document.colors.text"), sizeof(struct rgb));
-	memcpy(&o.default_bg, get_opt_ptr("document.colors.background"), sizeof(struct rgb));
-	memcpy(&o.default_link, get_opt_ptr("document.colors.link"), sizeof(struct rgb));
-	memcpy(&o.default_vlink, get_opt_str("document.colors.vlink"), sizeof(struct rgb));
+	o.default_fg = get_opt_color("document.colors.text");
+	o.default_bg = get_opt_color("document.colors.background");
+	o.default_link = get_opt_color("document.colors.link");
+	o.default_vlink = get_opt_color("document.colors.vlink");
 
 	o.framename = "";
 

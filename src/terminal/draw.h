@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.21 2003/08/23 03:31:43 jonas Exp $ */
+/* $Id: draw.h,v 1.22 2003/08/23 04:44:59 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -26,8 +26,8 @@ struct screen_char {
 };
 
 struct screen_color {
-	struct rgb *foreground;
-	struct rgb *background;
+	color_t foreground;
+	color_t background;
 };
 
 /* Linux frame symbols table (it's magically converted to other terminals when

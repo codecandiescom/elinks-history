@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.182 2003/08/23 03:31:43 jonas Exp $ */
+/* $Id: view.c,v 1.183 2003/08/23 04:44:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,8 +282,8 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 		set_window_ptr(get_current_tab(t), xp, yp);
 	}
 
-	color.foreground = NULL;
-	color.background = scr->document->y ? &scr->document->bgcolor : NULL;
+	color.foreground = 0;
+	color.background = scr->document->y ? scr->document->bgcolor : 0;
 
 	if (!scr->vs) {
 		draw_area(t, xp, yp, xw, yw, ' ', 0, &color);

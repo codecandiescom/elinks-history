@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.192 2003/08/23 03:31:42 jonas Exp $ */
+/* $Id: parser.c,v 1.193 2003/08/23 04:44:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -297,7 +297,7 @@ roman(unsigned char *p, unsigned n)
 }
 
 static int
-get_color(unsigned char *a, unsigned char *c, struct rgb *rgb)
+get_color(unsigned char *a, unsigned char *c, color_t *rgb)
 {
 	unsigned char *at;
 	int r;
@@ -315,7 +315,7 @@ get_color(unsigned char *a, unsigned char *c, struct rgb *rgb)
 }
 
 int
-get_bgcolor(unsigned char *a, struct rgb *rgb)
+get_bgcolor(unsigned char *a, color_t *rgb)
 {
 	if (!d_opt->col || d_opt->use_document_colours < 2)
 		return -1;
@@ -645,7 +645,7 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	put_chrs(prefix, strlen(prefix), put_chars_f, ff, 0);
 	format.link = join_urls(format.href_base, link);
 	format.target = stracpy(target);
-	memcpy(&format.fg, &format.clink, sizeof(struct rgb));
+	format.fg = format.clink;
 	put_chrs(linkname, strlen(linkname), put_chars_f, ff, 0);
 	ln_break(1, line_break_f, ff);
 	kill_html_stack_item(&html_top);
@@ -748,10 +748,10 @@ html_a(unsigned char *a)
 		}
 #ifdef GLOBHIST
 		if (get_global_history_item(format.link))
-			memcpy(&format.fg, &format.vlink, sizeof(struct rgb));
+			format.fg = format.vlink;
 		else
 #endif
-			memcpy(&format.fg, &format.clink, sizeof(struct rgb));
+			format.fg = format.clink;
 
 		if (format.title) mem_free(format.title);
 		format.title = get_attr_val(a, "title");

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.47 2003/08/23 03:31:42 jonas Exp $ */
+/* $Id: draw.c,v 1.48 2003/08/23 04:44:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,12 +24,8 @@
 static inline unsigned char
 encode_color(struct screen_color *color)
 {
-	unsigned char fg = color->foreground
-				? find_nearest_color(color->foreground, 16)
-				: 0;
-	unsigned char bg = color->background
-				? find_nearest_color(color->background, 8)
-				: 0;
+	unsigned char fg = find_nearest_color(color->foreground, 16);
+	unsigned char bg = find_nearest_color(color->background, 8);
 
 	return ((((fg) & 0x08) << 3) | ((bg) << 3) | ((fg) & 0x07));
 }

@@ -1,11 +1,11 @@
-/* $Id: frames.h,v 1.7 2003/08/23 03:31:42 jonas Exp $ */
+/* $Id: frames.h,v 1.8 2003/08/23 04:44:58 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
 
 #include "document/options.h"
 #include "lowlevel/ttime.h"
-#include "terminal/draw.h" /* chr type */
+#include "terminal/draw.h"
 
 struct frameset_desc;
 
@@ -27,7 +27,7 @@ struct frameset_desc {
 	struct frame_desc f[1]; /* must be last of struct. --Zas */
 };
 
-/* For struct f_data */
+/* For struct document */
 struct line {
 	struct screen_char *d;
 
@@ -35,8 +35,9 @@ struct line {
 	int size;
 	int dsize;
 
-	unsigned char color;
+	color_t bgcolor;
 };
+
 enum cp_status {
 	CP_STATUS_NONE,
 	CP_STATUS_SERVER,
@@ -77,7 +78,7 @@ struct document {
 	int frame;
 	int nlinks;
 	int nsearch;
-	struct rgb bgcolor;
+	color_t bgcolor;
 
 	enum cp_status cp_status;
 };

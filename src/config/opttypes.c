@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.60 2003/08/01 11:25:37 zas Exp $ */
+/* $Id: opttypes.c,v 1.61 2003/08/23 04:44:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,7 +367,7 @@ color_set(struct option *opt, unsigned char *str)
 {
 	int ret;
 
-	ret = decode_color(str, (struct rgb *) opt->ptr);
+	ret = decode_color(str, opt->ptr);
 
 	if (ret) return 0;
 
@@ -377,7 +377,7 @@ color_set(struct option *opt, unsigned char *str)
 static void
 color_wr(struct option *opt, struct string *str)
 {
-	struct rgb *color = (struct rgb *) opt->ptr;
+	color_t color = *(color_t *) opt->ptr;
 	unsigned char *strcolor = get_color_name(color);
 	unsigned char hexcolor[8];
 
@@ -394,9 +394,9 @@ color_wr(struct option *opt, struct string *str)
 static void *
 color_dup(struct option *opt, struct option *template)
 {
-	struct rgb *new = mem_alloc(sizeof(struct rgb));
+	color_t *new = mem_alloc(sizeof(color_t));
 
-	if (new) memcpy(new, template->ptr, sizeof(struct rgb));
+	if (new) *new = *(color_t *) template->ptr;
 	return new;
 }
 

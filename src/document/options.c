@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.14 2003/05/08 12:11:32 miciah Exp $ */
+/* $Id: options.c,v 1.15 2003/08/23 04:44:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,11 +59,11 @@ compare_opt(struct document_options *o1, struct document_options *o2)
 	    o1->num_links_display == o2->num_links_display &&
 	    o1->num_links_key == o2->num_links_key &&
 	    o1->table_order == o2->table_order &&
-	    !memcmp(&o1->default_fg, &o2->default_fg, sizeof(struct rgb)) &&
-	    !memcmp(&o1->default_bg, &o2->default_bg, sizeof(struct rgb)) &&
-	    !memcmp(&o1->default_link, &o2->default_link, sizeof(struct rgb)) &&
-	    !memcmp(&o1->default_vlink, &o2->default_vlink, sizeof(struct rgb)) &&
-	    !strcasecmp(o1->framename, o2->framename)) return 0;
+	    o1->default_fg == o2->default_fg &&
+	    o1->default_bg == o2->default_bg &&
+	    o1->default_link == o2->default_link &&
+	    o1->default_vlink == o2->default_vlink &&
+	    strcasecmp(o1->framename, o2->framename)) return 0;
 	return 1;
 }
 

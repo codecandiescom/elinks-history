@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.257 2003/07/28 05:54:56 jonas Exp $ */
+/* $Id: options.c,v 1.258 2003/08/23 04:44:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -663,11 +663,11 @@ print_full_help(struct option *tree, unsigned char *path)
 				get_cp_name(* (int *) option->ptr));
 
 		} else if (type == OPT_COLOR) {
-			struct rgb *color = (struct rgb *) option->ptr;
+			unsigned char colorstr[8];
 
-			printf(gettext("    %s%s%s %s (default: #%02x%02x%02x)"),
-				path, saved, option->name, help,
-				color->r, color->g, color->b);
+			color_to_string(*(color_t *) option->ptr, colorstr);
+			printf(gettext("    %s%s%s %s (default: %s)"),
+			       path, saved, option->name, help, colorstr);
 
 		} else if (type == OPT_COMMAND) {
 			printf("    %s%s%s", path, saved, option->name);

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.27 2003/08/23 03:31:42 jonas Exp $ */
+/* $Id: parser.h,v 1.28 2003/08/23 04:44:58 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -98,8 +98,8 @@ enum format_attr {
 
 struct text_attrib_beginning {
 	enum format_attr attr;
-	struct rgb fg;
-	struct rgb bg;
+	color_t fg;
+	color_t bg;
 };
 
 struct text_attrib {
@@ -107,8 +107,8 @@ struct text_attrib {
 	 * FIXME: can we use a field of struct text_attrib_beginning type ?
 	 */
 	enum format_attr attr;
-	struct rgb fg;
-	struct rgb bg;
+	color_t fg;
+	color_t bg;
 
 	int fontsize;
 	unsigned char *link;
@@ -116,8 +116,8 @@ struct text_attrib {
 	unsigned char *image;
 	unsigned char *title;
 	struct form_control *form;
-	struct rgb clink;
-	struct rgb vlink;
+	color_t clink;
+	color_t vlink;
 	unsigned char *href_base;
 	unsigned char *target_base;
 	unsigned char *select;
@@ -154,7 +154,7 @@ struct par_attrib {
 	unsigned list_number;
 	int dd_margin;
 	enum format_list_flag flags;
-	struct rgb bgcolor;
+	color_t bgcolor;
 };
 
 struct html_element {
@@ -197,8 +197,8 @@ unsigned char *get_attr_val(unsigned char *, unsigned char *);
 int has_attr(unsigned char *, unsigned char *);
 int get_num(unsigned char *, unsigned char *);
 int get_width(unsigned char *, unsigned char *, int);
-/* int get_color(unsigned char *, unsigned char *, struct rgb *); */
-int get_bgcolor(unsigned char *, struct rgb *);
+/* int get_color(unsigned char *, unsigned char *, color_t *); */
+int get_bgcolor(unsigned char *, color_t *);
 
 void html_stack_dup(void);
 void kill_html_stack_item(struct html_element *);

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.34 2003/07/30 00:22:42 jonas Exp $ */
+/* $Id: dump.c,v 1.35 2003/08/23 04:44:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,10 +117,10 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	mk_document_options(&o);
 	o.plain = 0;
 	o.frames = 0;
-	memcpy(&o.default_fg, get_opt_ptr("document.colors.text"), sizeof(struct rgb));
-	memcpy(&o.default_bg, get_opt_ptr("document.colors.background"), sizeof(struct rgb));
-	memcpy(&o.default_link, get_opt_ptr("document.colors.link"), sizeof(struct rgb));
-	memcpy(&o.default_vlink, get_opt_ptr("document.colors.vlink"), sizeof(struct rgb));
+	o.default_fg = get_opt_color("document.colors.text");
+	o.default_bg = get_opt_color("document.colors.background");
+	o.default_link = get_opt_color("document.colors.link");
+	o.default_vlink = get_opt_color("document.colors.vlink");
 	o.framename = "";
 
 	init_vs(vs, ce->url);

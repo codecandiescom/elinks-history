@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.17 2002/04/20 10:16:36 zas Exp $ */
+/* $Id: default.c,v 1.18 2002/04/20 12:25:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,7 @@
 #include <lowlevel/dns.h>
 #include <lowlevel/terminal.h>
 #include <protocol/types.h>
+#include <util/secsave.h>
 
 void get_system_name()
 {
@@ -272,24 +273,6 @@ unsigned char *read_config_file(unsigned char *name)
 	return s;
 }
 
-int write_to_config_file(unsigned char *name, unsigned char *c)
-{
-	int rr = strlen(c);
-	int r = rr;
-	int h, w;
-	if ((h = open(name, O_WRONLY | O_NOCTTY | O_CREAT | O_TRUNC, 0666)) == -1) return -1;
-	set_bin(h);
-	while (r > 0) {
-		if ((w = write(h, c + rr - r, r)) <= 0) {
-			close(h);
-			return -1;
-		}
-		r -= w;
-	}
-	close(h);
-	return 0;
-}
-
 unsigned char *get_home(int *new)
 {
 	struct stat st;
@@ -448,33 +431,38 @@ int
 write_config_file(unsigned char *prefix, unsigned char *name, struct option *o,
 		  struct terminal *term)
 {
+	int ret = -1;
+	struct secure_save_info *ssi;
 	unsigned char *config_file;
-	unsigned char *c = create_config_string(o);
+	unsigned char *cfg_str = create_config_string(o);
 
-	if (!c) return -1;
+	if (!cfg_str) return -1;
 	
 	config_file = straconcat(prefix, name, NULL);
-	if (!config_file) {
-		mem_free(c);
-		return -1;
+	if (!config_file) goto free_cfg_str;
+	
+	ssi = secure_open(config_file, 0177);
+	if (!ssi) goto free_config_file;
+
+	secure_fputs(ssi, cfg_str);
+	ret = secure_close(ssi);
+
+	if (ret && term) {
+		msg_box(term, NULL,
+			TEXT(T_CONFIG_ERROR), AL_CENTER | AL_EXTD_TEXT,
+			TEXT(T_UNABLE_TO_WRITE_TO_CONFIG_FILE), "\n",
+			config_file, ": ", strerror(ret), NULL,
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 	}
 
-	if (write_to_config_file(config_file, c)) {
-		if (term) {
-			msg_box(term, NULL,
-				TEXT(T_CONFIG_ERROR), AL_CENTER,
-				TEXT(T_UNABLE_TO_WRITE_TO_CONFIG_FILE),
-				NULL, 1,
-				TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
-		}
-		mem_free(c);
-		mem_free(config_file);
-		return -1;
-	}
-
-	mem_free(c);
+free_config_file:
 	mem_free(config_file);
-	return 0;
+	
+free_cfg_str:
+	mem_free(cfg_str);
+
+	return ret;
 }
 
 void write_config(struct terminal *term)

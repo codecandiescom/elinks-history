@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.8 2003/06/07 14:40:01 pasky Exp $ */
+/* $Id: connection.h,v 1.9 2003/06/11 15:27:54 pasky Exp $ */
 
 #ifndef EL__SCHED_SCHED_H
 #define EL__SCHED_SCHED_H
@@ -61,7 +61,7 @@ struct connection {
 	struct remaining_info prg;
 
 	unsigned char *url;
-	unsigned char *prev_url;
+	unsigned char *ref_url;
 	void *dnsquery;
 	void *conn_info;
 	void *info;

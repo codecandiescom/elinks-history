@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.21 2003/06/08 10:49:28 zas Exp $ */
+/* $Id: connection.c,v 1.22 2003/06/11 15:27:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -854,7 +854,7 @@ get_proxy(unsigned char *url)
 /* Note that stat's data _MUST_ be struct download * if start > 0! Yes, that
  * should be probably something else than data, but... ;-) */
 int
-load_url(unsigned char *url, unsigned char *prev_url,
+load_url(unsigned char *url, unsigned char *ref_url,
 	 struct status *stat, int pri, enum cache_mode cache_mode, int start)
 {
 	struct cache_entry *e = NULL;
@@ -953,7 +953,7 @@ load_url(unsigned char *url, unsigned char *prev_url,
 
 	c->count = connection_count++;
 	c->url = u;
-	c->prev_url = prev_url;
+	c->ref_url = ref_url;
 
 	if (cache_mode < NC_RELOAD && e && e->frag.next != &e->frag
 	    && !((struct fragment *) e->frag.next)->offset)

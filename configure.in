@@ -177,19 +177,21 @@ dnl Check for Lua, optional even if installed.
 dnl ===================================================================
 
 dnl Do this the long way, as FreeBSD reportedly needs -L<dir> for
-dnl anything dnl other than /usr/lib, and Lua is very often in
-dnl /usr/local/lib.
-
-AC_ARG_WITH(lua, [  --without-lua           disable Lua support],
-            [if test "$withval" = no;  then disable_lua=yes; fi])
-AC_MSG_CHECKING([for Lua])
+dnl anything other than /usr/lib, and Lua is very often in /usr/local/lib.
 
 CFLAGS_X="$CFLAGS"
 LIBS_X="$LIBS"
 cf_result=no
 
+dnl Lua needs it on Redhat, they say.. :/
+AC_CHECK_LIB(dl, dlopen)
+
+AC_ARG_WITH(lua, [  --without-lua           disable Lua support],
+            [if test "$withval" = no;  then disable_lua=yes; fi])
+AC_MSG_CHECKING([for Lua])
+
 if test -z "$disable_lua"; then
-	for luadir in "" /usr /usr/local; do
+	for luadir in "" /usr /usr/local /opt; do
 		if test "$cf_result" = no; then
 			if test ! -z "$luadir"; then
 				LIBS="-L$luadir/lib -llua -llualib -lm $LIBS_X"
@@ -197,18 +199,22 @@ if test -z "$disable_lua"; then
 			else
 				LIBS="-llua -llualib -lm $LIBS_X"
 			fi
+
 			AC_TRY_LINK([#include <lua.h>],
 				    [lua_open(0)],
 				    cf_result=yes, cf_result=no)
 		fi
 	done
-fi
 
-if test "$cf_result" != yes; then
-	CFLAGS="$CFLAGS_X"
-	LIBS="$LIBS_X"
-else
-	AC_DEFINE(HAVE_LUA)
+	if test "$cf_result" != yes; then
+		if test "$withval" = yes; then
+			AC_MSG_ERROR("Lua not found")
+		fi
+		CFLAGS="$CFLAGS_X"
+		LIBS="$LIBS_X"
+	else
+		AC_DEFINE(HAVE_LUA)
+	fi
 fi
 
 AC_MSG_RESULT($cf_result)
@@ -224,7 +230,8 @@ CFLAGS_X="$CFLAGS"
 LIBS_X="$LIBS"
 cf_result=no
 
-AC_CHECK_LIB(dl, dlopen) # OpenSSL needs it?
+dnl OpenSSL needs it?
+AC_CHECK_LIB(dl, dlopen) 
 
 AC_ARG_WITH(ssl, [  --without-ssl           disable SSL support],
             [if test "$withval" = no;  then disable_ssl=yes; fi])

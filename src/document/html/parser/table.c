@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.26 2004/10/19 12:46:37 zas Exp $ */
+/* $Id: table.c,v 1.27 2004/10/20 11:09:34 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -483,6 +483,7 @@ parse_table(unsigned char *html, unsigned char *eof, unsigned char **end,
 	int c_al = ALIGN_TR, c_val = VALIGN_TR, c_width = WIDTH_AUTO, c_span = 0;
 	int cols, rows;
 	int col = 0, row = -1;
+	int maxj;
 
 	*end = html;
 
@@ -739,7 +740,10 @@ see:
 	for (i = 1; colspan != -1 ? i < colspan : i < cols; i++) {
 		struct table_cell *span_cell = new_cell(table, col + i, row);
 
-		if (!span_cell || span_cell->is_used) {
+		if (!span_cell)
+			goto abort;
+
+		if (span_cell->is_used) {
 			colspan = i;
 			for (k = 0; k < i; k++)
 				CELL(table, col + k, row)->colspan = colspan;
@@ -754,15 +758,23 @@ see:
 	}
 
 	rows = table->rows;
-	for (j = 1; rowspan != -1 ? j < rowspan : j < rows; j++) {
+	maxj = rowspan != -1 ? rowspan : rows;
+	/* Out of memory prevention, limit allocated memory to HTML_MAX_CELLS_MEMORY.
+	 * Not perfect but better than nothing. */
+	if (maxj * i > HTML_MAX_CELLS_MEMORY / sizeof(struct table_cell))
+		goto abort;
+
+	for (j = 1; j < maxj; j++) {
 		for (k = 0; k < i; k++) {
 			struct table_cell *span_cell = new_cell(table, col + k, row + j);
 
-			if (!span_cell || span_cell->is_used) {
+			if (!span_cell)
+				goto abort;
+
+			if (span_cell->is_used) {
 				int l, m;
 
-				if (span_cell
-				    && span_cell->col == col
+				if (span_cell->col == col
 				    && span_cell->row == row)
 					continue;
 
@@ -804,11 +816,11 @@ scan_done:
 
 	if (table->rows) {
 		table->rows_heights = mem_calloc(table->rows, sizeof(int));
-		if (!table->rows_heights) {
-			free_table(table);
-			return NULL;
-		}
-	} else table->rows_heights = NULL;
+		if (!table->rows_heights)
+			goto abort;
+	} else {
+		table->rows_heights = NULL;
+	}
 
 	for (col = 0; col < table->columns_count; col++)
 		if (table->columns[col].width != WIDTH_AUTO)
@@ -816,4 +828,9 @@ scan_done:
 	set_td_width(table, table->cols, WIDTH_AUTO, 0);
 
 	return table;
+
+abort:
+	*end = eof;
+	free_table(table);
+	return NULL;
 }

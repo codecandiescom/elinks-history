@@ -1,3 +1,151 @@
+Wed Sep 29 21:56:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	0.10pre2 
+
+Wed Sep 29 21:54:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	Update .po files.  
+
+Wed Sep 29 21:52:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Wed Sep 29 20:03:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/frames.c:
+
+	If CONFIG_DEBUG, make it possible to debug format_frames() without
+	removing -O2.  
+
+Wed Sep 29 20:01:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Pah, it seems we use some stupid weak CONFIG_DEBUG instead of good
+	ol' DEBUG, whose idea was that? :) Bring the assertion failures
+	back! 
+
+Wed Sep 29 17:02:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, ecmascript/spidermonkey.c:
+
+	Never open new windows if -no-home or -no-connect or -anonymous is
+	enabled.  
+
+Wed Sep 29 16:42:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	window_open(): Fix URI leaking.  
+
+Wed Sep 29 15:49:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	display_title_bar(): Fix crash when dereferencing NULL doc_view->vs
+	triggerable at http://p2p.ingce.unibo.it/ 
+
+Wed Sep 29 15:05:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	do_html_script(): Fix off by one error in the HTML comment end
+	skipping. Fixes the example in bug 512.  
+
+Wed Sep 29 14:47:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/scanner.c:
+
+	scan_sgml_element_token(): Simplify the '<!' notation token scanning
+	and fix the comment node text to start after '<!--'.  
+
+Wed Sep 29 14:38:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/garbage.html:
+
+	@include "../garbage.html"; 
+
+Wed Sep 29 12:10:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/encoding/gzip.c:
+
+	Prevent gzip.c:155: warning: 'error' might be used uninitialized in
+	this function.  
+
+Wed Sep 29 11:49:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	get_content_type(): Fix memleaking of empty strings.  
+
+Tue Sep 28 23:57:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/draw.c:
+
+	check_document_fragment(): Check also that the cache entry id and
+	document id are in sync. Fixes displaying of wrong 'missing
+	fragment' dialogs when opening tab between the cache entry has been
+	marked complete but the document still hasn't been rerendered.  
+
+Tue Sep 28 23:50:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/status.c:
+
+	Do it my way instead, if you will. Do not attempt to show the link
+	info altogether unless doc_view->vs, it looks too dangerous. Also
+	explain why can actually doc_view->vs be NULL there.  
+
+Tue Sep 28 23:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	display_status_bar(): Fix crash when doc_view->vs is NULL. pasky is
+	this ok? 
+
+Tue Sep 28 23:28:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	location_goto()'s goto_uri_frame() now happens in a bottom half
+	handler to prevent nasty surprises inside of complex frame
+	configurations.  
+
+Tue Sep 28 23:14:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Disable the killer assert(!vs->doc_view) with a thorough explanation
+	- it should be re-enabled when we get frame name conflicts right.
+	Instead do some wild recovery now.  
+
+Tue Sep 28 22:41:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Moved the DBG message around.  
+
+Tue Sep 28 22:40:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Some so frequently useful debug message... (commented out, of
+	course).  
+
+Tue Sep 28 22:35:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	add_new_win_to_menu(): Fix the action ID.  
+
 Tue Sep 28 20:08:41 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/html/frames.h:
@@ -939,6 +1087,13 @@ Fri Sep 24 22:11:01 2004  Petr Baudis <pasky@ucw.cz>:
 
 	Introduced error_reporter(), which is, well, an error reporter ;-).  
 
+Fri Sep 24 21:45:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/inlinescript.html:
+
+	nice_href() needs to be called as nice_href(0). I'd love to know
+	why.  
+
 Fri Sep 24 21:29:53 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/ecmascript/spidermonkey.c:
@@ -962,7 +1117,8 @@ Fri Sep 24 21:21:51 2004  Petr Baudis <pasky@ucw.cz>:
 
 Fri Sep 24 20:47:20 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/ecmascript/: ecmascript.h, spidermonkey.c:
+	* src/ecmascript/ecmascript.h, src/ecmascript/spidermonkey.c,
+	test/ecmascript/infinite.html:
 
 	A safeguard function introduced, which kills the script after 5
 	seconds of running. That has to be enough for anything.  
@@ -1061,6 +1217,19 @@ Fri Sep 24 18:01:49 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	Make HTML highlighting support official.  
 
+Fri Sep 24 13:48:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/inlinescript.html:
+
+	Some nice_href() fixes.  
+
+Fri Sep 24 13:45:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/inlinescript.html:
+
+	Oops, fix syntax errors in the code snippets ;-). So that's why the
+	testcases didn't work! 
+
 Fri Sep 24 13:07:23 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/html/: parser.c, parser/parse.c:
@@ -1069,6 +1238,12 @@ Fri Sep 24 13:07:23 2004  Petr Baudis <pasky@ucw.cz>:
 	Otherwise it would be difficult to skip the contents if we weren't
 	processing the element (and if we were processing it, it was broken
 	until now because we were calling html_skip() on its parent).  
+
+Fri Sep 24 12:58:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/inlinescript.html:
+
+	Testcase for the inline <script> element.  
 
 Fri Sep 24 12:54:51 2004  Petr Baudis <pasky@ucw.cz>:
 
@@ -1178,6 +1353,12 @@ Fri Sep 24 01:45:11 2004  Petr Baudis <pasky@ucw.cz>:
 
 	Fixed initial adding to the snippets queue in process_snippets().
 	onLoad should work fine now.  
+
+Fri Sep 24 01:44:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/onload.html:
+
+	onLoad testcase.  
 
 Fri Sep 24 01:43:51 2004  Petr Baudis <pasky@ucw.cz>:
 
@@ -1316,6 +1497,18 @@ Thu Sep 23 19:34:41 2004  Petr Baudis <pasky@ucw.cz>:
 	/usr/include/smjs as $spidermonkeydir makes no sense, try to check
 	it as $spidermonkeyinclude instead and see who gets enraged.  
 
+Thu Sep 23 19:31:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/protocol.html:
+
+	Elaborate on the tests.  
+
+Thu Sep 23 19:23:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/protocol.html:
+
+	Each link in a single paragraph.  
+
 Thu Sep 23 19:15:15 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* configure.in:
@@ -1348,6 +1541,12 @@ Thu Sep 23 16:14:19 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	Looks like freshmeat and slashdot redirects away from www host. Hit
 	them directly instead.  
+
+Thu Sep 23 15:43:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/ecmascript/protocol.html:
+
+	Grow with separate tests for javascrip: URIs.  
 
 Thu Sep 23 15:40:33 2004  Laurent Monin <zas@norz.org>:
 
@@ -1388,7 +1587,7 @@ Thu Sep 23 15:04:07 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Sep 23 14:55:47 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* test/Makefile.am:
+	* test/: Makefile.am, ecmascript/protocol.html:
 
 	Add a simple testcase for the javascript: protocol, document.title
 	and document.url.  
@@ -2479,16 +2678,16 @@ Sun Sep 19 17:21:26 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
+	* AUTHORS:
+
+	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
+
+Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
 	* src/util/memory.c:
 
 	Fix mmap() usage on FreeBSD filed as bug 501. Patch by Lewis
 	Collard.  
-
-Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
-
-	* AUTHORS:
-
-	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
 
 Sun Sep 19 09:56:02 2004  Petr Baudis <pasky@ucw.cz>:
 

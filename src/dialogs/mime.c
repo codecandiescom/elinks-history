@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.74 2003/11/09 11:23:09 jonas Exp $ */
+/* $Id: mime.c,v 1.75 2003/11/09 14:55:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,6 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	dlg->layouter = generic_dialog_layouter;
 	dlg->refresh = (void (*)(void *)) really_add_ext;
 	dlg->refresh_data = new;
-	dlg->align = AL_BLOCK;
 
 	add_dlg_field(dlg, _("Extension(s)", term), 0, 0, check_nonempty, MAX_STR_LEN, ext, NULL);
 	add_dlg_field(dlg, _("Content-Type", term), 0, 0, check_nonempty, MAX_STR_LEN, ct, NULL);

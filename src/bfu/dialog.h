@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.22 2003/11/09 13:44:26 pasky Exp $ */
+/* $Id: dialog.h,v 1.23 2003/11/09 14:55:22 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -16,6 +16,16 @@ struct dialog_data;
 #define	EVENT_PROCESSED		0
 #define EVENT_NOT_PROCESSED	1
 
+struct dialog_layout {
+	/* Whether to adjust the dialog width to the maximal width. If not set
+	 * only use required width. */
+	unsigned int maximize_width:1;
+	/* Whether to pad the top of the dialog before any widgets. */
+	unsigned int padding_top:1;
+	/* Whether to horizontally pad widgets. */
+	unsigned int nopad_widgets:1;
+};
+
 struct dialog {
 	unsigned char *title;
 	void *udata;
@@ -27,7 +37,7 @@ struct dialog {
 	void (*abort)(struct dialog_data *);
 	void (*refresh)(void *);
 
-	enum format_align align;
+	struct dialog_layout layout;
 
 	size_t widgets_size;
 	struct widget widgets[1]; /* must be at end of struct */

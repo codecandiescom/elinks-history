@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.55 2003/11/09 14:02:56 pasky Exp $ */
+/* $Id: hierbox.c,v 1.56 2003/11/09 14:55:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,8 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 
 	dlg->title = _(title, term);
 	dlg->layouter = generic_dialog_layouter;
-	dlg->align = AL_NONE;
+	dlg->layout.maximize_width = 1;
+	dlg->layout.padding_top = 1;
 	dlg->handle_event = hierbox_dialog_event_handler;
 	dlg->udata = udata;
 

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.145 2003/11/09 13:44:28 pasky Exp $ */
+/* $Id: download.c,v 1.146 2003/11/09 14:55:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -413,7 +413,6 @@ found:
 	dlg->layouter = download_dialog_layouter;
 	dlg->abort = download_abort_function;
 	dlg->udata = down;
-	dlg->align = AL_CENTER;
 
 	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_undisplay_download, _("Background", term), NULL);
 	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);

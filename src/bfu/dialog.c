@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.84 2003/11/09 14:30:47 jonas Exp $ */
+/* $Id: dialog.c,v 1.85 2003/11/09 14:55:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,26 +379,25 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 
 
 static inline void
-layout_widgets(struct terminal *term, struct widget_data *wdata, int widgets,
+layout_widgets(struct terminal *term, struct dialog_data *dlg_data,
 	       int x, int *y, int w, int h, int *rw)
 {
+	struct widget_data *wdata = dlg_data->widgets_data;
+	int widgets = dlg_data->n;
+
 	/* TODO: Do something if (*y) gets > height. */
 	for (; widgets > 0; widgets--, wdata++) {
 		switch (wdata->widget->type) {
 		case WIDGET_FIELD:
 			dlg_format_field(term, wdata, x, y, w, rw, AL_LEFT);
-			(*y)++;
 			break;
 
 		case WIDGET_LISTBOX:
-			(*y)++;
 			dlg_format_box(term, wdata, x, y, w, h, rw, AL_LEFT);
-			(*y)++;
 			break;
 
 		case WIDGET_TEXT:
 			layout_text_widget(term, wdata, x, y, w, rw);
-			(*y)++;
 			break;
 
 		/* We assume that the buttons are all stuffed at the very end
@@ -410,6 +409,9 @@ layout_widgets(struct terminal *term, struct widget_data *wdata, int widgets,
 		default:
 			internal("Bad widget type or widget not supported.");
 		}
+
+		if (!dlg_data->dlg->layout.nopad_widgets)
+			(*y)++;
 	}
 }
 
@@ -420,21 +422,20 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 	int w = dialog_max_width(term);
 	int height = term->height;
 	int rw = 0;
-	int y = -1, x = 0;
+	int y = dlg_data->dlg->layout.padding_top ? 0 : -1;
+	int x = 0;
 
-	layout_widgets(NULL, dlg_data->widgets_data, dlg_data->n,
-		       x, &y, w, height, &rw);
+	layout_widgets(NULL, dlg_data, x, &y, w, height, &rw);
 
 	/* Update the width to respond to the required minimum width */
-	if (dlg_data->dlg->align != AL_NONE) w = rw;
+	if (!dlg_data->dlg->layout.maximize_width) w = rw;
 
 	draw_dialog(dlg_data, w, y);
 
-	y = dlg_data->y + DIALOG_TB;
+	y = dlg_data->y + DIALOG_TB + dlg_data->dlg->layout.padding_top;
 	x = dlg_data->x + DIALOG_LB;
 
-	layout_widgets(term, dlg_data->widgets_data, dlg_data->n,
-		       x, &y, w, height, NULL);
+	layout_widgets(term, dlg_data, x, &y, w, height, NULL);
 }
 
 

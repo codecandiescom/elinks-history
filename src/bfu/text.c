@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.42 2003/11/07 16:39:34 jonas Exp $ */
+/* $Id: text.c,v 1.43 2003/11/07 17:24:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ split_line(unsigned char *text, int w)
 			tx++;
 	} while (tx - split < w - line_width);
 
-	assertm(line_width + 1 == split - text);
+	assert(line_width + 1 == split - text);
 
 	return line_width;
 }

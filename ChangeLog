@@ -1,3 +1,48 @@
+Tue Mar 19 17:28:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/bfu.c:
+	
+	general code tidyup, based on patch by <zas@norz.org>
+
+Tue Mar 19 15:03:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/date.c:
+	
+	FIXME
+
+Mon Mar 18 22:26:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/: Makefile.am, info.c, refresh.c, refresh.h:
+	
+	moved periodical refresh of dialogs from dialogs/info.c to
+	dialogs/refresh.c
+
+Mon Mar 18 22:20:31 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/info.c:
+	
+	move common refresh initialization to refresh_init()
+
+Mon Mar 18 22:12:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/Makefile.am, dialogs/info.c, dialogs/info.h,
+	dialogs/menu.c, dialogs/menu.h, util/error.c, util/error.h:
+	
+	moved info dialogs from dialogs/menu.c to dialogs/info.c
+
+Mon Mar 18 21:03:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/lowlevel/kbd.c:
+	
+	somehow fix proccessing of incomplete escape sequences; patch by
+	Stephane CHAZELAS <Stephane.CHAZELAS@free.fr>
+
+Mon Mar 18 20:52:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/default.c, protocol/http/http.c:
+	
+	Elinks -> ELinks (by Zas ;)
+
 Mon Mar 18 20:51:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/connect.c, ssl/connect.c:

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.10 2003/07/30 00:22:42 jonas Exp $ */
+/* $Id: search.c,v 1.11 2003/07/31 16:56:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -381,7 +381,7 @@ void
 draw_searched(struct terminal *term, struct document_view *scr)
 {
 	struct point *pt = NULL;
-	int color = 0;
+	unsigned char color = 0;
 	int len = 0;
 	register int i;
 

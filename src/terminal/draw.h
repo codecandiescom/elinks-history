@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.14 2003/07/31 15:17:47 jonas Exp $ */
+/* $Id: draw.h,v 1.15 2003/07/31 16:56:16 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -70,7 +70,7 @@ enum frame_cross_direction {
 	FRAME_X_UP
 };
 
-void set_char(struct terminal *, int, int, unsigned char, unsigned int);
+void set_char(struct terminal *, int, int, unsigned char, unsigned char);
 void set_border_char(struct terminal *term, int x, int y, enum border_char border, unsigned char color);
 void set_xchar(struct terminal *, int x, int y, enum frame_cross_direction);
 struct screen_char *get_char(struct terminal *, int, int);
@@ -78,8 +78,8 @@ void set_color(struct terminal *, int, int, unsigned);
 void set_only_char(struct terminal *, int, int, unsigned char);
 void set_line(struct terminal *, int, int, int, struct screen_char *);
 void fill_area(struct terminal *, int, int, int, int, unsigned char, unsigned);
-void draw_frame(struct terminal *, int, int, int, int, unsigned, int);
-void print_text(struct terminal *, int, int, int, unsigned char *, unsigned);
+void draw_frame(struct terminal *, int, int, int, int, unsigned char, int);
+void print_text(struct terminal *, int, int, int, unsigned char *, unsigned char);
 
 #define fill_border_area(t, x, y, xw, yw, d, c) do { \
 		fill_area(t, x, y, xw, yw, d, (c | SCREEN_ATTR_FRAME) << 8); \

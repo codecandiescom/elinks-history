@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.43 2003/07/23 15:07:50 pasky Exp $ */
+/* $Id: auth.c,v 1.44 2003/07/31 16:56:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@ auth_layout(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	int dialog_text_color = get_bfu_color(term, "dialog.text");
+	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
 	unsigned char *label_login = N_("Login");
 	unsigned char *label_password = N_("Password");
 

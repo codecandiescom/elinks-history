@@ -1,4 +1,4 @@
-/* $Id: text.h,v 1.4 2003/06/27 20:42:37 zas Exp $ */
+/* $Id: text.h,v 1.5 2003/07/31 16:56:11 jonas Exp $ */
 
 #ifndef EL__BFU_TEXT_H
 #define EL__BFU_TEXT_H
@@ -9,6 +9,6 @@
 void text_width(struct terminal *term, register unsigned char *text, int *minwidth, int *maxwidth);
 void max_text_width(struct terminal *, unsigned char *, int *);
 void min_text_width(struct terminal *, unsigned char *, int *);
-void dlg_format_text(struct terminal *, struct terminal *, unsigned char *, int, int *, int, int *, int, enum format_align);
+void dlg_format_text(struct terminal *, struct terminal *, unsigned char *, int, int *, int, int *, unsigned char, enum format_align);
 
 #endif

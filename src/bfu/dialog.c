@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.36 2003/07/31 15:04:16 jonas Exp $ */
+/* $Id: dialog.c,v 1.37 2003/07/31 16:56:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ redraw_dialog(struct dialog_data *dlg)
 	int x = dlg->x + DIALOG_LEFT_BORDER;
 	int y = dlg->y + DIALOG_TOP_BORDER;
 	struct terminal *term = dlg->win->term;
-	int dialog_title_color = get_bfu_color(term, "dialog.title");
+	unsigned char dialog_title_color = get_bfu_color(term, "dialog.title");
 
 	draw_frame(term, x, y,
 		   dlg->xw - 2 * DIALOG_LEFT_BORDER,
@@ -358,20 +358,20 @@ void
 draw_dlg(struct dialog_data *dlg)
 {
 	fill_area(dlg->win->term, dlg->x, dlg->y, dlg->xw, dlg->yw, ' ',
-		  get_bfu_color(dlg->win->term, "=dialog"));
+		  COL(get_bfu_color(dlg->win->term, "=dialog")));
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
 		/* Draw shadow */
-		int shadow_color = get_bfu_color(dlg->win->term, "=dialog.shadow");
+		unsigned char shadow_color = get_bfu_color(dlg->win->term, "=dialog.shadow");
 
 		/* (horizontal) */
 		fill_area(dlg->win->term, dlg->x + 2, dlg->y + dlg->yw,
 			  dlg->xw - 2, 1, ' ',
-			  shadow_color);
+			  COL(shadow_color));
 
 		/* (vertical) */
 		fill_area(dlg->win->term, dlg->x + dlg->xw, dlg->y + 1,
 			  2, dlg->yw, ' ',
-			  shadow_color);
+			  COL(shadow_color));
 	}
 }

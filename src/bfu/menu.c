@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.84 2003/07/31 15:04:16 jonas Exp $ */
+/* $Id: menu.c,v 1.85 2003/07/31 16:56:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,14 +244,14 @@ static void
 display_menu(struct terminal *term, struct menu *menu)
 {
 	int p, s;
-	int menu_normal_color = get_bfu_color(term, "menu.normal");
-	int menu_frame_color = get_bfu_color(term, "menu.frame");
-	int menu_selected_color = get_bfu_color(term, "menu.selected");
-	int menu_hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
-	int menu_selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
+	unsigned char menu_normal_color = get_bfu_color(term, "menu.normal");
+	unsigned char menu_frame_color = get_bfu_color(term, "menu.frame");
+	unsigned char menu_selected_color = get_bfu_color(term, "menu.selected");
+	unsigned char menu_hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
+	unsigned char menu_selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
 
 	fill_area(term,	menu->x + 1, menu->y + 1, menu->xw - 2, menu->yw - 2,
-		  ' ', menu_normal_color);
+		  ' ', COL(menu_normal_color));
 
 	draw_frame(term, menu->x, menu->y, menu->xw, menu->yw,
 		   menu_frame_color, 1);
@@ -259,8 +259,8 @@ display_menu(struct terminal *term, struct menu *menu)
 	for (p = menu->view, s = menu->y + 1;
 	     p < menu->ni && p < menu->view + menu->yw - 2;
 	     p++, s++) {
-		int co = menu_normal_color;
-		int hkco = menu_hotkey_color;
+		unsigned char co = menu_normal_color;
+		unsigned char hkco = menu_hotkey_color;
 
 #ifdef DEBUG
 		/* Sanity check. */
@@ -276,7 +276,7 @@ display_menu(struct terminal *term, struct menu *menu)
 
 			set_cursor(term, menu->x + 1, s, 1);
 			set_window_ptr(menu->win, menu->x + menu->xw, s);
-			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, ' ', co);
+			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, ' ', COL(co));
 		}
 
 		if (menu->items[p].rtext == M_BAR &&
@@ -287,7 +287,7 @@ display_menu(struct terminal *term, struct menu *menu)
 					BORDER_SRTEE, menu_frame_color);
 
 			fill_border_area(term, menu->x + 1, s, menu->xw - 2, 1,
-					 BORDER_SHLINE, get_screen_char_attr(menu_frame_color));
+					 BORDER_SHLINE, menu_frame_color);
 
 			set_border_char(term, menu->x + menu->xw - 1, s,
 					BORDER_SLTEE, menu_frame_color);
@@ -630,12 +630,12 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
 	int i;
 	int p = 2;
-	int mainmenu_normal_color = get_bfu_color(term, "mainmenu.normal");
-	int mainmenu_selected_color = get_bfu_color(term, "mainmenu.selected");
-	int mainmenu_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
-	int mainmenu_selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
+	unsigned char mainmenu_normal_color = get_bfu_color(term, "mainmenu.normal");
+	unsigned char mainmenu_selected_color = get_bfu_color(term, "mainmenu.selected");
+	unsigned char mainmenu_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
+	unsigned char mainmenu_selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
 
-	fill_area(term, 0, 0, term->x, 1, ' ', mainmenu_normal_color);
+	fill_area(term, 0, 0, term->x, 1, ' ', COL(mainmenu_normal_color));
 
 	for (i = 0; i < menu->ni; i++) {
 		int j;
@@ -660,8 +660,8 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 			co = mainmenu_selected_color;
 			hkco = mainmenu_selected_hotkey_color;
 
-			fill_area(term, p, 0, 2, 1, ' ', co);
-			fill_area(term, p + tmptextlen + 2, 0, 2, 1, ' ', co);
+			fill_area(term, p, 0, 2, 1, ' ', COL(co));
+			fill_area(term, p + tmptextlen + 2, 0, 2, 1, ' ', COL(co));
 			menu->sp = p;
 			set_cursor(term, p, 0, 1);
 			set_window_ptr(menu->win, p, 1);

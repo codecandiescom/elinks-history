@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.78 2003/07/31 15:04:16 jonas Exp $ */
+/* $Id: listbox.c,v 1.79 2003/07/31 16:56:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,7 +326,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 	struct box_context *data = data_;
 	unsigned char *text = item->text;
 	int len; /* Length of the current text field. */
-	int color;
+	unsigned char color;
 	int depth = item->depth + 1;
 	int d;
 
@@ -365,7 +365,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 		set_border_char(data->term, data->listbox_item_data->x + d * 5 + 1,
 				data->listbox_item_data->y + data->offset,
-				BORDER_SVLINE, get_screen_char_attr(color));
+				BORDER_SVLINE, color);
 	}
 
 	if (depth) {
@@ -399,7 +399,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 			set_border_char(data->term,
 					data->listbox_item_data->x + (depth - 1) * 5 + i,
 					data->listbox_item_data->y + data->offset,
-					str[i], get_screen_char_attr(color));
+					str[i], color);
 		}
 	}
 
@@ -436,7 +436,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 
 	fill_area(term, listbox_item_data->x, listbox_item_data->y,
 		  listbox_item_data->l, listbox_item_data->h, ' ',
-		  get_bfu_color(term, "menu.normal"));
+		  COL(get_bfu_color(term, "menu.normal")));
 
 
 	/* We want to have these visible if possible. */

@@ -1,4 +1,4 @@
-/* $Id: align.h,v 1.21 2003/07/24 12:14:20 miciah Exp $ */
+/* $Id: align.h,v 1.22 2003/07/31 16:56:11 jonas Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
@@ -23,7 +23,7 @@ enum format_align {
 #define COL(x)	((x)<<8)
 
 /* FIXME: A bit ... */
-static inline int
+static inline unsigned char
 get_bfu_color(struct terminal *term, unsigned char *color_class)
 {
 	struct option *opt;
@@ -52,9 +52,9 @@ get_bfu_color(struct terminal *term, unsigned char *color_class)
 
 	/* XXX: Call fg_color() ? --pasky */
 
-	if (nofg) return COL(bg<<3);
+	if (nofg) return (bg<<3);
 	fg = find_nearest_color(get_opt_ptr_tree(opt, "text"), 16);
-	return COL(((fg&0x08)<<3)|(bg<<3)|(fg&0x07));
+	return (((fg&0x08)<<3)|(bg<<3)|(fg&0x07));
 }
 
 #endif

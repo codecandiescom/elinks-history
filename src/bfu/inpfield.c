@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.39 2003/07/31 15:04:16 jonas Exp $ */
+/* $Id: inpfield.c,v 1.40 2003/07/31 16:56:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ input_field_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	int dialog_text_color = get_bfu_color(term, "dialog.text");
+	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, dlg->dlg->udata, &min, &max);
 	buttons_width(term, dlg->items + 1, 2, &min, &max);
@@ -252,7 +252,7 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 		di->vpos = 0;
 
 	fill_area(term, di->x, di->y, di->l, 1, ' ',
-			get_bfu_color(term, "dialog.field"));
+		  COL(get_bfu_color(term, "dialog.field")));
 
 	{
 		int len = strlen(di->cdata + di->vpos);
@@ -264,7 +264,7 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 				   get_bfu_color(term, "dialog.field-text"));
 		} else {
 			fill_area(term, di->x, di->y, l, 1, '*',
-				  get_bfu_color(term, "dialog.field-text"));
+				  COL(get_bfu_color(term, "dialog.field-text")));
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.61 2003/07/30 00:22:41 jonas Exp $ */
+/* $Id: core.c,v 1.62 2003/07/31 16:56:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -345,7 +345,7 @@ dialog_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	int dialog_text_color =  get_bfu_color(term, "dialog.text");
+	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, dlg_msg[0], &min, &max);
 	text_width(term, dlg_msg[1], &min, &max);
@@ -495,7 +495,7 @@ xdialog_fn(struct dialog_data *dlg)
 	int y = -1;
 	int i;
 	int nfields;
-	int dialog_text_color = get_bfu_color(term, "dialog.text");
+	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	for (nfields = 0; dlg->items[nfields].item->type == D_FIELD; nfields++);
 

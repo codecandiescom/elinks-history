@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.35 2003/07/31 15:46:17 jonas Exp $ */
+/* $Id: draw.c,v 1.36 2003/07/31 16:56:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,7 @@
 
 void
 set_char(struct terminal *term, int x, int y,
-	 unsigned char data, unsigned int attr)
+	 unsigned char data, unsigned char attr)
 {
 	struct terminal_screen *screen = term->screen;
 	int position = x + term->x * y;
@@ -24,7 +24,7 @@ set_char(struct terminal *term, int x, int y,
 	if_assert_failed { return; }
 
 	screen->image[position].data = data;
-	screen->image[position].attr = get_screen_char_attr(attr);
+	screen->image[position].attr = attr;
 	screen->dirty = 1;
 }
 
@@ -170,7 +170,7 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw,
 
 void
 draw_frame(struct terminal *t, int x, int y, int xw, int yw,
-	   unsigned c, int w)
+	   unsigned char color, int w)
 {
 	static enum border_char p1[] = {
 		BORDER_SULCORNER,
@@ -195,7 +195,6 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 	int x1 = x + 1;
 	int ywt = yw - 2;
 	int xwt = xw - 2;
-	unsigned char color = get_screen_char_attr(c);
 
 	set_border_char(t, x, y, p[0], color);
 	set_border_char(t, xt, y, p[1], color);
@@ -210,22 +209,20 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 
 void
 print_text(struct terminal *term, int x, int y, int l,
-	   unsigned char *text, unsigned c)
+	   unsigned char *text, unsigned char color)
 {
 	struct terminal_screen *screen = term->screen;
 	int end = (l <= term->x - x) ? l : term->x - x;
 	int position = x + term->x * y;
-	unsigned char c_attr;
 
 	assert(text && l >= 0);
 	if_assert_failed { return; }
 	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
-	c_attr = get_screen_char_attr(c);
 	for (end += position; position < end && *text; text++, position++) {
 		screen->image[position].data = *text;
-		screen->image[position].attr = c_attr;
+		screen->image[position].attr = color;
 	}
 	screen->dirty = 1;
 }

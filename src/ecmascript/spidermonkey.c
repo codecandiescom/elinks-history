@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.83 2004/12/17 00:49:20 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.84 2004/12/17 01:11:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -752,17 +752,19 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	enum prop_type prop_type;
 	union prop_union p;
 	int counter = 0;
+	int index;
 
 	prop_type = JSPT_UNDEF;
 
 	if (argc != 1)
 		goto bye;
 
-	JSVAL_REQUIRE(&argv[0], INT);
+	JSVAL_REQUIRE(&argv[0], NUMBER);
+	index = DOUBLE_TO_JSVAL(v.number);
 
 	foreach (fc, document->forms) {
 		counter++;
-		if (counter == v.number) {
+		if (counter == index) {
 			p.object = get_form_object(ctx, obj, fc);
 			prop_type = JSPT_OBJECT;
 
@@ -796,7 +798,7 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 		goto bye;
 
 	foreach (fc, document->forms) {
-		if (fc->formname && !strcasecmp(name, fc->formname)) {
+		if (fc->formname && !strcasecmp(v.string, fc->formname)) {
 			p.object = get_form_object(ctx, obj, fc);
 			prop_type = JSPT_OBJECT;
 

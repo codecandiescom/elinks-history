@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.20 2004/11/20 00:33:12 jonas Exp $ */
+/* $Id: digest.c,v 1.21 2004/11/20 00:44:43 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -29,14 +29,13 @@
 
 #define MD5_HEX_DIGEST_LENGTH (MD5_DIGEST_LENGTH * 2)
 
+typedef unsigned char md5_hex_digest[MD5_HEX_DIGEST_LENGTH + 1];
+
 /* taken from RFC 2617 */
-static unsigned char *
-convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1])
+static void
+convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1], md5_hex_digest hex)
 {
 	int i;
-	unsigned char *hex = mem_alloc(MD5_HEX_DIGEST_LENGTH + 1);
-
-	if (!hex) return NULL;
 
 	for (i = 0; i < MD5_DIGEST_LENGTH; i++) {
 		int j = i * 2;
@@ -46,11 +45,10 @@ convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1])
 	}
 
 	hex[MD5_HEX_DIGEST_LENGTH] = '\0';
-	return hex;
 }
 
-static unsigned char *
-random_cnonce(void)
+static void
+random_cnonce(md5_hex_digest cnonce)
 {
 	unsigned char md5[MD5_DIGEST_LENGTH + 1];
 	int random;
@@ -60,11 +58,11 @@ random_cnonce(void)
 	random = rand();
 	MD5((const unsigned char *) &random, sizeof(int), md5);
 
-	return convert_hex(md5);
+	convert_hex(md5, cnonce);
 }
 
-static unsigned char *
-digest_calc_ha1(struct auth_entry *entry)
+static void
+digest_calc_ha1(md5_hex_digest ha1, struct auth_entry *entry)
 {
 	MD5_CTX MD5Ctx;
 	unsigned char skey[MD5_DIGEST_LENGTH + 1];
@@ -76,26 +74,27 @@ digest_calc_ha1(struct auth_entry *entry)
 	MD5_Update(&MD5Ctx, ":", 1);
 	MD5_Update(&MD5Ctx, entry->password, strlen(entry->password));
 	MD5_Final(skey, &MD5Ctx);
-	return convert_hex(skey);
+
+	convert_hex(skey, ha1);
 }
 
-static unsigned char *
-digest_calc_response(struct auth_entry *entry, struct uri *uri,
-		     unsigned char *cnonce)
+static void
+digest_calc_response(md5_hex_digest response, struct auth_entry *entry,
+		     struct uri *uri, unsigned char *cnonce)
 {
 	MD5_CTX MD5Ctx;
-	unsigned char *ha1;
+	md5_hex_digest ha1;
 	unsigned char Ha2[MD5_DIGEST_LENGTH + 1];
-	unsigned char *Ha2_hex;
+	md5_hex_digest Ha2_hex;
 
 	MD5_Init(&MD5Ctx);
 	MD5_Update(&MD5Ctx, "GET", 3);
 	MD5_Update(&MD5Ctx, ":/", 2);
 	MD5_Update(&MD5Ctx, uri->data, uri->datalen);
 	MD5_Final(Ha2, &MD5Ctx);
-	Ha2_hex = convert_hex(Ha2);
+	convert_hex(Ha2, Ha2_hex);
 
-	ha1 = digest_calc_ha1(entry);
+	digest_calc_ha1(ha1, entry);
 
 	MD5_Init(&MD5Ctx);
 	MD5_Update(&MD5Ctx, ha1, MD5_HEX_DIGEST_LENGTH);
@@ -111,10 +110,7 @@ digest_calc_response(struct auth_entry *entry, struct uri *uri,
 	MD5_Update(&MD5Ctx, Ha2_hex, 32);
 	MD5_Final(Ha2, &MD5Ctx);
 
-	mem_free_if(Ha2_hex);
-	mem_free_if(ha1);
-
-	return convert_hex(Ha2);
+	convert_hex(Ha2, response);
 }
 
 
@@ -122,14 +118,14 @@ unsigned char *
 get_http_auth_digest_response(struct auth_entry *entry, struct uri *uri)
 {
 	struct string string;
-	unsigned char *cnonce;
-	unsigned char *response;
+	md5_hex_digest cnonce;
+	md5_hex_digest response;
 
 	if (!init_string(&string))
 		return NULL;
 
-	cnonce = random_cnonce();
-	response = digest_calc_response(entry, uri, cnonce);
+	random_cnonce(cnonce);
+	digest_calc_response(response, entry, uri, cnonce);
 
 	add_to_string(&string, "username=\"");
 	add_to_string(&string, entry->user);
@@ -150,9 +146,6 @@ get_http_auth_digest_response(struct auth_entry *entry, struct uri *uri)
 	add_to_string(&string, "response=\"");
 	add_bytes_to_string(&string, response, MD5_HEX_DIGEST_LENGTH);
 	add_to_string(&string, "\"");
-
-	mem_free_if(cnonce);
-	mem_free_if(response);
 
 	if (entry->opaque) {
 		add_to_string(&string, ", opaque=\"");

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.76 2004/08/23 17:15:06 jonas Exp $ */
+/* $Id: connection.h,v 1.77 2004/08/23 17:22:08 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -86,12 +86,12 @@ enum connection_state {
 	S_FTP_NO_FILE		= -10304,
 	S_FTP_FILE_ERROR	= -10305,
 
-	S_NO_JAVASCRIPT		= -10500,
+	S_NNTP_ERROR		= -10400,
+	S_NNTP_NEWS_SERVER	= -10401,
 
-	S_NNTP_ERROR		= -10800,
-	S_NNTP_NEWS_SERVER	= -10801,
+	S_GOPHER_CSO_ERROR	= -10500,
 
-	S_GOPHER_CSO_ERROR	= -10900,
+	S_NO_JAVASCRIPT		= -10600,
 };
 
 struct remaining_info {

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.106 2003/11/17 18:39:15 jonas Exp $ */
+/* $Id: link.c,v 1.107 2003/11/17 21:48:03 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,7 +307,7 @@ get_first_link(struct document_view *doc_view)
 {
 	struct link *l;
 	struct document *document;
-	int width;
+	int height;
 	register int i;
 
 	assert(doc_view && doc_view->document);
@@ -318,9 +318,9 @@ get_first_link(struct document_view *doc_view)
 	if (!document->lines1) return NULL;
 
 	l = document->links + document->nlinks;
-	width = doc_view->vs->y + doc_view->height; /* XXX:zas: height ?? check again. */
+	height = doc_view->vs->y + doc_view->height;
 
-	for (i = doc_view->vs->y; i < width; i++) {
+	for (i = doc_view->vs->y; i < height; i++) {
 		if (i >= 0
 		    && i < document->height
 		    && document->lines1[i]

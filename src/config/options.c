@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.104 2002/10/01 16:18:48 zas Exp $ */
+/* $Id: options.c,v 1.105 2002/10/04 19:11:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,9 +593,13 @@ register_options()
 		"numbering", 0, 0,
 		"Display links numbered.");
 
-	add_opt_bool("document.browse.links",
-		"number_keys_select_link", 0, 0,
-		"Number keys select links rather than specify command prefixes.");
+	add_opt_int("document.browse.links",
+		"number_keys_select_link", 0, 0, 2, 1,
+		"Number keys select links rather than specify command prefixes. This\n"
+		"is a tristate:\n"
+		"0 never\n"
+		"1 if document.browse.links.numbering = 1\n"
+		"2 always\n");
 
 	/* TODO - this is somehow implemented by ff, but disabled
 	 * for now as it doesn't work. */

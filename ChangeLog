@@ -1,3 +1,27 @@
+Sun Mar  6 17:20:05 2005  Laurent Monin <zas@norz.org>:
+
+	* doc/hacking.txt:
+
+	Add a note about _T postfix for defined types.  
+
+Sun Mar  6 12:53:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/leds.c, dialogs/status.c:
+
+	This is just a small change, but I figured that since 
+	document.browse.forms.insert_mode now defaults to 1, that 'I' in the 
+	LEDs should mean "insert mode" and 'i' should mean "insert mode, 
+	modeless".  
+	
+	Patch by Russ Rowan.  
+
+Sun Mar  6 12:49:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, contrib/conv/w3m2links.awk.in,
+	contrib/conv/w3m2links.gawk:
+
+	Make w3m2links use the installed awk. Patch by Russ Rowan.  
+
 Sat Mar  5 22:14:31 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: cookies/cookies.c, cookies/cookies.h, cookies/dialogs.c,

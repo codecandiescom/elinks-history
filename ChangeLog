@@ -1,3 +1,19 @@
+Thu Nov 25 22:19:18 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/action.c:
+
+	In the switch in do_action, put back the default: label removed in
+	1.126.  Even tho there are cases for all values of enum main_action, 
+	its callers might get -1 from kbd_action and pass that value, which
+	is enumerated by enum main_action, to do_action. This fixes the bug
+	that prevent alt-[fvltsh] from opening the menus.  
+
+Thu Nov 25 18:01:39 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fixed segfault on bugzilla site.  
+
 Wed Nov 24 22:47:23 2004  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

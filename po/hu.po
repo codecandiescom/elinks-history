@@ -3064,7 +3064,7 @@ msgstr "Kiválasztott fül színei."
 
 #: src/config/options.inc:1261 src/config/options.inc:1671
 msgid "Tab separator"
-msgstr ""
+msgstr "Fül elválasztó"
 
 #: src/config/options.inc:1263 src/config/options.inc:1673
 msgid "Tab separator colors."
@@ -3104,31 +3104,31 @@ msgstr "Menüsor kiválasztott elemének színei."
 
 #: src/config/options.inc:1342
 msgid "Main menu selected hotkey default text color."
-msgstr ""
+msgstr "Fõmenü kiválasztott gyorsbillentyûjének szövegszíne."
 
 #: src/config/options.inc:1395
 msgid "Menu unselected hotkey colors."
-msgstr ""
+msgstr "Menü gyorsbillentyûinek színei."
 
 #: src/config/options.inc:1399
 msgid "Menu selected hotkey colors."
-msgstr ""
+msgstr "Menü kiválasztott gyorsbillentyûinek színei."
 
 #: src/config/options.inc:1403
 msgid "Menu unselected hotkey default text color."
-msgstr ""
+msgstr "Menü gyorsbillentyûjének szövegszíne."
 
 #: src/config/options.inc:1407
 msgid "Menu unselected hotkey default background color."
-msgstr ""
+msgstr "Menü gyorsbillentyûjének háttérszíne."
 
 #: src/config/options.inc:1411
 msgid "Menu selected hotkey default text color."
-msgstr ""
+msgstr "Menü kiválasztott gyorsbillentyûjének szövegszíne."
 
 #: src/config/options.inc:1415
 msgid "Menu selected hotkey default background color."
-msgstr ""
+msgstr "Menü kiválasztott gyorsbillentyûjének háttérszíne."
 
 #: src/config/options.inc:1437
 msgid ""
@@ -3310,7 +3310,7 @@ msgstr "Címsor megjelenítése a képernyõn."
 
 #: src/config/options.inc:1791
 msgid "Display goto dialog on startup"
-msgstr "AIndítás után dobja fel az URL beviteli ablakot"
+msgstr "Indítás után jelenítse meg az URL beviteli ablakot"
 
 #: src/config/options.inc:1793
 msgid "Pop up goto dialog on startup when there's no homepage set."
@@ -3743,6 +3743,13 @@ msgid ""
 "Expires: %s\n"
 "Secure: %s\n"
 msgstr ""
+"Szeretnél elfogadni cookie-t a %s helyrõl?\n"
+"\n"
+"Név: %s\n"
+"Érték: %s\n"
+"Domain: %s\n"
+"Lejárati idõ: %s\n"
+"Biztonság: %s\n"
 
 #: src/cookies/cookies.c:559
 msgid "at quit time"
@@ -4229,7 +4236,7 @@ msgstr "~Link"
 
 #: src/dialogs/menu.c:492
 msgid "~Tools"
-msgstr ""
+msgstr "~Eszközök"
 
 #: src/dialogs/menu.c:493
 msgid "~Setup"
@@ -4286,7 +4293,7 @@ msgstr "Terminál beállítások"
 
 #: src/dialogs/options.c:169
 msgid "Frame handling:"
-msgstr ""
+msgstr "Keretek kezelése:"
 
 #: src/dialogs/options.c:170
 msgid "No frames"
@@ -4342,11 +4349,11 @@ msgstr "Terminál átméretezése"
 
 #: src/formhist/dialogs.c:68
 msgid "Forms are never saved for this URL."
-msgstr ""
+msgstr "Ehhez az URL-hez nincsenek form-ok elmentve."
 
 #: src/formhist/dialogs.c:70
 msgid "Forms are saved for this URL."
-msgstr ""
+msgstr "Form-ok elmentve ehhez az URL-hez."
 
 #: src/formhist/dialogs.c:145
 msgid "Toggle saving"
@@ -4393,7 +4400,7 @@ msgstr ""
 
 #: src/formhist/formhist.c:489
 msgid "Never for this site"
-msgstr ""
+msgstr "Ehhez az oldalhoz soha"
 
 #. name:
 #: src/formhist/formhist.c:514
@@ -5137,6 +5144,8 @@ msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through options system."
 msgstr ""
+"Ez az URL az Elinks számára ismeretlen protokollra hivatkozik.\n"
+"Külsõ kezelõprogramot a program beállításai között lehet hozzárendelni."
 
 #: src/scripting/lua/core.c:471
 msgid "User dialog"
@@ -5174,17 +5183,17 @@ msgstr ""
 
 #: src/ssl/ssl.c:78
 msgid "Client Certificates"
-msgstr ""
+msgstr "Kliens oldali tanúsítványok"
 
 #: src/ssl/ssl.c:80
 msgid "X509 client certificate options."
-msgstr ""
+msgstr "X509 kliens oldali tanúsítványok"
 
 #: src/ssl/ssl.c:84
 msgid ""
 "Enable or not the sending of X509 client certificates\n"
 "to servers which request them."
-msgstr ""
+msgstr "X509 szabványú kliens oldali tanúsítványok küldése az õket igénylõ szervereknek."
 
 #: src/ssl/ssl.c:87
 msgid "Certificate File"
@@ -5197,6 +5206,9 @@ msgid ""
 "file pointed to by the X509_CLIENT_CERT variable is used\n"
 "instead."
 msgstr ""
+"A tanúsítvány fájl, és a PEM formátumú titkosítatlan pivát kulcs fájl helye.\n"
+"Ha nincs beállítva, az X509_CLIENT_CERT környezeti változó által\n"
+"mutatott fájl kerül felhasználásra."
 
 #: src/ssl/ssl.c:160
 msgid ""

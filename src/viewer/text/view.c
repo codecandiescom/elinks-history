@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.106 2003/06/25 09:06:58 zas Exp $ */
+/* $Id: view.c,v 1.107 2003/06/28 09:52:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1220,7 +1220,7 @@ nolink:
 static void
 page_down(struct session *ses, struct f_data_c *f, int a)
 {
-	int newpos = f->vs->view_pos + (f->f_data->opt.yw - 1);
+	int newpos = f->vs->view_pos + f->f_data->opt.yw;
 	int direction = -1;
 
 	if (newpos < f->f_data->y) {
@@ -1233,14 +1233,9 @@ page_down(struct session *ses, struct f_data_c *f, int a)
 static void
 page_up(struct session *ses, struct f_data_c *f, int a)
 {
-	int newpos = f->vs->view_pos - (f->f_data->opt.yw - 1);
-	int direction = 1;
-
-	if (newpos >= 0) {
-		f->vs->view_pos = newpos;
-		direction = -1;
-	}
-	find_link(f, direction, a);
+	f->vs->view_pos -= f->yw;
+	find_link(f, -1, a);
+	if (f->vs->view_pos < 0) f->vs->view_pos = 0/*, find_link(f, 1, a)*/;
 }
 
 

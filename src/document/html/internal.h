@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.19 2004/06/22 22:30:36 zas Exp $ */
+/* $Id: internal.h,v 1.20 2004/06/22 22:33:00 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -43,6 +43,7 @@ struct html_context {
 	unsigned char *startf;
 	unsigned char *last_form_tag;
 	unsigned char *last_form_attr;
+	unsigned char *last_input_tag;
 };
 
 extern struct html_context html_context;
@@ -55,9 +56,5 @@ void html_focusable(unsigned char *a);
 void html_skip(unsigned char *a);
 unsigned char *get_target(unsigned char *a);
 void import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len);
-
-/* For parser/forms.c: */
-
-extern unsigned char *last_input_tag;
 
 #endif

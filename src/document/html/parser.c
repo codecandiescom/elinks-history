@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.453 2004/06/22 22:30:36 zas Exp $ */
+/* $Id: parser.c,v 1.454 2004/06/22 22:33:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,8 +251,6 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 
 INIT_CSS_STYLESHEET(css_styles, import_css_stylesheet);
 #endif
-
-unsigned char *last_input_tag;
 
 void
 html_span(unsigned char *a)
@@ -1336,7 +1334,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	table_level = 0;
 	html_context.last_form_tag = NULL;
 	html_context.last_form_attr = NULL;
-	last_input_tag = NULL;
+	html_context.last_input_tag = NULL;
 
 #ifdef CONFIG_CSS
 	mirror_css_stylesheet(&css_styles, &default_stylesheet);

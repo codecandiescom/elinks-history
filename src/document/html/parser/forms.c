@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.27 2004/06/22 22:30:36 zas Exp $ */
+/* $Id: forms.c,v 1.28 2004/06/22 22:33:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,12 +128,12 @@ find_form_for_input(unsigned char *i)
 
 	if (!special_f(ff, SP_USED, NULL)) return;
 
-	if (last_input_tag && i <= last_input_tag
+	if (html_context.last_input_tag && i <= html_context.last_input_tag
 	    && i > html_context.last_form_tag) {
 		get_html_form(html_context.last_form_attr, &form);
 		return;
 	}
-	if (last_input_tag && i > last_input_tag)
+	if (html_context.last_input_tag && i > html_context.last_input_tag)
 		s = html_context.last_form_tag;
 	else
 		s = html_context.startf;
@@ -161,7 +161,7 @@ end_parse:
 	if (lf && la) {
 		html_context.last_form_tag = lf;
 		html_context.last_form_attr = la;
-		last_input_tag = i;
+		html_context.last_input_tag = i;
 		get_html_form(la, &form);
 	} else {
 		memset(&form, 0, sizeof(struct form));

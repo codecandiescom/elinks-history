@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.44 2003/11/29 01:46:26 jonas Exp $ */
+/* $Id: widget.h,v 1.45 2003/11/29 02:13:34 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -120,17 +120,18 @@ void dlg_set_history(struct widget_data *);
 #define widget_is_textfield(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
 					  || (widget_data)->widget->type == WIDGET_FIELD_PASS)
 
+#define text_is_scrollable(widget_data) \
+	((widget_data)->widget->info.text.is_scrollable \
+	 && (widget_data)->h < (widget_data)->info.text.lines)
+
 static inline int
 widget_is_focusable(struct widget_data *widget_data)
 {
-	enum widget_type type = widget_data->widget->type;
-
-	if (type == WIDGET_LISTBOX) return 0;
-	if (type != WIDGET_TEXT) return 1;
-
-	/* Only focus if there is some text to scroll */
-	return (widget_data->widget->info.text.is_scrollable
-		&& widget_data->h < widget_data->info.text.lines);
+	switch (widget_data->widget->type) {
+		case WIDGET_LISTBOX: return 0;
+		case WIDGET_TEXT: return text_is_scrollable(widget_data);
+		default: return 1;
+	}
 }
 
 #define widget_has_group(widget_data)	((widget_data)->widget->type == WIDGET_CHECKBOX \

@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.17 2004/08/15 00:27:06 jonas Exp $ */
+/* $Id: win32.c,v 1.18 2004/11/08 15:42:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,7 +202,7 @@ get_input_handle(void)
 	int fd[2];
 	static int ti = -1;
 	static int tp = -1;
-	int pid;
+	pid_t pid;
 
 	if (ti != -1) return ti;
 	if (c_pipe(fd) < 0) return 0;

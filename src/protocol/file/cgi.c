@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.82 2004/11/04 21:10:10 jonas Exp $ */
+/* $Id: cgi.c,v 1.83 2004/11/08 15:42:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -280,7 +280,7 @@ execute_cgi(struct connection *conn)
 	unsigned char *script;
 	int scriptlen;
 	struct stat buf;
-	int res;
+	pid_t pid;
 	enum connection_state state = S_OK;
 	int pipe_read[2], pipe_write[2];
 
@@ -329,12 +329,12 @@ execute_cgi(struct connection *conn)
 		goto end1;
 	}
 
-	res = fork();
-	if (res < 0) {
+	pid = fork();
+	if (pid < 0) {
 		state = -errno;
 		goto end0;
 	}
-	if (!res) { /* CGI script */
+	if (!pid) { /* CGI script */
 		int i;
 
 		if (set_vars(conn, script)) {

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.64 2004/11/05 03:32:19 jonas Exp $ */
+/* $Id: smb.c,v 1.65 2004/11/08 15:42:57 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -551,7 +551,8 @@ smb_protocol_handler(struct connection *conn)
 	int err_pipe[2] = { -1, -1 };
 	unsigned char *share, *dir;
 	unsigned char *p;
-	int cpid, dirlen;
+	pid_t cpid;
+	int dirlen;
 	struct smb_connection_info *si;
 	struct uri *uri;
 

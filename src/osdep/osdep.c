@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.151 2004/10/07 02:54:50 jonas Exp $ */
+/* $Id: osdep.c,v 1.152 2004/11/08 15:42:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -542,14 +542,14 @@ int
 start_thread(void (*fn)(void *, int), void *ptr, int l)
 {
 	int p[2];
-	int f;
+	pid_t pid;
 
 	if (c_pipe(p) < 0) return -1;
 	if (set_nonblocking_fd(p[0]) < 0) return -1;
 	if (set_nonblocking_fd(p[1]) < 0) return -1;
 
-	f = fork();
-	if (!f) {
+	pid = fork();
+	if (!pid) {
 		struct terminal *term;
 
 		/* Close input in this thread; otherwise, if it will live
@@ -572,7 +572,7 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 		 * reasons. Fixed by Sven Neumann <sven@convergence.de>. */
 		_exit(0);
 	}
-	if (f == -1) {
+	if (pid == -1) {
 		close(p[0]);
 		close(p[1]);
 		return -1;

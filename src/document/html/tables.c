@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.86 2003/09/16 18:25:43 jonas Exp $ */
+/* $Id: tables.c,v 1.87 2003/09/16 23:17:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,6 +50,9 @@
 
 #define INIT_X		2
 #define INIT_Y		2
+
+#define realloc_bad_html(bad_html, size) \
+	mem_align_alloc(bad_html, size, (size) + 1, sizeof(struct s_e), 0xFF)
 
 #define CELL(t, x, y) (&(t)->cells[(y) * (t)->rx + (x)])
 
@@ -429,12 +432,8 @@ se:
 see:
 	html = en;
 	if (bad_html && !p && !lbhp) {
-		if (!(*bhp & (ALLOC_GR-1))) {
-			struct s_e *s_e = mem_realloc(*bad_html, (*bhp + ALLOC_GR)
-								 * sizeof(struct s_e));
-
-			if (!s_e) goto qwe;
-			*bad_html = s_e;
+		if (!realloc_bad_html(bad_html, *bhp)) {
+			goto qwe;
 		}
 		lbhp = html;
 		(*bad_html)[(*bhp)++].s = html;

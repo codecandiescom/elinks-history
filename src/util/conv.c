@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.30 2003/05/14 12:43:12 zas Exp $ */
+/* $Id: conv.c,v 1.31 2003/05/14 12:48:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,15 +51,15 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 
 	if (width < 1 || !s) return -1; /* error */
 
-	/* Count the length of the number in chars.
-	 * We stop immediatly if width is attained. */
+	/* Count the length of the number in chars. */
 	while (q > 9) { /* 10 -> nlen = 2, 100 -> nlen = 3, ... */
-		if (nlen == width) { /* max. width attained */
-			ret = width; /* too long to fit */
-			break;
-		}
 		nlen++;
 		q /= 10;
+	}
+
+	if (nlen > width) { /* max. width attained, truncate */
+		ret = nlen;
+		nlen = width;
 	}
 
 	if (slen) {

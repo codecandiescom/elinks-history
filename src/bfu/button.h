@@ -1,4 +1,4 @@
-/* $Id: button.h,v 1.27 2004/11/19 10:04:45 zas Exp $ */
+/* $Id: button.h,v 1.28 2004/11/19 10:30:50 zas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
@@ -7,30 +7,21 @@
 #include "bfu/widget.h"
 
 struct terminal;
+struct dialog;
 
 /* Button flags, go into widget.gid */
 #define B_ENTER		1
 #define B_ESC		2
 
-#define add_dlg_button_do(dlg, key, handler, text_, data_, done_, done_data_)\
-	do {								\
-		struct widget *widget;					\
-									\
-		widget = &(dlg)->widgets[(dlg)->number_of_widgets++];	\
-		widget->type = WIDGET_BUTTON;				\
-		widget->info.button.flags = (key);			\
-		widget->info.button.done = (void (*)(void *)) (done_);	\
-		widget->info.button.done_data = (done_data_);		\
-		widget->fn = (handler);					\
-		widget->text = (text_);					\
-		widget->udata = (data_);				\
-	} while (0)
+#define BUTTON_DONE_FUNC(x) ((void (*)(void *))(x))
+
+void add_dlg_button_do(struct dialog *dlg, int key, void *handler, unsigned char *text, void *data, void (*done)(void *), void *done_data);
 
 #define add_dlg_ok_button(dlg, key, text, done, data)	\
-	add_dlg_button_do(dlg, key, ok_dialog, text, NULL, done, data)
+	add_dlg_button_do(dlg, key, ok_dialog, text, NULL, BUTTON_DONE_FUNC(done), data)
 
 #define add_dlg_button(dlg, key, handler, text, data)	\
-	add_dlg_button_do(dlg, key, handler, text, data, NULL, NULL)
+	add_dlg_button_do(dlg, key, handler, text, data, BUTTON_DONE_FUNC(NULL), NULL)
 
 extern struct widget_ops button_ops;
 void dlg_format_buttons(struct terminal *, struct widget_data *, int, int, int *, int, int *, enum format_align);

@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.28 2005/02/05 03:22:39 jonas Exp $ */
+/* $Id: signals.c,v 1.29 2005/02/05 03:35:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,13 +244,18 @@ got_signal(int sig)
 void
 install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 {
+#ifdef HAVE_SIGACTION
 	struct sigaction sa;
+#else
+	void (*handler)(int) = fn ? got_signal : SIG_IGN;
+#endif
 
 	/* Yes, assertm() in signal handler is totally unsafe and depends just
 	 * on good luck. But hey, assert()ions are never triggered ;-). */
 	assertm(sig >= 0 && sig < NUM_SIGNALS, "bad signal number: %d", sig);
 	if_assert_failed return;
 
+#ifdef HAVE_SIGACTION
 	/* AIX has problem with empty static initializers. */
 	memset(&sa, 0, sizeof(sa));
 
@@ -261,10 +266,16 @@ install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 
 	sigfillset(&sa.sa_mask);
 	if (!fn) sigaction(sig, &sa, NULL);
+#endif
+
 	signal_info[sig].handler = fn;
 	signal_info[sig].data = data;
 	signal_info[sig].critical = critical;
+
+#ifdef HAVE_SIGACTION
 	if (fn) sigaction(sig, &sa, NULL);
+#else
+	signal(sig, handler);
 #endif
 }
 

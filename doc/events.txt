@@ -117,6 +117,21 @@ Description:
  - NULL to use default proxies
 
 -------------------------------------------------------------------------------
+Name:		periodic-saving
+Managed By:	No maintainer but used by lowlevel/timer.*
+Triggered When:
+
+ The interval timer configured through option goes off.
+
+Arguments:
+
+ none
+
+Description:
+
+ Makes it possible to periodically save files in ~/.elinks to disk.
+
+-------------------------------------------------------------------------------
 Name:		pre-format-html
 Managed By:	The scripting subsystem/backends
 Triggered When:
@@ -153,4 +168,4 @@ Description:
  Allows a subsystem to do whatever clean up is required when ELinks quits.
 
 -------------------------------------------------------------------------------
-$Id: events.txt,v 1.11 2004/06/23 20:16:04 pasky Exp $
+$Id: events.txt,v 1.12 2004/07/16 18:33:45 jonas Exp $

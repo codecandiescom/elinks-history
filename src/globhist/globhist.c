@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.55 2003/12/01 13:55:40 pasky Exp $ */
+/* $Id: globhist.c,v 1.56 2003/12/03 12:37:39 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -71,7 +71,6 @@ static struct option_info global_history_options[] = {
 		"global", 0,
 		N_("Global history options.")),
 
-	/* XXX: Disable global history if -anonymous is given? */
 	INIT_OPT_BOOL("document.history.global", N_("Enable"),
 		"enable", 0, 1,
 		N_("Enable global history (\"history of all pages visited\").")),

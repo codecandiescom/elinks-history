@@ -1,3 +1,11 @@
+Sat May 15 17:20:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	is_in_box() doesn't work here. Revert part of rev 1.163 patch to fix
+	the bug concerning not clickable links on first line of document.
+	Need more work.  
+
 Fri May 14 14:59:43 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/dialogs.c:

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.30 2002/10/12 15:49:28 pasky Exp $ */
+/* $Id: os_dep.c,v 1.31 2002/10/18 18:26:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,26 +50,52 @@
 #include <X11/Xutil.h>
 #endif
 
-/* Set a file descriptor to non-blocking mode. It returns a negative value
+/* Set a file descriptor to non-blocking mode. It returns a non-zero value
  * on error. */
 int
 set_nonblocking_fd(int fd)
 {
+#if defined(O_NONBLOCK) || defined(O_NDELAY)
 	int flags = fcntl(fd, F_GETFL, 0);
 
 	if (flags < 0) return -1;
+#if defined(O_NONBLOCK)
 	return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+#else
+	return fcntl(fd, F_SETFL, flags | O_NDELAY);
+#endif
+	
+#elif defined(FIONBIO)
+	int flag = 1;
+
+	return ioctl(fd, FIONBIO, &flag);
+#else
+	return 0;
+#endif
 }
 
-/* Set a file descriptor to blocking mode. It returns a negative value on
+/* Set a file descriptor to blocking mode. It returns a non-zero value on
  * error. */
 int
 set_blocking_fd(int fd)
 {
+#if defined(O_NONBLOCK) || defined(O_NDELAY)
 	int flags = fcntl(fd, F_GETFL, 0);
 
 	if (flags < 0) return -1;
+#if defined(O_NONBLOCK)
 	return fcntl(fd, F_SETFL, flags & ~O_NONBLOCK);
+#else
+	return fcntl(fd, F_SETFL, flags & ~O_NDELAY);
+#endif
+	
+#elif defined(FIONBIO)
+	int flag = 0;
+
+	return ioctl(fd, FIONBIO, &flag);
+#else
+	return 0;
+#endif
 }
 
 int

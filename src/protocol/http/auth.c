@@ -1,15 +1,21 @@
 /* HTTP Authentication support */ 
-/* $Id: auth.c,v 1.1 2002/05/12 16:40:44 fis Exp $ */
+/* $Id: auth.c,v 1.2 2002/05/12 20:15:25 pasky Exp $ */
 
-#include <document/session.h>
-#include <intl/language.h>
-#include <protocol/url.h>
-#include <util/base64.h>
-#include <dialogs/auth.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <links.h>
+#include <string.h>
 
-#include <protocol/http/auth.h>
+#include "links.h"
+
+#include "dialogs/auth.h"
+#include "document/session.h"
+#include "intl/language.h"
+#include "protocol/http/auth.h"
+#include "protocol/url.h"
+#include "util/base64.h"
+
 
 struct list_head http_auth_basic_list = { &http_auth_basic_list, &http_auth_basic_list };
 
@@ -277,4 +283,3 @@ free_auth()
 
         free_list(questions_queue);
 }
-

@@ -1,11 +1,13 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.11 2002/05/12 16:40:43 fis Exp $
+## $Id: Makefile.am,v 1.12 2002/05/12 20:15:25 pasky Exp $
 
 INCLUDES = \
  -I$(srcdir)/..
 
 noinst_LIBRARIES = libdialogs.a
 libdialogs_a_SOURCES = \
+ auth.c \
+ auth.h \
  document.c \
  document.h \
  edit.c \
@@ -19,6 +21,4 @@ libdialogs_a_SOURCES = \
  options.c \
  options.h \
  refresh.c \
- refresh.h \
- auth.c \
- auth.h
+ refresh.h

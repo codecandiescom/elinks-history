@@ -1,12 +1,21 @@
 /* HTTP Auth dialog stuff */
-/* $Id: % */ 
+/* $Id: dialogs.c,v 1.2 2002/05/12 20:15:25 pasky Exp $ */ 
 
-#include <document/session.h>
-#include <intl/language.h>
-#include <protocol/http/auth.h>
-#include <links.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <dialogs/auth.h>
+#include <string.h>
+
+#include "links.h"
+
+#include "bfu/bfu.h"
+#include "dialogs/auth.h"
+#include "document/session.h"
+#include "intl/language.h"
+#include "lowlevel/terminal.h"
+#include "protocol/http/auth.h"
+
 
 void
 auth_layout(struct dialog_data *dlg)
@@ -15,7 +24,8 @@ auth_layout(struct dialog_data *dlg)
         int max = 0, min = 0;
         int w, rw;
         int y = -1;
-        max_text_width(term, TEXT(T_USERID), &max);
+
+	max_text_width(term, TEXT(T_USERID), &max);
         min_text_width(term, TEXT(T_USERID), &min);
         max_text_width(term, TEXT(T_PASSWORD), &max);
         min_text_width(term, TEXT(T_PASSWORD), &min);
@@ -71,6 +81,7 @@ auth_cancel(struct dialog_data *dlg, struct dialog_item_data *di)
         return cancel_dialog(dlg, di);
 }
 
+/* FIXME: This should be exported properly. --pasky */
 extern struct list_head http_auth_basic_list;
 
 void
@@ -80,7 +91,8 @@ do_auth_dialog(struct session *ses)
         struct dialog *d;
         struct terminal *term = ses->term;
         struct http_auth_basic *a = NULL;
-        if (!list_empty(http_auth_basic_list)
+
+	if (!list_empty(http_auth_basic_list)
             && !((struct http_auth_basic *) http_auth_basic_list.next)->valid)
                 a = (struct http_auth_basic *) http_auth_basic_list.next;
         if (!a || a->blocked) return;
@@ -139,4 +151,3 @@ do_auth_dialog(struct session *ses)
         do_dialog(term, d, getml(d, NULL));
         a->blocked = 0;
 }
-

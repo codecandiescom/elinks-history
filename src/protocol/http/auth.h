@@ -1,7 +1,7 @@
-/* $Id: auth.h,v 1.1 2002/05/12 16:40:44 fis Exp $ */
+/* $Id: auth.h,v 1.2 2002/05/12 20:15:25 pasky Exp $ */
 
-#ifndef EL__PROTOCOL_AUTH_H
-#define EL__PROTOCOL_AUTH_H
+#ifndef EL__PROTOCOL_HTTP_AUTH_H
+#define EL__PROTOCOL_HTTP_AUTH_H
 
 struct http_auth_basic {
         struct http_auth_basic *next;

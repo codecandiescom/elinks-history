@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.90 2003/05/19 14:12:30 zas Exp $ */
+/* $Id: main.c,v 1.91 2003/05/23 21:22:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,6 +50,7 @@
 #include "lowlevel/home.h"
 #include "terminal/kbd.h"
 #include "lowlevel/select.h"
+#include "lowlevel/signals.h"
 #include "lowlevel/sysname.h"
 #include "terminal/terminal.h"
 #include "lowlevel/timer.h"
@@ -69,193 +70,8 @@
 #include "version.h"
 #include "viewer/dump/dump.h"
 
+int terminate = 0;
 enum retval retval = RET_OK;
-
-
-/* TODO: Move that stuff to signals.{c,h} ? --Zas */
-void unhandle_basic_signals(struct terminal *);
-
-static void
-sig_terminate(struct terminal *t)
-{
-	unhandle_basic_signals(t);
-	terminate = 1;
-	retval = RET_SIGNAL;
-}
-
-static void
-sig_intr(struct terminal *t)
-{
-	unhandle_basic_signals(t);
-
-	if (!t)
-		terminate = 1;
-	else
-		exit_prog(t, NULL, NULL);
-}
-
-void
-sig_ctrl_c(struct terminal *t)
-{
-	if (!is_blocked()) kbd_ctrl_c();
-}
-
-static void
-sig_ign(void *x)
-{
-}
-
-static void
-sig_tstp(struct terminal *t)
-{
-#ifdef SIGSTOP
-	int pid = getpid();
-
-	block_itrm(0);
-#if defined (SIGCONT) && defined(SIGTTOU)
-	if (!fork()) {
-		sleep(1);
-		kill(pid, SIGCONT);
-		exit(0);
-	}
-#endif
-	raise(SIGSTOP);
-#endif
-}
-
-static void
-sig_cont(struct terminal *t)
-{
-	if (!unblock_itrm(0)) {
-		/* redraw_terminal_cls(t); */
-		resize_terminal();
-	} /* else {
-		register_bottom_half(raise, SIGSTOP);
-	} */
-}
-
-#ifdef BACKTRACE
-static void
-sig_segv(struct terminal *t)
-{
-	/* Get some attention. */
-	fputs("\a", stderr); fflush(stderr); sleep(1); fputs("\a\n", stderr);
-
-	/* Rant. */
-	fputs(	"ELinks crashed. That shouldn't happen. Please report this incident to\n"
-		"developers. Preferrably please include information about what probably\n"
-		"triggered this and the listout below. Note that it does NOT supercede the gdb\n"
-		"output, which is way more useful for developers. If you would like to help to\n"
-		"debug the problem you just uncovered, please keep the core you just got and\n"
-		"send the developers output of 'bt' command entered inside of gdb (which you run\n"
-		"as gdb elinks core). Thanks a lot for your cooperation!\n\n", stderr);
-
-	/* version information */
-	fputs(full_static_version, stderr);
-	fputs("\n\n", stderr);
-
-	/* Backtrace. */
-	dump_backtrace(stderr, 1);
-
-	/* TODO: Perhaps offer launching of gdb? Or trying to continue w/
-	 * program execution? --pasky */
-
-	/* The fastest way OUT! */
-	abort();
-}
-#endif
-
-
-static void
-handle_basic_signals(struct terminal *term)
-{
-	install_signal_handler(SIGHUP, (void (*)(void *))sig_intr, term, 0);
-	install_signal_handler(SIGINT, (void (*)(void *))sig_ctrl_c, term, 0);
-	install_signal_handler(SIGTERM, (void (*)(void *))sig_terminate, term, 0);
-#ifdef SIGTSTP
-	install_signal_handler(SIGTSTP, (void (*)(void *))sig_tstp, term, 0);
-#endif
-#ifdef SIGTTIN
-	install_signal_handler(SIGTTIN, (void (*)(void *))sig_tstp, term, 0);
-#endif
-#ifdef SIGTTOU
-	install_signal_handler(SIGTTOU, (void (*)(void *))sig_ign, term, 0);
-#endif
-#ifdef SIGCONT
-	install_signal_handler(SIGCONT, (void (*)(void *))sig_cont, term, 0);
-#endif
-#ifdef BACKTRACE
-	install_signal_handler(SIGSEGV, (void (*)(void *))sig_segv, term, 1);
-#endif
-}
-
-#if 0
-void handle_slave_signals(struct terminal *term)
-{
-	install_signal_handler(SIGHUP, (void (*)(void *))sig_terminate, term, 0);
-	install_signal_handler(SIGINT, (void (*)(void *))sig_terminate, term, 0);
-	install_signal_handler(SIGTERM, (void (*)(void *))sig_terminate, term, 0);
-#ifdef SIGTSTP
-	install_signal_handler(SIGTSTP, (void (*)(void *))sig_tstp, term, 0);
-#endif
-#ifdef SIGTTIN
-	install_signal_handler(SIGTTIN, (void (*)(void *))sig_tstp, term, 0);
-#endif
-#ifdef SIGTTOU
-	install_signal_handler(SIGTTOU, (void (*)(void *))sig_ign, term, 0);
-#endif
-#ifdef SIGCONT
-	install_signal_handler(SIGCONT, (void (*)(void *))sig_cont, term, 0);
-#endif
-}
-#endif
-
-
-void
-unhandle_terminal_signals(struct terminal *term)
-{
-	install_signal_handler(SIGHUP, NULL, NULL, 0);
-	install_signal_handler(SIGINT, NULL, NULL, 0);
-#ifdef SIGTSTP
-	install_signal_handler(SIGTSTP, NULL, NULL, 0);
-#endif
-#ifdef SIGTTIN
-	install_signal_handler(SIGTTIN, NULL, NULL, 0);
-#endif
-#ifdef SIGTTOU
-	install_signal_handler(SIGTTOU, NULL, NULL, 0);
-#endif
-#ifdef SIGCONT
-	install_signal_handler(SIGCONT, NULL, NULL, 0);
-#endif
-#ifdef BACKTRACE
-	install_signal_handler(SIGSEGV, NULL, NULL, 0);
-#endif
-}
-
-void
-unhandle_basic_signals(struct terminal *term)
-{
-	install_signal_handler(SIGHUP, NULL, NULL, 0);
-	install_signal_handler(SIGINT, NULL, NULL, 0);
-	install_signal_handler(SIGTERM, NULL, NULL, 0);
-#ifdef SIGTSTP
-	install_signal_handler(SIGTSTP, NULL, NULL, 0);
-#endif
-#ifdef SIGTTIN
-	install_signal_handler(SIGTTIN, NULL, NULL, 0);
-#endif
-#ifdef SIGTTOU
-	install_signal_handler(SIGTTOU, NULL, NULL, 0);
-#endif
-#ifdef SIGCONT
-	install_signal_handler(SIGCONT, NULL, NULL, 0);
-#endif
-#ifdef BACKTRACE
-	install_signal_handler(SIGSEGV, NULL, NULL, 0);
-#endif
-}
-
 
 /* TODO: I'd like to have this rather somewhere in lowlevel/. --pasky */
 

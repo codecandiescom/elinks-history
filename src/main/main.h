@@ -1,4 +1,4 @@
-/* $Id: main.h,v 1.8 2003/05/08 23:03:06 zas Exp $ */
+/* $Id: main.h,v 1.9 2003/05/23 21:22:20 zas Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
@@ -14,13 +14,10 @@ enum retval {
 };
 
 extern enum retval retval;
-
+extern int terminate;
 extern unsigned char *path_to_exe;
 
-void unhandle_terminal_signals(struct terminal *term);
-/* int attach_terminal(int, int, int, void *, int); */
 void shrink_memory(int);
 void init(void);
-void sig_ctrl_c(struct terminal *t);
 
 #endif

@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.26 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: select.c,v 1.27 2003/05/23 21:22:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,8 +30,9 @@
 #include "elinks.h"
 
 #include "document/cache.h"
-#include "lowlevel/select.h"
 #include "terminal/terminal.h"
+#include "lowlevel/select.h"
+#include "lowlevel/signals.h"
 #include "lowlevel/ttime.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -105,7 +106,7 @@ struct bottom_half {
 	void *data;
 };
 
-static INIT_LIST_HEAD(bottom_halves);
+INIT_LIST_HEAD(bottom_halves);
 
 int
 register_bottom_half(void (*fn)(void *), void *data)
@@ -274,140 +275,11 @@ set_handlers(int fd, void (*read_func)(void *), void (*write_func)(void *),
 	}
 }
 
-#define NUM_SIGNALS	32
-
-struct signal_handler {
-	void (*fn)(void *);
-	void *data;
-	int critical;
-};
-
-static int signal_mask[NUM_SIGNALS];
-static struct signal_handler signal_handlers[NUM_SIGNALS];
-static int critical_section = 0;
-
-static void check_for_select_race(void);
-
-/* TODO: In order to gain better portabilty, we should use signal() instead.
- * Highest care should be given to careful watching of which signals are
- * blocked and which aren't then, though. --pasky */
-
-static void
-got_signal(int sig)
-{
-	if (sig >= NUM_SIGNALS || sig < 0) {
-		error("ERROR: bad signal number: %d", sig);
-		return;
-	}
-
-	if (!signal_handlers[sig].fn) return;
-
-	if (signal_handlers[sig].critical) {
-		signal_handlers[sig].fn(signal_handlers[sig].data);
-		return;
-	}
-
-	signal_mask[sig] = 1;
-	check_for_select_race();
-}
-
-void
-install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
-{
-	struct sigaction sa;
-
-	if (sig >= NUM_SIGNALS || sig < 0) {
-		internal("bad signal number: %d", sig);
-		return;
-	}
-
-	memset(&sa, 0, sizeof sa);
-	if (!fn)
-		sa.sa_handler = SIG_IGN;
-	else
-		sa.sa_handler = got_signal;
-
-	sigfillset(&sa.sa_mask);
-	/*sa.sa_flags = SA_RESTART;*/
-	if (!fn) sigaction(sig, &sa, NULL);
-	signal_handlers[sig].fn = fn;
-	signal_handlers[sig].data = data;
-	signal_handlers[sig].critical = critical;
-	if (fn) sigaction(sig, &sa, NULL);
-}
-
-static int pending_alarm = 0;
-
-static void
-alarm_handler(void *x)
-{
-	pending_alarm = 0;
-	check_for_select_race();
-}
-
-static void
-check_for_select_race(void)
-{
-	if (critical_section) {
-#ifdef SIGALRM
-		install_signal_handler(SIGALRM, alarm_handler, NULL, 1);
-#endif
-		pending_alarm = 1;
-#ifdef HAVE_ALARM
-		/*alarm(1);*/
-#endif
-	}
-}
-
-static inline void
-uninstall_alarm(void)
-{
-	pending_alarm = 0;
-#ifdef HAVE_ALARM
-	alarm(0);
-#endif
-}
-
-static int
-check_signals(void)
-{
-	int i, r = 0;
-
-	for (i = 0; i < NUM_SIGNALS; i++)
-		if (signal_mask[i]) {
-			signal_mask[i] = 0;
-			if (signal_handlers[i].fn)
-				signal_handlers[i].fn(signal_handlers[i].data);
-			CHK_BH;
-			r = 1;
-		}
-
-	return r;
-}
-
-static void
-sigchld(void *p)
-{
-#ifdef WNOHANG
-	while ((int) waitpid(-1, NULL, WNOHANG) > 0);
-#else
-	wait(NULL);
-#endif
-}
-
-void
-set_sigcld()
-{
-	install_signal_handler(SIGCHLD, sigchld, NULL, 1);
-}
-
-int terminate = 0;
 
 void
 select_loop(void (*init)(void))
 {
-	memset(signal_mask, 0, sizeof signal_mask);
-	memset(signal_handlers, 0, sizeof signal_handlers);
+	clear_signal_mask_and_handlers();
 	FD_ZERO(&w_read);
 	FD_ZERO(&w_write);
 	FD_ZERO(&w_error);

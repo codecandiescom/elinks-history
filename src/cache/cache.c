@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.188 2004/10/14 20:23:47 jonas Exp $ */
+/* $Id: cache.c,v 1.189 2004/10/14 20:28:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -402,18 +402,18 @@ add_fragment(struct cache_entry *cached, int offset,
 	return 1;
 }
 
-void
-defrag_entry(struct cache_entry *cached)
+struct fragment *
+get_cache_fragment(struct cache_entry *cached)
 {
 	struct fragment *first_frag, *adj_frag, *frag, *new_frag;
 	int new_frag_len;
 
 	if (list_empty(cached->frag))
-		return;
+		return NULL;
 
 	first_frag = cached->frag.next;
 	if (first_frag->offset)
-		return;
+		return NULL;
 
 	/* Find the first pair of fragments that overlap. It will be used to
 	 * figure out what sequence of fragments to include in the
@@ -428,12 +428,12 @@ defrag_entry(struct cache_entry *cached)
 		if (overlay == 0) continue;
 
 		INTERNAL("fragments overlay");
-		return;
+		return NULL;
 	}
 
 	/* Only one fragment so no defragmentation is needed */
 	if (adj_frag == first_frag->next)
-		return;
+		return first_frag;
 
 	/* Calculate the length of the defragmented fragment. */
 	for (new_frag_len = 0, frag = first_frag;
@@ -441,10 +441,15 @@ defrag_entry(struct cache_entry *cached)
 	     frag = frag->next)
 		new_frag_len += frag->length;
 
-	/* One byte is reserved for data in struct fragment. */
+	/* XXX: Even tho' the defragmentation fails because of allocation
+	 * failure just fall back to return the first fragment and pretend all
+	 * is well. */
+	/* FIXME: Is this terribly brain-dead? It corresponds to the semantic of
+	 * the code this extended version of the old defrag_entry() is supposed
+	 * to replace. --jonas */
 	new_frag = frag_alloc(new_frag_len);
 	if (!new_frag)
-		return;
+		return first_frag->length ? first_frag : NULL;
 
 	new_frag->length = new_frag_len;
 	new_frag->real_length = new_frag_len;
@@ -464,21 +469,9 @@ defrag_entry(struct cache_entry *cached)
 
 	add_to_list(cached->frag, new_frag);
 
-	dump_frags(cached, "defrag_entry");
-}
+	dump_frags(cached, "get_cache_fragment");
 
-struct fragment *
-get_cache_fragment(struct cache_entry *cached)
-{
-	struct fragment *fragment;
-
-	defrag_entry(cached);
-
-	fragment = cached->frag.next;
-	if (list_empty(cached->frag) || fragment->offset || !fragment->length)
-		return NULL;
-	else
-		return fragment;
+	return new_frag;
 }
 
 static void

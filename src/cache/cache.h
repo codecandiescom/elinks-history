@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.93 2004/10/14 20:00:44 jonas Exp $ */
+/* $Id: cache.h,v 1.94 2004/10/14 20:28:24 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -99,7 +99,6 @@ int add_fragment(struct cache_entry *cached, int offset,
  * validation of the fragments fails. */
 struct fragment *get_cache_fragment(struct cache_entry *cached);
 
-void defrag_entry(struct cache_entry *);
 void truncate_entry(struct cache_entry *, int, int);
 void free_entry_to(struct cache_entry *, int);
 void delete_entry_content(struct cache_entry *);

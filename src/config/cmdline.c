@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.67 2004/04/24 00:20:18 jonas Exp $ */
+/* $Id: cmdline.c,v 1.68 2004/04/24 00:23:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 }
 
 #define skipback_whitespace(start, S) \
-	for ((S)--; (start) < (S) && isspace(*(S)); (S)--) ;
+	while ((start) < (S) && isspace(*(S))) (S)--;
 
 static unsigned char *
 remote_cmd(struct option *o, unsigned char ***argv, int *argc)
@@ -229,7 +229,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 			skipback_whitespace(arg, argend);
 
 			skip_whitespace(where);
-			len = argend - where + 1;
+			len = argend - where;
 
 			if (!strlcasecmp(where, len, "new-window", 10)) {
 				remote_session_flags |= SES_REMOTE_NEW_WINDOW;
@@ -241,11 +241,11 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 				return gettext("Command not supported");
 			}
 
-			remote_url = memacpy(arg, comma - arg + 1);
+			remote_url = memacpy(arg, comma - arg);
 
 		} else {
 			remote_session_flags |= SES_REMOTE_CURRENT_TAB;
-			remote_url = memacpy(arg, argend - arg + 1);
+			remote_url = memacpy(arg, argend - arg);
 		}
 
 	} else if (!strlcasecmp(command, len, "mailto", 6)) {
@@ -253,7 +253,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		return gettext("Command not supported");
 
 	} else if (!strlcasecmp(command, len, "xfeDoCommand", 12)) {
-		len = argend - arg + 1;
+		len = argend - arg;
 
 		if (!strlcasecmp(arg, len, "openBrowser", 11)) {
 			remote_session_flags = SES_REMOTE_NEW_WINDOW;

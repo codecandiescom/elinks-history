@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.232 2004/04/01 02:59:49 jonas Exp $ */
+/* $Id: download.c,v 1.233 2004/04/01 06:06:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -364,7 +364,7 @@ download_data(struct download *download, struct file_download *file_download)
 		if (file_download->dlg_data)
 			redraw_dialog(file_download->dlg_data, 1);
 
-		load_url(struri(file_download->uri), get_cache_uri_struct(ce), &file_download->download,
+		load_uri(file_download->uri, get_cache_uri_struct(ce), &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 			 download->prg ? download->prg->start : 0);
 
@@ -732,7 +732,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->remotetime = 0;
 
 	add_to_list(downloads, file_download);
-	load_url(url, cmdw_hop->ses->referrer, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
+	load_uri(file_download->uri, cmdw_hop->ses->referrer, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 		 (resume ? file_download->last_pos : 0));
 
 	if (is_in_downloads_list(file_download))

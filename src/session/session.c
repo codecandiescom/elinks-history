@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.336 2004/04/01 05:01:48 jonas Exp $ */
+/* $Id: session.c,v 1.337 2004/04/01 06:06:20 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -553,7 +553,7 @@ process_file_requests(struct session *ses)
 			if (doc_view && doc_view->document)
 				referer = doc_view->document->uri;
 
-			load_url(struri(ftl->uri), referer,
+			load_uri(ftl->uri, referer,
 				 &ftl->stat, ftl->pri, CACHE_MODE_NORMAL, -1);
 			more = 1;
 		}
@@ -906,7 +906,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 
 		l->download.data = ses;
 		l->download.end = (void *)doc_end_load;
-		load_url(l->vs.url, ses->referrer, &l->download, PRI_MAIN, cache_mode, -1);
+		load_uri(l->vs.uri, ses->referrer, &l->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
 			struct uri *referer = NULL;
 
@@ -917,7 +917,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 			if (doc_view && doc_view->document)
 				referer = doc_view->document->uri;
 
-			load_url(struri(ftl->uri), referer,
+			load_uri(ftl->uri, referer,
 				 &ftl->stat, ftl->pri, cache_mode, -1);
 		}
 	}

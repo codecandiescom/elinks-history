@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.35 2004/01/20 00:44:13 jonas Exp $ */
+/* $Id: scanner.c,v 1.36 2004/01/20 00:56:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,28 +47,30 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 {
 	unsigned char *string = scanner->position;
 	unsigned char first_char = *string;
+	enum css_token_type type = CSS_TOKEN_GARBAGE;
 
 	token->string = string++;
 
 	if (is_css_char_token(first_char)) {
-		token->type = first_char;
+		type = first_char;
 
 	} else if (is_css_digit(first_char)) {
 		scan_css(string, CSS_CHAR_DIGIT);
 
 		if (*string == '%') {
-			token->type = CSS_TOKEN_PERCENTAGE;
+			type = CSS_TOKEN_PERCENTAGE;
 			string++;
 
 		} else if (*string == '.') {
 			string++;
 
-			token->type = is_css_digit(*string)
-				    ? CSS_TOKEN_NUMBER : CSS_TOKEN_GARBAGE;
-			scan_css(string, CSS_CHAR_DIGIT);
+			if (is_css_digit(*string)) {
+				type = CSS_TOKEN_NUMBER;
+				scan_css(string, CSS_CHAR_DIGIT);
+			}
 
 		} else {
-			token->type = CSS_TOKEN_NUMBER;
+			type = CSS_TOKEN_NUMBER;
 		}
 
 	} else if (first_char == '#') {
@@ -78,8 +80,8 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 
 		/* Check that the hexdigit sequence is either 3 or 6 chars */
 		hexdigits = string - token->string - 1;
-		token->type = (hexdigits == 3 || hexdigits == 6)
-			    ? CSS_TOKEN_HEX_COLOR : CSS_TOKEN_GARBAGE;
+		if (hexdigits == 3 || hexdigits == 6)
+			type = CSS_TOKEN_HEX_COLOR;
 
 	} else if (first_char == '@') {
 
@@ -87,20 +89,14 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		if (is_css_ident_start(*string)) {
 			/* Scan both ident start and ident */
 			scan_css(string, CSS_CHAR_IDENT);
-			token->type = CSS_TOKEN_ATRULE;
-
-		} else {
-			token->type = CSS_TOKEN_GARBAGE;
+			type = CSS_TOKEN_ATRULE;
 		}
 
 	} else if (first_char == '!') {
 		scan_css(string, CSS_CHAR_WHITESPACE);
 		if (!strcasecmp(string, "important")) {
-			token->type = CSS_TOKEN_IMPORTANT;
+			type = CSS_TOKEN_IMPORTANT;
 			string += 9;
-
-		} else {
-			token->type = CSS_TOKEN_GARBAGE;
 		}
 
 	} else if (first_char == '"' || first_char == '\'') {
@@ -109,29 +105,27 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 
 		if (string_end) {
 			string = string_end + 1;
-			token->type = CSS_TOKEN_STRING;
-		} else {
-			token->type = CSS_TOKEN_GARBAGE;
+			type = CSS_TOKEN_STRING;
 		}
 
 	} else if ((first_char == '-' && *string == '-' && string[1] == '>')
 		   || (first_char == '<' && !strcmp(string, "!--"))) {
 		/* SGML left and right comments */
-		token->type = CSS_TOKEN_SGML_COMMENT;
+		type = CSS_TOKEN_SGML_COMMENT;
 		string += 2 + (first_char == '<');
 
 	} else if (is_css_ident(first_char)) {
 		scan_css(string, CSS_CHAR_IDENT);
 
 		if (!is_css_ident_start(first_char)) {
-			token->type = CSS_TOKEN_NAME;
+			type = CSS_TOKEN_NAME;
 
 		} else if (*string == '(') {
-			token->type = CSS_TOKEN_FUNCTION;
+			type = CSS_TOKEN_FUNCTION;
 			string++;
 
 		} else {
-			token->type = CSS_TOKEN_IDENTIFIER;
+			type = CSS_TOKEN_IDENTIFIER;
 		}
 
 	} else {
@@ -140,12 +134,11 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		if (!first_char) {
 			string--;
 			token->string = NULL;
-			token->type = CSS_TOKEN_NONE;
-		} else {
-			token->type = CSS_TOKEN_GARBAGE;
+			type = CSS_TOKEN_NONE;
 		}
 	}
 
+	token->type = type;
 	token->length = string - token->string;
 	scanner->position = string;
 

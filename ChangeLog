@@ -1,3 +1,33 @@
+Wed Mar  9 18:24:05 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Prevent possible double freeing of conn->info.  
+
+Wed Mar  9 17:59:06 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* .cvsignore:
+
+	Revert ignoring missing and install-sh. Their place is config/.  
+
+Wed Mar  9 17:58:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: connection.c, connection.h:
+
+	Revert attempt to fix ftp root directory issue (PWD). Last bits.  
+
+Wed Mar  9 17:56:12 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Revert attempt to fix ftp root directory issue (PWD).  
+
+Wed Mar  9 17:34:27 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* .cvsignore:
+
+	Ignore missing and install-sh.  
+
 Tue Mar  8 15:51:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/protocol/ftp/ftp.c:

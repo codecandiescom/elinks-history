@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.70 2003/12/27 14:33:28 zas Exp $ */
+/* $Id: kbdbind.h,v 1.71 2003/12/27 15:38:22 zas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -93,6 +93,7 @@ enum keyact {
 	ACT_SAVE_AS,
 	ACT_SAVE_URL_AS,
 	ACT_SAVE_FORMATTED,
+	ACT_SHOW_TERM_OPTIONS,
 	ACT_SCRIPTING_FUNCTION,
 	ACT_SCROLL_DOWN,
 	ACT_SCROLL_LEFT,

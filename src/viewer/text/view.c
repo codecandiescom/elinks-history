@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.317 2003/12/27 14:27:54 jonas Exp $ */
+/* $Id: view.c,v 1.318 2003/12/27 15:38:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "dialogs/document.h"
 #include "dialogs/download.h"
 #include "dialogs/menu.h"
+#include "dialogs/options.h"
 #include "dialogs/status.h"
 #include "document/document.h"
 #include "document/html/frames.h"
@@ -1153,6 +1154,9 @@ quit:
 				goto x;
 			case ACT_HEADER_INFO:
 				head_msg(ses);
+				goto x;
+			case ACT_SHOW_TERM_OPTIONS:
+				terminal_options(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_TOGGLE_DISPLAY_IMAGES:
 				toggle_images(ses, ses->doc_view, 0);

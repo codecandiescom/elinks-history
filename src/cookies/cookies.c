@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.7 2002/03/19 18:29:53 pasky Exp $ */
+/* $Id: cookies.c,v 1.8 2002/04/01 20:10:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -516,7 +516,7 @@ void load_cookies() {
 		q = p; p = strchr(p, ' ');
 		if (p == NULL) goto inv;
 		*p++ = '\0';
-		cookie->expires = atoi(q);
+		cookie->expires = atol(q);
 
 		cookie->secure = atoi(p);
 

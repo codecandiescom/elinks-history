@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.12 2003/05/26 08:51:00 zas Exp $ */
+/* $Id: kbd.c,v 1.13 2003/06/01 18:55:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -851,20 +851,29 @@ process_queue(struct itrm *itrm)
 					ev.ev = EV_MOUSE;
 					break;
 			}
+
 		} else {
 			el = 2;
+
 			if (itrm->kqueue[1] >= ' ') {
 				ev.x = itrm->kqueue[1];
 				ev.y = KBD_ALT;
 				goto l2;
 			}
+
 			if (itrm->kqueue[1] == ASCII_ESC) {
-				if (itrm->qlen >= 3 && (itrm->kqueue[2] == '[' || itrm->kqueue[2] == 'O')) el = 1;
+				if (itrm->qlen >= 3 &&
+				    (itrm->kqueue[2] == '[' ||
+				     itrm->kqueue[2] == 'O')) {
+					el = 1;
+				}
 				ev.x = KBD_ESC;
 				goto l2;
 			}
 		}
+
 		goto l1;
+
 	} else if (itrm->kqueue[0] == 0) {
 		if (itrm->qlen < 2) goto ret;
 		ev.x = os2xtd[itrm->kqueue[1]].x;

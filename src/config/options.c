@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.358 2003/10/25 10:17:04 pasky Exp $ */
+/* $Id: options.c,v 1.359 2003/10/25 10:45:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,7 +267,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 				add_at_pos(pos->prev, option);
 				break;
 			}
-			
+
 			assert(pos != (struct option *) cat);
 		}
 
@@ -458,6 +458,19 @@ init_options_tree(void)
 static inline void
 register_autocreated_options(void)
 {
+	static const unsigned char image_gif[]  = "image/gif";
+	static const unsigned char image_jpeg[] = "image/jpeg";
+	static const unsigned char image_png[]  = "image/png";
+	static const unsigned char text_plain[] = "text/plain";
+	static const unsigned char text_html[]  = "text/html";
+
+	static const unsigned char mailto[] = DEFAULT_AC_OPT_MAILTO;
+	static const unsigned char telnet[] = DEFAULT_AC_OPT_TELNET;
+	static const unsigned char tn3270[] = DEFAULT_AC_OPT_TN3270;
+	static const unsigned char gopher[] = DEFAULT_AC_OPT_GOPHER;
+	static const unsigned char news[]   = DEFAULT_AC_OPT_NEWS;
+	static const unsigned char irc[]    = DEFAULT_AC_OPT_IRC;
+
 	/* TODO: Use table-driven initialization. --jonas */
 	get_opt_int("terminal.linux.type") = 2;
 	get_opt_bool("terminal.linux.colors") = 1;
@@ -473,26 +486,26 @@ register_autocreated_options(void)
 	get_opt_bool("terminal.xterm-256color.colors") = 2;
 	get_opt_int("terminal.xterm-256color.underline") = 1;
 
-	strcpy(get_opt_str("mime.extension.gif"), "image/gif");
-	strcpy(get_opt_str("mime.extension.jpg"), "image/jpeg");
-	strcpy(get_opt_str("mime.extension.jpeg"), "image/jpeg");
-	strcpy(get_opt_str("mime.extension.png"), "image/png");
-	strcpy(get_opt_str("mime.extension.txt"), "text/plain");
-	strcpy(get_opt_str("mime.extension.htm"), "text/html");
-	strcpy(get_opt_str("mime.extension.html"), "text/html");
+	strcpy(get_opt_str("mime.extension.gif"), image_gif);
+	strcpy(get_opt_str("mime.extension.jpg"), image_jpeg);
+	strcpy(get_opt_str("mime.extension.jpeg"), image_jpeg);
+	strcpy(get_opt_str("mime.extension.png"), image_png);
+	strcpy(get_opt_str("mime.extension.txt"), text_plain);
+	strcpy(get_opt_str("mime.extension.htm"), text_html);
+	strcpy(get_opt_str("mime.extension.html"), text_html);
 
-	strcpy(get_opt_str("protocol.user.mailto.unix"), "mutt %h -s \"%s\"");
-	strcpy(get_opt_str("protocol.user.mailto.unix-xwin"), "mutt %h -s \"%s\"");
-	strcpy(get_opt_str("protocol.user.telnet.unix"), "telnet %h %p");
-	strcpy(get_opt_str("protocol.user.telnet.unix-xwin"), "telnet %h %p");
-	strcpy(get_opt_str("protocol.user.tn3270.unix"), "tn3270 %h %p");
-	strcpy(get_opt_str("protocol.user.tn3270.unix-xwin"), "tn3270 %h %p");
-	strcpy(get_opt_str("protocol.user.gopher.unix"), "lynx %u");
-	strcpy(get_opt_str("protocol.user.gopher.unix-xwin"), "lynx %u");
-	strcpy(get_opt_str("protocol.user.news.unix"), "lynx %u");
-	strcpy(get_opt_str("protocol.user.news.unix-xwin"), "lynx %u");
-	strcpy(get_opt_str("protocol.user.irc.unix"), "irc %u");
-	strcpy(get_opt_str("protocol.user.irc.unix-xwin"), "irc %u");
+	strcpy(get_opt_str("protocol.user.mailto.unix"), mailto);
+	strcpy(get_opt_str("protocol.user.mailto.unix-xwin"), mailto);
+	strcpy(get_opt_str("protocol.user.telnet.unix"), telnet);
+	strcpy(get_opt_str("protocol.user.telnet.unix-xwin"), telnet);
+	strcpy(get_opt_str("protocol.user.tn3270.unix"), tn3270);
+	strcpy(get_opt_str("protocol.user.tn3270.unix-xwin"), tn3270);
+	strcpy(get_opt_str("protocol.user.gopher.unix"), gopher);
+	strcpy(get_opt_str("protocol.user.gopher.unix-xwin"), gopher);
+	strcpy(get_opt_str("protocol.user.news.unix"), news);
+	strcpy(get_opt_str("protocol.user.news.unix-xwin"), news);
+	strcpy(get_opt_str("protocol.user.irc.unix"), irc);
+	strcpy(get_opt_str("protocol.user.irc.unix-xwin"), irc);
 }
 
 void

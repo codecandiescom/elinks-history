@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.377 2004/01/25 01:33:43 jonas Exp $ */
+/* $Id: parser.c,v 1.378 2004/01/25 05:02:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -725,8 +725,34 @@ add_fragment_identifier(void *part, unsigned char *attr)
 	special_f(part, SP_TAG, attr);
 }
 
+static void
+import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
+{
+#if 0
+	struct cache_entry *ce;
+	struct fragment *fr;
+
+	if (global_doc_opts->css_no_imports) return;
+
+	url = memacpy(url, len);
+	if (!url) return;
+
+	/* Do we have it in the cache (TODO: CSS cache) */
+	ce = find_in_cache(url);
+	mem_free(url);
+
+	if (!ce) {
+		/* Request the imported stylesheet */
+		special_f(f, SP_STYLESHEET, url, len);
+		return;
+	}
+	defrag_entry(ce);
+	if (...) css_parse_stylesheet(css, fr->data);
+#endif
+}
+
 static struct form form = NULL_STRUCT_FORM;
-static INIT_CSS_STYLESHEET(css_styles);
+static INIT_CSS_STYLESHEET(css_styles, import_css_stylesheet);
 
 static unsigned char *last_form_tag;
 static unsigned char *last_form_attr;

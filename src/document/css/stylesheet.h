@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.5 2004/01/25 02:08:40 jonas Exp $ */
+/* $Id: stylesheet.h,v 1.6 2004/01/25 05:02:15 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -25,7 +25,7 @@
  * Question is in what direction to apply. It should be possible for the user
  * to overwrite any document provided stylesheet using "!important" so we need
  * to keep track in some table what properties was already applied so we only
- * overwrite when we have to. */
+ * overwrite when we have to. --jonas */
 
 /* The {struct css_selector} is used for mapping elements (or nodes) in the
  * document structure to properties. */
@@ -43,17 +43,19 @@ struct css_selector {
  * user stylesheet so it can contain stuff from both <style> tags and
  * @import'ed CSS documents. */
 struct css_stylesheet {
-	/* The list of URIs the stylesheet imports. */
-	struct list_head imports; /* -> struct string_list_item */
+	/* The import callback function. */
+	/* TODO: Maybe we need some CSS parser struct for these and the
+	 * possibility to have some import data as well. --jonas */
+	void (*import)(struct css_stylesheet *, unsigned char *url, int urllen);
 
 	/* The list of selectors. */
 	struct list_head selectors; /* -> struct css_selector */
 };
 
-#define INIT_CSS_STYLESHEET(css)		\
-	struct css_stylesheet css = {		\
-		{ D_LIST_HEAD(css.imports) },	\
-		{ D_LIST_HEAD(css.selectors) },	\
+#define INIT_CSS_STYLESHEET(css, import)			\
+	struct css_stylesheet css = {				\
+		import,						\
+		{ D_LIST_HEAD(css.selectors) },			\
 	}
 
 /* Returns a new freshly made selector adding it to the given stylesheet or NULL. */

@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.33 2004/01/25 04:20:25 jonas Exp $ */
+/* $Id: css.c,v 1.34 2004/01/25 05:02:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,8 +21,6 @@
 #include "util/memory.h"
 #include "viewer/text/view.h"
 
-
-INIT_CSS_STYLESHEET(default_stylesheet);
 
 struct option_info css_options_info[] = {
 	INIT_OPT_TREE("document", N_("Cascading Style Sheets"),
@@ -46,25 +44,23 @@ struct option_info css_options_info[] = {
 
 
 static void
-import_css_file(struct css_stylesheet *css, unsigned char *url)
+import_css_file(struct css_stylesheet *css, unsigned char *url, int urllen)
 {
 	unsigned char filename[MAX_STR_LEN];
 	struct string string;
 	int length = 0;
-	int urllen;
 
 	if (!*url) return;
 
 	if (*url != '/' && elinks_home) {
 		length = strlen(elinks_home);
 		if (length > sizeof(filename)) return;
-		safe_strncpy(filename, elinks_home, length);
+		safe_strncpy(filename, elinks_home, length + 1);
 	}
 
-	urllen = strlen(url);
 	if (urllen + length > sizeof(filename)) return;
 
-	safe_strncpy(filename + length, url, urllen);
+	safe_strncpy(filename + length, url, urllen + 1);
 	length += urllen;
 
 	if (read_encoded_file(filename, length, &string) == S_OK) {
@@ -73,36 +69,19 @@ import_css_file(struct css_stylesheet *css, unsigned char *url)
 	}
 }
 
+INIT_CSS_STYLESHEET(default_stylesheet, import_css_file);
+
 static void
 import_default_css(void)
 {
 	unsigned char *url = get_opt_str("document.css.stylesheet");
-	struct string_list_item *import;
 
 	if (!list_empty(default_stylesheet.selectors))
 		done_css_stylesheet(&default_stylesheet);
 
 	if (!*url) return;
 
-	import_css_file(&default_stylesheet, url);
-
-	if (list_empty(default_stylesheet.imports)) return;
-
-	/* Hmm .. ok we start over */
-	while (!list_empty(default_stylesheet.selectors)) {
-		struct css_selector *selector = default_stylesheet.selectors.next;
-
-		del_from_list(selector);
-		free_list(selector->properties);
-		mem_free(selector->element);
-		mem_free(selector);
-	}
-
-	foreach (import, default_stylesheet.imports) {
-		import_css_file(&default_stylesheet, import->string.source);
-	}
-
-	import_css_file(&default_stylesheet, url);
+	import_css_file(&default_stylesheet, url, strlen(url));
 }
 
 static int

@@ -1,3 +1,217 @@
+Mon Oct 20 21:52:21 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Oct 20 19:48:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Simplify call to realloc_spaces() and check if allocation is needed.  
+
+Mon Oct 20 18:22:57 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Updated translation, 94.40% 
+
+Mon Oct 20 17:37:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix off by one error that caused centered string to be a little to
+	the left. Together with the previous patch the right/center
+	alignment regression should have been fixed.  
+
+Mon Oct 20 17:32:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix off by one error introduced between 1.253 and 1.254 by me. Jonas
+	r00lez! 
+
+Mon Oct 20 16:55:50 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Mon Oct 20 16:36:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/leet.po:
+
+	Bad string translation fix.  
+
+Mon Oct 20 16:34:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Mon Oct 20 16:23:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Mon Oct 20 16:22:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/small.txt:
+
+	Various typo fixes and similiar changes. Added note about non-diet
+	gcc and -O's.  
+
+Mon Oct 20 16:10:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Typo fix.  
+
+Mon Oct 20 15:51:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	There's no xterm256, only xterm-256color.  
+
+Mon Oct 20 15:50:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Elaborate on the dangers of config.i18n ;-).  
+
+Mon Oct 20 15:47:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/libintl.h:
+
+	Little tidyup and some typo fixes.  
+
+Mon Oct 20 15:42:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Factor out some art from the translation strings.  
+
+Mon Oct 20 15:39:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/formhist.c:
+
+	Form memory -> Forms memory in dialog title, spotted by Jonas.  
+
+Mon Oct 20 15:38:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/conf.c, config/kbdbind.c, osdep/os_dep.h:
+
+	Removed NEWLINE. It's getting to be too much hassle and the libc
+	should emulate that properly for us anyway, if the system is
+	non-standard.  
+
+Mon Oct 20 15:38:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/leet.po:
+
+	l337 VV45 0p7.  
+
+Mon Oct 20 15:24:57 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	100% pure Italian translation.  
+
+Mon Oct 20 15:22:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/: conf.c, options.c, options.h:
+
+	An option to control configuration file localization was added, off
+	by default.  
+
+Mon Oct 20 15:15:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/common.h:
+
+	Remove useless #include.  
+
+Mon Oct 20 14:54:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: common.c, common.h, default.c, mailcap.c,
+	mimetypes.c:
+
+	Store mime backends in a table instead of a list. My intensions
+	never got realized. Hopefully fixes local file crash.  
+
+Mon Oct 20 13:58:13 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/small.txt:
+
+	Remove -Os gcc flag, and add -Os diet flag instead. Updated results,
+	using gcc-2.95.3.  
+
+Mon Oct 20 11:46:14 2003  Laurent Monin <zas@norz.org>:
+
+	* po/be.po, po/bg.po, po/ca.po, po/cs.po, po/da.po, po/de.po,
+	po/el.po, po/es.po, po/et.po, po/fi.po, po/fr.po, po/gl.po,
+	po/hr.po, po/hu.po, po/id.po, po/is.po, po/it.po, po/leet.po,
+	po/lt.po, po/nl.po, po/no.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po,
+	src/config/conf.c:
+
+	elinks.conf is now localized.  
+
+Mon Oct 20 09:16:15 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/small.txt:
+
+	Details about --enable-small effects.  
+
+Mon Oct 20 08:59:05 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/small.txt:
+
+	Note about executable compression (example using UPX): 200kb static
+	elinks.  
+
+Mon Oct 20 08:49:27 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/small.txt:
+
+	Some cflags were added, and a note about smaller results with
+	gcc-3.2.x than with gcc-2.95.x.  
+
+Mon Oct 20 08:42:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: fastfind.c, fastfind.h:
+
+	Disable fastfind when compiled with --enable-small, and fix a
+	compilation issue when fastfind is disabled.  
+
+Mon Oct 20 08:37:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Compilation fix when globhist is disabled.  
+
+Mon Oct 20 08:12:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Minor cleanup.  
+
+Sun Oct 19 22:29:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: README, bookmarks.txt, color-model.txt, small.txt:
+
+	Plain text documentation files got aspelled.  
+
+Sun Oct 19 22:28:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: config/files.xml, config/mime.xml, config/syntax.xml,
+	intro/installation.xml:
+
+	DocBook files got aspelled.  
+
 Sun Oct 19 20:42:34 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/small.txt:

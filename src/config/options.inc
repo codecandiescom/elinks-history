@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.161 2004/12/18 20:45:43 jonas Exp $ */
+/* $Id: options.inc,v 1.162 2004/12/18 21:43:42 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -331,7 +331,7 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_BOOL("document.browse.links", N_("Warn about maliciously crafted URIs"),
 		"warn_malicious", 0, 1,
-		N_("When folowing a link the user ID part of the URI is\n"
+		N_("When following a link the user ID part of the URI is\n"
 		"checked and if a maliciously crafted URI is detected a\n"
 		"warning dialog will ask before following the link.")),
 

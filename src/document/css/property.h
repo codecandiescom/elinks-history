@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.5 2004/01/18 02:55:59 jonas Exp $ */
+/* $Id: property.h,v 1.6 2004/01/18 03:01:06 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -57,7 +57,6 @@ struct css_property {
  * have and what internal type they have. */
 struct css_property_info {
 	unsigned char *name;
-	int namelen;
 	enum css_decl_property property;
 	enum css_decl_valtype value_type;
 };

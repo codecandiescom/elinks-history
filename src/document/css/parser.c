@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.13 2004/01/18 02:55:59 jonas Exp $ */
+/* $Id: parser.c,v 1.14 2004/01/18 03:01:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,10 +43,10 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 			continue;
 		}
 
-		for (i = 0; css_property_info[i].namelen; i++) {
+		for (i = 0; css_property_info[i].name; i++) {
 			struct css_property_info *info = &css_property_info[i];
 
-			if (!strlcasecmp(string, pos, info->name, info->namelen)) {
+			if (!strlcasecmp(string, pos, info->name, -1)) {
 				property_info = info;
 				break;
 			}

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.144 2004/09/14 20:23:25 pasky Exp $ */
+/* $Id: uri.h,v 1.145 2004/09/28 12:17:35 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -163,7 +163,7 @@ enum uri_component {
 	URI_DNS_HOST		= URI_HOST | URI_IDN,
 
 	/* Used for adding the unproxied URI and encode it using IDN to string */
-	URI_PROXY		= URI_BASE | URI_IDN,
+	URI_PROXY		= ~(URI_RARE | URI_FRAGMENT) | URI_IDN,
 
 	/* Used for comparing keepalive connection URIs */
 	/* (We don't need to bother by explicit IP family, we don't care

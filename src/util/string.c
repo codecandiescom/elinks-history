@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.35 2003/05/09 17:09:38 zas Exp $ */
+/* $Id: string.c,v 1.36 2003/05/10 00:27:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,9 +359,11 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
  * A NUL char is always added at end of string.
  * s should point to a sufficient memory space (size >= width + 1).
  *
+ * It returns 0 if OK, 1 means truncated, others values errors.
+ *
  */
 /* TODO: align to right, left, center... --Zas */
-void inline
+int inline
 elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		unsigned long number, unsigned int width,
 		unsigned char fillchar)
@@ -369,11 +371,15 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 	unsigned int start = 0;
 	unsigned int pos = 1;
 	unsigned long q = number;
+	int ret = 0;
 
-	if (width < 1 || !s) return;
+	if (width < 1 || !s) return 2;
 
 	while (q > 9) {
-		if (pos == width) break;
+		if (pos == width) {
+			ret = 1;
+			break;
+		}
 		++pos;
 		q /= 10;
 	}
@@ -402,9 +408,11 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		s[--pos] = '0' + (number % 10);
 		number /= 10;
 	}
+
+	return ret;
 }
 
-void inline
+int inline
 elinks_longcat(unsigned char *s, unsigned int *slen,
 	       long number, unsigned int width,
 	       unsigned char fillchar)
@@ -418,7 +426,7 @@ elinks_longcat(unsigned char *s, unsigned int *slen,
 		width--;
 		p++;
 	}
-	elinks_ulongcat(p, slen, number, width, fillchar);
+	return elinks_ulongcat(p, slen, number, width, fillchar);
 }
 
 

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.14 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: conv.c,v 1.15 2003/05/10 00:27:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,15 +53,33 @@ snzprint(unsigned char *str, int len, int num)
 	return snprint(str, len, num);
 }
 
-
-void
-add_num_to_str(unsigned char **str, int *len, int num)
+/* TODO: Move it to string.c. --Zas */
+int
+add_num_to_str(unsigned char **str, int *len, long num)
 {
-	unsigned char buf[64];
+	int ret;
+	unsigned char t[64];
+	int tlen = 0;
 
-	snzprint(buf, sizeof(buf), num);
-	add_to_str(str, len, buf);
+	ret = longcat(&t, &tlen, num, sizeof(t) - 1, 0);
+	if (ret < 2 && tlen) {
+		if ((*len & ~(ALLOC_GR - 1))
+		    != ((*len + tlen) & ~(ALLOC_GR - 1))) {
+		   	unsigned char *p = mem_realloc(*str,
+					               (*len + tlen + ALLOC_GR)
+				 		       & ~(ALLOC_GR - 1));
+
+	   		if (!p) return 2;
+	   		*str = p;
+		}
+
+		memcpy(*str + *len, t, tlen + 1);
+		*len += tlen;
+	}
+
+	return ret;
 }
+
 
 void
 add_knum_to_str(unsigned char **str, int *len, int num)

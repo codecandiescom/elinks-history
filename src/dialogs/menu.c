@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.307 2004/04/26 09:05:46 zas Exp $ */
+/* $Id: menu.c,v 1.308 2004/04/26 11:38:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,10 +462,18 @@ query_file(struct session *ses, struct uri *uri, void *data,
 {
 	struct string def;
 
-	assert(ses && ses->download_uri);
+	assert(ses && uri);
 	if_assert_failed return;
 
-	if (ses->download_uri->protocol == PROTOCOL_UNKNOWN) {
+	/* FIXME: This ``sanity'' checking is mostly for the download code
+	 * using this function. They pass ses->download_uri and we have to make
+	 * sure that the connection code can download the URI. The reason we do
+	 * it before is that then users won't waste time typing a filename and
+	 * then discover that the URI can not be downloaded. However it might
+	 * be better to introduce a set_session_download_uri() which will do
+	 * the checking? --jonas */
+
+	if (uri->protocol == PROTOCOL_UNKNOWN) {
 		print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);
 		return;
 	}

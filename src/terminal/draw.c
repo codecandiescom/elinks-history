@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.6 2003/05/06 20:25:25 pasky Exp $ */
+/* $Id: draw.c,v 1.7 2003/06/23 21:47:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,9 +15,10 @@
 void
 set_char(struct terminal *t, int x, int y, unsigned c)
 {
-	t->dirty = 1;
-	if (x >= 0 && x < t->x && y >= 0 && y < t->y)
+	if (x >= 0 && x < t->x && y >= 0 && y < t->y) {
 		t->screen[x + t->x * y] = c;
+		t->dirty = 1;
+	}
 }
 
 unsigned
@@ -34,11 +35,11 @@ get_char(struct terminal *t, int x, int y)
 void
 set_color(struct terminal *t, int x, int y, unsigned c)
 {
-	t->dirty = 1;
 	if (x >= 0 && x < t->x && y >= 0 && y < t->y) {
 		int p = x + t->x * y;
 
 		t->screen[p] = (t->screen[p] & 0x80ff) | (c & ~0x80ff);
+		t->dirty = 1;
 	}
 }
 
@@ -50,17 +51,18 @@ set_only_char(struct terminal *t, int x, int y, unsigned c)
 		int p = x + t->x * y;
 
 		t->screen[p] = (t->screen[p] & ~0x80ff) | (c & 0x80ff);
+		t->dirty = 1;
 	}
 }
 
 void
 set_line(struct terminal *t, int x, int y, int l, chr *line)
 {
-	int i = (x >= 0) ? 0 : -x;
+	register int i = (x >= 0) ? 0 : -x;
 	int end = (x + l <= t->x) ? l : t->x - x;
-	int offset = x + t->x * y;
+	register int offset = x + t->x * y;
 
-	t->dirty = 1;
+	if (i < end) t->dirty = 1;
 
 	for (; i < end; i++)
 		t->screen[i + offset] = line[i];
@@ -69,14 +71,14 @@ set_line(struct terminal *t, int x, int y, int l, chr *line)
 void
 set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 {
-	int i = (x >= 0) ? 0 : -x;
+	register int i = (x >= 0) ? 0 : -x;
 	int end = (x + l <= t->x) ? l : t->x - x;
 	int offset = x + t->x * y;
 
-	t->dirty = 1;
+	if (i < end) t->dirty = 1;
 
 	for (; i < end; i++) {
-		int p = i + offset;
+		register int p = i + offset;
 
 		t->screen[p] = (t->screen[p] & 0x80ff) | (c & ~0x80ff);
 	}
@@ -85,17 +87,23 @@ set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 void
 fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 {
-	int j = (y >= 0) ? 0 : -y;
+	int starty = (y >= 0) ? 0 : -y;
+	int startx = (x >= 0) ? 0 : -x;
+	int endy = (yw < t->y - y) ? yw : t->y - y;
+	int endx = (xw < t->x - x) ? xw : t->x - x;
+	int offset_base =  x + t->x * y;
+	register int j;
 
 	t->dirty = 1;
-	for (; j < yw && y + j < t->y; j++) {
-		int offset = x + t->x * (y + j);
-		int i = (x >= 0) ? 0 : -x;
+
+	for (j = starty; j < endy; j++) {
+		register int offset = offset_base + t->x * j;
+		register int i;
 
 		/* No, we can't use memset() here :(. It's int, not char. */
 		/* TODO: Make screen two arrays actually. Enables various
 		 * optimalizations, consumes nearly same memory. --pasky */
-		for (; i < xw && x + i < t->x; i++)
+		for (i = startx; i < endx; i++)
 			t->screen[i + offset] = c;
 	}
 }
@@ -120,7 +128,7 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 		FRAMED_VLINE,
 		FRAMED_HLINE,
 	};
-	enum frame_char *p = w > 1 ? p2 : p1;
+	enum frame_char *p = (w > 1) ? p2 : p1;
 	int xt = x + xw - 1;
 	int yt = y + yw - 1;
 	int y1 = y + 1;
@@ -145,7 +153,8 @@ void
 print_text(struct terminal *t, int x, int y, int l,
 		unsigned char *text, unsigned c)
 {
-	for (; l-- && *text; text++, x++) set_char(t, x, y, *text + c);
+	for (; l-- && *text; text++, x++)
+		set_char(t, x, y, *text + c);
 }
 
 
@@ -155,6 +164,7 @@ void
 set_cursor(struct terminal *term, int x, int y, int altx, int alty)
 {
 	term->dirty = 1;
+
 	if (get_opt_bool_tree(term->spec, "block_cursor")) {
 		x = altx;
 		y = alty;

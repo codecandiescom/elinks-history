@@ -1,3 +1,11 @@
+Fri Aug  9 12:55:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, bfu/leds.c, config/options.c, lowlevel/Makefile.am,
+	lowlevel/terminal.c, lowlevel/terminal.h:
+
+	Simple keyboard inactivity timer support (yes, someone can make use
+	of this).  
+
 Thu Aug  8 20:46:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/: kbdbind.c, kbdbind.h:

@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.24 2004/07/15 16:19:33 jonas Exp $ */
+/* $Id: blacklist.c,v 1.25 2004/07/15 16:20:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,15 +44,9 @@ get_blacklist_entry(struct uri *uri)
 void
 add_blacklist_entry(struct uri *uri, enum blacklist_flags flags)
 {
-	struct blacklist_entry *entry;
+	struct blacklist_entry *entry = get_blacklist_entry(uri);
 
-	assert(uri && uri->hostlen > 0);
-	if_assert_failed return;
-
-	foreach (entry, blacklist) {
-		if (strncasecmp(entry->host, uri->host, uri->hostlen))
-			continue;
-
+	if (entry) {
 		entry->flags |= flags;
 		return;
 	}

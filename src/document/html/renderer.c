@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.331 2003/10/29 21:40:33 jonas Exp $ */
+/* $Id: renderer.c,v 1.332 2003/10/29 21:51:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1363,7 +1363,9 @@ end:
 }
 
 static void
-init_html_parser(unsigned char *url, struct document_options *options)
+init_html_parser(unsigned char *url, struct document_options *options,
+		 unsigned char *start, unsigned char *end,
+		 struct string *head, struct string *title)
 {
 	struct html_element *e;
 
@@ -1371,6 +1373,10 @@ init_html_parser(unsigned char *url, struct document_options *options)
 	if_assert_failed return;
 	assertm(list_empty(html_stack), "something on html stack");
 	if_assert_failed init_list(html_stack);
+
+	startf = start;
+	eofff = end;
+	scan_http_equiv(start, end, head, title);
 
 	e = mem_calloc(1, sizeof(struct html_element));
 	if (!e) return;
@@ -1509,13 +1515,11 @@ format_html(struct cache_entry *ce, struct document *document)
 		end = fr->data + fr->length;
 	}
 
-	startf = start;
-	eofff = end;
-
 	if (ce->head) add_to_string(&head, ce->head);
 
+	init_html_parser(url, &document->options, start, end, &head, &title);
+
 	i = d_opt->plain;
-	scan_http_equiv(start, end, &head, &title);
 	convert_table = get_convert_table(head.source, document->options.cp,
 					  document->options.assume_cp,
 					  &document->cp,
@@ -1525,8 +1529,6 @@ format_html(struct cache_entry *ce, struct document *document)
 	document->title = convert_string(convert_table, title.source, title.length, CSM_DEFAULT);
 	d_opt->plain = i;
 	done_string(&title);
-
-	init_html_parser(url, &document->options);
 
 	rp = format_html_part(start, end, par_format.align,
 			      par_format.leftmargin, document->options.xw, document,

@@ -1,3 +1,10 @@
+Mon Sep 16 12:57:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/README, contrib/hpux-pipe.diff, src/lowlevel/kbd.c:
+
+	Fix for HPUX pipe handling - patch by Jonas Fonseca, based on an old
+	patch by Stephane Chazelas <Stephane_Chazelas@Yahoo.fr>.  
+
 Sun Sep 15 21:03:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/ftp.c:

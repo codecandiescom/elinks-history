@@ -756,19 +756,34 @@ int g_ctrl_num;
 void html_form_control(struct part *part, struct form_control *fc)
 {
 	if (!part->data) {
-		/*destroy_fc(fc);
-		mem_free(fc);*/
+#if 0
+		destroy_fc(fc);
+		mem_free(fc);
+#endif
 		add_to_list(part->uf, fc);
 		return;
 	}
+	
 	fc->g_ctrl_num = g_ctrl_num++;
+	
 	if (1 /*fc->type == FC_TEXT || fc->type == FC_PASSWORD || fc->type == FC_TEXTAREA*/) {
 		unsigned char *dv = convert_string(convert_table, fc->default_value, strlen(fc->default_value));
+		int i;
+
 		if (dv) {
 			mem_free(fc->default_value);
 			fc->default_value = dv;
 		}
+		
+		for (i = 0; i < fc->nvalues; i++) {
+			dv = convert_string(convert_table, fc->values[i], strlen(fc->values[i]));
+			if (dv) {
+				mem_free(fc->values[i]);
+				fc->values[i] = dv;
+			}
+		}
 	}
+	
 	add_to_list(part->data->forms, fc);
 }
 

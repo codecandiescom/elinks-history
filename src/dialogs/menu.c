@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.335 2004/06/20 18:00:22 jonas Exp $ */
+/* $Id: menu.c,v 1.336 2004/06/20 21:02:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -813,5 +813,5 @@ add_uri_command_to_menu(struct menu_item **mi)
 	if (commands == 0) return;
 
 	add_to_menu(mi, N_("Pass URI to e~xternal command"), NULL,
-		    ACT_MAIN_PASS_URI, NULL, NULL, flags);
+		    ACT_MAIN_LINK_EXTERNAL_COMMAND, NULL, NULL, flags);
 }

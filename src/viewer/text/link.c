@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.238 2004/06/20 13:57:32 jonas Exp $ */
+/* $Id: link.c,v 1.239 2004/06/20 21:02:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -835,12 +835,12 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	if (link->where && !link_is_form(link)) {
 		if (link->type == LINK_MAP) {
-			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_MAIN_ENTER,
+			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_MAIN_LINK_FOLLOW,
 				    NULL, NULL, SUBMENU);
 		} else {
-			add_menu_action(&mi, N_("~Follow link"), ACT_MAIN_ENTER);
+			add_menu_action(&mi, N_("~Follow link"), ACT_MAIN_LINK_FOLLOW);
 
-			add_menu_action(&mi, N_("Follow link and r~eload"), ACT_MAIN_ENTER_RELOAD);
+			add_menu_action(&mi, N_("Follow link and r~eload"), ACT_MAIN_LINK_FOLLOW_RELOAD);
 
 			add_menu_separator(&mi);
 
@@ -853,7 +853,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 			if (!get_cmd_opt_int("anonymous")) {
 				add_menu_separator(&mi);
-				add_menu_action(&mi, N_("~Download link"), ACT_MAIN_DOWNLOAD);
+				add_menu_action(&mi, N_("~Download link"), ACT_MAIN_LINK_DOWNLOAD);
 
 #ifdef CONFIG_BOOKMARKS
 				add_menu_action(&mi, N_("~Add link to bookmarks"),
@@ -891,7 +891,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			}
 
 			if (!get_cmd_opt_int("anonymous"))
-				add_menu_action(&mi, N_("Submit form and ~download"), ACT_MAIN_DOWNLOAD);
+				add_menu_action(&mi, N_("Submit form and ~download"), ACT_MAIN_LINK_DOWNLOAD);
 
 			add_menu_action(&mi, N_("~Reset form"), ACT_MAIN_RESET_FORM);
 		}
@@ -900,7 +900,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (link->where_img) {
 		add_menu_action(&mi, N_("V~iew image"), ACT_MAIN_VIEW_IMAGE);
 		if (!get_cmd_opt_int("anonymous"))
-			add_menu_action(&mi, N_("Download ima~ge"), ACT_MAIN_DOWNLOAD_IMAGE);
+			add_menu_action(&mi, N_("Download ima~ge"), ACT_MAIN_LINK_DOWNLOAD_IMAGE);
 	}
 
 end:

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.77 2004/06/20 18:00:22 jonas Exp $ */
+/* $Id: action.c,v 1.78 2004/06/20 21:02:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,12 +186,12 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			document_info_dialog(ses);
 			break;
 
-		case ACT_MAIN_DOWNLOAD:
+		case ACT_MAIN_LINK_DOWNLOAD:
 			if (!get_cmd_opt_int("anonymous"))
 				do_frame_action(ses, download_link, action);
 			break;
 
-		case ACT_MAIN_DOWNLOAD_IMAGE:
+		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
 			if (!get_cmd_opt_int("anonymous"))
 				do_frame_action(ses, download_link, action);
 			break;
@@ -200,11 +200,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			download_manager(ses);
 			break;
 
-		case ACT_MAIN_ENTER:
+		case ACT_MAIN_LINK_FOLLOW:
 			do_frame_action(ses, (frame_action) enter, 0);
 			break;
 
-		case ACT_MAIN_ENTER_RELOAD:
+		case ACT_MAIN_LINK_FOLLOW_RELOAD:
 			do_frame_action(ses, (frame_action) enter, 1);
 			break;
 
@@ -325,7 +325,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			options_manager(ses);
 			break;
 
-		case ACT_MAIN_PASS_URI:
+		case ACT_MAIN_LINK_EXTERNAL_COMMAND:
 			do_frame_action(ses, pass_uri_to_command, 0);
 			break;
 
@@ -362,7 +362,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			resource_info(term);
 			break;
 
-		case ACT_MAIN_RESUME_DOWNLOAD:
+		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
 			if (!get_cmd_opt_int("anonymous"))
 				do_frame_action(ses, download_link, action);
 			break;

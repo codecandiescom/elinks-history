@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.505 2004/06/20 16:12:48 jonas Exp $ */
+/* $Id: view.c,v 1.506 2004/06/20 21:02:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -869,13 +869,13 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			break;
 		}
 
-		case ACT_MAIN_ENTER:
+		case ACT_MAIN_LINK_FOLLOW:
 			if (try_jump_to_link_number(ses, doc_view))
 				status = FRAME_EVENT_OK;
 			else
 				status = enter(ses, doc_view, 0);
 			break;
-		case ACT_MAIN_ENTER_RELOAD:
+		case ACT_MAIN_LINK_FOLLOW_RELOAD:
 			if (try_jump_to_link_number(ses, doc_view))
 				status = FRAME_EVENT_OK;
 			else
@@ -900,11 +900,11 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 #endif
 			status = FRAME_EVENT_OK;
 			break;
-		case ACT_MAIN_DOWNLOAD:
-		case ACT_MAIN_RESUME_DOWNLOAD:
-		case ACT_MAIN_VIEW_IMAGE:
-		case ACT_MAIN_DOWNLOAD_IMAGE:
+		case ACT_MAIN_LINK_DOWNLOAD:
+		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
+		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
 		case ACT_MAIN_LINK_MENU:
+		case ACT_MAIN_VIEW_IMAGE:
 		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
@@ -1270,13 +1270,13 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 	}
 
 	switch (action) {
-		case ACT_MAIN_RESUME_DOWNLOAD:
+		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
 			download = resume_download;
-		case ACT_MAIN_DOWNLOAD:
+		case ACT_MAIN_LINK_DOWNLOAD:
 			ses->download_uri = get_link_uri(ses, doc_view, link);
 			break;
 
-		case ACT_MAIN_DOWNLOAD_IMAGE:
+		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
 			if (!link->where_img) break;
 			ses->download_uri = get_uri(link->where_img, 0);
 			break;

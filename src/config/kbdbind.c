@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.223 2004/06/20 18:00:22 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.224 2004/06/20 21:02:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -447,12 +447,8 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "cookies-load", ACT_MAIN_COOKIES_LOAD, DACT(N_("Reload cookies file")) },
 	{ "copy-clipboard", ACT_MAIN_COPY_CLIPBOARD, DACT(N_("Copy text to clipboard")) },
 	{ "document-info", ACT_MAIN_DOCUMENT_INFO, DACT(N_("Show information about the current page")) },
-	{ "download", ACT_MAIN_DOWNLOAD, DACT(N_("Download the current link")) },
-	{ "download-image", ACT_MAIN_DOWNLOAD_IMAGE, DACT(N_("Download the current image")) },
 	{ "download-manager", ACT_MAIN_DOWNLOAD_MANAGER, DACT(N_("Open download manager")) },
 	{ "edit", ACT_MAIN_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
-	{ "enter", ACT_MAIN_ENTER, DACT(N_("Follow the current link")) },
-	{ "enter-reload", ACT_MAIN_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
 	{ "exmode", ACT_MAIN_EXMODE, DACT(N_("Enter ex-mode (command line)")) },
 	{ "file-menu", ACT_MAIN_FILE_MENU, DACT(N_("Open the File menu")) },
 	{ "find-next", ACT_MAIN_FIND_NEXT, DACT(N_("Find the next occurrence of the current search text")) },
@@ -470,7 +466,13 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "jump-to-link", ACT_MAIN_JUMP_TO_LINK, DACT(N_("Jump to link")) },
 	{ "keybinding-manager", ACT_MAIN_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },
 	{ "kill-backgrounded-connections", ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS, DACT(N_("Kill all backgrounded connections")) },
+	{ "link-download", ACT_MAIN_LINK_DOWNLOAD, DACT(N_("Download the current link")) },
+	{ "link-download-image", ACT_MAIN_LINK_DOWNLOAD_IMAGE, DACT(N_("Download the current image")) },
+	{ "link-download-resume", ACT_MAIN_LINK_DOWNLOAD_RESUME, DACT(N_("Attempt to resume download of the current link")) },
+	{ "link-follow", ACT_MAIN_LINK_FOLLOW, DACT(N_("Follow the current link")) },
+	{ "link-follow-reload", ACT_MAIN_LINK_FOLLOW_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
 	{ "link-menu", ACT_MAIN_LINK_MENU, DACT(N_("Open the link context menu")) },
+	{ "link-external-command", ACT_MAIN_LINK_EXTERNAL_COMMAND, DACT(N_("Pass URI of current link to external command")) },
 #ifdef CONFIG_LUA
 	{ "lua-console", ACT_MAIN_LUA_CONSOLE, DACT(N_("Open a Lua console")) },
 #else
@@ -498,7 +500,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "open-new-window", ACT_MAIN_OPEN_NEW_WINDOW, DACT(N_("Open a new window")) },
 	{ "open-os-shell", ACT_MAIN_OPEN_OS_SHELL, DACT(N_("Open an OS shell")) },
 	{ "options-manager", ACT_MAIN_OPTIONS_MANAGER, DACT(N_("Open options manager")) },
-	{ "pass-uri", ACT_MAIN_PASS_URI, DACT(N_("Pass current URI to external command")) },
 	{ "previous-frame", ACT_MAIN_PREVIOUS_FRAME, DACT(N_("Move to the previous frame")) },
 	{ "quit", ACT_MAIN_QUIT, DACT(N_("Open a quit confirmation dialog box")) },
 	{ "really-quit", ACT_MAIN_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
@@ -507,7 +508,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "rerender", ACT_MAIN_RERENDER, DACT(N_("Re-render the current page")) },
 	{ "reset-form", ACT_MAIN_RESET_FORM, DACT(N_("Reset form items to their initial values")) },
 	{ "resource-info", ACT_MAIN_RESOURCE_INFO, DACT(N_("Show information about the currently used resources")) },
-	{ "resume-download", ACT_MAIN_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
 	{ "save-as", ACT_MAIN_SAVE_AS, DACT(N_("Save as")) },
 	{ "save-formatted", ACT_MAIN_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
 	{ "save-options", ACT_MAIN_SAVE_OPTIONS, DACT(N_("Save options")), },
@@ -762,7 +762,7 @@ static struct default_kb default_main_keymap[] = {
 	{ 'a',		 0,		ACT_MAIN_ADD_BOOKMARK },
 	{ 'b',		 0,		ACT_MAIN_MOVE_PAGE_UP },
 	{ 'c',		 0,		ACT_MAIN_TAB_CLOSE },
-	{ 'd',		 0,		ACT_MAIN_DOWNLOAD },
+	{ 'd',		 0,		ACT_MAIN_LINK_DOWNLOAD },
 	{ 'e',		 0,		ACT_MAIN_TAB_MENU },
 	{ 'f',		 0,		ACT_MAIN_ZOOM_FRAME },
 	{ 'g',		 0,		ACT_MAIN_GOTO_URL },
@@ -773,13 +773,13 @@ static struct default_kb default_main_keymap[] = {
 	{ 'n',		 0,		ACT_MAIN_FIND_NEXT },
 	{ 'o',		 0,		ACT_MAIN_OPTIONS_MANAGER },
 	{ 'q',		 0,		ACT_MAIN_QUIT },
-	{ 'r',		 0,		ACT_MAIN_RESUME_DOWNLOAD },
+	{ 'r',		 0,		ACT_MAIN_LINK_DOWNLOAD_RESUME },
 	{ 's',		 0,		ACT_MAIN_BOOKMARK_MANAGER },
 	{ 't',		 0,		ACT_MAIN_OPEN_NEW_TAB },
 	{ 'u',		 0,		ACT_MAIN_HISTORY_MOVE_FORWARD },
 	{ 'v',		 0,		ACT_MAIN_VIEW_IMAGE },
 	{ 'w',		 0,		ACT_MAIN_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES },
-	{ 'x',		 0,		ACT_MAIN_ENTER_RELOAD },
+	{ 'x',		 0,		ACT_MAIN_LINK_FOLLOW_RELOAD },
 	{ 'z',		 0,		ACT_MAIN_ABORT_CONNECTION },
 	{ '{',		 0,		ACT_MAIN_SCROLL_LEFT },
 	{ '|',		 0,		ACT_MAIN_HEADER_INFO },
@@ -787,8 +787,8 @@ static struct default_kb default_main_keymap[] = {
 	{ KBD_DEL,	 0,		ACT_MAIN_SCROLL_DOWN },
 	{ KBD_DOWN,	 0,		ACT_MAIN_MOVE_LINK_DOWN },
 	{ KBD_END,	 0,		ACT_MAIN_MOVE_DOCUMENT_END },
-	{ KBD_ENTER,	 0,		ACT_MAIN_ENTER },
-	{ KBD_ENTER,	 KBD_CTRL,	ACT_MAIN_ENTER_RELOAD },
+	{ KBD_ENTER,	 0,		ACT_MAIN_LINK_FOLLOW },
+	{ KBD_ENTER,	 KBD_CTRL,	ACT_MAIN_LINK_FOLLOW_RELOAD },
 	{ KBD_ESC,	 0,		ACT_MAIN_MENU },
 	{ KBD_F10,	 0,		ACT_MAIN_FILE_MENU },
 	{ KBD_F9,	 0,		ACT_MAIN_MENU },
@@ -798,8 +798,8 @@ static struct default_kb default_main_keymap[] = {
 	{ KBD_LEFT,	 0,		ACT_MAIN_HISTORY_MOVE_BACK },
 	{ KBD_PAGE_DOWN, 0,		ACT_MAIN_MOVE_PAGE_DOWN },
 	{ KBD_PAGE_UP,	 0,		ACT_MAIN_MOVE_PAGE_UP },
-	{ KBD_RIGHT,	 0,		ACT_MAIN_ENTER },
-	{ KBD_RIGHT,	 KBD_CTRL,	ACT_MAIN_ENTER_RELOAD },
+	{ KBD_RIGHT,	 0,		ACT_MAIN_LINK_FOLLOW },
+	{ KBD_RIGHT,	 KBD_CTRL,	ACT_MAIN_LINK_FOLLOW_RELOAD },
 	{ KBD_TAB,	 0,		ACT_MAIN_NEXT_FRAME },
 	{ KBD_TAB,	 KBD_ALT,	ACT_MAIN_PREVIOUS_FRAME },
 	{ KBD_UP,	 0,		ACT_MAIN_MOVE_LINK_UP },
@@ -905,14 +905,19 @@ add_default_keybindings(void)
  */
 
 static struct strtonum main_action_aliases[] = {
+	{ "back", ACT_MAIN_HISTORY_MOVE_BACK, "history-move-back" },
 	{ "down", ACT_MAIN_MOVE_LINK_DOWN, "move-link-down" },
+	{ "download", ACT_MAIN_LINK_DOWNLOAD, "link-download" },
+	{ "download-image", ACT_MAIN_LINK_DOWNLOAD_IMAGE, "link-download-image" },
 	{ "end", ACT_MAIN_MOVE_DOCUMENT_END, "move-document-end" },
+	{ "enter", ACT_MAIN_LINK_FOLLOW, "link-follow" },
+	{ "enter-reload", ACT_MAIN_LINK_FOLLOW_RELOAD, "link-follow-reload" },
 	{ "home", ACT_MAIN_MOVE_DOCUMENT_START, "move-document-start" },
 	{ "page-down", ACT_MAIN_MOVE_PAGE_DOWN, "move-page-down" },
 	{ "page-up", ACT_MAIN_MOVE_PAGE_UP, "move-page-up" },
-	{ "up",	ACT_MAIN_MOVE_LINK_UP, "move-link-up" },
-	{ "back", ACT_MAIN_HISTORY_MOVE_BACK, "history-move-back" },
+	{ "resume-download", ACT_MAIN_LINK_DOWNLOAD_RESUME, "link-download-resume" },
 	{ "unback", ACT_MAIN_HISTORY_MOVE_FORWARD, "history-move-forward" },
+	{ "up",	ACT_MAIN_MOVE_LINK_UP, "move-link-up" },
 
 	{ NULL, 0, NULL }
 };

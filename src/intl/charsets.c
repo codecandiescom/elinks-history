@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.15 2002/09/17 13:21:42 zas Exp $ */
+/* $Id: charsets.c,v 1.16 2002/11/29 22:46:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -529,32 +529,27 @@ decode:
 int
 get_cp_index(unsigned char *n)
 {
-	int i, a, p, q;
-	int ii = -1, ll = 0;
+	int i, a;
 
 	for (i = 0; codepages[i].name; i++) {
 		for (a = 0; codepages[i].aliases[a]; a++) {
-			for (p = 0; n[p]; p++) {
-				if (upcase(n[p]) == upcase(codepages[i].aliases[a][0])) {
-					int slen;
+			/* In the past, we looked for the longest substring
+			 * in all the names; it is way too expensive, though:
+			 *
+			 *   %   cumulative   self              self     total
+			 *  time   seconds   seconds    calls  us/call  us/call  name
+			 *  3.00      0.66     0.03     1325    22.64    22.64  get_cp_index
+			 *
+			 * Anything called from redraw_screen() is in fact
+			 * relatively expensive, even if it's called just
+			 * once. So we will do a simple strcasecmp() here.
+			 */
 
-					for (q = 1; codepages[i].aliases[a][q]; q++) {
-						if (upcase(n[p+q]) != upcase(codepages[i].aliases[a][q]))
-							goto fail;
-					}
-
-					slen = strlen(codepages[i].aliases[a]);
-					if (slen > ll) {
-						ll = slen;
-						ii = i;
-					}
-				}
-fail:;
-			}
-		}
+			if (!strcasecmp(n, codepages[i].aliases[a]))
+				return i;
 	}
 
-	return ii;
+	return -1;
 }
 
 unsigned char *

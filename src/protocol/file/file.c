@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.97 2003/06/26 11:10:38 jonas Exp $ */
+/* $Id: file.c,v 1.98 2003/06/26 11:24:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,6 +261,8 @@ struct directory_entry {
 static int
 compare_dir_entries(struct directory_entry *d1, struct directory_entry *d2)
 {
+	if (d1->name[0] == '.' && d1->name[1] == '.' && !d1->name[2]) return -1;
+	if (d2->name[0] == '.' && d2->name[1] == '.' && !d2->name[2]) return 1;
 	if (d1->attrib[0] == 'd' && d2->attrib[0] != 'd') return -1;
 	if (d1->attrib[0] != 'd' && d2->attrib[0] == 'd') return 1;
 	return strcmp(d1->name, d2->name);

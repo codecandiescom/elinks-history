@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.14 2003/12/21 14:56:55 zas Exp $ */
+/* $Id: task.c,v 1.15 2003/12/31 04:48:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,6 @@
 
 #include "bfu/menu.h"
 #include "bfu/msgbox.h"
-#include "bfu/style.h"
 #include "cache/cache.h"
 #include "dialogs/status.h"
 #include "document/document.h"

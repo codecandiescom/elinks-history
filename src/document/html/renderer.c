@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.430 2004/04/24 00:18:54 pasky Exp $ */
+/* $Id: renderer.c,v 1.431 2004/04/26 16:46:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,10 +125,12 @@ realloc_line(struct document *document, int y, int x)
 	if (!ALIGN_LINE(&line->chars, line->length, x + 1))
 		return -1;
 
-	/* Make a template of the last char using that align alloc clears the
-	 * other members. */
+	/* We cannot rely on the aligned allocation to clear the members for us
+	 * since for line splitting we simply trim the length. Question is if
+	 * it is better to to clear the line after the splitting or here. */
 	end = &line->chars[x];
 	end->data = ' ';
+	end->attr = 0;
 	set_term_color(end, &colors, 0, document->options.color_mode);
 
 	for (pos = &line->chars[line->length]; pos < end; pos++) {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.469 2004/06/11 00:28:34 jonas Exp $ */
+/* $Id: session.c,v 1.470 2004/06/11 00:39:03 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -567,13 +567,6 @@ free_session_info(struct initial_session_info *info)
 
 
 static void
-dialog_goto_url_open_first(void *data)
-{
-	dialog_goto_url((struct session *) data, NULL);
-	first_use = 0;
-}
-
-static void
 dialog_goto_url_open(void *data)
 {
 	dialog_goto_url((struct session *) data, NULL);
@@ -590,7 +583,9 @@ setup_first_session(struct session *ses, struct uri *uri)
 	if (first_use) {
 		/* Only open the goto URL dialog if no URI was passed on the
 		 * command line. */
-		void *handler = uri ? dialog_goto_url_open_first : NULL;
+		void *handler = uri ? dialog_goto_url_open : NULL;
+
+		first_use = 0;
 
 		msg_box(term, NULL, 0,
 			N_("Welcome"), AL_CENTER,

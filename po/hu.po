@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-26 08:40+0000\n"
-"PO-Revision-Date: 2005-01-26 12:45+0000\n"
+"POT-Creation-Date: 2005-02-09 02:05+0000\n"
+"PO-Revision-Date: 2005-02-09 06:20+0000\n"
 "Last-Translator: Balazs Varga <vinnui@ent.hu>\n"
 "Language-Team: Hungarian <none@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -47,7 +47,7 @@ msgstr "A mappa kinyitásához nyomd meg a Space billentyût."
 #: src/dialogs/document.c:226 src/dialogs/document.c:297 src/dialogs/edit.c:98
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:97 src/dialogs/menu.c:520 src/dialogs/menu.c:571
-#: src/dialogs/options.c:174 src/dialogs/options.c:254
+#: src/dialogs/options.c:202 src/dialogs/options.c:282
 #: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1937
 #: src/ecmascript/spidermonkey.c:1963 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
@@ -171,14 +171,12 @@ msgstr "Név"
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:408
 #: src/config/dialogs.c:495 src/config/dialogs.c:908 src/cookies/dialogs.c:357
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
-#: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:177
-#: src/dialogs/options.c:255 src/mime/dialogs.c:131
+#: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
+#: src/dialogs/options.c:283 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
-#: src/sched/download.c:1022 src/sched/download.c:1032
-#: src/sched/download.c:1053 src/sched/download.c:1066
-#: src/scripting/lua/core.c:396 src/scripting/lua/core.c:477
-#: src/scripting/lua/core.c:717 src/viewer/text/search.c:1571
-#: src/viewer/text/view.c:730
+#: src/sched/download.c:1130 src/scripting/lua/core.c:396
+#: src/scripting/lua/core.c:477 src/scripting/lua/core.c:717
+#: src/viewer/text/search.c:1571 src/viewer/text/view.c:730
 msgid "Cancel"
 msgstr "Mégsem"
 
@@ -335,7 +333,8 @@ msgid ""
 msgstr ""
 "A könyvjelzõk fájlformátuma (a beolvasást és a mentést is befolyásolja):\n"
 "0 - alapértelmezett Elinks (Links 0.9x kompatibilis) formátum\n"
-"1 - XBEL univerzális XML könyvjelzõ formátum (nemzetközi karaktereket nem támogat!)"
+"1 - XBEL univerzális XML könyvjelzõ formátum (nemzetközi karaktereket nem "
+"támogat!)"
 
 #: src/bookmarks/bookmarks.c:61
 msgid ""
@@ -346,7 +345,8 @@ msgid ""
 msgstr ""
 "A könyvjelzõk fájlformátuma (a beolvasást és a mentést is befolyásolja):\n"
 "0 - alapértelmezett Elinks (Links 0.9x kompatibilis) formátum\n"
-"1 - XBEL univerzális XML könyvjelzõ formátum (nemzetközi karaktereket nem támogat!) (LETILTVA)"
+"1 - XBEL univerzális XML könyvjelzõ formátum (nemzetközi karaktereket nem "
+"támogat!) (LETILTVA)"
 
 #: src/bookmarks/bookmarks.c:67
 msgid "Periodic snapshotting"
@@ -475,9 +475,8 @@ msgstr "Törlés"
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
-#: src/dialogs/options.c:176 src/formhist/dialogs.c:216
-#: src/globhist/dialogs.c:235 src/sched/download.c:1019
-#: src/sched/download.c:1050
+#: src/dialogs/options.c:204 src/formhist/dialogs.c:216
+#: src/globhist/dialogs.c:235 src/sched/download.c:1114
 msgid "Save"
 msgstr "Mentés"
 
@@ -818,8 +817,8 @@ msgstr ""
 "Ezzel lehet megadni hogy az ELinks alapértelmezettnek vegye a HTML\n"
 "formátumot minden ismeretlen dokumentum esetén. Hasznos ha\n"
 "az Elinks-t külsõ megjelenítõként használjuk programokban\n"
-"(pl. levelezõprogram)."
-"Ez a beállítás megfelel a default-mime-type text/html-nek."
+"(pl. levelezõprogram).Ez a beállítás megfelel a default-mime-type text/html-"
+"nek."
 
 #: src/config/cmdline.c:685
 msgid "Print usage help and exit"
@@ -2384,7 +2383,7 @@ msgid "Invert the fore- and background color so the link stands out."
 msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:288 src/config/options.inc:792
-#: src/dialogs/options.c:171
+#: src/dialogs/options.c:199
 msgid "Underline"
 msgstr "Aláhúzás"
 
@@ -3231,7 +3230,7 @@ msgstr ""
 "2 - Linux, dupla keretek és egyéb finomságok\n"
 "3 - KOI-8 4 - FreeBSD"
 
-#: src/config/options.inc:754 src/dialogs/options.c:167
+#: src/config/options.inc:754 src/dialogs/options.c:195
 msgid "Switch fonts for line drawing"
 msgstr "Keretek rajzolása külön betûtípussal"
 
@@ -3245,7 +3244,7 @@ msgstr ""
 "és a keretek is mûködnek egyidõben. Csak Linux terminál esetén\n"
 "van értelme a beállításnak."
 
-#: src/config/options.inc:760 src/dialogs/options.c:172
+#: src/config/options.inc:760 src/dialogs/options.c:200
 msgid "UTF-8 I/O"
 msgstr "UTF_8 I/O"
 
@@ -3258,7 +3257,7 @@ msgstr ""
 "terminálok számára. Megjegyzés: jelenleg csak az UTF8 egy része\n"
 "mûködik."
 
-#: src/config/options.inc:765 src/dialogs/options.c:168
+#: src/config/options.inc:765 src/dialogs/options.c:196
 msgid "Restrict frames in cp850/852"
 msgstr "Keretek korlátozása cp850/852 alatt"
 
@@ -3270,7 +3269,7 @@ msgstr ""
 "Korlátozza a keretrajzoló karakterek használatát. Csak Linux\n"
 "terminálok és 850/852 kódlap esetén van értelme állítani."
 
-#: src/config/options.inc:770 src/dialogs/options.c:169
+#: src/config/options.inc:770 src/dialogs/options.c:197
 msgid "Block cursor"
 msgstr "Tömb kurzor"
 
@@ -3302,7 +3301,7 @@ msgstr ""
 "1 - 16 színû üzemmód, szabványos ANSI színekkel\n"
 "2 - 256 színû üzemmód, XTerm RGB színkódok használata"
 
-#: src/config/options.inc:784 src/dialogs/options.c:170
+#: src/config/options.inc:784 src/dialogs/options.c:198
 msgid "Transparency"
 msgstr "Áttetszõség"
 
@@ -4415,8 +4414,7 @@ msgstr ""
 "és sokan mások\n"
 "\n"
 "Ez egy szabad program; terjesztheted és/vagy módosíthatod a Szabad Szoftver "
-"Alapitvány által készített GNU Licensz második vagy késõbbi verziója "
-"szerint."
+"Alapitvány által készített GNU Licensz második vagy késõbbi verziója szerint."
 
 #: src/dialogs/info.c:169
 msgid "master"
@@ -4798,59 +4796,77 @@ msgstr "Könyvtárak:"
 msgid "Files:"
 msgstr "Állományok:"
 
+#. 2 '\n' + 1 '\0'
 #: src/dialogs/options.c:148
+#, c-format
+msgid ""
+"The environmental variable TERM is set to '%s'.\n"
+"\n"
+"ELinks maintains separate sets of values for these options\n"
+"and chooses the appropriate set based on the value of TERM.\n"
+"This allows you to configure the settings appropriately for\n"
+"each terminal in which you run ELinks."
+msgstr ""
+"A TERM környezeti változó beállítása '%s'.\n"
+"\n"
+"Az ELinks több beállítást tárol, és mindig a megfelelõt használja\n"
+"a TERM változó értéktõl függõen. Ez lehetõvé teszi hogy\n"
+"minden terminálra amiben az ELinks böngészõt futtatod,\n"
+"megadhass különféle beállításokat."
+
+#: src/dialogs/options.c:172
 msgid "Terminal options"
 msgstr "Terminál beállítások"
 
-#: src/dialogs/options.c:153
+#: src/dialogs/options.c:181
 msgid "Frame handling:"
 msgstr "Keretek kezelése:"
 
-#: src/dialogs/options.c:154
+#: src/dialogs/options.c:182
 msgid "No frames"
 msgstr "Nincs keret"
 
-#: src/dialogs/options.c:155
+#: src/dialogs/options.c:183
 msgid "VT 100 frames"
 msgstr "VT 100 keretek"
 
-#: src/dialogs/options.c:156
+#: src/dialogs/options.c:184
 msgid "Linux or OS/2 frames"
 msgstr "Linux vagy OS/2 keretek"
 
-#: src/dialogs/options.c:157
+#: src/dialogs/options.c:185
 msgid "FreeBSD frames"
 msgstr "FreeBSD keretek"
 
-#: src/dialogs/options.c:158
+#: src/dialogs/options.c:186
 msgid "KOI8-R frames"
 msgstr "KOI8-R keretek"
 
-#: src/dialogs/options.c:160
+#: src/dialogs/options.c:188
 msgid "Color mode:"
 msgstr "Szín üzemmód:"
 
-#: src/dialogs/options.c:161
+#: src/dialogs/options.c:189
 msgid "No colors (mono)"
 msgstr "Nincsenek színek (mono)"
 
-#: src/dialogs/options.c:162
+#: src/dialogs/options.c:190
 msgid "16 colors"
 msgstr "16 szín"
 
-#: src/dialogs/options.c:164
+#: src/dialogs/options.c:192
 msgid "256 colors"
 msgstr "256 szín"
 
-#: src/dialogs/options.c:248
+#: src/dialogs/options.c:276
 msgid "Resize terminal"
 msgstr "Terminál átméretezése"
 
-#: src/dialogs/options.c:251
+#: src/dialogs/options.c:279
 msgid "Width="
 msgstr "Szélesség="
 
-#: src/dialogs/options.c:252
+#: src/dialogs/options.c:280
 msgid "Height="
 msgstr "Magasság="
 
@@ -5418,40 +5434,40 @@ msgstr ""
 "változó helyesen van-e beállítva, és hogy a könyvtárra\n"
 "van-e írási jogod."
 
-#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:339
+#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:341
 #, c-format
 msgid "The call to %s failed: %d (%s)"
 msgstr "A %s hívása hibás volt: %d (%s)"
 
 #. Infinite loop prevention.
-#: src/lowlevel/select.c:342
+#: src/lowlevel/select.c:344
 #, c-format
 msgid "%d select() failures."
 msgstr "%d select() hibák."
 
-#: src/main.c:143
+#: src/main.c:144
 msgid "Cannot create a pipe for internal communication."
 msgstr "Nem lehet pipeot létrehozni a belsõ kommunikáció számára."
 
-#: src/main.c:203
+#: src/main.c:204
 #, c-format
 msgid "URL expected after -%s"
 msgstr "URL-t kell megadni %s után"
 
-#: src/main.c:211
+#: src/main.c:212
 msgid "No running ELinks found."
 msgstr "Nem található futó ELinks."
 
 #. The remote session(s) can not be created
-#: src/main.c:218
+#: src/main.c:219
 msgid "No remote session to connect to."
 msgstr ""
 
-#: src/main.c:227
+#: src/main.c:228
 msgid "Unable to encode session info."
 msgstr ""
 
-#: src/main.c:244
+#: src/main.c:245
 msgid "Unable to attach_terminal()."
 msgstr "Sikertelen attach_terminal()."
 
@@ -5990,6 +6006,12 @@ msgid ""
 "  and indicates that there is some much deeper problem with the web server\n"
 "  software.\n"
 msgstr ""
+"  Hiba történt a szerveren a dokumentum letöltése közben, viszont a\n"
+"  szerver nem küldött hibaüzenetet, ezért nem lehet tudni hogy mi volt\n"
+"  a probléma. Kérlek vedd fel a kapcsolatot a szerver üzemeltetõjével ha\n"
+"  úgy gondolod hogy ennek a hibának nem lenne szabad elõfordulnia.\n"
+"  A hibaüzenet elmaradása nem szabályos, és a webszerver szoftver\n"
+"  komolyabb problémájára utal.\n"
 
 #. name:
 #: src/protocol/http/http.c:58 src/protocol/http/http.c:186
@@ -6536,55 +6558,40 @@ msgstr "Az eredeti fájl felülírása"
 msgid "Resume download of the original file"
 msgstr "A letöltés folytatása"
 
-#: src/sched/download.c:1013 src/sched/download.c:1025
-msgid "Unknown type"
-msgstr "Ismeretlen fájlformátum"
-
-#: src/sched/download.c:1014
-#, c-format
-msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr "El akarod menteni ezt a fáljt: '%s' (típus: %s), vagy megjelenítsük?"
-
-#: src/sched/download.c:1020 src/sched/download.c:1030
-#: src/sched/download.c:1051 src/sched/download.c:1064
-msgid "Display"
-msgstr "Megjelenítés"
-
-#: src/sched/download.c:1021 src/sched/download.c:1031
-#: src/sched/download.c:1052 src/sched/download.c:1065
-msgid "Show header"
-msgstr "Fejléc megjelenítése"
-
-#: src/sched/download.c:1026
-#, c-format
-msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr "Meg akarod jeleníteni ezt a fájlt: '%s' (típus %s)?"
-
-#: src/sched/download.c:1042 src/sched/download.c:1056
+#: src/sched/download.c:1033
 msgid "What to do?"
 msgstr "Mit tegyünk?"
 
-#: src/sched/download.c:1043
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', save it or display it?"
-msgstr ""
-"Meg akarod nyitni ezt a fáljt: '%s' (típus: %s %s %s)\n"
-"ezzel: '%s', esetleg mentsük, vagy megjelenítsük?"
+#: src/sched/download.c:1036
+msgid "Unknown type"
+msgstr "Ismeretlen fájlformátum"
 
-#: src/sched/download.c:1049 src/sched/download.c:1063
+#: src/sched/download.c:1053
+#, c-format
+msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
+msgstr "Mit tegyünk a '%s' fájllal? (típus: %s%s%s)?"
+
+#: src/sched/download.c:1083
+#, no-c-format
+msgid "Program ('%' will be replaced by the filename)"
+msgstr "Program (a '%' jel helyére a fájlnév helyettesítõdik be)"
+
+#: src/sched/download.c:1090
+#, c-format
+msgid "The file will be opened with the program '%s'."
+msgstr "A fájlt a '%s' programmal fogjuk megnyitni."
+
+#: src/sched/download.c:1107
 msgid "Open"
 msgstr "Megnyitás"
 
-#: src/sched/download.c:1057
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', or display it?"
-msgstr ""
-"Meg akarod nyitni ezt a fáljt: '%s' (típus: %s %s %s)\n"
-"ezzel: '%s', vagy megjelenítsük?"
+#: src/sched/download.c:1120
+msgid "Display"
+msgstr "Megjelenítés"
+
+#: src/sched/download.c:1124
+msgid "Show header"
+msgstr "Fejléc megjelenítése"
 
 #: src/sched/error.c:31
 msgid "Waiting in queue"
@@ -6763,12 +6770,27 @@ msgid ""
 "been configured. Either set the option protocol.nntp.server\n"
 "or set the NNTPSERVER environment variable."
 msgstr ""
+"Nem lehetséges a news kezelése, mert nincs megadva news szerver.\n"
+"Vagy állítsd be a protocol.nntp.server opciót, vagy az NNTPSERVER\n"
+"környezeti változó értékét."
 
 #: src/sched/error.c:102
 msgid "The CSO phone-book protocol is not supported."
 msgstr "A CSO telefonkönyv protokoll nem támogatott."
 
-#: src/sched/error.c:126
+#: src/sched/error.c:105
+msgid ""
+"Configuration of the proxy server failed.\n"
+"This might be caused by an incorrect proxy\n"
+"setting specified by an environment variable\n"
+"or returned by a scripting proxy hook.\n"
+"\n"
+"The correct syntax for proxy settings are\n"
+"a host name optionally followed by a colon\n"
+"and a port number. Example: 'localhost:8080'."
+msgstr ""
+
+#: src/sched/error.c:135
 msgid "Unknown error"
 msgstr "Ismeretlen hiba"
 
@@ -6964,7 +6986,7 @@ msgstr "Hibas esemény: %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Nem lehet olvasni az eseményt: %d (%s)"
 
-#: src/terminal/kbd.c:998
+#: src/terminal/kbd.c:1000
 msgid "Too many bytes read from the itrm!"
 msgstr "Túl sok byte érkezett az itrm után!"
 

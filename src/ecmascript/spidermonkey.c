@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.168 2004/12/27 01:09:28 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.169 2004/12/27 01:11:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1016,9 +1016,6 @@ form_elements_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document *document = doc_view->document;
 	struct form_view *form_view = JS_GetPrivate(ctx, parent_form);
 	struct form *form = find_form_by_form_view(document, form_view);
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	if (JSVAL_IS_STRING(id)) {
 		form_elements_namedItem(ctx, obj, 1, &id, vp);
@@ -1027,6 +1024,8 @@ form_elements_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
+
+	undef_to_jsval(ctx, vp);
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORM_ELEMENTS_LENGTH:
@@ -1037,16 +1036,15 @@ form_elements_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		foreach (fc, form->items)
 			counter++;
 
-		set_prop_int(&prop, counter);
+		int_to_jsval(ctx, vp, counter);
 		break;
 	}
 	default:
 		/* Array index. */
 		form_elements_item(ctx, obj, 1, &id, vp);
-		return JS_TRUE;
+		break;
 	}
 
-	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
 

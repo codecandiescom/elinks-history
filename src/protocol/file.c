@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.125 2003/08/30 11:32:19 jonas Exp $ */
+/* $Id: file.c,v 1.126 2003/09/14 02:15:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,17 +264,23 @@ add_dir_entry(struct directory_entry *entry, struct string *page,
 	      int pathlen, unsigned char *dircolor)
 {
 	unsigned char *lnk = NULL;
-	struct string htmlname;
+	struct string html_encoded_name;
+	struct string uri_encoded_name;
 
-	if (!init_string(&htmlname)) return;
+	if (!init_string(&html_encoded_name)) return;
+	if (!init_string(&uri_encoded_name)) {
+		done_string(&html_encoded_name);
+		return;
+	}
 
-	add_html_to_string(&htmlname, entry->name + pathlen,
+	encode_uri_string(&uri_encoded_name, entry->name + pathlen);
+	add_html_to_string(&html_encoded_name, entry->name + pathlen,
 			   strlen(entry->name) - pathlen);
 
 	/* add_to_string(&fragment, &fragmentlen, "   "); */
 	add_html_to_string(page, entry->attrib, strlen(entry->attrib));
 	add_to_string(page, "<a href=\"");
-	add_string_to_string(page, &htmlname);
+	add_string_to_string(page, &uri_encoded_name);
 
 	if (entry->attrib[0] == 'd') {
 		add_char_to_string(page, '/');
@@ -302,8 +308,9 @@ add_dir_entry(struct directory_entry *entry, struct string *page,
 		string_concat(page, "<font color=\"", dircolor, "\"><b>", NULL);
 	}
 
-	add_string_to_string(page, &htmlname);
-	done_string(&htmlname);
+	add_string_to_string(page, &html_encoded_name);
+	done_string(&uri_encoded_name);
+	done_string(&html_encoded_name);
 
 	if (entry->attrib[0] == 'd' && *dircolor) {
 		add_to_string(page, "</b></font>");
@@ -578,6 +585,7 @@ file_func(struct connection *connection)
 	}
 
 	safe_strncpy(filename, connection->uri.data, filenamelen + 1);
+	decode_uri_string(filename);
 
 	directory = opendir(filename);
 	if (directory) {

@@ -1,3 +1,28 @@
+Sun Nov  7 17:39:45 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Smaller first read. If you still get garbage make it smaller.  
+
+Sun Nov  7 13:27:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Guard do_frame_action() calls with checks for doc_view->vs as it is
+	asserted to be non-NULL.  
+
+Sun Nov  7 09:25:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Minor code simplification.  
+
+Sun Nov  7 00:23:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/Makefile.am:
+
+	Add the spidermonkey patch to EXTRA_DIST.  
+
 Sat Nov  6 13:48:13 2004  Laurent Monin <zas@norz.org>:
 
 	* doc/small.txt:

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.154 2003/06/19 12:22:15 zas Exp $ */
+/* $Id: renderer.c,v 1.155 2003/06/25 08:39:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,7 +710,9 @@ decode:
 				i++;
 
 			/* Eat &nbsp &nbsp<foo>. --Zas ;) */
-			if (!isalnum(chars[i]) && i > start) {
+			/* But do not eat &nbsp=123 or &nbsp&nbsp123 --Zas */
+			if (chars[i] != '=' && chars[i] != '&' &&
+			    !isalnum(chars[i]) && i > start) {
 				e = get_entity_string(&chars[start], i - start,
 						d_opt->cp);
 				if (!e) goto putc;

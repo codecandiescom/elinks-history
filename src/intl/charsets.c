@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.38 2003/06/14 19:37:36 pasky Exp $ */
+/* $Id: charsets.c,v 1.39 2003/06/25 08:39:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -623,7 +623,9 @@ decode:
 				i++;
 
 			/* Eat &nbsp &nbsp<foo>. --pasky */
-			if (/* c[i] == ';' */ !isalnum(c[i]) && i > start) {
+			/* But do not eat &nbsp=123 or &nbsp&nbsp123 --Zas */
+			if (c[i] != '=' && c[i] != '&' && !isalnum(c[i]) &&
+			    i > start) {
 				e = get_entity_string(&c[start], i - start,
 	 					      d_opt->cp);
 				if (!e) goto putc;

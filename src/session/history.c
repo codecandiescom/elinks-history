@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.19 2003/06/11 16:28:12 pasky Exp $ */
+/* $Id: history.c,v 1.20 2003/06/11 22:05:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,6 +131,12 @@ ses_unback(struct session *ses)
 	del_from_list(loc);
 	/* Save it as the current location! */
 	add_to_list(ses->history, loc);
+
+	if (!strcmp(loc->vs.url, ses->loading_url)) return;
+
+	/* Remake that location. */
+	destroy_location(loc);
+	ses_forward(ses);
 }
 
 

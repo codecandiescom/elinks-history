@@ -844,17 +844,17 @@ if test x"$sysconfdir" = x"\${prefix}/etc"; then
 fi
 
 CONFDIR=$sysconfdir
-AC_DEFINE_UNQUOTED(CONFDIR,"$CONFDIR")
+AC_DEFINE_UNQUOTED(CONFDIR, "$CONFDIR", [Directory containing default config])
 AC_SUBST(CONFDIR)
 
 # Create LOCALEDIR #define for config.h
 LOCALEDIR=`eval echo "$datadir/locale"`
-AC_DEFINE_UNQUOTED(LOCALEDIR,"$LOCALEDIR")
+AC_DEFINE_UNQUOTED(LOCALEDIR, "$LOCALEDIR", [Directory containing locales])
 AC_SUBST(LOCALEDIR)
 
 # Create LIBDIR #define for config.h
 LIBDIR=`eval echo "$libdir"`
-AC_DEFINE_UNQUOTED(LIBDIR,"$LIBDIR")
+AC_DEFINE_UNQUOTED(LIBDIR, "$LIBDIR", [Directory containing libraries])
 AC_SUBST(LIBDIR)
 
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.136 2004/01/03 11:07:32 jonas Exp $ */
+/* $Id: hierbox.c,v 1.137 2004/01/03 11:56:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,11 +43,20 @@ update_hierbox_browser(struct hierbox_browser *browser)
 
 
 struct listbox_item *
-add_listbox_item(struct hierbox_browser *browser, unsigned char *text,
-		 void *data)
+do_add_listbox_item(struct listbox_item *root, unsigned char *text, void *data,
+		    int no_empty, int type)
 {
-	struct listbox_item *item = mem_calloc(1, sizeof(struct listbox_item));
+	struct listbox_item *item;
 
+	if (type == BI_FOLDER) {
+		/* Check if we have the folder already. Could be optional if
+		 * we are gonna use this for bookmarks and stuff. --jonas */
+		foreach (item, root->child)
+			if (!strcmp(item->text, text))
+				return item;
+	}
+
+	item = mem_calloc(1, sizeof(struct listbox_item));
 	if (!item) return NULL;
 
 	init_list(item->child);
@@ -55,10 +64,13 @@ add_listbox_item(struct hierbox_browser *browser, unsigned char *text,
 
 	item->text = text;
 	item->udata = data;
+	item->type = type;
+	item->depth = root->depth + 1;
+	item->free_empty_folder = no_empty;
+	if (item->depth > 0) item->root = root;
 
-	add_to_list(browser->root.child, item);
-
-	update_hierbox_browser(browser);
+	/* TODO: Sort? */
+	add_to_list(root->child, item);
 
 	return item;
 }

@@ -1,3 +1,286 @@
+Fri Dec  5 22:58:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/: cookies.c, cookies.h:
+
+	send_cookies() now returns struct string *, for now being the passed
+	@header if some cookies were actually appended there or NULL
+	otherwise.  
+
+Fri Dec  5 22:46:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/: Makefile.in, localealias.c:
+
+	Use LOCALEDIR defined in configure.in to /locale since HP-UX' cc
+	preprocessor cannot handle all these -D args.  
+
+Fri Dec  5 22:31:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Fixed invalid zas' cleanup. Trivial algebra ;-).  
+
+Fri Dec  5 22:30:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.h:
+
+	Compile fix for HP-UX' cc that do not like bogus ';' in structs.  
+
+Fri Dec  5 22:22:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Abnormal link wraparound from top to low part of document view when
+	going up was fixed.  
+
+Fri Dec  5 22:13:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Now, subdirs of the CGI path directories are allowed when testing
+	validity of CGI script path. Internally, we now pass the path with
+	trailing slash to test_path().  
+
+Fri Dec  5 22:01:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	choose_mouse_link(): cleanup, comments and code simplification.  
+
+Fri Dec  5 21:37:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Code simplification, using int_upper|lower_bound() and temp. vars.  
+
+Fri Dec  5 21:19:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	find_link(): @l -> @link_pos, improved readibility by introducing
+	ymin and ymax.  
+
+Fri Dec  5 21:00:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Tiny tidyup of test_path().  
+
+Fri Dec  5 20:49:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	get_link_url(): use @link instead of @,  use a switch here since it
+	looks more appropriate when matching enum values.  
+
+Fri Dec  5 20:27:31 2003  Laurent Monin <zas@norz.org>:
+
+	* po/sk.po:
+
+	Fix missing \n in a translation.  
+
+Fri Dec  5 19:12:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	Damned unsigned chars makes it necessary to put all kinds of garbage
+	casts in the code. ;-) 
+
+Fri Dec  5 19:02:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	When setting QUERY_STRING and using the query string we need to
+	temporarily insert NUL char on the @post position if there is any.  
+
+Fri Dec  5 18:53:25 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Fri Dec  5 18:21:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	TODO about HTTP auth.  
+
+Fri Dec  5 18:20:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set HTTP_PRAGMA and HTTP_CACHE_CONTROL to no-cache if appropriate.  
+
+Fri Dec  5 18:18:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set HTTP_IF_MODIFIED_SINCE.  
+
+Fri Dec  5 18:17:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set HTTP_ACCEPT_LANGUAGE more properly.  
+
+Fri Dec  5 18:14:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set HTTP_ACCEPT_LANGUAGE.  
+
+Fri Dec  5 18:12:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Explain why we won't set HTTP_ACCEPT_ENCODING.  
+
+Fri Dec  5 18:11:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Protect against vim's cindent bugs ("*/*" messed it up).  
+
+Fri Dec  5 18:08:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set HTTP_ACCEPT to */*.  
+
+Fri Dec  5 18:07:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Do not check for setenv("HTTP_USER_AGENT") failure.  
+
+Fri Dec  5 18:07:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set HTTP_REFERER.  
+
+Fri Dec  5 18:02:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set HTTP_USER_AGENT.  
+
+Fri Dec  5 18:02:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/: http.c, http.h:
+
+	Export subst_user_agent().  
+
+Fri Dec  5 17:53:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set SERVER_PROTOCOL to ELGI/1.0.  
+
+Fri Dec  5 17:49:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	It is possible to have QUERY_STRING in POST query, so added support
+	for that to set_vars().  
+
+Fri Dec  5 17:48:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Added blank line ;-).  
+
+Fri Dec  5 17:47:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Cleaned up setting SCRIPT_NAME to be uniform to the others.  
+
+Fri Dec  5 17:45:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set REMOTE_ADDR to 127.0.0.1. Empty string could be maybe better,
+	though.  
+
+Fri Dec  5 17:41:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set GATEWAY_INTERFACE to CGI/1.1.  
+
+Fri Dec  5 17:40:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set SERVER_NAME to localhost. Empty string could be maybe better,
+	though.  
+
+Fri Dec  5 17:38:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Convert handling of c_pipe() error to goto end1 in execute_cgi().  
+
+Fri Dec  5 17:37:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	close() pipes on error, if they were created already.  
+
+Fri Dec  5 17:31:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set SERVER_SOFTWARE to ELinks/<VERSION>.  
+
+Fri Dec  5 17:11:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Stahuju -> stahuji 
+
+Fri Dec  5 17:10:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Fixed bug of ELinks not closing local CGI connections.  
+
+Fri Dec  5 15:17:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: options.c, options.h:
+
+	Only compare document options width if the document is not plain.  
+
+Fri Dec  5 13:50:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: options.c, options.h, renderer.c, html/parser.c:
+
+	A nice little hack that will mark those document that actually
+	depend on a specific document height (those that contain textareas
+	or frames). This means we can better check if we need to compare the
+	height and determine if we need to rerender.  
+
+Fri Dec  5 08:38:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Convert assertion to test, and extends it to check for uri->hostlen
+	== 0, which is correct but do not have sense here. It shold fix bug
+	280 (...).  
+
+Fri Dec  5 05:41:40 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/viewer/text/view.c:
+
+	Middle click opens links in a new backgrounded tab.  
+
+Fri Dec  5 05:18:16 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/viewer/text/view.c:
+
+	Invert behaviour of the mouse wheel on tabs, wheel down jumps to the
+	next tab. Based on new IThinkIsBetterThisWay(TM) technology.  
+
 Thu Dec  4 19:40:15 2003  Varga Balázs <vinnui@ent.hu>:
 
 	* po/hu.po:

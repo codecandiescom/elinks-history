@@ -1,3 +1,9 @@
+Wed May 19 16:09:05 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
 Mon May 17 10:47:03 2004  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/tables.c:

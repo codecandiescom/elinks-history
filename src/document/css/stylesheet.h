@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.32 2004/09/19 22:11:52 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.33 2004/09/19 22:59:09 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -29,16 +29,23 @@
 
 
 /* The {struct css_selector} is used for mapping elements (or nodes) in the
- * document structure to properties. */
-/* For now we only handle really ``flat'' stylesheets and no complicated
- * selectors, only single-type ones. */
-/* TODO: Form the selectors to trees, both in-element and pan-element, according
- * to les plans grands sketched in the README. --pasky */
-/* TODO: Then hash the selectors at least at the top levels? Binary trees could
+ * document structure to properties. See README for some hints about how the
+ * trees of these span. */
+/* TODO: Hash the selectors at least at the top levels? Binary trees could
  * still give an excellent gain while not giving a constant memory usage hit.
  * --pasky */
 struct css_selector {
 	LIST_HEAD(struct css_selector);
+
+	/* This defines relation between this selector fragment and its
+	 * parent in the selector tree. */
+	enum css_selector_relation {
+		CSR_ROOT, /* First class stylesheet member. */
+		CSR_SPECIFITY, /* Narrowing-down, i.e. the "x" in "foo#x". */
+		CSR_ANCESTOR, /* Ancestor, i.e. the "p" in "p a". */
+		CSR_PARENT, /* Direct parent, i.e. the "div" in "div>img". */
+	} relation;
+	struct list_head leaves; /* -> struct css_selector */
 
 	enum css_selector_type {
 		CST_ELEMENT,
@@ -47,10 +54,9 @@ struct css_selector {
 		CST_PSEUDO,
 		CST_INVALID, /* Auxiliary for the parser */
 	} type;
-
 	unsigned char *name;
 
-	struct list_head properties;
+	struct list_head properties; /* -> struct css_property */
 };
 
 

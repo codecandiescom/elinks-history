@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.105 2004/09/19 22:35:57 pasky Exp $ */
+/* $Id: parser.c,v 1.106 2004/09/19 22:59:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,24 +174,22 @@ struct selector_pkg {
  *
  * selector:
  *	  element_name? ('#' id)? ('.' class)? (':' pseudo_class)? \
- *		  (' ' selector)?
+ *		  ((' ' | '>') selector)?
  *
- * TODO: selector cannot currently contain multiple types (i.e. both element
- * name and class), and combinators are not supported yet.
  */
 static void
 css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		   struct list_head *selectors)
 {
-	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just a single
-	 * thing. --pasky */
+	struct selector_pkg *pkg = NULL;
+
 	/* FIXME: element can be even '*' --pasky */
 
 	while (scanner_has_tokens(scanner)) {
 		struct scanner_token *token = get_scanner_token(scanner);
 		struct scanner_token element;
-		struct selector_pkg *pkg = NULL;
 		struct css_selector *selector;
+		enum css_selector_relation reltype = CSR_ROOT;
 		enum css_selector_type seltype = CST_ELEMENT;
 
 		assert(token);
@@ -210,14 +208,22 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			case CSS_TOKEN_HASH:
 			case CSS_TOKEN_HEX_COLOR:
 				seltype = CST_ID;
+				if (pkg) reltype = CSR_SPECIFITY;
 				break;
 
 			case '.':
 				seltype = CST_CLASS;
+				if (pkg) reltype = CSR_SPECIFITY;
 				break;
 
 			case ':':
 				seltype = CST_PSEUDO;
+				if (pkg) reltype = CSR_SPECIFITY;
+				break;
+
+			case '>':
+				seltype = CST_ELEMENT;
+				if (pkg) reltype = CSR_PARENT;
 				break;
 
 			default:
@@ -238,6 +244,9 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			token = get_next_scanner_token(scanner);
 			if (token->type != CSS_TOKEN_IDENT) /* wtf */
 				continue;
+
+		} else {
+			if (pkg) reltype = CSR_ANCESTOR;
 		}
 
 
@@ -259,21 +268,53 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		/* Register the selector */
 
-		selector = get_css_base_selector(css, seltype,
-		                                 element.string,
-		                                 element.length);
-		if (!selector) continue;
+		if (!pkg) {
+			selector = get_css_base_selector(css, seltype,
+					element.string,
+					element.length);
+			if (!selector) continue;
 
-		pkg = mem_calloc(1, sizeof(struct selector_pkg));
-		if (!pkg) continue;
-		add_to_list(*selectors, pkg);
+			pkg = mem_calloc(1, sizeof(struct selector_pkg));
+			if (!pkg) continue;
+			add_to_list(*selectors, pkg);
+
+		} else if (reltype == CSR_SPECIFITY) {
+			/* We append under the last fragment. */
+			selector = get_css_selector(&pkg->selector->leaves,
+			                            seltype,
+						    element.string,
+						    element.length);
+			if (!selector) continue;
+
+			selector->relation = reltype;
+
+		} else {
+			/* We - in the perlish speak - unshift in front
+			 * of the previous selector fragment and reparent
+			 * it to the upcoming one. */
+			selector = get_css_base_selector(css, seltype,
+					element.string,
+					element.length);
+			if (!selector) continue;
+
+			del_from_list(pkg->selector);
+			add_to_list(selector->leaves, pkg->selector);
+			pkg->selector->relation = reltype;
+		}
 
 		pkg->selector = selector;
 
 
-		/* Multiple elements hooked up to this ruleset? */
+		/* What to do next */
 
-		if (token->type == ',') skip_scanner_token(scanner);
+		if (token->type == ',') {
+			/* Another selector hooked to these properties. */
+			skip_scanner_token(scanner);
+			pkg = NULL;
+		} else if (token->type == '{') {
+			/* End of selector list. */
+			break;
+		} /* else Another selector fragment probably coming up. */
 	}
 }
 

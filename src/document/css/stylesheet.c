@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.31 2004/09/19 21:33:57 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.32 2004/09/19 22:59:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,6 +52,9 @@ init_css_selector(struct list_head *sels, enum css_selector_type type,
 
 	selector = mem_calloc(1, sizeof(struct css_selector));
 	if (!selector) return NULL;
+
+	selector->relation = CSR_ROOT; /* Default */
+	init_list(selector->leaves);
 
 	selector->type = type;
 	init_list(selector->properties);
@@ -165,6 +168,10 @@ found:
 void
 done_css_selector(struct css_selector *selector)
 {
+	while (selector->leaves.next != &selector->leaves) {
+		done_css_selector(selector->leaves.next);
+	}
+
 	if (selector->next) del_from_list(selector);
 	free_list(selector->properties);
 	mem_free_if(selector->name);

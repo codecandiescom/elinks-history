@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.37 2004/08/18 20:02:18 jonas Exp $ */
+/* $Id: encoding.c,v 1.38 2004/11/08 14:24:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,11 +238,12 @@ read_file(struct stream_encoded *stream, int readsize, struct string *page)
 	 * does best job for uncompressed files, and doesn't hurt for
 	 * compressed ones anyway - very large files usually tend to inflate
 	 * fast anyway. At least I hope ;).  --pasky */
+	/* Also there because of bug in Linux. Read returns -EACCES when
+	 * reading 0 bytes to invalid address so ensure never to try and
+	 * allocate zero number of bytes. */
 	if (!readsize) readsize = 4096;
 
-	/* + 1 is there because of bug in Linux. Read returns -EACCES when
-	 * reading 0 bytes to invalid address */
-	while (realloc_string(page, page->length + readsize + 1)) {
+	while (realloc_string(page, page->length + readsize)) {
 		unsigned char *string_pos = page->source + page->length;
 		int readlen = read_encoded(stream, string_pos, readsize);
 

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.1 2004/08/18 17:24:18 jonas Exp $ */
+/* $Id: gopher.c,v 1.2 2004/08/18 17:30:29 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -415,15 +415,18 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 
 	default:
 	{
-		/* Other types need port */
 		struct string address;
 		unsigned char *format = *selector ? "%s://%s@%s/" : "%s://%s%s/";
 
+		/* If port is defined it means that both @selector and @host
+		 * was correctly parsed. */
 		if (!port || !init_string(&address)) {
 			/* Parse error: Bad menu item */
 			add_to_string(buffer, name);
 			break;
 		}
+
+		assert(selector && host);
 
 		if (entity == GOPHER_TELNET) {
 			add_format_to_string(&address, format,
@@ -455,6 +458,7 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 
 	add_char_to_string(buffer, '\n');
 }
+
 
 /* Search for line ending \r\n pair */
 static unsigned char *

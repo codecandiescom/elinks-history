@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.9 2003/06/07 09:59:44 pasky Exp $ */
+/* $Id: snprintf.c,v 1.10 2003/06/07 10:15:29 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -71,20 +71,20 @@
 #include "config.h"
 #endif
 
-#include "util/snprintf.h"
-
 /* #define TEST_SNPRINTF */ /* For compiling a standlone test binary. */
 
 #ifdef TEST_SNPRINTF /* need math library headers for testing */
 #include <math.h>
 #endif
 
-#include <string.h>
-
 #include <ctype.h>
-#include <sys/types.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+
+#include "util/snprintf.h"
+
 
 #if defined(HAVE_SNPRINTF) && defined(HAVE_VSNPRINTF) && defined(HAVE_C99_VSNPRINTF)
 

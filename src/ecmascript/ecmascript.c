@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.23 2004/11/24 18:21:39 zas Exp $ */
+/* $Id: ecmascript.c,v 1.24 2004/12/19 01:51:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "terminal/window.h"
 #include "util/conv.h"
 #include "viewer/text/view.h" /* current_frame() */
+#include "viewer/text/form.h" /* <-ecmascript_reset_state() */
 #include "viewer/text/vs.h"
 
 
@@ -98,9 +99,18 @@ ecmascript_put_interpreter(struct ecmascript_interpreter *interpreter)
 void
 ecmascript_reset_state(struct view_state *vs)
 {
+	struct form_view *fv;
+	int i;
+
 	vs->ecmascript_fragile = 0;
 	if (vs->ecmascript)
 		ecmascript_put_interpreter(vs->ecmascript);
+
+	foreach (fv, vs->forms)
+		fv->ecmascript_obj = NULL;
+	for (i = 0; i < vs->form_info_len; i++)
+		vs->form_info[i].ecmascript_obj = NULL;
+
 	vs->ecmascript = ecmascript_get_interpreter(vs);
 	if (!vs->ecmascript)
 		vs->ecmascript_fragile = 1;

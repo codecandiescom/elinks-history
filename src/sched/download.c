@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.89 2003/07/31 17:29:00 jonas Exp $ */
+/* $Id: download.c,v 1.90 2003/08/01 14:24:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,16 +303,15 @@ download_window_function(struct dialog_data *dlg)
 	text_width(term, msg.source, &min, &max);
 	buttons_width(term, dlg->items, dlg->n, &min, &max);
 
-	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;
-	if (w < min) w = min;
-	if (w > dlg->win->term->x - 2 * DIALOG_LB)
-		w = dlg->win->term->x - 2 * DIALOG_LB;
+	w = term->x * 9 / 10 - 2 * DIALOG_LB;
+	int_lower_bound(&w, min);
+	int_upper_bound(&w, term->x - 2 * DIALOG_LB);
 	if (t && download->prg->size >= 0) {
-		if (w < DOWN_DLG_MIN) w = DOWN_DLG_MIN;
+		int_lower_bound(&w, DOWN_DLG_MIN);
 	} else {
-		if (w > max) w = max;
+		int_upper_bound(&w, max);
 	}
-	if (w < 1) w = 1;
+	int_lower_bound(&w, 1);
 
 	y = 0;
 	dlg_format_text(NULL, term, u, 0, &y, w, NULL,
@@ -349,7 +348,7 @@ download_window_function(struct dialog_data *dlg)
 				      / (longlong) download->prg->size);
 		int barprogress = p * progress / 100;
 
-		if (barprogress > p) barprogress = p; /* Limit to preserve display. */
+		int_upper_bound(&barprogress, p); /* Limit to preserve display. */
 
 		if (ulongcat(q, &qlen, progress, qwidth - 1, 0) > 0)
 			memset(q, '?', qlen); /* Too long, we limit to preserve display. */

@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.38 2004/05/11 09:33:00 zas Exp $ */
+/* $Id: frames.h,v 1.39 2004/05/11 09:56:22 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -15,7 +15,6 @@ struct frame_desc {
 	unsigned char *name;
 	struct uri *uri;
 
-	int line;
 	int width, height;
 };
 

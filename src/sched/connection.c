@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.159 2004/04/05 16:58:57 jonas Exp $ */
+/* $Id: connection.c,v 1.160 2004/04/07 19:34:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,7 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	/* load_uri() gets the URI from get_proxy() which grabs a reference for
 	 * us. */
 	conn->uri = uri;
-	conn->proxied_uri = get_uri_reference(proxied_uri);
+	conn->proxied_uri = proxied_uri;
 	conn->id = connection_id++;
 	conn->referrer = referrer ? get_uri_reference(referrer) : NULL;
 	conn->pri[priority] =  1;
@@ -764,7 +764,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 {
 	struct cache_entry *cached = NULL;
 	struct connection *conn;
-	struct uri *proxy_uri;
+	struct uri *proxy_uri, *proxied_uri;
 
 	if (download) {
 		download->conn = NULL;
@@ -816,17 +816,21 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		}
 	}
 
-	proxy_uri = get_proxy(uri);
+	proxied_uri = get_proxied_uri(uri);
+	proxy_uri   = get_proxy_uri(uri);
+
 	if (!proxy_uri
+	    || !proxied_uri
 	    || (VALID_PROTOCOL(proxy_uri->protocol)
 		&& get_protocol_need_slash_after_host(proxy_uri->protocol)
 		&& !proxy_uri->hostlen)) {
 
 		if (download) {
-			download->state = proxy_uri ? S_BAD_URL : S_OUT_OF_MEM;
+			download->state = proxy_uri && proxied_uri ? S_BAD_URL : S_OUT_OF_MEM;
 			download->end(download, download->data);
 		}
 		if (proxy_uri) done_uri(proxy_uri);
+		if (proxied_uri) done_uri(proxied_uri);
 		return -1;
 	}
 
@@ -856,13 +860,14 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		return 0;
 	}
 
-	conn = init_connection(proxy_uri, uri, referrer, start, cache_mode, pri);
+	conn = init_connection(proxy_uri, proxied_uri, referrer, start, cache_mode, pri);
 	if (!conn) {
 		if (download) {
 			download->state = S_OUT_OF_MEM;
 			download->end(download, download->data);
 		}
 		if (proxy_uri) done_uri(proxy_uri);
+		if (proxied_uri) done_uri(proxied_uri);
 		return -1;
 	}
 

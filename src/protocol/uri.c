@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.167 2004/04/07 19:12:19 jonas Exp $ */
+/* $Id: uri.c,v 1.168 2004/04/07 19:34:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -345,20 +345,27 @@ add_string_uri_to_string(struct string *string, unsigned char *uristring,
 static unsigned char *
 normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 {
+	unsigned char *parse_string = uristring;
 	unsigned char *src, *dest, *path;
 	int lo;
 
-	if (parse && parse_uri(uri, uristring) != URI_ERRNO_OK)
-		return uristring;
+	/* We need to get real URI */
+	do {
+		if (parse && parse_uri(uri, parse_string) != URI_ERRNO_OK)
+			return uristring;
 
-	assert(uri->data);
+		assert(uri->data);
 
-	/* This is a maybe not the right place but both join_urls() and
-	 * get_translated_uri() through translate_url() calls this function
-	 * and then it already works on and modifies an allocated copy. */
-	/* I don't think username and password should be lowercased. --jonas */
-	convert_to_lowercase(uri->protocol_str, uri->protocollen);
-	if (uri->hostlen) convert_to_lowercase(uri->host, uri->hostlen);
+		/* This is a maybe not the right place but both join_urls() and
+		 * get_translated_uri() through translate_url() calls this
+		 * function and then it already works on and modifies an
+		 * allocated copy. */
+		convert_to_lowercase(uri->protocol_str, uri->protocollen);
+		if (uri->hostlen) convert_to_lowercase(uri->host, uri->hostlen);
+
+		parse = 1;
+		parse_string = uri->data;
+	} while (uri->protocol == PROTOCOL_PROXY);
 
 	/* dsep() *hint* *hint* */
 	lo = (uri->protocol == PROTOCOL_FILE);

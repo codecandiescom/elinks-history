@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.87 2004/04/05 16:58:57 jonas Exp $ */
+/* $Id: uri.h,v 1.88 2004/04/07 19:34:51 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -120,9 +120,13 @@ get_uri_reference(struct uri *uri)
 	return uri;
 }
 
-#define get_proxied_uri(uri) \
-	((uri)->protocol == PROTOCOL_PROXY) \
-	? get_uri((uri)->data, -1) : get_uri_reference(uri)
+#define get_proxied_uri(uri)					\
+	(((uri)->protocol == PROTOCOL_PROXY)			\
+	? get_uri((uri)->data, -1) : get_uri_reference(uri))
+
+#define get_proxy_uri(uri)					\
+	(((uri)->protocol != PROTOCOL_PROXY)			\
+	? get_proxy(uri) : get_uri_reference(uri))
 
 /* Resolves an URI relative to a current working directory (CWD) and possibly
  * extracts the fragment. It is possible to just use it to extract fragment

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.399 2003/11/10 20:53:21 jonas Exp $ */
+/* $Id: options.c,v 1.400 2003/11/11 14:52:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,7 +211,9 @@ get_opt_(
 		if (!opt->value.command)
 			elinks_internal("Option %s has no value!", name);
 		break;
-	default:
+	case OPT_CODEPAGE: /* TODO: check these too. */
+	case OPT_LANGUAGE:
+	case OPT_COLOR:
 		break;
 	}
 #endif
@@ -394,10 +396,6 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 			option->value.command = value;
 			break;
 		case OPT_LANGUAGE:
-			break;
-		default:
-			/* XXX: Make sure all option types are handled here. */
-			internal("Invalid option type %d", type);
 			break;
 	}
 
@@ -907,10 +905,6 @@ print_full_help(struct option *tree, unsigned char *path)
 				printf("  %s: (%s)", capt, saved);
 				break;
 			}
-
-			default:
-				internal("Invalid option type: %d\n", type);
-				break;
 		}
 
 		printf("\n    %8s", "");
@@ -1170,7 +1164,12 @@ register_options(struct option_info info[], struct option *tree)
 				assert(string);
 				option->value.number = get_cp_index(string);
 				break;
-			default:
+			case OPT_BOOL:
+			case OPT_INT:
+			case OPT_LONG:
+			case OPT_LANGUAGE:
+			case OPT_COMMAND:
+			case OPT_ALIAS:
 				break;
 		}
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.328 2004/06/30 08:43:26 pasky Exp $ */
+/* $Id: tables.c,v 1.329 2004/06/30 14:03:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -758,6 +758,7 @@ get_table_heights(struct table *table)
 	table->real_height = get_table_real_height(table);
 }
 
+/* FIXME: too long, split it. */
 static void
 draw_table_cell(struct table *table, int col, int row, int x, int y)
 {
@@ -782,10 +783,8 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 	}
 
 	if (global_doc_opts && global_doc_opts->table_expand_cols) {
-		/* This is not working correctly. Some
-		 * pages will be rendered much better
-		 * (/.) while other will look very ugly
-		 * and broken. */
+		/* This is not working correctly. Some pages will be rendered
+		 * much better while other will look very ugly and broken. */
 		par_format.bgcolor = table->bgcolor;
 		expand_lines(table->part, x - 1, y, height);
 	}
@@ -831,7 +830,6 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 	done_html_parser_state(state);
 }
 
-/* FIXME: too long, split it. */
 static void
 draw_table_cells(struct table *table, int x, int y)
 {

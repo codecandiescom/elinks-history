@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.383 2003/10/25 19:29:46 pasky Exp $ */
+/* $Id: options.c,v 1.384 2003/10/25 19:38:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,19 +264,27 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 		/* Scan the list linearly. This could be probably optimized ie.
 		 * to choose direction based on the first letter or so. */
 		} else {
+			struct listbox_item *bpos = bcat->next;
+
+			assert(bpos != (struct listbox_item *) bcat);
+
 			foreach (pos, *cat) {
-				if (strcmp(pos->name, option->name) <= 0)
+				if (strcmp(pos->name, option->name) <= 0) {
+					bpos = bpos->next;
+					assert(bpos != (struct listbox_item *) bcat);
 					continue;
+				}
 
 				/* The (struct option) add_at_pos() can mess
 				 * up the order so that we add the box_item
 				 * to itself, so better do it first. */
-				if (abi) add_at_pos(pos->prev->box_item, option->box_item);
+				if (abi) add_at_pos(bpos->prev, option->box_item);
 				add_at_pos(pos->prev, option);
 				break;
 			}
 
 			assert(pos != (struct option *) cat);
+			assert(bpos != (struct listbox_item *) bcat);
 		}
 
 	} else {

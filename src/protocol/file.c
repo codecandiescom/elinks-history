@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.73 2003/06/23 15:04:20 jonas Exp $ */
+/* $Id: file.c,v 1.74 2003/06/23 21:14:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,24 +314,20 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 	add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory ");
 	{
 		/* Make the directory path with links to each subdir. */
-		unsigned char *pslash, *slash = filename - 1;
+		unsigned char *slash = filename;
+		unsigned char *pslash = ++slash;
 
-		while (pslash = ++slash, slash = strchr(slash, '/')) {
-			if (slash == filename) {
-				add_chr_to_str(&fragment, &fragmentlen, '/');
-				continue;
-			}
-
-			slash[0] = 0;
+		add_chr_to_str(&fragment, &fragmentlen, '/');
+		while ((slash = strchr(slash, '/'))) {
+			*slash = 0;
 			add_to_str(&fragment, &fragmentlen, "<a href=\"");
 			/* FIXME: htmlesc? At least we should escape quotes. --pasky */
 			add_to_str(&fragment, &fragmentlen, filename);
-			add_chr_to_str(&fragment, &fragmentlen, '/');
-			add_to_str(&fragment, &fragmentlen, "\">");
+			add_to_str(&fragment, &fragmentlen, "/\">");
 			add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
-			add_to_str(&fragment, &fragmentlen, "</a>");
-			add_chr_to_str(&fragment, &fragmentlen, '/');
-			slash[0] = '/';
+			add_to_str(&fragment, &fragmentlen, "</a>/");
+			*slash = '/';
+			pslash = ++slash;
 		}
 	}
 	add_to_str(&fragment, &fragmentlen, "</h2>\n<pre>");
@@ -607,7 +603,8 @@ file_func(struct connection *connection)
 
 	directory = opendir(filename);
 	if (directory) {
-		/* For some strange reason the directory url must end with a
+		/* In order for global history and directory listing to
+		 * function properly the directory url must end with a
 		 * directory separator. */
 		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
 			redirect = straconcat(connection->url, "/", NULL);

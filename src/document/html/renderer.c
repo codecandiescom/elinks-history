@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.292 2003/10/05 14:05:05 pasky Exp $ */
+/* $Id: renderer.c,v 1.293 2003/10/17 11:12:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1475,7 +1475,7 @@ get_convert_table(unsigned char *head, int to_cp,
 }
 
 static void
-format_html(struct cache_entry *ce, struct document *screen)
+format_html(struct cache_entry *ce, struct document *document)
 {
 	struct fragment *fr;
 	struct part *rp;
@@ -1486,14 +1486,14 @@ format_html(struct cache_entry *ce, struct document *screen)
 	struct string head;
 	int i;
 
-	assert(ce && screen);
+	assert(ce && document);
 	if_assert_failed return;
 
 	if (!init_string(&head)) return;
 
 	url = ce->url;
-	d_opt = &screen->opt;
-	screen->use_tag = ce->count;
+	d_opt = &document->opt;
+	document->id_tag = ce->id_tag;
 	defrag_entry(ce);
 	fr = ce->frag.next;
 
@@ -1509,17 +1509,17 @@ format_html(struct cache_entry *ce, struct document *screen)
 
 	i = d_opt->plain;
 	scan_http_equiv(start, end, &head, &title);
-	convert_table = get_convert_table(head.source, screen->opt.cp,
-					  screen->opt.assume_cp,
-					  &screen->cp,
-					  &screen->cp_status,
-					  screen->opt.hard_assume);
+	convert_table = get_convert_table(head.source, document->opt.cp,
+					  document->opt.assume_cp,
+					  &document->cp,
+					  &document->cp_status,
+					  document->opt.hard_assume);
 	d_opt->plain = 0;
-	screen->title = convert_string(convert_table, title.source, title.length, CSM_DEFAULT);
+	document->title = convert_string(convert_table, title.source, title.length, CSM_DEFAULT);
 	d_opt->plain = i;
 	done_string(&title);
 
-	push_base_format(url, &screen->opt);
+	push_base_format(url, &document->opt);
 
 	table_level = 0;
 	g_ctrl_num = 0;
@@ -1528,28 +1528,28 @@ format_html(struct cache_entry *ce, struct document *screen)
 	last_input_tag = NULL;
 
 	rp = format_html_part(start, end, par_format.align,
-			      par_format.leftmargin, screen->opt.xw, screen,
+			      par_format.leftmargin, document->opt.xw, document,
 			      0, 0, head.source, 1);
 	if (rp) mem_free(rp);
 
 	done_string(&head);
 
-	screen->x = 0;
+	document->x = 0;
 
-	for (i = screen->y - 1; i >= 0; i--) {
-		if (!screen->data[i].l) {
-			if (screen->data[i].d) mem_free(screen->data[i].d);
-			screen->y--;
+	for (i = document->y - 1; i >= 0; i--) {
+		if (!document->data[i].l) {
+			if (document->data[i].d) mem_free(document->data[i].d);
+			document->y--;
 		} else break;
 	}
 
-	for (i = 0; i < screen->y; i++)
-		screen->x = int_max(screen->x, screen->data[i].l);
+	for (i = 0; i < document->y; i++)
+		document->x = int_max(document->x, document->data[i].l);
 
 	if (form.action) mem_free(form.action), form.action = NULL;
 	if (form.target) mem_free(form.target), form.target = NULL;
 
-	screen->bgcolor = par_format.bgcolor;
+	document->bgcolor = par_format.bgcolor;
 
 	kill_html_stack_item(html_stack.next);
 
@@ -1557,7 +1557,7 @@ format_html(struct cache_entry *ce, struct document *screen)
 		"html stack not empty after operation");
 	if_assert_failed init_list(html_stack);
 
-	sort_links(screen);
+	sort_links(document);
 
 #if 0 /* debug purpose */
 	{
@@ -1565,7 +1565,7 @@ format_html(struct cache_entry *ce, struct document *screen)
 		struct form_control *form;
 		unsigned char *qq;
 		fprintf(f,"FORM:\n");
-		foreach (form, screen->forms) {
+		foreach (form, document->forms) {
 			fprintf(f, "g=%d f=%d c=%d t:%d\n",
 				form->g_ctrl_num, form->form_num,
 				form->ctrl_num, form->type);
@@ -1581,7 +1581,7 @@ format_html(struct cache_entry *ce, struct document *screen)
 void
 shrink_format_cache(int whole)
 {
-	struct document *ce;
+	struct document *document;
 	int format_cache_size = get_opt_int("document.cache.format.size");
 
 	delete_unused_format_cache_entries();
@@ -1589,17 +1589,17 @@ shrink_format_cache(int whole)
 	assertm(format_cache_entries >= 0, "format_cache_entries underflow");
 	if_assert_failed format_cache_entries = 0;
 
-	ce = format_cache.prev;
+	document = format_cache.prev;
 	while ((whole || format_cache_entries > format_cache_size)
-	       && (void *)ce != &format_cache) {
+	       && (void *)document != &format_cache) {
 
-		if (ce->refcount) {
-			ce = ce->prev;
+		if (document->refcount) {
+			document = document->prev;
 			continue;
 		}
 
-		ce = ce->prev;
-		done_document(ce->next);
+		document = document->prev;
+		done_document(document->next);
 		format_cache_entries--;
 	}
 }
@@ -1607,29 +1607,29 @@ shrink_format_cache(int whole)
 void
 count_format_cache(void)
 {
-	struct document *ce;
+	struct document *document;
 
 	format_cache_entries = 0;
-	foreach (ce, format_cache)
-		if (!ce->refcount)
+	foreach (document, format_cache)
+		if (!document->refcount)
 			format_cache_entries++;
 }
 
 void
 delete_unused_format_cache_entries(void)
 {
-	struct document *ce;
+	struct document *document;
 
-	foreach (ce, format_cache) {
-		struct cache_entry *cee = NULL;
+	foreach (document, format_cache) {
+		if (!document->refcount) {
+			struct cache_entry *ce = NULL;
 
-		if (!ce->refcount) {
-			if (!find_in_cache(ce->url, &cee) || !cee
-			    || cee->count != ce->use_tag) {
-				assertm(cee, "file %s disappeared from cache",
-					ce->url);
-				ce = ce->prev;
-				done_document(ce->next);
+			if (!find_in_cache(document->url, &ce) || !ce
+			    || ce->id_tag != document->id_tag) {
+				assertm(ce, "file %s disappeared from cache",
+					document->url);
+				document = document->prev;
+				done_document(document->next);
 				format_cache_entries--;
 			}
 		}
@@ -1637,13 +1637,13 @@ delete_unused_format_cache_entries(void)
 }
 
 void
-format_cache_reactivate(struct document *ce)
+format_cache_reactivate(struct document *document)
 {
-	assert(ce);
+	assert(document);
 	if_assert_failed return;
 
-	del_from_list(ce);
-	add_to_list(format_cache, ce);
+	del_from_list(document);
+	add_to_list(format_cache, document);
 }
 
 void
@@ -1679,7 +1679,7 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 		    || compare_opt(&document->opt, options))
 			continue;
 
-		if (cache_entry->count != document->use_tag) {
+		if (cache_entry->id_tag != document->id_tag) {
 			if (!document->refcount) {
 				document = document->prev;
 				done_document(document->next);
@@ -1721,14 +1721,15 @@ long
 formatted_info(int type)
 {
 	int i = 0;
-	struct document *ce;
+	struct document *document;
 
 	switch (type) {
 		case INFO_FILES:
-			foreach (ce, format_cache) i++;
+			foreach (document, format_cache) i++;
 			return i;
 		case INFO_LOCKED:
-			foreach (ce, format_cache) i += !!ce->refcount;
+			foreach (document, format_cache)
+				i += !!document->refcount;
 			return i;
 		default:
 			internal("formatted_info: bad request");

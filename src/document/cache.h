@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.22 2003/10/17 09:32:35 zas Exp $ */
+/* $Id: cache.h,v 1.23 2003/10/17 11:12:47 zas Exp $ */
 
 #ifndef EL__DOCUMENT_CACHE_H
 #define EL__DOCUMENT_CACHE_H
@@ -26,7 +26,7 @@ struct cache_entry {
 	unsigned char *ssl_info;
 	unsigned char *encoding_info;
 
-	unsigned int count;
+	unsigned int id_tag; /* Change each time entry is modified. */
 
 	int length;
 	int data_size;

@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.14 2003/09/27 13:47:28 jonas Exp $ */
+/* $Id: frames.h,v 1.15 2003/10/17 11:12:48 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -71,7 +71,7 @@ struct document {
 	struct search **slines1;
 	struct search **slines2;
 
-	unsigned int use_tag;
+	unsigned int id_tag; /* Used to check cache entries. */
 
 	int refcount;
 	int cp;

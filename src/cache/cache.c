@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.57 2003/10/17 09:07:23 zas Exp $ */
+/* $Id: cache.c,v 1.58 2003/10/17 11:12:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 
 static INIT_LIST_HEAD(cache);
 static long cache_size;
-static int cache_count = 0;
+static int id_tag_counter = 0;
 
 
 /* Define to enable cache debugging features (redirect stderr to a file). */
@@ -132,7 +132,7 @@ get_cache_entry(unsigned char *url, struct cache_entry **cep)
 
 	e->incomplete = 1;
 	init_list(e->frag);
-	e->count = cache_count++;
+	e->id_tag = id_tag_counter++;
 
 	add_to_list(cache, e);
 	*cep = e;
@@ -171,8 +171,9 @@ add_fragment(struct cache_entry *e, int offset,
 	if (e->length < end_offset)
 		e->length = end_offset;
 
-	/* XXX: This is probably some magic strange thing for HTML renderer. */
-	e->count = cache_count++;
+	/* id_tag marks each entry, and change each time it's modified,
+	 * used in HTML renderer. */
+	e->id_tag = id_tag_counter++;
 
 	/* Possibly insert the new data in the middle of existing fragment. */
 	foreach (f, e->frag) {
@@ -416,7 +417,7 @@ delete_entry_content(struct cache_entry *e)
 	if_assert_failed { cache_size = 0; }
 
 	free_list(e->frag);
-	e->count = cache_count++;
+	e->id_tag = id_tag_counter++;
 	e->length = 0;
 	e->incomplete = 1;
 	e->data_size = 0;

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.60 2003/11/24 16:23:39 jonas Exp $ */
+/* $Id: formhist.c,v 1.61 2003/11/24 17:01:17 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -408,6 +408,9 @@ done_form_history(struct module *module)
 	foreach(form, saved_forms) {
 		free_form_in_list(form);
 		mem_free(form->submit);
+		if (form->box_item)
+			done_browser_box(&formhist_browser, form->box_item);
+
 	}
 
 	free_list(saved_forms);

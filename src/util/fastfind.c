@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.6 2003/06/13 22:04:51 zas Exp $ */
+/* $Id: fastfind.c,v 1.7 2003/06/13 22:14:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,16 +127,16 @@ add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 
 	new_pointers = mem_realloc(info->pointers, new_count * sizeof(void *));
 	if (!new_pointers) return 0;
+	info->pointers = new_pointers;
 
 	new_keylen_list = mem_realloc(info->keylen_list, new_count * sizeof(int));
 	if (!new_keylen_list) return 0;
+	info->keylen_list = new_keylen_list;
 
 #ifdef FASTFIND_DEBUG
 	info->memory_usage += sizeof(int) + sizeof(void *);
 #endif
 
-	info->pointers = new_pointers;
-	info->keylen_list = new_keylen_list;
 	info->pointers[info->pointers_count] = p;
 	info->keylen_list[info->pointers_count] = key_len; /* Record key len, used in search */
 
@@ -150,20 +150,22 @@ static int
 alloc_line(struct fastfind_info *info)
 {
 	/* FIXME: Check limit */
+	struct ff_elt **new_lines;
 	struct ff_elt *line;
 
-	info->lines = mem_realloc(info->lines, sizeof(struct ff_elt *) * (info->lines_count + 2));
-	if (!info->lines) return 0;
-#ifdef FASTFIND_DEBUG
-	info->memory_usage += sizeof(struct ff_elt *);
-#endif
+	/* info->lines[0] is never used since l=0 marks no leaf in struct ff_elt.
+	 * That's the reason of that + 2. */
+	new_lines = mem_realloc(info->lines, sizeof(struct ff_elt *) * (info->lines_count + 2));
+	if (!new_lines) return 0;
+	info->lines = new_lines;
 
 	line = mem_calloc(info->uniq_chars_count, sizeof(struct ff_elt));
 	if (!line) return 0;
+
 #ifdef FASTFIND_DEBUG
-	info->memory_usage += sizeof(struct ff_elt) * info->uniq_chars_count;
+	info->memory_usage += sizeof(struct ff_elt *)
+			      + sizeof(struct ff_elt) * info->uniq_chars_count;
 #endif
-	/* info->lines[0] is never used since l=0 marks no leaf in struct ff_elt */
 	info->lines_count++;
 	info->lines[info->lines_count] = line;
 

@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.48 2004/02/13 17:52:48 zas Exp $ */
+/* $Id: fastfind.c,v 1.49 2004/02/13 20:33:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,8 +85,8 @@
 /* Use only 32 bits per element, but has very low limits. */
 /* Adequate for ELinks tags search. */
 
-#define POINTER_INDEX_BITS	9	/* 512 */
-#define LEAFSET_INDEX_BITS	14	/* 16384 */
+#define POINTER_INDEX_BITS	10	/* 1024 */
+#define LEAFSET_INDEX_BITS	13	/* 8192 */
 #define COMP_CHAR_INDEX_BITS	7	/* 128	*/
 
 #define ff_node ff_node_c /* Both are 32 bits long. */

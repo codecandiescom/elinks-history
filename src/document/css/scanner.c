@@ -1,11 +1,13 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.1 2004/01/18 15:41:04 jonas Exp $ */
+/* $Id: scanner.c,v 1.2 2004/01/18 15:47:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <string.h>
+
+#include "elinks.h"
 
 #include "document/css/scanner.h"
 #include "util/error.h"

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.350 2004/01/08 02:48:19 jonas Exp $ */
+/* $Id: view.c,v 1.351 2004/01/08 02:50:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -900,7 +900,7 @@ quit:
 			goto x;
 		}
 
-		switch (kbd_action(KM_MAIN, ev, &func_ref)) {
+		switch (action) {
 			case ACT_SCRIPTING_FUNCTION:
 #ifdef HAVE_SCRIPTING
 				trigger_event(func_ref, ses);

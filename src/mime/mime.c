@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.68 2004/09/27 11:30:47 jonas Exp $ */
+/* $Id: mime.c,v 1.69 2004/09/29 11:49:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,6 +228,7 @@ get_content_type(struct cache_entry *cached)
 			cached->content_type = ctype;
 			return ctype;
 		}
+		mem_free_if(ctype);
 	}
 
 	/* We can't use the extension string we are getting below, because we
@@ -252,6 +253,7 @@ get_content_type(struct cache_entry *cached)
 			cached->content_type = ctype;
 			return ctype;
 		}
+		mem_free_if(ctype);
 	}
 
 	debug_ctype(get_default_mime_type());

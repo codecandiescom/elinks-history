@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.18 2004/02/20 16:03:15 jonas Exp $ */
+/* $Id: codes.c,v 1.19 2004/02/20 16:32:15 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -99,39 +99,59 @@ http_code_to_string(int code)
 
 /* TODO: Some short intermediate document for the 3xx messages? --pasky */
 static unsigned char *
-get_http_error_document(struct terminal *term, int code)
+get_http_error_document(struct terminal *term, unsigned char *url, int code)
 {
 	unsigned char *codestr = http_code_to_string(code);
+	unsigned char *title = asprintfa(_("HTTP error %03d", term), code);
+	struct string string;
 
 	if (!codestr) codestr = "Unknown error";
 
-	/* TODO: l10n this but without all the HTML code. --jonas */
-	return asprintfa(
-"<html>\n"
-" <head>\n"
-"  <title>HTTP error %03d</title>\n"
-" </head>\n"
-" <body>\n"
-"  <h1 align=\"left\">HTTP error %03d: %s</h1>\n"
+	if (!init_string(&string)) {
+		if (title) mem_free(title);
+		return NULL;
+	}
+
+	add_format_to_string(&string,
+		"<html>\n"
+		" <head><title>%s</title></head>\n"
+		" <body>\n"
+		"  <h1 align=\"left\">%s: %s</h1>\n"
 #ifndef ELINKS_SMALL
-"  \n"
-"  <center><hr /></center>\n"
-"  \n"
-"  <p>An error occurred on the server while fetching the document you\n"
-"  requested. Moreover, the server did not send back any explanation of what\n"
-"  happenned whatsoever - it would be nice if you notified the web server\n"
-"  administrator about this, as it is not a nice behaviour from the web\n"
-"  server at all and it frequently indicates some much deeper problem with\n"
-"  the web server software.</p>\n"
-"  \n"
-"  <p>I have no idea about what is wrong, sorry. Please contact the web\n"
-"  server administrator if you believe that this error should not occur.</p>\n"
-"  \n"
-"  <p align=\"right\">Have a nice day.</p>\n"
+		"  <hr />\n"
+		"  <p>\n"
 #endif
-" </body>\n"
-"</html>\n",
-			code, code, codestr);
+		, title, title, codestr);
+
+#ifndef ELINKS_SMALL
+	add_format_to_string(&string, _(
+		"  An error occurred on the server while fetching the document you\n"
+		"  requested. Moreover, the server did not send back any explanation of what\n"
+		"  happenned whatsoever - it would be nice if you notified the web server\n"
+		"  administrator about this, as it is not a nice behaviour from the web\n"
+		"  server at all and it frequently indicates some much deeper problem with\n"
+		"  the web server software.\n"
+		"  <br><br>\n"
+		"  I have no idea about what is wrong, sorry. Please contact the web\n"
+		"  server administrator if you believe that this error should not occur.\n",
+		term));
+
+	add_format_to_string(&string,
+		"  </p>\n"
+		"  <p>\n"
+		"  URI: <a href=\"%s\">%s</a>\n", url, url);
+#endif
+	add_format_to_string(&string,
+#ifndef ELINKS_SMALL
+		" </p>\n"
+		" <hr />\n"
+#endif
+		" </body>\n"
+		"</html>\n");
+
+	if (title) mem_free(title);
+
+	return string.source;
 }
 
 struct http_error_info {
@@ -148,7 +168,7 @@ show_http_error_document(struct session *ses, void *data)
 	struct cache_entry *cache = cached ? cached : get_cache_entry(info->url);
 	unsigned char *str = NULL;
 
-	if (cache) str = get_http_error_document(term, info->code);
+	if (cache) str = get_http_error_document(term, info->url, info->code);
 
 	if (str) {
 		if (cached) delete_entry_content(cache);

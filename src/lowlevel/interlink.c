@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.32 2003/06/17 23:23:46 zas Exp $ */
+/* $Id: interlink.c,v 1.33 2003/06/18 07:48:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,13 +66,15 @@ af_unix_close(void)
 #include <sys/un.h>
 #endif
 
+/* FIXME: Separate client and server code. --Zas */
+
 /* Accepted socket */
-struct sockaddr *s_unix_accept = NULL;
+static struct sockaddr *s_unix_accept;
 
 /* Listening socket */
-struct sockaddr *s_unix = NULL;
-int s_unix_l;
-int s_unix_fd = -1;
+static struct sockaddr *s_unix;
+static int s_unix_l;
+static int s_unix_fd = -1;
 
 #ifdef USE_AF_UNIX
 
@@ -179,6 +181,8 @@ af_unix_connection(void *dummy)
 	set_highpri();
 }
 
+
+/* TODO: separate to a client function and a server function. */
 int
 bind_to_af_unix(void)
 {
@@ -222,6 +226,7 @@ again:
 #endif
 
 			if (++attempts < MAX_BIND_TRIES) {
+				/* XXX: What's wrong with sleep(1) ?? --Zas */
 				struct timeval tv = { 0, 100000 };
 				fd_set dummy;
 

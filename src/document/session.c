@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.31 2002/05/08 12:27:49 pasky Exp $ */
+/* $Id: session.c,v 1.32 2002/05/08 13:39:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -703,12 +703,26 @@ void doc_end_load(struct status *stat, struct session *ses)
 				ses->screen->f_data->title, time(NULL));
 }
 
-void file_end_load(struct status *stat, struct file_to_load *ftl)
+void
+file_end_load(struct status *stat, struct file_to_load *ftl)
 {
 	if (ftl->stat.ce) {
 		if (ftl->ce) ftl->ce->refcount--;
 		(ftl->ce = ftl->stat.ce)->refcount++;
 	}
+
+	/* FIXME: We need to do content-type check here! However, we won't
+	 * handle properly the "Choose action" dialog now :(. */
+#if 0
+	if (ses_chktype(ftl->ses, stat, ftl->ce)) {
+#if 0
+		free_wtd(ftl->ses);
+		reload(ses, NC_CACHE);
+#endif
+		return;
+	}
+#endif
+
 	doc_end_load(stat, ftl->ses);
 }
 

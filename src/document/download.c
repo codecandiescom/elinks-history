@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.6 2002/05/06 14:12:13 pasky Exp $ */
+/* $Id: download.c,v 1.7 2002/05/08 13:39:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -784,8 +784,11 @@ tp_open(struct session *ses)
 }
 
 
+/* FIXME: We need to modify this function to take frame data instead, as we
+ * want to use this function for frames as well (now, when frame has content
+ * type text/plain, it is ignored and displayed as HTML). */
 void
-tp_display(struct session *ses)	/* !!! FIXME: frames */
+tp_display(struct session *ses)
 {
 	struct location *l;
 

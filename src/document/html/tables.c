@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.108 2003/10/30 17:27:41 zas Exp $ */
+/* $Id: tables.c,v 1.109 2003/10/30 17:38:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,10 @@ struct table {
 	int *rows_height;
 	int x, y;
 	int rx, ry;
-	int border, cellpd, vcellpd, cellsp;
+	int border;
+	int cellpadding;
+	int vcellpadding;
+	int cellspacing;
 	int frame, rules, width, wf;
 	int rw;
 	int min_t, max_t;
@@ -751,7 +754,7 @@ scan_done:
 }
 
 static inline void
-get_cell_width(unsigned char *start, unsigned char *end, int cellpd, int w,
+get_cell_width(unsigned char *start, unsigned char *end, int cellpadding, int w,
 	       int a, int *min, int *max, int n_link, int *n_links)
 {
 	struct part *p;
@@ -760,7 +763,7 @@ get_cell_width(unsigned char *start, unsigned char *end, int cellpd, int w,
 	if (max) *max = -1;
 	if (n_links) *n_links = n_link;
 
-	p = format_html_part(start, end, AL_LEFT, cellpd, w, NULL, !!a, !!a,
+	p = format_html_part(start, end, AL_LEFT, cellpadding, w, NULL, !!a, !!a,
 			     NULL, n_link);
 	if (!p) return;
 
@@ -785,7 +788,7 @@ check_cell_widths(struct table *t)
 
 		if (!c->start) continue;
 
-		get_cell_width(c->start, c->end, t->cellpd, 0, 0,
+		get_cell_width(c->start, c->end, t->cellpadding, 0, 0,
 			       &min, &max, c->link_num, NULL);
 
 		assertm(!(min != c->min_width || max < c->max_width),
@@ -806,7 +809,7 @@ get_cell_widths(struct table *t)
 
 				if (!c->start) continue;
 				c->link_num = nl;
-				get_cell_width(c->start, c->end, t->cellpd, 0, 0,
+				get_cell_width(c->start, c->end, t->cellpadding, 0, 0,
 					       &c->min_width, &c->max_width, nl, &nl);
 			}
 	else
@@ -816,7 +819,7 @@ get_cell_widths(struct table *t)
 
 				if (!c->start) continue;
 				c->link_num = nl;
-				get_cell_width(c->start, c->end, t->cellpd, 0, 0,
+				get_cell_width(c->start, c->end, t->cellpadding, 0, 0,
 					       &c->min_width, &c->max_width, nl, &nl);
 			}
 
@@ -870,11 +873,11 @@ get_vline_width(struct table *t, int col)
 	if (!col) return -1;
 
 	if (t->rules == TABLE_RULE_COLS || t->rules == TABLE_RULE_ALL)
-		w = t->cellsp;
+		w = t->cellspacing;
 	else if (t->rules == TABLE_RULE_GROUPS)
 		w = (col < t->columns_count && t->columns[col].group);
 
-	if (!w && t->cellpd) w = -1;
+	if (!w && t->cellpadding) w = -1;
 
 	return w;
 }
@@ -889,7 +892,7 @@ get_hline_width(struct table *t, int row)
 	if (t->rules == TABLE_RULE_ROWS || t->rules == TABLE_RULE_ALL) {
 
 x:
-		if (t->cellsp || t->vcellpd) return t->cellsp;
+		if (t->cellspacing || t->vcellpadding) return t->cellspacing;
 		return -1;
 
 	} else if (t->rules == TABLE_RULE_GROUPS) {
@@ -898,10 +901,10 @@ x:
 		for (q = 0; q < t->x; q++)
 			if (CELL(t, q, row)->group)
 				goto x;
-		return t->vcellpd ? 0 : -1;
+		return t->vcellpadding ? 0 : -1;
 	}
 
-	if (!w && !t->vcellpd) w = -1;
+	if (!w && !t->vcellpadding) w = -1;
 
 	return w;
 }
@@ -1194,7 +1197,7 @@ check_table_widths(struct table *t)
 			     (k && get_vline_width(t, i + k) >= 0);
 		}
 
-		get_cell_width(c->start, c->end, t->cellpd, p, 1, &c->width,
+		get_cell_width(c->start, c->end, t->cellpadding, p, 1, &c->width,
 			       NULL, c->link_num, NULL);
 
 		int_upper_bound(&c->width, p);
@@ -1279,7 +1282,7 @@ get_table_heights(struct table *t)
 			}
 
 			p = format_html_part(cell->start, cell->end,
-					     cell->align, t->cellpd, xw, NULL,
+					     cell->align, t->cellpadding, xw, NULL,
 					     2, 2, NULL, cell->link_num);
 			if (!p) return;
 
@@ -1391,7 +1394,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				   	p = format_html_part(cell->start,
 							     cell->end,
 							     cell->align,
-							     t->cellpd, xw,
+							     t->cellpadding, xw,
 							     document,
 							     t->p->x + xp,
 							     tmpy, NULL,
@@ -1539,13 +1542,13 @@ display_table_frames(struct table *t, int x, int y)
 		ysp = cell->rowspan ? cell->rowspan : t->y - j;
 
 		if (t->rules != TABLE_RULE_COLS) {
-			memset(&H_FRAME_POSITION(t, i, j), t->cellsp, xsp);
-			memset(&H_FRAME_POSITION(t, i, j + ysp), t->cellsp, xsp);
+			memset(&H_FRAME_POSITION(t, i, j), t->cellspacing, xsp);
+			memset(&H_FRAME_POSITION(t, i, j + ysp), t->cellspacing, xsp);
 		}
 
 		if (t->rules != TABLE_RULE_ROWS) {
-			memset(&V_FRAME_POSITION(t, i, j), t->cellsp, ysp);
-			memset(&V_FRAME_POSITION(t, i + xsp, j), t->cellsp, ysp);
+			memset(&V_FRAME_POSITION(t, i, j), t->cellspacing, ysp);
+			memset(&V_FRAME_POSITION(t, i + xsp, j), t->cellspacing, ysp);
 		}
 	}
 
@@ -1640,7 +1643,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct node *node, *new_node;
 	unsigned char *al;
 	color_t bgcolor = par_format.bgcolor;
-	int border, cellsp, vcellpd, cellpd, align;
+	int border, cellspacing, vcellpadding, cellpadding, align;
 	int frame, rules, width, wf;
 	int cye;
 	int x;
@@ -1673,8 +1676,8 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (border) {
 		int_upper_bound(&border, 2);
 
-		cellsp = get_num(attr, "cellspacing");
-		int_bounds(&cellsp, 1, 2);
+		cellspacing = get_num(attr, "cellspacingacing");
+		int_bounds(&cellspacing, 1, 2);
 
 		frame = TABLE_FRAME_BOX;
 		al = get_attr_val(attr, "frame");
@@ -1691,17 +1694,17 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 			mem_free(al);
 		}
 	} else {
-		cellsp = 0;
+		cellspacing = 0;
 		frame = TABLE_FRAME_VOID;
 	}
 
-	cellpd = get_num(attr, "cellpadding");
-	if (cellpd == -1) {
-		vcellpd = 0;
-		cellpd = !!border;
+	cellpadding = get_num(attr, "cellpadding");
+	if (cellpadding == -1) {
+		vcellpadding = 0;
+		cellpadding = !!border;
 	} else {
-		vcellpd = (cellpd >= HTML_CHAR_HEIGHT / 2 + 1);
-		cellpd = (cellpd >= HTML_CHAR_WIDTH / 2 + 1);
+		vcellpadding = (cellpadding >= HTML_CHAR_HEIGHT / 2 + 1);
+		cellpadding = (cellpadding >= HTML_CHAR_WIDTH / 2 + 1);
 	}
 
 	align = par_format.align;
@@ -1755,16 +1758,16 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	par_format.align = AL_LEFT;
 	t->p = p;
 	t->border = border;
-	t->cellpd = cellpd;
-	t->vcellpd = vcellpd;
-	t->cellsp = cellsp;
+	t->cellpadding = cellpadding;
+	t->vcellpadding = vcellpadding;
+	t->cellspacing = cellspacing;
 	t->frame = frame;
 	t->rules = rules;
 	t->width = width;
 	t->wf = wf;
 
 	cpd_pass = 0;
-	cpd_last = t->cellpd;
+	cpd_last = t->cellpadding;
 	cpd_width = 0;  /* not needed, but let the warning go away */
 
 again:
@@ -1784,14 +1787,14 @@ again:
 		goto ret2;
 	}
 
-	if (!cpd_pass && t->min_t > width && t->cellpd) {
-		t->cellpd = 0;
+	if (!cpd_pass && t->min_t > width && t->cellpadding) {
+		t->cellpadding = 0;
 		cpd_pass = 1;
 		cpd_width = t->min_t;
 		goto again;
 	}
 	if (cpd_pass == 1 && t->min_t > cpd_width) {
-		t->cellpd = cpd_last;
+		t->cellpadding = cpd_last;
 		cpd_pass = 2;
 		goto again;
 	}

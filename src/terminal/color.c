@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.11 2003/08/31 00:19:13 jonas Exp $ */
+/* $Id: color.c,v 1.12 2003/08/31 00:40:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,9 +191,6 @@ static unsigned char fg_color[16][8] = {
 	{ 15, 15, 15, 15, 15, 15, 15,  7 },
 };
 
-/* TODO: Either only #define mix_color_pair() in header file to use
- * mix_attr_colors() as backend or reduce code duplication some other way. */
-
 /* Terminal color encoding: */
 /* Below color pairs are encoded to terminal colors. Both the terminal fore-
  * and background color are a number between 0 and 7. They are stored in an
@@ -202,77 +199,64 @@ static unsigned char fg_color[16][8] = {
  *	00bbbfff (0 = not used, f = foreground bit, b = background bit)
  */
 
-#if YOU_WANT_TO_TRY_SOMETHING_WEIRD
-#define encode_colors(color, bg, fg) \
-	do { \
-		color = ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07); \
-		\
-		if (!(color & 0x40) && bg == fg && !(bg & 0x02)) \
-			color |= 0x07; \
-	} while (0)
-#else
-#define encode_color(color, bg, fg) \
-	do { \
-		color = ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07); \
-		\
-		if (!(color & 0x40) && bg == (fg & 0x07)) \
-			color = (color & 0x38) | 7 * !(color & 0x10); \
-	} while (0)
-#endif
-			
-
-unsigned char
-mix_color_pair(struct color_pair *pair)
+static inline unsigned char
+encode_color(struct color_pair *pair, enum screen_char_attr attr)
 {
 	register unsigned char fg = find_nearest_color(pair->foreground, 16);
 	register unsigned char bg = find_nearest_color(pair->background, 8);
-	register unsigned char color;
+	register unsigned char bold = 0;
 
-	if (d_opt && !d_opt->allow_dark_on_black)
-		fg = fg_color[fg][bg];
-
-	encode_color(color, bg, fg);
-
-	return color;
-}
-
-/* Defined in viewer/dump/dump.c */
-extern int dump_pos;
-
-unsigned char
-mix_attr_colors(struct color_pair *pair, enum screen_char_attr attr)
-{
-	register unsigned char fg;
-	register unsigned char bg;
-	register unsigned char color;
-
-	/* We don't ever care about colors while dumping stuff. */
-	if (dump_pos) return 0;
-
-	fg = find_nearest_color(pair->foreground, 16);
-	bg = find_nearest_color(pair->background, 8);
-
+	/* Add various color enhancement based on the attributes. */
 	if (attr) {
 		if (attr & SCREEN_ATTR_ITALIC)
 			fg ^= 0x01;
 
 		if (attr & SCREEN_ATTR_UNDERLINE)
-			fg = (fg ^ 0x04) | 0x08;
+			fg ^= 0x04;
 
-		if (attr & SCREEN_ATTR_BOLD)
-			fg |= 0x08;
-
-#if 0
-		/* AT_GRAPHICS is currently only used for <hr /> tags.
-		 * Dunno if this (old code) makes sense? --jonas */
-		if (attr & AT_GRAPHICS) bg = bg | 0x10;
-#endif
+		/* TODO: For terminals that support underline no enhancements
+		 *	 should be added. */
+		if (attr & (SCREEN_ATTR_BOLD | SCREEN_ATTR_UNDERLINE))
+			bold = TERM_COLOR_BOLD;
 	}
 
-	if (d_opt && !d_opt->allow_dark_on_black)
+	/* Adjusts the foreground color to be more visible. */
+	if (d_opt && !d_opt->allow_dark_on_black) {
 		fg = fg_color[fg][bg];
+	}
 
-	encode_color(color, bg, fg);
+	/* If foreground color is not contained within the mask ( it's >7 )
+	 * we are dealing with a bright (bold) color so mirror that. */
+	if (fg & ~TERM_COLOR_MASK) {
+		bold = TERM_COLOR_BOLD;
+		fg &= TERM_COLOR_MASK;
+	}
 
-	return color;
+	/* If fg and bg color are the same use white fg color _unless_ we are
+	 * dealing with a ``bright'' (bold) color. */
+	/* TODO: Wtf is (bg & 0x02) about? It basicly means if the background
+	 *	 color is not green, brown, cyan or white! */
+	/* TODO: This test should probably only be done if !d_opt->allow...
+	 *	 since we should trust that fg_color[][] avoids this problem. */
+	if (bg == fg && !bold && !(bg & 0x02)) {
+		fg = 0x07;
+	}
+
+	return (bold | (bg << 3) | fg);
+}
+
+unsigned char
+mix_color_pair(struct color_pair *pair)
+{
+	return encode_color(pair, 0);
+}
+
+/* Defined in viewer/dump/dump.c and used to avoid calculating colors when
+ * dumping stuff. */
+extern int dump_pos;
+
+unsigned char
+mix_attr_colors(struct color_pair *pair, enum screen_char_attr attr)
+{
+	return (dump_pos) ? 0 : encode_color(pair, attr);
 }

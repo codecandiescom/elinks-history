@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.82 2004/03/03 18:10:22 jonas Exp $ */
+/* $Id: form.c,v 1.83 2004/04/06 01:20:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -980,13 +980,10 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 				int value_len = strlen(fs->value);
 
 				if (!frm->ro && value_len < frm->maxlength) {
-					unsigned char *v = mem_realloc(fs->value, value_len + 2);
+					unsigned char chr = ev->x;
 
-					if (v) {
-						fs->value = v;
-						memmove(v + fs->state + 1, v + fs->state, strlen(v + fs->state) + 1);
-						v[fs->state++] = ev->x;
-					}
+					if (insert_in_string(&fs->value, value_len, &chr, 1))
+						fs->state++;
 				}
 				break;
 			}

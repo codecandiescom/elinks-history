@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.43 2004/03/03 18:10:22 jonas Exp $ */
+/* $Id: textarea.c,v 1.44 2004/04/06 01:20:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -603,13 +603,8 @@ textarea_op_enter(struct form_state *fs, struct form_control *frm, int rep)
 
 	value_len = strlen(fs->value);
 	if (!frm->ro && value_len < frm->maxlength) {
-		unsigned char *v = mem_realloc(fs->value, value_len + 2);
-
-		if (v) {
-			fs->value = v;
-			memmove(v + fs->state + 1, v + fs->state, strlen(v + fs->state) + 1);
-			v[fs->state++] = '\n';
-		}
+		if (insert_in_string(&fs->value, value_len, "\n", 1))
+			fs->state++;
 	}
 
 	return 0;

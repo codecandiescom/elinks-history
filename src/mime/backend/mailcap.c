@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.81 2004/04/23 19:20:18 pasky Exp $ */
+/* $Id: mailcap.c,v 1.82 2004/04/23 19:26:46 pasky Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -369,7 +369,7 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 
 		if (!parse_optional_fields(entry, linepos)) {
 			done_mailcap_entry(entry);
-			usrerror(gettext("Badly formated mailcap entry "
+			usrerror(G_("Badly formated mailcap entry "
 			         "for type %s in \"%s\" line %d"),
 			         type, filename, lineno);
 			continue;

@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.70 2004/04/16 16:34:11 zas Exp $ */
+/* $Id: interlink.c,v 1.71 2004/04/23 19:26:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,7 +332,7 @@ af_unix_connection(struct socket_info *info)
 	memset(info->addr, 0, l);
 	ns = accept(info->fd, info->addr, &l);
 	if (ns < 0) {
-		ERROR(gettext("accept() failed: %d (%s)"),
+		ERROR(G_("accept() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		return;
 	}
@@ -372,7 +372,7 @@ bind_to_af_unix(void)
 again:
 	s_info_listen.fd = socket(af, SOCK_STREAM, 0);
 	if (s_info_listen.fd == -1) {
-		ERROR(gettext("socket() failed: %d (%s)"),
+		ERROR(G_("socket() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		goto free_and_error;
 	}
@@ -381,7 +381,7 @@ again:
 
 	if (bind(s_info_listen.fd, s_info_listen.addr, s_info_listen.size) < 0) {
 		if (errno != EADDRINUSE)
-			ERROR(gettext("bind() failed: %d (%s)"),
+			ERROR(G_("bind() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 
 		if (++attempts <= MAX_BIND_TRIES) {
@@ -401,7 +401,7 @@ again:
 	s_info_accept.fd = s_info_listen.fd;
 
 	if (listen(s_info_listen.fd, LISTEN_BACKLOG)) {
-		ERROR(gettext("listen() failed: %d (%s)"),
+		ERROR(G_("listen() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		goto free_and_error;
 	}
@@ -433,7 +433,7 @@ connect_to_af_unix(void)
 again:
 	s_info_connect.fd = socket(af, SOCK_STREAM, 0);
 	if (s_info_connect.fd == -1) {
-		ERROR(gettext("socket() failed: %d (%s)"),
+		ERROR(G_("socket() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		goto free_and_error;
 	}
@@ -445,7 +445,7 @@ again:
 	if (connect(s_info_connect.fd, s_info_connect.addr,
 		    s_info_connect.size) < 0) {
 		if (errno != ECONNREFUSED && errno != ENOENT)
-			ERROR(gettext("connect() failed: %d (%s)"),
+			ERROR(G_("connect() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 
 		if (++attempts <= MAX_CONNECT_TRIES) {

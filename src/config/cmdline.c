@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.57 2004/04/23 19:20:17 pasky Exp $ */
+/* $Id: cmdline.c,v 1.58 2004/04/23 19:26:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_
 
 			if (!option) {
 unknown_option:
-				usrerror(gettext("Unknown option %s"), argv[-1]);
+				usrerror(G_("Unknown option %s"), argv[-1]);
 				return 1;
 			}
 
@@ -85,7 +85,7 @@ unknown_option:
 
 				if (err) {
 					if (err[0])
-						usrerror(gettext("Cannot parse option %s: %s"), argv[-1], err);
+						usrerror(G_("Cannot parse option %s: %s"), argv[-1], err);
 
 					return 1;
 				} else if (remote_url) {
@@ -148,9 +148,9 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	(*argv)++; (*argc)--;
 	if (do_real_lookup(*(*argv - 1), &addrs, &addrno, 0)) {
 #ifdef HAVE_HERROR
-		herror(gettext("error"));
+		herror(G_("error"));
 #else
-		usrerror(gettext("Host not found"));
+		usrerror(G_("Host not found"));
 #endif
 		return "";
 	}
@@ -164,7 +164,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 				(addr.sin6_family == AF_INET6 ? (void *) &addr.sin6_addr
 							      : (void *) &((struct sockaddr_in *) &addr)->sin_addr),
 				p, INET6_ADDRSTRLEN))
-			ERROR(gettext("Resolver error"));
+			ERROR(G_("Resolver error"));
 		else
 			printf("%s\n", p);
 #else
@@ -274,7 +274,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 static unsigned char *
 version_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	printf(gettext("ELinks %s - Text WWW browser\n"), VERSION_STRING);
+	printf(G_("ELinks %s - Text WWW browser\n"), VERSION_STRING);
 	fflush(stdout);
 	return "";
 }
@@ -337,24 +337,24 @@ print_full_help(struct option *tree, unsigned char *path)
 			case OPT_BOOL:
 			case OPT_INT:
 			case OPT_LONG:
-				printf(gettext("(default: %ld)"),
+				printf(G_("(default: %ld)"),
 					type == OPT_LONG
 					? option->value.big_number
 					: (long) option->value.number);
 				break;
 
 			case OPT_STRING:
-				printf(gettext("(default: \"%s\")"),
+				printf(G_("(default: \"%s\")"),
 					option->value.string);
 				break;
 
 			case OPT_ALIAS:
-				printf(gettext("(alias for %s)"),
+				printf(G_("(alias for %s)"),
 					option->value.string);
 				break;
 
 			case OPT_CODEPAGE:
-				printf(gettext("(default: %s)"),
+				printf(G_("(default: %s)"),
 					get_cp_name(option->value.number));
 				break;
 
@@ -363,7 +363,7 @@ print_full_help(struct option *tree, unsigned char *path)
 				color_t color = option->value.color;
 				unsigned char hexcolor[8];
 
-				printf(gettext("(default: %s)"),
+				printf(G_("(default: %s)"),
 				       get_color_string(color, hexcolor));
 				break;
 			}
@@ -373,7 +373,7 @@ print_full_help(struct option *tree, unsigned char *path)
 
 			case OPT_LANGUAGE:
 #ifdef ENABLE_NLS
-				printf(gettext("(default: \"%s\")"),
+				printf(G_("(default: \"%s\")"),
 					language_to_name(option->value.number));
 #endif
 				break;
@@ -496,11 +496,11 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 	printf("\n");
 
 	if (!strcmp(option->name, "config-help")) {
-		printf(gettext("Configuration options:\n"));
+		printf(G_("Configuration options:\n"));
 		print_full_help(config_options, "");
 	} else {
-		printf(gettext("Usage: elinks [OPTION]... [URL]\n\n"));
-		printf(gettext("Options:\n"));
+		printf(G_("Usage: elinks [OPTION]... [URL]\n\n"));
+		printf(G_("Options:\n"));
 		if (!strcmp(option->name, "long-help")) {
 			print_full_help(cmdline_options, "-");
 		} else {

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.126 2003/06/17 12:43:27 zas Exp $ */
+/* $Id: renderer.c,v 1.127 2003/06/17 12:47:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,9 +373,9 @@ shift_chars(struct part *part, int y, int shift)
 {
 	chr *a;
 	int len;
-       
+
 	assert(part && part->data && part->data->data);
-	
+
 	len = LEN(y);
 
 	a = fmem_alloc(len * sizeof(chr));
@@ -417,7 +417,7 @@ split_line_at(struct part *part, register int x)
 	int new_x = x + par_format.rightmargin;
 
 	assert(part);
-	
+
 	/* Make sure that we count the right margin to the total
 	 * actual box width. */
 	if (new_x > part->x)
@@ -472,7 +472,7 @@ split_line(struct part *part)
 	register int x;
 
 	assert(part);
-	
+
 	for (x = overlap(par_format); x >= par_format.leftmargin; x--)
 		if (x < part->spaces_len && part->spaces[x])
 			return split_line_at(part, x);
@@ -584,8 +584,7 @@ align_line(struct part *part, int y, int last)
 	int shift;
 	int len;
 
-	if (!part->data)
-		return;
+	assert(part && part->data && part->data->data);
 
 	len = LEN(y);
 
@@ -806,7 +805,8 @@ end_format_change:
 				part->x = LEN(part->cy-1);
 #endif
 
-			align_line(part, part->cy - 1, 0);
+			if (part->data)
+				align_line(part, part->cy - 1, 0);
 			nobreak = x - 1;
 		}
 	}

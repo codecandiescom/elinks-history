@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.494 2004/09/24 12:43:36 pasky Exp $ */
+/* $Id: parser.c,v 1.495 2004/09/24 12:54:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,7 +439,7 @@ not_processed:
 	/* Positive, grab the rest and interpret it. */
 
 	/* First position to the real script start. */
-	while (html < eof && (*html == '\n' || *html == '\r')) html++;
+	while (html < eof && *html <= ' ') html++;
 	if (eof - html > 4 && !strncmp(html, "<!--", 4)) {
 		/* We either skip to the end of line or to -->. */
 		for (; *html != '\n' && *html != '\r'; html++) {

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.361 2003/10/25 12:13:34 pasky Exp $ */
+/* $Id: options.c,v 1.362 2003/10/25 12:33:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,6 +443,8 @@ copy_option(struct option *template)
 
 
 static void register_options(void);
+static void unregister_options(void);
+
 static struct change_hook_info change_hooks[];
 
 struct list_head *
@@ -530,6 +532,7 @@ free_options_tree(struct list_head *tree)
 void
 done_options(void)
 {
+	unregister_options();
 	free_options_tree(&options_root_tree);
 }
 
@@ -1128,4 +1131,11 @@ register_options(void)
 {
 	register_option_info(config_options_info, config_options);
 	register_option_info(cmdline_options_info, cmdline_options);
+}
+
+static void
+unregister_options(void)
+{
+	unregister_option_info(config_options_info, config_options);
+	unregister_option_info(cmdline_options_info, cmdline_options);
 }

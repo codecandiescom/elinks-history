@@ -1,10 +1,10 @@
-/* $Id: leds.h,v 1.10 2003/11/17 10:34:19 pasky Exp $ */
+/* $Id: leds.h,v 1.11 2003/11/17 10:56:55 pasky Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
 
 #include "modules/module.h"
-#include "terminal/terminal.h"
+#include "sched/session.h"
 #include "util/color.h"
 
 /* TODO: Variable count! */
@@ -31,11 +31,20 @@ struct led {
 	int __used;
 };
 
+/* Per-session led panel structure. */
+struct led_panel {
+	struct led leds[LEDS_COUNT];
+	unsigned char leds_backup[LEDS_COUNT];
+};
+
+
 extern struct module leds_module;
+
+void init_led_panel(struct led_panel *leds);
 
 void draw_leds(struct session *ses);
 
-struct led *register_led(int);
+struct led *register_led(struct session *ses, int number)
 void unregister_led(struct led *);
 
 #endif

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.63 2003/11/16 06:29:00 witekfl Exp $ */
+/* $Id: session.h,v 1.64 2003/11/17 10:56:56 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -6,6 +6,9 @@
 /* We need to declare these first :/. Damn cross-dependencies. */
 struct session;
 
+#ifdef USE_LEDS
+#include "bfu/leds.h"
+#endif
 #include "cache/cache.h"
 #include "document/options.h"
 #include "document/view.h"
@@ -147,6 +150,10 @@ struct session {
 	int visible_title_bar;
 
 	unsigned char *last_title;
+
+#ifdef USE_LEDS
+	struct led_panel leds;
+#endif
 };
 
 extern struct list_head sessions; /* -> struct session */

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.27 2003/11/17 10:34:19 pasky Exp $ */
+/* $Id: leds.c,v 1.28 2003/11/17 10:56:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,6 @@
 /* TODO: In order for this to have some real value, this should be per-session,
  * not global. Then we could even use it for something ;-). --pasky */
 
-static struct led leds[LEDS_COUNT];
-static unsigned char leds_backup[LEDS_COUNT];
 static int timer_duration_backup = 0;
 
 static int redraw_timer = -1;
@@ -55,15 +53,6 @@ static void redraw_leds(void *);
 void
 init_leds(struct module *module)
 {
-	int i;
-
-	for (i = 0; i < LEDS_COUNT; i++) {
-		leds[i].number = i;
-		leds[i].value = '-';
-		leds[i].__used = 0;
-		leds_backup[i] = 0; /* assure first redraw */
-	}
-
 	timer_duration_backup = 0;
 
 	/* We can't setup timer here, because we may not manage to startup in
@@ -75,6 +64,19 @@ void
 done_leds(struct module *module)
 {
 	if (redraw_timer >= 0) kill_timer(redraw_timer);
+}
+
+void
+init_led_panel(struct led_panel *leds)
+{
+	int i;
+
+	for (i = 0; i < LEDS_COUNT; i++) {
+		leds->leds[i].number = i;
+		leds->leds[i].value = '-';
+		leds->leds[i].__used = 0;
+		leds->leds_backup[i] = 0; /* assure first redraw */
+	}
 }
 
 void
@@ -117,10 +119,12 @@ draw_leds(struct session *ses)
 	color.background = led_color->background;
 
 	for (i = 0; i < LEDS_COUNT; i++) {
-		color.foreground = leds[i].__used ? leds[i].fgcolor
-						  : led_color->foreground;
+		struct led *led = &ses->leds.leds[i];
 
-		draw_char(term, xpos + i + 1, ypos, leds[i].value, 0, &color);
+		color.foreground = led->__used  ? led->fgcolor
+						: led_color->foreground;
+
+		draw_char(term, xpos + i + 1, ypos, led->value, 0, &color);
 	}
 
 	draw_char(term, xpos + LEDS_COUNT + 1, ypos, ']', 0, led_color);
@@ -143,8 +147,11 @@ sync_leds(void)
 	}
 
 	for (i = 0; i < LEDS_COUNT; i++) {
-		if (leds[i].value != leds_backup[i]) {
-			leds_backup[i] = leds[i].value;
+		struct led *led = &ses->leds.leds[i];
+		unsigned char *led_backup = &ses->leds.leds_backup[i];
+
+		if (led->value != *led_backup) {
+			*led_backup = led->value;
 			resync++;
 		}
 	}
@@ -176,11 +183,15 @@ redraw_leds(void *xxx)
 
 
 struct led *
-register_led(int number)
+register_led(struct session *ses, int number)
 {
-	if (number >= LEDS_COUNT || number < 0 || leds[number].__used)
+	if (number >= LEDS_COUNT || number < 0)
 		return NULL;
-	return &leds[number];
+
+	if (ses->leds.leds[number].__used)
+		return NULL;
+
+	return &ses->leds.leds[number];
 }
 
 void

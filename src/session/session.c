@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.238 2003/11/17 10:34:20 pasky Exp $ */
+/* $Id: session.c,v 1.239 2003/11/17 10:56:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1200,6 +1200,9 @@ create_basic_session(struct window *tab)
 	ses->id = session_id++;
 	ses->task = TASK_NONE;
 	ses->display_timer = -1;
+#ifdef USE_LEDS
+	init_led_panel(&ses->leds);
+#endif
 
 	add_to_list(sessions, ses);
 

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.81 2004/05/25 00:26:32 jonas Exp $ */
+/* $Id: task.c,v 1.82 2004/05/25 00:55:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,23 +499,16 @@ follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 }
 
 void
-goto_url_frame_reload(struct session *ses, unsigned char *url,
-		      unsigned char *target)
-{
-	follow_url(ses, url, target, TASK_FORWARD, CACHE_MODE_FORCE_RELOAD, 1);
-}
-
-void
 goto_url_frame(struct session *ses, unsigned char *url,
-	       unsigned char *target)
+	       unsigned char *target, enum cache_mode cache_mode)
 {
-	follow_url(ses, url, target, TASK_FORWARD, CACHE_MODE_NORMAL, 1);
+	follow_url(ses, url, target, TASK_FORWARD, cache_mode, 1);
 }
 
 void
 map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 {
-	goto_url_frame(ses, ld->link, ld->target);
+	goto_url_frame(ses, ld->link, ld->target, CACHE_MODE_NORMAL);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.179 2004/05/25 00:48:40 jonas Exp $ */
+/* $Id: link.c,v 1.180 2004/05/25 00:55:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -518,11 +518,10 @@ goto_current_link(struct session *ses, struct document_view *doc_view, int do_re
 		goto_imgmap(ses, uri, null_or_stracpy(link->target));
 
 	} else {
-		if (do_reload) {
-			goto_url_frame_reload(ses, struri(uri), link->target);
-		} else {
-			goto_url_frame(ses, struri(uri), link->target);
-		}
+		enum cache_mode mode = do_reload ? CACHE_MODE_FORCE_RELOAD
+						 : CACHE_MODE_NORMAL;
+
+		goto_url_frame(ses, struri(uri), link->target, mode);
 	}
 
 	done_uri(uri);

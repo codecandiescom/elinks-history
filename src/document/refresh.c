@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.30 2004/05/23 02:39:01 jonas Exp $ */
+/* $Id: refresh.c,v 1.31 2004/05/25 00:55:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,7 @@ do_document_refresh(void *data)
 		reload(ses, CACHE_MODE_FORCE_RELOAD);
 	} else {
 		/* This makes sure that we send referer. */
-		goto_url_frame(ses, struri(refresh->uri), NULL);
+		goto_url_frame(ses, struri(refresh->uri), NULL, CACHE_MODE_NORMAL);
 	}
 }
 

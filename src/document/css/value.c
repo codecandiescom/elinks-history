@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.27 2004/01/18 17:43:27 jonas Exp $ */
+/* $Id: value.c,v 1.28 2004/01/18 17:48:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,36 +217,29 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 			   struct css_scanner *scanner)
 {
 	struct css_token *token = get_css_token(scanner);
-	unsigned char *tok_string = token->string;
-	unsigned char **string = &tok_string;
 
 	assert(propinfo->value_type == CSS_VT_TEXT_ALIGN);
 
-	if (!strncasecmp(*string, "left", 4)) {
-		(*string) += 4;
+	if (token->type != CSS_TOKEN_IDENTIFIER) return 0;
+
+	if (css_token_contains(token, "left", 4)) {
 		value->text_align = AL_LEFT;
-		return 1;
-	}
 
-	if (!strncasecmp(*string, "right", 5)) {
-		(*string) += 5;
+	} else 	if (css_token_contains(token, "right", 5)) {
 		value->text_align = AL_RIGHT;
-		return 1;
-	}
 
-	if (!strncasecmp(*string, "center", 6)) {
-		(*string) += 6;
+	} else 	if (css_token_contains(token, "center", 6)) {
 		value->text_align = AL_CENTER;
-		return 1;
-	}
 
-	if (!strncasecmp(*string, "justify", 7)) {
-		(*string) += 7;
+	} else 	if (css_token_contains(token, "justify", 7)) {
 		value->text_align = AL_BLOCK;
-		return 1;
+
+	} else {
+		return 0;
 	}
 
-	return 0;
+	skip_css_tokens(scanner, CSS_TOKEN_IDENTIFIER);
+	return 1;
 }
 
 

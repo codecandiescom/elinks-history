@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.433 2004/06/08 15:08:58 jonas Exp $ */
+/* $Id: parser.c,v 1.434 2004/06/18 20:11:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -759,8 +759,8 @@ html_li(unsigned char *a)
 		put_chrs(".&nbsp;", 7, put_chars_f, ff);
 		par_format.leftmargin += strlen(n) + c + 2;
 		par_format.align = AL_LEFT;
+		html_top.next->parattr.list_number = par_format.list_number;
 		par_format.list_number = 0;
-		html_top.next->parattr.list_number++;
 	}
 
 	putsp = -1;

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.200 2004/06/13 00:12:10 jonas Exp $ */
+/* $Id: link.c,v 1.201 2004/06/13 00:17:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -858,11 +858,11 @@ get_current_link_title(struct document_view *doc_view)
 }
 
 unsigned char *
-get_current_link_info(struct document_view *doc_view, struct terminal *term)
+get_current_link_info(struct session *ses, struct document_view *doc_view)
 {
 	struct link *link;
 
-	assert(term && doc_view && doc_view->document && doc_view->vs);
+	assert(ses && doc_view && doc_view->document && doc_view->vs);
 	if_assert_failed return NULL;
 
 	if (doc_view->document->frame_desc)
@@ -872,6 +872,7 @@ get_current_link_info(struct document_view *doc_view, struct terminal *term)
 	if (!link) return NULL;
 
 	if (!link_is_form(link)) {
+		struct terminal *term = ses->tab->term;
 		struct string str;
 		unsigned char *uristring = link->where;
 
@@ -895,7 +896,7 @@ get_current_link_info(struct document_view *doc_view, struct terminal *term)
 
 	if (!link->form_control) return NULL;
 
-	return get_form_info(doc_view, term);
+	return get_form_info(ses, doc_view);
 }
 
 unsigned char *
@@ -909,5 +910,5 @@ print_current_link(struct session *ses)
 	assert(doc_view);
 	if_assert_failed return NULL;
 
-	return get_current_link_info(doc_view, ses->tab->term);
+	return get_current_link_info(ses, doc_view);
 }

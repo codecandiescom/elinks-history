@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.93 2004/06/13 00:12:10 jonas Exp $ */
+/* $Id: document.c,v 1.94 2004/06/13 00:17:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,7 +171,7 @@ document_info_dialog(struct session *ses)
 #endif
 
 	if (doc_view) {
-		unsigned char *a = get_current_link_info(doc_view, term);
+		unsigned char *a = get_current_link_info(ses, doc_view);
 
 		add_char_to_string(&msg, '\n');
 		if (a) {

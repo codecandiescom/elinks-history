@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.149 2004/06/12 19:43:36 jonas Exp $ */
+/* $Id: form.c,v 1.150 2004/06/13 00:17:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1245,8 +1245,9 @@ field_op(struct session *ses, struct document_view *doc_view,
 }
 
 unsigned char *
-get_form_info(struct document_view *doc_view, struct terminal *term)
+get_form_info(struct session *ses, struct document_view *doc_view)
 {
+	struct terminal *term = ses->tab->term;
 	struct link *link = get_current_link(doc_view);
 	struct form_control *fc;
 	unsigned char *label;

@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.2 2003/12/07 01:45:30 jonas Exp $ */
+/* $Id: rewrite.c,v 1.3 2003/12/07 01:57:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ static struct option_info uri_rewrite_options[] = {
 		"rewrite", OPT_SORT,
 		N_("Rules for rewriting URIs entered in the goto dialog.\n"
 		"It makes it possible to define a set of prefixes that will\n"
-		"be expanded if they match a string entered in the goto dialog\n"
+		"be expanded if they match a string entered in the goto dialog.\n"
 		"The prefixes can be dumb, meaning that they work only like\n"
 		"URI abbreviations, or smart ones, making it possible to pass\n"
 		"arguments to them like search engine keywords.")),

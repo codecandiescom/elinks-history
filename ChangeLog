@@ -1,3 +1,205 @@
+Sat Mar  5 22:14:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: cookies/cookies.c, cookies/cookies.h, cookies/dialogs.c,
+	globhist/globhist.c, globhist/globhist.h, lowlevel/dns.c,
+	lowlevel/select.c, lowlevel/timers.c, lowlevel/timers.h,
+	protocol/date.c, protocol/date.h, sched/connection.c,
+	sched/connection.h, sched/download.h, sched/session.c, util/conv.c,
+	util/conv.h, util/ttime.c, util/ttime.h:
+
+	ttime -> time_T.  
+
+Sat Mar  5 22:08:22 2005  Laurent Monin <zas@norz.org>:
+
+	* Unicode/gen-cp:
+
+	Fix tail/head update.  
+
+Sat Mar  5 21:49:29 2005  Laurent Monin <zas@norz.org>:
+
+	* Unicode/: gen, gen-7b, gen-cp, gen-ent, tr7bit.awk:
+
+	Add $Id$ to scripts.  
+
+Sat Mar  5 21:47:21 2005  Laurent Monin <zas@norz.org>:
+
+	* Unicode/gen-cp:
+
+	Recent head/tail warns about obsolete -<number>/+<number> options,
+	use -n <number> instead.  
+
+Sat Mar  5 21:41:41 2005  Laurent Monin <zas@norz.org>:
+
+	* Unicode/gen-7b, Unicode/gen-ent, src/intl/charsets.c,
+	src/intl/charsets.h, src/intl/entity.inc, src/intl/uni_7b.inc,
+	src/terminal/event.c:
+
+	unicode_val -> unicode_val_T. Scripts in Unicode/ were updated.  
+
+Sat Mar  5 21:34:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/style.c, config/cmdline.c, config/options.h,
+	config/opttypes.c, document/document.h, document/options.h,
+	document/css/property.h, document/dom/renderer.c,
+	document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, document/html/renderer.h,
+	document/html/tables.c, document/html/parser/link.c,
+	document/html/parser/table.c, document/html/parser/table.h,
+	document/plain/renderer.c, terminal/color.c, util/color.c,
+	util/color.h, viewer/text/link.c:
+
+	color_t -> color_T.  
+
+Sat Mar  5 21:28:52 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: event.c, event.h:
+
+	event_hook -> event_hook_T.  
+
+Sat Mar  5 21:21:27 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/menu.c, sched/session.c, terminal/tab.c,
+	terminal/tab.h, terminal/window.c, terminal/window.h:
+
+	window_handler -> window_handler_T.  
+
+Sat Mar  5 21:18:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/action.c:
+
+	frame_action -> frame_action_T.  
+
+Sat Mar  5 21:16:06 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: hash.c, hash.h:
+
+	hash_func -> hash_func_T.  
+
+Sat Mar  5 21:14:38 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: hash.c, hash.h:
+
+	hash_value -> hash_value_T.  
+
+Sat Mar  5 21:11:03 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/connection.h, sched/download.c, sched/session.c,
+	sched/task.c, viewer/dump/dump.c:
+
+	download_callback -> download_callback_T.  
+
+Sat Mar  5 21:08:11 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/css/: stylesheet.c, stylesheet.h:
+
+	css_stylesheet_importer -> css_stylesheet_importer_T.  
+
+Sat Mar  5 21:06:35 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/css/property.h:
+
+	css_property_value_parser -> css_property_value_parser_T.  
+
+Sat Mar  5 21:04:49 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/about.h, protocol/data.h, protocol/protocol.c,
+	protocol/protocol.h, protocol/user.h, protocol/file/file.h,
+	protocol/finger/finger.h, protocol/ftp/ftp.h,
+	protocol/gopher/gopher.h, protocol/http/http.h,
+	protocol/nntp/connection.h, protocol/smb/smb.h, sched/connection.c,
+	sched/task.c:
+
+	protocol_handler -> protocol_handler_T, protocol_external_handler ->
+	protocol_external_handler_T.  
+
+Sat Mar  5 21:04:25 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/css/apply.c:
+
+	Rename css_applier_t type to css_applier_T.  
+
+Sat Mar  5 21:02:15 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/exmode.c:
+
+	Rename exmode_handler type to exmode_handler_T.  
+
+Sat Mar  5 20:59:13 2005  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.h:
+
+	Rename change_hook type to change_hook_T.  
+
+Sat Mar  5 20:50:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, button.h, common.h, hierbox.h, inpfield.c,
+	inpfield.h, widget.h:
+
+	Rename t_widget_handler type to widget_handler_T.  
+
+Sat Mar  5 20:46:46 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/common.h, bfu/dialog.c,
+	bfu/dialog.h, bfu/hierbox.c, bfu/hierbox.h, bfu/inpfield.c,
+	bfu/inpfield.h, bfu/listbox.c, bfu/text.c, bookmarks/dialogs.c,
+	config/dialogs.c, cookies/dialogs.c, dialogs/download.c,
+	dialogs/edit.c, dialogs/options.c, formhist/dialogs.c,
+	globhist/dialogs.c, sched/download.c, viewer/text/search.c:
+
+	Rename t_handler_event_status type to widget_handler_status_T.  
+
+Sat Mar  5 20:41:04 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: inpfield.c, inpfield.h:
+
+	Use t_widget_handler * type for input_field() check parameter.  
+
+Sat Mar  5 20:40:01 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/common.h:
+
+	Make enum anonymous when used with typedef.  
+
+Sat Mar  5 20:31:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, bfu/menu.c, bfu/menu.h, dialogs/menu.c,
+	dialogs/menu.h, dialogs/options.c, mime/dialogs.c, sched/task.c,
+	viewer/text/form.c, viewer/text/textarea.c:
+
+	Rename menu_func type to menu_func_T.  
+
+Sat Mar  5 20:22:45 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, viewer/text/search.c:
+
+	Rename input_line_handler type to input_line_handler_T.  
+
+Sat Mar  5 20:19:19 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: dialog.c, dialog.h:
+
+	Rename dialog_refresh_handler type to dialog_refresh_handler_T.  
+
+Sat Mar  5 20:14:24 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/button.h, bfu/dialog.c, bfu/msgbox.c,
+	dialogs/edit.c, dialogs/edit.h, sched/download.c:
+
+	Rename type t_done_handler to done_handler_T.  
+
+Sat Mar  5 01:20:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Try to improve Refresh parsing, ignore negative/erroneous values,
+	and limit delay to 2 days.  
+
+Sat Mar  5 00:13:08 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Reduce indentation level.  
+
 Fri Mar  4 21:14:26 2005  Laurent Monin <zas@norz.org>:
 
 	* src/lowlevel/: timers.c, timers.h:

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.190 2004/06/10 01:10:59 jonas Exp $ */
+/* $Id: link.c,v 1.191 2004/06/12 17:28:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,12 +108,12 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	}
 
 	/* Allocate an extra background char to work on here. */
-	doc_view->link_bg = mem_alloc((1 + link->n) * sizeof(struct link_bg));
+	doc_view->link_bg = mem_alloc((1 + link->npoints) * sizeof(struct link_bg));
 	if (!doc_view->link_bg) return;
-	doc_view->link_bg_n = link->n;
+	doc_view->link_bg_n = link->npoints;
 
 	/* Setup the template char. */
-	template = &doc_view->link_bg[link->n].c;
+	template = &doc_view->link_bg[link->npoints].c;
 	template->attr = SCREEN_ATTR_STANDOUT;
 
 	/* For the color mode options we use the options set for the document.
@@ -152,9 +152,9 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	xpos = doc_view->box.x - doc_view->vs->x;
 	ypos = doc_view->box.y - doc_view->vs->y;
 
-	for (i = 0; i < link->n; i++) {
-		int x = link->pos[i].x + xpos;
-		int y = link->pos[i].y + ypos;
+	for (i = 0; i < link->npoints; i++) {
+		int x = link->points[i].x + xpos;
+		int y = link->points[i].y + ypos;
 		struct screen_char *co;
 
 		if (!is_in_box(&doc_view->box, x, y)) {
@@ -289,8 +289,8 @@ in_viewx(struct document_view *doc_view, struct link *link)
 	assert(doc_view && link);
 	if_assert_failed return 0;
 
-	for (i = 0; i < link->n; i++) {
-		int x = link->pos[i].x - doc_view->vs->x;
+	for (i = 0; i < link->npoints; i++) {
+		int x = link->points[i].x - doc_view->vs->x;
 
 		if (x >= 0 && x < doc_view->box.width)
 			return 1;
@@ -307,8 +307,8 @@ in_viewy(struct document_view *doc_view, struct link *link)
 	assert(doc_view && link);
 	if_assert_failed return 0;
 
-	for (i = 0; i < link->n; i++) {
-		int y = link->pos[i].y - doc_view->vs->y;
+	for (i = 0; i < link->npoints; i++) {
+		int y = link->points[i].y - doc_view->vs->y;
 
 		if (y >= 0 && y < doc_view->box.height)
 			return 1;
@@ -386,12 +386,12 @@ set_pos_x(struct document_view *doc_view, struct link *link)
 	assert(doc_view && link);
 	if_assert_failed return;
 
-	for (i = 0; i < link->n; i++) {
-		int y = link->pos[i].y - doc_view->vs->y;
+	for (i = 0; i < link->npoints; i++) {
+		int y = link->points[i].y - doc_view->vs->y;
 
 		if (y >= 0 && y < doc_view->box.height) {
-			int_lower_bound(&xm, link->pos[i].x + 1);
-			int_upper_bound(&xl, link->pos[i].x);
+			int_lower_bound(&xm, link->points[i].x + 1);
+			int_upper_bound(&xl, link->points[i].x);
 		}
 	}
 
@@ -410,9 +410,9 @@ set_pos_y(struct document_view *doc_view, struct link *link)
 	if_assert_failed return;
 
 	yl = doc_view->document->height;
-	for (i = 0; i < link->n; i++) {
-		int_lower_bound(&ym, link->pos[i].y + 1);
-		int_upper_bound(&yl, link->pos[i].y);
+	for (i = 0; i < link->npoints; i++) {
+		int_lower_bound(&ym, link->points[i].y + 1);
+		int_upper_bound(&yl, link->points[i].y);
 	}
 	doc_view->vs->y = (ym + yl - doc_view->box.height) / 2;
 	int_bounds(&doc_view->vs->y, 0,
@@ -661,9 +661,9 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 	mouse_y = ev->y + doc_view->vs->y;
 
 	for (link = l1; link <= l2; link++) {
-		for (i = 0; i < link->n; i++)
-			if (link->pos[i].x == mouse_x
-			    && link->pos[i].y == mouse_y)
+		for (i = 0; i < link->npoints; i++)
+			if (link->points[i].x == mouse_x
+			    && link->points[i].y == mouse_y)
 				return link;
 	}
 

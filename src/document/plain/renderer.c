@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.102 2004/05/21 11:21:02 jonas Exp $ */
+/* $Id: renderer.c,v 1.103 2004/06/12 17:28:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,13 +85,13 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 	if (!realloc_points(link, length))
 		return NULL;
 
-	link->n = length;
+	link->npoints = length;
 	link->type = LINK_HYPERTEXT;
 	link->where = uri;
 	link->color.background = document->options.default_bg;
 	link->color.foreground = document->options.default_vlink;
 
-	for (point = link->pos; length > 0; length--, point++, x++) {
+	for (point = link->points; length > 0; length--, point++, x++) {
 		point->x = x;
 		point->y = y;
 	}

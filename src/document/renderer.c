@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.51 2004/06/07 16:18:33 jonas Exp $ */
+/* $Id: renderer.c,v 1.52 2004/06/12 17:28:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,7 +230,7 @@ sort_links(struct document *document)
 		struct link *link = &document->links[i];
 		register int p, q, j;
 
-		if (!link->n) {
+		if (!link->npoints) {
 			done_link_members(link);
 			memmove(link, link + 1,
 				(document->nlinks - i - 1) * sizeof(struct link));
@@ -238,8 +238,8 @@ sort_links(struct document *document)
 			i--;
 			continue;
 		}
-		p = link->pos[0].y;
-		q = link->pos[link->n - 1].y;
+		p = link->points[0].y;
+		q = link->points[link->npoints - 1].y;
 		if (p > q) j = p, p = q, q = j;
 		for (j = p; j <= q; j++) {
 			assertm(j < document->height, "link out of screen");

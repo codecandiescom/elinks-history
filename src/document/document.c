@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.68 2004/06/07 17:46:52 jonas Exp $ */
+/* $Id: document.c,v 1.69 2004/06/12 17:28:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ done_link_members(struct link *link)
 	mem_free_if(link->target);
 	mem_free_if(link->title);
 	mem_free_if(link->where_img);
-	mem_free_if(link->pos);
+	mem_free_if(link->points);
 	mem_free_if(link->name);
 }
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.140 2004/06/12 16:29:05 zas Exp $ */
+/* $Id: form.c,v 1.141 2004/06/12 17:28:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,12 +249,12 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 		case FC_PASSWORD:
 		case FC_FILE:
 			int_bounds(&fs->vpos, fs->state - frm->size + 1, fs->state);
-			if (!link->n) break;
+			if (!link->npoints) break;
 
-			y = link->pos[0].y + dy;
+			y = link->points[0].y + dy;
 			if (row_is_in_box(box, y)) {
 				len = strlen(fs->value) - fs->vpos;
-				x = link->pos[0].x + dx;
+				x = link->points[0].x + dx;
 				for (i = 0; i < frm->size; i++, x++) {
 					if (!col_is_in_box(box, x)) continue;
 					if (fs->value && i >= -fs->vpos && i < len)
@@ -272,9 +272,9 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 			break;
 		case FC_CHECKBOX:
 		case FC_RADIO:
-			if (link->n < 2) break;
-			x = link->pos[1].x + dx;
-			y = link->pos[1].y + dy;
+			if (link->npoints < 2) break;
+			x = link->points[1].x + dx;
+			y = link->points[1].y + dy;
 			if (is_in_box(box, x, y))
 				draw_char_data(term, x, y, fs->state ? 'X' : ' ');
 			break;
@@ -286,9 +286,9 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 				/* XXX: when can this happen? --pasky */
 				s = "";
 			len = s ? strlen(s) : 0;
-			for (i = 0; i < link->n; i++) {
-				x = link->pos[i].x + dx;
-				y = link->pos[i].y + dy;
+			for (i = 0; i < link->npoints; i++) {
+				x = link->points[i].x + dx;
+				y = link->points[i].y + dy;
 				if (is_in_box(box, x, y))
 					draw_char_data(term, x, y, i < len ? s[i] : '_');
 			}

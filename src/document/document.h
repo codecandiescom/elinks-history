@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.62 2004/06/07 17:46:52 jonas Exp $ */
+/* $Id: document.h,v 1.63 2004/06/12 17:28:43 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -79,9 +79,10 @@ struct link {
 	unsigned char *name;
 
 	struct form_control *form;
-	struct point *pos;
 
-	int n;
+	struct point *points;
+	int npoints;
+	
 	int num;
 
 	struct color_pair color;

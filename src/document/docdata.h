@@ -1,4 +1,4 @@
-/* $Id: docdata.h,v 1.5 2004/04/17 02:39:52 jonas Exp $ */
+/* $Id: docdata.h,v 1.6 2004/06/12 17:28:43 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCDATA_H
 #define EL__DOCUMENT_DOCDATA_H
@@ -15,7 +15,7 @@
 #define ALIGN_LINK(x, o, n) mem_align_alloc(x, o, n, struct link, LINK_GRANULARITY)
 
 #define realloc_points(link, size) \
-	mem_align_alloc(&(link)->pos, (link)->n, size, struct point, 0)
+	mem_align_alloc(&(link)->points, (link)->npoints, size, struct point, 0)
 
 struct line *realloc_lines(struct document *document, int y);
 

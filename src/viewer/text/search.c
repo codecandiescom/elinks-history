@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.240 2004/06/11 10:30:52 zas Exp $ */
+/* $Id: search.c,v 1.241 2004/06/12 17:28:43 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -815,7 +815,7 @@ find_next_link_in_search(struct document_view *doc_view, int direction)
 nt:
 		link = &doc_view->document->links[doc_view->vs->current_link];
 		get_searched(doc_view, &pt, &len);
-		if (point_intersect(pt, len, link->pos, link->n)) {
+		if (point_intersect(pt, len, link->points, link->npoints)) {
 			mem_free(pt);
 			return 0;
 		}
@@ -1060,8 +1060,8 @@ draw_link_text(struct terminal *term, struct document_view *doc_view,
 	register int i, j;
 
 	for (i = 0, j = 0; text[j] && i < end; i++, j++) {
-		int x = link->pos[i].x;
-		int y = link->pos[i].y;
+		int x = link->points[i].x;
+		int y = link->points[i].y;
 		unsigned char data = get_document_char(doc_view->document, x, y);
 
 		/* Text wrapping might remove space chars from the link

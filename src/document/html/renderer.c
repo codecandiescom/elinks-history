@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.445 2004/06/04 07:54:02 jonas Exp $ */
+/* $Id: renderer.c,v 1.446 2004/06/12 17:28:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -409,32 +409,32 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 		struct link *link = &part->document->links[nlink];
 		int i;
 
-		for (i = 0; i < link->n; i++) {
-			if (link->pos[i].y != Y(yf))
+		for (i = 0; i < link->npoints; i++) {
+			if (link->points[i].y != Y(yf))
 				continue;
 
 			matched = 1;
 
-			if (link->pos[i].x < X(xf))
+			if (link->points[i].x < X(xf))
 				continue;
 
 			if (yt >= 0) {
-				link->pos[i].y = Y(yt);
-				link->pos[i].x += -xf + xt;
+				link->points[i].y = Y(yt);
+				link->points[i].x += -xf + xt;
 			} else {
-				int to_move = link->n - (i + 1);
+				int to_move = link->npoints - (i + 1);
 
 				assert(to_move >= 0);
 
 				if (to_move > 0) {
-					memmove(&link->pos[i],
-						&link->pos[i + 1],
+					memmove(&link->points[i],
+						&link->points[i + 1],
 						to_move *
 						sizeof(struct point));
 					i--;
 				}
 
-				link->n--;
+				link->npoints--;
 			}
 		}
 
@@ -703,13 +703,13 @@ justify_line(struct part *part, int y)
 				/* FIXME: Move to move_links() --jonas */
 				if (new_spaces
 				    && link
-				    && link->pos[link->n - 1].x < new_start
-				    && link->pos[link->n - 1].y >= y
-				    && realloc_points(link, link->n + new_spaces)) {
-					struct point *point = &link->pos[link->n];
+				    && link->points[link->npoints - 1].x < new_start
+				    && link->points[link->npoints - 1].y >= y
+				    && realloc_points(link, link->npoints + new_spaces)) {
+					struct point *point = &link->points[link->npoints];
 					int x = prev_end + 1;
 
-					link->n += new_spaces;
+					link->npoints += new_spaces;
 
 					for (; new_spaces > 0; new_spaces--, point++, x++) {
 						point->x = x;
@@ -981,12 +981,12 @@ process_link(struct part *part, enum link_state link_state,
 	}
 
 	/* Add new canvas positions to the link. */
-	if (realloc_points(link, link->n + charslen)) {
-		struct point *point = &link->pos[link->n];
+	if (realloc_points(link, link->npoints + charslen)) {
+		struct point *point = &link->points[link->npoints];
 		int x = X(part->cx) + x_offset;
 		int y = Y(part->cy);
 
-		link->n += charslen;
+		link->npoints += charslen;
 
 		for (; charslen > 0; charslen--, point++, x++) {
 			point->x = x;

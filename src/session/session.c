@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.254 2003/11/29 16:56:30 jonas Exp $ */
+/* $Id: session.c,v 1.255 2003/11/29 16:58:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,8 +81,6 @@ struct file_to_load *request_additional_loading_file(struct session *,
 						     unsigned char *,
 						     struct download *, int);
 #endif
-
-extern struct document_options *global_doc_opts;
 
 void
 init_bars_status(struct session *ses, int *tabs_count, struct document_options *doo)

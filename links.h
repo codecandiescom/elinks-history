@@ -2110,12 +2110,14 @@ extern struct rgb default_vlink;
 extern int color_dirs;
 extern int allow_special_files;
 
-#define REFERER_NONE 0
-#define REFERER_SAME_URL 1
-#define REFERER_FAKE 2
-#define REFERER_TRUE 3
+typedef enum {
+	REFERER_NONE,
+	REFERER_SAME_URL,
+	REFERER_FAKE,
+	REFERER_TRUE,
+} referer_t;
 
-extern int referer;
+extern referer_t referer;
 extern unsigned char fake_referer[];
 extern unsigned char http_proxy[];
 extern unsigned char ftp_proxy[];

@@ -512,7 +512,7 @@ void terminal_options(struct terminal *term, void *xxx, struct session *ses)
  	do_dialog(term, d, getml(d, NULL));
 }
 
-unsigned char *http_labels[] = { TEXT(T_USE_HTTP_10), TEXT(T_ALLOW_SERVER_BLACKLIST), TEXT(T_BROKEN_302_REDIRECT), TEXT(T_NO_KEEPALIVE_AFTER_POST_REQUEST), TEXT(T_REFERER_NONE), TEXT(T_REFERER_TRUE), TEXT(T_REFERER_SAME_URL), TEXT(T_REFERER_FAKE), TEXT(T_FAKE_REFERER), TEXT(T_USER_AGENT), };
+unsigned char *http_labels[] = { TEXT(T_USE_HTTP_10), TEXT(T_ALLOW_SERVER_BLACKLIST), TEXT(T_BROKEN_302_REDIRECT), TEXT(T_NO_KEEPALIVE_AFTER_POST_REQUEST), TEXT(T_REFERER_NONE), TEXT(T_REFERER_SAME_URL), TEXT(T_REFERER_FAKE), TEXT(T_REFERER_TRUE), TEXT(T_FAKE_REFERER), TEXT(T_USER_AGENT), };
 
 void httpopt_fn(struct dialog_data *dlg)
 {
@@ -582,32 +582,41 @@ int dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	d->items[3].gid = 0;
 	d->items[3].dlen = sizeof(int);
 	d->items[3].data = (void *)&bugs->bug_post_no_keepalive;
+	
 	d->items[4].type = D_CHECKBOX;
 	d->items[4].gid = 1;
 	d->items[4].gnum = REFERER_NONE;
 	d->items[4].dlen = sizeof(int);
 	d->items[4].data = (void *)&referer;
+	
 	d->items[5].type = D_CHECKBOX;
 	d->items[5].gid = 1;
-	d->items[5].gnum = REFERER_TRUE;
+	d->items[5].gnum = REFERER_SAME_URL;
 	d->items[5].dlen = sizeof(int);
 	d->items[5].data = (void *)&referer;
+	
+	/* This should be last, but I did it wrong originally and now I would
+	 * break backwards compatibility by changing it :/. */
 	d->items[6].type = D_CHECKBOX;
 	d->items[6].gid = 1;
-	d->items[6].gnum = REFERER_SAME_URL;
+	d->items[6].gnum = REFERER_FAKE;
 	d->items[6].dlen = sizeof(int);
 	d->items[6].data = (void *)&referer;
+	
 	d->items[7].type = D_CHECKBOX;
 	d->items[7].gid = 1;
-	d->items[7].gnum = REFERER_FAKE;
+	d->items[7].gnum = REFERER_TRUE;
 	d->items[7].dlen = sizeof(int);
 	d->items[7].data = (void *)&referer;
+	
 	d->items[8].type = D_FIELD;
 	d->items[8].dlen = MAX_STR_LEN;
 	d->items[8].data = fake_referer;
+	
 	d->items[9].type = D_FIELD;
 	d->items[9].dlen = MAX_STR_LEN;
 	d->items[9].data = user_agent;
+	
 	d->items[10].type = D_BUTTON;
 	d->items[10].gid = B_ENTER;
 	d->items[10].fn = ok_dialog;

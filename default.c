@@ -966,7 +966,7 @@ int keep_unhistory = 0;
 int default_left_margin = HTML_LEFT_MARGIN;
 
 unsigned char fake_referer[MAX_STR_LEN] = "";
-int referer;   /* values: REFERER_NONE (default), REFERER_TRUE, REFERER_SAME_URL, REFERER_FAKE */
+referer_t referer = REFERER_NONE;
 
 unsigned char http_proxy[MAX_STR_LEN] = "";
 unsigned char ftp_proxy[MAX_STR_LEN] = "";
@@ -1157,12 +1157,12 @@ struct option links_options[] = {
 	 
 	{	"http-referer", "http_referer",
 		gen_cmd, num_rd, num_wr,
-	 	0, 3, &referer,
+	 	REFERER_NONE, REFERER_TRUE, &referer,
 		"Mode of sending HTTP referer:\n"
 		"0 is send no referer\n"
-		"1 is send previous URL as referer\n"
-		"2 is send current URL as referer\n"
-		"3 is send fixed fake referer" },
+		"1 is send current URL as referer\n"
+		"2 is send fixed fake referer\n"
+		"3 is send previous URL as referer (correct, but insecure)\n" },
 	 
 	{	"fake-referer", "fake_referer", /* exception to alphabetical order */
 		gen_cmd, str_rd, str_wr,

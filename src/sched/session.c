@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.273 2003/12/06 16:44:24 pasky Exp $ */
+/* $Id: session.c,v 1.274 2003/12/06 16:44:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,7 +314,7 @@ post_yes(struct task *task)
 	if (task->ses->goto_position) mem_free(task->ses->goto_position);
 
 	ses->goto_position = task->pos ? stracpy(task->pos) : NULL;
-	ses->loading.end = (void (*)(struct download *, void *))task->fn;
+	ses->loading.end = (void (*)(struct download *, void *)) task->fn;
 	ses->loading.data = task->ses;
 	ses->loading_url = stracpy(task->url);
 	ses->task.type = task->type;

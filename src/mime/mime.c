@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.63 2004/08/16 01:05:09 jonas Exp $ */
+/* $Id: mime.c,v 1.64 2004/08/18 19:49:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ get_content_type(struct cache_entry *cached)
 	extension = uri ? get_extension_from_uri(uri) : NULL;
 	debug_extension(extension);
 
-#if defined(CONFIG_GZIP) || defined(CONFIG_BZIP)
+#if defined(CONFIG_GZIP) || defined(CONFIG_BZIP2)
 	/* The @encoding variable controls when we check for the content
 	 * type in the cache header and there is really only a reason for
 	 * doing this if decoding is an option. */
@@ -255,7 +255,7 @@ get_content_type(struct cache_entry *cached)
 		}
 	}
 
-#if defined(CONFIG_GZIP) || defined(CONFIG_BZIP)
+#if defined(CONFIG_GZIP) || defined(CONFIG_BZIP2)
 	/* If there is any sign that the content is encoded we only
 	 * trust information from the server if we didn't guess the
 	 * content type from the extension. This way .gz files with

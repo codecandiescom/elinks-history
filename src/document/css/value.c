@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.4 2004/01/17 16:46:09 pasky Exp $ */
+/* $Id: value.c,v 1.5 2004/01/17 19:40:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 
 typedef int (*css_value_parser_t)(union css_decl_value *value,
 				  unsigned char **string);
+
 
 static int
 rgb_component_parser(unsigned char **string, unsigned char terminator)
@@ -88,6 +89,7 @@ css_parse_color_value(union css_decl_value *value, unsigned char **string)
 	return 1;
 }
 
+
 static int
 css_parse_font_attribute_value(union css_decl_value *value,
 				unsigned char **string)
@@ -95,10 +97,19 @@ css_parse_font_attribute_value(union css_decl_value *value,
 	unsigned char *nstring;
 	int weight;
 
+	/* This is triggered with a lot of various properties, basically
+	 * everything just touching font_attribute. */
+
 	skip_whitespace(*string);
 	if (!strlcasecmp(*string, -1, "bold", 4)) {
 		(*string) += 4;
 		value->font_attribute |= AT_BOLD;
+		return 1;
+	}
+	if (!strlcasecmp(*string, -1, "italic", 6) ||
+	    !strlcasecmp(*string, -1, "oblique", 7)) {
+		(*string) += 6 + (**string == 'o');
+		value->font_attribute |= AT_ITALIC;
 		return 1;
 	}
 
@@ -119,6 +130,7 @@ css_parse_font_attribute_value(union css_decl_value *value,
 	if (weight >= 700) value->font_attribute |= AT_BOLD;
 	return 1;
 }
+
 
 static css_value_parser_t css_value_parsers[CSS_DV_LAST] = {
 	/* CSS_DV_NONE */		NULL,

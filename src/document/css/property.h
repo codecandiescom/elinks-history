@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.1 2004/01/17 16:36:16 pasky Exp $ */
+/* $Id: property.h,v 1.2 2004/01/17 19:40:27 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -20,6 +20,7 @@ struct css_property {
 		CSS_DP_NONE,
 		CSS_DP_BACKGROUND_COLOR,
 		CSS_DP_COLOR,
+		CSS_DP_FONT_STYLE,
 		CSS_DP_FONT_WEIGHT,
 		CSS_DP_LAST,
 	} property;

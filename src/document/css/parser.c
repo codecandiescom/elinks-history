@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.3 2004/01/17 17:35:34 pasky Exp $ */
+/* $Id: parser.c,v 1.4 2004/01/17 19:40:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@ static enum css_decl_valtype prop2valtype[CSS_DP_LAST] = {
 	/* CSS_DP_NONE */		CSS_DV_NONE,
 	/* CSS_DP_BACKGROUND_COLOR */	CSS_DV_COLOR,
 	/* CSS_DP_COLOR */		CSS_DV_COLOR,
+	/* CSS_DP_FONT_STYLE */		CSS_DV_FONT_ATTRIBUTE,
 	/* CSS_DP_FONT_WEIGHT */	CSS_DV_FONT_ATTRIBUTE,
 };
 
@@ -42,6 +43,7 @@ struct css_property_info {
 struct css_property_info css_property_info[] = {
 	CSS_PROPERTY("background-color", CSS_DP_BACKGROUND_COLOR),
 	CSS_PROPERTY("color", CSS_DP_COLOR),
+	CSS_PROPERTY("font-style", CSS_DP_FONT_STYLE),
 	CSS_PROPERTY("font-weight", CSS_DP_FONT_WEIGHT),
 
 	CSS_PROPERTY("", CSS_DP_NONE),

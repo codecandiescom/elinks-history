@@ -1,3 +1,174 @@
+Tue Jun 24 21:44:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Make xmlto the preferred doctool (the only one that can build the
+	book).  
+
+Tue Jun 24 20:58:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	Some esotheric speech about changes.  
+
+Tue Jun 24 20:57:02 2003  Laurent Monin <zas@norz.org>:
+
+	* po/bg.po:
+
+	Some errors were fixed. Author was added. Translators please review.  
+
+Tue Jun 24 20:49:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/hacking.txt:
+
+	Update the language file section, fix expanded CVS tags and add
+	comment about splitting big patches.  
+
+Tue Jun 24 20:46:05 2003  Laurent Monin <zas@norz.org>:
+
+	* po/bg.po:
+
+	Fatal errors were fixed in recent translation update. Concerned
+	translators should check that.  
+
+Tue Jun 24 20:14:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Changes from mime/ integration and the new show_hidden_files.  
+
+Tue Jun 24 20:13:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: Makefile.am, Makefile.doc, TODO, manpages/Makefile.am,
+	tools/help2doc:
+
+	Misc small fixes and updates all over the map. Sorry.  
+
+Tue Jun 24 17:52:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, po/bg.po:
+
+	Some bulgarian translation updates by dinux <dinux@mail.bg>.  
+
+Tue Jun 24 14:56:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Stupid patch was reverted. Reported by Pasky.  
+
+Tue Jun 24 14:47:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	A comment was added about a strange part of code...  
+
+Tue Jun 24 14:29:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Code redundancy was reduced.  
+
+Tue Jun 24 12:32:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Minor clearifying cleanups.  
+
+Tue Jun 24 12:08:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Purify the directory_entry allocation by making @name contain whole 
+	path, so concatenation in add_dir_entry() isn't needed.  Also fix
+	some possible leaks in the allocation.  
+
+Tue Jun 24 10:03:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/tab.c:
+
+	A useless comment was removed.  
+
+Tue Jun 24 09:37:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	redraw_screen() was optimized, a useless test was removed, it fixes
+	the status bar which was not drawn until its end.  
+
+Tue Jun 24 01:51:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Inline all the split up functions and (my) cleanups should be done.  
+
+Tue Jun 24 01:35:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Reduce the number of variables.  
+
+Tue Jun 24 01:29:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Cleanup the listing of (sym)links.  
+
+Tue Jun 24 01:19:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	'Cache' html escaped entry->name to simplify and optimize.  
+
+Tue Jun 24 00:35:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Relocate the testing of link is directory.  
+
+Tue Jun 24 00:26:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Get ready to streamline the code for adding link entries.  
+
+Tue Jun 24 00:07:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Minor cleanup and commenting.  
+
+Mon Jun 23 23:36:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Sorry re^2name: (file_)info -> (file_)data seems more appropriate.  
+
+Mon Jun 23 23:29:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Split out the adding of one directory entry to the fragment. Last
+	one! ;) 
+
+Mon Jun 23 23:12:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	:s/filename/dirpath/ in directory functions.  
+
+Mon Jun 23 23:10:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Split out the adding of directory entries to the fragment.  
+
+Mon Jun 23 22:41:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Another bunch of renames + small optimizations by sharing strlen()
+	results.  
+
 Mon Jun 23 21:53:40 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/file.c:

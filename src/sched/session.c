@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.189 2003/10/24 22:57:21 jonas Exp $ */
+/* $Id: session.c,v 1.190 2003/10/25 19:50:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -622,7 +622,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 		if (ses->goto_position) mem_free(ses->goto_position);
 		ses->goto_position = pos;
 
-		ses->loading.end = (void (*)(struct download *, void *))fn;
+		ses->loading.end = (void (*)(struct download *, void *)) fn;
 		ses->loading.data = ses;
 		ses->loading_url = url;
 		ses->task = task_type;

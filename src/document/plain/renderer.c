@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.30 2003/11/18 20:07:01 pasky Exp $ */
+/* $Id: renderer.c,v 1.31 2003/11/18 20:16:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,8 +242,7 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 	set_term_color(&template, &colors, global_doc_opts->color_flags, global_doc_opts->color_mode);
 
 	for (lineno = 0; length > 0; lineno++) {
-		unsigned char *lineend = strchr(source, '\n');
-		int width = lineend ? lineend - source: strlen(source);
+		int width = source + strcspn(source, "\n");
 		int added;
 
 		added = add_document_line(document, lineno, source, width, &template,

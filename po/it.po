@@ -286,8 +286,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione config."
-"saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione "
+"config.saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:635
@@ -480,8 +480,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
-"s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"\"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -853,29 +853,29 @@ msgid "Template option folder"
 msgstr "Cartella di opzioni template"
 
 #: src/config/options.c:769
-#, fuzzy, c-format
+#, c-format
 msgid "(default: %ld)"
-msgstr "    %s%s%s %s (predefinito: %d)"
+msgstr "(predefinito: %ld)"
 
 #: src/config/options.c:774 src/config/options.c:797
-#, fuzzy, c-format
+#, c-format
 msgid "(default: \"%s\")"
-msgstr "    %s%s%s %s (predefinito: \"%s\")"
+msgstr "(predefinito: \"%s\")"
 
 #: src/config/options.c:779
-#, fuzzy, c-format
+#, c-format
 msgid "(alias for %s)"
-msgstr "    %s%s%s %s (alias per %s)"
+msgstr "(alias per %s)"
 
 #: src/config/options.c:784
-#, fuzzy, c-format
+#, c-format
 msgid "(default: %s)"
-msgstr "    %s%s%s %s (predefinito: %s"
+msgstr "(predefinito: %s)"
 
 #: src/config/options.c:789
-#, fuzzy, c-format
+#, c-format
 msgid "(default: #%06x)"
-msgstr "    %s%s%s %s (predefinito: %06x)"
+msgstr "(predefinito: #%06x)"
 
 #: src/config/options.c:916
 msgid "Configuration options:\n"
@@ -918,7 +918,6 @@ msgstr ""
 "NAZIONALI!)"
 
 #: src/config/options.inc:26
-#, fuzzy
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
@@ -2795,8 +2794,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.inc:945
 msgid ""
@@ -3493,8 +3492,9 @@ msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
-"Azioni temporizzate dopo un certo intervallo di inattività dell'utente."
-"Qualcuno lo può trovare persino utile, anche se puoi non crederci."
+"Azioni temporizzate dopo un certo intervallo di inattività "
+"dell'utente.Qualcuno lo può trovare persino utile, anche se puoi non "
+"crederci."
 
 #: src/config/options.inc:1919
 msgid ""
@@ -3902,8 +3902,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, "
-"storico, ...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
+"...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in connessione con una di queste opzioni."
 
@@ -4300,14 +4300,12 @@ msgid "Toggle ~html/plain"
 msgstr "Inverti ~html/plain"
 
 #: src/dialogs/menu.c:494
-#, fuzzy
 msgid "Toggle i~mages"
-msgstr "URL/Titolo"
+msgstr "Abilita/Disabilita i~mmagini"
 
 #: src/dialogs/menu.c:495
-#, fuzzy
 msgid "Toggle ~link numbering"
-msgstr "Inserisci il numero del collegamento"
+msgstr "Abilita/Disabilita co~llegamenti numerati"
 
 #: src/dialogs/menu.c:496
 msgid "Document ~info"
@@ -5084,9 +5082,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5094,9 +5092,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:1701
 msgid "Unknown event."

@@ -1,3 +1,94 @@
+Thu Oct  9 16:12:04 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* AUTHORS:
+
+	Cristiano Guadagnino and criguada@libero.it are the same physical
+	entity.  
+
+Thu Oct  9 15:49:17 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation fixes in order to please the Accademia della
+	Crusca.  
+
+Thu Oct  9 12:27:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation updated, unfuzzied some older bits. Have to keep
+	some jump in front of Jonas.  
+
+Thu Oct  9 10:36:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: options.c, options.h:
+
+	Add comments.  
+
+Thu Oct  9 10:14:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Danish translation micro update.  
+
+Thu Oct  9 10:09:48 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation updated.  
+
+Thu Oct  9 09:55:02 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update, 77.41% done 
+
+Thu Oct  9 09:49:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: options.c, options.h, html/parser.c:
+
+	Add "meta" link display option to struct document_options so
+	changing it will automagically rerender the page.  
+
+Thu Oct  9 09:41:00 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Oct  9 09:34:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Reverse links are now printed (reported by Peter Gervai), html link
+	display format was improved.  
+
+Thu Oct  9 09:09:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Do not call trim_chars() if string has zero length, it prevents
+	segfault reported by Stephane Chazelas, when calling add_bookmark()
+	with a read-only empty string in do_add_folder().  
+
+Thu Oct  9 05:57:28 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/bfu/msgbox.c:
+
+	Deinlining msg_text_do. With inline elinks segfaults on Cygwin.  
+
+Thu Oct  9 05:54:39 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/: os_dep.h, win32.c:
+
+	When Cygwin is treated as UNIX cursor is visible. Before it wasn't.  
+
+Thu Oct  9 05:51:21 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/elinks.spec.in:
+
+	Enabled 256 colors.  
+
 Wed Oct  8 21:10:49 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/protocol/http/http.c:

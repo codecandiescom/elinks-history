@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.187 2003/08/23 18:01:02 jonas Exp $ */
+/* $Id: view.c,v 1.188 2003/08/23 18:11:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1513,69 +1513,59 @@ menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 
 
 /* Print page's title and numbering at window top. */
-static unsigned char *
-print_current_titlex(struct document_view *fd, int w)
-{
-	struct string m;
-	struct string p;
-
-	assert(fd);
-	if_assert_failed return NULL;
-
-	if (!init_string(&p)) return NULL;
-
-	if (fd->yw < fd->document->y) {
-		int pp = 1;
-		int pe = 1;
-
-		if (fd->yw) {
-			pp = (fd->vs->view_pos + fd->yw / 2) / fd->yw + 1;
-			pe = (fd->document->y + fd->yw - 1) / fd->yw;
-			if (pp > pe) pp = pe;
-		}
-
-		if (fd->vs->view_pos + fd->yw >= fd->document->y)
-			pp = pe;
-		if (fd->document->title)
-			add_char_to_string(&p, ' ');
-
-		add_char_to_string(&p, '(');
-		add_long_to_string(&p, pp);
-		add_char_to_string(&p, '/');
-		add_long_to_string(&p, pe);
-		add_char_to_string(&p, ')');
-	}
-
-	if (!fd->document->title) return p.source;
-
-	if (!init_string(&m)) goto end;
-
-	add_to_string(&m, fd->document->title);
-
-	if (m.length + p.length > w - 4) {
-		m.length = w - 4 - p.length;
-		if (m.length < 0) m.length = 0;
-		add_to_string(&m, "...");
-	}
-
-	add_string_to_string(&m, &p);
-
-end:
-	done_string(&p);
-
-	return m.source;
-}
-
 unsigned char *
 print_current_title(struct session *ses)
 {
-	struct document_view *fd;
+	struct document_view *frame;
+	struct document *document;
+	struct string title;
+	unsigned char buf[80];
+	int buflen = 0;
+	int width;
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;
-	fd = current_frame(ses);
-	assert(fd);
+
+	frame = current_frame(ses);
+
+	assert(frame && frame->document);
 	if_assert_failed return NULL;
 
-	return print_current_titlex(fd, ses->tab->term->x);
+	if (!init_string(&title)) return NULL;
+
+	document = frame->document;
+	width = ses->tab->term->x;
+
+	/* Set up the document page info string: '(' %page '/' %pages ')' */
+	if (frame->yw < document->y) {
+		int pos = frame->vs->view_pos + frame->yw;
+		int page = 1;
+		int pages = frame->yw ? (document->y + frame->yw - 1) / frame->yw
+				      : 1;
+
+		/* Check if at the end else calculate the page. */
+		if (pos >= document->y) {
+			page = pages;
+		} else if (frame->yw) {
+			page = int_min((pos - frame->yw / 2) / frame->yw + 1,
+				       pages);
+		}
+
+		buflen = snprintf(buf, sizeof(buf), " (%d/%d)", page, pages);
+		if (buflen < 0) buflen = 0;
+	}
+
+	if (frame->document->title) {
+		add_to_string(&title, frame->document->title);
+
+		if (title.length + buflen > width - 4) {
+			title.length = int_max(width - 4 - buflen, 0);
+			add_to_string(&title, "...");
+		}
+	}
+
+	if (buflen > 0)
+		add_bytes_to_string(&title, buf, buflen);
+
+	return title.source;
 }

@@ -1,15 +1,10 @@
 " Vim syntax file
 " Language:	ELinks configuration file (elinks.conf)
 " Maintainer:	Jonas Fonseca <fonseca@diku.dk>
-" Last Change:	Sep 12th 2002
+" Last Change:	Sep 19th 2002
 " Description:	This file covers elinks version 0.4pre15
-"-
-" Todo:         Add more color words.
-"               Support for include command.
-"               Improve error highlighting.
-"               Highlighting of various stuff inside of strings (\", %).
 
-" $Id: elinks.vim,v 1.2 2002/09/13 20:45:37 pasky Exp $
+" $Id: elinks.vim,v 1.3 2002/09/19 15:25:54 pasky Exp $
 
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
@@ -17,6 +12,13 @@ if version < 600
   syntax clear
 elseif exists("b:current_syntax")
   finish
+endif
+
+" Add keyword characters needed by elinksAction's.
+if version < 600
+  set iskeyword+=-
+else
+  setlocal iskeyword+=-
 endif
 
 " Comment stuff
@@ -31,13 +33,15 @@ syn match	elinksSet	/^\s*set\s/ skipwhite nextgroup=elinksTreeOpt
 syn match	elinksTreeOpt	/[a-zA-Z-0-9\*\._-]\+\s*=/ skipwhite contains=elinksAssign nextgroup=elinksNumber,elinksValue
 syn match	elinksAssign	contained /=/
 
-syn match	elinksNumber	/\s*-\?\d\+[Mk]\?/
+syn match	elinksNumber	/-\?\d\+[Mk]\?/ contains=elinksSize
+syn match	elinksSize	contained /[Mk]/
+
 syn region	elinksValue	start=+"+ms=e end=+"+ contains=elinksEmail,elinksURL,elinksColor,elinksEscape,elinksComArgs
 syn match	elinksEscape	contained /\\"/
 syn match	elinksComArgs	contained /%[hpstuv]/
 syn match	elinksColor	contained /#\x\{6\}/
-syn match	elinksEmail	contained "[a-zA-Z0-9._-]\+@[a-zA-Z0-9.-_]\+"
-syn match	elinksURL	contained "\(http\|ftp\)://\w\+[a-zA-Z0-9._-]*"
+syn match	elinksEmail	contained "[a-zA-Z0-9.-]\+@[a-zA-Z0-9.-]\+"
+syn match	elinksURL	contained "\(https\?\|ftp\)://\w\+[a-zA-Z0-9.-]*\(:[1-9]\d\{0,4\}\)\?"
 
 " Bind statements
 syn match	elinksBind	/^\s*bind\s/ skipwhite nextgroup=elinksKeymap
@@ -45,17 +49,17 @@ syn match	elinksKeymap	/"\(main\|edit\|menu\)"/ skipwhite nextgroup=elinksKey
 syn match	elinksKey	/"[^"]\+"/ skipwhite nextgroup=elinksActStr
 
 syn match	elinksActStr	/=\s*"[^"]*"/ contains=elinksAssign,elinksAction
-syn keyword	elinksAction	contained add-bookmark back bookmark-manager download end enter file-menu
-syn keyword	elinksAction	contained find-next find-next-back goto-url goto-url-current goto-url-current-link
-syn keyword	elinksAction	contained header-info home link-menu lua-console menu next-frame open-new-window
-syn keyword	elinksAction	contained open-link-in-new-window page-down page-up paste-clipboard previous-frame
-syn keyword	elinksAction	contained quit really-quit reload scroll-down scroll-left scroll-right scroll-up
-syn keyword	elinksAction	contained search search-back toggle-display-images toggle-display-tables 
-syn keyword	elinksAction	contained toggle-html-plain unback view-image zoom-frame jump-to-link document-info
-syn keyword     elinksAction    contained cookies-load history-manager enter-reload 
-syn keyword	elinksAction	contained up down left right home end backspace delete kill-to-bol kill-to-eol auto-complete
-syn keyword	elinksAction	contained enter copy-clipboard cut-clipboard paste-clipboard edit auto-complete-unambiguous
-syn keyword	elinksAction	contained left right up down home end page-up page-down
+syn keyword	elinksAction	contained add-bookmark auto-complete auto-complete-unambiguous back backspace
+syn keyword	elinksAction	contained bookmark-manager cookies-load copy-clipboard cut-clipboard delete
+syn keyword	elinksAction	contained document-info down download download-image edit end enter enter-reload
+syn keyword	elinksAction	contained file-menu find-next find-next-back follow-link forget-credentials
+syn keyword	elinksAction	contained goto-url goto-url-current goto-url-current-link goto-url-home
+syn keyword	elinksAction	contained header-info history-manager home jump-to-link kill-to-bol kill-to-eol
+syn keyword	elinksAction	contained left link-menu lua-console menu next-frame none open-link-in-new-window
+syn keyword	elinksAction	contained open-new-window page-down page-up paste-clipboard previous-frame quit
+syn keyword	elinksAction	contained really-quit reload right save-formatted scroll-down scroll-left
+syn keyword	elinksAction	contained scroll-right scroll-up search search-back toggle-display-images
+syn keyword	elinksAction	contained toggle-display-tables toggle-html-plain unback up view-image zoom-frame
 
 " Include statements
 syn match	elinksInclude	/^\s*include\s/ skipwhite nextgroup=elinksValue
@@ -84,6 +88,7 @@ if version >= 508 || !exists("did_elinks_syntax_inits")
   HiLink elinksEmail	Type
   HiLink elinksURL	Type
   HiLink elinksNumber	Number
+  HiLink elinksSize	Type
 
   HiLink elinksBind	Keyword
   HiLink elinksKeymap	Type

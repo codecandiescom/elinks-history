@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.67 2003/11/18 23:59:10 pasky Exp $ */
+/* $Id: inphist.c,v 1.68 2003/11/19 00:02:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,6 +115,8 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 		for (; *cur && *cur == *matchpos; ++cur, ++matchpos) {
 			++cur_len;
 
+			/* XXX: I think that unifying the two cases of this
+			 * test could seriously hurt readability. --pasky */
 			if (longest_common_match
 			    && cur_len >= longest_common_match)
 				break;
@@ -123,10 +125,12 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 		if (cur_len < base_len)
 			continue;
 
+		if (!match) cur_len = strlen(entry->data);
+
 		/* By now, @cur_len oscillates between @base_len and
 		 * @longest_common_match. */
-
-		if (cur_len >= longest_common_match)
+		if (longest_common_match
+		    && cur_len >= longest_common_match)
 			continue;
 
 		/* We found the next shortest common match. */

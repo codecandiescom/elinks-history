@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.6 2003/12/08 16:16:16 zas Exp $ */
+/* $Id: smb.c,v 1.7 2003/12/08 22:45:33 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -36,25 +36,28 @@
 #include "util/string.h"
 
 /* XXX: Nice cleanup target --pasky */
+/* FIXME: we rely on smbclient output which may change in future,
+ * so i think we should use libsmbclient instead (or better in addition)
+ * This stuff is a quick hack, but it works ;). --Zas */
 
+enum smb_list_type {
+	SMB_LIST_NONE,
+	SMB_LIST_SHARES,
+	SMB_LIST_DIR,
+};
 
 struct smb_connection_info {
-	enum smb_list_type {
-		SMB_LIST_NONE,
-		SMB_LIST_SHARES,
-		SMB_LIST_DIR,
-        } list;
+	enum smb_list_type list_type;
 
 	/* If this is 1, it means one socket is already off. The second one
 	 * should call end_smb_connection() when it goes off as well. */
 	int closing;
 
 	int textlen;
-	char text[1];
+	unsigned char text[1];
 };
 
 static void end_smb_connection(struct connection *conn);
-
 
 #define READ_SIZE	4096
 
@@ -65,13 +68,14 @@ smb_read_text(struct connection *conn, int sock)
 	struct smb_connection_info *si = conn->info;
 
 	si = mem_realloc(si, sizeof(struct smb_connection_info) + si->textlen
-			     + READ_SIZE + 2);
+			     + READ_SIZE + 2); /* XXX: why +2 ? --Zas */
 	if (!si) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 	conn->info = si;
 
+	/* FIXME: code redundancy with smb_got_data(). */
 	r = read(sock, si->text + si->textlen, READ_SIZE);
 	if (r == -1) {
 		retry_conn_with_state(conn, -errno);
@@ -95,14 +99,15 @@ static void
 smb_got_data(struct connection *conn)
 {
 	struct smb_connection_info *si = conn->info;
-	char buffer[READ_SIZE];
+	unsigned char buffer[READ_SIZE];
 	int r;
 
-	if (si->list != SMB_LIST_NONE) {
+	if (si->list_type != SMB_LIST_NONE) {
 		smb_read_text(conn, conn->data_socket);
 		return;
 	}
 
+	/* FIXME: code redundancy with smb_read_text(). */
 	r = read(conn->data_socket, buffer, READ_SIZE);
 	if (r == -1) {
 		retry_conn_with_state(conn, -errno);
@@ -120,6 +125,7 @@ smb_got_data(struct connection *conn)
 
 	set_connection_state(conn, S_TRANS);
 
+	/* FIXME: code redundancy. */
 	if (!conn->cache && !(conn->cache = get_cache_entry(struri(conn->uri)))) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
@@ -145,6 +151,7 @@ end_smb_connection(struct connection *conn)
 {
 	struct smb_connection_info *si = conn->info;
 
+	/* FIXME: code redundancy. */
 	if (!conn->cache && !(conn->cache = get_cache_entry(struri(conn->uri)))) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
@@ -158,8 +165,9 @@ end_smb_connection(struct connection *conn)
 
 	if (si->textlen && si->text[si->textlen - 1] != '\n')
 		si->text[si->textlen++] = '\n';
-	si->text[si->textlen] = 0;
+	si->text[si->textlen] = '\0';
 
+	assert(conn->uri.datalen);
 	if ((strstr(si->text, "NT_STATUS_FILE_IS_A_DIRECTORY")
 	     || strstr(si->text, "NT_STATUS_ACCESS_DENIED")
 	     || strstr(si->text, "ERRbadfile"))
@@ -200,7 +208,7 @@ end_smb_connection(struct connection *conn)
 
 			/* And I got bored here with cleaning it up. --pasky */
 
-			if (si->list == SMB_LIST_SHARES) {
+			if (si->list_type == SMB_LIST_SHARES) {
 				unsigned char *ll, *lll;
 
 				if (!*line) type = 0;
@@ -298,9 +306,9 @@ np:
 					goto print_as_is;
 				}
 
-			} else if (si->list == SMB_LIST_DIR) {
+			} else if (si->list_type == SMB_LIST_DIR) {
 				if (strstr(line, "NT_STATUS")) {
-					line_end[1] = 0;
+					line_end[1] = '\0';
 					goto print_as_is;
 				}
 
@@ -308,20 +316,19 @@ np:
 				    && line_start[0] == ' '
 				    && line_start[1] == ' '
 				    && line_start[2] != ' ') {
-					int dir;
+					int dir = 0;
 					unsigned char *pp;
 					unsigned char *p = line_start + 3;
 					unsigned char *url = p - 1;
 
 					while (p + 2 <= line_end2) {
 						if (p[0] == ' ' && p[1] == ' ')
-							goto o;
+							goto is_a_file_entry;
 						p++;
 					}
 					goto print_as_is;
 
-o:
-					dir = 0;
+is_a_file_entry:
 					pp = p;
 					while (pp < line_end2 && *pp == ' ')
 						pp++;
@@ -398,7 +405,7 @@ smb_func(struct connection *conn)
 	int err_pipe[2] = { -1, -1 };
 	unsigned char *share, *dir;
 	unsigned char *p;
-	int cpid;
+	int cpid, dirlen;
 	struct smb_connection_info *si;
 
 	si = mem_calloc(1, sizeof(struct smb_connection_info) + 2);
@@ -408,12 +415,13 @@ smb_func(struct connection *conn)
 	}
 	conn->info = si;
 
-	if ((p = strchr(conn->uri.data, '/'))
-	    && p - conn->uri.data < conn->uri.datalen) {
+	p = strchr(conn->uri.data, '/');
+	if (p && p - conn->uri.data < conn->uri.datalen) {
 		share = memacpy(conn->uri.data, p - conn->uri.data);
 		dir = p + 1;
 
 	} else if (conn->uri.datalen) {
+		/* FIXME: code redundancy. */
 		if (!conn->cache && !(conn->cache = get_cache_entry(struri(conn->uri)))) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
@@ -433,11 +441,17 @@ smb_func(struct connection *conn)
 		dir = "";
 	}
 
+	if (!share) {
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		return;
+	}
+
+	dirlen = strlen(dir);
 	if (!*share) {
-		si->list = SMB_LIST_SHARES;
-	} else if (!*dir || dir[strlen(dir) - 1] == '/'
-		   || dir[strlen(dir) - 1] == '\\') {
-		si->list = SMB_LIST_DIR;
+		si->list_type = SMB_LIST_SHARES;
+	} else if (!dirlen || dir[dirlen - 1] == '/'
+		   || dir[dirlen - 1] == '\\') {
+		si->list_type = SMB_LIST_DIR;
 	}
 
 	if (c_pipe(out_pipe) || c_pipe(err_pipe)) {
@@ -483,6 +497,8 @@ smb_func(struct connection *conn)
 		n = 0;
 		v[n++] = "smbclient";
 
+		/* FIXME: handle alloc failures. */
+
 		if (!*share) {
 			v[n++] = "-L";
 			v[n++] = memacpy(conn->uri.host, conn->uri.hostlen);
@@ -515,8 +531,9 @@ smb_func(struct connection *conn)
 		}
 
 		if (*share) {
-			if (!*dir || dir[strlen(dir) - 1] == '/' || dir[strlen(dir) - 1] == '\\') {
-				if (*dir) {
+			/* FIXME: use si->list_type here ?? --Zas */
+			if (!dirlen || dir[dirlen - 1] == '/' || dir[dirlen - 1] == '\\') {
+				if (dirlen) {
 					v[n++] = "-D";
 					v[n++] = dir;
 				}
@@ -537,6 +554,7 @@ smb_func(struct connection *conn)
 
 		execvp("smbclient", (char **) v);
 
+		/* FIXME: error() ??. */
 		fprintf(stderr, "smbclient not found in $PATH");
 		_exit(1);
 	}
@@ -557,7 +575,7 @@ smb_func(struct connection *conn)
 
 struct protocol_backend smb_protocol_backend = {
 	/* name: */			"smb",
-	/* port: */			139,
+	/* port: */			139, /* FIXME: why ? we use pipes and fork() to call smbclient, no tcp/ip there... --Zas */
 	/* handler: */			smb_func,
 	/* external_handler: */		NULL,
 	/* free_syntax: */		0,

@@ -18,7 +18,7 @@ else
 	features="features.conf"
 fi
 
-AC_MSG_CHECKING([for feature file])
+AC_MSG_CHECKING([for features.conf])
 if test -e "$features"; then
 	. $features
 	AC_MSG_RESULT($features)
@@ -640,7 +640,7 @@ enable_gnutls=""
 
 AC_ARG_WITH(gnutls, [  --without-gnutls        disable GNUTLS SSL support],
 	    [if test "$with_gnutls" = no;  then disable_gnutls=yes; fi])
-AC_ARG_WITH(gnutls, [  --with-gnutls[[=prefix]]  enable GNUTLS SSL support],
+AC_ARG_WITH(gnutls, [  --with-gnutls[=DIR]     enable GNUTLS SSL support],
 	    [if test "$with_gnutls" != no;  then enable_gnutls=yes; fi])
 gnutls_withval="$withval"
 
@@ -650,7 +650,7 @@ fi
 
 AC_ARG_WITH(openssl, [  --without-openssl       disable OpenSSL support],
 	    [if test "$with_openssl" = no;  then disable_openssl=yes; fi])
-AC_ARG_WITH(openssl, [  --with-openssl[[=prefix]] enable OpenSSL support (default)])
+AC_ARG_WITH(openssl, [  --with-openssl[=DIR]    enable OpenSSL support (default)])
 openssl_withval="$withval"
 
 dnl ---- OpenSSL
@@ -807,7 +807,7 @@ if test -z "$no_x"; then
 		LDFLAGS="$LDFLAGS -L$x_libraries"
 	fi
 	LIBS="-lX11 $LIBS"
-	EL_DEFINE(HAVE_X11, [X11])
+	EL_DEFINE(HAVE_X11, [X11 for restoring window titles])
 fi
 
 

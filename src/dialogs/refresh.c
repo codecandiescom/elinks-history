@@ -1,5 +1,5 @@
 /* Periodic refresh of dialogs */
-/* $Id: refresh.c,v 1.11 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: refresh.c,v 1.12 2003/10/25 12:20:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,9 +41,9 @@ refresh_end(struct refresh *r)
 }
 
 static void
-refresh_abort(struct dialog_data *dlg)
+refresh_abort(struct dialog_data *dlg_data)
 {
-	refresh_end(dlg->dlg->udata2);
+	refresh_end(dlg_data->dlg->udata2);
 }
 
 void

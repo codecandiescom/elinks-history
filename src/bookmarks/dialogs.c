@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.97 2003/10/24 23:39:47 pasky Exp $ */
+/* $Id: dialogs.c,v 1.98 2003/10/25 12:20:47 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -596,9 +596,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	/* Create the dialog */
-	dlg = mem_calloc(1, sizeof(struct dialog)
-			 + (BM_BOX_IND + 2) * sizeof(struct widget)
-			 + sizeof(struct bookmark) + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(BM_BOX_IND + 1, sizeof(struct bookmark) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	dlg->title = _("Bookmark manager", term);

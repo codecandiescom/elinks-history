@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.158 2004/07/15 15:54:20 jonas Exp $ */
+/* $Id: listbox.c,v 1.159 2004/07/27 16:11:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -541,7 +541,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		if (check_mouse_wheel(ev))
 			return EVENT_NOT_PROCESSED;
 
-		if (is_in_box(&widget_data->box, ev->x, ev->y)) {
+		if (check_mouse_position(ev, &widget_data->box)) {
 			/* Clicked in the box. */
 			int offset = ev->y - widget_data->box.y;
 

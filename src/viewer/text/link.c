@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.281 2004/07/20 22:25:59 pasky Exp $ */
+/* $Id: link.c,v 1.282 2004/07/27 16:11:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -898,7 +898,7 @@ get_link_at_coordinates(struct document_view *doc_view, int x, int y)
 	if (y < 0 || y >= doc_view->box.height) return NULL;
 
 	/* FIXME: This doesn't work. --Zas
-	if (!is_in_box(&doc_view->box, ev->x, ev->y))
+	if (!check_mouse_position(ev, &doc_view->box))
 		return NULL;
 	*/
 

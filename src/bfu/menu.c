@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.250 2004/07/19 21:16:39 zas Exp $ */
+/* $Id: menu.c,v 1.251 2004/07/27 16:11:42 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -569,7 +569,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 			return;
 	}
 
-	if (!is_in_box(&menu->box, ev->x, ev->y)) {
+	if (!check_mouse_position(ev, &menu->box)) {
 		if (check_mouse_action(ev, B_DOWN)) {
 			delete_window_ev(win, NULL);
 
@@ -590,7 +590,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 
 				m1 = w1->data;
 
-				if (is_in_box(&m1->box, ev->x, ev->y)) {
+				if (check_mouse_position(ev, &m1->box)) {
 					delete_window_ev(win, ev);
 					break;
 				}

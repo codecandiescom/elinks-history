@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.59 2004/07/17 20:10:42 zas Exp $ */
+/* $Id: button.c,v 1.60 2004/07/27 16:11:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,7 +122,7 @@ mouse_button(struct widget_data *widget_data, struct dialog_data *dlg_data, stru
 	if (check_mouse_wheel(ev))
 		return EVENT_NOT_PROCESSED;
 
-	if (!is_in_box(&widget_data->box, ev->x, ev->y))
+	if (!check_mouse_position(ev, &widget_data->box))
 		return EVENT_NOT_PROCESSED;
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);

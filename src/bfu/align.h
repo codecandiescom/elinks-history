@@ -1,4 +1,4 @@
-/* $Id: align.h,v 1.17 2003/06/29 21:55:26 zas Exp $ */
+/* $Id: align.h,v 1.18 2003/07/02 01:52:36 pasky Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
@@ -32,7 +32,9 @@ get_bfu_color(struct terminal *term, unsigned char *color_class)
 	int bg;
 	int nofg;
 
-	assert(term && color_class && *color_class);
+	assert(color_class && *color_class);
+
+	if (!term) return 0;
 
 	opt_tree = term->spec;
 
@@ -54,12 +56,11 @@ get_bfu_color(struct terminal *term, unsigned char *color_class)
 	if (!opt_tree) return 0;
 
 	bg = find_nearest_color(get_opt_ptr_tree(opt_tree, "background"), 8);
+
 	/* XXX: Call fg_color() ? --pasky */
 
 	if (nofg) return COL(bg<<3);
-
 	fg = find_nearest_color(get_opt_ptr_tree(opt_tree, "text"), 16);
-
 	return COL(((fg&0x08)<<3)|(bg<<3)|(fg&0x07));
 }
 

@@ -2,7 +2,7 @@ Elinks installation guidelines
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   Quick guide for the impatient:
-  
+
 	./configure && make && make install
 
   Check out the bottom of this file if you're upgrading from Links or an older
@@ -85,8 +85,8 @@ recommended for users to give a strong preference to OpenSSL whenever possible.
 
   Unix - just doing:
 
-         $ ./configure
-         $ make
+	 $ ./configure
+	 $ make
 
 	 should be enough.  However, in some FreeBSD 3 distributions you have to
 	 set CFLAGS=-aout before running ./configure.  Also, you may want to
@@ -168,5 +168,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.23 2003/12/20 22:42:53 pasky Exp $
+$Id: INSTALL,v 1.24 2003/12/31 18:47:48 pasky Exp $
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.128 2004/04/27 16:28:25 zas Exp $ */
+/* $Id: screen.c,v 1.129 2004/04/30 08:38:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,15 +298,16 @@ get_screen_driver(struct terminal *term)
 	struct screen_driver *driver;
 
 	foreach (driver, active_screen_drivers) {
-		if (driver->type == type && !memcmp(driver->name, name, len)) {
-			/* Some simple probably useless MRU ;) */
-			if (driver != active_screen_drivers.next) {
-				del_from_list(driver);
-				add_to_list(active_screen_drivers, driver);
-			}
+		if (driver->type != type) continue;
+		if (memcmp(driver->name, name, len)) continue;
 
-			return driver;
+		/* Some simple probably useless MRU ;) */
+		if (driver != active_screen_drivers.next) {
+			del_from_list(driver);
+			add_to_list(active_screen_drivers, driver);
 		}
+
+		return driver;
 	}
 
 	return add_screen_driver(type, term, len);
@@ -371,21 +372,22 @@ static inline void
 add_char_data(struct string *screen, struct screen_driver *driver,
 	      unsigned char data, unsigned char border)
 {
-	if (data >= ' ' && data != ASCII_DEL /* && c != 155*/) {
-		if (border && driver->frame && data >= 176 && data < 224) {
-			data = driver->frame[data - 176];
-		}
-
-		if (use_utf8_io(driver)) {
-			int charset = driver->charsets[!!border];
-
-			add_to_string(screen, cp2utf_8(charset, data));
-		} else {
-			add_char_to_string(screen, data);
-		}
-	} else {
+	if (data < ' ' || data == ASCII_DEL) {
 		add_char_to_string(screen, ' ');
+		return;
 	}
+
+	if (border && driver->frame && data >= 176 && data < 224)
+		data = driver->frame[data - 176];
+
+	if (use_utf8_io(driver)) {
+		int charset = driver->charsets[!!border];
+
+		add_to_string(screen, cp2utf_8(charset, data));
+		return;
+	}
+
+	add_char_to_string(screen, data);
 }
 
 /* Time critical section. */

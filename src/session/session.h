@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.86 2003/12/26 09:55:27 jonas Exp $ */
+/* $Id: session.h,v 1.87 2003/12/27 03:12:12 miciah Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -13,6 +13,7 @@
 #include "viewer/text/vs.h"
 
 struct document_view;
+struct link;
 struct location;
 struct session_status;
 struct term_event;

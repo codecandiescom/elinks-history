@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.13 2002/12/14 18:17:41 zas Exp $ */
+/* $Id: colors.c,v 1.14 2002/12/22 10:23:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,7 +229,7 @@ color_to_string(struct rgb *color, unsigned char *str)
 #include "document/options.h"
 
 static struct rgb palette[] = {
-#if 0
+#if defined(PALA)
 	{0x00, 0x00, 0x00},
 	{0x80, 0x00, 0x00},
 	{0x00, 0x80, 0x00},
@@ -246,8 +246,7 @@ static struct rgb palette[] = {
 	{0xff, 0x00, 0xff},
 	{0x00, 0xff, 0xff},
 	{0xff, 0xff, 0xff},
-#endif
-#if 0
+#elif defined(PALB)
 	{0x00, 0x00, 0x00},
 	{0xaa, 0x00, 0x00},
 	{0x00, 0xaa, 0x00},
@@ -264,7 +263,7 @@ static struct rgb palette[] = {
 	{0xff, 0x55, 0xff},
 	{0x55, 0xff, 0xff},
 	{0xff, 0xff, 0xff},
-#endif
+#else
 	{0x00, 0x00, 0x00},
 	{0x80, 0x00, 0x00},
 	{0x00, 0x80, 0x00},
@@ -281,8 +280,23 @@ static struct rgb palette[] = {
 	{0xff, 0x55, 0xff},
 	{0x55, 0xff, 0xff},
 	{0xff, 0xff, 0xff},
+#endif
 	{-1, -1, -1}
 };
+
+#if 0
+static struct rgb bgpalette[] = {
+	{0x22, 0x22, 0x22},
+	{0xbb, 0x22, 0x22},
+	{0x22, 0xbb, 0x22},
+	{0xcc, 0xbb, 0x22},
+	{0x22, 0x22, 0xbb},
+	{0xbb, 0x22, 0xbb},
+	{0x22, 0xbb, 0xbb},
+	{0xcc, 0xcc, 0xcc},
+	{-1, -1, -1}
+};
+#endif
 
 struct rgb_cache_entry {
 	int color;
@@ -322,7 +336,9 @@ find_nearest_color(struct rgb *r, int l)
 #define HASH_RGB(r, l) ((((r)->r << 3) + ((r)->g << 2) + (r)->b + (l)) & (RGB_HASH_SIZE - 1))
 
 	int dist, dst, min, i;
-	static struct rgb_cache_entry rgb_cache[RGB_HASH_SIZE];
+	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
+	/*static struct rgb_cache_entry rgb_bgcache[RGB_HASH_SIZE];*/
+	struct rgb_cache_entry *rgb_cache = /*l == 8 ? rgb_bgcache :*/ rgb_fgcache;
 	static int cache_init = 0;
 	int h;
 
@@ -347,7 +363,7 @@ find_nearest_color(struct rgb *r, int l)
 	min = 0;
 
 	for (i = 0; i < l; i++) {
-		dst = color_distance(r, &palette[i]);
+		dst = color_distance(r, /*l==8 ? &bgpalette[i] :*/ &palette[i]);
 		if (dst < dist) {
 			dist = dst;
 			min = i;

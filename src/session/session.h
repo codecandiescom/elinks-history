@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.68 2003/11/21 04:57:22 witekfl Exp $ */
+/* $Id: session.h,v 1.69 2003/11/24 16:35:01 fabio Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -205,6 +205,7 @@ set_referrer(struct session *ses, unsigned char *referrer)
 
 void print_screen_status(struct session *);
 void print_error_dialog(struct session *, struct download *);
+void print_unknown_protocol_dialog(struct session *);
 
 void process_file_requests(struct session *);
 

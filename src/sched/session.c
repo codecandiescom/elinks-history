@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.249 2003/11/22 14:38:27 witekfl Exp $ */
+/* $Id: session.c,v 1.250 2003/11/24 16:35:01 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1554,7 +1554,7 @@ ses_load_notify(struct download *stat, struct session *ses)
 }
 #endif
 
-static void
+void
 print_unknown_protocol_dialog(struct session *ses)
 {
 	msg_box(ses->tab->term, NULL, 0,

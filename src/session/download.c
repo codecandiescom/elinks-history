@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.182 2003/11/22 14:38:27 witekfl Exp $ */
+/* $Id: download.c,v 1.183 2003/11/24 16:35:00 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,7 @@
 #include "osdep/osdep.h"
 #include "protocol/http/date.h"
 #include "protocol/uri.h"
+#include "protocol/protocol.h"
 #include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/error.h"
@@ -1003,6 +1004,14 @@ download_error:
 void
 start_download(void *ses, unsigned char *file)
 {
+        enum protocol protocol = known_protocol(((struct session *)ses)->dn_url,
+						NULL);
+
+        if (protocol == PROTOCOL_UNKNOWN) {
+                print_unknown_protocol_dialog(ses);
+                return;
+        }
+
 	common_download(ses, file, 0);
 }
 

@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.50 2004/11/19 10:04:45 zas Exp $ */
+/* $Id: dialog.h,v 1.51 2004/11/19 17:14:56 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -144,5 +144,9 @@ struct widget_data *select_widget_by_id(struct dialog_data *dlg_data, int i);
 
 #define is_selected_widget(dlg_data, widget_data) ((widget_data) == selected_widget(dlg_data))
 
+#define add_dlg_end(dlg, n)						\
+	do {								\
+		assert(n == (dlg)->number_of_widgets);			\
+	} while (0)
 
 #endif

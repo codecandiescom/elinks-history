@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.78 2004/11/19 17:07:18 zas Exp $ */
+/* $Id: widget.h,v 1.79 2004/11/19 17:14:56 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -20,17 +20,7 @@
 #include "util/box.h"
 
 struct dialog_data;
-struct input_history;
-struct input_history_entry;
-struct term_event;
-
 struct widget_data;
-
-
-#define add_dlg_end(dlg, n)						\
-	do {								\
-		assert(n == (dlg)->number_of_widgets);			\
-	} while (0)
 
 
 struct widget_ops {
@@ -86,19 +76,6 @@ void display_widget_unfocused(struct dialog_data *, struct widget_data *);
 
 void dlg_set_history(struct widget_data *);
 
-
-#define widget_has_history(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
-					 && (widget_data)->widget->info.field.history)
-
-#define widget_is_textfield(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
-					  || (widget_data)->widget->type == WIDGET_FIELD_PASS)
-
-#define text_is_scrollable(widget_data) \
-	((widget_data)->widget->info.text.is_scrollable \
-	 && (widget_data)->box.height > 0 \
-	 && (widget_data)->info.text.lines > 0 \
-	 && (widget_data)->box.height < (widget_data)->info.text.lines)
-
 static inline int
 widget_is_focusable(struct widget_data *widget_data)
 {
@@ -109,7 +86,5 @@ widget_is_focusable(struct widget_data *widget_data)
 	}
 }
 
-#define widget_has_group(widget_data)	((widget_data)->widget->type == WIDGET_CHECKBOX \
-					  ? (widget_data)->widget->info.checkbox.gid : -1)
 
 #endif

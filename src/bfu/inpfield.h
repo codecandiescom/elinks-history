@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.43 2004/11/19 17:07:18 zas Exp $ */
+/* $Id: inpfield.h,v 1.44 2004/11/19 17:14:56 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -90,5 +90,11 @@ struct input_line {
 void
 input_field_line(struct session *ses, unsigned char *prompt, void *data,
 		 struct input_history *history, input_line_handler handler);
+
+#define widget_has_history(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
+					 && (widget_data)->widget->info.field.history)
+
+#define widget_is_textfield(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
+					  || (widget_data)->widget->type == WIDGET_FIELD_PASS)
 
 #endif

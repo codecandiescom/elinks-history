@@ -1,4 +1,4 @@
-/* $Id: checkbox.h,v 1.35 2004/11/19 17:07:18 zas Exp $ */
+/* $Id: checkbox.h,v 1.36 2004/11/19 17:14:56 zas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
@@ -38,5 +38,8 @@ dlg_format_checkbox(struct terminal *term,
 		    struct widget_data *widget_data,
 		    int x, int *y, int w, int *rw,
 		    enum format_align align);
+
+#define widget_has_group(widget_data)	((widget_data)->widget->type == WIDGET_CHECKBOX \
+					  ? (widget_data)->widget->info.checkbox.gid : -1)
 
 #endif

@@ -1,4 +1,4 @@
-/* $Id: text.h,v 1.25 2004/11/19 17:07:18 zas Exp $ */
+/* $Id: text.h,v 1.26 2004/11/19 17:14:56 zas Exp $ */
 
 #ifndef EL__BFU_TEXT_H
 #define EL__BFU_TEXT_H
@@ -55,5 +55,11 @@ void dlg_format_text_do(struct terminal *term,
 void
 dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 		int x, int *y, int dlg_width, int *real_width, int height);
+
+#define text_is_scrollable(widget_data) \
+	((widget_data)->widget->info.text.is_scrollable \
+	 && (widget_data)->box.height > 0 \
+	 && (widget_data)->info.text.lines > 0 \
+	 && (widget_data)->box.height < (widget_data)->info.text.lines)
 
 #endif

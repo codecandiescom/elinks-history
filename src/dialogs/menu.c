@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.167 2003/10/24 01:36:33 pasky Exp $ */
+/* $Id: menu.c,v 1.168 2003/10/24 01:41:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 
 		ses->history.current = cur;
 		go_back(ses, newcur->prev);
-		ses->history.current = newcur;
+		if (cur_loc(ses) == cur) ses->history.current = newcur;
 	}
 }
 
@@ -224,7 +224,7 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 
 		ses->history.current = cur;
 		go_unback(ses, newcur->next);
-		ses->history.current = newcur;
+		if (cur_loc(ses) == cur) ses->history.current = newcur;
 	}
 }
 

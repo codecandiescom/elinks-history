@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.221 2004/04/20 23:54:13 jonas Exp $ */
+/* $Id: menu.c,v 1.222 2004/04/21 00:00:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -853,61 +853,58 @@ static void
 mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
+	int i, p = L_MAINMENU_SPACE;
 
 	if (check_mouse_wheel(ev))
 		return;
 
 	if (check_mouse_action(ev, B_DOWN) && ev->y) {
 		delete_window_ev(win, NULL);
+		return;
+	}
 
-	} else if (!ev->y) {
-		int p = L_MAINMENU_SPACE;
-		int i;
+	if (ev->y) return;
 
-		/* We don't initialize to
-		 * menu->first here,
-		 * since it breaks horizontal
-		 * scrolling using mouse in some
-		 * cases. --Zas */
-		for (i = 0; i < menu->size; i++) {
-			int o = p;
+	/* We don't initialize to menu->first here, since it breaks horizontal
+	 * scrolling using mouse in some cases. --Zas */
+	for (i = 0; i < menu->size; i++) {
+		int o = p;
 
-			if (mi_has_left_text(menu->items[i])) {
-				unsigned char *text = menu->items[i].text;
+		if (mi_has_left_text(menu->items[i])) {
+			unsigned char *text = menu->items[i].text;
 
-				if (mi_text_translate(menu->items[i]))
-					text = _(text, win->term);
+			if (mi_text_translate(menu->items[i]))
+				text = _(text, win->term);
 
-				p += L_MAINTEXT_SPACE + L_TEXT_SPACE
-				     + strlen(text)
-				     - !!menu->items[i].hotkey_pos
-				     + R_TEXT_SPACE + R_MAINTEXT_SPACE;
-			}
-
-			if (ev->x < o) {
-				if (ev->x > L_MAINMENU_SPACE)
-					continue;
-
-				scroll_menu(menu, -1);
-
-			} else if (ev->x >= p) {
-				if (ev->x < win->term->width - R_MAINMENU_SPACE)
-					continue;
-
-				scroll_menu(menu, 1);
-
-			} else {
-				menu->selected = i;
-			}
-
-			display_mainmenu(win->term, menu);
-
-			if (check_mouse_action(ev, B_UP)
-			    || mi_is_submenu(menu->items[menu->selected])) {
-				select_menu(win->term, menu);
-			}
-			break;
+			p += L_MAINTEXT_SPACE + L_TEXT_SPACE
+				+ strlen(text)
+				- !!menu->items[i].hotkey_pos
+				+ R_TEXT_SPACE + R_MAINTEXT_SPACE;
 		}
+
+		if (ev->x < o) {
+			if (ev->x > L_MAINMENU_SPACE)
+				continue;
+
+			scroll_menu(menu, -1);
+
+		} else if (ev->x >= p) {
+			if (ev->x < win->term->width - R_MAINMENU_SPACE)
+				continue;
+
+			scroll_menu(menu, 1);
+
+		} else {
+			menu->selected = i;
+		}
+
+		display_mainmenu(win->term, menu);
+
+		if (check_mouse_action(ev, B_UP)
+			|| mi_is_submenu(menu->items[menu->selected])) {
+			select_menu(win->term, menu);
+		}
+		break;
 	}
 }
 #endif

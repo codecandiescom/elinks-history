@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.50 2004/03/31 22:42:38 jonas Exp $ */
+/* $Id: document.h,v 1.51 2004/04/01 05:09:58 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -139,7 +139,7 @@ struct document {
 /* Initializes a document and its canvas. */
 /* Return NULL on allocation failure. */
 struct document *
-init_document(unsigned char *uri, struct cache_entry *cache_entry,
+init_document(struct uri *uri, struct cache_entry *cache_entry,
 	      struct document_options *options);
 
 /* Releases the document and all its resources. */
@@ -148,7 +148,7 @@ void done_document(struct document *document);
 /* Free's the allocated members of the link. */
 void done_link_members(struct link *link);
 
-struct document *get_cached_document(unsigned char *uristring, struct document_options *options, unsigned int id);
+struct document *get_cached_document(struct uri *uri, struct document_options *options, unsigned int id);
 
 /* Release a reference to the document. */
 void release_document(struct document *document);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.37 2004/03/31 22:42:38 jonas Exp $ */
+/* $Id: renderer.c,v 1.38 2004/04/01 05:09:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,11 +60,11 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 		return;
 	}
 
-	document = get_cached_document(vs->url, options, cache_entry->id_tag);
+	document = get_cached_document(vs->uri, options, cache_entry->id_tag);
 	if (!document) {
 		struct fragment *fr;
 
-		document = init_document(vs->url, cache_entry, options);
+		document = init_document(vs->uri, cache_entry, options);
 		if (!document) return;
 
 		shrink_memory(0);

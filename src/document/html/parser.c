@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.365 2004/01/18 17:09:03 zas Exp $ */
+/* $Id: parser.c,v 1.366 2004/01/18 17:14:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2418,18 +2418,13 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
 	int values_count;
 	register int i;
 
+	*new_values_count = 0;
+
 	ret = extract_rows_or_cols_values(str, max_value, pixels_per_char,
 					  &values, &values_count);
-	if (!ret) {
-		*new_values_count = 0;
-		return;
-	}
+	if (!ret) return;
 
-	*new_values = values;
-	*new_values_count = values_count;
-
-	/* Here begins distribution between rows or cols.
-	 * Be warn, this is Mikulas's black magic ;) */
+	/* Here begins distribution between rows or cols. */
 
 	val = 2 * values_count - 1;
 	for (i = 0; i < values_count; i++)
@@ -2451,10 +2446,7 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
 			ret = distribute_rows_or_cols(&val, max_value, values, values_count);
 	}
 
-	if (!ret) {
-		*new_values_count = 0;
-		return;
-	}
+	if (!ret) return;
 
 	for (i = 0; i < values_count; i++)
 		if (!values[i]) {
@@ -2468,6 +2460,9 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
 			if (maxval)
 				values[i] = 1, values[maxpos]--;
 		}
+
+	*new_values = values;
+	*new_values_count = values_count;
 }
 
 static void

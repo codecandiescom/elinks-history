@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.82 2003/10/25 10:26:03 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.83 2003/10/25 10:42:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +32,93 @@ INIT_LIST_HEAD(bookmark_boxes);
 
 /* Set to 1, if bookmarks have changed. */
 int bookmarks_dirty = 0;
+
+
+
+
+/* Life functions */
+
+void
+init_bookmarks(void)
+{
+	struct option_info bookmark_options_info[] = {
+		INIT_OPT_TREE("", N_("Bookmarks"),
+			"bookmarks", 0,
+			N_("Bookmark options.")),
+
+#ifdef HAVE_LIBEXPAT
+		INIT_OPT_INT("bookmarks", N_("File format"),
+			"file_format", 0, 0, 1, 0,
+			N_("File format for bookmarks (affects both reading and saving):\n"
+			"0 is the default ELinks (Links 0.9x compatible) format\n"
+			"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)")),
+#else
+		INIT_OPT_INT("bookmarks", N_("File format"),
+			"file_format", 0, 0, 1, 0,
+			N_("File format for bookmarks (affects both reading and saving):\n"
+			"0 is the default ELinks (Links 0.9x compatible) format\n"
+			"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
+			"  (DISABLED)")),
+#endif
+
+		NULL_OPTION_INFO
+	};
+
+	register_option_info(bookmark_options_info, config_options);
+
+	read_bookmarks();
+}
+
+/* Clears the bookmark list */
+static void
+free_bookmarks(struct list_head *bookmarks_list,
+	       struct list_head *box_items)
+{
+	struct bookmark *bm;
+
+	foreach (bm, *bookmarks_list) {
+		if (!list_empty(bm->child))
+			free_bookmarks(&bm->child, &bm->box_item->child);
+		mem_free(bm->title);
+		mem_free(bm->url);
+	}
+
+	free_list(*box_items);
+	free_list(*bookmarks_list);
+}
+
+/* Does final cleanup and saving of bookmarks */
+void
+done_bookmarks(void)
+{
+	write_bookmarks();
+	free_bookmarks(&bookmarks, &bookmark_box_items);
+	if (bm_last_searched_name) mem_free(bm_last_searched_name);
+	if (bm_last_searched_url) mem_free(bm_last_searched_url);
+}
+
+
+
+
+/* Read/write wrappers */
+
+/* Loads the bookmarks from file */
+void
+read_bookmarks(void)
+{
+	bookmarks_read();
+}
+
+void
+write_bookmarks(void)
+{
+	bookmarks_write(&bookmarks);
+}
+
+
+
+
+/* Bookmarks manipulation */
 
 /* Deletes a bookmark. Returns 0 on failure (no such bm), 1 on success. */
 int
@@ -272,79 +359,6 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 	bookmarks_dirty = 1;
 
 	return 1;
-}
-
-
-void
-init_bookmarks(void)
-{
-	struct option_info bookmark_options_info[] = {
-		INIT_OPT_TREE("", N_("Bookmarks"),
-			"bookmarks", 0,
-			N_("Bookmark options.")),
-
-#ifdef HAVE_LIBEXPAT
-		INIT_OPT_INT("bookmarks", N_("File format"),
-			"file_format", 0, 0, 1, 0,
-			N_("File format for bookmarks (affects both reading and saving):\n"
-			"0 is the default ELinks (Links 0.9x compatible) format\n"
-			"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)")),
-#else
-		INIT_OPT_INT("bookmarks", N_("File format"),
-			"file_format", 0, 0, 1, 0,
-			N_("File format for bookmarks (affects both reading and saving):\n"
-			"0 is the default ELinks (Links 0.9x compatible) format\n"
-			"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
-			"  (DISABLED)")),
-#endif
-
-		NULL_OPTION_INFO
-	};
-
-	register_option_info(bookmark_options_info, config_options);
-
-	read_bookmarks();
-}
-
-/* Loads the bookmarks from file */
-void
-read_bookmarks(void)
-{
-	bookmarks_read();
-}
-
-void
-write_bookmarks(void)
-{
-	bookmarks_write(&bookmarks);
-}
-
-/* Clears the bookmark list */
-static void
-free_bookmarks(struct list_head *bookmarks_list,
-	       struct list_head *box_items)
-{
-	struct bookmark *bm;
-
-	foreach (bm, *bookmarks_list) {
-		if (!list_empty(bm->child))
-			free_bookmarks(&bm->child, &bm->box_item->child);
-		mem_free(bm->title);
-		mem_free(bm->url);
-	}
-
-	free_list(*box_items);
-	free_list(*bookmarks_list);
-}
-
-/* Does final cleanup and saving of bookmarks */
-void
-done_bookmarks(void)
-{
-	write_bookmarks();
-	free_bookmarks(&bookmarks, &bookmark_box_items);
-	if (bm_last_searched_name) mem_free(bm_last_searched_name);
-	if (bm_last_searched_url) mem_free(bm_last_searched_url);
 }
 
 #endif /* BOOKMARKS */

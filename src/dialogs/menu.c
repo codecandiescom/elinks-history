@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.79 2003/04/29 17:11:07 zas Exp $ */
+/* $Id: menu.c,v 1.80 2003/04/29 17:34:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -599,15 +599,23 @@ do_setup_menu(struct terminal *term, void *xxx, struct session *ses)
 		do_menu(term, setup_menu_anon, ses, 1);
 }
 
+static void
+do_help_menu(struct terminal *term, void *xxx, struct session *ses)
+{
+	do_menu(term, help_menu, ses, 1);
+}
+
 static struct menu_item main_menu[] = {
 	{N_("~File"), "", MENU_FUNC do_file_menu, NULL, 1, 1},
 	{N_("~View"), "", MENU_FUNC do_view_menu, NULL, 1, 1},
 	{N_("~Link"), "", MENU_FUNC link_menu, NULL, 1, 1},
 	{N_("~Downloads"), "", MENU_FUNC downloads_menu, NULL, 1, 1},
 	{N_("~Setup"), "", MENU_FUNC do_setup_menu, NULL, 1, 1},
-	{N_("~Help"), "", MENU_FUNC do_menu, help_menu, 1, 1},
+	{N_("~Help"), "", MENU_FUNC do_help_menu, NULL, 1, 1},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
+
+
 
 void
 activate_bfu_technology(struct session *ses, int item)

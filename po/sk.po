@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-03 01:53+0100\n"
-"PO-Revision-Date: 2003-11-28 11:55+0100\n"
+"PO-Revision-Date: 2003-12-05 19:47+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -75,7 +75,7 @@ msgstr "Smola, ale zlo¾ku \"%s\" práve pou¾íva nieèo iné."
 
 #: src/bfu/hierbox.c:466
 msgid "Delete error"
-msgstr ""
+msgstr "Chyba pri mazaní"
 
 #: src/bfu/hierbox.c:557
 msgid "Delete marked items"
@@ -332,7 +332,7 @@ msgstr "Veµkos»"
 
 #: src/cache/dialogs.c:74
 msgid "Loaded size"
-msgstr ""
+msgstr "Stiahnutá veµkos»"
 
 #: src/cache/dialogs.c:77 src/dialogs/document.c:140
 msgid "Last modified"
@@ -816,11 +816,11 @@ msgstr "Otvori» Lua konzolu (VYPNUTÉ)"
 #. internal use only
 #: src/config/kbdbind.c:424
 msgid "Set a mark"
-msgstr ""
+msgstr "Nastavi» znaèku"
 
 #: src/config/kbdbind.c:425
 msgid "Go at a specified mark"
-msgstr ""
+msgstr "Prejs» na zadanú znaèku"
 
 #: src/config/kbdbind.c:426
 msgid "Activate the menu"
@@ -956,7 +956,7 @@ msgstr "Prepnú» pou¾ívanie farieb nastavených v dokumente"
 
 #: src/config/kbdbind.c:460
 msgid "Go forward in the unhistory"
-msgstr ""
+msgstr "Ís» dopredu v antihistórii"
 
 #: src/config/kbdbind.c:461
 msgid "Move cursor upwards"
@@ -968,11 +968,11 @@ msgstr "Zobrazi» aktuálny obrázok"
 
 #: src/config/kbdbind.c:463
 msgid "Maximize the current frame"
-msgstr ""
+msgstr "Maximalizova» aktuálny rámec"
 
 #: src/config/kbdbind.c:656
 msgid "Unrecognised keymap"
-msgstr ""
+msgstr "Neznáma klávesová mapa"
 
 #: src/config/kbdbind.c:658
 msgid "Error parsing keystroke"
@@ -980,11 +980,11 @@ msgstr "Chyba pri èítaní kombinácie kláves"
 
 #: src/config/kbdbind.c:660
 msgid "Unrecognised action (internal error)"
-msgstr ""
+msgstr "Nerozoznaná akcia (vnútorná chyba)"
 
 #: src/config/options.c:721 src/config/options.c:745 src/config/opttypes.c:38
 msgid "Parameter expected"
-msgstr ""
+msgstr "Bol oèakávaný parameter"
 
 #: src/config/options.c:746
 msgid "Too many parameters"
@@ -1005,7 +1005,7 @@ msgstr "Chyba pri zis»ovaní IP adresy"
 #: src/config/options.c:789
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
-msgstr ""
+msgstr "ELinks %s - Textový WWW prehliadaè"
 
 #: src/config/options.c:829
 msgid "Template option folder"
@@ -1045,18 +1045,20 @@ msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 msgstr ""
+"Pou¾itie: elinks [voµby]... [URL]\n"
+"\n"
 
 #: src/config/options.c:1011
 msgid "Options:\n"
-msgstr ""
+msgstr "Nastavenie:\n"
 
 #: src/config/options.inc:18
 msgid "Configuration system"
-msgstr ""
+msgstr "Konfiguraèný systém"
 
 #: src/config/options.inc:20
 msgid "Configuration handling options."
-msgstr ""
+msgstr "Nastavenie systému konfigurácie."
 
 #: src/config/options.inc:22
 msgid "Comments"
@@ -1070,6 +1072,11 @@ msgid ""
 "2 is only the description is written\n"
 "3 is full comments are written"
 msgstr ""
+"Spôsob ukladania komentárov do konfiguraèného súboru:\n"
+"0 znamená nezapísa» ¾iadne komentáre\n"
+"1 znamená uklada» iba struèné komentáre (meno a typ)\n"
+"2 znamená uklada» iba popis voµby\n"
+"3 znamená uklada» v¹etky komentáre"
 
 #: src/config/options.inc:30
 msgid "Indentation"
@@ -1081,10 +1088,12 @@ msgid ""
 "file. Zero means that no indentation is performed at all\n"
 "when saving the configuration."
 msgstr ""
+"Poèet medzier na jednu úroveò odsadenia v konfiguraènom súbore.\n"
+"Nula znamená neodsadzova» vôbec."
 
 #: src/config/options.inc:36
 msgid "Saving style"
-msgstr ""
+msgstr "Spôsob ukladania"
 
 #: src/config/options.inc:38
 msgid ""
@@ -1097,10 +1106,17 @@ msgid ""
 "     CHANGED during this ELinks session are added at the end of\n"
 "     the file"
 msgstr ""
+"Urèuje èo sa stane keï poviete ELinksu aby ulo¾il va¹e nastavenie:\n"
+"0 povolí iba zmenu existujúcich volieb\n"
+"1 povolí zmenu existujúcich volieb, chýbajúce voµby budú pridané\n"
+"     na koniec súboru\n"
+"2 spôsobí úplné prepísanie konfiguraèného súboru novým\n"
+"3 povolí iba zmenu existujúcich volieb a pridanie volieb zmenených od\n"
+"     spustenia ELinku na koniec súboru"
 
 #: src/config/options.inc:47
 msgid "Comments localization"
-msgstr ""
+msgstr "Prelo¾ené komentáre"
 
 #: src/config/options.inc:49
 msgid ""
@@ -1111,26 +1127,35 @@ msgid ""
 "terminal where you saved the file, but it should be generally\n"
 "considered unpredictable."
 msgstr ""
+"Ak nastavené na 1, budú komentáre v konfiguraènom súbore prelo¾ené\n"
+"do jazyka pou¾ívaného v ELinkse. Uvedomte si ale, ¾e pokiaµ máte\n"
+"v rôznych termináloch rôzne nastavené jazyky, jazyk pou¾itý v\n"
+"konfiguraènom súbore MÔ®E by» rovnaký ako na termináli, kde ste\n"
+"ulo¾ili súbor, ale vo v¹eobecnosti je výsledok nepredvídateµný."
 
 #: src/config/options.inc:57
 msgid "Saving style warnings"
-msgstr ""
+msgstr "Varovanie o spôsobe ukladania"
 
 #: src/config/options.inc:59
 msgid ""
 "This is internal option used when displaying a warning about\n"
 "obsolete config.saving_style. You shouldn't touch it."
 msgstr ""
+"Toto je interná polo¾ka pou¾ívaná pri zobrazovaní varovania o nevhodnej\n"
+"hodnote config.saving_style zdedenej zo star¹ích verzií ELinks. Ruky preè."
 
 #: src/config/options.inc:62
 msgid "Show template"
-msgstr ""
+msgstr "Zobrazova» ¹ablóny"
 
 #: src/config/options.inc:64
 msgid ""
 "Show _template_ options in autocreated trees in the options\n"
 "manager and save them to the configuration file."
 msgstr ""
+"Urèuje, èi zobrazova» v správcovi nastavenia voµby s názvom _template_\n"
+"(¹ablóny) a uklada» ich do konfiguraèného súboru."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:70
@@ -1163,7 +1188,7 @@ msgstr "Maximálny poèet spojení na jeden server"
 
 #: src/config/options.inc:85
 msgid "Maximum number of concurrent connections to a given host."
-msgstr ""
+msgstr "Maximálny poèet paralelných spojení na jeden server."
 
 #: src/config/options.inc:87
 msgid "Connection retries"
@@ -1174,6 +1199,8 @@ msgid ""
 "Number of tries to establish a connection.\n"
 "Zero means try forever."
 msgstr ""
+"Poèet pokusov na vytvorenie spojenia.\n"
+"Nula znamená neobmedzený poèet."
 
 #: src/config/options.inc:92 src/sched/error.c:52
 msgid "Receive timeout"
@@ -1185,11 +1212,11 @@ msgstr "Èas vypr¹al (v sekundách)"
 
 #: src/config/options.inc:96
 msgid "Timeout for non-restartable connections"
-msgstr ""
+msgstr "Èasový limit pre neobnoviteµné spojenia"
 
 #: src/config/options.inc:98
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
+msgstr "Èasový limit pre vypr¹anie neobnoviteµných spojení (v sekundách)."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:104
@@ -1202,15 +1229,15 @@ msgstr "Nastavenie dokumentu."
 
 #: src/config/options.inc:108
 msgid "Browsing"
-msgstr ""
+msgstr "Prezeranie"
 
 #: src/config/options.inc:110
 msgid "Document browsing options (mainly interactivity)."
-msgstr ""
+msgstr "Nastavenie prezerania dokumentu (najmä interaktivita)."
 
 #: src/config/options.inc:113
 msgid "Accesskeys"
-msgstr ""
+msgstr "Prístupové klávesy"
 
 #: src/config/options.inc:115
 msgid ""
@@ -1731,7 +1758,7 @@ msgstr "Sformátované dokumenty"
 
 #: src/config/options.inc:343
 msgid "Format cache options."
-msgstr ""
+msgstr "Nastavenie cache formátovaných dokumentov."
 
 #: src/config/options.inc:345
 msgid "Number"
@@ -1912,7 +1939,7 @@ msgstr ""
 
 #: src/config/options.inc:466
 msgid "Dump output options."
-msgstr ""
+msgstr "Nastavenie dump výstupu."
 
 #: src/config/options.inc:468 src/config/options.inc:851
 #: src/config/opttypes.c:368 src/dialogs/document.c:102
@@ -1938,7 +1965,7 @@ msgstr "História"
 
 #: src/config/options.inc:480
 msgid "History options."
-msgstr ""
+msgstr "Nastavenie histórie."
 
 #: src/config/options.inc:482
 msgid "Keep unhistory"
@@ -1946,7 +1973,7 @@ msgstr "Udr¾ova» antihistóriu"
 
 #: src/config/options.inc:484
 msgid "Keep unhistory (\"forward history\")?"
-msgstr ""
+msgstr "Udr¾ova» antihistóriu (\"doprednú históriu\")?"
 
 #: src/config/options.inc:488
 msgid "HTML rendering"
@@ -2058,7 +2085,7 @@ msgstr ""
 
 #: src/config/options.inc:551
 msgid "Protocol specific options."
-msgstr ""
+msgstr "Nastavenie jednotlivých protokolov."
 
 #: src/config/options.inc:553
 msgid "HTTP"
@@ -2066,7 +2093,7 @@ msgstr ""
 
 #: src/config/options.inc:555
 msgid "HTTP-specific options."
-msgstr ""
+msgstr "Nastavenie HTTP."
 
 #: src/config/options.inc:558
 msgid "Server bug workarounds"
@@ -2243,7 +2270,7 @@ msgstr ""
 
 #: src/config/options.inc:658
 msgid "FTP specific options."
-msgstr ""
+msgstr "Nastavenie FTP."
 
 #: src/config/options.inc:662
 msgid "FTP proxy configuration."
@@ -3628,7 +3655,7 @@ msgstr "Èas poslednej náv¹tevy odkazu"
 
 #: src/dialogs/document.c:223
 msgid "Link title (from history)"
-msgstr ""
+msgstr "Titulok odkazu (z histórie)"
 
 #: src/dialogs/document.c:254 src/dialogs/document.c:302
 #: src/dialogs/document.c:314
@@ -3768,7 +3795,7 @@ msgstr "Antihistória"
 #: src/dialogs/menu.c:294
 #, fuzzy
 msgid "Global ~history"
-msgstr "Správca histórie"
+msgstr "Globálna histórie"
 
 #: src/dialogs/menu.c:297
 msgid "~Bookmarks"
@@ -4163,7 +4190,7 @@ msgstr "Správca histórie formulárov"
 #. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:35
 msgid "Show forms history dialog"
-msgstr ""
+msgstr "Zobrazi» dialóg na zapamätanie formulárov"
 
 #: src/formhist/formhist.c:37
 msgid ""

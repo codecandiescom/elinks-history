@@ -226,9 +226,9 @@ void memory_info(struct terminal *term, void *d, struct session *ses)
 	r->data = d;
 	r->timer = -1;
 	p = message;
-	p += sprintf(p, "%ld %s", mem_amount, _(TEXT(T_MEMORY_ALLOCATED), term));
-	if (last_mem_amount != -1) p += sprintf(p, ", %s %ld, %s %ld", _(TEXT(T_LAST), term), last_mem_amount, _(TEXT(T_DIFFERENCE), term), mem_amount - last_mem_amount);
-	p += sprintf(p, ".");
+	sprintf(p, "%ld %s", mem_amount, _(TEXT(T_MEMORY_ALLOCATED), term)), p += strlen(p);
+	if (last_mem_amount != -1) sprintf(p, ", %s %ld, %s %ld", _(TEXT(T_LAST), term), last_mem_amount, _(TEXT(T_DIFFERENCE), term), mem_amount - last_mem_amount), p += strlen(p);
+	sprintf(p, "."), p += strlen(p);
 #if 0 && defined(MAX_LIST_SIZE)
 	if (last_mem_amount != -1) {
 		long i, j;

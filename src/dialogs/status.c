@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.5 2003/12/01 15:45:33 jonas Exp $ */
+/* $Id: status.c,v 1.6 2003/12/01 16:08:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,7 +253,8 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 		}
 
 		if (tab_num) {
-			draw_text(term, xpos, ypos, "|", 1, 0, tabsep_color);
+			draw_char(term, xpos, ypos, BORDER_SVLINE,
+				  SCREEN_ATTR_FRAME, tabsep_color);
 			xpos += 1;
 		}
 

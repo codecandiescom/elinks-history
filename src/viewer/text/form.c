@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.154 2004/06/14 18:51:21 jonas Exp $ */
+/* $Id: form.c,v 1.155 2004/06/14 18:53:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1173,9 +1173,8 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			    && fs->value[fs->state - 1] != ASCII_LF)
 				text++;
 
-			memmove(text,
-				fs->value + fs->state,
-				strlen(fs->value + fs->state) + 1);
+			length = strlen(fs->value + fs->state) + 1;
+			memmove(text, fs->value + fs->state, length);
 
 			fs->state = (int) (text - fs->value);
 			break;

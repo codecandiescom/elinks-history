@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2004-01-18 00:13+0100\n"
-"PO-Revision-Date: 2004-01-14 03:52+0100\n"
+"PO-Revision-Date: 2004-01-19 05:14+0100\n"
 "Last-Translator: Varga Balazs <vinnui@ent.hu>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -520,7 +520,6 @@ msgid "Name of directory with configuration file"
 msgstr ""
 
 #: src/config/cmdline.c:443
-#, fuzzy
 msgid ""
 "ELinks will read and write its config files to the given\n"
 "directory instead of ~/.elinks. If the path begins with\n"
@@ -528,14 +527,13 @@ msgid ""
 "be relative to your HOME dir."
 msgstr ""
 "A konfigurációs könyvtár elérési útvonala. Az ELinks innen fogja\n"
-"olvasni, és ide írja a konfigurációs állományait. Ha az útvonal '/' jellel\n"
-"kezdõdik, akkor abszolút elérési útvonalként, egyébként pedig a HOME\n"
+"olvasni, és ide írja a konfigurációs állományait a ~/.elinks helyett. Ha az útvonal\n"
+" '/' jellel kezdõdik, akkor abszolút elérési útvonalként, egyébként pedig a HOME\n"
 "könyvtárhoz képest relatívan kerül értelmezésre."
 
 #: src/config/cmdline.c:448
-#, fuzzy
 msgid "Name of configuration file"
-msgstr "Konfigurációs fájl neve"
+msgstr "A konfigurációs fájl neve"
 
 #: src/config/cmdline.c:450
 msgid ""
@@ -665,8 +663,7 @@ msgstr "Ne próbálja irni/használni a fáljokat a ~/.elinks könyvtárban."
 
 #: src/config/cmdline.c:515
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/cmdline.c:517
 msgid ""
@@ -990,8 +987,7 @@ msgstr ""
 #: src/config/dialogs.c:607
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:634 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -1014,9 +1010,8 @@ msgid "Menu mapping"
 msgstr "Menüben mûködõ billentyûhozzárendelés"
 
 #: src/config/kbdbind.c:392
-#, fuzzy
 msgid "Do nothing"
-msgstr "Letöltés"
+msgstr "Ne csináljon semmit"
 
 #: src/config/kbdbind.c:393
 msgid "Abort connection"
@@ -1051,9 +1046,8 @@ msgid "Delete character in front of the cursor"
 msgstr "A kurzor elõtti karakter törlése"
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Go to the first line of the buffer"
-msgstr "Ugrás a buffer elesõ sorára."
+msgstr "Ugrás a buffer elesõ sorára"
 
 #: src/config/kbdbind.c:402
 msgid "Open bookmark manager"
@@ -1121,9 +1115,8 @@ msgid "Go to the end of the page/line"
 msgstr "Ugrás az oldal/sor végére"
 
 #: src/config/kbdbind.c:418
-#, fuzzy
 msgid "Go to the last line of the buffer"
-msgstr "Ugrás a buffer utolsó sorára."
+msgstr "Ugrás a buffer utolsó sorára"
 
 #: src/config/kbdbind.c:419
 msgid "Follow the current link"
@@ -1167,8 +1160,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:429
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:430
 msgid "Go to the homepage"
@@ -1627,8 +1619,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:99
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:105
@@ -1884,8 +1875,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:222
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:225 src/dialogs/options.c:189
 msgid "Underline"
@@ -1901,8 +1891,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:232
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:234
 msgid "Number links"
@@ -1949,8 +1938,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:265
 msgid "Searching"
@@ -1968,8 +1956,7 @@ msgstr "Kis/nagybetû érzékenység"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr ""
-"A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
+msgstr "A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
 
 #: src/config/options.inc:275 src/config/options.inc:282
 msgid "Regular expressions"
@@ -2144,8 +2131,7 @@ msgstr ""
 
 #: src/config/options.inc:370
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:372
 msgid ""
@@ -2854,8 +2840,7 @@ msgid "Local CGI specific options. (DISABLED)"
 msgstr "Helyi CGI-vel kapcsolatos beállítások. (LETILTVA)"
 
 #: src/config/options.inc:761
-msgid ""
-"Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
+msgid "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal "
 "elválasztva. (LETILTVA)"
@@ -4020,7 +4005,7 @@ msgid "Copying"
 msgstr "Szerzöi jogok"
 
 #: src/dialogs/info.c:134
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -4034,7 +4019,7 @@ msgstr ""
 "ELinks %s\n"
 "\n"
 "(C) 1999 - 2002 Mikulas Patocka\n"
-"(C) 2001 - 2004 Petr Baudis\n"
+"(C) 2001 - 2004 Petr Baudis és sokan mások\n"
 "\n"
 "Ez egy szabad program; terjesztheted és/vagy módosíthatod a Szabad Szoftver "
 "Alapitvány által készített GNU Licensz második vagy késõbbi verziója "
@@ -4479,7 +4464,7 @@ msgstr "eltelt idõ"
 
 #: src/dialogs/status.c:114
 msgid "ETT"
-msgstr ""
+msgstr "ETT"
 
 #: src/dialogs/status.c:122
 msgid "estimated time"
@@ -4519,6 +4504,9 @@ msgid ""
 "If you want to save passwords for this URL, enable it by the \"Toggle saving"
 "\" button."
 msgstr ""
+"Nincs információ elmentve ehhez az URL-hez.\n"
+"Ha szeretnél jelszavakat eltárolni ehhez az URL-hez, akkor engedélyezd a "
+"\"Mentés ki/be\" gombbal."
 
 #: src/formhist/dialogs.c:164 src/protocol/auth/dialogs.c:74
 msgid "Login"
@@ -4526,7 +4514,7 @@ msgstr "Felhasználónév"
 
 #: src/formhist/dialogs.c:167
 msgid "Toggle saving"
-msgstr ""
+msgstr "Mentés be/ki"
 
 #: src/formhist/dialogs.c:174
 msgid "Form history manager"
@@ -4769,8 +4757,7 @@ msgstr "Ukrán"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -6385,3 +6372,4 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
+

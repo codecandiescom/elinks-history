@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-22 10:41+0200\n"
-"PO-Revision-Date: 2003-10-20 18:33+0200\n"
+"PO-Revision-Date: 2003-10-22 19:20+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -351,7 +351,7 @@ msgid "N/A"
 msgstr "nic"
 
 #: src/config/dialogs.c:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Name: %s\n"
 "Type: %s\n"
@@ -361,6 +361,7 @@ msgid ""
 msgstr ""
 "Jméno: %s\n"
 "Typ: %s\n"
+"\n"
 "Popis:\n"
 "%s"
 
@@ -1705,15 +1706,16 @@ msgstr ""
 "2 znamená vyhledávání roz¹íøených regulárních výrazù. (VYPNUTO)"
 
 #: src/config/options.c:1244
-#, fuzzy
 msgid "Show search hit top or bottom dialogs"
-msgstr "Vyhledávání dosáhlo zaèátku dokumentu, pokraèuji od konce."
+msgstr "Zobrazovat upozornìní o vyhledávání, které dosáhlo zaèátku dokumentu"
 
 #: src/config/options.c:1246
 msgid ""
 "Whether to show a dialog when the search hits top or bottom of the\n"
 "document."
 msgstr ""
+"Zdalipak ukazovat upozornìní, kdy¾ vyhledávání dosáhne zaèátku nebo\n"
+"konce dokumentu."
 
 #: src/config/options.c:1250
 msgid "Horizontal text margin"
@@ -2319,12 +2321,12 @@ msgid "Program"
 msgstr "Program"
 
 #: src/config/options.c:1584
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
 msgstr ""
-"Externí prohlí¾eè pro tento typ souboru. '%' bude v tomto øetìzci nahrazeno\n"
+"Externí prohlí¾eè pro tento typ souboru. V tomto øetìzci bude '%' nahrazeno\n"
 "jménem souboru."
 
 #: src/config/options.c:1588

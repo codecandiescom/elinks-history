@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.49 2004/05/22 13:44:26 jonas Exp $ */
+/* $Id: socket.c,v 1.50 2004/06/20 18:22:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 #include <openssl/ssl.h>
 #elif defined(CONFIG_GNUTLS)
 #include <gnutls/gnutls.h>
+#include <gnutls/compat4.h> /* FIXME: this should be removed after upgrading GNUTLS code! */
 #else
 #error "Huh?! You have SSL enabled, but not OPENSSL nor GNUTLS!! And then you want exactly *what* from me?"
 #endif
@@ -74,7 +75,6 @@ ssl_set_no_tls(struct connection *conn)
 			GNUTLS_CIPHER_RIJNDAEL_128_CBC,
 			GNUTLS_CIPHER_3DES_CBC,
 			GNUTLS_CIPHER_ARCFOUR,
-			GNUTLS_CIPHER_TWOFISH_128_CBC,
 			GNUTLS_CIPHER_RIJNDAEL_256_CBC,
 			0
 		};

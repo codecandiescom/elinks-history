@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.47 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: ssl.c,v 1.48 2004/06/20 18:22:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include <openssl/rand.h>
 #elif defined(CONFIG_GNUTLS)
 #include <gnutls/gnutls.h>
+#include <gnutls/compat4.h> /* FIXME: this should be removed after upgrading GNUTLS code! */
 #else
 #error "Huh?! You have SSL enabled, but not OPENSSL nor GNUTLS!! And then you want exactly *what* from me?"
 #endif
@@ -116,8 +117,8 @@ const static int kx_priority[16] = {
 	GNUTLS_KX_ANON_DH, GNUTLS_KX_RSA_EXPORT, 0
 };
 const static int cipher_priority[16] = {
-	GNUTLS_CIPHER_ARCFOUR_128, GNUTLS_CIPHER_RIJNDAEL_128_CBC,
-	GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_ARCFOUR_40, 0
+	GNUTLS_CIPHER_RIJNDAEL_128_CBC, GNUTLS_CIPHER_ARCFOUR_128,
+	GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_AES_256_CBC, GNUTLS_CIPHER_ARCFOUR_40, 0
 };
 const static int comp_priority[16] = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
 const static int mac_priority[16] = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };

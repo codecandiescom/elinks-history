@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.12 2002/07/03 23:03:33 pasky Exp $ */
+/* $Id: terminal.h,v 1.13 2002/07/11 11:14:53 pasky Exp $ */
 
 #ifndef EL__TERMINAL_H
 #define EL__TERMINAL_H
@@ -83,6 +83,7 @@ struct window {
 	void (*handler)(struct window *, struct event *, int fwd);
 	void *data;
 	int xp, yp;
+	int touched_by_interm;
 	struct terminal *term;
 };
 

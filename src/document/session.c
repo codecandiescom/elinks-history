@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.49 2002/07/08 17:19:40 pasky Exp $ */
+/* $Id: session.c,v 1.50 2002/07/11 11:14:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "bfu/menu.h"
 #include "bfu/msgbox.h"
 #include "config/options.h"
+#include "dialogs/menu.h"
 #include "document/cache.h"
 #include "document/download.h"
 #include "document/history.h"
@@ -1132,12 +1133,8 @@ read_session_info(int fd, struct session *ses, void *data, int len)
 		if (!h || !*h)
 			h = WWW_HOME_URL;
 		if (!h || !*h) {
-#if 0
-			/* I can't do it here - it doesn't work everytime and
-			 * it leaks. --pasky */
 			if (get_opt_int("ui.startup_goto_dialog"))
 				dialog_goto_url(ses, "");
-#endif
 		} else {
 			goto_url(ses, h);
 		}

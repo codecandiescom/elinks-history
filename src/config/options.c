@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.69 2002/07/06 09:20:17 pasky Exp $ */
+/* $Id: options.c,v 1.70 2002/07/11 11:14:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -962,8 +962,6 @@ register_options()
 		"show_title_bar", 0, 1,
 		"Show title bar on the screen.");
 
-	/* TODO - this is implemented, but disabled for now as
-	 * it's buggy. */
 	add_opt_bool("ui",
 		"startup_goto_dialog", 0, 1,
 		"Pop up goto dialog on startup when there's no homepage.");

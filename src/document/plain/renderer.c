@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.159 2004/10/15 00:59:03 jonas Exp $ */
+/* $Id: renderer.c,v 1.160 2004/12/18 00:28:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,11 +329,13 @@ add_document_line(struct plain_renderer *renderer,
 				continue;
 			}
 
-			if (expanded - 2 >= 0)
-				expanded -= 2; /* Don't count the backspace character
-				        * or the deleted character
-				        * when returning the line's width
-				        * or when expanding tabs */
+			if (expanded - 2 >= 0) {
+				/* Don't count the backspace character
+				 * or the deleted character
+				 * when returning the line's width
+				 * or when expanding tabs */
+				expanded -= 2;
+			}
 
 			if (pos->data == '_' && next_char == '_') {
 				/* Is _^H_ an underlined underscore

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.86 2003/07/17 08:56:30 zas Exp $ */
+/* $Id: conf.c,v 1.87 2003/07/21 05:47:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,7 +95,7 @@ enum parse_error {
 
 static enum parse_error
 parse_set(struct option *opt_tree, unsigned char **file, int *line,
-	  unsigned char **str, int *len)
+	  struct string *mirror)
 {
 	unsigned char *orig_pos = *file;
 	unsigned char *optname;
@@ -123,7 +123,7 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 	if (!**file) { mem_free(optname); return ERROR_VALUE; }
 
 	/* Mirror what we already have */
-	if (str) add_bytes_to_str(str, len, orig_pos, *file - orig_pos);
+	if (mirror) add_bytes_to_string(mirror, orig_pos, *file - orig_pos);
 
 	/* Option value */
 	{
@@ -142,10 +142,10 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 		val = option_types[opt->type].read(opt, file);
 		if (!val) {
 			return ERROR_VALUE;
-		} else if (str) {
+		} else if (mirror) {
 			opt->flags |= OPT_WATERMARK;
 			if (option_types[opt->type].write)
-				option_types[opt->type].write(opt, str, len);
+				option_types[opt->type].write(opt, mirror);
 		} else if (!val || !option_types[opt->type].set
 			   || !option_types[opt->type].set(opt, val)) {
 			mem_free(val);
@@ -162,7 +162,7 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 
 static enum parse_error
 parse_bind(struct option *opt_tree, unsigned char **file, int *line,
-	   unsigned char **str, int *len)
+	   struct string *mirror)
 {
 	unsigned char *orig_pos = *file, *next_pos;
 	unsigned char *keymap, *keystroke, *action;
@@ -207,13 +207,13 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 		return ERROR_VALUE;
 	}
 
-	if (str) {
+	if (mirror) {
 		/* Mirror what we already have */
 		unsigned char *act_str = bind_act(keymap, keystroke);
 
 		if (act_str) {
-			add_bytes_to_str(str, len, orig_pos, next_pos - orig_pos);
-			add_to_str(str, len, act_str);
+			add_bytes_to_string(mirror, orig_pos, next_pos - orig_pos);
+			add_to_string(mirror, act_str);
 			mem_free(act_str);
 		} else {
 			err = ERROR_VALUE;
@@ -226,18 +226,17 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 }
 
 static int load_config_file(unsigned char *, unsigned char *, struct option *,
-			    unsigned char **, int *);
+			    struct string *);
 
 static enum parse_error
 parse_include(struct option *opt_tree, unsigned char **file, int *line,
-	      unsigned char **str, int *len)
+	      struct string *mirror)
 {
 	unsigned char *orig_pos = *file;
 	unsigned char *fname;
-	unsigned char *dumbstr = init_str();
-	int dumblen = 0;
+	struct string dumbstring;
 
-	if (!dumbstr) return ERROR_NOMEM;
+	if (!init_string(&dumbstring)) return ERROR_NOMEM;
 
 	*file = skip_white(*file, line);
 	if (!*file) return ERROR_PARSE;
@@ -248,7 +247,7 @@ parse_include(struct option *opt_tree, unsigned char **file, int *line,
 		return ERROR_VALUE;
 
 	/* Mirror what we already have */
-	if (str) add_bytes_to_str(str, len, orig_pos, *file - orig_pos);
+	if (mirror) add_bytes_to_string(mirror, orig_pos, *file - orig_pos);
 
 	/* We want load_config_file() to watermark stuff, but not to load
 	 * anything, polluting our beloved options tree - thus, we will feed it
@@ -259,13 +258,13 @@ parse_include(struct option *opt_tree, unsigned char **file, int *line,
 	 * CONFDIR/<otherfile> ;). --pasky */
 	if (load_config_file(fname[0] == '/' ? (unsigned char *) ""
 					     : elinks_home,
-			     fname, opt_tree, &dumbstr, &dumblen)) {
-		mem_free(dumbstr);
+			     fname, opt_tree, &dumbstring)) {
+		done_string(&dumbstring);
 		mem_free(fname);
 		return ERROR_VALUE;
 	}
 
-	mem_free(dumbstr);
+	done_string(&dumbstring);
 	mem_free(fname);
 	return ERROR_NONE;
 }
@@ -275,7 +274,7 @@ struct parse_handler {
 	unsigned char *command;
 	enum parse_error (*handler)(struct option *opt_tree,
 				    unsigned char **file, int *line,
-				    unsigned char **str, int *len);
+				    struct string *mirror);
 };
 
 static struct parse_handler parse_handlers[] = {
@@ -288,7 +287,7 @@ static struct parse_handler parse_handlers[] = {
 
 void
 parse_config_file(struct option *options, unsigned char *name,
-		  unsigned char *file, unsigned char **str, int *len)
+		  unsigned char *file, struct string *mirror)
 {
 	int line = 1;
 	int error_occured = 0;
@@ -309,7 +308,7 @@ parse_config_file(struct option *options, unsigned char *name,
 		file = skip_white(file, &line);
 
 		/* Mirror what we already have */
-		if (str) add_bytes_to_str(str, len, orig_pos, file - orig_pos);
+		if (mirror) add_bytes_to_string(mirror, orig_pos, file - orig_pos);
 
 		/* Second chance to escape from the hell. */
 		if (!*file) break;
@@ -323,26 +322,27 @@ parse_config_file(struct option *options, unsigned char *name,
 
 				if (!strncmp(file, handler->command, cmdlen)
 				    && WHITECHAR(file[cmdlen])) {
-					unsigned char *s2 = NULL;
-					int l2 = 0;
+					struct string mirror2 = { NULL, 0 };
+					struct string *m2;
 
 					/* Mirror what we already have */
-					if (str) {
-						s2 = init_str();
-						if (s2)
-						add_bytes_to_str(&s2, &l2,
-								 file, cmdlen);
+					if (mirror && init_string(&mirror2)) {
+						m2 = &mirror2;
+						add_bytes_to_string(m2,
+								    file, cmdlen);
+					} else {
+						m2 = NULL;
 					}
+						
 
 					file += cmdlen;
 					err = handler->handler(options,
 							       &file, &line,
-							       str?&s2:NULL,
-							       &l2);
-					if (!err && str && s2) {
-						add_to_str(str, len, s2);
+							       mirror?m2:NULL);
+					if (!err && mirror && m2) {
+						add_to_string(mirror, m2->source);
 					}
-					if (s2)	mem_free(s2);
+					if (m2)	done_string(m2);
 					goto test_end;
 				}
 			}
@@ -355,11 +355,11 @@ parse_config_file(struct option *options, unsigned char *name,
 			file++;
 
 		/* Mirror what we already have */
-		if (str) add_bytes_to_str(str, len, orig_pos, file - orig_pos);
+		if (mirror) add_bytes_to_string(mirror, orig_pos, file - orig_pos);
 
 test_end:
 
-		if (!str && err) {
+		if (!mirror && err) {
 			/* TODO: Make this a macro and report error directly
 			 * as it's stumbled upon; line info may not be accurate
 			 * anymore now (?). --pasky */
@@ -382,16 +382,14 @@ read_config_file(unsigned char *name)
 {
 #define FILE_BUF	1024
 	unsigned char cfg_buffer[FILE_BUF];
-	unsigned char *s;
-	int l = 0;
+	struct string string;
 	int fd, r;
 
 	fd = open(name, O_RDONLY | O_NOCTTY);
 	if (fd < 0) return NULL;
 	set_bin(fd);
 
-	s = init_str();
-	if (!s) return NULL;
+	if (!init_string(&string)) return NULL;
 
 	while ((r = read(fd, cfg_buffer, FILE_BUF)) > 0) {
 		int i;
@@ -401,24 +399,22 @@ read_config_file(unsigned char *name)
 			if (!cfg_buffer[i])
 				cfg_buffer[i] = ' ';
 
-		add_bytes_to_str(&s, &l, cfg_buffer, r);
+		add_bytes_to_string(&string, cfg_buffer, r);
 	}
 
-	if (r < 0) {
-		mem_free(s);
-		s = NULL;
-	}
+	if (r < 0)
+		done_string(&string);
 
 	close(fd);
 
-	return s;
+	return string.source;
 #undef FILE_BUF
 }
 
 /* Return 0 on success. */
 static int
 load_config_file(unsigned char *prefix, unsigned char *name,
-		 struct option *options, unsigned char **str, int *len)
+		 struct option *options, struct string *mirror)
 {
 	unsigned char *config_str, *config_file;
 
@@ -438,7 +434,7 @@ load_config_file(unsigned char *prefix, unsigned char *name,
 		}
 	}
 
-	parse_config_file(options, config_file, config_str, str, len);
+	parse_config_file(options, config_file, config_str, mirror);
 
 	mem_free(config_str);
 	mem_free(config_file);
@@ -451,14 +447,9 @@ load_config(void)
 {
 	static unsigned char *cf = "elinks.conf";
 
-	load_config_file(CONFDIR, cf,
-			 config_options, NULL, NULL);
-	if (elinks_home)
-		load_config_file(elinks_home, cf,
-				 config_options, NULL, NULL);
-	else
-		load_config_file((unsigned char *) "", cf,
-				 config_options, NULL, NULL);
+	load_config_file(CONFDIR, cf, config_options, NULL);
+	load_config_file(elinks_home ? elinks_home : (unsigned char *) "",
+			 cf, config_options, NULL);
 }
 
 
@@ -468,11 +459,11 @@ static int comments = 3;
 static int touching = 0;
 
 static void
-smart_config_output_fn(unsigned char **str, int *len, struct option *option,
+smart_config_output_fn(struct string *string, struct option *option,
 		       unsigned char *path, int depth, int do_print_comment,
 		       int action)
 {
-	int i, j, l;
+	int i, l;
 
 	/* When we're OPT_TREE, we won't get called with action 2 anyway and
 	 * we want to pop out a comment. */
@@ -487,18 +478,17 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 	switch (action) {
 		case 0:
 			if (!(comments & 1)) break;
-			for (i = 0; i < depth * indentation; i++)
-				add_chr_to_str(str, len, ' ');
+			add_xchar_to_string(string, ' ', depth * indentation);
 
-			add_to_str(str, len, "## ");
+			add_to_string(string, "## ");
 			if (path) {
-				add_to_str(str, len, path);
-				add_chr_to_str(str, len, '.');
+				add_to_string(string, path);
+				add_char_to_string(string, '.');
 			}
-			add_to_str(str, len, option->name);
-			add_chr_to_str(str, len, ' ');
-			add_to_str(str, len, option_types[option->type].help_str);
-			add_to_str(str, len, NEWLINE);
+			add_to_string(string, option->name);
+			add_char_to_string(string, ' ');
+			add_to_string(string, option_types[option->type].help_str);
+			add_to_string(string, NEWLINE);
 			break;
 
 		case 1:
@@ -509,43 +499,41 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 
 			l = strlen(option->desc);
 
-			for (i = 0; i < depth * indentation; i++)
-				add_chr_to_str(str, len, ' ');
-			add_to_str(str, len, "# ");
+			add_xchar_to_string(string, ' ', depth * indentation);
+			add_to_string(string, "# ");
 
 			for (i = 0; i < l; i++) {
 				if (option->desc[i] == '\n') {
-					add_to_str(str, len, NEWLINE);
-					for (j = 0; j < depth * indentation; j++)
-						add_chr_to_str(str, len, ' ');
-					add_to_str(str, len, "# ");
+					add_to_string(string, NEWLINE);
+					add_xchar_to_string(string, ' ',
+							    depth * indentation);
+					add_to_string(string, "# ");
 				} else {
-					add_chr_to_str(str, len,
-							option->desc[i]);
+					add_char_to_string(string,
+							   option->desc[i]);
 				}
 			}
 
-			add_to_str(str, len, NEWLINE);
+			add_to_string(string, NEWLINE);
 			break;
 
 		case 2:
-			for (j = 0; j < depth * indentation; j++)
-				add_chr_to_str(str, len, ' ');
-			add_to_str(str, len, "set ");
+			add_xchar_to_string(string, ' ', depth * indentation);
+			add_to_string(string, "set ");
 			if (path) {
-				add_to_str(str, len, path);
-				add_chr_to_str(str, len, '.');
+				add_to_string(string, path);
+				add_char_to_string(string, '.');
 			}
-			add_to_str(str, len, option->name);
-			add_to_str(str, len, " = ");
-			option_types[option->type].write(option, str, len);
-			add_to_str(str, len, NEWLINE);
-			if (do_print_comment) add_to_str(str, len, NEWLINE);
+			add_to_string(string, option->name);
+			add_to_string(string, " = ");
+			option_types[option->type].write(option, string);
+			add_to_string(string, NEWLINE);
+			if (do_print_comment) add_to_string(string, NEWLINE);
 			break;
 
 		case 3:
 			if (do_print_comment < 2)
-				add_to_str(str, len, NEWLINE);
+				add_to_string(string, NEWLINE);
 			break;
 	}
 }
@@ -554,15 +542,13 @@ static unsigned char *
 create_config_string(unsigned char *prefix, unsigned char *name,
 		     struct option *options)
 {
-	unsigned char *str = init_str();
-	int len = 0;
+	struct string config;
 	/* Don't write headers if nothing will be added anyway. */
-	unsigned char *tmpstr;
-	int tmplen;
+	struct string tmpstring;
 	int origlen;
 	int savestyle = get_opt_int("config.saving_style");
 
-	if (!str) return NULL;
+	if (!init_string(&config)) return NULL;
 
 	if (savestyle == 3) {
 		touching = 1;
@@ -572,10 +558,10 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	}
 
 	/* Scaring. */
-	if (savestyle == 2 || (savestyle < 2
-				&& (load_config_file(prefix, name, options,
-						     &str, &len)
-				    || !*str))) {
+	if (savestyle == 2
+	    || (savestyle < 2
+		&& (load_config_file(prefix, name, options, &config)
+		    || !config.length))) {
 		unsigned char headings[3][1024] = {
 			"## This is ELinks configuration file. You can edit it manually," NEWLINE
 			"## if you wish so; this file is edited by ELinks when you save" NEWLINE
@@ -596,8 +582,8 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 			"## luck with your formatting and own comments then, so beware." NEWLINE,
 		};
 
-		add_to_str(&str, &len, headings[savestyle]);
-		add_to_str(&str, &len,
+		add_to_string(&config, headings[savestyle]);
+		add_to_string(&config,
 			"##" NEWLINE
 			"## Obviously, if you don't like what ELinks is going to do with" NEWLINE
 			"## this file, you can change it by altering the config.saving_style" NEWLINE
@@ -610,33 +596,37 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	indentation = get_opt_int("config.indentation");
 	comments = get_opt_int("config.comments");
 
-	tmpstr = init_str(); tmplen = 0;
-	add_to_str(&tmpstr, &tmplen, NEWLINE NEWLINE NEWLINE);
-	add_to_str(&tmpstr, &tmplen, "#####################################" NEWLINE);
-	add_to_str(&tmpstr, &tmplen, "# Automatically saved options" NEWLINE);
-	add_to_str(&tmpstr, &tmplen, "#" NEWLINE);
-	add_to_str(&tmpstr, &tmplen, NEWLINE);
+	if (!init_string(&tmpstring)) goto get_me_out;
 
-	origlen = tmplen;
-	smart_config_string(&tmpstr, &tmplen, 2, options->ptr, NULL, 0, smart_config_output_fn);
-	if (tmplen > origlen) add_bytes_to_str(&str, &len, tmpstr, tmplen);
-	mem_free(tmpstr);
+	add_to_string(&tmpstring, NEWLINE NEWLINE NEWLINE);
+	add_to_string(&tmpstring, "#####################################" NEWLINE);
+	add_to_string(&tmpstring, "# Automatically saved options" NEWLINE);
+	add_to_string(&tmpstring, "#" NEWLINE);
+	add_to_string(&tmpstring, NEWLINE);
 
-	tmpstr = init_str(); tmplen = 0;
-	add_to_str(&tmpstr, &tmplen, NEWLINE NEWLINE NEWLINE);
-	add_to_str(&tmpstr, &tmplen, "#####################################" NEWLINE);
-	add_to_str(&tmpstr, &tmplen, "# Automatically saved keybindings" NEWLINE);
-	add_to_str(&tmpstr, &tmplen, "#" NEWLINE);
+	origlen = tmpstring.length;
+	smart_config_string(&tmpstring, 2, options->ptr, NULL, 0, smart_config_output_fn);
+	if (tmpstring.length > origlen)
+		add_bytes_to_string(&config, tmpstring.source, tmpstring.length);
+	done_string(&tmpstring);
 
-	origlen = tmplen;
-	bind_config_string(&tmpstr, &tmplen);
-	if (tmplen > origlen) add_bytes_to_str(&str, &len, tmpstr, tmplen);
-	mem_free(tmpstr);
+	if (!init_string(&tmpstring)) goto get_me_out;
+
+	add_to_string(&tmpstring, NEWLINE NEWLINE NEWLINE);
+	add_to_string(&tmpstring, "#####################################" NEWLINE);
+	add_to_string(&tmpstring, "# Automatically saved keybindings" NEWLINE);
+	add_to_string(&tmpstring, "#" NEWLINE);
+
+	origlen = tmpstring.length;
+	bind_config_string(&tmpstring);
+	if (tmpstring.length > origlen)
+		add_bytes_to_string(&config, tmpstring.source, tmpstring.length);
+	done_string(&tmpstring);
 
 get_me_out:
 	unmark_options_tree(options->ptr);
 
-	return str;
+	return config.source;
 }
 
 /* TODO: The error condition should be handled somewhere else. */
@@ -647,9 +637,7 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	int ret = 0;
 	struct secure_save_info *ssi;
 	unsigned char *config_file;
-	unsigned char *cfg_str;
-
-	cfg_str = create_config_string(prefix, name, options);
+	unsigned char *cfg_str = create_config_string(prefix, name, options);
 
 	if (!cfg_str) return -1;
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.206 2005/01/19 11:22:10 zas Exp $ */
+/* $Id: dialogs.c,v 1.207 2005/01/19 12:52:22 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -882,7 +882,10 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		hop->action = strtonum->num;
 
 		item = get_keybinding_root(item);
-		if (!item) return EVENT_PROCESSED; /* FIXME: hop not freed, leak ?? */
+		if (!item) {
+			mem_free(hop);
+			return EVENT_PROCESSED;
+		}
 
 		strtonum = item->udata;
 		hop->keymap = strtonum->num;

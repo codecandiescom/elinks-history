@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.27 2002/09/18 16:07:01 pasky Exp $ */
+/* $Id: terminal.c,v 1.28 2002/11/27 10:22:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,8 +119,12 @@ alloc_term_screen(struct terminal *term, int x, int y)
 
 	s = mem_realloc(term->screen, space);
 	if (!s) return;
+	
 	t = mem_realloc(term->last_screen, space);
-	if (!t) return;
+	if (!t) {
+		mem_free(s);
+		return;
+	}
 
 	memset(t, -1, space);
 	term->x = x;

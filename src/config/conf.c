@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.136 2004/04/11 20:46:52 jonas Exp $ */
+/* $Id: conf.c,v 1.137 2004/04/11 21:11:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -740,7 +740,6 @@ get_me_out:
 	return config.source;
 }
 
-/* TODO: The error condition should be handled somewhere else. */
 static int
 write_config_file(unsigned char *prefix, unsigned char *name,
 		  struct option *options, struct terminal *term)
@@ -750,20 +749,15 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	unsigned char *config_file = NULL;
 	unsigned char *cfg_str = create_config_string(prefix, name, options);
 	int prefixlen = strlen(prefix);
-	int prefix_has_slash, name_has_slash;
+	int prefix_has_slash = (prefixlen && dir_sep(prefix[prefixlen - 1]));
+	int name_has_slash = dir_sep(name[0]);
+	unsigned char *slash = name_has_slash || prefix_has_slash ? "" : "/";
 
 	if (!cfg_str) return -1;
 
-	name_has_slash = (name[0] && dir_sep(name[0]));
-	prefix_has_slash = (prefixlen && dir_sep(prefix[prefixlen - 1]));
-	if (name_has_slash || prefix_has_slash) {
-		if (name_has_slash && prefix_has_slash)
-			name++;
-		config_file = straconcat(prefix, name, NULL);
-	} else {
-		config_file = straconcat(prefix, "/", name, NULL);
-	}
+	if (name_has_slash && prefix_has_slash) name++;
 
+	config_file = straconcat(prefix, slash, name, NULL);
 	if (!config_file) goto free_cfg_str;
 
 	ssi = secure_open(config_file, 0177);
@@ -773,9 +767,9 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	}
 
 	if (term) write_config_dialog(term, config_file, secsave_errno, ret);
+	mem_free(config_file);
 
 free_cfg_str:
-	if (config_file) mem_free(config_file);
 	mem_free(cfg_str);
 
 	return ret;

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.16 2003/05/10 01:29:08 zas Exp $ */
+/* $Id: conv.c,v 1.17 2003/05/12 20:37:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,147 @@
 #include "util/string.h"
 
 
-/* TODO: Move it to string.c. --Zas */
+
+/* This functions takes string @s and stores the @number (of a result width
+ * @width) in string format there, starting at position [*@slen]. If the number
+ * would take more space than @width, it is truncated and only the _last_
+ * digits of it are inserted to the string. If the number takes less space than
+ * @width, it is padded by @fillchar from left.
+ *
+ * A NUL char is always added at the end of the string. @s must point to a
+ * sufficiently large memory space, at least *@slen + @width + 1.
+ *
+ * Example:
+ *
+ * ulongcat(s, NULL, 12345, 4, 0) : s = "2345"
+ *
+ * ulongcat(s, NULL, 123, 5, '0') : s = "001234"
+ */
+/* The function returns 0 if OK, 1 if truncated, other values sign an error. */
+/* TODO: Sane return value. --pasky */
+/* TODO: Align to right, left, center... --Zas */
+int inline
+elinks_ulongcat(unsigned char *s, unsigned int *slen,
+		unsigned long number, unsigned int width,
+		unsigned char fillchar)
+{
+	unsigned int start = 0;
+	unsigned int pos = 1;
+	unsigned long q = number;
+	int ret = 0;
+
+	if (width < 1 || !s) return 2;
+
+	while (q > 9) {
+		if (pos == width) {
+			ret = 1;
+			break;
+		}
+		pos++;
+		q /= 10;
+	}
+
+	if (slen) start = *slen;
+
+	if (fillchar) {
+		unsigned int pad = width - pos;
+
+		if (pad) {
+			unsigned int tmp = start;
+
+			start += pad;
+			if (slen) *slen += pad;
+			while (pad) s[--pad + tmp] = fillchar;
+		}
+	}
+
+	if (slen) *slen += pos;
+
+	pos += start;
+
+	s[pos] = '\0';
+
+	while (pos > start) {
+		s[--pos] = '0' + (number % 10);
+		number /= 10;
+	}
+
+	return ret;
+}
+
+int inline
+elinks_longcat(unsigned char *s, unsigned int *slen,
+	       long number, unsigned int width,
+	       unsigned char fillchar)
+{
+	unsigned char *p = s;
+
+	if (number < 0) {
+		if (slen) p[(*slen)++] = '-';
+		else *p++ = '-';
+		number = -number;
+		width--;
+	}
+	return elinks_ulongcat(p, slen, number, width, fillchar);
+}
+
+/* This function is similar to elinks_ulongcat() but convert a long to
+ * hexadecimal format.
+ * An additionnal parameter 'upper' permits to choose between
+ * uppercased and lowercased hexa numbers. */
+int inline
+elinks_ulonghexcat(unsigned char *s, unsigned int *slen,
+		   unsigned long number, unsigned int width,
+		   unsigned char fillchar, unsigned int upper)
+{
+	static unsigned char uhex[]= "0123456789ABCDEF";
+	static unsigned char lhex[]= "0123456789abcdef";
+	unsigned char *hex = (unsigned char *) (upper ? &uhex : &lhex);
+	unsigned int start = 0;
+	unsigned int pos = 1;
+	unsigned long q = number;
+	int ret = 0;
+
+	if (width < 1 || !s) return 2;
+
+	while (q > 15) {
+		if (pos == width) {
+			ret = 1;
+			break;
+		}
+		++pos;
+		q /= 16;
+	}
+
+	if (slen) start = *slen;
+
+	if (fillchar) {
+		unsigned int pad = width - pos;
+
+		if (pad) {
+			unsigned int tmp = start;
+
+			start += pad;
+			if (slen) *slen += pad;
+			while (pad) s[--pad + tmp] = fillchar;
+		}
+	}
+
+	if (slen) *slen += pos;
+
+	pos += start;
+
+	s[pos] = '\0';
+
+	while (pos > start) {
+		s[--pos] = hex[(number % 16)];
+		number /= 16;
+	}
+
+	return ret;
+}
+
+
 int
 add_num_to_str(unsigned char **str, int *len, long num)
 {
@@ -156,4 +296,26 @@ add_htmlesc_str(unsigned char **str, int *strl,
 
 #undef accept_char
 
+}
+
+/* String conversion functions */
+
+/* Trim starting and ending chars from a string.
+ * Pointer to the string is passed.
+ * WARNING: string is modified.
+ * If len != NULL, it is set to length of the new string.
+ */
+inline unsigned char *
+trim_chars(unsigned char *s, unsigned char c, int *len)
+{
+	int l = strlen(s);
+	unsigned char *p = s;
+
+	while (*p == c) p++, l--;
+	while (l && p[l - 1] == c) p[--l] = '\0';
+
+	memmove(s, p, l + 1);
+	if (len) *len = l;
+
+	return s;
 }

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.30 2003/05/11 19:49:47 zas Exp $ */
+/* $Id: string.h,v 1.31 2003/05/12 20:37:46 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -48,38 +48,6 @@ int xstrcmp(unsigned char *, unsigned char *);
 unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);
 unsigned char *trim_chars(unsigned char *, unsigned char, int *);
 
-/* These are fast functions to convert integers to string, or to hexadecimal string. */
-int elinks_ulongcat(unsigned char *s, unsigned int *slen, unsigned long number,
-		    unsigned int width, unsigned char fillchar);
-/* Type casting is enforced, to shorten calls. --Zas */
-#define ulongcat(s, slen, number, width, fillchar) \
-	elinks_ulongcat((unsigned char *) (s), \
-			(unsigned int *) (slen), \
-			(unsigned long) (number), \
-			(unsigned int) (width), \
-			(unsigned char) (fillchar))
-
-int elinks_longcat(unsigned char *s, unsigned int *slen, long number,
-		   unsigned int width, unsigned char fillchar);
-/* Type casting is enforced, to shorten calls. --Zas */
-#define longcat(s, slen, number, width, fillchar) \
-	 elinks_longcat((unsigned char *) (s), \
-			(unsigned int *) (slen), \
-			(long) (number), \
-			(unsigned int) (width), \
-			(unsigned char) (fillchar))
-
-int elinks_ulonghexcat(unsigned char *s, unsigned int *slen, unsigned long number,
-		       unsigned int width, unsigned char fillchar, unsigned int upper);
-/* Type casting is enforced, to shorten calls. --Zas */
-#define ulonghexcat(s, slen, number, width, fillchar, upper) \
-	elinks_ulonghexcat((unsigned char *) (s), \
-			   (unsigned int *) (slen), \
-			   (unsigned long) (number), \
-			   (unsigned int) (width), \
-			   (unsigned char) (fillchar), \
-			   (unsigned int) (upper))
-
 
 #define WHITECHAR(x) ((x) == ' ' || ((x) >= ASCII_TAB && (x) <= ASCII_CR))
 #define IS_QUOTE(x) ((x) == '"' || (x) == '\'')
@@ -92,10 +60,6 @@ isA(unsigned char c)
 		|| (c >= '0' && c <= '9')
 		|| c == '_' || c == '-';
 }
-
-/* XXX: Compatibility only. Remove these at some time. --Zas */
-#define snprint(str, len, num) ulongcat(str, NULL, num, len, 0);
-#define snzprint(str, len, num) longcat(str, NULL, num, len, 0);
 
 
 /*** Our libc... */

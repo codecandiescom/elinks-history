@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.49 2003/05/03 02:27:05 pasky Exp $ */
+/* $Id: menu.c,v 1.50 2003/05/03 02:29:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -533,7 +533,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					int step = -1;
 
 					for (; i >= 0; i--) {
-						if (menu->items[sel].rtext == M_BAR) {
+						if (menu->items[i].rtext == M_BAR) {
 							found = 1;
 							break;
 						}
@@ -561,8 +561,8 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					int found = 0;
 					int step = 1;
 
-					for (;i < menu->ni; i++) {
-						if (menu->items[sel].rtext == M_BAR) {
+					for (; i < menu->ni; i++) {
+						if (menu->items[i].rtext == M_BAR) {
 							found = 1;
 							break;
 						}
@@ -746,7 +746,7 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 	struct menu_item *it = &menu->items[menu->selected];
 
 	if (menu->selected < 0 || menu->selected >= menu->ni
-	    || menu->items[sel].rtext == M_BAR)
+	    || it->rtext == M_BAR)
 		return;
 
 	if (!it->in_m) {

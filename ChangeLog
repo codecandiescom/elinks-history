@@ -1,3 +1,89 @@
+Mon Jan  5 19:47:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/globhist.c:
+
+	Fix compiling globhist with warnings. The write timer is unused.  
+
+Mon Jan  5 19:44:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Add missing #include <stdarg.h> 
+
+Mon Jan  5 16:55:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/download.c:
+
+	Removed ancient FIXME, I'm not gonna fix anything anymore :-).  
+
+Mon Jan  5 13:33:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Use tab instead of bunch of spaces to indent link target.  
+
+Mon Jan  5 13:32:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Fixed an off-by-one overflow when iterating through links.  
+
+Mon Jan  5 11:29:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	Remove unused menu macro.  
+
+Mon Jan  5 11:11:19 2004  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	gcc flag -fno-inline was removed (--enable-debug mode). It causes
+	compilation failure with old gcc/glibc. Errors like undefined
+	reference to __strcpy_small are shown, and linking fails.  
+
+Mon Jan  5 08:51:15 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/dump/dump.c:
+
+	Print the title with each link when a title is available.  
+
+Mon Jan  5 08:42:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/dump/dump.c:
+
+	In the dump output, when printing the link footnotes below the
+	document, include the first link.  
+
+Mon Jan  5 06:14:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In page_down, remove some useless assignments to @newpos, which were
+	introduced in src/viewer/text/view.c:1.302->1.303.  
+
+Mon Jan  5 05:51:08 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Remove do_format, which was made a pretty well useless wrapper in
+	src/document/html/renderer.c:1.344->1.345, and instead call
+	parse_html directly from format_html_part.  
+
+Mon Jan  5 04:54:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: osdep/os2/os2.c, viewer/text/view.c, util/error.h:
+
+	Update a few occurrences of the error(), debug(), wdebug(), and
+	internal() macros (now ERROR(), DBG(), WDBG(), and INTERNAL(),
+	respectively) in comments and commented-out code.  
+
+Sun Jan  4 23:40:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	Use dynamic menu interface for tab completion menus.  
+
 Sun Jan  4 20:57:41 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/bfu/hierbox.c:

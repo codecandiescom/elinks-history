@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.42 2003/10/27 15:33:23 jonas Exp $ */
+/* $Id: inphist.c,v 1.43 2003/10/27 15:40:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,7 @@ remove_duplicate_from_history(struct input_history *historylist,
 		del_from_list(tmphistoryitem);
 		mem_free(tmphistoryitem);
 
-		historylist->n--;
+		historylist->size--;
 	}
 }
 
@@ -180,24 +180,24 @@ add_to_input_history(struct input_history *historylist, unsigned char *url,
 
 	/* add new entry to history list */
 	add_to_list(historylist->items, newhistoryitem);
-	historylist->n++;
+	historylist->size++;
 
 	if (!historylist->nosave) historylist->dirty = 1;
 
 	/* limit size of history to MAX_HISTORY_ITEMS
 	 * removing first entries if needed */
-	while (historylist->n > MAX_HISTORY_ITEMS) {
+	while (historylist->size > MAX_HISTORY_ITEMS) {
 		struct input_history_item *tmphistoryitem = historylist->items.prev;
 
 		if ((void *) tmphistoryitem == &historylist->items) {
 			internal("history is empty");
-			historylist->n = 0;
+			historylist->size = 0;
 			return;
 		}
 
 		del_from_list(tmphistoryitem);
 		mem_free(tmphistoryitem);
-		historylist->n--;
+		historylist->size--;
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.17 2003/01/04 11:39:25 pasky Exp $ */
+/* $Id: xbel.c,v 1.18 2003/04/17 17:48:56 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -134,7 +134,7 @@ read_bookmarks_xbel(FILE *f)
 		}
 	}
 
-	if (!err) readok = xbeltree_to_bookmarks_list(root_node, NULL);
+	if (!err) readok = xbeltree_to_bookmarks_list(root_node->children, NULL); /* Top node is xbel */
 
 	XML_ParserFree(p);
 	free_xbeltree(root_node);
@@ -517,8 +517,8 @@ free_node(struct tree_node *node)
 		foreachback(attribute, *node->attrs) {
 			if (attribute->name)
 				mem_free(attribute->name);
-			mem_free(attribute);
 		}
+		free_list(*(struct list_head *)node->attrs); /* Don't free list during traversal */
 		mem_free(node->attrs);
 	}
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.46 2002/11/29 19:06:16 pasky Exp $ */
+/* $Id: parser.c,v 1.47 2002/11/29 20:53:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1412,7 +1412,7 @@ xxx:
 	fc->ctrl_num = a - last_form_tag;
 	fc->position = a - startf;
 	fc->method = form.method;
-	fc->action = stracpy(form.action);
+	fc->action = form.action ? stracpy(form.action) : NULL;
 	fc->name = get_attr_val(a, "name");
 	fc->default_value = get_attr_val(a, "value");
 	fc->ro = has_attr(a, "disabled") ? 2 : has_attr(a, "readonly") ? 1 : 0;
@@ -1619,7 +1619,7 @@ x:
 	fc->ctrl_num = a - last_form_tag;
 	fc->position = a - startf;
 	fc->method = form.method;
-	fc->action = stracpy(form.action);
+	fc->action = form.action ? stracpy(form.action) : NULL;
 	fc->type = FC_CHECKBOX;
 	fc->name = stracpy(format.select);
 	fc->default_value = val;
@@ -2029,7 +2029,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	fc->ctrl_num = attr - last_form_tag;
 	fc->position = attr - startf;
 	fc->method = form.method;
-	fc->action = stracpy(form.action);
+	fc->action = form.action ? stracpy(form.action) : NULL;
 	fc->name = get_attr_val(attr, "name");
 	fc->type = FC_TEXTAREA;;
 	fc->ro = has_attr(attr, "disabled") ? 2 : has_attr(attr, "readonly") ? 1 : 0;

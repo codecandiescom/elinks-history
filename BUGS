@@ -10,4 +10,9 @@ You can't upload large files; it takes _lots_ of memory.
 
 You shouldn't press '^Z' when you are in a viewer
 
+When site has more RR records, links probes only the first one, even if
+connection is refused.
+
+Handling of &#13; is not lynx-compatible in <pre> tag (should be newline).
+
 vim: textwidth=80

@@ -2,10 +2,10 @@
 /* config.h.in.  Generated automatically from configure.in by autoheader.  */
 
 /* Name of package */
-#define PACKAGE "links"
+#define PACKAGE "elinks"
 
 /* Version number of package */
-#define VERSION "0.96"
+#define VERSION "0.1"
 
 /* Define to empty if the keyword does not work.  */
 /* #undef const */

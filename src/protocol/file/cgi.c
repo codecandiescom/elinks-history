@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.69 2004/06/25 10:52:30 zas Exp $ */
+/* $Id: cgi.c,v 1.70 2004/07/10 18:40:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,10 +38,8 @@ close_pipe_and_read(struct connection *conn)
 {
 	struct read_buffer *rb = alloc_read_buffer(conn);
 
-	if (!rb) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
-		return;
-	}
+	if (!rb) return;
+
 	memcpy(rb->data, "HTTP/1.0 200 OK\r\n", 17);
 	rb->len = 17;
 	rb->freespace -= 17;

@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.3 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: leds.h,v 1.4 2003/05/07 10:40:11 zas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -19,13 +19,13 @@
 
 struct led {
 	int number;
-	unsigned char value;
 	/* Use COL() macro to set up color. Note that you shouldn't use color
 	 * only as additional indication, as the terminal can be monochrome. */
 	int color;
 
 	/* Private data. */
 	int __used;
+	unsigned char value;
 };
 
 void init_leds();

@@ -154,6 +154,9 @@ Flemming Frandsen <ff@partyticket.net>
 Fuzzy European King <james@place.org>
 	Fixed lua stack overflow
 
+Grzegorz Adam Hankiewicz <gradha@terra.es>
+	Default lua hooks enhancements
+
 Grzegorz Golawski <grzegol@pld.org.pl>
 	Polish translation updates
 
@@ -395,4 +398,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.94 2002/10/12 16:27:15 pasky Exp $
+$Id: AUTHORS,v 1.95 2002/10/13 12:06:25 pasky Exp $

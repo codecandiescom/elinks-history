@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.136 2004/04/08 02:00:34 jonas Exp $ */
+/* $Id: cache.c,v 1.137 2004/04/16 10:09:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,7 @@ struct cache_entry *
 find_in_cache(struct uri *uri)
 {
 	struct cache_entry *cached;
-	int proxy = (uri->protocol == PROTOCOL_PROXY); 
+	int proxy = (uri->protocol == PROTOCOL_PROXY);
 
 	/* If only the caller has a reference it will most definitely not be in
 	 * the cache unless the caller uses an URI from a cache_entry in which

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.72 2004/04/14 00:11:51 jonas Exp $ */
+/* $Id: task.c,v 1.73 2004/04/16 10:09:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,7 +325,7 @@ do_move(struct session *ses, struct download **stat)
 		case TASK_FORWARD:
 		{
 			protocol_external_handler *fn;
-			struct uri *uri = cached->redirect; 
+			struct uri *uri = cached->redirect;
 
 			fn = get_protocol_external_handler(uri->protocol);
 			if (fn) {

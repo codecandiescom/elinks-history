@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.371 2004/04/16 10:02:07 zas Exp $ */
+/* $Id: session.c,v 1.372 2004/04/16 10:09:43 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -707,9 +707,9 @@ decode_session_info(const void *pdata)
 		/* Extract multiple NUL terminated URIs */
 		while (len > 0) {
 			unsigned char *end = memchr(str, 0, len);
- 
+
 			if (!end) break;
- 
+
 			add_to_string_list(&info->url_list, str, end - str);
 
 			len -= end - str + 1;

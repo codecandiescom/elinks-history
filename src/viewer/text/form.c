@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.179 2004/06/16 06:06:51 miciah Exp $ */
+/* $Id: form.c,v 1.180 2004/06/16 06:34:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1223,8 +1223,12 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 
 		default:
-			if (frm->ro || ev->y || ev->x < 32 || ev->x >= 256)
+			if (ev->y || ev->x < 32 || ev->x >= 256) {
+				x = 0;
 				break;
+			}
+
+			if (frm->ro) break;
 
 			length = strlen(fs->value);
 			if (length >= frm->maxlength) {

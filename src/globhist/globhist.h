@@ -1,4 +1,4 @@
-/* $Id: globhist.h,v 1.7 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: globhist.h,v 1.8 2003/05/07 12:59:24 zas Exp $ */
 
 #ifndef EL__GLOBHIST_GLOBHIST_H
 #define EL__GLOBHIST_GLOBHIST_H
@@ -12,15 +12,18 @@ struct listbox_item;
 struct global_history_item {
 	LIST_HEAD(struct global_history_item);
 
-	ttime last_visit;
+	struct listbox_item *box_item;
+
 	unsigned char *title;
 	unsigned char *url;
-	int refcount;
 
-	struct listbox_item *box_item;
+	ttime last_visit;
+	int refcount;
 };
 
+
 struct global_history_list {
+	/* Order matters there. --Zas */
 	int n;
 	struct list_head items;
 };

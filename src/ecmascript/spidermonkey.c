@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.18 2004/09/24 20:47:20 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.19 2004/09/24 21:23:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,6 +404,10 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 	if (JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
 			      code->source, code->length, "", 0, &rval)
 	    == JS_FALSE) {
+		return NULL;
+	}
+	if (JSVAL_IS_VOID(rval)) {
+		/* Undefined value. */
 		return NULL;
 	}
 

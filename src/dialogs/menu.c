@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.342 2004/07/14 22:00:03 zas Exp $ */
+/* $Id: menu.c,v 1.343 2004/07/14 22:08:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,9 +50,9 @@
 
 /* Helper for url items in help menu. */
 static void
-menu_url_shortcut(struct terminal *term, void *d, struct session *ses)
+menu_url_shortcut(struct terminal *term, void *url, struct session *ses)
 {
-	struct uri *uri = get_uri((unsigned char *) d, 0);
+	struct uri *uri = get_uri((unsigned char *) url, 0);
 
 	if (!uri) return;
 	goto_uri(ses, uri);

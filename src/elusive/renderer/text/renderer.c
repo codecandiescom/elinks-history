@@ -1,11 +1,12 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.14 2003/01/19 14:28:41 pasky Exp $ */
+/* $Id: renderer.c,v 1.15 2003/01/19 14:36:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "elinks.h"

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.76 2004/12/16 00:15:09 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.77 2004/12/16 23:53:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,48 +493,6 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 }
 
 
-static JSBool document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
-static JSBool document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
-
-static const JSClass document_class = {
-	"document",
-	JSCLASS_HAS_PRIVATE,
-	JS_PropertyStub, JS_PropertyStub,
-	document_get_property, document_set_property,
-	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
-};
-
-enum document_prop { JSP_DOC_REF, JSP_DOC_TITLE, JSP_DOC_URL, JSP_DOC_FORMS };
-/* "cookie" is special; it isn't a regular property but we channel it to the
- * cookie-module. XXX: Would it work if "cookie" was defined in this array? */
-static const JSPropertySpec document_props[] = {
-	{ "location",	JSP_DOC_URL,	JSPROP_ENUMERATE },
-	{ "referrer",	JSP_DOC_REF,	JSPROP_ENUMERATE | JSPROP_READONLY },
-	{ "title",	JSP_DOC_TITLE,	JSPROP_ENUMERATE }, /* TODO: Charset? */
-	{ "url",	JSP_DOC_URL,	JSPROP_ENUMERATE },
-	{ "forms", JSP_DOC_FORMS, JSPROP_ENUMERATE },
-	{ NULL }
-};
-
-static JSBool forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
-
-static const JSClass forms_class = {
-	"forms",
-	JSCLASS_HAS_PRIVATE,
-	JS_PropertyStub, JS_PropertyStub,
-	forms_get_property, JS_PropertyStub,
-	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
-};
-
-static JSBool forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
-static JSBool forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
-
-static const JSFunctionSpec forms_funcs[] = {
-	{ "item",		forms_item,		1 },
-	{ "namedItem",		forms_namedItem,	1 },
-	{ NULL }
-};
-
 static JSBool form_control_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 static JSBool form_control_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 
@@ -567,6 +525,265 @@ static JSBool form_control_submit(JSContext *ctx, JSObject *obj, uintN argc, jsv
 static const JSFunctionSpec form_control_funcs[] = {
 	{ "reset",	form_control_reset,	0 },
 	{ "submit",	form_control_submit,	0 },
+	{ NULL }
+};
+
+static JSBool
+form_control_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	struct form_control *fc = JS_GetPrivate(ctx, obj);
+
+	VALUE_TO_JSVAL_START;
+
+	if (!fc) return JS_FALSE;
+
+	if (!JSVAL_IS_INT(id))
+		goto bye;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_FORM_CONTROL_NAME:
+		p.string = fc->name;
+		prop_type = JSPT_STRING;
+		break;
+	case JSP_FORM_CONTROL_ACTION:
+		p.string = fc->action;
+		prop_type  = JSPT_STRING;
+		break;
+	case JSP_FORM_CONTROL_METHOD:
+		switch(fc->method) {
+			case FORM_METHOD_GET:
+				p.string = "GET";
+				prop_type = JSPT_STRING;
+				goto end;
+			case FORM_METHOD_POST:
+			case FORM_METHOD_POST_MP:
+			case FORM_METHOD_POST_TEXT_PLAIN:
+				p.string = "POST";
+				prop_type = JSPT_STRING;
+				goto end;
+		}
+		break;
+	case JSP_FORM_CONTROL_TARGET:
+		p.string = fc->target;
+		prop_type = JSPT_STRING;
+		break;
+	default:
+		INTERNAL("Invalid ID %d in form_control_get_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+end:
+	VALUE_TO_JSVAL_END(vp);
+}
+
+static JSBool
+form_control_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	struct form_control *fc = JS_GetPrivate(ctx, obj);
+
+	JSVAL_TO_VALUE_START;
+
+	if (!fc) return JS_FALSE;
+
+	if (!JSVAL_IS_INT(id))
+		goto bye;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_FORM_CONTROL_NAME:
+		JSVAL_REQUIRE(vp, STRING);
+		mem_free_set(fc->name, stracpy(v.string));
+		break;
+	case JSP_FORM_CONTROL_ACTION:
+		JSVAL_REQUIRE(vp, STRING);
+		mem_free_set(fc->action, stracpy(v.string));
+		break;
+	case JSP_FORM_CONTROL_METHOD:
+		JSVAL_REQUIRE(vp, STRING);
+		if (!strcasecmp(v.string, "GET")) {
+			fc->method = FORM_METHOD_GET;
+			break;
+		}
+		if (!strcasecmp(v.string, "POST")) {
+			fc->method = FORM_METHOD_POST;
+			break;
+		}
+		break;
+	case JSP_FORM_CONTROL_TARGET:
+		JSVAL_REQUIRE(vp, STRING);
+		mem_free_set(fc->target, stracpy(v.string));
+		break;
+	default:
+		INTERNAL("Invalid ID %d in form_control_get_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+	JSVAL_TO_VALUE_END;
+}
+
+static JSBool
+form_control_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	struct document_view *doc_view = vs->doc_view;
+	struct form_control *fc = JS_GetPrivate(ctx, obj);
+
+	if (!fc) return JS_FALSE;
+	if (argc != 0) return JS_FALSE;
+	do_reset_form(doc_view, fc->form_num);
+	draw_forms(doc_view->session->tab->term, doc_view);
+	return JS_TRUE;
+}
+
+static JSBool
+form_control_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+	struct form_control *fc = JS_GetPrivate(ctx, obj);
+	int link;
+
+	if (!fc) return JS_FALSE;
+	if (argc != 0) return JS_FALSE;
+
+	for (link = 0; link < document->nlinks; link++)
+		if (get_link_form_control(&document->links[link]) == fc)
+			break;
+
+	if (link >= document->nlinks) return JS_FALSE;
+
+	doc_view->vs->current_link = link;
+	submit_form(doc_view->session, doc_view, 0);
+	return JS_TRUE;
+}
+
+
+static JSBool forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+
+static const JSClass forms_class = {
+	"forms",
+	JSCLASS_HAS_PRIVATE,
+	JS_PropertyStub, JS_PropertyStub,
+	forms_get_property, JS_PropertyStub,
+	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
+};
+
+static JSBool forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+static JSBool forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+
+static const JSFunctionSpec forms_funcs[] = {
+	{ "item",		forms_item,		1 },
+	{ "namedItem",		forms_namedItem,	1 },
+	{ NULL }
+};
+
+enum forms_prop { JSP_FORMS_LENGTH };
+static const JSPropertySpec forms_props[] = {
+	{ "length",	JSP_FORMS_LENGTH,	JSPROP_ENUMERATE | JSPROP_READONLY},
+	{ NULL }
+};
+
+static JSBool
+forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+
+	VALUE_TO_JSVAL_START;
+	if (!JSVAL_IS_INT(id))
+		goto bye;
+	if (JSVAL_TO_INT(id) == JSP_FORMS_LENGTH) {
+		struct form_control *fc;
+		int counter = 0;
+
+		foreach(fc, document->forms)
+			counter++;
+		p.number = counter;
+		prop_type = JSPT_INT;
+	} else {
+		INTERNAL("Invalid ID %d in form_control_get_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+	VALUE_TO_JSVAL_END(vp);
+}
+
+static JSBool
+forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+	struct form_control *fc;
+	int counter = 0;
+	int index;
+	JSObject *form;
+
+	if (argc != 1) return JS_FALSE;
+	if (!JSVAL_IS_INT(argv[0])) return JS_FALSE;
+	index = JSVAL_TO_INT(argv[0]);
+	foreach(fc, document->forms) {
+		counter++;
+		if (counter == index) break;
+	}
+	if (index > counter) return JS_FALSE;
+	form = JS_NewObject(ctx, (JSClass *)&form_control_class, NULL, parent);
+	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
+	JS_SetPrivate(ctx, form, fc);
+	*rval = OBJECT_TO_JSVAL(form);
+	return JS_TRUE;
+}
+
+static JSBool
+forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+	struct form_control *fc;
+	unsigned char *name;
+	JSObject *form;
+
+	if (argc != 1) return JS_FALSE;
+	if (!JSVAL_IS_STRING(argv[0])) return JS_FALSE;
+	name = JS_GetStringBytes(JS_ValueToString(ctx, argv[0]));
+	if (!name) return JS_FALSE;
+	foreach(fc, document->forms) {
+		if (fc->formname && !strcasecmp(name, fc->formname)) goto ok;
+	}
+	return JS_FALSE;
+ok:
+	form = JS_NewObject(ctx, (JSClass *)&form_control_class, NULL, parent);
+	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
+	JS_SetPrivate(ctx, form, fc);
+	*rval = OBJECT_TO_JSVAL(form);
+	return JS_TRUE;
+}
+
+
+static JSBool document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+static JSBool document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+
+static const JSClass document_class = {
+	"document",
+	JSCLASS_HAS_PRIVATE,
+	JS_PropertyStub, JS_PropertyStub,
+	document_get_property, document_set_property,
+	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
+};
+
+enum document_prop { JSP_DOC_REF, JSP_DOC_TITLE, JSP_DOC_URL, JSP_DOC_FORMS };
+/* "cookie" is special; it isn't a regular property but we channel it to the
+ * cookie-module. XXX: Would it work if "cookie" was defined in this array? */
+static const JSPropertySpec document_props[] = {
+	{ "location",	JSP_DOC_URL,	JSPROP_ENUMERATE },
+	{ "referrer",	JSP_DOC_REF,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "title",	JSP_DOC_TITLE,	JSPROP_ENUMERATE }, /* TODO: Charset? */
+	{ "url",	JSP_DOC_URL,	JSPROP_ENUMERATE },
+	{ "forms",	JSP_DOC_FORMS,	JSPROP_ENUMERATE },
 	{ NULL }
 };
 
@@ -954,222 +1171,6 @@ unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	JSVAL_TO_VALUE_END;
 }
 
-static JSBool
-form_control_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
-{
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
-
-	VALUE_TO_JSVAL_START;
-
-	if (!fc) return JS_FALSE;
-
-	if (!JSVAL_IS_INT(id))
-		goto bye;
-
-	switch (JSVAL_TO_INT(id)) {
-	case JSP_FORM_CONTROL_NAME:
-		p.string = fc->name;
-		prop_type = JSPT_STRING;
-		break;
-	case JSP_FORM_CONTROL_ACTION:
-		p.string = fc->action;
-		prop_type  = JSPT_STRING;
-		break;
-	case JSP_FORM_CONTROL_METHOD:
-		switch(fc->method) {
-			case FORM_METHOD_GET:
-				p.string = "GET";
-				prop_type = JSPT_STRING;
-				goto end;
-			case FORM_METHOD_POST:
-			case FORM_METHOD_POST_MP:
-			case FORM_METHOD_POST_TEXT_PLAIN:
-				p.string = "POST";
-				prop_type = JSPT_STRING;
-				goto end;
-		}
-		break;
-	case JSP_FORM_CONTROL_TARGET:
-		p.string = fc->target;
-		prop_type = JSPT_STRING;
-		break;
-	default:
-		INTERNAL("Invalid ID %d in form_control_get_property().", JSVAL_TO_INT(id));
-		goto bye;
-	}
-end:
-	VALUE_TO_JSVAL_END(vp);
-}
-
-static JSBool
-form_control_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
-{
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
-
-	JSVAL_TO_VALUE_START;
-
-	if (!fc) return JS_FALSE;
-
-	if (!JSVAL_IS_INT(id))
-		goto bye;
-
-	switch (JSVAL_TO_INT(id)) {
-	case JSP_FORM_CONTROL_NAME:
-		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fc->name, stracpy(v.string));
-		break;
-	case JSP_FORM_CONTROL_ACTION:
-		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fc->action, stracpy(v.string));
-		break;
-	case JSP_FORM_CONTROL_METHOD:
-		JSVAL_REQUIRE(vp, STRING);
-		if (!strcasecmp(v.string, "GET")) {
-			fc->method = FORM_METHOD_GET;
-			break;
-		}
-		if (!strcasecmp(v.string, "POST")) {
-			fc->method = FORM_METHOD_POST;
-			break;
-		}
-		break;
-	case JSP_FORM_CONTROL_TARGET:
-		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fc->target, stracpy(v.string));
-		break;
-	default:
-		INTERNAL("Invalid ID %d in form_control_get_property().", JSVAL_TO_INT(id));
-		goto bye;
-	}
-	JSVAL_TO_VALUE_END;
-}
-
-static JSBool
-form_control_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
-{
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
-	struct document_view *doc_view = vs->doc_view;
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
-
-	if (!fc) return JS_FALSE;
-	if (argc != 0) return JS_FALSE;
-	do_reset_form(doc_view, fc->form_num);
-	draw_forms(doc_view->session->tab->term, doc_view);
-	return JS_TRUE;
-}
-
-static JSBool
-form_control_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
-{
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
-	struct document_view *doc_view = vs->doc_view;
-	struct document *document = doc_view->document;
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
-	int link;
-
-	if (!fc) return JS_FALSE;
-	if (argc != 0) return JS_FALSE;
-
-	for (link = 0; link < document->nlinks; link++)
-		if (get_link_form_control(&document->links[link]) == fc)
-			break;
-
-	if (link >= document->nlinks) return JS_FALSE;
-
-	doc_view->vs->current_link = link;
-	submit_form(doc_view->session, doc_view, 0);
-	return JS_TRUE;
-}
-
-enum forms_prop { JSP_FORMS_LENGTH };
-static const JSPropertySpec forms_props[] = {
-	{ "length",	JSP_FORMS_LENGTH,	JSPROP_ENUMERATE | JSPROP_READONLY},
-	{ NULL }
-};
-
-
-
-static JSBool
-forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
-{
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
-	struct document_view *doc_view = vs->doc_view;
-	struct document *document = doc_view->document;
-
-	VALUE_TO_JSVAL_START;
-	if (!JSVAL_IS_INT(id))
-		goto bye;
-	if (JSVAL_TO_INT(id) == JSP_FORMS_LENGTH) {
-		struct form_control *fc;
-		int counter = 0;
-
-		foreach(fc, document->forms)
-			counter++;
-		p.number = counter;
-		prop_type = JSPT_INT;
-	} else {
-		INTERNAL("Invalid ID %d in form_control_get_property().", JSVAL_TO_INT(id));
-		goto bye;
-	}
-	VALUE_TO_JSVAL_END(vp);
-}
-
-static JSBool
-forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
-{
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
-	struct document_view *doc_view = vs->doc_view;
-	struct document *document = doc_view->document;
-	struct form_control *fc;
-	int counter = 0;
-	int index;
-	JSObject *form;
-
-	if (argc != 1) return JS_FALSE;
-	if (!JSVAL_IS_INT(argv[0])) return JS_FALSE;
-	index = JSVAL_TO_INT(argv[0]);
-	foreach(fc, document->forms) {
-		counter++;
-		if (counter == index) break;
-	}
-	if (index > counter) return JS_FALSE;
-	form = JS_NewObject(ctx, (JSClass *)&form_control_class, NULL, parent);
-	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
-	JS_SetPrivate(ctx, form, fc);
-	*rval = OBJECT_TO_JSVAL(form);
-	return JS_TRUE;
-}
-
-static JSBool
-forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
-{
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
-	struct document_view *doc_view = vs->doc_view;
-	struct document *document = doc_view->document;
-	struct form_control *fc;
-	unsigned char *name;
-	JSObject *form;
-
-	if (argc != 1) return JS_FALSE;
-	if (!JSVAL_IS_STRING(argv[0])) return JS_FALSE;
-	name = JS_GetStringBytes(JS_ValueToString(ctx, argv[0]));
-	if (!name) return JS_FALSE;
-	foreach(fc, document->forms) {
-		if (fc->formname && !strcasecmp(name, fc->formname)) goto ok;
-	}
-	return JS_FALSE;
-ok:
-	form = JS_NewObject(ctx, (JSClass *)&form_control_class, NULL, parent);
-	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
-	JS_SetPrivate(ctx, form, fc);
-	*rval = OBJECT_TO_JSVAL(form);
-	return JS_TRUE;
-}
 
 /*** The ELinks interface */
 

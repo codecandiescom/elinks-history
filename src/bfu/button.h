@@ -1,8 +1,9 @@
-/* $Id: button.h,v 1.33 2004/11/21 14:07:00 zas Exp $ */
+/* $Id: button.h,v 1.34 2004/11/21 14:14:27 zas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
 
+#include "bfu/common.h"
 #include "util/align.h"
 
 struct dialog;
@@ -23,7 +24,7 @@ struct widget_info_button {
 #define B_ENTER		1
 #define B_ESC		2
 
-void add_dlg_button_do(struct dialog *dlg, int flags, void *handler, unsigned char *text, void *data, t_done_handler *done, void *done_data);
+void add_dlg_button_do(struct dialog *dlg, int flags, t_widget_handler *handler, unsigned char *text, void *data, t_done_handler *done, void *done_data);
 
 #define add_dlg_ok_button(dlg, flags, text, done, data)	\
 	add_dlg_button_do(dlg, flags, ok_dialog, text, NULL, done, data)

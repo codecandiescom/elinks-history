@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-20 00:14+0100\n"
-"PO-Revision-Date: 2004-11-26 18:30+0100\n"
+"POT-Creation-Date: 2004-12-21 00:37+0100\n"
+"PO-Revision-Date: 2004-12-21 18:30+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -319,18 +319,16 @@ msgid "File format"
 msgstr "Format pliku"
 
 #: src/bookmarks/bookmarks.c:54
-#, fuzzy
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default native ELinks format\n"
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 msgstr ""
 "Format pliku zak³adek (dotyczy i odczytu, i zapisu):\n"
-"0 - domy¶lny format ELinksa (kompatybilny z Linksem 0.9x)\n"
+"0 - domy¶lny format ELinksa\n"
 "1 - XBEL uniwersalny format XML (BEZ OBS£UGI ZNAKÓW NARODOWYCH!)"
 
 #: src/bookmarks/bookmarks.c:60
-#, fuzzy
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default native ELinks format\n"
@@ -338,12 +336,12 @@ msgid ""
 "(DISABLED)"
 msgstr ""
 "Format pliku zak³adek (dotyczy i odczytu, i zapisu):\n"
-"0 - domy¶lny format ELinksa (kompatybilny z Linksem 0.9x)\n"
+"0 - domy¶lny format ELinksa\n"
 "1 - XBEL uniwersalny format XML (BEZ OBS£UGI ZNAKÓW NARODOWYCH!) (WY£¡CZONE)"
 
 #: src/bookmarks/bookmarks.c:66
 msgid "Periodic snapshotting"
-msgstr ""
+msgstr "Cykliczne zapisywanie"
 
 #: src/bookmarks/bookmarks.c:68
 msgid ""
@@ -354,6 +352,11 @@ msgid ""
 "\n"
 "This feature requires bookmark support."
 msgstr ""
+"Automatycznie zapisuj cyklicznie stan wszystkich kart.\n"
+"Stan kart z ka¿dego terminala bêdzie zapisywany co pewien czas w oddzielnym "
+"folderze, aby móc wznowiæ po³±czenia w wypadku padu Elinksa.\n"
+"\n"
+"Wymagana jest obs³uga zak³adek."
 
 #: src/bookmarks/dialogs.c:75 src/config/options.inc:943
 #: src/dialogs/document.c:81 src/globhist/dialogs.c:66
@@ -886,6 +889,9 @@ msgid ""
 "configuration directory (~/.elinks). It forces default configuration\n"
 "values to be used and disables saving of runtime state files."
 msgstr ""
+"Blokuje tworzenie i u¿ywanie plików w katalogu konfiguracji u¿ytkownika\n"
+"(~/.elinks). Wymusza u¿ycie domy¶lnej konfiguracji i blokuje zapis plików\n"
+"stanu przegl±darki."
 
 #: src/config/cmdline.c:709
 msgid "Do not number links in dump output"
@@ -1012,7 +1018,6 @@ msgid "Verbose level"
 msgstr "Poziom gadatliwo¶ci"
 
 #: src/config/cmdline.c:767
-#, fuzzy
 msgid ""
 "The verbose level controls what messages are shown at\n"
 "start up and while running:\n"
@@ -1024,7 +1029,7 @@ msgstr ""
 "w momencie uruchamiania i podczas dzia³ania:\n"
 "\t0 pokazuj tylko powa¿ne b³êdy\n"
 "\t1 pokazuj powa¿ne b³êdy i ostrze¿enia\n"
-"\t2 pokazuj wszysstkie informacje\n"
+"\t2 pokazuj wszystkie informacje"
 
 #: src/config/cmdline.c:773
 msgid "Print version information and exit"
@@ -2219,7 +2224,6 @@ msgid "Display style for image tags"
 msgstr "Sposób wy¶wietlania znaczników obrazka"
 
 #: src/config/options.inc:206
-#, fuzzy
 msgid ""
 "Display style for image tags when displayed:\n"
 "0     means always display IMG\n"
@@ -2228,12 +2232,12 @@ msgid ""
 "3     means display alt/title attribute if possible, filename if not"
 msgstr ""
 "Sposób wy¶wietlania znaczników obrazka:\n"
-"0     zawsze wy¶wietlaj IMG\n"
-"1     zawsze wy¶wietlaj nazwê pliku\n"
-"2     je¶li mo¿liwe, wy¶wietlaj atrybuty alt/title, w przeciwnym wypadku "
+"0   - zawsze wy¶wietlaj IMG\n"
+"1   - zawsze wy¶wietlaj nazwê pliku\n"
+"2   - je¶li mo¿liwe, wy¶wietlaj atrybuty alt/title, w przeciwnym wypadku "
 "IMG\n"
-"3     je¶li mo¿liwe, wy¶wietlaj atrybuty alt/title, w przeciwnym wypadku "
-"nazwê pliku\n"
+"3   - je¶li mo¿liwe, wy¶wietlaj atrybuty alt/title, w przeciwnym wypadku "
+"nazwê pliku"
 
 #: src/config/options.inc:212
 msgid "Maximum length for image filename"
@@ -2481,7 +2485,7 @@ msgstr ""
 
 #: src/config/options.inc:332
 msgid "Warn about maliciously crafted URIs"
-msgstr ""
+msgstr "Ostrzegaj o nieprawid³owych URI"
 
 #: src/config/options.inc:334
 msgid ""
@@ -2489,6 +2493,9 @@ msgid ""
 "checked and if a maliciously crafted URI is detected a\n"
 "warning dialog will ask before following the link."
 msgstr ""
+"Podczas pod±¿ania za odno¶nikiem sprawdzana jest czê¶æ ID u¿ytkownika.\n"
+"Je¶li jest ona nieprawid³owa pojawi siê okienko dialogowe z zapytaniem\n"
+"czy kontynuowaæ."
 
 #. TODO - this is somehow implemented by ff, but disabled
 #. * for now as it doesn't work.
@@ -5216,7 +5223,7 @@ msgid "JavaScript Emergency"
 msgstr "Wypadek JavaScriptu"
 
 #: src/ecmascript/spidermonkey.c:2074
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A script embedded in the current document was running for more than %d "
 "seconds in line.\n"
@@ -5224,9 +5231,10 @@ msgid ""
 "the whole ELinks.\n"
 "The script execution was interrupted."
 msgstr ""
-"Skrypt zawarty w bie¿±cym dokumencie wykonywa³ siê d³u¿ej ni¿ %d sekund. "
+"Skrypt zawarty w bie¿±cym dokumencie wykonywa³ siê d³u¿ej ni¿ %d sekund.\n"
 "Oznacza to prawdopodobnie, ¿e w skrypcie jest b³±d i mo¿e to spowodowaæ "
-"zastopowanie ca³ego ELinksa. Wykonywanie skryptu zosta³o przerwane."
+"zastopowanie ca³ego ELinksa.\n"
+"Wykonywanie skryptu zosta³o przerwane."
 
 #: src/formhist/dialogs.c:67
 msgid "Forms are never saved for this URL."
@@ -6153,9 +6161,8 @@ msgstr ""
 
 #. name:
 #: src/protocol/file/file.c:89
-#, fuzzy
 msgid "File"
-msgstr "~Plik"
+msgstr "Plik"
 
 #. name:
 #: src/protocol/finger/finger.c:22
@@ -6374,7 +6381,6 @@ msgid "Policy"
 msgstr "Polisa"
 
 #: src/protocol/http/http.c:119
-#, fuzzy
 msgid ""
 "Mode of sending HTTP referer:\n"
 "0 is send no referer\n"
@@ -6386,7 +6392,7 @@ msgstr ""
 "0 - nie wysy³aj Referer\n"
 "1 - wysy³aj bie¿±cy URL\n"
 "2 - wysy³aj z góry ustalony Referer\n"
-"3 - wysy³aj poprzedni URL (zgodne z RFC, ale niebezpieczne)\n"
+"3 - wysy³aj poprzedni URL (poprawne, ale niebezpieczne)"
 
 #: src/protocol/http/http.c:125
 msgid "Fake referer URL"
@@ -6409,7 +6415,6 @@ msgid "Use UI language as Accept-Language"
 msgstr "U¿yj jêzyka interfejsu u¿ytkownika jako Accept-Language"
 
 #: src/protocol/http/http.c:136
-#, fuzzy
 msgid ""
 "Request localised versions of documents from web-servers (using the\n"
 "Accept-Language header) using the language you have configured for\n"
@@ -6420,8 +6425,10 @@ msgid ""
 msgstr ""
 "¯±da narodowej wersji dokumentu od serwera (u¿ywaj±c\n"
 "Accept-Language) u¿ywaj±c jêzyka dla którego masz skonfigurowany\n"
-"interfejs u¿ytkownika. Wiedz, ¿e mo¿e siê to wi±zaæ z pewnym ryzykiem\n"
-"poniewa¿ mówisz serwerowi o swoich preferencjach jêzykowych."
+"interfejs u¿ytkownika (dotyczy to tak¿e w³a¶ciwo¶ci navigator.language\n"
+"ECMAScript, która jest dostêpna dla skryptów). Wiedz, ¿e mo¿e siê to\n"
+"wi±zaæ z pewnym ryzykiem poniewa¿ mówisz serwerowi o swoich preferencjach\n"
+"jêzykowych."
 
 #: src/protocol/http/http.c:143
 msgid "Activate HTTP TRACE debugging"
@@ -6739,9 +6746,8 @@ msgstr ""
 #
 #. name:
 #: src/protocol/user.c:85
-#, fuzzy
 msgid "User"
-msgstr "Nazwa u¿ytkownika"
+msgstr "U¿ytkownik"
 
 #: src/protocol/user.c:263
 msgid "No program"
@@ -7045,9 +7051,8 @@ msgid "This version of ELinks does not contain SSL/TLS support"
 msgstr "Ta wersja ELinksa nie zawiera wsparcia dla SSL/TSL"
 
 #: src/sched/error.c:92
-#, fuzzy
 msgid "JavaScript support is not enabled."
-msgstr "JavaScript nie jest na razie obs³ugiwana."
+msgstr "Obs³uga JavaScriptu nie jest w³±czona."
 
 #: src/sched/error.c:95
 msgid "Bad NNTP response"
@@ -7139,11 +7144,16 @@ msgid ""
 "\n"
 "Do you want to go to URL %s?"
 msgstr ""
+"URL, który zosta³ wybrany jest nieprawid³owy. Pod±¿aj±c za odno¶nikiem "
+"po³±czysz siê z serwerem \"%s\" jako u¿ytkownik \"%s\".\n"
+"\n"
+"Czy przej¶æ do URL-a %s?"
 
 #: src/sched/task.c:249
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to follow the redirect and post form data to URL %s?"
-msgstr "Czy chcesz i¶æ za przekierowaniem i wys³aæ dane formularza do %s?"
+msgstr ""
+"Czy chcesz i¶æ za przekierowaniem i wys³aæ dane formularza do URL-a %s?"
 
 #: src/sched/task.c:253
 #, c-format

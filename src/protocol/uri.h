@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.34 2003/07/25 19:23:51 pasky Exp $ */
+/* $Id: uri.h,v 1.35 2003/07/26 20:30:04 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -21,7 +21,7 @@
 
 struct uri {
 	/* The start of the uri (and thus start of the protocol string). */
-	unsigned char *string;
+	unsigned char *protocol_str;
 
 	/* The internal type of protocol. Can _never_ be PROTOCOL_UNKNOWN. */
 	int protocol; /* enum protocol */

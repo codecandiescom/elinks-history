@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.42 2003/07/25 16:23:51 jonas Exp $ */
+/* $Id: uri.c,v 1.43 2003/07/26 20:30:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	/* Nothing to do for an empty url. */
 	if_assert_failed return 0;
 	if (!*uristring) return 0;
-	uri->string = uristring;
+	uri->protocol_str = uristring;
 
 	/* Isolate prefix */
 
@@ -183,7 +183,7 @@ struct string *
 add_uri_to_string(struct string *string, struct uri *uri,
 		  enum uri_component components)
 {
- 	assert(uri->string && uri->protocollen);
+ 	assert(uri->protocol_str && uri->protocollen);
 	if_assert_failed { return NULL; }
 
  	if (get_protocol_free_syntax(uri->protocol)) {
@@ -197,7 +197,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 #define wants(x) (components & (x))
 
  	if (wants(URI_PROTOCOL)) {
-		add_bytes_to_string(string, uri->string, uri->protocollen);
+		add_bytes_to_string(string, uri->protocol_str, uri->protocollen);
 		add_char_to_string(string, ':');
  		if (get_protocol_need_slashes(uri->protocol))
 			add_to_string(string, "//");

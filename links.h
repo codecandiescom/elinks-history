@@ -1728,7 +1728,7 @@ void free_conv_table();
 /* view.c */
 
 extern int textarea_editor;
-void textarea_edit(int, struct terminal *, struct form_control *, struct form_state *);
+void textarea_edit(int, struct terminal *, struct form_control *, struct form_state *, struct f_data_c *, struct link *);
 
 int can_open_in_new(struct terminal *);
 void open_in_new_window(struct terminal *, void (*)(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *ses), struct session *);

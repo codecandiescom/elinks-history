@@ -1455,54 +1455,103 @@ int get_current_state(struct session *ses)
 	return -1;
 }
 
+
+/*
+ * We use some evil hacking in order to make external textarea editor working.
+ * We need to have some way how to be notified that the editor finished and we
+ * should reload content of the textarea.  So we use global variable
+ * textarea_editor as a flag whether we have one running, and if we have, we
+ * just call textarea_edit(1, ...).  Then we recover our state from static
+ * variables, reload content of textarea back from file and clean up.
+ *
+ * Unfortunately, we can't support calling of editor from non-master links
+ * session, as it would be extremely ugly to hack (you would have to transfer
+ * the content of it back to master somehow, add special flags for not deleting
+ * of 'delete' etc) and I'm not going to do that now. Inter-links communication
+ * *NEEDS* rewrite, as it looks just like quick messy hack now. --pasky
+ */
+
 int textarea_editor = 0;
 
-void textarea_edit(int op, struct terminal *term_, struct form_control *form_, struct form_state *fs_)
+void textarea_edit(int op, struct terminal *term_, struct form_control *form_,
+		   struct form_state *fs_, struct f_data_c *f_, struct link *l_)
 {
 	static int form_maxlength;
 	static struct form_state *fs;
 	static struct terminal *term;
+	static struct f_data_c *f;
+	static struct link *l;
 	static char *fn = NULL;
-	char *ed, *ex;
-	FILE *taf;
 	int flen;
 
 	if (form_) form_maxlength = form_->maxlength;
 	if (fs_) fs = fs_;
+	if (f_) f = f_;
+	if (l_) l = l_;
 	if (term_) term = term_;
 	
-	if (! fn) fn = tempnam(NULL, "linksarea");
+	if (!fn) fn = tempnam(NULL, "linksarea");
+	if (!fn) return;
 
-	if (! op) {
-		taf = fopen(fn, "w");
+	if (op == 0 && !textarea_editor && term->master) {
+		FILE *taf = fopen(fn, "w");
+		char *ed = getenv("EDITOR");
+		char *ex;
+
+		if (!taf) {
+			fn = NULL; fs = NULL;
+			return;
+		}
+
 		fwrite(fs->value, strlen(fs->value), 1, taf);
 		fclose(taf);
-					
-		ed = getenv("EDITOR");
-		if (! ed) ed = "vi";
+
+		if (!ed) ed = "vi";
+		
 		ex = mem_alloc(strlen(ed) + strlen(fn) + 2);
+		if (!ex) {
+			unlink(fn);
+			fn = NULL; fs = NULL;
+			return;
+		}
+			
 		sprintf(ex, "%s %s", ed, fn);
 		exec_on_terminal(term, ex, "", 1);
+		
 		mem_free(ex);
 
 		textarea_editor = 1;
+
+	} else if (op == 1 && fs) {
+		FILE *taf = fopen(fn, "r+");
 		
-	} else {
-	  
-		taf = fopen(fn, "r+");
 		if (taf) {
-			fseek(taf, 0, SEEK_END); flen = ftell(taf); fseek(taf, 0, SEEK_SET);
+			fseek(taf, 0, SEEK_END);
+			flen = ftell(taf);
+			fseek(taf, 0, SEEK_SET);
+			
 			if (flen <= form_maxlength) {
+				int bread;
+				
 				mem_free(fs->value);
 				fs->value = mem_alloc(flen + 1);
-				fread(fs->value, flen, 1, taf); fs->value[flen] = 0;
-				fs->state = flen;
+				
+				bread = fread(fs->value, 1, flen, taf);
+				fs->value[bread] = 0;
+				fs->state = bread;
+
+				if (f && l)
+					draw_form_entry(term, f, l);
 			}
+			
 			fclose(taf);
+			unlink(fn);
 		}
-		textarea_editor = 0; fn = NULL;
+
+		textarea_editor = 0; fn = NULL; fs = NULL;
 	}
 }
+
 
 int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct event *ev, int rep)
 {
@@ -1598,7 +1647,7 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 				break;
 			case ACT_EDIT:
 				if (form->type == FC_TEXTAREA && !form->ro)
-				  	textarea_edit(0, ses->term, form, fs);
+				  	textarea_edit(0, ses->term, form, fs, f, l);
 				break;
 			case ACT_COPY_CLIPBOARD:
 				set_clipboard_text(fs->value);

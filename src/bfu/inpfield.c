@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.122 2004/02/08 20:29:16 jonas Exp $ */
+/* $Id: inpfield.c,v 1.123 2004/02/08 20:36:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -500,11 +500,13 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	enum edit_action action;
 	struct widget_data *widget_data = dlg_data->widgets_data;
 
-	if (ev->ev != EV_KBD) return EVENT_NOT_PROCESSED;
+	/* Noodle time */
+	switch (ev->ev) {
+	case EV_KBD:
+		action = kbd_action(KM_EDIT, ev, NULL);
 
-	action = kbd_action(KM_EDIT, ev, NULL);
-	/* Handle some basic actions such as quiting for empty buffers */
-	switch (action) {
+		/* Handle some basic actions such as quiting for empty buffers */
+		switch (action) {
 		case ACT_EDIT_ENTER:
 			if (widget_has_history(widget_data))
 				add_to_input_history(widget_data->widget->info.field.history,
@@ -519,6 +521,12 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 
 		default:
 			break;
+		}
+
+		break;
+
+	default:
+		return EVENT_NOT_PROCESSED;
 	}
 
 	/* First let the input field do its business */

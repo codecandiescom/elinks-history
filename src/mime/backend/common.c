@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.19 2004/01/01 15:47:25 jonas Exp $ */
+/* $Id: common.c,v 1.20 2004/01/01 16:56:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 
 #include "mime/backend/common.h"
 #include "mime/mime.h"
+#include "modules/module.h"
 #include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -39,13 +40,14 @@ static struct mime_backend *mime_backends[] = {
 unsigned char *
 get_content_type_backends(unsigned char *extension)
 {
-	struct mime_backend **backend;
+	struct mime_backend *backend;
+	int i;
 
-	for (backend = mime_backends; *backend; backend++)
-		if ((*backend)->get_content_type) {
+	foreach_module (backend, mime_backends, i)
+		if (backend->get_content_type) {
 			unsigned char *content_type;
 
-			content_type = (*backend)->get_content_type(extension);
+			content_type = backend->get_content_type(extension);
 			if (content_type) return content_type;
 		}
 
@@ -55,13 +57,14 @@ get_content_type_backends(unsigned char *extension)
 struct mime_handler *
 get_mime_handler_backends(unsigned char *ctype, int have_x)
 {
-	struct mime_backend **backend;
+	struct mime_backend *backend;
+	int i;
 
-	for (backend = mime_backends; *backend; backend++)
-		if ((*backend)->get_mime_handler) {
+	foreach_module (backend, mime_backends, i)
+		if (backend->get_mime_handler) {
 			struct mime_handler *handler;
 
-			handler = (*backend)->get_mime_handler(ctype, have_x);
+			handler = backend->get_mime_handler(ctype, have_x);
 			if (handler) return handler;
 		}
 

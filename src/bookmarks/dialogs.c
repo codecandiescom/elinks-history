@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.178 2004/07/21 23:27:38 pasky Exp $ */
+/* $Id: dialogs.c,v 1.179 2004/07/22 02:06:02 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -75,6 +75,7 @@ get_bookmark_info(struct listbox_item *item, struct terminal *term)
 	struct bookmark *bookmark = item->udata;
 	struct string info;
 
+	if (item->type == BI_FOLDER) return NULL;
 	if (!init_string(&info)) return NULL;
 
 	add_format_to_string(&info, "%s: %s", _("Title", term), bookmark->title);

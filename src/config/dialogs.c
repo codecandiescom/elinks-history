@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.193 2004/07/20 07:58:44 miciah Exp $ */
+/* $Id: dialogs.c,v 1.194 2004/07/22 02:06:02 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -675,6 +675,7 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term)
 	struct string info;
 
 	if (item->depth < 2) return NULL;
+	if (item->type == BI_FOLDER) return NULL;
 
 	if (!init_string(&info))
 		return NULL;

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.108 2004/07/14 13:51:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.109 2004/07/22 02:06:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,6 +134,7 @@ get_http_auth_basic_info(struct listbox_item *item, struct terminal *term)
 	struct http_auth_basic *http_auth_basic = item->udata;
 	struct string info;
 
+	if (item->type == BI_FOLDER) return NULL;
 	if (!init_string(&info)) return NULL;
 
 	add_format_to_string(&info, "%s: ", _("URL", term));

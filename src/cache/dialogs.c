@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.76 2004/07/14 13:51:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.77 2004/07/22 02:06:02 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -64,6 +64,7 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term)
 	struct cache_entry *cached = item->udata;
 	struct string msg;
 
+	if (item->type == BI_FOLDER) return NULL;
 	if (!init_string(&msg)) return NULL;
 
 	add_to_string(&msg, _("URL", term));

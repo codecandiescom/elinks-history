@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.122 2004/07/14 13:51:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.123 2004/07/22 02:06:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,6 +66,7 @@ get_globhist_item_info(struct listbox_item *box_item, struct terminal *term)
 	struct global_history_item *item = box_item->udata;
 	struct string info;
 
+	if (box_item->type == BI_FOLDER) return NULL;
 	if (!init_string(&info)) return NULL;
 
 	add_format_to_string(&info, "%s: %s", _("Title", term), item->title);

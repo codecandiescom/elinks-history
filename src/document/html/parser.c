@@ -1,10 +1,11 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.57 2002/12/14 11:58:45 pasky Exp $ */
+/* $Id: parser.c,v 1.58 2002/12/14 17:11:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,13 +61,13 @@ parse_element(unsigned char *e, unsigned char *eof, unsigned char **name,
 	      int *namelen, unsigned char **attr, unsigned char **end)
 {
 	unsigned char tmp;
-	
+
 	if (e >= eof || *(e++) != '<') return -1;
 	if (name) *name = e;
-	
+
 	tmp = *eof;
 	*eof = '\0';
-	
+
 	if (*e == '/') e++;
 	if (e >= eof || !isA(*e)) goto end_1;
 
@@ -173,7 +174,7 @@ aa:
 			e++;
 		}
 	} else {
-		char uu = *e;
+		unsigned char uu = *e;
 
 a:
 		e++;
@@ -236,7 +237,7 @@ get_url_val(unsigned char *e, unsigned char *name)
 int
 has_attr(unsigned char *e, unsigned char *name)
 {
-	char *a = get_attr_val(e, name);
+	unsigned char *a = get_attr_val(e, name);
 
 	if (!a) return 0;
 	mem_free(a);
@@ -246,7 +247,7 @@ has_attr(unsigned char *e, unsigned char *name)
 
 struct {
 	int n;
-	char *s;
+	unsigned char *s;
 } roman_tbl[] = {
 	{1000,	"m"},
 	{999,	"im"},
@@ -271,7 +272,7 @@ struct {
 };
 
 void
-roman(char *p, unsigned n)
+roman(unsigned char *p, unsigned n)
 {
 	int i = 0;
 
@@ -300,7 +301,7 @@ roman(char *p, unsigned n)
 int
 get_color(unsigned char *a, unsigned char *c, struct rgb *rgb)
 {
-	char *at;
+	unsigned char *at;
 	int r = -1;
 
 	if (d_opt->col >= 1 && d_opt->use_document_colours) {
@@ -362,7 +363,7 @@ kill_html_stack_item(struct html_element *e)
 }
 
 static inline void
-kill_elem(char *e)
+kill_elem(unsigned char *e)
 {
 	if (html_top.namelen == strlen(e)
 	    && !strncasecmp(html_top.name, e, html_top.namelen))
@@ -540,13 +541,15 @@ killll:
 int
 get_num(unsigned char *a, unsigned char *n)
 {
-	char *al = get_attr_val(a, n);
+	unsigned char *al = get_attr_val(a, n);
 
 	if (al) {
-		char *end;
-		int s = strtoul(al, &end, 10);
+		unsigned char *end;
+		int s;
 
-		if (!*al || *end || s < 0) s = -1;
+		errno = 0;
+		s = strtoul(al, (char **)&end, 10);
+		if (errno || !*al || *end || s < 0) s = -1;
 		mem_free(al);
 
 		return s;
@@ -577,7 +580,9 @@ parse_width(unsigned char *w, int trunc)
 
 	width = par_format.width - par_format.leftmargin - par_format.rightmargin;
 
+	errno = 0;
 	s = strtoul((char *)w, (char **)&end, 10);
+	if (errno) return -1;
 
 	if (p) {
 		if (trunc)
@@ -689,7 +694,7 @@ html_superscript(unsigned char *a)
 void
 html_focusable(unsigned char *a)
 {
-	char *accesskey = a ? get_attr_val(a, "accesskey") : NULL;
+	unsigned char *accesskey = a ? get_attr_val(a, "accesskey") : NULL;
 	int tabindex = a ? get_num(a, "tabindex") : 0;
 
 	format.accesskey = 0;
@@ -713,11 +718,11 @@ html_focusable(unsigned char *a)
 void
 html_a(unsigned char *a)
 {
-	char *href, *name;
+	unsigned char *href, *name;
 
 	href = get_url_val(a, "href");
 	if (href) {
-		char *target;
+		unsigned char *target;
 
 		if (format.link) mem_free(format.link);
 		format.link = join_urls(format.href_base, trim_chars(href, ' ', 0));
@@ -758,18 +763,19 @@ html_a(unsigned char *a)
 void
 html_font(unsigned char *a)
 {
-	char *al = get_attr_val(a, "size");
+	unsigned char *al = get_attr_val(a, "size");
 
 	if (al) {
 		int p = 0;
 		unsigned s;
-		char *nn = al;
-		char *end;
+		unsigned char *nn = al;
+		unsigned char *end;
 
 		if (*al == '+') p = 1, nn++;
 		if (*al == '-') p = -1, nn++;
-		s = strtoul(nn, &end, 10);
-		if (*nn && !*end) {
+		errno = 0;
+		s = strtoul(nn, (char **)&end, 10);
+		if (!errno && *nn && !*end) {
 			if (s > 7) s = 7;
 			if (!p) format.fontsize = s;
 			else format.fontsize += p * s;
@@ -1000,7 +1006,7 @@ html_blockquote(unsigned char *a)
 }
 
 void
-html_h(int h, char *a)
+html_h(int h, unsigned char *a)
 {
 	par_format.align = AL_LEFT;
 	html_linebrk(a);
@@ -1129,7 +1135,7 @@ html_td(unsigned char *a)
 void
 html_base(unsigned char *a)
 {
-	char *al = get_url_val(a, "href");
+	unsigned char *al = get_url_val(a, "href");
 
 	if (al) {
 		if (format.href_base) mem_free(format.href_base);
@@ -1147,7 +1153,7 @@ html_base(unsigned char *a)
 void
 html_ul(unsigned char *a)
 {
-	char *al;
+	unsigned char *al;
 
 	/*debug_stack();*/
 	par_format.list_level++;
@@ -1170,7 +1176,7 @@ html_ul(unsigned char *a)
 void
 html_ol(unsigned char *a)
 {
-	char *al;
+	unsigned char *al;
 	int st;
 
 	par_format.list_level++;
@@ -1203,7 +1209,7 @@ html_li(unsigned char *a)
 {
 	/*kill_until(0, "", "UL", "OL", NULL);*/
 	if (!par_format.list_number) {
-		char x[7] = "*&nbsp;";
+		unsigned char x[7] = "*&nbsp;";
 
 		if ((par_format.flags & P_LISTMASK) == P_O) x[0] = 'o';
 		if ((par_format.flags & P_LISTMASK) == P_PLUS) x[0] = '+';
@@ -1211,8 +1217,8 @@ html_li(unsigned char *a)
 		par_format.leftmargin += 2;
 		par_format.align = AL_LEFT;
 	} else {
-		char c = 0;
-		char n[32];
+		unsigned char c = 0;
+		unsigned char n[32];
 		int t = par_format.flags & P_LISTMASK;
 		int s = get_num(a, "value");
 
@@ -1389,7 +1395,7 @@ end_parse:
 void
 html_button(unsigned char *a)
 {
-	char *al;
+	unsigned char *al;
 	struct form_control *fc;
 
 	find_form_for_input(a);
@@ -1572,7 +1578,7 @@ html_select(unsigned char *a)
 	/* Note I haven't seen this code in use, do_html_select() seems to take
 	 * care of bussiness. --FF */
 
-	char *al = get_attr_val(a, "name");
+	unsigned char *al = get_attr_val(a, "name");
 
 	if (!al) return;
 	html_focusable(a);
@@ -1665,7 +1671,7 @@ clr_spaces(unsigned char *name)
 	for (second = nm = name; *nm; nm++) {
 		if (nm[0] == ' ' && (second == name || nm[1] == ' ' || !nm[1]))
 			continue;
-		*second++ = *nm;						
+		*second++ = *nm;
 	}
 	/* FIXME: Shouldn't be *second = 0; enough? --pasky */
 	memset(second, 0, nm - second);
@@ -2413,7 +2419,7 @@ html_link(unsigned char *a)
 }
 
 struct element_info {
-	char *name;
+	unsigned char *name;
 	void (*func)(unsigned char *);
 	int linebreak;
 	int nopair;

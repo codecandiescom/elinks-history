@@ -1,3 +1,18 @@
+Tue Feb 25 14:17:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/css/: tree.c, tree.h:
+
+	Still under work. The tree allocation used by the parsers in
+	ruleset.c.  
+
+Tue Feb 25 14:15:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/css/: README, TESTING, TODO, atrule.c,
+	atrule.h, parser.c, parser.h, ruleset.c, ruleset.h, scanner.c,
+	scanner.h, state.h, test.c, test.h, util.c, util.h:
+
+	Updates for the css parser.  
+
 Mon Feb 24 12:12:37 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/sched/download.c:

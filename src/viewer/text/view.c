@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.292 2003/12/10 02:49:04 jonas Exp $ */
+/* $Id: view.c,v 1.293 2003/12/10 03:45:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1215,7 +1215,7 @@ quit:
 					struct window *tab = get_current_tab(ses->tab->term);
 
 					set_window_ptr(tab, ev->x, ev->y);
-					tab_menu(ses->tab->term, tab, ses);
+					tab_menu(ses->tab->term, tab, tab->data);
 				}
 			}
 

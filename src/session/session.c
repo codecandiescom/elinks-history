@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.475 2004/06/11 01:21:13 jonas Exp $ */
+/* $Id: session.c,v 1.476 2004/06/11 02:00:34 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -485,7 +485,7 @@ request_additional_file(struct session *ses, unsigned char *name, struct uri *ur
 	}
 
 	foreach (ftl, ses->more_files) {
-		if (compare_uri(ftl->uri, uri, 0)) {
+		if (compare_uri(ftl->uri, uri, URI_BASE)) {
 			if (ftl->pri > pri) {
 				ftl->pri = pri;
 				change_connection(&ftl->stat, &ftl->stat, pri, 0);

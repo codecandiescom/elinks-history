@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.42 2003/07/28 22:17:32 jonas Exp $ */
+/* $Id: screen.c,v 1.43 2003/07/30 20:58:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,8 +251,8 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 	} while (0)
 #endif
 
-/* Updates the terminal screen. */
-/* This is done by checking what needs to be updated using the last screen. */
+/* Updating of the terminal screen is done by checking what needs to be updated
+ * using the last screen. */
 void
 redraw_screen(struct terminal *term)
 {
@@ -338,7 +338,6 @@ redraw_screen(struct terminal *term)
 	screen->dirty = 0;
 }
 
-/* Erase entire screen and move curosr to upper left corner. */
 void
 erase_screen(struct terminal *term)
 {
@@ -372,8 +371,7 @@ init_screen(void)
 	return screen;
 }
 
-/* Update the size of the previous and the current screen image. The two images
- * are allocated in one chunk. */
+/* The two images are allocated in one chunk. */
 /* TODO: It seems allocation failure here is fatal. We should do something! */
 void
 resize_screen(struct terminal *term, int x, int y)

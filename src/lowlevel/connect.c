@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.43 2003/07/24 11:06:43 miciah Exp $ */
+/* $Id: connect.c,v 1.44 2003/07/25 21:18:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,6 +452,7 @@ write_to_socket(struct connection *c, int s, unsigned char *data,
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */
 #define RD_MEM (sizeof(struct read_buffer) + 4 * RD_ALLOC_GR + RD_ALLOC_GR)
+#define RD_SIZE(len) ((RD_MEM + (len)) & ~(RD_ALLOC_GR - 1))
 
 static void
 read_select(struct connection *c)
@@ -468,7 +469,7 @@ read_select(struct connection *c)
 	set_handlers(rb->sock, NULL, NULL, NULL, NULL);
 
 	if (!rb->freespace) {
-		int size = (RD_MEM + rb->len) & ~(RD_ALLOC_GR - 1);
+		int size = RD_SIZE(rb->len);
 
 		rb = mem_realloc(rb, size);
 		if (!rb) {
@@ -508,21 +509,21 @@ struct read_buffer *
 alloc_read_buffer(struct connection *c)
 {
 	struct read_buffer *rb;
-	int size = RD_MEM & ~(RD_ALLOC_GR - 1);
 
-	rb = mem_calloc(1, size);
+	rb = mem_calloc(1, RD_SIZE(0));
 	if (!rb) {
 		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return NULL;
 	}
 
-	rb->freespace = size - sizeof(struct read_buffer);
+	rb->freespace = RD_SIZE(0) - sizeof(struct read_buffer);
 
 	return rb;
 }
 
 #undef RD_ALLOC_GR
 #undef RD_MEM
+#undef RD_SIZE
 
 void
 read_from_socket(struct connection *c, int s, struct read_buffer *buf,

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.7 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: cache.c,v 1.8 2002/05/12 16:18:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,10 +21,13 @@ long cache_size;
 
 int cache_count = 0;
 
-long cache_info(int type)
+
+long
+cache_info(int type)
 {
 	int i = 0;
 	struct cache_entry *ce;
+
 	switch (type) {
 		case CI_BYTES:
 			return cache_size;
@@ -45,11 +48,17 @@ long cache_info(int type)
 	return 0;
 }
 
-unsigned char *extract_proxy(unsigned char *url)
+unsigned char *
+extract_proxy(unsigned char *url)
 {
 	char *a;
-	if (strlen(url) < 8 || casecmp(url, "proxy://", 8)) return url;
-	if (!(a = strchr(url + 8, '/'))) return url;
+
+	if (strlen(url) < 8 || casecmp(url, "proxy://", 8))
+		return url;
+
+	a = strchr(url + 8, '/');
+	if (!a) return url;
+
 	return a + 1;
 }
 
@@ -76,27 +85,37 @@ find_in_cache(unsigned char *url, struct cache_entry **f)
 	return 0;
 }
 
-int get_cache_entry(unsigned char *url, struct cache_entry **f)
+int
+get_cache_entry(unsigned char *url, struct cache_entry **f)
 {
 	struct cache_entry *e;
+
 	if (find_in_cache(url, f)) return 0;
 	shrink_memory(0);
 	url = extract_proxy(url);
-	if (!(e = mem_alloc(sizeof(struct cache_entry)))) return -1;
+
+	e = mem_alloc(sizeof(struct cache_entry));
+	if (!e) return -1;
 	memset(e, 0, sizeof(struct cache_entry));
-	if (!(e->url = mem_alloc(strlen(url)+1))) {
+
+	e->url = mem_alloc(strlen(url) + 1);
+	if (!e->url) {
 		mem_free(e);
 		return -1;
 	}
+
 	strcpy(e->url, url);
 	e->length = 0;
 	e->incomplete = 1;
 	e->data_size = 0;
+
 	init_list(e->frag);
+
 	e->count = cache_count++;
 	e->refcount = 0;
 	add_to_list(cache, e);
 	*f = e;
+
 	return 0;
 }
 
@@ -116,38 +135,49 @@ int get_cache_data(struct cache_entry *e, unsigned char **d, int *l)
 
 #define C_ALIGN(x) (((x) | 0x3fff) + 1)
 
-int add_fragment(struct cache_entry *e, int offset, unsigned char *data, int length)
+int
+add_fragment(struct cache_entry *e, int offset,
+	     unsigned char *data, int length)
 {
 	struct fragment *f;
 	struct fragment *nf;
 	int a = 0;
 	int trunc = 0;
+
 	if (!length) return 0;
 	if (e->length < offset + length) e->length = offset + length;
+
 	e->count = cache_count++;
 	foreach(f, e->frag) {
 		if (f->offset > offset) break;
-		if (f->offset <= offset && f->offset+f->length >= offset) {
-			if (offset+length > f->offset+f->length) {
-				if (memcmp(f->data+offset-f->offset, data, f->offset+f->length-offset)) trunc = 1;
+		else if (f->offset + f->length >= offset) {
+			if (offset + length > f->offset + f->length) {
+				if (memcmp(f->data + offset - f->offset, data,
+					   f->offset + f->length - offset))
+					trunc = 1;
+
 				a = 1; /* !!! FIXME */
-				if (offset-f->offset+length <= f->real_length) {
-					sf((offset+length) - (f->offset+f->length));
-					f->length = offset-f->offset+length;
-				}
-				else {
-					f->length = offset-f->offset;
+				if (offset - f->offset + length <= f->real_length) {
+					sf((offset + length) - (f->offset + f->length));
+					f->length = offset - f->offset + length;
+				} else {
+					f->length = offset - f->offset;
 					f = f->next;
 					break;
 				}
 			} else {
-				if (memcmp(f->data+offset-f->offset, data, length)) trunc = 1;
+				if (memcmp(f->data + offset - f->offset, data, length))
+					trunc = 1;
 			}
-			memcpy(f->data+offset-f->offset, data, length);
+
+			memcpy(f->data + offset - f->offset, data, length);
 			goto ch_o;
 		}
 	}
-	if (!(nf = mem_alloc(sizeof(struct fragment)+C_ALIGN(length)))) return -1;
+
+	nf = mem_alloc(sizeof(struct fragment) + C_ALIGN(length));
+	if (!nf) return -1;
+
 	a = 1;
 	sf(length);
 	nf->offset = offset;
@@ -156,21 +186,38 @@ int add_fragment(struct cache_entry *e, int offset, unsigned char *data, int len
 	memcpy(nf->data, data, length);
 	add_at_pos(f->prev, nf);
 	f = nf;
-	ch_o:
-	while ((void *)f->next != &e->frag && f->offset+f->length > f->next->offset) {
-		if (f->offset+f->length < f->next->offset+f->next->length) {
-			if (!(nf = mem_realloc(f, sizeof(struct fragment)+f->next->offset-f->offset+f->next->length))) goto ff;
+
+ch_o:
+	while ((void *)f->next != &e->frag
+		&& f->offset + f->length > f->next->offset) {
+		if (f->offset + f->length < f->next->offset + f->next->length) {
+			nf = mem_realloc(f, sizeof(struct fragment)
+					    + f->next->offset
+					    - f->offset
+					    + f->next->length);
+			if (!nf) goto ff;
 			nf->prev->next = nf;
 			nf->next->prev = nf;
 			f = nf;
-			if (memcmp(f->data+f->next->offset-f->offset, f->next->data, f->offset+f->length-f->next->offset)) trunc = 1;
-			memcpy(f->data+f->length, f->next->data+f->offset+f->length-f->next->offset, f->next->offset+f->next->length-f->offset-f->length);
-			sf(f->next->offset+f->next->length-f->offset-f->length);
-			f->length = f->real_length = f->next->offset+f->next->length-f->offset;
-			ff:;
+			if (memcmp(f->data + f->next->offset - f->offset,
+				   f->next->data,
+				   f->offset + f->length - f->next->offset))
+				trunc = 1;
+			memcpy(f->data + f->length,
+			       f->next->data + f->offset + f->length - f->next->offset,
+			       f->next->offset + f->next->length - f->offset - f->length);
+
+			sf(f->next->offset + f->next->length - f->offset - f->length);
+			f->length = f->real_length = f->next->offset + f->next->length - f->offset;
+
+ff:;
 		} else {
-			if (memcmp(f->data+f->next->offset-f->offset, f->next->data, f->next->length)) trunc = 1;
+			if (memcmp(f->data + f->next->offset - f->offset,
+				   f->next->data,
+				   f->next->length))
+				trunc = 1;
 		}
+
 		nf = f->next;
 		del_from_list(nf);
 		sf(-nf->length);
@@ -186,20 +233,30 @@ int add_fragment(struct cache_entry *e, int offset, unsigned char *data, int len
 	return a;
 }
 
-void defrag_entry(struct cache_entry *e)
+void
+defrag_entry(struct cache_entry *e)
 {
 	struct fragment *f, *g, *h, *n, *x;
 	int l;
+
 	if (list_empty(e->frag)) return;
 	f = e->frag.next;
 	if (f->offset) return;
-	for (g = f->next; g != (void *)&e->frag && g->offset <= g->prev->offset+g->prev->length; g = g->next) if (g->offset < g->prev->offset+g->prev->length) {
-		internal("fragments overlay");
-		return;
-	}
+	for (g = f->next;
+	     g != (void *)&e->frag && g->offset <= g->prev->offset + g->prev->length;
+	     g = g->next)
+		if (g->offset < g->prev->offset + g->prev->length) {
+			internal("fragments overlay");
+			return;
+		}
+
 	if (g == f->next) return;
-	for (l = 0, h = f; h != g; h = h->next) l += h->length;
-	if (!(n = mem_alloc(sizeof(struct fragment) + l))) return;
+
+	for (l = 0, h = f; h != g; h = h->next)
+		l += h->length;
+
+	n = mem_alloc(sizeof(struct fragment) + l);
+	if (!n) return;
 	n->offset = 0;
 	n->length = l;
 	n->real_length = l;
@@ -227,10 +284,11 @@ void defrag_entry(struct cache_entry *e)
 #endif
 }
 
-void truncate_entry(struct cache_entry *e, int off, int final)
+void
+truncate_entry(struct cache_entry *e, int off, int final)
 {
 	struct fragment *f, *g;
-	
+
 	if (e->length > off) {
 		e->length = off;
 		e->incomplete = 1;
@@ -238,7 +296,8 @@ void truncate_entry(struct cache_entry *e, int off, int final)
 
 	foreach(f, e->frag) {
 		if (f->offset >= off) {
-			del:
+
+del:
 			while ((void *)f != &e->frag) {
 				sf(-f->length);
 				g = f->next;
@@ -251,11 +310,15 @@ void truncate_entry(struct cache_entry *e, int off, int final)
 		if (f->offset + f->length > off) {
 			f->length = off - f->offset;
 			sf(-(f->offset + f->length - off));
-			if (final && (g = mem_realloc(f, sizeof(struct fragment) + f->length))) {
-				g->next->prev = g;
-				g->prev->next = g;
-				f = g;
-				f->real_length = f->length;
+			if (final) {
+				g = mem_realloc(f, sizeof(struct fragment)
+						   + f->length);
+				if (g) {
+					g->next->prev = g;
+					g->prev->next = g;
+					f = g;
+					f->real_length = f->length;
+				}
 			}
 			f = f->next;
 			goto del;
@@ -263,9 +326,11 @@ void truncate_entry(struct cache_entry *e, int off, int final)
 	}
 }
 
-void free_entry_to(struct cache_entry *e, int off)
+void
+free_entry_to(struct cache_entry *e, int off)
 {
 	struct fragment *f, *g;
+
 	foreach(f, e->frag) {
 		if (f->offset + f->length <= off) {
 			sf(-f->length);
@@ -275,88 +340,120 @@ void free_entry_to(struct cache_entry *e, int off)
 			mem_free(g);
 		} else if (f->offset < off) {
 			sf(f->offset - off);
-			memmove(f->data, f->data + off - f->offset, f->length -= off - f->offset);
+			f->length -= off - f->offset;
+			memmove(f->data, f->data + off - f->offset, f->length);
 			f->offset = off;
 		} else break;
 	}
 }
 
-void delete_entry_content(struct cache_entry *e)
+void
+delete_entry_content(struct cache_entry *e)
 {
 	e->count = cache_count++;
 	free_list(e->frag);
 	e->length = 0;
 	e->incomplete = 1;
-	if ((cache_size -= e->data_size) < 0) {
+
+	cache_size -= e->data_size;
+	if (cache_size < 0) {
 		internal("cache_size underflow: %ld", cache_size);
 		cache_size = 0;
 	}
 	e->data_size = 0;
+
 	if (e->last_modified) {
 		mem_free(e->last_modified);
 		e->last_modified = NULL;
 	}
 }
 
-void delete_cache_entry(struct cache_entry *e)
+void
+delete_cache_entry(struct cache_entry *e)
 {
 	if (e->refcount) internal("deleteing locked cache entry");
 #ifdef DEBUG
 	if (is_entry_used(e)) internal("deleting loading cache entry");
 #endif
+
 	delete_entry_content(e);
 	del_from_list(e);
 	mem_free(e->url);
+
 	if (e->head) mem_free(e->head);
 	if (e->last_modified) mem_free(e->last_modified);
 	if (e->redirect) mem_free(e->redirect);
 #ifdef HAVE_SSL
 	if (e->ssl_info) mem_free(e->ssl_info);
 #endif
+
 	mem_free(e);
 }
 
-void garbage_collection(int u)
+void
+garbage_collection(int u)
 {
 	struct cache_entry *e, *f;
 	long ncs = cache_size;
 	long ccs = 0;
 	int no = 0;
+
 	if (!u && cache_size <= memory_cache_size) return;
+
 	foreach(e, cache) {
-		if (e->refcount || is_entry_used(e)) if ((ncs -= e->data_size) < 0) {
-			internal("cache_size underflow: %ld", ncs);
-			ncs = 0;
+		if (e->refcount || is_entry_used(e)) {
+			ncs -= e->data_size;
+			if (ncs < 0) {
+				internal("cache_size underflow: %ld", ncs);
+				ncs = 0;
+			}
 		}
 		ccs += e->data_size;
 	}
-	if (ccs != cache_size) internal("cache size badly computed: %ld != %ld", cache_size, ccs), cache_size = ccs;
+
+	if (ccs != cache_size) {
+		internal("cache size badly computed: %ld != %ld", cache_size, ccs);
+	       	cache_size = ccs;
+	}
+
 	if (!u && ncs <= memory_cache_size) return;
+
 	for (e = cache.prev; (void *)e != &cache; e = e->prev) {
-		if (!u && ncs <= memory_cache_size * MEMORY_CACHE_GC_PERCENT) goto g;
+		if (!u && ncs <= memory_cache_size * MEMORY_CACHE_GC_PERCENT)
+			goto g;
 		if (e->refcount || is_entry_used(e)) {
 			no = 1;
 			e->tgc = 0;
 			continue;
 		}
 		e->tgc = 1;
-		if ((ncs -= e->data_size) < 0) {
+		ncs -= e->data_size;
+		if (ncs < 0) {
 			internal("cache_size underflow: %ld", ncs);
 			ncs = 0;
 		}
 	}
-	if (/*!no &&*/ ncs) internal("cache_size(%ld) is larger than size of all objects(%ld)", cache_size, cache_size - ncs);
-	g:
-	if ((void *)(e = e->next) == &cache) return;
-	if (!u) for (f = e; (void *)f != &cache; f = f->next) {
-		if (ncs + f->data_size <= memory_cache_size * MEMORY_CACHE_GC_PERCENT) {
-			ncs += f->data_size;
-			f->tgc = 0;
+	if (/*!no &&*/ ncs)
+		internal("cache_size(%ld) is larger than size of all objects(%ld)",
+			 cache_size, cache_size - ncs);
+
+g:
+	e = e->next;
+	if ((void *)e == &cache) return;
+
+	if (!u) {
+		for (f = e; (void *)f != &cache; f = f->next) {
+			if (ncs + f->data_size <= memory_cache_size * MEMORY_CACHE_GC_PERCENT) {
+				ncs += f->data_size;
+				f->tgc = 0;
+			}
 		}
 	}
+
 	for (f = e; (void *)f != &cache;) {
 		f = f->next;
-		if (f->prev->tgc) delete_cache_entry(f->prev);
+		if (f->prev->tgc)
+			delete_cache_entry(f->prev);
 	}
 #if 0
 	if (!no && cache_size > memory_cache_size * MEMORY_CACHE_GC_PERCENT) {

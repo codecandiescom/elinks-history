@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.120 2003/05/18 16:05:18 pasky Exp $ */
+/* $Id: http.c,v 1.121 2003/05/18 16:08:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -331,7 +331,6 @@ http_send_header(struct connection *conn)
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
 	unsigned char *post = NULL;
-	struct cache_entry *cache = NULL;
 	unsigned char *hdr;
 	unsigned char *host_data, *url_data;
 	int l = 0;
@@ -616,12 +615,11 @@ http_send_header(struct connection *conn)
 		}
 	}
 
-	cache = conn->cache;
-	if (cache) {
-		if (!cache->incomplete && cache->head && cache->last_modified
+	if (conn->cache) {
+		if (!conn->cache->incomplete && conn->cache->head && conn->cache->last_modified
 		    && conn->cache_mode <= NC_IF_MOD) {
 			add_to_str(&hdr, &l, "If-Modified-Since: ");
-			add_to_str(&hdr, &l, cache->last_modified);
+			add_to_str(&hdr, &l, conn->cache->last_modified);
 			add_to_str(&hdr, &l, "\r\n");
 		}
 	}
@@ -1058,7 +1056,6 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	int a, h;
 	struct http_version version;
 	unsigned char *d;
-	struct cache_entry *cache;
 	struct http_connection_info *info;
 	unsigned char *host = GET_REAL_URL(conn->url);
 
@@ -1139,28 +1136,28 @@ again:
 		http_end_request(conn, S_OK);
 		return;
 	}
-	if (get_cache_entry(conn->url, &cache)) {
+	if (get_cache_entry(conn->url, &conn->cache)) {
 		mem_free(head);
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
-	if (cache->head) mem_free(cache->head);
-	cache->head = head;
+	if (conn->cache->head) mem_free(conn->cache->head);
+	conn->cache->head = head;
 
 	if (!get_opt_bool("document.cache.ignore_cache_control")) {
-		if ((d = parse_http_header(cache->head, "Cache-Control", NULL))
-		    || (d = parse_http_header(cache->head, "Pragma", NULL)))
+		if ((d = parse_http_header(conn->cache->head, "Cache-Control", NULL))
+		    || (d = parse_http_header(conn->cache->head, "Pragma", NULL)))
 		{
 			if (strstr(d, "no-cache")) {
-				cache->cache_mode = NC_PR_NO_CACHE;
+				conn->cache->cache_mode = NC_PR_NO_CACHE;
 			}
 			mem_free(d);
 		}
 	}
 
 	if (conn->ssl) {
-		if (cache->ssl_info) mem_free(cache->ssl_info);
-		cache->ssl_info = get_ssl_cipher_str(conn->ssl);
+		if (conn->cache->ssl_info) mem_free(conn->cache->ssl_info);
+		conn->cache->ssl_info = get_ssl_cipher_str(conn->ssl);
 	}
 
 	if (h == 204) {
@@ -1168,16 +1165,16 @@ again:
 		return;
 	}
 	if (h == 301 || h == 302 || h == 303) {
-		d = parse_http_header(cache->head, "Location", NULL);
+		d = parse_http_header(conn->cache->head, "Location", NULL);
 		if (d) {
-			if (cache->redirect) mem_free(cache->redirect);
-			cache->redirect = d;
-			cache->redirect_get = h == 303;
+			if (conn->cache->redirect) mem_free(conn->cache->redirect);
+			conn->cache->redirect = d;
+			conn->cache->redirect_get = h == 303;
 		}
 	}
 
 	if (h == 401) {
-		d = parse_http_header(cache->head, "WWW-Authenticate", NULL);
+		d = parse_http_header(conn->cache->head, "WWW-Authenticate", NULL);
 		if (d) {
 			if (!strncasecmp(d, "Basic", 5)) {
 				unsigned char *realm = get_http_header_param(d, "realm");
@@ -1194,13 +1191,12 @@ again:
 	}
 
 	kill_buffer_data(rb, a);
-	conn->cache = cache;
 	info->close = 0;
 	info->length = -1;
 	info->recv_version = version;
 
-	if ((d = parse_http_header(cache->head, "Connection", NULL))
-	     || (d = parse_http_header(cache->head, "Proxy-Connection", NULL))) {
+	if ((d = parse_http_header(conn->cache->head, "Connection", NULL))
+	     || (d = parse_http_header(conn->cache->head, "Proxy-Connection", NULL))) {
 		if (!strcasecmp(d, "close")) info->close = 1;
 		mem_free(d);
 	} else if (version.major < 1
@@ -1209,7 +1205,7 @@ again:
 
 	cf = conn->from;
 	conn->from = 0;
-	d = parse_http_header(cache->head, "Content-Range", NULL);
+	d = parse_http_header(conn->cache->head, "Content-Range", NULL);
 	if (d) {
 		if (strlen(d) > 6) {
 			d[5] = 0;
@@ -1249,7 +1245,7 @@ again:
 	}
 	conn->prg.start = conn->from;
 
-	d = parse_http_header(cache->head, "Content-Length", NULL);
+	d = parse_http_header(conn->cache->head, "Content-Length", NULL);
 	if (d) {
 		unsigned char *ep;
 		int l;
@@ -1267,14 +1263,14 @@ again:
 		mem_free(d);
 	}
 
-	d = parse_http_header(cache->head, "Accept-Ranges", NULL);
+	d = parse_http_header(conn->cache->head, "Accept-Ranges", NULL);
 	if (d) {
 		if (!strcasecmp(d, "none") && !conn->unrestartable)
 			conn->unrestartable = 1;
 		mem_free(d);
 	} else if (!conn->unrestartable && !conn->from) conn->unrestartable = 1;
 
-	d = parse_http_header(cache->head, "Transfer-Encoding", NULL);
+	d = parse_http_header(conn->cache->head, "Transfer-Encoding", NULL);
 	if (d) {
 		if (!strcasecmp(d, "chunked")) {
 			info->length = LEN_CHUNKED;
@@ -1284,10 +1280,10 @@ again:
 	}
 	if (!info->close && info->length == -1) info->close = 1;
 
-	d = parse_http_header(cache->head, "Last-Modified", NULL);
+	d = parse_http_header(conn->cache->head, "Last-Modified", NULL);
 	if (d) {
-		if (cache->last_modified && strcasecmp(cache->last_modified, d)) {
-			delete_entry_content(cache);
+		if (conn->cache->last_modified && strcasecmp(conn->cache->last_modified, d)) {
+			delete_entry_content(conn->cache);
 			if (conn->from) {
 				conn->from = 0;
 				mem_free(d);
@@ -1295,18 +1291,18 @@ again:
 				return;
 			}
 		}
-		if (!cache->last_modified) cache->last_modified = d;
+		if (!conn->cache->last_modified) conn->cache->last_modified = d;
 		else mem_free(d);
 	}
-	if (!cache->last_modified) {
-	       	d = parse_http_header(cache->head, "Date", NULL);
-		if (d) cache->last_modified = d;
+	if (!conn->cache->last_modified) {
+	       	d = parse_http_header(conn->cache->head, "Date", NULL);
+		if (d) conn->cache->last_modified = d;
 	}
 
-	d = parse_http_header(cache->head, "ETag", NULL);
+	d = parse_http_header(conn->cache->head, "ETag", NULL);
 	if (d) {
-		if (cache->etag && strcasecmp(cache->etag, d)) {
-			delete_entry_content(cache);
+		if (conn->cache->etag && strcasecmp(conn->cache->etag, d)) {
+			delete_entry_content(conn->cache);
 			if (conn->from) {
 				conn->from = 0;
 				mem_free(d);
@@ -1314,15 +1310,15 @@ again:
 				return;
 			}
 		}
-		if (!cache->etag) cache->etag = d;
+		if (!conn->cache->etag) conn->cache->etag = d;
 		else mem_free(d);
 	}
 
-	d = parse_http_header(cache->head, "Content-Type", NULL);
+	d = parse_http_header(conn->cache->head, "Content-Type", NULL);
 	if (d) {
 		if (!strncmp(d, "text", 4)) {
 			mem_free(d);
-			d = parse_http_header(cache->head, "Content-Encoding", NULL);
+			d = parse_http_header(conn->cache->head, "Content-Encoding", NULL);
 			if (d) {
 #ifdef HAVE_ZLIB_H
 				if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip"))
@@ -1340,8 +1336,8 @@ again:
 	}
 
 	if (conn->content_encoding != ENCODING_NONE) {
-		if (cache->encoding_info) mem_free(cache->encoding_info);
-		cache->encoding_info = stracpy(encoding_names[conn->content_encoding]);
+		if (conn->cache->encoding_info) mem_free(conn->cache->encoding_info);
+		conn->cache->encoding_info = stracpy(encoding_names[conn->content_encoding]);
 	}
 
 	if (info->length == -1 ||

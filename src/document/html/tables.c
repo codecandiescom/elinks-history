@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.274 2004/06/29 03:01:10 jonas Exp $ */
+/* $Id: tables.c,v 1.275 2004/06/29 03:07:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1011,10 +1011,8 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct part *part = f;
 	struct table *table;
 	struct node *node, *new_node;
-	unsigned char *al;
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
-	int align;
 	int x;
 	int cpd_pass, cpd_width, cpd_last;
 	int margins;
@@ -1024,17 +1022,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	table = parse_table(html, eof, end, bgcolor, attr, (part->document || part->box.x));
 	if (!table) goto ret0;
-
-	align = par_format.align;
-	if (align == ALIGN_NONE || align == ALIGN_JUSTIFY) align = ALIGN_LEFT;
-
-	al = get_attr_val(attr, "align");
-	if (al) {
-		if (!strcasecmp(al, "left")) align = ALIGN_LEFT;
-		else if (!strcasecmp(al, "center")) align = ALIGN_CENTER;
-		else if (!strcasecmp(al, "right")) align = ALIGN_RIGHT;
-		mem_free(al);
-	}
 
 	table->part = part;
 
@@ -1099,7 +1086,19 @@ again:
 #endif
 
 	{
+		unsigned char *al;
 		int ww = par_format.width - table->real_width;
+		int align = par_format.align;
+
+		if (align == ALIGN_NONE || align == ALIGN_JUSTIFY) align = ALIGN_LEFT;
+
+		al = get_attr_val(attr, "align");
+		if (al) {
+			if (!strcasecmp(al, "left")) align = ALIGN_LEFT;
+			else if (!strcasecmp(al, "center")) align = ALIGN_CENTER;
+			else if (!strcasecmp(al, "right")) align = ALIGN_RIGHT;
+			mem_free(al);
+		}
 
 		if (align == ALIGN_CENTER)
 			x = (ww + par_format.leftmargin

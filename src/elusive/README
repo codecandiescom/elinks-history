@@ -10,12 +10,4 @@ know the whole document source at once frequently, but this is doable.
 
 See TODO file for TODO list.
 
-Structure:
-
-parser  : it will construct a syntactic tree from the source
-layouter: it will create a page layout from the tree in some abstract
-          fashion
-          (??? - not sure about this, maybe we'll drop this layer)
-renderer: it will create some image of the layout
-[viewer : it will display the image of the layout - this one will live in
-          ELinks itself]
+See DESIGN file for architecture and structure of the ELusive engine.

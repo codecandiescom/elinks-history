@@ -1,0 +1,51 @@
+The ELusive engine has layered structure, trying to make as much parts common
+for various types of both input and output and trying to preserve maximally
+modular structure of the engine, allowing easy adding of new modules and
+disabling of the unneeded ones.
+
+Usually, the calls to the engine are made in the top->down direction, thus
+starting at renderer, which will call layouter, which will call parser etc.
+There is also a caching interface, making it possible to prevent multiple calls
+to the parser on the same source.
+
+
+Parser
+~~~~~~
+
+Parser will construct a syntax tree from the source supplied. It usually has
+ability to construct the syntax tree based on several calls with consecutive
+fragments of source, but it's not a rule (ie. it's very useful for XML parser
+but makes basically no sense for DTD parser).
+
+Its interface is defined at parser/parser.h.
+
+
+Layouter
+~~~~~~~~
+Layouter will take a syntax tree, possibly merge it with other syntax trees
+(ie. it will merge XML syntax tree with CSS syntax tree), locate the tree nodes
+on a virtual display and produce a document layout. The layout has again a
+tree-like structure - it consists from a lot of so-called "rectangles", which
+have arbitrary attributes and can be arbitrary sized (in none, one or two
+dimensions). These rectangles can contain either nothing (these are also called
+spacers), end-data (usually text, but also ie. images or other objects) or
+other rectangles. The layout is not dependent of type of the output - thus it
+can be used either for graphics or text or whatever you imagine.
+
+Its interface is defined at layouter/layouter.h.
+
+
+Renderer
+~~~~~~~~
+Renderer will take a document layout, relocate and resize the rectangles to
+match the real output proportions and parameters. It is specific for the output
+type and it has no generic output format - the output is viewer-specific.
+
+Its interface is defined at renderer/renderer.h.
+
+
+Viewer
+~~~~~~
+This is not part of ELusive anymore (it lives in ELinks) - it takes the
+renderer output, displays it on the screen and optionally maintains the user
+interaction.

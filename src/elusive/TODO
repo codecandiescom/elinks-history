@@ -2,6 +2,7 @@
 
   * Scripting hooks (for ECMAScript).
   * Split this TODO list to appropriate subdirs...?
+  * Caching interface (allowing syntax trees and layout outputs to be cached).
 
 
 

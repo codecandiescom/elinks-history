@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.22 2004/10/01 16:03:47 pasky Exp $ */
+/* $Id: memory.c,v 1.23 2004/10/05 01:23:30 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* MREMAP_MAYMOVE */
@@ -140,7 +140,8 @@ mem_mmap_alloc(size_t size)
 	if (size) {
 		void *p = mmap(NULL, round_size(size), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 
-		return p;
+		if (p != MAP_FAILED)
+			return p;
 	}
 
 	return NULL;
@@ -169,13 +170,16 @@ mem_mmap_realloc(void *p, size_t old_size, size_t new_size)
 #ifdef HAVE_MREMAP
 		void *p2 = mremap(p, round_size(old_size), round_size(new_size), MREMAP_MAYMOVE);
 
-		return p2;
+		if (p2 != MAP_FAILED)
+			return p2;
 #else
 		void *p2 = mem_mmap_alloc(new_size);
 
-		if (p2) memcpy(p2, p, old_size);
-		munmap(p, round_size(old_size));
-		return p2;
+		if (p2) {
+			memcpy(p2, p, old_size);
+			mem_mmap_free(p, old_size);
+			return p2;
+		}
 #endif
 	} else {
 		mem_mmap_free(p, old_size);

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.79 2004/10/10 23:09:24 pasky Exp $ */
+/* $Id: document.h,v 1.80 2004/10/21 20:54:22 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -59,12 +59,13 @@ enum link_type {
 };
 
 struct script_event_hook {
-	LIST_HEAD(struct event_hook);
+	LIST_HEAD(struct script_event_hook);
 
 	enum script_event_hook_type {
 		SEVHOOK_ONCLICK,
 		SEVHOOK_ONDBLCLICK,
 		SEVHOOK_ONMOUSEOVER,
+		SEVHOOK_ONHOVER,
 		SEVHOOK_ONFOCUS,
 		SEVHOOK_ONMOUSEOUT,
 		SEVHOOK_ONBLUR,
@@ -91,6 +92,9 @@ struct link {
 
 	struct color_pair color;
 
+	/* XXX: They don't neccessary need to be link-specific, but we just
+	 * don't support them for any other elements for now. Well, we don't
+	 * even have a good place where to store them in that case. */
 	struct list_head *event_hooks; /* -> struct script_event_hook */
 
 	union {

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.293 2004/10/17 20:20:16 miciah Exp $ */
+/* $Id: link.c,v 1.294 2004/10/21 20:54:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "document/html/renderer.h"
 #include "document/options.h"
 #include "document/view.h"
+#include "ecmascript/ecmascript.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
@@ -44,6 +45,41 @@
 
 /* Perhaps some of these would be more fun to have in viewer/common/, dunno.
  * --pasky */
+
+
+static void
+current_link_evhook(struct document_view *doc_view, enum script_event_hook_type type)
+{
+#ifdef CONFIG_ECMASCRIPT
+	struct link *link;
+	struct script_event_hook *evhook;
+
+	assert(doc_view && doc_view->vs);
+	link = get_current_link(doc_view);
+	if (!link) return;
+	if (!link->event_hooks) return;
+
+	foreach (evhook, *link->event_hooks) {
+		struct string src = INIT_STRING(evhook->src, strlen(evhook->src));
+
+		if (evhook->type != type) continue;
+		/* TODO: Some even handlers return a bool. */
+		ecmascript_eval(doc_view->vs->ecmascript, &src);
+	}
+#endif
+}
+
+#define current_link_hover(dv) \
+do { \
+	current_link_evhook(dv, SEVHOOK_ONMOUSEOVER); \
+	current_link_evhook(dv, SEVHOOK_ONHOVER); \
+	current_link_evhook(dv, SEVHOOK_ONFOCUS); \
+} while (0)
+#define current_link_blur(dv) \
+do { \
+	current_link_evhook(dv, SEVHOOK_ONMOUSEOUT); \
+	current_link_evhook(dv, SEVHOOK_ONBLUR); \
+} while (0)
 
 
 void
@@ -428,12 +464,15 @@ next_link_in_view(struct document_view *doc_view, int current, int direction,
 
 	get_visible_links_range(doc_view, &start, &end);
 
+	current_link_blur(doc_view);
+
 	/* Go from the @current link in @direction until either
 	 * fn() is happy or we would leave the current viewport. */
 	while (current >= start && current <= end) {
 		if (fn(doc_view, &document->links[current])) {
 			vs->current_link = current;
 			if (cntr) cntr(doc_view, &document->links[current]);
+			current_link_hover(doc_view);
 			return 1;
 		}
 		current += direction;
@@ -621,13 +660,16 @@ next_link_in_dir(struct document_view *doc_view, int dir_x, int dir_y)
 		return 0;
 	}
 
+	current_link_blur(doc_view);
 	vs->current_link = -1;
 	return 0;
 
 chose_link:
 	/* The link is in bounds, take it. */
+	current_link_blur(doc_view);
 	vs->current_link = get_link_index(document, link);
 	set_pos_x(doc_view, link);
+	current_link_hover(doc_view);
 	return 1;
 }
 
@@ -734,11 +776,14 @@ find_link(struct document_view *doc_view, int direction, int page_mode)
 		next_link_in_view(doc_view, link_pos, direction, link_in_view, NULL);
 		return;
 	}
+	current_link_blur(doc_view);
 	doc_view->vs->current_link = link_pos;
 	set_pos_x(doc_view, link);
+	current_link_hover(doc_view);
 	return;
 
 nolink:
+	current_link_blur(doc_view);
 	doc_view->vs->current_link = -1;
 }
 
@@ -834,6 +879,9 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 
 	link = get_current_link(doc_view);
 	if (!link) return FRAME_EVENT_REFRESH;
+
+	/* XXX: If the script returns false, we shall not proceed. */
+	current_link_evhook(doc_view, SEVHOOK_ONCLICK);
 
 	if (!link_is_form(link)
 	    || link_is_textinput(link)
@@ -947,8 +995,10 @@ jump_to_link_number(struct session *ses, struct document_view *doc_view, int n)
 	if_assert_failed return;
 
 	if (n < 0 || n >= doc_view->document->nlinks) return;
+	current_link_blur(doc_view);
 	doc_view->vs->current_link = n;
 	check_vs(doc_view);
+	current_link_hover(doc_view);
 }
 
 /* This is common backend for goto_link_number() and try_document_key(). */
@@ -1128,6 +1178,9 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		if (!get_cmd_opt_int("anonymous"))
 			add_menu_action(&mi, N_("Download ima~ge"), ACT_MAIN_LINK_DOWNLOAD_IMAGE);
 	}
+
+	/* TODO: Make it possible to trigger any script event hooks associated
+	 * to the link. --pasky */
 
 end:
 	if (!mi->text) {

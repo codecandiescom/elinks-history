@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.506 2004/10/13 00:30:55 jonas Exp $ */
+/* $Id: parser.c,v 1.507 2004/10/21 20:54:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -335,6 +335,14 @@ html_focusable(unsigned char *a)
 	if (tabindex > 0) {
 		format.tabindex = (tabindex & 0x7fff) << 16;
 	}
+
+	mem_free_if(format.onclick); format.onclick = get_attr_val(a, "onclick");
+	mem_free_if(format.ondblclick); format.ondblclick = get_attr_val(a, "ondblclick");
+	mem_free_if(format.onmouseover); format.onmouseover = get_attr_val(a, "onmouseover");
+	mem_free_if(format.onhover); format.onhover = get_attr_val(a, "onhover");
+	mem_free_if(format.onfocus); format.onfocus = get_attr_val(a, "onfocus");
+	mem_free_if(format.onmouseout); format.onmouseout = get_attr_val(a, "onmouseout");
+	mem_free_if(format.onblur); format.onblur = get_attr_val(a, "onblur");
 }
 
 void
@@ -1488,6 +1496,8 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	format.attr = 0;
 	format.fontsize = 3;
 	format.link = format.target = format.image = NULL;
+	format.onclick = format.ondblclick = format.onmouseover = format.onhover
+		= format.onfocus = format.onmouseout = format.onblur = NULL;
 	format.select = NULL;
 	format.form = NULL;
 	format.title = NULL;

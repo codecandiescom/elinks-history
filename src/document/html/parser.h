@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.71 2004/10/10 23:09:25 pasky Exp $ */
+/* $Id: parser.h,v 1.72 2004/10/21 20:54:22 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -59,6 +59,14 @@ struct text_attrib {
 	int select_disabled;
 	unsigned int tabindex;
 	long accesskey;
+
+	unsigned char *onclick;
+	unsigned char *ondblclick;
+	unsigned char *onmouseover;
+	unsigned char *onhover;
+	unsigned char *onfocus;
+	unsigned char *onmouseout;
+	unsigned char *onblur;
 };
 
 /* This enum is pretty ugly, yes ;). */

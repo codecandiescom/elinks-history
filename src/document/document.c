@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.84 2004/10/10 23:09:24 pasky Exp $ */
+/* $Id: document.c,v 1.85 2004/10/21 20:54:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,12 @@ void
 done_link_members(struct link *link)
 {
 	if (link->event_hooks) {
-		free_list(*link->event_hooks);
+		struct script_event_hook *evhook, *safety;
+
+		foreachsafe (evhook, safety, *link->event_hooks) {
+			mem_free_if(evhook->src);
+			mem_free(evhook);
+		}
 		mem_free(link->event_hooks);
 	}
 	mem_free_if(get_link_name(link));

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.500 2004/10/10 23:09:25 pasky Exp $ */
+/* $Id: renderer.c,v 1.501 2004/10/21 20:54:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/lists.h"
 #include "util/hash.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -906,7 +907,28 @@ new_link(struct document *document, int link_number,
 	link->color.foreground = link_is_textinput(link)
 				? format.fg : format.clink;
 
-	link->event_hooks = NULL;
+	link->event_hooks = mem_calloc(1, sizeof(struct list_head));
+	if (link->event_hooks) {
+		init_list(*link->event_hooks);
+#define add_evhook(list_, type_, src_) \
+do { \
+	struct script_event_hook *evhook = mem_calloc(1, sizeof(struct script_event_hook)); \
+	\
+	if (evhook) { \
+		evhook->type = type_; \
+		evhook->src = stracpy(src_); \
+		add_to_list(*list_, evhook); \
+	} \
+} while (0)
+		if (format.onclick) add_evhook(link->event_hooks, SEVHOOK_ONCLICK, format.onclick);
+		if (format.ondblclick) add_evhook(link->event_hooks, SEVHOOK_ONDBLCLICK, format.ondblclick);
+		if (format.onmouseover) add_evhook(link->event_hooks, SEVHOOK_ONMOUSEOVER, format.onmouseover);
+		if (format.onhover) add_evhook(link->event_hooks, SEVHOOK_ONHOVER, format.onhover);
+		if (format.onfocus) add_evhook(link->event_hooks, SEVHOOK_ONFOCUS, format.onfocus);
+		if (format.onmouseout) add_evhook(link->event_hooks, SEVHOOK_ONMOUSEOUT, format.onmouseout);
+		if (format.onblur) add_evhook(link->event_hooks, SEVHOOK_ONBLUR, format.onblur);
+#undef add_evhook
+	}
 
 	return link;
 }

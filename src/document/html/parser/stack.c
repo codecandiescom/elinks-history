@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.25 2004/09/24 19:01:43 pasky Exp $ */
+/* $Id: stack.c,v 1.26 2004/10/21 20:54:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,6 +103,15 @@ kill_html_stack_item(struct html_element *e)
 	mem_free_if(e->attr.image);
 	mem_free_if(e->attr.title);
 	mem_free_if(e->attr.select);
+
+	mem_free_if(e->attr.onclick);
+	mem_free_if(e->attr.ondblclick);
+	mem_free_if(e->attr.onmouseover);
+	mem_free_if(e->attr.onhover);
+	mem_free_if(e->attr.onfocus);
+	mem_free_if(e->attr.onmouseout);
+	mem_free_if(e->attr.onblur);
+
 	del_from_list(e);
 	mem_free(e);
 #if 0
@@ -133,6 +142,11 @@ html_stack_dup(enum html_element_type type)
 	if (ep->attr.image) e->attr.image = stracpy(ep->attr.image);
 	if (ep->attr.title) e->attr.title = stracpy(ep->attr.title);
 	if (ep->attr.select) e->attr.select = stracpy(ep->attr.select);
+
+	/* We don't want to propagate these. */
+	/* XXX: For sure? --pasky */
+	e->attr.onclick = e->attr.ondblclick = e->attr.onmouseover = e->attr.onhover
+		= e->attr.onfocus = e->attr.onmouseout = e->attr.onblur = NULL;
 
 #if 0
 	if (e->name) {

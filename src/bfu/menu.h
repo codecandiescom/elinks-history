@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.17 2003/05/07 12:41:43 zas Exp $ */
+/* $Id: menu.h,v 1.18 2003/05/21 10:08:42 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -52,6 +52,37 @@ struct menu_item {
 	enum item_free item_free;
 	int hotkey_pos;
 	int ignore_hotkey;
+};
+
+
+/* These structs are used in hotkey.h. */
+/* Must match the start of structs menu and mainmenu */
+struct menu_head {
+	struct window *win;
+	struct menu_item *items;
+	void *data;
+	int selected;
+	int ni;
+};
+
+struct menu {
+	/* menu_head */
+	struct window *win;
+	struct menu_item *items;
+	void *data;
+	int selected;
+	int ni;
+	/* end of menu_head */
+
+	int view;
+	int x, y;
+	int xp, yp;
+        int xw, yw;
+
+	int hotkeys;
+#ifdef ENABLE_NLS
+	int lang;
+#endif
 };
 
 

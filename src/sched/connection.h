@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.30 2003/07/04 23:35:06 jonas Exp $ */
+/* $Id: connection.h,v 1.31 2003/07/05 00:29:42 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -7,6 +7,7 @@
 
 #include "document/cache.h"
 #include "lowlevel/ttime.h"
+#include "lowlevel/connect.h"
 #include "protocol/uri.h"
 #include "ssl/ssl.h"
 #include "util/encoding.h"
@@ -116,8 +117,6 @@ struct connection {
 	void *conn_info;
 	void *info;
 	void *buffer;
-	void *read_func;
-	void (*conn_func)(void *);
 	struct cache_entry *cache;
 	ssl_t *ssl;
 	struct stream_encoded *stream;

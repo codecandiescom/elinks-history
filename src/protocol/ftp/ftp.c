@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.95 2003/07/04 21:41:46 jonas Exp $ */
+/* $Id: ftp.c,v 1.96 2003/07/05 00:29:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,6 +61,7 @@ struct ftp_connection_info {
 #endif
 	unsigned char ftp_buffer[FTP_BUF_SIZE];
 	unsigned char cmd_buffer[1];
+	void (*read_func)(struct connection *, struct read_buffer *);
 };
 
 
@@ -251,16 +252,21 @@ static void
 get_resp(struct connection *conn)
 {
 	struct read_buffer *rb = alloc_read_buffer(conn);
+	struct ftp_connection_info *info = conn->info;
 
+	assert(info);
 	if (!rb) return;
-	read_from_socket(conn, conn->sock1, rb, conn->read_func);
+	read_from_socket(conn, conn->sock1, rb, info->read_func);
 }
 
 /* Send command, set connection state and free cmd string. */
 static void
 send_cmd(struct connection *conn, unsigned char *cmd, int cmdl, void *callback, int state)
 {
-	conn->read_func = (void *) callback;
+	struct ftp_connection_info *info = conn->info;
+
+	assert(info);
+	info->read_func = callback;
 	write_to_socket(conn, conn->sock1, cmd, cmdl, get_resp);
 
 	mem_free(cmd);

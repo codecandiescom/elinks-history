@@ -1,3 +1,30 @@
+Tue Oct  5 20:19:18 2004  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Hungarian translation updates/fixes.  
+
+Tue Oct  5 16:40:01 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation fixes. Certyfikaty --\> Dane uwierzytelniaj±ce.  
+
+Tue Oct  5 09:14:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/renderer.c:
+
+	Assertion related to bug 521 was disabled.  
+
+Tue Oct  5 01:23:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/memory.c:
+
+	Check for MAP_FAILED return value when calling mmap() and mremap()
+	so it won't be treated as a valid address. Never munmap() the old
+	pointer if reallocation fails -- remember it should behave like
+	realloc()! 
+
 Mon Oct  4 16:48:25 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:

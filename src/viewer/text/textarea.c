@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.26 2003/11/18 10:38:32 kuser Exp $ */
+/* $Id: textarea.c,v 1.27 2003/11/18 10:49:45 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,10 +111,10 @@ area_cursor(struct form_control *frm, struct form_state *fs)
 			continue;
 
 		if (frm->wrap && x == frm->cols) x--;
-		if (x >= frm->cols + fs->vpos) fs->vpos = x - frm->cols + 1;
-		if (x < fs->vpos) fs->vpos = x;
-		if (y >= frm->rows + fs->vypos) fs->vypos = y - frm->rows + 1;
-		if (y < fs->vypos) fs->vypos = y;
+		int_lower_bound(&fs->vpos, x - frm->cols + 1);
+		int_upper_bound(&fs->vpos, x);
+		int_lower_bound(&fs->vypos, y - frm->rows + 1);
+		int_upper_bound(&fs->vypos, y);
 		x -= fs->vpos;
 		y -= fs->vypos;
 		q = y * frm->cols + x;

@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.68 2003/12/21 14:56:55 zas Exp $ */
+/* $Id: interlink.c,v 1.69 2004/02/07 01:39:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
+#include <sys/stat.h> /* OS/2 needs this after sys/types.h */
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -362,6 +363,7 @@ elinks_usleep(unsigned long useconds)
 static int
 bind_to_af_unix(void)
 {
+	mode_t saved_mask = umask(0177);
 	int attempts = 0;
 	int af = get_address(&s_info_listen, ADDR_IP_SERVER);
 
@@ -407,10 +409,12 @@ again:
 	set_handlers(s_info_listen.fd, (void (*)(void *)) af_unix_connection,
 		     NULL, NULL, &s_info_accept);
 
+	umask(saved_mask);
 	return s_info_listen.fd;
 
 free_and_error:
 	af_unix_close();
+	umask(saved_mask);
 
 	return -1;
 }

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.236 2003/09/06 15:29:51 jonas Exp $ */
+/* $Id: renderer.c,v 1.237 2003/09/06 19:37:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -823,91 +823,25 @@ put_chars_format_change(struct part *part, unsigned char *color,
 	}
 }
 
-void
-put_chars(struct part *part, unsigned char *chars, int charslen)
+static inline void
+process_link(struct part *part, unsigned char *chars, int charslen)
 {
-	unsigned char color;
-	enum screen_char_attr attr = 0;
 	struct link *link;
 	struct point *pt;
 
-	assert(part);
-	if_assert_failed return;
-
-	assert(chars);
-	if_assert_failed return;
-
-	while (par_format.align != AL_NONE && part->cx == -1
-	       && charslen && *chars == ' ') {
-		chars++;
-		charslen--;
-	}
-
-	if (!charslen) return;
-
-	if (chars[0] != ' ' || (chars[1] && chars[1] != ' ')) {
-		last_tag_for_newline = (void *)&part->document->tags;
-	}
-	if (part->cx == -1) part->cx = par_format.leftmargin;
-
-	if (last_link || last_image || last_form || format.link
-	    || format.image || format.form)
-		goto process_link;
-no_link:
-
-	put_chars_format_change(part, &color, &attr);
-
-	if (part->cx == par_format.leftmargin && *chars == ' '
-	    && par_format.align != AL_NONE) {
-		chars++;
-		charslen--;
-	}
-
-	if (!charslen) return;
-
-	int_lower_bound(&part->y, part->cy + 1);
-
-	if (nowrap && part->cx + charslen > overlap(par_format))
-		return;
-
-	set_hline(part, part->cx, part->cy, chars, charslen, color, attr);
-	part->cx += charslen;
-	nobreak = 0;
-
-	if (par_format.align != AL_NONE) {
-		while (part->cx > overlap(par_format)
-		       && part->cx > par_format.leftmargin) {
-			int x = split_line(part);
-
-			if (!x) break;
-			if (part->document)
-				align_line(part, part->cy - 1, 0);
-			nobreak = x - 1;
-		}
-	}
-
-	assert(charslen > 0);
-	part->xa += charslen;
-	part->xmax = int_max(part->xmax, part->xa
-					 - (chars[charslen - 1] == ' '
-				            && par_format.align != AL_NONE)
-					 + par_format.leftmargin
-					 + par_format.rightmargin);
-	return;
-
-process_link:
 	if ((last_link || last_image || last_form)
 	    && !xstrcmp(format.link, last_link)
 	    && !xstrcmp(format.target, last_target)
 	    && !xstrcmp(format.image, last_image)
 	    && format.form == last_form) {
-		if (part->document) {
-			assertm(part->document->nlinks > 0, "no link");
-			if_assert_failed goto no_link;
-			link = &part->document->links[part->document->nlinks - 1];
-			goto set_link;
-		}
-		goto no_link;
+		if (!part->document) return;
+
+		assertm(part->document->nlinks > 0, "no link");
+		if_assert_failed return;
+
+		link = &part->document->links[part->document->nlinks - 1];
+		goto set_link;
+
 	} else {
 		if (last_link) mem_free(last_link);	/* !!! FIXME: optimize */
 		if (last_target) mem_free(last_target);
@@ -916,7 +850,7 @@ process_link:
 		last_link = last_target = last_image = NULL;
 		last_form = NULL;
 
-		if (!(format.link || format.image || format.form)) goto no_link;
+		if (!(format.link || format.image || format.form)) return;
 
 		if (d_opt->num_links_display) {
 			unsigned char s[64];
@@ -950,10 +884,10 @@ process_link:
 		last_image = format.image ? stracpy(format.image) : NULL;
 		last_form = format.form;
 
-		if (!part->document) goto no_link;
+		if (!part->document) return;
 
 		link = new_link(part->document);
-		if (!link) goto no_link;
+		if (!link) return;
 
 		link->num = format.tabindex + part->link_num - 1;
 		link->accesskey = format.accesskey;
@@ -1017,7 +951,77 @@ set_link:
 			link->n += i;
 		}
 	}
-	goto no_link;
+}
+
+void
+put_chars(struct part *part, unsigned char *chars, int charslen)
+{
+	unsigned char color;
+	enum screen_char_attr attr = 0;
+
+	assert(part);
+	if_assert_failed return;
+
+	assert(chars);
+	if_assert_failed return;
+
+	while (par_format.align != AL_NONE && part->cx == -1
+	       && charslen && *chars == ' ') {
+		chars++;
+		charslen--;
+	}
+
+	if (!charslen) return;
+
+	if (chars[0] != ' ' || (chars[1] && chars[1] != ' ')) {
+		last_tag_for_newline = (void *)&part->document->tags;
+	}
+	if (part->cx == -1) part->cx = par_format.leftmargin;
+
+	if (last_link || last_image || last_form || format.link
+	    || format.image || format.form)
+		process_link(part, chars, charslen);
+
+	put_chars_format_change(part, &color, &attr);
+
+	if (part->cx == par_format.leftmargin && *chars == ' '
+	    && par_format.align != AL_NONE) {
+		chars++;
+		charslen--;
+	}
+
+	if (!charslen) return;
+
+	int_lower_bound(&part->y, part->cy + 1);
+
+	if (nowrap && part->cx + charslen > overlap(par_format))
+		return;
+
+	set_hline(part, part->cx, part->cy, chars, charslen, color, attr);
+	part->cx += charslen;
+	nobreak = 0;
+
+	if (par_format.align != AL_NONE) {
+		while (part->cx > overlap(par_format)
+		       && part->cx > par_format.leftmargin) {
+			int x = split_line(part);
+
+			if (!x) break;
+			if (part->document)
+				align_line(part, part->cy - 1, 0);
+			nobreak = x - 1;
+		}
+	}
+
+	assert(charslen > 0);
+	part->xa += charslen;
+	part->xmax = int_max(part->xmax, part->xa
+					 - (chars[charslen - 1] == ' '
+				            && par_format.align != AL_NONE)
+					 + par_format.leftmargin
+					 + par_format.rightmargin);
+	return;
+
 }
 
 #undef overlap

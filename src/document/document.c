@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.18 2003/11/04 22:43:59 zas Exp $ */
+/* $Id: document.c,v 1.19 2003/11/04 23:04:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,14 +189,15 @@ shrink_format_cache(int whole)
 	if_assert_failed format_cache_entries = 0;
 
 	foreach (document, format_cache) {
+		if (document->refcount) continue;
+
 		if (!whole) {
 			struct cache_entry *ce = NULL;
 
 			/* If we are not purging the whole format cache delete
 			 * unreferenced documents or until we are below maximum
 			 * number of entries. */
-			if (document->refcount
-			    || format_cache_entries <= format_cache_size)
+			if (format_cache_entries <= format_cache_size)
 				continue;
 
 			/* Keep unreferenced documents that are in sync with
@@ -205,8 +206,6 @@ shrink_format_cache(int whole)
 			    && ce && ce->id_tag == document->id_tag)
 				continue;
 		}
-
-		if (document->refcount) continue;
 
 		document = document->prev;
 		done_document(document->next);

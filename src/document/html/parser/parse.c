@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.68 2004/06/24 15:15:05 jonas Exp $ */
+/* $Id: parse.c,v 1.69 2004/06/25 13:30:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -668,7 +668,7 @@ next_break:
 				int newlines = 0;
 
 				while (html + 5 < eof && !memcmp(html, "&#13;", 5)) {
-					newlines++; 
+					newlines++;
 					html += 5;
 				}
 
@@ -730,8 +730,6 @@ ng:;
 		}
 
 		prev_html = html;
-		html = end;
-
 		html = process_element(name, namelen, endingtag, html, prev_html, eof, attr, f);
 	}
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2004-01-18 00:13+0100\n"
-"PO-Revision-Date: 2004-01-18 00:20+0100\n"
+"PO-Revision-Date: 2004-01-24 21:37+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4285,7 +4285,7 @@ msgstr "Najít ~pøedchozí"
 
 #: src/dialogs/menu.c:332
 msgid "T~ypeahead search"
-msgstr "Inte~raktivní vyhledávání"
+msgstr "Inter~aktivní vyhledávání"
 
 #: src/dialogs/menu.c:334
 msgid "Toggle ~html/plain"

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.160 2003/07/17 08:56:33 zas Exp $ */
+/* $Id: view.c,v 1.161 2003/07/21 22:52:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1301,21 +1301,21 @@ send_download(struct terminal *term, void *xxx, struct session *ses)
 	send_download_do(term, xxx, ses, URL);
 }
 
-static int
-add_session_ring_to_str(unsigned char **str, int *len)
+static struct string *
+add_session_ring_to_string(struct string *str)
 {
 	int ring;
 
-	assert(str && len);
-	if_assert_failed return 0;
+	assert(str);
+	if_assert_failed return NULL;
 
 	ring = get_opt_int_tree(cmdline_options, "session-ring");
 	if (ring) {
-		add_to_str(str, len, " -session-ring ");
-		add_num_to_str(str, len, ring);
+		add_to_string(str, " -session-ring ");
+		add_long_to_string(str, ring);
 	}
 
-	return ring;
+	return str;
 }
 
 /* open a link in a new xterm */
@@ -1350,17 +1350,20 @@ send_open_new_xterm(struct terminal *term,
 		    void (*open_window)(struct terminal *, unsigned char *, unsigned char *),
 		    struct session *ses)
 {
-	int l = 0;
+	struct string dn_url;
 
 	assert(term && open_window && ses);
 	if_assert_failed return;
 
 	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = init_str();
-	if (!ses->dn_url) return;
-	add_to_str(&ses->dn_url, &l, "-base-session ");
-	add_num_to_str(&ses->dn_url, &l, ses->id);
-	add_session_ring_to_str(&ses->dn_url, &l);
+
+	if (!init_string(&dn_url)) return;
+
+	add_to_string(&dn_url, "-base-session ");
+	add_long_to_string(&dn_url, ses->id);
+	add_session_ring_to_string(&dn_url);
+
+	ses->dn_url = dn_url.source;
 	open_window(term, path_to_exe, ses->dn_url);
 }
 

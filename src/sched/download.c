@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.58 2003/06/15 17:11:05 jonas Exp $ */
+/* $Id: download.c,v 1.59 2003/06/15 22:22:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1262,7 +1262,7 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 	/* Used to see if association came from mailcap or not */
 	struct option *mailcap = NULL;
 #endif
-	int r = 0;
+	int plaintext = 0;
 	unsigned char *ct;
 
 	ct = get_content_type(ce->head, ce->url);
@@ -1272,7 +1272,7 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 	/* RFC 3236 */
 	if (!strcasecmp(ct, "application/xhtml+xml")) goto free_ct;
 
-	r = 1;
+	plaintext = 1;
 	if (!strcasecmp(ct, "text/plain")) goto free_ct;
 
 	assoc = get_mime_type_handler(ses->tab->term, ct);
@@ -1324,8 +1324,8 @@ end:
 #ifdef MAILCAP
 	if (mailcap) delete_option(mailcap);
 #endif
-	if (ses->task_target && r) *ses->task_target = 0;
+	if (ses->task_target && plaintext) *ses->task_target = 0;
 	ses_forward(ses);
-	cur_loc(ses)->vs.plain = r;
+	cur_loc(ses)->vs.plain = plaintext;
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.5 2003/07/03 01:03:35 jonas Exp $ */
+/* $Id: error.c,v 1.6 2003/09/22 15:39:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,6 +87,7 @@ get_err_msg(int state, struct terminal *term)
 {
 	unsigned char *e;
 	struct strerror_val *s;
+	int len;
 
 	if (state <= S_OK || state >= S_WAIT) {
 		int i;
@@ -101,14 +102,16 @@ unknown_error:
 	e = (unsigned char *) strerror(-state);
 	if (!e || !*e) goto unknown_error;
 
+	len = strlen(e);
+
 	foreach (s, strerror_buf)
-		if (!strcmp(s->msg, e))
+		if (!strlcmp(s->msg, -1, e, len))
 			return s->msg;
 
-	s = mem_alloc(sizeof(struct strerror_val) + strlen(e) + 1);
+	s = mem_calloc(1, sizeof(struct strerror_val) + len);
 	if (!s) goto unknown_error;
 
-	strcpy(s->msg, e);
+	memcpy(s->msg, e, len + 1);
 	add_to_list(strerror_buf, s);
 
 	return s->msg;

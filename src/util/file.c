@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.38 2004/09/23 23:34:30 jonas Exp $ */
+/* $Id: file.c,v 1.39 2004/11/08 17:04:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,7 +428,9 @@ stat_group(struct string *string, struct stat *stp)
 static inline void
 stat_size(struct string *string, struct stat *stp)
 {
-	if (!stp) {
+	/* Check if st_size will cause overflow. */
+	/* FIXME: See bug 497 for info about support for big files. */
+	if (!stp && (unsigned long)stp->st_size != stp->st_size) {
 		add_to_string(string, "         ");
 	} else {
 		unsigned char size[64];

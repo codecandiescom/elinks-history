@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.38 2004/11/08 14:24:19 jonas Exp $ */
+/* $Id: encoding.c,v 1.39 2004/11/08 17:04:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -330,7 +330,20 @@ read_encoded_file(struct string *filename, struct string *page)
 		state = S_OUT_OF_MEM;
 
 	} else {
-		state = read_file(stream, stt.st_size, page);
+		int readsize = (int) stt.st_size;
+
+		/* Check if st_size will cause overflow. */
+		/* FIXME: See bug 497 for info about support for big files. */
+		if (readsize != stt.st_size || readsize < 0) {
+#ifdef EFBIG
+			state = (enum connection_state) -(EFBIG);
+#else
+			state = S_FILE_ERROR;
+#endif
+
+		} else {
+			state = read_file(stream, stt.st_size, page);
+		}
 		close_encoded(stream);
 	}
 

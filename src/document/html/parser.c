@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.463 2004/06/23 10:33:06 zas Exp $ */
+/* $Id: parser.c,v 1.464 2004/06/23 10:53:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,7 +149,11 @@ get_target(unsigned char *a)
 }
 
 
-struct html_context html_context;
+struct html_context html_context = {
+#ifdef CONFIG_CSS
+	INIT_CSS_STYLESHEET(html_context.css_styles, import_css_stylesheet),
+#endif
+};
 
 
 inline void
@@ -244,8 +248,6 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 
 	done_uri(uri);
 }
-
-INIT_CSS_STYLESHEET(css_styles, import_css_stylesheet);
 #endif
 
 void
@@ -361,7 +363,7 @@ html_body(unsigned char *a)
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
 	 * it _and_ prefer it over bgcolor attribute. */
 	if (global_doc_opts->css_enable)
-		css_apply(&html_top, &css_styles);
+		css_apply(&html_top, &html_context.css_styles);
 #endif
 
 	if (par_format.bgcolor != format.bg) {
@@ -1343,7 +1345,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	html_context.last_input_tag = NULL;
 
 #ifdef CONFIG_CSS
-	mirror_css_stylesheet(&css_styles, &default_stylesheet);
+	mirror_css_stylesheet(&html_context.css_styles, &default_stylesheet);
 #endif
 }
 
@@ -1352,7 +1354,7 @@ done_html_parser(void)
 {
 #ifdef CONFIG_CSS
 	if (global_doc_opts->css_enable)
-		done_css_stylesheet(&css_styles);
+		done_css_stylesheet(&html_context.css_styles);
 #endif
 
 	done_form();

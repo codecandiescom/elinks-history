@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.19 2004/01/31 00:43:40 jonas Exp $ */
+/* $Id: stylesheet.h,v 1.20 2004/06/23 10:53:54 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -68,11 +68,7 @@ struct css_stylesheet {
 	int import_level;
 };
 
-#define INIT_CSS_STYLESHEET(css, import)			\
-	struct css_stylesheet css = {				\
-		import,						\
-		{ D_LIST_HEAD(css.selectors) },			\
-	}
+#define INIT_CSS_STYLESHEET(css, import) { import, { D_LIST_HEAD(css.selectors) } }
 
 /* Dynamically allocates a stylesheet. */
 struct css_stylesheet *init_css_stylesheet(css_stylesheet_importer importer);

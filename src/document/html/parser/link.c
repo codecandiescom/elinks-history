@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.15 2004/06/22 23:16:30 zas Exp $ */
+/* $Id: link.c,v 1.16 2004/06/23 10:53:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -671,7 +671,9 @@ html_link(unsigned char *a)
 
 #ifdef CONFIG_CSS
 	if (link.type == LT_STYLESHEET) {
-		import_css_stylesheet(&css_styles, link.href, strlen(link.href));
+		int len = strlen(link.href);
+
+		import_css_stylesheet(&html_context.css_styles, link.href, len);
 	}
 #endif
 

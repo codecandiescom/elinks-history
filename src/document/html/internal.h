@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.28 2004/06/23 10:33:06 zas Exp $ */
+/* $Id: internal.h,v 1.29 2004/06/23 10:53:54 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -15,6 +15,13 @@ void process_head(unsigned char *head);
 void put_chrs(unsigned char *start, int len, void (*put_chars)(void *, unsigned char *, int), void *f);
 
 struct html_context {
+#ifdef CONFIG_CSS
+	/* The default stylesheet is initially merged into it. When parsing CSS
+	 * from <style>-tags and external stylesheets if enabled is merged
+	 * added to it. */
+	struct css_stylesheet css_styles;
+#endif
+
 	/* For:
 	 * html/parser/parse.c
 	 * html/parser/stack.c
@@ -86,8 +93,6 @@ struct html_context {
 
 
 extern struct html_context html_context;
-
-extern struct css_stylesheet css_styles;
 
 /* For parser/link.c: */
 

@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.47 2004/06/23 08:16:23 jonas Exp $ */
+/* $Id: css.c,v 1.48 2004/06/23 10:53:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,7 @@ import_css_file(struct css_stylesheet *css, unsigned char *url, int urllen)
 	done_string(&filename);
 }
 
-INIT_CSS_STYLESHEET(default_stylesheet, import_css_file);
+struct css_stylesheet default_stylesheet = INIT_CSS_STYLESHEET(default_stylesheet, import_css_file);
 
 static void
 import_default_css(void)

@@ -1,3 +1,66 @@
+Thu Aug 21 14:55:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: memory.h, string.c:
+
+	grmask() and mem_gralloc() macros were introduced to simplify
+	granular allocation code.  
+
+Thu Aug 21 14:29:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/frames.c:
+
+	Partial fix for bug 237.  
+
+Thu Aug 21 13:06:47 2003  Laurent Monin <zas@norz.org>:
+
+	* .cvsignore, Unicode/.cvsignore, contrib/.cvsignore,
+	contrib/guile/.cvsignore, contrib/lua/.cvsignore, doc/.cvsignore,
+	doc/book/.cvsignore, doc/book/config/.cvsignore,
+	doc/book/info/.cvsignore, doc/book/intro/.cvsignore,
+	doc/book/manpages/.cvsignore, doc/book/tools/.cvsignore,
+	doc/man/.cvsignore, doc/man/man1/.cvsignore,
+	doc/man/man5/.cvsignore, intl/.cvsignore, po/.cvsignore,
+	src/.cvsignore, src/bfu/.cvsignore, src/bookmarks/.cvsignore,
+	src/bookmarks/backend/.cvsignore, src/config/.cvsignore,
+	src/cookies/.cvsignore, src/dialogs/.cvsignore,
+	src/document/.cvsignore, src/document/html/.cvsignore,
+	src/elusive/.cvsignore, src/elusive/layouter/.cvsignore,
+	src/elusive/layouter/syntree/.cvsignore,
+	src/elusive/parser/.cvsignore, src/elusive/parser/css/.cvsignore,
+	src/elusive/parser/dtd/.cvsignore,
+	src/elusive/parser/html/.cvsignore,
+	src/elusive/renderer/.cvsignore,
+	src/elusive/renderer/text/.cvsignore, src/globhist/.cvsignore,
+	src/intl/.cvsignore, src/intl/gettext/.cvsignore,
+	src/lowlevel/.cvsignore, src/mime/.cvsignore,
+	src/mime/backend/.cvsignore, src/osdep/.cvsignore,
+	src/protocol/.cvsignore, src/protocol/http/.cvsignore,
+	src/sched/.cvsignore, src/scripting/.cvsignore,
+	src/scripting/guile/.cvsignore, src/scripting/lua/.cvsignore,
+	src/ssl/.cvsignore, src/terminal/.cvsignore,
+	src/terminal/graphics/.cvsignore, src/terminal/text/.cvsignore,
+	src/util/.cvsignore, src/viewer/.cvsignore,
+	src/viewer/common/.cvsignore, src/viewer/dump/.cvsignore,
+	src/viewer/graphics/.cvsignore, src/viewer/text/.cvsignore,
+	test/.cvsignore:
+
+	*.swp files (temporary vim files) are now ignored by cvs.  
+
+Thu Aug 21 13:03:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, document/html/renderer.c,
+	intl/charsets.c, intl/charsets.h, viewer/text/form.c:
+
+	Attempt to fix &nbsp&nbsp bug without reintroducing bug 213. Please
+	review for side effects.  
+
+Thu Aug 21 07:37:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/base64.c:
+
+	Another base64_decode() fix, ending nul is now added... Thanks to
+	Zardoz.  
+
 Wed Aug 20 11:11:44 2003  Laurent Monin <zas@norz.org>:
 
 	* Unicode/gen-cp, src/intl/codepage.inc:

@@ -1,3 +1,451 @@
+Tue Jul 22 16:16:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/stub.c:
+
+	#include "util/stub.h".  
+
+Tue Jul 22 15:59:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: elinks.h, util/Makefile.am, util/string.c, util/string.h,
+	util/stub.c, util/stub.h:
+
+	Moved libc stub functions to util/stub.*. Idea by pasky.  
+
+Tue Jul 22 15:50:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/string.c:
+
+	Use assertions and get rid of old #defines.  
+
+Tue Jul 22 15:36:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/document.c:
+
+	Slim location message composing by using add_format_to_string().  
+
+Tue Jul 22 15:09:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Updating comments.  
+
+Tue Jul 22 15:01:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Commented out decode_uri_string() for it is not used and thus shall
+	not defile our binary.  
+
+Tue Jul 22 15:01:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Do not print lang if hreflang is the same.  
+
+Tue Jul 22 14:57:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Improve add_string_uri_to_string()s comment.  
+
+Tue Jul 22 14:53:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, protocol/uri.c, protocol/uri.h,
+	viewer/text/link.c:
+
+	Stripping of uri password is now done through a generic
+	add_string_uri_to_string() (yes the name is just too good).  
+
+Tue Jul 22 14:25:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Introduce add_uri_to_string(). It's basicly the old get_uri_string()
+	that now uses it as a backend.  
+
+Tue Jul 22 14:17:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: download.c, session.c, session.h:
+
+	session.task_target -> session.task_target_frame 
+
+Tue Jul 22 13:46:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Print name as title if no title, print media attribute value if any,
+	and fix alternate stylesheets displaying.  
+
+Tue Jul 22 13:35:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Give preferences to our names for html links. As a side effect, it
+	forces lowercased name, print previous instead of prev, and more.
+	Related functions and struct were enabled.  
+
+Tue Jul 22 11:22:12 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced, french translation was updated.  
+
+Tue Jul 22 10:57:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Print lang attribute value if link type is LT_ALTERNATE_LANG.  
+
+Tue Jul 22 10:31:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Code simplification.  
+
+Tue Jul 22 10:27:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	html_link() is now using html_link_parse(). Behavior should be
+	unchanged. New code was activated and a missing else was added to
+	html_link_parse().  
+
+Tue Jul 22 10:03:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Link of type UP was added, not standart but sometimes encountered.  
+
+Tue Jul 22 09:58:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	First step to html_link() rewrite, some struct and functions were
+	added to identify type of an html link, in respect of w3c
+	documentation. Enclosed in #if 0/#endif to prevent compilation
+	errors for now.  
+
+Tue Jul 22 03:40:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: conv.c, conv.h, string.c, string.h:
+
+	[String util restructuring] Purge the old string utils. <insert
+	sentimental grace>.  
+
+Tue Jul 22 03:34:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/conv.c:
+
+	[String util restructuring] Convert (de|en)code_shell_safe_url().  
+
+Tue Jul 22 03:30:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	[String util restructuring] Convert some missing users in
+	get_image_map(). Another strange goto function. Please verify.  
+
+Tue Jul 22 03:09:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	[String util restructuring] Convert html_option() but it's hard to
+	figure out the gotos.  
+
+Tue Jul 22 03:00:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Rearrange add_select_item() to get rid of double negation.  
+
+Tue Jul 22 02:57:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Test that there something to add before calling
+	add_bytes_to_string() in scan_http_equiv().  
+
+Tue Jul 22 02:54:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	[String util restructuring] Convert in_sock().  
+
+Tue Jul 22 02:44:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Fix FIXME comment.  
+
+Tue Jul 22 02:43:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/opttypes.c:
+
+	[String util restructuring] Convert str_rd().  
+
+Tue Jul 22 02:39:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	[String util restructuring] Convert print_current_link_do().  
+
+Tue Jul 22 02:33:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Reindentation of add_select_item().  
+
+Tue Jul 22 02:29:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix last commit.  
+
+Tue Jul 22 02:28:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.c, protocol/uri.h, viewer/text/form.c:
+
+	[String util restructuring] encode_uri_string() now takes struct
+	string.  
+
+Tue Jul 22 02:23:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	[String util restructuring] encode_controls() now takes a string
+	struct.  
+
+Tue Jul 22 02:17:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	[String util restructuring] encode_multipart() now takes a string
+	struct.  
+
+Tue Jul 22 02:10:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	[String util restructuring] Convert get_form_url().  
+
+Tue Jul 22 01:52:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	[String util restructuring] scan_http_equiv() now takes two string
+	structs simplifying things a bit.  
+
+Tue Jul 22 01:37:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	[String util restructuring] Convert get_image_map().  
+
+Tue Jul 22 01:30:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	[String util restructuring] Convert html_link(). Hmm not sure the if
+	(text.source) is not always true.  
+
+Tue Jul 22 01:20:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Unicode/8859_5.cp, src/intl/codepage.inc:
+
+	Typo fix in charset alias: 8895 -> 8859. Reported by Recai Oktas
+	<roktas@omu.edu.tr>, fixes bug 225.  
+
+Tue Jul 22 01:09:41 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Fix a bug introduced in src/sched/session.c:1.110->1.111: The
+	titlebar is blanked while another tab is loading.  
+
+Tue Jul 22 01:08:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Comment about perverse string composition in
+	download_window_function().  
+
+Tue Jul 22 01:07:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	[String util restructuring] do_html_select() gets the treatment.
+	It's a very cryptic function. A macro is introduced to get rid of
+	code dublication. Some ard nullification of the string is necessary
+	but not that pretty. Mabbe a pointer that a (clear|reset)_string
+	would be useful? 
+
+Tue Jul 22 01:05:20 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Removed a superfluous fill_area() in the code for drawing the
+	tab-bar.  
+
+Tue Jul 22 00:32:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	[String util restructuring] Convert format_html().  
+
+Tue Jul 22 00:20:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.h:
+
+	STR_MAGIC -> STRING_MAGIC 
+
+Tue Jul 22 00:14:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	[String util restructuring] print_char() now takes struct string as
+	parameter.  
+
+Tue Jul 22 00:07:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	TODO added: An optimized add_term_escape_to_string() would be nice.  
+
+Tue Jul 22 00:05:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	[String util restructuring] Convert redraw_screen().  
+
+Mon Jul 21 23:52:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: os_dep.c, os_dep.h:
+
+	Purge check_shell_security(). It's partly made obsolete by
+	add_shell_safe_to_string().  
+
+Mon Jul 21 23:48:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	[String util restructuring] Convert subst_file().  
+
+Mon Jul 21 23:43:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	[String util restructuring] Convert get_temp_name().  
+
+Mon Jul 21 23:41:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file.c:
+
+	Make actually use of add_string_to_string() in add_dir_entry().  
+
+Mon Jul 21 23:39:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	Minor reindentation.  
+
+Mon Jul 21 23:37:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Added a FIXME regarding Bugzilla problems to newlines-coping part of
+	do_textarea(). Entities are decoded too late.  
+
+Mon Jul 21 23:34:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	[String util restructuring] Convert download_window_function(). Use
+	string utils for both stat message code paths.  
+
+Mon Jul 21 23:28:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	No code redundancy in convert_string() anymore - removed obsolete
+	FIXME.  
+
+Mon Jul 21 23:11:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	[String util restructuring] Attack get_stat_msg().  
+
+Mon Jul 21 23:08:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Fixed another trailing blank line.  
+
+Mon Jul 21 23:04:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Added some pathetic comment about how ugly is this file getting.  
+
+Mon Jul 21 23:01:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	[String util restructuring] Use in print_current_titlex(). Hmm
+	there's some string.length mangling that I don't like, but if it
+	worked before it should work still.  
+
+Mon Jul 21 23:01:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	When actually cleaning up in done_string(), also zero
+	string->length.  
+
+Mon Jul 21 22:58:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Removed superfluous newline introduced in 1.42.  
+
+Mon Jul 21 22:52:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	[String util restructuring] Rename and make
+	add_session_ring_to_str() have the the generic string add type.
+	Update the user.  
+
+Mon Jul 21 22:38:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	[String util restructuring] Use it in encode_textarea().  
+
+Mon Jul 21 22:31:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/ssl.c:
+
+	[String util restructuring] This is untested but very trivial. We
+	should probably use string_concat() to make things clearer.  
+
+Mon Jul 21 22:19:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/sysname.c:
+
+	[String util restructuring] First user of add_format_... since a
+	little extra work should not be a problem here.  
+
+Mon Jul 21 22:13:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Typo fix in summary for the document.html.link_display option: hmtl
+	-> html.  
+
 Mon Jul 21 22:01:06 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/util/file.c:

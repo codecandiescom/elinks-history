@@ -1,3 +1,42 @@
+Sun Feb 15 16:35:21 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Feb 15 16:33:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.inc:
+
+	"\%u" -> "%u". Prevent i18n issues in Info box of these options.  
+
+Sun Feb 15 12:49:30 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/uri.c:
+
+	Do not decode %7E in filenames.  
+
+Sun Feb 15 12:48:48 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: config/options.inc, viewer/dump/dump.c:
+
+	Added configuration options:
+	document.dump.{header,footer,separator}.  
+
+Sun Feb 15 12:14:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	Add support for table bordercolor attribute. To keep this patch as
+	simple as possible we do not honour bordercolor attributes in tr/td
+	tags (yet). Table bgcolor applies to all cell borders.  
+
+Sun Feb 15 06:57:09 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/main.c:
+
+	ELinks should no connect to previous instances when act as a pager.  
+
 Sat Feb 14 13:56:11 2004  Laurent Monin <zas@norz.org>:
 
 	* src/util/color.inc:

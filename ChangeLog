@@ -1,3 +1,23 @@
+Wed Apr 17 22:22:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/config/default.c, src/config/default.h,
+	src/protocol/http/http.c:
+	
+	Basic Proxy Auth support by Sergio R. Velasquez Zeballos
+	<svelasqu@thor.uc.edu.ve>.
+
+Wed Apr 17 19:15:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/ukrainian.lng, src/intl/language.inc:
+	
+	Ukrainian translation fixes by Dmitry.
+
+Wed Apr 17 08:53:58 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+	
+	Silence compiler warning.
+
 Wed Apr 17 08:33:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, intl/german.lng, src/intl/language.inc:

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.126 2004/03/21 14:30:25 jonas Exp $ */
+/* $Id: cookies.c,v 1.127 2004/03/21 15:23:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -297,7 +297,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		}
 
 		add_char_to_string(&path, '/');
-		add_bytes_to_string(&path, uri->datastr, uri->datalen);
+		add_string_to_string(&path, &uri->data);
 
 		cookie->path = path.source;
 		for (path_end = cookie->path; *path_end; path_end++) {
@@ -580,15 +580,18 @@ is_in_domain(unsigned char *d, struct string *server)
 
 
 static inline int
-is_path_prefix(unsigned char *d, unsigned char *s, int sl)
+is_path_prefix(unsigned char *prefix, struct string *path)
 {
-	int dl = strlen(d);
+	unsigned char *data = path->source - 1;
+	int datalen = path->length + 1;
+	int prefixlen = strlen(prefix);
 
+	assert(*data == '/');
 	/* TODO: strlcmp()? --pasky */
 
-	if (dl > sl) return 0;
+	if (prefixlen > datalen) return 0;
 
-	return !memcmp(d, s, dl);
+	return !memcmp(prefix, data, datalen);
 }
 
 
@@ -600,8 +603,7 @@ send_cookies(struct uri *uri)
 {
 	struct c_domain *cd;
 	struct cookie *c, *d;
-	unsigned char *data = NULL;
-	int datalen = uri->datalen + 1;
+	struct string *data = NULL;
 	static struct string header;
 
 	if (string_is_empty(&uri->host) || !uri->datastr)
@@ -609,7 +611,7 @@ send_cookies(struct uri *uri)
 
 	foreach (cd, c_domains)
 		if (is_in_domain(cd->domain, &uri->host)) {
-			data = uri->datastr - 1;
+			data = &uri->data;
 			break;
 		}
 
@@ -619,7 +621,7 @@ send_cookies(struct uri *uri)
 
 	foreach (c, cookies) {
 		if (!is_in_domain(c->domain, &uri->host)
-		    || !is_path_prefix(c->path, data, datalen))
+		    || !is_path_prefix(c->path, data))
 			continue;
 
 		if (is_expired(c->expires)) {

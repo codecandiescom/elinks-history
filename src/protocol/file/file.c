@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.76 2003/06/23 22:41:13 jonas Exp $ */
+/* $Id: file.c,v 1.77 2003/06/23 23:10:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,24 +282,21 @@ struct file_info {
 	int fragmentlen;
 };
 
-/* Generates a HTML page listing the content of @directory with the path
- * @filename. */
-/* Returns a connection state. S_OK if all is well. */
-/* TODO comment and split up this function; possibly the two loops. --jonas */
-static int
-list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
+/* First information such as permissions is gathered for each directory entry.
+ * All entries are then sorted and finally the sorted entries are added to the
+ * fragment one by one. */
+static void
+add_dir_entries(DIR *directory, unsigned char *filename, struct file_info *info)
 {
 	struct directory_entry *entries = NULL;
+	unsigned char *fragment = info->fragment;
+	int fragmentlen = info->fragmentlen;
 	int size = 0;
 	int i;
 	struct dirent *entry;
 	unsigned char dircolor[8];
 	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
 	int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
-	unsigned char *fragment = init_str();
-	int fragmentlen = 0;
-
-	if (!fragment) return S_OUT_OF_MEM;
 
 	if (colorize_dir) {
 		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
@@ -308,29 +305,6 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 
 	last_uid = -1;
 	last_gid = -1;
-
-	add_to_str(&fragment, &fragmentlen, "<html>\n<head><title>");
-	add_htmlesc_str(&fragment, &fragmentlen, filename, strlen(filename));
-	add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory ");
-	{
-		/* Make the directory path with links to each subdir. */
-		unsigned char *slash = filename;
-		unsigned char *pslash = ++slash;
-
-		add_chr_to_str(&fragment, &fragmentlen, '/');
-		while ((slash = strchr(slash, '/'))) {
-			*slash = 0;
-			add_to_str(&fragment, &fragmentlen, "<a href=\"");
-			/* FIXME: htmlesc? At least we should escape quotes. --pasky */
-			add_to_str(&fragment, &fragmentlen, filename);
-			add_to_str(&fragment, &fragmentlen, "/\">");
-			add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
-			add_to_str(&fragment, &fragmentlen, "</a>/");
-			*slash = '/';
-			pslash = ++slash;
-		}
-	}
-	add_to_str(&fragment, &fragmentlen, "</h2>\n<pre>");
 
 	while ((entry = readdir(directory))) {
 		struct stat st, *stp;
@@ -475,10 +449,52 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 	}
 	mem_free(entries);
 
-	add_to_str(&fragment, &fragmentlen, "</pre>\n<hr>\n</body>\n</html>\n");
+	info->fragment = fragment;
+	info->fragmentlen = fragmentlen;
+}
+
+/* Generates a HTML page listing the content of @directory with the path
+ * @filename. */
+/* Returns a connection state. S_OK if all is well. */
+/* TODO comment and split up this function; possibly the two loops. --jonas */
+static int
+list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
+{
+	unsigned char *fragment = init_str();
+	int fragmentlen = 0;
+
+	if (!fragment) return S_OUT_OF_MEM;
+
+	add_to_str(&fragment, &fragmentlen, "<html>\n<head><title>");
+	add_htmlesc_str(&fragment, &fragmentlen, filename, strlen(filename));
+	add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory ");
+	{
+		/* Make the directory path with links to each subdir. */
+		unsigned char *slash = filename;
+		unsigned char *pslash = ++slash;
+
+		add_chr_to_str(&fragment, &fragmentlen, '/');
+		while ((slash = strchr(slash, '/'))) {
+			*slash = 0;
+			add_to_str(&fragment, &fragmentlen, "<a href=\"");
+			/* FIXME: htmlesc? At least we should escape quotes. --pasky */
+			add_to_str(&fragment, &fragmentlen, filename);
+			add_to_str(&fragment, &fragmentlen, "/\">");
+			add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
+			add_to_str(&fragment, &fragmentlen, "</a>/");
+			*slash = '/';
+			pslash = ++slash;
+		}
+	}
+	add_to_str(&fragment, &fragmentlen, "</h2>\n<pre>");
 
 	info->fragment = fragment;
 	info->fragmentlen = fragmentlen;
+
+	add_dir_entries(directory, filename, info);
+
+	add_to_str(&info->fragment, &info->fragmentlen, "</pre>\n<hr>\n</body>\n</html>\n");
+
 	info->head = stracpy("\r\nContent-Type: text/html\r\n");
 	return S_OK;
 }

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.15 2004/04/24 11:31:01 pasky Exp $ */
+/* $Id: parse.c,v 1.16 2004/04/24 11:39:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -832,11 +832,9 @@ end_element(struct element_info *ei,
 	int xxx = 0;
 
 	if (was_xmp) {
-		if (ei->func == html_xmp) {
-			was_xmp = 0;
-		} else {
+		if (ei->func != html_xmp)
 			return;
-		}
+		was_xmp = 0;
 	}
 
 	was_br = 0;

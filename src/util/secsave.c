@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.41 2004/12/16 15:56:54 zas Exp $ */
+/* $Id: secsave.c,v 1.42 2005/02/05 05:54:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "osdep/osdep.h" /* Needed for mkstemp() on win32 */
 #include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"

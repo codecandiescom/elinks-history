@@ -1,5 +1,5 @@
 /* Provide stub function getifaddrs(). */
-/* $Id: getifaddrs.c,v 1.9 2005/02/05 04:47:54 jonas Exp $ */
+/* $Id: getifaddrs.c,v 1.10 2005/02/05 05:54:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,7 @@
 
 #if (defined(AF_INET6)    && defined(SIOCGIF6CONF) && defined(SIOCGIF6FLAGS)) \
  || (defined(AF_INET)     && defined(SIOCGIFCONF)  && defined(SIOCGIFFLAGS)) \
-    (defined(CONFIG_IPV6) && defined(SIOCGIFCONF)
+ || (defined(CONFIG_IPV6) && defined(SIOCGIFCONF))
 
 static int
 getifaddrs2(struct ifaddrs **ifap,

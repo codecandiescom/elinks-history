@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.2 2002/08/30 10:58:28 pasky Exp $ */
+/* $Id: dialogs.c,v 1.3 2002/08/30 22:55:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,6 @@ static struct listbox_data *
 history_dialog_box_build()
 {
 	struct listbox_data *box;
-	struct listbox_item *item;
 
 	/* Deleted in abort */
 	box = mem_alloc(sizeof(struct listbox_data));
@@ -63,9 +62,7 @@ history_dialog_box_build()
 
 	memset(box, 0, sizeof(struct listbox_data));
 	box->items = &gh_box_items;
-	foreach (item, *box->items) {
-		item->box = box;
-	}
+	add_to_list(gh_boxes, box);
 
 	return box;
 }
@@ -77,7 +74,6 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 {
 	struct listbox_data *box;
 	struct history_dialog_list_item *item;
-	struct listbox_item *litem;
 
 	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
@@ -90,9 +86,7 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 		}
 	}
 
-	foreach (litem, *box->items) {
-		litem->box = NULL;
-	}
+	del_from_list(box);
 
 	mem_free(box);
 }
@@ -230,14 +224,15 @@ layout_history_manager(struct dialog_data *dlg)
 static void
 history_search_do(struct dialog *d)
 {
-	if (globhist_simple_search(d->items[1].data, d->items[0].data)) {
-		struct listbox_item *item = gh_box_items.next;
-		struct listbox_data *box = item->box;
+	struct listbox_item *item = gh_box_items.next;
+	struct listbox_data *box;
 
-		if (!list_empty(gh_box_items)) {
-			box->top = item;
-			box->sel = box->top;
-		}
+	if (!globhist_simple_search(d->items[1].data, d->items[0].data)) return;
+	if (list_empty(gh_box_items)) return;
+
+	foreach (box, *item->box) {
+		box->top = item;
+		box->sel = box->top;
 	}
 }
 
@@ -293,7 +288,7 @@ push_delete_button(struct dialog_data *dlg,
 	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
-	if (!box->sel->udata) return 0;
+	if (!box->sel) return 0;
 	historyitem = box->sel->udata;
 	if (!historyitem) return 0;
 

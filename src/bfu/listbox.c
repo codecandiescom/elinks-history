@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.24 2002/08/30 10:58:28 pasky Exp $ */
+/* $Id: listbox.c,v 1.25 2002/08/30 22:55:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,9 +76,10 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 			    void *d)
 {
 	struct listbox_item *visible_item = item;
-	struct listbox_data *box = item->box;
+	struct listbox_data *box;
 
 	if (!item) return NULL;
+	box = item->box->next;
 
 	while (offset) {
 		if (fn && (!follow_visible || item->visible))

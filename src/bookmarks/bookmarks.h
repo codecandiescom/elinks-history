@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.10 2002/08/30 09:26:16 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.11 2002/08/30 22:55:27 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -23,6 +23,7 @@ struct bookmark {
 
 extern struct list_head bookmarks;
 extern struct list_head bookmark_box_items;
+extern struct list_head bookmark_boxes;
 
 /* Search memorization */
 extern unsigned char *bm_last_searched_name;

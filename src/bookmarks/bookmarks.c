@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.36 2002/08/30 10:58:28 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.37 2002/08/30 22:55:27 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -26,6 +26,7 @@
 struct list_head bookmarks = { &bookmarks, &bookmarks };
 struct list_head bookmark_box_items = { &bookmark_box_items,
 					&bookmark_box_items };
+struct list_head bookmark_boxes = { &bookmark_boxes, &bookmark_boxes };
 
 /* Last searched values */
 unsigned char *bm_last_searched_name = NULL;
@@ -91,9 +92,7 @@ add_bookmark(const unsigned char *title, const unsigned char *url)
 
 	bm->box_item->text = ((unsigned char *) bm->box_item
 			      + sizeof(struct listbox_item));
-	if (!list_empty(bookmark_box_items))
-		bm->box_item->box = ((struct listbox_item *)
-				     bookmark_box_items.next)->box;
+	bm->box_item->box = &bookmark_boxes;
 	bm->box_item->udata = (void *) bm;
 
 	strcpy(bm->box_item->text, bm->title);

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.23 2002/08/30 10:58:28 pasky Exp $ */
+/* $Id: dialogs.c,v 1.24 2002/08/30 22:55:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,6 @@ static struct listbox_data *
 bookmark_dlg_box_build()
 {
 	struct listbox_data *box;
-	struct listbox_item *item;
 
 	/* Deleted in abort */
 	box = mem_alloc(sizeof(struct listbox_data));
@@ -55,9 +54,7 @@ bookmark_dlg_box_build()
 
 	memset(box, 0, sizeof(struct listbox_data));
 	box->items = &bookmark_box_items;
-	foreach (item, *box->items) {
-		item->box = box;
-	}
+	add_to_list(bookmark_boxes, box);
 
 	return box;
 }
@@ -71,6 +68,7 @@ bookmark_dialog_abort_handler(struct dialog_data *dlg)
 
 	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
 
+	del_from_list(box);
 	/* Delete the box structure */
 	mem_free(box);
 }
@@ -308,7 +306,6 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
  * really_del_bookmark() */
 struct push_del_button_hop_struct {
 	struct dialog *dlg;
-	struct listbox_data *box;
 	struct bookmark *bm;
 };
 
@@ -321,9 +318,12 @@ really_del_bookmark(void *vhop)
 	struct listbox_data *box;
 
 	hop = (struct push_del_button_hop_struct *) vhop;
-	box = hop->box;
 
 	/* Take care about move of the selected item if we're deleting it. */
+
+	foreach (box, *hop->bm->box_item->box) {
+
+	/* Please. Don't. Reindent. This. Ask. Why. --pasky */
 
 	if (box->sel && box->sel->udata == hop->bm) {
 		struct bookmark *bm = (struct bookmark *) box->sel->udata;
@@ -347,6 +347,8 @@ really_del_bookmark(void *vhop)
 					1, NULL, NULL);
 		if (bm->box_item == box->top)
 			box->top = NULL;
+	}
+
 	}
 
 	if (!delete_bookmark(hop->bm))
@@ -384,7 +386,6 @@ push_delete_button(struct dialog_data *dlg,
 
 	hop->bm = bm;
 	hop->dlg = dlg->dlg;
-	hop->box = box;
 
 	msg_box(term, getml(hop, NULL),
 		TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
@@ -493,8 +494,7 @@ bookmark_add_add(struct dialog *d)
 	struct listbox_data *box;
 
 	bm = add_bookmark(d->items[0].data, d->items[1].data);
-	box = bm->box_item->box;
-	if (box) {
+	foreach (box, *bm->box_item->box) {
 		box->sel = bm->box_item;
 		box->top = bm->box_item; /* XXX: BLEARGH! */
 	}
@@ -509,14 +509,15 @@ bookmark_add_add(struct dialog *d)
 void
 bookmark_search_do(struct dialog *d)
 {
-	if (bookmark_simple_search(d->items[1].data, d->items[0].data)) {
-		struct listbox_item *item = bookmark_box_items.next;
-		struct listbox_data *box = item->box;
+	struct listbox_item *item = bookmark_box_items.next;
+	struct listbox_data *box;
 
-		if (!list_empty(bookmark_box_items)) {
-			box->top = item;
-			box->sel = box->top;
-		}
+	if (!bookmark_simple_search(d->items[1].data, d->items[0].data)) return;
+	if (list_empty(bookmark_box_items)) return;
+
+	foreach (box, *item->box) {
+		box->top = item;
+		box->sel = box->top;
 	}
 }
 

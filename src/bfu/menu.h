@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.66 2004/08/03 17:08:09 zas Exp $ */
+/* $Id: menu.h,v 1.67 2004/11/22 13:27:41 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -107,7 +107,7 @@ struct menu_item {
 	(unsigned char *) (text),					\
 	(unsigned char *) (rtext),					\
 	(action),							\
-	(menu_func) (func),						\
+	(func),								\
 	(void *) (data),						\
 	(flags),							\
 	HKS_SHOW,							\
@@ -129,7 +129,7 @@ do {									\
 	(e_)->text = (unsigned char *) (text_);				\
 	(e_)->rtext = (unsigned char *) (rtext_);			\
 	(e_)->action = (action_);					\
-	(e_)->func = (menu_func) (func_);				\
+	(e_)->func = (func_);						\
 	(e_)->data = (void *) (data_);					\
 	(e_)->flags = (flags_);						\
 	(e_)->hotkey_state = (hotkey_state_);				\

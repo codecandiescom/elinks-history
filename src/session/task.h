@@ -1,4 +1,4 @@
-/* $Id: task.h,v 1.16 2004/09/28 16:12:20 pasky Exp $ */
+/* $Id: task.h,v 1.17 2004/11/22 13:27:41 zas Exp $ */
 
 #ifndef EL__SCHED_TASK_H
 #define EL__SCHED_TASK_H
@@ -35,6 +35,6 @@ void goto_url(struct session *, unsigned char *);
 void goto_url_with_hook(struct session *, unsigned char *);
 int goto_url_home(struct session *ses);
 void goto_imgmap(struct session *, struct uri *, unsigned char *);
-void map_selected(struct terminal *, struct link_def *, struct session *);
+void map_selected(struct terminal *term, void *ld, void *ses);
 
 #endif

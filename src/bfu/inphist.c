@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.89 2004/11/19 17:19:05 zas Exp $ */
+/* $Id: inphist.c,v 1.90 2004/11/22 13:27:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,9 +39,19 @@ tab_compl_n(struct dialog_data *dlg_data, unsigned char *item, int len)
 	redraw_dialog(dlg_data, 1);
 }
 
-static inline void
-tab_compl(struct terminal *term, unsigned char *item, struct dialog_data *dlg_data)
+static void
+tab_compl(struct dialog_data *dlg_data, unsigned char *item)
 {
+	tab_compl_n(dlg_data, item, strlen(item));
+}
+
+/* menu_func */
+static void
+menu_tab_compl(struct terminal *term, void *item_, void *dlg_data_)
+{
+	unsigned char *item = item_;
+	struct dialog_data *dlg_data = dlg_data_;
+
 	tab_compl_n(dlg_data, item, strlen(item));
 }
 
@@ -64,14 +74,14 @@ do_tab_compl(struct dialog_data *dlg_data, struct list_head *history)
 			continue;
 
 		add_to_menu(&items, entry->data, NULL, ACT_MAIN_NONE,
-			    (menu_func) tab_compl, entry->data, 0);
+			    menu_tab_compl, entry->data, 0);
 		n++;
 	}
 
 	if (n > 1) {
 		do_menu_selected(term, items, dlg_data, n - 1, 0);
 	} else {
-		if (n == 1) tab_compl(term, items->data, dlg_data);
+		if (n == 1) tab_compl(dlg_data, items->data);
 		mem_free(items);
 	}
 }

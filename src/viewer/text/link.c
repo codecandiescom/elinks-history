@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.297 2004/11/12 13:45:59 zas Exp $ */
+/* $Id: link.c,v 1.298 2004/11/22 13:27:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1083,8 +1083,9 @@ try_document_key(struct session *ses, struct document_view *doc_view,
 /* Open a contextual menu on a link, form or image element. */
 /* TODO: This should be completely configurable. */
 void
-link_menu(struct terminal *term, void *xxx, struct session *ses)
+link_menu(struct terminal *term, void *xxx, void *ses_)
 {
+	struct session *ses = ses_;
 	struct document_view *doc_view;
 	struct link *link;
 	struct menu_item *mi;
@@ -1153,7 +1154,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 				add_to_menu(&mi, N_("Open in ~external editor"),
 					    keystroke.source, ACT_MAIN_NONE,
-					    (menu_func) menu_textarea_edit, NULL, FREE_RTEXT);
+					    menu_textarea_edit, NULL, FREE_RTEXT);
 			}
 			/* Fall through */
 		default:

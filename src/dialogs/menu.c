@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.375 2004/11/19 16:16:26 zas Exp $ */
+/* $Id: menu.c,v 1.376 2004/11/22 13:27:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,9 +49,11 @@
 
 /* Helper for url items in help menu. */
 static void
-menu_url_shortcut(struct terminal *term, void *url, struct session *ses)
+menu_url_shortcut(struct terminal *term, void *url_, void *ses_)
 {
-	struct uri *uri = get_uri((unsigned char *) url, 0);
+	unsigned char *url = url_;
+	struct session *ses = ses_;
+	struct uri *uri = get_uri(url, 0);
 
 	if (!uri) return;
 	goto_uri(ses, uri);
@@ -141,9 +143,11 @@ exit_prog(struct session *ses, int query)
 
 
 static void
-go_historywards(struct terminal *term, struct location *target,
-		struct session *ses)
+go_historywards(struct terminal *term, void *target_, void *ses_)
 {
+	struct location *target = target_;
+	struct session *ses = ses_;
+
 	go_history(ses, target);
 }
 
@@ -175,7 +179,7 @@ history_menu_common(struct terminal *term, struct session *ses, int unhist)
 			url = get_uri_string(loc->vs.uri, URI_PUBLIC);
 			if (url) {
 				add_to_menu(&mi, url, NULL, ACT_MAIN_NONE,
-					    (menu_func) go_historywards,
+					    go_historywards,
 				    	    (void *) loc, 0);
 			}
 		}
@@ -188,14 +192,18 @@ history_menu_common(struct terminal *term, struct session *ses, int unhist)
 }
 
 static void
-history_menu(struct terminal *term, void *xxx, struct session *ses)
+history_menu(struct terminal *term, void *xxx, void *ses_)
 {
+	struct session *ses = ses_;
+
 	history_menu_common(term, ses, 0);
 }
 
 static void
-unhistory_menu(struct terminal *term, void *xxx, struct session *ses)
+unhistory_menu(struct terminal *term, void *xxx, void *ses_)
 {
+	struct session *ses = ses_;
+
 	history_menu_common(term, ses, 1);
 }
 
@@ -271,9 +279,11 @@ tab_menu(struct session *ses, int x, int y, int place_above_cursor)
 }
 
 static void
-do_submenu(struct terminal *term, void *menu, struct session *ses)
+do_submenu(struct terminal *term, void *menu_, void *ses_)
 {
-	do_menu(term, menu, ses, 1);
+	struct menu_item *menu = menu_;
+
+	do_menu(term, menu, ses_, 1);
 }
 
 
@@ -312,7 +322,7 @@ static struct menu_item file_menu3[] = {
 };
 
 static void
-do_file_menu(struct terminal *term, void *xxx, struct session *ses)
+do_file_menu(struct terminal *term, void *xxx, void *ses_)
 {
 	struct menu_item *file_menu, *e, *f;
 	int anonymous = get_cmd_opt_int("anonymous");
@@ -334,7 +344,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	if (o) {
 		SET_MENU_ITEM(e, N_("~New window"), NULL, ACT_MAIN_OPEN_NEW_WINDOW,
-			      (menu_func) open_in_new_window, send_open_new_window,
+			      open_in_new_window, send_open_new_window,
 			      (o - 1) ? SUBMENU : 0, 0, HKS_SHOW);
 		e++;
 	}
@@ -372,7 +382,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	for (f = file_menu; f < e; f++)
 		f->flags |= FREE_LIST;
 
-	do_menu(term, file_menu, ses, 1);
+	do_menu(term, file_menu, ses_, 1);
 }
 
 static struct menu_item view_menu[] = {
@@ -467,8 +477,10 @@ static struct menu_item tools_menu[] = {
 };
 
 static void
-do_setup_menu(struct terminal *term, void *xxx, struct session *ses)
+do_setup_menu(struct terminal *term, void *xxx, void *ses_)
 {
+	struct session *ses = ses_;
+
 	if (!get_cmd_opt_int("anonymous"))
 		do_menu(term, setup_menu, ses, 1);
 	else
@@ -644,12 +656,10 @@ send_open_new_window(struct terminal *term, const struct open_in_new *open,
 
 
 void
-open_in_new_window(struct terminal *term,
-		   void (*func)(struct terminal *,
-			        const struct open_in_new *,
-			        struct session *ses),
-		   struct session *ses)
+open_in_new_window(struct terminal *term, void *func_, void *ses_)
 {
+	menu_func func = func_;
+	struct session *ses = ses_;
 	struct menu_item *mi;
 	int posibilities;
 
@@ -673,10 +683,10 @@ open_in_new_window(struct terminal *term,
 		const struct open_in_new *oi = &open_in_new[posibilities];
 
 		if (mi == NULL) {
-			func(term, oi, ses);
+			func(term, (void *) oi, ses);
 			return;
 		}
-		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, (menu_func) func, (void *) oi, 0);
+		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, func, (void *) oi, 0);
 	}
 
 	do_menu(term, mi, ses, 1);
@@ -701,15 +711,16 @@ add_new_win_to_menu(struct menu_item **mi, unsigned char *text,
 		return;
 
 	add_to_menu(mi, text, NULL, ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW,
-		    (menu_func) open_in_new_window,
+		    open_in_new_window,
 		    send_open_in_new_window, c - 1 ? SUBMENU : 0);
 }
 
 
 static void
-do_pass_uri_to_command(struct terminal *term, unsigned char *command,
-		       struct session *ses)
+do_pass_uri_to_command(struct terminal *term, void *command_, void *xxx)
 {
+	unsigned char *command = command_;
+
 	exec_on_terminal(term, command, "", 0);
 	mem_free(command);
 }
@@ -811,7 +822,7 @@ pass_uri_to_command(struct session *ses, struct document_view *doc_view,
 		}
 
 		add_to_menu(&items, text, NULL, ACT_MAIN_NONE,
-			    (menu_func) do_pass_uri_to_command, data, 0);
+			    do_pass_uri_to_command, data, 0);
 		commands++;
 	}
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.249 2004/11/19 16:16:27 zas Exp $ */
+/* $Id: form.c,v 1.250 2004/11/22 13:27:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,10 +113,12 @@ fixup_select_state(struct form_control *fc, struct form_state *fs)
 					 : (unsigned char *) ""));
 }
 
+/* menu_func */
 void
-selected_item(struct terminal *term, void *pitem, struct session *ses)
+selected_item(struct terminal *term, void *item_, void *ses_)
 {
-	int item = (int) pitem;
+	struct session *ses = ses_;
+	int item = (int) item_;
 	struct document_view *doc_view;
 	struct link *link;
 	struct form_state *fs;
@@ -1100,20 +1102,26 @@ auto_submit_form(struct session *ses)
 }
 
 
+/* menu_func */
 static void
-set_file_form_state(struct terminal *term, unsigned char *filename,
-		    struct form_state *fs)
+set_file_form_state(struct terminal *term, void *filename_, void *fs_)
 {
+	unsigned char *filename = filename_;
+	struct form_state *fs = fs_;
+
 	/* The menu code doesn't free the filename data */
 	mem_free_set(&fs->value, filename);
 	fs->state = strlen(filename);
 	redraw_terminal(term);
 }
 
+/* menu_func */
 static void
-file_form_menu(struct terminal *term, unsigned char *path,
-	       struct form_state *fs)
+file_form_menu(struct terminal *term, void *path_, void *fs_)
 {
+	unsigned char *path = path_;
+	struct form_state *fs = fs_;
+
 	/* FIXME: It doesn't work for ../../ */
 #if 0
 	int valuelen = strlen(fs->value);
@@ -1132,8 +1140,8 @@ file_form_menu(struct terminal *term, unsigned char *path,
 #endif
 
 	auto_complete_file(term, 0 /* no_elevator */, path,
-			   (menu_func) set_file_form_state,
-			   (menu_func) file_form_menu, fs);
+			   set_file_form_state,
+			   file_form_menu, fs);
 }
 
 

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.118 2004/11/19 16:16:26 zas Exp $ */
+/* $Id: info.c,v 1.119 2004/11/22 13:27:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
 #include "util/string.h"
 
 void
-menu_about(struct terminal *term, void *d, struct session *ses)
+menu_about(struct terminal *term, void *xxx, void *xxxx)
 {
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("About"), ALIGN_CENTER,
@@ -58,8 +58,10 @@ push_toggle_keys_display_button(void *data)
 }
 
 void
-menu_keys(struct terminal *term, void *d, struct session *ses)
+menu_keys(struct terminal *term, void *d_, void *xxx)
 {
+	int d = (int) d_;
+
 	/* We scale by main mapping because it has the most actions */
 	int actions[MAIN_ACTIONS] = {
 		ACT_MAIN_MENU,
@@ -96,7 +98,7 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 	}
 
 	info->term = term;
-	info->toggle = (int) d;
+	info->toggle = d;
 
 	if (info->toggle) {
 		int action;
@@ -135,7 +137,7 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 }
 
 void
-menu_copying(struct terminal *term, void *d, struct session *ses)
+menu_copying(struct terminal *term, void *xxx, void *xxxx)
 {
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Copying"), ALIGN_CENTER,

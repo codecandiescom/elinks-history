@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.158 2004/11/21 14:53:30 zas Exp $ */
+/* $Id: options.c,v 1.159 2004/11/22 13:27:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,8 +26,9 @@
 
 
 static void
-display_codepage(struct terminal *term, unsigned char *name, struct session *ses)
+display_codepage(struct terminal *term, void *name_, void *xxx)
 {
+	unsigned char *name = name_;
 	struct option *opt = get_opt_rec(term->spec, "charset");
 	int index = get_cp_index(name);
 
@@ -42,8 +43,9 @@ display_codepage(struct terminal *term, unsigned char *name, struct session *ses
 }
 
 void
-charset_list(struct terminal *term, void *xxx, struct session *ses)
+charset_list(struct terminal *term, void *xxx, void *ses_)
 {
+	struct session *ses = ses_;
 	int i;
 	int sel = int_max(0, get_opt_int_tree(term->spec, "charset"));
 	struct menu_item *mi = new_menu(FREE_LIST);
@@ -57,7 +59,7 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
 		if (is_cp_special(i)) continue;
 
 		add_to_menu(&mi, name, NULL, ACT_MAIN_NONE,
-		    	    (menu_func) display_codepage, get_cp_mime_name(i), 0);
+		    	    display_codepage, get_cp_mime_name(i), 0);
 	}
 
 	do_menu_selected(term, mi, ses, sel, 0);
@@ -179,15 +181,17 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 
 #ifdef ENABLE_NLS
 static void
-menu_set_language(struct terminal *term, void *pcp, struct session *ses)
+menu_set_language(struct terminal *term, void *pcp_, void *xxx)
 {
-	set_language((int) pcp);
+	int pcp = (int) pcp_;
+
+	set_language(pcp);
 	cls_redraw_all_terminals();
 }
 #endif
 
 void
-menu_language_list(struct terminal *term, void *xxx, struct session *ses)
+menu_language_list(struct terminal *term, void *xxx, void *ses)
 {
 #ifdef ENABLE_NLS
 	int i;
@@ -196,7 +200,7 @@ menu_language_list(struct terminal *term, void *xxx, struct session *ses)
 	if (!mi) return;
 	for (i = 0; languages[i].name; i++) {
 		add_to_menu(&mi, languages[i].name, language_to_iso639(i), ACT_MAIN_NONE,
-			    (menu_func) menu_set_language, (void *) i, 0);
+			    menu_set_language, (void *) i, 0);
 	}
 
 	do_menu_selected(term, mi, ses, current_language, 0);
@@ -221,8 +225,9 @@ push_resize_button(void *data)
 	do_terminal_function(term, TERM_FN_RESIZE, str);
 }
 
+/* menu_func */
 void
-dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
+dlg_resize_terminal(struct terminal *term, void *xxx, void *xxxx)
 {
 	struct dialog *dlg;
 	int x = int_min(term->width, 999);

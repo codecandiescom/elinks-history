@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.39 2004/10/22 20:15:07 pasky Exp $ */
+/* $Id: form.h,v 1.40 2004/11/22 13:27:42 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -109,7 +109,7 @@ struct uri *get_form_uri(struct session *ses, struct document_view *doc_view, st
 
 unsigned char *get_form_info(struct session *ses, struct document_view *doc_view);
 
-void selected_item(struct terminal *term, void *pitem, struct session *ses);
+void selected_item(struct terminal *term, void *item_, void *ses_);
 struct form_state *find_form_state(struct document_view *doc_view, struct form_control *fc);
 int get_current_state(struct session *ses);
 

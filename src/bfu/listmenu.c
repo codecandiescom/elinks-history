@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.34 2004/11/08 19:27:22 jonas Exp $ */
+/* $Id: listmenu.c,v 1.35 2004/11/22 13:27:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 static int
 menu_contains(struct menu_item *m, int f)
 {
-	if (m->func != (menu_func) do_select_submenu)
+	if (m->func != do_select_submenu)
 		return (int) m->data == f;
 
 	foreach_menu_item (m, m->data) {
@@ -39,9 +39,10 @@ menu_contains(struct menu_item *m, int f)
 }
 
 void
-do_select_submenu(struct terminal *term, struct menu_item *menu,
-		  struct session *ses)
+do_select_submenu(struct terminal *term, void *menu_, void *ses_)
 {
+	struct menu_item *menu = menu_;
+	struct session *ses = ses_;
 	struct menu_item *m;
 	int def = int_max(0, get_current_state(ses));
 	int sel = 0;
@@ -108,11 +109,11 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 	if (data == -1) {
 		add_to_menu(items, name, NULL, ACT_MAIN_NONE,
-			    (menu_func) do_select_submenu,
+			    do_select_submenu,
 			    new_menu_item, SUBMENU);
 	} else {
 		add_to_menu(items, name, NULL, ACT_MAIN_NONE,
-			    (menu_func) selected_item,
+			    selected_item,
 			    (void *) data, (fullname ? MENU_FULLNAME : 0));
 	}
 
@@ -142,7 +143,7 @@ free_menu(struct menu_item *m) /* Grrr. Recursion */
 
 	foreach_menu_item (mm, m) {
 		mem_free_if(mm->text);
-		if (mm->func == (menu_func) do_select_submenu) free_menu(mm->data);
+		if (mm->func == do_select_submenu) free_menu(mm->data);
 	}
 
 	mem_free(m);
@@ -180,12 +181,12 @@ menu_labels(struct menu_item *items, unsigned char *base, unsigned char **lbls)
 		bs = straconcat(bs, item->text, NULL);
 		if (!bs) continue;
 
-		if (item->func == (menu_func) do_select_submenu) {
+		if (item->func == do_select_submenu) {
 			add_to_strn(&bs, " ");
 			menu_labels(item->data, bs, lbls);
 			mem_free(bs);
 		} else {
-			assert(item->func == (menu_func) selected_item);
+			assert(item->func == selected_item);
 			lbls[(int) item->data] = bs;
 		}
 	}

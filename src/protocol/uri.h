@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.67 2004/03/31 20:31:22 jonas Exp $ */
+/* $Id: uri.h,v 1.68 2004/03/31 21:50:32 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -94,7 +94,13 @@ enum uri_component {
 /* A small URI struct cache to increase reusability. */
 struct uri *get_uri(unsigned char *string);
 void done_uri(struct uri *uri);
-#define get_uri_reference(uri) object_lock(uri)
+
+static inline struct uri *
+get_uri_reference(struct uri *uri)
+{
+	object_lock(uri);
+	return uri;
+}
 
 /* These functions recreate the URI string part by part. */
 /* The @components bitmask describes the set of URI components used for

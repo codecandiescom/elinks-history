@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.127 2004/06/11 01:06:34 jonas Exp $ */
+/* $Id: uri.h,v 1.128 2004/06/11 23:48:06 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -94,21 +94,22 @@ enum uri_component {
 	URI_DATA		= (1 << 6),
 	URI_FRAGMENT		= (1 << 7),
 	URI_POST		= (1 << 8),
+	URI_POST_INFO		= (1 << 9),
 
 	/* Control for ``encoding'' URIs into Internationalized Domain Names.
 	 * Hopefully only a few lowlevel places should have to use it and it
 	 * should never be exposed to the user. */
-	URI_IDN			= (1 << 9),
+	URI_IDN			= (1 << 10),
 
 	/* Add stuff from uri->data and up and prefixes a '/' */
-	URI_PATH		= (1 << 10),
+	URI_PATH		= (1 << 11),
 
 	/* Add filename from last direcory separator in uri->data to end of
 	 * path. */
-	URI_FILENAME		= (1 << 11),
+	URI_FILENAME		= (1 << 12),
 
 	/* Add query part from uri->data not including the '?' */
-	URI_QUERY		= (1 << 12),
+	URI_QUERY		= (1 << 13),
 
 	/* Some predefined classes for formatting of URIs */
 
@@ -119,7 +120,7 @@ enum uri_component {
 	URI_RARE		= URI_SPECIAL | URI_POST | URI_IDN,
 
 	/* Used for public display either in dialogs or sent over the Net */
-	URI_PUBLIC		= ~(URI_PASSWORD | URI_RARE),
+	URI_PUBLIC		= ~(URI_PASSWORD | URI_RARE) | URI_POST_INFO,
 
 	/* Used for getting the original URI with no internal post encoding */
 	URI_ORIGINAL		= ~URI_RARE,

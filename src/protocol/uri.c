@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.238 2004/06/10 00:02:18 jonas Exp $ */
+/* $Id: uri.c,v 1.239 2004/06/11 23:48:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,6 +493,18 @@ add_uri_to_string(struct string *string, struct uri *uri,
 	if (wants(URI_POST) && uri->post) {
 		add_char_to_string(string, POST_CHAR);
 		add_to_string(string, uri->post);
+
+	} else if (wants(URI_POST_INFO) && uri->post) {
+		if (!strncmp(uri->post, "text/plain", 10)) {
+			add_to_string(string, " (PLAIN TEXT DATA)");
+
+		} else if (!strncmp(uri->post, "multipart/form-data;", 20)) {
+			add_to_string(string, " (MULTIPART FORM DATA)");
+
+		} else {
+			add_to_string(string, " (POST DATA)");
+		}
+
 	}
 
 	return string;

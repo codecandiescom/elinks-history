@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.173 2004/11/10 17:21:52 zas Exp $ */
+/* $Id: cookies.c,v 1.174 2004/11/10 17:26:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,9 +198,10 @@ free_cookie(struct cookie *c)
 	mem_free(c);
 }
 
-
+/* Check whether cookie's domain matches server.
+ * It returns 1 if ok, 0 else. */
 static int
-check_domain_security(unsigned char *domain, unsigned char *server, int server_len)
+is_domain_security_ok(unsigned char *domain, unsigned char *server, int server_len)
 {
 	int i, j;
 	int domain_len;
@@ -403,7 +404,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	}
 #endif
 
-	if (!check_domain_security(cookie->domain, uri->host, uri->hostlen)) {
+	if (!is_domain_security_ok(cookie->domain, uri->host, uri->hostlen)) {
 #ifdef DEBUG_COOKIES
 		DBG("Domain security violated: %s vs %.*s", cookie->domain,
 		    uri->hostlen, uri->host);

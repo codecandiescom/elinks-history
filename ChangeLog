@@ -1,3 +1,660 @@
+Fri Oct 24 21:19:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	Now we can again use cur_loc() in go_(un)back() ;-).  
+
+Fri Oct 24 21:17:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/history.h, sched/session.h, viewer/text/view.c:
+
+	Okay, no help, moved go_(un)back() from sched/history.h to
+	sched/session.h. It belongs there more anyway.  
+
+Fri Oct 24 21:15:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	cur_loc() is session.h's thing, so don't use it in go_(un)back()
+	definitions.  
+
+Fri Oct 24 21:11:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	#undef history_menu_model 
+
+Fri Oct 24 21:11:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Reduced code duplication for (un)history_menu(), now it is done
+	through history_menu_model() macro.  
+
+Fri Oct 24 21:05:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Removed abort_loading() from go_historywards() because it is already
+	done in go_history().  
+
+Fri Oct 24 21:05:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Fix go_history() definition.  
+
+Fri Oct 24 21:04:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Removed obsolete go_history() comment.  
+
+Fri Oct 24 21:03:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	go_(un)backwards() unified to go_historywards().  
+
+Fri Oct 24 21:02:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	The only dangling prototype in this .h file which had unnamed
+	parameter, the black sheep ses_history_move(). Tsk.  
+
+Fri Oct 24 21:00:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	About the dangers of go_history().  
+
+Fri Oct 24 20:57:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	Tidyup.  
+
+Fri Oct 24 20:56:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, sched/history.c, sched/history.h,
+	viewer/text/view.c:
+
+	go_history() exported. go_(un)back() now just wraps going right to
+	the previous/next location in the history.  
+
+Fri Oct 24 20:52:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	go_away() -> go_history().  
+
+Fri Oct 24 20:51:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: history.c, session.c, session.h:
+
+	TASK_(UN)BACK unified to TASK_HISTORY.  
+
+Fri Oct 24 20:49:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Do the same thing when coming forward from nowhere to a redirect as
+	when coming back from nowhere. *mumble* 
+
+Fri Oct 24 20:46:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Fixed going in history to a document which was a redirect.  
+
+Fri Oct 24 20:39:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: history.c, history.h, session.c:
+
+	Unified ses_leave_location(), ses_back() and ses_unback() to
+	ses_history_move().  
+
+Fri Oct 24 20:32:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Factored out go_(un)back() just to call of go_away().  
+
+Fri Oct 24 20:11:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Always use dlg for struct dialog*, dlg_data for struct dialog_data*.  
+	Use counter for dialog creation.  
+
+Fri Oct 24 20:02:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Always use dlg for struct dialog*, dlg_data for struct dialog_data*.  
+	Use counter for dialog creation.  Prefix lua hackish dlg_data and
+	xdialog_data structures with lua_.  
+
+Fri Oct 24 19:43:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, globhist/globhist.c, globhist/globhist.h:
+
+	Move global history change_hooks back home.  
+
+Fri Oct 24 19:35:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, mime/backend/mailcap.c,
+	mime/backend/mimetypes.c:
+
+	Move mailcap/mimetypes change_hooks back home.  
+
+Fri Oct 24 19:08:05 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Fri Oct 24 17:25:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Always use dlg variable name for struct dialog *, and dlg_data for
+	struct dialog_data *. Use a counter for dialog items creation and
+	assert(). Always use file_download for struct file_download *.  
+
+Fri Oct 24 17:12:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/dialogs.c:
+
+	Always use dlg variable name for struct dialog *, and dlg_data for
+	struct dialog_data *. Use a counter for dialog items creation and
+	assert().  
+
+Fri Oct 24 17:05:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, sched/history.c, sched/session.c,
+	sched/session.h:
+
+	ses_goto() takes additional task_target_location parameter, which is
+	in turn harvested by ses_(un)back() and is used instead of assuming
+	the item next/previous to the cur_loc(). This should fix bug 255.  
+
+Fri Oct 24 17:04:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/options.c:
+
+	Always use dlg variable name for struct dialog *, and dlg_data for
+	struct dialog_data *. Use a counter for dialog items creation and
+	assert().  
+
+Fri Oct 24 16:55:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/mime.c:
+
+	Always use dlg variable name for struct dialog *, and dlg_data for
+	struct dialog_data *. Use a counter for dialog items creation and
+	assert().  
+
+Fri Oct 24 16:50:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: scripting/lua/core.c, viewer/dump/dump.c,
+	viewer/dump/dump.h:
+
+	add_document_to_string(): Centralize the ``dump'' code. Only user is
+	lua backend since it hurts performance for --dump a bit.  
+
+Fri Oct 24 16:47:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/edit.c:
+
+	Use a counter for dialog items creation and assert(): it will ease
+	deletion or insertion of buttons, and will ensure size of dialog is
+	correctly set.  
+
+Fri Oct 24 16:44:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/auth.c:
+
+	Use a counter for dialog items creation and assert(): it will ease
+	deletion or insertion of buttons, and will ensure size of dialog is
+	correctly set.  
+
+Fri Oct 24 16:36:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Use a counter for dialog items creation and assert(): it will ease
+	deletion or insertion of buttons, and will ensure size of dialog is
+	correctly set.  
+
+Fri Oct 24 16:34:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, mime/backend/mailcap.c,
+	mime/backend/mimetypes.c:
+
+	Move over the mailcap/mimetypes change hooks.  
+
+Fri Oct 24 16:30:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	Always use dlg variable name for struct dialog *, and dlg_data for
+	struct dialog_data *.  
+
+Fri Oct 24 16:26:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Always use dlg variable name for struct dialog *, and dlg_data for
+	struct dialog_data *. Use a counter for dialog items creation and
+	assert().  
+
+Fri Oct 24 16:14:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Use a counter for dialog items creation and assert(): it will ease
+	deletion or insertion of buttons, and will ensure size of dialog is
+	correctly set.  
+
+Fri Oct 24 16:04:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/edit.c:
+
+	Always use dlg variable name for struct dialog *, and dlg_data for
+	struct dialog_data *.  
+
+Fri Oct 24 16:00:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/auth.c:
+
+	Always use dlg variable name for struct dialog *, and dlg_data for
+	struct dialog_data *.  
+
+Fri Oct 24 15:54:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Always use dlg variable name for struct dialog *, and dlg_data for
+	struct dialog_data *.  
+
+Fri Oct 24 15:37:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Always use dlg variable name for struct dialog *, and dlg_data for
+	struct dialog_data *.  
+
+Fri Oct 24 15:11:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	A potential bug was fixed: loops should exit if nul char is
+	encountered by parser.  
+
+Fri Oct 24 14:10:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Drastically simplify (un)history menu handling - don't pass steps as
+	data, but directly the target location pointer.  
+
+Fri Oct 24 13:36:51 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/hacking.txt:
+
+	"Do not specify variable names in prototypes" recommendation was
+	removed.  
+
+Fri Oct 24 12:07:24 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Fri Oct 24 12:00:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os_dep.c:
+
+	read() -> safe_read(), write() -> safe_write().  
+
+Fri Oct 24 11:52:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced. Czech translation update.  
+
+Fri Oct 24 11:41:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/conf.c, lowlevel/dns.c, protocol/ftp.c,
+	terminal/event.c, terminal/hardio.c:
+
+	Cleaned up the whitespace mess created by last zas' patch ;-).  
+
+Fri Oct 24 11:41:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Moved safe_read() back to the while() condition.  
+
+Fri Oct 24 11:21:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/conf.c, intl/gettext/loadmsgcat.c,
+	lowlevel/connect.c, lowlevel/dns.c, osdep/os_depx.h,
+	protocol/ftp.c, protocol/http/http.c, sched/download.c,
+	terminal/event.c, terminal/hardio.c, terminal/kbd.c,
+	util/encoding.c, viewer/text/form.c:
+
+	Attempt to workaround the EINTR mess.  
+
+Fri Oct 24 09:35:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/signals.c:
+
+	Old inactive code was removed.  
+
+Fri Oct 24 09:01:36 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Hotkey fix.  
+
+Fri Oct 24 08:11:41 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Frecnh translation was updated.  
+
+Fri Oct 24 01:41:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Reset cur_loc() only if it didn't change.  
+
+Fri Oct 24 01:36:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	And yet another fix of obsolete test in menu_history().  
+
+Fri Oct 24 01:18:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Removed some stupid obsolete measure from the history_menu()'s loop,
+	runing my day.  
+
+Fri Oct 24 01:17:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Fixed the history_menu()'s for loop.  
+
+Fri Oct 24 01:09:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Fixed the potential theoetical bad-num-of-steps problem in
+	go_(un)back().  
+
+Fri Oct 24 01:02:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Fri Oct 24 00:59:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Reverted bogus change by zas [options.c:1.317] - add globhist
+	options even if globhist support is not compiled in.  
+
+Fri Oct 24 00:58:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Minor tidyup. Always add document.browse.forms.show_formhist.  
+
+Fri Oct 24 00:49:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: history.c, history.c:
+
+	Compilation fix.  
+
+Fri Oct 24 00:33:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Compilation fixes.  
+
+Fri Oct 24 00:28:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/: menu.c, menu.c:
+
+	Compilation fix.  
+
+Fri Oct 24 00:27:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Oops, ses_history.history is not a pointer, really.  
+
+Fri Oct 24 00:23:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	Compilation fix.  
+
+Fri Oct 24 00:22:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	This should be the final fix for the (un)history menu - set the
+	original document as cur_loc() when calling go_(un)back(), as
+	expected by the cleanup workers. Now I should actually test the
+	whole beast ;-).  
+
+Fri Oct 24 00:21:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Fix so globhist changehook will not result in fetching non existent
+	option.  
+
+Fri Oct 24 00:18:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, sched/history.c, sched/history.h,
+	viewer/text/view.c:
+
+	go_(un)back now takes the 'destination location' as second
+	parameter.  
+
+Fri Oct 24 00:09:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Don't set referer to the previous document when moving through
+	history.  
+
+Fri Oct 24 00:00:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Sanitize the history menus handler so that it actually has a chance
+	to work.  
+
+Thu Oct 23 23:53:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	del_from_history(): if there's something in history, move there,
+	otherwise if there's something in unhistory, move there, otherwise
+	set it to NULL.  
+
+Thu Oct 23 23:52:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	copy_option(): Fix bug in last patch. option->udata should point to
+	the resulting option not the template.  
+
+Thu Oct 23 23:49:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	Fixed del_from_history() to move @current to the previous location,
+	not to the next location.  
+
+Thu Oct 23 23:48:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, sched/history.c, sched/history.h:
+
+	Unify the history and unhistory to one single list, with
+	ses_history.current acting as a movable pivot inside indicating the
+	current location.  
+
+Thu Oct 23 23:44:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	init_option_listbox_item(): Introduced.  
+
+Thu Oct 23 23:35:52 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Thu Oct 23 23:23:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	delete_option(): Merge in free_option_value() and free_option().
+	Should cleanup the namespace a little.  
+
+Thu Oct 23 23:09:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, viewer/text/view.c, viewer/text/view.h:
+
+	Add document color toggling to View menu. Fix link numbering toggle
+	handler.  
+
+Thu Oct 23 23:00:04 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Thu Oct 23 22:50:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Actually remove location from list in free_history().  
+
+Thu Oct 23 22:49:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Quick fix colliding hotkeys.  
+
+Thu Oct 23 22:42:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.h:
+
+	Fix typos spotted by zas.  
+
+Thu Oct 23 22:39:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Made document.cache.memory.size long. It is supposed to be so from
+	the very time when this changed units to bytes, and I'd bet it *was*
+	so for at least some time. At least all users happily get_opt_long()
+	it anyway. And it's the right thing. Trust me. My name is Pasky.  
+
+Thu Oct 23 22:37:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_depx.h:
+
+	Introduced MAXLONG definition, mimicking the MAXINT one.  
+
+Thu Oct 23 22:35:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Improve comments.  
+
+Thu Oct 23 22:29:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	Removed never-used add_to_unhistory(). We may reintroduce it later,
+	but it'd only complicate stuff now.  
+
+Thu Oct 23 22:27:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: history.c, session.c:
+
+	clean_unhistory() now always does so.  
+
+Thu Oct 23 22:22:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/bookmarks.c, config/kbdbind.c, config/options.c,
+	document/html/frames.c, mime/backend/mailcap.c, util/lists.h:
+
+	add_to_list_bottom() -> add_to_list_end(). Much more accurate, IMHO.  
+
+Thu Oct 23 22:20:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	ses_history.current is used now.  
+
+Thu Oct 23 22:20:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	Update cur_loc() and have_location() to use ses_history.current.  
+
+Thu Oct 23 22:19:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Keep session existence tests outside download_error_dialog(),
+	cleaner imho.  
+
+Thu Oct 23 22:18:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, sched/history.c:
+
+	Use cur_loc() more.  
+
+Thu Oct 23 22:16:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.h, options.inc:
+
+	Rename option info initializers from add_opt_<type> to
+	INIT_OPT_<type>.  
+
+Thu Oct 23 22:16:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Alphabetize includes.  
+
+Thu Oct 23 22:15:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: history.c, history.h, location.c, location.h,
+	session.c:
+
+	Keep ses_history.current up-to-date. Newly introduced
+	del_from_history() helps with that task.  
+
 Thu Oct 23 22:05:17 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/sched/history.h:

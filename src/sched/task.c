@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.155 2005/03/02 15:59:55 zas Exp $ */
+/* $Id: task.c,v 1.156 2005/03/02 16:06:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -401,6 +401,9 @@ do_redirect(struct session *ses, struct download **download_p, struct cache_entr
 {
 	enum task_type task = ses->task.type;
 
+	if (task == TASK_HISTORY && !have_location(ses))
+		return DO_MOVE_DISPLAY;
+	
 	assertm(compare_uri(cached->uri, ses->loading_uri, URI_BASE),
 		"Redirecting using bad base URI");
 
@@ -468,8 +471,7 @@ do_move(struct session *ses, struct download **download_p)
 	cached = (*download_p)->cached;
 	if (!cached) return DO_MOVE_ABORT;
 
-	if (cached->redirect && ses->redirect_cnt++ < MAX_REDIRECTS
-	    && (ses->task.type != TASK_HISTORY || have_location(ses))) {
+	if (cached->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		enum do_move d = do_redirect(ses, download_p, cached);
 
 		if (d != DO_MOVE_DISPLAY) return d;

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.34 2003/12/05 19:02:44 jonas Exp $ */
+/* $Id: cgi.c,v 1.35 2003/12/05 19:12:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,8 @@ set_vars(struct connection *conn, unsigned char *script)
 {
 	unsigned char *post = conn->uri.post;
 	unsigned char *question_mark = strchr(conn->uri.data, '?');
-	unsigned char *query_string = question_mark ? question_mark + 1 : "";
+	unsigned char *query_string = question_mark
+				    ? question_mark + 1 : (unsigned char *) "";
 	unsigned char *optstr;
 
 	if (post) {

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-07-26 11:51+0200\n"
+"POT-Creation-Date: 2003-07-26 23:13+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Muhamad Faizal <faizal@mfaizal.net>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
@@ -793,7 +793,7 @@ msgid "Options:\n"
 msgstr ""
 
 #. TODO: The change hooks should be added more elegantly! --pasky
-#: src/config/options.c:879 src/util/version.c:79
+#: src/config/options.c:879 src/util/version.c:82
 #, fuzzy
 msgid "Bookmarks"
 msgstr "Bookmark"
@@ -985,7 +985,7 @@ msgstr ""
 msgid "Timeout for non-restartable connections (in seconds)."
 msgstr ""
 
-#: src/config/options.c:997 src/util/version.c:82
+#: src/config/options.c:997 src/util/version.c:85
 msgid "Cookies"
 msgstr ""
 
@@ -4308,21 +4308,21 @@ msgstr ""
 msgid "Enter expression"
 msgstr ""
 
-#: src/terminal/event.c:86
+#: src/terminal/event.c:90
 #, fuzzy, c-format
 msgid "Could not read event: %d (%s)"
 msgstr "Ngga bisa buat file"
 
-#: src/terminal/event.c:105
+#: src/terminal/event.c:109
 #, c-format
 msgid "Bad event %d"
 msgstr ""
 
-#: src/terminal/event.c:142
+#: src/terminal/event.c:146
 msgid "Warning: terminal name contains illicit chars."
 msgstr ""
 
-#: src/terminal/event.c:164
+#: src/terminal/event.c:168
 #, c-format
 msgid "Bad terminal size: %d, %d"
 msgstr ""
@@ -4366,12 +4366,12 @@ msgstr ""
 msgid "No Backtrace"
 msgstr "~Balik"
 
-#: src/util/version.c:85
+#: src/util/version.c:88
 #, fuzzy
 msgid "Global History"
 msgstr "Ngga ada history"
 
-#: src/util/version.c:88
+#: src/util/version.c:91
 msgid "LED indicators"
 msgstr ""
 

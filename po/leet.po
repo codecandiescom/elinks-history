@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"POT-Creation-Date: 2003-07-26 11:51+0200\n"
+"POT-Creation-Date: 2003-07-26 23:13+0200\n"
 "PO-Revision-Date: 2003-06-20 16:45+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
@@ -798,7 +798,7 @@ msgid "Options:\n"
 msgstr "0P710|\\|5:\n"
 
 #. TODO: The change hooks should be added more elegantly! --pasky
-#: src/config/options.c:879 src/util/version.c:79
+#: src/config/options.c:879 src/util/version.c:82
 msgid "Bookmarks"
 msgstr "800|<|V|4R|<5"
 
@@ -1012,7 +1012,7 @@ msgstr "71|V|3out for |\\|0n-restar74|3le (0|\\||\\|3(710N5"
 msgid "Timeout for non-restartable connections (in seconds)."
 msgstr "71|V|3out for |\\|0n-restar74|3le (0|\\||\\|3(710N5 (in seconds)."
 
-#: src/config/options.c:997 src/util/version.c:82
+#: src/config/options.c:997 src/util/version.c:85
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -4587,21 +4587,21 @@ msgstr "Lua Console"
 msgid "Enter expression"
 msgstr "3|\\|73R expression"
 
-#: src/terminal/event.c:86
+#: src/terminal/event.c:90
 #, c-format
 msgid "Could not read event: %d (%s)"
 msgstr "(0VL|) |\\|07 |23@|) 3\\/3N7: %d (%s)"
 
-#: src/terminal/event.c:105
+#: src/terminal/event.c:109
 #, c-format
 msgid "Bad event %d"
 msgstr "84|) 3\\/3N7 %d"
 
-#: src/terminal/event.c:142
+#: src/terminal/event.c:146
 msgid "Warning: terminal name contains illicit chars."
 msgstr "VV4RN1N6: 73R|V|1|\\|4| |\\|4|V|3 (0|\\|741N5s 1||1(17 (|-|4R5."
 
-#: src/terminal/event.c:164
+#: src/terminal/event.c:168
 #, c-format
 msgid "Bad terminal size: %d, %d"
 msgstr "84|) 73R|V|1|\\|4| size: %d, %d"
@@ -4642,11 +4642,11 @@ msgstr "Own Libc Routines"
 msgid "No Backtrace"
 msgstr "|\\|0 84(|<trace"
 
-#: src/util/version.c:85
+#: src/util/version.c:88
 msgid "Global History"
 msgstr "Global |-|1570r`/"
 
-#: src/util/version.c:88
+#: src/util/version.c:91
 msgid "LED indicators"
 msgstr ""
 

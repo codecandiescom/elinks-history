@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-07-26 11:51+0200\n"
+"POT-Creation-Date: 2003-07-26 23:13+0200\n"
 "PO-Revision-Date: 2003-01-04 12:06+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@poczta.onet.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -811,7 +811,7 @@ msgstr "Opcje:\n"
 
 #
 #. TODO: The change hooks should be added more elegantly! --pasky
-#: src/config/options.c:879 src/util/version.c:79
+#: src/config/options.c:879 src/util/version.c:82
 msgid "Bookmarks"
 msgstr "Zak³adki"
 
@@ -1033,7 +1033,7 @@ msgstr "Limit czasu pobierania dla niewznawialnych po³±czeñ"
 msgid "Timeout for non-restartable connections (in seconds)."
 msgstr "Limit czasu pobierania dla niewznawialnych po³±czeñ (w sekundach)."
 
-#: src/config/options.c:997 src/util/version.c:82
+#: src/config/options.c:997 src/util/version.c:85
 msgid "Cookies"
 msgstr "Ciasteczka"
 
@@ -4733,21 +4733,21 @@ msgstr "Konsola Lua"
 msgid "Enter expression"
 msgstr "Wprowad¼ wyra¿enie"
 
-#: src/terminal/event.c:86
+#: src/terminal/event.c:90
 #, c-format
 msgid "Could not read event: %d (%s)"
 msgstr "Nie mo¿na odczytaæ zdarzenia: %d (%s)"
 
-#: src/terminal/event.c:105
+#: src/terminal/event.c:109
 #, c-format
 msgid "Bad event %d"
 msgstr "B³êdne zdarzenie %d"
 
-#: src/terminal/event.c:142
+#: src/terminal/event.c:146
 msgid "Warning: terminal name contains illicit chars."
 msgstr "Ostrze¿enie: nazwa terminala zawiera \"nieprzyzwoite\" znaki."
 
-#: src/terminal/event.c:164
+#: src/terminal/event.c:168
 #, c-format
 msgid "Bad terminal size: %d, %d"
 msgstr "B³êdny rozmiar terminala: %d, %d"
@@ -4790,11 +4790,11 @@ msgstr "W³asny Libc"
 msgid "No Backtrace"
 msgstr "Bez backtrace"
 
-#: src/util/version.c:85
+#: src/util/version.c:88
 msgid "Global History"
 msgstr "Historia globalna"
 
-#: src/util/version.c:88
+#: src/util/version.c:91
 msgid "LED indicators"
 msgstr "Wska¼niki LED"
 

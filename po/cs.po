@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-07-26 11:51+0200\n"
+"POT-Creation-Date: 2003-07-26 23:13+0200\n"
 "PO-Revision-Date: 2003-07-26 23:12+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
@@ -73,8 +73,8 @@ msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s"
 msgstr ""
-"read_bookmarks_xbel(): Chyba syntaxe v souboru %s na øádku %d ve sloupci "
-"%d:\n"
+"read_bookmarks_xbel(): Chyba syntaxe v souboru %s na øádku %d ve sloupci %"
+"d:\n"
 "%s"
 
 #: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
@@ -800,7 +800,7 @@ msgid "Options:\n"
 msgstr "Nastavení:\n"
 
 #. TODO: The change hooks should be added more elegantly! --pasky
-#: src/config/options.c:879 src/util/version.c:79
+#: src/config/options.c:879 src/util/version.c:82
 msgid "Bookmarks"
 msgstr "Bookmarky"
 
@@ -995,7 +995,7 @@ msgstr "Èasový limit pro neobnovitelná spojení"
 msgid "Timeout for non-restartable connections (in seconds)."
 msgstr ""
 
-#: src/config/options.c:997 src/util/version.c:82
+#: src/config/options.c:997 src/util/version.c:85
 msgid "Cookies"
 msgstr ""
 
@@ -4276,21 +4276,21 @@ msgstr "Lua Konzole"
 msgid "Enter expression"
 msgstr "Zadej výraz"
 
-#: src/terminal/event.c:86
+#: src/terminal/event.c:90
 #, c-format
 msgid "Could not read event: %d (%s)"
 msgstr "Nemù¾u pøeèíst událost: %d (%s)"
 
-#: src/terminal/event.c:105
+#: src/terminal/event.c:109
 #, c-format
 msgid "Bad event %d"
 msgstr ""
 
-#: src/terminal/event.c:142
+#: src/terminal/event.c:146
 msgid "Warning: terminal name contains illicit chars."
 msgstr ""
 
-#: src/terminal/event.c:164
+#: src/terminal/event.c:168
 #, c-format
 msgid "Bad terminal size: %d, %d"
 msgstr ""
@@ -4332,11 +4332,11 @@ msgstr "Vlastní malá libc"
 msgid "No Backtrace"
 msgstr "Bez Backtrace"
 
-#: src/util/version.c:85
+#: src/util/version.c:88
 msgid "Global History"
 msgstr "Globální historie"
 
-#: src/util/version.c:88
+#: src/util/version.c:91
 msgid "LED indicators"
 msgstr "LED indikátory"
 

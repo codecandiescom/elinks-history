@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.16 2002/05/17 22:13:39 pasky Exp $ */
+/* $Id: options.c,v 1.17 2002/05/17 22:14:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -642,10 +642,6 @@ int unrestartable_receive_timeout = 600;
 
 int max_format_cache_entries = 5;
 long memory_cache_size = 1048576;
-
-int enable_html_tables = 1;
-int enable_html_frames = 1;
-int display_images = 1;
 
 struct document_setup dds = { 0, 0, 1, 1, 1, 1, 0, 3, 0, 0 };
 

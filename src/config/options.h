@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.8 2002/05/17 21:34:27 pasky Exp $ */
+/* $Id: options.h,v 1.9 2002/05/17 22:14:59 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -38,6 +38,7 @@ extern void *get_opt(struct option *, unsigned char *);
 #define get_opt_long(name) *((long *) get_opt(links_options, name))
 #define get_opt_char(name) *((unsigned char *) get_opt(links_options, name))
 #define get_opt_str(name) ((unsigned char *) get_opt(links_options, name))
+#define get_opt_ptr(name) ((void *) get_opt(links_options, name))
 
 extern unsigned char *cmd_name(unsigned char *);
 extern unsigned char *opt_name(unsigned char *);

@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.42 2003/12/30 13:57:44 zas Exp $ */
+/* $Id: options.c,v 1.43 2003/12/30 18:26:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,28 +78,14 @@ init_document_options(struct document_options *doo)
 	doo->framename = "";
 }
 
-
-int
-compare_opt_only_size(struct document_options *o1, struct document_options *o2)
-{
-	return ((o1->needs_height || o2->needs_height)
-		    && o1->height != o2->height)
-		|| ((o1->needs_width || o2->needs_width)
-		    && o1->width != o2->width);
-}
-
-int
-compare_opt_but_size(struct document_options *o1, struct document_options *o2)
-{
-	return memcmp(o1, o2, offsetof(struct document_options, framename))
-		|| strcasecmp(o1->framename, o2->framename);
-}
-
 int
 compare_opt(struct document_options *o1, struct document_options *o2)
 {
-	return compare_opt_but_size(o1, o2)
-		|| compare_opt_only_size(o1, o2);
+	return memcmp(o1, o2, offsetof(struct document_options, framename))
+		|| strcasecmp(o1->framename, o2->framename)
+		|| ((o1->needs_height || o2->needs_height)
+		    && o1->height != o2->height)
+		|| (!o1->plain && o1->width != o2->width);
 }
 
 inline void

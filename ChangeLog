@@ -1,3 +1,281 @@
+Thu Sep 23 22:08:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Bug 358 revisited another time, now really encode the URI string
+	only if we are prepending the file:// scheme to it, as described
+	everywhere. This fixes non-working entering of URIs with query parts
+	to the Goto URI box and supposedly on the commandline too. I don't
+	want to know about the possible problems still associated with local
+	CGIs. (Those people ought to use full URIs.) 
+
+Thu Sep 23 19:36:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/selectors.html:
+
+	'div,' selector looks like a good crash testcase. Borrowed from
+	irc.mozilla.org/#developers ;). (Haha, it crashes for them...) 
+
+Thu Sep 23 19:34:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	/usr/include/smjs as $spidermonkeydir makes no sense, try to check
+	it as $spidermonkeyinclude instead and see who gets enraged.  
+
+Thu Sep 23 19:15:15 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* configure.in:
+
+	PLD location for SpiderMonkey.  
+
+Thu Sep 23 18:10:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Remove junk -I includes flags in SPIDERMONKEY_CFLAGS.  
+
+Thu Sep 23 16:25:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/ecmascript.c:
+
+	Do not eval() anything unless get_ecmascript_enable().  
+
+Thu Sep 23 16:23:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: ecmascript.c, ecmascript.h, spidermonkey.c,
+	spidermonkey.h:
+
+	ecmascript_eval() is like ..._eval_stringback() but gives back no
+	string ;-).  
+
+Thu Sep 23 16:14:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Looks like freshmeat and slashdot redirects away from www host. Hit
+	them directly instead.  
+
+Thu Sep 23 15:40:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.inc, viewer/text/form.c, viewer/text/link.c:
+
+	A boolean option named document.browse.accesskey.display was added
+	to enable display of access key in link info.  
+
+Thu Sep 23 15:26:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/ecmascript.c:
+
+	ecmascript_protocol_handler(): Tidy up.  
+
+Thu Sep 23 15:25:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/: ecmascript.c, spidermonkey.c:
+
+	Space fixes.  
+
+Thu Sep 23 15:21:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Advertise ECMAScript.  
+
+Thu Sep 23 15:04:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Use free_syntax strategy for javascript: URIs.  
+
+Thu Sep 23 15:04:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/ecmascript.c:
+
+	Fix compilation.  
+
+Thu Sep 23 14:55:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/Makefile.am:
+
+	Add a simple testcase for the javascript: protocol, document.title
+	and document.url.  
+
+Thu Sep 23 14:12:17 2004  Laurent Monin <zas@norz.org>:
+
+	* doc/ecmascript.txt:
+
+	Spidermonker compilation/installation documentation was improved.  
+
+Thu Sep 23 14:05:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Basic support for the location object - just the 'href' property for
+	now.  
+
+Thu Sep 23 14:03:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/ecmascript.c:
+
+	Use get_hooked_uri() instead of get_uri() in
+	ecmascript_protocol_handler(), which munches it however weird could
+	it be before.  
+
+Thu Sep 23 13:56:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: ecmascript/ecmascript.c, ecmascript/ecmascript.h,
+	protocol/protocol.c:
+
+	Move code for the javascript: protocol handling to
+	ecmascrip_protocol_handler().  
+
+Thu Sep 23 13:51:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/ecmascript.txt:
+
+	Sorry the rewrapping went a little crazy. Make it more clear what SM
+	means ;) and try to rearrange section about compiling SM so it is
+	clearer that it belong together.  
+
+Thu Sep 23 13:39:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/ecmascript.txt:
+
+	Insert section for people living on easy street with nice package
+	systems that will do all the dirty work.  
+
+Thu Sep 23 13:16:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Add support for detecting existence of spidermonkey on debian
+	systems.  
+
+Thu Sep 23 13:12:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/memory.c:
+
+	Even more fix mmap() usage: some systems (HP/UX it seems) may not
+	have MAP_ANON but MAP_ANONYMOUS, and no alias, so just handle that
+	case.  
+
+Thu Sep 23 12:42:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Guarding #includes should not be necessary ever unless it is system
+	headers.  
+
+Thu Sep 23 12:42:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Evangelize doc/small.txt in --enable-small description.  
+
+Thu Sep 23 12:40:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Fix immediate crash when compiled with CONFIG_SMALL, reported by
+	uroboros. act->desc was NULL and the dialogs code didn't cope well
+	with that.  
+
+Thu Sep 23 11:57:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/protocol.c:
+
+	Just get_uri(, 0) instead of get_uri(, URI_ORIGINAL) in the
+	javascript protocol handler. The get_uri() function could use some
+	real documentation :).  
+
+Thu Sep 23 10:28:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/renderer.c, document/plain/renderer.c,
+	protocol/gopher/gopher.c, protocol/nntp/nntp.c:
+
+	Drop trailing spaces.  
+
+Thu Sep 23 08:40:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	When lua_dofile() fails, sleep 3 seconds to let see Lua error
+	message. Patch by Alexey Tourbin.  
+
+Thu Sep 23 00:07:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: renderer.c, view.h, html/frames.c:
+
+	(struct document_view) now references (struct session *) as the
+	.session field. This will be enormously useful in the ECMAScript
+	code, but should create space for more simplifications all over the
+	map.  
+
+Wed Sep 22 23:59:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/protocol.c:
+
+	Oops, fixed invalid usage of @uri instead of @redirect_uri. It of
+	course took me a deep and dreadful into the ucs16-based SpiderMonkey
+	parser to discover that. :/ 
+
+Wed Sep 22 23:30:05 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	SpiderMonkey doesn't like uppercase property names - document.URL ->
+	document.url.  
+
+Wed Sep 22 23:21:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Oops, use JS_GetStringBytes() instead of JS_GetStringChars().  
+
+Wed Sep 22 23:21:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Do not free() strings acquired by JS_GetStringChars(). Should fix
+	those random crashes ;-).  
+
+Wed Sep 22 23:14:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Pass "" filename instead of NULL to JS_EvaluateScript(). Who knows
+	where it would crash again otherwise...  
+
+Wed Sep 22 23:13:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Now the whole context has doc_view private data, instead of
+	individual objects having various stuff (which might be empty at the
+	time of get_interpreter() anyway, leading to fast and painful
+	crash). This means entering 'javascript:document.title=1+1' to the
+	Goto URL window (with some document loaded, of course) already works
+	now! 
+
+Wed Sep 22 22:32:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Capitalization fixes.  
+
+Wed Sep 22 22:31:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Betrayal! NULL cannot be passed as the class hooks, stub hooks need
+	to be used instead.  
+
+Wed Sep 22 22:14:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Handle JS_NewObject() failures.  
+
 Wed Sep 22 22:06:23 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/viewer/text/view.c:

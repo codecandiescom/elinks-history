@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.44 2004/06/26 23:06:35 pasky Exp $ */
+/* $Id: link.h,v 1.45 2004/07/12 14:31:37 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -38,7 +38,7 @@ int current_link_is_visible(struct document_view *doc_view);
 int link_in_view(struct document_view *doc_view, struct link *link);
 int link_in_view_y(struct document_view *doc_view, struct link *link);
 int next_link_in_view(struct document_view *doc_view, int p, int d, int (*fn)(struct document_view *, struct link *), void (*cntr)(struct document_view *, struct link *));
-int next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir_y);
+int next_link_in_dir(struct document_view *doc_view, int dir_x, int dir_y);
 
 void jump_to_link_number(struct session *ses, struct document_view *doc_view, int);
 

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.272 2004/07/04 16:31:44 jonas Exp $ */
+/* $Id: link.c,v 1.273 2004/07/12 14:31:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -489,7 +489,7 @@ get_link_y_intersect(struct link *link, int x, int min_y, int max_y)
 }
 
 int
-next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir_y)
+next_link_in_dir(struct document_view *doc_view, int dir_x, int dir_y)
 {
 	struct document *document;
 	struct view_state *vs;
@@ -505,7 +505,8 @@ next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir
 	document = doc_view->document;
 	vs = doc_view->vs;
 
-	link = &document->links[current];
+	link = get_current_link(doc_view);
+	if (!link) return 0;
 
 	/* Find the link's "bounding box" coordinates. */
 

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.92 2003/07/09 18:37:43 pasky Exp $ */
+/* $Id: connection.c,v 1.93 2003/07/09 19:21:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,17 +164,14 @@ add_host_connection(struct connection *c)
 {
 	struct host_connection *hc = get_host_connection(c);
 
-	if (hc) {
-		hc->connections++;
-
-	} else if (c->uri.host) {
-		hc = mem_alloc(sizeof(struct host_connection) + c->uri.hostlen);
+	if (!hc && c->uri.host) {
+		hc = mem_calloc(sizeof(struct host_connection) + c->uri.hostlen);
 		if (!hc) return 0;
 
-		hc->connections = 1;
 		memcpy(hc->host, c->uri.host, c->uri.hostlen);
 		add_to_list(host_connections, hc);
 	}
+	if (hc) hc->connections++;
 
 	return 1;
 }

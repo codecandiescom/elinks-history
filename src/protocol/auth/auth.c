@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.84 2004/05/31 03:45:44 jonas Exp $ */
+/* $Id: auth.c,v 1.85 2004/06/13 13:43:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,15 +33,16 @@ static INIT_LIST_HEAD(http_auth_basic_list);
  * NULL, it returns the first record found. If realm isn't NULL, it returns
  * the first record that matches exactly (url and realm) if any. */
 static struct http_auth_basic *
-find_auth_entry(unsigned char *url, unsigned char *realm)
+find_auth_entry(struct uri *uri, unsigned char *realm)
 {
+	unsigned char *url = get_uri_string(uri, URI_HTTP_AUTH);
 	struct http_auth_basic *match = NULL, *entry;
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("find_auth_entry: url=%s realm=%s", url, realm);
 #endif
 
-	if (!url || !*url) return NULL;
+	if (!url) return NULL;
 
 	foreach (entry, http_auth_basic_list) {
 		if (strcasecmp(entry->url, url)) continue;
@@ -65,6 +66,8 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 		}
 	}
 
+	mem_free(url);
+
 	return match;
 }
 
@@ -85,7 +88,7 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 	} while (0)
 
 static struct http_auth_basic *
-init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
+init_auth_entry(struct uri *uri, unsigned char *realm)
 {
 	struct http_auth_basic *entry;
 
@@ -96,7 +99,11 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 	entry = mem_calloc(1, sizeof(struct http_auth_basic));
 	if (!entry) return NULL;
 
-	entry->url = auth_url;
+	entry->url = get_uri_string(uri, URI_HTTP_AUTH);
+	if (!entry->url) {
+		mem_free(entry);
+		return NULL;
+	}
 
 	if (realm) {
 		/* Copy realm value. */
@@ -124,19 +131,14 @@ struct http_auth_basic *
 add_auth_entry(struct uri *uri, unsigned char *realm)
 {
 	struct http_auth_basic *entry;
-	unsigned char *newurl = get_uri_string(uri, URI_HTTP_AUTH);
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("add_auth_entry: newurl=%s realm=%s uri=%p", newurl, realm, uri);
 #endif
 
-	if (!newurl) return NULL;
-
 	/* Is host/realm already known ? */
-	entry = find_auth_entry(newurl, realm);
+	entry = find_auth_entry(uri, realm);
 	if (entry) {
-		mem_free(newurl);
-
 		/* Waiting for user/pass in dialog. */
 		if (entry->blocked) return NULL;
 
@@ -174,11 +176,8 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 
 	} else {
 		/* Create a new entry. */
-		entry = init_auth_entry(newurl, realm, uri);
-		if (!entry) {
-			mem_free(newurl);
-			return NULL;
-		}
+		entry = init_auth_entry(uri, realm);
+		if (!entry) return NULL;
 
 		add_to_list(http_auth_basic_list, entry);
 	}
@@ -201,16 +200,12 @@ find_auth(struct uri *uri)
 {
 	struct http_auth_basic *entry = NULL;
 	unsigned char *id, *ret;
-	unsigned char *newurl = get_uri_string(uri, URI_HTTP_AUTH);
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("find_auth: newurl=%s uri=%p", newurl, uri);
 #endif
 
-	if (!newurl) return NULL;
-
-	entry = find_auth_entry(newurl, NULL);
-	mem_free(newurl);
+	entry = find_auth_entry(uri, NULL);
 
 	/* Check is user/pass info is in url. */
 	if (uri->userlen || uri->passwordlen) {

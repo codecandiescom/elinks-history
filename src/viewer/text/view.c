@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.446 2004/06/09 21:14:31 zas Exp $ */
+/* $Id: view.c,v 1.447 2004/06/09 21:29:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,8 +342,12 @@ draw_formatted(struct session *ses, int rerender)
 		ses->doc_view->vs = &cur_loc(ses)->vs;
 	ses->doc_view->last_x = ses->doc_view->last_y = -1;
 
+	/* refresh_view() is not applicable here, since
+	 * draw_frames() needs to be called after draw_doc(). --Zas */
+	draw_doc(ses, ses->doc_view, 1);
 	draw_frames(ses);
-	refresh_view(ses, ses->doc_view);
+	print_screen_status(ses);
+	redraw_from_window(ses->tab);
 }
 
 static void

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.66 2004/11/12 17:28:39 zas Exp $ */
+/* $Id: view.h,v 1.67 2004/11/12 17:33:19 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -22,8 +22,8 @@ enum frame_event_status {
 /* Releases the document view's resources. But doesn't free() the @view. */
 void detach_formatted(struct document_view *doc_view);
 
-void move_page_down(struct session *ses, struct document_view *doc_view);
-void move_page_up(struct session *ses, struct document_view *doc_view);
+enum frame_event_status move_page_down(struct session *ses, struct document_view *doc_view);
+enum frame_event_status move_page_up(struct session *ses, struct document_view *doc_view);
 void move_link(struct session *ses, struct document_view *doc_view,
 	       int direction, int wraparound_bound, int wraparound_link);
 

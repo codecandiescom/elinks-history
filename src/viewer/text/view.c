@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.653 2004/11/12 17:28:39 zas Exp $ */
+/* $Id: view.c,v 1.654 2004/11/12 17:33:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,7 @@ move_down(struct session *ses, struct document_view *doc_view, int type)
 		find_link_page_down(doc_view);
 }
 
-void
+enum frame_event_status
 move_page_down(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
@@ -114,6 +114,8 @@ move_page_down(struct session *ses, struct document_view *doc_view)
 
 	while (count--)
 		move_down(ses, doc_view, 0);
+
+	return FRAME_EVENT_REFRESH;
 }
 
 /* type == 0 -> PAGE_UP
@@ -136,7 +138,7 @@ move_up(struct session *ses, struct document_view *doc_view, int type)
 		find_link_page_up(doc_view);
 }
 
-void
+enum frame_event_status
 move_page_up(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
@@ -147,6 +149,8 @@ move_page_up(struct session *ses, struct document_view *doc_view)
 
 	while (count--)
 		move_up(ses, doc_view, 0);
+
+	return FRAME_EVENT_REFRESH;
 }
 
 void

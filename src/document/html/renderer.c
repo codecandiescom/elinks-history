@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.114 2003/06/16 15:37:15 pasky Exp $ */
+/* $Id: renderer.c,v 1.115 2003/06/16 15:42:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -402,8 +402,10 @@ split_line_at(struct part *part, register int x)
 	x++; /* Since we were using (x + 1) only later... */
 
 	tmp = part->spaces_len - x;
-	if (tmp > 0) /* 0 is possible and x'm paranoiac ... --Zas */
+	if (tmp > 0) {
+		/* 0 is possible and I'm paranoid ... --Zas */
 		memmove(part->spaces, part->spaces + x, tmp);
+	}
 
 	/* XXX: is this correct ??? tmp <= 0 case ? --Zas */
 	memset(part->spaces + tmp, 0, x);

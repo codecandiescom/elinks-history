@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.137 2004/08/19 07:16:03 miciah Exp $ */
+/* $Id: renderer.c,v 1.138 2004/08/19 07:24:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,6 +276,8 @@ add_document_line(struct plain_renderer *renderer,
 			*template = saved_renderer_template;
 
 		} else if (line_char == ASCII_BS) {
+			unsigned char next_char, prev_char;
+
 			if (!(expanded + line_pos)) {
 				/* We've backspaced to the start
 				 * of the line */
@@ -283,18 +285,21 @@ add_document_line(struct plain_renderer *renderer,
 				continue;
 			}
 
+			prev_char = line[line_pos - 1];
+			next_char = line[line_pos + 1];
+
 			pos--;  /* Backspace */
 
 			/* Handle x^H_ as _^Hx */
-			if (line[line_pos + 1] == '_'
-			    && line[line_pos - 1] != '_') /* No inf. loop
-							   * swapping two
-							   * underscores */
+			if (next_char == '_'
+			    && prev_char != '_') /* No inf. loop
+						  * swapping two
+						  * underscores */
 			{
-				unsigned char saved_char = line[line_pos - 1];
+				unsigned char saved_char = prev_char;
 
 				/* x^H_ becomes _^Hx */
-				line[line_pos - 1] = line[line_pos + 1];
+				line[line_pos - 1] = next_char;
 				line[line_pos + 1] = saved_char;
 
 				/* Go back and reparse the swapped characters */
@@ -307,7 +312,7 @@ add_document_line(struct plain_renderer *renderer,
 				        * when returning the line's width
 				        * or when expanding tabs */
 
-			if (pos->data == '_' && line[line_pos + 1] == '_') {
+			if (pos->data == '_' && next_char == '_') {
 				/* Is _^H_ an underlined underscore
 				 * or an emboldened underscore? */
 
@@ -327,7 +332,7 @@ add_document_line(struct plain_renderer *renderer,
 
 				template->attr |= SCREEN_ATTR_UNDERLINE;
 
-			} else if (pos->data == line[line_pos + 1]) {
+			} else if (pos->data == next_char) {
 				/* Embolden x^Hx */
 
 				template->attr |= SCREEN_ATTR_BOLD;

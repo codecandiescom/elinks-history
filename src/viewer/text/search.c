@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.135 2003/12/13 00:32:43 jonas Exp $ */
+/* $Id: search.c,v 1.136 2003/12/13 03:46:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -994,7 +994,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	}
 
 	switch (get_opt_int("document.browse.links.typeahead_error")) {
-		case 1:
+		case 2:
 			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("Typeahead"), AL_CENTER,
 				msg_text(ses->tab->term,
@@ -1004,7 +1004,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 				N_("OK"), NULL, B_ENTER | B_ESC);
 			break;
 
-		case 2:
+		case 1:
 			beep_terminal(ses->tab->term);
 
 		default:

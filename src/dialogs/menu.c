@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.51 2002/11/30 20:41:38 pasky Exp $ */
+/* $Id: menu.c,v 1.52 2002/11/30 20:42:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,8 +260,8 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 
 			add_to_menu(&mi, url, "", "", MENU_FUNC go_unbackwards,
 			    	    (void *) n, 0);
-			n++;
 		}
+		n++;
 	}
 
 	if (!n)

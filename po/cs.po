@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-19 00:17+0200\n"
-"PO-Revision-Date: 2003-10-19 00:30+0200\n"
+"PO-Revision-Date: 2003-10-19 00:39+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -2179,7 +2179,6 @@ msgid "Program"
 msgstr "Program"
 
 #: src/config/options.c:1564
-#, c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
@@ -3502,7 +3501,7 @@ msgstr "Automatické odeslání prvního formuláøe"
 
 #: src/config/options.c:2889
 msgid "Go and submit the first form you'll stumble upon."
-msgstr ""
+msgstr "Jdi a ode¹li první formuláø, na který narazí¹."
 
 #: src/config/options.c:2891
 msgid "Clone session with given ID"
@@ -3513,6 +3512,8 @@ msgid ""
 "ID of session (ELinks instance) which we want to clone.\n"
 "This is internal ELinks option, you don't want to use it."
 msgstr ""
+"ID sezení (instance ELinksu), které chceme naklonovat.\n"
+"Toto je interní parametr ELinksu, vy ho nechcete pou¾ívat."
 
 #: src/config/options.c:2896
 msgid "Set config dir to given string"
@@ -3532,7 +3533,7 @@ msgstr "Pøedpokládaný MIME typ dokumentù"
 
 #: src/config/options.c:2905
 msgid "Default MIME type to assume for documents of unknown type."
-msgstr ""
+msgstr "Výchozí MIME typ, který bych mìl pøedpokládat u neznámých dokumentù."
 
 #: src/config/options.c:2907
 msgid "Write formatted version of given URL to stdout"
@@ -3543,6 +3544,7 @@ msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
 msgstr ""
+"Zapsat plaintextovou verzi daného HTML dokumentu na standardní výstup."
 
 #: src/config/options.c:2912
 msgid "Codepage to use with -dump"
@@ -3576,6 +3578,8 @@ msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
+"Tato volba øekne ELinksu, aby pøedpokládal, ¾e soubory, které uvidí, jsou\n"
+"v HTML. Tento parametr je ekvivalentní -default-mime-type text/html."
 
 #: src/config/options.c:2941
 msgid "Print usage help and exit"
@@ -3620,6 +3624,10 @@ msgid ""
 "(bookmarks, history and so on) are written to the disk when\n"
 "this option is used. See also -touch-files."
 msgstr ""
+"Spustit ELinks jako oddìlenou instanci místo toho, abych se zkusil pøipojit\n"
+"k nìjaké ji¾ existující instanci. V tomto pøípadì normálnì nebudu na disk\n"
+"zapisovat ¾ádné konfiguraèní soubory (ani zálo¾ky, historii apod.). Viz také\n"
+"parametr -touch-files."
 
 #: src/config/options.c:2964
 msgid "Don't use files in ~/.elinks"
@@ -3627,7 +3635,7 @@ msgstr "Nepou¾ívat soubory v ~/.elinks"
 
 #: src/config/options.c:2966
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
-msgstr ""
+msgstr "Nezkou¹ej vytvoøit nebo pou¾ít domovský konfiguraèní adresáø (~/.elinks)."
 
 #: src/config/options.c:2968
 msgid "Connect to session ring with given ID"
@@ -3683,6 +3691,9 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
+"Pokud je tato volba nastavena, konfiguraèní soubory (i zálo¾ky, historie\n"
+"apod.) budou ukládány na disk i v pøípadì, ¾e byl pou¾it parametr\n"
+"-no-connect èi -session-ring. Jinak nemá tento parametr ¾ádný význam."
 
 #: src/config/options.c:3003
 msgid "Print version information and exit"

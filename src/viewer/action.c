@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.128 2004/11/25 22:19:18 miciah Exp $ */
+/* $Id: action.c,v 1.129 2004/12/02 16:34:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 	struct document_view *doc_view = current_frame(ses);
 	int has_vs = (doc_view && doc_view->vs);
 	struct link *link = has_vs ? get_current_link(doc_view) : NULL;
-	int anonymous = get_cmd_opt_int("anonymous");
+	int anonymous = get_cmd_opt_bool("anonymous");
 
 	/* Please keep in alphabetical order for now. Later we can sort by most
 	 * used or something. */

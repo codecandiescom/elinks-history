@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.172 2004/11/22 06:28:50 miciah Exp $ */
+/* $Id: core.c,v 1.173 2004/12/02 16:34:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -709,7 +709,7 @@ dialog_lua_console(va_list ap, void *data)
 {
 	struct session *ses = va_arg(ap, struct session *);
 
-	if (get_cmd_opt_int("anonymous"))
+	if (get_cmd_opt_bool("anonymous"))
 		return EVENT_HOOK_STATUS_NEXT;
 
 	input_field(ses->tab->term, NULL, 1,

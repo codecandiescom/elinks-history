@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.189 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: cookies.c,v 1.190 2004/12/02 16:34:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -757,7 +757,7 @@ save_cookies(void) {
 	struct secure_save_info *ssi;
 
 	if (cookies_nosave || !elinks_home || !cookies_dirty
-	    || get_cmd_opt_int("anonymous"))
+	    || get_cmd_opt_bool("anonymous"))
 		return;
 
 	cookfile = straconcat(elinks_home, COOKIES_FILENAME, NULL);

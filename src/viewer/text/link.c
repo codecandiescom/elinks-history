@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.298 2004/11/22 13:27:42 zas Exp $ */
+/* $Id: link.c,v 1.299 2004/12/02 16:34:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1123,7 +1123,7 @@ link_menu(struct terminal *term, void *xxx, void *ses_)
 			add_menu_action(&mi, N_("Open in new tab in ~background"),
 					ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND);
 
-			if (!get_cmd_opt_int("anonymous")) {
+			if (!get_cmd_opt_bool("anonymous")) {
 				add_menu_separator(&mi);
 				add_menu_action(&mi, N_("~Download link"), ACT_MAIN_LINK_DOWNLOAD);
 
@@ -1171,7 +1171,7 @@ link_menu(struct terminal *term, void *xxx, void *ses_)
 						ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND);
 			}
 
-			if (!get_cmd_opt_int("anonymous"))
+			if (!get_cmd_opt_bool("anonymous"))
 				add_menu_action(&mi, N_("Submit form and ~download"), ACT_MAIN_LINK_DOWNLOAD);
 
 			add_menu_action(&mi, N_("~Reset form"), ACT_MAIN_RESET_FORM);
@@ -1180,7 +1180,7 @@ link_menu(struct terminal *term, void *xxx, void *ses_)
 
 	if (link->where_img) {
 		add_menu_action(&mi, N_("V~iew image"), ACT_MAIN_VIEW_IMAGE);
-		if (!get_cmd_opt_int("anonymous"))
+		if (!get_cmd_opt_bool("anonymous"))
 			add_menu_action(&mi, N_("Download ima~ge"), ACT_MAIN_LINK_DOWNLOAD_IMAGE);
 	}
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.159 2004/11/22 13:27:41 zas Exp $ */
+/* $Id: options.c,v 1.160 2004/12/02 16:34:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,7 +135,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct dialog *dlg;
 	union option_value *values;
-	int anonymous = get_cmd_opt_int("anonymous");
+	int anonymous = get_cmd_opt_bool("anonymous");
 
 	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, sizeof(union option_value) * TERM_OPTIONS);
 	if (!dlg) return;

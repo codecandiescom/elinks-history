@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.251 2004/11/23 17:12:57 witekfl Exp $ */
+/* $Id: form.c,v 1.252 2004/12/02 16:34:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -776,7 +776,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 			if (*sv->value) {
 				unsigned char *filename;
 
-				if (get_cmd_opt_int("anonymous")) {
+				if (get_cmd_opt_bool("anonymous")) {
 					errno = EPERM;
 					goto encode_error;
 				}

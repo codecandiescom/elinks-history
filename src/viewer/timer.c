@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.13 2004/07/28 15:43:51 jonas Exp $ */
+/* $Id: timer.c,v 1.14 2004/12/02 16:34:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ periodic_save_handler(void *xxx)
 	static int periodic_save_event_id = EVENT_NONE;
 	int interval;
 
-	if (get_cmd_opt_int("anonymous")) return;
+	if (get_cmd_opt_bool("anonymous")) return;
 
 	/* Don't trigger anything at startup */
 	if (periodic_save_event_id == EVENT_NONE)
@@ -90,7 +90,7 @@ static int
 periodic_save_change_hook(struct session *ses, struct option *current,
 			  struct option *changed)
 {
-	if (get_cmd_opt_int("anonymous")) return 0;
+	if (get_cmd_opt_bool("anonymous")) return 0;
 
 	if (periodic_save_timer != -1) {
 		kill_timer(periodic_save_timer);

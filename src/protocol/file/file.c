@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.180 2004/11/10 21:22:54 jonas Exp $ */
+/* $Id: file.c,v 1.181 2004/12/02 16:34:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,7 +188,7 @@ file_protocol_handler(struct connection *connection)
 	enum connection_state state;
 	unsigned char *type = NULL;
 
-	if (get_cmd_opt_int("anonymous")) {
+	if (get_cmd_opt_bool("anonymous")) {
 		/* FIXME: Better connection_state ;-) */
 		abort_conn_with_state(connection, S_BAD_URL);
 		return;

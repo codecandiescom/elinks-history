@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.378 2004/11/27 16:03:26 jonas Exp $ */
+/* $Id: menu.c,v 1.379 2004/12/02 16:34:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,7 +329,7 @@ static void
 do_file_menu(struct terminal *term, void *xxx, void *ses_)
 {
 	struct menu_item *file_menu, *e, *f;
-	int anonymous = get_cmd_opt_int("anonymous");
+	int anonymous = get_cmd_opt_bool("anonymous");
 	int x, o;
 
 	file_menu = mem_alloc(sizeof(file_menu11) + sizeof(file_menu21)
@@ -485,7 +485,7 @@ do_setup_menu(struct terminal *term, void *xxx, void *ses_)
 {
 	struct session *ses = ses_;
 
-	if (!get_cmd_opt_int("anonymous"))
+	if (!get_cmd_opt_bool("anonymous"))
 		do_menu(term, setup_menu, ses, 1);
 	else
 		do_menu(term, setup_menu_anon, ses, 1);
@@ -1012,7 +1012,7 @@ auto_complete_file(struct terminal *term, int no_elevator, unsigned char *path,
 
 	assert(term && data && file_func && dir_func && data);
 
-	if (get_cmd_opt_int("anonymous"))
+	if (get_cmd_opt_bool("anonymous"))
 		return;
 
 	if (!*path) path = "./";

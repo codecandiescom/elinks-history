@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.87 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: globhist.c,v 1.88 2004/12/02 16:34:01 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -275,7 +275,7 @@ read_global_history(void)
 	FILE *f;
 
 	if (!get_globhist_enable()
-	    || get_cmd_opt_int("anonymous"))
+	    || get_cmd_opt_bool("anonymous"))
 		return;
 
 	if (elinks_home) {
@@ -320,7 +320,7 @@ write_global_history(void)
 
 	if (!global_history.dirty || !elinks_home
 	    || !get_globhist_enable()
-	    || get_cmd_opt_int("anonymous"))
+	    || get_cmd_opt_bool("anonymous"))
 		return;
 
 	file_name = straconcat(elinks_home, GLOBAL_HISTORY_FILENAME, NULL);

@@ -1,5 +1,5 @@
 /* Base64 encoder implementation. */
-/* $Id: base64.c,v 1.8 2003/08/01 17:28:38 zas Exp $ */
+/* $Id: base64.c,v 1.9 2003/08/01 19:37:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,28 +62,28 @@ unsigned char *
 base64_decode(unsigned char *in)
 {
 	unsigned char *out, *outstr;
-	unsigned int buffer = 0;
-	int tmp;
-	int inlen = strlen(in);
+	unsigned int val = 0;
+	unsigned int tmp;
 
 	assert(in && *in);
 
-	outstr = out = mem_alloc(inlen / 4 * 3 + 1);
+	outstr = out = mem_alloc(strlen(in) / 4 * 3 + 1);
 	if (!outstr) return NULL;
 
 	while (*in) {
-	        buffer = INDEXOF(*in++) << 18;
-	        buffer |= INDEXOF(*in++) << 12;
-	        if (*in++ != '=') buffer |= INDEXOF(*(in - 1)) << 6;
-	        if (*in++ != '=') buffer |= INDEXOF(*(in - 1));
-	        *out++ = buffer >> 16;
-	        tmp = (buffer & 0xFF00) >> 8;
+	        val = INDEXOF(*in++) << 18 | INDEXOF(*in++) << 12;
+	        if (*in != '=') val |= INDEXOF(*in) << 6;
+		in++;
+	        if (*in != '=') val |= INDEXOF(*in);
+		in++;
+	        *out++ = val >> 16;
+	        tmp = (val & 0xFF00) >> 8;
 	        if (tmp) *out++ = tmp;
-	        tmp = (buffer & 0xFF);
+	        tmp = (val & 0xFF);
 	        if (tmp) *out++ = tmp;
-	        buffer = 0;
-	 }
+	}
 	*out = '\0';
+
 	return outstr;
 }
 #endif /* FORMS_MEMORY */

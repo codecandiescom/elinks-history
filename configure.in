@@ -717,51 +717,6 @@ AM_GNU_GETTEXT
 
 
 dnl ===================================================================
-dnl DocBook tools configuration
-dnl ===================================================================
-
-dnl TODO Take user input for which program to use
-AC_CHECK_PROGS(DOCTOOL, [xmlto docbook2html db2html jw], [], [$PATH])
-
-if test -n "$ac_cv_prog_DOCTOOL"; then
-	AC_MSG_CHECKING(for how doctools should be called)
-	DOCTOOL=
-	HTMLDOCTOOL=
-	MANDOCTOOL=
-	USE_DOCBOOK_XML="IGNORE"
-	USE_DOCBOOK_SGML="INCLUDE"
-	doctool_result=""
-	case "$ac_cv_prog_DOCTOOL" in
-		docbook2* | db2*)
-			frontend="docbook2"
-			if test "$ac_cv_prog_DOCTOOL" = db2html; then
-				frontend="db2"
-			fi
-			DOCTOOL=jw
-			HTMLDOCTOOL="${frontend}html"
-			MANDOCTOOL="${frontend}man"
-			doctool_result="assuming man frontend is available"
-		;;
-		jw)
-			HTMLDOCTOOL="$DOCTOOL -f html"
-			MANDOCTOOL="$DOCTOOL -f man"
-			doctool_result="using -f \${format}"
-		;;
-		xmlto)
-			DOCTOOL="$DOCTOOL --skip-validation"
-			HTMLDOCTOOL="$DOCTOOL html"
-			MANDOCTOOL="$DOCTOOL man"
-			USE_DOCBOOK_XML="INCLUDE"
-			USE_DOCBOOK_SGML="IGNORE"
-			doctool_result="cross your fingers that it will work"
-		;;
-	esac
-	AC_SUBST(HTMLDOCTOOL)
-	AC_SUBST(MANDOCTOOL)
-	AC_MSG_RESULT($doctool_result)
-fi
-
-dnl ===================================================================
 dnl Compile-time features control
 dnl ===================================================================
 
@@ -872,9 +827,6 @@ AC_OUTPUT([ \
  contrib/elinks.spec \
  contrib/lua/hooks.lua \
  doc/Makefile \
- doc/book/Makefile \
- doc/book/config.ent \
- doc/book/manpages/Makefile \
  doc/man/Makefile \
  doc/man/man1/Makefile \
  doc/man/man1/elinks.1 \

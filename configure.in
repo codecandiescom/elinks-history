@@ -119,6 +119,7 @@ AC_FUNC_STRFTIME
 AC_CHECK_FUNCS(alarm cfmakeraw chmod gethostbyaddr herror strcasestr strncasecmp timegm)
 AC_CHECK_FUNCS(popen uname access)
 AC_CHECK_FUNCS(strchr strrchr index rindex strstr strerror memmove bcopy)
+AC_CHECK_FUNCS(isalnum)
 
 AC_HAVE_FUNCS(cygwin_conv_to_full_win32_path)
 

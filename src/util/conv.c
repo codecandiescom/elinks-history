@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.11 2002/11/25 14:24:49 zas Exp $ */
+/* $Id: conv.c,v 1.12 2002/12/02 23:40:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,9 +135,15 @@ add_htmlesc_str(unsigned char **str, int *strl,
 		unsigned char *ostr, int ostrl)
 {
 
-#define accept_char(x) (isA((x)) || (x) == ' ' || (x) == '.' \
+#ifdef HAVE_ISALNUM
+#define accept_char(x) (isalnum((x)) || (x) == '-' || (x) == '_' \
+			|| (x) == ' ' || (x) == '.' \
 			|| (x) == ':' || (x) == ';')
 
+#else
+#define accept_char(x) (isA((x)) || (x) == ' ' || (x) == '.' \
+			|| (x) == ':' || (x) == ';')
+#endif
 	for (; ostrl; ostrl--, ostr++) {
 		if (accept_char(*ostr)) {
 			add_chr_to_str(str, strl, *ostr);

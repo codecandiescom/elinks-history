@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.5 2002/09/17 14:36:48 zas Exp $ */
+/* $Id: auth.c,v 1.6 2002/11/23 19:34:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ get_auth_url(unsigned char *url)
         unsigned char *port = get_port_str(url);
         unsigned char *newurl = NULL;
 
-        /* protocol == NULL is tested in straconcat() */;
+        /* NULL protocol or host are handled by straconcat() */;
         newurl = straconcat(protocol, "://", host, NULL);
         if (!newurl) goto end;
 
@@ -110,7 +110,10 @@ add_auth_entry(unsigned char *url, unsigned char *realm)
         unsigned char *newurl = get_auth_url(url);
         int ret = -1;
 
-        if (!newurl || !user || !pass) goto end;
+	if (!user) user = stracpy("");
+	if (!pass) pass = stracpy("");
+	
+	if (!newurl || !user || !pass) goto end;
 
         /* Is host/realm already known ? */
         entry = find_auth_entry(newurl, realm);
@@ -206,7 +209,10 @@ find_auth(unsigned char *url)
         unsigned char *user = get_user_name(url);
         unsigned char *pass = get_pass(url);
 
-        if (!newurl) goto end;
+	if (!user) user = stracpy("");
+	if (!pass) pass = stracpy("");
+
+	if (!newurl || !user || !pass) goto end;
 
 again:
         entry = find_auth_entry(newurl, NULL);

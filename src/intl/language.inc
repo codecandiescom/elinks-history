@@ -2467,8 +2467,8 @@ struct translation translation_czech [] = {
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Preferovaný jazyk stránek (seznam ISO kódù oddìlených èárkami)"},
   {T_ACCEPT_UI_LANGUAGE, "Pou¾ít jazyk u¾ivatelského rozhraní jako preferovaný jazyk stránek"},
-  {T_SSL_CIPHER, NULL},
-  {T_ENCODING, NULL},
+  {T_SSL_CIPHER, "SSL ¹ifra"},
+  {T_ENCODING, "Kódování"},
   {0, NULL}
 };
 

@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.55 2004/12/29 15:04:21 zas Exp $ */
+/* $Id: vs.c,v 1.56 2005/02/28 15:36:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@
 void
 init_vs(struct view_state *vs, struct uri *uri, int plain)
 {
-	memset(vs, 0, sizeof(struct view_state));
+	memset(vs, 0, sizeof(*vs));
 	vs->current_link = -1;
 	vs->plain = plain;
 	vs->uri = uri ? get_uri_reference(uri) : NULL;
@@ -83,7 +83,7 @@ copy_vs(struct view_state *dst, struct view_state *src)
 
 	init_list(dst->forms);
 	foreach (fv, src->forms) {
-		struct form_view *newfv = mem_calloc(1, sizeof(struct form_view));
+		struct form_view *newfv = mem_calloc(1, sizeof(*newfv));
 
 		if (!newfv) continue;
 		newfv->form_num = fv->form_num;
@@ -93,12 +93,12 @@ copy_vs(struct view_state *dst, struct view_state *src)
 
 	if (src->form_info_len) {
 		dst->form_info = mem_alloc(src->form_info_len
-					   * sizeof(struct form_state));
+					   * sizeof(*src->form_info));
 		if (dst->form_info) {
 			int i;
 
 			memcpy(dst->form_info, src->form_info,
-			       src->form_info_len * sizeof(struct form_state));
+			       src->form_info_len * sizeof(*src->form_info));
 			for (i = 0; i < src->form_info_len; i++) {
 				struct form_state *srcfs = &src->form_info[i];
 				struct form_state *dstfs = &dst->form_info[i];

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.599 2005/02/28 14:31:12 zas Exp $ */
+/* $Id: session.c,v 1.600 2005/02/28 15:34:47 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -974,7 +974,7 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		/* The old format calculates the session_info and magic members
 		 * as part of the data that should be decoded so we have to
 		 * substract it to get the size of the actual URI data. */
-		len -= 2 * sizeof(int);
+		len -= sizeof(info->session_info) + sizeof(info->magic);
 
 		/* Extract URI containing @magic bytes */
 		if (info->magic <= 0 || info->magic > len)

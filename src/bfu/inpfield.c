@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.196 2005/02/28 10:10:09 zas Exp $ */
+/* $Id: inpfield.c,v 1.197 2005/02/28 15:32:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -668,7 +668,7 @@ input_field_line(struct session *ses, unsigned char *prompt, void *data,
 
 	assert(ses);
 
-	dlg = calloc_dialog(INPUT_LINE_WIDGETS, sizeof(struct input_line));
+	dlg = calloc_dialog(INPUT_LINE_WIDGETS, sizeof(*input_line));
 	if (!dlg) return;
 
 	input_line = (void *) get_dialog_offset(dlg, INPUT_LINE_WIDGETS);

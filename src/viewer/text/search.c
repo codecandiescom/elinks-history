@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.307 2005/01/15 18:16:26 miciah Exp $ */
+/* $Id: search.c,v 1.308 2005/02/28 15:36:30 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -76,23 +76,23 @@ sort_srch(struct document *document)
 	assert(document);
 	if_assert_failed return;
 
-	document->slines1 = mem_calloc(document->height, sizeof(struct search *));
+	document->slines1 = mem_calloc(document->height, sizeof(*document->slines1));
 	if (!document->slines1) return;
 
-	document->slines2 = mem_calloc(document->height, sizeof(struct search *));
+	document->slines2 = mem_calloc(document->height, sizeof(*document->slines2));
 	if (!document->slines2) {
 		mem_free(document->slines1);
 		return;
 	}
 
-	min = mem_calloc(document->height, sizeof(int));
+	min = mem_calloc(document->height, sizeof(*min));
 	if (!min) {
 		mem_free(document->slines1);
 		mem_free(document->slines2);
 		return;
 	}
 
-	max = mem_calloc(document->height, sizeof(int));
+	max = mem_calloc(document->height, sizeof(*max));
 	if (!max) {
 		mem_free(document->slines1);
 		mem_free(document->slines2);
@@ -190,7 +190,7 @@ get_search_data(struct document *document)
 
 	document->nsearch = 0;
 
-	document->search = mem_alloc(n * sizeof(struct search));
+	document->search = mem_alloc(n * sizeof(*document->search));
 	if (!document->search) return;
 
 	get_srch(document);
@@ -1534,7 +1534,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml,
 	struct search_dlg_hop *hop;
 	unsigned char *text = _("Search for text", term);
 
-	hop = mem_calloc(1, sizeof(struct search_dlg_hop));
+	hop = mem_calloc(1, sizeof(*hop));
 	if (!hop) return;
 
 	checkout_option_values(resolvers, config_options,

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.270 2005/02/21 23:29:34 miciah Exp $ */
+/* $Id: form.c,v 1.271 2005/02/28 15:35:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ init_submitted_value(unsigned char *name, unsigned char *value, enum form_type t
 {
 	struct submitted_value *sv;
 
-	sv = mem_alloc(sizeof(struct submitted_value));
+	sv = mem_alloc(sizeof(*sv));
 	if (!sv) return NULL;
 
 	sv->value = stracpy(value);
@@ -205,10 +205,10 @@ find_form_state(struct document_view *doc_view, struct form_control *fc)
 	if (n >= vs->form_info_len) {
 		int nn = n + 1;
 
-		fs = mem_realloc(vs->form_info, nn * sizeof(struct form_state));
+		fs = mem_realloc(vs->form_info, nn * sizeof(*fs));
 		if (!fs) return NULL;
 		memset(fs + vs->form_info_len, 0,
-		       (nn - vs->form_info_len) * sizeof(struct form_state));
+		       (nn - vs->form_info_len) * sizeof(*fs));
 		vs->form_info = fs;
 		vs->form_info_len = nn;
 	}
@@ -221,7 +221,7 @@ find_form_state(struct document_view *doc_view, struct form_control *fc)
 		return fs;
 
 	mem_free_if(fs->value);
-	memset(fs, 0, sizeof(struct form_state));
+	memset(fs, 0, sizeof(*fs));
 	fs->form_view = find_form_view(doc_view, fc->form);
 	fs->g_ctrl_num = fc->g_ctrl_num;
 	fs->position = fc->position;
@@ -258,7 +258,7 @@ find_form_view_in_vs(struct view_state *vs, int form_num)
 		if (fv->form_num == form_num)
 			return fv;
 
-	fv = mem_calloc(1, sizeof(struct form_view));
+	fv = mem_calloc(1, sizeof(*fv));
 	fv->form_num = form_num;
 	add_to_list(vs->forms, fv);
 	return fv;
@@ -637,7 +637,7 @@ struct boundary_info {
 static inline void
 init_boundary(struct boundary_info *boundary)
 {
-	memset(boundary, 0, sizeof(struct boundary_info));
+	memset(boundary, 0, sizeof(*boundary));
 	memset(boundary->string, '0', BOUNDARY_LENGTH);
 }
 

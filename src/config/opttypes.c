@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.90 2005/01/05 14:37:44 jonas Exp $ */
+/* $Id: opttypes.c,v 1.91 2005/02/28 15:33:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,7 +149,7 @@ static unsigned char *
 num_rd(struct option *opt, unsigned char **file, int *line)
 {
 	unsigned char *end = *file;
-	long *value = mem_alloc(sizeof(long));
+	long *value = mem_alloc(sizeof(*value));
 
 	if (!value) return NULL;
 

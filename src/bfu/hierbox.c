@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.203 2005/02/28 10:09:50 zas Exp $ */
+/* $Id: hierbox.c,v 1.204 2005/02/28 15:32:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,7 +318,7 @@ hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 
 	assert(ses);
 
-	dlg = calloc_dialog(button, sizeof(struct listbox_data));
+	dlg = calloc_dialog(button, sizeof(*listbox_data));
 	if (!dlg) return NULL;
 
 	listbox_data = (struct listbox_data *) get_dialog_offset(dlg, button);

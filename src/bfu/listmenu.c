@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.36 2005/02/03 23:36:58 adamg Exp $ */
+/* $Id: listmenu.c,v 1.37 2005/02/28 15:33:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 	}
 
 	if (data == -1) {
-		int size = (menu->stack_size + 1) * sizeof(struct menu_item *);
+		int size = (menu->stack_size + 1) * sizeof(*menu->stack);
 		struct menu_item **stack = mem_realloc(menu->stack, size);
 
 		if (stack) {

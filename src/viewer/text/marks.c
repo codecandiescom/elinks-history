@@ -1,5 +1,5 @@
 /* Marks registry */
-/* $Id: marks.c,v 1.13 2004/09/28 19:22:13 pasky Exp $ */
+/* $Id: marks.c,v 1.14 2005/02/28 15:36:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,7 +125,7 @@ set_mark(unsigned char mark, struct view_state *mark_vs)
 
 	if (!mark_vs) return;
 
-	vs = mem_calloc(1, sizeof(struct view_state));
+	vs = mem_calloc(1, sizeof(*vs));
 	if (!vs) return;
 	copy_vs(vs, mark_vs);
 

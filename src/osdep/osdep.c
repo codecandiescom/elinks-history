@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.165 2005/02/11 20:04:32 jonas Exp $ */
+/* $Id: osdep.c,v 1.166 2005/02/28 15:34:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,7 +135,7 @@ set_ip_tos_throughput(int socket)
 #if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
 	int on = IPTOS_THROUGHPUT;
 
-	setsockopt(socket, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
+	setsockopt(socket, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(on));
 #endif
 }
 

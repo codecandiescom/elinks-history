@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.213 2005/02/28 14:29:39 zas Exp $ */
+/* $Id: connection.c,v 1.214 2005/02/28 15:34:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,7 +282,7 @@ update_progress(struct connection *conn)
 	while (progress->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
 		progress->cur_loaded -= progress->data_in_secs[0];
 		memmove(progress->data_in_secs, progress->data_in_secs + 1,
-			sizeof(int) * (CURRENT_SPD_SEC - 1));
+			sizeof(*progress->data_in_secs) * (CURRENT_SPD_SEC - 1));
 		progress->data_in_secs[CURRENT_SPD_SEC - 1] = 0;
 		progress->dis_b -= SPD_DISP_TIME;
 	}

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.312 2005/01/08 03:17:49 miciah Exp $ */
+/* $Id: link.c,v 1.313 2005/02/28 15:35:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,7 +147,7 @@ init_link_drawing(struct document_view *doc_view, struct link *link, int invert)
 	struct color_pair colors;
 
 	/* Allocate an extra background char to work on here. */
-	doc_view->link_bg = mem_alloc((1 + link->npoints) * sizeof(struct link_bg));
+	doc_view->link_bg = mem_alloc((1 + link->npoints) * sizeof(*doc_view->link_bg));
 	if (!doc_view->link_bg) return NULL;
 
 	doc_view->link_bg_n = link->npoints;

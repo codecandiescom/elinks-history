@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.89 2004/01/19 21:35:46 jonas Exp $ */
+/* $Id: options.inc,v 1.90 2004/01/22 21:18:39 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -521,7 +521,7 @@ struct option_info config_options_info[] = {
 		N_("Options concerning how to use CSS for styling documents.")),
 
 	INIT_OPT_BOOL("document.css", N_("Enable CSS"),
-		"enable", 0, 0,
+		"enable", 0, 1,
 		N_("Enable adding of CSS style info to documents.")),
 
 

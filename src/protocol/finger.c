@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.32 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: finger.c,v 1.33 2004/05/06 15:32:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,46 +16,19 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-static void finger_send_request(struct connection *);
-static void finger_sent_request(struct connection *);
-static void finger_get_response(struct connection *, struct read_buffer *);
-static void finger_end_request(struct connection *, int);
 
 static void
-finger_func(struct connection *conn)
+finger_end_request(struct connection *conn, enum connection_state state)
 {
-	set_connection_timeout(conn);
-	conn->from = 0;
-	make_connection(conn, get_uri_port(conn->uri), &conn->socket, finger_send_request);
-}
+	set_connection_state(conn, state);
 
-static void finger_send_request(struct connection *conn)
-{
-	struct string req;
-
-	if (!init_string(&req)) return;
-	/* add_to_string(&req, &rl, "/W"); */
-
-	if (conn->uri->user) {
-		add_char_to_string(&req, ' ');
-		add_bytes_to_string(&req, conn->uri->user, conn->uri->userlen);
+	if (conn->state == S_OK) {
+		if (conn->cached) {
+			truncate_entry(conn->cached, conn->from, 1);
+			conn->cached->incomplete = 0;
+		}
 	}
-	add_to_string(&req, "\r\n");
-	write_to_socket(conn, conn->socket, req.source, req.length, finger_sent_request);
-	done_string(&req);
-	set_connection_state(conn, S_SENT);
-}
-
-static void
-finger_sent_request(struct connection *conn)
-{
-	struct read_buffer *rb;
-
-	set_connection_timeout(conn);
-	rb = alloc_read_buffer(conn);
-	if (!rb) return;
-	rb->close = 1;
-	read_from_socket(conn, conn->socket, rb, finger_get_response);
+	abort_connection(conn);
 }
 
 static void
@@ -90,17 +63,41 @@ finger_get_response(struct connection *conn, struct read_buffer *rb)
 }
 
 static void
-finger_end_request(struct connection *conn, enum connection_state state)
+finger_sent_request(struct connection *conn)
 {
-	set_connection_state(conn, state);
+	struct read_buffer *rb;
 
-	if (conn->state == S_OK) {
-		if (conn->cached) {
-			truncate_entry(conn->cached, conn->from, 1);
-			conn->cached->incomplete = 0;
-		}
+	set_connection_timeout(conn);
+	rb = alloc_read_buffer(conn);
+	if (!rb) return;
+	rb->close = 1;
+	read_from_socket(conn, conn->socket, rb, finger_get_response);
+}
+
+static void
+finger_send_request(struct connection *conn)
+{
+	struct string req;
+
+	if (!init_string(&req)) return;
+	/* add_to_string(&req, &rl, "/W"); */
+
+	if (conn->uri->user) {
+		add_char_to_string(&req, ' ');
+		add_bytes_to_string(&req, conn->uri->user, conn->uri->userlen);
 	}
-	abort_connection(conn);
+	add_to_string(&req, "\r\n");
+	write_to_socket(conn, conn->socket, req.source, req.length, finger_sent_request);
+	done_string(&req);
+	set_connection_state(conn, S_SENT);
+}
+
+static void
+finger_func(struct connection *conn)
+{
+	set_connection_timeout(conn);
+	conn->from = 0;
+	make_connection(conn, get_uri_port(conn->uri), &conn->socket, finger_send_request);
 }
 
 struct protocol_backend finger_protocol_backend = {

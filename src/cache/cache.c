@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.49 2003/10/15 11:01:16 zas Exp $ */
+/* $Id: cache.c,v 1.50 2003/10/15 16:59:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ static int cache_count = 0;
 
 #define dump_frag(frag, count) \
 do { \
-	debug(" [%d] f=%p offset=%d length=%d real_length=%d", \
+	debug(" [%d] f=%p offset=%li length=%li real_length=%li", \
 	      count, frag, frag->offset, frag->length, frag->real_length); \
 } while (0)
 
@@ -40,7 +40,7 @@ do { \
 	struct fragment *frag; \
         int count = 0;	\
  \
-	debug("url=%s, comment=%s", entry->url, comment); \
+	debug("url=%s, comment=%s cache_size=%li", entry->url, comment, cache_size); \
 	foreach (frag, entry->frag) \
 		dump_frag(frag, ++count); \
 } while (0)
@@ -290,8 +290,6 @@ ff:;
 	return ret;
 }
 
-#undef CACHE_PAD
-
 void
 defrag_entry(struct cache_entry *e)
 {
@@ -461,9 +459,20 @@ garbage_collection(int whole)
 	long ccs = 0;
 	int no = 0;
 	long opt_cache_memory_size = get_opt_long("document.cache.memory.size");
+	static long old_opt_cache_memory_size = -1;
 	long opt_cache_gc_size = opt_cache_memory_size
 				 * MEMORY_CACHE_GC_PERCENT / 100;
 
+	if (old_opt_cache_memory_size != opt_cache_memory_size) {
+		/* To force minimal cache size test in case of user changed
+		 * option value. */
+		whole = 1;
+		old_opt_cache_memory_size = opt_cache_memory_size;
+	}
+
+#ifdef DEBUG_CACHE
+	debug("gc %d", whole);
+#endif
 	if (!whole && cache_size <= opt_cache_memory_size) return;
 
 	foreach (e, cache) {
@@ -522,10 +531,17 @@ g:
 			delete_cache_entry(f->prev);
 	}
 
+	if ((whole || !no) && cache_size > opt_cache_gc_size) {
+		/* Given cache size is too low regarding currently used cache
+		 * elements so we set it to a reasonable value. */
+		/* TODO: warn user about it. */
+		get_opt_long("document.cache.memory.size") =
+			CACHE_PAD(cache_size * 100 / MEMORY_CACHE_GC_PERCENT);
 #ifdef DEBUG_CACHE
-	if (!no && cache_size > opt_cache_gc_size) {
-		debug("garbage collection doesn't work, cache size %ld > %ld",
-		      cache_size, opt_cache_gc_size);
-	}
+		debug("garbage collection doesn't work, cache size %li > %li, "
+		      "document.cache.memory.size set to: %li bytes",
+		      cache_size, opt_cache_gc_size,
+		      get_opt_long("document.cache.memory.size"));
 #endif
+	}
 }

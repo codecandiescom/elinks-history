@@ -1,3 +1,343 @@
+Mon Jun 14 22:03:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, sched/session.c:
+
+	bookmark_terminal_tabs(): Just continue if either current URI or
+	title fails to be initialized. Requested by Miciah.  
+
+Mon Jun 14 19:58:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	enter(): Cleanup. Patch by Miciah.  
+
+Mon Jun 14 19:35:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Merge field_op() and field_op_do().  
+
+Mon Jun 14 19:31:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op(): Cleanup.  
+
+Mon Jun 14 19:29:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, textarea.c:
+
+	field_op() is called two places. In frame_ev() where we wil signal
+	FRAME_EVENT_REFRESH if it returns non zero, and in set_textarea().
+	Since frame_ev() will make sure refresh_view() is called there is no
+	need to redraw form entry and lower top windows.  
+
+Mon Jun 14 19:17:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op_do(): Take session arg instead of terminal.  
+
+Mon Jun 14 19:15:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op_do(): Cleanup.  
+
+Mon Jun 14 19:09:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op_do(): Cleanup ACT_EDIT_DELETE label.  
+
+Mon Jun 14 19:05:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op_do(): Cleanup ACT_EDIT_BACKSPACE label.  
+
+Mon Jun 14 19:01:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op_do(): Cleanup the default label.  
+
+Mon Jun 14 18:55:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op_do(): Cleanup ACT_EDIT_KILL_TO_EOL label.  
+
+Mon Jun 14 18:53:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op_do(): Cleanup ACT_EDIT_KILL_TO_BOL label.  
+
+Mon Jun 14 18:51:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op_do(): Use length variable to cleanup
+	ACT_EDIT_PASTE_CLIPBOARD label.  
+
+Mon Jun 14 18:47:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op_do(): Cleanup ACT_EDIT_KILL_TO_BOL label.  
+
+Mon Jun 14 18:44:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op_do(): Move local text varible out of switch and cleanup
+	ACT_EDIT_PASTE_CLIPBOARD label.  
+
+Mon Jun 14 18:13:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	add_new_win_to_menu(): It is not possible to open links in new
+	windows with -no-connect anymore.  
+
+Mon Jun 14 18:04:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	done_session_info(): Check URI before calling done_uri().  
+
+Mon Jun 14 17:39:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	add_session_info(): URI can be NULL for clean open in new windows.  
+
+Mon Jun 14 13:16:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	next_in_view(): doc_view->document -> document, doc_view->vs -> vs.  
+
+Mon Jun 14 13:09:17 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Sort document.browse.scrolling.*.  
+
+Mon Jun 14 13:06:43 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Moving document.browse.scrolling up with the other folders.  
+
+Mon Jun 14 12:56:58 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	In display_mainmenu, substitute arithmetic for the loop to scroll
+	the main menu horizontally to keep the selected menu on the screen.  
+
+Mon Jun 14 12:15:40 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation fix: entête -> en-tête.  
+
+Mon Jun 14 10:28:37 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Jun 14 10:16:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	find_link(): minor optimization and cleanup, move @direction test
+	outside loop.  
+
+Mon Jun 14 10:08:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Rearrange scroll-related functions, group mouse-related functions.  
+
+Mon Jun 14 10:05:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Drop TODO.  
+
+Mon Jun 14 10:02:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.inc, viewer/text/view.c:
+
+	Group scrolling options under document.browse.scrolling tree, and
+	introduce horizontal_step sub-option, cleanup.  
+
+Mon Jun 14 09:33:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	scroll() -> vertical_scroll(), hscroll() -> horizontal_scroll(),
+	drop buggy MacOS nameclash workaround scrool (not scroll).  
+
+Mon Jun 14 08:02:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/: os2/os2.c, unix/unix.c:
+
+	Compilation fixes: include "terminal/mouse.h".  
+
+Mon Jun 14 03:58:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Since init_session() and init_remote_session() is no longer called
+	in tabwin_func() there is no need to open goto URL dialogs using
+	bottom halves.  
+
+Mon Jun 14 03:46:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): End loop after URI has been released.  
+
+Mon Jun 14 02:21:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: Makefile.am, kbd.c, key.inc:
+
+	Move key data to key.inc file.  
+
+Mon Jun 14 01:27:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: kbd.h, terminal.h:
+
+	Move declaration to correct header.  
+
+Mon Jun 14 00:58:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	elinks.h includes setup.h 
+
+Mon Jun 14 00:53:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/hotkey.c, bfu/inpfield.c,
+	bfu/listbox.c, bfu/menu.c, bfu/text.c, bfu/widget.c,
+	bookmarks/dialogs.c, cache/dialogs.c, cookies/dialogs.c,
+	dialogs/menu.c, formhist/dialogs.c, globhist/dialogs.c,
+	osdep/osdep.c, osdep/unix/unix.c, terminal/Makefile.am,
+	terminal/event.h, terminal/kbd.c, terminal/kbd.h, terminal/mouse.h,
+	viewer/text/view.c:
+
+	Move terminal mouse stuff to terminal/mouse.h and remove a lot of
+	unneded #includes of terminal/kbd.h which probably goes back to when
+	hardcoded dialog keybinding was reworked.  
+
+Mon Jun 14 00:18:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Compile fix.  
+
+Mon Jun 14 00:08:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/event.h:
+
+	Move comments about interlink information to terminal_info struct.  
+
+Sun Jun 13 23:50:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): We do need to substract 2 * sizeof(int) for
+	the old format to get the length of the URI data.  
+
+Sun Jun 13 23:42:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Cleanup.  
+
+Sun Jun 13 23:30:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Improve comments.  
+
+Sun Jun 13 22:55:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_current_link(): Merge with draw_link_do(). Zas I hope you agree
+	that with the other things split out this is ok. Also add missing
+	check of init_link_drawing() return value.  
+
+Sun Jun 13 22:50:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	init_link_drawing(): Introduced. Sets up the template char with all
+	the funky document option checking.  
+
+Sun Jun 13 22:46:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	find_link(): @normal -> !@page_mode.  
+
+Sun Jun 13 22:43:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: link.c, link.h, search.c:
+
+	Use find_link_*() and make find_link() static.  
+
+Sun Jun 13 22:42:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, view.c:
+
+	draw_view_status(): Apart from the bad name it draws form, search
+	and link stuff. Replaces old draw_current_link(). draw_link()
+	renamed to draw_current_link().  
+
+Sun Jun 13 22:37:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/vs.c:
+
+	Use find_link_page_down().  
+
+Sun Jun 13 22:37:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_link(): Don't take current link number but use
+	get_current_link() macro.  
+
+Sun Jun 13 22:36:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Use find_link_{up|page_up|down|page_down}().  
+
+Sun Jun 13 22:31:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	get_link_cursor_offset(): Introduced.  
+
+Sun Jun 13 22:26:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: link.c, link.h:
+
+	find_link_{up|page_up|down|page_down}() were introduced.  
+
+Sun Jun 13 22:19:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	@p -> @direction, @s -> @normal.  
+
 Sun Jun 13 22:08:30 2004  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/: link.c, view.c, view.h:

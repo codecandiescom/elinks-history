@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.14 2003/06/11 05:02:58 miciah Exp $ */
+/* $Id: mime.c,v 1.15 2003/06/15 23:34:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,20 +35,15 @@ static inline unsigned char *
 try_extension_type(unsigned char *extension)
 {
 	struct mime_handler *handler;
-	unsigned char *trimmed = strrchr(extension, '.');
 	unsigned char *content_type;
-	int trimmedlen;
+	unsigned char *trimmed = strrchr(extension, '.');
 
 	if (!trimmed)
 		return NULL;
 
-	trimmedlen = strlen(trimmed) + 1;
-	content_type = mem_alloc(14 + trimmedlen);
+	content_type = straconcat("application/x-", trimmed + 1, NULL);
 	if (!content_type)
 		return NULL;
-
-	memcpy(content_type, "application/x-", 14);
-	memcpy(content_type + 14, trimmed, trimmedlen);
 
 	handler = get_mime_type_handler(NULL, content_type);
 	if (handler) {

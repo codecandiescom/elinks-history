@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.89 2002/11/12 10:39:15 zas Exp $ */
+/* $Id: view.c,v 1.90 2002/11/13 20:50:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -552,7 +552,7 @@ cont:
 				co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
 				set_color(t, x, y, co);
 #endif
-				if (!(len & ALLOC_GR)) {
+				if (!(len % ALLOC_GR)) {
 					struct point *npt = mem_realloc(points, sizeof(struct point) * (len + ALLOC_GR));
 
 					if (!npt) continue;

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.358 2004/07/08 13:53:42 jonas Exp $ */
+/* $Id: tables.c,v 1.359 2004/07/08 14:05:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -880,7 +880,11 @@ draw_table_cells(struct table *table, int x, int y)
 	/* Finish the table drawing by aligning the right and bottom edge of
 	 * the table */
 	par_format.bgcolor = table->bgcolor;
-	expand_lines(table->part, x + table->real_width, y, table->real_height);
+	/* If there are table borders involved don't draw passed the table
+	 * border. This could be fixed by always expanding table cells with the
+	 * ``width - 1''. */
+	x += table->real_width - !!table->border;
+	expand_lines(table->part, x, y, table->real_height);
 
 	/* Do a sanity check whether the height is correct */
 	check_table_height(table, &table_frames, y);

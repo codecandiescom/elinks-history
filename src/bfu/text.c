@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.40 2003/11/07 16:20:19 jonas Exp $ */
+/* $Id: text.c,v 1.41 2003/11/07 16:22:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,8 +76,8 @@ split_line(unsigned char *text, int w, int x)
 /* Format text according to dialog dimensions and alignment. */
 /* TODO: Longer names for local variables. */
 void
-dlg_format_text(struct terminal *term,
-		unsigned char *text, int x, int *y, int w, int *rw,
+dlg_format_text(struct terminal *term, unsigned char *text,
+		int x, int *y, int dlg_width, int *real_width,
 		struct color_pair *color, enum format_align align)
 {
 	int line_width;
@@ -88,20 +88,20 @@ dlg_format_text(struct terminal *term,
 		/* Skip any leading space from last line split */
 		if (*text == ' ' || *text == '\n') text++;
 
-		line_width = split_line(text, w, x);
+		line_width = split_line(text, dlg_width, x);
 
-		if (rw) int_lower_bound(rw, line_width);
+		if (real_width) int_lower_bound(real_width, line_width);
 		if (!term || !line_width) continue;
 
 		/* Calculate the number of chars to indent */
 		if (align == AL_CENTER)
-			shift = (w - line_width) / 2;
+			shift = (dlg_width - line_width) / 2;
 		else if (align == AL_RIGHT)
-			shift = w - line_width;
+			shift = dlg_width - line_width;
 		else
 			shift = 0;
 
-		assert(line_width - x <= w && shift < w);
+		assert(line_width - x <= dlg_width && shift < dlg_width);
 
 		draw_text(term, x + shift, *y, text, line_width, 0, color);
 	}

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.98 2003/06/07 12:58:21 pasky Exp $ */
+/* $Id: parser.c,v 1.99 2003/06/07 13:46:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1051,8 +1051,6 @@ html_h(int h, unsigned char *a)
 			par_format.leftmargin = par_format.rightmargin = (h - 2) * 2;
 			break;
 		case AL_NONE:
-		case AL_MASK:
-		case AL_EXTD_TEXT:
 			/* Silence compiler warnings */
 			break;
 	}

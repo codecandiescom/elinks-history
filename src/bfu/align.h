@@ -1,4 +1,4 @@
-/* $Id: align.h,v 1.13 2003/06/07 13:17:35 pasky Exp $ */
+/* $Id: align.h,v 1.14 2003/06/07 13:46:36 pasky Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
@@ -10,8 +10,6 @@ enum format_align {
 	AL_RIGHT,
 	AL_BLOCK,
 	AL_NONE,
-
-	AL_MASK = 0x7f,
 };
 
 #include "config/options.h"

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.21 2003/06/07 12:05:10 pasky Exp $ */
+/* $Id: button.c,v 1.22 2003/06/07 13:46:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ dlg_format_buttons(struct terminal *term, struct terminal *t2,
 
 		if (term) {
 			int i;
-			int p = x + ((align & AL_MASK) == AL_CENTER ? (w - mw) / 2 : 0);
+			int p = x + (align == AL_CENTER ? (w - mw) / 2 : 0);
 
 			for (i = i1; i < i2; i++) {
 				butt[i].x = p;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.49 2003/05/07 17:46:45 pasky Exp $ */
+/* $Id: session.c,v 1.50 2003/05/08 00:38:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1325,33 +1325,34 @@ struct session *startup_goto_dialog_ses;
 static int
 read_session_info(int fd, struct session *ses, void *data, int len)
 {
-	int cpfrom, sz;
+	int base_session, url_len;
 	struct session *s;
 
 	if (len < 2 * sizeof(int)) return -1;
-	cpfrom = *(int *)data;
-	sz = *((int *)data + 1);
+
+	base_session = *((int *) data);
+	url_len = *((int *) data + 1);
 
 	/* This is the only place where s->id comes into game - we're comparing
 	 * it to possibly supplied -base-session here, and clone the session
 	 * with id of base-session (its current document association only,
 	 * rather) to the newly created session. */
 	foreach(s, sessions) {
-		if (s->id == cpfrom) {
+		if (s->id == base_session) {
 			copy_session(s, ses);
 			break;
 		}
 	}
 
-	if (sz) {
+	if (url_len) {
 		unsigned char *u, *uu;
 
-		if (len < 2 * sizeof(int) + sz) return 0;
+		if (len < 2 * sizeof(int) + url_len) return 0;
 
-		u = mem_alloc(sz + 1);
-		if (u) {
-			memcpy(u, (int *)data + 2, sz);
-			u[sz] = '\0';
+		u = mem_alloc(url_len + 1);
+		if (!u) {
+			memcpy(u, (int *)data + 2, url_len);
+			u[url_len] = '\0';
 			uu = decode_url(u);
 			goto_url(ses, uu);
 			mem_free(u);

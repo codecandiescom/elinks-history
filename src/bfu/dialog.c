@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.113 2003/12/13 01:53:32 jonas Exp $ */
+/* $Id: dialog.c,v 1.114 2003/12/18 22:37:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -281,19 +281,13 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			/* Cycle focus. */
 
 			if ((ev->x == KBD_TAB && !ev->y)
-			    || action == ACT_DOWN
-			    || action == ACT_RIGHT
-			    || ev->x == KBD_DOWN
-			    || ev->x == KBD_RIGHT) {
+			    || action == ACT_DOWN || action == ACT_RIGHT) {
 				cycle_widget_focus(dlg_data, 1);
 				break;
 			}
 
 			if ((ev->x == KBD_TAB && ev->y)
-			    || action == ACT_UP
-			    || action == ACT_LEFT
-			    || ev->x == KBD_UP
-			    || ev->x == KBD_LEFT) {
+			    || action == ACT_UP || action == ACT_LEFT) {
 				cycle_widget_focus(dlg_data, -1);
 				break;
 			}

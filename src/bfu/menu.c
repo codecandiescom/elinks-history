@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.121 2003/12/13 01:41:10 jonas Exp $ */
+/* $Id: menu.c,v 1.122 2003/12/18 22:37:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -750,11 +750,6 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 			enum keyact action = kbd_action(KM_MENU, ev, NULL);
 
 			if (ev->x == ' '
-			    || ev->x == KBD_ENTER
-			    || ev->x == KBD_DOWN
-			    || ev->x == KBD_UP
-			    || ev->x == KBD_PAGE_DOWN
-			    || ev->x == KBD_PAGE_UP
 			    || action == ACT_ENTER
 			    || action == ACT_DOWN
 			    || action == ACT_UP
@@ -764,23 +759,19 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 				break;
 			}
 
-			if (ev->x == KBD_LEFT
-			    || action == ACT_LEFT) {
+			if (action == ACT_LEFT) {
 				if (!menu->selected--)
 					menu->selected = menu->ni - 1;
 				s = 1;
 
-			} else if (ev->x == KBD_RIGHT
-				   || action == ACT_RIGHT) {
+			} else if (action == ACT_RIGHT) {
 				if (++menu->selected >= menu->ni)
 					menu->selected = 0;
 				s = 1;
 
 			}
 
-			if (fwd
-			    && (ev->x == KBD_LEFT || ev->x == KBD_RIGHT
-				|| action == ACT_LEFT || action == ACT_RIGHT)) {
+			if (fwd && (action == ACT_LEFT || action == ACT_RIGHT)) {
 				display_mainmenu(win->term, menu);
 				select_mainmenu(win->term, menu);
 				break;

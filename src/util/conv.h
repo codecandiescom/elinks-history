@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.38 2004/07/14 17:44:40 zas Exp $ */
+/* $Id: conv.h,v 1.39 2004/11/14 22:54:41 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -19,9 +19,16 @@ is_safe_in_shell(unsigned char c)
 
 long strtolx(unsigned char *, unsigned char **);
 
-/* Convert a decimal number to hexadecimal (0 <= a <= 15). */
+/* Convert a decimal number to hexadecimal (lowercase) (0 <= a <= 15). */
 static inline unsigned char
 hx(register int a)
+{
+	return a >= 10 ? a + 'a' - 10 : a + '0';
+}
+
+/* Convert a decimal number to hexadecimal (uppercase) (0 <= a <= 15). */
+static inline unsigned char
+Hx(register int a)
 {
 	return a >= 10 ? a + 'A' - 10 : a + '0';
 }
@@ -33,8 +40,8 @@ static inline int
 unhx(register unsigned char a)
 {
 	if (isdigit(a)) return a - '0';
-	if (a >= 'A' && a <= 'F') return a - 'A' + 10;
 	if (a >= 'a' && a <= 'f') return a - 'a' + 10;
+	if (a >= 'A' && a <= 'F') return a - 'A' + 10;
 	return -1;
 }
 

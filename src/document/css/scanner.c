@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.71 2004/01/21 05:20:58 jonas Exp $ */
+/* $Id: scanner.c,v 1.72 2004/01/21 05:39:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,8 +109,8 @@ get_css_identifier_type(unsigned char *ident, int length,
 	  || ((skipto) == ';' && ((c) == '{' || (c) == '}'))			\
 	  || ((skipto) == '{' && (c) == '}'))
 
-#define	skip_css(s, skipto) \
-	while (*(s) && check_css_precedence(*(s), skipto)) {			\
+#define	skip_css(s, skipto)							\
+	while (*(s) && *(s) != (skipto) && check_css_precedence(*(s), skipto)) {\
 		if (*(s) == '"' || *(s) == '\'') {				\
 			unsigned char *end = strchr(s + 1, *(s));		\
 										\
@@ -235,6 +235,9 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 				if (type == CSS_TOKEN_FUNCTION) {
 					string = function_end;
 				}
+
+				assert(type != CSS_TOKEN_RGB || *string == '(');
+				assert(type != CSS_TOKEN_FUNCTION || *string == ')');
 			}
 
 			string++;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.126 2003/07/02 17:13:13 pasky Exp $ */
+/* $Id: view.c,v 1.127 2003/07/02 17:17:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -581,25 +581,25 @@ get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 	for (; s1 <= s2; s1++) {
 		register int i;
 
-		if (srch_cmp(s1->c, c)) {
-cont:
+		if (srch_cmp(s1->c, c))
 			continue;
-		}
 
 		for (i = 1; i < l; i++)
 			if (srch_cmp(s1[i].c, (*scr->search_word)[i]))
-				goto cont;
+				continue;
 
 		for (i = 0; i < l; i++) {
 			register int j;
 			int y = s1[i].y + yp - vy;
 
-			if (y < yp || y >= yp + yw) continue;
+			if (y < yp || y >= yp + yw)
+				continue;
 
 			for (j = 0; j < s1[i].n; j++) {
 				int x = s1[i].x + j + xp - vx;
 
-				if (x < xp || x >= xp + xw) continue;
+				if (x < xp || x >= xp + xw)
+					continue;
 
 				if (!(len % ALLOC_GR)) {
 					struct point *npt;

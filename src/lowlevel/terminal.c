@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.32 2002/11/29 19:11:52 pasky Exp $ */
+/* $Id: terminal.c,v 1.33 2002/11/29 20:39:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1033,10 +1033,13 @@ fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 	int j = (y >= 0) ? 0 : -y;
 
 	t->dirty = 1;
-	for (; j < yw && y+j < t->y; j++) {
-		int i = (x >= 0) ? 0 : -x;
+	for (; j < yw && y + j < t->y; j++) {
+		int i;
 
-		for (; i < xw && x + i < t->x; i++)
+		/* No, we can't use memset() here :(. It's int, not char. */
+		/* TODO: Make screen two arrays actually. Enables various
+		 * optimalizations, consumes nearly same memory. --pasky */
+		for (i = (x >= 0) ? 0 : -x; i < xw && x + i < t->x; i++)
 			t->screen[x + i + t->x * (y + j)] = c;
 	}
 }

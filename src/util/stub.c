@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.3 2003/09/13 00:32:32 zas Exp $ */
+/* $Id: stub.c,v 1.4 2003/10/08 15:59:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,6 +140,8 @@ elinks_memmove(void *d, const void *s, size_t n)
 {
 	register unsigned char *dst = (unsigned char *) d;
 	register unsigned char *src = (unsigned char *) s;
+
+	if (!n || src == dst) return (void *) dst;
 
 	if (src > dst)
 		for (; n > 0; n--)

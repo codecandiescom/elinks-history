@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.60 2004/04/04 01:26:52 jonas Exp $ */
+/* $Id: task.c,v 1.61 2004/04/04 01:40:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -459,7 +459,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	}
 
 	if (uri->protocol == PROTOCOL_UNKNOWN) {
-		print_unknown_protocol_dialog(ses);
+		print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);
 		if (pos) mem_free(pos);
 		done_uri(uri);
 		return;

@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.19 2004/01/31 00:28:37 zas Exp $ */
+/* $Id: state.c,v 1.20 2004/04/04 01:40:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,6 +53,9 @@ struct s_msg_dsc {
 	{S_RESTART,		N_("Request must be restarted")},
 	{S_STATE,		N_("Can't get socket state")},
 	{S_LOCAL_ONLY,		N_("Only local connections are permitted")},
+	{S_UNKNOWN_PROTOCOL,	N_("This URL contains a protocol not yet known by ELinks.\n"
+				   "You can configure an external handler for it through\n"
+				   "options system.")},
 
 	{S_HTTP_ERROR,		N_("Bad HTTP response")},
 	{S_HTTP_100,		N_("HTTP 100 (\?\?\?)")},

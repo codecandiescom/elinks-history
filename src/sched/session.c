@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.355 2004/04/04 01:26:52 jonas Exp $ */
+/* $Id: session.c,v 1.356 2004/04/04 01:40:20 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -890,17 +890,6 @@ reload(struct session *ses, enum cache_mode cache_mode)
 	}
 }
 
-
-void
-print_unknown_protocol_dialog(struct session *ses)
-{
-	msg_box(ses->tab->term, NULL, 0,
-		N_("Error"), AL_CENTER,
-		N_("This URL contains a protocol not yet known by ELinks.\n"
-		   "You can configure an external handler for it through options system."),
-		ses, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
-}
 
 struct frame *
 ses_find_frame(struct session *ses, unsigned char *name)

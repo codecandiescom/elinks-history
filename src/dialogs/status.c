@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.59 2004/04/03 14:13:47 jonas Exp $ */
+/* $Id: status.c,v 1.60 2004/04/16 10:02:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +32,7 @@
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/math.h"
 #include "util/memory.h"
 #include "util/snprintf.h"
 #include "util/string.h"

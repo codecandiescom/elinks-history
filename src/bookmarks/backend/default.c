@@ -1,5 +1,5 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.14 2004/03/09 15:24:46 zas Exp $ */
+/* $Id: default.c,v 1.15 2004/04/16 10:02:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "bookmarks/backend/common.h"
 #include "bookmarks/backend/default.h"
 #include "util/file.h"
+#include "util/math.h"
 #include "util/memory.h"
 #include "util/string.h"
 

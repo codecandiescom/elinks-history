@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.47 2004/01/30 19:13:29 jonas Exp $ */
+/* $Id: button.c,v 1.48 2004/04/16 10:02:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
-
+#include "util/math.h"
 
 static void
 buttons_width(struct widget_data *widget_data, int n,

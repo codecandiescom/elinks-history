@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.142 2004/03/16 15:38:00 jonas Exp $ */
+/* $Id: listbox.c,v 1.143 2004/04/16 10:02:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/lists.h"
-
+#include "util/math.h"
 
 /* Layout for generic boxes */
 void

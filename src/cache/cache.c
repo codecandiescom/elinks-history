@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.60 2003/10/30 17:01:37 pasky Exp $ */
+/* $Id: cache.c,v 1.61 2003/11/06 23:49:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,7 +349,7 @@ truncate_entry(struct cache_entry *ce, int off, int final)
 	foreach (f, ce->frag) {
 		long size = off - f->offset;
 
-		if (size < 0) {
+		if (size <= 0) {
 
 del:
 			while ((void *)f != &ce->frag) {

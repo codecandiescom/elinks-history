@@ -1,3 +1,28 @@
+Thu Feb 12 17:51:38 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/main.c:
+
+	From now ELinks can act as pager.  
+
+Thu Feb 12 17:11:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, search.c:
+
+	Fix link typeahead fixups so current links will never be under the
+	input line.  
+
+Thu Feb 12 12:00:34 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Real translation update.  
+
+Thu Feb 12 06:52:21 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Translation update.  
+
 Wed Feb 11 11:44:24 2004  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po, src/config/options.inc:

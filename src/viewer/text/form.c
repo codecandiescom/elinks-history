@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.188 2004/06/16 15:41:31 zas Exp $ */
+/* $Id: form.c,v 1.189 2004/06/16 16:56:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1328,9 +1328,10 @@ get_form_label(struct form_control *fc)
 	switch (fc->type) {
 	case FC_RESET:
 		return N_("Reset form");
+	case FC_HIDDEN:
+		return NULL;
 	case FC_SUBMIT:
 	case FC_IMAGE:
-	case FC_HIDDEN:
 		if (!fc->action) return NULL;
 
 		if (fc->method == FM_GET)
@@ -1437,14 +1438,15 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 
 	case FC_SUBMIT:
 	case FC_IMAGE:
-	case FC_HIDDEN:
 		add_char_to_string(&str, ' ');
 
 		/* Add the uri with password and post info stripped */
 		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
 		break;
 
-	default:
+	case FC_HIDDEN:
+	case FC_RESET:
+	case FC_SELECT:
 		break;
 	}
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.118 2003/05/18 15:59:11 pasky Exp $ */
+/* $Id: http.c,v 1.119 2003/05/18 16:03:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -331,7 +331,7 @@ http_send_header(struct connection *c)
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
 	unsigned char *post = NULL;
-	struct cache_entry *e = NULL;
+	struct cache_entry *cache = NULL;
 	unsigned char *hdr;
 	unsigned char *host_data, *url_data;
 	int l = 0;
@@ -616,12 +616,12 @@ http_send_header(struct connection *c)
 		}
 	}
 
-	e = c->cache;
-	if (e) {
-		if (!e->incomplete && e->head && e->last_modified
+	cache = c->cache;
+	if (cache) {
+		if (!cache->incomplete && cache->head && cache->last_modified
 		    && c->cache_mode <= NC_IF_MOD) {
 			add_to_str(&hdr, &l, "If-Modified-Since: ");
-			add_to_str(&hdr, &l, e->last_modified);
+			add_to_str(&hdr, &l, cache->last_modified);
 			add_to_str(&hdr, &l, "\r\n");
 		}
 	}
@@ -1058,7 +1058,7 @@ http_got_header(struct connection *c, struct read_buffer *rb)
 	int a, h;
 	struct http_version version;
 	unsigned char *d;
-	struct cache_entry *e;
+	struct cache_entry *cache;
 	struct http_connection_info *info;
 	unsigned char *host = GET_REAL_URL(c->url);
 
@@ -1139,28 +1139,28 @@ again:
 		http_end_request(c, S_OK);
 		return;
 	}
-	if (get_cache_entry(c->url, &e)) {
+	if (get_cache_entry(c->url, &cache)) {
 		mem_free(head);
 		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return;
 	}
-	if (e->head) mem_free(e->head);
-	e->head = head;
+	if (cache->head) mem_free(cache->head);
+	cache->head = head;
 
 	if (!get_opt_bool("document.cache.ignore_cache_control")) {
-		if ((d = parse_http_header(e->head, "Cache-Control", NULL))
-		    || (d = parse_http_header(e->head, "Pragma", NULL)))
+		if ((d = parse_http_header(cache->head, "Cache-Control", NULL))
+		    || (d = parse_http_header(cache->head, "Pragma", NULL)))
 		{
 			if (strstr(d, "no-cache")) {
-				e->cache_mode = NC_PR_NO_CACHE;
+				cache->cache_mode = NC_PR_NO_CACHE;
 			}
 			mem_free(d);
 		}
 	}
 
 	if (c->ssl) {
-		if (e->ssl_info) mem_free(e->ssl_info);
-		e->ssl_info = get_ssl_cipher_str(c->ssl);
+		if (cache->ssl_info) mem_free(cache->ssl_info);
+		cache->ssl_info = get_ssl_cipher_str(c->ssl);
 	}
 
 	if (h == 204) {
@@ -1168,16 +1168,16 @@ again:
 		return;
 	}
 	if (h == 301 || h == 302 || h == 303) {
-		d = parse_http_header(e->head, "Location", NULL);
+		d = parse_http_header(cache->head, "Location", NULL);
 		if (d) {
-			if (e->redirect) mem_free(e->redirect);
-			e->redirect = d;
-			e->redirect_get = h == 303;
+			if (cache->redirect) mem_free(cache->redirect);
+			cache->redirect = d;
+			cache->redirect_get = h == 303;
 		}
 	}
 
 	if (h == 401) {
-		d = parse_http_header(e->head, "WWW-Authenticate", NULL);
+		d = parse_http_header(cache->head, "WWW-Authenticate", NULL);
 		if (d) {
 			if (!strncasecmp(d, "Basic", 5)) {
 				unsigned char *realm = get_http_header_param(d, "realm");
@@ -1194,13 +1194,13 @@ again:
 	}
 
 	kill_buffer_data(rb, a);
-	c->cache = e;
+	c->cache = cache;
 	info->close = 0;
 	info->length = -1;
 	info->recv_version = version;
 
-	if ((d = parse_http_header(e->head, "Connection", NULL))
-	     || (d = parse_http_header(e->head, "Proxy-Connection", NULL))) {
+	if ((d = parse_http_header(cache->head, "Connection", NULL))
+	     || (d = parse_http_header(cache->head, "Proxy-Connection", NULL))) {
 		if (!strcasecmp(d, "close")) info->close = 1;
 		mem_free(d);
 	} else if (version.major < 1
@@ -1209,7 +1209,7 @@ again:
 
 	cf = c->from;
 	c->from = 0;
-	d = parse_http_header(e->head, "Content-Range", NULL);
+	d = parse_http_header(cache->head, "Content-Range", NULL);
 	if (d) {
 		if (strlen(d) > 6) {
 			d[5] = 0;
@@ -1249,7 +1249,7 @@ again:
 	}
 	c->prg.start = c->from;
 
-	d = parse_http_header(e->head, "Content-Length", NULL);
+	d = parse_http_header(cache->head, "Content-Length", NULL);
 	if (d) {
 		unsigned char *ep;
 		int l;
@@ -1267,14 +1267,14 @@ again:
 		mem_free(d);
 	}
 
-	d = parse_http_header(e->head, "Accept-Ranges", NULL);
+	d = parse_http_header(cache->head, "Accept-Ranges", NULL);
 	if (d) {
 		if (!strcasecmp(d, "none") && !c->unrestartable)
 			c->unrestartable = 1;
 		mem_free(d);
 	} else if (!c->unrestartable && !c->from) c->unrestartable = 1;
 
-	d = parse_http_header(e->head, "Transfer-Encoding", NULL);
+	d = parse_http_header(cache->head, "Transfer-Encoding", NULL);
 	if (d) {
 		if (!strcasecmp(d, "chunked")) {
 			info->length = LEN_CHUNKED;
@@ -1284,10 +1284,10 @@ again:
 	}
 	if (!info->close && info->length == -1) info->close = 1;
 
-	d = parse_http_header(e->head, "Last-Modified", NULL);
+	d = parse_http_header(cache->head, "Last-Modified", NULL);
 	if (d) {
-		if (e->last_modified && strcasecmp(e->last_modified, d)) {
-			delete_entry_content(e);
+		if (cache->last_modified && strcasecmp(cache->last_modified, d)) {
+			delete_entry_content(cache);
 			if (c->from) {
 				c->from = 0;
 				mem_free(d);
@@ -1295,18 +1295,18 @@ again:
 				return;
 			}
 		}
-		if (!e->last_modified) e->last_modified = d;
+		if (!cache->last_modified) cache->last_modified = d;
 		else mem_free(d);
 	}
-	if (!e->last_modified) {
-	       	d = parse_http_header(e->head, "Date", NULL);
-		if (d) e->last_modified = d;
+	if (!cache->last_modified) {
+	       	d = parse_http_header(cache->head, "Date", NULL);
+		if (d) cache->last_modified = d;
 	}
 
-	d = parse_http_header(e->head, "ETag", NULL);
+	d = parse_http_header(cache->head, "ETag", NULL);
 	if (d) {
-		if (e->etag && strcasecmp(e->etag, d)) {
-			delete_entry_content(e);
+		if (cache->etag && strcasecmp(cache->etag, d)) {
+			delete_entry_content(cache);
 			if (c->from) {
 				c->from = 0;
 				mem_free(d);
@@ -1314,15 +1314,15 @@ again:
 				return;
 			}
 		}
-		if (!e->etag) e->etag = d;
+		if (!cache->etag) cache->etag = d;
 		else mem_free(d);
 	}
 
-	d = parse_http_header(e->head, "Content-Type", NULL);
+	d = parse_http_header(cache->head, "Content-Type", NULL);
 	if (d) {
 		if (!strncmp(d, "text", 4)) {
 			mem_free(d);
-			d = parse_http_header(e->head, "Content-Encoding", NULL);
+			d = parse_http_header(cache->head, "Content-Encoding", NULL);
 			if (d) {
 #ifdef HAVE_ZLIB_H
 				if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip"))
@@ -1340,8 +1340,8 @@ again:
 	}
 
 	if (c->content_encoding != ENCODING_NONE) {
-		if (e->encoding_info) mem_free(e->encoding_info);
-		e->encoding_info = stracpy(encoding_names[c->content_encoding]);
+		if (cache->encoding_info) mem_free(cache->encoding_info);
+		cache->encoding_info = stracpy(encoding_names[c->content_encoding]);
 	}
 
 	if (info->length == -1 ||

@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.13 2003/09/12 23:41:25 zas Exp $ */
+/* $Id: vs.c,v 1.14 2003/09/14 01:04:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,9 @@ init_vs(struct view_state *vs, unsigned char *url)
 {
 	int url_len = strlen(url);
 
-	memset(vs, 0, sizeof(struct view_state) + url_len + 1);
+	/* No need to add a byte for the \0 to url_len:
+	 * struct view_state has an unsigned char url[1]. -- Miciah */
+	memset(vs, 0, sizeof(struct view_state) + url_len);
 	vs->current_link = -1;
 	vs->plain = -1;
 	memcpy(vs->url, url, url_len);

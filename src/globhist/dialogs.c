@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.82 2003/11/22 13:45:29 jonas Exp $ */
+/* $Id: dialogs.c,v 1.83 2003/11/22 14:26:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,12 +52,11 @@ get_globhist_item_info(struct listbox_item *box_item, struct terminal *term)
 
 	if (!init_string(&info)) return NULL;
 
-	/* If the text has not been toggled */
-	if (box_item->text == item->title) {
-		add_format_to_string(&info, _("URL: \"%s\"", term), item->url);
-	} else {
-		add_format_to_string(&info, _("Title: \"%s\"", term), item->title);
-	}
+	add_format_to_string(&info, _("Title: %s\n"
+			"URL: %s\n"
+			"Last visit time: %s", term),
+			item->title, item->url,
+			ctime(&item->last_visit));
 
 	return info.source;
 }
@@ -191,42 +190,6 @@ push_clear_button(struct dialog_data *dlg_data,
 }
 
 
-static void
-done_info_button(void *vhop)
-{
-	struct global_history_item *history_item = vhop;
-
-	object_unlock(history_item);
-}
-
-static int
-push_info_button(struct dialog_data *dlg_data,
-		  struct widget_data *some_useless_info_button)
-{
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-	struct terminal *term = dlg_data->win->term;
-	struct global_history_item *historyitem;
-
-	/* Show history item info */
-	if (!box->sel) return 0;
-	historyitem = box->sel->udata;
-	if (!historyitem) return 0;
-	object_lock(historyitem);
-
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Info"), AL_LEFT,
-		msg_text(term, N_("Title: %s\n"
-			"URL: %s\n"
-			"Last visit time: %s"),
-			historyitem->title, historyitem->url,
-			ctime(&historyitem->last_visit)),
-		historyitem, 1,
-		N_("OK"), done_info_button, B_ESC | B_ENTER);
-
-	return 0;
-}
-
-
 #ifdef BOOKMARKS
 static int
 push_bookmark_button(struct dialog_data *dlg_data,
@@ -273,7 +236,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 			GLOBHIST_MANAGER_ADDSIZE, &globhist_browser, ses,
 			GLOBHIST_MANAGER_BUTTONS,
 			N_("Goto"), push_goto_button, B_ENTER, ses,
-			N_("Info"), push_info_button, B_ENTER, ses,
+			N_("Info"), push_hierbox_info_button, B_ENTER, ses,
 #ifdef BOOKMARKS
 			N_("Bookmark"), push_bookmark_button, B_ENTER, NULL,
 #endif

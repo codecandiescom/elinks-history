@@ -3899,7 +3899,7 @@ msgstr ""
 "Warto¶æ: %s\n"
 "Domena: %s\n"
 "Wa¿ne do: %s\n"
-"Bezpieczeñstwo: %s\n"
+"Bezpieczeñstwo: %s"
 
 #: src/cookies/dialogs.c:150
 msgid "Cookie manager"

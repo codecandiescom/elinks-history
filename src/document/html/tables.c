@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.82 2003/09/15 22:41:45 jonas Exp $ */
+/* $Id: tables.c,v 1.83 2003/09/16 18:00:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1421,15 +1421,16 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 }
 
 
-#ifndef DEBUG
-#define H_LINE_X(table, xx, yy) frame[0][(xx) + 1 + ((table)->x + 2) * (yy)]
-#define V_LINE_X(table, xx, yy) frame[1][(yy) + 1 + ((table)->y + 2) * (xx)]
-#else
-#define H_LINE_X(table, xx, yy) (*(xx < -1 || xx > (table)->x + 1 || yy < 0 || yy > (table)->y ? \
-		   	(signed char *) NULL : &frame[0][(xx) + 1 + ((table)->x + 2) * (yy)]))
-#define V_LINE_X(table, xx, yy) (*(xx < 0 || xx > (table)->x || yy < -1 || yy > (table)->y + 1 ? \
-			(signed char *) NULL : &frame[1][(yy) + 1 + ((table)->y + 2) * (xx)]))
-#endif
+static inline int
+get_frame_pos(int a, int a_size, int b, int b_size)
+{
+	assertm(a >= -1 || a < a_size + 2 || b >= 0 || b <= b_size);
+	if_assert_failed return 0;
+	return a + 1 + (a_size + 2) * b;
+}
+
+#define H_LINE_X(tt, xx, yy) frame[0][get_frame_pos(xx, (tt)->x, yy, (tt)->y)]
+#define V_LINE_X(tt, xx, yy) frame[1][get_frame_pos(yy, (tt)->y, xx, (tt)->x)]
 
 static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,

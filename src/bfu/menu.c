@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.29 2003/01/18 22:58:03 pasky Exp $ */
+/* $Id: menu.c,v 1.30 2003/01/18 23:05:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -335,13 +335,13 @@ display_menu(struct terminal *term, struct menu *menu)
 
 		} else {
 			set_char(term, menu->x, s,
-				 menu_frame_color | ATTR_FRAME | FRAMES_RTEE);
+				 menu_frame_color | FRAMES_RTEE);
 
 			fill_area(term, menu->x + 1, s, menu->xw - 2, 1,
-				  menu_frame_color | ATTR_FRAME | FRAMES_HLINE);
+				  menu_frame_color | FRAMES_HLINE);
 
 			set_char(term, menu->x + menu->xw - 1, s,
-				 menu_frame_color | ATTR_FRAME | FRAMES_LTEE);
+				 menu_frame_color | FRAMES_LTEE);
 		}
 
 		mem_free(tmptext);

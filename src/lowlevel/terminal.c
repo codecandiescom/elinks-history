@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.45 2003/01/18 23:00:50 pasky Exp $ */
+/* $Id: terminal.c,v 1.46 2003/01/18 23:05:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1084,7 +1084,6 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 	};
 	enum frame_char *p = w > 1 ? p2 : p1;
 
-	c |= ATTR_FRAME;
 	set_char(t, x, y, c+p[0]);
 	set_char(t, x+xw-1, y, c+p[1]);
 	set_char(t, x, y+yw-1, c+p[2]);

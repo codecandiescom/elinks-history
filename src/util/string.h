@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.34 2003/06/02 17:05:34 pasky Exp $ */
+/* $Id: string.h,v 1.35 2003/06/07 08:30:20 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -66,11 +66,11 @@ isA(unsigned char c)
 
 #if 0
 #ifdef DEBUG
-#define USE_LIBC
+#define USE_OWN_LIBC
 #endif
 #endif
 
-#ifdef USE_LIBC
+#ifdef USE_OWN_LIBC
 
 #undef HAVE_MEMMOVE
 #undef HAVE_BCOPY /* prevent using bcopy() stub for memmove() */
@@ -83,7 +83,7 @@ isA(unsigned char c)
 #undef HAVE_STRNCASECMP
 #undef HAVE_STRSTR
 
-#endif /* USE_LIBC */
+#endif /* USE_OWN_LIBC */
 
 /** strchr() */
 

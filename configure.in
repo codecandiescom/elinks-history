@@ -747,7 +747,7 @@ AC_ARG_ENABLE(fastmem, [  --enable-fastmem        enable direct use of system al
 	      [if test "$enableval" = yes && test "$hm_enabled_debug" = no; then AC_DEFINE(FASTMEM) fi])
 
 AC_ARG_ENABLE(own-libc, [  --enable-own-libc       Force use of internal functions instead of those of system libc],
-	      [if test "$enableval" = yes; then AC_DEFINE(USE_LIBC) fi])
+	      [if test "$enableval" = yes; then AC_DEFINE(USE_OWN_LIBC) fi])
 
 
 dnl == EMX hack

@@ -1,10 +1,10 @@
-/* $Id: snprintf.h,v 1.2 2003/06/07 08:14:07 zas Exp $ */
+/* $Id: snprintf.h,v 1.3 2003/06/07 08:30:20 zas Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
 
 /* --enable-own-libc will force to use internal *snprintf() stuff */
-#if defined(USE_LIBC) || \
+#if defined(USE_OWN_LIBC) || \
     !(defined(HAVE_SNPRINTF) && defined(HAVE_VSNPRINTF) \
       && defined(HAVE_C99_VSNPRINTF))
 #define USE_OUR_SNPRINTF_C

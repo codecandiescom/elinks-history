@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.67 2003/09/21 11:24:48 zas Exp $ */
+/* $Id: core.c,v 1.68 2003/09/22 21:54:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "scripting/lua/core.h"
+#include "scripting/lua/hooks.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
 #include "util/memory.h"
@@ -634,11 +635,13 @@ init_lua(void)
 	lua_register(L, "xdialog", l_xdialog);
 	do_hooks_file(L, CONFDIR, "hooks.lua");
 	if (elinks_home) do_hooks_file(L, elinks_home, "hooks.lua");
+	register_lua_hooks();
 }
 
 void
 cleanup_lua(void)
 {
+	unregister_lua_hooks();
 	lua_close(L);
 }
 

@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.2 2003/09/12 10:48:41 zas Exp $ */
+/* $Id: hooks.c,v 1.3 2003/09/22 21:56:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "elinks.h"
 
+#include "sched/event.h"
 #include "sched/session.h"
 #include "scripting/guile/hooks.h"
 #include "util/string.h"
@@ -34,21 +35,30 @@ internal_module(void)
  *  - do nothing.
  */
 
-unsigned char *
-script_hook_goto_url(struct session *ses, unsigned char *url)
+static int
+script_hook_goto_url(va_list ap)
 {
+	unsigned char **returl = va_arg(ap, unsigned char **);
+	struct session *ses = va_arg(ap, struct session *);
+	unsigned char *url = va_arg(ap, unsigned char *);
 	SCM proc = scm_c_module_lookup(internal_module(), "%goto-url-hook");
 	SCM x;
 
+	if (0 && ses);
+
+	*returl = NULL;
+
 	if (!*url)
-		return NULL;
+		return 0;
 
 	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(url));
 	if (SCM_STRINGP(x)) {
-		return stracpy(SCM_STRING_UCHARS(x));
+		*returl = stracpy(SCM_STRING_UCHARS(x));
 	} else {
-		return stracpy("");
+		*returl = stracpy("");
 	}
+
+	return *returl ? 1 : 0;
 }
 
 
@@ -59,16 +69,23 @@ script_hook_goto_url(struct session *ses, unsigned char *url)
  * allocated string, or NULL to not follow any URL.
  */
 
-unsigned char *
-script_hook_follow_url(struct session *ses, unsigned char *url)
+static int
+script_hook_follow_url(va_list ap)
 {
+	unsigned char **returl = va_arg(ap, unsigned char **);
+	struct session *ses = va_arg(ap, struct session *);
+	unsigned char *url = va_arg(ap, unsigned char *);
 	SCM proc = scm_c_module_lookup(internal_module(), "%follow-url-hook");
 	SCM x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(url));
 
+	if (0 && ses);
+
 	if (SCM_STRINGP(x))
-		return memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
+		*returl = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
 	else
-		return stracpy("");
+		*returl = stracpy("");
+
+	return *returl ? 1 : 0;
 }
 
 
@@ -79,20 +96,28 @@ script_hook_follow_url(struct session *ses, unsigned char *url)
  * allocated string, or NULL to keep the content unchanged.
  */
 
-unsigned char *
-script_hook_pre_format_html(struct session *ses, unsigned char *url,
-			    unsigned char *html, int *len)
+static int
+script_hook_pre_format_html(va_list ap)
 {
+	unsigned char **retval = va_arg(ap, unsigned char **);
+	struct session *ses = va_arg(ap, struct session *);
+	unsigned char *url = va_arg(ap, unsigned char *);
+	unsigned char *html = va_arg(ap, unsigned char *);
+	int *len = va_arg(ap, int *);
 	SCM proc = scm_c_module_lookup(internal_module(), "%pre-format-html-hook");
 	SCM x = scm_call_2(SCM_VARIABLE_REF(proc), scm_makfrom0str(url),
 			   scm_mem2string(html, *len));
 
+	if (0 && ses);
+
 	if (SCM_STRINGP(x)) {
 		*len = SCM_STRING_LENGTH(x);
-		return memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
+		*retval = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
 	} else {
-		return NULL;
+		*retval = NULL;
 	}
+
+	return *retval ? 1 : 0;
 }
 
 
@@ -110,18 +135,21 @@ script_hook_pre_format_html(struct session *ses, unsigned char *url,
  *  - NULL to use default proxies
  */
 
-unsigned char *
-script_hook_get_proxy(unsigned char *url)
+static int
+script_hook_get_proxy(va_list ap)
 {
+	unsigned char **retval = va_arg(ap, unsigned char **);
+	unsigned char *url = va_arg(ap, unsigned char *);
 	SCM proc = scm_c_module_lookup(internal_module(), "%get-proxy-hook");
 	SCM x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(url));
 
 	if (SCM_STRINGP(x))
-		return memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
+		*retval = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
 	else if (SCM_NULLP(x))
-		return stracpy("");
+		*retval = stracpy("");
 	else
-		return NULL;
+		*retval = NULL;
+	return *retval ? 1 : 0;
 }
 
 
@@ -130,12 +158,54 @@ script_hook_get_proxy(unsigned char *url)
  * required when Links quits.
  */
 
-void
-script_hook_quit(void)
+static int
+script_hook_quit(va_list ap)
 {
 	SCM proc = scm_c_module_lookup(internal_module(), "%quit-hook");
 
 	scm_call_0(SCM_VARIABLE_REF(proc));
+
+	return 0;
+}
+
+static struct {
+	unsigned char *name;
+	int (*callback)(va_list ap);
+} hooks[] = {
+	{ "goto-url", script_hook_goto_url },
+	{ "follow-url", script_hook_follow_url },
+	{ "pre-format-html", script_hook_pre_format_html },
+	{ "get-proxy", script_hook_get_proxy },
+	{ "quit", script_hook_quit },
+	{ NULL, NULL }
+};
+
+void
+register_guile_hooks(void)
+{
+	int i;
+
+	for (i = 0; hooks[i].name; i++) {
+		int id;
+
+		id = register_event(hooks[i].name);
+		if (id >= 0)
+			register_event_hook(id, hooks[i].callback, 0);
+	}
+}
+
+void
+unregister_guile_hooks(void)
+{
+	int i;
+
+	for (i = 0; hooks[i].name; i++) {
+		int id;
+
+		id = get_event_id(hooks[i].name);
+		if (id >= 0)
+			unregister_event_hook(id, hooks[i].callback);
+	}
 }
 
 #endif /* HAVE_GUILE */

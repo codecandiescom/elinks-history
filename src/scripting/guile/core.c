@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.1 2003/07/24 15:33:33 pasky Exp $ */
+/* $Id: core.c,v 1.2 2003/09/22 21:56:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 
 #include "lowlevel/home.h"
 #include "scripting/guile/core.h"
+#include "scripting/guile/hooks.h"
 #include "util/error.h"
 #include "util/string.h"
 
@@ -80,8 +81,15 @@ init_guile(void)
 	path = straconcat(elinks_home, "user-hooks.scm", NULL);
 	scm_c_primitive_load_path(path);
 	mem_free(path);
+
+	register_guile_hooks();
 }
 
+void
+done_guile(void)
+{
+	unregister_guile_hooks();
+}
 
 
 #endif /* HAVE_GUILE */

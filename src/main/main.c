@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.124 2003/09/22 16:35:06 jonas Exp $ */
+/* $Id: main.c,v 1.125 2003/09/22 21:56:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,9 +61,7 @@
 #include "sched/connection.h"
 #include "sched/session.h"
 #include "scripting/guile/core.h"
-#include "scripting/guile/hooks.h"
 #include "scripting/lua/core.h"
-#include "scripting/lua/hooks.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "terminal/screen.h"
@@ -249,7 +247,7 @@ terminate_all_subsystems(void)
 
 	if (init_b) {
 #ifdef HAVE_SCRIPTING
-		script_hook_quit();
+		trigger_event(get_event_id("quit"));
 #endif
 		save_url_history();
 #ifdef GLOBHIST
@@ -263,6 +261,9 @@ terminate_all_subsystems(void)
 #endif
 #ifdef HAVE_LUA
 		cleanup_lua();
+#endif
+#ifdef HAVE_GUILE
+		done_guile();
 #endif
 	}
 

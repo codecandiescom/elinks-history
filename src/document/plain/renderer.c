@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.162 2004/12/20 11:48:12 miciah Exp $ */
+/* $Id: renderer.c,v 1.163 2004/12/20 11:50:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,12 +133,14 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 
 	uri[length] = keep;
 
-	if (where && !add_document_link(document, where, length, x, y)) {
+	if (!where) return 0;
+
+	if (!add_document_link(document, where, length, x, y)) {
 		mem_free(where);
 		return 0;
 	}
 
-	return where ? length : 0;
+	return length;
 }
 
 #define url_char(c) (		\

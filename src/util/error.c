@@ -1,12 +1,12 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.65 2003/06/17 07:17:27 zas Exp $ */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+/* $Id: error.c,v 1.66 2003/06/17 11:11:41 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
+#endif
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
 #endif
 
 #include <signal.h>

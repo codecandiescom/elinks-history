@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-11-14 10:23+0100\n"
+"POT-Creation-Date: 2003-11-15 15:49+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -35,10 +35,10 @@ msgstr "Saisir un nombre"
 #: src/config/dialogs.c:309 src/config/dialogs.c:364 src/config/dialogs.c:379
 #: src/config/dialogs.c:452 src/config/dialogs.c:474 src/config/dialogs.c:501
 #: src/config/dialogs.c:565 src/config/dialogs.c:578 src/dialogs/auth.c:79
-#: src/dialogs/document.c:47 src/dialogs/document.c:244
-#: src/dialogs/document.c:313 src/dialogs/document.c:325 src/dialogs/edit.c:99
+#: src/dialogs/document.c:47 src/dialogs/document.c:231
+#: src/dialogs/document.c:300 src/dialogs/document.c:312 src/dialogs/edit.c:99
 #: src/dialogs/info.c:49 src/dialogs/info.c:90 src/dialogs/info.c:110
-#: src/dialogs/info.c:137 src/dialogs/info.c:203 src/dialogs/info.c:223
+#: src/dialogs/info.c:137 src/dialogs/info.c:199 src/dialogs/info.c:219
 #: src/dialogs/menu.c:533 src/dialogs/menu.c:544 src/dialogs/menu.c:575
 #: src/dialogs/mime.c:165 src/dialogs/options.c:189 src/dialogs/options.c:264
 #: src/globhist/dialogs.c:208 src/globhist/dialogs.c:379
@@ -381,7 +381,7 @@ msgid "Unable to write to config file %s: %s"
 msgstr "Impossible d'écrire dans le fichier de configuration %s: %s"
 
 #: src/config/dialogs.c:100 src/config/dialogs.c:113 src/config/dialogs.c:404
-#: src/dialogs/document.c:41 src/dialogs/document.c:241
+#: src/dialogs/document.c:41 src/dialogs/document.c:228
 #: src/globhist/dialogs.c:372 src/globhist/dialogs.c:439
 msgid "Info"
 msgstr "Info"
@@ -1749,7 +1749,7 @@ msgstr "Cache mémoire"
 msgid "Memory cache options."
 msgstr "Options du cache mémoire."
 
-#: src/config/options.inc:360 src/dialogs/document.c:104
+#: src/config/options.inc:360 src/dialogs/document.c:91
 msgid "Size"
 msgstr "Taille"
 
@@ -1935,7 +1935,7 @@ msgid "Dump output options."
 msgstr "Options de sortie (dump)."
 
 #: src/config/options.inc:475 src/config/options.inc:841
-#: src/config/opttypes.c:395 src/dialogs/document.c:111
+#: src/config/opttypes.c:395 src/dialogs/document.c:98
 msgid "Codepage"
 msgstr "Jeu de caractères"
 
@@ -2834,7 +2834,7 @@ msgid "Dialog frame colors."
 msgstr "Couleurs de la bordure des dialogues."
 
 #: src/config/options.inc:1044 src/config/options.inc:1465
-#: src/dialogs/document.c:94
+#: src/dialogs/document.c:81
 msgid "Title"
 msgstr "Titre"
 
@@ -3710,68 +3710,68 @@ msgstr "Vous êtes nulle part !"
 msgid "URL"
 msgstr "URL"
 
-#: src/dialogs/document.c:107
+#: src/dialogs/document.c:94
 msgid "incomplete"
 msgstr "incomplet"
 
-#: src/dialogs/document.c:115
+#: src/dialogs/document.c:102
 msgid "assumed"
 msgstr "supposé"
 
-#: src/dialogs/document.c:118
+#: src/dialogs/document.c:105
 msgid "ignoring server setting"
 msgstr "Configuration du serveur ignorée"
 
-#: src/dialogs/document.c:125
+#: src/dialogs/document.c:112
 msgid "Server"
 msgstr "Serveur"
 
-#: src/dialogs/document.c:131
+#: src/dialogs/document.c:118
 msgid "SSL Cipher"
 msgstr "Chiffrement SSL"
 
-#: src/dialogs/document.c:136
+#: src/dialogs/document.c:123
 msgid "Encoding"
 msgstr "Encodage"
 
-#: src/dialogs/document.c:143
+#: src/dialogs/document.c:130
 msgid "Date"
 msgstr "Date"
 
-#: src/dialogs/document.c:149
+#: src/dialogs/document.c:136
 msgid "Last modified"
 msgstr "Dernière modification"
 
-#: src/dialogs/document.c:161
+#: src/dialogs/document.c:148
 msgid "Last visit time"
 msgstr "Date de dernière visite"
 
-#: src/dialogs/document.c:180
+#: src/dialogs/document.c:167
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: src/dialogs/document.c:192
+#: src/dialogs/document.c:179
 msgid "Link"
 msgstr "Lien"
 
-#: src/dialogs/document.c:199
+#: src/dialogs/document.c:186
 msgid "Link title"
 msgstr "Titre du lien"
 
-#: src/dialogs/document.c:226
+#: src/dialogs/document.c:213
 msgid "Link last visit time"
 msgstr "Dernière visite du lien"
 
-#: src/dialogs/document.c:232
+#: src/dialogs/document.c:219
 msgid "Link title (from history)"
 msgstr "Titre du lien (historique)"
 
-#: src/dialogs/document.c:263 src/dialogs/document.c:310
-#: src/dialogs/document.c:322
+#: src/dialogs/document.c:250 src/dialogs/document.c:297
+#: src/dialogs/document.c:309
 msgid "Header info"
 msgstr "Info. entêtes"
 
-#: src/dialogs/document.c:323
+#: src/dialogs/document.c:310
 msgid "No header info."
 msgstr "Aucune information d'entête."
 
@@ -3832,29 +3832,29 @@ msgstr ""
 "Cache mémoire: %d octets, %d fichiers, %d verrouillés, %d en chargement.\n"
 "Cache documents formatés: %d documents, %d verrouillés."
 
-#: src/dialogs/info.c:188
+#: src/dialogs/info.c:184
 msgid "No entry."
 msgstr "Aucune entrée."
 
-#: src/dialogs/info.c:194
+#: src/dialogs/info.c:190
 #, c-format
 msgid "%ld more entries."
 msgstr "%ld entrées supplémentaires."
 
-#: src/dialogs/info.c:200
+#: src/dialogs/info.c:196
 msgid "Cache info"
 msgstr "Info sur le cache"
 
-#: src/dialogs/info.c:201
+#: src/dialogs/info.c:197
 #, c-format
 msgid "Cache content: %s"
 msgstr "Contenu du cache: %s"
 
-#: src/dialogs/info.c:219
+#: src/dialogs/info.c:215
 msgid "Memory info"
 msgstr "État de la mémoire vive"
 
-#: src/dialogs/info.c:220
+#: src/dialogs/info.c:216
 #, c-format
 msgid "%ld bytes of memory allocated."
 msgstr "%ld octets alloués en mémoire."
@@ -4627,7 +4627,7 @@ msgstr ""
 "défaut."
 
 #. name:
-#: src/mime/mime.c:32 src/mime/mime.c:173
+#: src/mime/mime.c:32 src/mime/mime.c:196
 msgid "MIME"
 msgstr "MIME"
 

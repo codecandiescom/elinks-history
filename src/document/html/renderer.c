@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.26 2002/06/08 11:28:38 zas Exp $ */
+/* $Id: renderer.c,v 1.27 2002/06/08 11:44:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1304,7 +1304,8 @@ void free_table_cache()
 		
 		/* We do not free key here. */
 		foreach_hash_item(item, *table_cache, i)
-			if (item->value) mem_free(item->value);
+			if (item->value)
+				mem_free(item->value);
 
 		free_hash(table_cache);
 	}
@@ -1331,7 +1332,8 @@ struct part *format_html_part(unsigned char *start, unsigned char *end,
 	struct table_cache_entry *tce;
 
 	/* Hash creation if needed. */
-	if (!table_cache) table_cache = init_hash(8, &strhash);
+	if (!table_cache)
+		table_cache = init_hash(8, &strhash);
 	
 	if (!data && table_cache) {
 		/* Search for cached entry. */
@@ -1354,6 +1356,7 @@ struct part *format_html_part(unsigned char *start, unsigned char *end,
 			memcpy(part,
 			       &((struct table_cache_entry *)item->value)->part,
 			       sizeof(struct part));
+
 			return part;
 		}
 	}

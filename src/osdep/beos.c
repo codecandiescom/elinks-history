@@ -1,12 +1,17 @@
 /* BeOS system-specific routines. */
-/* $Id: beos.c,v 1.4 2003/10/27 00:46:18 pasky Exp $ */
+/* $Id: beos.c,v 1.5 2003/10/27 00:55:03 pasky Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
  * time, but it will probably be removed if noone will adopt it. */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifdef __BEOS__
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -16,11 +21,94 @@
 #include <netinet/in.h>
 #include <be/kernel/OS.h>
 
-#define SHS	128
+#include "elinks.h"
 
-#ifndef MAXINT
-#define MAXINT 0x7fffffff
+#include "osdepx.h"
+
+
+int start_thr(void (*)(void *), void *, unsigned char *);
+
+int ihpipe[2];
+
+int inth;
+
+void
+input_handle_th(void *p)
+{
+	char c;
+	int b = 0;
+
+	setsockopt(ihpipe[1], SOL_SOCKET, SO_NONBLOCK, &b, sizeof(b));
+	while (1) if (read(0, &c, 1) == 1) be_write(ihpipe[1], &c, 1);
+}
+
+int
+get_input_handle(void)
+{
+	static int h = -1;
+
+	if (h >= 0) return h;
+	if (be_pipe(ihpipe) < 0) return -1;
+	if ((inth = start_thr(input_handle_th, NULL, "input_thread")) < 0) {
+		closesocket(ihpipe[0]);
+		closesocket(ihpipe[1]);
+		return -1;
+	}
+	return h = ihpipe[0];
+}
+
+void
+block_stdin(void)
+{
+	suspend_thread(inth);
+}
+
+void
+unblock_stdin(void)
+{
+	resume_thread(inth);
+}
+
+#if 0
+int ohpipe[2];
+
+#define O_BUF	16384
+
+void
+output_handle_th(void *p)
+{
+	char *c = malloc(O_BUF);
+	int r, b = 0;
+
+	if (!c) return;
+	setsockopt(ohpipe[1], SOL_SOCKET, SO_NONBLOCK, &b, sizeof(b));
+	while ((r = be_read(ohpipe[0], c, O_BUF)) > 0) write(1, c, r);
+	free(c);
+}
+
+int
+get_output_handle(void)
+{
+	static int h = -1;
+
+	if (h >= 0) return h;
+	if (be_pipe(ohpipe) < 0) return -1;
+	if (start_thr(output_handle_th, NULL, "output_thread") < 0) {
+		closesocket(ohpipe[0]);
+		closesocket(ohpipe[1]);
+		return -1;
+	}
+	return h = ohpipe[1];
+}
 #endif
+
+
+
+
+
+/* This is the mess of own BeOS-specific wrappers to standard stuff. */
+
+#define SHS	128
 
 int
 be_read(int s, void *ptr, int len)
@@ -210,83 +298,5 @@ be_getsockopt(int s, int level, int optname, void *optval, int *optlen)
 	}
 	return -1;
 }
-
-int start_thr(void (*)(void *), void *, unsigned char *);
-
-int ihpipe[2];
-
-int inth;
-
-#include <errno.h>
-
-void
-input_handle_th(void *p)
-{
-	char c;
-	int b = 0;
-
-	setsockopt(ihpipe[1], SOL_SOCKET, SO_NONBLOCK, &b, sizeof(b));
-	while (1) if (read(0, &c, 1) == 1) be_write(ihpipe[1], &c, 1);
-}
-
-int
-get_input_handle(void)
-{
-	static int h = -1;
-
-	if (h >= 0) return h;
-	if (be_pipe(ihpipe) < 0) return -1;
-	if ((inth = start_thr(input_handle_th, NULL, "input_thread")) < 0) {
-		closesocket(ihpipe[0]);
-		closesocket(ihpipe[1]);
-		return -1;
-	}
-	return h = ihpipe[0];
-}
-
-void
-block_stdin(void)
-{
-	suspend_thread(inth);
-}
-
-void
-unblock_stdin(void)
-{
-	resume_thread(inth);
-}
-
-#if 0
-int ohpipe[2];
-
-#define O_BUF	16384
-
-void
-output_handle_th(void *p)
-{
-	char *c = malloc(O_BUF);
-	int r, b = 0;
-
-	if (!c) return;
-	setsockopt(ohpipe[1], SOL_SOCKET, SO_NONBLOCK, &b, sizeof(b));
-	while ((r = be_read(ohpipe[0], c, O_BUF)) > 0) write(1, c, r);
-	free(c);
-}
-
-int
-get_output_handle(void)
-{
-	static int h = -1;
-
-	if (h >= 0) return h;
-	if (be_pipe(ohpipe) < 0) return -1;
-	if (start_thr(output_handle_th, NULL, "output_thread") < 0) {
-		closesocket(ohpipe[0]);
-		closesocket(ohpipe[1]);
-		return -1;
-	}
-	return h = ohpipe[1];
-}
-#endif
 
 #endif

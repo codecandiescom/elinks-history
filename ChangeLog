@@ -1,3 +1,283 @@
+Tue Jan 20 22:25:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: text.c, widget.h:
+
+	Handling of mouse with text scrollbar was improved. Using right
+	click will make it to scroll faster, and mouse wheel is now handled.  
+
+Tue Jan 20 20:40:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Make the scanners current a css_token pointer.  
+
+Tue Jan 20 20:09:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	scan_css_tokens(): Make move_to_front byte sized.  
+
+Tue Jan 20 20:00:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	scan_css_tokens(): Make current a css_token pointer.  
+
+Tue Jan 20 18:25:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Make scan table initialization data driven. It is very generic and
+	more readable (I hope). A bit slower but I am really a sucker for
+	data driven coding. ;) 
+
+Tue Jan 20 18:18:40 2004  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Tue Jan 20 17:49:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, scanner.c, scanner.h, value.c:
+
+	Rearrange token types to group them better. Add comments. Rename
+	CSS_TOKEN_IDENTIFIER to CSS_TOKEN_IDENT. It wouldn.t be C without
+	abbreviations. ;) 
+
+Tue Jan 20 17:28:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Generate hash tokens.  
+
+Tue Jan 20 17:15:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Take precedence and string args into considerations when skipping
+	functions.  
+
+Tue Jan 20 17:12:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/garbage.html:
+
+	More garbage.  
+
+Tue Jan 20 16:40:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Improve precedence checking.  
+
+Tue Jan 20 16:13:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Oops revert part from last patch and fix rgb comparison.  
+
+Tue Jan 20 16:12:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Try to skip comments.  
+
+Tue Jan 20 15:59:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h, value.c:
+
+	Use smarter scanning of functions skipping to ')' if it is unknown
+	so tokens are not generated for every arg.  
+
+Tue Jan 20 15:18:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/README:
+
+	m33p.  
+
+Tue Jan 20 15:12:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/README:
+
+	Update.  
+
+Tue Jan 20 14:57:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Don't remove garbage token as they might be used for some kind of
+	recovery. 'None token' can now be used for tokens we want to skip
+	plus it should now be more obvious that scanner->position could have
+	become NULL.  
+
+Tue Jan 20 07:05:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Make link type parser more data driven.  
+
+Tue Jan 20 06:25:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Alphabetise css token types.  
+
+Tue Jan 20 06:22:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Treat SGML comments as garbage.  
+
+Tue Jan 20 05:11:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Fix assertion failure reported by Zardoz. It concerned string like
+	"property:" with no expressions meaning skipping could not get next
+	token.  
+
+Tue Jan 20 04:54:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/garbage.html:
+
+	Test case for the bug Zardoz pointed out.  
+
+Tue Jan 20 04:37:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	Tidy-up: Wrap before &&, not after, and join a hanging ')' with the
+	line above.  
+
+Tue Jan 20 04:33:37 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	Drop some double-negation in look_for_tag and html_option.  
+
+Tue Jan 20 02:37:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Add more TODOs. Will we ever be done? 
+
+Tue Jan 20 02:30:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Handle scanning of number identifiers.  
+
+Tue Jan 20 02:12:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Use strn* .. Doh! 
+
+Tue Jan 20 02:09:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	First scan the number then the kind of number.  
+
+Tue Jan 20 02:00:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, scanner.c, scanner.h:
+
+	In order to handle end of tags when getting style info from <style>
+	tags we need better signaling of whether to keep scanning since the
+	CSS source doesn't end at the string end. We now recognize SGML tag
+	ends in the scanner and generate a CSS_TOKEN_NONE while also setting
+	scanner->position to NULL.  
+
+Tue Jan 20 01:42:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	scan_css_token(): Don't return anything.  
+
+Tue Jan 20 01:05:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Two optimizations: never scan token if the scanner positon is at the
+	end, never put garbage tokens in the token table.  
+
+Tue Jan 20 00:56:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Make token types default to CSS_TOKEN_GARBAGE.  
+
+Tue Jan 20 00:44:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Fix off by one error in SGML comment scanning.  
+
+Tue Jan 20 00:43:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Scan !important tokens.  
+
+Tue Jan 20 00:37:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Add types for all kinds of token we have to support. If not for
+	usage it will make the scanning more efficient.  
+
+Tue Jan 20 00:23:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Handle scanning of floating point numbers.  
+
+Tue Jan 20 00:16:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Fix SGML comment scanning.  
+
+Tue Jan 20 00:13:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h, value.c:
+
+	CSS_TOKEN_DIGIT -> CSS_TOKEN_NUMBER 
+
+Tue Jan 20 00:11:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Move css_token_type enum out of the css_token struct and describe
+	tokens using patterns.  
+
+Mon Jan 19 23:52:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Make scan_css_tokens() static.  
+
+Mon Jan 19 23:48:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Cleanup scanner validation.  
+
+Mon Jan 19 23:31:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	More paranoia checking. Make sure never to return CSS_TOKEN_NONE
+	typed token.  
+
+Mon Jan 19 23:21:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	More usage of css_scanner_has_tokens() before accessing the scanners
+	table.  
+
 Mon Jan 19 23:10:48 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/css/scanner.c:

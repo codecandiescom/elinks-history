@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.7 2002/09/17 21:08:48 pasky Exp $ */
+/* $Id: widget.c,v 1.8 2002/10/12 18:33:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,4 +39,6 @@ dlg_set_history(struct widget_data *di)
 	memcpy(di->cdata, s, len);
 	di->cdata[len] = 0;
 	di->cpos = len;
+	di->vpos = di->cpos - di->l;
+	if (di->vpos < 0) di->vpos = 0;
 }

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.148 2003/10/18 23:12:19 pasky Exp $ */
+/* $Id: menu.c,v 1.149 2003/10/18 23:14:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,7 +366,7 @@ static struct menu_item file_menu11[] = {
 	INIT_MENU_ITEM(N_("Go ~back"), "<-", menu_go_back, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("~Reload"), "Ctrl-R", menu_reload, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("~History"), M_SUBMENU, history_menu, NULL, FREE_NOTHING, 1),
-	INIT_MENU_ITEM(N_("Unhis~tory"), M_SUBMENU, unhistory_menu, NULL, FREE_NOTHING, 1),
+	INIT_MENU_ITEM(N_("Unh~istory"), M_SUBMENU, unhistory_menu, NULL, FREE_NOTHING, 1),
 };
 
 static struct menu_item file_menu12[] = {
@@ -389,7 +389,7 @@ static struct menu_item file_menu22[] = {
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("~Kill background connections"), "", menu_kill_background_connections, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("~Flush all caches"), "", flush_caches, NULL, FREE_NOTHING, 0),
-	INIT_MENU_ITEM(N_("Resource ~info"), "", res_inf, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Resource in~fo"), "", res_inf, NULL, FREE_NOTHING, 0),
 #ifdef DEBUG
 	INIT_MENU_ITEM(N_("~Cache info"), "", cache_inf, NULL, FREE_NOTHING, 0),
 #endif
@@ -450,7 +450,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	}
 
 	if (can_resize_window(term->environment)) {
-		SET_MENU_ITEM(e, N_("Resize ~terminal"), "", dlg_resize_terminal,
+		SET_MENU_ITEM(e, N_("Resize t~erminal"), "", dlg_resize_terminal,
 			      NULL, FREE_NOTHING, 0, 0, 0, HKS_SHOW);
 		e++;
 		x = 0;

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.18 2003/12/09 13:40:18 pasky Exp $ */
+/* $Id: smb.c,v 1.19 2003/12/09 13:42:53 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -36,6 +36,7 @@
 #include "util/snprintf.h"
 #include "util/string.h"
 
+
 /* XXX: Nice cleanup target --pasky */
 /* FIXME: we rely on smbclient output which may change in future,
  * so i think we should use libsmbclient instead (or better in addition)
@@ -59,6 +60,7 @@ struct smb_connection_info {
 };
 
 static void end_smb_connection(struct connection *conn);
+
 
 #define READ_SIZE	4096
 
@@ -152,6 +154,7 @@ smb_got_text(struct connection *conn)
 {
 	smb_read_text(conn, conn->socket);
 }
+
 
 /* FIXME: split it. --Zas */
 static void
@@ -385,6 +388,7 @@ bye:
 	close_socket(conn, &conn->data_socket);
 	abort_conn_with_state(conn, S_OK);
 }
+
 
 /* Close all non-terminal file descriptors. */
 static void

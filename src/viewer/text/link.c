@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.289 2004/08/06 17:03:37 jonas Exp $ */
+/* $Id: link.c,v 1.290 2004/08/06 18:26:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "terminal/color.h"
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
+#include "terminal/screen.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
@@ -228,6 +229,7 @@ draw_current_link(struct session *ses, struct document_view *doc_view)
 
  		template->data = co->data;
  		copy_screen_chars(co, template, 1);
+		set_screen_dirty(term->screen, y, y);
 	}
 }
 
@@ -255,10 +257,12 @@ clear_link(struct terminal *term, struct document_view *doc_view)
 			struct link_bg *bgchar = &link_bg[i];
 
 			if (bgchar->x != -1 && bgchar->y != -1) {
+				struct terminal_screen *screen = term->screen;
 				struct screen_char *co;
 
 				co = get_char(term, bgchar->x, bgchar->y);
 				copy_screen_chars(co, &bgchar->c, 1);
+				set_screen_dirty(screen, bgchar->y, bgchar->y);
 			}
 		}
 

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.313 2004/08/19 09:35:58 miciah Exp $ */
+/* $Id: download.c,v 1.314 2004/08/19 09:41:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,12 +205,13 @@ download_error_dialog(struct file_download *file_download, int saved_errno)
 {
 	unsigned char *emsg = (unsigned char *) strerror(saved_errno);
 	struct session *ses = file_download->ses;
+	struct terminal *term = file_download->term;
 
 	if (!ses) return;
 
-	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Download error"), ALIGN_CENTER,
-		msg_text(ses->tab->term, N_("Could not create file %s: %s"),
+		msg_text(term, N_("Could not create file %s: %s"),
 			 file_download->file, emsg),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
@@ -286,15 +287,13 @@ static void
 download_data_store(struct download *download, struct file_download *file_download)
 {
 	struct session *ses = file_download->ses;
-	struct terminal *term;
+	struct terminal *term = file_download->term;
 
 	if (!ses) {
 		/* No term here, so no beep. --Zas */
 		abort_download(file_download);
 		return;
 	}
-
-	term = ses->tab->term;
 
 	if (is_in_progress_state(download->state)) {
 		if (file_download->dlg_data)

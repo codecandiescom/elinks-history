@@ -1,3 +1,26 @@
+Sat Mar  2 14:04:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, BUGS, TODO, http.c, language.h, language.inc, links.h,
+	menu.c, sched.c, session.c, intl/brazilian_portuguese.lng,
+	intl/bulgarian.lng, intl/catalan.lng, intl/czech.lng,
+	intl/dutch.lng, intl/english.lng, intl/estonian.lng,
+	intl/french.lng, intl/galician.lng, intl/german.lng,
+	intl/greek.lng, intl/hungarian.lng, intl/icelandic.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/polish.lng,
+	intl/romanian.lng, intl/russian.lng, intl/slovak.lng,
+	intl/spanish.lng, intl/swedish.lng, intl/turkish.lng,
+	intl/ukrainian.lng:
+	
+	Merged HTTP-auth support by Jan Sembera (based on the original one
+	by Sergei Borushevsky)
+
+Sat Mar  2 13:09:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in:
+	
+	Version updated to 0.4pre1-CVS
+
 Sat Mar  2 11:29:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c:

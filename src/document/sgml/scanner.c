@@ -1,5 +1,5 @@
 /* SGML token scanner utilities */
-/* $Id: scanner.c,v 1.4 2004/09/25 23:10:19 jonas Exp $ */
+/* $Id: scanner.c,v 1.5 2004/09/25 23:38:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,7 +190,15 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 	if (first_char == '<') {
 		scan_sgml(scanner, string, SGML_CHAR_WHITESPACE);
 
-		if (is_sgml_ident(*string)) {
+		if (scanner->state == SGML_STATE_ELEMENT) {
+			/* Already inside an element so insert a tag end token
+			 * and continue scanning in next iteration. */
+			string--;
+			real_length = 0;
+			type = SGML_TOKEN_TAG_END;
+			scanner->state = SGML_STATE_TEXT;
+
+		} else if (is_sgml_ident(*string)) {
 			token->string = string;
 			scan_sgml(scanner, string, SGML_CHAR_IDENT);
 
@@ -198,7 +206,6 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 
 			scan_sgml(scanner, string, SGML_CHAR_WHITESPACE);
 			if (*string == '>') {
-				assert(scanner->state != SGML_STATE_ELEMENT);
 				type = SGML_TOKEN_ELEMENT;
 				string++;
 			} else {

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.329 2004/06/14 00:53:47 jonas Exp $ */
+/* $Id: menu.c,v 1.330 2004/06/14 18:13:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -650,7 +650,12 @@ add_new_win_to_menu(struct menu_item **mi, unsigned char *text,
 {
 	int c = can_open_in_new(term);
 
-	if (!c) return;
+	/* The URI is saved as session info in the master and not sent to the
+	 * instance in the new window so with -no-connect enabled it is not
+	 * possible to open links URIs. */
+	if (!c || get_opt_bool_tree(cmdline_options, "no-connect"))
+		return;
+
 	add_to_menu(mi, text, NULL, ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,
 		    (menu_func) open_in_new_window,
 		    send_open_in_new_window, c - 1 ? SUBMENU : 0);

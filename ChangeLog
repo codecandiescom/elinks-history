@@ -1,3 +1,73 @@
+Fri Jan 17 23:09:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/renderer.h:
+
+	LAYOUTER_* -> RENDERER_* ;-) 
+
+Fri Jan 17 23:06:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Random fixes.  
+
+Fri Jan 17 22:38:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Attempted to implement some really trivial text renderer.  
+
+Fri Jan 17 22:04:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: DESIGN, TODO, layouter/box.c, layouter/box.h,
+	layouter/syntree/layouter.c, parser/Makefile.am, parser/attrib.c,
+	parser/attrib.h, parser/property.c, parser/property.h,
+	parser/syntree.c, parser/syntree.h, parser/html/parser.c,
+	renderer/text/renderer.c:
+
+	attribute -> property terminology change.  
+
+Fri Jan 17 21:48:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: DESIGN, TODO, layouter/Makefile.am, layouter/box.c,
+	layouter/box.h, layouter/layouter.c, layouter/layouter.h,
+	layouter/rectangle.c, layouter/rectangle.h,
+	layouter/syntree/layouter.c:
+
+	rectangle -> box terminology change.  
+
+Fri Jan 17 17:04:17 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	Translations resync. French translation was updated.  
+
+Fri Jan 17 16:47:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, document/html/parser.c:
+
+	How image links are enclosed is now configurable by options system.
+	Please comment, fix, or revert. ;) 
+
+Fri Jan 17 10:54:59 2003  Laurent Monin <zas@norz.org>:
+
+	* po/be.po, src/dialogs/document.c, po/bg.po, po/ca.po, po/cs.po,
+	po/da.po, po/de.po, po/el.po, po/es.po, po/et.po, po/fi.po,
+	po/fr.po, po/gl.po, po/hr.po, po/hu.po, po/id.po, po/is.po,
+	po/it.po, po/lt.po, po/nl.po, po/no.po, po/pl.po, po/pt.po,
+	po/pt_BR.po, po/ro.po, po/ru.po, po/sk.po, po/sv.po, po/tr.po,
+	po/uk.po:
+
+	Erroneous translation was fixed ~Link -> Link.  
+
+Fri Jan 17 09:58:10 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated. Many menu hotkeys were fixed.  
+
 Thu Jan 16 21:56:16 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/main.c:

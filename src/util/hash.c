@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.20 2003/06/28 23:07:40 zas Exp $ */
+/* $Id: hash.c,v 1.21 2003/09/16 14:58:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,21 +25,21 @@
 #define hash_mask(n) (hash_size(n) - 1)
 
 struct hash *
-init_hash(int width, hash_func func)
+init_hash(unsigned int width, hash_func func)
 {
-	struct hash *hash = mem_alloc(sizeof(struct hash));
-	register int i = 0;
+	struct hash *hash;
+	register unsigned int i = 0;
 
+	assert(width > 0 && func);
+	if_assert_failed return NULL;
+
+	/* One is already reserved in struct hash, so use size - 1. */
+	hash = mem_alloc(sizeof(struct hash) + (hash_size(width) - 1)
+			 * sizeof(struct list_head));
 	if (!hash) return NULL;
 
 	hash->width = width;
 	hash->func = func;
-
-	hash->hash = mem_alloc(hash_size(width) * sizeof(struct list_head));
-	if (!hash->hash) {
-		mem_free(hash);
-		return NULL;
-	}
 
 	/* Initialize dummy list_heads */
 	for (; i < hash_size(width); i++)
@@ -51,12 +51,14 @@ init_hash(int width, hash_func func)
 void
 free_hash(struct hash *hash)
 {
-	register int i = 0;
+	register unsigned int i = 0;
+
+	assert(hash);
+	if_assert_failed return;
 
 	for (; i < hash_size(hash->width); i++)
 		free_list(hash->hash[i]);
 
-	mem_free(hash->hash);
 	mem_free(hash);
 }
 
@@ -89,21 +91,25 @@ add_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen,
 inline struct hash_item *
 get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 {
+	struct list_head *list;
 	struct hash_item *item;
-	hash_value hashval = hash->func(key, keylen, HASH_MAGIC)
-			     & hash_mask(hash->width);
+	hash_value hashval;
 
-	foreach (item, hash->hash[hashval]) {
-		if (keylen != item->keylen || memcmp(key, item->key, keylen))
-			continue;
+	hashval = hash->func(key, keylen, HASH_MAGIC) & hash_mask(hash->width);
+	list    = &hash->hash[hashval];
+
+	foreach (item, *list) {
+		if (keylen != item->keylen) continue;
+	        if (memcmp(key, item->key, keylen)) continue;
 
 		/* Watch the MFR (Move Front Rule)! Basically, it self-orders
 		 * the list by popularity of its items. Inspired from Links,
 		 * probably PerM. --pasky */
-		if (item != hash->hash[hashval].next) {
+		if (item != list->next) { /* If not already first. */
 			del_from_list(item);
-			add_to_list(hash->hash[hashval], item);
+			add_to_list(*list, item);
 		}
+
 		return item;
 	}
 
@@ -117,19 +123,59 @@ get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 void
 del_hash_item(struct hash *hash, struct hash_item *item)
 {
-	if (!item) return;
+	assert(item);
+	if_assert_failed return;
 
 	del_from_list(item);
 	mem_free(item);
 }
 
 
-#ifdef MIX_HASH
+#ifdef X31_HASH
+
+/* Fast string hashing. */
+hash_value
+strhash(unsigned char *k, /* the key */
+	unsigned int length, /* the length of the key */
+	hash_value initval /* the previous hash, or an arbitrary value */)
+{
+	const unsigned char *p = (const unsigned char *) k;
+	register hash_value h = initval;
+	register unsigned int i = 0;
+
+	assert(k && length > 0);
+	if_assert_failed return h;
+
+	/* This loop was unrolled, should improve performance on most cpus,
+	 * After some tests, 8 seems a good value for most keys. --Zas */
+	for (;;) {
+		h = (h << 5) - h + p[i];
+		if (++i == length) break;
+		h = (h << 5) - h + p[i];
+		if (++i == length) break;
+		h = (h << 5) - h + p[i];
+		if (++i == length) break;
+		h = (h << 5) - h + p[i];
+		if (++i == length) break;
+		h = (h << 5) - h + p[i];
+		if (++i == length) break;
+		h = (h << 5) - h + p[i];
+		if (++i == length) break;
+		h = (h << 5) - h + p[i];
+		if (++i == length) break;
+		h = (h << 5) - h + p[i];
+		if (++i == length) break;
+	};
+
+	return h;
+}
+
+#else /* X31_HASH */
 
 /* String hashing function follows; it is not written by me, somewhere below
  * are credits. I only hacked it a bit. --pasky */
 
-/* TODO: This is a big CPU hog, in fact:
+/* This is a big CPU hog, in fact:
  *
  *   %   cumulative   self              self     total-----------
  *  time   seconds   seconds    calls  us/call  us/call  name----
@@ -263,19 +309,3 @@ strhash(unsigned char *k, /* the key */
 #endif /* MIX_HASH */
 
 
-#ifdef X31_HASH
-hash_value
-strhash(unsigned char *k, /* the key */
-	unsigned int length, /* the length of the key */
-	hash_value initval /* the previous hash, or an arbitrary value */)
-{
-	const unsigned char *p = (const unsigned char *) k;
-	register hash_value h = initval;
-	register unsigned int i = 0;
-
-	for (; i < length; i++)
-		h = (h << 5) - h + p[i];
-
-	return h;
-}
-#endif /* X31_HASH */

@@ -1,4 +1,4 @@
-/* $Id: hash.h,v 1.7 2003/06/18 01:55:24 jonas Exp $ */
+/* $Id: hash.h,v 1.8 2003/09/16 14:58:53 zas Exp $ */
 
 #ifndef EL__UTIL_HASH_H
 #define EL__UTIL_HASH_H
@@ -20,14 +20,14 @@ struct hash_item {
 };
 
 struct hash {
-	int width; /* Number of bits - hash array must be 2^width long. */
+	unsigned int width; /* Number of bits - hash array must be 2^width long. */
 	hash_func func;
-	struct list_head *hash;
+	struct list_head hash[1]; /* Must be at end ! */
 };
 
 #define hash_size(n) (1 << (n))
 
-struct hash *init_hash(int width, hash_func func);
+struct hash *init_hash(unsigned int width, hash_func func);
 void free_hash(struct hash *hash);
 
 struct hash_item *add_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen, void *value);

@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.5 2004/05/24 18:05:42 jonas Exp $ */
+/* $Id: event.h,v 1.6 2004/06/13 12:18:19 jonas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -28,7 +28,7 @@ struct term_event {
 
 struct terminal_info {
 	struct term_event event;
-	unsigned char term[MAX_TERM_LEN];
+	unsigned char name[MAX_TERM_LEN];
 	unsigned char cwd[MAX_CWD_LEN];
 	int system_env;
 	int length;

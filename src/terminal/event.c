@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.54 2004/06/13 12:14:36 jonas Exp $ */
+/* $Id: event.c,v 1.55 2004/06/13 12:18:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,8 +155,8 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 		if (term->qlen < sizeof(struct terminal_info) + info->length)
 			return 0;
 
-		info->term[MAX_TERM_LEN - 1] = 0;
-		check_terminal_name(term, info->term);
+		info->name[MAX_TERM_LEN - 1] = 0;
+		check_terminal_name(term, info->name);
 
 		memcpy(term->cwd, info->cwd, MAX_CWD_LEN);
 		term->cwd[MAX_CWD_LEN - 1] = 0;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.54 2002/12/07 22:11:41 pasky Exp $ */
+/* $Id: parser.c,v 1.55 2002/12/08 13:21:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,62 +59,71 @@ int
 parse_element(unsigned char *e, unsigned char *eof, unsigned char **name,
 	      int *namelen, unsigned char **attr, unsigned char **end)
 {
+	unsigned char tmp;
+	
 	if (e >= eof || *(e++) != '<') return -1;
 	if (name) *name = e;
+	
+	tmp = *eof;
+	*eof = '\0';
+	
+	if (*e == '/') e++;
+	if (e >= eof || !isA(*e)) goto end_1;
 
-	if (e < eof && *e == '/') e++;
-	if (e >= eof || !isA(*e)) return -1;
-
-	while (e < eof && isA(*e)) e++;
-	if (e >= eof || (!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/' && *e != ':')) return -1;
+	while (isA(*e)) e++;
+	if (e >= eof || (!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/' && *e != ':')) goto end_1;
 
 	if (name && namelen) *namelen = e - *name;
 
-	while (e < eof && (WHITECHAR(*e) || *e == '/' || *e == ':')) e++;
-	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) return -1;
+	while (WHITECHAR(*e) || *e == '/' || *e == ':') e++;
+	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) goto end_1;
 
 	if (attr) *attr = e;
 
 nextattr:
-	while (e < eof && WHITECHAR(*e)) e++;
-	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) return -1;
+	while (WHITECHAR(*e)) e++;
+	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) goto end_1;
 
 	if (*e == '>' || *e == '<') goto end;
 
-	while (e < eof && atchr(*e)) e++;
-	while (e < eof && WHITECHAR(*e)) e++;
-	if (e >= eof) return -1;
+	while (atchr(*e)) e++;
+	while (WHITECHAR(*e)) e++;
+	if (e >= eof) goto end_1;
 
 	if (*e != '=') goto endattr;
 	e++;
 
-	while (e < eof && WHITECHAR(*e)) e++;
-	if (e >= eof) return -1;
+	while (WHITECHAR(*e)) e++;
+	if (e >= eof) goto end_1;
 
 	if (IS_QUOTE(*e)) {
 		unsigned char quote = *e;
 
 quoted_value:
 		e++;
-		while (e < eof && *e != quote && *e) e++;
-		if (e >= eof || *e < ' ') return -1;
+		while (*e != quote && *e) e++;
+		if (e >= eof || *e < ' ') goto end_1;
 		e++;
-		if (e >= eof) return -1;
+		if (e >= eof) goto end_1;
 		if (*e == quote) goto quoted_value;
 	} else {
-		while (e < eof && !WHITECHAR(*e) && *e != '>' && *e != '<') e++;
-		if (e >= eof) return -1;
+		while (!WHITECHAR(*e) && *e != '>' && *e != '<') e++;
+		if (e >= eof) goto end_1;
 	}
 
-	while (e < eof && WHITECHAR(*e)) e++;
-	if (e >= eof) return -1;
+	while (WHITECHAR(*e)) e++;
+	if (e >= eof) goto end_1;
 
 endattr:
 	if (*e != '>' && *e != '<') goto nextattr;
 
 end:
 	if (end) *end = e + (*e == '>');
+	*eof = tmp;
 	return 0;
+end_1:
+	*eof = tmp;
+	return -1;
 }
 
 #define add_chr(s, l, c) \

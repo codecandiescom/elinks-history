@@ -1,0 +1,1426 @@
+# Bulgarian ELinks translation.
+# Kaloian Doganov <kaloian@europe.com>
+# Dimitar Dimitrov <mitaka_ddd@yahoo.com>
+#
+# TODO: Convert this to some sane encoding! --pasky
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ELinks 0.5pre0.CVS\n"
+"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"PO-Revision-Date: 2003-01-03 03:41+0100\n"
+"Last-Translator: Dimitar Dimitrov <mitaka_ddd@yahoo.com>\n"
+"Language-Team: Bulgarian <bg@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CP1251\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/bfu/inpfield.c:40 src/bfu/inpfield.c:49
+msgid "Bad number"
+msgstr "Невалидно число"
+
+#: src/bfu/inpfield.c:41
+msgid "Number expected in field"
+msgstr "В това поле трябва да има число"
+
+#: src/bfu/inpfield.c:43 src/bfu/inpfield.c:52 src/bfu/inpfield.c:72
+#: src/bookmarks/dialogs.c:171 src/bookmarks/dialogs.c:273
+#: src/bookmarks/dialogs.c:281 src/config/dialogs.c:42
+#: src/config/dialogs.c:184 src/config/dialogs.c:323 src/config/dialogs.c:355
+#: src/config/dialogs.c:390 src/config/dialogs.c:402 src/config/dialogs.c:457
+#: src/config/dialogs.c:472 src/config/dialogs.c:606 src/config/dialogs.c:628
+#: src/config/dialogs.c:654 src/config/dialogs.c:718 src/config/dialogs.c:731
+#: src/dialogs/auth.c:191 src/dialogs/edit.c:173 src/dialogs/menu.c:605
+#: src/dialogs/menu.c:615 src/dialogs/menu.c:644 src/dialogs/menu.c:662
+#: src/dialogs/menu.c:672 src/dialogs/mime.c:269 src/dialogs/options.c:267
+#: src/dialogs/options.c:360 src/document/download.c:505
+#: src/document/download.c:538 src/document/download.c:640
+#: src/document/download.c:979 src/document/download.c:987
+#: src/document/download.c:1022 src/document/download.c:1032
+#: src/document/session.c:313 src/document/session.c:585
+#: src/globhist/dialogs.c:285 src/lua/core.c:428 src/lua/core.c:572
+#: src/lua/core.c:797 src/protocol/url.c:67 src/protocol/user.c:103
+#: src/protocol/user.c:131 src/viewer/text/view.c:1580
+#: src/viewer/text/view.c:1914 src/viewer/text/view.c:2343
+#: src/viewer/text/view.c:2389 src/viewer/text/view.c:2626
+#: src/viewer/text/view.c:3284
+msgid "Cancel"
+msgstr "Отказ"
+
+#: src/bfu/inpfield.c:50
+msgid "Number out of range"
+msgstr "Числото е извън диапазона"
+
+#: src/bfu/inpfield.c:69
+msgid "Bad string"
+msgstr "Невалиден символен низ"
+
+#: src/bfu/inpfield.c:70
+msgid "Empty string not allowed"
+msgstr "Не е позволен празен символен низ"
+
+#: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
+msgid "Add folder"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:170
+msgid "Folder name"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:171 src/config/dialogs.c:124
+#: src/config/dialogs.c:132 src/config/dialogs.c:319 src/config/dialogs.c:402
+#: src/config/dialogs.c:471 src/config/dialogs.c:654 src/config/dialogs.c:730
+#: src/dialogs/auth.c:187 src/dialogs/document.c:52 src/dialogs/document.c:207
+#: src/dialogs/document.c:230 src/dialogs/document.c:277
+#: src/dialogs/document.c:289 src/dialogs/edit.c:164 src/dialogs/info.c:103
+#: src/dialogs/info.c:130 src/dialogs/info.c:146 src/dialogs/info.c:207
+#: src/dialogs/info.c:239 src/dialogs/info.c:268 src/dialogs/menu.c:605
+#: src/dialogs/menu.c:615 src/dialogs/menu.c:643 src/dialogs/menu.c:662
+#: src/dialogs/menu.c:672 src/dialogs/mime.c:265 src/dialogs/options.c:257
+#: src/dialogs/options.c:355 src/document/download.c:563
+#: src/document/session.c:1075 src/document/session.c:1092
+#: src/document/session.c:1116 src/globhist/dialogs.c:396 src/lua/core.c:424
+#: src/lua/core.c:567 src/lua/core.c:676 src/lua/core.c:796
+#: src/sched/sched.c:70 src/viewer/text/view.c:2625
+msgid "OK"
+msgstr "ОК"
+
+#: src/bookmarks/dialogs.c:241 src/lua/core.c:408
+msgid "Edit bookmark"
+msgstr "Редактиране на отметка"
+
+#: src/bookmarks/dialogs.c:269 src/bookmarks/dialogs.c:276
+#: src/bookmarks/dialogs.c:406 src/bookmarks/dialogs.c:413
+#: src/bookmarks/dialogs.c:420 src/bookmarks/dialogs.c:421
+msgid "Delete bookmark"
+msgstr "Изтриване на отметка"
+
+#: src/bookmarks/dialogs.c:270 src/bookmarks/dialogs.c:277
+#: src/globhist/dialogs.c:283
+msgid "Sorry, but this bookmark is already being used by something right now."
+msgstr "За съжаление тази отметка се използва от нещо в момента"
+
+#: src/bookmarks/dialogs.c:271 src/bookmarks/dialogs.c:278
+#: src/dialogs/document.c:91 src/globhist/dialogs.c:392
+msgid "Title"
+msgstr "Заглавие"
+
+#: src/bookmarks/dialogs.c:279 src/bookmarks/dialogs.c:422
+#: src/dialogs/document.c:60 src/dialogs/edit.c:27 src/globhist/dialogs.c:324
+#: src/globhist/dialogs.c:393 src/lua/core.c:294
+msgid "URL"
+msgstr "URL"
+
+#: src/bookmarks/dialogs.c:407
+msgid "Delete marked bookmarks?"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:409 src/bookmarks/dialogs.c:416
+#: src/bookmarks/dialogs.c:424 src/dialogs/menu.c:124 src/dialogs/mime.c:163
+#: src/document/session.c:583 src/globhist/dialogs.c:326
+#: src/globhist/dialogs.c:358
+msgid "Yes"
+msgstr "Да"
+
+#: src/bookmarks/dialogs.c:410 src/bookmarks/dialogs.c:417
+#: src/bookmarks/dialogs.c:425 src/dialogs/menu.c:125 src/dialogs/mime.c:164
+#: src/document/session.c:584 src/globhist/dialogs.c:327
+#: src/globhist/dialogs.c:359
+msgid "No"
+msgstr "Не"
+
+#: src/bookmarks/dialogs.c:414
+msgid "Delete folder content"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:608
+msgid "Bookmark manager"
+msgstr "Управление на отметките"
+
+#: src/bookmarks/dialogs.c:618 src/globhist/dialogs.c:443
+msgid "Goto"
+msgstr "Отвори"
+
+#: src/bookmarks/dialogs.c:624 src/config/dialogs.c:301
+#: src/config/dialogs.c:350 src/config/dialogs.c:515
+msgid "Edit"
+msgstr "Редактирай"
+
+#: src/bookmarks/dialogs.c:629 src/config/dialogs.c:527
+#: src/config/dialogs.c:773 src/globhist/dialogs.c:453
+msgid "Delete"
+msgstr "Изтрий"
+
+#: src/bookmarks/dialogs.c:634
+msgid "Move"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:644 src/config/dialogs.c:521
+#: src/config/dialogs.c:767
+msgid "Add"
+msgstr "Добави"
+
+#: src/bookmarks/dialogs.c:649 src/dialogs/menu.c:671
+#: src/globhist/dialogs.c:458 src/viewer/text/view.c:2340
+#: src/viewer/text/view.c:2386
+msgid "Search"
+msgstr "Търсене"
+
+#: src/bookmarks/dialogs.c:654 src/config/dialogs.c:538
+#: src/config/dialogs.c:790 src/globhist/dialogs.c:473
+msgid "Close"
+msgstr "Затвори"
+
+#: src/bookmarks/dialogs.c:788 src/bookmarks/dialogs.c:813
+msgid "Add bookmark"
+msgstr "Добавяне на отметка"
+
+#: src/bookmarks/dialogs.c:799
+msgid "Search bookmarks"
+msgstr "Търси в отметките"
+
+#: src/config/dialogs.c:38
+msgid "Config error"
+msgstr "Грешка в настройките"
+
+#: src/config/dialogs.c:39
+msgid "Unable to write to config file"
+msgstr "Не може да се пише във файла с настройките"
+
+#: src/config/dialogs.c:118 src/config/dialogs.c:127 src/config/dialogs.c:509
+#: src/dialogs/document.c:49 src/dialogs/document.c:204
+#: src/globhist/dialogs.c:391 src/globhist/dialogs.c:448
+msgid "Info"
+msgstr "Информация"
+
+#: src/config/dialogs.c:119 src/config/dialogs.c:128 src/config/dialogs.c:199
+#: src/config/dialogs.c:401 src/dialogs/edit.c:26 src/lua/core.c:292
+#: src/lua/core.c:293
+msgid "Name"
+msgstr "Име"
+
+#: src/config/dialogs.c:120 src/config/dialogs.c:129 src/config/dialogs.c:200
+msgid "Type"
+msgstr ""
+
+#: src/config/dialogs.c:121 src/config/dialogs.c:202
+#: src/viewer/text/view.c:3536
+msgid "value"
+msgstr "стойност"
+
+#: src/config/dialogs.c:122 src/config/dialogs.c:130 src/config/dialogs.c:203
+msgid "Description"
+msgstr ""
+
+#: src/config/dialogs.c:181 src/document/session.c:856
+#: src/document/session.c:917 src/document/session.c:1395
+#: src/protocol/url.c:64 src/viewer/text/view.c:1911
+#: src/viewer/text/view.c:3226
+msgid "Error"
+msgstr "Грешка"
+
+#: src/config/dialogs.c:182
+msgid "Bad option value."
+msgstr ""
+
+#: src/config/dialogs.c:351
+msgid ""
+"This option cannot be edited. This means that this is some special option "
+"like a folder - try to press a space in order to see its contents."
+msgstr ""
+
+#: src/config/dialogs.c:387 src/config/dialogs.c:401
+msgid "Add option"
+msgstr ""
+
+#: src/config/dialogs.c:388
+msgid "Cannot add an option here."
+msgstr ""
+
+#: src/config/dialogs.c:454 src/config/dialogs.c:468
+msgid "Delete option"
+msgstr ""
+
+#: src/config/dialogs.c:455
+msgid "Cannot delete this option."
+msgstr ""
+
+#: src/config/dialogs.c:469
+msgid "Really delete the option"
+msgstr ""
+
+#: src/config/dialogs.c:499
+msgid "Options manager"
+msgstr ""
+
+#: src/config/dialogs.c:533 src/config/dialogs.c:785 src/dialogs/options.c:262
+#: src/document/download.c:977 src/document/download.c:1020
+msgid "Save"
+msgstr "Запазване"
+
+#: src/config/dialogs.c:603 src/config/dialogs.c:625 src/config/dialogs.c:653
+msgid "Add keybinding"
+msgstr ""
+
+#: src/config/dialogs.c:604
+msgid "Invalid keystroke."
+msgstr ""
+
+#: src/config/dialogs.c:626
+msgid "Need to select a keymap."
+msgstr ""
+
+#: src/config/dialogs.c:641
+msgid "Action"
+msgstr ""
+
+#: src/config/dialogs.c:642
+msgid "Keymap"
+msgstr ""
+
+#: src/config/dialogs.c:643
+msgid ""
+"Keystroke should be written in the format: [Prefix-]Key\n"
+"Prefix: Shift, Ctrl, Alt\n"
+"Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
+msgstr ""
+
+#: src/config/dialogs.c:647
+msgid "Keystroke"
+msgstr ""
+
+#: src/config/dialogs.c:714 src/config/dialogs.c:725
+msgid "Delete keybinding"
+msgstr ""
+
+#: src/config/dialogs.c:715
+msgid ""
+"This item is not a keybinding. Try to press a space in order to get to the "
+"keybinindings themselves."
+msgstr ""
+
+#: src/config/dialogs.c:726
+msgid "Really delete the keybinding"
+msgstr ""
+
+#: src/config/dialogs.c:727
+msgid "action"
+msgstr ""
+
+#: src/config/dialogs.c:728
+msgid "keymap"
+msgstr ""
+
+#: src/config/dialogs.c:757
+msgid "Keybinding manager"
+msgstr ""
+
+#: src/config/dialogs.c:779 src/globhist/dialogs.c:463
+msgid "Toggle display"
+msgstr ""
+
+#: src/config/opttypes.c:462
+msgid "Boolean"
+msgstr ""
+
+#: src/config/opttypes.c:463
+msgid "Integer"
+msgstr ""
+
+#: src/config/opttypes.c:464
+msgid "Longint"
+msgstr ""
+
+#: src/config/opttypes.c:465
+msgid "String"
+msgstr ""
+
+#: src/config/opttypes.c:467 src/dialogs/document.c:111
+msgid "Codepage"
+msgstr "Кодиране"
+
+#: src/config/opttypes.c:468
+msgid "Language"
+msgstr ""
+
+#: src/config/opttypes.c:469 src/dialogs/options.c:118
+msgid "Color"
+msgstr "Цвят"
+
+#: src/config/opttypes.c:471
+msgid "Special"
+msgstr ""
+
+#: src/config/opttypes.c:473
+msgid "Alias"
+msgstr ""
+
+#. tree
+#: src/config/opttypes.c:476
+msgid "Folder"
+msgstr ""
+
+#: src/dialogs/auth.c:33 src/dialogs/auth.c:34 src/dialogs/auth.c:52
+#: src/dialogs/auth.c:75
+msgid "Login"
+msgstr "Идентификация на потребителя"
+
+#: src/dialogs/auth.c:35 src/dialogs/auth.c:36 src/dialogs/auth.c:56
+#: src/dialogs/auth.c:82
+msgid "Password"
+msgstr "Парола"
+
+#: src/dialogs/auth.c:147 src/dialogs/auth.c:166
+msgid "Authentication required for "
+msgstr "Въведете име на потребителя "
+
+#: src/dialogs/auth.c:149 src/dialogs/auth.c:168
+msgid " at "
+msgstr " на "
+
+#: src/dialogs/auth.c:162
+msgid "HTTP Authentication"
+msgstr "HTTP удостоверяване"
+
+#: src/dialogs/document.c:50 src/dialogs/document.c:228
+msgid "You are nowhere!"
+msgstr "Вие не се намирате на никъде!"
+
+#: src/dialogs/document.c:100
+msgid "Size"
+msgstr "Размер"
+
+#: src/dialogs/document.c:106
+msgid "incomplete"
+msgstr "незавършен"
+
+#: src/dialogs/document.c:117
+msgid "assumed"
+msgstr "прието"
+
+#: src/dialogs/document.c:123
+msgid "ignoring server setting"
+msgstr "игнориране на настройките на сървъра"
+
+#: src/dialogs/document.c:130
+msgid "Server"
+msgstr "Сервър"
+
+#: src/dialogs/document.c:138
+msgid "SSL Cipher"
+msgstr "SSL шифър"
+
+#: src/dialogs/document.c:144
+msgid "Encoding"
+msgstr "Кодиране"
+
+#: src/dialogs/document.c:152
+msgid "Date"
+msgstr "Дата"
+
+#: src/dialogs/document.c:160
+msgid "Last modified"
+msgstr "Последна модификация"
+
+#: src/dialogs/document.c:169 src/globhist/dialogs.c:394
+msgid "Last visit time"
+msgstr "Време на последно посещение"
+
+#: src/dialogs/document.c:178
+msgid "Unknown"
+msgstr "Не се знае"
+
+#: src/dialogs/document.c:187 src/dialogs/menu.c:583
+msgid "~Link"
+msgstr "Връзка"
+
+#: src/dialogs/document.c:196
+msgid "Link title"
+msgstr "Заглавие на връзката"
+
+#: src/dialogs/document.c:227 src/dialogs/document.c:274
+#: src/dialogs/document.c:286
+msgid "Header info"
+msgstr "Информация на заглавната част"
+
+#: src/dialogs/document.c:287
+msgid "No header info."
+msgstr ""
+
+#: src/dialogs/edit.c:168 src/globhist/dialogs.c:468
+msgid "Clear"
+msgstr "Изчисти"
+
+#: src/dialogs/info.c:55
+msgid "Text WWW browser"
+msgstr " Lynx-подобен текстов web-браузър"
+
+#: src/dialogs/info.c:58
+msgid "Features"
+msgstr "Добавки"
+
+#: src/dialogs/info.c:100
+msgid "About"
+msgstr "За програмата"
+
+#: src/dialogs/info.c:111
+msgid "Keys"
+msgstr "Клавиши"
+
+#: src/dialogs/info.c:112
+msgid ""
+"ESC      display menu\n"
+"^C, q    quit\n"
+"^P, ^N   scroll up, down\n"
+"[, ]     scroll left, right\n"
+"up, down select link\n"
+"->       follow link\n"
+"<-       go back\n"
+"g        go to url\n"
+"G        go to url based on current url\n"
+"/        search\n"
+"?        search back\n"
+"n        find next\n"
+"N        find previous\n"
+"=        document info\n"
+"|        header info\n"
+"\\        document source\n"
+"d        download"
+msgstr ""
+"ESC      меню\n"
+"^C, q    изход\n"
+"^P, ^N   прелисти нагоре-надолу\n"
+"[, ]     прелисти наляво-надясно\n"
+"up, down избери връзка\n"
+"->       проследи връзка\n"
+"<-       назад\n"
+"g        отвори нов URL\n"
+"G        отвори URL, базиран на текущия\n"
+"/        търси\n"
+"?        търси в обратна посока\n"
+"n        намери следващото съвпадение\n"
+"N        намери предното съвпадение\n"
+"=        информация за документа\n"
+"|        информация за заглавната част\n"
+"\\        покажи HTML кода\n"
+"d        свали (дръпни, изтегли)"
+
+#: src/dialogs/info.c:136
+msgid "Copying"
+msgstr "Авторско правo"
+
+#: src/dialogs/info.c:137
+msgid "ELinks "
+msgstr ""
+
+#: src/dialogs/info.c:137
+msgid ""
+"\n"
+"\n"
+"(C) 1999 - 2002 Mikulas Patocka\n"
+"(C) 2001 - 2003 Petr Baudis\n"
+"\n"
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+"\n"
+"\n"
+"(C) 1999 - 2002 Mikulas Patocka\n"
+"(C) 2001 - 2003 Petr Baudis\n"
+"\n"
+"Тази програма е свободен софтуер; можете да я разпространявате и/или "
+"модифицирате според клаузите на Общия Публичен Лиценз GNU, публикуван от "
+"Фондацията за свободен софтуер (FSF); версия 2 на Лиценза или (по Ваше "
+"желание) която и да е по-късна версия."
+
+#: src/dialogs/info.c:189 src/dialogs/info.c:190
+msgid "Resources"
+msgstr "Ресурси"
+
+#: src/dialogs/info.c:191
+msgid "handles"
+msgstr "handles"
+
+#: src/dialogs/info.c:192
+msgid "timers"
+msgstr "таймери"
+
+#: src/dialogs/info.c:193
+msgid "Connections"
+msgstr "Връзка(и)"
+
+#: src/dialogs/info.c:194
+msgid "connections"
+msgstr "връзка(и)"
+
+#: src/dialogs/info.c:195
+msgid "connecting"
+msgstr "свързване"
+
+#: src/dialogs/info.c:196
+msgid "transferring"
+msgstr "предаване"
+
+#: src/dialogs/info.c:197
+msgid "keepalive"
+msgstr "реанимиране на връзката"
+
+#: src/dialogs/info.c:198
+msgid "Memory cache"
+msgstr "Кеш-памет"
+
+#: src/dialogs/info.c:199
+msgid "bytes"
+msgstr "байта"
+
+#: src/dialogs/info.c:200
+msgid "files"
+msgstr "файла"
+
+#: src/dialogs/info.c:201 src/dialogs/info.c:205
+msgid "locked"
+msgstr "заключен"
+
+#: src/dialogs/info.c:202
+msgid "loading"
+msgstr "зареждане"
+
+#: src/dialogs/info.c:203
+msgid "Formatted document cache"
+msgstr "Кеш за форматираните документи"
+
+#: src/dialogs/info.c:204
+msgid "documents"
+msgstr "документи"
+
+#: src/dialogs/info.c:236
+msgid "Cache info"
+msgstr "Информация за кеша"
+
+#: src/dialogs/info.c:237
+msgid "Cache content"
+msgstr "Съдържание на кеша"
+
+#: src/dialogs/info.c:256
+msgid "bytes of memory allocated"
+msgstr "байта заделена памет"
+
+#: src/dialogs/info.c:265
+msgid "Memory info"
+msgstr "Информация за паметта"
+
+#: src/dialogs/menu.c:118
+msgid "Exit ELinks"
+msgstr "Изход от Links"
+
+#: src/dialogs/menu.c:120
+msgid "Do you really want to exit ELinks (and terminate all downloads)?"
+msgstr "Наистина ли желаете да излезете от Links и да прекратите всичко, което сваляте?"
+
+#: src/dialogs/menu.c:122
+msgid "Do you really want to exit ELinks?"
+msgstr "Наистина ли желаете да излезете от Links?"
+
+#: src/dialogs/menu.c:226
+msgid "No history"
+msgstr "Няма история"
+
+#: src/dialogs/menu.c:301
+msgid "No downloads"
+msgstr "Нищо не се сваля"
+
+#: src/dialogs/menu.c:372
+msgid "~Go to URL"
+msgstr "Отвори нов URL"
+
+#: src/dialogs/menu.c:373
+msgid "Go ~back"
+msgstr "Върни се назад"
+
+#: src/dialogs/menu.c:374
+msgid "~History"
+msgstr "История"
+
+#: src/dialogs/menu.c:375
+msgid "Unhis~tory"
+msgstr "Напред в историята"
+
+#: src/dialogs/menu.c:376
+msgid "~Reload"
+msgstr "Зареди отново"
+
+#: src/dialogs/menu.c:381
+msgid "Global histor~y"
+msgstr "Обща история"
+
+#: src/dialogs/menu.c:384
+msgid "Bookmark~s"
+msgstr "Отметки"
+
+#: src/dialogs/menu.c:390
+msgid "Sa~ve as"
+msgstr "Запази като"
+
+#: src/dialogs/menu.c:391
+msgid "Save ~URL as"
+msgstr "Запази URL като"
+
+#: src/dialogs/menu.c:392
+msgid "Save formatted ~document"
+msgstr "Запази форматиран документ"
+
+#: src/dialogs/menu.c:397
+msgid "~Kill background connections"
+msgstr "Убий връзките във фонов режим"
+
+#: src/dialogs/menu.c:398
+msgid "~Flush all caches"
+msgstr "Изпразни всички видове кеш"
+
+#: src/dialogs/menu.c:399
+msgid "Resource ~info"
+msgstr "Информация за ресурсите"
+
+#. This ought to be rewritten first, now it's too messy - try it with
+#. * a bit full cache.
+#: src/dialogs/menu.c:403
+msgid "~Cache info"
+msgstr "Информация за кеша"
+
+#: src/dialogs/menu.c:406
+msgid "~Memory info"
+msgstr "Информация за паметта"
+
+#: src/dialogs/menu.c:413
+msgid "E~xit"
+msgstr "Изход"
+
+#: src/dialogs/menu.c:442
+msgid "~New window"
+msgstr "Нов прозорец"
+
+#: src/dialogs/menu.c:463
+msgid "~OS shell"
+msgstr "Команден ред"
+
+#: src/dialogs/menu.c:474 src/dialogs/options.c:332
+msgid "Resize ~terminal"
+msgstr "Променете размера на терминала"
+
+#: src/dialogs/menu.c:493 src/dialogs/menu.c:506
+msgid "~Search"
+msgstr "Търсене"
+
+#: src/dialogs/menu.c:494 src/dialogs/menu.c:507
+msgid "Search ~backward"
+msgstr "Търсене в обратна посока"
+
+#: src/dialogs/menu.c:495 src/dialogs/menu.c:508
+msgid "Find ~next"
+msgstr "Намери следващото съвпадение"
+
+#: src/dialogs/menu.c:496 src/dialogs/menu.c:509
+msgid "Find ~previous"
+msgstr "Намери предното съвпадение"
+
+#: src/dialogs/menu.c:498 src/dialogs/menu.c:511
+msgid "Toggle ~html/plain"
+msgstr "Превключи HTML/текст"
+
+#: src/dialogs/menu.c:499 src/dialogs/menu.c:512
+msgid "Document ~info"
+msgstr "Информация за документа"
+
+#: src/dialogs/menu.c:500
+msgid "H~eader info"
+msgstr "Информация на заглавната част"
+
+#: src/dialogs/menu.c:501 src/dialogs/menu.c:513
+msgid "Frame at ~full-screen"
+msgstr "Рамка при пълен екран"
+
+#: src/dialogs/menu.c:518
+msgid "~About"
+msgstr "За програмата"
+
+#: src/dialogs/menu.c:519
+msgid "~Keys"
+msgstr "Клавиши"
+
+#: src/dialogs/menu.c:520
+msgid "User's ~manual"
+msgstr "Ръководство"
+
+#: src/dialogs/menu.c:521
+msgid "~Copying"
+msgstr "Авторско правo"
+
+#: src/dialogs/menu.c:522
+msgid "~ELinks homepage"
+msgstr "Домашна страница на Elinks"
+
+#: src/dialogs/menu.c:528 src/dialogs/menu.c:536
+msgid "~Add"
+msgstr "Добави"
+
+#: src/dialogs/menu.c:529 src/dialogs/menu.c:537
+msgid "~Modify"
+msgstr "Промени"
+
+#: src/dialogs/menu.c:530 src/dialogs/menu.c:538
+msgid "~Delete"
+msgstr "Изтрий"
+
+#: src/dialogs/menu.c:543 src/dialogs/menu.c:556
+msgid "~Language"
+msgstr "Език"
+
+#: src/dialogs/menu.c:544 src/dialogs/menu.c:557
+msgid "C~haracter set"
+msgstr "Кодиране"
+
+#: src/dialogs/menu.c:545 src/dialogs/menu.c:558
+msgid "~Terminal options"
+msgstr "Настройки на терминала"
+
+#. {N_("~Associations"), ">", MENU_FUNC do_menu, assoc_menu, 1, 0},
+#: src/dialogs/menu.c:547
+msgid "File ~extensions"
+msgstr "Файлови разширения"
+
+#: src/dialogs/menu.c:549
+msgid "~Options manager"
+msgstr ""
+
+#: src/dialogs/menu.c:550
+msgid "~Keybinding manager"
+msgstr ""
+
+#: src/dialogs/menu.c:551
+msgid "~Save options"
+msgstr "Запази настройките"
+
+#: src/dialogs/menu.c:581
+msgid "~File"
+msgstr "Файл"
+
+#: src/dialogs/menu.c:582
+msgid "~View"
+msgstr "Изглед"
+
+#: src/dialogs/menu.c:584
+msgid "~Downloads"
+msgstr "Сваляне"
+
+#: src/dialogs/menu.c:585
+msgid "~Setup"
+msgstr "Настройки"
+
+#: src/dialogs/menu.c:586
+msgid "~Help"
+msgstr "Помощ"
+
+#: src/dialogs/menu.c:604
+msgid "Go to URL"
+msgstr "Отвори нов URL"
+
+#: src/dialogs/menu.c:604 src/dialogs/menu.c:614
+msgid "Enter URL"
+msgstr "Въведете URL"
+
+#: src/dialogs/menu.c:614
+msgid "Save URL"
+msgstr "Запазете URL"
+
+#: src/dialogs/menu.c:643 src/document/download.c:388
+#: src/document/download.c:560
+msgid "Download"
+msgstr "Свали (дръпни, изтегли)"
+
+#: src/dialogs/menu.c:643
+msgid "Save to file"
+msgstr "Запази във файл"
+
+#: src/dialogs/menu.c:661
+msgid "Search backward"
+msgstr "Търсене в обратна посока"
+
+#: src/dialogs/menu.c:661 src/dialogs/menu.c:671
+msgid "Search for text"
+msgstr "Търсене на текст"
+
+#: src/dialogs/mime.c:44
+msgid "Extension(s)"
+msgstr "Разширение(я)"
+
+#: src/dialogs/mime.c:45
+msgid "Content-Type"
+msgstr "Тип на съдържанието"
+
+#: src/dialogs/mime.c:160 src/dialogs/mime.c:161
+msgid "Delete extension"
+msgstr "Изтрий разширение"
+
+#: src/dialogs/mime.c:247
+msgid "Extension"
+msgstr "Разширение"
+
+#: src/dialogs/mime.c:281
+msgid "No extensions"
+msgstr "Няма разширения"
+
+#: src/dialogs/options.c:111
+msgid "No frames"
+msgstr "Без рамки"
+
+#: src/dialogs/options.c:112
+msgid "VT 100 frames"
+msgstr "Рамки VT 100"
+
+#: src/dialogs/options.c:113
+msgid "Linux or OS/2 frames"
+msgstr "Рамки Linux или OS/2"
+
+#: src/dialogs/options.c:114
+msgid "KOI8-R frames"
+msgstr "Рамки KOI8-R"
+
+#: src/dialogs/options.c:115
+msgid "Use ^[[11m"
+msgstr "Използване на ^[[11m"
+
+#: src/dialogs/options.c:116
+msgid "Restrict frames in cp850/852"
+msgstr "Ограничени рамки в cp850/852"
+
+#: src/dialogs/options.c:117
+msgid "Block the cursor"
+msgstr "Блоков курсор"
+
+#: src/dialogs/options.c:119
+msgid "Transparency"
+msgstr ""
+
+#: src/dialogs/options.c:120
+msgid "UTF-8 I/O"
+msgstr "UTF-8 Вх/Изх"
+
+#: src/dialogs/options.c:194
+msgid "Terminal options"
+msgstr "Настройки на терминала"
+
+#: src/dialogs/options.c:301
+msgid "Columns"
+msgstr "Колони"
+
+#: src/dialogs/options.c:302
+msgid "Rows"
+msgstr "Редове"
+
+#: src/document/download.c:222 src/document/session.c:177
+msgid "Received"
+msgstr "Получени"
+
+#: src/document/download.c:228 src/document/session.c:182
+msgid "of"
+msgstr "от"
+
+#: src/document/download.c:238
+msgid "after resume"
+msgstr ""
+
+#: src/document/download.c:244
+msgid "Average speed"
+msgstr "Средна скорост"
+
+#: src/document/download.c:245
+msgid "Speed"
+msgstr "Скорост"
+
+#: src/document/download.c:254
+msgid "current speed"
+msgstr "текуща скорост"
+
+#: src/document/download.c:263
+msgid "Elapsed time"
+msgstr "Изтекло време"
+
+#: src/document/download.c:269
+msgid "estimated time"
+msgstr "Прогнозирано време"
+
+#: src/document/download.c:397
+msgid "Background"
+msgstr "Във фонов режим"
+
+#: src/document/download.c:402
+msgid "Background with notify"
+msgstr "Фонов режим с изскачащи забележки"
+
+#: src/document/download.c:407
+msgid "Abort"
+msgstr "Прекъсни"
+
+#: src/document/download.c:501 src/document/download.c:534
+#: src/document/download.c:636
+msgid "Download error"
+msgstr "Грешка при сваляне"
+
+#: src/document/download.c:502 src/document/download.c:637
+msgid "Could not create file"
+msgstr "Не може да се пише във файл"
+
+#: src/document/download.c:535
+msgid "Error downloading"
+msgstr "Грешка при сваляне"
+
+#: src/document/download.c:561
+msgid "Download complete"
+msgstr "Свалянето привърши"
+
+#: src/document/download.c:973 src/document/download.c:982
+msgid "Unknown type"
+msgstr "Непознат тип"
+
+#: src/document/download.c:974 src/document/download.c:983
+#: src/document/download.c:1015 src/document/download.c:1026
+msgid "Content type is"
+msgstr "Типът на документа е"
+
+#: src/document/download.c:975 src/document/download.c:984
+msgid "Do you want to save or display this file?"
+msgstr "Желаете ли да запазите или покажете този файл на екрана?"
+
+#: src/document/download.c:978 src/document/download.c:986
+#: src/document/download.c:1021 src/document/download.c:1031
+msgid "Display"
+msgstr "Показване"
+
+#: src/document/download.c:1014 src/document/download.c:1025
+msgid "What to do?"
+msgstr "Какво да правя?"
+
+#: src/document/download.c:1016 src/document/download.c:1027
+msgid "Do you want to open file with"
+msgstr "Желаете ли да отворите файла чрез"
+
+#: src/document/download.c:1017 src/document/download.c:1028
+msgid "save it or display it?"
+msgstr "да го запазя или да го покажа на екрана?"
+
+#: src/document/download.c:1019 src/document/download.c:1030
+msgid "Open"
+msgstr "Отвори"
+
+#: src/document/session.c:97
+msgid "Unknown error"
+msgstr "Непозната грешка"
+
+#: src/document/session.c:188
+msgid "avg"
+msgstr "средно"
+
+#: src/document/session.c:196
+msgid "cur"
+msgstr "текущо"
+
+#: src/document/session.c:569
+msgid "Do you want to follow redirect and post form data to url"
+msgstr "Желаете ли да проследите препращането и да изпратите данните от формуляра към адрес"
+
+#: src/document/session.c:572
+msgid "Do you want to post form data to url"
+msgstr "Желаете да изпратите данните от формуляра към адрес"
+
+#: src/document/session.c:574
+msgid "Do you want to repost form data to url"
+msgstr "Желаете ли да препратите данните от формуляра към адрес"
+
+#: src/document/session.c:580 src/document/session.c:1080
+#: src/document/session.c:1100
+msgid "Warning"
+msgstr "Внимание"
+
+#: src/document/session.c:1070
+msgid "Welcome"
+msgstr "Здравейте"
+
+#: src/document/session.c:1071
+msgid "Welcome to ELinks!"
+msgstr "Добре дошли в Links!"
+
+#: src/document/session.c:1072
+msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
+msgstr "Натиснете ESC за да извикате менюто. Изберете 'Помощ->Ръководство', за да прочетете ръководството за потребителя."
+
+#: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
+msgid "Global history"
+msgstr "Обща история"
+
+#: src/globhist/dialogs.c:187
+msgid "Search history"
+msgstr "Търси в историята"
+
+#: src/globhist/dialogs.c:282 src/globhist/dialogs.c:322
+#: src/globhist/dialogs.c:323
+msgid "Delete history item"
+msgstr "Изтрий събитие от историята"
+
+#: src/globhist/dialogs.c:355 src/globhist/dialogs.c:356
+msgid "Clear global history"
+msgstr "Изчисти общата история"
+
+#: src/lua/core.c:446
+msgid "A field"
+msgstr "Поле"
+
+#: src/lua/core.c:555
+msgid "User dialog"
+msgstr "Потребителски диалог"
+
+#: src/lua/core.c:673
+msgid "Lua Error"
+msgstr "Грешка в Lua"
+
+#: src/lua/core.c:794
+msgid "Lua Console"
+msgstr "Lua конзола"
+
+#: src/lua/core.c:795
+msgid "Enter expression"
+msgstr "Въведете израз"
+
+#: src/osdep/os_dep.c:1832
+msgid "~Xterm"
+msgstr ""
+
+#: src/osdep/os_dep.c:1833
+msgid "~Twterm"
+msgstr ""
+
+#: src/osdep/os_dep.c:1834
+msgid "~Screen"
+msgstr "Екран"
+
+#: src/osdep/os_dep.c:1836 src/osdep/os_dep.c:1840
+msgid "~Window"
+msgstr "Прозорец"
+
+#: src/osdep/os_dep.c:1837
+msgid "~Full screen"
+msgstr "На цял екран"
+
+#: src/osdep/os_dep.c:1843
+msgid "~BeOS terminal"
+msgstr "BeOS терминал"
+
+#: src/protocol/url.c:65
+msgid "JavaScript is currently not supported."
+msgstr ""
+
+#: src/protocol/user.c:100
+msgid "No program"
+msgstr "Няма програма"
+
+#: src/protocol/user.c:101
+msgid "No program specified for"
+msgstr "Не е посочена програма за"
+
+#: src/protocol/user.c:128 src/sched/sched.c:79
+msgid "Bad URL syntax"
+msgstr "Невалиден URL синтаксис"
+
+#: src/protocol/user.c:129
+msgid "Bad user protocol URL"
+msgstr "Невалиден URL с спотребителски протокол"
+
+#: src/sched/sched.c:59
+msgid "Waiting in queue"
+msgstr "Чакане на опашка"
+
+#: src/sched/sched.c:60
+msgid "Looking up host"
+msgstr "Търси се хостът"
+
+#: src/sched/sched.c:61
+msgid "Making connection"
+msgstr "Връзката се установява"
+
+#: src/sched/sched.c:62
+msgid "SSL negotiation"
+msgstr "SSL преговаряне"
+
+#: src/sched/sched.c:63
+msgid "Request sent"
+msgstr "Заявката е изпратена"
+
+#: src/sched/sched.c:64
+msgid "Logging in"
+msgstr "Влизам в"
+
+#: src/sched/sched.c:65
+msgid "Getting headers"
+msgstr "Получава се заглавната част"
+
+#: src/sched/sched.c:66
+msgid "Server is processing request"
+msgstr "Сървърът обработва заявката"
+
+#: src/sched/sched.c:67
+msgid "Transferring"
+msgstr "Предаване"
+
+#: src/sched/sched.c:69
+msgid "Waiting for redirect confirmation"
+msgstr "Очаква се потвръждение на препращането"
+
+#: src/sched/sched.c:71
+msgid "Interrupted"
+msgstr "Прекъснато"
+
+#: src/sched/sched.c:72
+msgid "Socket exception"
+msgstr "Изключение в socket"
+
+#: src/sched/sched.c:73
+msgid "Internal error"
+msgstr "Вътрешна грешка"
+
+#: src/sched/sched.c:74
+msgid "Out of memory"
+msgstr "Паметта е недостатъчна"
+
+#: src/sched/sched.c:75
+msgid "Host not found"
+msgstr "Хостът не е открит"
+
+#: src/sched/sched.c:76
+msgid "Error writing to socket"
+msgstr "Грешка при писането в socket"
+
+#: src/sched/sched.c:77
+msgid "Error reading from socket"
+msgstr "Грешка при четенето от socket"
+
+#: src/sched/sched.c:78
+msgid "Data modified"
+msgstr "Датата е променена"
+
+#: src/sched/sched.c:80
+msgid "Receive timeout"
+msgstr "Таймаут при получаване"
+
+#: src/sched/sched.c:81
+msgid "Request must be restarted"
+msgstr "Заявката трябва да се повтори"
+
+#: src/sched/sched.c:82
+msgid "Can't get socket state"
+msgstr "Не може да се получи състоянието на socket-а"
+
+#: src/sched/sched.c:84
+msgid "Bad HTTP response"
+msgstr "Невалиден HTTP отговор"
+
+#: src/sched/sched.c:85
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/sched.c:86
+msgid "No content"
+msgstr "Няма данни"
+
+#: src/sched/sched.c:88
+msgid "Unknown file type"
+msgstr "Неизвестен тип файл"
+
+#: src/sched/sched.c:89
+msgid "Error opening file"
+msgstr "Грешка при отварянето на файл"
+
+#: src/sched/sched.c:91
+msgid "Bad FTP response"
+msgstr "Невалиден FTP отговор"
+
+#: src/sched/sched.c:92
+msgid "FTP service unavailable"
+msgstr "Услугата FTP е недостъпна"
+
+#: src/sched/sched.c:93
+msgid "Bad FTP login"
+msgstr "Невалиден FTP login"
+
+#: src/sched/sched.c:94
+msgid "FTP PORT command failed"
+msgstr "Командата FTP PORT завърши неуспешно"
+
+#: src/sched/sched.c:95
+msgid "File not found"
+msgstr "Файлът не е открит"
+
+#: src/sched/sched.c:96
+msgid "FTP file error"
+msgstr "Грешка в FTP файл"
+
+#: src/sched/sched.c:98
+msgid "SSL error"
+msgstr "SSL грешка"
+
+#: src/sched/sched.c:100
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "Тази версия на Links не поддържа SSL/TSL"
+
+#: src/viewer/text/view.c:1577
+msgid "Error while posting form"
+msgstr "Грешка при изпращане на формуляра"
+
+#: src/viewer/text/view.c:1578
+msgid "Could not get file"
+msgstr "Файлът не може да бъде получен"
+
+#: src/viewer/text/view.c:1912
+msgid "You can do this only on the master terminal"
+msgstr "Това е позволено само в главния терминал"
+
+#: src/viewer/text/view.c:2341
+msgid "No previous search"
+msgstr "Няма предишно търсене"
+
+#: src/viewer/text/view.c:2387
+msgid "Search string not found"
+msgstr "Търсеният символен низ не е открит"
+
+#: src/viewer/text/view.c:2624
+msgid "Go to link"
+msgstr "Отвори връзка"
+
+#: src/viewer/text/view.c:2625
+msgid "Enter link number"
+msgstr "Въведете номер на връзка"
+
+#: src/viewer/text/view.c:3281
+msgid "Save error"
+msgstr "Грешка при запазване"
+
+#: src/viewer/text/view.c:3282
+msgid "Error writing to file"
+msgstr "Грешка при запис във файл"
+
+#: src/viewer/text/view.c:3316
+msgid "Display ~usemap"
+msgstr "Покажи картата"
+
+#: src/viewer/text/view.c:3321
+msgid "~Follow link"
+msgstr "Проследи връзка"
+
+#: src/viewer/text/view.c:3324
+msgid "Follow link and r~eload"
+msgstr "Проследи връзката и презареди"
+
+#: src/viewer/text/view.c:3328
+msgid "Open in new ~window"
+msgstr "Отвори в нов прозорец"
+
+#: src/viewer/text/view.c:3334
+msgid "~Download link"
+msgstr "Свали (дръпни, изтегли) връзка"
+
+#: src/viewer/text/view.c:3338
+msgid "~Add link to bookmarks"
+msgstr "Добави връзката към отметките"
+
+#: src/viewer/text/view.c:3349 src/viewer/text/view.c:3466
+msgid "~Reset form"
+msgstr "Изчисти формуляр"
+
+#: src/viewer/text/view.c:3354
+msgid "~Submit form"
+msgstr "Потвърди формуляр"
+
+#: src/viewer/text/view.c:3357
+msgid "Submit form and rel~oad"
+msgstr "Потвърди формуляр и презареди"
+
+#: src/viewer/text/view.c:3361
+msgid "Submit form and open in new ~window"
+msgstr "Потвърди формуляра и отвори в нов прозорец"
+
+#: src/viewer/text/view.c:3367
+msgid "Submit form and ~download"
+msgstr "Потвърди формуляра и свали (дръпни, изтегли)"
+
+#: src/viewer/text/view.c:3374
+msgid "V~iew image"
+msgstr "Покажи изображение"
+
+#: src/viewer/text/view.c:3377
+msgid "Download ima~ge"
+msgstr "Свали изображение"
+
+#: src/viewer/text/view.c:3383
+msgid "No link selected"
+msgstr "Не е избрана връзка"
+
+#: src/viewer/text/view.c:3430
+msgid "Image"
+msgstr "Изображение"
+
+#: src/viewer/text/view.c:3446
+msgid "Usemap"
+msgstr "Карта на връзките"
+
+#: src/viewer/text/view.c:3479
+msgid "Submit form to"
+msgstr "Потвърди формуляр към адрес"
+
+#: src/viewer/text/view.c:3481
+msgid "Post form to"
+msgstr "Изпрати формуляр към адрес"
+
+#: src/viewer/text/view.c:3499
+msgid "Radio button"
+msgstr "Радио-бутон"
+
+#: src/viewer/text/view.c:3502
+msgid "Checkbox"
+msgstr "Контролна кутийка (checkbox)"
+
+#: src/viewer/text/view.c:3505
+msgid "Select field"
+msgstr "Поле за избор"
+
+#: src/viewer/text/view.c:3508
+msgid "Text field"
+msgstr "Текстово поле"
+
+#: src/viewer/text/view.c:3511
+msgid "Text area"
+msgstr "Текстова област"
+
+#: src/viewer/text/view.c:3514
+msgid "File upload"
+msgstr "Качване (upload) на файл"
+
+#: src/viewer/text/view.c:3517
+msgid "Password field"
+msgstr "Поле за парола"
+
+#: src/viewer/text/view.c:3526
+msgid "name"
+msgstr "име"
+
+#: src/viewer/text/view.c:3545
+msgid "hit ENTER to"
+msgstr "натиснете ENTER, за да"
+
+#: src/viewer/text/view.c:3548
+msgid "submit to"
+msgstr "потвърдете към адрес"
+
+#: src/viewer/text/view.c:3550
+msgid "post to"
+msgstr "изпратете към адрес"

@@ -1,5 +1,4 @@
 english
-bulgarian
 catalan
 croatian
 dutch

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.268 2005/04/06 21:23:35 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.269 2005/04/06 22:30:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int event)
 	kb->action = action;
 	kb->key = key;
 	kb->meta = meta;
-	kb->func_ref = event;
+	kb->event = event;
 	kb->flags = is_default * KBDB_DEFAULT;
 
 	object_nolock(kb, "keybinding");
@@ -100,8 +100,8 @@ free_keybinding(struct keybinding *kb)
 
 #ifdef CONFIG_SCRIPTING
 /* TODO: unref function must be implemented. */
-/*	if (kb->func_ref != EVENT_NONE)
-		scripting_unref(kb->func_ref); */
+/*	if (kb->event != EVENT_NONE)
+		scripting_unref(kb->event); */
 #endif
 
 	if (kb->flags & KBDB_DEFAULT) {
@@ -155,7 +155,7 @@ kbd_ev_lookup(enum keymap kmap, long key, long meta, int *event)
 			continue;
 
 		if (kb->action == ACT_MAIN_SCRIPTING_FUNCTION && event)
-			*event = kb->func_ref;
+			*event = kb->event;
 
 		return kb;
 	}

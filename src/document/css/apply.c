@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.92 2005/01/05 03:02:31 jonas Exp $ */
+/* $Id: apply.c,v 1.93 2005/03/05 21:04:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@
  * or aligning or colors but keeping all the others.) --pasky */
 
 
-typedef void (*css_applier_t)(struct html_element *element,
+typedef void (*css_applier_T)(struct html_element *element,
 			      struct css_property *prop);
 
 static void
@@ -73,7 +73,7 @@ css_apply_text_align(struct html_element *element, struct css_property *prop)
 }
 
 /* XXX: Sort like the css_property_type */
-static css_applier_t css_appliers[CSS_PT_LAST] = {
+static css_applier_T css_appliers[CSS_PT_LAST] = {
 	/* CSS_PT_NONE */		NULL,
 	/* CSS_PT_BACKGROUND */		css_apply_background_color,
 	/* CSS_PT_BACKGROUND_COLOR */	css_apply_background_color,

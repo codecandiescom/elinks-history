@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.266 2003/11/15 16:53:37 miciah Exp $ */
+/* $Id: parser.c,v 1.267 2003/11/15 17:20:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1826,7 +1826,7 @@ static void
 new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullname)
 	/* name == NULL - up;	data == -1 - down */
 {
-	struct menu_item *top, *item, *nmenu = NULL; /* no uninitialized warnings */
+	struct menu_item *nmenu = NULL; /* no uninitialized warnings */
 
 	if (name) {
 		clr_spaces(name);
@@ -1839,10 +1839,11 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 			mem_free(name);
 			return;
 		}
-		/*nmenu->text = "";*/
 	}
 
 	if (menu->stack_size && name) {
+		struct menu_item *top, *item;
+
 		top = item = menu->stack[menu->stack_size - 1];
 		while (item->text) item++;
 
@@ -1873,11 +1874,12 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 		item++;
 		memset(item, 0, sizeof(struct menu_item));
-		/*item->text = "";*/
+
 	} else if (name) mem_free(name);
 
 	if (name && data == -1) {
-		struct menu_item **ms = mem_realloc(menu->stack, (menu->stack_size + 1) * sizeof(struct menu_item *));
+		int size = (menu->stack_size + 1) * sizeof(struct menu_item *);
+		struct menu_item **ms = mem_realloc(menu->stack, size);
 
 		if (!ms) return;
 		menu->stack = ms;

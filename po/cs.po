@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-30 22:00+0100\n"
-"PO-Revision-Date: 2004-01-01 15:50+0100\n"
+"PO-Revision-Date: 2004-01-02 21:05+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4166,7 +4166,7 @@ msgstr "~Historie"
 
 #: src/dialogs/menu.c:374
 msgid "~Unhistory"
-msgstr "An~tihistorie"
+msgstr "Antihistori~e"
 
 #: src/dialogs/menu.c:379
 msgid "~Save as"
@@ -4198,7 +4198,7 @@ msgstr "Informace o pa~mìti"
 
 #: src/dialogs/menu.c:406
 msgid "E~xit"
-msgstr "©mit~ec"
+msgstr "©mite~c"
 
 #: src/dialogs/menu.c:425
 msgid "~New window"

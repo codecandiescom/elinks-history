@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.185 2004/11/23 13:08:29 zas Exp $ */
+/* $Id: dialogs.c,v 1.186 2004/12/14 01:58:49 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -336,16 +336,10 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		 struct list_head *desti, struct list_head *src,
 		 struct listbox_data *box)
 {
-	struct bookmark *bm = (struct bookmark *) src; /* piggy */
-	struct bookmark *bm_next = bm->next;
+	struct bookmark *bm, *next;
 	int blind_insert = (destb && desti);
 
-	/* Like foreach (), but foreach () hates when we delete actual items
-	 * from the list. */
-	while ((struct list_head *) bm_next != src) {
-		bm = bm_next;
-		bm_next = bm->next;
-
+	foreachsafe (bm, next, *src) {
 		if (bm != dest /* prevent moving a folder into itself */
 		    && bm->box_item->marked && bm != move_cache_root_avoid) {
 			bm->box_item->marked = 0;

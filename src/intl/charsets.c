@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.41 2003/06/26 13:55:55 zas Exp $ */
+/* $Id: charsets.c,v 1.42 2003/07/01 22:39:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -432,7 +432,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 	if (strlen < ENTITY_CACHE_MAXLEN && nb_entity_cache[slen] > 0) {
 		for (i = 0; i < nb_entity_cache[slen]; i++) {
 			if (entity_cache[slen][i].encoding == encoding
-			    && !strncasecmp(str, entity_cache[slen][i].str, strlen)) {
+			    && !memcmp(str, entity_cache[slen][i].str, strlen)) {
 #ifdef DEBUG_ENTITY_CACHE
 				static double total_iter = 0;
 				static unsigned long hit_count = 0;

@@ -196,7 +196,7 @@ Jonas Fonseca <fonseca@diku.dk>
 	Mailcap support
 	Random hacking
 
-John
+John <martian202002@yahoo.com>
 	Tab browsing initial patch
 	
 José Luis González González <jlg80@mi.madritel.es>
@@ -433,4 +433,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.120 2003/05/02 21:43:44 zas Exp $
+$Id: AUTHORS,v 1.121 2003/05/03 02:12:35 pasky Exp $

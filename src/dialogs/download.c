@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.3 2003/11/26 23:49:46 jonas Exp $ */
+/* $Id: download.c,v 1.4 2003/11/27 21:52:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -358,6 +358,13 @@ delete_file_download(struct listbox_item *item, int last)
 	abort_download(file_download, 1);
 }
 
+static enum dlg_refresh_code
+refresh_file_download(struct dialog_data *dlg_data, void *data)
+{
+	/* Always refresh (until we keep finished downloads) */
+	return are_there_downloads() ? REFRESH_DIALOG : REFRESH_NONE;
+}
+
 static void
 draw_file_download(struct listbox_item *item, struct listbox_context *context,
 		   int x, int y, int width)
@@ -381,7 +388,31 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 	}
 
 	draw_text(context->term, x, y, text, length, 0, color);
-	if (trim) draw_text(context->term, x + length, y, "...", 3, 0, color);
+	if (trim) {
+		draw_text(context->term, x + length, y, "...", 3, 0, color);
+
+	} else if (file_download->download.prg->size >= 0
+		   && length + 4 < width) {
+		longlong pos = file_download->download.prg->pos;
+		longlong size = file_download->download.prg->size;
+		unsigned char percent[] = "XXXX%";
+		const unsigned int percent_width = sizeof(percent) - 1;
+		unsigned int percent_len = 0;
+		int progress = (int) ((longlong) 100 * pos / size);
+
+		if (ulongcat(percent, &percent_len, progress, percent_width - 1, 0) > 0)
+			memset(percent, '?', percent_len);
+
+		percent[percent_len++] = '%';
+		percent[percent_len] = '\0';
+
+		/* Draw percentage */
+		draw_text(context->term, x + length + 1, y,
+			  percent, percent_len, 0, color);
+
+		if (!dialog_has_refresh(context->dlg_data))
+			refresh_dialog(context->dlg_data, refresh_file_download, NULL);
+	}
 }
 
 static struct listbox_ops downloads_listbox_ops = {

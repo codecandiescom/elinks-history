@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.327 2004/08/14 06:57:38 jonas Exp $ */
+/* $Id: http.c,v 1.328 2004/08/23 17:15:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1177,7 +1177,7 @@ again:
 
 		if (ssl_connect(conn, &conn->socket) == -1) return;
 #else
-		abort_conn_with_state(conn, S_NO_SSL);
+		abort_conn_with_state(conn, S_SSL_ERROR);
 #endif
 		return;
 	}

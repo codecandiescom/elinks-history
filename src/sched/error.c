@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.33 2004/08/23 17:03:05 jonas Exp $ */
+/* $Id: error.c,v 1.34 2004/08/23 17:15:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ struct s_msg_dsc {
 #ifdef CONFIG_SSL
 	{S_SSL_ERROR,		N_("SSL error")},
 #else
-	{S_NO_SSL,		N_("This version of ELinks does not contain SSL/TLS support")},
+	{S_SSL_ERROR,		N_("This version of ELinks does not contain SSL/TLS support")},
 #endif
 
 	{S_NO_JAVASCRIPT,	N_("JavaScript is currently not supported.")},

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.75 2004/08/23 17:04:40 jonas Exp $ */
+/* $Id: connection.h,v 1.76 2004/08/23 17:15:06 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -69,6 +69,7 @@ enum connection_state {
 	S_UNKNOWN_PROTOCOL	= -10015,
 	S_EXTERNAL_PROTOCOL	= -10016,
 	S_ENCODE_ERROR		= -10017,
+	S_SSL_ERROR		= -10018,
 
 	S_HTTP_ERROR		= -10100,
 	S_HTTP_100		= -10101,
@@ -84,9 +85,6 @@ enum connection_state {
 	S_FTP_PORT		= -10303,
 	S_FTP_NO_FILE		= -10304,
 	S_FTP_FILE_ERROR	= -10305,
-
-	S_SSL_ERROR		= -10400,
-	S_NO_SSL		= -10401,
 
 	S_NO_JAVASCRIPT		= -10500,
 

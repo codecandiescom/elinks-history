@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.69 2004/08/23 17:03:04 jonas Exp $ */
+/* $Id: protocol.c,v 1.70 2004/08/23 17:15:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,7 +205,7 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 	default:
 #ifndef CONFIG_SSL
 		if (get_protocol_need_ssl(uri->protocol)) {
-			state = S_NO_SSL;
+			state = S_SSL_ERROR;
 			break;
 		}
 #endif

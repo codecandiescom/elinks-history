@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.201 2003/09/09 21:52:52 zas Exp $ */
+/* $Id: view.c,v 1.202 2003/09/15 14:15:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -988,9 +988,12 @@ quak:
 				goto x;
 			case ACT_GOTO_URL_CURRENT: {
 				unsigned char *s, *postchar;
+				struct location *loc;
 
 				if (!have_location(ses)) goto quak;
-				s = stracpy(cur_loc(ses)->vs.url);
+
+				loc = cur_loc(ses);
+				s = memacpy(loc->vs.url, loc->vs.url_len);
 				if (s) {
 					postchar = strchr(s, POST_CHAR);
 					if (postchar) *postchar = 0;
@@ -1428,15 +1431,15 @@ send_image(struct terminal *term, void *xxx, struct session *ses)
 void
 save_as(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct location *l;
+	struct location *loc;
 
 	assert(term && ses);
 	if_assert_failed return;
 
 	if (!have_location(ses)) return;
-	l = cur_loc(ses);
+	loc = cur_loc(ses);
 	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = stracpy(l->vs.url);
+	ses->dn_url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (ses->dn_url) {
 		struct document_view *fd = current_frame(ses);
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.120 2003/12/21 23:19:03 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.121 2003/12/21 23:23:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -460,10 +460,10 @@ static struct strtonum action_table[] = {
 	{ "tab-prev", ACT_TAB_PREV,DACT( N_("Previous tab")) },
 	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
 	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES, DACT(N_("Toggle rendering of tables")) },
+	{ "toggle-document-colors", ACT_TOGGLE_DOCUMENT_COLORS, DACT(N_("Toggle usage of document specific colors")) },
 	{ "toggle-expand", ACT_TOGGLE_EXPAND, DACT(N_("Toggle expansion of items")) },
 	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, DACT(N_("Toggle rendering page as HTML / plain text")) },
 	{ "toggle-numbered-links", ACT_TOGGLE_NUMBERED_LINKS, DACT(N_("Toggle displaying of links numbers")) },
-	{ "toggle-document-colors", ACT_TOGGLE_DOCUMENT_COLORS, DACT(N_("Toggle usage of document specific colors")) },
 	{ "unback", ACT_UNBACK, DACT(N_("Go forward in the unhistory")) },
 	{ "unexpand", ACT_UNEXPAND, DACT(N_("Collapse item")) },
 	{ "up", ACT_UP, DACT(N_("Move cursor upwards")) },

@@ -670,7 +670,7 @@ void put_chars(struct part *part, unsigned char *c, int l)
 		last_form = format.form;
 		if (!part->data) goto no_l;
 		if (!(link = new_link(part->data))) goto no_l;
-		link->num = part->link_num - 1;
+		link->num = format.tabindex + part->link_num - 1;
 		link->pos = DUMMY;
 		if (!last_form) {
 			link->type = L_LINK;

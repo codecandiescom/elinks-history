@@ -1884,6 +1884,7 @@ struct text_attrib {
 	unsigned char *target_base;
 	unsigned char *select;
 	int select_disabled;
+	unsigned int tabindex;
 };
 
 #define P_NUMBER	1

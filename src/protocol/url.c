@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.26 2002/07/03 16:32:25 pasky Exp $ */
+/* $Id: url.c,v 1.27 2002/07/03 22:39:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -859,13 +859,19 @@ proxy:
 http:				prefix = "http://";
 				not_file = 1;
 
-			} else if (host_end - domain == 3) {
+			} else {
+				/* See above the braindead FIXME :^). */
 				unsigned char *tld[] = { "com", "edu", "net",
 							 "org", "gov", "mil",
-							 "int", "biz", NULL };
+							 "int", "biz", "arpa",
+							 "aero", "coop",
+							 "info", "museum",
+							 "name", "pro", NULL };
 
 				for (i = 0; tld[i]; i++)
-					if (!casecmp(tld[i], domain, 3))
+					if (host_end - domain == strlen(tld[i])
+					    && !casecmp(tld[i], domain,
+						        host_end - domain))
 						goto http;
 			}
 		}

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.50 2005/03/26 23:53:35 rrowan Exp $
+# $Id: hooks.pl,v 1.51 2005/03/27 00:24:10 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -185,8 +185,7 @@ sub goto_url_hook
 	if ($url =~ '^bugmenot$' && $current_url)
 	{
 		(undef, $current_url) = $current_url =~ /^(.*):\/\/(.*)/;
-		$url = 'http://bugmenot.com/view.php?url=' . $current_url;
-		return $url;
+		return 'http://bugmenot.com/view.php?url=' . $current_url;
 	}
 
 	# Random URL generator
@@ -204,8 +203,7 @@ sub goto_url_hook
 		rand($.) < 1 && ($word = $_) while <FILE>;
 		close FILE;
 		($word) = $word =~ /(.*)/;
-		$url = 'http://' . lc($word) . '.com';
-		return $url;
+		return 'http://' . lc($word) . '.com';
 	}
 
 	# Search engines
@@ -251,29 +249,30 @@ sub goto_url_hook
 		my ($thingy) = $url =~ /^[a-z]* (.*)/;
 		my ($domain) = $current_url =~ /([a-z0-9-]+\.(com|net|org|edu|gov|mil))/;
 
-		my $whois = 'http://reports.internic.net/cgi/whois?type=domain&whois_nic=';
-		my $locator_zip         = 'http://usps.com';
-		my $ipv                 = "ipv4-address-space"; $ipv = "ipv6-address-space" if loadrc("ipv6") eq "yes";
-			my $locator_ip  = 'http://www.iana.org/assignments/' . $ipv;
-		my $locator_whois       = 'http://www.iana.org/cctld/cctld-whois.htm';
-			$locator_whois      = $whois . $domain if $domain;
-		my $locator_rfc         = 'http://ietf.org';
-		my $locator_weather     = 'http://weather.noaa.gov';
-		my $locator_whatis      = 'http://uptime.netcraft.com';
-			$locator_whatis     = 'http://uptime.netcraft.com/up/graph/?host=' . $domain if $domain;
+		my $locator_zip            = 'http://usps.com';
+		my $ipv                    = "ipv4-address-space"; $ipv = "ipv6-address-space" if loadrc("ipv6") eq "yes";
+			my $locator_ip         = 'http://www.iana.org/assignments/' . $ipv;
+		my $whois                  = 'http://reports.internic.net/cgi/whois?type=domain&whois_nic=';
+			my $locator_whois      = 'http://www.iana.org/cctld/cctld-whois.htm';
+			$locator_whois         = $whois . $domain if $domain;
+		my $locator_rfc            = 'http://ietf.org';
+		my $locator_weather        = 'http://weather.noaa.gov';
+		my $locator_whatis         = 'http://uptime.netcraft.com';
+			$locator_whatis        = 'http://uptime.netcraft.com/up/graph/?host=' . $domain if $domain;
 
-		if ($thingy) {
-			$locator_zip         = 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;
-				$locator_zip     = 'http://zipinfo.com/cgi-local/zipsrch.exe?zip=' . $thingy if $thingy !~ '^[0-9]*$';
-			$locator_ip          = 'http://melissadata.com/lookups/iplocation.asp?ipaddress=' . $thingy;
-			$locator_whois       = $whois . $thingy;
-			$locator_rfc         = 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?num=37&searchwords=' . $thingy;
-				$locator_rfc     = 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless $thingy !~ '^[0-9]*$';
-			my $weather          = loadrc("weather");
-				$locator_weather     = $weather_locators{$weather};
-				$locator_weather   ||= $weather_locators{'weather underground'};
-				$locator_weather     =~ s/!query!/$thingy/;
-			$locator_whatis      = 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
+		if ($thingy)
+		{
+			$locator_zip           = 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;
+				$locator_zip       = 'http://zipinfo.com/cgi-local/zipsrch.exe?zip=' . $thingy if $thingy !~ '^[0-9]*$';
+			$locator_ip            = 'http://melissadata.com/lookups/iplocation.asp?ipaddress=' . $thingy;
+			$locator_whois         = $whois . $thingy;
+			$locator_rfc           = 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?num=37&searchwords=' . $thingy;
+				$locator_rfc       = 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless $thingy !~ '^[0-9]*$';
+			my $weather            = loadrc("weather");
+				$locator_weather   = $weather_locators{$weather};
+				$locator_weather ||= $weather_locators{'weather underground'};
+				$locator_weather   =~ s/!query!/$thingy/;
+			$locator_whatis        = 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
 		}
 		$url = $locator_zip         if ($url =~ '^(zip|usps)(| .*)$');
 		$url = $locator_ip          if ($url =~ '^ip(| .*)$');
@@ -294,14 +293,13 @@ sub goto_url_hook
 		if ($search)
 		{
 			$bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
-			$url = 'http://' . $beta . '/groups?q=' . $search . $bork;
+			return 'http://' . $beta . '/groups?q=' . $search . $bork;
 		}
 		else
 		{
 			$bork = "/groups?hl=xx-bork" unless (loadrc("bork") ne "yes");
-			$url = 'http://' . $beta . $bork;
+			return 'http://' . $beta . $bork;
 		}
-		return $url;
 	}
 
 	# MirrorDot
@@ -310,20 +308,18 @@ sub goto_url_hook
 		my ($slashdotted) = $url =~ /^[a-z]* (.*)/;
 		if ($slashdotted)
 		{
-			$url = 'http://mirrordot.com/find-mirror.html?' . $slashdotted;
+			return 'http://mirrordot.com/find-mirror.html?' . $slashdotted;
 		}
 		else
 		{
-			$url = 'http://mirrordot.com';
+			return 'http://mirrordot.com';
 		}
-		return $url;
 	}
 
 	# The Bastard Operator from Hell
 	if ($url =~ '^bofh$')
 	{
-		$url = 'http://prime-mover.cc.waikato.ac.nz/Bastard.html';
-		return $url;
+		return 'http://prime-mover.cc.waikato.ac.nz/Bastard.html';
 	}
 
 	# Coral cache <URL>
@@ -332,8 +328,7 @@ sub goto_url_hook
 		my ($cache) = $url =~ /^[a-z]* (.*)/;
 		$cache =~ s/^http:\/\///;
 		($url) = $cache =~ s/\//.nyud.net:8090\//;
-		$url = 'http://' . $cache;
-		return $url;
+		return 'http://' . $cache;
 	}
 
 	# Babelfish ("babelfish german english"  or  "bf de en")
@@ -556,10 +551,12 @@ sub quit_hook
 {
 	# Collapse XBEL bookmark folders (obsoleted by bookmarks.folder_state)
 	my $bookmarkfile = $ENV{'HOME'} . '/.elinks/bookmarks.xbel';
-	if (-f $bookmarkfile and loadrc('collapse') eq 'yes') {
+	if (-f $bookmarkfile and loadrc('collapse') eq 'yes')
+	{
 		open BOOKMARKS, "+<$bookmarkfile";
 		my $bookmark;
-		while (<BOOKMARKS>) {
+		while (<BOOKMARKS>)
+		{
 			s/<folder folded="no">/<folder folded="yes">/;
 			$bookmark .= $_;
 		}
@@ -570,7 +567,8 @@ sub quit_hook
 	}
 
 	# Words of wisdom from ELinks the Sage
-	if (loadrc('fortune') eq 'fortune') {
+	if (loadrc('fortune') eq 'fortune')
+	{
 		system('echo ""; fortune -sa 2>/dev/null');
 		die;
 	}

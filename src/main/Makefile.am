@@ -1,8 +1,8 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2002/03/17 11:29:11 pasky Exp $
+## $Id: Makefile.am,v 1.2 2002/03/17 11:54:43 pasky Exp $
 
-noinst_LIBRARIES = lowlevel.a
-lowlevel_a_SOURCES = \
+noinst_LIBRARIES = liblowlevel.a
+liblowlevel_a_SOURCES = \
  af_unix.c \
  af_unix.h \
  connect.c \

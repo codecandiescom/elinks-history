@@ -1,8 +1,8 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2002/03/17 11:29:12 pasky Exp $
+## $Id: Makefile.am,v 1.2 2002/03/17 11:54:44 pasky Exp $
 
-noinst_LIBRARIES = protocol.a
-protocol_a_SOURCES = \
+noinst_LIBRARIES = libprotocol.a
+libprotocol_a_SOURCES = \
  file.c \
  file.h \
  finger.c \

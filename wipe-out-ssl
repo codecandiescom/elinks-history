@@ -1,5 +1,5 @@
 #!/bin/sh
-for i in src/*/*.c src/*/*.h src/*.h configure.in configure; do
+for i in src/*/*/*.c src/*/*/*.h src/*/*.c src/*/*.h src/*.c src/*.h configure.in configure; do
 	awk -f wipe-out-ssl.awk <$i >wipe-out-ssl.tmp
 	mv wipe-out-ssl.tmp $i
 done

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.187 2003/07/30 00:22:39 jonas Exp $ */
+/* $Id: renderer.c,v 1.188 2003/07/30 15:18:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,28 +100,32 @@ realloc_lines(struct part *p, int y)
 {
 	int i;
 	int newsize = ALIGN(y + 1);
+	struct document *document;
+	struct line *lines;
 
 	assert(p && p->document);
 	if_assert_failed return 0;
 
-	if (newsize >= ALIGN(p->document->y)
-	    && (!p->document->data || p->document->data->size < newsize)) {
-		struct line *l;
+	document = p->document;
+	lines = document->data;
 
-		l = mem_realloc(p->document->data, newsize * sizeof(struct line));
-		if (!l)	return -1;
+	if (newsize >= ALIGN(document->y)
+	    && (!document->data || document->data->size < newsize)) {
 
-		p->document->data = l;
-		p->document->data->size = newsize;
+		lines = mem_realloc(lines, newsize * sizeof(struct line));
+		if (!lines) return -1;
+
+		document->data = lines;
+		lines->size = newsize;
 	}
 
-	for (i = p->document->y; i <= y; i++) {
-		p->document->data[i].l = 0;
-		p->document->data[i].color = find_nearest_color(&par_format.bgcolor, 8);
-		p->document->data[i].d = NULL;
+	for (i = document->y; i <= y; i++) {
+		lines[i].l = 0;
+		lines[i].color = find_nearest_color(&par_format.bgcolor, 8);
+		lines[i].d = NULL;
 	}
 
-	p->document->y = i;
+	document->y = i;
 
 	return 0;
 }

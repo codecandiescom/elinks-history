@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.82 2004/03/09 15:24:46 zas Exp $ */
+/* $Id: inphist.c,v 1.83 2004/04/14 22:03:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,6 @@
 #include "config/options.h"
 #include "lowlevel/home.h"
 #include "terminal/terminal.h"
-#include "terminal/window.h"
 #include "util/conv.h"
 #include "util/file.h"
 #include "util/lists.h"
@@ -27,8 +26,6 @@
 static void
 tab_compl_n(struct dialog_data *dlg_data, unsigned char *item, int len)
 {
-	struct terminal *term = dlg_data->win->term;
-	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->width, term->height, 0);
 	struct widget_data *widget_data = selected_widget(dlg_data);
 
 	assert(widget_is_textfield(widget_data));
@@ -38,7 +35,8 @@ tab_compl_n(struct dialog_data *dlg_data, unsigned char *item, int len)
 	widget_data->cdata[len] = 0;
 	widget_data->info.field.cpos = len;
 	widget_data->info.field.vpos = 0;
-	dialog_func(dlg_data->win, &ev, 0);
+
+	redraw_dialog(dlg_data, 1);
 }
 
 static inline void

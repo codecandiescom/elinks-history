@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.128 2004/01/31 00:30:34 pasky Exp $ */
+/* $Id: dialog.c,v 1.129 2004/04/14 22:03:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,8 @@
 #include "bfu/listbox.h"
 #include "bfu/text.h"
 
+
+static void dialog_func(struct window *win, struct term_event *ev, int fwd);
 
 struct dialog_data *
 do_dialog(struct terminal *term, struct dialog *dlg,
@@ -189,7 +191,7 @@ cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 }
 
 /* TODO: This is too long and ugly. Rewrite and split. */
-void
+static void
 dialog_func(struct window *win, struct term_event *ev, int fwd)
 {
 	int i;

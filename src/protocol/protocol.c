@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.26 2003/11/12 01:44:29 miciah Exp $ */
+/* $Id: protocol.c,v 1.27 2003/11/12 15:52:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,6 @@ check_protocol(unsigned char *name, int namelen)
 	return protocol;
 }
 
-
 int
 get_protocol_port(enum protocol protocol)
 {
@@ -138,7 +137,6 @@ get_protocol_need_slash_after_host(enum protocol protocol)
 	return protocol_backends[protocol]->need_slash_after_host;
 }
 
-
 protocol_handler *
 get_protocol_handler(enum protocol protocol)
 {
@@ -151,21 +149,9 @@ protocol_external_handler *
 get_protocol_external_handler(unsigned char *url)
 {
 	enum protocol protocol;
-	unsigned char *end = url;
+	unsigned char *end = get_protocol_end(url);
 
-	/* Seek the end of the protocol name if any. */
-	while (*end && *end != ':') {
-		/* RFC1738:
-		 * scheme  = 1*[ lowalpha | digit | "+" | "-" | "." ] */
-		if ((*end >= 'a' && *end <= 'z') || (*end >= '0' && *end <= '9')
-		    || *end == '+' || *end == '-' || *end == '.') {
-			end++;
-		} else
-			break;
-
-	}
-
-	if (*end != ':' || end == url) return NULL; /* No valid protocol scheme. */
+	if (!end) return NULL; /* No valid protocol scheme. */
 
 	protocol = check_protocol(url, end - url);
 	if (protocol != PROTOCOL_UNKNOWN)

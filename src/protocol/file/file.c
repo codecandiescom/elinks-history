@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.45 2003/06/20 15:24:42 jonas Exp $ */
+/* $Id: file.c,v 1.46 2003/06/21 13:43:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -315,7 +315,7 @@ file_func(struct connection *c)
 	saved_errno = errno;
 	if (h == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
 		/* No file of that name was found, try some others names. */
-		for (enc = 1; enc < NB_KNOWN_ENCODING; enc++) {
+		for (enc = 1; enc < ENCODINGS_KNOWN; enc++) {
 			ext = listext_encoded(enc);
 			while (ext && *ext) {
 				unsigned char *tname = init_str();
@@ -338,7 +338,7 @@ file_func(struct connection *c)
 					name = tname;
 					namelen = strlen(tname);
 					encoding = enc;
-					enc = NB_KNOWN_ENCODING;
+					enc = ENCODINGS_KNOWN;
 					break;
 				}
 				mem_free(tname);

@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.23 2003/06/20 23:34:31 jonas Exp $ */
+/* $Id: encoding.c,v 1.24 2003/06/21 13:43:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,7 +308,7 @@ guess_encoding(unsigned char *filename)
 	unsigned char *fname_end = filename + fname_len;
 	int enc;
 
-	for (enc = 1; enc < NB_KNOWN_ENCODING; enc++) {
+	for (enc = 1; enc < ENCODINGS_KNOWN; enc++) {
 		unsigned char **ext = decoding_backends[enc]->extensions;
 
 		while (ext && *ext) {

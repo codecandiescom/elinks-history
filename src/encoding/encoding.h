@@ -1,4 +1,4 @@
-/* $Id: encoding.h,v 1.9 2003/06/20 23:02:44 jonas Exp $ */
+/* $Id: encoding.h,v 1.10 2003/06/21 13:43:44 jonas Exp $ */
 
 #ifndef EL__UTIL_ENCODING_H
 #define EL__UTIL_ENCODING_H
@@ -9,7 +9,7 @@ enum stream_encoding {
 	ENCODING_BZIP2,
 
 	/* Max. number of known encoding including ENCODING_NONE. */
-	NB_KNOWN_ENCODING,
+	ENCODINGS_KNOWN,
 };
 
 struct stream_encoded {

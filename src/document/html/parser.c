@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.330 2004/01/17 01:26:58 pasky Exp $ */
+/* $Id: parser.c,v 1.331 2004/01/17 14:06:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@
 #include "bfu/menu.h"
 #include "config/options.h"
 #include "config/kbdbind.h"
-#include "document/html/css.h"
+#include "document/css/css.h"
 #include "document/html/frames.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"

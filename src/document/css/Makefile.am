@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.15 2004/01/17 14:06:23 pasky Exp $
+## $Id: Makefile.am,v 1.1 2004/01/17 14:06:36 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -8,18 +8,10 @@ include $(top_srcdir)/Makefile.base
 # objects here and link them directly to libdocument.a in ../Makefile.am.
 
 # However, we apparently need to create the library in order to convience
-# automake to compile the objects :/. We DON'T use libhtml.a ANYWHERE.
+# automake to compile the objects :/. We DON'T use libcss.a ANYWHERE.
 
-EXTRA_DIST = TODO
-
-noinst_LIBRARIES = libhtml.a
-libhtml_a_SOURCES = \
- frames.c \
- frames.h \
- parser.c \
- parser.h \
- renderer.c \
- renderer.h \
- tables.c \
- tables.h
+noinst_LIBRARIES = libcss.a
+libcss_a_SOURCES = \
+ css.c \
+ css.h
 

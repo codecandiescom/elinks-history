@@ -918,6 +918,7 @@ AC_OUTPUT([ \
  src/cookies/Makefile \
  src/dialogs/Makefile \
  src/document/Makefile \
+ src/document/css/Makefile \
  src/document/html/Makefile \
  src/document/plain/Makefile \
  src/encoding/Makefile \

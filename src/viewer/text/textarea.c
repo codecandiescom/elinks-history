@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.29 2003/11/18 11:07:44 kuser Exp $ */
+/* $Id: textarea.c,v 1.30 2003/11/18 11:15:35 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -390,7 +390,7 @@ int
 textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
-	int y;
+	int y = 0;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return 0;
@@ -398,8 +398,7 @@ textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
 
-rep:
-	for (y = 0; ln[y].st; y++) {
+	while (ln[y].st) {
 		if (fs->value + fs->state >= ln[y].st &&
 		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
 			if (!y) {
@@ -408,14 +407,15 @@ rep:
 			}
 			fs->state -= ln[y].st - ln[y-1].st;
 			int_upper_bound(&fs->state, ln[y-1].en - fs->value);
-			goto xx;
+			if (!rep) goto xx;
+		} else {
+			y++;
 		}
 	}
 	mem_free(ln);
 	return 1;
 
 xx:
-	if (rep) goto rep;
 	mem_free(ln);
 	return 0;
 }
@@ -424,7 +424,7 @@ int
 textarea_op_down(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
-	int y;
+	int y = 0;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return 0;
@@ -432,8 +432,7 @@ textarea_op_down(struct form_state *fs, struct form_control *frm, int rep)
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
 
-rep:
-	for (y = 0; ln[y].st; y++) {
+	while (ln[y].st) {
 		if (fs->value + fs->state >= ln[y].st &&
 		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
 			if (!ln[y+1].st) {
@@ -442,13 +441,14 @@ rep:
 			}
 			fs->state += ln[y+1].st - ln[y].st;
 			int_upper_bound(&fs->state, ln[y+1].en - fs->value);
-			goto yy;
+			if (!rep) goto yy;
+		} else {
+			y++;
 		}
 	}
 	mem_free(ln);
 	return 1;
 yy:
-	if (rep) goto rep;
 	mem_free(ln);
 	return 0;
 }

@@ -1,3 +1,184 @@
+Mon Jun 17 21:41:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/memdebug.c:
+
+	Introduced underflow/overflow checking, patch by zas and me. Removed
+	thee undef garbage at the file end.  
+
+Mon Jun 17 21:10:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/memdebug.c:
+
+	Introduced dump_info() dumping alloc_header contents and relevant
+	info. ah->file/line updated in realloc().  
+
+Mon Jun 17 16:07:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, config/options.h, dialogs/options.c,
+	protocol/types.c:
+
+	Introduced get_opt_rec_real().  
+
+Mon Jun 17 15:16:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, dialogs/options.c, protocol/mailto.c,
+	protocol/types.c, protocol/types.h:
+
+	Enabled saving of mailto/telnet/tn3270 external programs - they are
+	now reusing options tree infrastructure. Needs more work.  
+
+Mon Jun 17 15:12:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/conv.c:
+
+	Fixed bug in snzprint() (one superfluous char).  
+
+Mon Jun 17 11:42:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/memdebug.c:
+
+	CHECK_REALLOC_NULL is now defined by default. Introduced
+	CHECK_INVALID_FREE.  
+
+Mon Jun 17 11:23:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/opttypes.c, dialogs/info.c,
+	document/html/parser.c, util/Makefile.am, util/error.c,
+	util/error.h, util/memdebug.c, util/memdebug.h, util/memory.h,
+	util/string.c:
+
+	Moved memory debugger from util/error.* to util/memdebug.*.  
+
+Mon Jun 17 11:23:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	Compilation fix for the last fix ;).  
+
+Mon Jun 17 10:31:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	Fixed last patch.  
+
+Mon Jun 17 10:28:17 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/types.c:
+
+	A call to mem_alloc() + sprintf() was replaced by a call to safer
+	straconcat().  
+
+Mon Jun 17 10:18:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	Trivial tidyup ;).  
+
+Mon Jun 17 10:12:59 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/types.c:
+
+	An overflow by two bytes was fixed in get_real_opt().  
+
+Mon Jun 17 08:08:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bookmarks/bookmarks.c, dialogs/globhist.c, util/string.h:
+
+	Reverted last patch, it didn't work out..  
+
+Mon Jun 17 08:01:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bookmarks/bookmarks.c, dialogs/globhist.c, util/string.h:
+
+	Move #define _GNU_SOURCE near strcasestr(), as appropriate.  
+
+Mon Jun 17 08:00:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, bfu/bfu.h, bookmarks/bookmarks.h,
+	config/options.h, dialogs/globhist.c, document/cache.h,
+	document/download.h, document/globhist.h, document/location.h,
+	document/session.h, document/html/parser.h,
+	document/html/renderer.h, lowlevel/sched.h, lowlevel/terminal.h,
+	protocol/types.h, util/Makefile.am, util/blacklist.c, util/error.c,
+	util/hash.h, util/lists.h:
+
+	Moved lists handling stuff from links.h to util/lists.h 
+
+Mon Jun 17 07:45:22 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	A typo was fixed. Useless commented old code was removed from
+	safe_strncpy() code.  
+
+Mon Jun 17 07:42:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, main.c, bfu/bfu.c, bfu/menu.c,
+	bookmarks/bookmarks.c, bookmarks/dialogs.c, config/cmdline.c,
+	config/conf.c, config/kbdbind.c, config/options.c,
+	config/options.h, config/opttypes.c, config/urlhist.c,
+	cookies/cookies.c, dialogs/auth.c, dialogs/document.c,
+	dialogs/edit.c, dialogs/globhist.c, dialogs/info.c, dialogs/menu.c,
+	dialogs/options.c, dialogs/refresh.c, document/cache.c,
+	document/download.c, document/dump.c, document/globhist.c,
+	document/history.c, document/location.c, document/session.c,
+	document/view.c, document/vs.c, document/html/parser.c,
+	document/html/renderer.c, document/html/tables.c, intl/charsets.c,
+	intl/language.c, lowlevel/af_unix.c, lowlevel/connect.c,
+	lowlevel/dns.c, lowlevel/home.c, lowlevel/kbd.c, lowlevel/sched.c,
+	lowlevel/select.c, lowlevel/sysname.c, lowlevel/terminal.c,
+	lua/core.c, osdep/os_dep.c, protocol/file.c, protocol/finger.c,
+	protocol/ftp.c, protocol/mailto.c, protocol/types.c,
+	protocol/url.c, protocol/http/auth.c, protocol/http/header.c,
+	protocol/http/http.c, ssl/connect.c, util/Makefile.am,
+	util/base64.c, util/blacklist.c, util/encoding.c, util/error.c,
+	util/hash.c, util/memlist.c, util/memory.c, util/memory.h,
+	util/secsave.c, util/string.c:
+
+	Moved standart memory allocation functions from links.h to
+	util/memory.*.  
+
+Sun Jun 16 23:38:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, Makefile.base, Unicode/Makefile.am,
+	contrib/Makefile.am, intl/Makefile.am, src/Makefile.am,
+	src/bfu/Makefile.am, src/bookmarks/Makefile.am,
+	src/config/Makefile.am, src/cookies/Makefile.am,
+	src/dialogs/Makefile.am, src/document/Makefile.am,
+	src/document/html/Makefile.am, src/intl/Makefile.am,
+	src/lowlevel/Makefile.am, src/lua/Makefile.am,
+	src/osdep/Makefile.am, src/protocol/Makefile.am,
+	src/protocol/http/Makefile.am, src/ssl/Makefile.am,
+	src/util/Makefile.am, test/Makefile.am:
+
+	Build system changes - now, we _finally_ don't -I. anymore; we
+	include one common file Makefile.base in all ams, where we have
+	INCLUDES and also own COMPILE, because that automake idiocy; I hope
+	dirname is portable enough ;).  
+
+Sun Jun 16 23:13:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, bfu/bfu.c, bookmarks/bookmarks.c, config/conf.c,
+	config/options.c, config/opttypes.c, config/urlhist.c,
+	cookies/cookies.c, cookies/parser.c, dialogs/document.c,
+	dialogs/edit.c, dialogs/globhist.c, dialogs/info.c, dialogs/menu.c,
+	dialogs/options.c, document/cache.c, document/download.c,
+	document/dump.c, document/globhist.c, document/history.c,
+	document/location.c, document/options.c, document/session.c,
+	document/view.c, document/vs.c, document/html/parser.c,
+	document/html/renderer.c, document/html/tables.c, intl/charsets.c,
+	intl/language.c, lowlevel/af_unix.c, lowlevel/home.c,
+	lowlevel/kbd.c, lowlevel/sched.c, lowlevel/sysname.c,
+	lowlevel/terminal.c, lua/core.c, lua/hooks.c, osdep/os_dep.c,
+	protocol/file.c, protocol/finger.c, protocol/ftp.c,
+	protocol/mailto.c, protocol/types.c, protocol/url.c,
+	protocol/http/auth.c, protocol/http/header.c, protocol/http/http.c,
+	util/Makefile.am, util/conv.c, util/error.c, util/secsave.c,
+	util/string.c, util/string.h:
+
+	Moved string manipulation functions from links.h to util/string.*.
+	Compilation fixes related to move of some conversion functions.  
+
 Sun Jun 16 21:22:10 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: links.h, bfu/bfu.c, bfu/menu.c, cookies/cookies.c,

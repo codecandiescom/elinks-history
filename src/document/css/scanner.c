@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.88 2004/01/22 21:40:43 pasky Exp $ */
+/* $Id: scanner.c,v 1.89 2004/01/22 22:01:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		}
 
 	} else if (first_char == '#') {
-		/* Check wether hexcolor or hash token */
+		/* Check whether it is hexcolor or hash token */
 		if (is_css_hexdigit(*string)) {
 			int hexdigits;
 

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.187 2004/02/03 18:38:29 jonas Exp $ */
+/* $Id: search.c,v 1.188 2004/02/03 18:56:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1317,24 +1317,16 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 
 void
-search_back_dlg(struct session *ses, struct document_view *doc_view, int a)
-{
-	search_dlg_do(ses->tab->term, NULL, 1,
-		    N_("Search backward"), N_("Search for text"),
-		    N_("OK"), N_("Cancel"), ses, &search_history,
-		    MAX_STR_LEN, "", 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) search_for_back,
-		    NULL);
-}
-
-void
 search_dlg(struct session *ses, struct document_view *doc_view, int a)
 {
+	unsigned char *title  = a > 0 ? N_("Search") : N_("Search backward");
+	void *search_function = a > 0 ? search_for   : search_for_back;
+
 	search_dlg_do(ses->tab->term, NULL, 1,
-		    N_("Search"), N_("Search for text"),
+		    title, N_("Search for text"),
 		    N_("OK"), N_("Cancel"), ses, &search_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) search_for,
+		    search_function,
 		    NULL);
 }
 

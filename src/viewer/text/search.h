@@ -1,4 +1,4 @@
-/* $Id: search.h,v 1.16 2004/01/28 06:43:31 jonas Exp $ */
+/* $Id: search.h,v 1.17 2004/02/03 18:56:24 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_SEARCH_H
 #define EL__VIEWER_TEXT_SEARCH_H
@@ -16,7 +16,6 @@ void find_next(struct session *, struct document_view *doc_view, int);
 void find_next_back(struct session *, struct document_view *doc_view, int);
 
 void search_dlg(struct session *ses, struct document_view *doc_view, int a);
-void search_back_dlg(struct session *ses, struct document_view *doc_view, int a);
 void search_typeahead(struct session *ses, struct document_view *doc_view, int a);
 
 void init_search_history(void);

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.20 2003/07/27 22:48:36 jonas Exp $ */
+/* $Id: link.c,v 1.21 2003/07/27 22:54:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,29 +143,24 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	vy = vs->view_pos;
 
 	switch (link->type) {
+		struct form_state *fs;
 
 		case L_LINK:
 		case L_CHECKBOX:
 		case L_BUTTON:
 		case L_SELECT:
+			break;
 		case L_FIELD:
+			fs = find_form_state(scr, link->form);
+			if (fs) q = fs->state - fs->vpos;
+			break;
 		case L_AREA:
+			fs = find_form_state(scr, link->form);
+			if (fs) q = area_cursor(link->form, fs);
 			break;
 		default:
 			internal("bad link type");
 			return;
-	}
-
-	if (link->type == L_FIELD) {
-		struct form_state *fs = find_form_state(scr, link->form);
-
-		if (fs) q = fs->state - fs->vpos;
-		/*else internal("link has no form control");*/
-	} else if (link->type == L_AREA) {
-		struct form_state *fs = find_form_state(scr, link->form);
-
-		if (fs) q = area_cursor(link->form, fs);
-		/*else internal("link has no form control");*/
 	}
 
 	scr->link_bg = mem_alloc(link->n * sizeof(struct link_bg));

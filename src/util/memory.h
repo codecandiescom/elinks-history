@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.6 2002/12/08 17:00:42 zas Exp $ */
+/* $Id: memory.h,v 1.7 2002/12/23 21:36:09 pasky Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -24,6 +24,12 @@
 #else
 
 #ifndef FASTMEM
+
+/* Cygwin wants some size_t definition here... let's try to make it happy
+ * then. Hrmpf. */
+#include <sys/types.h>
+#include <stddef.h>
+
 void *mem_alloc(size_t);
 void *mem_calloc(size_t, size_t);
 void mem_free(void *);

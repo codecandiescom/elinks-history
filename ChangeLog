@@ -142,6 +142,75 @@ Sat Oct  4 19:53:17 2003  Karsten Schölzel <kuser@gmx.de>:
 	Move things specific to plain string searching into
 	@is_in_range_plain in preparation of regex searching.  
 
+Sat Oct  4 21:15:05 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Make regex searching depend on HAVE_REGEX_H.  
+
+Sat Oct  4 21:03:36 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* acconfig.h, configure.in:
+
+	Add test for regex.h and regex_t to configure.  
+
+Sat Oct  4 20:56:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/README:
+
+	Spelling/grammar fixes. Huh.  
+
+Sat Oct  4 20:50:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Corrected scripting/ note.  
+
+Sat Oct  4 20:43:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Added regex searches.  
+
+Sat Oct  4 20:42:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Added 256 colors support.  
+
+Sat Oct  4 20:33:02 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Add @get_searched_regex and use it. Regex searching is useable ;) 
+
+Sat Oct  4 20:24:54 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Add @is_in_range_regex and use.  
+
+Sat Oct  4 20:19:13 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/config/options.c:
+
+	Add options for regular expressions searching.  
+
+Sat Oct  4 20:03:11 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Move things specific to plain string searching into
+	@get_searched_plain in preparation of regex searching. Also removing
+	some unneeded variables.  
+
+Sat Oct  4 19:53:17 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Move things specific to plain string searching into
+	@is_in_range_plain in preparation of regex searching.  
+
 Sat Oct  4 20:56:04 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* doc/README:

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.19 2003/05/02 22:20:39 pasky Exp $ */
+/* $Id: download.c,v 1.20 2003/05/03 21:42:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1177,7 +1177,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 			msg_box(ses->term, getml(content_type, NULL),
 				N_("Unknown type"), AL_CENTER | AL_EXTD_TEXT,
 				N_("Content type is"), " ", content_type, ".\n",
-				N_("Do you want to save or display this file?"), NULL,
+				N_("Do you want to display this file?"), NULL,
 				ses, 2,
 				N_("Display"), tp_display, B_ENTER,
 				N_("Cancel"), tp_cancel, B_ESC);
@@ -1221,7 +1221,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 				N_("What to do?"), AL_CENTER | AL_EXTD_TEXT,
 				N_("Content type is"), " ", content_type, ".\n",
 				N_("Do you want to open file with"),
-				" ", name, ", ", N_("save it or display it?"), NULL,
+				" ", name, ", ", N_("or display it?"), NULL,
 				ses, 3,
 				N_("Open"), tp_open, B_ENTER,
 				N_("Display"), tp_display, 0,

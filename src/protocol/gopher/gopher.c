@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.30 2004/11/10 21:31:28 jonas Exp $ */
+/* $Id: gopher.c,v 1.31 2004/12/17 22:59:01 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -587,7 +587,7 @@ read_gopher_directory_data(struct connection *conn, struct read_buffer *rb)
 	if (conn->from == 0) {
 		unsigned char *where = get_uri_string(conn->uri, URI_PUBLIC);
 
-		if (where) decode_uri(where);
+		if (where) decode_uri_for_display(where);
 
 		add_format_to_string(&buffer,
 			"<html>\n"
@@ -664,7 +664,7 @@ init_gopher_index_cache_entry(struct connection *conn)
 		return S_OUT_OF_MEM;
 
 	where = get_uri_string(conn->uri, URI_PUBLIC);
-	if (where) decode_uri(where);
+	if (where) decode_uri_for_display(where);
 
 	add_format_to_string(&buffer,
 		"<html>\n"

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.152 2004/11/15 00:57:19 jonas Exp $ */
+/* $Id: uri.h,v 1.153 2004/12/17 22:59:01 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -273,6 +273,9 @@ void encode_uri_string(struct string *string, unsigned char *src, int len);
 void decode_uri_string(struct string *string);
 void decode_uri(unsigned char *uristring);
 
+/* Decodes and replaces illicit screen chars with '*'. */
+void decode_uri_string_for_display(struct string *string);
+void decode_uri_for_display(unsigned char *uristring);
 
 /* Returns allocated string containing the biggest possible extension.
  * If url is 'jabadaba.1.foo.gz' the returned extension is '1.foo.gz' */

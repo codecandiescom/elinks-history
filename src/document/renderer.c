@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.136 2004/12/16 23:48:42 pasky Exp $ */
+/* $Id: renderer.c,v 1.137 2004/12/17 22:59:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,7 +319,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 
 			document->title = get_uri_string(document->uri, components);
 			if (document->title)
-				decode_uri(document->title);
+				decode_uri_for_display(document->title);
 		}
 
 #ifdef CONFIG_CSS

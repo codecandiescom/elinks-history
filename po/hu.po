@@ -1,4 +1,4 @@
-# translation of hu.po to 
+# translation of hu.po to
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
 # Varga Balazs <vinnui@ent.hu>, 2003.
@@ -57,49 +57,34 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" can not be deleted."
-msgstr ""
-"Ez a könyvjelzõ már foglalt.\n"
-"\n"
-"Címe: \"%s\""
+msgstr "A \"%s\" bejegyzést nem lehet törölni."
 
 #: src/bfu/hierbox.c:438
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
-msgstr ""
-"Ez a könyvjelzõ már foglalt.\n"
-"\n"
-"Címe: \"%s\""
+msgstr "A \"%s\" már használatban van."
 
 #: src/bfu/hierbox.c:441
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" can not be deleted."
-msgstr ""
-"Ez a könyvjelzõ már foglalt.\n"
-"\n"
-"Címe: \"%s\""
+msgstr "A \"%s\" mappát nem lehet törölni."
 
 #: src/bfu/hierbox.c:442
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
-msgstr ""
-"Ez a könyvjelzõ már foglalt.\n"
-"\n"
-"Címe: \"%s\""
+msgstr "A \"%s\" mappát már valami használja."
 
 #: src/bfu/hierbox.c:466
-#, fuzzy
 msgid "Delete error"
-msgstr "Könyvjelzõ törlése"
+msgstr "Törlési hiba"
 
 #: src/bfu/hierbox.c:559
-#, fuzzy
 msgid "Delete marked items"
-msgstr "A kijelölt bejegyzések törlése?"
+msgstr "A kijelölt bejegyzések törlése"
 
 #: src/bfu/hierbox.c:560
-#, fuzzy
 msgid "Delete marked items?"
 msgstr "A kijelölt bejegyzések törlése?"
 
@@ -116,40 +101,36 @@ msgid "No"
 msgstr "Nem"
 
 #: src/bfu/hierbox.c:576
-#, fuzzy
 msgid "Delete folder"
-msgstr "Könyvjelzõ törlése"
+msgstr "Mappa törlése"
 
 #: src/bfu/hierbox.c:577
-#, fuzzy, c-format
+#, c-format
 msgid "Delete the folder \"%s\" and its content?"
-msgstr "Töröljem a \"%s\" mappa tartalmát?"
+msgstr "Töröljem a \"%s\" mappát és a tartalmát?"
 
 #: src/bfu/hierbox.c:589
-#, fuzzy
 msgid "Delete item"
 msgstr "Bejegyzés törlése"
 
 #: src/bfu/hierbox.c:590
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete \"%s\"?\n"
 "\n"
 "%s"
 msgstr ""
-"Töröljük ezt a könyvjelzõt: \"%s\"?\n"
+"Töröljük ezt: \"%s\"?\n"
 "\n"
-"URL: \"%s\""
+"%s"
 
 #: src/bfu/hierbox.c:650
-#, fuzzy
 msgid "Clear all items"
-msgstr "Az összes látogatott lap törlése"
+msgstr "Az összes bejegyzés törlése"
 
 #: src/bfu/hierbox.c:651
-#, fuzzy
 msgid "Do you really want to remove all items?"
-msgstr "Biztos, hogy kilépsz az ELinksbõl?"
+msgstr "Töröljük az összes bejegyzést?"
 
 #: src/bfu/inpfield.c:44 src/bfu/inpfield.c:53
 msgid "Bad number"
@@ -173,11 +154,11 @@ msgstr "Üres szöveg nem engedélyezett"
 
 #: src/bfu/leds.c:64
 msgid "LEDs"
-msgstr ""
+msgstr "LED-ek"
 
 #: src/bfu/leds.c:66
 msgid "LEDs (visual indicators) options."
-msgstr ""
+msgstr "LED-ek (vizuális visszajelzõk) beállításai."
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/bfu/leds.c:68 src/config/options.inc:1725 src/config/options.inc:1732
@@ -191,6 +172,8 @@ msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
 msgstr ""
+"A LED-ek engedélyezése.\n"
+"Ezek a vizuális visszajelzõk különbözõ állapotokról tájékoztatnak."
 
 #. name:
 #: src/bfu/leds.c:239
@@ -258,7 +241,7 @@ msgstr ""
 #: src/bookmarks/dialogs.c:76
 #, c-format
 msgid "URL: \"%s\""
-msgstr ""
+msgstr "URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:190 src/bookmarks/dialogs.c:378
 msgid "Add folder"
@@ -345,7 +328,7 @@ msgstr "URL"
 
 #: src/cache/dialogs.c:65
 msgid "Redirect"
-msgstr ""
+msgstr "Átirányítás"
 
 #: src/cache/dialogs.c:73 src/config/options.inc:353 src/dialogs/document.c:92
 msgid "Size"
@@ -377,21 +360,19 @@ msgstr "sikertelen"
 
 #: src/cache/dialogs.c:101
 msgid "invalid"
-msgstr ""
+msgstr "érvénytelen"
 
 #: src/cache/dialogs.c:106
 msgid "ID tag"
 msgstr ""
 
 #: src/cache/dialogs.c:110
-#, fuzzy
 msgid "Header"
-msgstr "Fejléc információ"
+msgstr "Fejléc"
 
 #: src/cache/dialogs.c:151
-#, fuzzy
 msgid "Cache manager"
-msgstr "A látogatott oldalak listájának megnyitása"
+msgstr "Gyorsítótár menedzser"
 
 #: src/config/cmdline.c:57
 #, c-format
@@ -460,34 +441,28 @@ msgid "Automatically saved keybindings\n"
 msgstr "Automatikusan mentett billentyûparancsok\n"
 
 #: src/config/conf.c:697
-#, fuzzy
 msgid "Secure file error"
-msgstr "FTP fájl hiba"
+msgstr ""
 
 #: src/config/conf.c:703
-#, fuzzy
 msgid "Cannot read the file"
-msgstr "A fáljt nem lehet írni"
+msgstr "A fáljt nem lehet olvasni"
 
 #: src/config/conf.c:706
-#, fuzzy
 msgid "Cannot stat the file"
-msgstr "A fáljt nem lehet írni"
+msgstr ""
 
 #: src/config/conf.c:709
-#, fuzzy
 msgid "Cannot access the file"
-msgstr "A fáljt nem lehet írni"
+msgstr "A fáljhoz nem lehet hozzáférni"
 
 #: src/config/conf.c:712
-#, fuzzy
 msgid "Cannot create temp file"
-msgstr "A fáljt nem lehet írni"
+msgstr "Nem lehet átmeneti fáljt létrehozni"
 
 #: src/config/conf.c:715
-#, fuzzy
 msgid "Cannot rename the file"
-msgstr "A fáljt nem lehet írni"
+msgstr "A fáljt nem lehet átnevezni"
 
 #: src/config/conf.c:718
 msgid "File saving disabled by option"
@@ -594,7 +569,6 @@ msgid "Cannot add an option here."
 msgstr "Ide nem lehet beállítást hozzáadni."
 
 #: src/config/dialogs.c:365
-#, fuzzy
 msgid "Option manager"
 msgstr "Beállítások"
 
@@ -648,8 +622,7 @@ msgstr ""
 #: src/config/dialogs.c:504
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:531 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -704,14 +677,12 @@ msgid "Open bookmark manager"
 msgstr "Könyvjelzõk ablakának megnyitása"
 
 #: src/config/kbdbind.c:386
-#, fuzzy
 msgid "Open cache manager"
-msgstr "A látogatott oldalak listájának megnyitása"
+msgstr "A gyorsítótár menedzser megnyitása"
 
 #: src/config/kbdbind.c:387
-#, fuzzy
 msgid "Open cookie manager"
-msgstr "A látogatott oldalak listájának megnyitása"
+msgstr "A cookie menedzser megnyitása"
 
 #: src/config/kbdbind.c:388
 msgid "Reload cookies file"
@@ -788,8 +759,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:406
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:407
 msgid "Go to the homepage"
@@ -841,9 +811,8 @@ msgstr "Lua konzol megnyitása (LETILTVA)"
 
 #. internal use only
 #: src/config/kbdbind.c:423
-#, fuzzy
 msgid "Set a mark"
-msgstr "Keresés a könyvjelzõkben"
+msgstr ""
 
 #: src/config/kbdbind.c:424
 msgid "Go at a specified mark"
@@ -1241,8 +1210,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:98
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:104
@@ -1588,8 +1556,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:217
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:220 src/dialogs/options.c:186
 msgid "Underline"
@@ -1605,8 +1572,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:227
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:229
 msgid "Number links"
@@ -1648,8 +1614,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:253
 msgid "Searching"
@@ -1798,8 +1763,7 @@ msgstr ""
 
 #: src/config/options.inc:336
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:338
 msgid ""
@@ -2154,19 +2118,16 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:537
-#, fuzzy
 msgid "Plain rendering"
-msgstr "HTML megjelenítés"
+msgstr "Normál szöveg megjelenítése"
 
 #: src/config/options.inc:539
-#, fuzzy
 msgid "Options concerning the display of plain text pages."
-msgstr "A HTML megjelenítésre vonatkozó beállítások."
+msgstr "Normál szöveget tartalmazó oldalak megjelenítésének beállításai."
 
 #: src/config/options.inc:541
-#, fuzzy
 msgid "Display URIs"
-msgstr "Megjelenítés"
+msgstr "URI-k megjelenítése"
 
 #: src/config/options.inc:543
 #, fuzzy
@@ -3563,8 +3524,7 @@ msgstr "Ne próbálja irni/használni a fáljokat a ~/.elinks könyvtárban."
 
 #: src/config/options.inc:1910
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/options.inc:1912
 msgid ""
@@ -4536,8 +4496,7 @@ msgstr "Látogatott lapok"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -5791,3 +5750,4 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
+

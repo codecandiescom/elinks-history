@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.26 2004/01/28 00:42:52 jonas Exp $
+## $Id: Makefile.am,v 1.27 2004/02/03 19:20:02 zas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -18,6 +18,8 @@ libosdep_a_LIBADD = \
 libosdep_a_SOURCES = \
  ascii.h \
  generic.h \
+ getifaddrs.c \
+ getifaddrs.h \
  newwin.c \
  newwin.h \
  osdep.c \

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.59 2004/02/01 15:56:25 zas Exp $ */
+/* $Id: socket.c,v 1.60 2004/02/03 19:20:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "lowlevel/dns.h"
 #include "lowlevel/select.h"
 #include "osdep/osdep.h"
+#include "osdep/getifaddrs.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "ssl/connect.h"
@@ -262,14 +263,67 @@ sock_error:
 static inline int
 check_if_local_address6(struct sockaddr_in6 *addr)
 {
-	return IN6_IS_ADDR_LOOPBACK(&(addr->sin6_addr));
+	struct ifaddrs *ifaddrs;
+	int local = IN6_IS_ADDR_LOOPBACK(&(addr->sin6_addr));
+
+	if (!local && !getifaddrs(&ifaddrs)) {
+		struct ifaddrs *ifa;
+
+		for (ifa = ifaddrs; ifa; ifa = ifa->ifa_next) {
+			if (!ifa->ifa_addr)
+				continue;
+
+			if (ifa->ifa_addr->sa_family == AF_INET6
+			    && !memcmp(&addr->sin6_addr.s6_addr,
+			    &((struct sockaddr_in6 *) ifa->ifa_addr)->sin6_addr.s6_addr,
+			    sizeof(struct in6_addr))) {
+				local = 1;
+				break;
+			}
+
+			if (ifa->ifa_addr->sa_family == AF_INET
+			    && !memcmp(&((struct sockaddr_in *) &addr)->sin_addr.s_addr,
+				&((struct sockaddr_in *) ifa->ifa_addr)->sin_addr.s_addr,
+				sizeof(struct in_addr))) {
+					local = 1;
+					break;
+			}
+		}
+		
+		freeifaddrs(ifaddrs);
+	}
+
+	return local;
 }
 #endif
 
 static inline int
 check_if_local_address4(struct sockaddr_in *addr)
 {
-	return (ntohl(addr->sin_addr.s_addr) >> 24) == IN_LOOPBACKNET;
+	struct ifaddrs *ifaddrs;
+	int local = (ntohl(addr->sin_addr.s_addr) >> 24) == IN_LOOPBACKNET;
+
+	if (!local && !getifaddrs(&ifaddrs)) {
+		struct ifaddrs *ifa;
+
+		for (ifa = ifaddrs; ifa; ifa = ifa->ifa_next) {
+			if (!ifa->ifa_addr)
+				continue;
+		
+			if (ifa->ifa_addr->sa_family != AF_INET) continue;
+
+			if (!memcmp(&addr->sin_addr.s_addr,
+				&((struct sockaddr_in *) ifa->ifa_addr)->sin_addr.s_addr,
+				sizeof(struct in_addr))) {
+					local = 1;
+					break;
+			}
+		}
+		
+		freeifaddrs(ifaddrs);
+	}
+
+	return local;
 }
 
 

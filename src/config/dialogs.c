@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.89 2003/10/30 00:11:49 jonas Exp $ */
+/* $Id: dialogs.c,v 1.90 2003/10/30 00:28:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ write_config_error(struct terminal *term, struct memory_list *ml,
 ****************************************************************************/
 
 /* The location of the box in the options manager */
-#define	OP_WIDGETS_COUNT		7
+#define	OP_WIDGETS_COUNT	6
 
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
@@ -303,7 +303,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	dlg->udata = option;
 	dlg->udata2 = ses;
 
-	value = (unsigned char *) &dlg->widgets[EDIT_WIDGETS_COUNT + 1];
+	value = (unsigned char *) &dlg->widgets[EDIT_WIDGETS_COUNT];
 	safe_strncpy(value, tvalue.source, MAX_STR_LEN);
 	done_string(&tvalue);
 
@@ -502,9 +502,10 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	add_dlg_button(dlg, n, B_ENTER, push_del_button, _("Delete", term), ses);
 	add_dlg_button(dlg, n, B_ENTER, push_save_button, _("Save", term), ses);
 	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
-	add_dlg_listbox(dlg, n, 12, option_dlg_box_build());
 
 	assert(n == OP_WIDGETS_COUNT);
+
+	add_dlg_listbox(dlg, n, 12, option_dlg_box_build());
 
 	dlg->widgets_size = n;
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.66 2003/11/08 01:33:42 pasky Exp $ */
+/* $Id: cache.c,v 1.67 2003/11/08 01:35:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,8 +470,8 @@ garbage_collection(int whole)
 	 * sure we aren't cleaning cache too frequently when working with a lot
 	 * of small cache entries but rather free more and then let it grow a
 	 * little more as well. */
-	long opt_cache_gc_size = opt_cache_memory_size
-				 * MEMORY_CACHE_GC_PERCENT / 100;
+	long gc_cache_size = opt_cache_memory_size * MEMORY_CACHE_GC_PERCENT
+						     / 100;
 	/* The cache size we aim to reach. */
 	long new_cache_size = cache_size;
 	/* Whether we've hit an used (unfreeable) entry when collecting
@@ -511,7 +511,7 @@ garbage_collection(int whole)
 	if (!whole && new_cache_size <= opt_cache_memory_size) return;
 
 	foreachback (ce, cache) {
-		if (!whole && new_cache_size <= opt_cache_gc_size)
+		if (!whole && new_cache_size <= gc_cache_size)
 			goto g;
 		if (ce->refcount || is_entry_used(ce)) {
 			obstacle_entry = 1;
@@ -538,7 +538,7 @@ g:
 		for (entry = ce; (void *)entry != &cache; entry = entry->next) {
 			long newer_cache_size = new_cache_size + entry->data_size;
 
-			if (newer_cache_size <= opt_cache_gc_size) {
+			if (newer_cache_size <= gc_cache_size) {
 				new_cache_size = newer_cache_size;
 				entry->gc_target = 0;
 			}
@@ -551,7 +551,7 @@ g:
 			delete_cache_entry(entry->prev);
 	}
 
-	if ((whole || !obstacle_entry) && cache_size > opt_cache_gc_size) {
+	if ((whole || !obstacle_entry) && cache_size > gc_cache_size) {
 		/* Given cache size is too low regarding currently used cache
 		 * elements so we set it to a reasonable value. */
 		/* TODO: warn user about it. */
@@ -560,7 +560,7 @@ g:
 #ifdef DEBUG_CACHE
 		debug("garbage collection doesn't work, cache size %li > %li, "
 		      "document.cache.memory.size set to: %li bytes",
-		      cache_size, opt_cache_gc_size,
+		      cache_size, gc_cache_size,
 		      get_opt_long("document.cache.memory.size"));
 #endif
 	}

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.110 2004/01/09 09:27:58 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.111 2004/01/09 09:31:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,7 +338,7 @@ bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
 			delete_bookmark(folder->child.next);
 	}
 
-	foreach_tab (tab, term->windows) {
+	foreachback_tab (tab, term->windows) {
 		if (!get_current_title(tab->data, title, MAX_STR_LEN))
 			continue;
 

@@ -1,3 +1,153 @@
+Tue Dec 21 22:44:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Chain local CGI scripts' stderr to ELinks' implicit stderr. Enables
+	i.e. logging of mangle hexcodes and whatever else.  
+
+Tue Dec 21 22:38:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/dcigettext.c:
+
+	Only declare alloca() #ifndef HAVE_ALLOCA instead of #ifndef alloca.
+	Fixes warning on FreeBSD.  
+
+Tue Dec 21 21:45:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/loadmsgcat.c:
+
+	Fix a typo introduced in last patch by Jonas.  
+
+Tue Dec 21 21:11:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	Update by Witold.  
+
+Tue Dec 21 15:11:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/localealias.c:
+
+	Include util/memory.h 
+
+Tue Dec 21 15:08:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/localealias.c:
+
+	Use fmem_(alloc|free) instead of alloca directly. Fixes warning on
+	FreeBSD.  
+
+Tue Dec 21 15:05:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/plural.c:
+
+	Oops. Revert stupid locally generated plural.c updates.  
+
+Tue Dec 21 15:04:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/: loadmsgcat.c, plural.c:
+
+	Use fmem_(alloc|free) instead of alloca directly. Fixes warning on
+	FreeBSD.  
+
+Tue Dec 21 14:07:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/index.txt:
+
+	elinks.keys -> elinkskeys 
+
+Tue Dec 21 13:58:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/index.txt:
+
+	Fixups.  
+
+Tue Dec 21 13:55:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/index.txt:
+
+	Squeeze in the man pages after the user guide.  
+
+Tue Dec 21 13:29:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/README:
+
+	Make README only a README.  
+
+Tue Dec 21 13:18:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, index.txt, mailcap.html, mailcap.txt:
+
+	mailcap.html -> mailcap.txt, and update it a bit. It still needs
+	heavy rewrite.  
+
+Tue Dec 21 13:13:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/elinks.1.in:
+
+	The data protocol is not a remote protocol so remove it. Requested
+	by Miciah.  
+
+Tue Dec 21 07:34:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Factor code out from add_global_history_item to the new
+	add_item_to_global_history.  
+
+Tue Dec 21 07:30:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Factor code out from add_global_history_item into the new
+	cap_global_history.  
+
+Tue Dec 21 07:26:17 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Factor code out from delete_global_history_item into the new
+	done_global_history_item.  
+
+Tue Dec 21 07:24:36 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Factor code out from delete_global_history_item into the new
+	remove_item_from_global_history.  
+
+Tue Dec 21 07:22:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Consistently use the name history_item for parameters and local
+	avariables of the type struct global_history_item.  
+
+Tue Dec 21 01:53:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/table.c:
+
+	Do those nice exponential table allocations (bug 571 of Jonas) only
+	up to 256kb and then go on only in steps of 256kb in the
+	reallocations - well, you get the idea. This commit is officially
+	dedicated to Ms. Thelma, future master coder of ELinks, currently
+	entering the apprentice status. Let's hope it doesn't contain much
+	bugs (the commit, not our new apprentice).  
+
+Mon Dec 20 23:52:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	When settings the colors for active link, invert the colors (if
+	applicable) even if custom colors were specified. Hopefully fixes
+	bug 586 as reported by Apu.  
+
+Mon Dec 20 23:51:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: Makefile.am, math.c, math.h:
+
+	Introduced swap_values() macro, which does exactly that.  
+
 Mon Dec 20 21:21:09 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/dump/dump.c:

@@ -1,3 +1,16 @@
+Thu Jan  8 22:26:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	automatic session saving/restoring support 
+
+Thu Jan  8 22:22:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.9.CVS. Please backport all the relevant bugfixes to REL_0_9_1rc1
+	branch. Expected 0.9.1-final release: Sunday. What a mess.  
+
 Thu Jan  8 22:15:46 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.222 2004/07/12 20:55:27 zas Exp $ */
+/* $Id: form.c,v 1.223 2004/07/13 08:42:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1016,6 +1016,8 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 	case FM_POST_MP:
 	case FM_POST_TEXT_PLAIN:
 	{
+		/* Note that we end content type here by a simple '\n',
+		 * replaced later by correct '\r\n' in http_send_header(). */
 		int i;
 
 		add_to_string(&go, fc->action);

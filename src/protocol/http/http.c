@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.299 2004/07/10 14:30:11 jonas Exp $ */
+/* $Id: http.c,v 1.300 2004/07/13 08:42:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -573,6 +573,9 @@ http_send_header(struct connection *conn)
 	}
 
 	if (uri->post) {
+		/* We search for first '\n' in uri->post to get content type
+		 * as set by get_form_uri(). This '\n' is dropped if any
+		 * and replaced by correct '\r\n' termination here. */
 		unsigned char *postend = strchr(uri->post, '\n');
 
 		if (postend) {

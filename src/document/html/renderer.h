@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.13 2002/12/22 00:04:59 pasky Exp $ */
+/* $Id: renderer.h,v 1.14 2003/01/01 18:19:52 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -128,7 +128,7 @@ struct f_data {
 	struct search **slines2;
 };
 
-#include "document/vs.h"
+#include "viewer/text/vs.h"
 
 struct f_data_c {
 	struct f_data_c *next;

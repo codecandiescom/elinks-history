@@ -1,7 +1,7 @@
-/* $Id: view.h,v 1.9 2002/06/07 19:53:45 pasky Exp $ */
+/* $Id: view.h,v 1.1 2003/01/01 18:19:54 pasky Exp $ */
 
-#ifndef EL__DOCUMENT_VIEW_H
-#define EL__DOCUMENT_VIEW_H
+#ifndef EL__VIEWER_TEXT_VIEW_H
+#define EL__VIEWER_TEXT_VIEW_H
 
 #include "document/location.h"
 #include "document/session.h"

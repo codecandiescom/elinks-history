@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.168 2002/12/24 00:26:40 jonas Exp $ */
+/* $Id: options.c,v 1.169 2003/01/01 18:19:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,6 @@
 #include "document/html/parser.h"
 #include "document/cache.h"
 #include "document/session.h"
-#include "document/view.h"
 #include "intl/charsets.h"
 #include "intl/language.h"
 #include "lowlevel/dns.h"
@@ -38,6 +37,7 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/view.h"
 
 
 /* TODO? In the past, covered by shadow and legends, remembered only by the

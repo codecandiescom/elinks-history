@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.16 2002/12/05 23:16:08 pasky Exp $ */
+/* $Id: session.h,v 1.17 2003/01/01 18:19:52 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
@@ -8,12 +8,12 @@ struct session;
 
 #include "document/cache.h"
 #include "document/options.h"
-#include "document/vs.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "lowlevel/sched.h"
 #include "lowlevel/terminal.h"
 #include "util/lists.h"
+#include "viewer/text/vs.h"
 
 /* For map_selected() */
 struct link_def {

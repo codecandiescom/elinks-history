@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.57 2002/12/26 03:06:35 pasky Exp $ */
+/* $Id: renderer.c,v 1.58 2003/01/01 18:19:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,8 +16,6 @@
 #include "document/cache.h"
 #include "document/options.h"
 #include "document/session.h"
-#include "document/view.h"
-#include "document/vs.h"
 #include "document/html/colors.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
@@ -31,6 +29,8 @@
 #include "util/hash.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/view.h"
+#include "viewer/text/vs.h"
 
 /* This is here in order not to break the cross-deps. */
 #include "document/history.h"

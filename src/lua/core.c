@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.23 2002/12/18 16:31:07 pasky Exp $ */
+/* $Id: core.c,v 1.24 2003/01/01 18:19:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,8 +32,6 @@
 #include "document/history.h"
 #include "document/location.h"
 #include "document/session.h"
-#include "document/view.h"
-#include "document/vs.h"
 #include "document/html/renderer.h"
 #include "intl/language.h"
 #include "lowlevel/home.h"
@@ -42,6 +40,8 @@
 #include "lua/core.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/view.h"
+#include "viewer/text/vs.h"
 
 
 lua_State *lua_state;

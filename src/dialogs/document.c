@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.21 2002/12/17 23:58:43 zas Exp $ */
+/* $Id: document.c,v 1.22 2003/01/01 18:19:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,6 @@
 #include "document/history.h"
 #include "document/location.h"
 #include "document/session.h"
-#include "document/view.h"
 #include "document/html/renderer.h"
 #include "globhist/globhist.h"
 #include "intl/language.h"
@@ -29,6 +28,7 @@
 #include "util/conv.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/view.h"
 
 /* Location info. message box. */
 static void

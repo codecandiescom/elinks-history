@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.67 2002/12/20 09:15:02 zas Exp $ */
+/* $Id: menu.c,v 1.68 2003/01/01 18:19:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,6 @@
 #include "document/history.h"
 #include "document/location.h"
 #include "document/session.h"
-#include "document/view.h"
 #include "globhist/dialogs.h"
 #include "intl/language.h"
 #include "lowlevel/kbd.h"
@@ -41,6 +40,7 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/view.h"
 
 static void
 menu_elinks_home(struct terminal *term, void *d, struct session *ses)

@@ -1,11 +1,11 @@
-/* $Id: vs.h,v 1.2 2002/05/08 13:55:03 pasky Exp $ */
+/* $Id: vs.h,v 1.1 2003/01/01 18:19:55 pasky Exp $ */
 
 /* Placing this before the #ifndef, we'll fix some crossdep problems. */
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 
-#ifndef EL__DOCUMENT_VS_H
-#define EL__DOCUMENT_VS_H
+#ifndef EL__VIEWER_TEXT_VS_H
+#define EL__VIEWER_TEXT_VS_H
 
 struct view_state {
 	int view_pos;

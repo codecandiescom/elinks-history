@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.116 2003/01/01 17:48:46 pasky Exp $ */
+/* $Id: view.c,v 1.1 2003/01/01 18:19:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,8 +36,6 @@
 #include "document/location.h"
 #include "document/options.h"
 #include "document/session.h"
-#include "document/view.h"
-#include "document/vs.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "globhist/dialogs.h"
@@ -53,6 +51,8 @@
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/dump/dump.h"
+#include "viewer/text/view.h"
+#include "viewer/text/vs.h"
 
 
 /* FIXME: Add comments!! --Zas */

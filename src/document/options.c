@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.54 2004/07/27 21:28:53 jonas Exp $ */
+/* $Id: options.c,v 1.55 2004/12/16 15:12:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,8 +24,8 @@ init_document_options(struct document_options *doo)
 	/* Ensure that any padding bytes are cleared. */
 	memset(doo, 0, sizeof(struct document_options));
 
-	doo->assume_cp = get_opt_int("document.codepage.assume");
-	doo->hard_assume = get_opt_int("document.codepage.force_assumed");
+	doo->assume_cp = get_opt_codepage("document.codepage.assume");
+	doo->hard_assume = get_opt_bool("document.codepage.force_assumed");
 
 	doo->use_document_colors = get_opt_int("document.colors.use_document_colors");
 	doo->margin = get_opt_int("document.browse.margin_width");

@@ -1,3 +1,182 @@
+Thu Jan 22 22:55:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Put some use to the second member of scan_table_info.data.string.  
+
+Thu Jan 22 22:26:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/garbage.html:
+
+	Better garbage.  
+
+Thu Jan 22 22:18:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Our current text-decoration parsing is invalid.  
+
+Thu Jan 22 22:17:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: property.c, value.c, value.h:
+
+	Introduced css_parse_text_decoration_value(). NEVER overload single
+	function for disjunct properties! 
+
+Thu Jan 22 22:01:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	English fix.  
+
+Thu Jan 22 21:40:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	Make current->type token type checking against NONE/SKIP more
+	explicit and also simpler.  
+
+Thu Jan 22 21:38:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	English grammar fix.  
+
+Thu Jan 22 21:37:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	Fixed memory leak in do_tab_compl() triggered when there were no
+	completion possibilities.  
+
+Thu Jan 22 21:26:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	FIXME about unbased sizeof() equivalence assumptions.  
+
+Thu Jan 22 21:18:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Enabled document.css.enable by default. It is important to let the
+	CSS support to be extensively tested by people.  
+
+Thu Jan 22 21:14:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	In ident2type(), use strlcasecmp() for token matching so that ie.
+	'me' won't match 'media' (or is that ok?).  
+
+Thu Jan 22 21:11:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	Removed redundant identifiers2type record.  
+
+Thu Jan 22 21:06:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.h:
+
+	English grammar fixes.  
+
+Thu Jan 22 20:53:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/property.c:
+
+	Make sure someone won't pollute our nice clear simple code with
+	fastfind too soon ;-).  
+
+Thu Jan 22 20:47:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.h:
+
+	Jonas is too French.  
+
+Thu Jan 22 19:34:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Remove unneeded #includes.  
+
+Thu Jan 22 19:32:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Tidyup comment.  
+
+Thu Jan 22 19:31:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	The universal (match all) selector '*' is also a char token.  
+
+Thu Jan 22 18:45:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Oops no revert plain render change from last patch. :/ 
+
+Thu Jan 22 18:43:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/parser.c, css/parser.h, plain/renderer.c:
+
+	Add comments to functions and one TODO.  
+
+Thu Jan 22 18:34:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Add grammar info from ELusive as comments.  
+
+Thu Jan 22 18:27:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	css_parse_selector() -> css_parse_ruleset().  
+
+Thu Jan 22 18:19:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/osdep.c:
+
+	Removed unused @display variable.  
+
+Thu Jan 22 18:09:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Revert my two last patches to the renderer. The one adding link
+	state enum to struct link_state_info and the one trying to remove
+	link_state updating hacks from put_chars(). They broke numbered
+	links.  
+
+Thu Jan 22 17:46:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: frames.c, frames.h, parser.c:
+
+	Moved parse_frame_widths() & co from document/html/parser.* to
+	document/html/frames.*.  
+
+Thu Jan 22 16:22:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/osdep/osdep.c:
+
+	Fixed xterm detection - except DISPLAY check also if either WINDOWID
+	or KONSOLE_DCOP_SESSION env variable is present.  
+
+Thu Jan 22 07:25:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Move up identifier scanning.  
+
+Thu Jan 22 06:49:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Bug in SGML logic.  
+
 Wed Jan 21 18:16:08 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/plain/renderer.c:

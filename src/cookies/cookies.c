@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.143 2004/05/31 02:22:37 jonas Exp $ */
+/* $Id: cookies.c,v 1.144 2004/05/31 02:29:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -414,7 +414,7 @@ accept_cookie(struct cookie *c)
 	struct cookie *d, *e;
 	int domain_len;
 
-	c->box_item = add_listbox_item_at_pos(&cookie_browser, c->server->box_item, c->name, c);
+	c->box_item = add_listbox_leaf(&cookie_browser, c->server->box_item, c->name, c);
 
 	foreach (d, cookies) {
 		if (strcasecmp(d->name, c->name)

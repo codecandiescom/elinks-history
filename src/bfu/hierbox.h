@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.53 2004/05/31 02:24:09 jonas Exp $ */
+/* $Id: hierbox.h,v 1.54 2004/05/31 02:29:50 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -61,24 +61,11 @@ void done_listbox_item(struct hierbox_browser *browser, struct listbox_item *box
 void update_hierbox_browser(struct hierbox_browser *browser);
 
 struct listbox_item *
-do_add_listbox_item(struct listbox_item *root, unsigned char *text, void *data,
-		    int no_empty, enum listbox_item_type type);
-
-static inline struct listbox_item *
-add_listbox_item(struct hierbox_browser *browser, unsigned char *text, void *data)
-{
-	struct listbox_item *item;
-
-	item = do_add_listbox_item(&browser->root, text, data, 0, BI_LEAF);
-	update_hierbox_browser(browser);
-	return item;
-}
-
-struct listbox_item *
 add_listbox_folder(struct hierbox_browser *browser, struct listbox_item *root, unsigned char *text, void *data);
 
 struct listbox_item *
-add_listbox_item_at_pos(struct hierbox_browser *browser, struct listbox_item *root, unsigned char *text, void *data);
+add_listbox_leaf(struct hierbox_browser *browser, struct listbox_item *root, unsigned char *text, void *data);
+#define add_listbox_item(browser, text, data) add_listbox_leaf(browser, NULL, text, data)
 
 /* We use hierarchic listbox browsers for the various managers. They consist
  * of a listbox widget and some buttons.

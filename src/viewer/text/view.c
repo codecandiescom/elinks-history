@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.68 2003/05/08 14:02:28 zas Exp $ */
+/* $Id: view.c,v 1.69 2003/05/08 15:39:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -584,27 +584,34 @@ ret:
 	*pl = len;
 }
 
+/* Highlighting of searched strings. */
 static void
-draw_searched(struct terminal *t, struct f_data_c *scr)
+draw_searched(struct terminal *term, struct f_data_c *scr)
 {
-	int xp = scr->xp;
-	int yp = scr->yp;
-	int vx = scr->vs->view_posx;
-	int vy = scr->vs->view_pos;
 	struct point *pt = NULL;
-	int len, i;
+	int color = 0;
+	int len = 0;
+	int i;
 
 	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
 		return;
-	get_searched(scr, &pt, &len);
-	for (i = 0; i < len; i++) {
-		int x = pt[i].x + xp - vx;
-		int y = pt[i].y + yp - vy;
-		unsigned co = get_char(t, x, y);
 
+	get_searched(scr, &pt, &len);
+	if (len) color = get_bfu_color(term, "searched");
+
+	for (i = 0; i < len; i++) {
+		int x = pt[i].x + scr->xp - scr->vs->view_posx;
+		int y = pt[i].y + scr->yp - scr->vs->view_pos;
+
+#if 0 /* We should take in account orignal colors and combine them
+	 with defined color. */
+		unsigned co = get_char(term, x, y);
 		co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
-		set_color(t, x, y, co);
+#endif
+
+		set_color(term, x, y, color);
 	}
+
 	if (pt) mem_free(pt);
 }
 

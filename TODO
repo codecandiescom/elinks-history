@@ -63,7 +63,7 @@ Text HTML viewer:
 
 - Incremental-search
 
-- Configurable highlight colour for text matched after a search
+* Configurable highlight colour for text matched after a search
 
 - Scroll when searching so that the current match is always displayed at
   the top of the screen (optional?)
@@ -207,4 +207,4 @@ Permanent goals:
 Key: - nothing done + work in progress * almost ready
      (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.55 2003/05/08 14:02:29 zas Exp $
+$Id: TODO,v 1.56 2003/05/08 15:39:58 zas Exp $

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.206 2003/05/03 21:44:01 pasky Exp $ */
+/* $Id: options.c,v 1.207 2003/05/08 15:39:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2048,6 +2048,19 @@ register_options()
 		"background", 0, "green",
 		N_("Default background color."));
 
+	add_opt_tree("ui.colors.color", N_("Searched strings"),
+		"searched", 0,
+		N_("Searched string highlight colors."));
+
+	add_opt_color("ui.colors.color.searched", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.color.searched", N_("Background color"),
+		"background", 0, "lime",
+		N_("Default background color."));
+
+
 
 	add_opt_tree("ui.colors", N_("Non-color terminals"),
 		"mono", 0,
@@ -2403,6 +2416,17 @@ register_options()
 		"background", 0, "black",
 		N_("Default background color."));
 
+	add_opt_tree("ui.colors.mono", N_("Searched strings"),
+		"searched", 0,
+		N_("Searched string highlight colors."));
+
+	add_opt_color("ui.colors.mono.searched", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.mono.searched", N_("Background color"),
+		"background", 0, "white",
+		N_("Default background color."));
 
 
 	/* ========================================================== */

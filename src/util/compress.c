@@ -1,5 +1,5 @@
-/* File/stream decompression */
-/* $Id: compress.c,v 1.1 2002/05/08 17:18:36 pasky Exp $ */
+/* Stream reading and decoding (mostly decompression) */
+/* $Id: compress.c,v 1.2 2002/05/09 21:16:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,15 +23,7 @@
 #include "util/compress.h"
 
 
-#define RESERVED 0xE0
-#define HEAD_CRC 2
-#define EXTRA_FIELD 4
-#define ORIG_NAME 8
-#define COMMENT 16
-#define INPUT_BUFSIZE 16384
-#define INFLATE_BUFSIZE 65536
-
-
+#if 0
 static void *
 z_mem_alloc(void *opaque, int items, int size)
 {
@@ -43,9 +35,83 @@ z_mem_free(void *opaque, void *address)
 {
 	mem_free(address);
 }
+#endif
 
+
+struct decoding_handlers {
+	int (*open)(struct stream_encoded *stream, int fd);
+	int (*read)(struct stream_encoded *stream, unsigned char *data, int len);
+	void (*close)(struct stream_encoded *stream);
+};
+
+
+/*************************************************************************
+  Dummy encoding (ENCODING_NONE)
+*************************************************************************/
+
+struct dummy_enc_data {
+	int fd;
+};
+
+static int
+dummy_open(struct stream_encoded *stream, int fd)
+{
+	stream->data = mem_alloc(sizeof(struct dummy_enc_data));
+	if (!stream->data) return -1;
+
+	((struct dummy_enc_data *) stream->data)->fd = fd;
+
+	return 0;
+}
+
+static int
+dummy_read(struct stream_encoded *stream, unsigned char *data, int len)
+{
+	return read(((struct dummy_enc_data *) stream->data)->fd, data, len);
+}
+
+static void
+dummy_close(struct stream_encoded *stream)
+{
+	close(((struct dummy_enc_data *) stream->data)->fd);
+	mem_free(stream->data);
+}
+
+struct decoding_handlers dummy_handlers = {
+	dummy_open,
+	dummy_read,
+	dummy_close,
+};
+
+
+/*************************************************************************
+  Gzip encoding (ENCODING_GZIP)
+*************************************************************************/
 
 #ifdef HAVE_ZLIB_H
+
+static int
+gzip_open(struct stream_encoded *stream, int fd)
+{
+	stream->data = (void *) gzdopen(fd, "rb");
+	if (!stream->data) return -1;
+
+	return 0;
+}
+
+static int
+gzip_read(struct stream_encoded *stream, unsigned char *data, int len)
+{
+	return gzread((gzFile *) stream->data, data, len);
+}
+
+static void
+gzip_close(struct stream_encoded *stream)
+{
+	gzclose((gzFile *) stream->data);
+}
+
+#if 0
 static unsigned char *
 decompress_gzip(unsigned char *stream, int cur_size, int *new_size)
 {
@@ -55,53 +121,6 @@ decompress_gzip(unsigned char *stream, int cur_size, int *new_size)
 	char *output;
 	int size;
 	int ret;
-
-
-	/* Based on check_headers() from zlib/gzio.c. */
-
-	/* XXX: This is very ugly, but it looks this can't be done in other
-	 * way :(. */
-
-	method = stream_pos[2];
-	flags = stream_pos[3];
-
-	if (method != Z_DEFLATED || flags & RESERVED)
-		return stream;
-
-	stream_pos += 10;
-	cur_size -= 10;
-	if (cur_size <= 0) return stream;
-
-	if (flags & EXTRA_FIELD) {
-		int len = 2 + *stream_pos + ((*stream_pos + 1) << 8);
-
-		stream_pos += len;
-		cur_size -= len;
-		if (cur_size <= 0) return stream;
-	}
-
-	if (flags & ORIG_NAME) {
-		int len = strlen(stream_pos) + 1;
-
-		stream_pos += len;
-		cur_size -= len;
-		if (cur_size <= 0) return stream;
-	}
-
-	if (flags & COMMENT) {
-		int len = strlen(stream_pos) + 1;
-
-		stream_pos += len;
-		cur_size -= len;
-		if (cur_size <= 0) return stream;
-	}
-
-	if (flags & HEAD_CRC) {
-		stream_pos += 2;
-		cur_size -= 2;
-		if (cur_size <= 0) return stream;
-	}
-
 
 	output = mem_alloc(cur_size * 4);
 	if (!output) return stream;
@@ -155,7 +174,84 @@ decompress_gzip(unsigned char *stream, int cur_size, int *new_size)
 }
 #endif
 
+struct decoding_handlers gzip_handlers = {
+	gzip_open,
+	gzip_read,
+	gzip_close,
+};
+
+#endif
+
+
+/*************************************************************************
+  Bzip2 encoding (ENCODING_BZIP2)
+*************************************************************************/
+
 #ifdef HAVE_BZLIB_H
+
+struct bz2_enc_data {
+	FILE *file;
+	BZFILE *bzfile;
+	int last_read; /* If err after last bzRead() was BZ_STREAM_END.. */
+};
+
+/* TODO: When it'll be official, use bzdopen() from Yoshioka Tsuneo. --pasky */
+
+static int
+bzip2_open(struct stream_encoded *stream, int fd)
+{
+	struct bz2_enc_data *data = mem_alloc(sizeof(struct bz2_enc_data));
+	int err;
+
+	if (!data) {
+		return -1;
+	}
+	data->last_read = 0;
+
+	data->file = fdopen(fd, "rb");
+
+	data->bzfile = BZ2_bzReadOpen(&err, data->file, 0, 0, NULL, 0);
+	if (!data->bzfile) {
+		mem_free(data);
+		return -1;
+	}
+
+	stream->data = data;
+
+	return 0;
+}
+
+static int
+bzip2_read(struct stream_encoded *stream, unsigned char *buf, int len)
+{
+	struct bz2_enc_data *data = (struct bz2_enc_data *) stream->data;
+	int err = 0;
+
+	if (data->last_read)
+		return 0;
+
+	len = BZ2_bzRead(&err, data->bzfile, buf, len);
+
+	if (err == BZ_STREAM_END)
+		data->last_read = 1;
+	else if (err)
+		return -1;
+
+	return len;
+}
+
+static void
+bzip2_close(struct stream_encoded *stream)
+{
+	struct bz2_enc_data *data = (struct bz2_enc_data *) stream->data;
+	int err;
+
+	BZ2_bzReadClose(&err, data->bzfile);
+	fclose(data->file);
+	mem_free(data);
+}
+
+#if 0
 static unsigned char *
 decompress_bzip2(unsigned char *stream, int cur_size, int *new_size)
 {
@@ -215,30 +311,58 @@ decompress_bzip2(unsigned char *stream, int cur_size, int *new_size)
 }
 #endif
 
-/* FIXME: This is broken. We need to have better guess for gzip/bzip2. I think
- * we shoud just guess from the extension (and pass the compression type here;
- * thus this would be just kind of "multiplexer", which would take appropriate
- * function from the handler table and feed it with the stream). Yes, check for
- * the magic as well, but directly in the decompress_appropriate(). Note that
- * this is also reason, why it's not actually used. It should be fixed in few
- * days ;). --pasky
- *
- * FIXME: Also, we should feed it with fd where we could read the stream from,
- * instead of the data themselves. --pasky */
-unsigned char *
-try_decompress(unsigned char *stream, int cur_size, int *new_size)
+struct decoding_handlers bzip2_handlers = {
+	bzip2_open,
+	bzip2_read,
+	bzip2_close,
+};
+
+#endif
+
+
+struct decoding_handlers *handlers[] = {
+	&dummy_handlers,
+	&gzip_handlers,
+	&bzip2_handlers,
+};
+
+
+/*************************************************************************
+  Public functions
+*************************************************************************/
+
+
+/* Associates encoded stream with a fd. */
+struct stream_encoded *
+open_encoded(int fd, enum stream_encoding encoding)
 {
-	/* magic gzip */
-#ifdef HAVE_ZLIB_H
-	if ((stream[0] == 0x1f) && (stream[1] == 0x8b))
-		return decompress_gzip(stream, cur_size, new_size);
-#endif
+	struct stream_encoded *stream;
+	
+	stream = mem_alloc(sizeof(struct stream_encoded));
+	if (!stream) return NULL;
 
-	/* magic bzip2 */
-#ifdef HAVE_BZLIB_H
-	if ((stream[0] == 'B') && (stream[1] == 'Z') && (stream[2] == 'h'))
-		return decompress_bzip2(stream, cur_size, new_size);
-#endif
+	stream->encoding = encoding;
+	if (handlers[stream->encoding]->open(stream, fd) >= 0)
+		return stream;
 
-	return stream; 
+	mem_free(stream);
+	return NULL;
+}
+
+/* Read available data from stream and decode them. Note that when data change
+ * their size during decoding, 'len' indicates desired size of _returned_ data,
+ * not desired size of data read from stream. */
+int
+read_encoded(struct stream_encoded *stream, unsigned char *data, int len)
+{
+	return handlers[stream->encoding]->read(stream, data, len);
+}
+
+/* Closes encoded stream. Note that fd associated with the stream will be
+ * closed here. */
+void
+close_encoded(struct stream_encoded *stream)
+{
+	handlers[stream->encoding]->close(stream);
+	mem_free(stream);
 }

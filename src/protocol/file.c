@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.14 2002/05/08 17:18:36 pasky Exp $ */
+/* $Id: file.c,v 1.15 2002/05/09 21:16:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,6 +275,29 @@ get_filenamepart_from_url(unsigned char *url, unsigned char **name,
 
 	*name = filename;
 	*namelen = len;
+}
+
+static enum stream_encoding
+guess_encoding(unsigned char *fname)
+{
+	int fname_len = strlen(fname);
+	unsigned char *fname_end = fname + fname_len;
+
+	/* Case-insensitive?! */
+
+	if (fname_len > 3 && !strcmp(fname_end - 3, ".gz")) {
+		return ENCODING_GZIP;
+	}
+
+	if (fname_len > 4 && !strcmp(fname_end - 4, ".tgz")) {
+		return ENCODING_GZIP;
+	}
+
+	if (fname_len > 4 && !strcmp(fname_end - 4, ".bz2")) {
+		return ENCODING_BZIP2;
+	}
+
+	return ENCODING_NONE;
 }
 
 
@@ -559,9 +582,18 @@ dir:
 		head = stracpy("");
 
 	} else {
+		struct stream_encoded *stream;
+		enum stream_encoding encoding = guess_encoding(name);
+	
 		mem_free(name);
-		/* + 1 is there because of bug in Linux. Read returns -EACCES when
-		   reading 0 bytes to invalid address */
+
+		/* We read with granularity of stt.st_size - this does best
+		 * job for uncompressed files, and doesn't hurt for compressed
+		 * ones anyway - very large files usually tend to inflate fast
+		 * anyway. At least I hope ;). --pasky */
+
+		/* + 1 is there because of bug in Linux. Read returns -EACCES
+		 * when reading 0 bytes to invalid address */
 
 		file = mem_alloc(stt.st_size + 1);
 		if (!file) {
@@ -570,19 +602,30 @@ dir:
 			return;
 		}
 
-		r = read(h, file, stt.st_size);
-		if (r != stt.st_size) {
-			saved_errno = errno;
-			mem_free(file);
-			close(h);
-			abort_conn_with_state(c, (r == -1) ? -saved_errno
-							   : S_FILE_ERROR);
-			return;
+		stream = open_encoded(h, encoding);
+		fl = 0;
+		while ((r = read_encoded(stream, file + fl, stt.st_size))) {
+			if (r < 0) {
+				/* FIXME: We should get the correct error
+				 * value. But it's I/O error in 90% of cases
+				 * anyway.. ;) --pasky */
+				saved_errno = errno;
+				mem_free(file);
+				close_encoded(stream);
+				abort_conn_with_state(c, -saved_errno);
+				return;
+			}
+
+			fl += r; r = 0;
+			file = mem_realloc(file, fl + stt.st_size);
+			if (!file) {
+				close_encoded(stream);
+				abort_conn_with_state(c, S_OUT_OF_MEM);
+				return;
+			}
 		}
-		close(h);
-		fl = stt.st_size;
-		/* See FIXMEs near try_decompress() for details. */
-		/* file = try_decompress(file, fl, &fl); */
+		close_encoded(stream);
+
 		head = stracpy("");
 	}
 	

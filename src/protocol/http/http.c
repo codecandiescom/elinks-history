@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.73 2002/12/03 19:31:45 zas Exp $ */
+/* $Id: http.c,v 1.74 2002/12/05 13:39:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -631,8 +631,8 @@ http_send_header(struct connection *c)
 	}
 
 	write_to_socket(c, c->sock1, hdr, strlen(hdr), http_get_header);
-
-	if (hdr) mem_free(hdr);
+	mem_free(hdr);
+	
 	setcstate(c, S_SENT);
 }
 

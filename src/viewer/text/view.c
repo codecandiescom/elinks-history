@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.319 2003/12/27 15:46:26 zas Exp $ */
+/* $Id: view.c,v 1.320 2003/12/28 02:16:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1173,6 +1173,11 @@ quit:
 				goto x;
 			case ACT_TOGGLE_HTML_PLAIN:
 				toggle_plain_html(ses, ses->doc_view, 0);
+				goto x;
+			case ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:
+				get_opt_int("document.plain.compress_empty_lines") =
+					!get_opt_int("document.plain.compress_empty_lines");
+				draw_formatted(ses, 1);
 				goto x;
 			case ACT_TOGGLE_NUMBERED_LINKS:
 				toggle_link_numbering(ses, ses->doc_view, 0);

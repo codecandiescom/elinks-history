@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.136 2003/12/27 17:31:36 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.137 2003/12/28 02:16:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -491,6 +491,7 @@ static struct strtonum action_table[] = {
 	{ "toggle-document-colors", ACT_TOGGLE_DOCUMENT_COLORS, DACT(N_("Toggle usage of document specific colors")) },
 	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, DACT(N_("Toggle rendering page as HTML / plain text")) },
 	{ "toggle-numbered-links", ACT_TOGGLE_NUMBERED_LINKS, DACT(N_("Toggle displaying of links numbers")) },
+	{ "toggle-plain-compress-empty-lines", ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES, DACT(N_("Toggle plain renderer compression of empty lines")) },
 	{ "unback", ACT_UNBACK, DACT(N_("Go forward in the unhistory")) },
 	{ "unexpand", ACT_UNEXPAND, DACT(N_("Collapse item")) },
 	{ "up", ACT_UP, DACT(N_("Move cursor upwards")) },

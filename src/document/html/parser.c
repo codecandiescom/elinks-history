@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.130 2003/06/15 00:21:56 zas Exp $ */
+/* $Id: parser.c,v 1.131 2003/06/15 10:01:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,9 +31,7 @@
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/error.h"
-#ifdef USE_FASTFIND
 #include "util/fastfind.h"
-#endif
 #include "util/memdebug.h"
 #include "util/memlist.h"
 #include "util/memory.h"

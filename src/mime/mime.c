@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.31 2003/10/26 16:47:14 jonas Exp $ */
+/* $Id: mime.c,v 1.32 2003/10/26 16:53:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,13 @@
 #include "util/string.h"
 
 
+enum mime_options {
+	MIME_TREE,
+	MIME_DEFAULT_TYPE,
+
+	MIME_OPTIONS,
+};
+
 static struct option_info mime_options[] = {
 	INIT_OPT_TREE("", N_("MIME"),
 		"mime", 0,
@@ -33,6 +40,9 @@ static struct option_info mime_options[] = {
 
 	NULL_OPTION_INFO,
 };
+
+#define get_opt_mime(which)	mime_options[(which)].option
+#define get_default_mime_type()	get_opt_mime(MIME_DEFAULT_TYPE).value.string
 
 /* Checks if application/x-<extension> has any handlers. */
 static inline unsigned char *
@@ -133,7 +143,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 	}
 
 	/* Fallback.. use some hardwired default */
-	return stracpy(get_opt_str("mime.default_type"));
+	return stracpy(get_default_mime_type());
 }
 
 struct mime_handler *

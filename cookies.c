@@ -1,12 +1,13 @@
 #include "links.h"
 
-/* #undef it defaultly */
+/* Whether to save cookies after each modification of their list
+ * (receive/expiration). */
 #define COOKIES_RESAVE	1
 
 /* #define COOKIES_DEBUG */
 
 #define ACCEPT_NONE	0
-#define ACCEPT_ASK	1
+#define ACCEPT_ASK	1 /* TODO */
 #define ACCEPT_ALL	2
 
 int accept_cookies = ACCEPT_ALL;

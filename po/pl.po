@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-15 14:13+0200\n"
-"PO-Revision-Date: 2003-10-10 23:13+0200\n"
+"PO-Revision-Date: 2003-10-16 05:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1574,9 +1574,8 @@ msgid "Size"
 msgstr "Rozmiar"
 
 #: src/config/options.c:1269
-#, fuzzy
 msgid "Memory cache size (in bytes)."
-msgstr "Rozmiar pamiêci podrêcznej (w kilobajtach)."
+msgstr "Rozmiar pamiêci podrêcznej (w bajtach)."
 
 #
 #: src/config/options.c:1273
@@ -3520,7 +3519,7 @@ msgstr ""
 
 #: src/config/options.c:2809
 msgid "Set config dir to given string"
-msgstr ""
+msgstr "Ustaw katalog konfiguracyjny na podany ³añcuch"
 
 #: src/config/options.c:2811
 msgid ""
@@ -3529,6 +3528,11 @@ msgid ""
 "a '/' its used as an absolute path. Else it is assumed to\n"
 "be relative to your HOME dir."
 msgstr ""
+"Ustaw katalog konfiguracyjny na podan± ¶cie¿kê. ELinks bêdzie\n"
+"czyta³ i zapisywa³ pliki konfiguracyjne z tego katalogu. Je¶li\n"
+"¶cie¿ka zaczyna siê od znaku '/' to jest traktowana jako ¶cie¿ka\n"
+"absolutna. W przeciwnym wypadku przyjmuje siê j± jako wzglêdn±\n"
+"do katalogu domowego."
 
 #: src/config/options.c:2816
 msgid "MIME type to assume for documents"
@@ -5154,11 +5158,11 @@ msgstr "Niczego wcze¶niej nie szukano"
 
 #: src/viewer/text/search.c:856
 msgid "Search hit bottom, continuing at top."
-msgstr ""
+msgstr "Przeszukiwanie osi±gnê³o koniec tekstu, kontynuacja od pocz±tku."
 
 #: src/viewer/text/search.c:862
 msgid "Search hit top, continuing at bottom."
-msgstr ""
+msgstr "Przeszukiwanie osi±gnê³o pocz±tek tekstu, kontynuacja od koñca."
 
 #: src/viewer/text/search.c:884
 #, c-format

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.80 2003/09/26 20:58:30 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.81 2003/09/27 15:21:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -455,7 +455,6 @@ read_action(unsigned char *action)
 unsigned char *
 write_action(int action)
 {
-
 	return numtostr(action_table, action);
 }
 

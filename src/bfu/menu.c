@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.97 2003/09/25 19:17:33 zas Exp $ */
+/* $Id: menu.c,v 1.98 2003/09/27 15:17:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,14 +27,7 @@
 /* Types and structures */
 
 struct mainmenu {
-	/* menu_head */
-	struct window *win;
-	struct menu_item *items;
-	void *data;
-	int selected;
-	int ni;
-	/* end of menu_head */
-
+	MENU_HEAD;
 	int sp;
 };
 
@@ -112,37 +105,30 @@ do_menu(struct terminal *term, struct menu_item *items, void *data, int hotkeys)
 static void
 select_menu(struct terminal *term, struct menu *menu)
 {
-	struct menu_item *it = &menu->items[menu->selected];
-	void (*func)(struct terminal *, void *, void *);
-	void *data1 = it->data;
-	void *data2 = menu->data;
+	struct menu_item *item = &menu->items[menu->selected];
 
-	func = it->func;
-
-	if (menu->selected < 0 ||
-	    menu->selected >= menu->ni ||
-	    it->rtext == M_BAR)
+	if (menu->selected < 0
+	    || menu->selected >= menu->ni
+	    || item->rtext == M_BAR)
 		return;
 
-	if (!it->submenu) {
-		struct window *win, *win1;
+	if (!item->submenu) {
+		struct window *win = term->windows.next;
 
 		/* Don't free data! */
-		it->item_free &= ~FREE_DATA;
+		item->item_free &= ~FREE_DATA;
 
-		win = term->windows.next;
+		while ((void *) win != &term->windows
+			&& (win->handler == menu_func
+			    || win->handler == mainmenu_func)) {
+			struct window *win1 = win->next;
 
-		while ((void *) win != &term->windows &&
-			(win->handler == menu_func ||
-			 win->handler == mainmenu_func)) {
-
-			win1 = win->next;
 			delete_window(win);
 			win = win1;
 		}
 	}
 
-	func(term, data1, data2);
+	item->func(term, item->data, menu->data);
 }
 
 static void
@@ -158,13 +144,12 @@ count_menu_size(struct terminal *term, struct menu *menu)
 		unsigned char *text = menu->items[my].text;
 		unsigned char *rtext = menu->items[my].rtext;
 
-
 		if (text && *text) {
 			if (!menu->items[my].no_intl) text = _(text, term);
 
 			if (text[0])
 				s += strlen(text)
-				     - (menu->items[my].hotkey_pos ? 1 : 0)
+				     - !!menu->items[my].hotkey_pos
 				     + 1;
 		}
 
@@ -233,7 +218,6 @@ scroll_menu(struct menu *menu, int d)
 static void
 display_menu(struct terminal *term, struct menu *menu)
 {
-	int p, s;
 	struct color_pair *normal_color = get_bfu_color(term, "menu.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
 	struct color_pair *frame_color = get_bfu_color(term, "menu.frame");
@@ -243,6 +227,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	int mxw = menu->xw - 2;
 	int my = menu->y + 1;
 	int myw = menu->yw - 2;
+	int p, s;
 
 	draw_area(term,	mx, my, mxw, myw, ' ', 0, normal_color);
 	draw_border(term, menu->x, menu->y, menu->xw, menu->yw, frame_color, 1);
@@ -269,8 +254,9 @@ display_menu(struct terminal *term, struct menu *menu)
 			draw_area(term, mx, s, mxw, 1, ' ', 0, color);
 		}
 
-		if (menu->items[p].rtext == M_BAR &&
-		    menu->items[p].text && !*menu->items[p].text) {
+		if (menu->items[p].rtext == M_BAR
+		    && menu->items[p].text
+		    && !*menu->items[p].text) {
 
 			/* Horizontal separator */
 			draw_border_char(term, menu->x, s,
@@ -321,7 +307,7 @@ display_menu(struct terminal *term, struct menu *menu)
 #endif
 							hk = 2;
 						} else {
-							draw_char(term, xbase + x - (hk ? 1 : 0), s, c, 0, color);
+							draw_char(term, xbase + x - !!hk, s, c, 0, color);
 						}
 					}
 
@@ -402,8 +388,10 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 					return;
 			}
 
-			if ((ev->x < menu->x) || (ev->x >= menu->x + menu->xw) ||
-			    (ev->y < menu->y) || (ev->y >= menu->y + menu->yw)) {
+			if (ev->x < menu->x
+			    || ev->x >= menu->x + menu->xw
+			    || ev->y < menu->y
+			    || ev->y >= menu->y + menu->yw) {
 				if ((ev->b & BM_ACT) == B_DOWN)
 					delete_window_ev(win, ev);
 
@@ -423,19 +411,19 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 
 						m1 = w1->data;
 
-						if (ev->x > m1->x &&
-						    ev->x < m1->x + m1->xw - 1 &&
-						    ev->y > m1->y &&
-						    ev->y < m1->y + m1->yw - 1)
+						if (ev->x > m1->x
+						    && ev->x < m1->x + m1->xw - 1
+						    && ev->y > m1->y
+						    && ev->y < m1->y + m1->yw - 1)
 							delete_window_ev(win, ev);
 					}
 				}
 
 			} else {
-				if (!(ev->x <  menu->x ||
-				      ev->x >= menu->x + menu->xw ||
-				      ev->y <  menu->y + 1 ||
-				      ev->y >= menu->y + menu->yw-1)) {
+				if (ev->x >=  menu->x
+				    && ev->x < menu->x + menu->xw
+				    && ev->y >=  menu->y + 1
+				    && ev->y < menu->y + menu->yw - 1) {
 					int sel = ev->y - menu->y - 1 + menu->view;
 
 					if (sel >= 0 && sel < menu->ni
@@ -444,8 +432,8 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 						scroll_menu(menu, 0);
 						display_menu(win->term, menu);
 
-						if ((ev->b & BM_ACT) == B_UP ||
-						    menu->items[sel].submenu)
+						if ((ev->b & BM_ACT) == B_UP
+						    || menu->items[sel].submenu)
 							select_menu(win->term, menu);
 					}
 				}
@@ -457,8 +445,8 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 			switch (kbd_action(KM_MENU, ev, NULL)) {
 				case ACT_LEFT:
 				case ACT_RIGHT:
-					if ((void *) win->next != &win->term->windows &&
-					    win->next->handler == mainmenu_func) {
+					if ((void *) win->next != &win->term->windows
+					    && win->next->handler == mainmenu_func) {
 						delete_window_ev(win, ev);
 						goto break2;
 					}
@@ -467,7 +455,6 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 						goto enter;
 
 					delete_window(win);
-
 					goto break2;
 
 				case ACT_UP:
@@ -494,12 +481,11 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 					int found = 0;
 					int step = -1;
 
-					for (; i >= 0; i--) {
+					for (; i >= 0; i--)
 						if (menu->items[i].rtext == M_BAR) {
 							found = 1;
 							break;
 						}
-					}
 
 					if (found) {
 						step = i + 1 - menu->selected;
@@ -523,12 +509,11 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 					int found = 0;
 					int step = 1;
 
-					for (; i < menu->ni; i++) {
+					for (; i < menu->ni; i++)
 						if (menu->items[i].rtext == M_BAR) {
 							found = 1;
 							break;
 						}
-					}
 
 					if (found) {
 						step = i + 1 - menu->selected;
@@ -546,15 +531,15 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 #undef DIST
 				default:
 				{
-					if ((ev->x >= KBD_F1 && ev->x <= KBD_F12) ||
-					    ev->y == KBD_ALT) {
+					if (ev->y == KBD_ALT
+					    || (ev->x >= KBD_F1 && ev->x <= KBD_F12)) {
 						delete_window_ev(win, ev);
 						goto break2;
 					}
 
 					if (ev->x == KBD_ESC) {
-						if ((void *) win->next != &win->term->windows &&
-						    win->next->handler == mainmenu_func)
+						if ((void *) win->next != &win->term->windows
+						    && win->next->handler == mainmenu_func)
 							delete_window_ev(win, ev);
 						else
 							delete_window_ev(win, NULL);
@@ -620,24 +605,23 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 static void
 display_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
-	int i;
-	int p = 2;
 	struct color_pair *normal_color = get_bfu_color(term, "mainmenu.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "mainmenu.selected");
 	struct color_pair *hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
 	struct color_pair *selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
+	int p = 2;
+	int i;
 
 	draw_area(term, 0, 0, term->x, 1, ' ', 0, normal_color);
 
 	for (i = 0; i < menu->ni; i++) {
-		int j;
 		struct color_pair *co = normal_color;
 		struct color_pair *hkco = hotkey_color;
-		int hk = 0;
-		int key_pos = menu->items[i].hotkey_pos;
-		unsigned char c;
 		unsigned char *tmptext = menu->items[i].text;
-
+		int key_pos = menu->items[i].hotkey_pos;
+		int j;
+		int hk = 0;
+		unsigned char c;
 #ifdef DEBUG
 		int double_hk = 0;
 		if (key_pos < 0) key_pos = -key_pos, double_hk = 1;
@@ -646,8 +630,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		if (!menu->items[i].no_intl) tmptext = _(tmptext, term);
 
 		if (i == menu->selected) {
-			int tmptextlen = strlen(tmptext)
-					 - (key_pos ? 1 : 0);
+			int tmptextlen = strlen(tmptext) - !!key_pos;
 
 			co = selected_color;
 			hkco = selected_hotkey_color;
@@ -662,7 +645,8 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		p += 2;
 
 		for (j = 0; (c = tmptext[j]); j++, p++) {
-			if (!hk && key_pos
+			if (!hk
+			    && key_pos
 			    && j == key_pos - 1) {
 				hk = 1;
 				p--;
@@ -690,46 +674,43 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 static void
 select_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
-	struct menu_item *it = &menu->items[menu->selected];
+	struct menu_item *item = &menu->items[menu->selected];
 
-	if (menu->selected < 0 || menu->selected >= menu->ni
-	    || it->rtext == M_BAR)
+	if (menu->selected < 0
+	    || menu->selected >= menu->ni
+	    || item->rtext == M_BAR)
 		return;
 
-	if (!it->submenu) {
-		struct window *win, *win1;
+	if (!item->submenu) {
+		struct window *win = term->windows.next;
 
 		/* Don't free data! */
-		it->item_free &= ~FREE_DATA;
+		item->item_free &= ~FREE_DATA;
 
-		win = term->windows.next;
+		while ((void *) win != &term->windows
+		       && (win->handler == menu_func
+			   || win->handler == mainmenu_func)) {
+			struct window *win1 = win->next;
 
-		while ((void *) win != &term->windows &&
-			(win->handler == menu_func ||
-			 win->handler == mainmenu_func)) {
-
-			win1 = win->next;
 			delete_window(win);
 			win = win1;
 		}
 	}
 
 #ifdef DEBUG
-	if (!it->func) {
+	if (!item->func) {
 	       	internal("No menu function");
-	} else {
-		it->func(term, it->data, menu->data);
+		return;
 	}
-#else
-	it->func(term, it->data, menu->data);
 #endif
+	item->func(term, item->data, menu->data);
 }
 
 static void
 mainmenu_func(struct window *win, struct term_event *ev, int fwd)
 {
-	int s = 0;
 	struct mainmenu *menu = win->data;
+	int s = 0;
 
 	menu->win = win;
 	switch (ev->ev) {
@@ -758,8 +739,7 @@ mainmenu_func(struct window *win, struct term_event *ev, int fwd)
 
 					if (text && text[0])
 						p += strlen(text) + 4
-							    - (menu->items[i].hotkey_pos
-							    ? 1 : 0);
+						     - !!menu->items[i].hotkey_pos;
 
 					if (ev->x < o || ev->x >= p)
 						continue;
@@ -777,12 +757,12 @@ mainmenu_func(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_KBD:
-			if (ev->x == ' ' ||
-			    ev->x == KBD_ENTER ||
-			    ev->x == KBD_DOWN ||
-			    ev->x == KBD_UP ||
-			    ev->x == KBD_PAGE_DOWN ||
-			    ev->x == KBD_PAGE_UP) {
+			if (ev->x == ' '
+			    || ev->x == KBD_ENTER
+			    || ev->x == KBD_DOWN
+			    || ev->x == KBD_UP
+			    || ev->x == KBD_PAGE_DOWN
+			    || ev->x == KBD_PAGE_UP) {
 				select_mainmenu(win->term, menu);
 				break;
 			}
@@ -799,14 +779,15 @@ mainmenu_func(struct window *win, struct term_event *ev, int fwd)
 
 			}
 
-			if ((ev->x == KBD_LEFT || ev->x == KBD_RIGHT) && fwd) {
+			if (fwd && (ev->x == KBD_LEFT || ev->x == KBD_RIGHT)) {
 				display_mainmenu(win->term, menu);
 				select_mainmenu(win->term, menu);
 				break;
 			}
 
-			if (ev->x > ' ' && ev->x < 256 &&
-			    check_hotkeys((struct menu_head *)menu, ev->x, win->term))
+			if (ev->x > ' '
+			    && ev->x < 256
+			    && check_hotkeys((struct menu_head *)menu, ev->x, win->term))
 				s = 2;
 
 			if (!s) {
@@ -848,13 +829,9 @@ add_to_menu(struct menu_item **mi, unsigned char *text,
 	if (!mii) return;
 
 	*mi = mii;
-	memcpy(mii + n + 1, mii + n, sizeof(struct menu_item));
-	mii[n].text = text;
-	mii[n].rtext = rtext;
-	mii[n].func = func;
-	mii[n].data = data;
-	mii[n].submenu = submenu;
-	mii[n].no_intl = no_intl;
-	mii[n].hotkey_pos = 0;
-	mii[n].hotkey_state = HKS_SHOW;
+	/* Move last item by one place. */
+	memcpy(&mii[n + 1], &mii[n], sizeof(struct menu_item));
+	/* Initialize new item and keep item_free from previous one. */
+	SET_MENU_ITEM(&mii[n], text, rtext, func, data,
+		      mii[n + 1].item_free, submenu, no_intl, HKS_SHOW, 0);
 }

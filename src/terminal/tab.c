@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.25 2003/10/30 15:50:55 zas Exp $ */
+/* $Id: tab.c,v 1.26 2003/11/13 18:44:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,11 @@
 
 #include "elinks.h"
 
+#include "bfu/msgbox.h"
 #include "config/options.h"
+#include "dialogs/menu.h"
+#include "intl/gettext/libintl.h"
+#include "sched/session.h"
 #include "terminal/screen.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
@@ -157,16 +161,44 @@ switch_to_prev_tab(struct terminal *term)
 	switch_to_tab(term, term->current_tab - 1, num_tabs);
 }
 
-void
-close_tab(struct terminal *term)
+static void
+push_yes_button(struct session *ses)
 {
+	struct terminal *term = ses->tab->term;
 	int num_tabs = number_of_tabs(term);
-
-	if (num_tabs < 2)
-		return;
 
 	delete_window(get_current_tab(term));
 	switch_to_tab(term, term->current_tab - 1, num_tabs - 1);
+}
+
+static void
+push_no_button(struct session *ses)
+{
+	/* m33p */
+}
+
+void
+close_tab(struct terminal *term, struct session *ses)
+{
+	int num_tabs = number_of_tabs(term);
+
+	if (num_tabs < 2) {
+		query_exit(ses);
+		return;
+	}
+
+	if (get_opt_bool("ui.tabs.confirm_close")) {
+		msg_box(term, NULL, 0,
+			N_("Close tab"), AL_CENTER,
+			N_("Do you really want to close the current tab?"),
+			ses, 2,
+			N_("Yes"), (void (*)(void *)) push_yes_button, B_ENTER,
+			N_("No"), (void (*)(void *)) push_no_button, B_ESC);
+
+	} else {
+		delete_window(get_current_tab(term));
+		switch_to_tab(term, term->current_tab - 1, num_tabs - 1);
+	}
 }
 
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.262 2003/11/12 00:16:05 jonas Exp $ */
+/* $Id: view.c,v 1.263 2003/11/13 18:44:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1070,7 +1070,7 @@ quit:
 				open_in_new_tab_in_background(ses->tab->term, 1, ses);
 				goto x;
 			case ACT_TAB_CLOSE:
-				close_tab(ses->tab->term);
+				close_tab(ses->tab->term, ses);
 				ses = NULL; /* Disappeared in EV_ABORT handler. */
 				goto x;
 			case ACT_TAB_NEXT:

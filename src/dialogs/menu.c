@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.183 2003/11/12 00:10:34 zas Exp $ */
+/* $Id: menu.c,v 1.184 2003/11/13 18:44:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ menu_prev_tab(struct terminal *term, void *d, struct session *ses)
 static void
 menu_close_tab(struct terminal *term, void *d, struct session *ses)
 {
-	close_tab(term);
+	close_tab(term, ses);
 }
 
 /* Helper for url items in help menu. */
@@ -135,7 +135,7 @@ dont_exit_prog(struct session *ses)
 	ses->exit_query = 0;
 }
 
-static void
+void
 query_exit(struct session *ses)
 {
 	ses->exit_query = 1;

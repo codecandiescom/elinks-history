@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.27 2003/11/11 20:11:08 pasky Exp $ */
+/* $Id: options.inc,v 1.28 2003/11/13 18:44:15 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1753,6 +1753,10 @@ struct option_info config_options_info[] = {
 		"wraparound", 0, 1,
 		N_("When moving right from the last tab, jump at the first one, and\n"
 		"vice versa.")),
+
+	INIT_OPT_BOOL("ui.tabs", N_("Confirm tab closing"),
+		"confirm_close", 0, 0,
+		N_("When closing a tab show confirmation dialog.")),
 
 
 

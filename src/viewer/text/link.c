@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.198 2004/06/13 00:06:54 jonas Exp $ */
+/* $Id: link.c,v 1.199 2004/06/13 00:07:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -909,5 +909,5 @@ print_current_link(struct session *ses)
 	assert(doc_view);
 	if_assert_failed return NULL;
 
-	return get_link_info(doc_view, ses->tab->term);
+	return get_current_link_info(doc_view, ses->tab->term);
 }

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.91 2004/06/12 17:29:15 jonas Exp $ */
+/* $Id: document.c,v 1.92 2004/06/13 00:06:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,7 +171,7 @@ document_info_dialog(struct session *ses)
 #endif
 
 	if (doc_view) {
-		unsigned char *a = print_current_link_do(doc_view, term);
+		unsigned char *a = get_current_link_info(doc_view, term);
 
 		add_char_to_string(&msg, '\n');
 		if (a) {
@@ -180,7 +180,7 @@ document_info_dialog(struct session *ses)
 			mem_free(a);
 		}
 
-		a = print_current_link_title_do(doc_view, term);
+		a = get_current_link_title(doc_view, term);
 		if (a) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("Link title", term), a);

@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.28 2004/06/12 18:51:21 zas Exp $ */
+/* $Id: link.h,v 1.29 2004/06/13 00:06:54 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -25,8 +25,8 @@ struct link *get_first_link(struct document_view *doc_view);
 struct link *get_last_link(struct document_view *doc_view);
 struct link *choose_mouse_link(struct document_view *doc_view, struct term_event *ev);
 
-unsigned char *print_current_link_title_do(struct document_view *doc_view, struct terminal *term);
-unsigned char *print_current_link_do(struct document_view *doc_view, struct terminal *term);
+unsigned char *get_current_link_title(struct document_view *doc_view, struct terminal *term);
+unsigned char *get_current_link_info(struct document_view *doc_view, struct terminal *term);
 unsigned char *print_current_link(struct session *ses);
 
 void set_pos_x(struct document_view *doc_view, struct link *link);

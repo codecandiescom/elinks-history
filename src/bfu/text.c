@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.105 2004/07/31 06:32:27 miciah Exp $ */
+/* $Id: text.c,v 1.106 2004/11/11 20:31:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,6 +68,8 @@ split_line(unsigned char *text, int max_width)
 
 	return split - text;
 }
+
+#undef is_unsplitable
 
 #define LINES_GRANULARITY 0x7
 #define realloc_lines(x, o, n) mem_align_alloc(x, o, n, unsigned char *, LINES_GRANULARITY)

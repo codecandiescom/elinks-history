@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.575 2004/07/30 10:36:38 jonas Exp $ */
+/* $Id: view.c,v 1.576 2004/07/30 10:38:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -936,7 +936,9 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	return send_to_frame(ses, &evv);
 }
 
-static int
+/* Returns the session if event cleanup should be done or NULL if no cleanup is
+ * needed. */
+static struct session *
 send_mouse_event(struct session *ses, struct document_view *doc_view,
 		 struct term_event *ev)
 {
@@ -952,7 +954,7 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 		m = ses->tab->term->windows.next;
 		m->handler(m, ev, 0);
 
-		return 1;
+		return ses;
 	}
 
 	bars = 0;
@@ -979,7 +981,7 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 			}
 		}
 
-		return 1;
+		return ses;
 	}
 
 	if (!do_mouse_event(ses, ev, doc_view)
@@ -987,7 +989,7 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 		tab_menu(ses, mouse->x, mouse->y, 0);
 	}
 
-	return 0;
+	return NULL;
 }
 #endif /* CONFIG_MOUSE */
 
@@ -1066,17 +1068,13 @@ send_event(struct session *ses, struct term_event *ev)
 
 	if (ev->ev == EVENT_KBD) {
 		ses = send_kbd_event(ses, doc_view, ev);
-		if (ses) goto x;
 	}
 #ifdef CONFIG_MOUSE
 	if (ev->ev == EVENT_MOUSE) {
-		if (send_mouse_event(ses, doc_view, ev))
-			goto x;
+		ses = send_mouse_event(ses, doc_view, ev);
 	}
 #endif /* CONFIG_MOUSE */
-	return;
 
-x:
 	/* ses may disappear ie. in close_tab() */
 	if (ses) ses->kbdprefix.repeat_count = 0;
 }

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.84 2002/12/26 12:26:36 pasky Exp $ */
+/* $Id: http.c,v 1.85 2002/12/26 18:04:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -687,13 +687,8 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 	if (conn->stream_pipes[0] == -1
 	    && (c_pipe(conn->stream_pipes) < 0
 		|| set_nonblocking_fd(conn->stream_pipes[0]) < 0
-		|| set_nonblocking_fd(conn->stream_pipes[1]) < 0))
+		|| set_nonblocking_fd(conn->stream_pipes[1]) < 0)) {
 		return NULL;
-
-	if (!conn->stream) {
-		conn->stream = open_encoded(conn->stream_pipes[0],
-					    conn->content_encoding);
-		if (!conn->stream) return NULL;
 	}
 
 	while (r == ret) {
@@ -737,6 +732,12 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		if (ret < PIPE_BUF) {
 			/* Not enough data, try in next round. */
 			return output;
+		}
+
+		if (!conn->stream) {
+			conn->stream = open_encoded(conn->stream_pipes[0],
+					conn->content_encoding);
+			if (!conn->stream) return NULL;
 		}
 
 		output = (unsigned char *) mem_realloc(output, *new_len + ret);

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.101 2004/09/19 22:30:35 pasky Exp $ */
+/* $Id: parser.c,v 1.102 2004/09/19 22:32:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,6 +196,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		assert(token);
 
+
 		/* This is basicly check_css_precedence(token->type, ','))
 		 * meaning check if the token precedence is less than or equal
 		 * some ordinary token. But that would be too corny to write at
@@ -204,6 +205,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		    || token->type == '}'
 		    || token->type == ';')
 			break;
+
 
 		/* Examine the selector fragment */
 
@@ -234,11 +236,13 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 				continue;
 		}
 
+
 		/* Save it */
 
 		memcpy(&element, token, sizeof(struct scanner_token));
 		token = get_next_scanner_token(scanner);
 		if (!token) return;
+
 
 		/* End of selector? */
 
@@ -248,7 +252,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			continue;
 		}
 
-		/* Check if we have already encountered the selector */
+
+		/* Register the selector */
 
 		selector = get_css_base_selector(css, seltype,
 		                                 element.string,
@@ -261,7 +266,9 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		add_to_list(*selectors, pkg);
 
-		/* Multiple elements hooked up to this ruleset. */
+
+		/* Multiple elements hooked up to this ruleset? */
+
 		if (token->type == ',') skip_scanner_token(scanner);
 	}
 }

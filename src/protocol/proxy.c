@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.43 2004/07/22 07:45:32 miciah Exp $ */
+/* $Id: proxy.c,v 1.44 2004/07/22 08:07:46 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -114,10 +114,12 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		break;
 
 	case PROTOCOL_HTTPS:
-		/* As Timo Lindfors explains, the connection between ELinks
-		 * and the proxy server is never encrypted (if there is some
-		 * proxy server with which the Web client communicates using
-		 * encryption, ELinks does not support it). */
+		/* As Timo Lindfors explains, the communication between ELinks
+		 * and the proxy server is never encrypted, altho the proxy
+		 * might be used to transfer encrypted data between Web client
+		 * and Web server. (Some proxy servers might allow encrypted
+		 * communication between the Web client and the proxy
+		 * but ELinks does not support that.) */
 		/* So, don't check whether the URI for the proxy begins
 		 * with "https://" but rather check for "http://".
 		 * Maybe we should allow either -- ELinks uses HTTP

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.52 2003/08/25 22:32:18 jonas Exp $ */
+/* $Id: draw.c,v 1.53 2003/08/25 23:52:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,15 +22,6 @@
 		int_upper_bound(&(y), (term)->y - 1); \
 		int_lower_bound(&(y), 0); \
 	} while (0)
-
-static inline unsigned char
-encode_color(struct color_pair *color)
-{
-	unsigned char fg = find_nearest_color(color->foreground, 16);
-	unsigned char bg = find_nearest_color(color->background, 8);
-
-	return ((((fg) & 0x08) << 3) | ((bg) << 3) | ((fg) & 0x07));
-}
 
 void
 draw_border_cross(struct terminal *term, int x, int y,
@@ -69,7 +60,7 @@ draw_border_char(struct terminal *term, int x, int y,
 
 	position = x + term->x * y;
 	term->screen->image[position].data = (unsigned char) border;
-	term->screen->image[position].color = encode_color(color);
+	term->screen->image[position].color = mix_color_pair(color);
 	term->screen->image[position].attr = SCREEN_ATTR_FRAME;
 	term->screen->dirty = 1;
 }
@@ -92,7 +83,7 @@ draw_char_color(struct terminal *term, int x, int y, struct color_pair *color)
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	term->screen->image[x + term->x * y].color = encode_color(color);
+	term->screen->image[x + term->x * y].color = mix_color_pair(color);
 	term->screen->dirty = 1;
 }
 
@@ -180,7 +171,7 @@ draw_char(struct terminal *term, int x, int y,
 
 	position = x + term->x * y;
 	term->screen->image[position].data = data;
-	term->screen->image[position].color = encode_color(color);
+	term->screen->image[position].color = mix_color_pair(color);
 	term->screen->image[position].attr = attr;
 	term->screen->dirty = 1;
 }
@@ -208,8 +199,8 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	position = x + term->x * y;
 	line = &term->screen->image[position];
 
-	/* Make an Use*/
-	area.color = color ?  encode_color(color) : 0;
+	/* Compose a screen position in the ares so memcpy() can be used. */
+	area.color = color ? mix_color_pair(color) : 0;
 	area.data = data;
 	area.attr = attr;
 
@@ -241,7 +232,7 @@ draw_text(struct terminal *term, int x, int y,
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	enc_color = color ? encode_color(color) : 0;
+	enc_color = color ? mix_color_pair(color) : 0;
 
 	end = int_min(length, term->x - x);
 	position = x + term->x * y;

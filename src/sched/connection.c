@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.9 2003/01/19 14:24:19 pasky Exp $ */
+/* $Id: connection.c,v 1.10 2003/01/23 02:29:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,10 +239,11 @@ setcstate(struct connection *c, int state)
 			tcount count = c->count;
 
 			if (!prg->valid) {
-				int tmp = prg->start;
+				int tmp = prg->start, tmp2 = prg->seek;
 
 				memset(prg, 0, sizeof(struct remaining_info));
 				prg->start = tmp;
+				prg->seek = tmp2;
 				prg->valid = 1;
 			}
 			prg->last_time = get_time();

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.3 2003/01/22 00:49:18 pasky Exp $ */
+/* $Id: download.c,v 1.4 2003/01/23 02:29:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,6 +462,15 @@ download_data(struct status *stat, struct download *down)
 		return;
 	}
 
+	if (down->stat.prg && down->stat.prg->seek) {
+		down->last_pos = down->stat.prg->seek;
+		down->stat.prg->seek = 0;
+		/* This is exclusive with the prealloc, thus we can perform
+		 * this in front of that thing safely. */
+		if (lseek(down->handle, down->last_pos, SEEK_SET) < 0)
+			goto write_error;
+	}
+
 	foreach (frag, ce->frag) {
 		/* TODO: Separate function? --pasky */
 		int remain = down->last_pos - frag->offset;
@@ -486,9 +495,7 @@ download_data(struct status *stat, struct download *down)
 			if (w == -1) {
 				int saved_errno;
 
-#ifdef USE_OPEN_PREALLOC
 write_error:
-#endif
 				saved_errno = errno; /* Saved in case of ... --Zas */
 
 				detach_connection(stat, down->last_pos);

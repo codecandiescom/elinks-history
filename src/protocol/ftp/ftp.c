@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.78 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: ftp.c,v 1.79 2003/01/23 02:29:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,6 @@
 #include "protocol/ftpparse.h"
 #include "protocol/url.h"
 #include "sched/sched.h"
-#include "sched/download.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -813,51 +812,10 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 						conn->from = conn->prg.start;
 					/* Come on, don't be nervous ;-). */
 					if (conn->prg.start >= 0) {
-						/* I'm not really sure about
-						 * this. --pasky */
-						/* FIXME */
-						struct download *down =
-							((struct status *)
-							 conn->statuss.next
-							 )->data;
-
 						/* Update to the real value
 						 * which we've got from
 						 * Content-Range. */
-						/* This is certainly not the
-						 * best place to do it, the
-						 * struct download looks alien
-						 * here, but I'm not aware
-						 * about any other place where
-						 * we could do this elegantly.
-						 */
-
-						if (!down)
-							internal("Eek! We've "
-								"NULL down "
-								"(c->stat->data)"
-								" even when we "
-								"got "
-								"c->prg.start! "
-								"Call "
-								"pasky@ucw.cz "
-								"immediatelly, "
-								"please. And "
-								"expect segfault"
-								" right now.");
-
-						/* FIXME: there's a problem here
-						 * sometimes down->handle == 0
-						 */
-						if (lseek(down->handle,
-						    conn->from, SEEK_SET)
-						    < 0) {
-							abort_conn_with_state(
-								conn, -errno);
-							return;
-						}
-
-						down->last_pos = conn->from;
+						conn->prg.seek = conn->from;
 					}
 					conn->prg.start = conn->from;
 				}

@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.3 2003/01/07 23:18:59 pasky Exp $ */
+/* $Id: sched.h,v 1.4 2003/01/23 02:29:28 pasky Exp $ */
 
 #ifndef EL__SCHED_SCHED_H
 #define EL__SCHED_SCHED_H
@@ -41,6 +41,10 @@ struct remaining_info {
 	 * relative_position is equiv to loaded, but I'd rather not rely on it
 	 * --pasky). */
 	int pos;
+	/* If this is non-zero, it indicates that we should seek in the
+	 * stream to the value inside before the next write (and zero this
+	 * counter then, obviously). */
+	int seek;
 
 	ttime elapsed;
 	ttime last_time;

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.73 2003/09/08 20:37:34 jonas Exp $ */
+/* $Id: screen.c,v 1.74 2003/09/08 20:54:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,6 +93,9 @@ struct screen_driver {
 	/* The frame mode setup and teardown sequences. May be NULL. */
 	struct frame_seq *frame_seqs;
 
+	/* How many bytes are used for colors. */
+	int color_size;
+
 	/* These are directly derived from the terminal options. */
 	unsigned int colors:1;
 	unsigned int trans:1;
@@ -108,6 +111,7 @@ static struct screen_driver dumb_screen_driver = {
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		frame_dumb,
 	/* frame_seqs: */	NULL,
+	/* color_size: */	1,
 	/* colors: */		1,
 	/* trans: */		1,
 	/* underline: */	1,
@@ -119,6 +123,7 @@ static struct screen_driver vt100_screen_driver = {
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		frame_vt100,	/* No UTF8 I/O */
 	/* frame_seqs: */	vt100_frame_seqs, /* No UTF8 I/O */
+	/* color_size: */	1,
 	/* colors: */		1,
 	/* trans: */		1,
 	/* underline: */	1,
@@ -130,6 +135,7 @@ static struct screen_driver linux_screen_driver = {
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		NULL,		/* No restrict_852 */
 	/* frame_seqs: */	NULL,		/* No m11_hack */
+	/* color_size: */	1,
 	/* colors: */		1,
 	/* trans: */		1,
 	/* underline: */	1,
@@ -141,6 +147,7 @@ static struct screen_driver koi8_screen_driver = {
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		frame_koi,
 	/* frame_seqs: */	NULL,
+	/* color_size: */	1,
 	/* colors: */		1,
 	/* trans: */		1,
 	/* underline: */	1,
@@ -262,10 +269,12 @@ done_screen_drivers(void)
 
 
 struct screen_state {
-	unsigned char color;
 	unsigned char border;
 	unsigned char underline;
+	unsigned char color[1];
 };
+
+#define STATE_SIZE (sizeof(struct screen_state) + SCREEN_COLOR_EXTRA)
 
 #define use_utf8_io(driver) ((driver)->charsets[0] != -1)
 
@@ -275,7 +284,6 @@ print_char(struct string *screen, struct screen_driver *driver,
 	   struct screen_char *ch, struct screen_state *state)
 {
 	unsigned char c = ch->data;
-	unsigned char color = ch->color[0];
 	unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
 	unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
 
@@ -297,14 +305,15 @@ print_char(struct string *screen, struct screen_driver *driver,
 			 * because we want to apply enhancements for each
 			 * underlined char. */
 			if (underline) {
+#if 0
 				color |= SCREEN_ATTR_BOLD;
 				color ^= 0x04;
-
+#endif
 				/* Mark that underline has been handled so it
 				 * is not added when adding the color below. */
 				underline = 0;
 			}
-		} else if (color != state->color) {
+		} else if (memcmp(ch->color, state->color, driver->color_size)) {
 			/* Color changes wipes away any previous attributes
 			 * which means underlines has to be added together with
 			 * the color below so here we just update the state. */
@@ -321,11 +330,11 @@ print_char(struct string *screen, struct screen_driver *driver,
 		}
 	}
 
-	if (color != state->color) {
+	if (memcmp(ch->color, state->color, driver->color_size)) {
 		unsigned char code[13];
 		int length;
 
-		state->color = color;
+		memcpy(state->color, ch->color, driver->color_size);
 
 		code[0] = '\033';
 		code[1] = '[';
@@ -334,9 +343,9 @@ print_char(struct string *screen, struct screen_driver *driver,
 		if (driver->colors) {
 			code[3] = ';';
 			code[4] = '3';
-			code[5] = '0' + TERM_COLOR_FOREGROUND(color);
+			code[5] = '0' + TERM_COLOR_FOREGROUND(ch->color[0]);
 
-			code[8] = '0' + TERM_COLOR_BACKGROUND(color);
+			code[8] = '0' + TERM_COLOR_BACKGROUND(ch->color[0]);
 			if (!driver->trans || code[8] != '0') {
 				code[6] = ';';
 				code[7] = '4';
@@ -361,7 +370,7 @@ print_char(struct string *screen, struct screen_driver *driver,
 
 		/* Check if the char should be rendered bold. */
 		/* TODO: Don't use @color but @attr here. */
-		if (color & SCREEN_ATTR_BOLD) {
+		if (ch->attr & SCREEN_ATTR_BOLD) {
 			code[length++] = ';';
 			code[length++] = '1';
 		}
@@ -420,11 +429,12 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 void
 redraw_screen(struct terminal *term)
 {
+	unsigned char space[STATE_SIZE];
 	struct screen_driver *driver = get_screen_driver(term);
 	struct string image;
 	register int y = 0;
 	int prev_y = -1;
-	struct screen_state state = { 0xFF, 0xFF, 0xFF };
+	struct screen_state *state = (struct screen_state *)space;
 	struct terminal_screen *screen = term->screen;
  	register struct screen_char *current;
  	register struct screen_char *pos;
@@ -436,6 +446,7 @@ redraw_screen(struct terminal *term)
 	    || (term->master && is_blocked())
 	    || !init_string(&image)) return;
 
+	memset(space, 0xFF, sizeof(space));
 	current = screen->last_image;
  	pos = screen->image;
  	prev_pos = NULL;
@@ -445,7 +456,7 @@ redraw_screen(struct terminal *term)
 
  		for (; x < term->x; x++, current++, pos++) {
 
-			if (!memcmp(pos->color, current->color, 1)) {
+			if (!memcmp(pos->color, current->color, driver->color_size)) {
 				/* No update for exact match. */
 				if (pos->data == current->data
 				    && pos->attr == current->attr)
@@ -466,7 +477,7 @@ redraw_screen(struct terminal *term)
 			}
 
 			for (; prev_pos <= pos; prev_pos++)
-				print_char(&image, driver, prev_pos, &state);
+				print_char(&image, driver, prev_pos, state);
 		}
 	}
 
@@ -477,7 +488,7 @@ redraw_screen(struct terminal *term)
 		add_bytes_to_string(&image, "\033[0m", 4);
 
 		/* If we ended in border state end the frame mode. */
-		if (state.border && driver->frame_seqs) {
+		if (state->border && driver->frame_seqs) {
 			struct frame_seq *seq = &driver->frame_seqs[0];
 
 			add_bytes_to_string(&image, seq->src, seq->len);

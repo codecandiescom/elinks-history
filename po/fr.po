@@ -1243,7 +1243,6 @@ msgid "Prevent overwriting"
 msgstr "Prévenir l'écrasement"
 
 #: src/config/options.c:1260
-#, fuzzy
 msgid ""
 "Prevent overwriting the local files:\n"
 "0 is files will silently be overwritten.\n"
@@ -1252,7 +1251,8 @@ msgid ""
 msgstr ""
 "Prévenir l'écrasement des fichiers locaux:\n"
 "0 Ecraser les fichiers silencieusement.\n"
-"1 Ajouter un suffixe .{nombre} (par exemple '.1') au nom."
+"1 Ajouter un suffixe .{nombre} (par exemple '.1') au nom.\n"
+"2 Demander à l'utilisateur."
 
 #: src/config/options.c:1265
 msgid "Notify download completion by bell"
@@ -1785,7 +1785,6 @@ msgstr ""
 "en fonction de votre système (par exemple unix, unix-xwin)."
 
 #: src/config/options.c:1559
-#, fuzzy
 msgid ""
 "Handler (external program) for this protocol and system.\n"
 "%h in the string means hostname (or email address)\n"
@@ -1797,6 +1796,7 @@ msgstr ""
 "Programme externe pour ce protocole et ce système.\n"
 "%h dans la chaîne insère le nom d'hôte ou l'adresse email\n"
 "%p dans la chaîne insère le port\n"
+"%d dans la chaîne insère le chemin(tout à partir du port)\n"
 "%s dans la chaîne insère le sujet (?subject=<this>)\n"
 "%u dans la chaîne insère l'URL complète"
 
@@ -2485,13 +2485,12 @@ msgstr ""
 "Numéro de session (instance d'ELinks) à cloner."
 
 #: src/config/options.c:2389
-#, fuzzy
 msgid "MIME type to assume for documents"
-msgstr "Associations des types MIME"
+msgstr "Type MIME à supposer pour les documents"
 
 #: src/config/options.c:2391
 msgid "Default MIME type to assume for documents of unknown type."
-msgstr ""
+msgstr "Type MIME à supposer pour les documents dont le type est inconnu."
 
 #: src/config/options.c:2393
 msgid "Write formatted version of given URL to stdout"
@@ -3454,30 +3453,28 @@ msgid "Download complete"
 msgstr "Téléchargement terminé"
 
 #: src/sched/download.c:683
-#, fuzzy
 msgid "File exists"
-msgstr "E~xtensions de fichiers"
+msgstr "Fichier existant"
 
 #: src/sched/download.c:684
 msgid "This file already exists:\n"
-msgstr ""
+msgstr "Ce fichier existe déjà:\n"
 
 #: src/sched/download.c:685
 msgid "The alternative filename is:\n"
-msgstr ""
+msgstr "Le nom de fichier alternatif est:\n"
 
 #: src/sched/download.c:687
 msgid "Save under the alternative name"
-msgstr ""
+msgstr "Sauver sous un nom différent"
 
 #: src/sched/download.c:688
-#, fuzzy
 msgid "Overwrite the original file"
-msgstr "Configurer la date de fichier"
+msgstr "Ecraser le fichier original"
 
 #: src/sched/download.c:689
 msgid "Resume download of the original file"
-msgstr ""
+msgstr "Reprendre le téléchargement du fichier original"
 
 #: src/sched/download.c:1152 src/sched/download.c:1161
 msgid "Unknown type"

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-30 21:39+0100\n"
-"PO-Revision-Date: 2004-12-30 21:35+0100\n"
+"POT-Creation-Date: 2004-12-31 03:40+0100\n"
+"PO-Revision-Date: 2004-12-31 03:42+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -41,8 +41,8 @@ msgstr "Tryk mellemrum for at åbne denne mappe."
 #: src/dialogs/document.c:50 src/dialogs/document.c:226
 #: src/dialogs/document.c:243 src/dialogs/document.c:301 src/dialogs/edit.c:95
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
-#: src/dialogs/menu.c:96 src/dialogs/menu.c:516 src/dialogs/menu.c:567
-#: src/dialogs/options.c:173 src/dialogs/options.c:250
+#: src/dialogs/menu.c:96 src/dialogs/menu.c:515 src/dialogs/menu.c:566
+#: src/dialogs/options.c:173 src/dialogs/options.c:253
 #: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1931
 #: src/ecmascript/spidermonkey.c:1958 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
@@ -167,8 +167,8 @@ msgstr "Navn"
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:411
 #: src/config/dialogs.c:498 src/config/dialogs.c:908 src/cookies/dialogs.c:356
 #: src/dialogs/edit.c:99 src/dialogs/edit.c:102 src/dialogs/menu.c:96
-#: src/dialogs/menu.c:516 src/dialogs/menu.c:567 src/dialogs/options.c:176
-#: src/dialogs/options.c:251 src/mime/dialogs.c:131
+#: src/dialogs/menu.c:515 src/dialogs/menu.c:566 src/dialogs/options.c:176
+#: src/dialogs/options.c:254 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
 #: src/sched/download.c:1022 src/sched/download.c:1032
 #: src/sched/download.c:1053 src/sched/download.c:1066
@@ -1215,7 +1215,7 @@ msgstr "Edit tastaturoversigt"
 msgid "Menu mapping"
 msgstr "Menu tastaturoversigt"
 
-#: src/config/kbdbind.c:430 src/config/kbdbind.c:549 src/config/kbdbind.c:580
+#: src/config/kbdbind.c:430 src/config/kbdbind.c:550 src/config/kbdbind.c:581
 msgid "Do nothing"
 msgstr "Gør ingenting"
 
@@ -1260,7 +1260,7 @@ msgstr "Åbn cookie-håndtering"
 msgid "Reload cookies file"
 msgstr "Genindlæs cookie fil"
 
-#: src/config/kbdbind.c:442 src/config/kbdbind.c:556
+#: src/config/kbdbind.c:442 src/config/kbdbind.c:557
 msgid "Copy text to clipboard"
 msgstr "Kopier tekst til udklipsholder"
 
@@ -1372,7 +1372,7 @@ msgstr "Forsøg at genoptage hentning af den nuværende henvisning"
 msgid "Pass URI of current link to external command"
 msgstr "Videregiv URI fra den nuværende henvisning til ekstern program"
 
-#: src/config/kbdbind.c:470 src/config/kbdbind.c:562 src/config/kbdbind.c:586
+#: src/config/kbdbind.c:470 src/config/kbdbind.c:563 src/config/kbdbind.c:587
 msgid "Follow the current link"
 msgstr "~Følg det nuværende lænke"
 
@@ -1452,11 +1452,11 @@ msgstr "Flyt en henvisning til højre"
 msgid "Move one link up"
 msgstr "Flyt en henvisning opad"
 
-#: src/config/kbdbind.c:493 src/config/kbdbind.c:592
+#: src/config/kbdbind.c:493 src/config/kbdbind.c:593
 msgid "Move downwards by a page"
 msgstr "Flyt en side ned"
 
-#: src/config/kbdbind.c:494 src/config/kbdbind.c:593
+#: src/config/kbdbind.c:494 src/config/kbdbind.c:594
 msgid "Move upwards by a page"
 msgstr "Flyt en side op"
 
@@ -1500,7 +1500,7 @@ msgstr "Åbn et dialogvindue til at bekræftige afslutning"
 msgid "Quit without confirmation"
 msgstr "Afslut uden bekræftelse"
 
-#: src/config/kbdbind.c:505 src/config/kbdbind.c:571 src/config/kbdbind.c:595
+#: src/config/kbdbind.c:505 src/config/kbdbind.c:572 src/config/kbdbind.c:596
 msgid "Redraw the terminal"
 msgstr "Gentegn terminalen"
 
@@ -1552,7 +1552,7 @@ msgstr "Rul til højre"
 msgid "Scroll up"
 msgstr "Rul op"
 
-#: src/config/kbdbind.c:518 src/config/kbdbind.c:597
+#: src/config/kbdbind.c:518 src/config/kbdbind.c:598
 msgid "Search for a text pattern"
 msgstr "Søg efter tekststring"
 
@@ -1617,153 +1617,157 @@ msgid "Previous tab"
 msgstr "Forrige faneblad"
 
 #: src/config/kbdbind.c:535
+msgid "Open the terminal resize dialog"
+msgstr "Åbn dialogvindue til ændring af terminalstørrelse"
+
+#: src/config/kbdbind.c:536
 msgid "Toggle rendering of page using CSS"
 msgstr "Skift mellem gengivning af side ved brug af CSS"
 
-#: src/config/kbdbind.c:536
+#: src/config/kbdbind.c:537
 msgid "Toggle displaying of links to images"
 msgstr "Skift mellem visning af billedhenvisninger"
 
-#: src/config/kbdbind.c:537
+#: src/config/kbdbind.c:538
 msgid "Toggle rendering of tables"
 msgstr "Skift mellem visning af tabeller"
 
-#: src/config/kbdbind.c:538
+#: src/config/kbdbind.c:539
 msgid "Toggle usage of document specific colors"
 msgstr "Skift mellem brug af dokument definerede farver"
 
-#: src/config/kbdbind.c:539
+#: src/config/kbdbind.c:540
 msgid "Toggle rendering page as HTML / plain text"
 msgstr "Skift mellem visning af side som HTML eller almindelig tekst"
 
-#: src/config/kbdbind.c:540
+#: src/config/kbdbind.c:541
 msgid "Toggle displaying of links numbers"
 msgstr "Skift mellem visning af nummerering af henvisninger"
 
-#: src/config/kbdbind.c:541
+#: src/config/kbdbind.c:542
 msgid "Toggle plain renderer compression of empty lines"
 msgstr ""
 "Skift mellem af komprimering af tomme linier for gengivelse af klartekst"
 
-#: src/config/kbdbind.c:542
+#: src/config/kbdbind.c:543
 msgid "Toggle wrapping of text"
 msgstr "Skift mellem tekstombrydning"
 
-#: src/config/kbdbind.c:543
+#: src/config/kbdbind.c:544
 msgid "View the current image"
 msgstr "Vis det nuværende billede"
 
 #. internal use only
-#: src/config/kbdbind.c:551
+#: src/config/kbdbind.c:552
 msgid "Attempt to auto-complete the input"
 msgstr "Forsøg automatisk at færdiggøre input"
 
-#: src/config/kbdbind.c:552
+#: src/config/kbdbind.c:553
 msgid "Attempt to unambiguously auto-complete the input"
 msgstr "Forsøg automatisk utvetydigt at færdiggøre input"
 
-#: src/config/kbdbind.c:553
+#: src/config/kbdbind.c:554
 msgid "Delete character in front of the cursor"
 msgstr "Slet tegn foran markøren"
 
-#: src/config/kbdbind.c:554
+#: src/config/kbdbind.c:555
 msgid "Go to the first line of the buffer"
 msgstr "Gå til første linje af buffer"
 
 #. internal use only
-#: src/config/kbdbind.c:555 src/config/kbdbind.c:582
+#: src/config/kbdbind.c:556 src/config/kbdbind.c:583
 msgid "Cancel current state"
 msgstr "Afbryd nuværende tilstand"
 
-#: src/config/kbdbind.c:557
+#: src/config/kbdbind.c:558
 msgid "Delete text from clipboard"
 msgstr "Slet tekst fra udklipsholder"
 
-#: src/config/kbdbind.c:558 src/config/kbdbind.c:583
+#: src/config/kbdbind.c:559 src/config/kbdbind.c:584
 msgid "Delete character under cursor"
 msgstr "Slet tegn under markør"
 
-#: src/config/kbdbind.c:559 src/config/kbdbind.c:584
+#: src/config/kbdbind.c:560 src/config/kbdbind.c:585
 msgid "Move cursor downwards"
 msgstr "Flyt markøren nedad"
 
-#: src/config/kbdbind.c:560 src/config/kbdbind.c:585
+#: src/config/kbdbind.c:561 src/config/kbdbind.c:586
 msgid "Go to the end of the page/line"
 msgstr "Flyt markøren til enden af siden/linjen"
 
-#: src/config/kbdbind.c:561
+#: src/config/kbdbind.c:562
 msgid "Go to the last line of the buffer"
 msgstr "Gå til sidste linje i bufferen"
 
-#: src/config/kbdbind.c:563 src/config/kbdbind.c:588
+#: src/config/kbdbind.c:564 src/config/kbdbind.c:589
 msgid "Go to the start of the page/line"
 msgstr "Gå til begyndelsen af siden/linjen"
 
-#: src/config/kbdbind.c:564
+#: src/config/kbdbind.c:565
 msgid "Delete to beginning of line"
 msgstr "Slet til linjestart"
 
-#: src/config/kbdbind.c:565
+#: src/config/kbdbind.c:566
 msgid "Delete to end of line"
 msgstr "Slet til enden af linje"
 
-#: src/config/kbdbind.c:566 src/config/kbdbind.c:589
+#: src/config/kbdbind.c:567 src/config/kbdbind.c:590
 msgid "Move the cursor left"
 msgstr "Flyt markør til venstre"
 
-#: src/config/kbdbind.c:567 src/config/kbdbind.c:591
+#: src/config/kbdbind.c:568 src/config/kbdbind.c:592
 msgid "Move to the next item"
 msgstr "Flyt til næste indgang"
 
-#: src/config/kbdbind.c:568
+#: src/config/kbdbind.c:569
 msgid "Open in external editor"
 msgstr "Åbn i en ekstern tekstbehandler"
 
-#: src/config/kbdbind.c:569
+#: src/config/kbdbind.c:570
 msgid "Paste text from the clipboard"
 msgstr "Kopier tekst fra udklipsholder"
 
-#: src/config/kbdbind.c:570 src/config/kbdbind.c:594
+#: src/config/kbdbind.c:571 src/config/kbdbind.c:595
 msgid "Move to the previous item"
 msgstr "Flyt til den forrige indgang"
 
-#: src/config/kbdbind.c:572 src/config/kbdbind.c:596
+#: src/config/kbdbind.c:573 src/config/kbdbind.c:597
 msgid "Move the cursor right"
 msgstr "Flyt markøren til højre"
 
-#: src/config/kbdbind.c:573
+#: src/config/kbdbind.c:574
 msgid "Toggle regex matching (type-ahead searching)"
 msgstr "Skift mellem søgning med regulære udtryk"
 
-#: src/config/kbdbind.c:574 src/config/kbdbind.c:600
+#: src/config/kbdbind.c:575 src/config/kbdbind.c:601
 msgid "Move cursor upwards"
 msgstr "Flyt markør op af"
 
-#: src/config/kbdbind.c:587
+#: src/config/kbdbind.c:588
 msgid "Expand item"
 msgstr "Udfold indgang"
 
-#: src/config/kbdbind.c:590
+#: src/config/kbdbind.c:591
 msgid "Mark item"
 msgstr "Marker indgang"
 
-#: src/config/kbdbind.c:598
+#: src/config/kbdbind.c:599
 msgid "Select current highlighted item"
 msgstr "Udvælg det nuværende fremhævede element"
 
-#: src/config/kbdbind.c:599
+#: src/config/kbdbind.c:600
 msgid "Collapse item"
 msgstr "Sammenfold indgang"
 
-#: src/config/kbdbind.c:666
+#: src/config/kbdbind.c:667
 msgid "Unrecognised keymap"
 msgstr "Ugenkendt tasteoversigt"
 
-#: src/config/kbdbind.c:668
+#: src/config/kbdbind.c:669
 msgid "Error parsing keystroke"
 msgstr "Fejl ved parsning af tastekombination"
 
-#: src/config/kbdbind.c:670
+#: src/config/kbdbind.c:671
 msgid "Unrecognised action (internal error)"
 msgstr "Ugenkendt handling (intern fejl)"
 
@@ -3020,11 +3024,11 @@ msgstr "Komprimer efterfølgende tomme linjer til kun en i den viste tekst."
 
 #: src/config/options.inc:689
 msgid "URI passing"
-msgstr ""
+msgstr "Ekstern URI håndtering"
 
 #: src/config/options.inc:691
 msgid "Rules for passing URIs to external commands."
-msgstr ""
+msgstr "Regler for håndtering af URIs af eksterne kommandoer."
 
 #: src/config/options.inc:695
 msgid ""
@@ -3054,6 +3058,9 @@ msgid ""
 "Interval at which to trigger information files in ~/.elinks\n"
 "to be saved to disk if they has changed (seconds; 0 to disable)"
 msgstr ""
+"Det interval som vil forårsage at informationsfiler i ~/.elinks\n"
+"skrives til disken hvis de er blevet ændret. Angives i sekunder\n"
+"hvor 0 betyder deaktivering."
 
 #: src/config/options.inc:714
 msgid "Use secure file saving"
@@ -3082,7 +3089,7 @@ msgstr "Terminalindstillinger."
 
 #: src/config/options.inc:735
 msgid "Options specific to this terminal type (according to $TERM value)."
-msgstr ""
+msgstr "Indstillinger for terminaler af typen angivet med TERM miljøvariablen."
 
 #: src/config/options.inc:739
 msgid ""
@@ -3097,7 +3104,7 @@ msgstr ""
 
 #: src/config/options.inc:747 src/dialogs/options.c:166
 msgid "Switch fonts for line drawing"
-msgstr "Skift skrifttype ved linetegning"
+msgstr "Skift skrifttype ved linjetegning"
 
 #: src/config/options.inc:749
 msgid ""
@@ -3105,6 +3112,9 @@ msgid ""
 "and lines working at the same time. Makes sense only with linux\n"
 "terminal."
 msgstr ""
+"Skift skrifttype ved tegning af linjer, hvormed både lokale tegn\n"
+"og linjer kan benyttes samtidig. Er kun meningsfuld at sætte for\n"
+"linux terminal."
 
 #: src/config/options.inc:753
 msgid "UTF-8 I/0"
@@ -3115,6 +3125,8 @@ msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
 msgstr ""
+"Aktiver UTF-8 I/O for terminaler der understøtter Unicode. Bemærk,\n"
+"at der på nuværende tidspunkt kun bruges en delmængde af UTF-8."
 
 #: src/config/options.inc:758 src/dialogs/options.c:167
 msgid "Restrict frames in cp850/852"
@@ -3125,6 +3137,8 @@ msgid ""
 "Restrict the characters used when drawing lines. Makes sense\n"
 "only with linux terminals using the cp850/852 character sets."
 msgstr ""
+"Begræns hvilke tegn der bruges ved tegning af linjer. Er kun\n"
+"meningsfuld for linux terminaler, der bruger cp850/852 tegnsæt."
 
 #: src/config/options.inc:763 src/dialogs/options.c:168
 msgid "Block cursor"
@@ -3136,6 +3150,9 @@ msgid ""
 "This is particularly useful when we have a block cursor,\n"
 "so that inversed text is displayed correctly."
 msgstr ""
+"Fly markøren til nederste højre hjørne efter genopfriskning\n"
+"af skærmen. Dette er specielt brugbart når der anvendes en\n"
+"udfyldt markør, således at inverteret tekst vises korrekt."
 
 #: src/config/options.inc:769
 msgid "Color mode"
@@ -3202,48 +3219,48 @@ msgstr "Farve indstillinger for farve terminaler"
 
 #: src/config/options.inc:837
 msgid "Non-color terminals"
-msgstr ""
+msgstr "Farveløse terminaler"
 
 #: src/config/options.inc:839
 msgid "Color settings for non-color terminal."
-msgstr ""
+msgstr "Farveindstillinger for farveløse terminaler."
 
 #. FIXME: obsolete, how to alias them correctly ? --Zas
 #: src/config/options.inc:842
 msgid "Main menu bar"
-msgstr "Hoved menubjælke"
+msgstr "Hovedmenulinje"
 
 #: src/config/options.inc:844
 msgid "Main menu bar colors."
-msgstr "Farver for hoved menubjælke."
+msgstr "Farver for hovedmenulinje."
 
 #: src/config/options.inc:846
 msgid "Unselected main menu bar item"
-msgstr ""
+msgstr "Ikke markeret element i hovedmenulinje"
 
 #: src/config/options.inc:848
 msgid "Unselected main menu bar item colors."
-msgstr ""
+msgstr "Farver for ikke markeret element i hovedmenulinje."
 
 #: src/config/options.inc:850
 msgid "Selected main menu bar item"
-msgstr ""
+msgstr "Valgt element i hovedmenulinje"
 
 #: src/config/options.inc:852
 msgid "Selected main menu bar item colors."
-msgstr ""
+msgstr "Farver for element i hovedmenulinje."
 
 #: src/config/options.inc:854 src/config/options.inc:883
 msgid "Hotkey"
-msgstr ""
+msgstr "Tasteturgenvej"
 
 #: src/config/options.inc:856
 msgid "Main menu hotkey colors."
-msgstr ""
+msgstr "Farver for tasteturgenveje i hovedmenu"
 
 #: src/config/options.inc:858 src/config/options.inc:887
 msgid "Unselected hotkey"
-msgstr ""
+msgstr "Ikke markeret tasteturgenvej"
 
 #: src/config/options.inc:860
 msgid "Main menu unselected hotkey colors."
@@ -3311,15 +3328,15 @@ msgstr "Farver for menurammer."
 
 #: src/config/options.inc:900
 msgid "Dialog"
-msgstr ""
+msgstr "Dialogvindue"
 
 #: src/config/options.inc:902
 msgid "Dialog colors."
-msgstr ""
+msgstr "Dialogvinduesfarver"
 
 #: src/config/options.inc:912
 msgid "Generic"
-msgstr ""
+msgstr "Almene farver"
 
 #: src/config/options.inc:914
 msgid "Generic dialog colors."
@@ -3331,7 +3348,7 @@ msgstr "Ramme"
 
 #: src/config/options.inc:918
 msgid "Dialog frame colors."
-msgstr ""
+msgstr "Farver for dialogvinduesrammer"
 
 #: src/config/options.inc:920
 msgid "Scrollbar"
@@ -3545,7 +3562,7 @@ msgstr "Fremhævningsfarver for tekststrenge ved søgning"
 #. Keep options in alphabetical order.
 #: src/config/options.inc:1039
 msgid "Dialog settings"
-msgstr ""
+msgstr "Dialogvinduesindstillinger"
 
 #: src/config/options.inc:1041
 msgid "Dialogs-specific appearance and behaviour settings."
@@ -3553,7 +3570,7 @@ msgstr ""
 
 #: src/config/options.inc:1044
 msgid "Minimal height of listbox widget"
-msgstr ""
+msgstr "Minimal højde af listbox element"
 
 #: src/config/options.inc:1046
 msgid ""
@@ -3563,7 +3580,7 @@ msgstr ""
 
 #: src/config/options.inc:1049
 msgid "Drop shadows"
-msgstr ""
+msgstr "Slagskygger"
 
 #: src/config/options.inc:1051
 msgid ""
@@ -3797,7 +3814,7 @@ msgstr "Sandhedsværdi (1: sandt, 0: falsk)"
 
 #: src/config/opttypes.c:359
 msgid "[0|1]"
-msgstr ""
+msgstr "[0|1]"
 
 #: src/config/opttypes.c:360
 msgid "Integer"
@@ -3805,7 +3822,7 @@ msgstr "Heltal"
 
 #: src/config/opttypes.c:360 src/config/opttypes.c:361
 msgid "<num>"
-msgstr ""
+msgstr "<tal>"
 
 #: src/config/opttypes.c:361
 msgid "Longint"
@@ -3817,7 +3834,7 @@ msgstr "Tekststreng"
 
 #: src/config/opttypes.c:362
 msgid "<str>"
-msgstr ""
+msgstr "<streng>"
 
 #: src/config/opttypes.c:364
 msgid "<codepage>"
@@ -3833,7 +3850,7 @@ msgstr "Farver"
 
 #: src/config/opttypes.c:366
 msgid "<color|#rrggbb>"
-msgstr ""
+msgstr "<farve|#rrggbb>"
 
 #: src/config/opttypes.c:368
 msgid "Special"
@@ -3859,7 +3876,7 @@ msgstr "Cookieindstillinger."
 
 #: src/cookies/cookies.c:85
 msgid "Accept policy"
-msgstr ""
+msgstr "Retningslinjer for godkendelse"
 
 #: src/cookies/cookies.c:88
 msgid ""
@@ -3884,7 +3901,7 @@ msgstr ""
 
 #: src/cookies/cookies.c:100
 msgid "Paranoid security"
-msgstr ""
+msgstr "Paranoid sikkerhed"
 
 #: src/cookies/cookies.c:102
 msgid ""
@@ -3903,7 +3920,7 @@ msgstr "Læs/gem cookies fra/til disken?"
 
 #: src/cookies/cookies.c:110
 msgid "Resaving"
-msgstr ""
+msgstr "Gentaget gemning"
 
 #: src/cookies/cookies.c:112
 msgid ""
@@ -3917,7 +3934,7 @@ msgstr "når programmet afsluttes"
 
 #: src/cookies/dialogs.c:54
 msgid "Accept cookie?"
-msgstr ""
+msgstr "Godkend cookie?"
 
 #: src/cookies/dialogs.c:55
 #, c-format
@@ -3941,11 +3958,11 @@ msgstr "nej"
 
 #: src/cookies/dialogs.c:66
 msgid "Accept"
-msgstr ""
+msgstr "Godkend"
 
 #: src/cookies/dialogs.c:67
 msgid "Reject"
-msgstr ""
+msgstr "Afvis"
 
 #: src/cookies/dialogs.c:136 src/cookies/dialogs.c:341
 #: src/dialogs/document.c:113
@@ -3963,7 +3980,7 @@ msgstr "Sti"
 
 #: src/cookies/dialogs.c:144 src/cookies/dialogs.c:352
 msgid "Expires"
-msgstr ""
+msgstr "Udløber"
 
 #: src/cookies/dialogs.c:149 src/cookies/dialogs.c:353
 msgid "Secure"
@@ -4091,7 +4108,7 @@ msgstr "Ingen info."
 msgid "Internal header info"
 msgstr "Intern protocolhoved."
 
-#: src/dialogs/download.c:253 src/dialogs/menu.c:566 src/sched/download.c:365
+#: src/dialogs/download.c:253 src/dialogs/menu.c:565 src/sched/download.c:365
 msgid "Download"
 msgstr "Hent"
 
@@ -4147,7 +4164,7 @@ msgstr "Afbryd denne filoverførelse?"
 #. clear_all_items_title
 #: src/dialogs/download.c:422
 msgid "Interrupt all downloads"
-msgstr ""
+msgstr "Afbryd alle filoverførelser"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:424
@@ -4212,11 +4229,16 @@ msgid ""
 "Document cache: %d formatted, %d locked, %d refreshing.\n"
 "Interlinking: %s terminal, %d terminals, %d sessions."
 msgstr ""
+"Ressourcer: %d håndtag, %d tidstagere.\n"
+"Forbindelser: %d forbindelser, %d opretter, %d overfører, %d holdes i live.\n"
+"Hukommelsescache: %d byte, %d filer, %d brugs, %d indlæses.\n"
+"Dokumentcache: %d formatterede, %d bruges, %d genopfriskes.\n"
+"Intern kommunikation: %s terminal, %d terminaler, %d sessioner."
 
 #: src/dialogs/info.c:200
 #, c-format
 msgid "Memory allocated: %ld bytes, %ld bytes overhead (%0.2f%%)."
-msgstr ""
+msgstr "Hukommelse allokeret: %ld byte, %ld byte formeget (%0.2f%%)."
 
 #: src/dialogs/info.c:211
 msgid "Resources"
@@ -4226,7 +4248,7 @@ msgstr "Ressourcer"
 msgid "Save URL"
 msgstr "Gem URL"
 
-#: src/dialogs/menu.c:95 src/dialogs/menu.c:515
+#: src/dialogs/menu.c:95 src/dialogs/menu.c:514
 msgid "Enter URL"
 msgstr "Indtast URL"
 
@@ -4252,7 +4274,7 @@ msgstr "Gå tilbage"
 
 #: src/dialogs/menu.c:231
 msgid "Go for~ward"
-msgstr ""
+msgstr "Gå ~fremad"
 
 #: src/dialogs/menu.c:237 src/dialogs/menu.c:310
 msgid "Bookm~ark document"
@@ -4262,25 +4284,25 @@ msgstr "Tilføj dokument som ~bogmærke"
 msgid "~Reload"
 msgstr "Genindlæs"
 
-#: src/dialogs/menu.c:244 src/dialogs/menu.c:409
+#: src/dialogs/menu.c:244 src/dialogs/menu.c:408
 msgid "Frame at ~full-screen"
 msgstr "Maksimer ramme"
 
-#: src/dialogs/menu.c:252 src/dialogs/menu.c:411
+#: src/dialogs/menu.c:252 src/dialogs/menu.c:410
 msgid "Nex~t tab"
 msgstr "~Næste faneblad"
 
-#: src/dialogs/menu.c:253 src/dialogs/menu.c:412
+#: src/dialogs/menu.c:253 src/dialogs/menu.c:411
 msgid "Pre~v tab"
 msgstr "F~orrige faneblad"
 
-#: src/dialogs/menu.c:256 src/dialogs/menu.c:413
+#: src/dialogs/menu.c:256 src/dialogs/menu.c:412
 msgid "~Close tab"
 msgstr "~Luk faneblad"
 
 #: src/dialogs/menu.c:259
 msgid "C~lose all tabs but the current"
-msgstr ""
+msgstr "Luk alle faneblade undtagen det nuværende"
 
 #: src/dialogs/menu.c:263
 msgid "B~ookmark all tabs"
@@ -4348,221 +4370,221 @@ msgstr "K~ommandofortolker"
 
 #: src/dialogs/menu.c:376
 msgid "Resize t~erminal"
-msgstr "Ændre ~terminalstørrelse"
+msgstr "Ændr ~terminalstørrelse"
 
-#: src/dialogs/menu.c:393
+#: src/dialogs/menu.c:392
 msgid "~Search"
 msgstr "~Søg"
 
-#: src/dialogs/menu.c:394
+#: src/dialogs/menu.c:393
 msgid "Search ~backward"
 msgstr "Søg ~bagud"
 
-#: src/dialogs/menu.c:395
+#: src/dialogs/menu.c:394
 msgid "Find ~next"
 msgstr "Søg ~næste"
 
-#: src/dialogs/menu.c:396
+#: src/dialogs/menu.c:395
 msgid "Find ~previous"
 msgstr "Søg foregående"
 
-#: src/dialogs/menu.c:397
+#: src/dialogs/menu.c:396
 msgid "T~ypeahead search"
 msgstr "~Inkrementel søgning"
 
-#: src/dialogs/menu.c:399
+#: src/dialogs/menu.c:398
 msgid "Toggle ~html/plain"
 msgstr "Skift mellem ~HTML/tekst"
 
-#: src/dialogs/menu.c:400
+#: src/dialogs/menu.c:399
 msgid "Toggle i~mages"
 msgstr "Skifte mellem billedvisning"
 
-#: src/dialogs/menu.c:401
+#: src/dialogs/menu.c:400
 msgid "Toggle ~link numbering"
 msgstr "Skift mellem henvisningsnummerering"
 
-#: src/dialogs/menu.c:402
+#: src/dialogs/menu.c:401
 msgid "Toggle ~document colors"
 msgstr "Skift mellem brug af farver"
 
-#: src/dialogs/menu.c:403
+#: src/dialogs/menu.c:402
 msgid "~Wrap text on/off"
-msgstr ""
+msgstr "Skift mellem tekstombrydning"
 
-#: src/dialogs/menu.c:405
+#: src/dialogs/menu.c:404
 msgid "Document ~info"
 msgstr "Dokument~information"
 
-#: src/dialogs/menu.c:406
+#: src/dialogs/menu.c:405
 msgid "H~eader info"
 msgstr "Info om sid~ehoved"
 
-#: src/dialogs/menu.c:407
+#: src/dialogs/menu.c:406
 msgid "Rel~oad document"
 msgstr "Genind~læs dokument"
 
-#: src/dialogs/menu.c:408
+#: src/dialogs/menu.c:407
 msgid "~Rerender document"
 msgstr "Gen~optegn dokument"
 
-#: src/dialogs/menu.c:419
+#: src/dialogs/menu.c:418
 msgid "~ELinks homepage"
 msgstr "~ELinks hjemmeside"
 
-#: src/dialogs/menu.c:420
+#: src/dialogs/menu.c:419
 msgid "~Documentation"
 msgstr "~Dokumentation"
 
-#: src/dialogs/menu.c:421
+#: src/dialogs/menu.c:420
 msgid "~Keys"
 msgstr "~Taster"
 
-#: src/dialogs/menu.c:423
+#: src/dialogs/menu.c:422
 msgid "~Bugs information"
 msgstr "~Fejlrapportering"
 
-#: src/dialogs/menu.c:425
+#: src/dialogs/menu.c:424
 msgid "ELinks C~vsWeb"
 msgstr "ELinks ~CvsWeb"
 
-#: src/dialogs/menu.c:426
+#: src/dialogs/menu.c:425
 msgid "ELinks Cvs ~History"
 msgstr "ELinks cvs ~historik"
 
-#: src/dialogs/menu.c:427
+#: src/dialogs/menu.c:426
 msgid "ELinks ~LXR"
 msgstr "ELinks L~XR"
 
-#: src/dialogs/menu.c:430
+#: src/dialogs/menu.c:429
 msgid "~Copying"
 msgstr "~Licens"
 
-#: src/dialogs/menu.c:431
+#: src/dialogs/menu.c:430
 msgid "~About"
 msgstr "~Om ELinks"
 
-#: src/dialogs/menu.c:437
+#: src/dialogs/menu.c:436
 msgid "~Add"
 msgstr "~Tilføj"
 
-#: src/dialogs/menu.c:438
+#: src/dialogs/menu.c:437
 msgid "~Modify"
-msgstr "~Ændre"
+msgstr "~Ændr"
 
-#: src/dialogs/menu.c:439
+#: src/dialogs/menu.c:438
 msgid "~Delete"
 msgstr "~Slet"
 
-#: src/dialogs/menu.c:445 src/dialogs/menu.c:458
+#: src/dialogs/menu.c:444 src/dialogs/menu.c:457
 msgid "~Language"
 msgstr "~Sprog"
 
-#: src/dialogs/menu.c:447 src/dialogs/menu.c:459
+#: src/dialogs/menu.c:446 src/dialogs/menu.c:458
 msgid "C~haracter set"
 msgstr "Tegn~sætindstillinger"
 
-#: src/dialogs/menu.c:448 src/dialogs/menu.c:460
+#: src/dialogs/menu.c:447 src/dialogs/menu.c:459
 msgid "~Terminal options"
 msgstr "~Terminalindstillinger"
 
-#: src/dialogs/menu.c:449
+#: src/dialogs/menu.c:448
 msgid "File ~extensions"
 msgstr "Filend~elser"
 
-#: src/dialogs/menu.c:451
+#: src/dialogs/menu.c:450
 msgid "~Options manager"
 msgstr "Indstillingshåndtering"
 
-#: src/dialogs/menu.c:452
+#: src/dialogs/menu.c:451
 msgid "~Keybinding manager"
 msgstr "Tastatur~genvejshåndtering"
 
-#: src/dialogs/menu.c:453
+#: src/dialogs/menu.c:452
 msgid "~Save options"
 msgstr "~Gem indstillinger"
 
-#: src/dialogs/menu.c:466
+#: src/dialogs/menu.c:465
 msgid "Global ~history"
 msgstr "Historikhåndtering"
 
-#: src/dialogs/menu.c:469
+#: src/dialogs/menu.c:468
 msgid "~Bookmarks"
 msgstr "~Bogmærker"
 
-#: src/dialogs/menu.c:471
+#: src/dialogs/menu.c:470
 msgid "~Cache"
 msgstr "~Cache"
 
-#: src/dialogs/menu.c:472
+#: src/dialogs/menu.c:471
 msgid "~Downloads"
 msgstr "~Filoverførsler"
 
-#: src/dialogs/menu.c:474
+#: src/dialogs/menu.c:473
 msgid "Coo~kies"
 msgstr "Coo~kies"
 
-#: src/dialogs/menu.c:477
+#: src/dialogs/menu.c:476
 msgid "~Form history"
 msgstr "~Formularhistorik"
 
-#: src/dialogs/menu.c:479
+#: src/dialogs/menu.c:478
 msgid "~Authentication"
 msgstr "~Identitetsbekræftelse"
 
-#: src/dialogs/menu.c:495
+#: src/dialogs/menu.c:494
 msgid "~File"
 msgstr "~Filer"
 
-#: src/dialogs/menu.c:496
+#: src/dialogs/menu.c:495
 msgid "~View"
 msgstr "~Vis"
 
-#: src/dialogs/menu.c:497
+#: src/dialogs/menu.c:496
 msgid "~Link"
 msgstr "~Lænker"
 
-#: src/dialogs/menu.c:498
+#: src/dialogs/menu.c:497
 msgid "~Tools"
 msgstr "~Værktøjer"
 
-#: src/dialogs/menu.c:499
+#: src/dialogs/menu.c:498
 msgid "~Setup"
 msgstr "~Indstillinger"
 
-#: src/dialogs/menu.c:500
+#: src/dialogs/menu.c:499
 msgid "~Help"
 msgstr "~Hjælp"
 
-#: src/dialogs/menu.c:515
+#: src/dialogs/menu.c:514
 msgid "Go to URL"
 msgstr "Gå til URL"
 
-#: src/dialogs/menu.c:566
+#: src/dialogs/menu.c:565
 msgid "Save to file"
 msgstr "Gem som fil"
 
-#: src/dialogs/menu.c:863
+#: src/dialogs/menu.c:862
 msgid "~Pass frame URI to external command"
 msgstr ""
 
-#: src/dialogs/menu.c:868
+#: src/dialogs/menu.c:867
 msgid "Pass link URI to e~xternal command"
 msgstr ""
 
-#: src/dialogs/menu.c:874
+#: src/dialogs/menu.c:873
 msgid "Pass tab URI to e~xternal command"
 msgstr ""
 
-#: src/dialogs/menu.c:899
+#: src/dialogs/menu.c:898
 msgid "Empty directory"
-msgstr ""
+msgstr "Tom mappe"
 
-#: src/dialogs/menu.c:943
+#: src/dialogs/menu.c:942
 msgid "Directories:"
-msgstr ""
+msgstr "Mapper:"
 
-#: src/dialogs/menu.c:956
+#: src/dialogs/menu.c:955
 msgid "Files:"
 msgstr "Filer:"
 
@@ -4572,7 +4594,7 @@ msgstr "Terminalindstillinger"
 
 #: src/dialogs/options.c:152
 msgid "Frame handling:"
-msgstr ""
+msgstr "Håndtering af rammer:"
 
 #: src/dialogs/options.c:153
 msgid "No frames"
@@ -4600,7 +4622,7 @@ msgstr "Farvetilstand:"
 
 #: src/dialogs/options.c:160
 msgid "No colors (mono)"
-msgstr ""
+msgstr "Ingen farver (mono)"
 
 #: src/dialogs/options.c:161
 msgid "16 colors"
@@ -4614,15 +4636,15 @@ msgstr "256 farver"
 msgid "UTF-8 I/O"
 msgstr "UTF-8 I/O"
 
-#: src/dialogs/options.c:244
+#: src/dialogs/options.c:247
 msgid "Resize terminal"
 msgstr "Ændr terminalstørrelse"
 
-#: src/dialogs/options.c:247
+#: src/dialogs/options.c:250
 msgid "Width="
 msgstr "Bredde="
 
-#: src/dialogs/options.c:248
+#: src/dialogs/options.c:251
 msgid "Height="
 msgstr "Højde="
 
@@ -4696,12 +4718,12 @@ msgstr "Indtast mærket, som skal hoppes til"
 #: src/dialogs/status.c:258
 #, c-format
 msgid "Keyboard prefix: %d"
-msgstr ""
+msgstr "Tasteturpræfiks: %d"
 
 #: src/dialogs/status.c:282
 #, c-format
 msgid "Cursor position: %dx%d"
-msgstr ""
+msgstr "Markørens position: %dx%d"
 
 #: src/dialogs/status.c:383
 msgid "Untitled"
@@ -4714,7 +4736,7 @@ msgstr "Intet dokument"
 #. name:
 #: src/document/css/css.c:29 src/document/css/css.c:156
 msgid "Cascading Style Sheets"
-msgstr ""
+msgstr "CSS stilark"
 
 #: src/document/css/css.c:31
 msgid "Options concerning how to use CSS for styling documents."
@@ -4726,11 +4748,11 @@ msgstr "Anvend CSS stilark"
 
 #: src/document/css/css.c:35
 msgid "Enable adding of CSS style info to documents."
-msgstr ""
+msgstr "Anvend CSS stilark ved optegning af dokumenter."
 
 #: src/document/css/css.c:37
 msgid "Import external style sheets"
-msgstr ""
+msgstr "Importer eksterne stilark"
 
 #: src/document/css/css.c:39
 msgid ""
@@ -4771,19 +4793,19 @@ msgstr "Rapportering af skriptfejl"
 
 #: src/ecmascript/ecmascript.c:47
 msgid "Open a message box when a script reports an error."
-msgstr ""
+msgstr "Åbn dialogvindue når et skript rapportere en fejl."
 
 #: src/ecmascript/ecmascript.c:49
-msgid "Max. Execution time"
-msgstr ""
+msgid "Maximum execution time"
+msgstr "Maksimal tid for udførelse"
 
 #: src/ecmascript/ecmascript.c:51
 msgid "Maximum execution time in seconds for a script."
-msgstr ""
+msgstr "Antal sekunder som et skript maksimalt må eksekveres."
 
 #: src/ecmascript/spidermonkey.c:368
 msgid "JavaScript Alert"
-msgstr ""
+msgstr "JavaScript advarsel"
 
 #: src/ecmascript/spidermonkey.c:1914
 #, c-format
@@ -4806,11 +4828,11 @@ msgstr ""
 
 #: src/ecmascript/spidermonkey.c:1929
 msgid "JavaScript Error"
-msgstr ""
+msgstr "JavaScript fejl"
 
 #: src/ecmascript/spidermonkey.c:1949
 msgid "JavaScript Emergency"
-msgstr ""
+msgstr "JavaScript nødssituation"
 
 #: src/ecmascript/spidermonkey.c:1951
 #, c-format
@@ -4824,11 +4846,11 @@ msgstr ""
 
 #: src/formhist/dialogs.c:67
 msgid "Forms are never saved for this URL."
-msgstr ""
+msgstr "Formularer gemmes aldrig for denne URL."
 
 #: src/formhist/dialogs.c:69
 msgid "Forms are saved for this URL."
-msgstr ""
+msgstr "Formularer gemmes for denne URL."
 
 #. cant_delete_item
 #: src/formhist/dialogs.c:121
@@ -5041,7 +5063,7 @@ msgstr "Bulgarsk"
 
 #: src/intl/gettext/libintl.c:34
 msgid "Catalan"
-msgstr "calalansk"
+msgstr "Calalansk"
 
 #: src/intl/gettext/libintl.c:35
 msgid "Croatian"
@@ -5061,7 +5083,7 @@ msgstr "Hollandsk"
 
 #: src/intl/gettext/libintl.c:39
 msgid "Estonian"
-msgstr ""
+msgstr "Estisk"
 
 #: src/intl/gettext/libintl.c:40
 msgid "Finnish"
@@ -5161,71 +5183,46 @@ msgid ""
 "directory."
 msgstr ""
 
-#: src/lowlevel/interlink.c:340
+#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:339
 #, c-format
-msgid "accept() failed: %d (%s)"
-msgstr ""
-
-#: src/lowlevel/interlink.c:380 src/lowlevel/interlink.c:441
-#, c-format
-msgid "socket() failed: %d (%s)"
-msgstr ""
-
-#: src/lowlevel/interlink.c:389
-#, c-format
-msgid "bind() failed: %d (%s)"
-msgstr ""
-
-#: src/lowlevel/interlink.c:409
-#, c-format
-msgid "listen() failed: %d (%s)"
-msgstr ""
-
-#: src/lowlevel/interlink.c:454
-#, c-format
-msgid "connect() failed: %d (%s)"
-msgstr ""
-
-#: src/lowlevel/select.c:339
-#, c-format
-msgid "select() failed: %d (%s)"
-msgstr ""
+msgid "The call to %s failed: %d (%s)"
+msgstr "Kaldet til %s fejlede: %d (%s)"
 
 #. Infinite loop prevention.
 #: src/lowlevel/select.c:342
 #, c-format
 msgid "%d select() failures."
-msgstr ""
+msgstr "%d select() fejl"
 
-#: src/main.c:145
+#: src/main.c:143
 msgid "Cannot create a pipe for internal communication."
 msgstr ""
 
-#: src/main.c:205
+#: src/main.c:203
 #, c-format
 msgid "URL expected after -%s"
-msgstr ""
+msgstr "URL forvented efter -%s"
 
-#: src/main.c:213
+#: src/main.c:211
 msgid "No running ELinks found."
-msgstr ""
+msgstr "Ingen eksisterende ELinks blev fundet."
 
 #. The remote session(s) can not be created
-#: src/main.c:220
+#: src/main.c:218
 msgid "No remote session to connect to."
-msgstr ""
+msgstr "Ingen fjernsession at forbinde til."
 
-#: src/main.c:229
+#: src/main.c:227
 msgid "Unable to encode session info."
-msgstr ""
+msgstr "Kunne ikke inkode sessionsinformation."
 
-#: src/main.c:246
+#: src/main.c:244
 msgid "Unable to attach_terminal()."
-msgstr ""
+msgstr "Kunne ikke forbinde til terminal med attach_terminal()."
 
 #: src/mime/backend/default.c:26
 msgid "MIME type associations"
-msgstr ""
+msgstr "MIME type associationer"
 
 #: src/mime/backend/default.c:28
 msgid ""
@@ -5512,7 +5509,7 @@ msgstr "Bekræftelse af identitet kræves for %s hos %s"
 msgid "HTTP Authentication"
 msgstr "HTTP verificering"
 
-#: src/protocol/auth/dialogs.c:106 src/protocol/http/http.c:102
+#: src/protocol/auth/dialogs.c:106 src/protocol/http/http.c:103
 msgid "Password"
 msgstr "Adgangskode"
 
@@ -5658,8 +5655,8 @@ msgstr ""
 msgid "FTP specific options."
 msgstr ""
 
-#: src/protocol/ftp/ftp.c:57 src/protocol/http/http.c:89
-#: src/protocol/http/http.c:171
+#: src/protocol/ftp/ftp.c:57 src/protocol/http/http.c:90
+#: src/protocol/http/http.c:172
 msgid "Proxy configuration"
 msgstr ""
 
@@ -5667,8 +5664,8 @@ msgstr ""
 msgid "FTP proxy configuration."
 msgstr ""
 
-#: src/protocol/ftp/ftp.c:61 src/protocol/http/http.c:93
-#: src/protocol/http/http.c:175
+#: src/protocol/ftp/ftp.c:61 src/protocol/http/http.c:94
+#: src/protocol/http/http.c:176
 msgid "Host and port-number"
 msgstr "Vært og portnummer"
 
@@ -5732,94 +5729,94 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/protocol/http/http.c:57 src/protocol/http/http.c:185
+#: src/protocol/http/http.c:58 src/protocol/http/http.c:186
 msgid "HTTP"
 msgstr ""
 
-#: src/protocol/http/http.c:59
+#: src/protocol/http/http.c:60
 msgid "HTTP-specific options."
 msgstr ""
 
-#: src/protocol/http/http.c:62
+#: src/protocol/http/http.c:63
 msgid "Server bug workarounds"
 msgstr ""
 
-#: src/protocol/http/http.c:64
+#: src/protocol/http/http.c:65
 msgid "Server-side HTTP bugs workarounds."
 msgstr ""
 
-#: src/protocol/http/http.c:66
+#: src/protocol/http/http.c:67
 msgid "Do not send Accept-Charset"
 msgstr ""
 
-#: src/protocol/http/http.c:68
+#: src/protocol/http/http.c:69
 msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
 msgstr ""
 
-#: src/protocol/http/http.c:71
+#: src/protocol/http/http.c:72
 msgid "Allow blacklisting"
 msgstr ""
 
-#: src/protocol/http/http.c:73
+#: src/protocol/http/http.c:74
 msgid "Allow blacklisting of buggy servers."
 msgstr ""
 
-#: src/protocol/http/http.c:75
+#: src/protocol/http/http.c:76
 msgid "Broken 302 redirects"
 msgstr ""
 
-#: src/protocol/http/http.c:77
+#: src/protocol/http/http.c:78
 msgid ""
 "Broken 302 redirect (violates RFC but compatible with Netscape).\n"
 "This is a problem for a lot of web discussion boards and the like.\n"
 "If they will do strange things to you, try to play with this."
 msgstr ""
 
-#: src/protocol/http/http.c:81
+#: src/protocol/http/http.c:82
 msgid "No keepalive after POST requests"
 msgstr ""
 
-#: src/protocol/http/http.c:83
+#: src/protocol/http/http.c:84
 msgid "Disable keepalive connection after POST request."
 msgstr ""
 
-#: src/protocol/http/http.c:85
+#: src/protocol/http/http.c:86
 msgid "Use HTTP/1.0"
 msgstr ""
 
-#: src/protocol/http/http.c:87
+#: src/protocol/http/http.c:88
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
 msgstr ""
 
-#: src/protocol/http/http.c:91
+#: src/protocol/http/http.c:92
 msgid "HTTP proxy configuration."
 msgstr ""
 
-#: src/protocol/http/http.c:95
+#: src/protocol/http/http.c:96
 msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
 msgstr ""
 
-#: src/protocol/http/http.c:98
+#: src/protocol/http/http.c:99
 msgid "Username"
 msgstr "Brugernavn"
 
-#: src/protocol/http/http.c:100
+#: src/protocol/http/http.c:101
 msgid "Proxy authentication username."
 msgstr "Proxy verificerings brugernavn."
 
-#: src/protocol/http/http.c:104
+#: src/protocol/http/http.c:105
 msgid "Proxy authentication password."
 msgstr "Proxy verificerings adgangskode."
 
-#: src/protocol/http/http.c:107
+#: src/protocol/http/http.c:108
 msgid "Referer sending"
 msgstr "Sending af referering"
 
-#: src/protocol/http/http.c:109
+#: src/protocol/http/http.c:110
 msgid ""
 "HTTP referer sending options. HTTP referer is a special header\n"
 "sent in the HTTP requests, which is supposed to contain the previous\n"
@@ -5829,11 +5826,11 @@ msgid ""
 "security problem on some badly designed web pages."
 msgstr ""
 
-#: src/protocol/http/http.c:116
+#: src/protocol/http/http.c:117
 msgid "Policy"
 msgstr "Politik"
 
-#: src/protocol/http/http.c:119
+#: src/protocol/http/http.c:120
 msgid ""
 "Mode of sending HTTP referer:\n"
 "0 is send no referer\n"
@@ -5842,27 +5839,27 @@ msgid ""
 "3 is send previous URL as referer (correct, but insecure)"
 msgstr ""
 
-#: src/protocol/http/http.c:125
+#: src/protocol/http/http.c:126
 msgid "Fake referer URL"
 msgstr ""
 
-#: src/protocol/http/http.c:127
+#: src/protocol/http/http.c:128
 msgid "Fake referer to be sent when policy is 2."
 msgstr ""
 
-#: src/protocol/http/http.c:130
+#: src/protocol/http/http.c:131
 msgid "Send Accept-Language header"
 msgstr ""
 
-#: src/protocol/http/http.c:132
+#: src/protocol/http/http.c:133
 msgid "Send Accept-Language header."
 msgstr ""
 
-#: src/protocol/http/http.c:134
+#: src/protocol/http/http.c:135
 msgid "Use UI language as Accept-Language"
 msgstr ""
 
-#: src/protocol/http/http.c:136
+#: src/protocol/http/http.c:137
 msgid ""
 "Request localised versions of documents from web-servers (using the\n"
 "Accept-Language header) using the language you have configured for\n"
@@ -5872,11 +5869,11 @@ msgid ""
 "your language preference."
 msgstr ""
 
-#: src/protocol/http/http.c:143
+#: src/protocol/http/http.c:144
 msgid "Activate HTTP TRACE debugging"
 msgstr ""
 
-#: src/protocol/http/http.c:145
+#: src/protocol/http/http.c:146
 msgid ""
 "If active, all HTTP requests are sent with TRACE as their method\n"
 "rather than GET or POST. This is useful for debugging of both ELinks\n"
@@ -5886,11 +5883,11 @@ msgid ""
 msgstr ""
 
 #. OSNews.com is supposed to be relying on the textmode token, at least.
-#: src/protocol/http/http.c:152
+#: src/protocol/http/http.c:153
 msgid "User-agent identification"
 msgstr "Identifikation af brugeragent"
 
-#: src/protocol/http/http.c:154
+#: src/protocol/http/http.c:155
 msgid ""
 "Change the User Agent ID. That means identification string, which\n"
 "is sent to HTTP server when a document is requested. The 'textmode'\n"
@@ -5905,19 +5902,19 @@ msgid ""
 "Use \" \" if you don't want any User-Agent header to be sent at all."
 msgstr ""
 
-#: src/protocol/http/http.c:167
+#: src/protocol/http/http.c:168
 msgid "HTTPS"
 msgstr ""
 
-#: src/protocol/http/http.c:169
+#: src/protocol/http/http.c:170
 msgid "HTTPS-specific options."
 msgstr "Indstillinger for HTTPS"
 
-#: src/protocol/http/http.c:173
+#: src/protocol/http/http.c:174
 msgid "HTTPS proxy configuration."
 msgstr "Instillinger for HTTPS proxy"
 
-#: src/protocol/http/http.c:177
+#: src/protocol/http/http.c:178
 msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."

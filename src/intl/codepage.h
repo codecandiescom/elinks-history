@@ -1,1 +1,1 @@
-#define N_CODEPAGES 27
+#define N_CODEPAGES 35

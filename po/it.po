@@ -3843,7 +3843,7 @@ msgstr ""
 "?        cerca indietro\n"
 "n        trova successivo\n"
 "N        trova precedente\n"
-"=        info documento\n"
+"=        informazioni documento\n"
 "\\        sorgente documento\n"
 "d        scarica"
 
@@ -3911,7 +3911,7 @@ msgstr "Contenuto cache: %s"
 
 #: src/dialogs/info.c:200
 msgid "Memory info"
-msgstr "Info memoria"
+msgstr "Informazioni memoria"
 
 #: src/dialogs/info.c:201
 #, c-format
@@ -3996,7 +3996,7 @@ msgstr "Informazioni cac~he"
 
 #: src/dialogs/menu.c:394
 msgid "~Memory info"
-msgstr "Info ~memoria"
+msgstr "Informazioni ~memoria"
 
 #: src/dialogs/menu.c:401
 msgid "E~xit"

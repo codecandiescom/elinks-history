@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.153 2002/12/12 21:33:49 pasky Exp $ */
+/* $Id: options.c,v 1.154 2002/12/13 18:08:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,6 @@ static int no_autocreate = 0;
 struct option *
 get_opt_rec(struct option *tree, unsigned char *name_)
 {
-	struct option *cat = NULL;
 	struct option *option;
 	unsigned char *aname = stracpy(name_);
 	unsigned char *name = aname;
@@ -107,17 +106,17 @@ get_opt_rec(struct option *tree, unsigned char *name_)
 	if ((sep = strrchr(name, '.'))) {
 		*sep = '\0';
 
-		cat = get_opt_rec(tree, name);
-		if (!cat || cat->type != OPT_TREE || cat->flags & OPT_HIDDEN) {
+		tree = get_opt_rec(tree, name);
+		if (!tree || tree->type != OPT_TREE || tree->flags & OPT_HIDDEN) {
 #if 0
 			debug("ERROR in get_opt_rec() crawl: %s (%d) -> %s",
-			      name, cat ? cat->type : -1, sep + 1);
+			      name, tree ? tree->type : -1, sep + 1);
 #endif
 			mem_free(aname);
 			return NULL;
 		}
 
-		tree = cat;
+		tree = tree;
 
 		*sep = '.';
 		name = sep + 1;
@@ -130,7 +129,7 @@ get_opt_rec(struct option *tree, unsigned char *name_)
 		}
 	}
 
-	if (cat && cat->flags & OPT_AUTOCREATE && !no_autocreate) {
+	if (tree && tree->flags & OPT_AUTOCREATE && !no_autocreate) {
 		struct option *template = get_opt_rec(tree, "_template_");
 
 		if (!template) {

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.19 2002/12/13 12:42:09 zas Exp $ */
+/* $Id: dialogs.c,v 1.20 2002/12/13 18:08:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@
 #include "util/memory.h"
 
 /* The location of the box in the options manager */
-#define	OP_BOX_IND		4
+#define	OP_BOX_IND		5
 
 
 void
@@ -348,6 +348,50 @@ push_edit_button(struct dialog_data *dlg,
 }
 
 
+static void
+add_option_to_tree(void *data, unsigned char *name)
+{
+	struct option *option = data;
+
+	/* get_opt_rec() will do all the work for ourselves... ;-) */
+	if (!get_opt_rec(option, name)) {
+	}
+	/* TODO: If the return value is NULL, we should pop up a msgbox. */
+}
+
+static int
+push_add_button(struct dialog_data *dlg,
+		struct widget_data *some_useless_info_button)
+{
+	struct terminal *term = dlg->win->term;
+	struct listbox_data *box = (void *) dlg->dlg->items[OP_BOX_IND].data;
+	struct option *option;
+
+	if (!box->sel || !box->sel->udata) {
+invalid_option:
+		msg_box(term, NULL,
+			TEXT(T_ADD_OPTION), AL_CENTER,
+			TEXT(T_CANNOT_ADD_OPTION_HERE),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ESC | B_ENTER);
+		return 0;
+	}
+
+	option = box->sel->udata;
+	if (option->flags != OPT_AUTOCREATE) {
+		if (box->sel->root) option = box->sel->root->udata;
+		if (!option || option->flags != OPT_AUTOCREATE)
+			goto invalid_option;
+	}
+	
+	input_field(term, NULL, TEXT(T_ADD_OPTION), TEXT(T_NNAME),
+		TEXT(T_OK), TEXT(T_CANCEL), option, NULL,
+		MAX_STR_LEN, "", 0, 0, NULL,
+		add_option_to_tree, NULL);
+	return 0;
+}
+
+
 static int
 push_save_button(struct dialog_data *dlg,
 		struct widget_data *some_useless_info_button)
@@ -388,14 +432,20 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
-	d->items[2].fn = push_save_button;
+	d->items[2].fn = push_add_button;
 	d->items[2].udata = ses;
-	d->items[2].text = TEXT(T_SAVE);
+	d->items[2].text = TEXT(T_ADD);
 
 	d->items[3].type = D_BUTTON;
-	d->items[3].gid = B_ESC;
-	d->items[3].fn = cancel_dialog;
-	d->items[3].text = TEXT(T_CLOSE);
+	d->items[3].gid = B_ENTER;
+	d->items[3].fn = push_save_button;
+	d->items[3].udata = ses;
+	d->items[3].text = TEXT(T_SAVE);
+
+	d->items[4].type = D_BUTTON;
+	d->items[4].gid = B_ESC;
+	d->items[4].fn = cancel_dialog;
+	d->items[4].text = TEXT(T_CLOSE);
 
 	d->items[OP_BOX_IND].type = D_BOX;
 	d->items[OP_BOX_IND].gid = 12;

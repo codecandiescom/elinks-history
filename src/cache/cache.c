@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.73 2003/11/08 02:01:01 pasky Exp $ */
+/* $Id: cache.c,v 1.74 2003/11/08 02:03:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -458,7 +458,7 @@ delete_cache_entry(struct cache_entry *ce)
 void
 garbage_collection(int whole)
 {
-	struct cache_entry *ce, *entry;
+	struct cache_entry *ce;
 	/* We recompute cache_size when scanning cache entries, to ensure
 	 * consistency. */
 	long old_cache_size = 0;
@@ -565,6 +565,8 @@ shrinked_enough:
 
 
 	if (!whole) {
+		struct cache_entry *entry;
+
 		/* Scanning cache, pass #3:
 		 * Walk back in the cache and unmark the cache entries which
 		 * could still fit into the cache. */
@@ -590,10 +592,10 @@ shrinked_enough:
 	/* Scanning cache, pass #4:
 	 * Destroy the marked entries. So sad, but that's life, bro'. */
 
-	for (entry = ce; (void *) entry != &cache; ) {
-		entry = entry->next;
-		if (entry->prev->gc_target)
-			delete_cache_entry(entry->prev);
+	for (; (void *) ce != &cache; ) {
+		ce = ce->next;
+		if (ce->prev->gc_target)
+			delete_cache_entry(ce->prev);
 	}
 
 

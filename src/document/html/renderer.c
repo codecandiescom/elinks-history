@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.194 2003/08/03 03:44:23 jonas Exp $ */
+/* $Id: renderer.c,v 1.195 2003/08/03 04:55:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ static INIT_LIST_HEAD(format_cache);
 
 /* Prototypes */
 void line_break(struct part *);
-void put_chars(struct part *, unsigned char *, int);
+void put_chars(struct part *, unsigned char *, int, unsigned char);
 
 
 #ifdef ALIGN
@@ -240,7 +240,7 @@ xpand_spaces(struct part *p, int l)
 #define Y(y) (part->yp + (y))
 
 static inline void
-set_hchar(struct part *part, int x, int y, unsigned char data, unsigned char attr)
+set_hchar(struct part *part, int x, int y, unsigned char data, unsigned char color, unsigned char attr)
 {
 	assert(part && part->document);
 	if_assert_failed return;
@@ -253,13 +253,13 @@ set_hchar(struct part *part, int x, int y, unsigned char data, unsigned char att
 	if_assert_failed return;
 
 	POS(x, y).data = data;
-	POS(x, y).color = (attr & ~SCREEN_ATTR_FRAME);
-	POS(x, y).attr = (attr & ~SCREEN_ATTR_FRAME);
+	POS(x, y).color = color;
+	POS(x, y).attr = attr;
 }
 
 static inline void
 set_hchars(struct part *part, int x, int y, int xl,
-	   unsigned char data, unsigned char attr)
+	   unsigned char data, unsigned char color, unsigned char attr)
 {
 	assert(part && part->document);
 	if_assert_failed return;
@@ -273,27 +273,28 @@ set_hchars(struct part *part, int x, int y, int xl,
 
 	for (; xl; xl--, x++) {
 		POS(x, y).data = data;
-		POS(x, y).color = (attr & ~SCREEN_ATTR_FRAME);
-		POS(x, y).attr = (attr & ~SCREEN_ATTR_FRAME);
+		POS(x, y).color = color;
+		POS(x, y).attr = attr;
 	}
 }
 
 void
-xset_hchar(struct part *part, int x, int y, unsigned char data, unsigned char attr)
+xset_hchar(struct part *part, int x, int y,
+	   unsigned char data, unsigned char color, unsigned char attr)
 {
-	set_hchar(part, x, y, data, attr);
+	set_hchar(part, x, y, data, color, attr);
 }
 
 void
 xset_hchars(struct part *part, int x, int y, int xl,
-	    unsigned char data, unsigned char attr)
+	    unsigned char data, unsigned char color, unsigned char attr)
 {
-	set_hchars(part, x, y, xl, data, attr);
+	set_hchars(part, x, y, xl, data, color, attr);
 }
 
 static inline void
-set_hline(struct part *part, int x, int y,
-	  unsigned char *chars, int charslen, unsigned char attr)
+set_hline(struct part *part, int x, int y, unsigned char *chars,
+	  int charslen, unsigned char color, unsigned char attr)
 {
 	assert(part);
 	if_assert_failed return;
@@ -310,8 +311,8 @@ set_hline(struct part *part, int x, int y,
 	for (; charslen > 0; charslen--, x++, chars++) {
 		part->spaces[x] = (*chars == ' ');
 		if (part->document && part->document->data) {
-			POS(x, y).color = (attr & ~SCREEN_ATTR_FRAME);
-			POS(x, y).attr = (attr & ~SCREEN_ATTR_FRAME);
+			POS(x, y).color = color;
+			POS(x, y).attr = attr;
 			POS(x, y).data = *chars;
 		}
 	}
@@ -428,7 +429,7 @@ shift_chars(struct part *part, int y, int shift)
 	 * already got that idea; results in even more stains since we probably
 	 * shift chars even on surrounding lines when realigning tables
 	 * maniacally. --pasky */
-	set_hchars(part, 0, y, shift, ' ', part->document->data[y].color << 3);
+	set_hchars(part, 0, y, shift, ' ', part->document->data[y].color << 3, 0);
 	copy_chars(part, shift, y, len, a);
 	fmem_free(a);
 
@@ -594,7 +595,7 @@ justify_line(struct part *part, int y)
 
 		/* See shift_chars() about why this is broken. */
 		set_hchars(part, 0, y, overlap(par_format), ' ',
-			   part->document->data[y].color << 3);
+			   part->document->data[y].color << 3, 0);
 
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of
@@ -699,7 +700,8 @@ html_tag(struct document *f, unsigned char *t, int x, int y)
 
 
 static void
-put_chars_conv(struct part *part, unsigned char *chars, int charslen)
+put_chars_conv(struct part *part, unsigned char *chars, int charslen,
+	       unsigned char attr)
 {
 	unsigned char *buffer;
 
@@ -707,12 +709,12 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	if_assert_failed return;
 
 	if (format.attr & AT_GRAPHICS) {
-		put_chars(part, chars, charslen);
+		put_chars(part, chars, charslen, attr);
 		return;
 	}
 
 	if (!charslen) {
-		put_chars(part, NULL, 0);
+		put_chars(part, NULL, 0, 0);
 		return;
 	}
 
@@ -721,13 +723,14 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 
 	buffer = convert_string(convert_table, chars, charslen);
 	if (buffer) {
-		put_chars(part, buffer, strlen(buffer));
+		put_chars(part, buffer, strlen(buffer), attr);
 		mem_free(buffer);
 	}
 }
 
 void
-put_chars(struct part *part, unsigned char *chars, int charslen)
+put_chars(struct part *part, unsigned char *chars, int charslen,
+	  unsigned char attr)
 {
 	static struct text_attrib_beginning ta_cache =
 		{-1, {0, 0, 0}, {0, 0, 0}};
@@ -781,7 +784,7 @@ end_format_change:
 		return;
 
 	set_hline(part, part->cx, part->cy, chars, charslen,
-		  (((fg&0x08)<<3) | (bg<<3) | (fg&0x07)));
+		  (((fg&0x08)<<3) | (bg<<3) | (fg&0x07)), attr);
 	part->cx += charslen;
 	nobreak = 0;
 
@@ -845,7 +848,7 @@ process_link:
 			s[slen++] = ']';
 			s[slen] = '\0';
 
-			put_chars(part, s, slen);
+			put_chars(part, s, slen, attr);
 
 			if (ff && ff->type == FC_TEXTAREA) line_break(part);
 			if (part->cx == -1) part->cx = par_format.leftmargin;
@@ -955,11 +958,11 @@ format_change:
 		if (format.attr & AT_SUBSCRIPT) {
 			if (!sub) {
 				sub = 1;
-				put_chars(part, "[", 1);
+				put_chars(part, "[", 1, 0);
 			}
 		} else {
 			if (sub) {
-				put_chars(part, "]", 1);
+				put_chars(part, "]", 1, 0);
 				sub = 0;
 			}
 		}
@@ -969,7 +972,7 @@ format_change:
 		if (format.attr & AT_SUPERSCRIPT) {
 			if (!super) {
 				super = 1;
-				put_chars(part, "^", 1);
+				put_chars(part, "^", 1, 0);
 			}
 		} else {
 			if (super) {
@@ -1142,7 +1145,7 @@ static inline void
 do_format(char *start, char *end, struct part *part, unsigned char *head)
 {
 	parse_html(start, end,
-		   (void (*)(void *, unsigned char *, int)) put_chars_conv,
+		   (void (*)(void *, unsigned char *, int, unsigned char)) put_chars_conv,
 		   (void (*)(void *)) line_break,
 		   (void (*)(void *)) html_init,
 		   (void *(*)(void *, int, ...)) html_special,

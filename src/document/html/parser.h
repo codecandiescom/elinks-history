@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.25 2003/07/22 01:52:59 jonas Exp $ */
+/* $Id: parser.h,v 1.26 2003/08/03 04:55:42 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -182,7 +182,7 @@ extern unsigned char *eofff;
 #define html_top (*(struct html_element *) html_stack.next)
 
 /* extern void *ff; */
-extern void (*put_chars_f)(void *, unsigned char *, int);
+extern void (*put_chars_f)(void *, unsigned char *, int, unsigned char);
 extern void (*line_break_f)(void *);
 extern void (*init_f)(void *);
 extern void *(*special_f)(void *, int, ...);
@@ -208,7 +208,7 @@ int get_image_map(unsigned char *, unsigned char *, unsigned char *, unsigned ch
 
 void scan_http_equiv(unsigned char *, unsigned char *, struct string *, struct string *);
 
-void parse_html(unsigned char *, unsigned char *, void (*)(void *, unsigned char *, int), void (*)(void *), void (*)(void *), void *(*)(void *, int, ...), void *, unsigned char *);
+void parse_html(unsigned char *, unsigned char *, void (*)(void *, unsigned char *, int, unsigned char), void (*)(void *), void (*)(void *), void *(*)(void *, int, ...), void *, unsigned char *);
 
 enum html_special_type {
 	SP_TAG,

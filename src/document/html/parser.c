@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.189 2003/08/01 14:59:09 jonas Exp $ */
+/* $Id: parser.c,v 1.190 2003/08/03 04:55:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,7 +433,7 @@ html_stack_dup(void)
 }
 
 void *ff;
-void (*put_chars_f)(void *, unsigned char *, int);
+void (*put_chars_f)(void *, unsigned char *, int, unsigned char);
 void (*line_break_f)(void *);
 void (*init_f)(void *);
 void *(*special_f)(void *, int, ...);
@@ -460,7 +460,8 @@ ln_break(int n, void (*line_break)(void *), void *f)
 
 static void
 put_chrs(unsigned char *start, int len,
-	 void (*put_chars)(void *, unsigned char *, int), void *f)
+	 void (*put_chars)(void *, unsigned char *, int, unsigned char), void *f,
+	 unsigned char attr)
 {
 	if (was_li) {
 		was_li = 0;
@@ -468,7 +469,7 @@ put_chrs(unsigned char *start, int len,
 	}
 	if (par_format.align == AL_NONE) putsp = 0;
 	if (!len || html_top.invisible) return;
-	if (putsp == 1) put_chars(f, " ", 1), position++, putsp = -1;
+	if (putsp == 1) put_chars(f, " ", 1, attr), position++, putsp = -1;
 	if (putsp == -1) {
 		if (start[0] == ' ') start++, len--;
 		putsp = 0;
@@ -481,7 +482,7 @@ put_chrs(unsigned char *start, int len,
 	if (start[len - 1] == ' ') putsp = -1;
 	if (par_format.align == AL_NONE) putsp = 0;
 	was_br = 0;
-	put_chars(f, start, len);
+	put_chars(f, start, len, attr);
 	position += len;
 	line_breax = 0;
 }
@@ -642,11 +643,11 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	if (format.target) mem_free(format.target), format.target = NULL;
 	if (format.title) mem_free(format.title), format.title = NULL;
 	format.form = NULL;
-	put_chrs(prefix, strlen(prefix), put_chars_f, ff);
+	put_chrs(prefix, strlen(prefix), put_chars_f, ff, 0);
 	format.link = join_urls(format.href_base, link);
 	format.target = stracpy(target);
 	memcpy(&format.fg, &format.clink, sizeof(struct rgb));
-	put_chrs(linkname, strlen(linkname), put_chars_f, ff);
+	put_chrs(linkname, strlen(linkname), put_chars_f, ff, 0);
 	ln_break(1, line_break_f, ff);
 	kill_html_stack_item(&html_top);
 }
@@ -936,7 +937,7 @@ html_img(unsigned char *a)
 				format.link = h;
 			}
 		}
-		put_chrs(al, strlen(al), put_chars_f, ff);
+		put_chrs(al, strlen(al), put_chars_f, ff, 0);
 		if (ismap) kill_html_stack_item(&html_top);
 	}
 	if (format.image) mem_free(format.image), format.image = NULL;
@@ -1139,7 +1140,7 @@ html_hr(unsigned char *a)
 	if (i == -1) i = par_format.width - (margin - 2) * 2;
 	format.attr = AT_GRAPHICS;
 	special_f(ff, SP_NOWRAP, 1);
-	while (i-- > 0) put_chrs(&r, 1, put_chars_f, ff);
+	while (i-- > 0) put_chrs(&r, 1, put_chars_f, ff, SCREEN_ATTR_FRAME);
 	special_f(ff, SP_NOWRAP, 0);
 	ln_break(2, line_break_f, ff);
 	kill_html_stack_item(&html_top);
@@ -1167,7 +1168,7 @@ html_th(unsigned char *a)
 	/*html_linebrk(a);*/
 	kill_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.attr |= AT_BOLD;
-	put_chrs(" ", 1, put_chars_f, ff);
+	put_chrs(" ", 1, put_chars_f, ff, 0);
 }
 
 static void
@@ -1176,7 +1177,7 @@ html_td(unsigned char *a)
 	/*html_linebrk(a);*/
 	kill_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.attr &= ~AT_BOLD;
-	put_chrs(" ", 1, put_chars_f, ff);
+	put_chrs(" ", 1, put_chars_f, ff, 0);
 }
 
 static void
@@ -1265,7 +1266,7 @@ html_li(unsigned char *a)
 
 		if ((par_format.flags & P_LISTMASK) == P_O) x[0] = 'o';
 		if ((par_format.flags & P_LISTMASK) == P_PLUS) x[0] = '+';
-		put_chrs(x, 7, put_chars_f, ff);
+		put_chrs(x, 7, put_chars_f, ff, 0);
 		par_format.leftmargin += 2;
 		par_format.align = AL_LEFT;
 	} else {
@@ -1277,7 +1278,7 @@ html_li(unsigned char *a)
 		if (s != -1) par_format.list_number = s;
 		if ((t != P_roman && t != P_ROMAN && par_format.list_number < 10)
 		    || t == P_alpha || t == P_ALPHA)
-			put_chrs("&nbsp;", 6, put_chars_f, ff), c = 1;
+			put_chrs("&nbsp;", 6, put_chars_f, ff, 0), c = 1;
 
 		if (t == P_ALPHA || t == P_alpha) {
 			n[0] = par_format.list_number
@@ -1295,8 +1296,8 @@ html_li(unsigned char *a)
 		} else {
 			ulongcat(n, NULL, par_format.list_number, (sizeof(n) - 1), 0);
 		}
-		put_chrs(n, strlen(n), put_chars_f, ff);
-		put_chrs(".&nbsp;", 7, put_chars_f, ff);
+		put_chrs(n, strlen(n), put_chars_f, ff, 0);
+		put_chrs(".&nbsp;", 7, put_chars_f, ff, 0);
 		par_format.leftmargin += strlen(n) + c + 2;
 		par_format.align = AL_LEFT;
 		par_format.list_number = 0;
@@ -1471,15 +1472,15 @@ html_button(unsigned char *a)
 	else if (!strcasecmp(al, "reset")) fc->type = FC_RESET;
 	else if (!strcasecmp(al, "button")) {
 		mem_free(al);
-		put_chrs(" [&nbsp;", 8, put_chars_f, ff);
+		put_chrs(" [&nbsp;", 8, put_chars_f, ff, 0);
 
 		al = get_attr_val(a, "value");
 		if (al) {
-			put_chrs(al, strlen(al), put_chars_f, ff);
+			put_chrs(al, strlen(al), put_chars_f, ff, 0);
 			mem_free(al);
-		} else put_chrs("BUTTON", 6, put_chars_f, ff);
+		} else put_chrs("BUTTON", 6, put_chars_f, ff, 0);
 
-		put_chrs("&nbsp;] ", 8, put_chars_f, ff);
+		put_chrs("&nbsp;] ", 8, put_chars_f, ff, 0);
 		mem_free(fc);
 		return;
 	} else {
@@ -1506,10 +1507,10 @@ xxx:
 	format.form = fc;
 	format.attr |= AT_BOLD;
 #if 0
-	put_chrs("[&nbsp;", 7, put_chars_f, ff);
-	if (fc->default_value) put_chrs(fc->default_value, strlen(fc->default_value), put_chars_f, ff);
-	put_chrs("&nbsp;]", 7, put_chars_f, ff);
-	put_chrs(" ", 1, put_chars_f, ff);
+	put_chrs("[&nbsp;", 7, put_chars_f, ff, 0);
+	if (fc->default_value) put_chrs(fc->default_value, strlen(fc->default_value), put_chars_f, ff, 0);
+	put_chrs("&nbsp;]", 7, put_chars_f, ff, 0);
+	put_chrs(" ", 1, put_chars_f, ff, 0);
 #endif
 }
 
@@ -1542,15 +1543,15 @@ html_input(unsigned char *a)
 	else if (!strcasecmp(al, "image")) fc->type = FC_IMAGE;
 	else if (!strcasecmp(al, "button")) {
 		mem_free(al);
-		put_chrs(" [&nbsp;", 8, put_chars_f, ff);
+		put_chrs(" [&nbsp;", 8, put_chars_f, ff, 0);
 
 		al = get_attr_val(a, "value");
 		if (al) {
-			put_chrs(al, strlen(al), put_chars_f, ff);
+			put_chrs(al, strlen(al), put_chars_f, ff, 0);
 			mem_free(al);
-		} else put_chrs("BUTTON", 6, put_chars_f, ff);
+		} else put_chrs("BUTTON", 6, put_chars_f, ff, 0);
 
-		put_chrs("&nbsp;] ", 8, put_chars_f, ff);
+		put_chrs("&nbsp;] ", 8, put_chars_f, ff, 0);
 		mem_free(fc);
 		return;
 	} else fc->type = FC_TEXT;
@@ -1581,7 +1582,7 @@ xxx:
 	if (!fc->default_value) fc->default_value = stracpy("");
 	if (fc->type == FC_HIDDEN) goto hid;
 
-	put_chrs(" ", 1, put_chars_f, ff);
+	put_chrs(" ", 1, put_chars_f, ff, 0);
 	html_stack_dup();
 	format.form = fc;
 	if (format.title) mem_free(format.title);
@@ -1591,15 +1592,15 @@ xxx:
 		case FC_PASSWORD:
 		case FC_FILE:
 			format.attr |= AT_BOLD;
-			for (i = 0; i < fc->size; i++) put_chrs("_", 1, put_chars_f, ff);
+			for (i = 0; i < fc->size; i++) put_chrs("_", 1, put_chars_f, ff, 0);
 			break;
 		case FC_CHECKBOX:
 			format.attr |= AT_BOLD;
-			put_chrs("[&nbsp;]", 8, put_chars_f, ff);
+			put_chrs("[&nbsp;]", 8, put_chars_f, ff, 0);
 			break;
 		case FC_RADIO:
 			format.attr |= AT_BOLD;
-			put_chrs("(&nbsp;)", 8, put_chars_f, ff);
+			put_chrs("(&nbsp;)", 8, put_chars_f, ff, 0);
 			break;
 		case FC_IMAGE:
 			if (format.image) mem_free(format.image), format.image = NULL;
@@ -1609,24 +1610,24 @@ xxx:
 				mem_free(al);
 			}
 			format.attr |= AT_BOLD;
-			put_chrs("[&nbsp;", 7, put_chars_f, ff);
-			if (fc->alt) put_chrs(fc->alt, strlen(fc->alt), put_chars_f, ff);
-			else if (fc->name) put_chrs(fc->name, strlen(fc->name), put_chars_f, ff);
-			else put_chrs("Submit", 6, put_chars_f, ff);
-			put_chrs("&nbsp;]", 7, put_chars_f, ff);
+			put_chrs("[&nbsp;", 7, put_chars_f, ff, 0);
+			if (fc->alt) put_chrs(fc->alt, strlen(fc->alt), put_chars_f, ff, 0);
+			else if (fc->name) put_chrs(fc->name, strlen(fc->name), put_chars_f, ff, 0);
+			else put_chrs("Submit", 6, put_chars_f, ff, 0);
+			put_chrs("&nbsp;]", 7, put_chars_f, ff, 0);
 			break;
 		case FC_SUBMIT:
 		case FC_RESET:
 			format.attr |= AT_BOLD;
-			put_chrs("[&nbsp;", 7, put_chars_f, ff);
-			if (fc->default_value) put_chrs(fc->default_value, strlen(fc->default_value), put_chars_f, ff);
-			put_chrs("&nbsp;]", 7, put_chars_f, ff);
+			put_chrs("[&nbsp;", 7, put_chars_f, ff, 0);
+			if (fc->default_value) put_chrs(fc->default_value, strlen(fc->default_value), put_chars_f, ff, 0);
+			put_chrs("&nbsp;]", 7, put_chars_f, ff, 0);
 			break;
 		default:
 			internal("bad control type");
 	}
 	kill_html_stack_item(&html_top);
-	put_chrs(" ", 1, put_chars_f, ff);
+	put_chrs(" ", 1, put_chars_f, ff, 0);
 
 hid:
 	special_f(ff, SP_CONTROL, fc);
@@ -1713,13 +1714,13 @@ x:
 	fc->default_state = has_attr(a, "selected");
 	fc->ro = format.select_disabled;
 	if (has_attr(a, "disabled")) fc->ro = 2;
-	put_chrs(" ", 1, put_chars_f, ff);
+	put_chrs(" ", 1, put_chars_f, ff, 0);
 	html_stack_dup();
 	format.form = fc;
 	format.attr |= AT_BOLD;
-	put_chrs("[ ]", 3, put_chars_f, ff);
+	put_chrs("[ ]", 3, put_chars_f, ff, 0);
 	kill_html_stack_item(&html_top);
-	put_chrs(" ", 1, put_chars_f, ff);
+	put_chrs(" ", 1, put_chars_f, ff, 0);
 	special_f(ff, SP_CONTROL, fc);
 }
 
@@ -2073,7 +2074,7 @@ end_parse:
 	fc->menu = detach_menu();
 	fc->labels = lbls;
 	menu_labels(fc->menu, "", lbls);
-	put_chrs("[", 1, put_chars_f, f);
+	put_chrs("[", 1, put_chars_f, f, 0);
 	html_stack_dup();
 	format.form = fc;
 	format.attr |= AT_BOLD;
@@ -2088,10 +2089,10 @@ end_parse:
 	}
 
 	for (i = 0; i < mw; i++)
-		put_chrs("_", 1, put_chars_f, f);
+		put_chrs("_", 1, put_chars_f, f, 0);
 
 	kill_html_stack_item(&html_top);
-	put_chrs("]", 1, put_chars_f, f);
+	put_chrs("]", 1, put_chars_f, f, 0);
 	special_f(ff, SP_CONTROL, fc);
 
 	return 0;
@@ -2183,7 +2184,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (fc->maxlength == -1) fc->maxlength = MAXINT;
 
 	if (rows > 1) ln_break(1, line_break_f, f);
-	else put_chrs(" ", 1, put_chars_f, f);
+	else put_chrs(" ", 1, put_chars_f, f, 0);
 
 	html_stack_dup();
 	format.form = fc;
@@ -2193,14 +2194,14 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		int j;
 
 		for (j = 0; j < cols; j++)
-			put_chrs("_", 1, put_chars_f, f);
+			put_chrs("_", 1, put_chars_f, f, 0);
 		if (i < rows - 1)
 			ln_break(1, line_break_f, f);
 	}
 
 	kill_html_stack_item(&html_top);
 	if (rows > 1) ln_break(1, line_break_f, f);
-	else put_chrs(" ", 1, put_chars_f, f);
+	else put_chrs(" ", 1, put_chars_f, f, 0);
 	special_f(f, SP_CONTROL, fc);
 }
 
@@ -2975,7 +2976,7 @@ free_tags_lookup(void)
 
 void
 parse_html(unsigned char *html, unsigned char *eof,
-	   void (*put_chars)(void *, unsigned char *, int),
+	   void (*put_chars)(void *, unsigned char *, int, unsigned char),
 	   void (*line_break)(void *),
 	   void (*init)(void *),
 	   void *(*special)(void *, int, ...),
@@ -3025,7 +3026,7 @@ set_lt:
 			while (h < eof && WHITECHAR(*h)) h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
-					put_chrs(lt, html - lt, put_chars, f);
+					put_chrs(lt, html - lt, put_chars, f, 0);
 					lt = html = h;
 					putsp = 1;
 					goto element;
@@ -3036,10 +3037,10 @@ set_lt:
 			if (*(html - 1) == ' ') {
 				/* BIG performance win; not sure if it doesn't cause any bug */
 				if (html < eof && !WHITECHAR(*html)) continue;
-				put_chrs(lt, html - lt, put_chars, f);
+				put_chrs(lt, html - lt, put_chars, f, 0);
 			} else {
-				put_chrs(lt, html - 1 - lt, put_chars, f);
-				put_chrs(" ", 1, put_chars, f);
+				put_chrs(lt, html - 1 - lt, put_chars, f, 0);
+				put_chrs(" ", 1, put_chars, f, 0);
 			}
 
 skip_w:
@@ -3048,19 +3049,19 @@ skip_w:
 			goto set_lt;
 
 put_sp:
-			put_chrs(" ", 1, put_chars, f);
+			put_chrs(" ", 1, put_chars, f, 0);
 			/*putsp = -1;*/
 		}
 
 		if (par_format.align == AL_NONE) {
 			putsp = 0;
 			if (*html == ASCII_TAB) {
-				put_chrs(lt, html - lt, put_chars, f);
-				put_chrs("        ", 8 - (position % 8), put_chars, f);
+				put_chrs(lt, html - lt, put_chars, f, 0);
+				put_chrs("        ", 8 - (position % 8), put_chars, f, 0);
 				html++;
 				goto set_lt;
 			} else if (*html == ASCII_CR || *html == ASCII_LF) {
-				put_chrs(lt, html - lt, put_chars, f);
+				put_chrs(lt, html - lt, put_chars, f, 0);
 
 next_break:
 				if (*html == ASCII_CR && html < eof - 1
@@ -3079,7 +3080,7 @@ next_break:
 		while (*html < ' ') {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
-			if (html - lt) put_chrs(lt, html - lt, put_chars, f);
+			if (html - lt) put_chrs(lt, html - lt, put_chars, f, 0);
 			dotcounter++;
 			html++; lt = html;
 			if (*html >= ' ' || WHITECHAR(*html) || html >= eof) {
@@ -3087,7 +3088,7 @@ next_break:
 
 				if (dots) {
 					memset(dots, '.', dotcounter);
-					put_chrs(dots, dotcounter, put_chars, f);
+					put_chrs(dots, dotcounter, put_chars, f, 0);
 					mem_free(dots);
 				}
 				goto set_lt;
@@ -3097,7 +3098,7 @@ next_break:
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !d_opt->plain) {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
-			put_chrs(lt, html - lt, put_chars, f);
+			put_chrs(lt, html - lt, put_chars, f, 0);
 			html = skip_comment(html, eof);
 			goto set_lt;
 		}
@@ -3112,7 +3113,7 @@ next_break:
 element:
 		inv = *name == '/'; name += inv; namelen -= inv;
 		if (!inv && putsp == 1 && !html_top.invisible) goto put_sp;
-		put_chrs(lt, html - lt, put_chars, f);
+		put_chrs(lt, html - lt, put_chars, f, 0);
 		if (par_format.align != AL_NONE) if (!inv && !putsp) {
 			unsigned char *ee = end;
 			unsigned char *nm;
@@ -3121,7 +3122,7 @@ element:
 				if (*nm == '/') goto ng;
 			if (ee < eof && WHITECHAR(*ee)) {
 				/*putsp = -1;*/
-				put_chrs(" ", 1, put_chars, f);
+				put_chrs(" ", 1, put_chars, f, 0);
 			}
 
 ng:;
@@ -3156,7 +3157,7 @@ ng:;
 				unsigned char *a;
 
 				if (d_opt->plain) {
-					put_chrs("<", 1, put_chars, f);
+					put_chrs("<", 1, put_chars, f, 0);
 					html = prev_html + 1;
 					break;
 				}
@@ -3249,7 +3250,7 @@ ng:;
 		goto set_lt; /* unreachable */
 	}
 
-	put_chrs(lt, html - lt, put_chars, f);
+	put_chrs(lt, html - lt, put_chars, f, 0);
 	ln_break(1, line_break, f);
 	putsp = -1;
 	position = 0;

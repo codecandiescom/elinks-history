@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.59 2003/08/01 12:32:47 zas Exp $ */
+/* $Id: tables.c,v 1.60 2003/08/03 04:55:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1455,25 +1455,26 @@ if (H_LINE_X((ii-1), (jj)) >= 0 || H_LINE_X((ii), (jj)) >= 0 || \
 						 3*H_LINE((ii), (jj))+ \
 						 9*H_LINE((ii)-1, (jj))+ \
 						 27*V_LINE((ii),(jj))], \
-				     SCREEN_ATTR_FRAME \
-				     | find_nearest_color(&par_format.bgcolor, 8) << 3)
+				     find_nearest_color(&par_format.bgcolor, 8) << 3, \
+				     SCREEN_ATTR_FRAME)
 
 
 #define draw_frame_hline(xx, yy, ll, ii, jj) \
 if (H_LINE_X((ii), (jj)) >= 0) \
 	xset_hchars(t->p, (xx), (yy), (ll),\
-		    hline_table[H_LINE((ii), (jj))], SCREEN_ATTR_FRAME \
-		    | find_nearest_color(&par_format.bgcolor, 8) << 3)
+		    hline_table[H_LINE((ii), (jj))], \
+		    find_nearest_color(&par_format.bgcolor, 8) << 3, \
+		    SCREEN_ATTR_FRAME)
 
 
 #define draw_frame_vline(xx, yy, ll, ii, jj) \
 	if (V_LINE_X((ii), (jj)) >= 0) { \
 		unsigned char data = vline_table[V_LINE((ii), (jj))]; \
-		unsigned char attr = SCREEN_ATTR_FRAME | \
-			find_nearest_color(&par_format.bgcolor, 8) << 3;\
+		unsigned char color = find_nearest_color(&par_format.bgcolor, 8) << 3; \
+		unsigned char attr = SCREEN_ATTR_FRAME; \
 		register int qq = 0; \
 		while (qq < (ll)) { \
-			xset_hchar(t->p, (xx), (yy) + qq, data, attr); \
+			xset_hchar(t->p, (xx), (yy) + qq, data, color, attr); \
 			qq++; \
 		} \
 	}

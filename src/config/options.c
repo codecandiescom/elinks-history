@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.456 2004/07/10 13:02:23 jonas Exp $ */
+/* $Id: options.c,v 1.457 2004/07/10 13:31:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -526,20 +526,21 @@ delete_option_do(struct option *option, int recursive)
 void
 mark_option_as_deleted(struct option *option)
 {
-	switch (option->type) {
-		case OPT_TREE:
-			if (!option->value.tree) break;
-			free_options_tree(option->value.tree, 1);
-			break;
-		default:
-			break;
+	if (option->type == OPT_TREE) {
+		struct option *unmarked;
+
+		assert(option->value.tree);
+
+		foreach (unmarked, *option->value.tree)
+			mark_option_as_deleted(unmarked);
 	}
 
 	if (option->box_item) {
 		done_listbox_item(&option_browser, option->box_item);
 		option->box_item = NULL;
 	}
-	option->flags |= OPT_TOUCHED | OPT_DELETED;
+
+	option->flags |= (OPT_TOUCHED | OPT_DELETED);
 }
 
 void

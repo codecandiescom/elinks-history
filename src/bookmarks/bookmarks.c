@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.148 2004/12/17 21:54:31 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.149 2004/12/19 01:01:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,6 +103,8 @@ bookmark_write_hook(va_list ap, void *data)
 	if (get_opt_bool("ui.sessions.snapshot")
 	    && !get_cmd_opt_bool("anonymous"))
 		bookmark_snapshot();
+
+	write_bookmarks();
 
 	return EVENT_HOOK_STATUS_NEXT;
 }

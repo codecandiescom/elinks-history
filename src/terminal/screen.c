@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.96 2003/10/02 16:02:19 jonas Exp $ */
+/* $Id: screen.c,v 1.97 2003/10/02 17:14:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -312,11 +312,19 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 struct screen_state {
 	unsigned char border;
 	unsigned char underline;
-	unsigned char color[1];
+	unsigned char bold;
+	unsigned char attr;
+	unsigned char color[2];
 };
 
+#ifdef USE_256_COLORS
+#define compare_color(a, b)	(!memcmp((a), (b), 2))
+#define copy_color(a, b)	memcpy((a), (b), 2)
+#else
 #define compare_color(a, b)	((a)[0] == (b)[0])
 #define copy_color(a, b)	((a)[0] = (b)[0])
+#endif
+
 #define use_utf8_io(driver)	((driver)->charsets[0] != -1)
 
 /* Time critical section. */
@@ -392,6 +400,74 @@ add_char16(struct string *screen, struct screen_driver *driver,
 	}
 }
 
+#ifdef USE_256_COLORS
+/* Time critical section. */
+static inline void
+add_char256(struct string *screen, struct screen_driver *driver,
+	    struct screen_char *ch, struct screen_state *state)
+{
+	unsigned char c = ch->data;
+	unsigned char attr_delta = (ch->attr ^ state->attr);
+
+	if (attr_delta) {
+		if ((attr_delta & SCREEN_ATTR_FRAME) && driver->frame_seqs) {
+			state->border = !!(ch->attr & SCREEN_ATTR_FRAME);
+			add_term_string(screen, driver->frame_seqs[state->border]);
+		}
+
+		if (attr_delta & SCREEN_ATTR_BOLD) {
+			/* Completely handle the underlining. */
+
+			if (ch->attr & SCREEN_ATTR_BOLD) {
+				add_bytes_to_string(screen, "\033[1m", 4);
+			} else {
+				/* Force repainting of the other attributes. */
+				attr_delta |= SCREEN_ATTR_UNDERLINE;
+				state->color[0] = ch->color[0] + 1;
+			}
+		}
+
+		state->attr = ch->attr;
+	}
+
+	if (!compare_color(ch->color, state->color)) {
+		copy_color(state->color, ch->color);
+
+		add_format_to_string(screen, "\033[0;38;5;%dm", ch->color[0]);
+		if (!driver->trans || ch->color[1] != 0) {
+			add_format_to_string(screen, "\033[48;5;%dm", ch->color[1]);
+		}
+
+		if (ch->attr & SCREEN_ATTR_BOLD)
+			add_bytes_to_string(screen, "\033[1m", 4);
+	}
+
+	if ((attr_delta & SCREEN_ATTR_UNDERLINE) && driver->underline) {
+		register int pos = (ch->attr & SCREEN_ATTR_UNDERLINE);
+
+		add_term_string(screen, driver->underline[!!pos]);
+	}
+
+	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
+		unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
+
+		if (border && driver->frame && c >= 176 && c < 224) {
+			c = driver->frame[c - 176];
+		}
+
+		if (use_utf8_io(driver)) {
+			int charset = driver->charsets[state->border];
+
+			add_to_string(screen, cp2utf_8(charset, c));
+		} else {
+			add_char_to_string(screen, c);
+		}
+	} else {
+		add_char_to_string(screen, ' ');
+	}
+}
+#endif
+
 #define add_chars(image_, term_, driver_, state_, ADD_CHAR)				\
 {										\
 	register struct screen_char *current = (term_)->screen->last_image;	\
@@ -439,7 +515,7 @@ redraw_screen(struct terminal *term)
 {
 	struct screen_driver *driver = get_screen_driver(term);
 	struct string image;
-	struct screen_state state = { 0xFF, 0xFF, { 0xFF } };
+	struct screen_state state = { 0xFF, 0xFF, 0xFF, 0, { 0xFF, 0xFF } };
 	struct terminal_screen *screen = term->screen;
 
 	if (!driver
@@ -454,6 +530,11 @@ redraw_screen(struct terminal *term)
 		add_chars(&image, term, driver, &state, add_char16);
 		break;
 
+#ifdef USE_256_COLORS
+	case COLOR_MODE_256:
+		add_chars(&image, term, driver, &state, add_char256);
+		break;
+#endif
 	default:
 		internal("Invalid color mode");
 		return;

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.75 2003/10/02 15:18:28 jonas Exp $ */
+/* $Id: draw.c,v 1.76 2003/10/02 17:14:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,11 @@
 		int_bounds(&(y), 0, (term)->y - 1); \
 	} while (0)
 
+#ifdef USE_256_COLORS
+#define clear_screen_char_color(schar) do { memset((schar)->color, 0, 2); } while (0)
+#else
 #define clear_screen_char_color(schar) do { (schar)->color[0] = 0; } while (0)
+#endif
 
 /* TODO: Clearify this piece of magic code. --jonas */
 void

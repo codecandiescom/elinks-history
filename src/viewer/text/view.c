@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.591 2004/09/21 22:37:37 jonas Exp $ */
+/* $Id: view.c,v 1.592 2004/09/22 22:06:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,8 +77,10 @@ detach_formatted(struct document_view *doc_view)
 	if (doc_view->link_bg) free_link(doc_view);
 	mem_free_set(&doc_view->name, NULL);
 #ifdef CONFIG_ECMASCRIPT
-	ecmascript_put_interpreter(doc_view->ecmascript);
-	doc_view->ecmascript = NULL;
+	if (doc_view->ecmascript) {
+		ecmascript_put_interpreter(doc_view->ecmascript);
+		doc_view->ecmascript = NULL;
+	}
 #endif
 }
 

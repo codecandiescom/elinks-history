@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.89 2004/06/17 22:36:44 jonas Exp $ */
+/* $Id: textarea.c,v 1.90 2004/06/17 22:41:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -402,7 +402,7 @@ textarea_op_home(struct form_state *fs, struct form_control *fc, int rep)
 	unsigned char *position;
 	unsigned char *prev_end = NULL;
 	struct line_info *line;
-	int y;
+	int y, state = 0;
 
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
@@ -420,13 +420,16 @@ textarea_op_home(struct form_state *fs, struct form_control *fc, int rep)
 		wrap = (line[y].start == prev_end);
 		if (position >= line[y].end + !wrap) continue;
 
-		fs->state = line[y].start - fs->value;
-		goto free_and_return;
+		state = line[y].start - fs->value;
+		break;
 	}
-	fs->state = 0;
 
-free_and_return:
 	mem_free(line);
+
+	if (fs->state == state) return FRAME_EVENT_OK;
+
+	fs->state = state;
+
 	return FRAME_EVENT_REFRESH;
 }
 

@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.24 2004/12/27 10:51:19 jonas Exp $ */
+/* $Id: libintl.h,v 1.25 2004/12/31 00:44:27 jonas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -17,6 +17,17 @@
 #include "config/options.h"
 #include "intl/charsets.h"
 #include "terminal/terminal.h"
+
+/* no-op - just for marking */
+#define N_(msg) (gettext_noop(msg))
+
+/* The intl/gettext/libgettext.h header nukes gettext functions but not the _()
+ * function so make sure it is also just a noop when NLS is disabled. */
+#ifndef ENABLE_NLS
+
+#define _(msg, term)	gettext_noop(msg)
+
+#else
 
 /* The number of the charset to which the "elinks" domain was last
  * bound with bind_textdomain_codeset(), or -1 if none yet.  This
@@ -121,9 +132,6 @@ do_lookup:
 
 #endif
 
-/* no-op - just for marking */
-#define N_(msg) (gettext_noop(msg))
-
 /* Languages table lookups. */
 
 struct language {
@@ -147,5 +155,7 @@ extern int get_system_language_index(void);
 
 extern int current_language, system_language;
 extern void set_language(int language);
+
+#endif /* ENABLE_NLS */
 
 #endif

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.21 2003/08/01 18:47:02 zas Exp $ */
+/* $Id: form.c,v 1.22 2003/08/01 18:55:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -671,11 +671,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 	int save = 0;
 
 	foreach (sv, *submit) {
-		if (!sv->value || !*sv->value) {
-			save = 0;
-			break;
-		}
-		if (sv->type == FC_PASSWORD) {
+		if (sv->type == FC_PASSWORD && sv->value && *sv->value) {
 			save = 1;
 			break;
 		}
@@ -725,8 +721,6 @@ fail:
 	return NULL;
 }
 #endif /* FORMS_MEMORY */
-
-
 
 unsigned char *
 get_form_url(struct session *ses, struct document_view *f,

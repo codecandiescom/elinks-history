@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.92 2004/06/20 21:36:00 jonas Exp $ */
+/* $Id: cmdline.c,v 1.93 2004/06/20 21:37:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -460,8 +460,6 @@ print_full_help(struct option *tree, unsigned char *path)
 		*savedpos = 0;
 	}
 }
-
-static unsigned char *redir_cmd(struct option *option, unsigned char ***argv, int *argc);
 
 static void
 print_short_help()

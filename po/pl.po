@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-04 13:35+0100\n"
+"POT-Creation-Date: 2003-01-04 14:40+0100\n"
 "PO-Revision-Date: 2003-01-04 12:06+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@poczta.onet.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -45,7 +45,7 @@ msgstr "Oczekiwano liczby"
 #: src/protocol/user.c:131 src/viewer/text/view.c:1580
 #: src/viewer/text/view.c:1914 src/viewer/text/view.c:2343
 #: src/viewer/text/view.c:2389 src/viewer/text/view.c:2626
-#: src/viewer/text/view.c:3284
+#: src/viewer/text/view.c:3290
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -230,7 +230,7 @@ msgid "Type"
 msgstr "Typ"
 
 #: src/config/dialogs.c:121 src/config/dialogs.c:202
-#: src/viewer/text/view.c:3536
+#: src/viewer/text/view.c:3542
 msgid "value"
 msgstr "warto¶æ"
 
@@ -241,7 +241,7 @@ msgstr "Opis"
 #: src/config/dialogs.c:181 src/document/session.c:856
 #: src/document/session.c:917 src/document/session.c:1395
 #: src/protocol/url.c:64 src/viewer/text/view.c:1911
-#: src/viewer/text/view.c:3226
+#: src/viewer/text/view.c:3232
 msgid "Error"
 msgstr "B³±d"
 
@@ -1404,126 +1404,126 @@ msgstr "Przejd¼ do linka"
 msgid "Enter link number"
 msgstr "Wprowad¼ numer linka"
 
-#: src/viewer/text/view.c:3281
+#: src/viewer/text/view.c:3287
 msgid "Save error"
 msgstr "B³±d zapisu"
 
-#: src/viewer/text/view.c:3282
+#: src/viewer/text/view.c:3288
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
 
-#: src/viewer/text/view.c:3316
+#: src/viewer/text/view.c:3322
 msgid "Display ~usemap"
 msgstr "Poka¿ ~mapê obrazków"
 
-#: src/viewer/text/view.c:3321
+#: src/viewer/text/view.c:3327
 msgid "~Follow link"
 msgstr "Wybierz ~link"
 
-#: src/viewer/text/view.c:3324
+#: src/viewer/text/view.c:3330
 msgid "Follow link and r~eload"
 msgstr "Wybierz link i prze³aduj"
 
-#: src/viewer/text/view.c:3328
+#: src/viewer/text/view.c:3334
 msgid "Open in new ~window"
 msgstr "Otwórz w nowym oknie"
 
-#: src/viewer/text/view.c:3334
+#: src/viewer/text/view.c:3340
 msgid "~Download link"
 msgstr "~Pobierz"
 
-#: src/viewer/text/view.c:3338
+#: src/viewer/text/view.c:3344
 msgid "~Add link to bookmarks"
 msgstr "Dodaj zak³adkê"
 
-#: src/viewer/text/view.c:3349 src/viewer/text/view.c:3466
+#: src/viewer/text/view.c:3355 src/viewer/text/view.c:3472
 msgid "~Reset form"
 msgstr "Wyczy¶æ formularz"
 
-#: src/viewer/text/view.c:3354
+#: src/viewer/text/view.c:3360
 msgid "~Submit form"
 msgstr "~Prze¶lij formularz"
 
-#: src/viewer/text/view.c:3357
+#: src/viewer/text/view.c:3363
 msgid "Submit form and rel~oad"
 msgstr "Prze¶lij formularz i prze³aduj"
 
-#: src/viewer/text/view.c:3361
+#: src/viewer/text/view.c:3367
 msgid "Submit form and open in new ~window"
 msgstr "Prze¶lij ~formularz i otwórz w nowym oknie"
 
-#: src/viewer/text/view.c:3367
+#: src/viewer/text/view.c:3373
 msgid "Submit form and ~download"
 msgstr "Prze¶lij formularz i ¶ci±gnij"
 
-#: src/viewer/text/view.c:3374
+#: src/viewer/text/view.c:3380
 msgid "V~iew image"
 msgstr "Poka¿ o~brazek"
 
-#: src/viewer/text/view.c:3377
+#: src/viewer/text/view.c:3383
 msgid "Download ima~ge"
 msgstr "Pobierz ~obrazek"
 
-#: src/viewer/text/view.c:3383
+#: src/viewer/text/view.c:3389
 msgid "No link selected"
 msgstr "Nie wybrano ¿adnego linka"
 
-#: src/viewer/text/view.c:3430
+#: src/viewer/text/view.c:3436
 msgid "Image"
 msgstr "Obrazek"
 
-#: src/viewer/text/view.c:3446
+#: src/viewer/text/view.c:3452
 msgid "Usemap"
 msgstr "Mapa obrazków"
 
-#: src/viewer/text/view.c:3479
+#: src/viewer/text/view.c:3485
 msgid "Submit form to"
 msgstr "Prze¶lij formularz do"
 
-#: src/viewer/text/view.c:3481
+#: src/viewer/text/view.c:3487
 msgid "Post form to"
 msgstr "Wy¶lij formularz do"
 
-#: src/viewer/text/view.c:3499
+#: src/viewer/text/view.c:3505
 msgid "Radio button"
 msgstr "Okr±g³y przycisk"
 
-#: src/viewer/text/view.c:3502
+#: src/viewer/text/view.c:3508
 msgid "Checkbox"
 msgstr "Przycisk wyboru"
 
-#: src/viewer/text/view.c:3505
+#: src/viewer/text/view.c:3511
 msgid "Select field"
 msgstr "Pole wyboru"
 
-#: src/viewer/text/view.c:3508
+#: src/viewer/text/view.c:3514
 msgid "Text field"
 msgstr "Pole tekstowe"
 
-#: src/viewer/text/view.c:3511
+#: src/viewer/text/view.c:3517
 msgid "Text area"
 msgstr "Pole tekstowe"
 
-#: src/viewer/text/view.c:3514
+#: src/viewer/text/view.c:3520
 msgid "File upload"
 msgstr "£adowanie pliku"
 
-#: src/viewer/text/view.c:3517
+#: src/viewer/text/view.c:3523
 msgid "Password field"
 msgstr "Pole has³a"
 
-#: src/viewer/text/view.c:3526
+#: src/viewer/text/view.c:3532
 msgid "name"
 msgstr "nazwa"
 
-#: src/viewer/text/view.c:3545
+#: src/viewer/text/view.c:3551
 msgid "hit ENTER to"
 msgstr "wci¶nij ENTER aby"
 
-#: src/viewer/text/view.c:3548
+#: src/viewer/text/view.c:3554
 msgid "submit to"
 msgstr "przes³aæ do"
 
-#: src/viewer/text/view.c:3550
+#: src/viewer/text/view.c:3556
 msgid "post to"
 msgstr "wys³aæ do"

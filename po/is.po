@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-04 13:35+0100\n"
+"POT-Creation-Date: 2003-01-04 14:40+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Armon Red <armon@islandia.is>\n"
 "Language-Team: Icelandic <kde-isl@mmedia.is>\n"
@@ -41,7 +41,7 @@ msgstr "Búist við tölu á reit"
 #: src/protocol/user.c:131 src/viewer/text/view.c:1580
 #: src/viewer/text/view.c:1914 src/viewer/text/view.c:2343
 #: src/viewer/text/view.c:2389 src/viewer/text/view.c:2626
-#: src/viewer/text/view.c:3284
+#: src/viewer/text/view.c:3290
 msgid "Cancel"
 msgstr "Hætta við"
 
@@ -225,7 +225,7 @@ msgid "Type"
 msgstr ""
 
 #: src/config/dialogs.c:121 src/config/dialogs.c:202
-#: src/viewer/text/view.c:3536
+#: src/viewer/text/view.c:3542
 msgid "value"
 msgstr "gildi"
 
@@ -236,7 +236,7 @@ msgstr ""
 #: src/config/dialogs.c:181 src/document/session.c:856
 #: src/document/session.c:917 src/document/session.c:1395
 #: src/protocol/url.c:64 src/viewer/text/view.c:1911
-#: src/viewer/text/view.c:3226
+#: src/viewer/text/view.c:3232
 msgid "Error"
 msgstr "Villa"
 
@@ -1390,126 +1390,126 @@ msgstr "Opna tengil"
 msgid "Enter link number"
 msgstr "Innsetning tenglanúmer"
 
-#: src/viewer/text/view.c:3281
+#: src/viewer/text/view.c:3287
 msgid "Save error"
 msgstr "Vistunarvilla"
 
-#: src/viewer/text/view.c:3282
+#: src/viewer/text/view.c:3288
 msgid "Error writing to file"
 msgstr "Villa við ritun skráar"
 
-#: src/viewer/text/view.c:3316
+#: src/viewer/text/view.c:3322
 msgid "Display ~usemap"
 msgstr "Sýna notk~unarkort"
 
-#: src/viewer/text/view.c:3321
+#: src/viewer/text/view.c:3327
 msgid "~Follow link"
 msgstr "~Elta slóð"
 
-#: src/viewer/text/view.c:3324
+#: src/viewer/text/view.c:3330
 msgid "Follow link and r~eload"
 msgstr ""
 
-#: src/viewer/text/view.c:3328
+#: src/viewer/text/view.c:3334
 msgid "Open in new ~window"
 msgstr "Opna í nýjum glugga"
 
-#: src/viewer/text/view.c:3334
+#: src/viewer/text/view.c:3340
 msgid "~Download link"
 msgstr "Hlaða niður ~tengil"
 
-#: src/viewer/text/view.c:3338
+#: src/viewer/text/view.c:3344
 msgid "~Add link to bookmarks"
 msgstr ""
 
-#: src/viewer/text/view.c:3349 src/viewer/text/view.c:3466
+#: src/viewer/text/view.c:3355 src/viewer/text/view.c:3472
 msgid "~Reset form"
 msgstr "H~reinsa form"
 
-#: src/viewer/text/view.c:3354
+#: src/viewer/text/view.c:3360
 msgid "~Submit form"
 msgstr "Senda form"
 
-#: src/viewer/text/view.c:3357
+#: src/viewer/text/view.c:3363
 msgid "Submit form and rel~oad"
 msgstr ""
 
-#: src/viewer/text/view.c:3361
+#: src/viewer/text/view.c:3367
 msgid "Submit form and open in new ~window"
 msgstr "Senda form og opna nýjan glugga"
 
-#: src/viewer/text/view.c:3367
+#: src/viewer/text/view.c:3373
 msgid "Submit form and ~download"
 msgstr "Sen~da form og hlaða niður"
 
-#: src/viewer/text/view.c:3374
+#: src/viewer/text/view.c:3380
 msgid "V~iew image"
 msgstr "~Skoða mynd"
 
-#: src/viewer/text/view.c:3377
+#: src/viewer/text/view.c:3383
 msgid "Download ima~ge"
 msgstr "Hlaða niður ~mynd"
 
-#: src/viewer/text/view.c:3383
+#: src/viewer/text/view.c:3389
 msgid "No link selected"
 msgstr "Enginn tengill valinn"
 
-#: src/viewer/text/view.c:3430
+#: src/viewer/text/view.c:3436
 msgid "Image"
 msgstr "Mynd"
 
-#: src/viewer/text/view.c:3446
+#: src/viewer/text/view.c:3452
 msgid "Usemap"
 msgstr "Notkunarkort"
 
-#: src/viewer/text/view.c:3479
+#: src/viewer/text/view.c:3485
 msgid "Submit form to"
 msgstr "Senda form til"
 
-#: src/viewer/text/view.c:3481
+#: src/viewer/text/view.c:3487
 msgid "Post form to"
 msgstr "Senda form til"
 
-#: src/viewer/text/view.c:3499
+#: src/viewer/text/view.c:3505
 msgid "Radio button"
 msgstr "Einvalshnappur"
 
-#: src/viewer/text/view.c:3502
+#: src/viewer/text/view.c:3508
 msgid "Checkbox"
 msgstr "Fjölvalshnappur"
 
-#: src/viewer/text/view.c:3505
+#: src/viewer/text/view.c:3511
 msgid "Select field"
 msgstr "Einvalsreitur"
 
-#: src/viewer/text/view.c:3508
+#: src/viewer/text/view.c:3514
 msgid "Text field"
 msgstr "Textareitur"
 
-#: src/viewer/text/view.c:3511
+#: src/viewer/text/view.c:3517
 msgid "Text area"
 msgstr "Textasvæði"
 
-#: src/viewer/text/view.c:3514
+#: src/viewer/text/view.c:3520
 msgid "File upload"
 msgstr "Upphlöðun skráar"
 
-#: src/viewer/text/view.c:3517
+#: src/viewer/text/view.c:3523
 msgid "Password field"
 msgstr "Lykilorðareitur"
 
-#: src/viewer/text/view.c:3526
+#: src/viewer/text/view.c:3532
 msgid "name"
 msgstr "nafn"
 
-#: src/viewer/text/view.c:3545
+#: src/viewer/text/view.c:3551
 msgid "hit ENTER to"
 msgstr "ýttu á ENTER til að"
 
-#: src/viewer/text/view.c:3548
+#: src/viewer/text/view.c:3554
 msgid "submit to"
 msgstr "senda til"
 
-#: src/viewer/text/view.c:3550
+#: src/viewer/text/view.c:3556
 msgid "post to"
 msgstr "senda til"

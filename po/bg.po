@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-04 13:35+0100\n"
+"POT-Creation-Date: 2003-01-04 14:40+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dimitar Dimitrov <mitaka_ddd@yahoo.com>\n"
 "Language-Team: Bulgarian <bg-team@bash.info>\n"
@@ -44,7 +44,7 @@ msgstr "В това поле трябва да има число"
 #: src/protocol/user.c:131 src/viewer/text/view.c:1580
 #: src/viewer/text/view.c:1914 src/viewer/text/view.c:2343
 #: src/viewer/text/view.c:2389 src/viewer/text/view.c:2626
-#: src/viewer/text/view.c:3284
+#: src/viewer/text/view.c:3290
 msgid "Cancel"
 msgstr "Отказ"
 
@@ -229,7 +229,7 @@ msgid "Type"
 msgstr ""
 
 #: src/config/dialogs.c:121 src/config/dialogs.c:202
-#: src/viewer/text/view.c:3536
+#: src/viewer/text/view.c:3542
 msgid "value"
 msgstr "стойност"
 
@@ -240,7 +240,7 @@ msgstr ""
 #: src/config/dialogs.c:181 src/document/session.c:856
 #: src/document/session.c:917 src/document/session.c:1395
 #: src/protocol/url.c:64 src/viewer/text/view.c:1911
-#: src/viewer/text/view.c:3226
+#: src/viewer/text/view.c:3232
 msgid "Error"
 msgstr "Грешка"
 
@@ -1402,126 +1402,126 @@ msgstr "Отвори връзка"
 msgid "Enter link number"
 msgstr "Въведете номер на връзка"
 
-#: src/viewer/text/view.c:3281
+#: src/viewer/text/view.c:3287
 msgid "Save error"
 msgstr "Грешка при запазване"
 
-#: src/viewer/text/view.c:3282
+#: src/viewer/text/view.c:3288
 msgid "Error writing to file"
 msgstr "Грешка при запис във файл"
 
-#: src/viewer/text/view.c:3316
+#: src/viewer/text/view.c:3322
 msgid "Display ~usemap"
 msgstr "Покажи картата"
 
-#: src/viewer/text/view.c:3321
+#: src/viewer/text/view.c:3327
 msgid "~Follow link"
 msgstr "Проследи връзка"
 
-#: src/viewer/text/view.c:3324
+#: src/viewer/text/view.c:3330
 msgid "Follow link and r~eload"
 msgstr "Проследи връзката и презареди"
 
-#: src/viewer/text/view.c:3328
+#: src/viewer/text/view.c:3334
 msgid "Open in new ~window"
 msgstr "Отвори в нов прозорец"
 
-#: src/viewer/text/view.c:3334
+#: src/viewer/text/view.c:3340
 msgid "~Download link"
 msgstr "Свали (дръпни, изтегли) връзка"
 
-#: src/viewer/text/view.c:3338
+#: src/viewer/text/view.c:3344
 msgid "~Add link to bookmarks"
 msgstr "Добави връзката към отметките"
 
-#: src/viewer/text/view.c:3349 src/viewer/text/view.c:3466
+#: src/viewer/text/view.c:3355 src/viewer/text/view.c:3472
 msgid "~Reset form"
 msgstr "Изчисти формуляр"
 
-#: src/viewer/text/view.c:3354
+#: src/viewer/text/view.c:3360
 msgid "~Submit form"
 msgstr "Потвърди формуляр"
 
-#: src/viewer/text/view.c:3357
+#: src/viewer/text/view.c:3363
 msgid "Submit form and rel~oad"
 msgstr "Потвърди формуляр и презареди"
 
-#: src/viewer/text/view.c:3361
+#: src/viewer/text/view.c:3367
 msgid "Submit form and open in new ~window"
 msgstr "Потвърди формуляра и отвори в нов прозорец"
 
-#: src/viewer/text/view.c:3367
+#: src/viewer/text/view.c:3373
 msgid "Submit form and ~download"
 msgstr "Потвърди формуляра и свали (дръпни, изтегли)"
 
-#: src/viewer/text/view.c:3374
+#: src/viewer/text/view.c:3380
 msgid "V~iew image"
 msgstr "Покажи изображение"
 
-#: src/viewer/text/view.c:3377
+#: src/viewer/text/view.c:3383
 msgid "Download ima~ge"
 msgstr "Свали изображение"
 
-#: src/viewer/text/view.c:3383
+#: src/viewer/text/view.c:3389
 msgid "No link selected"
 msgstr "Не е избрана връзка"
 
-#: src/viewer/text/view.c:3430
+#: src/viewer/text/view.c:3436
 msgid "Image"
 msgstr "Изображение"
 
-#: src/viewer/text/view.c:3446
+#: src/viewer/text/view.c:3452
 msgid "Usemap"
 msgstr "Карта на връзките"
 
-#: src/viewer/text/view.c:3479
+#: src/viewer/text/view.c:3485
 msgid "Submit form to"
 msgstr "Потвърди формуляр към адрес"
 
-#: src/viewer/text/view.c:3481
+#: src/viewer/text/view.c:3487
 msgid "Post form to"
 msgstr "Изпрати формуляр към адрес"
 
-#: src/viewer/text/view.c:3499
+#: src/viewer/text/view.c:3505
 msgid "Radio button"
 msgstr "Радио-бутон"
 
-#: src/viewer/text/view.c:3502
+#: src/viewer/text/view.c:3508
 msgid "Checkbox"
 msgstr "Контролна кутийка (checkbox)"
 
-#: src/viewer/text/view.c:3505
+#: src/viewer/text/view.c:3511
 msgid "Select field"
 msgstr "Поле за избор"
 
-#: src/viewer/text/view.c:3508
+#: src/viewer/text/view.c:3514
 msgid "Text field"
 msgstr "Текстово поле"
 
-#: src/viewer/text/view.c:3511
+#: src/viewer/text/view.c:3517
 msgid "Text area"
 msgstr "Текстова област"
 
-#: src/viewer/text/view.c:3514
+#: src/viewer/text/view.c:3520
 msgid "File upload"
 msgstr "Качване (upload) на файл"
 
-#: src/viewer/text/view.c:3517
+#: src/viewer/text/view.c:3523
 msgid "Password field"
 msgstr "Поле за парола"
 
-#: src/viewer/text/view.c:3526
+#: src/viewer/text/view.c:3532
 msgid "name"
 msgstr "име"
 
-#: src/viewer/text/view.c:3545
+#: src/viewer/text/view.c:3551
 msgid "hit ENTER to"
 msgstr "натиснете ENTER, за да"
 
-#: src/viewer/text/view.c:3548
+#: src/viewer/text/view.c:3554
 msgid "submit to"
 msgstr "потвърдете към адрес"
 
-#: src/viewer/text/view.c:3550
+#: src/viewer/text/view.c:3556
 msgid "post to"
 msgstr "изпратете към адрес"

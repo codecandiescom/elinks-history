@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-04 13:35+0100\n"
+"POT-Creation-Date: 2003-01-04 14:40+0100\n"
 "PO-Revision-Date: 2003-01-04 13:40+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
@@ -41,7 +41,7 @@ msgstr "V rámeèku musí být èíslo"
 #: src/protocol/user.c:131 src/viewer/text/view.c:1580
 #: src/viewer/text/view.c:1914 src/viewer/text/view.c:2343
 #: src/viewer/text/view.c:2389 src/viewer/text/view.c:2626
-#: src/viewer/text/view.c:3284
+#: src/viewer/text/view.c:3290
 msgid "Cancel"
 msgstr "Zru¹it"
 
@@ -69,14 +69,15 @@ msgstr "read_bookmarks_xbel(): Chyba v XML_ParserCreate()%c\n"
 msgid "read_bookmarks_xbel(): Error reading %s%c\n"
 msgstr "read_bookmarks_xbel(): Chyba pøi naèítání %s%c\n"
 
-#: src/bookmarks/backend/xbel.c:124
 # This translation was based on idea by Jakub Suchy.
+#: src/bookmarks/backend/xbel.c:124
 #, c-format
 msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s%c\n"
 msgstr ""
-"read_bookmarks_xbel(): Chyba syntaxe v souboru %s na øádku %d ve sloupci %d:\n"
+"read_bookmarks_xbel(): Chyba syntaxe v souboru %s na øádku %d ve sloupci %"
+"d:\n"
 "%s%c\n"
 
 #: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
@@ -229,7 +230,7 @@ msgid "Type"
 msgstr "Typ"
 
 #: src/config/dialogs.c:121 src/config/dialogs.c:202
-#: src/viewer/text/view.c:3536
+#: src/viewer/text/view.c:3542
 msgid "value"
 msgstr "hodnota"
 
@@ -240,7 +241,7 @@ msgstr "Popis"
 #: src/config/dialogs.c:181 src/document/session.c:856
 #: src/document/session.c:917 src/document/session.c:1395
 #: src/protocol/url.c:64 src/viewer/text/view.c:1911
-#: src/viewer/text/view.c:3226
+#: src/viewer/text/view.c:3232
 msgid "Error"
 msgstr "Chyba"
 
@@ -495,8 +496,8 @@ msgstr "Textový WWW browser"
 msgid "Features: "
 msgstr "Podporuje: "
 
-#: src/dialogs/info.c:64
 # XXX: Tohle se mi ani trosku nelibi, ale jak to udelat lepe? ;-)
+#: src/dialogs/info.c:64
 msgid " Standard"
 msgstr " Prohlí¾eè"
 
@@ -1168,9 +1169,9 @@ msgstr ""
 "posledního upgrade ELinksu zmìnily. Nyní jsou normálnì ukládány pouze ty "
 "volby, které jsi skuteènì zmìnil, místo toho, abych ukládal v¹echny volby. "
 "To nám velmi ulehèuje situaci, kdy¾ zjistíme, ¾e má nìjaká volba nevhodnou "
-"implicitní hodnotu nebo pokud potøebujeme lehce upravit pou¾ití volby. "
-"Proto doporuèujeme, abys zmìnil hodnotu volby config.saving_style na 3, "
-"aby ELinks pøe¹el na \"správný\" zpùsob chování. Omlouváme se za zpùsobené "
+"implicitní hodnotu nebo pokud potøebujeme lehce upravit pou¾ití volby. Proto "
+"doporuèujeme, abys zmìnil hodnotu volby config.saving_style na 3, aby ELinks "
+"pøe¹el na \"správný\" zpùsob chování. Omlouváme se za zpùsobené "
 "nepøíjemnosti."
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
@@ -1418,126 +1419,126 @@ msgstr "Bì¾ na link"
 msgid "Enter link number"
 msgstr "Zadej èíslo linku"
 
-#: src/viewer/text/view.c:3281
+#: src/viewer/text/view.c:3287
 msgid "Save error"
 msgstr "Chyba pøi ukládání"
 
-#: src/viewer/text/view.c:3282
+#: src/viewer/text/view.c:3288
 msgid "Error writing to file"
 msgstr "Chyba pøi zápisu do souboru"
 
-#: src/viewer/text/view.c:3316
+#: src/viewer/text/view.c:3322
 msgid "Display ~usemap"
 msgstr "Zobrazit map~u"
 
-#: src/viewer/text/view.c:3321
+#: src/viewer/text/view.c:3327
 msgid "~Follow link"
 msgstr "~Otevøít link"
 
-#: src/viewer/text/view.c:3324
+#: src/viewer/text/view.c:3330
 msgid "Follow link and r~eload"
 msgstr "Otevøít link a obnovit cílovou stránku"
 
-#: src/viewer/text/view.c:3328
+#: src/viewer/text/view.c:3334
 msgid "Open in new ~window"
 msgstr "Otevøít v ~novém oknì"
 
-#: src/viewer/text/view.c:3334
+#: src/viewer/text/view.c:3340
 msgid "~Download link"
 msgstr "~Stáhnout link"
 
-#: src/viewer/text/view.c:3338
+#: src/viewer/text/view.c:3344
 msgid "~Add link to bookmarks"
 msgstr "Pøidat link do bookm~arkù"
 
-#: src/viewer/text/view.c:3349 src/viewer/text/view.c:3466
+#: src/viewer/text/view.c:3355 src/viewer/text/view.c:3472
 msgid "~Reset form"
 msgstr "~Vygumovat formuláø"
 
-#: src/viewer/text/view.c:3354
+#: src/viewer/text/view.c:3360
 msgid "~Submit form"
 msgstr "Odeslat formuláø"
 
-#: src/viewer/text/view.c:3357
+#: src/viewer/text/view.c:3363
 msgid "Submit form and rel~oad"
 msgstr "Odeslat formuláø a obnovit výslednou stránku"
 
-#: src/viewer/text/view.c:3361
+#: src/viewer/text/view.c:3367
 msgid "Submit form and open in new ~window"
 msgstr "Poslat formuláø a otevøít v ~novém oknì"
 
-#: src/viewer/text/view.c:3367
+#: src/viewer/text/view.c:3373
 msgid "Submit form and ~download"
 msgstr "Poslat formuláø a ~stáhnout"
 
-#: src/viewer/text/view.c:3374
+#: src/viewer/text/view.c:3380
 msgid "V~iew image"
 msgstr "Zobraz~it obrázek"
 
-#: src/viewer/text/view.c:3377
+#: src/viewer/text/view.c:3383
 msgid "Download ima~ge"
 msgstr "Stáhnout o~brázek"
 
-#: src/viewer/text/view.c:3383
+#: src/viewer/text/view.c:3389
 msgid "No link selected"
 msgstr "®ádný link"
 
-#: src/viewer/text/view.c:3430
+#: src/viewer/text/view.c:3436
 msgid "Image"
 msgstr "Obrázek"
 
-#: src/viewer/text/view.c:3446
+#: src/viewer/text/view.c:3452
 msgid "Usemap"
 msgstr "Mapa obrázkù"
 
-#: src/viewer/text/view.c:3479
+#: src/viewer/text/view.c:3485
 msgid "Submit form to"
 msgstr "Po¹li formuláø na"
 
-#: src/viewer/text/view.c:3481
+#: src/viewer/text/view.c:3487
 msgid "Post form to"
 msgstr "Po¹li formuláø na"
 
-#: src/viewer/text/view.c:3499
+#: src/viewer/text/view.c:3505
 msgid "Radio button"
 msgstr "Izostaty"
 
-#: src/viewer/text/view.c:3502
+#: src/viewer/text/view.c:3508
 msgid "Checkbox"
 msgstr "Za¹krtávací ètvereèek"
 
-#: src/viewer/text/view.c:3505
+#: src/viewer/text/view.c:3511
 msgid "Select field"
 msgstr "Vybírací políèko"
 
-#: src/viewer/text/view.c:3508
+#: src/viewer/text/view.c:3514
 msgid "Text field"
 msgstr "Textové políèko"
 
-#: src/viewer/text/view.c:3511
+#: src/viewer/text/view.c:3517
 msgid "Text area"
 msgstr "Textová plocha"
 
-#: src/viewer/text/view.c:3514
+#: src/viewer/text/view.c:3520
 msgid "File upload"
 msgstr "Uploadnutí souboru"
 
-#: src/viewer/text/view.c:3517
+#: src/viewer/text/view.c:3523
 msgid "Password field"
 msgstr "Políèko s heslem"
 
-#: src/viewer/text/view.c:3526
+#: src/viewer/text/view.c:3532
 msgid "name"
 msgstr "jméno"
 
-#: src/viewer/text/view.c:3545
+#: src/viewer/text/view.c:3551
 msgid "hit ENTER to"
 msgstr "bácni do ENTERu aby"
 
-#: src/viewer/text/view.c:3548
+#: src/viewer/text/view.c:3554
 msgid "submit to"
 msgstr "bylo posláno na"
 
-#: src/viewer/text/view.c:3550
+#: src/viewer/text/view.c:3556
 msgid "post to"
 msgstr "bylo posláno na"

@@ -1,8 +1,12 @@
-# ifdef _WIN32
+/* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
+/* $Id: win32.c,v 1.4 2002/05/10 17:09:21 pasky Exp $ */
+
+#if defined(_WIN32) || defined(__CYGWIN__)
 
 #include <windows.h>
 #include <signal.h>
 #include <stdio.h>
+#include <unistd.h>
 
 static		int		w32_input_pid;
 
@@ -103,6 +107,7 @@ void input_function (int fd)
 	exit (0);
 }
 
+#if 0
 void handle_terminal_resize(int fd, void (*fn)())
 {
 		return;
@@ -123,8 +128,11 @@ int get_terminal_size(int fd, int *x, int *y)
 		*y = s.dwSize.Y - 1;
 		return 0;
 	}
-	return -1;
+	*x = 80;
+	*y = 25;
+	return 0;
 }
+#endif
 
 void terminate_osdep ()
 {

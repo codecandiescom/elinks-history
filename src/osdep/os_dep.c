@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.15 2002/05/08 13:55:05 pasky Exp $ */
+/* $Id: os_dep.c,v 1.16 2002/05/10 17:09:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ int get_e(char *env)
 
 /* Terminal size */
 
-#if defined(UNIX) || defined(BEOS) || defined(RISCOS)
+#if defined(UNIX) || defined(BEOS) || defined(RISCOS) || defined(WIN32)
 
 void sigwinch(void *s)
 {
@@ -326,6 +326,29 @@ int exe(char *path)
 	if (p > 0) waitpid(p, &s, 0);
 	else return system(path);
 	return 0;
+}
+
+#elif defined(WIN32)
+
+int exe(char *path)
+{
+	int r;
+	unsigned char *x1 = !GETSHELL ? DEFAULT_SHELL : GETSHELL;
+	unsigned char *x = *path != '"' ? " /c start /wait " : " /c start /wait \"\" ";
+	unsigned char *p = malloc((strlen(x1) + strlen(x) + strlen(path)) * 2 + 1);
+
+	if (!p) return -1;
+	strcpy(p, x1);
+	strcat(p, x);
+	strcat(p, path);
+	x = p;
+	while (*x) {
+		if (*x == '\\') memmove(x + 1, x, strlen(x) + 1), x++;
+		x++;
+	}
+	r = system(p);
+	free(p);
+	return r;
 }
 
 #else
@@ -1229,6 +1252,9 @@ int get_input_handle()
 
 #elif defined(WIN32)
 
+void input_function(int fd);
+void set_proc_id(int id);
+
 int get_input_handle()
 {
 	int	fd[2];
@@ -1351,6 +1377,13 @@ int get_system_env()
 	return 0;
 }
 
+#elif defined(WIN32)
+
+int get_system_env()
+{
+	return ENV_WIN32;
+}
+
 #else
 
 int get_system_env()
@@ -1400,6 +1433,13 @@ void open_in_new_fullscreen(struct terminal *term, unsigned char *exe, unsigned 
 }
 #endif
 
+#ifdef WIN32
+void open_in_new_win32(struct terminal *term, unsigned char *exe, unsigned char *param)
+{
+	exec_new_links(term, "", exe, param);
+}
+#endif
+
 #ifdef BEOS
 void open_in_new_be(struct terminal *term, unsigned char *exe, unsigned char *param)
 {
@@ -1419,6 +1459,9 @@ struct {
 #ifdef OS2
 	{ENV_OS2VIO, open_in_new_vio, TEXT(T_WINDOW), TEXT(T_HK_WINDOW)},
 	{ENV_OS2VIO, open_in_new_fullscreen, TEXT(T_FULL_SCREEN), TEXT(T_HK_FULL_SCREEN)},
+#endif
+#ifdef WIN32
+	{ENV_WIN32, open_in_new_win32, TEXT(T_WINDOW), TEXT(T_HK_WINDOW)},
 #endif
 #ifdef BEOS
 	{ENV_BE, open_in_new_be, TEXT(T_BEOS_TERMINAL), TEXT(T_HK_BEOS_TERMINAL)},

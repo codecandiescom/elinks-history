@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.8 2002/05/08 13:55:04 pasky Exp $ */
+/* $Id: terminal.h,v 1.9 2002/05/10 17:09:21 pasky Exp $ */
 
 #ifndef EL__TERMINAL_H
 #define EL__TERMINAL_H
@@ -57,6 +57,7 @@ enum term_env_type {
 	ENV_OS2VIO = 4,
 	ENV_BE = 8,
 	ENV_TWIN = 16,
+	ENV_WIN32 = 32,
 };
 
 struct terminal {

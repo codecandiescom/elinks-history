@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.8 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: download.c,v 1.9 2002/05/10 17:09:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_SYS_CYGWIN_H
+#include <sys/cygwin.h>
+#endif
 #include <sys/types.h>
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
@@ -640,7 +643,18 @@ subst_file(unsigned char *prog, unsigned char *file)
 		prog += p;
 
 		if (*prog == '%') {
+#if defined(HAVE_CYGWIN_CONV_TO_FULL_WIN32_PATH)
+#ifdef MAX_PATH
+			unsigned char new_path[MAX_PATH];
+#else
+			unsigned char new_path[1024];
+#endif
+
+			cygwin_conv_to_full_win32_path(file, new_path);
+			add_to_str(&n, &l, new_path);
+#else
 			add_to_str(&n, &l, file);
+#endif
 			prog++;
 		}
 	}

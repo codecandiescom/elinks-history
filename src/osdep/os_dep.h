@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.2 2002/04/06 16:51:24 pasky Exp $ */
+/* $Id: os_dep.h,v 1.3 2002/05/10 17:09:21 pasky Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -13,7 +13,7 @@
 
 #if defined(__EMX__)
 #define OS2
-#elif defined(_WIN32)
+#elif defined(_WIN32) || defined (__CYGWIN__)
 #define WIN32
 #ifdef UNIX
 #undef UNIX
@@ -77,13 +77,11 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 /*#define NO_ASYNC_LOOKUP*/
 #define SYSTEM_ID SYS_WIN32
 #define SYSTEM_NAME "Win32"
-#define DEFAULT_SHELL "command.com"
+#define DEFAULT_SHELL "cmd.exe"
 #define GETSHELL getenv("COMSPEC")
 #define NO_FG_EXEC
 #define DOS_FS
 #define NO_FORK_ON_EXIT
-#define ASSOC_BLOCK
-#define ASSOC_CONS_XWIN
 
 #elif defined(BEOS)
 

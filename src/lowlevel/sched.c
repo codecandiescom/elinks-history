@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.61 2002/12/06 14:17:48 pasky Exp $ */
+/* $Id: sched.c,v 1.62 2002/12/06 20:44:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -222,22 +222,22 @@ void
 setcstate(struct connection *c, int state)
 {
 	struct status *stat;
+	struct remaining_info *prg = &c->prg;
 
 	if (c->state < 0 && state >= 0)
 		c->prev_error = c->state;
 
 	c->state = state;
 	if (c->state == S_TRANS) {
-		struct remaining_info *prg = &c->prg;
-
 		if (prg->timer == -1) {
 			tcount count = c->count;
+
 			if (!prg->valid) {
 				int tmp = prg->start;
 
 				memset(prg, 0, sizeof(struct remaining_info));
-				prg->valid = 1;
 				prg->start = tmp;
+				prg->valid = 1;
 			}
 			prg->last_time = get_time();
 			prg->last_loaded = prg->loaded;
@@ -249,8 +249,6 @@ setcstate(struct connection *c, int state)
 		}
 
 	} else {
-		struct remaining_info *prg = &c->prg;
-
 		if (prg->timer != -1) {
 			kill_timer(prg->timer);
 			prg->timer = -1;
@@ -527,7 +525,7 @@ add_to_queue(struct connection *c)
 void
 sort_queue()
 {
-	struct connection *c, *n;
+	struct connection *c;
 	int swp;
 
 	do {
@@ -535,7 +533,8 @@ sort_queue()
 		foreach(c, queue) {
 			if ((void *)c->next != &queue) {
 				if (getpri(c->next) < getpri(c)) {
-					n = c->next;
+					struct connection *n = c->next;
+
 					del_from_list(c);
 					add_at_pos(n, c);
 					swp = 1;
@@ -548,10 +547,11 @@ sort_queue()
 void
 interrupt_connection(struct connection *c)
 {
+	/* FIXME: can we get rid of that -1 pointer ? */
 	if (c->ssl == (void *)-1) c->ssl = 0;
 	if (c->ssl) {
 		free_ssl(c->ssl);
-		c->ssl=NULL;
+		c->ssl = NULL;
 	}
 
 	close_socket(c, &c->sock1);

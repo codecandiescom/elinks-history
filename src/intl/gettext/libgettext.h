@@ -22,7 +22,7 @@
 #if ENABLE_NLS
 
 /* Get declarations of GNU message catalog functions.  */
-# include <libintl.h>
+# include "intl/gettext/libgnuintl.h"
 
 #else
 

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.53 2003/10/28 20:38:11 jonas Exp $ */
+/* $Id: checkbox.c,v 1.54 2003/10/29 10:51:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,12 +126,14 @@ display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data, 
 	color = get_bfu_color(term, "dialog.checkbox");
 	if (!color) return;
 
-	if (widget_data->info.checkbox.checked) {
-		text = (!widget_data->widget->info.checkbox.gid) ? "[X]" : "(X)";
+	if (widget_data->widget->info.checkbox.gid) {
+		/* Radio buttons */
+		text = widget_data->info.checkbox.checked ? "(X)" : "( )";
 	} else {
-		text = (!widget_data->widget->info.checkbox.gid) ? "[ ]" : "( )";
+		/* Checkboxes */
+		text = widget_data->info.checkbox.checked ? "[X]" : "[ ]";
 	}
-
+	
 	draw_text(term, widget_data->x,	widget_data->y, text, 3, 0, color);
 
 	if (sel) {
@@ -145,9 +147,11 @@ init_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	      struct term_event *ev)
 {
 	if (widget_data->widget->info.checkbox.gid) {
+		/* Radio buttons */
 		if (*((int *) widget_data->cdata) == widget_data->widget->info.checkbox.gnum)
 			widget_data->info.checkbox.checked = 1;
 	} else {
+		/* Checkboxes */
 		if (*((int *) widget_data->cdata))
 			widget_data->info.checkbox.checked = 1;
 	}
@@ -158,8 +162,11 @@ mouse_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	       struct term_event *ev)
 {
 	if ((ev->b & BM_BUTT) >= B_WHEEL_UP
-	    || ev->y != widget_data->y || ev->x < widget_data->x || ev->x >= widget_data->x + 3)
+	    || ev->y != widget_data->y
+	    || ev->x < widget_data->x
+	    || ev->x >= widget_data->x + 3)
 		return EVENT_NOT_PROCESSED;
+
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 	dlg_data->selected = widget_data - dlg_data->widgets_data;
 	display_dlg_item(dlg_data, widget_data, 1);
@@ -172,9 +179,11 @@ static void
 select_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data)
 {
 	if (!widget_data->widget->info.checkbox.gid) {
+		/* Checkboxes */
 		widget_data->info.checkbox.checked = *((int *) widget_data->cdata)
 			    = !*((int *) widget_data->cdata);
 	} else {
+		/* Radio buttons */
 		int i;
 
 		for (i = 0; i < dlg_data->n; i++) {

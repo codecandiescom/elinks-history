@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.75 2003/10/27 15:52:45 jonas Exp $ */
+/* $Id: search.c,v 1.76 2003/10/29 10:51:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1119,11 +1119,11 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_dlg_field(dlg, n, min, max, check, l, field, history);
 
-	add_dlg_checkbox(dlg, n, 1, 0, hop->whether_regex);
-	add_dlg_checkbox(dlg, n, 1, 1, hop->whether_regex);
-	add_dlg_checkbox(dlg, n, 1, 2, hop->whether_regex);
-	add_dlg_checkbox(dlg, n, 2, 1, hop->cases);
-	add_dlg_checkbox(dlg, n, 2, 0, hop->cases);
+	add_dlg_radio(dlg, n, 1, 0, hop->whether_regex);
+	add_dlg_radio(dlg, n, 1, 1, hop->whether_regex);
+	add_dlg_radio(dlg, n, 1, 2, hop->whether_regex);
+	add_dlg_radio(dlg, n, 2, 1, hop->cases);
+	add_dlg_radio(dlg, n, 2, 0, hop->cases);
 
 	add_dlg_button(dlg, n, B_ENTER, search_dlg_ok, okbutton, fn);
 	add_dlg_button(dlg, n, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);

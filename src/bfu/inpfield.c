@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.72 2003/10/28 09:48:32 zas Exp $ */
+/* $Id: inpfield.c,v 1.73 2003/10/29 10:51:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,8 @@ check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 		return 1;
 	}
 
-	if (l < widget_data->widget->info.field.min || l > widget_data->widget->info.field.max) {
+	if (l < widget_data->widget->info.field.min
+	    || l > widget_data->widget->info.field.max) {
 		msg_box(dlg_data->win->term, NULL, 0,
 			N_("Bad number"), AL_CENTER,
 			N_("Number out of range"),
@@ -196,7 +197,7 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	if (!dlg) return;
 
 	field = (unsigned char *) dlg + sizeof_dialog(INPUT_DLG_SIZE, 0);
-	*field = 0;
+	/* *field = 0; */ /* calloc() should take care of it. */
 
 	if (def) {
 		int defsize = strlen(def) + 1;
@@ -281,14 +282,16 @@ init_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		struct input_history_item *item;
 
 		foreach (item, widget_data->widget->info.field.history->items) {
-			int dsize = strlen(item->d) + 1;
+			int datalen = strlen(item->data);
 			struct input_history_item *hi;
 
+			/* One byte is reserved in struct input_history_item.
+			 * --Zas */
 			hi = mem_alloc(sizeof(struct input_history_item)
-				       + dsize);
+				       + datalen);
 			if (!hi) continue;
 
-			memcpy(hi->d, item->d, dsize);
+			memcpy(hi->data, item->data, datalen + 1);
 			add_to_list(widget_data->info.field.history, hi);
 		}
 	}
@@ -300,7 +303,8 @@ static int
 mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
-	if (ev->y != widget_data->y || ev->x < widget_data->x
+	if (ev->y != widget_data->y
+	    || ev->x < widget_data->x
 	    || ev->x >= widget_data->x + widget_data->w
 	    || !widget_has_history(widget_data))
 		return EVENT_NOT_PROCESSED;

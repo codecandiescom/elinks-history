@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.96 2003/10/27 10:35:26 jonas Exp $ */
+/* $Id: options.c,v 1.97 2003/10/29 10:51:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,23 +220,23 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg->refresh = (void (*)(void *)) terminal_options_ok;
 	dlg->refresh_data = termopt_hop;
 
-	add_dlg_checkbox(dlg, n, 1, TERM_DUMB, termopt_hop->type);
-	add_dlg_checkbox(dlg, n, 1, TERM_VT100, termopt_hop->type);
-	add_dlg_checkbox(dlg, n, 1, TERM_LINUX, termopt_hop->type);
-	add_dlg_checkbox(dlg, n, 1, TERM_KOI8, termopt_hop->type);
+	add_dlg_radio(dlg, n, 1, TERM_DUMB, termopt_hop->type);
+	add_dlg_radio(dlg, n, 1, TERM_VT100, termopt_hop->type);
+	add_dlg_radio(dlg, n, 1, TERM_LINUX, termopt_hop->type);
+	add_dlg_radio(dlg, n, 1, TERM_KOI8, termopt_hop->type);
 
-	add_dlg_checkbox(dlg, n, 2, COLOR_MODE_MONO, termopt_hop->colors);
-	add_dlg_checkbox(dlg, n, 2, COLOR_MODE_16, termopt_hop->colors);
+	add_dlg_radio(dlg, n, 2, COLOR_MODE_MONO, termopt_hop->colors);
+	add_dlg_radio(dlg, n, 2, COLOR_MODE_16, termopt_hop->colors);
 #ifdef USE_256_COLORS
-	add_dlg_checkbox(dlg, n, 2, COLOR_MODE_256, termopt_hop->colors);
+	add_dlg_radio(dlg, n, 2, COLOR_MODE_256, termopt_hop->colors);
 #endif
 
-	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->m11_hack);
-	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->restrict_852);
-	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->block_cursor);
-	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->trans);
-	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->underline);
-	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->utf_8_io);
+	add_dlg_checkbox(dlg, n, termopt_hop->m11_hack);
+	add_dlg_checkbox(dlg, n, termopt_hop->restrict_852);
+	add_dlg_checkbox(dlg, n, termopt_hop->block_cursor);
+	add_dlg_checkbox(dlg, n, termopt_hop->trans);
+	add_dlg_checkbox(dlg, n, termopt_hop->underline);
+	add_dlg_checkbox(dlg, n, termopt_hop->utf_8_io);
 
 	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term), NULL);

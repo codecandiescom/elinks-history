@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.144 2004/12/14 17:07:14 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.145 2004/12/14 17:08:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,8 +192,8 @@ delete_folder_by_name(unsigned char *foldername)
 	struct bookmark *bookmark, *next;
 
 	foreachsafe (bookmark, next, bookmarks) {
-		if (strcmp(bookmark->title, foldername)
-		    || (bookmark->url && *bookmark->url))
+		if ((bookmark->url && *bookmark->url)
+		    || strcmp(bookmark->title, foldername))
 			continue;
 
 		delete_bookmark(bookmark);

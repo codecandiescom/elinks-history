@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.274 2003/09/15 21:28:34 jonas Exp $ */
+/* $Id: renderer.c,v 1.275 2003/09/15 21:29:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,9 +94,9 @@ void put_chars(struct part *, unsigned char *, int);
 #define SPACES_GRANULARITY	0x7F
 
 #define ALIGN_LINES(x, o, n) mem_align_alloc(x, o, n, sizeof(struct line), LINES_GRANULARITY)
-#define ALIGN_LINE(x, o, n)  mem_align_alloc(x, o, n, sizeof(struct screen_char), LINE_GRANULARITY)
-#define ALIGN_LINK(x, o, n)  mem_align_alloc(x, o, n, sizeof(struct link), LINK_GRANULARITY)
-#define ALIGN_SPACES(x, o, n)  mem_align_alloc(x, o, n, sizeof(unsigned char), SPACES_GRANULARITY)
+#define ALIGN_LINE(x, o, n) mem_align_alloc(x, o, n, sizeof(struct screen_char), LINE_GRANULARITY)
+#define ALIGN_LINK(x, o, n) mem_align_alloc(x, o, n, sizeof(struct link), LINK_GRANULARITY)
+#define ALIGN_SPACES(x, o, n) mem_align_alloc(x, o, n, sizeof(unsigned char), SPACES_GRANULARITY)
 
 static int
 realloc_lines(struct document *document, int y)
@@ -187,7 +187,7 @@ static inline void
 set_hchars(struct part *part, int x, int y, int xl,
 	   unsigned char data, color_t *bgcolor, enum screen_char_attr attr)
 {
-	assert(part && part->document);
+	assert(part && part->document && xl > 0);
 	if_assert_failed return;
 
 	if (realloc_line(part->document, Y(y), X(x) + xl - 1))
@@ -215,7 +215,8 @@ set_hchars(struct part *part, int x, int y, int xl,
 	}
 }
 
-/* xset_hchar() and xset_vchars() is used for rendering table frames. */
+/* xset_hchar() and xset_vchars() are used for rendering table frames. */
+
 void
 xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
 {

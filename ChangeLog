@@ -1,3 +1,17 @@
+Sat Feb 14 13:56:11 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/color.inc:
+
+	Some notes of where this color list comes from where added. It is
+	unclear if there is any copyright on it. Let me know if it is the
+	case. Suggested by Pasky.  
+
+Sat Feb 14 00:53:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/: color.inc, color_s.inc:
+
+	cvs Id were added.  
+
 Fri Feb 13 20:33:31 2004  Laurent Monin <zas@norz.org>:
 
 	* src/util/: Makefile.am, color.c, color.inc, color_s.inc,

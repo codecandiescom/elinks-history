@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.456 2004/06/13 22:08:30 zas Exp $ */
+/* $Id: view.c,v 1.457 2004/06/13 22:36:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,8 +359,11 @@ move_down(struct session *ses, struct document_view *doc_view, int type)
 	if (newpos < doc_view->document->height)
 		doc_view->vs->y = newpos;
 
-	if (!current_link_is_visible(doc_view))
-		find_link(doc_view, 1, type);
+	if (current_link_is_visible(doc_view)) return;
+	if (type)
+		find_link_down(doc_view);
+	else
+		find_link_page_down(doc_view);
 }
 
 static void
@@ -381,8 +384,12 @@ move_up(struct session *ses, struct document_view *doc_view, int type)
 	doc_view->vs->y -= doc_view->box.height;
 	int_lower_bound(&doc_view->vs->y, 0);
 
-	if (!current_link_is_visible(doc_view))
-		find_link(doc_view, -1, type);
+	if (current_link_is_visible(doc_view)) return;
+
+	if (type)
+		find_link_up(doc_view);
+	else
+		find_link_page_up(doc_view);
 }
 
 static void
@@ -472,8 +479,12 @@ scroll(struct session *ses, struct document_view *doc_view, int steps)
 	if (steps > 0) int_upper_bound(&doc_view->vs->y, max_height);
 	int_lower_bound(&doc_view->vs->y, 0);
 
-	if (!current_link_is_visible(doc_view))
-		find_link(doc_view, steps < 0 ? -1 : 1, 0);
+	if (current_link_is_visible(doc_view)) return;
+
+	if (steps < 0)
+		find_link_page_up(doc_view);
+	else
+		find_link_page_down(doc_view);
 }
 
 static void
@@ -530,8 +541,9 @@ hscroll(struct session *ses, struct document_view *doc_view, int steps)
 
 	doc_view->vs->x = x;
 
-	if (!current_link_is_visible(doc_view))
-		find_link(doc_view, 1, 0);
+	if (current_link_is_visible(doc_view)) return;
+
+	find_link_page_down(doc_view);
 	/* !!! FIXME: check right margin */
 }
 
@@ -583,7 +595,7 @@ home(struct session *ses, struct document_view *doc_view)
 	if_assert_failed return;
 
 	doc_view->vs->y = doc_view->vs->x = 0;
-	find_link(doc_view, 1, 0);
+	find_link_page_down(doc_view);
 }
 
 static void
@@ -597,7 +609,7 @@ x_end(struct session *ses, struct document_view *doc_view)
 	max_height = doc_view->document->height - doc_view->box.height;
 	doc_view->vs->x = 0;
 	int_lower_bound(&doc_view->vs->y, int_max(0, max_height));
-	find_link(doc_view, -1, 0);
+	find_link_page_up(doc_view);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.456 2004/06/10 21:55:36 jonas Exp $ */
+/* $Id: session.c,v 1.457 2004/06/10 22:11:32 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -872,10 +872,8 @@ decode_session_info(struct terminal *term, int len, const int *data)
 				remote = handle_remote_session(base_session, remote, uri);
 
 			} else if (!info) {
-				info = init_session_info(base_session, remote, NULL);
+				info = init_session_info(base_session, remote, uri);
 				if (!info) return NULL;
-
-				info->uri = get_uri_reference(uri);
 
 			} else {
 				init_session(base_session, term, uri, 1);

@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.12 2004/09/25 00:19:37 jonas Exp $ */
+/* $Id: ecmascript.c,v 1.13 2004/09/25 00:59:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "viewer/text/view.h" /* current_frame() */
+#include "viewer/text/vs.h"
 
 
 enum ecmascript_option {
@@ -87,6 +88,17 @@ ecmascript_put_interpreter(struct ecmascript_interpreter *interpreter)
 	assert(interpreter);
 	spidermonkey_put_interpreter(interpreter);
 	mem_free(interpreter);
+}
+
+void
+ecmascript_cleanup_state(struct document_view *doc_view, struct view_state *vs)
+{
+	if (ses->doc_view->ecmascript) {
+		ecmascript_put_interpreter(ses->doc_view->ecmascript);
+		ses->doc_view->ecmascript = NULL;
+	}
+	free_string_list(&vs->onload_snippets);
+	vs->current_onload_snippet = NULL;
 }
 
 

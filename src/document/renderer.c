@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.84 2004/09/24 22:43:45 pasky Exp $ */
+/* $Id: renderer.c,v 1.85 2004/09/25 00:59:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -280,12 +280,7 @@ render_document_frames(struct session *ses, int no_cache)
 			/* This means we aren't doing gradual re-rendering,
 			 * thus don't need to preserve the online snippets
 			 * evaluation progress status. */
-			free_string_list(&vs->onload_snippets);
-			vs->current_onload_snippet = NULL;
-			if (ses->doc_view->ecmascript) {
-				ecmascript_put_interpreter(ses->doc_view->ecmascript);
-				ses->doc_view->ecmascript = NULL;
-			}
+			ecmascript_cleanup_state(ses->doc_view, vs);
 		}
 #endif
 		if (vs->plain < 0) vs->plain = 0;

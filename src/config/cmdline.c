@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.65 2004/04/23 22:58:50 jonas Exp $ */
+/* $Id: cmdline.c,v 1.66 2004/04/23 23:05:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -652,11 +652,11 @@ struct option_info cmdline_options_info[] = {
 	INIT_OPT_COMMAND("", N_("Control an already running ELinks"),
 		"remote", 0, remote_cmd,
 		N_("Mozilla compliant support for controlling a remote ELinks instance.\n"
-		"The command line takes an additional argument that contains the method\n"
-		"which should be remotely invoked. For ease of use this special argument\n"
-		"can be omitted in which case any additional URL arguments will be opened\n"
-		"in new tabs in the remote instance. Following is a list of the methods\n"
-		"that are supported:\n"
+		"The command takes an additional argument containing the method which\n"
+		"should be invoked and any parameters that should be passed to it.\n"
+		"For ease of use the additional method argument can be omitted in which\n"
+		"case any URL arguments will be opened in new tabs in the remote instance.\n"
+		"Following is a list of the methods that are supported:\n"
 		"  ping()                                   -- check for remote instance\n"
 		"  openURL()                                -- open new tab\n"
 		"  openURL(http://elinks.or.cz)             -- open URL in new tab\n"

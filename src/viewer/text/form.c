@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.112 2004/05/29 02:28:36 jonas Exp $ */
+/* $Id: form.c,v 1.113 2004/05/30 17:56:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@
 void
 fixup_select_state(struct form_control *fc, struct form_state *fs)
 {
-	register int i = 0;
+	register int i;
 
 	assert(fc && fs);
 	if_assert_failed return;
@@ -64,19 +64,17 @@ fixup_select_state(struct form_control *fc, struct form_state *fs)
 	    && !strcmp(fc->values[fs->state], fs->value))
 		return;
 
-	while (i < fc->nvalues) {
+	for (i = 0; i < fc->nvalues; i++)
 		if (!strcmp(fc->values[i], fs->value)) {
 			fs->state = i;
 			return;
 		}
-		i++;
-	}
 
 	fs->state = 0;
 
 	mem_free_set(&fs->value, stracpy(fc->nvalues
-					   ? fc->values[0]
-					   : (unsigned char *) ""));
+					 ? fc->values[0]
+					 : (unsigned char *) ""));
 }
 
 static void

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.74 2004/06/30 05:33:56 jonas Exp $ */
+/* $Id: parse.c,v 1.75 2004/07/02 23:07:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -627,9 +627,6 @@ skip_w:
 			while (html < eof && isspace(*html))
 				html++;
 			continue;
-
-put_sp:
-			put_chrs(" ", 1, html_context.put_chars_f, f);
 		}
 
 		if (html_is_preformatted()) {
@@ -714,7 +711,7 @@ next_break:
 element:
 		endingtag = *name == '/'; name += endingtag; namelen -= endingtag;
 		if (!endingtag && html_context.putsp == 1 && !html_top.invisible)
-			goto put_sp;
+			put_chrs(" ", 1, html_context.put_chars_f, f);
 		put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
 		if (!html_is_preformatted() && !endingtag && !html_context.putsp) {
 			unsigned char *ee = end;

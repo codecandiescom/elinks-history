@@ -1,3 +1,41 @@
+Sun Sep 14 03:03:25 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Add EMACS-style ^A, ^E, ^N, ^P, ^V, and Alt-V and Vi-style ^F and ^B 
+	key bindings to listboxes.  
+
+Sun Sep 14 02:15:55 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/: file.c, uri.c, uri.h:
+
+	Encode links in file: listings, and decode them when following a
+	file: link.  This is slightly slower, uses slightly more memory, and
+	required that I reënable the decode_uri_string function, but is more
+	correct and robust.  
+
+Sun Sep 14 01:04:22 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/: dump/dump.c, text/vs.c:
+
+	Only mem_alloc and memset sizeof(struct view_state) + strlen(url), 
+	not sizeof(struct view_state) + strlen(url) + 1: struct view_state
+	has unsigned char url[1], so the extra space necessary for the null
+	terminator is already there, included in the sizeof(struct
+	view_state).  
+	
+	This fixes the bug whereby ELinks overflow memory when displaying a
+	file of an unrecognised type. It also saves a byte(!) of memory when
+	-dump is used.  
+
+Sat Sep 13 23:23:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Starting ELinks with -no-home specified make ELinks die on entering
+	a site with forms. The attached patch solves the problem with
+	elinks_home being NULL. Patch by Karsten Schölzel.  
+
 Sat Sep 13 21:32:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/dialogs/document.c:

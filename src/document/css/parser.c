@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.122 2004/09/21 00:12:31 pasky Exp $ */
+/* $Id: parser.c,v 1.123 2004/09/21 00:21:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,7 +321,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 				            last_chained_selector);
 			}
 
-			if (prev_element_selector) {
+			if (pkg->selector == base_sel) {
 				/* This is still just specificitying offspring
 				 * of the previous pkg->selector. */
 				pkg->selector = selector;

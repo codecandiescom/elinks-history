@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.270 2003/11/15 18:29:03 zas Exp $ */
+/* $Id: parser.c,v 1.271 2003/11/16 01:03:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1822,6 +1822,8 @@ struct list_menu {
 
 static struct list_menu lnk_menu;
 
+#define MENU_FULLNAME (1 << 8)
+
 static void
 new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullname)
 	/* name == NULL - up;	data == -1 - down */
@@ -1864,11 +1866,11 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 		if (data == -1) {
 			SET_MENU_ITEM(item, name, M_SUBMENU, do_select_submenu,
-				      new_menu_item, FREE_NOTHING | (fullname << 8),
+				      data, FREE_NOTHING | (fullname ? MENU_FULLNAME : 0),
 				      1, 1, 0, 0);
 		} else {
 			SET_MENU_ITEM(item, name, "", selected_item,
-				      data, FREE_NOTHING | (fullname << 8),
+				      data, FREE_NOTHING | (fullname ? MENU_FULLNAME : 0),
 				      0, 1, 0, 0);
 		}
 
@@ -1946,7 +1948,9 @@ menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls)
 				mem_free(bs);
 			}
 		} else {
-			bs = stracpy((m->item_free & (1<<8)) ? (unsigned char *)"" : base);
+			assert(m->func == (menu_func) selected_item);
+			bs = stracpy((m->item_free & MENU_FULLNAME)
+				     ? (unsigned char *)"" : base);
 			if (bs) add_to_strn(&bs, m->text);
 			lbls[(int)m->data] = bs;
 		}

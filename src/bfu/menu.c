@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.140 2003/12/26 13:08:32 zas Exp $ */
+/* $Id: menu.c,v 1.141 2003/12/26 16:28:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,8 @@
 struct mainmenu {
 	MENU_HEAD;
 	int sp;
+	int first_displayed;
+	int last_displayed;
 };
 
 /* Submenu indicator, displayed at right. */
@@ -176,7 +178,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 				s += MENU_HOTKEY_SPACE + keystroke.length;
 				done_string(&keystroke);
 			}
-			
+
 		} else if (mi_has_right_text(menu->items[my])) {
 			unsigned char *rtext = menu->items[my].rtext;
 
@@ -681,6 +683,7 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 	menu->items = items;
 	menu->data = data;
 	menu->ni = count_items(items);
+
 #ifdef ENABLE_NLS
 	clear_hotkeys_cache(items, menu->ni, 1);
 #endif
@@ -703,9 +706,22 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	int p = 0;
 	int i;
 
+	/* FIXME: menu horizontal scrolling do not work well yet, we need to cache
+	 * menu items width and recalculate them only when needed (ie. language change)
+	 * instead of looping and calculate them each time. --Zas */
+	if (menu->selected < menu->first_displayed)
+		menu->first_displayed--;
+	else if (menu->selected > menu->last_displayed) {
+		menu->first_displayed++;
+	}
+	int_bounds(&menu->first_displayed, 0, menu->last_displayed);
+
 	draw_area(term, 0, 0, term->width, 1, ' ', 0, normal_color);
 
-	for (i = 0; i < menu->ni; i++) {
+	if (menu->first_displayed != 0)
+		draw_area(term, 0, 0, 2, 1, '<', 0, normal_color);
+
+	for (i = menu->first_displayed; i < menu->ni; i++) {
 		struct color_pair *color = normal_color;
 		unsigned char *text = menu->items[i].text;
 		int l = menu->items[i].hotkey_pos;
@@ -715,6 +731,9 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 			text = _(text, term);
 
 		textlen = strlen(text) - !!l;
+
+		if (p + textlen + 4 >= term->width)
+			break;
 
 		p += 2;
 
@@ -741,6 +760,11 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 		p += textlen;
 	}
+
+	menu->last_displayed = i - 1;
+	int_lower_bound(&menu->last_displayed, menu->first_displayed);
+	if (menu->last_displayed < menu->ni - 1)
+		draw_area(term, term->width - 2, 0, 2, 1, '>', 0, normal_color);
 
 	redraw_from_window(menu->win);
 }
@@ -793,10 +817,22 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 						     - !!menu->items[i].hotkey_pos;
 					}
 
-					if (ev->x < o || ev->x >= p)
-						continue;
+					if (ev->x < o) {
+						if (ev->x >= 2) continue;
+						menu->selected--;
+						if (menu->selected < 0)
+							menu->selected = menu->ni - 1;
 
-					menu->selected = i;
+					} else if (ev->x >= p) {
+						if (ev->x < win->term->width - 2) continue;
+						menu->selected++;
+						if (menu->selected > menu->ni - 1)
+							menu->selected = 0;
+
+					} else {
+						menu->selected = i;
+					}
+
 					display_mainmenu(win->term, menu);
 					if ((ev->b & BM_ACT) == B_UP
 					    || mi_is_submenu(menu->items[s])) {
@@ -823,15 +859,16 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 			}
 
 			if (action == ACT_LEFT) {
-				if (!menu->selected--)
+				menu->selected--;
+				if (menu->selected < 0)
 					menu->selected = menu->ni - 1;
 				s = 1;
 
 			} else if (action == ACT_RIGHT) {
-				if (++menu->selected >= menu->ni)
+				menu->selected++;
+				if (menu->selected >= menu->ni)
 					menu->selected = 0;
 				s = 1;
-
 			}
 
 			if (fwd && (action == ACT_LEFT || action == ACT_RIGHT)) {

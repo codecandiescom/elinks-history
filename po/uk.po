@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-07 11:01+0200\n"
+"POT-Creation-Date: 2003-06-08 00:41+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dmitry Pinchukov <dpinch@mail.ru>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
@@ -23,24 +23,24 @@ msgid "Number expected in field"
 msgstr "В пол╕ ма╓ бути число"
 
 #: src/bfu/inpfield.c:45 src/bfu/inpfield.c:54 src/bfu/inpfield.c:74
-#: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:274
-#: src/bookmarks/dialogs.c:284 src/config/dialogs.c:44
-#: src/config/dialogs.c:190 src/config/dialogs.c:329 src/config/dialogs.c:361
-#: src/config/dialogs.c:396 src/config/dialogs.c:408 src/config/dialogs.c:463
+#: src/bookmarks/dialogs.c:171 src/bookmarks/dialogs.c:275
+#: src/bookmarks/dialogs.c:285 src/config/dialogs.c:43
+#: src/config/dialogs.c:189 src/config/dialogs.c:328 src/config/dialogs.c:360
+#: src/config/dialogs.c:395 src/config/dialogs.c:407 src/config/dialogs.c:462
 #: src/config/dialogs.c:478 src/config/dialogs.c:612 src/config/dialogs.c:634
-#: src/config/dialogs.c:660 src/config/dialogs.c:724 src/config/dialogs.c:738
-#: src/dialogs/auth.c:193 src/dialogs/edit.c:173 src/dialogs/menu.c:642
-#: src/dialogs/menu.c:652 src/dialogs/menu.c:681 src/dialogs/menu.c:699
-#: src/dialogs/menu.c:709 src/dialogs/mime.c:278 src/dialogs/options.c:267
+#: src/config/dialogs.c:661 src/config/dialogs.c:725 src/config/dialogs.c:739
+#: src/dialogs/auth.c:192 src/dialogs/edit.c:177 src/dialogs/menu.c:644
+#: src/dialogs/menu.c:655 src/dialogs/menu.c:684 src/dialogs/menu.c:702
+#: src/dialogs/menu.c:713 src/dialogs/mime.c:278 src/dialogs/options.c:267
 #: src/dialogs/options.c:364 src/globhist/dialogs.c:240 src/lua/core.c:443
-#: src/lua/core.c:587 src/lua/core.c:813 src/protocol/url.c:67
-#: src/protocol/user.c:107 src/protocol/user.c:135 src/sched/download.c:524
-#: src/sched/download.c:556 src/sched/download.c:717 src/sched/download.c:807
-#: src/sched/download.c:1196 src/sched/download.c:1205
-#: src/sched/download.c:1241 src/sched/download.c:1251 src/sched/session.c:379
-#: src/viewer/text/view.c:1687 src/viewer/text/view.c:2031
-#: src/viewer/text/view.c:2464 src/viewer/text/view.c:2514
-#: src/viewer/text/view.c:2756 src/viewer/text/view.c:3447
+#: src/lua/core.c:587 src/lua/core.c:811 src/protocol/url.c:67
+#: src/protocol/user.c:109 src/protocol/user.c:137 src/sched/download.c:527
+#: src/sched/download.c:561 src/sched/download.c:722 src/sched/download.c:812
+#: src/sched/download.c:1201 src/sched/download.c:1210
+#: src/sched/download.c:1246 src/sched/download.c:1257 src/sched/session.c:335
+#: src/viewer/text/view.c:1688 src/viewer/text/view.c:2032
+#: src/viewer/text/view.c:2465 src/viewer/text/view.c:2514
+#: src/viewer/text/view.c:2756 src/viewer/text/view.c:3448
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -77,43 +77,42 @@ msgstr ""
 msgid "No title"
 msgstr "Назва посилання"
 
-#: src/bookmarks/dialogs.c:169 src/bookmarks/dialogs.c:640
+#: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:641
 msgid "Add folder"
 msgstr "Додати папку"
 
-#: src/bookmarks/dialogs.c:169
+#: src/bookmarks/dialogs.c:170
 msgid "Folder name"
 msgstr "╤м'я папки"
 
-#: src/bookmarks/dialogs.c:170 src/config/dialogs.c:128
-#: src/config/dialogs.c:138 src/config/dialogs.c:325 src/config/dialogs.c:408
-#: src/config/dialogs.c:477 src/config/dialogs.c:660 src/config/dialogs.c:737
-#: src/dialogs/auth.c:189 src/dialogs/document.c:53 src/dialogs/document.c:208
+#: src/bookmarks/dialogs.c:171 src/config/dialogs.c:127
+#: src/config/dialogs.c:137 src/config/dialogs.c:324 src/config/dialogs.c:407
+#: src/config/dialogs.c:477 src/config/dialogs.c:661 src/config/dialogs.c:738
+#: src/dialogs/auth.c:188 src/dialogs/document.c:53 src/dialogs/document.c:208
 #: src/dialogs/document.c:231 src/dialogs/document.c:281
-#: src/dialogs/document.c:293 src/dialogs/edit.c:164 src/dialogs/info.c:47
-#: src/dialogs/info.c:75 src/dialogs/info.c:95 src/dialogs/info.c:121
-#: src/dialogs/info.c:185 src/dialogs/info.c:207 src/dialogs/menu.c:642
-#: src/dialogs/menu.c:652 src/dialogs/menu.c:680 src/dialogs/menu.c:699
-#: src/dialogs/menu.c:709 src/dialogs/mime.c:274 src/dialogs/options.c:257
-#: src/dialogs/options.c:359 src/globhist/dialogs.c:417 src/lua/core.c:439
-#: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:812
-#: src/sched/download.c:581 src/sched/sched.c:72 src/sched/session.c:1143
-#: src/sched/session.c:1160 src/sched/session.c:1184
-#: src/viewer/text/view.c:2755
+#: src/dialogs/document.c:293 src/dialogs/edit.c:168 src/dialogs/info.c:48
+#: src/dialogs/info.c:75 src/dialogs/info.c:95 src/dialogs/info.c:122
+#: src/dialogs/info.c:186 src/dialogs/info.c:206 src/dialogs/menu.c:644
+#: src/dialogs/menu.c:655 src/dialogs/menu.c:684 src/dialogs/menu.c:702
+#: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
+#: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
+#: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
+#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
+#: src/sched/session.c:1142 src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "Угу"
 
-#: src/bookmarks/dialogs.c:240 src/lua/core.c:423
+#: src/bookmarks/dialogs.c:241 src/lua/core.c:423
 msgid "Edit bookmark"
 msgstr "Редагувати закладку"
 
-#: src/bookmarks/dialogs.c:268 src/bookmarks/dialogs.c:277
-#: src/bookmarks/dialogs.c:411 src/bookmarks/dialogs.c:418
-#: src/bookmarks/dialogs.c:426
+#: src/bookmarks/dialogs.c:269 src/bookmarks/dialogs.c:278
+#: src/bookmarks/dialogs.c:412 src/bookmarks/dialogs.c:419
+#: src/bookmarks/dialogs.c:427
 msgid "Delete bookmark"
 msgstr "Видалити закладку"
 
-#: src/bookmarks/dialogs.c:269
+#: src/bookmarks/dialogs.c:270
 #, fuzzy, c-format
 msgid ""
 "Sorry, but this bookmark is already being used by something right now.\n"
@@ -121,7 +120,7 @@ msgid ""
 "Title: \"%s\""
 msgstr "Вибачте, ця закладинка вже чимось використову╓ться прямо зараз"
 
-#: src/bookmarks/dialogs.c:278
+#: src/bookmarks/dialogs.c:279
 #, fuzzy, c-format
 msgid ""
 "Sorry, but this bookmark is already being used by something right now.\n"
@@ -130,30 +129,30 @@ msgid ""
 "URL: \"%s\""
 msgstr "Вибачте, ця закладинка вже чимось використову╓ться прямо зараз"
 
-#: src/bookmarks/dialogs.c:412
+#: src/bookmarks/dialogs.c:413
 msgid "Delete marked bookmarks?"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:414 src/bookmarks/dialogs.c:422
-#: src/bookmarks/dialogs.c:431 src/dialogs/menu.c:134 src/dialogs/mime.c:180
+#: src/bookmarks/dialogs.c:415 src/bookmarks/dialogs.c:423
+#: src/bookmarks/dialogs.c:432 src/dialogs/menu.c:134 src/dialogs/mime.c:180
 #: src/globhist/dialogs.c:322 src/globhist/dialogs.c:333
-#: src/globhist/dialogs.c:378 src/sched/session.c:641
+#: src/globhist/dialogs.c:378 src/sched/session.c:598
 msgid "Yes"
 msgstr "Так"
 
-#: src/bookmarks/dialogs.c:415 src/bookmarks/dialogs.c:423
-#: src/bookmarks/dialogs.c:432 src/dialogs/menu.c:135 src/dialogs/mime.c:181
+#: src/bookmarks/dialogs.c:416 src/bookmarks/dialogs.c:424
+#: src/bookmarks/dialogs.c:433 src/dialogs/menu.c:135 src/dialogs/mime.c:181
 #: src/globhist/dialogs.c:323 src/globhist/dialogs.c:334
-#: src/globhist/dialogs.c:379 src/sched/session.c:642
+#: src/globhist/dialogs.c:379 src/sched/session.c:599
 msgid "No"
 msgstr "Н╕"
 
-#: src/bookmarks/dialogs.c:419
-#, c-format
-msgid "Delete folder content \"%s\" ?"
-msgstr ""
+#: src/bookmarks/dialogs.c:420
+#, fuzzy, c-format
+msgid "Delete content of folder \"%s\" ?"
+msgstr "Видалити розширення"
 
-#: src/bookmarks/dialogs.c:427
+#: src/bookmarks/dialogs.c:428
 #, fuzzy, c-format
 msgid ""
 "Delete bookmark \"%s\" ?\n"
@@ -161,49 +160,49 @@ msgid ""
 "URL: \"%s\""
 msgstr "Видалити закладку"
 
-#: src/bookmarks/dialogs.c:609
+#: src/bookmarks/dialogs.c:610
 msgid "Bookmark manager"
 msgstr "Робота з закладками"
 
-#: src/bookmarks/dialogs.c:619 src/globhist/dialogs.c:464
+#: src/bookmarks/dialogs.c:620 src/globhist/dialogs.c:465
 msgid "Goto"
 msgstr "Йти"
 
-#: src/bookmarks/dialogs.c:625 src/config/dialogs.c:307
-#: src/config/dialogs.c:356 src/config/dialogs.c:521
+#: src/bookmarks/dialogs.c:626 src/config/dialogs.c:306
+#: src/config/dialogs.c:355 src/config/dialogs.c:521
 msgid "Edit"
 msgstr "Редагувати"
 
-#: src/bookmarks/dialogs.c:630 src/config/dialogs.c:533
-#: src/config/dialogs.c:780 src/globhist/dialogs.c:474
+#: src/bookmarks/dialogs.c:631 src/config/dialogs.c:533
+#: src/config/dialogs.c:781 src/globhist/dialogs.c:475
 msgid "Delete"
 msgstr "Стерти"
 
-#: src/bookmarks/dialogs.c:635
+#: src/bookmarks/dialogs.c:636
 msgid "Move"
 msgstr "Перем╕стити"
 
-#: src/bookmarks/dialogs.c:645 src/config/dialogs.c:527
-#: src/config/dialogs.c:774
+#: src/bookmarks/dialogs.c:646 src/config/dialogs.c:527
+#: src/config/dialogs.c:775
 msgid "Add"
 msgstr "Додати"
 
-#: src/bookmarks/dialogs.c:650 src/dialogs/menu.c:708
-#: src/globhist/dialogs.c:479 src/viewer/text/view.c:2461
-#: src/viewer/text/view.c:2509
+#: src/bookmarks/dialogs.c:651 src/dialogs/menu.c:712
+#: src/globhist/dialogs.c:480 src/viewer/text/view.c:2462
+#: src/viewer/text/view.c:2510
 msgid "Search"
 msgstr "Пошук"
 
-#: src/bookmarks/dialogs.c:655 src/config/dialogs.c:544
-#: src/config/dialogs.c:797 src/globhist/dialogs.c:494
+#: src/bookmarks/dialogs.c:656 src/config/dialogs.c:544
+#: src/config/dialogs.c:798 src/globhist/dialogs.c:495
 msgid "Close"
 msgstr "Закрити"
 
-#: src/bookmarks/dialogs.c:790 src/bookmarks/dialogs.c:815
+#: src/bookmarks/dialogs.c:791 src/bookmarks/dialogs.c:816
 msgid "Add bookmark"
 msgstr "Додати закладку"
 
-#: src/bookmarks/dialogs.c:801
+#: src/bookmarks/dialogs.c:802
 msgid "Search bookmarks"
 msgstr "Пошук по закладках"
 
@@ -223,18 +222,16 @@ msgstr "Помилка конф╕гурац╕╖"
 
 #: src/config/dialogs.c:40
 #, fuzzy, c-format
-msgid ""
-"Unable to write to config file\n"
-"%s: %s"
+msgid "Unable to write to config file %s: %s"
 msgstr "Не можу записати файл конф╕гурац╕╖"
 
-#: src/config/dialogs.c:120 src/config/dialogs.c:131 src/config/dialogs.c:515
+#: src/config/dialogs.c:119 src/config/dialogs.c:130 src/config/dialogs.c:515
 #: src/dialogs/document.c:50 src/dialogs/document.c:205
-#: src/globhist/dialogs.c:411 src/globhist/dialogs.c:469
+#: src/globhist/dialogs.c:411 src/globhist/dialogs.c:470
 msgid "Info"
 msgstr "╤нформац╕я"
 
-#: src/config/dialogs.c:121
+#: src/config/dialogs.c:120
 #, c-format
 msgid ""
 "Name: %s\n"
@@ -244,7 +241,7 @@ msgid ""
 "Description: %s\n"
 msgstr ""
 
-#: src/config/dialogs.c:132
+#: src/config/dialogs.c:131
 #, c-format
 msgid ""
 "Name: %s\n"
@@ -252,56 +249,56 @@ msgid ""
 "Description: %s\n"
 msgstr ""
 
-#: src/config/dialogs.c:187 src/protocol/url.c:64 src/sched/session.c:913
-#: src/sched/session.c:976 src/sched/session.c:1448
-#: src/viewer/text/view.c:2028 src/viewer/text/view.c:3393
+#: src/config/dialogs.c:186 src/protocol/url.c:64 src/sched/session.c:332
+#: src/viewer/text/view.c:2029
 msgid "Error"
 msgstr "Помилка"
 
-#: src/config/dialogs.c:188
+#: src/config/dialogs.c:187
 msgid "Bad option value."
 msgstr ""
 
-#: src/config/dialogs.c:205 src/config/dialogs.c:407 src/dialogs/edit.c:26
+#: src/config/dialogs.c:204 src/config/dialogs.c:406 src/dialogs/edit.c:26
 #: src/lua/core.c:307 src/lua/core.c:308
 msgid "Name"
 msgstr "Назва"
 
-#: src/config/dialogs.c:206
+#: src/config/dialogs.c:205
 msgid "Type"
 msgstr ""
 
-#: src/config/dialogs.c:208 src/viewer/text/view.c:3708
-msgid "value"
+#: src/config/dialogs.c:207
+#, fuzzy
+msgid "Value"
 msgstr "значення"
 
-#: src/config/dialogs.c:209
+#: src/config/dialogs.c:208
 msgid "Description"
 msgstr ""
 
-#: src/config/dialogs.c:357
+#: src/config/dialogs.c:356
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
 
-#: src/config/dialogs.c:393 src/config/dialogs.c:407
+#: src/config/dialogs.c:392 src/config/dialogs.c:406
 msgid "Add option"
 msgstr ""
 
-#: src/config/dialogs.c:394
+#: src/config/dialogs.c:393
 msgid "Cannot add an option here."
 msgstr ""
 
-#: src/config/dialogs.c:460 src/config/dialogs.c:474
+#: src/config/dialogs.c:459 src/config/dialogs.c:473
 msgid "Delete option"
 msgstr ""
 
-#: src/config/dialogs.c:461
+#: src/config/dialogs.c:460
 msgid "Cannot delete this option."
 msgstr ""
 
-#: src/config/dialogs.c:475
+#: src/config/dialogs.c:474
 #, c-format
 msgid "Really delete the option \"%s\" ?"
 msgstr ""
@@ -310,12 +307,12 @@ msgstr ""
 msgid "Options manager"
 msgstr ""
 
-#: src/config/dialogs.c:539 src/config/dialogs.c:792 src/dialogs/options.c:262
-#: src/sched/download.c:1194 src/sched/download.c:1239
+#: src/config/dialogs.c:539 src/config/dialogs.c:793 src/dialogs/options.c:262
+#: src/sched/download.c:1199 src/sched/download.c:1244
 msgid "Save"
 msgstr "Зберегти"
 
-#: src/config/dialogs.c:609 src/config/dialogs.c:631 src/config/dialogs.c:659
+#: src/config/dialogs.c:609 src/config/dialogs.c:631 src/config/dialogs.c:660
 msgid "Add keybinding"
 msgstr ""
 
@@ -346,26 +343,26 @@ msgstr ""
 msgid "Keystroke"
 msgstr ""
 
-#: src/config/dialogs.c:720 src/config/dialogs.c:731
+#: src/config/dialogs.c:721 src/config/dialogs.c:732
 msgid "Delete keybinding"
 msgstr ""
 
-#: src/config/dialogs.c:721
+#: src/config/dialogs.c:722
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr ""
 
-#: src/config/dialogs.c:732
+#: src/config/dialogs.c:733
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 
-#: src/config/dialogs.c:764
+#: src/config/dialogs.c:765
 msgid "Keybinding manager"
 msgstr ""
 
-#: src/config/dialogs.c:786 src/globhist/dialogs.c:484
+#: src/config/dialogs.c:787 src/globhist/dialogs.c:485
 msgid "Toggle display"
 msgstr "Перемикнути URL/назва"
 
@@ -945,7 +942,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 
-#: src/config/options.c:976 src/sched/sched.c:82
+#: src/config/options.c:976
 msgid "Receive timeout"
 msgstr "Тайм-аут п╕д час читання"
 
@@ -1620,7 +1617,7 @@ msgstr "╤стор╕я стор╕нок до поточно╖"
 msgid "History options."
 msgstr ""
 
-#: src/config/options.c:1298 src/globhist/dialogs.c:454
+#: src/config/options.c:1298 src/globhist/dialogs.c:455
 msgid "Global history"
 msgstr "Керування ╕стор╕╓ю"
 
@@ -2466,7 +2463,7 @@ msgid "Dialog text colors."
 msgstr ""
 
 #: src/config/options.c:1876 src/config/options.c:2244
-#: src/viewer/text/view.c:3674
+#: src/viewer/text/view.c:3675
 msgid "Checkbox"
 msgstr "Прапорець"
 
@@ -2500,7 +2497,7 @@ msgid "Dialog selected button colors."
 msgstr ""
 
 #: src/config/options.c:1924 src/config/options.c:2292
-#: src/viewer/text/view.c:3680
+#: src/viewer/text/view.c:3681
 msgid "Text field"
 msgstr "Текстове поле"
 
@@ -3131,15 +3128,12 @@ msgstr ""
 msgid "Login"
 msgstr "╤м'я користувача"
 
-#: src/dialogs/auth.c:149 src/dialogs/auth.c:168
-msgid "Authentication required for "
+#: src/dialogs/auth.c:148
+#, fuzzy, c-format
+msgid "Authentication required for %s at %s"
 msgstr "Необх╕дна аутентиф╕кац╕я для "
 
-#: src/dialogs/auth.c:151 src/dialogs/auth.c:170
-msgid " at "
-msgstr " на "
-
-#: src/dialogs/auth.c:164
+#: src/dialogs/auth.c:166
 msgid "HTTP Authentication"
 msgstr "HTTP Аутентиф╕кац╕я"
 
@@ -3209,11 +3203,11 @@ msgstr "╤нформац╕я про заголовок"
 msgid "No header info."
 msgstr ""
 
-#: src/dialogs/edit.c:168 src/globhist/dialogs.c:489
+#: src/dialogs/edit.c:172 src/globhist/dialogs.c:490
 msgid "Clear"
 msgstr "Очистити"
 
-#: src/dialogs/info.c:44
+#: src/dialogs/info.c:45
 msgid "About"
 msgstr "Про програму"
 
@@ -3263,12 +3257,9 @@ msgid "Copying"
 msgstr "Л╕ценз╕я"
 
 #: src/dialogs/info.c:83
-msgid "ELinks "
-msgstr ""
-
-#: src/dialogs/info.c:84
+#, fuzzy, c-format
 msgid ""
-"\n"
+"ELinks %s\n"
 "\n"
 "(C) 1999 - 2002 Mikulas Patocka\n"
 "(C) 2001 - 2003 Petr Baudis\n"
@@ -3297,33 +3288,33 @@ msgid ""
 "Formatted document cache: %d documents, %d locked."
 msgstr ""
 
-#: src/dialogs/info.c:170
+#: src/dialogs/info.c:171
 #, fuzzy
 msgid "No entry."
 msgstr "╤нформац╕╖ нема╓"
 
-#: src/dialogs/info.c:176
+#: src/dialogs/info.c:177
 #, c-format
 msgid "%ld more entries."
 msgstr ""
 
-#: src/dialogs/info.c:182
+#: src/dialogs/info.c:183
 msgid "Cache info"
 msgstr "╤нформац╕я про кеш"
 
-#: src/dialogs/info.c:183
+#: src/dialogs/info.c:184
 #, fuzzy, c-format
 msgid "Cache content: %s"
 msgstr "Вм╕ст кешу"
 
-#: src/dialogs/info.c:196
+#: src/dialogs/info.c:202
+msgid "Memory info"
+msgstr "╤нформац╕я про пам'ять"
+
+#: src/dialogs/info.c:203
 #, fuzzy, c-format
 msgid "%ld bytes of memory allocated."
 msgstr "байт╕в вид╕лено"
-
-#: src/dialogs/info.c:204
-msgid "Memory info"
-msgstr "╤нформац╕я про пам'ять"
 
 #: src/dialogs/menu.c:128
 msgid "Exit ELinks"
@@ -3337,83 +3328,83 @@ msgstr "Ви д╕йсно бажа╓те вийти з ELinks та припинити вс╕ завантаження?"
 msgid "Do you really want to exit ELinks?"
 msgstr "Ви д╕йсно бажа╓те вийти з ELinks?"
 
-#: src/dialogs/menu.c:235
+#: src/dialogs/menu.c:233
 msgid "No history"
 msgstr "╤стор╕я порожня"
 
-#: src/dialogs/menu.c:310
+#: src/dialogs/menu.c:308
 msgid "No downloads"
 msgstr "Нема╓ завантажень"
 
-#: src/dialogs/menu.c:381
+#: src/dialogs/menu.c:379
 msgid "~Go to URL"
 msgstr "Пeрейти до..."
 
-#: src/dialogs/menu.c:382
+#: src/dialogs/menu.c:380
 msgid "Go ~back"
 msgstr "Пoвернутися назад"
 
-#: src/dialogs/menu.c:383
+#: src/dialogs/menu.c:381
 msgid "~Reload"
 msgstr "Перезавантажити"
 
-#: src/dialogs/menu.c:384
+#: src/dialogs/menu.c:382
 msgid "~History"
 msgstr "╤стор╕я стор╕нок до поточно╖"
 
-#: src/dialogs/menu.c:385
+#: src/dialogs/menu.c:383
 msgid "Unhis~tory"
 msgstr "╤стор╕я стор╕нок п╕сля поточно╖"
 
-#: src/dialogs/menu.c:390
+#: src/dialogs/menu.c:388
 msgid "Global histor~y"
 msgstr "Повна ╕стор╕я"
 
-#: src/dialogs/menu.c:393
+#: src/dialogs/menu.c:391
 msgid "Bookmark~s"
 msgstr "Закладки"
 
-#: src/dialogs/menu.c:399
+#: src/dialogs/menu.c:397
 msgid "Sa~ve as"
 msgstr "Зберегти як"
 
-#: src/dialogs/menu.c:400
+#: src/dialogs/menu.c:398
 msgid "Save ~URL as"
 msgstr "Зберегти URL як"
 
-#: src/dialogs/menu.c:401
+#: src/dialogs/menu.c:399
 msgid "Save formatted ~document"
 msgstr "Зберегти в╕дформатований документ"
 
-#: src/dialogs/menu.c:406
+#: src/dialogs/menu.c:404
 msgid "~Kill background connections"
 msgstr "Роз╕рвати з'╓днання на тл╕"
 
-#: src/dialogs/menu.c:407
+#: src/dialogs/menu.c:405
 msgid "~Flush all caches"
 msgstr "Очистити вс╕ кеш╕"
 
-#: src/dialogs/menu.c:408
+#: src/dialogs/menu.c:406
 msgid "Resource ~info"
 msgstr "╤нформац╕я про ресурси"
 
-#: src/dialogs/menu.c:410
+#: src/dialogs/menu.c:408
 msgid "~Cache info"
 msgstr "╤нформац╕я про кеш"
 
-#: src/dialogs/menu.c:413
+#: src/dialogs/menu.c:411
 msgid "~Memory info"
 msgstr "╤нформац╕я про пам'ять"
 
-#: src/dialogs/menu.c:420
+#: src/dialogs/menu.c:418
 msgid "E~xit"
 msgstr "Вих╕д"
 
-#: src/dialogs/menu.c:442
+#: src/dialogs/menu.c:440
 msgid "~New window"
 msgstr "Нове в╕кно"
 
-#: src/dialogs/menu.c:472
+#: src/dialogs/menu.c:471
 msgid "~OS shell"
 msgstr "Оболонка операц╕йно╖ системи"
 
@@ -3421,172 +3412,172 @@ msgstr "Оболонка операц╕йно╖ системи"
 msgid "Resize ~terminal"
 msgstr "Зм╕нити розм╕ри терминалу"
 
-#: src/dialogs/menu.c:506 src/dialogs/menu.c:523
+#: src/dialogs/menu.c:507 src/dialogs/menu.c:524
 msgid "~Search"
 msgstr "Пошук"
 
-#: src/dialogs/menu.c:507 src/dialogs/menu.c:524
+#: src/dialogs/menu.c:508 src/dialogs/menu.c:525
 msgid "Search ~backward"
 msgstr "Зворотн╕й пошук"
 
-#: src/dialogs/menu.c:508 src/dialogs/menu.c:525
+#: src/dialogs/menu.c:509 src/dialogs/menu.c:526
 msgid "Find ~next"
 msgstr "Знайти наступне"
 
-#: src/dialogs/menu.c:509 src/dialogs/menu.c:526
+#: src/dialogs/menu.c:510 src/dialogs/menu.c:527
 msgid "Find ~previous"
 msgstr "Знайти попередн╓"
 
-#: src/dialogs/menu.c:511 src/dialogs/menu.c:528
+#: src/dialogs/menu.c:512 src/dialogs/menu.c:529
 msgid "Toggle ~html/plain"
 msgstr "Перемикач HTML/текст"
 
-#: src/dialogs/menu.c:512 src/dialogs/menu.c:529
+#: src/dialogs/menu.c:513 src/dialogs/menu.c:530
 msgid "Document ~info"
 msgstr "╤нформац╕я про документ"
 
-#: src/dialogs/menu.c:513
+#: src/dialogs/menu.c:514
 msgid "H~eader info"
 msgstr "╤нформац╕я про заголовок"
 
-#: src/dialogs/menu.c:514 src/dialogs/menu.c:530
+#: src/dialogs/menu.c:515 src/dialogs/menu.c:531
 msgid "Frame at ~full-screen"
 msgstr "Фрейм на весь екран"
 
-#: src/dialogs/menu.c:516
+#: src/dialogs/menu.c:517
 msgid "Nex~t tab"
 msgstr ""
 
-#: src/dialogs/menu.c:517
+#: src/dialogs/menu.c:518
 #, fuzzy
 msgid "Pre~v tab"
 msgstr "Пошуку ще не було"
 
-#: src/dialogs/menu.c:518
+#: src/dialogs/menu.c:519
 #, fuzzy
 msgid "~Close tab"
 msgstr "Закрити"
 
-#: src/dialogs/menu.c:535
+#: src/dialogs/menu.c:536
 msgid "~ELinks homepage"
 msgstr "Домашня стор╕нка Elinks"
 
-#: src/dialogs/menu.c:536
+#: src/dialogs/menu.c:537
 #, fuzzy
 msgid "~Documentation"
 msgstr "╤нформац╕я про документ"
 
-#: src/dialogs/menu.c:537
+#: src/dialogs/menu.c:538
 msgid "~Keys"
 msgstr "Kлав╕ш╕"
 
-#: src/dialogs/menu.c:540
+#: src/dialogs/menu.c:541
 msgid "~Bugs information"
 msgstr ""
 
-#: src/dialogs/menu.c:541
+#: src/dialogs/menu.c:542
 #, fuzzy
 msgid "~ELinks CvsWeb"
 msgstr "Домашня стор╕нка Elinks"
 
-#: src/dialogs/menu.c:544
+#: src/dialogs/menu.c:545
 msgid "~Copying"
 msgstr "Л╕ценз╕я"
 
-#: src/dialogs/menu.c:545
+#: src/dialogs/menu.c:546
 msgid "~About"
 msgstr "Про програму"
 
-#: src/dialogs/menu.c:551 src/dialogs/menu.c:559
+#: src/dialogs/menu.c:552 src/dialogs/menu.c:560
 msgid "~Add"
 msgstr "Додати"
 
-#: src/dialogs/menu.c:552 src/dialogs/menu.c:560
+#: src/dialogs/menu.c:553 src/dialogs/menu.c:561
 msgid "~Modify"
 msgstr "Зм╕нити"
 
-#: src/dialogs/menu.c:553 src/dialogs/menu.c:561
+#: src/dialogs/menu.c:554 src/dialogs/menu.c:562
 msgid "~Delete"
 msgstr "Стерти"
 
-#: src/dialogs/menu.c:573 src/dialogs/menu.c:587
+#: src/dialogs/menu.c:574 src/dialogs/menu.c:588
 msgid "~Language"
 msgstr "Мова"
 
-#: src/dialogs/menu.c:575 src/dialogs/menu.c:588
+#: src/dialogs/menu.c:576 src/dialogs/menu.c:589
 msgid "C~haracter set"
 msgstr "Кодування"
 
-#: src/dialogs/menu.c:576 src/dialogs/menu.c:589
+#: src/dialogs/menu.c:577 src/dialogs/menu.c:590
 msgid "~Terminal options"
 msgstr "Параметри термiналу"
 
-#. {N_("~Associations"), M_SUBMENU, MENU_FUNC do_menu, assoc_menu, 1, 0},
-#: src/dialogs/menu.c:578
+#. {N_("~Associations"), M_SUBMENU, MENU_FUNC do_menu, assoc_menu, 0, 1},
+#: src/dialogs/menu.c:579
 msgid "File ~extensions"
 msgstr "Розширення файл╕в"
 
-#: src/dialogs/menu.c:580
+#: src/dialogs/menu.c:581
 msgid "~Options manager"
 msgstr ""
 
-#: src/dialogs/menu.c:581
+#: src/dialogs/menu.c:582
 msgid "~Keybinding manager"
 msgstr ""
 
-#: src/dialogs/menu.c:582
+#: src/dialogs/menu.c:583
 msgid "~Save options"
 msgstr "Зберегти параметри"
 
-#: src/dialogs/menu.c:620
+#: src/dialogs/menu.c:621
 msgid "~File"
 msgstr "Файл"
 
-#: src/dialogs/menu.c:621
+#: src/dialogs/menu.c:622
 msgid "~View"
 msgstr "Вигляд"
 
-#: src/dialogs/menu.c:622
+#: src/dialogs/menu.c:623
 msgid "~Link"
 msgstr "Посилання"
 
-#: src/dialogs/menu.c:623
+#: src/dialogs/menu.c:624
 msgid "~Downloads"
 msgstr "Завантаження"
 
-#: src/dialogs/menu.c:624
+#: src/dialogs/menu.c:625
 msgid "~Setup"
 msgstr "Параметри"
 
-#: src/dialogs/menu.c:625
+#: src/dialogs/menu.c:626
 msgid "~Help"
 msgstr "Допомога"
 
-#: src/dialogs/menu.c:641
+#: src/dialogs/menu.c:643
 msgid "Go to URL"
 msgstr "Пeрейти до..."
 
-#: src/dialogs/menu.c:641 src/dialogs/menu.c:651
+#: src/dialogs/menu.c:643 src/dialogs/menu.c:654
 msgid "Enter URL"
 msgstr "Введ╕ть URL"
 
-#: src/dialogs/menu.c:651
+#: src/dialogs/menu.c:654
 msgid "Save URL"
 msgstr "Зберегти URL"
 
-#: src/dialogs/menu.c:680 src/sched/download.c:401 src/sched/download.c:578
+#: src/dialogs/menu.c:683 src/sched/download.c:402 src/sched/download.c:583
 msgid "Download"
 msgstr "Завантаження"
 
-#: src/dialogs/menu.c:680
+#: src/dialogs/menu.c:683
 msgid "Save to file"
 msgstr "Записати до файлу"
 
-#: src/dialogs/menu.c:698
+#: src/dialogs/menu.c:701
 msgid "Search backward"
 msgstr "Зворотн╕й пошук"
 
-#: src/dialogs/menu.c:698 src/dialogs/menu.c:708
+#: src/dialogs/menu.c:701 src/dialogs/menu.c:712
 msgid "Search for text"
 msgstr "Пошук тексту"
 
@@ -3744,7 +3735,7 @@ msgstr "Помилка Lua"
 msgid "Lua Console"
 msgstr "Консоль Lua"
 
-#: src/lua/core.c:811
+#: src/lua/core.c:810
 msgid "Enter expression"
 msgstr "Введ╕сть вираз"
 
@@ -3785,73 +3776,73 @@ msgstr ""
 msgid "No program"
 msgstr "Нема╓ програми"
 
-#: src/protocol/user.c:105
+#: src/protocol/user.c:106
 #, fuzzy, c-format
-msgid "No program specified for %s."
+msgid "No program specified for protocol %s."
 msgstr "Не вказано програму для"
 
-#: src/protocol/user.c:132 src/sched/sched.c:81
+#: src/protocol/user.c:134
 msgid "Bad URL syntax"
 msgstr "Неправильний синтаксис URL"
 
-#: src/protocol/user.c:133
+#: src/protocol/user.c:135
 msgid "Bad user protocol URL"
 msgstr ""
 
-#: src/sched/download.c:225 src/sched/session.c:125
+#: src/sched/download.c:226 src/sched/session.c:82
 msgid "Received"
 msgstr "Прийнято"
 
-#: src/sched/download.c:231 src/sched/session.c:130
+#: src/sched/download.c:232 src/sched/session.c:87
 msgid "of"
 msgstr "з"
 
-#: src/sched/download.c:241
+#: src/sched/download.c:242
 msgid "after resume"
 msgstr "п╕сля продовження"
 
-#: src/sched/download.c:247
+#: src/sched/download.c:248
 msgid "Average speed"
 msgstr "Середня швидк╕сть"
 
-#: src/sched/download.c:248
+#: src/sched/download.c:249
 msgid "Speed"
 msgstr "Швидк╕сть"
 
-#: src/sched/download.c:257
+#: src/sched/download.c:258
 msgid "current speed"
 msgstr "поточна швидк╕сть"
 
-#: src/sched/download.c:266
+#: src/sched/download.c:267
 msgid "Elapsed time"
 msgstr "Витрачений час"
 
-#: src/sched/download.c:272
+#: src/sched/download.c:273
 msgid "estimated time"
 msgstr "Оч╕куваний час"
 
-#: src/sched/download.c:410
+#: src/sched/download.c:411
 msgid "Background"
 msgstr "На тл╕"
 
-#: src/sched/download.c:415
+#: src/sched/download.c:416
 msgid "Background with notify"
 msgstr "На тл╕ з пов╕домленням"
 
-#: src/sched/download.c:420
+#: src/sched/download.c:421
 msgid "Abort"
 msgstr "Перервати"
 
-#: src/sched/download.c:521 src/sched/download.c:553 src/sched/download.c:803
+#: src/sched/download.c:524 src/sched/download.c:558 src/sched/download.c:808
 msgid "Download error"
 msgstr "Помилка завантаження"
 
-#: src/sched/download.c:522 src/sched/download.c:804
+#: src/sched/download.c:525 src/sched/download.c:809
 #, fuzzy, c-format
 msgid "Could not create file %s: %s"
 msgstr "Не можу писати у файл"
 
-#: src/sched/download.c:554
+#: src/sched/download.c:559
 #, fuzzy, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -3859,19 +3850,19 @@ msgid ""
 "%s"
 msgstr "Помилка завантаження"
 
-#: src/sched/download.c:579
+#: src/sched/download.c:584
 #, fuzzy, c-format
 msgid ""
 "Download complete:\n"
 "%s"
 msgstr "Завантаження зак╕нчено"
 
-#: src/sched/download.c:706
+#: src/sched/download.c:711
 #, fuzzy
 msgid "File exists"
 msgstr "Розширення файл╕в"
 
-#: src/sched/download.c:707
+#: src/sched/download.c:712
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -3881,234 +3872,101 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/sched/download.c:714
+#: src/sched/download.c:719
 msgid "Save under the alternative name"
 msgstr ""
 
-#: src/sched/download.c:715
+#: src/sched/download.c:720
 msgid "Overwrite the original file"
 msgstr ""
 
-#: src/sched/download.c:716
+#: src/sched/download.c:721
 msgid "Resume download of the original file"
 msgstr ""
 
-#: src/sched/download.c:1189 src/sched/download.c:1199
+#: src/sched/download.c:1194 src/sched/download.c:1204
 msgid "Unknown type"
 msgstr "Нев╕домий тип"
 
-#: src/sched/download.c:1190
+#: src/sched/download.c:1195
 #, fuzzy, c-format
 msgid ""
 "Content type is %s.\n"
 "Do you want to save or display this file?"
 msgstr "Ви б хот╕ли зберегти чи показати цей файл?"
 
-#: src/sched/download.c:1195 src/sched/download.c:1204
-#: src/sched/download.c:1240 src/sched/download.c:1250
+#: src/sched/download.c:1200 src/sched/download.c:1209
+#: src/sched/download.c:1245 src/sched/download.c:1256
 msgid "Display"
 msgstr "Показати"
 
-#: src/sched/download.c:1200
+#: src/sched/download.c:1205
 #, fuzzy, c-format
 msgid ""
 "Content type is %s.\n"
 "Do you want to display this file?"
 msgstr "Ви б хот╕ли зберегти чи показати цей файл?"
 
-#: src/sched/download.c:1232 src/sched/download.c:1244
+#: src/sched/download.c:1237 src/sched/download.c:1249
 msgid "What to do?"
 msgstr "Що робити?"
 
-#: src/sched/download.c:1234
+#: src/sched/download.c:1238
 #, c-format
 msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, save it or display it?"
 msgstr ""
 
-#: src/sched/download.c:1238 src/sched/download.c:1249
+#: src/sched/download.c:1243 src/sched/download.c:1255
 msgid "Open"
 msgstr "В╕дкрити"
 
-#: src/sched/download.c:1245
+#: src/sched/download.c:1250
 #, c-format
 msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
 
-#: src/sched/sched.c:61
-msgid "Waiting in queue"
-msgstr "Оч╕кування в черз╕"
-
-#: src/sched/sched.c:62
-msgid "Looking up host"
-msgstr "Визначення ╕мен╕ серверу"
-
-#: src/sched/sched.c:63
-msgid "Making connection"
-msgstr "Створення з'╓днання"
-
-#: src/sched/sched.c:64
-msgid "SSL negotiation"
-msgstr "Встановлення SSL з'╓днання"
-
-#: src/sched/sched.c:65
-msgid "Request sent"
-msgstr "Запит над╕слано"
-
-#: src/sched/sched.c:66
-msgid "Logging in"
-msgstr "Входження"
-
-#: src/sched/sched.c:67
-msgid "Getting headers"
-msgstr "Отримання заголовк╕в"
-
-#: src/sched/sched.c:68
-msgid "Server is processing request"
-msgstr "Сервер оброблю╓ запит"
-
-#: src/sched/sched.c:69
-msgid "Transferring"
-msgstr "Передача"
-
-#: src/sched/sched.c:71
-msgid "Waiting for redirect confirmation"
-msgstr "Оч╕кування п╕дтвердження перенапрямлення"
-
-#: src/sched/sched.c:73
-msgid "Interrupted"
-msgstr "Перервано"
-
-#: src/sched/sched.c:74
-msgid "Socket exception"
-msgstr "Виключення в сокет╕"
-
-#: src/sched/sched.c:75
-msgid "Internal error"
-msgstr "Внутр╕шня помилка"
-
-#: src/sched/sched.c:76
-msgid "Out of memory"
-msgstr "Нестача пам'ят╕"
-
-#: src/sched/sched.c:77
-msgid "Host not found"
-msgstr "Сервер не знайдено"
-
-#: src/sched/sched.c:78
-msgid "Error writing to socket"
-msgstr "Помилка запису в сокет"
-
-#: src/sched/sched.c:79
-msgid "Error reading from socket"
-msgstr "Помилка читання з сокету"
-
-#: src/sched/sched.c:80
-msgid "Data modified"
-msgstr "Дату зм╕нено"
-
-#: src/sched/sched.c:83
-msgid "Request must be restarted"
-msgstr "Запит потр╕бно повторити"
-
-#: src/sched/sched.c:84
-msgid "Can't get socket state"
-msgstr "Неможливо отримати стан сокету"
-
-#: src/sched/sched.c:86
-msgid "Bad HTTP response"
-msgstr "Неправильна в╕дпов╕дь HTTP"
-
-#: src/sched/sched.c:87
-msgid "HTTP 100 (???)"
-msgstr ""
-
-#: src/sched/sched.c:88
-msgid "No content"
-msgstr "╤нформац╕╖ нема╓"
-
-#: src/sched/sched.c:90
-msgid "Unknown file type"
-msgstr "Нев╕домий тип файлу"
-
-#: src/sched/sched.c:91
-msgid "Error opening file"
-msgstr "Помилка в╕дкриття файлу"
-
-#: src/sched/sched.c:93
-msgid "Bad FTP response"
-msgstr "Неправильна в╕дпов╕дь FTP"
-
-#: src/sched/sched.c:94
-msgid "FTP service unavailable"
-msgstr "Серв╕с FTP недоступний"
-
-#: src/sched/sched.c:95
-msgid "Bad FTP login"
-msgstr "Невдале FTP-з'╓днання"
-
-#: src/sched/sched.c:96
-msgid "FTP PORT command failed"
-msgstr "Команда FTP PORT зак╕нчилася невдало"
-
-#: src/sched/sched.c:97
-msgid "File not found"
-msgstr "Файл не знайдено"
-
-#: src/sched/sched.c:98
-msgid "FTP file error"
-msgstr "Помилка файлу на FTP"
-
-#: src/sched/sched.c:100
-msgid "SSL error"
-msgstr "Помилка SSL"
-
-#: src/sched/sched.c:102
-msgid "This version of ELinks does not contain SSL/TSL support"
-msgstr "Ця верс╕я ELinks не п╕дтриму╓ SSL/TSL"
-
-#: src/sched/session.c:99
-msgid "Unknown error"
-msgstr "Нев╕дома помилка"
-
-#: src/sched/session.c:136
+#: src/sched/session.c:93
 msgid "avg"
 msgstr "в середньому"
 
-#: src/sched/session.c:144
+#: src/sched/session.c:101
 msgid "cur"
 msgstr "поточна"
 
-#: src/sched/session.c:302
+#: src/sched/session.c:259
 #, fuzzy
 msgid "Untitled"
 msgstr "Назва посилання"
 
-#: src/sched/session.c:627
-msgid "Do you want to follow redirect and post form data to url"
+#: src/sched/session.c:584
+#, fuzzy, c-format
+msgid "Do you want to follow redirect and post form data to url %s?"
 msgstr ""
 "Бажа╓те прямувати за переадресац╕╓ю та в╕дправити вм╕ст форми за адресою"
 
-#: src/sched/session.c:630
-msgid "Do you want to post form data to url"
+#: src/sched/session.c:587
+#, fuzzy, c-format
+msgid "Do you want to post form data to url %s?"
 msgstr "Ви бажа╓те в╕дправити вм╕ст форми за адресою"
 
-#: src/sched/session.c:632
-msgid "Do you want to repost form data to url"
+#: src/sched/session.c:589
+#, fuzzy, c-format
+msgid "Do you want to repost form data to url %s?"
 msgstr "Ви бажа╓те заново в╕дправити вм╕ст форми за адресою"
 
-#: src/sched/session.c:638 src/sched/session.c:1148 src/sched/session.c:1168
+#: src/sched/session.c:595 src/sched/session.c:1106 src/sched/session.c:1126
 msgid "Warning"
 msgstr "Попередження"
 
-#: src/sched/session.c:1139
+#: src/sched/session.c:1096
 msgid "Welcome"
 msgstr "В╕та╓мо"
 
-#: src/sched/session.c:1140
+#: src/sched/session.c:1097
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -4118,7 +3976,7 @@ msgstr ""
 "Натисн╕ть ESC щоб викликати меню. Прочитайте ╕нструкц╕ю в меню 'Допомога-"
 ">╤нструкц╕я'."
 
-#: src/sched/session.c:1149
+#: src/sched/session.c:1107
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -4129,7 +3987,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:1169
+#: src/sched/session.c:1127
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -4178,16 +4036,16 @@ msgstr "Пoвернутися назад"
 msgid "GlobHist"
 msgstr "Керування ╕стор╕╓ю"
 
-#: src/viewer/dump/dump.c:96
+#: src/viewer/dump/dump.c:97
 #, fuzzy, c-format
 msgid "Error writing to stdout: %s."
 msgstr "Помилка запису в сокет"
 
-#: src/viewer/dump/dump.c:99
+#: src/viewer/dump/dump.c:100
 msgid "Can't write to stdout."
 msgstr ""
 
-#: src/viewer/dump/dump.c:168
+#: src/viewer/dump/dump.c:169
 #, c-format
 msgid "URL expected after %s."
 msgstr ""
@@ -4201,22 +4059,20 @@ msgstr "Помилка в╕дправлення форми"
 msgid "Could not get file %s: %s"
 msgstr "Не можу отримати файл"
 
-#: src/viewer/text/view.c:2029
+#: src/viewer/text/view.c:2030
 msgid "You can do this only on the master terminal"
 msgstr "Ви можете зробити це т╕льки на головному терм╕нал╕"
 
-#: src/viewer/text/view.c:2462
+#: src/viewer/text/view.c:2463
 msgid "No previous search"
 msgstr "Пошуку ще не було"
 
-#: src/viewer/text/view.c:2510
+#: src/viewer/text/view.c:2511
 #, fuzzy, c-format
-msgid ""
-"'%s'\n"
-"Search string not found"
+msgid "Search string '%s' not found"
 msgstr "Рядок не знайдено"
 
-#: src/viewer/text/view.c:2754
+#: src/viewer/text/view.c:2755
 msgid "Go to link"
 msgstr "Йти за посиланням"
 
@@ -4224,121 +4080,227 @@ msgstr "Йти за посиланням"
 msgid "Enter link number"
 msgstr "Введ╕ть номер посилання"
 
-#: src/viewer/text/view.c:3444
+#: src/viewer/text/view.c:3445
 msgid "Save error"
 msgstr "Помилка збереження"
 
-#: src/viewer/text/view.c:3445
+#: src/viewer/text/view.c:3446
 msgid "Error writing to file"
 msgstr "Помилка запису до файлу"
 
-#: src/viewer/text/view.c:3489
+#: src/viewer/text/view.c:3490
 msgid "Display ~usemap"
 msgstr "В╕добразити мапу"
 
-#: src/viewer/text/view.c:3494
+#: src/viewer/text/view.c:3495
 msgid "~Follow link"
 msgstr "Йти за посиланням"
 
-#: src/viewer/text/view.c:3497
+#: src/viewer/text/view.c:3498
 msgid "Follow link and r~eload"
 msgstr "Йти за посиланням та перезавантажити"
 
-#: src/viewer/text/view.c:3501
+#: src/viewer/text/view.c:3502
 msgid "Open in new ~window"
 msgstr "В╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/view.c:3507
+#: src/viewer/text/view.c:3508
 msgid "~Download link"
 msgstr "Завантажити за посиланням"
 
-#: src/viewer/text/view.c:3511
+#: src/viewer/text/view.c:3512
 msgid "~Add link to bookmarks"
 msgstr "Додати посилання до закладок"
 
-#: src/viewer/text/view.c:3523 src/viewer/text/view.c:3642
+#: src/viewer/text/view.c:3524 src/viewer/text/view.c:3643
 msgid "~Reset form"
 msgstr "Очистити форму"
 
-#: src/viewer/text/view.c:3528
+#: src/viewer/text/view.c:3529
 msgid "~Submit form"
 msgstr "В╕д╕слати форму"
 
-#: src/viewer/text/view.c:3531
+#: src/viewer/text/view.c:3532
 msgid "Submit form and rel~oad"
 msgstr "В╕д╕слати форму та перезавантажити"
 
-#: src/viewer/text/view.c:3535
+#: src/viewer/text/view.c:3536
 msgid "Submit form and open in new ~window"
 msgstr "В╕д╕слати форму та в╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/view.c:3541
+#: src/viewer/text/view.c:3542
 msgid "Submit form and ~download"
 msgstr "В╕д╕слати форму та завантижити"
 
-#: src/viewer/text/view.c:3548
+#: src/viewer/text/view.c:3549
 msgid "V~iew image"
 msgstr "Подивитись зображення"
 
-#: src/viewer/text/view.c:3551
+#: src/viewer/text/view.c:3552
 msgid "Download ima~ge"
 msgstr "Завантижити зображення"
 
-#: src/viewer/text/view.c:3557
+#: src/viewer/text/view.c:3558
 msgid "No link selected"
 msgstr "Нема╓ вибраних посилань"
 
-#: src/viewer/text/view.c:3603
+#: src/viewer/text/view.c:3604
 msgid "Image"
 msgstr "Зображення"
 
-#: src/viewer/text/view.c:3621
+#: src/viewer/text/view.c:3622
 msgid "Usemap"
 msgstr "Мапа посилань"
 
-#: src/viewer/text/view.c:3650
+#: src/viewer/text/view.c:3651
 msgid "Submit form to"
 msgstr "Передати форму за адресою"
 
-#: src/viewer/text/view.c:3652
+#: src/viewer/text/view.c:3653
 msgid "Post form to"
 msgstr "В╕дправити форму за адресою"
 
-#: src/viewer/text/view.c:3671
+#: src/viewer/text/view.c:3672
 msgid "Radio button"
 msgstr "Рад╕окнопка"
 
-#: src/viewer/text/view.c:3677
+#: src/viewer/text/view.c:3678
 msgid "Select field"
 msgstr "Поле вибору"
 
-#: src/viewer/text/view.c:3683
+#: src/viewer/text/view.c:3684
 msgid "Text area"
 msgstr "Текстова область"
 
-#: src/viewer/text/view.c:3686
+#: src/viewer/text/view.c:3687
 msgid "File upload"
 msgstr "Посилання файлу (upload)"
 
-#: src/viewer/text/view.c:3689
+#: src/viewer/text/view.c:3690
 msgid "Password field"
 msgstr "Введ╕ть пароль"
 
-#: src/viewer/text/view.c:3698
+#: src/viewer/text/view.c:3699
 msgid "name"
 msgstr "╕м'я"
 
-#: src/viewer/text/view.c:3719
+#: src/viewer/text/view.c:3709
+msgid "value"
+msgstr "значення"
+
+#: src/viewer/text/view.c:3720
 msgid "hit ENTER to"
 msgstr "натисн╕ть ENTER, щоб"
 
-#: src/viewer/text/view.c:3722
+#: src/viewer/text/view.c:3723
 msgid "submit to"
 msgstr "передати за адресою"
 
-#: src/viewer/text/view.c:3724
+#: src/viewer/text/view.c:3725
 msgid "post to"
 msgstr "в╕дправити за адресою"
+
+#~ msgid " at "
+#~ msgstr " на "
+
+#~ msgid "Waiting in queue"
+#~ msgstr "Оч╕кування в черз╕"
+
+#~ msgid "Looking up host"
+#~ msgstr "Визначення ╕мен╕ серверу"
+
+#~ msgid "Making connection"
+#~ msgstr "Створення з'╓днання"
+
+#~ msgid "SSL negotiation"
+#~ msgstr "Встановлення SSL з'╓днання"
+
+#~ msgid "Request sent"
+#~ msgstr "Запит над╕слано"
+
+#~ msgid "Logging in"
+#~ msgstr "Входження"
+
+#~ msgid "Getting headers"
+#~ msgstr "Отримання заголовк╕в"
+
+#~ msgid "Server is processing request"
+#~ msgstr "Сервер оброблю╓ запит"
+
+#~ msgid "Transferring"
+#~ msgstr "Передача"
+
+#~ msgid "Waiting for redirect confirmation"
+#~ msgstr "Оч╕кування п╕дтвердження перенапрямлення"
+
+#~ msgid "Interrupted"
+#~ msgstr "Перервано"
+
+#~ msgid "Socket exception"
+#~ msgstr "Виключення в сокет╕"
+
+#~ msgid "Internal error"
+#~ msgstr "Внутр╕шня помилка"
+
+#~ msgid "Out of memory"
+#~ msgstr "Нестача пам'ят╕"
+
+#~ msgid "Host not found"
+#~ msgstr "Сервер не знайдено"
+
+#~ msgid "Error writing to socket"
+#~ msgstr "Помилка запису в сокет"
+
+#~ msgid "Error reading from socket"
+#~ msgstr "Помилка читання з сокету"
+
+#~ msgid "Data modified"
+#~ msgstr "Дату зм╕нено"
+
+#~ msgid "Request must be restarted"
+#~ msgstr "Запит потр╕бно повторити"
+
+#~ msgid "Can't get socket state"
+#~ msgstr "Неможливо отримати стан сокету"
+
+#~ msgid "Bad HTTP response"
+#~ msgstr "Неправильна в╕дпов╕дь HTTP"
+
+#~ msgid "No content"
+#~ msgstr "╤нформац╕╖ нема╓"
+
+#~ msgid "Unknown file type"
+#~ msgstr "Нев╕домий тип файлу"
+
+#~ msgid "Error opening file"
+#~ msgstr "Помилка в╕дкриття файлу"
+
+#~ msgid "Bad FTP response"
+#~ msgstr "Неправильна в╕дпов╕дь FTP"
+
+#~ msgid "FTP service unavailable"
+#~ msgstr "Серв╕с FTP недоступний"
+
+#~ msgid "Bad FTP login"
+#~ msgstr "Невдале FTP-з'╓днання"
+
+#~ msgid "FTP PORT command failed"
+#~ msgstr "Команда FTP PORT зак╕нчилася невдало"
+
+#~ msgid "File not found"
+#~ msgstr "Файл не знайдено"
+
+#~ msgid "FTP file error"
+#~ msgstr "Помилка файлу на FTP"
+
+#~ msgid "SSL error"
+#~ msgstr "Помилка SSL"
+
+#~ msgid "This version of ELinks does not contain SSL/TSL support"
+#~ msgstr "Ця верс╕я ELinks не п╕дтриму╓ SSL/TSL"
+
+#~ msgid "Unknown error"
+#~ msgstr "Нев╕дома помилка"
 
 #~ msgid "handles"
 #~ msgstr "хендл╕в"

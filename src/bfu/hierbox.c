@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.178 2004/07/07 02:59:16 miciah Exp $ */
+/* $Id: hierbox.c,v 1.179 2004/07/07 03:04:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -923,12 +923,11 @@ search_hierbox_browser(void *data, unsigned char *text)
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_context *context;
 
-	context = init_listbox_context(box, term, box->sel, NULL);
+	context = init_listbox_context(box, term, NULL, NULL);
 	if (!context) return;
 
 	/* Eeew :/ */
 	context->widget_data = (void *) text;
-	context->item = NULL;
 
 	traverse_listbox_items_list(box->items->next, box, 0, 0,
 				    scan_for_matches, context);

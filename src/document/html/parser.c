@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.158 2003/07/22 01:07:51 jonas Exp $ */
+/* $Id: parser.c,v 1.159 2003/07/22 01:30:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2465,52 +2465,49 @@ html_link(unsigned char *a)
 	      strcasecmp(name, "made") &&
 	      strcasecmp(name, "icon") &&
 	      strcasecmp(name, "SHORTCUT ICON")))) {
-		unsigned char *text;
-		int textlen = 0;
+		struct string text;
 		unsigned char *title;
 		unsigned char *hreflang;
 
-		text = init_str();
-		if (!text) goto free_and_return;
+		if (!init_string(&text)) goto free_and_return;
 
 		html_focusable(a);
 
 		title = get_attr_val(a, "title");
 		if (title) {
-			add_to_str(&text, &textlen, title);
+			add_to_string(&text, title);
 			mem_free(title);
 		}
 
 		if (link_display == 1) goto only_title;
 
-		add_to_str(&text, &textlen, " (");
-		add_to_str(&text, &textlen, name);
+		add_to_string(&text, " (");
+		add_to_string(&text, name);
 
 		if (link_display >= 3) {
 			hreflang = get_attr_val(a, "hreflang");
 			if (hreflang) {
-				add_to_str(&text, &textlen, ", ");
-				add_to_str(&text, &textlen, hreflang);
+				add_to_string(&text, ", ");
+				add_to_string(&text, hreflang);
 				mem_free(hreflang);
 			}
 		}
 
 		if (link_display >= 4) {
 			if (type) {
-				add_to_str(&text, &textlen, ", ");
-				add_to_str(&text, &textlen, type);
-
+				add_to_string(&text, ", ");
+				add_to_string(&text, type);
 			}
 		}
-		add_chr_to_str(&text, &textlen, ')');
+		add_char_to_string(&text, ')');
 
 only_title:
-		if (text) {
-			if (*text)
-				put_link_line("Link: ", text, url, format.target_base);
+		if (text.source) {
+			if (text.length)
+				put_link_line("Link: ", text.source, url, format.target_base);
 			else
 				put_link_line("Link: ", name, url, format.target_base);
-			mem_free(text);
+			done_string(&text);
 
 		} else {
 			put_link_line("Link: ", name, url, format.target_base);

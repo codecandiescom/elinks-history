@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.318 2003/10/21 13:20:41 jonas Exp $ */
+/* $Id: renderer.c,v 1.319 2003/10/26 22:22:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1123,8 +1123,18 @@ static inline void
 color_link_lines(struct document *document)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
-	enum color_mode cmode = document->opt.color_mode;
+	enum color_mode color_mode = document->opt.color_mode;
+	enum color_flags color_flags = 0;
 	int y;
+
+	if (!document->opt.underline)
+		color_flags |= COLOR_ENHANCE_UNDERLINE;
+
+	if (!document->opt.allow_dark_on_black)
+		color_flags |= COLOR_INCREASE_CONTRAST;
+
+	if (document->opt.ensure_contrast)
+		color_flags |= COLOR_ENSURE_CONTRAST;
 
 	for (y = 0; y < document->y; y++) {
 		int x;
@@ -1132,7 +1142,7 @@ color_link_lines(struct document *document)
 		for (x = 0; x < document->data[y].l; x++) {
 			struct screen_char *schar = &document->data[y].d[x];
 
-			set_term_color(schar, &colors, 0, cmode);
+			set_term_color(schar, &colors, color_flags, color_mode);
 
 			/* XXX: Entering hack zone! Change to clink color after
 			 * link text has been recolored. */

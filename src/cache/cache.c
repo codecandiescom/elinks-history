@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.162 2004/07/24 14:23:00 zas Exp $ */
+/* $Id: cache.c,v 1.163 2004/07/24 17:34:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,7 +324,13 @@ add_fragment(struct cache_entry *cached, int offset,
 
 		/* Copy the stuff over there. */
 		memcpy(f->data + offset - f->offset, data, length);
-		goto remove_overlaps;
+
+		remove_overlaps(cached, f, &trunc);
+		if (trunc) truncate_entry(cached, offset + length, 0);
+
+		dump_frags(cached, "add_fragment");
+
+		return ret;
 	}
 
 	/* Make up new fragment. */
@@ -341,7 +347,6 @@ add_fragment(struct cache_entry *cached, int offset,
 	ret = 1;
 	enlarge_entry(cached, length);
 
-remove_overlaps:
 	remove_overlaps(cached, f, &trunc);
 	if (trunc) truncate_entry(cached, offset + length, 0);
 

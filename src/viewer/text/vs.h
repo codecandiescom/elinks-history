@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.24 2004/09/26 10:03:45 pasky Exp $ */
+/* $Id: vs.h,v 1.25 2004/09/26 10:15:33 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -32,7 +32,7 @@ struct view_state {
 	 * the document. You also cannot reset the document right away because
 	 * it might take some time before the first rerendering is done and
 	 * until then the old document is still hanging there. */
-	int ecmascript_fragile:1;
+	unsigned int ecmascript_fragile:1;
 	struct ecmascript_interpreter *ecmascript;
 #endif
 };

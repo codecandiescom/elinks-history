@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.41 2003/11/06 22:02:51 jonas Exp $ */
+/* $Id: hierbox.c,v 1.42 2003/11/07 13:33:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,26 +135,12 @@ void
 hierbox_browser_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
-	int max = 0, min = 0;
 	int w = dialog_max_width(term);
-	int rw;
+	int rw = w; /* We want it to have the maximal width possible. */
 	int y = -1;
 	int n = dlg_data->n - 1;
 
 	/* Find dimensions of dialog */
-	text_width(term, dlg_data->dlg->title, &min, &max);
-#if 0
-	buttons_width(dlg->widgets + 2, 2, &min, &max);
-#endif
-	buttons_width(dlg_data->widgets_data, n, &min, &max);
-
-	/* We ignore this now, as we don't compute with the width of the listbox
-	 * itself and we want it to have the maximal width possible. */
-	/* int_upper_bound(&w, max); */
-	int_lower_bound(&w, min);
-	int_bounds(&w, 1, term->width - 2 * DIALOG_LB);
-
-	rw = w;
 
 	y += 1;	/* Blankline between top and top of box */
 	dlg_format_box(term, &dlg_data->widgets_data[n], dlg_data->x + DIALOG_LB,

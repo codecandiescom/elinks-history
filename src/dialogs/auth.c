@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.77 2003/11/06 22:02:51 jonas Exp $ */
+/* $Id: auth.c,v 1.78 2003/11/07 13:33:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,23 +28,12 @@ static void
 auth_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
-	int max = 0, min = 0;
 	int w = dialog_max_width(term);
 	int rw = 0;
 	int y = -1;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 	unsigned char *label_login = N_("Login");
 	unsigned char *label_password = N_("Password");
-
-	if (dlg_data->dlg->udata)
-		text_width(term, dlg_data->dlg->udata, &min, &max);
-
-	text_width(term, label_login, &min, &max);
-	text_width(term, label_password, &min, &max);
-	buttons_width(dlg_data->widgets_data + 2, 2, &min, &max);
-
-	int_bounds(&w, min, max);
-	int_bounds(&w, 1, term->width - 2 * DIALOG_LB);
 
 	if (dlg_data->dlg->udata) {
 		dlg_format_text(NULL,

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.91 2003/11/06 22:02:51 jonas Exp $ */
+/* $Id: inpfield.c,v 1.92 2003/11/07 13:32:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,20 +125,12 @@ void
 input_field_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
-	int max = 0, min = 0;
 	int w = dialog_max_width(term);
 	int rw = 0; /* !!! FIXME: input field */
 	int y = -1;
 	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
-	text_width(term, dlg_data->dlg->udata, &min, &max);
-	buttons_width(dlg_data->widgets_data + 1, 2, &min, &max);
-
-	if (max < dlg_data->dlg->widgets->datalen)
-		max = dlg_data->dlg->widgets->datalen;
-
-	if (w > max) w = max;
-	if (w < min) w = min;
+	int_upper_bound(&w, dlg_data->dlg->widgets->datalen);
 
 	dlg_format_text(NULL, dlg_data->dlg->udata, 0, &y, w, &rw,
 			text_color, AL_LEFT);

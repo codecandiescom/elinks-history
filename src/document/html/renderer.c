@@ -1,10 +1,11 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.97 2003/06/11 22:54:19 pasky Exp $ */
+/* $Id: renderer.c,v 1.98 2003/06/16 09:06:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <stdarg.h>
 #include <string.h>
 
@@ -668,7 +669,8 @@ decode:
 				   || (c[i] == '#')))
 				i++;
 
-			if (c[i] == ';' && i > start) {
+			/* Eat &nbsp &nbsp<foo>. --Zas ;) */
+			if (!isalnum(c[i]) && i > start) {
 				e = get_entity_string(&c[start], i - start, d_opt->cp);
 				if (!e) goto putc;
 				pp = i + (i < l);

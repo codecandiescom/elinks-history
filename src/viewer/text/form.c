@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.99 2004/05/23 16:58:19 jonas Exp $ */
+/* $Id: form.c,v 1.100 2004/05/23 17:13:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,6 +291,7 @@ draw_forms(struct terminal *t, struct document_view *doc_view)
 	}
 	do {
 		if (l1->type == LINK_HYPERTEXT) continue;
+		if (l1->type == LINK_MAP) continue;
 #ifdef CONFIG_FORMHIST
 		if (l1->form->type == FC_TEXT
 		    || l1->form->type == FC_PASSWORD) {
@@ -765,7 +766,7 @@ submit_form(struct session *ses, struct document_view *doc_view, int do_reload)
 	if (!link) return;
 
 	url = get_form_url(ses, doc_view, link->form);
-	if (url) goto_link(url, link->target, ses, do_reload);
+	if (url) goto_link(url, link->target, ses, do_reload, 0);
 }
 
 

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.170 2004/05/23 16:58:19 jonas Exp $ */
+/* $Id: link.c,v 1.171 2004/05/23 17:13:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,6 +84,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 		struct form_state *fs;
 
 		case LINK_HYPERTEXT:
+		case LINK_MAP:
 		case LINK_SELECT:
 			break;
 
@@ -479,6 +480,7 @@ get_link_url(struct session *ses, struct document_view *doc_view,
 
 	switch (link->type) {
 		case LINK_HYPERTEXT:
+		case LINK_MAP:
 			if (link->where) return stracpy(link->where);
 			return stracpy(link->where_img);
 
@@ -495,26 +497,21 @@ get_link_url(struct session *ses, struct document_view *doc_view,
 /* This is common backend for submit_form_do() and enter(). */
 int
 goto_link(unsigned char *url, unsigned char *target, struct session *ses,
-	  int do_reload)
+	  int do_reload, int is_map)
 {
 	assert(url && ses);
 	if_assert_failed return 1;
 
-	/* if (strlen(url) > 4 && !strncasecmp(url, "MAP@", 4)) { */
-	if (((url[0]|32) == 'm') &&
-	    ((url[1]|32) == 'a') &&
-	    ((url[2]|32) == 'p') &&
-	    (url[3] == '@') &&
-	    url[4]) {
+	if (is_map) {
 		/* TODO: Test reload? */
-		unsigned char *s = stracpy(url + 4);
+		unsigned char *s = stracpy(url);
 
 		if (!s) {
 			mem_free(url);
 			return 1;
 		}
 
-		goto_imgmap(ses, url + 4, s, null_or_stracpy(target));
+		goto_imgmap(ses, url, s, null_or_stracpy(target));
 
 	} else {
 		if (do_reload) {
@@ -541,14 +538,17 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	link = get_current_link(doc_view);
 	if (!link) return 1;
 
-	if (link->type == LINK_HYPERTEXT || link->type == LINK_BUTTON
+	if (link->type == LINK_HYPERTEXT
+	    || link->type == LINK_BUTTON
+	    || link->type == LINK_MAP
 	    || ((has_form_submit(doc_view->document, link->form)
 		 || get_opt_int("document.browse.forms.auto_submit"))
 		&& (link_is_textinput(link)))) {
 		unsigned char *url = get_link_url(ses, doc_view, link);
+		int is_map = link->type == LINK_MAP;
 
 		if (url)
-			return goto_link(url, link->target, ses, a);
+			return goto_link(url, link->target, ses, a, is_map);
 
 	} else if (link_is_textinput(link)) {
 		/* We won't get here if (has_form_submit() ||
@@ -822,7 +822,8 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	link = get_current_link(doc_view);
 	if (!link) goto end;
 
-	if (link->type == LINK_HYPERTEXT && link->where) {
+	if (link->where
+	    && (link->type == LINK_HYPERTEXT || link->type == LINK_MAP)) {
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
 			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_MAIN_ENTER,
@@ -926,7 +927,8 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 	link = get_current_link(doc_view);
 	if (!link) return NULL;
 
-	if (link->type == LINK_HYPERTEXT) {
+	if (link->type == LINK_HYPERTEXT
+	    || link->type == LINK_MAP) {
 		struct string str;
 		unsigned char *uristring;
 

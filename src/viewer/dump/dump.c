@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.130 2004/05/16 12:11:51 jonas Exp $ */
+/* $Id: dump.c,v 1.131 2004/05/23 17:13:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -408,8 +408,6 @@ fail:
 			unsigned char *where = l->where;
 
 			if (!where) continue;
-			if (strlen(where) > 4 && !memcmp(where, "MAP@", 4))
-				where += 4;
 
 			if (l->title && *l->title)
 				snprintf(buf, D_BUF, "%4d. %s\n\t%s\n",

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.396 2004/05/23 16:58:19 jonas Exp $ */
+/* $Id: session.c,v 1.397 2004/05/23 17:13:34 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -429,7 +429,7 @@ doc_end_load(struct download *stat, struct session *ses)
 		struct form_control *fc = ses->doc_view->document->forms.next;
 		unsigned char *url = get_form_url(ses, ses->doc_view, fc);
 
-		if (url) goto_link(url, fc->target, ses, 1);
+		if (url) goto_link(url, fc->target, ses, 1, 0);
 	}
 }
 
@@ -1167,7 +1167,7 @@ get_current_link_in_view(struct document_view *doc_view)
 {
 	struct link *link = get_current_link(doc_view);
 
-	return (link && link->type == LINK_HYPERTEXT)
+	return (link && (link->type == LINK_HYPERTEXT || link->type == LINK_MAP))
 		? link : NULL;
 }
 

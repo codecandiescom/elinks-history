@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.57 2004/05/23 16:58:18 jonas Exp $ */
+/* $Id: document.h,v 1.58 2004/05/23 17:13:34 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -59,6 +59,7 @@ struct point {
 
 enum link_type {
 	LINK_HYPERTEXT,
+	LINK_MAP,
 	LINK_BUTTON,
 	LINK_CHECKBOX,
 	LINK_SELECT,

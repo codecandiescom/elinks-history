@@ -1,3 +1,10 @@
+Mon Aug 12 01:30:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	Rewritten last chunk detection so that it works properly now. Fixed
+	partial downloads thru SSL and other possible bugs.  
+
 Sun Aug 11 18:54:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/: listbox.c, listbox.h:

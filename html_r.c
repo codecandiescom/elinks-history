@@ -304,46 +304,65 @@ struct tag *last_tag_for_newline;
 
 static inline void move_links(struct part *part, int xf, int yf, int xt, int yt)
 {
-	int n;
-	struct tag *t;
-	int w = 0;
+	struct tag *tag;
+	int nlink;
+	int matched = 0;
+	
 	if (!part->data) return;
 	xpand_lines(part, yt);
-	for (n = last_link_to_move; n < part->data->nlinks; n++) {
+	
+	for (nlink = last_link_to_move; nlink < part->data->nlinks; nlink++) {
+		struct link *link = &part->data->links[nlink];
 		int i;
-		struct link *link = &part->data->links[n];
-			/*printf("ml: %d %d %d %d",link->pos[0].x,link->pos[0].y,X(xf),Y(yf));fflush(stdout);sleep(1);*/
-		for (i = 0; i < link->n; i++) if (link->pos[i].y == Y(yf)) {
-			w = 1;
-			if (link->pos[i].x >= X(xf)) {
-				if (yt >= 0)
-					link->pos[i].y = Y(yt), link->pos[i].x += -xf + xt;
-				else
-					memmove(&link->pos[i], &link->pos[i+1],
-						(link->n-i-1) * sizeof(struct point)),
-					link->n--, i--;
+		
+		for (i = 0; i < link->n; i++) {
+			if (link->pos[i].y == Y(yf)) {
+				matched = 1;
+				if (link->pos[i].x >= X(xf)) {
+					if (yt >= 0) {
+						link->pos[i].y = Y(yt);
+						link->pos[i].x += -xf + xt;
+					} else {
+						memmove(&link->pos[i],
+							&link->pos[i + 1],
+							(link->n - i - 1) *
+							sizeof(struct point));
+						link->n--;
+						i--;
+					}
+				}
 			}
 		}
-		/*if (!link->n) {
+		
+#if 0
+		if (!link->n) {
 			if (link->where) mem_free(link->where);
 			if (link->target) mem_free(link->target);
 			if (link->where_img) mem_free(link->where_img);
 			if (link->pos) mem_free(link->pos);
-			memmove(link, link + 1, (part->data->nlinks - n - 1) * sizeof(struct link));
+			memmove(link, link + 1, (part->data->nlinks - nlink - 1) * sizeof(struct link));
 			part->data->nlinks --;
-			n--;
-		}*/
-		if (!w /*&& n >= 0*/) last_link_to_move = n;
-	}
-	w = 0;
-	if (yt >= 0) for (t = last_tag_to_move->next; (void *)t != &part->data->tags; t = t->next) {
-		if (t->y == Y(yf)) {
-			w = 1;
-			if (t->x >= X(xf)) {
-				t->y = Y(yt), t->x += -xf + xt;
-			}
+			nlink--;
 		}
-		if (!w) last_tag_to_move = t;
+#endif
+		
+		if (!matched /* && nlink >= 0 */) last_link_to_move = nlink;
+	}
+	
+	matched = 0;
+	
+	if (yt >= 0) {
+		for (tag = last_tag_to_move->next;
+		     (void *) tag != &part->data->tags;
+		     tag = tag->next) {
+			if (tag->y == Y(yf)) {
+				matched = 1;
+				if (tag->x >= X(xf)) {
+					tag->y = Y(yt), tag->x += -xf + xt;
+				}
+			}
+			if (!matched) last_tag_to_move = tag;
+		}
 	}
 }
 

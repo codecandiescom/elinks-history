@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.201 2003/09/16 23:33:32 jonas Exp $ */
+/* $Id: parser.c,v 1.202 2003/09/16 23:38:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2026,12 +2026,10 @@ abort:
 		if (has_attr(t_attr, "disabled")) goto see;
 		if (preselect == -1 && has_attr(t_attr, "selected")) preselect = order;
 		v = get_attr_val(t_attr, "value");
-		if (!(order & (ALLOC_GR - 1))) {
-			unsigned char **vv = mem_realloc(val, (order + ALLOC_GR) * sizeof(unsigned char *));
 
-			if (!vv) goto abort;
-			val = vv;
-		}
+		if (!mem_align_alloc(&val, order, order + 1, sizeof(unsigned char *), 0xFF))
+			goto abort;
+
 		val[order++] = v;
 		vx = get_attr_val(t_attr, "label");
 		if (vx) new_menu_item(vx, order - 1, 0);

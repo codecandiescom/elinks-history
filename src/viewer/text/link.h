@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.7 2003/09/15 20:42:54 jonas Exp $ */
+/* $Id: link.h,v 1.8 2003/09/25 19:50:40 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -25,7 +25,7 @@ int get_current_state(struct session *);
 
 struct link *get_first_link(struct document_view *f);
 struct link *get_last_link(struct document_view *f);
-struct link *choose_mouse_link(struct document_view *f, struct event *ev);
+struct link *choose_mouse_link(struct document_view *f, struct term_event *ev);
 
 unsigned char *print_current_link_title_do(struct document_view *, struct terminal *);
 unsigned char *print_current_link_do(struct document_view *, struct terminal *);
@@ -46,7 +46,7 @@ void goto_link_number(struct session *ses, unsigned char *num);
 
 /* Bruteforce compilation fixes */
 int enter(struct session *ses, struct document_view *fd, int a);
-int try_document_key(struct session *ses, struct document_view *fd, struct event *ev);
+int try_document_key(struct session *ses, struct document_view *fd, struct term_event *ev);
 int in_viewy(struct document_view *f, struct link *l);
 unsigned char *get_link_url(struct session *ses, struct document_view *f, struct link *l);
 

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.29 2003/09/06 15:09:43 jonas Exp $ */
+/* $Id: kbd.c,v 1.30 2003/09/25 19:45:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,10 +149,10 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 void
 kbd_ctrl_c(void)
 {
-	struct event ev = { EV_KBD, KBD_CTRL_C, 0, 0 };
+	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_CTRL_C, 0, 0);
 
 	if (ditrm)
-		queue_event(ditrm, (unsigned char *)&ev, sizeof(struct event));
+		queue_event(ditrm, (unsigned char *)&ev, sizeof(struct term_event));
 }
 
 #define write_sequence(fd, seq) \
@@ -216,13 +216,13 @@ send_done_sequence(int h, int flags)
 void
 resize_terminal(void)
 {
-	struct event ev = { EV_RESIZE, 0, 0, 0 };
+	struct term_event ev = INIT_TERM_EVENT(EV_RESIZE, 0, 0, 0);
 	int x, y;
 
 	if (get_terminal_size(ditrm->std_out, &x, &y)) return;
 	ev.x = x;
 	ev.y = y;
-	queue_event(ditrm, (char *)&ev, sizeof(struct event));
+	queue_event(ditrm, (char *)&ev, sizeof(struct term_event));
 }
 
 
@@ -276,7 +276,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 {
 	int x, y, i;
 	struct itrm *itrm;
-	struct event ev = { EV_INIT, 80, 24, 0 };
+	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 80, 24, 0);
 	unsigned char *ts;
 	int env;
 
@@ -307,7 +307,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	ev.x = x;
 	ev.y = y;
 	handle_terminal_resize(ctl_in, resize_terminal);
-	queue_event(itrm, (char *)&ev, sizeof(struct event));
+	queue_event(itrm, (char *)&ev, sizeof(struct term_event));
 
 	env = get_system_env();
 
@@ -602,7 +602,7 @@ int process_queue(struct itrm *);
 static void
 kbd_timeout(struct itrm *itrm)
 {
-	struct event ev = {EV_KBD, KBD_ESC, 0, 0};
+	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_ESC, 0, 0);
 
 	itrm->tm = -1;
 
@@ -614,7 +614,7 @@ kbd_timeout(struct itrm *itrm)
 	assertm(itrm->qlen, "timeout on empty queue");
 	if_assert_failed return;
 
-	queue_event(itrm, (char *)&ev, sizeof(struct event));
+	queue_event(itrm, (char *)&ev, sizeof(struct term_event));
 
 	if (--itrm->qlen)
 		memmove(itrm->kqueue, itrm->kqueue + 1, itrm->qlen);
@@ -716,7 +716,7 @@ static int xterm_button = -1;
 int
 process_queue(struct itrm *itrm)
 {
-	struct event ev = {EV_KBD, -1, 0, 0};
+	struct term_event ev = INIT_TERM_EVENT(EV_KBD, -1, 0, 0);
 	int el = 0;
 
 	if (!itrm->qlen) goto end;
@@ -897,7 +897,7 @@ l1:
 	itrm->qlen -= el;
 
 	if (ev.x != -1)
-		queue_event(itrm, (char *)&ev, sizeof(struct event));
+		queue_event(itrm, (char *)&ev, sizeof(struct term_event));
 
 	if (itrm->qlen)
 		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.38 2003/09/21 14:47:28 jonas Exp $ */
+/* $Id: form.c,v 1.39 2003/09/25 19:50:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -811,7 +811,7 @@ submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
 
 int
 field_op(struct session *ses, struct document_view *f, struct link *l,
-	 struct event *ev, int rep)
+	 struct term_event *ev, int rep)
 {
 	struct form_control *frm;
 	struct form_state *fs;

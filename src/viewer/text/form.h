@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.5 2003/08/23 06:18:22 jonas Exp $ */
+/* $Id: form.h,v 1.6 2003/09/25 19:50:40 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -30,7 +30,7 @@ unsigned char *get_form_url(struct session *, struct document_view *,
 void fixup_select_state(struct form_control *fc, struct form_state *fs);
 struct form_state *find_form_state(struct document_view *f, struct form_control *frm);
 
-int field_op(struct session *ses, struct document_view *f, struct link *l, struct event *ev, int rep);
+int field_op(struct session *ses, struct document_view *f, struct link *l, struct term_event *ev, int rep);
 
 void draw_form_entry(struct terminal *t, struct document_view *f, struct link *l);
 void draw_forms(struct terminal *t, struct document_view *f);

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.205 2003/09/21 14:47:28 jonas Exp $ */
+/* $Id: view.c,v 1.206 2003/09/25 19:50:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -626,7 +626,7 @@ frm_download(struct session *ses, struct document_view *fd, int resume)
 
 
 static int
-frame_ev(struct session *ses, struct document_view *fd, struct event *ev)
+frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 {
 	int x = 1;
 
@@ -871,7 +871,7 @@ current_frame(struct session *ses)
 }
 
 static int
-send_to_frame(struct session *ses, struct event *ev)
+send_to_frame(struct session *ses, struct term_event *ev)
 {
 	struct document_view *fd;
 	int r;
@@ -893,9 +893,10 @@ send_to_frame(struct session *ses, struct event *ev)
 }
 
 static void
-do_mouse_event(struct session *ses, struct event *ev, struct document_view *fd)
+do_mouse_event(struct session *ses, struct term_event *ev,
+	       struct document_view *fd)
 {
-	struct event evv;
+	struct term_event evv;
 	struct document_view *fdd; /* !!! FIXME: frames */
 	struct document_options *o;
 
@@ -922,7 +923,7 @@ r:
 	return;
 
 ok:
-	memcpy(&evv, ev, sizeof(struct event));
+	memcpy(&evv, ev, sizeof(struct term_event));
 	evv.x -= fd->xp;
 	evv.y -= fd->yp;
 	send_to_frame(ses, &evv);
@@ -931,7 +932,7 @@ ok:
 void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *);
 
 void
-send_event(struct session *ses, struct event *ev)
+send_event(struct session *ses, struct term_event *ev)
 {
 	struct document_view *fd;
 
@@ -1195,7 +1196,7 @@ x:
 void
 send_enter(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct event ev = { EV_KBD, KBD_ENTER, 0, 0 };
+	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_ENTER, 0, 0);
 
 	assert(ses);
 	if_assert_failed return;
@@ -1205,7 +1206,7 @@ send_enter(struct terminal *term, void *xxx, struct session *ses)
 void
 send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct event ev = { EV_KBD, KBD_ENTER, KBD_CTRL, 0 };
+	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_ENTER, KBD_CTRL, 0);
 
 	assert(ses);
 	if_assert_failed return;

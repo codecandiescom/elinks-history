@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.24 2003/08/23 18:17:27 jonas Exp $ */
+/* $Id: view.h,v 1.25 2003/09/25 19:50:40 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -41,7 +41,7 @@ void save_url(struct session *, unsigned char *);
 
 /* Various event emitters and link menu handlers. */
 
-void send_event(struct session *, struct event *);
+void send_event(struct session *, struct term_event *);
 void send_enter(struct terminal *term, void *xxx, struct session *ses);
 void send_enter_reload(struct terminal *term, void *xxx, struct session *ses);
 

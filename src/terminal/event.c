@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.10 2003/08/25 02:43:59 jonas Exp $ */
+/* $Id: event.c,v 1.11 2003/09/25 19:45:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@
 
 
 void
-term_send_event(struct terminal *term, struct event *ev)
+term_send_event(struct terminal *term, struct term_event *ev)
 {
 	struct window *win;
 
@@ -50,7 +50,7 @@ term_send_event(struct terminal *term, struct event *ev)
 }
 
 static void
-term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
+term_send_ucs(struct terminal *term, struct term_event *ev, unicode_val u)
 {
 	unsigned char *recoded;
 
@@ -68,7 +68,7 @@ term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
 void
 in_term(struct terminal *term)
 {
-	struct event *ev;
+	struct term_event *ev;
 	int r;
 	unsigned char *iq = term->input_queue;
 
@@ -96,9 +96,9 @@ in_term(struct terminal *term)
 	term->qfreespace -= r;
 
 test_queue:
-	if (term->qlen < sizeof(struct event)) return;
-	ev = (struct event *)iq;
-	r = sizeof(struct event);
+	if (term->qlen < sizeof(struct term_event)) return;
+	ev = (struct term_event *)iq;
+	r = sizeof(struct term_event);
 
 	if (ev->ev != EV_INIT
 	    && ev->ev != EV_RESIZE
@@ -112,7 +112,7 @@ test_queue:
 
 	if (ev->ev == EV_INIT) {
 		int init_len;
-		int evterm_len = sizeof(struct event) + MAX_TERM_LEN;
+		int evterm_len = sizeof(struct term_event) + MAX_TERM_LEN;
 		int evtermcwd_len = evterm_len + MAX_CWD_LEN;
 		int evtermcwd1int_len = evtermcwd_len + sizeof(int);
 		int evtermcwd2int_len = evtermcwd1int_len + sizeof(int);
@@ -122,7 +122,7 @@ test_queue:
 
 		if (term->qlen < evtermcwd2int_len + init_len) return;
 
-		memcpy(term->term, iq + sizeof(struct event), MAX_TERM_LEN);
+		memcpy(term->term, iq + sizeof(struct term_event), MAX_TERM_LEN);
 		term->term[MAX_TERM_LEN - 1] = 0;
 
 		{

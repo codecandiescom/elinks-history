@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.59 2003/09/15 20:45:43 jonas Exp $ */
+/* $Id: link.c,v 1.60 2003/09/25 19:50:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -689,7 +689,7 @@ get_current_state(struct session *ses)
 
 
 struct link *
-choose_mouse_link(struct document_view *f, struct event *ev)
+choose_mouse_link(struct document_view *f, struct term_event *ev)
 {
 	struct link *l1, *l2, *l;
 	register int i;
@@ -770,7 +770,7 @@ goto_link_number(struct session *ses, unsigned char *num)
 /* See if this document is interested in the key user pressed. */
 int
 try_document_key(struct session *ses, struct document_view *fd,
-		 struct event *ev)
+		 struct term_event *ev)
 {
 	long x;
 	int passed = -1;

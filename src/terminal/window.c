@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.9 2003/09/21 14:47:27 jonas Exp $ */
+/* $Id: window.c,v 1.10 2003/09/25 19:45:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@ void
 redraw_from_window(struct window *win)
 {
 	struct terminal *term = win->term;
-	struct event ev = {EV_REDRAW, term->x, term->y, 0};
+	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->x, term->y, 0);
 	struct window *end = (void *) &term->windows;
 
 	if (term->redrawing != 0) return;
@@ -36,7 +36,7 @@ void
 redraw_below_window(struct window *win)
 {
 	struct terminal *term = win->term;
-	struct event ev = {EV_REDRAW, term->x, term->y, 0};
+	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->x, term->y, 0);
 	struct window *end = win;
 	int tr = term->redrawing;
 
@@ -52,11 +52,11 @@ redraw_below_window(struct window *win)
 
 static void
 add_window_at_pos(struct terminal *term,
-		  void (*handler)(struct window *, struct event *, int),
+		  void (*handler)(struct window *, struct term_event *, int),
 		  void *data, struct window *at)
 {
 	struct window *win = mem_calloc(1, sizeof(struct window));
-	struct event ev = {EV_INIT, term->x, term->y, 0};
+	struct term_event ev = INIT_TERM_EVENT(EV_INIT, term->x, term->y, 0);
 
 	if (!win) {
 		if (data) mem_free(data);
@@ -73,7 +73,7 @@ add_window_at_pos(struct terminal *term,
 
 void
 add_window(struct terminal *term,
-	   void (*handler)(struct window *, struct event *, int),
+	   void (*handler)(struct window *, struct term_event *, int),
 	   void *data)
 {
 	add_window_at_pos(term, handler, data, (struct window *) &term->windows);
@@ -82,7 +82,7 @@ add_window(struct terminal *term,
 void
 delete_window(struct window *win)
 {
-	struct event ev = {EV_ABORT, 0, 0, 0};
+	struct term_event ev = INIT_TERM_EVENT(EV_ABORT, 0, 0, 0);
 
 	win->handler(win, &ev, 1);
 	del_from_list(win);
@@ -92,7 +92,7 @@ delete_window(struct window *win)
 }
 
 void
-delete_window_ev(struct window *win, struct event *ev)
+delete_window_ev(struct window *win, struct term_event *ev)
 {
 	struct window *w = win->next;
 
@@ -131,7 +131,7 @@ struct ewd {
 };
 
 static void
-empty_window_handler(struct window *win, struct event *ev, int fwd)
+empty_window_handler(struct window *win, struct term_event *ev, int fwd)
 {
 	struct terminal *term = win->term;
 	struct ewd *ewd = win->data;

@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.28 2004/05/21 11:57:50 jonas Exp $ */
+/* $Id: encoding.c,v 1.29 2004/05/25 17:35:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,7 @@ static struct decoding_backend dummy_decoding_backend = {
   Gzip encoding (ENCODING_GZIP)
 *************************************************************************/
 
-#ifdef HAVE_ZLIB_H
+#ifdef CONFIG_GZIP
 
 static int
 gzip_open(struct stream_encoded *stream, int fd)
@@ -155,7 +155,7 @@ static struct decoding_backend gzip_decoding_backend = {
   Bzip2 encoding (ENCODING_BZIP2)
 *************************************************************************/
 
-#ifdef HAVE_BZLIB_H
+#ifdef CONFIG_BZIP2
 
 struct bz2_enc_data {
 	FILE *file;

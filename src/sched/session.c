@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.507 2004/06/13 18:45:50 jonas Exp $ */
+/* $Id: session.c,v 1.508 2004/06/13 18:56:37 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -836,10 +836,7 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 struct string *
 encode_session_info(struct string *info, struct list_head *url_list)
 {
-	unsigned char *remote_chars = (unsigned char *) &remote_session_flags;
-
-	if (init_string(info)
-	    && add_bytes_to_string(info, remote_chars, sizeof(int))) {
+	if (init_string(info)) {
 		struct string_list_item *url;
 
 		foreach (url, *url_list) {
@@ -867,12 +864,14 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 
 	switch (info->magic) {
 	case INTERLINK_NORMAL_MAGIC:
-		/* SESSION_MAGIC(1, 0) supports multiple URIs, remote opening
-		 * and magic variables:
+		/* SESSION_NORMAL_MAGIC and INTERLINK_REMOTE_MAGIC supports
+		 * multiple URIs, remote opening and magic variables. For
+		 * normal magic the session info field store info about
+		 * possibly saved sessions and for remote magic it stores
+		 * the remote flags:
 		 *
-		 *	0: base-session ID <int>
+		 *	0: session info (saved id or remote flags) <int>
 		 *	1: Session magic <int>
-		 *	2: Remote <int>
 		 *	3: NUL terminated URIs <unsigned char>+
 		 */
 
@@ -884,15 +883,12 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		 * instance connects to the master. This is also the reason why
 		 * we don't need to handle it for the old format. New instances
 		 * will always be of the same origin as the master. */
-		if (init_saved_session(term, info->base_session))
+		if (init_saved_session(term, info->session_info))
 			return 1;
+		break;
 
-		
-		if (len < sizeof(int))
-			return 0;
-
-		remote = *(data++);
-		len -= sizeof(int);
+	case INTERLINK_REMOTE_MAGIC:
+		remote = info->session_info;
 
 		/* If processing session info from a -remote instance we just
 		 * want to hook up with the master. */

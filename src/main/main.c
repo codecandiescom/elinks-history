@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.212 2004/06/13 12:48:56 jonas Exp $ */
+/* $Id: main.c,v 1.213 2004/06/13 18:56:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,7 +191,8 @@ init(void)
 			close_terminal_pipes();
 
 			handle_trm(get_input_handle(), get_output_handle(),
-				   fd, fd, get_ctl_handle(), info.source, info.length);
+				   fd, fd, get_ctl_handle(), info.source, info.length,
+				   remote_session_flags);
 		} else {
 			/* Setup a master terminal */
 			term = attach_terminal(get_input_handle(), get_output_handle(),

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.69 2004/06/13 13:25:50 jonas Exp $ */
+/* $Id: terminal.c,v 1.70 2004/06/13 18:56:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,7 +336,7 @@ attach_terminal(int in, int out, int ctl, void *info, int len)
 
 	if (set_nonblocking_fd(terminal_pipe[0]) < 0) return NULL;
 	if (set_nonblocking_fd(terminal_pipe[1]) < 0) return NULL;
-	handle_trm(in, out, out, terminal_pipe[1], ctl, info, len);
+	handle_trm(in, out, out, terminal_pipe[1], ctl, info, len, 0);
 
 	term = init_term(terminal_pipe[0], out);
 	if (!term) {

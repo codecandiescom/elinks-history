@@ -1,4 +1,4 @@
-/* $Id: kbd.h,v 1.3 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: kbd.h,v 1.4 2004/06/13 18:56:37 jonas Exp $ */
 
 #ifndef EL__TERMINAL_KBD_H
 #define EL__TERMINAL_KBD_H
@@ -123,7 +123,10 @@
 #define KBD_CTRL	2
 #define KBD_ALT		4
 
-void handle_trm(int, int, int, int, int, void *, int);
+void
+handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
+	   void *init_string, int init_len, int remote);
+
 void free_all_itrms(void);
 void resize_terminal(void);
 void dispatch_special(unsigned char *);

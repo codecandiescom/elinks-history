@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.6 2002/12/30 16:42:05 pasky Exp $ */
+/* $Id: parser.h,v 1.7 2003/01/19 17:51:20 jonas Exp $ */
 
 #ifndef EL__USIVE_PARSER_PARSER_H
 #define EL__USIVE_PARSER_PARSER_H
@@ -17,7 +17,7 @@ enum parser_backend_type {
 
 /* This is the ELusive parser state - it is created by init() and destroyed by
  * done(). Note that the ELusive parser works perfectly with multiple states -
- * it will maintain the complete context pter-sate, thus you can parse various
+ * it will maintain the complete context per-state, thus you can parse various
  * sources independently at once. You then call init() and done() for each of
  * the states independently. */
 
@@ -34,6 +34,23 @@ struct parser_backend {
 	void (*init)(struct parser_state *);
 	void (*parse)(struct parser_state *, unsigned char **, int *);
 	void (*done)(struct parser_state *);
+};
+
+/* Return codes for the state parsers */
+enum pstate_code {
+	/* Returned when parsing of the buffer is completed and the parser is
+	 * in the same state. */
+	PSTATE_COMPLETE =  1,
+
+	/* Returned on change of the state. */
+	PSTATE_CHANGE   =  0,
+
+	/* Returned when we can't parse further and the string wasn't completed
+	 * yet. */
+	PSTATE_SUSPEND  = -1,
+
+	/* Returned when recovering from syntax errors is needed. */
+	PSTATE_RECOVER  = -2,
 };
 
 

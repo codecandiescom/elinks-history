@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.30 2003/01/18 00:36:14 pasky Exp $ */
+/* $Id: parser.c,v 1.31 2003/01/19 17:51:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 /* We maintain the states (see below for a nice diagram) in a stack, maintained
  * by utility functions and structures below. */
 
-enum state_code {
+enum html_state_code {
 	HPT_PLAIN,
 	HPT_ENTITY,
 	HPT_TAG,
@@ -59,7 +59,7 @@ struct html_parser_state {
 };
 
 static inline struct html_parser_state *
-html_state_push(struct parser_state *state, enum state_code state_code)
+html_state_push(struct parser_state *state, enum html_state_code state_code)
 {
 	return (struct html_parser_state *)
 		state_stack_push(state, sizeof(struct html_parser_state),
@@ -138,13 +138,13 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 		if (*html == '&') {
 			pstate = html_state_push(state, HPT_ENTITY);
 			*str = html, *len = html_len;
-			return 0;
+			return PSTATE_CHANGE;
 		}
 
 		if (*html == '<') {
 			pstate = html_state_push(state, HPT_TAG);
 			*str = html, *len = html_len;
-			return 0;
+			return PSTATE_CHANGE;
 		}
 
 		/* If we can't append ourselves to the current node, make up a
@@ -165,7 +165,7 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 	}
 
 	*str = html, *len = html_len;
-	return 1;
+	return PSTATE_COMPLETE;
 }
 
 /* This tries to eat a HTML entity and add it as a node. */
@@ -206,11 +206,11 @@ entity_parse(struct parser_state *state, unsigned char **str, int *len)
 
 		pstate = html_state_pop(state);
 		*str = html, *len = html_len;
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
 	/* Huh. Neverending entity? Try the next time. */
-	return -1;
+	return PSTATE_SUSPEND;
 }
 
 /* This handles a sign of the allmighty tag, determines what the tag is about.
@@ -240,12 +240,12 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 
 		html++, html_len--; /* > */
 		*str = html, *len = html_len;
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
 	html++, html_len--; /* < */
 
-	if (!html_len) return -1;
+	if (!html_len) return PSTATE_SUSPEND;
 
 	/* Closing tag fun! */
 	if (*html == '/') {
@@ -255,13 +255,13 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 
 		html++, html_len--;
 		*str = html, *len = html_len;
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
 	/* Comment fun...? */
 	if (*html == '!' && html_len < 3) {
 		/* We must be sure. */
-		return -1;
+		return PSTATE_SUSPEND;
 	}
 	if (*html == '?' || (*html == '!' && !strncmp(html + 1, "--", 2))) {
 		/* The next time we'll visit you, we will be at the end of our
@@ -276,7 +276,7 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 		}
 		html++, html_len--;
 		*str = html, *len = html_len;
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
 	/* Ordinary tag. *yawn* */
@@ -287,7 +287,7 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	}
 
 	*str = html, *len = html_len;
-	return 0;
+	return PSTATE_CHANGE;
 }
 
 /* This skips sequence of whitespaces inside of a tag. */
@@ -306,11 +306,11 @@ tag_white_parse(struct parser_state *state, unsigned char **str, int *len)
 
 		pstate = html_state_pop(state);
 		*str = html, *len = html_len;
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
 	*str = html, *len = html_len;
-	return -1;
+	return PSTATE_SUSPEND;
 }
 
 /* This eats name of the tag. Also, it maintains the corresponding struct
@@ -324,7 +324,7 @@ tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 
 	if (WHITECHAR(*html)) {
 		pstate = html_state_push(state, HPT_TAG_WHITE);
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
 	while (html_len) {
@@ -382,10 +382,10 @@ tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 			pstate = html_state_push(state, HPT_TAG_WHITE);
 		}
 		*str = html, *len = html_len;
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
-	return -1;
+	return PSTATE_SUSPEND;
 }
 
 /* This eats tag attributes names. */
@@ -398,12 +398,12 @@ tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 
 	if (WHITECHAR(*html)) {
 		pstate = html_state_push(state, HPT_TAG_WHITE);
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
 	if (*html == '>') {
 		pstate = html_state_pop(state);
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
 	while (html_len) {
@@ -437,10 +437,10 @@ tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 		}
 
 		*str = html, *len = html_len;
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
-	return -1;
+	return PSTATE_SUSPEND;
 }
 
 /* This eats tag value, if there is any. It also adds the attribute to the
@@ -457,7 +457,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 
 	if (WHITECHAR(*html)) {
 		pstate = html_state_push(state, HPT_TAG_WHITE);
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
 	if (*html == '>') {
@@ -469,7 +469,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,
 			html, 0);
 		pstate = html_state_pop(state);
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
 	if (!pstate->data.attr.ate_eq) {
@@ -477,12 +477,12 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 		pstate->data.attr.ate_eq = 1;
 		if (!html_len) {
 			*str = html, *len = html_len;
-			return 0;
+			return PSTATE_CHANGE;
 		}
 		if (WHITECHAR(*html)) {
 			pstate = html_state_push(state, HPT_TAG_WHITE);
 			*str = html, *len = html_len;
-			return 0;
+			return PSTATE_CHANGE;
 		}
 	}
 
@@ -510,10 +510,10 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 			html++, html_len--;
 
 		*str = html, *len = html_len;
-		return 0;
+		return PSTATE_CHANGE;
 	}
 
-	return -1;
+	return PSTATE_SUSPEND;
 }
 
 /* Walk through a comment towards the light. */
@@ -530,7 +530,7 @@ comment_parse(struct parser_state *state, unsigned char **str, int *len)
 		if (pstate->data.tag.type == '?' && *html == '?') {
 			if (html_len == 1) {
 				*str = html, *len = html_len;
-				return -1;
+				return PSTATE_SUSPEND;
 			}
 			if (html[1] == '>') {
 				html++, html_len--;
@@ -543,7 +543,7 @@ comment_end:
 				pstate = html_state_pop(state);
 
 				*str = html, *len = html_len;
-				return 0;
+				return PSTATE_CHANGE;
 			}
 
 		} else if (pstate->data.tag.type == '!' && *html == end[endp]) {
@@ -564,10 +564,10 @@ comment_end:
 	}
 
 	if (endp) {
-		return -1;
+		return PSTATE_SUSPEND;
 	} else {
 		*str = html, *len = html_len;
-		return 1;
+		return PSTATE_COMPLETE;
 	}
 }
 

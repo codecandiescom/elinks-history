@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.171 2004/06/15 12:14:33 zas Exp $ */
+/* $Id: form.c,v 1.172 2004/06/15 21:37:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1286,26 +1286,26 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 
 	switch (fc->type) {
 	case FC_RADIO:
-		label = _("Radio button", term); break;
+		label = N_("Radio button"); break;
 	case FC_CHECKBOX:
-		label = _("Checkbox", term); break;
+		label = N_("Checkbox"); break;
 	case FC_SELECT:
-		label = _("Select field", term); break;
+		label = N_("Select field"); break;
 	case FC_TEXT:
-		label = _("Text field", term); break;
+		label = N_("Text field"); break;
 	case FC_TEXTAREA:
-		label = _("Text area", term); break;
+		label = N_("Text area"); break;
 	case FC_FILE:
-		label = _("File upload", term); break;
+		label = N_("File upload"); break;
 	case FC_PASSWORD:
-		label = _("Password field", term); break;
+		label = N_("Password field"); break;
 	default:
 		return NULL;
 	}
 
 	if (!init_string(&str)) return NULL;
 
-	add_to_string(&str, label);
+	add_to_string(&str, _(label, term));
 
 	if (fc->name && fc->name[0]) {
 		add_to_string(&str, ", ");

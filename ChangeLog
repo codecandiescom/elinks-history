@@ -1,3 +1,137 @@
+Fri Jun 27 20:51:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.c:
+
+	checkboxes_width() was optimized a bit.  
+
+Fri Jun 27 20:44:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.c, bfu/checkbox.h, dialogs/options.c:
+
+	min_max_checkboxes_width() was renamed checkboxes_width().  
+
+Fri Jun 27 20:42:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.c, bfu/inpfield.c, bfu/msgbox.c, bfu/text.c,
+	bfu/text.h, config/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	dialogs/hierbox.c, dialogs/mime.c, sched/download.c,
+	scripting/lua/core.c:
+
+	min_max_text_width() was renamed text_width().  
+
+Fri Jun 27 20:39:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/button.h, bfu/checkbox.c, bfu/group.c,
+	bfu/inpfield.c, bfu/msgbox.c, config/dialogs.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/hierbox.c, dialogs/mime.c,
+	dialogs/options.c, sched/download.c, scripting/lua/core.c:
+
+	min_max_buttons_width() was renamed  buttons_width().  
+
+Fri Jun 27 20:34:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.c, bfu/checkbox.h, dialogs/options.c:
+
+	checkboxes_width() was replaced with min_max_checkboxes_width().  
+
+Fri Jun 27 20:22:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/download.c, scripting/lua/core.c:
+
+	min_max_text_width() is now used.  
+
+Fri Jun 27 20:19:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: hierbox.c, mime.c:
+
+	min_max_text_width() is now used.  
+
+Fri Jun 27 20:16:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/dialogs.c, dialogs/auth.c, dialogs/edit.c:
+
+	min_max_text_width() is now used.  
+
+Fri Jun 27 20:12:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: msgbox.c, inpfield.c:
+
+	min_max_text_width() is now used.  
+
+Fri Jun 27 20:11:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: text.c, text.h:
+
+	min_max_text_width() was introduced.  
+
+Fri Jun 27 19:57:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	min_max_buttons_width() is used.  
+
+Fri Jun 27 19:54:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/options.c, sched/download.c:
+
+	min_max_buttons_width() is used.  
+
+Fri Jun 27 19:50:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: hierbox.c, mime.c:
+
+	min_max_buttons_width() is used.  
+
+Fri Jun 27 19:46:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/dialogs.c, dialogs/auth.c, dialogs/edit.c:
+
+	min_max_buttons_width() is used.  
+
+Fri Jun 27 19:44:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: checkbox.c, group.c, inpfield.c, msgbox.c:
+
+	Populate with min_max_buttons_width().  
+
+Fri Jun 27 19:36:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, button.h:
+
+	min_max_buttons_width() was introduced, it does the same job that
+	min_buttons_width() and max_buttons_width() successive calls.  
+
+Fri Jun 27 19:26:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.c:
+
+	Indentation level was reduced in display_button().  
+
+Fri Jun 27 01:52:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, po/leet.po, src/intl/gettext/libintl.c:
+
+	1337 |_@|\|6|_|463 VV45 4|)|)3|).  
+
+Fri Jun 27 00:16:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.h:
+
+	Cleanup and remove stale function declaration.  
+
+Fri Jun 27 00:01:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Cleanup check_protocol().  
+
+Thu Jun 26 23:49:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h, url.c:
+
+	Eliminate get_prot_info() by adding one more accessor and
+	simplifying get_protocol_*handler().  
+
 Thu Jun 26 22:09:24 2003  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/listbox.c:
@@ -141,7 +275,7 @@ Thu Jun 26 16:24:10 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* po/README:
 
-	Idea by zas. Needs reviewing.  
+	Some basic introduction for translators. Idea by zas.  
 
 Thu Jun 26 14:28:00 2003  Jonas Fonseca <fonseca@diku.dk>:
 

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-29 23:37+0100\n"
-"PO-Revision-Date: 2004-12-30 04:55+0100\n"
+"POT-Creation-Date: 2004-12-30 05:00+0100\n"
+"PO-Revision-Date: 2004-12-30 05:01+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -869,8 +869,7 @@ msgstr "Numerer ikke henvisninger i uddata fra -dump"
 msgid ""
 "Prevents printing of link number in dump output.\n"
 "Note that this really affects only -dump, nothing else."
-msgstr ""
-"Deaktiverer nummerering af henvisninger i uddata fra -dump."
+msgstr "Deaktiverer nummerering af henvisninger i uddata fra -dump."
 
 #: src/config/cmdline.c:721
 msgid "Disable printing of link references in dump output"
@@ -1945,7 +1944,6 @@ msgstr ""
 "en given IP-protokol bruges til forbindelser ved at bruge en\n"
 "URL med en stil såsom http4://elinks.or.cz/."
 
-
 #: src/config/options.inc:110
 msgid ""
 "Whether to try to connect to a host over IPv4.\n"
@@ -1998,8 +1996,7 @@ msgstr "Browsing"
 
 #: src/config/options.inc:140
 msgid "Document browsing options (mainly interactivity)."
-msgstr ""
-"Indstillinger for læsning af dokumenter (hovedsagelig interaktivt)"
+msgstr "Indstillinger for læsning af dokumenter (hovedsagelig interaktivt)"
 
 #: src/config/options.inc:143
 msgid "Accesskeys"
@@ -2474,10 +2471,10 @@ msgstr "Regulære udtryk"
 
 #: src/config/options.inc:371
 msgid ""
-"Enable searching with regular expressions.\n"
-"0 for plain text searching.\n"
-"1 for basic regular expression searches.\n"
-"2 for extended regular expression searches."
+"Enable searching with regular expressions:\n"
+"0 for plain text searching\n"
+"1 for basic regular expression searches\n"
+"2 for extended regular expression searches"
 msgstr ""
 "Anvend søgning med regulære udtryk:\n"
 "0 for søgning kun med klartekst\n"

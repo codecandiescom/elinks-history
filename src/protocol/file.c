@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.53 2003/06/22 16:19:34 jonas Exp $ */
+/* $Id: file.c,v 1.54 2003/06/22 16:28:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -284,12 +284,7 @@ file_func(struct connection *c)
 	unsigned char *file, *name, *head;
 	int fl;
 	DIR *d;
-	int fd;
-	struct stat stt;
 	int namelen;
-	int saved_errno;
-	int show_hidden_files;
-	enum stream_encoding encoding = ENCODING_NONE;
 
 	if (get_opt_int_tree(&cmdline_options, "anonymous")) {
 		abort_conn_with_state(c, S_BAD_URL);
@@ -309,12 +304,12 @@ file_func(struct connection *c)
 		int i;
 		struct dirent *de;
 		unsigned char dircolor[8];
-		int colorize_dir;
+		int colorize_dir = get_opt_int("document.browse.links.color_dirs");
+		int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
 
 		dir = NULL;
 		dirl = 0;
 
-		colorize_dir = get_opt_int("document.browse.links.color_dirs");
 		if (colorize_dir) {
 			color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
 				(unsigned char *) &dircolor);
@@ -376,7 +371,6 @@ file_func(struct connection *c)
 		}
 		add_to_str(&file, &fl, "</h2>\n<pre>");
 
-		show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
 		while ((de = readdir(d))) {
 			struct stat st, *stp;
 			unsigned char **p;
@@ -527,9 +521,11 @@ file_func(struct connection *c)
 	} else {
 		struct stream_encoded *stream;
 		int readlen;
+		struct stat stt;
+		enum stream_encoding encoding = ENCODING_NONE;
+		int fd = open(name, O_RDONLY | O_NOCTTY);
+		int saved_errno;
 
-		/* First, we try with name as is. */
-		fd = open(name, O_RDONLY | O_NOCTTY);
 		saved_errno = errno;
 		if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
 			int enc;

@@ -1,11 +1,9 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.49 2004/05/14 11:39:35 jonas Exp $ */
+/* $Id: leds.c,v 1.50 2004/05/20 12:42:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_LEDS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -292,5 +290,3 @@ struct module leds_module = struct_module(
 	/* init: */		init_leds,
 	/* done: */		done_leds
 );
-
-#endif

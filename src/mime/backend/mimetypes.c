@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.38 2004/04/16 16:37:17 zas Exp $ */
+/* $Id: mimetypes.c,v 1.39 2004/05/20 12:42:44 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-2004 The ELinks Project */
@@ -7,8 +7,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_MIMETYPES
 
 #include <ctype.h>
 #include <stdio.h>
@@ -296,5 +294,3 @@ struct module mimetypes_mime_module = struct_module(
 	/* init: */		init_mimetypes,
 	/* done: */		done_mimetypes
 );
-
-#endif /* CONFIG_MIMETYPES */

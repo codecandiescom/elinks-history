@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.82 2004/04/23 19:26:46 pasky Exp $ */
+/* $Id: mailcap.c,v 1.83 2004/05/20 12:42:44 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -19,8 +19,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_MAILCAP
 
 #include <ctype.h>
 #include <stdio.h>
@@ -694,5 +692,3 @@ struct module mailcap_mime_module = struct_module(
 	/* init: */		init_mailcap,
 	/* done: */		done_mailcap
 );
-
-#endif /* CONFIG_MAILCAP */

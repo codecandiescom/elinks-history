@@ -1,3 +1,18 @@
+Wed Mar  6 12:54:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c, links.h, session.c, setup.h:
+	
+	add WWW_HOME_URL #define into setup.h, which can act as default
+	homepage, if non-empty (empty by default); also attempt to add
+	startup_goto_dialog option, but commented out for now as it doesn't
+	work properly yet
+
+Wed Mar  6 10:55:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* view.c:
+	
+	another segfault fixes
+
 Wed Mar  6 01:26:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:

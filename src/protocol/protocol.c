@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.80 2004/10/12 15:23:27 zas Exp $ */
+/* $Id: protocol.c,v 1.81 2004/10/13 10:00:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,7 @@ get_protocol(unsigned char *name, int namelen)
 			if (pnamelen == namelen)
 				return protocol;
 
-			/* If the current protocol name is longer thatn the
+			/* If the current protocol name is longer that the
 			 * protocol name being searched for move @end else move
 			 * @start. */
 			compare = pnamelen > namelen ? 1 : -1;
@@ -220,7 +220,7 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 			_("Error", ses->tab->term), ALIGN_CENTER,
 			msg_text(ses->tab->term,
 				N_("This version of ELinks does not contain "
-				"%s protocol support"),
+				   "%s protocol support"),
 				protocol_backends[uri->protocol].name),
 			ses, 1,
 			_("OK", ses->tab->term), NULL, B_ENTER | B_ESC);

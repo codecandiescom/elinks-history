@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.9 2002/12/01 17:42:59 pasky Exp $ */
+/* $Id: user.c,v 1.10 2002/12/01 17:45:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,15 +10,36 @@
 #include "links.h"
 
 #include "bfu/msgbox.h"
+#include "config/options.h"
 #include "document/download.h"
 #include "document/session.h"
 #include "intl/language.h"
 #include "lowlevel/terminal.h"
-#include "protocol/mime.h"
 #include "protocol/url.h"
 #include "protocol/user.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+
+unsigned char *
+get_prog(struct terminal *term, unsigned char *progid)
+{
+	struct option *opt;
+	unsigned char *system_str =
+		get_system_str(term ? term->environment & ENV_XWIN : 0);
+	unsigned char *name;
+
+	if (!system_str) return NULL;
+	name = straconcat("protocol.user.", progid, ".",
+			  system_str, NULL);
+	mem_free(system_str);
+	if (!name) return NULL;
+
+	opt = get_opt_rec_real(root_options, name);
+
+	mem_free(name);
+	return (unsigned char *) (opt ? opt->ptr : NULL);
+}
 
 
 static unsigned char *

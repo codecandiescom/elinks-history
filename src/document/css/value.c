@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.47 2004/01/28 00:11:19 jonas Exp $ */
+/* $Id: value.c,v 1.48 2004/03/30 00:36:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,6 @@ css_parse_background_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
 			   struct scanner *scanner)
 {
-	struct scanner_token *token = get_scanner_token(scanner);
 	int success = 0;
 
 	assert(propinfo->value_type == CSS_VT_COLOR);
@@ -99,17 +98,19 @@ css_parse_background_value(struct css_property_info *propinfo,
 	/* This is pretty naive, we just jump space by space, trying to parse
 	 * each token as a color. */
 
-	while (token && check_css_precedence(token->type, ';')) {
-		if (!css_parse_color_value(propinfo, value, scanner)) {
-			token = get_next_scanner_token(scanner);
+	while (scanner_has_tokens(scanner)) {
+		struct scanner_token *token = get_scanner_token(scanner);
+
+		if (!check_css_precedence(token->type, ';'))
+			break;
+
+		if (token->type == ','
+		    || !css_parse_color_value(propinfo, value, scanner)) {
+			skip_scanner_token(scanner);
 			continue;
 		}
 
 		success++;
-		if (check_next_scanner_token(scanner, ','))
-			skip_css_tokens(scanner, ','); /* Uh. */
-
-		token = get_scanner_token(scanner);
 	}
 
 	return success;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.122 2003/11/23 17:33:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.123 2003/11/23 18:49:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,22 +31,6 @@
 #include "util/lists.h"
 #include "util/memory.h"
 
-
-struct hierbox_browser option_browser = {
-	{ D_LIST_HEAD(option_browser.boxes) },
-	NULL,	/* Set in menu_options_manager() */
-	{ D_LIST_HEAD(option_browser.dialogs) },
-	NULL,
-};
-
-static INIT_LIST_HEAD(keybinding_dialog_list);
-
-struct hierbox_browser keybinding_browser = {
-	{ D_LIST_HEAD(keybinding_browser.boxes) },
-	&kbdbind_box_items,
-	{ D_LIST_HEAD(keybinding_browser.dialogs) },
-	NULL,
-};
 
 void
 write_config_error(struct terminal *term, struct memory_list *ml,
@@ -369,20 +353,33 @@ push_save_button(struct dialog_data *dlg_data,
 #define	OPTION_MANAGER_BUTTONS	5
 #define	OPTION_MANAGER_ADDSIZE	(sizeof(struct option) + 2 * MAX_STR_LEN)
 
+static struct hierbox_browser_button option_buttons[] = {
+	{ N_("Info"),		push_info_button	},
+	{ N_("Edit"),		push_edit_button	},
+	{ N_("Add"),		push_add_button		},
+	{ N_("Delete"),		push_del_button		},
+	{ N_("Save"),		push_save_button	},
+
+	END_HIERBOX_BROWSER_BUTTONS,
+};
+
+struct hierbox_browser option_browser = {
+	N_("Option manager"),
+	option_buttons,
+
+	{ D_LIST_HEAD(option_browser.boxes) },
+	NULL,	/* Set in menu_options_manager() */
+	{ D_LIST_HEAD(option_browser.dialogs) },
+	NULL,
+};
+
 /* Builds the "Options manager" dialog */
 void
 menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	option_browser.items = &config_options->box_item->child;
 
-	hierbox_browser(term, N_("Option manager"),
-			OPTION_MANAGER_ADDSIZE, &option_browser, ses,
-			OPTION_MANAGER_BUTTONS,
-			N_("Info"), push_info_button,
-			N_("Edit"), push_edit_button,
-			N_("Add"), push_add_button,
-			N_("Delete"), push_del_button,
-			N_("Save"), push_save_button);
+	hierbox_browser(&option_browser, ses, OPTION_MANAGER_ADDSIZE);
 }
 
 
@@ -529,15 +526,30 @@ push_kbdbind_save_button(struct dialog_data *dlg_data,
 #define	KEYBINDING_MANAGER_BUTTONS	4
 #define KEYBINDING_MANAGER_ADDSIZE	(sizeof(struct option) + 2 * MAX_STR_LEN)
 
+static INIT_LIST_HEAD(keybinding_dialog_list);
+
+static struct hierbox_browser_button keybinding_buttons[] = {
+	{ N_("Add"),		push_kbdbind_add_button			},
+	{ N_("Delete"),		push_kbdbind_del_button			},
+	{ N_("Toggle display"),	push_kbdbind_toggle_display_button	},
+	{ N_("Save"),		push_kbdbind_save_button		},
+
+	END_HIERBOX_BROWSER_BUTTONS,
+};
+
+struct hierbox_browser keybinding_browser = {
+	N_("Keybinding manager"),
+	keybinding_buttons,
+
+	{ D_LIST_HEAD(keybinding_browser.boxes) },
+	&kbdbind_box_items,
+	{ D_LIST_HEAD(keybinding_browser.dialogs) },
+	NULL,
+};
+
 /* Builds the "Keybinding manager" dialog */
 void
 menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	hierbox_browser(term, N_("Keybinding manager"),
-			KEYBINDING_MANAGER_ADDSIZE, &keybinding_browser, ses,
-			KEYBINDING_MANAGER_BUTTONS,
-			N_("Add"), push_kbdbind_add_button,
-			N_("Delete"), push_kbdbind_del_button,
-			N_("Toggle display"), push_kbdbind_toggle_display_button,
-			N_("Save"), push_kbdbind_save_button, B_ENTER);
+	hierbox_browser(&keybinding_browser, ses, KEYBINDING_MANAGER_ADDSIZE);
 }

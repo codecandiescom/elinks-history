@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.61 2003/09/29 14:17:53 pasky Exp $ */
+/* $Id: charsets.c,v 1.62 2003/09/29 14:18:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -590,14 +590,14 @@ convert_string(struct conv_table *convert_table, unsigned char *chars,
 
 	/* Iterate ;-) */
 
+	while (charspos < charslen) {
+		unsigned char *translit;
+
 #define PUTC do { \
 		buffer[bufferpos++] = chars[charspos++]; \
 		translit = ""; \
 		goto flush; \
 	} while (0)
-
-	while (charspos < charslen) {
-		unsigned char *translit;
 
 		if (chars[charspos] != '&') {
 			struct conv_table *t;
@@ -672,10 +672,10 @@ flush:
 			}
 			buffer = new;
 		}
+#undef PUTC
 	}
 
 	/* Say bye */
-#undef PUTC
 
 	buffer[bufferpos] = 0;
 	return buffer;

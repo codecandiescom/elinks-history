@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.139 2003/08/23 18:24:44 jonas Exp $ */
+/* $Id: session.c,v 1.140 2003/09/05 12:02:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -941,23 +941,28 @@ doc_end_load(struct download *stat, struct session *ses)
 			kill_timer(ses->display_timer);
 			ses->display_timer = -1;
 		}
+
 		html_interpret(ses);
 		draw_formatted(ses);
+
 		if (get_opt_bool_tree(cmdline_options, "auto-submit")) {
-			fc = (struct form_control *)
-				ses->screen->document->forms.next;
-			if (fc != fc->next) {
+			if (!list_empty(ses->screen->document->forms)) {
 				get_opt_bool_tree(cmdline_options,
 						  "auto-submit") = 0;
 				submit = 1;
 			}
 		}
+
 		load_frames(ses, ses->screen);
 		process_file_requests(ses);
-		if (stat->state != S_OK)
-			print_error_dialog(ses, stat);
 
-	} else if (ses->display_timer == -1) display_timer(ses);
+		if (stat->state != S_OK) {
+			print_error_dialog(ses, stat);
+		}
+
+	} else if (ses->display_timer == -1) {
+		display_timer(ses);
+	}
 
 	check_questions_queue(ses);
 	print_screen_status(ses);

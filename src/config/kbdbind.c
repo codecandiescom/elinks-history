@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.86 2003/10/19 11:10:23 zas Exp $ */
+/* $Id: kbdbind.c,v 1.87 2003/10/20 15:38:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -625,7 +625,7 @@ bind_config_string(struct string *file)
 			add_to_string(file, "\" = \"");
 			add_to_string(file, action_str);
 			add_char_to_string(file, '\"');
-			add_to_string(file, NEWLINE);
+			add_char_to_string(file, '\n');
 		}
 }
 

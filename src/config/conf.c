@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.92 2003/10/20 15:22:32 zas Exp $ */
+/* $Id: conf.c,v 1.93 2003/10/20 15:38:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -507,7 +507,7 @@ smart_config_output_fn(struct string *string, struct option *option,
 			add_to_string(string, option->name);
 			add_char_to_string(string, ' ');
 			add_to_string(string, option_types[option->type].help_str);
-			add_to_string(string, NEWLINE);
+			add_char_to_string(string, '\n');
 			break;
 
 		case 1:
@@ -524,19 +524,16 @@ smart_config_output_fn(struct string *string, struct option *option,
 			add_to_string(string, "# ");
 
 			for (i = 0; i < l; i++) {
+				add_char_to_string(string, desc_i18n[i]);
 				if (desc_i18n[i] == '\n') {
-					add_to_string(string, NEWLINE);
 					if (depth)
 						add_xchar_to_string(string, ' ',
 								    depth * indentation);
 					add_to_string(string, "# ");
-				} else {
-					add_char_to_string(string,
-							   desc_i18n[i]);
 				}
 			}
 
-			add_to_string(string, NEWLINE);
+			add_char_to_string(string, '\n');
 			break;
 
 		case 2:
@@ -550,13 +547,13 @@ smart_config_output_fn(struct string *string, struct option *option,
 			add_to_string(string, option->name);
 			add_to_string(string, " = ");
 			option_types[option->type].write(option, string);
-			add_to_string(string, NEWLINE);
-			if (do_print_comment) add_to_string(string, NEWLINE);
+			add_char_to_string(string, '\n');
+			if (do_print_comment) add_char_to_string(string, '\n');
 			break;
 
 		case 3:
 			if (do_print_comment < 2)
-				add_to_string(string, NEWLINE);
+				add_char_to_string(string, '\n');
 			break;
 	}
 }
@@ -631,11 +628,10 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	if (!init_string(&tmpstring)) goto get_me_out;
 
-	add_to_string(&tmpstring, NEWLINE NEWLINE NEWLINE);
-	add_to_string(&tmpstring, "#####################################" NEWLINE);
+	add_to_string(&tmpstring, "\n\n\n");
+	add_to_string(&tmpstring, "#####################################\n");
 	add_to_string(&tmpstring, conf_i18n(N_("# Automatically saved options\n"), i18n));
-	add_to_string(&tmpstring, "#" NEWLINE);
-	add_to_string(&tmpstring, NEWLINE);
+	add_to_string(&tmpstring, "#\n\n");
 
 	origlen = tmpstring.length;
 	smart_config_string(&tmpstring, 2, i18n, options->ptr, NULL, 0, smart_config_output_fn);
@@ -645,10 +641,10 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	if (!init_string(&tmpstring)) goto get_me_out;
 
-	add_to_string(&tmpstring, NEWLINE NEWLINE NEWLINE);
-	add_to_string(&tmpstring, "#####################################" NEWLINE);
+	add_to_string(&tmpstring, "\n\n\n");
+	add_to_string(&tmpstring, "#####################################\n");
 	add_to_string(&tmpstring, conf_i18n(N_("# Automatically saved keybindings\n"), i18n));
-	add_to_string(&tmpstring, "#" NEWLINE);
+	add_to_string(&tmpstring, "#\n\n");
 
 	origlen = tmpstring.length;
 	bind_config_string(&tmpstring);

@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.19 2003/10/09 05:54:39 witekfl Exp $ */
+/* $Id: os_dep.h,v 1.20 2003/10/20 15:38:33 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -55,7 +55,6 @@
 #if defined(UNIX)
 
 static inline int dir_sep(char x) { return x == '/'; }
-#define NEWLINE	"\n"
 #define FS_UNIX_RIGHTS
 #define FS_UNIX_HARDLINKS
 #define FS_UNIX_SOFTLINKS
@@ -78,7 +77,6 @@ static inline int dir_sep(char x) { return x == '/'; }
 #elif defined(OS2)
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
-#define NEWLINE	"\r\n"
 /*#define NO_ASYNC_LOOKUP*/
 #define SYSTEM_ID SYS_OS2
 #define SYSTEM_NAME "OS/2"
@@ -94,7 +92,6 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #elif defined(WIN32)
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
-#define NEWLINE	"\r\n"
 /*#define NO_ASYNC_LOOKUP*/
 #define SYSTEM_ID SYS_WIN32
 #define SYSTEM_NAME "Win32"
@@ -108,7 +105,6 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #elif defined(BEOS)
 
 static inline int dir_sep(char x) { return x == '/'; }
-#define NEWLINE	"\n"
 #define FS_UNIX_RIGHTS
 #define FS_UNIX_SOFTLINKS
 #define FS_UNIX_USERS
@@ -143,7 +139,6 @@ int be_getsockopt(int, int, int, void *, int *);
 #elif defined(RISCOS)
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
-#define NEWLINE        "\n"
 #define SYSTEM_ID SYS_RISCOS
 #define SYSTEM_NAME "RISC OS"
 #define SYSTEM_STR "riscos"

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-06 15:25+0100\n"
-"PO-Revision-Date: 2005-01-06 17:22+0100\n"
+"POT-Creation-Date: 2005-01-07 02:26+0100\n"
+"PO-Revision-Date: 2005-01-07 02:50+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -58,8 +58,8 @@ msgstr "Tast mellemrum for at udfolde denne mappe."
 #: src/viewer/text/form.c:857 src/viewer/text/search.c:953
 #: src/viewer/text/search.c:1014 src/viewer/text/search.c:1459
 #: src/viewer/text/search.c:1570 src/viewer/text/textarea.c:366
-#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:731
-#: src/viewer/text/view.c:1284
+#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:732
+#: src/viewer/text/view.c:1285
 msgid "OK"
 msgstr "Ok"
 
@@ -176,7 +176,7 @@ msgstr "Navn"
 #: src/sched/download.c:1053 src/sched/download.c:1066
 #: src/scripting/lua/core.c:396 src/scripting/lua/core.c:477
 #: src/scripting/lua/core.c:717 src/viewer/text/search.c:1571
-#: src/viewer/text/view.c:731
+#: src/viewer/text/view.c:732
 msgid "Cancel"
 msgstr "Annuller"
 
@@ -434,7 +434,7 @@ msgstr "Mappenavn"
 
 #: src/bookmarks/dialogs.c:307 src/scripting/lua/core.c:387
 msgid "Edit bookmark"
-msgstr "Rediger bogmærke"
+msgstr "Redigér bogmærke"
 
 #: src/bookmarks/dialogs.c:445 src/cache/dialogs.c:220
 #: src/globhist/dialogs.c:224 src/protocol/auth/dialogs.c:253
@@ -1647,15 +1647,15 @@ msgstr "Søg bagud efter tekstmønster"
 
 #: src/config/kbdbind.c:520 src/config/kbdbind.c:521
 msgid "Search link text by typing ahead"
-msgstr "Inkrementel søgning af tekst for henvisninger"
+msgstr "Tast og find linktekst"
 
 #: src/config/kbdbind.c:522
 msgid "Search document text by typing ahead"
-msgstr "Inkrementel søgning af dokumenttekst"
+msgstr "Søg i dokument med tast og find"
 
 #: src/config/kbdbind.c:523
 msgid "Search document text backwards by typing ahead"
-msgstr "Inkrementel baglæns søgning af dokumenttekst"
+msgstr "Søg baglæns i dokument med tast og find"
 
 #: src/config/kbdbind.c:524
 msgid "Show terminal options dialog"
@@ -1707,15 +1707,15 @@ msgstr "Vis dialog til ændring af terminalstørrelse"
 
 #: src/config/kbdbind.c:536
 msgid "Toggle rendering of page using CSS"
-msgstr "Skift mellem gengivning af side ved brug af CSS"
+msgstr "Slå gengivelse ved brug af CSS fra/til"
 
 #: src/config/kbdbind.c:537
 msgid "Toggle displaying of links to images"
-msgstr "Skift mellem visning af billedhenvisninger"
+msgstr "Slå visning af billedlinks fra/til"
 
 #: src/config/kbdbind.c:538
 msgid "Toggle rendering of tables"
-msgstr "Skift mellem visning af tabeller"
+msgstr "Slå tabelgengivelse fra/til"
 
 #: src/config/kbdbind.c:539
 msgid "Toggle usage of document specific colors"
@@ -1723,20 +1723,19 @@ msgstr "Skift mellem brug af dokument definerede farver"
 
 #: src/config/kbdbind.c:540
 msgid "Toggle rendering page as HTML / plain text"
-msgstr "Skift mellem visning af side som HTML eller som almindelig tekst"
+msgstr "Skift mellem gengivelse som HTML / kildetekst"
 
 #: src/config/kbdbind.c:541
 msgid "Toggle displaying of links numbers"
-msgstr "Skift mellem visning af nummerering af henvisninger"
+msgstr "Slå visning af linknummerering fra/til"
 
 #: src/config/kbdbind.c:542
 msgid "Toggle plain renderer compression of empty lines"
-msgstr ""
-"Skift mellem af komprimering af tomme linier for gengivelse af klartekst"
+msgstr "Slå visning af komprimerede blanke linjer fra/til"
 
 #: src/config/kbdbind.c:543
 msgid "Toggle wrapping of text"
-msgstr "Skift mellem tekstombrydning"
+msgstr "Slå tekstombrydning fra/til"
 
 #: src/config/kbdbind.c:544
 msgid "View the current image"
@@ -1762,7 +1761,7 @@ msgstr "Gå til første linje i bufferen"
 #. internal use only
 #: src/config/kbdbind.c:556 src/config/kbdbind.c:583
 msgid "Cancel current state"
-msgstr "Afbryd aktuelle tilstand"
+msgstr "Anullér aktuelle tilstand"
 
 #: src/config/kbdbind.c:558
 msgid "Delete text from clipboard"
@@ -1806,7 +1805,7 @@ msgstr "Flyt til næste emne"
 
 #: src/config/kbdbind.c:569
 msgid "Open in external editor"
-msgstr "Åbn i en ekstern tekstbehandler"
+msgstr "Åbn i ekstern tekstbehandler"
 
 #: src/config/kbdbind.c:570
 msgid "Paste text from the clipboard"
@@ -1850,15 +1849,15 @@ msgstr "Ugenkendt tasteoversigt"
 
 #: src/config/kbdbind.c:669
 msgid "Error parsing keystroke"
-msgstr "Fejl ved parsning af tastekombination"
+msgstr "Fortolkningsfejl i tastetryk"
 
 #: src/config/kbdbind.c:671
 msgid "Unrecognised action (internal error)"
-msgstr "Ugenkendt handling (intern fejl)"
+msgstr "Ukendt handling (intern fejl)"
 
 #: src/config/options.inc:19
 msgid "Configuration system"
-msgstr "Konfigurationssystem"
+msgstr "Opsætningssystem"
 
 #: src/config/options.inc:21
 msgid "Configuration handling options."
@@ -1884,7 +1883,7 @@ msgstr ""
 
 #: src/config/options.inc:31
 msgid "Indentation"
-msgstr "Indentering"
+msgstr "Indryk"
 
 #: src/config/options.inc:33
 msgid ""
@@ -2120,11 +2119,11 @@ msgstr ""
 
 #: src/config/options.inc:154
 msgid "Display access key in link info"
-msgstr "Vis adgangstast sammen med information om henvisninger"
+msgstr "Vis adgangstast sammen med linkinformation"
 
 #: src/config/options.inc:156
 msgid "Display access key in link info."
-msgstr "Vis adgangstast sammen med information om henvisninger."
+msgstr "Vis adgangstast sammen med linkinformation."
 
 #: src/config/options.inc:158
 msgid "Accesskey priority"
@@ -2220,7 +2219,7 @@ msgid ""
 "2     means display alt/title attribute if possible, IMG if not\n"
 "3     means display alt/title attribute if possible, filename if not"
 msgstr ""
-"Visning af billedhenvisninger:\n"
+"Visning af billedlinks:\n"
 "0     betyder vis altid IMG\n"
 "1     betyder vis altid filnavn\n"
 "2     betyder vis alt/title attribut hvis muligt ellers IMG\n"
@@ -2260,11 +2259,11 @@ msgstr ""
 
 #: src/config/options.inc:224
 msgid "Image link prefix"
-msgstr "Præfiks for billedhenvisninger"
+msgstr "Præfiks for billedlinks"
 
 #: src/config/options.inc:226
 msgid "Prefix string to use to mark image links."
-msgstr "Præfiskstreng brugt til at markere billedhenvisninger."
+msgstr "Præfiskstreng brugt til at markere billedlinks."
 
 #: src/config/options.inc:228
 msgid "Image link suffix"
@@ -2299,7 +2298,7 @@ msgid ""
 "Display links to images without an alt attribute. If this option\n"
 "is off, these images are completely invisible."
 msgstr ""
-"Vis henvisninger til billeder uden alt-attribut. Hvis denne indstilling\n"
+"Vis links til billeder uden alt-attribut. Hvis denne indstilling\n"
 "er deaktiveret disse billeder er fuldstændig usynlige."
 
 #: src/config/options.inc:244
@@ -2313,10 +2312,10 @@ msgid ""
 "attribute contents is shown, but as normal text, not selectable\n"
 "as a link."
 msgstr ""
-"Vis henvisninger til alle billeder i dokumentet ligegyldigt om\n"
+"Vis links til alle billeder i dokumentet ligegyldigt om\n"
 "de har alt attribut eller ej. Hvis denne indstilling er deaktiveret\n"
 "vil indholdet af alt attributten blive vist som normal tekst,\n"
-"i stedet for som en henvisning."
+"i stedet for som et link."
 
 #: src/config/options.inc:252
 msgid "Links"
@@ -2340,7 +2339,7 @@ msgstr "Farver"
 
 #: src/config/options.inc:262
 msgid "Active link colors."
-msgstr "Standardfarver for den aktiverede henvisning."
+msgstr "Standardfarver for det aktiverede link."
 
 #: src/config/options.inc:264 src/config/options.inc:521
 #: src/config/options.inc:824
@@ -2434,10 +2433,10 @@ msgid ""
 "1 means open link in new tab in foreground\n"
 "2 means open link in new tab in background"
 msgstr ""
-"Definerer hvordan henvisninger med target=_blank sat håndteres:\n"
-"0 betyder åbn henvisning i det aktuelle faneblad\n"
-"1 betyder åbn henvisning i et nyt faneblad i forgrunden\n"
-"2 betyder åbn henvisning i et nyt faneblad i baggrunden"
+"Definerer hvordan links med target=_blank sat håndteres:\n"
+"0 betyder åbn link i det aktuelle faneblad\n"
+"1 betyder åbn link i et nyt faneblad i forgrunden\n"
+"2 betyder åbn link i et nyt faneblad i baggrunden"
 
 #: src/config/options.inc:313
 msgid "Use tabindex"
@@ -2445,7 +2444,7 @@ msgstr "Anvend tabindex"
 
 #: src/config/options.inc:315
 msgid "Whether to navigate links using tabindex."
-msgstr "Angiver om henvisninger navigeres ved brug af tabindex."
+msgstr "Angiver om links navigeres ved brug af tabindex."
 
 #: src/config/options.inc:317
 msgid "Number keys select links"
@@ -2475,16 +2474,16 @@ msgid ""
 "checked and if a maliciously crafted URI is detected a\n"
 "warning dialog will ask before following the link."
 msgstr ""
-"Når henvisninger følges tjekkes brugeridentitetsdelen af\n"
+"Når links følges tjekkes brugeridentitetsdelen af\n"
 "URIen og hvis en ondskabsfuld konstrueret URI opdages\n"
-"advarselsdialogvindue vil forespørge før henvisningen\n"
+"advarselsdialogvindue vil forespørge før linket\n"
 "følges."
 
 #. TODO - this is somehow implemented by ff, but disabled
 #. * for now as it doesn't work.
 #: src/config/options.inc:333
 msgid "Wrap-around links cycling"
-msgstr "Ombryd gennemløb af henvisning"
+msgstr "Ombryd gennemløb af link"
 
 #. 0
 #: src/config/options.inc:335
@@ -2492,8 +2491,8 @@ msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
 msgstr ""
-"Når 'ned' trykkes på den sidste henvisning hoppes til det første\n"
-"og omvendt."
+"Når der tastes \"pil ned\" på det sidste link, hop da til\n"
+"det første og omvendt."
 
 #: src/config/options.inc:339
 msgid "Scrolling"
@@ -2512,8 +2511,8 @@ msgid ""
 "Number of columns to scroll when a key bound to scroll-left or scroll-\n"
 "right is pressed and no prefix was given."
 msgstr ""
-"Antal kolonner der rulles når en tast der er tildelt scroll-left eller\n"
-"scroll-right trykkes og intet præfiks er angivet."
+"Antal linjer der rulles når en tast der er tildelt scroll-up\n"
+"eller scroll-down trykkes og intet præfiks er angivet."
 
 #: src/config/options.inc:348
 msgid "Extended horizontal scrolling"
@@ -2550,8 +2549,8 @@ msgid ""
 "Number of lines to scroll when a key bound to scroll-up or scroll-\n"
 "down is pressed and no prefix was given."
 msgstr ""
-"Antal linjer der rulles når en tast bundet til scroll-up eller\n"
-"scroll-down trykkes og ingen præfiks er angivet."
+"Antal linjer der rulles når en tast der er tildelt scroll-up\n"
+"eller scroll-down trykkes og intet præfiks er angivet."
 
 #: src/config/options.inc:365
 msgid "Searching"
@@ -2611,7 +2610,7 @@ msgstr ""
 
 #: src/config/options.inc:392
 msgid "Show not found"
-msgstr "Vis ikke fundet"
+msgstr "Vis ikke-fundet"
 
 #: src/config/options.inc:394
 msgid ""
@@ -2620,14 +2619,14 @@ msgid ""
 "1 means beep the terminal\n"
 "2 means pop up message box"
 msgstr ""
-"Hvordan situation hvor der ingen træffere findes håndteres:\n"
-"0 betyder gør ingenting\n"
-"1 betyder send et bip til terminalen\n"
-"2 betyder vis en besked i et dialogvindue"
+"Hvordan fejl håndteres når søgning ikke matcher:\n"
+"0 betyder at intet sker\n"
+"1 betyder at der gives et \"beep\"\n"
+"2 betyder at en påmindelse popper op."
 
 #: src/config/options.inc:399
 msgid "Typeahead searching"
-msgstr "Inkremental søgning"
+msgstr "Tast og find"
 
 #: src/config/options.inc:401
 msgid ""
@@ -2647,16 +2646,16 @@ msgstr ""
 "0 betyder deaktiver denne egenskab, dvs. inkrementel søgning vil kun\n"
 "  anvendes, når du trykker en tast bundet til search-typeahead eller\n"
 "  lignende\n"
-"1 betyder begynd automatisk inkrementel søgning af henvisningstekst\n"
+"1 betyder begynd automatisk inkrementel søgning af linktekst\n"
 "2 betyder begynd automatisk inkrementel søgning af dokumenttekst"
 
 #: src/config/options.inc:410
 msgid "Horizontal text margin"
-msgstr "Horisontal tekst margin"
+msgstr "Vandret tekstmargin"
 
 #: src/config/options.inc:412
 msgid "Horizontal text margin."
-msgstr "Horisontal tekst margin."
+msgstr "Vandret tekstmargin"
 
 #: src/config/options.inc:414
 msgid "Document meta refresh"
@@ -2675,7 +2674,7 @@ msgstr ""
 "(såsom '<meta>' tags). Webudgivere bruger disse til at fortælle\n"
 "en browser om at genindlæse det samme dokument eller et nyt efter\n"
 "et givent interval. URIen som vil blive genindlæst er tilgængelig\n"
-"som en henvisning lige meget hvordan denne indstillinge sættes.\n"
+"som et link lige meget hvordan denne indstillinge sættes.\n"
 "Anvend indstillingen document.browse.minimum_refresh_time til at\n"
 "sætte det minimale antal sekunder en genopfriskning må tage."
 
@@ -2697,11 +2696,11 @@ msgstr ""
 
 #: src/config/options.inc:430
 msgid "Tables navigation order"
-msgstr "Navigations orden i tabeller"
+msgstr "Navigeringsorden i tabeller"
 
 #: src/config/options.inc:432
 msgid "Move by columns in table, instead of rows."
-msgstr "Naviger tabeller søjlevis, istedet for rækkevis"
+msgstr "Naviger tabeller kolonnevis i stedet for rækkevis"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:438
@@ -2714,7 +2713,7 @@ msgstr "Cacheindstillinger."
 
 #: src/config/options.inc:442
 msgid "Cache information about redirects"
-msgstr "Cacheinformation om omstillinger"
+msgstr "Gem informationer om omdirigeringer i cachen"
 
 #: src/config/options.inc:444
 msgid ""
@@ -2767,17 +2766,17 @@ msgid ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
 msgstr ""
-"Ignorer Cache-Control og Pragma server HTTP hoved.\n"
-"Når denne er sat, vil documentet blive gemt i cachen selv hvis 'Cache-"
-"Control: no-cache'."
+"Ignorér serverlinjerne Cache-Control og Pragma.\n"
+"Når denne er aktiv, vil dokumentet blive gemt i cachen,\n"
+"selv med \"Cache-Control: no-cache\"."
 
 #: src/config/options.inc:467
 msgid "Formatted documents"
-msgstr "Behandlede dokumenter"
+msgstr "Formaterede dokumenter"
 
 #: src/config/options.inc:469
 msgid "Format cache options."
-msgstr "Indstillinger for behandlede documenter"
+msgstr "Indstillinger for tekstformaterede dokumenter"
 
 #: src/config/options.inc:471
 msgid "Number"
@@ -2825,7 +2824,7 @@ msgstr "Indstillinger for hukommelsescache."
 
 #: src/config/options.inc:493
 msgid "Memory cache size (in bytes)."
-msgstr "Størrelse for hukommelsescache (i bytes)."
+msgstr "Størrelse på hukommelsescache (i bytes)."
 
 #: src/config/options.inc:497
 msgid "Charset"
@@ -2837,7 +2836,7 @@ msgstr "Tegnsætindstillinger."
 
 #: src/config/options.inc:501
 msgid "Default codepage"
-msgstr "Standard kodeside"
+msgstr "Standard tegnkodningstabel"
 
 #: src/config/options.inc:503
 msgid ""
@@ -2849,63 +2848,63 @@ msgstr ""
 
 #: src/config/options.inc:506
 msgid "Ignore charset info from server"
-msgstr "Ignorer tegnsæt information fra server"
+msgstr "Ignorer information om tegnsæt fra server"
 
 #: src/config/options.inc:508
 msgid "Ignore charset info sent by server."
-msgstr "Ignorer tegnsæt information sent fra server."
+msgstr "Ignorer information om tegnsæt sendt fra server"
 
 #: src/config/options.inc:512
 msgid "Default color settings"
-msgstr "Standard farve indstillinger"
+msgstr "Standard farveindstillinger"
 
 #: src/config/options.inc:514
 msgid "Default document color settings."
-msgstr "Standard document farve indstillinger"
+msgstr "Standard farveindstillinger for dokumenter"
 
 #: src/config/options.inc:525
 msgid "Link color"
-msgstr "Farve for henvisninger"
+msgstr "Linkfarve"
 
 #: src/config/options.inc:527
 msgid "Default link color."
-msgstr "Standard farve for henvisninger."
+msgstr "Standard linkfarve."
 
 #: src/config/options.inc:529
 msgid "Visited-link color"
-msgstr "Farve for besøgte henvisninger"
+msgstr "Farve for besøgte links."
 
 #: src/config/options.inc:531
 msgid "Default visited link color."
-msgstr "Standard farve for besøgte henvisninger."
+msgstr "Standardfarve for besøgte links."
 
 #: src/config/options.inc:533
 msgid "Image-link color"
-msgstr "Farve for billedhenvisninger"
+msgstr "Farve for billedlinks."
 
 #: src/config/options.inc:535
 msgid "Default image link color."
-msgstr "Standard farve for billedhenvisninger."
+msgstr "Standard billedlinkfarve."
 
 #: src/config/options.inc:537
 msgid "Bookmarked-link color"
-msgstr "Farve for henvisninger til gemte bogmærker"
+msgstr "Linkfarve for tilføjede bogmærker"
 
 #: src/config/options.inc:539
 msgid "Default bookmarked link color."
-msgstr "Standard farve for henvisning til gemte bogmærker."
+msgstr "Standard farve for links til gemte bogmærker."
 
 #: src/config/options.inc:541
 msgid "Directory color"
-msgstr "Farve for fil mapper"
+msgstr "Farve for kataloger"
 
 #: src/config/options.inc:543
 msgid ""
 "Default directory color.\n"
 "See document.browse.links.color_dirs option."
 msgstr ""
-"Standard farve for fil mapper.\n"
-"Se document.browse.links.color_dirs indstillingen."
+"Standardfarve for kataloger.\n"
+"Se indstillingen document.browse.links.color_dirs."
 
 #: src/config/options.inc:546
 msgid "Allow dark colors on black background"
@@ -2917,17 +2916,17 @@ msgstr "Tillad mørke farver på sort baggrund."
 
 #: src/config/options.inc:550
 msgid "Ensure contrast"
-msgstr "Sikring af kontrast"
+msgstr "Sørg for kontrast"
 
 #: src/config/options.inc:552
-msgid "Makes sure that the back- and foreground color is never equal."
-msgstr "Sikrer at bag- og forgrundsfarve aldrig er ens."
+msgid "Makes sure that the back- and foreground color are never equal."
+msgstr "Sørger for at bag- og forgrundsfarve aldrig er ens."
 
 #. If you change this please also change ACT_MAIN_DOCUMENT_COLORS action
 #. * handling.
 #: src/config/options.inc:557
 msgid "Use document-specified colors"
-msgstr "Anvend dokument specificerede farver"
+msgstr "Brug farver fra dokument"
 
 #: src/config/options.inc:559
 msgid ""
@@ -3146,11 +3145,11 @@ msgstr ""
 
 #: src/config/options.inc:667
 msgid "Underline links"
-msgstr "Understreg henvisninger"
+msgstr "Understreg links"
 
 #: src/config/options.inc:669
 msgid "Underline links."
-msgstr "Understreg henvisninger."
+msgstr "Understreg links."
 
 #: src/config/options.inc:671
 msgid "Wrap non breaking space"
@@ -3178,11 +3177,11 @@ msgstr "Indstillinger for visning af klartekst"
 
 #: src/config/options.inc:682
 msgid "Display URIs"
-msgstr "Vis URIer"
+msgstr "Vis adresser"
 
 #: src/config/options.inc:684
 msgid "Display URIs in the document as links."
-msgstr "Vis URIer i dokumentet som henvisninger"
+msgstr "Vis adresser i dokumentet som links"
 
 #: src/config/options.inc:686
 msgid "Compress empty lines"
@@ -4386,7 +4385,7 @@ msgstr "Intern protocolhoved."
 
 #: src/dialogs/download.c:253 src/dialogs/menu.c:569 src/sched/download.c:365
 msgid "Download"
-msgstr "Hent"
+msgstr "Overfør"
 
 #: src/dialogs/download.c:260
 msgid "Background"
@@ -4479,14 +4478,14 @@ msgid ""
 msgstr ""
 "ELinks %s\n"
 "\n"
-"(c) 1999 - 2002 Mikulas Patocka\n"
-"(C) 2001 - 2003 Petr Baudis\n"
+"(C) 1999 - 2002 Mikulas Patocka\n"
+"(C) 2001 - 2004 Petr Baudis\n"
 "(C) 2002 - 2005 Jonas Fonseca\n"
-"samt andre\n"
+"samt flere\n"
 "\n"
 "Dette program er fri software. Du kan distribuere det og/eller ændre det i "
-"henhold til GNU General Public License, publiceret af Free Software "
-"Foundation, specifik version 2 af licensen."
+"henhold til GNU General Public License, udgivet af The Free Software "
+"Foundation, specifikt version 2."
 
 #: src/dialogs/info.c:169
 msgid "master"
@@ -4505,9 +4504,9 @@ msgid ""
 "Document cache: %d formatted, %d locked, %d refreshing.\n"
 "Interlinking: %s terminal, %d terminals, %d sessions."
 msgstr ""
-"Ressourcer: %d håndtag, %d tidstagere.\n"
+"Ressourcer: %d håndteringer, %d timere.\n"
 "Forbindelser: %d forbindelser, %d opretter, %d overfører, %d holdes i live.\n"
-"Hukommelsescache: %d byte, %d filer, %d brugs, %d indlæses.\n"
+"Hukommelsescache: %d bytes, %d filer, %d låste filer, %d indlæses.\n"
 "Dokumentcache: %d formatterede, %d bruges, %d genopfriskes.\n"
 "Intern kommunikation: %s terminal, %d terminaler, %d sessioner."
 
@@ -4666,7 +4665,7 @@ msgstr "Søg ~forrige"
 
 #: src/dialogs/menu.c:397
 msgid "T~ypeahead search"
-msgstr "~Inkrementel søgning"
+msgstr "~Tast og find"
 
 #: src/dialogs/menu.c:399
 msgid "Toggle ~html/plain"
@@ -4674,27 +4673,27 @@ msgstr "S~kift mellem HTML/tekst"
 
 #: src/dialogs/menu.c:400
 msgid "Toggle i~mages"
-msgstr "Skifte mellem billedvisning"
+msgstr "B~illedlinks fra/til"
 
 #: src/dialogs/menu.c:401
 msgid "Toggle ~link numbering"
-msgstr "Skift mellem henvisningsnummerering"
+msgstr "Linkn~ummerering fra/til"
 
 #: src/dialogs/menu.c:402
 msgid "Toggle ~document colors"
-msgstr "Skift mellem brug af farver"
+msgstr "Dokumentf~arver fra/til"
 
 #: src/dialogs/menu.c:403
 msgid "~Wrap text on/off"
-msgstr "Skift mellem tekstombrydning"
+msgstr "~Ombryd tekst fra/til"
 
 #: src/dialogs/menu.c:405
 msgid "Document ~info"
-msgstr "Dokument~information"
+msgstr "~Dokumentinformation"
 
 #: src/dialogs/menu.c:406
 msgid "H~eader info"
-msgstr "Info om sid~ehoved"
+msgstr "Ser~verinformation om side"
 
 #: src/dialogs/menu.c:407
 msgid "Rel~oad document"
@@ -4702,7 +4701,7 @@ msgstr "~Genindlæs dokument"
 
 #: src/dialogs/menu.c:408
 msgid "~Rerender document"
-msgstr "Gen~optegn dokument"
+msgstr "Genf~ormater dokument"
 
 #: src/dialogs/menu.c:419
 msgid "~ELinks homepage"
@@ -4766,7 +4765,7 @@ msgstr "~Tegnsæt"
 
 #: src/dialogs/menu.c:451 src/dialogs/menu.c:463
 msgid "~Terminal options"
-msgstr "~Terminalindstillinger"
+msgstr "Sk~ærmstyring"
 
 #: src/dialogs/menu.c:452
 msgid "File ~extensions"
@@ -4774,19 +4773,19 @@ msgstr "Filend~elser"
 
 #: src/dialogs/menu.c:454
 msgid "~Options manager"
-msgstr "Indstillingshåndtering"
+msgstr "Opsætningshåndtering"
 
 #: src/dialogs/menu.c:455
 msgid "~Keybinding manager"
-msgstr "Tastatur~genvejshåndtering"
+msgstr "T~astetildelingshåndtering"
 
 #: src/dialogs/menu.c:456
 msgid "~Save options"
-msgstr "~Gem indstillinger"
+msgstr "~Gem opsætning"
 
 #: src/dialogs/menu.c:469
 msgid "Global ~history"
-msgstr "Historikhåndtering"
+msgstr "Global ~historik"
 
 #: src/dialogs/menu.c:472
 msgid "~Bookmarks"
@@ -4802,7 +4801,7 @@ msgstr "~Filoverførsler"
 
 #: src/dialogs/menu.c:477
 msgid "Coo~kies"
-msgstr "Coo~kies"
+msgstr "Coo~kier"
 
 #: src/dialogs/menu.c:480
 msgid "~Form history"
@@ -4822,7 +4821,7 @@ msgstr "~Vis"
 
 #: src/dialogs/menu.c:500
 msgid "~Link"
-msgstr "~Lænker"
+msgstr "~Link"
 
 #: src/dialogs/menu.c:501
 msgid "~Tools"
@@ -4870,7 +4869,7 @@ msgstr "Filer:"
 
 #: src/dialogs/options.c:148
 msgid "Terminal options"
-msgstr "Terminalindstillinger"
+msgstr "Skærmstyring"
 
 #: src/dialogs/options.c:153
 msgid "Frame handling:"
@@ -5096,11 +5095,12 @@ msgstr "JavaScript advarsel"
 #: src/ecmascript/spidermonkey.c:1911
 #, c-format
 msgid "A script embedded in the current document raised the following%s%s%s%s"
-msgstr "Et skript i det aktuelle dokument rejste den følgende%s%s%s%s"
+msgstr ""
+"Et skript indlejret i det aktuelle dokument rejste den følgende%s%s%s%s"
 
 #: src/ecmascript/spidermonkey.c:1928
 msgid "JavaScript Error"
-msgstr "JavaScript fejl"
+msgstr "JavaScript-fejl"
 
 #: src/ecmascript/spidermonkey.c:1948
 msgid "JavaScript Emergency"
@@ -5189,7 +5189,7 @@ msgstr "Brugernavn"
 
 #: src/formhist/dialogs.c:214
 msgid "Toggle saving"
-msgstr "Skifte mellem gemning"
+msgstr "Gemning fra/til"
 
 #: src/formhist/dialogs.c:221
 msgid "Form history manager"
@@ -6158,11 +6158,11 @@ msgstr "Proxy verificerings brugernavn."
 
 #: src/protocol/http/http.c:105
 msgid "Proxy authentication password."
-msgstr "Proxy verificerings adgangskode."
+msgstr "Adgangskode til proxygodkendelse."
 
 #: src/protocol/http/http.c:108
 msgid "Referer sending"
-msgstr "Sending af henviser"
+msgstr "Afsendelse af henviseradresse"
 
 #: src/protocol/http/http.c:110
 msgid ""
@@ -6176,7 +6176,7 @@ msgstr ""
 "Indstilling for afsending af HTTP henviser. HTTP henviser (referer)\n"
 "er en speciel indgang i protokolhovedet, der sendes i forespørgelser\n"
 "og formodes at indholde adressen på browserens forrige besøgte side.\n"
-"Derved er det muligt for serveren at vide hvilken henvisning, som\n"
+"Derved er det muligt for serveren at vide hvilket link, som\n"
 "du fulgte, da du tilgik siden. Desværre kan denne adfærd krænke\n"
 "privatlivetanses i nogle tilfælde og kan tilmed føre til problemer\n"
 "med sikkerheden på visse dårligt designede websider."
@@ -6209,15 +6209,15 @@ msgstr "Den falske henviser adresse der sendes når retningslinjen 2 anvendes."
 
 #: src/protocol/http/http.c:131
 msgid "Send Accept-Language header"
-msgstr "Indsend Accept-Language information"
+msgstr "Send serverlinjen Accept-Language"
 
 #: src/protocol/http/http.c:133
 msgid "Send Accept-Language header."
-msgstr "Indsend Accept-Language information."
+msgstr "Send serverlinjen Accept-Language."
 
 #: src/protocol/http/http.c:135
 msgid "Use UI language as Accept-Language"
-msgstr "Anvend brugergrænsefladens sprog som Accept-Language"
+msgstr "Brug sprog fra brugerflade i Accept-Language"
 
 #: src/protocol/http/http.c:137
 msgid ""
@@ -6342,7 +6342,7 @@ msgid ""
 "Used when resolving news: URIs. If set to the empty string\n"
 "the value of the NNTPSERVER environment variable will be used."
 msgstr ""
-"Anvendes ved håndtering af news: URIer til at omskrive til\n"
+"Anvendes ved håndtering af news: adresser til at omskrive til\n"
 "nntp: URI. Hvis sat til den tomme streng vil miljøvariablen\n"
 "NNTPSERVER anvendes i stedet."
 
@@ -6384,7 +6384,7 @@ msgid ""
 "domains as well. If it's blank, NO_PROXY environment variable is\n"
 "checked as well."
 msgstr ""
-"Komma separeret liste a domæner som der ikke skal anvendes proxy\n"
+"Kommasepareret liste a domæner som der ikke skal anvendes proxy\n"
 "for. Alternativt kan en port også angives for domæner. Hvis tom\n"
 "anvendes miljøvariablen NO_PROXY i stedet."
 
@@ -6406,12 +6406,12 @@ msgid ""
 "URI abbreviations, or smart ones, making it possible to pass\n"
 "arguments to them like search engine keywords."
 msgstr ""
-"Regler for omskrivning af URIer som indstastes i gå til adresse\n"
-"dialogvinduet. Muliggør definering af præfikser som vil blive\n"
-"omskrevet hvis det matcheren tekststreng indtastet i gå til\n"
-"adresse dialogvinduet. Præfikserne kan være simple, dvs. at de\n"
-"kun virker som URI forkortelser, eller smarte, som undersøtter\n"
-"angivelse af argumenterer såsom ord til søgemaskiner."
+"Regler for adresseomskrivning i dialogboksen \"Gå til adresse\".\n"
+"Disse gør det muligt at definere en række præfikser som\n"
+"automatisk omskrives til en fuld adresse. Præfikser kan være\n"
+"simple og fungerer som sådan kun som forkortelser for adresser,\n"
+"eller de kan være smarte, og her er det muligt at lade dem\n"
+"ledsage af argumenter som f.eks. søgeord til en søgemaskine."
 
 #: src/protocol/rewrite/rewrite.c:54
 msgid "Enable dumb prefixes"
@@ -6425,7 +6425,7 @@ msgid ""
 "http://elinks.or.cz/."
 msgstr ""
 "Anvend simple præfikser - simple URI forkortelser som skrives\n"
-"i Gå til adresse dialogvinduet i stedet for de egentlige URIer.\n"
+"i Gå til adresse dialogvinduet i stedet for de egentlige adresser.\n"
 "Eksempelvis kan du skrive 'elinks' og blive omdirigeret til\n"
 "http://elinks.or.cz/."
 
@@ -6440,7 +6440,7 @@ msgid ""
 "of arguments from which the actual URI is composed - i.e.\n"
 "'gg:search keywords' or 'gn search keywords for news'."
 msgstr ""
-"Anvend smarte præfikser - URI skabeloner der kan bruges ved\n"
+"Anvend smarte præfikser - adresseskabeloner der kan bruges ved\n"
 "at skrive en given forkortelse i Gå til adresse dialogvinduet\n"
 "efterfulgt af en liste argumenter hvorfra den endelige URI\n"
 "sammensættes. Eksempler: 'gg:søgeord' eller 'gn søgeord for news'."
@@ -6460,9 +6460,9 @@ msgid ""
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
-"Omskrevet URI for dette simple præfiks:\n"
+"Erstatningsadresse for dette simple præfiks.\n"
 "%c erstattes med af den aktuelle adresse\n"
-"%% betyder '%'"
+"%% erstattes med '%'"
 
 #: src/protocol/rewrite/rewrite.c:79
 msgid "Smart Prefixes"
@@ -6481,11 +6481,11 @@ msgid ""
 "%0,%1,...,%9 means argument 0, 1, ..., 9\n"
 "%% in the string means '%'"
 msgstr ""
-"Omskrevet URI for dette smarte præfiks:\n"
+"Erstatningsadresse for dette smartpræfiks\n"
 "%c erstattes med af den aktuelle adresse\n"
 "%s erstattes med hele argumentet til det smarte præfiks\n"
 "%0,%1,...,%9 erstattes af 0., 1., ..., 9. argument\n"
-"%% betyder '%'"
+"%% erstattes '%'"
 
 #. name:
 #: src/protocol/rewrite/rewrite.c:358
@@ -6628,7 +6628,7 @@ msgstr "Overskriv originalfilen"
 
 #: src/sched/download.c:550
 msgid "Resume download of the original file"
-msgstr "Genoptag filoverførelse af den originale fil"
+msgstr "Genoptag filoverførelse af originalfilen"
 
 #: src/sched/download.c:1013 src/sched/download.c:1025
 msgid "Unknown type"
@@ -6774,9 +6774,9 @@ msgid ""
 "You can configure an external handler for it through\n"
 "the options system."
 msgstr ""
-"Denne adresse benytter en protokol som ikke er kendt af ELinks.\n"
-"Du kan konfigurere et eksterne program til at håndtere den\n"
-"gennem konfigurationssystemet."
+"Denne adresse benytter en protokol som ELinks endnu ikke\n"
+"kender. Du kan sætte en ekstern programhåndtering op for\n"
+"den i opsætningshåndteringen."
 
 #: src/sched/error.c:64
 msgid ""
@@ -6887,14 +6887,12 @@ msgid ""
 "what I'm talking about, just do this), so that correct default setting will "
 "be used. Apologies for any inconvience caused."
 msgstr ""
-"Du har protocol.http.user_agent sat til en tom tekstreng, hvilket var "
-"standardværdien førhen. Denne praksis er blevet erstattet, så der nu "
-"anvendes en standard ELinks brugeragenttekststreng i stedet. Dette betyder "
-"altså at INGEN brugeragenttekststreng (User-Agent) vil blive send. Hvis du "
-"stadig øsnekr dette sæt indstillingensværdi til \" \". Ellers bedes du "
-"venligst slette denne indstilling fra din konfigurationsfil (hvis du ikke "
-"har nogen ide om hvad denne besked omhandler bare gør dette) så den korrekte "
-"standardværdi vil blive anvendt. Undskyld for ulejligheden."
+"Værdien for protocol.http.user_agent er tom. Standardindstillingen er at "
+"sende en ELinks User-Agent-linje. Den nuværende tomme værdi betyder at "
+"serveren IKKE får besked om hvilken browser du bruger. Hvis du virkelig "
+"ønsker dette, så sæt denne værdi til \" \". Hvis du ønsker at "
+"standardindstillingen bruges, så slet venligst denne linje fra din "
+"opsætningsfil. Sidstnævnte anbefales."
 
 #: src/sched/session.c:716
 msgid ""
@@ -6908,14 +6906,14 @@ msgid ""
 "saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
 "for any inconvience caused."
 msgstr ""
-"Du har indstillingen config.saving_style sat til en værdi, der er forældet. "
-"Algoritmen brugt til at gemme ELinks' konfigurationsfilen er blevet ændret i "
-"forhold til sidste gang du opgraderede ELinks. Nu gemmes kun de "
-"indstillinger som du faktisk har ændret i konfigurationsfilen i stedet for "
-"alle indstillinger. Dette gør det nemmere at undgå problemer med forældede "
-"værdier eller upassende standardværdier. Du rådes derfor til at ændre "
-"værdien af indstillingen config.saving_style til 3 for at opnå den \"rette\" "
-"adfærd. Undskyld for ulejligheden."
+"Indstillingen config.saving_style er sat til en værdi som reelt er forældet. "
+"Den algoritme som ELinks bruger til at gemme opsætningen er blevet ændret "
+"siden sidste opgradering. Nu er det kun de indstillinger som ændres der "
+"bliver gemt i opsætningsfilen, i stedet for alle indstillingerne. Dette "
+"forenkler tingene meget i de tilfælde hvor en indstilling har en upassende "
+"standardværdi, eller hvor betydningen af en indstilling ændres. Derfor "
+"anbefales det at sætte værdien af config.saving_style til 3 for at det "
+"fungerer korrekt."
 
 #: src/sched/session.c:743
 msgid "Welcome"
@@ -7342,18 +7340,18 @@ msgstr "Man kan ikke åbne en ekstern editor i tilstanden anonymous."
 msgid "You can do this only on the master terminal"
 msgstr "Dette er kun muligt i masterterminalen"
 
-#: src/viewer/text/view.c:730
+#: src/viewer/text/view.c:731
 msgid "Go to link"
 msgstr "Gå til link"
 
-#: src/viewer/text/view.c:730
+#: src/viewer/text/view.c:731
 msgid "Enter link number"
 msgstr "Skriv nummer på link"
 
-#: src/viewer/text/view.c:1281
+#: src/viewer/text/view.c:1282
 msgid "Save error"
 msgstr "Fejl ved skrivning"
 
-#: src/viewer/text/view.c:1282
+#: src/viewer/text/view.c:1283
 msgid "Error writing to file"
 msgstr "Fejl ved skrivning til fil"

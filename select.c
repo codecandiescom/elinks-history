@@ -287,8 +287,11 @@ int check_signals()
 
 void sigchld(void *p)
 {
-	/*wait(NULL);*/
-	while ((int)waitpid(-1, NULL, WNOHANG) > 0) ;
+#ifdef WNOHANG
+	while ((int) waitpid(-1, NULL, WNOHANG) > 0) ;
+#else
+	wait(NULL);
+#endif
 }
 
 void set_sigcld()

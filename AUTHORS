@@ -123,6 +123,9 @@ Karel Kulhavy <clock@atrey.karlin.mff.cuni.cz>
 	Czech translation
 	Fixed compile incompatibility
 
+Karvinen Ilkka <ik@iki.fi>
+	Finnish translation
+
 Lukasz Dobrek <dobrek@student.ifpan.edu.pl>
 	$CONFIG_DIR for config directory
 
@@ -251,4 +254,4 @@ zas@norz.org
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.28 2002/03/03 22:55:28 pasky Exp $
+$Id: AUTHORS,v 1.29 2002/03/03 23:30:51 pasky Exp $

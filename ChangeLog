@@ -1,3 +1,158 @@
+Sat Jul 17 20:22:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/inpfield.h, config/conf.c, dialogs/status.c:
+
+	Partially reverted brainless s/80/DEFAULT_TERMINAL_WIDTH/, updated
+	the value of 80 to some more sensible value in each case while at
+	it.  
+
+Sat Jul 17 20:14:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Our whitespace police detected a tragic incident in the
+	add_char_to_string() avenue.  
+
+Sat Jul 17 20:13:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	dlg_format_group(): assert @n > 0.  
+
+Sat Jul 17 20:10:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.c:
+
+	buttons_width(): assert @n > 0 and simplify loop test.  
+
+Sat Jul 17 20:08:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/Makefile.am:
+
+	Removed codepage.h reference. Look kids, here you see Jonas, who
+	unknowingly broke make dist and nightly builds by forgetting to
+	update this. Take example. Now let's go on in the excursion, here
+	you see the image of our magnificient project leader...  
+
+Sat Jul 17 20:03:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Mark unused parameters using @xxx name.  
+
+Sat Jul 17 19:51:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	select_dlg_item(): use struct widget_data *widget_data.  
+
+Sat Jul 17 19:47:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	dialog_ev_mouse(): shorten lines by using struct widget_data *.  
+
+Sat Jul 17 19:36:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.c:
+
+	buttons_width(): simplify loop by using @n only.  
+
+Sat Jul 17 16:28:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Include sched/event.h now that it defines an event hook.  
+
+Fri Jul 16 18:55:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/urlhist.c:
+
+	Compile fix.  
+
+Fri Jul 16 18:53:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/urlhist.c, dialogs/menu.c:
+
+	done_url_history(): Free goto url history.  
+
+Fri Jul 16 18:50:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Periodically save searchhist to disk.  
+
+Fri Jul 16 18:46:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, config/urlhist.c, config/urlhist.h:
+
+	Periodically save gotohist to disk. Fixes bug 229.  
+
+Fri Jul 16 18:33:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/events.txt:
+
+	Add periodic-saving event description.  
+
+Fri Jul 16 18:30:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, globhist/globhist.c, lowlevel/timer.c:
+
+	Use global history code to make infrastructure for periodically
+	saving ~/.elinks info files to disk. It introduces 'infofiles'
+	option tree where the 'save_interval' is placed. Idea is to also
+	move secure saving there. Maybe they can all go under 'config' tree.
+	Anyway the naming of things is not so good so please search and
+	replace any oddities.  
+
+Fri Jul 16 15:32:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Minor optimization: test @file_encoding before any string
+	comparaison.  
+
+Fri Jul 16 12:27:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	draw_typeahead_match(): Use get_current_link().  
+
+Fri Jul 16 12:20:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	draw_link_text() -> draw_typeahead_match() 
+
+Fri Jul 16 12:13:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/blacklist.c:
+
+	get_blacklist_entry(): Use strlcasecmp() to make sure the whole
+	string is matched. Tak Miciah.  
+
+Fri Jul 16 07:00:07 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	Fix a logic inversion introduced in revision 1.277 that prevented 
+	the display of information on the selected form field in the status
+	bar.  
+
+Fri Jul 16 06:55:19 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/document.c:
+
+	In done_link_members, drop the |name| local variable and pass the
+	return value of get_link_name directly to mem_free_if.  
+
+Fri Jul 16 06:13:18 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/http/blacklist.c:
+
+	In get_blacklist_entry, return NULL rather than 0 when the assertion
+	fails.  
+
 Thu Jul 15 17:51:32 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/document/html/renderer.c:

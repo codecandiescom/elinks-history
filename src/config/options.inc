@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.108 2004/05/25 16:29:00 jonas Exp $ */
+/* $Id: options.inc,v 1.109 2004/05/28 20:19:38 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -660,7 +660,7 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_INT("protocol.http.referer", N_("Policy"),
 		"policy", 0,
-		REFERER_NONE, REFERER_TRUE, REFERER_SAME_URL,
+		REFERER_NONE, REFERER_TRUE, REFERER_TRUE,
 		N_("Mode of sending HTTP referer:\n"
 		"0 is send no referer\n"
 		"1 is send current URL as referer\n"

@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.4 2002/06/17 21:41:44 pasky Exp $ */
+/* $Id: memdebug.c,v 1.5 2002/06/18 08:23:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 
 	ah = calloc(1, SIZE_BASE2AH(size));
 	if (!ah) {
-		error("ERROR: out of memory (malloc returned NULL)\n");
+		error("ERROR: out of memory (calloc returned NULL)\n");
 		return NULL;
 	}
 

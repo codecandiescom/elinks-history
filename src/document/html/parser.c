@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.342 2004/01/18 14:58:36 zas Exp $ */
+/* $Id: parser.c,v 1.343 2004/01/18 15:01:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2264,8 +2264,8 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 	unsigned long n;
 	int q, qq, divisor, nn;
 	int *oo;
-	int *o = NULL;
-	int ol = 0;
+	int *values = NULL;
+	int values_count = 0;
 	register int i;
 
 new_ch:
@@ -2283,8 +2283,8 @@ new_ch:
 	else if (!q) q = -1;
 	else q = -q;
 
-	oo = mem_realloc(o, (ol + 1) * sizeof(int));
-	if (oo) (o = oo)[ol++] = q;
+	oo = mem_realloc(values, (values_count + 1) * sizeof(int));
+	if (oo) (values = oo)[values_count++] = q;
 	else {
 		*new_values_count = 0;
 		return;
@@ -2294,30 +2294,30 @@ new_ch:
 		str = tmp_str + 1;
 		goto new_ch;
 	}
-	*new_values = o;
-	*new_values_count = ol;
-	q = 2 * ol - 1;
-	for (i = 0; i < ol; i++) if (o[i] > 0) q += o[i] - 1;
+	*new_values = values;
+	*new_values_count = values_count;
+	q = 2 * values_count - 1;
+	for (i = 0; i < values_count; i++) if (values[i] > 0) q += values[i] - 1;
 
 	if (q >= max_value) {
 
 distribute:
-		for (i = 0; i < ol; i++) if (o[i] < 1) o[i] = 1;
+		for (i = 0; i < values_count; i++) if (values[i] < 1) values[i] = 1;
 		q -= max_value;
 		divisor = 0;
-		for (i = 0; i < ol; i++) divisor += o[i];
+		for (i = 0; i < values_count; i++) divisor += values[i];
 		qq = q;
-		for (i = 0; i < ol; i++) {
-			q -= o[i] - o[i] * (divisor - qq) / divisor;
+		for (i = 0; i < values_count; i++) {
+			q -= values[i] - values[i] * (divisor - qq) / divisor;
 			/* SIGH! gcc 2.7.2.* has an optimizer bug! */
 			do_not_optimize_here_gcc_2_7(&divisor);
-			o[i] = o[i] * (divisor - qq) / divisor;
+			values[i] = values[i] * (divisor - qq) / divisor;
 		}
 		while (q) {
 			nn = 0;
-			for (i = 0; i < ol; i++) {
-				if (q < 0) o[i]++, q++, nn = 1;
-				if (q > 0 && o[i] > 1) o[i]--, q--, nn = 1;
+			for (i = 0; i < values_count; i++) {
+				if (q < 0) values[i]++, q++, nn = 1;
+				if (q > 0 && values[i] > 1) values[i]--, q--, nn = 1;
 				if (!q) break;
 			}
 			if (!nn) break;
@@ -2325,41 +2325,41 @@ distribute:
 	} else {
 		int neg = 0;
 
-		for (i = 0; i < ol; i++) if (o[i] < 0) neg = 1;
+		for (i = 0; i < values_count; i++) if (values[i] < 0) neg = 1;
 		if (!neg) goto distribute;
 
-		oo = mem_alloc(ol * sizeof(int));
+		oo = mem_alloc(values_count * sizeof(int));
 		if (!oo) {
 			*new_values_count = 0;
 			return;
 		}
-		memcpy(oo, o, ol * sizeof(int));
-		for (i = 0; i < ol; i++) if (o[i] < 1) o[i] = 1;
+		memcpy(oo, values, values_count * sizeof(int));
+		for (i = 0; i < values_count; i++) if (values[i] < 1) values[i] = 1;
 		q = max_value - q;
 		divisor = 0;
-		for (i = 0; i < ol; i++) if (oo[i] < 0) divisor += -oo[i];
+		for (i = 0; i < values_count; i++) if (oo[i] < 0) divisor += -oo[i];
 		qq = q;
-		for (i = 0; i < ol; i++) if (oo[i] < 0) {
-			o[i] += (-oo[i] * qq / divisor);
+		for (i = 0; i < values_count; i++) if (oo[i] < 0) {
+			values[i] += (-oo[i] * qq / divisor);
 			q -= (-oo[i] * qq / divisor);
 		}
 		assertm(q >= 0, "parse_frame_widths: q < 0");
 		if_assert_failed q = 0;
-		for (i = 0; i < ol; i++) if (oo[i] < 0) {
-			if (q) o[i]++, q--;
+		for (i = 0; i < values_count; i++) if (oo[i] < 0) {
+			if (q) values[i]++, q--;
 		}
 		assertm(q <= 0, "parse_frame_widths: q > 0");
 		if_assert_failed q = 0;
 		mem_free(oo);
 	}
 
-	for (i = 0; i < ol; i++) if (!o[i]) {
+	for (i = 0; i < values_count; i++) if (!values[i]) {
 		register int j;
 		int m = 0;
 		int mj = 0;
 
-		for (j = 0; j < ol; j++) if (o[j] > m) m = o[j], mj = j;
-		if (m) o[i] = 1, o[mj]--;
+		for (j = 0; j < values_count; j++) if (values[j] > m) m = values[j], mj = j;
+		if (m) values[i] = 1, values[mj]--;
 	}
 }
 

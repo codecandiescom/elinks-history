@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.465 2004/06/23 12:13:53 jonas Exp $ */
+/* $Id: parser.c,v 1.466 2004/06/23 12:44:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1294,7 +1294,6 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	init_list(html_context.stack);
 
 	html_context.startf = start;
-	html_context.eofff = end;
 	html_context.put_chars_f = put_chars;
 	html_context.line_break_f = line_break;
 	html_context.special_f = special;

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.30 2004/06/23 12:13:53 jonas Exp $ */
+/* $Id: internal.h,v 1.31 2004/06/23 12:44:27 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -44,7 +44,6 @@ struct html_context {
 	int has_link_lines;
 
 	/* For parser/forms.c: */
-	unsigned char *eofff;
 	unsigned char *startf;
 	unsigned char *last_form_tag;
 	unsigned char *last_form_attr;

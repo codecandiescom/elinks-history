@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.526 2004/06/23 08:16:23 jonas Exp $ */
+/* $Id: session.c,v 1.527 2004/06/23 20:16:03 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -857,7 +857,6 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 	int len = info->length;
 	struct session *base_session = NULL;
 	enum remote_session_flags remote = 0;
-	struct uri *current_uri;
 	unsigned char *str;
 
 	switch (info->magic) {
@@ -921,8 +920,6 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 	}
 
 	str = info->data;
-	current_uri = base_session && have_location(base_session)
-		    ? cur_loc(base_session)->vs.uri : NULL;
 
 	/* Extract multiple (possible) NUL terminated URIs */
 	while (len > 0) {

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.55 2004/06/22 23:11:19 pasky Exp $ */
+/* $Id: hooks.c,v 1.56 2004/06/23 20:16:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ script_hook_goto_url(va_list ap, void *data)
 
 	lua_pushstring(L, *url);
 
-	if (!have_location(ses)) {
+	if (!ses || !have_location(ses)) {
 		lua_pushnil(L);
 	} else {
 		lua_pushstring(L, struri(cur_loc(ses)->vs.uri));

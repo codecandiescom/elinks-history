@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.12 2004/06/22 23:11:19 pasky Exp $ */
+/* $Id: hooks.c,v 1.13 2004/06/23 20:16:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ do_script_hook_goto_url(struct session *ses, unsigned char **url)
 
 	PUSHMARK(SP);
 	my_XPUSHs(*url, strlen(*url));
-	if (!have_location(ses)) {
+	if (!ses || !have_location(ses)) {
 		XPUSHs(sv_2mortal(newSV(0)));
 	} else {
 		unsigned char *uri = struri(cur_loc(ses)->vs.uri);

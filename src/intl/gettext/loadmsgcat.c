@@ -332,6 +332,41 @@ _nl_free_domain_conv (domain)
 #endif
 }
 
+
+#include "util/memory.h"
+#include "util/string.h"
+#include "main.h"
+
+/* This is hacked for ELinks - we want to look up for the translations at the
+ * correct place even if we are being ran from the source/build tree. */
+static unsigned char *
+internal_function
+source_tree_filename(struct loaded_l10nfile *domain_file)
+{
+	unsigned char *language = memacpy((unsigned char *)
+					domain_file->langdirname,
+					domain_file->langdirnamelen);
+	unsigned char *dirname = stracpy(path_to_exe), *slash;
+	unsigned char *filename = NULL;
+
+	if (!language) return stracpy("");
+
+	if (dirname) {
+		slash = strrchr(dirname, '/');
+		if (slash) {
+			*(++slash) = 0;
+			filename = straconcat(dirname, "../po/", language,
+						".gmo", NULL);
+		}
+		mem_free(dirname);
+	} else {
+		filename = straconcat("../po/", language, ".gmo", NULL);
+	}
+
+	return filename;
+}
+
+
 /* Load the message catalogs specified by FILENAME.  If it is no valid
    message catalog do nothing.  */
 void
@@ -340,7 +375,7 @@ _nl_load_domain (domain_file, domainbinding)
      struct loaded_l10nfile *domain_file;
      struct binding *domainbinding;
 {
-  int fd;
+  int fd = -1;
   size_t size;
 #ifdef _LIBC
   struct stat64 st;
@@ -359,6 +394,16 @@ _nl_load_domain (domain_file, domainbinding)
      because domainbinding might be == NULL now but != NULL later (after
      a call to bind_textdomain_codeset).  */
 
+  {
+	  unsigned char *name = source_tree_filename(domain_file);
+
+	  fd = open (name, O_RDONLY | O_BINARY);
+	  mem_free(name);
+
+	  if (fd != -1)
+	      goto source_success;
+  }
+
   /* If the record does not represent a valid locale the FILENAME
      might be NULL.  This can happen when according to the given
      specification the locale file name is different for XPG and CEN
@@ -370,6 +415,8 @@ _nl_load_domain (domain_file, domainbinding)
   fd = open (domain_file->filename, O_RDONLY | O_BINARY);
   if (fd == -1)
     return;
+
+source_success:
 
   /* We must know about the size of the file.  */
   if (

@@ -63,6 +63,9 @@
 struct loaded_l10nfile
 {
   const char *filename;
+  const char *langdirname;
+  int langdirnamelen;
+
   int decided;
 
   const void *data;

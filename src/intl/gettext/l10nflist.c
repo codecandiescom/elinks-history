@@ -179,7 +179,8 @@ _nl_make_l10nflist (l10nfile_list, dirlist, dirlist_len, mask, language,
      const char *filename;
      int do_allocate;
 {
-  char *abs_filename;
+  char *abs_filename, *abs_langdirname;
+  int abs_langdirnamelen;
   struct loaded_l10nfile *last = NULL;
   struct loaded_l10nfile *retval;
   char *cp;
@@ -219,6 +220,7 @@ _nl_make_l10nflist (l10nfile_list, dirlist, dirlist_len, mask, language,
   __argz_stringify (abs_filename, dirlist_len, PATH_SEPARATOR);
   cp = abs_filename + (dirlist_len - 1);
   *cp++ = '/';
+  abs_langdirname = cp;
   cp = stpcpy (cp, language);
 
   if ((mask & TERRITORY) != 0)
@@ -259,6 +261,7 @@ _nl_make_l10nflist (l10nfile_list, dirlist, dirlist_len, mask, language,
 	  cp = stpcpy (cp, revision);
 	}
     }
+  abs_langdirnamelen = cp - abs_langdirname;
 
   *cp++ = '/';
   stpcpy (cp, filename);
@@ -297,6 +300,8 @@ _nl_make_l10nflist (l10nfile_list, dirlist, dirlist_len, mask, language,
     return NULL;
 
   retval->filename = abs_filename;
+  retval->langdirname = abs_langdirname;
+  retval->langdirnamelen = abs_langdirnamelen;
   retval->decided = (__argz_count (dirlist, dirlist_len) != 1
 		     || ((mask & XPG_CODESET) != 0
 			 && (mask & XPG_NORM_CODESET) != 0));

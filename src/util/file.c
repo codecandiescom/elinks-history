@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.11 2003/05/01 10:43:14 zas Exp $ */
+/* $Id: file.c,v 1.12 2003/06/05 23:04:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,6 +122,9 @@ file_read_line(unsigned char *line, size_t *size, FILE *file, int *lineno)
 
 	if (!line) {
 		line = mem_alloc(MAX_STR_LEN);
+		if (!line)
+			return NULL;
+
 		*size = MAX_STR_LEN;
 	}
 

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.97 2003/07/06 02:45:49 jonas Exp $ */
+/* $Id: ftp.c,v 1.98 2003/07/06 08:48:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,7 @@
 /* Types and structs */
 
 struct ftp_connection_info {
+	void (*read_func)(struct connection *, struct read_buffer *);
 	int pending_commands; /* Num of commands queued */
 	int opc;	/* Total num of commands queued */
 	int dir;	/* Directory listing in progress */
@@ -61,8 +62,7 @@ struct ftp_connection_info {
 	int use_epsv; /* Use EPSV */
 #endif
 	unsigned char ftp_buffer[FTP_BUF_SIZE];
-	unsigned char cmd_buffer[1];
-	void (*read_func)(struct connection *, struct read_buffer *);
+	unsigned char cmd_buffer[1]; /* Must be last field !! */
 };
 
 
@@ -750,7 +750,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 	struct sockaddr_storage sa;
 	int response;
 	int fd;
-	
+
 	if (c_i->pending_commands > 1) {
 		response = get_ftp_response(conn, rb, 0, &sa);
 
@@ -1148,7 +1148,7 @@ out_of_mem:
 			abort_conn_with_state(conn, S_FTP_ERROR);
 			return;
 		}
-		
+
 		url_data = memacpy(url_data, conn->uri.datalen);
 		if (!url_data) goto out_of_mem;
 

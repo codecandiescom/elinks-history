@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.99 2004/07/28 14:50:26 jonas Exp $ */
+/* $Id: kbd.c,v 1.100 2004/07/28 15:26:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -718,7 +718,6 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 
 		el += 3;
 	}
-	ev->ev = EVENT_MOUSE;
 
 	return el;
 }
@@ -821,6 +820,7 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 	case 'R': resize_terminal(); break;
 	case 'M':
 #ifdef CONFIG_MOUSE
+		ev->ev = EVENT_MOUSE;
 		el = decode_terminal_mouse_escape_sequence(itrm, ev, el, v);
 #endif /* CONFIG_MOUSE */
 		break;

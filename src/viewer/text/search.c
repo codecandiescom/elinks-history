@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.173 2004/01/29 07:18:26 jonas Exp $ */
+/* $Id: search.c,v 1.174 2004/01/29 07:21:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1070,6 +1070,33 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 }
 
 static enum input_line_code
+text_typeahead_handler(struct input_line *line, int action)
+{
+	struct session *ses = line->ses;
+	unsigned char *buffer = line->buffer;
+	struct document_view *doc_view = current_frame(ses);
+
+	assertm(doc_view, "document not formatted");
+	if_assert_failed return INPUT_LINE_CANCEL;
+
+	switch (action) {
+		case ACT_EDIT_ENTER:
+			send_enter(ses->tab->term, NULL, ses);
+			return INPUT_LINE_CANCEL;
+
+		case ACT_EDIT_NEXT_ITEM:
+			find_next(ses, doc_view, 0);
+			break;
+
+		default:
+			search_for(ses, buffer);
+	}
+
+	draw_formatted(ses, 0);
+	return INPUT_LINE_PROCEED;
+}
+
+static enum input_line_code
 link_typeahead_handler(struct input_line *line, int action)
 {
 	struct session *ses = line->ses;
@@ -1101,33 +1128,6 @@ link_typeahead_handler(struct input_line *line, int action)
 		default:
 			return INPUT_LINE_CANCEL;
 	}
-}
-
-static enum input_line_code
-text_typeahead_handler(struct input_line *line, int action)
-{
-	struct session *ses = line->ses;
-	unsigned char *buffer = line->buffer;
-	struct document_view *doc_view = current_frame(ses);
-
-	assertm(doc_view, "document not formatted");
-	if_assert_failed return INPUT_LINE_CANCEL;
-
-	switch (action) {
-		case ACT_EDIT_ENTER:
-			send_enter(ses->tab->term, NULL, ses);
-			return INPUT_LINE_CANCEL;
-
-		case ACT_EDIT_NEXT_ITEM:
-			find_next(ses, doc_view, 0);
-			break;
-
-		default:
-			search_for(ses, buffer);
-	}
-
-	draw_formatted(ses, 0);
-	return INPUT_LINE_PROCEED;
 }
 
 static struct input_history search_history = {

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.185 2003/08/23 16:44:43 jonas Exp $ */
+/* $Id: view.c,v 1.186 2003/08/23 17:54:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,18 +62,28 @@
  * --pasky */
 
 
-void
-init_formatted(struct document *scr)
+struct document *
+init_document(unsigned char *uristring, struct document_options *options)
 {
-	struct list_head tmp;
+	struct document *document = mem_calloc(1, sizeof(struct document));
 
-	memcpy(&tmp, (struct document **)scr, sizeof(struct list_head));
-	memset(((struct document **)scr), 0, sizeof(struct document));
-	memcpy((struct document **)scr, &tmp, sizeof(struct list_head));
+	if (!document) return NULL;
 
-	init_list(scr->forms);
-	init_list(scr->tags);
-	init_list(scr->nodes);
+	document->url = stracpy(uristring);
+	if (!document->url) {
+		mem_free(document);
+		return NULL;
+	}
+
+	init_list(document->forms);
+	init_list(document->tags);
+	init_list(document->nodes);
+
+	document->refcount = 1;
+
+	copy_opt(&document->opt, options);
+
+	return document;
 }
 
 static void
@@ -92,6 +102,7 @@ free_frameset_desc(struct frameset_desc *fd)
 static void
 clear_formatted(struct document *scr)
 {
+	struct list_head tmp;
 	int n;
 	int y;
 	struct cache_entry *ce;
@@ -135,7 +146,10 @@ clear_formatted(struct document *scr)
 	if (scr->search) mem_free(scr->search);
 	if (scr->slines1) mem_free(scr->slines1);
 	if (scr->slines2) mem_free(scr->slines2);
-	init_formatted(scr);
+
+	memcpy(&tmp, (struct document **)scr, sizeof(struct list_head));
+	memset(((struct document **)scr), 0, sizeof(struct document));
+	memcpy((struct document **)scr, &tmp, sizeof(struct list_head));
 }
 
 void

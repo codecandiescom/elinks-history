@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.212 2003/08/23 17:45:16 jonas Exp $ */
+/* $Id: renderer.c,v 1.213 2003/08/23 17:54:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1705,23 +1705,12 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 	cache_entry->refcount++;
 	shrink_memory(0);
 
-	document = mem_alloc(sizeof(struct document));
+	document = init_document(vs->url, options);
 	if (!document) {
 		cache_entry->refcount--;
 		return;
 	}
 
-	init_formatted(document);
-	document->refcount = 1;
-
-	document->url = stracpy(vs->url);
-	if (!document->url) {
-		mem_free(document);
-		cache_entry->refcount--;
-		return;
-	}
-
-	copy_opt(&document->opt, options);
 	add_to_list(format_cache, document);
 
 	document_view->document = document;

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.19 2003/07/15 20:18:11 jonas Exp $ */
+/* $Id: view.h,v 1.20 2003/08/23 17:54:32 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -15,7 +15,7 @@ void send_open_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned
 
 void destroy_formatted(struct document *);
 /* void clear_formatted(struct document *); */
-void init_formatted(struct document *);
+struct document *init_document(unsigned char *uristring, struct document_options *options);
 void detach_formatted(struct document_view *);
 
 /* void draw_doc(struct terminal *, struct document_view *, int); */

@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.26 2003/08/23 17:48:05 jonas Exp $ */
+/* $Id: renderer.c,v 1.27 2003/08/23 17:54:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,6 +199,7 @@ text_init(struct renderer_state *state)
 {
 	struct document_options *document_options = state->input;
 	struct document_view *document_view;
+	struct document *document;
 
 	state->data = mem_calloc(1, sizeof(struct text_renderer_state));
 	if (!state->data) return;
@@ -215,12 +216,10 @@ text_init(struct renderer_state *state)
 	document_view->xp = document_options->xp;
 	document_view->yp = document_options->yp;
 
-	document_view->document = mem_calloc(1, sizeof(struct document));
-	if (!document_view->document) return;
+	document = init_document("TODO: add uri ;)", document_options);
+	if (!document) return;
 
-	init_formatted(document_view->document);
-	document_view->document->refcount = 1;
-	copy_opt(&document_view->document->opt, document_options);
+	document_view->document = document;
 }
 
 static void

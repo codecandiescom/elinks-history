@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.40 2003/07/11 19:20:49 jonas Exp $ */
+/* $Id: auth.c,v 1.41 2003/07/11 19:22:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,7 +229,7 @@ find_auth(struct uri *uri)
 	 * <something> could be a new flag. Or maybe we should just split up
 	 * add_auth_entry() so existing entries was a matter of calling
 	 * get_auth_entry(). */
-again:
+
 	entry = find_auth_entry(newurl, NULL);
 
 	/* Check is user/pass info is in url. */
@@ -245,18 +245,8 @@ again:
 			 * readding. */
 			entry = add_auth_entry(uri, NULL);
 
-			if (entry && entry->valid) {
-				/* An entry was re-created, we free user/pass
-				 * before retry to prevent infinite loop. */
-				if (user) {
-					mem_free(user);
-					user = NULL;
-				}
-				if (pass) {
-					mem_free(pass);
-					pass = NULL;
-				}
-				goto again;
+			if (entry && !entry->valid) {
+				goto end;
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.76 2003/11/14 18:30:51 jonas Exp $ */
+/* $Id: info.c,v 1.77 2003/11/15 16:23:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,7 +164,7 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 			if (ce->incomplete)
 				add_char_to_string(&info, '*');
 			else /* number of references */
-				add_long_to_string(&info, get_cache_entry_locks(ce));
+				add_long_to_string(&info, get_cache_entry_refcount(ce));
 			add_char_to_string(&info, ' ');
 #endif
 			/* FIXME: What to do with long urls ? they wrap for now

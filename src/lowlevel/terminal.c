@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.5 2002/04/01 15:25:04 pasky Exp $ */
+/* $Id: terminal.c,v 1.6 2002/04/09 08:07:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -953,7 +953,8 @@ void print_text(struct terminal *t, int x, int y, int l,
 }
 
 
-/* set_cursor() */
+/* (altx,alty) is alternative location, when block_cursor terminal option is
+ * set. It is usually bottom right corner of the screen. */
 void set_cursor(struct terminal *term, int x, int y, int altx, int alty)
 {
 	term->dirty = 1;

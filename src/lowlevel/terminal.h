@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.5 2002/03/22 14:59:10 pasky Exp $ */
+/* $Id: terminal.h,v 1.6 2002/04/09 08:07:03 pasky Exp $ */
 
 #ifndef EL__TERMINAL_H
 #define EL__TERMINAL_H
@@ -43,6 +43,8 @@ struct term_spec {
 	enum term_mode_type mode;
 	int m11_hack;
 	int restrict_852;
+	/* This means we always move cursor to (altx,alty) in set_cursor(),
+	 * which is usually bottom right corner. */
 	int block_cursor;
 	int col;
 	int charset;

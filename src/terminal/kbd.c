@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.48 2004/03/26 17:46:10 zas Exp $ */
+/* $Id: kbd.c,v 1.49 2004/03/26 17:49:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -476,22 +476,22 @@ in_sock(struct itrm *itrm)
 	struct string delete;
 	char ch;
 	int fg;
-	int c, i, p;
+	int bytes_read, i, p;
 	unsigned char buf[OUT_BUF_SIZE];
 
-	c = safe_read(itrm->sock_in, buf, OUT_BUF_SIZE);
-	if (c <= 0) {
+	bytes_read = safe_read(itrm->sock_in, buf, OUT_BUF_SIZE);
+	if (bytes_read <= 0) {
 fr:
 		free_trm(itrm);
 		return;
 	}
 
 qwerty:
-	for (i = 0; i < c; i++)
+	for (i = 0; i < bytes_read; i++)
 		if (!buf[i])
 			goto ex;
 
-	safe_hard_write(itrm->std_out, buf, c);
+	safe_hard_write(itrm->std_out, buf, bytes_read);
 	return;
 
 ex:
@@ -500,12 +500,12 @@ ex:
 	i++;
 	assert(OUT_BUF_SIZE - i > 0);
 	memmove(buf, buf + i, OUT_BUF_SIZE - i);
-	c -= i;
+	bytes_read -= i;
 	p = 0;
 
 #define RD(xx) { \
 	unsigned char cc; \
-	if (p < c) cc = buf[p++]; \
+	if (p < bytes_read) cc = buf[p++]; \
 	else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto fr; \
 	xx = cc; }
 
@@ -585,7 +585,7 @@ nasty_thing:
 	done_string(&delete);
 	assert(OUT_BUF_SIZE - p > 0);
 	memmove(buf, buf + p, OUT_BUF_SIZE - p);
-	c -= p;
+	bytes_read -= p;
 
 	goto qwerty;
 }

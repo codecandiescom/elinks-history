@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.78 2003/06/05 15:28:03 zas Exp $ */
+/* $Id: session.c,v 1.79 2003/06/07 01:45:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -636,7 +636,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	msg_box(ses->tab->term, getml(m2, wtd_data, wtd_data->url, wtd_data->pos,
 				 NULL),
 		N_("Warning"), AL_CENTER | AL_EXTD_TEXT,
-		m1, " ", m2, "?", NULL,
+		msg_text("%s %s?", m1, m2),
 		wtd_data, 2,
 		N_("Yes"), post_yes, B_ENTER,
 		N_("No"), post_no, B_ESC);
@@ -1136,10 +1136,10 @@ create_session(struct window *tab)
 	if (first_use) {
 		first_use = 0;
 		msg_box(term, NULL,
-			N_("Welcome"), AL_CENTER | AL_EXTD_TEXT,
-			N_("Welcome to ELinks!"), "\n\n",
-			N_("Press ESC for menu. Select Help->Manual in menu "
-			   "for user's manual."), NULL,
+			N_("Welcome"), AL_CENTER,
+			N_("Welcome to ELinks!\n\n"
+			"Press ESC for menu. Select Help->Manual in menu "
+			"for user's manual."),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
 	}

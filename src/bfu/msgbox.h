@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.3 2003/06/07 00:33:33 jonas Exp $ */
+/* $Id: msgbox.h,v 1.4 2003/06/07 01:45:54 jonas Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -7,10 +7,6 @@
 #include "bfu/button.h"
 #include "terminal/terminal.h"
 #include "util/memlist.h"
-
-void msg_box(struct terminal *, struct memory_list *, unsigned char *, enum format_align, /*unsigned char *, void *, int,*/ ...);
-
-#if 0
 
 /* This is _the_ dialog function used in almost all parts of the code.
  *
@@ -49,7 +45,5 @@ msg_box(struct terminal *term, struct memory_list *mem_list,
 /* A wrapper around vasprintf() to format gettextized string.
  * The returned string is allocated and may be NULL! */
 unsigned char *msg_text(unsigned char *format, ...);
-
-#endif
 
 #endif

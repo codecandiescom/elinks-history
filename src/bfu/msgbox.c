@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.26 2003/06/07 00:54:06 jonas Exp $ */
+/* $Id: msgbox.c,v 1.27 2003/06/07 01:45:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "terminal/terminal.h"
 #include "util/memlist.h"
 #include "util/memory.h"
+#include "util/snprintf.h"
 #include "util/string.h"
 
 
@@ -86,123 +87,6 @@ msg_box_button(struct dialog_data *dlg, struct widget_data *di)
 
 	return 0;
 }
-
-/* The '...' means:
- *
- * ( text1, [text2, ..., textN, NULL,]
- *   udata, M,
- *   label1, handler1, flags1,
- *   ...,
- *   labelM, handlerM, flagsM )
- *
- * If !(align & AL_EXTD_TEXT), only one text is accepted, if you'll give it
- * AL_EXTD_TEXT, more texts are accepted, terminated by NULL.
- *
- * When labelX == NULL, the entire record is skipped.
- *
- * Handler takes one (void *), and udata is passed as it.
- *
- * You should always align it in a similiar way. */
-void
-msg_box(struct terminal *term, struct memory_list *ml,
-	unsigned char *title, enum format_align align,
-	...)
-{
-	unsigned char **info = NULL;
-	int button;
-	int buttons;
-	struct dialog *dlg;
-	void *udata;
-	va_list ap;
-
-	va_start(ap, align);
-
-	if (align & AL_EXTD_TEXT) {
-		unsigned char *text = "";
-		int info_n = 0;
-
-		while (text) {
-			text = va_arg(ap, unsigned char *);
-
-			info = mem_realloc(info, (info_n + 1)
-						 * sizeof(unsigned char *));
-			if (!info) {
-				va_end(ap);
-				if (ml) freeml(ml);
-				return;
-			}
-
-			info[info_n] = text;
-			info_n++;
-		}
-
-	} else {
-		/* I had to decide between evil gotos and code duplication. */
-		unsigned char *text = va_arg(ap, unsigned char *);
-		unsigned char **info_;
-
-		info_ = mem_realloc(info, 2 * sizeof(unsigned char *));
-		if (!info_) {
-			va_end(ap);
-			if (ml) freeml(ml);
-			return;
-	   	}
-
-		info = info_;
-		info[0] = text;
-		info[1] = NULL;
-	}
-
-	udata = va_arg(ap, void *);
-	buttons = va_arg(ap, int);
-
-	dlg = mem_calloc(1, sizeof(struct dialog) +
-			    (buttons + 1) * sizeof(struct widget));
-	if (!dlg) {
-		va_end(ap);
-		mem_free(info);
-		if (ml) freeml(ml);
-		return;
-	}
-
-	dlg->title = title;
-	dlg->fn = msg_box_fn;
-	dlg->udata = info;
-	dlg->udata2 = udata;
-	dlg->align = align;
-
-	for (button = 0; button < buttons; button++) {
-		unsigned char *label;
-		void (*fn)(void *);
-		int flags;
-
-		label = va_arg(ap, unsigned char *);
-		fn = va_arg(ap, void *);
-		flags = va_arg(ap, int);
-
-		if (!label) {
-			/* Skip this button. */
-			button--;
-			buttons--;
-			continue;
-		}
-
-		dlg->items[button].type = D_BUTTON;
-		dlg->items[button].gid = flags;
-		dlg->items[button].fn = msg_box_button;
-		dlg->items[button].dlen = 0;
-		dlg->items[button].text = label;
-		dlg->items[button].udata = fn;
-	}
-
-	va_end(ap);
-
-	dlg->items[button].type = D_END;
-	add_to_ml(&ml, dlg, info, NULL);
-	do_dialog(term, dlg, ml);
-}
-
-#if 0
 
 void
 msg_box(struct terminal *term, struct memory_list *ml,
@@ -319,5 +203,3 @@ msg_text(unsigned char *format, ...)
 
 	return info;
 }
-
-#endif

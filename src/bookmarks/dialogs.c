@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.73 2003/05/08 21:43:34 zas Exp $ */
+/* $Id: dialogs.c,v 1.74 2003/06/07 01:45:54 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -266,16 +266,20 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 		if (bookmark->box_item->type == BI_FOLDER)
 		msg_box(term, NULL,
 			N_("Delete bookmark"), AL_CENTER | AL_EXTD_TEXT,
-			N_("Sorry, but this bookmark is already being used by something right now."), "\n\n",
-			N_("Title"), ": \"", bookmark->title, NULL,
+			msg_text(N_("Sorry, but this bookmark is already being"
+			" used by something right now.\n\n"
+			"Title: \"%s\""),
+			bookmark->title),
 			NULL, 1,
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
 		else
 		msg_box(term, NULL,
 			N_("Delete bookmark"), AL_CENTER | AL_EXTD_TEXT,
-			N_("Sorry, but this bookmark is already being used by something right now."), "\n\n",
-			N_("Title"), ": \"", bookmark->title, "\n",
-			N_("URL"), ": \"", bookmark->url, NULL,
+			msg_text(N_("Sorry, but this bookmark is already being"
+			" used by something right now.\n\n"
+			"Title: \"%s\"\n"
+			"URL: \"%s\""),
+			bookmark->title, bookmark->url),
 			NULL, 1,
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
 		return;
@@ -412,15 +416,17 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 	else if (bm->box_item->type == BI_FOLDER)
 	msg_box(term, getml(hop, NULL),
 		N_("Delete bookmark"), AL_CENTER | AL_EXTD_TEXT,
-		N_("Delete folder content"), " \"", bm->title, "\" ?", NULL,
+		msg_text(N_("Delete folder content \"%s\" ?"),
+		bm->title),
 		hop, 2,
 		N_("Yes"), really_del_bookmark, B_ENTER,
 		N_("No"), cancel_del_bookmark, B_ESC);
 	else
 	msg_box(term, getml(hop, NULL),
 		N_("Delete bookmark"), AL_CENTER | AL_EXTD_TEXT,
-		N_("Delete bookmark"), " \"", bm->title, "\" ?\n\n",
-		N_("URL"), ": \"", bm->url, "\"", NULL,
+		msg_text(N_("Delete bookmark \"%s\" ?\n\n"
+		"URL: \"%s\""),
+		bm->title, bm->url),
 		hop, 2,
 		N_("Yes"), really_del_bookmark, B_ENTER,
 		N_("No"), cancel_del_bookmark, B_ESC);

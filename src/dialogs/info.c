@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.45 2003/06/04 10:28:15 zas Exp $ */
+/* $Id: info.c,v 1.46 2003/06/07 01:45:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,18 +79,18 @@ void
 menu_copying(struct terminal *term, void *d, struct session *ses)
 {
 	msg_box(term, NULL,
-		N_("Copying"), AL_CENTER | AL_EXTD_TEXT,
-		N_("ELinks "), VERSION_STRING,
-		N_("\n"
-		   "\n"
-		   "(C) 1999 - 2002 Mikulas Patocka\n"
-		   "(C) 2001 - 2003 Petr Baudis\n"
-		   "\n"
-		   "This program is free software; you can redistribute it "
-		   "and/or modify it under the terms of the GNU General Public "
-		   "License as published by the Free Software Foundation; "
-		   "either version 2 of the License, or (at your option) any "
-		   "later version."), NULL,
+		N_("Copying"), AL_CENTER,
+		N_("ELinks " VERSION_STRING
+		"\n"
+		"\n"
+		"(C) 1999 - 2002 Mikulas Patocka\n"
+		"(C) 2001 - 2003 Petr Baudis\n"
+		"\n"
+		"This program is free software; you can redistribute it "
+		"and/or modify it under the terms of the GNU General Public "
+		"License as published by the Free Software Foundation; "
+		"either version 2 of the License, or (at your option) any "
+		"later version."),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }
@@ -99,60 +99,24 @@ menu_copying(struct terminal *term, void *d, struct session *ses)
 void
 res_inf(struct terminal *term, void *d, struct session *ses)
 {
-	unsigned char *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9, *a10,
-		      *a11, *a12, *a13, *a14, *a15, *a16;
-	int l = 0;
 	struct refresh *r;
 
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r)	return;
 
-	/* FIXME: allocation failures are not handled here. */
-#define create_str(x, s1, num)	l = 0; (x) = init_str(); \
-				add_to_str(&(x), &l, (s1)); \
-				add_num_to_str(&(x), &l, (num)); \
-				add_chr_to_str(&(x), &l, ' ');
-
-	create_str(a1, ": ", select_info(CI_FILES));
-	create_str(a2, ", ", select_info(CI_TIMERS));
-	l = 0; a3 = init_str(); add_to_str(&a3, &l, ".\n");
-
-	create_str(a4, ": ", connect_info(CI_FILES));
-	create_str(a5, ", ", connect_info(CI_CONNECTING));
-	create_str(a6, ", ", connect_info(CI_TRANSFER));
-	create_str(a7, ", ", connect_info(CI_KEEP));
-	l = 0; a8 = init_str(); add_to_str(&a8, &l, ".\n");
-
-	create_str(a9, ": ", cache_info(CI_BYTES));
-	create_str(a10, ", ", cache_info(CI_FILES));
-	create_str(a11, ", ", cache_info(CI_LOCKED));
-	create_str(a12, ", ", cache_info(CI_LOADING));
-	l = 0; a13 = init_str(); add_to_str(&a13, &l, ".\n");
-
-	create_str(a14, ": ", formatted_info(CI_FILES));
-	create_str(a15, ", ", formatted_info(CI_LOCKED));
-	l = 0; a16 = init_str(); add_chr_to_str(&a16, &l, '.');
-
-#undef create_str
-
-	msg_box(term, getml(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, NULL),
+	msg_box(term, NULL,
 		N_("Resources"), AL_LEFT | AL_EXTD_TEXT,
-		N_("Resources"), a1,
-		N_("handles"), a2,
-		N_("timers"), a3,
-		N_("Connections"), a4,
-		N_("connections"), a5,
-		N_("connecting"), a6,
-		N_("transferring"), a7,
-		N_("keepalive"), a8,
-		N_("Memory cache"), a9,
-		N_("bytes"), a10,
-		N_("files"), a11,
-		N_("locked"), a12,
-		N_("loading"), a13,
-		N_("Formatted document cache"), a14,
-		N_("documents"), a15,
-		N_("locked"), a16, NULL,
+		msg_text(N_("Resources: %d handles, %d timers.\n"
+		"Connections: %d connections, %d connecting, %d transferring,"
+		" %d keepalive.\n"
+		"Memory cache: %d bytes, %d files, %d locked, %d loading.\n"
+		"Formatted document cache: %d documents, %d locked."),
+		select_info(CI_FILES), select_info(CI_TIMERS),
+		connect_info(CI_FILES), connect_info(CI_CONNECTING),
+		connect_info(CI_TRANSFER), connect_info(CI_KEEP),
+		cache_info(CI_BYTES), cache_info(CI_FILES),
+		cache_info(CI_LOCKED), cache_info(CI_LOADING),
+		formatted_info(CI_FILES), formatted_info(CI_LOCKED)),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
@@ -216,7 +180,7 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 
 	msg_box(term, getml(a, NULL),
 		N_("Cache info"), AL_LEFT | AL_EXTD_TEXT,
-		N_("Cache content"), ":", a, NULL,
+		msg_text(N_("Cache content: %s"), a),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.22 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: dialogs.c,v 1.23 2003/06/07 01:45:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,9 +231,11 @@ do_delete_global_history_item(struct terminal *term,
 	if (historyitem->refcount > 0) {
 		msg_box(term, NULL,
 			N_("Delete history item"), AL_CENTER | AL_EXTD_TEXT,
-			N_("Sorry, but this bookmark is already being used by something right now."), "\n\n",
-			N_("Title"), ": \"", historyitem->title, "\n",
-			N_("URL"), ": \"", historyitem->url, NULL,
+			msg_text(N_("Sorry, but this history entry is already "
+			"being used by something right now.\n\n"
+			"Title: \"%s\"\n"
+			"URL: \"%s\"\n"),
+			historyitem->title, historyitem->url),
  			NULL, 1,
  			N_("Cancel"), NULL, B_ENTER | B_ESC);
  		return;
@@ -324,8 +326,9 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 	else
 		msg_box(term, getml(ctx, NULL),
 			N_("Delete history item"), AL_CENTER | AL_EXTD_TEXT,
-			N_("Delete history item"), " \"", historyitem->title, "\" ?\n\n",
-			N_("URL"), ": \"", historyitem->url, "\"", NULL,
+			msg_text(N_("Delete history item \"%s\" ?\n\n"
+			"URL: \"%s\""),
+			historyitem->title, historyitem->url),
 			ctx, 2,
 			N_("Yes"), really_delete_global_history_item, B_ENTER,
 			N_("No"), cancel_delete_globhist_item, B_ESC);
@@ -369,8 +372,8 @@ push_clear_button(struct dialog_data *dlg,
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	msg_box(term, NULL,
-		N_("Clear global history"), AL_CENTER | AL_EXTD_TEXT,
-		N_("Clear global history"), "?", NULL,
+		N_("Clear global history"), AL_CENTER,
+		N_("Clear global history?"),
 		box, 2,
 		N_("Yes"), really_clear_history, B_ENTER,
 		N_("No"), NULL, B_ESC);
@@ -406,9 +409,10 @@ push_info_button(struct dialog_data *dlg,
 
 	msg_box(term, NULL,
 		N_("Info"), AL_LEFT | AL_EXTD_TEXT,
-		N_("Title"), ": ", historyitem->title, "\n",
-		N_("URL"), ": ", historyitem->url, "\n",
-		N_("Last visit time"), ": ", ctime(&historyitem->last_visit), NULL,
+		msg_text(N_("Title: %s\n"
+		"URL: %s\n"
+		"Last visit time: %s"), historyitem->title,
+		historyitem->url, ctime(&historyitem->last_visit)),
 		historyitem, 1,
 		N_("OK"), done_info_button, B_ESC | B_ENTER);
 

@@ -1,11 +1,7 @@
-<!-- $Id: elinkskeys.5.xml,v 1.4 2003/05/09 21:34:08 jonas Exp $ -->
+<!-- $Id: elinkskeys.5.xml,v 1.5 2003/06/10 13:41:59 jonas Exp $ -->
 
-<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
-	"http://www.oasis-open.org/docbook/sgml/4.2/docbook.dtd">
-	
-<!--DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN">
-	http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"-->
-	
+<!DOCTYPE refentry SYSTEM "../elinksbook.dtd">
+
 <refentry id="elinkskeys">
 
 <refmeta>
@@ -34,7 +30,7 @@
 </para>
 <screen>
 
-	bind  "<emphasis>keymap</emphasis>" "<emphasis>keystroke</emphasis>" = "<emphasis>action<emphasis>"
+	bind  "<emphasis>keymap</emphasis>" "<emphasis>keystroke</emphasis>" = "<emphasis>action</emphasis>"
 
 </screen>
 <para>
@@ -688,7 +684,7 @@
 </variablelist> 
 </refsect1>
 
-<refsect1><title>EDITING KEYS</title>
+<refsect1><title> EDITING KEYS </title>
 <para>
 
 	The following keys can be used while editing a line/jumping to a URL:
@@ -737,8 +733,8 @@ bind "main" "Tab" = "next-frame"
 bind "main" "*" = "toggle-display-images"
 bind "main" "." = "toggle-numbered-links"
 bind "main" "\\" = "toggle-html-plain"
-bind "main" "<" = "tab-prev"
-bind "main" ">" = "tab-next"
+bind "main" "&lt;" = "tab-prev"
+bind "main" "&gt;" = "tab-next"
 bind "main" "c" = "tab-close"
 bind "main" "|" = "header-info"
 bind "main" "=" = "document-info"

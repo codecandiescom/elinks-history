@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2003/06/10 02:12:51 jonas Exp $
+## $Id: Makefile.am,v 1.8 2003/06/10 13:41:59 jonas Exp $
 
 include $(top_srcdir)/doc/book/Makefile.doc
 
@@ -15,6 +15,7 @@ EXTRA_DIST = \
  README \
  TODO \
  config/* \
+ elinksbool.dtd \
  info/* \
  intro/* \
  manual.xml

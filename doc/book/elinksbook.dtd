@@ -1,0 +1,16 @@
+<!-- $Id: elinksbook.dtd,v 1.1 2003/06/10 13:41:59 jonas Exp $ -->
+
+<!ENTITY % use-xml "IGNORE">
+<!ENTITY % use-sgml "INCLUDE">
+
+<![%use-xml;[
+<!ENTITY % DocBookDTD PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+		"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+%DocBookDTD;
+]]>
+
+<![%use-sgml;[
+<!ENTITY % DocBookDTD PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
+		"http://www.oasis-open.org/docbook/sgml/4.2/docbook.dtd">
+%DocBookDTD;
+]]>

@@ -1,9 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.4 2003/06/09 22:39:02 jonas Exp $
+## $Id: Makefile.am,v 1.5 2003/06/10 13:41:59 jonas Exp $
 
 include $(top_srcdir)/doc/book/Makefile.doc
-
-DOCBUILDDIR = $(top_srcdir)/doc/
 
 EXTRA_PROGRAMS = manpages
 manpages_SOURCES = elinks.1.xml elinkskeys.5.xml

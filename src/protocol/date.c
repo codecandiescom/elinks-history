@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.3 2004/07/04 01:10:24 jonas Exp $ */
+/* $Id: date.c,v 1.4 2004/07/04 10:49:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,11 +94,11 @@ parse_day(const unsigned char **date_p)
 	/* TODO: Use strtol() ? ;)) --pasky */
 
 	c = *date;
-	if (c < '0' || c > '9') return 32;
+	if (!isdigit(c)) return 32;
 	day = c - '0';
 
 	c = *++date;
-	if (c >= '0' && c <= '9') {
+	if (isdigit(c)) {
 		day = day * 10 + c - '0';
 		date++;
 	}

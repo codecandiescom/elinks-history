@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.62 2002/12/10 21:56:16 pasky Exp $ */
+/* $Id: conf.c,v 1.63 2002/12/10 22:12:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -594,7 +594,7 @@ static int
 write_config_file(unsigned char *prefix, unsigned char *name,
 		  struct option *options, struct terminal *term)
 {
-	int ret = -1;
+	int ret = 2222; /* magic */
 	struct secure_save_info *ssi;
 	unsigned char *config_file;
 	unsigned char *cfg_str;
@@ -607,15 +607,16 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	if (!config_file) goto free_cfg_str;
 
 	ssi = secure_open(config_file, 0177);
-	if (!ssi) goto free_config_file;
+	if (!ssi) goto wr_config_error;
 
 	secure_fputs(ssi, cfg_str);
 	ret = secure_close(ssi);
 
-	if (ret && term)
+	if (ret && term) {
+wr_config_error:
 		write_config_error(term, config_file, ret);
+	}
 
-free_config_file:
 	mem_free(config_file);
 
 free_cfg_str:

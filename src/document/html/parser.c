@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.203 2003/09/26 17:35:44 zas Exp $ */
+/* $Id: parser.c,v 1.204 2003/09/28 13:43:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1801,12 +1801,12 @@ new_menu_item(unsigned char *name, int data, int fullname)
 		item->text = name;
 		if (data == -1) {
 			item->rtext = M_SUBMENU;
-			item->func = MENU_FUNC do_select_submenu;
+			item->func = (menu_func) do_select_submenu;
 			item->data = nmenu;
 			item->submenu = 1;
 		} else {
 			item->rtext = "";
-			item->func = MENU_FUNC selected_item;
+			item->func = (menu_func) selected_item;
 			item->data = (void *) data;
 			item->submenu = 0;
 		}
@@ -1845,7 +1845,7 @@ free_menu(struct menu_item *m) /* Grrr. Recursion */
 
 	for (mm = m; mm->text; mm++) {
 		if (mm->text) mem_free(mm->text);
-		if (mm->func == MENU_FUNC do_select_submenu) free_menu(mm->data);
+		if (mm->func == (menu_func) do_select_submenu) free_menu(mm->data);
 	}
 	mem_free(m);
 }
@@ -1876,7 +1876,7 @@ menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls)
 	unsigned char *bs;
 
 	for (; m->text; m++) {
-		if (m->func == MENU_FUNC do_select_submenu) {
+		if (m->func == (menu_func) do_select_submenu) {
 			bs = stracpy(base);
 			if (bs) {
 				add_to_strn(&bs, m->text);
@@ -1895,7 +1895,7 @@ menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls)
 static int
 menu_contains(struct menu_item *m, int f)
 {
-	if (m->func != MENU_FUNC do_select_submenu)
+	if (m->func != (menu_func) do_select_submenu)
 		return (int)m->data == f;
 	for (m = m->data; m->text; m++)
 		if (menu_contains(m, f))
@@ -3492,7 +3492,7 @@ look_for_tag:
 		memset(&nm[nmenu], 0, 2 * sizeof(struct menu_item));
 		nm[nmenu].text = label;
 		nm[nmenu].rtext = "";
-		nm[nmenu].func = MENU_FUNC map_selected;
+		nm[nmenu].func = (menu_func) map_selected;
 		nm[nmenu].data = ld;
 		nm[nmenu].no_intl = 1;
 		nm[++nmenu].text = NULL;

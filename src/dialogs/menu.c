@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.134 2003/09/27 15:26:31 zas Exp $ */
+/* $Id: menu.c,v 1.135 2003/09/28 13:43:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 			unsigned char *pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
-			add_to_menu(&mi, url, "", MENU_FUNC go_backwards,
+			add_to_menu(&mi, url, "", (menu_func) go_backwards,
 			    	    (void *) n, 0, 1);
 		}
 		n++;
@@ -274,7 +274,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 			unsigned char *pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
-			add_to_menu(&mi, url, "", MENU_FUNC go_unbackwards,
+			add_to_menu(&mi, url, "", (menu_func) go_unbackwards,
 			    	    (void *) n, 0, 1);
 		}
 		n++;
@@ -312,7 +312,7 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 			unsigned char *pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
-			add_to_menu(&mi, url, "", MENU_FUNC display_download,
+			add_to_menu(&mi, url, "", (menu_func) display_download,
 			    	    d, 0, 1);
 			n++;
 		}
@@ -419,7 +419,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	o = can_open_in_new(term);
 	if (o) {
 		SET_MENU_ITEM(e, N_("~New window"), o - 1 ? M_SUBMENU : (unsigned char *) "",
-			      MENU_FUNC open_in_new_window, send_open_new_xterm,
+			      (menu_func) open_in_new_window, send_open_new_xterm,
 			      FREE_NOTHING, !!(o - 1), 0, 0, HKS_SHOW);
 		e++;
 	}

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.101 2003/09/28 13:02:36 zas Exp $ */
+/* $Id: menu.c,v 1.102 2003/09/28 13:43:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,8 +36,8 @@ unsigned char m_submenu[] = ">>";
 unsigned char m_bar = 0;
 
 /* Prototypes */
-static void menu_func(struct window *, struct term_event *, int);
-static void mainmenu_func(struct window *, struct term_event *, int);
+static void menu_handler(struct window *, struct term_event *, int);
+static void mainmenu_handler(struct window *, struct term_event *, int);
 
 
 static inline int
@@ -90,7 +90,7 @@ do_menu_selected(struct terminal *term, struct menu_item *items,
 		menu->lang = -1;
 #endif
 		refresh_hotkeys(term, menu);
-		add_window(term, menu_func, menu);
+		add_window(term, menu_handler, menu);
 	} else if (items->item_free & ~(1<<8)) {
 		free_menu_items(items);
 	}
@@ -126,8 +126,8 @@ select_menu(struct terminal *term, struct menu *menu)
 		win = term->windows.next;
 
 		while ((void *) win != &term->windows &&
-			(win->handler == menu_func ||
-			 win->handler == mainmenu_func)) {
+			(win->handler == menu_handler ||
+			 win->handler == mainmenu_handler)) {
 
 			win1 = win->next;
 			delete_window(win);
@@ -355,7 +355,7 @@ display_menu(struct terminal *term, struct menu *menu)
 
 
 static void
-menu_func(struct window *win, struct term_event *ev, int fwd)
+menu_handler(struct window *win, struct term_event *ev, int fwd)
 {
 	struct menu *menu = win->data;
 	int s = 0;
@@ -408,13 +408,13 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 					     w1 = w1->next) {
 						struct menu *m1;
 
-						if (w1->handler == mainmenu_func) {
+						if (w1->handler == mainmenu_handler) {
 							if (!ev->y)
 								delete_window_ev(win, ev);
 							break;
 						}
 
-						if (w1->handler != menu_func) break;
+						if (w1->handler != menu_handler) break;
 
 						m1 = w1->data;
 
@@ -453,7 +453,7 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 				case ACT_LEFT:
 				case ACT_RIGHT:
 					if ((void *) win->next != &win->term->windows &&
-					    win->next->handler == mainmenu_func) {
+					    win->next->handler == mainmenu_handler) {
 						delete_window_ev(win, ev);
 						goto break2;
 					}
@@ -549,7 +549,7 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 
 					if (ev->x == KBD_ESC) {
 						if ((void *) win->next != &win->term->windows &&
-						    win->next->handler == mainmenu_func)
+						    win->next->handler == mainmenu_handler)
 							delete_window_ev(win, ev);
 						else
 							delete_window_ev(win, NULL);
@@ -602,7 +602,7 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 	clear_hotkeys_cache(items, menu->ni, 1);
 #endif
 	init_hotkeys(term, items, menu->ni, 1);
-	add_window(term, mainmenu_func, menu);
+	add_window(term, mainmenu_handler, menu);
 
 	if (sel != -1) {
 		struct term_event ev =
@@ -700,8 +700,8 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 		win = term->windows.next;
 
 		while ((void *) win != &term->windows &&
-			(win->handler == menu_func ||
-			 win->handler == mainmenu_func)) {
+			(win->handler == menu_handler ||
+			 win->handler == mainmenu_handler)) {
 
 			win1 = win->next;
 			delete_window(win);
@@ -721,7 +721,7 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 }
 
 static void
-mainmenu_func(struct window *win, struct term_event *ev, int fwd)
+mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 {
 	int s = 0;
 	struct mainmenu *menu = win->data;

@@ -1,12 +1,11 @@
-/* $Id: menu.h,v 1.26 2003/09/28 13:07:18 jonas Exp $ */
+/* $Id: menu.h,v 1.27 2003/09/28 13:43:55 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
 
 #include "terminal/terminal.h"
 
-#define MENU_FUNC_TYPE	void (*)(struct terminal *, void *, void *)
-#define MENU_FUNC	(MENU_FUNC_TYPE)
+typedef void (*menu_func)(struct terminal *, void *, void *);
 
 extern unsigned char m_submenu[];
 #define M_SUBMENU ((unsigned char *) m_submenu)
@@ -52,7 +51,7 @@ enum hotkey_state {
 struct menu_item {
 	unsigned char *text;
 	unsigned char *rtext; /* FIXME: Use real keybindings. */
-	void (*func)(struct terminal *, void *, void *);
+	menu_func func;
 	void *data;
 	enum item_free item_free;
 
@@ -69,7 +68,7 @@ struct menu_item {
 {									\
 	(unsigned char *) (text),					\
 	(unsigned char *) (rtext),					\
-	MENU_FUNC (func),						\
+	(menu_func) (func),						\
 	(void *) (data),						\
 	(item_free),							\
 	(submenu),							\
@@ -89,7 +88,7 @@ struct menu_item {
 do {									\
 	(e_)->text = (unsigned char *) (text_);				\
 	(e_)->rtext = (unsigned char *) (rtext_);			\
-	(e_)->func = MENU_FUNC (func_);					\
+	(e_)->func = (menu_func) (func_);				\
 	(e_)->data = (void *) (data_);					\
 	(e_)->item_free = (item_free_);					\
 	(e_)->submenu = (submenu_);					\
@@ -126,7 +125,7 @@ struct menu {
 
 
 struct menu_item *new_menu(enum item_free);
-void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, MENU_FUNC_TYPE, void *, int, int);
+void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, menu_func, void *, int, int);
 void do_menu(struct terminal *, struct menu_item *, void *, int);
 void do_menu_selected(struct terminal *, struct menu_item *, void *, int, int);
 void do_mainmenu(struct terminal *, struct menu_item *, void *, int);

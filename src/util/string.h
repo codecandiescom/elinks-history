@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.91 2005/01/03 07:30:52 miciah Exp $ */
+/* $Id: string.h,v 1.92 2005/01/03 07:41:01 miciah Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -210,7 +210,8 @@ add_bytes_to_string__(
 #ifdef DEBUG_MEMLEAK
 		    unsigned char *file, int line,
 #endif
-		    struct string *string, unsigned char *bytes, int length)
+		    struct string *string, const unsigned char *bytes,
+		    int length)
 {
 	int newlength;
 

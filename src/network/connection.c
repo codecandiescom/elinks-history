@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.48 2003/07/03 22:37:39 jonas Exp $ */
+/* $Id: connection.c,v 1.49 2003/07/03 22:43:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,15 +36,15 @@
 
 
 /* Types and structs */
-struct h_conn {
-	LIST_HEAD(struct h_conn);
+struct host_connection {
+	LIST_HEAD(struct host_connection);
 
 	unsigned char *host;
 	int conn;
 };
 
-struct k_conn {
-	LIST_HEAD(struct k_conn);
+struct keepalive_connection {
+	LIST_HEAD(struct keepalive_connection);
 
 	protocol_handler *protocol;
 	unsigned char *host;
@@ -98,7 +98,7 @@ connect_info(int type)
 {
 	long info = 0;
 	struct connection *ce;
-	struct k_conn *cee;
+	struct keepalive_connection *cee;
 
 	switch (type) {
 		case INFO_FILES:
@@ -135,11 +135,11 @@ connection_disappeared(struct connection *c)
 	return 1;
 }
 
-static struct h_conn *
+static struct host_connection *
 is_host_on_list(struct connection *c)
 {
 	unsigned char *ho = get_host_name(c->url);
-	struct h_conn *h;
+	struct host_connection *h;
 
 	if (!ho) return NULL;
 	foreach (h, host_connections)
@@ -231,13 +231,13 @@ set_connection_state(struct connection *c, int state)
 	if (state >= 0) send_connection_info(c);
 }
 
-static struct k_conn *
+static struct keepalive_connection *
 is_host_on_keepalive_list(struct connection *c)
 {
 	unsigned char *ho;
 	protocol_handler *ph = get_protocol_handler(c->url);
 	int po;
-	struct k_conn *h;
+	struct keepalive_connection *h;
 
 	if (!ph) return NULL;
 
@@ -249,7 +249,7 @@ is_host_on_keepalive_list(struct connection *c)
 
 	foreach (h, keepalive_connections)
 		if (h->protocol == ph && h->port == po
-		    && !strcmp(h->host, ho)) {
+			&& !strcmp(h->host, ho)) {
 			mem_free(ho);
 			return h;
 		}
@@ -261,7 +261,7 @@ is_host_on_keepalive_list(struct connection *c)
 int
 get_keepalive_socket(struct connection *c)
 {
-	struct k_conn *k = is_host_on_keepalive_list(c);
+	struct keepalive_connection *k = is_host_on_keepalive_list(c);
 
 	if (!k) return -1;
 
@@ -278,7 +278,7 @@ get_keepalive_socket(struct connection *c)
 static inline void
 abort_all_keepalive_connections(void)
 {
-	struct k_conn *k;
+	struct keepalive_connection *k;
 
 	foreach (k, keepalive_connections) {
 		mem_free(k->host);
@@ -333,7 +333,7 @@ free_connection_data(struct connection *c)
 	assertm(active_connections >= 0, "active connections underflow");
 
 	if (c->state != S_WAIT) {
-		struct h_conn *h = is_host_on_list(c);
+		struct host_connection *h = is_host_on_list(c);
 
 		assertm(h, "suspending connection that is not on the list "
 			"(state %d)", c->state);
@@ -379,12 +379,12 @@ del_connection(struct connection *c)
 void
 add_keepalive_socket(struct connection *c, ttime timeout)
 {
-	struct k_conn *k;
+	struct keepalive_connection *k;
 
 	free_connection_data(c);
 	assertm(c->sock1 != -1, "keepalive connection not connected");
 
-	k = mem_calloc(1, sizeof(struct k_conn));
+	k = mem_calloc(1, sizeof(struct keepalive_connection));
 	if (!k) goto close;
 
 	k->port = get_port(c->url);
@@ -421,7 +421,7 @@ close:
 }
 
 static inline void
-del_keepalive_socket(struct k_conn *kc)
+del_keepalive_socket(struct keepalive_connection *kc)
 {
 	del_from_list(kc);
 	close(kc->conn);
@@ -439,7 +439,7 @@ keepalive_timer(void *x)
 void
 check_keepalive_connections(void)
 {
-	struct k_conn *kc;
+	struct keepalive_connection *kc;
 	ttime ct = get_time();
 	int p = 0;
 
@@ -553,7 +553,7 @@ try_to_suspend_connection(struct connection *c, unsigned char *ho)
 static void
 run_connection(struct connection *c)
 {
-	struct h_conn *hc;
+	struct host_connection *hc;
 	protocol_handler *func;
 
 	assertm(!c->running, "connection already running");
@@ -567,7 +567,7 @@ run_connection(struct connection *c)
 
 	hc = is_host_on_list(c);
 	if (!hc) {
-		hc = mem_calloc(1, sizeof(struct h_conn));
+		hc = mem_calloc(1, sizeof(struct host_connection));
 		if (!hc) {
 			set_connection_state(c, S_OUT_OF_MEM);
 			del_connection(c);
@@ -657,7 +657,7 @@ check_queue_bugs(void)
 static inline int
 try_connection(struct connection *c, int max_conns_to_host, int max_conns)
 {
-	struct h_conn *hc = is_host_on_list(c);
+	struct host_connection *hc = is_host_on_list(c);
 
 	if (hc && hc->conn >= max_conns_to_host)
 		return try_to_suspend_connection(c, hc->host) ? 0 : -1;

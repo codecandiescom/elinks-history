@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.79 2003/10/30 15:50:55 zas Exp $ */
+/* $Id: draw.c,v 1.80 2003/11/06 11:42:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 #include "terminal/screen.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
-
+#include "util/conv.h"
 
 /* Makes sure that @x and @y are within the dimensions of the terminal. */
 #define check_range(term, x, y) \
@@ -304,4 +304,36 @@ clear_terminal(struct terminal *term)
 {
 	draw_area(term, 0, 0, term->width, term->height, ' ', 0, NULL);
 	set_cursor(term, 0, 0, 1);
+}
+
+void
+draw_progress_bar(struct terminal *term,
+	     	  int x, int *y, int width,
+		  struct color_pair *text_color,
+		  struct color_pair *meter_color,
+		  longlong current, longlong total)
+{
+	/* FIXME: not yet perfect, pasky will improve it later. --Zas */
+	/* Note : values > 100% are theorically possible and were seen. */
+	unsigned char percent[] = "XXXX%"; /* Reduce or enlarge at will. */
+	const unsigned int percent_width = sizeof(percent) - 1;
+	unsigned int percent_len = 0;
+	int gauge_width = width - percent_width; /* width for gauge meter */
+	int progress = (int) ((longlong) 100 * current / total);
+	int barprogress = gauge_width * progress / 100;
+
+	int_upper_bound(&barprogress, gauge_width); /* Limit to preserve display. */
+
+	if (ulongcat(percent, &percent_len, progress, percent_width - 1, 0) > 0)
+		memset(percent, '?', percent_len); /* Too long, we limit to preserve display. */
+
+	percent[percent_len++] = '%'; /* on error, will print '%' only, should not occur. */
+	percent[percent_len] = '\0';
+
+	(*y)++;
+	draw_char_data(term, x, *y, '[');
+	draw_area(term, x + 1, *y, barprogress, 1, ' ', 0, meter_color);
+	draw_char_data(term, x + gauge_width, *y, ']');
+	draw_text(term, x + width - percent_len + 1, *y, percent, percent_len, 0, text_color);
+	(*y)++;
 }

@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.39 2003/10/02 17:14:44 jonas Exp $ */
+/* $Id: draw.h,v 1.40 2003/11/06 11:42:44 zas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -120,5 +120,12 @@ void set_cursor(struct terminal *term, int x, int y, int blockable);
 
 /* Blanks the screen. */
 void clear_terminal(struct terminal *);
+
+/* Draw a progress bar of width @witdh, at pos @x,@*y. @*y is updated. */
+void draw_progress_bar(struct terminal *term,
+		       int x, int *y, int width,
+		       struct color_pair *text_color,
+		       struct color_pair *meter_color,
+		       longlong current, longlong total);
 
 #endif

@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.33 2004/07/18 01:50:02 jonas Exp $ */
+/* $Id: file.c,v 1.34 2004/07/18 02:20:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -485,12 +485,16 @@ file_visible(unsigned char *name, int get_hidden_files, int is_root_directory)
  * All entries are then sorted and finally the sorted entries are added to the
  * @data->fragment one by one. */
 struct directory_entry *
-get_directory_entries(DIR *directory, unsigned char *dirname, int get_hidden)
+get_directory_entries(unsigned char *dirname, int get_hidden)
 {
 	struct directory_entry *entries = NULL;
+	DIR *directory;
 	int size = 0;
 	struct dirent *entry;
 	int is_root_directory = dirname[0] == '/' && !dirname[1];
+
+	directory = opendir(dirname);
+	if (!directory) return NULL;
 
 	while ((entry = readdir(directory))) {
 		struct stat st, *stp;
@@ -536,6 +540,8 @@ get_directory_entries(DIR *directory, unsigned char *dirname, int get_hidden)
 		size++;
 	}
 
+	closedir(directory);
+
 	if (!size) {
 		/* We may have allocated space for entries but added none. */
 		mem_free_if(entries);
@@ -549,4 +555,3 @@ get_directory_entries(DIR *directory, unsigned char *dirname, int get_hidden)
 
 	return entries;
 }
-

@@ -1,10 +1,11 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.171 2004/07/18 01:50:02 jonas Exp $ */
+/* $Id: file.c,v 1.172 2004/07/18 02:20:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -120,11 +121,10 @@ add_dir_entry(struct directory_entry *entry, struct string *page,
  * All entries are then sorted and finally the sorted entries are added to the
  * @data->fragment one by one. */
 static inline void
-add_dir_entries(DIR *directory, unsigned char *dirpath, struct string *page)
+add_dir_entries(struct directory_entry *entries, unsigned char *dirpath,
+		struct string *page)
 {
-	struct directory_entry *entries;
 	unsigned char dircolor[8];
-	int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
 	int dirpathlen = strlen(dirpath);
 	int i;
 
@@ -135,9 +135,6 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct string *page)
 	} else {
 		dircolor[0] = 0;
 	}
-
-	entries = get_directory_entries(directory, dirpath, show_hidden_files);
-	if (!entries) return;
 
 	for (i = 0; entries[i].name; i++) {
 		add_dir_entry(&entries[i], page, dirpathlen, dircolor);
@@ -153,10 +150,19 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct string *page)
  * @dirpath. */
 /* Returns a connection state. S_OK if all is well. */
 static inline enum connection_state
-list_directory(DIR *directory, unsigned char *dirpath, struct string *page)
+list_directory(unsigned char *dirpath, struct string *page)
 {
+	int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
 	unsigned char *slash = dirpath;
 	unsigned char *pslash = ++slash;
+	struct directory_entry *entries;
+
+	errno = 0;
+	entries = get_directory_entries(dirpath, show_hidden_files);
+	if (!entries) {
+		if (errno) return -errno;
+		return S_OUT_OF_MEM;
+	}
 
 	if (!init_string(page)) return S_OUT_OF_MEM;
 
@@ -178,7 +184,7 @@ list_directory(DIR *directory, unsigned char *dirpath, struct string *page)
 	}
 
 	add_to_string(page, "</h2>\n<pre>");
-	add_dir_entries(directory, dirpath, page);
+	add_dir_entries(entries, dirpath, page);
 	add_to_string(page, "</pre>\n<hr>\n</body>\n</html>\n");
 	return S_OK;
 }
@@ -196,7 +202,6 @@ void
 file_protocol_handler(struct connection *connection)
 {
 	unsigned char *redirect_location = NULL;
-	DIR *directory;
 	struct string page, name;
 	enum connection_state state;
 	unsigned char *head = "";
@@ -227,8 +232,7 @@ file_protocol_handler(struct connection *connection)
 	decode_uri_string(name.source);
 	name.length = strlen(name.source);
 
-	directory = opendir(name.source);
-	if (directory) {
+	if (file_is_dir(name.source)) {
 		/* In order for global history and directory listing to
 		 * function properly the directory url must end with a
 		 * directory separator. */
@@ -236,11 +240,9 @@ file_protocol_handler(struct connection *connection)
 			redirect_location = "/";
 			state = S_OK;
 		} else {
-			state = list_directory(directory, name.source, &page);
+			state = list_directory(name.source, &page);
 			head = "\r\nContent-Type: text/html\r\n";
 		}
-
-		closedir(directory);
 
 	} else {
 		state = read_encoded_file(&name, &page);

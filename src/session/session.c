@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.41 2003/05/05 22:36:57 zas Exp $ */
+/* $Id: session.c,v 1.42 2003/05/05 23:13:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1297,19 +1297,20 @@ unsigned char *
 decode_url(unsigned char *url)
 {
 	unsigned char *u = init_str();
-	int l = 0;
-	size_t url_len = strlen(url);
 
-	if (!u) return NULL;
+	if (u) {
+		int l = 0;
+		size_t url_len = strlen(url);
 
-	for (; *url; url++, url_len--) {
-		if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
-		    || unhx(url[2]) == -1 || url[3] != '=')
-			add_chr_to_str(&u, &l, *url);
-		else {
-			add_chr_to_str(&u, &l, (unhx(url[1]) << 4) + unhx(url[2]));
-		       	url += 3;
-			url_len -= 3;
+		for (; *url; url++, url_len--) {
+			if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
+			    || unhx(url[2]) == -1 || url[3] != '=') {
+				add_chr_to_str(&u, &l, *url);
+			} else {
+				add_chr_to_str(&u, &l, (unhx(url[1]) << 4) + unhx(url[2]));
+			       	url += 3;
+				url_len -= 3;
+			}
 		}
 	}
 
@@ -1322,7 +1323,6 @@ struct session *startup_goto_dialog_ses;
 static int
 read_session_info(int fd, struct session *ses, void *data, int len)
 {
-	unsigned char *h;
 	int cpfrom, sz;
 	struct session *s;
 
@@ -1342,21 +1342,22 @@ read_session_info(int fd, struct session *ses, void *data, int len)
 	}
 
 	if (sz) {
-		char *u, *uu;
+		unsigned char *u, *uu;
 
 		if (len < 2 * sizeof(int) + sz) return 0;
 
 		u = mem_alloc(sz + 1);
 		if (u) {
 			memcpy(u, (int *)data + 2, sz);
-			u[sz] = 0;
+			u[sz] = '\0';
 			uu = decode_url(u);
 			goto_url(ses, uu);
 			mem_free(u);
 			mem_free(uu);
 		}
 	} else {
-		h = getenv("WWW_HOME");
+		unsigned char *h = getenv("WWW_HOME");
+
 		if (!h || !*h)
 			h = WWW_HOME_URL;
 		if (!h || !*h) {
@@ -1387,9 +1388,9 @@ abort_preloading(struct session *ses, int interrupt)
 void
 abort_loading(struct session *ses, int interrupt)
 {
-	struct location *l = cur_loc(ses);
-
 	if (have_location(ses)) {
+		struct location *l = cur_loc(ses);
+
 		if (l->stat.state >= 0)
 			change_connection(&l->stat, NULL, PRI_CANCEL, interrupt);
 		abort_files_load(ses, interrupt);
@@ -1448,18 +1449,17 @@ destroy_all_sessions()
 void
 reload(struct session *ses, enum cache_mode cache_mode)
 {
-	struct location *l;
-	struct f_data_c *fd = current_frame(ses);
-
 	abort_loading(ses, 0);
+
 	if (cache_mode == -1)
 		cache_mode = ++ses->reloadlevel;
 	else
 		ses->reloadlevel = cache_mode;
 
-	l = cur_loc(ses);
 	if (have_location(ses)) {
+		struct location *l = cur_loc(ses);
 		struct file_to_load *ftl;
+		struct f_data_c *fd = current_frame(ses);
 
 		l->stat.data = ses;
 		l->stat.end = (void *)doc_end_load;
@@ -1498,8 +1498,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	unsigned char *u;
 	unsigned char *pos;
 	void (*fn)(struct session *, unsigned char *);
-	struct f_data_c *fd = current_frame(ses);
-	int l = 0;
+	struct f_data_c *fd;
 
 	fn = get_external_protocol_function(url);
 	if (fn) {
@@ -1517,6 +1516,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 		print_error_dialog(ses, &stat, N_("Error"));
 		goto end;
 	}
+
 	pos = extract_position(u);
 
 	if (ses->wtd == wtd) {
@@ -1538,9 +1538,13 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 		ses->ref_url = NULL;
 	}
 
+	fd = current_frame(ses);
 	if (fd && fd->f_data && fd->f_data->url) {
+		int l = 0;
+
  		ses->ref_url = init_str();
-		add_to_str(&ses->ref_url, &l, fd->f_data->url);
+		if (ses->ref_url)
+			add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
 
 	ses_goto(ses, u, target, PRI_MAIN, cache_mode, wtd, pos, end_load, 0);
@@ -1611,19 +1615,18 @@ goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
 struct frame *
 ses_find_frame(struct session *ses, unsigned char *name)
 {
-	struct location *l = cur_loc(ses);
-	struct frame *frm;
+	if (have_location(ses)) {
+		struct location *l = cur_loc(ses);
+		struct frame *frm;
 
-	if (!have_location(ses)) {
-		internal("ses_request_frame: no location yet");
-		return NULL;
+		foreachback(frm, l->frames)
+			if (!strcasecmp(frm->name, name))
+				return frm;
 	}
+#ifdef DEBUG
+	else internal("ses_request_frame: no location yet");
+#endif
 
-	foreachback(frm, l->frames)
-		if (!strcasecmp(frm->name, name))
-			return frm;
-
-	/*internal("ses_find_frame: frame not found");*/
 	return NULL;
 }
 
@@ -1631,39 +1634,36 @@ struct frame *
 ses_change_frame_url(struct session *ses, unsigned char *name,
 		     unsigned char *url)
 {
-	struct location *l = cur_loc(ses);
-	struct frame *frm;
-	size_t url_len;
+	if (have_location(ses)) {
+		struct frame *frm;
+		size_t url_len = strlen(url);
+		struct location *l = cur_loc(ses);
 
-	if (!have_location(ses)) {
-		internal("ses_change_frame_url: no location yet");
-		return NULL;
-	}
+		foreachback(frm, l->frames) if (!strcasecmp(frm->name, name)) {
+			if (url_len > strlen(frm->vs.url)) {
+				struct f_data_c *fd;
+				struct frame *nf = frm;
 
-	url_len = strlen(url);
-
-	foreachback(frm, l->frames) if (!strcasecmp(frm->name, name)) {
-		if (url_len > strlen(frm->vs.url)) {
-			struct f_data_c *fd;
-			struct frame *nf = frm;
-
-			nf = mem_realloc(frm, sizeof(struct frame)
+				nf = mem_realloc(frm, sizeof(struct frame)
 					      + url_len + 1);
-			if (!nf) return NULL;
+				if (!nf) return NULL;
 
-			nf->prev->next = nf->next->prev = nf;
+				nf->prev->next = nf->next->prev = nf;
 
-			foreach(fd, ses->scrn_frames)
-				if (fd->vs == &frm->vs)
-					fd->vs = &nf->vs;
+				foreach(fd, ses->scrn_frames)
+					if (fd->vs == &frm->vs)
+						fd->vs = &nf->vs;
 
-			frm = nf;
+				frm = nf;
+			}
+			memcpy(frm->vs.url, url, url_len + 1);
+
+			return frm;
 		}
-		memcpy(frm->vs.url, url, url_len + 1);
-
-		return frm;
 	}
-
+#ifdef DEBUG
+	else internal("ses_change_frame_url: no location yet");
+#endif
 	return NULL;
 
 }
@@ -1720,30 +1720,32 @@ tabwin_func(struct window *tab, struct event *ev, int fw)
 unsigned char *
 get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 {
-	unsigned char *here, *end_of_url;
-	size_t url_len = 0;
+	if (have_location(ses)) { /* Looking at something */
+		unsigned char *here = cur_loc(ses)->vs.url;
 
-	/* Not looking at anything */
-	if (!have_location(ses))
-		return NULL;
+		if (here) {
+			size_t url_len = 0;
+			unsigned char *end_of_url = strchr(here, POST_CHAR); /* Find the length of the url */
 
-	here = cur_loc(ses)->vs.url;
+			if (end_of_url) {
+				url_len = (size_t)(end_of_url - here);
+			} else {
+				url_len = strlen(here);
+			}
 
-	/* Find the length of the url */
-	end_of_url = strchr(here, POST_CHAR);
-	if (end_of_url) {
-		url_len = (size_t)(end_of_url - (unsigned char *)here);
-	} else {
-		url_len = strlen(here);
+			/* Ensure that the url size is not greater than
+			 * str_size. We can't just happily
+			 * strncpy(str, here, str_size)
+			 * because we have to stop at POST_CHAR, not only at
+			 * NULL. */
+			if (url_len >= str_size)
+					url_len = str_size - 1;
+
+			return safe_strncpy(str, here, url_len + 1);
+		}
 	}
 
-	/* Ensure that the url size is not greater than str_size. We can't just
-	 * happily strncpy(str, here, str_size) because we have to stop at
-	 * POST_CHAR, not only at NULL. */
-	if (url_len >= str_size)
-			url_len = str_size - 1;
-
-	return safe_strncpy(str, here, url_len + 1);
+	return NULL;
 }
 
 
@@ -1754,8 +1756,7 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct f_data_c *fd;
-	fd = (struct f_data_c *)current_frame(ses);
+	struct f_data_c *fd = current_frame(ses);
 
 	/* Ensure that the title is defined */
 	if (fd) return safe_strncpy(str, fd->f_data->title, str_size);
@@ -1770,9 +1771,7 @@ get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct link *l;
-
-	l = get_current_link(ses);
+	struct link *l = get_current_link(ses);
 
 	if (l) return safe_strncpy(str, l->where ? l->where : l->where_img,
 				   str_size);
@@ -1786,9 +1785,7 @@ get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct link *l;
-
-	l = get_current_link(ses);
+	struct link *l = get_current_link(ses);
 
 	if (l) return safe_strncpy(str, l->name, str_size);
 
@@ -1798,14 +1795,11 @@ get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 struct link *
 get_current_link(struct session *ses)
 {
-	struct f_data_c *fd;
-	struct link *l;
-
-	/* What the hell is an 'fd'? */
-	fd = (struct f_data_c *)current_frame(ses);
+	struct f_data_c *fd = current_frame(ses); /* What the hell is an 'fd'? */
 
 	if (fd && fd->vs->current_link != -1) {
-		l = &fd->f_data->links[fd->vs->current_link];
+		struct link *l = &fd->f_data->links[fd->vs->current_link];
+
 		/* Only return a link */
 		if (l->type == L_LINK) return l;
 	}

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.25 2002/10/17 20:26:41 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.26 2002/12/05 22:48:54 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -17,6 +17,7 @@ enum keymap {
  * and also update the table action_table[] in kbdbind.c.  */
 enum keyact {
 	ACT_NONE = -1,
+	ACT_ABORT_CONNECTION,
 	ACT_ADD_BOOKMARK,
 	ACT_ADD_BOOKMARK_LINK,
 	ACT_AUTO_COMPLETE,

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.102 2002/12/01 20:04:37 zas Exp $ */
+/* $Id: view.c,v 1.103 2002/12/05 22:48:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2843,8 +2843,10 @@ send_event(struct session *ses, struct event *ev)
 			case ACT_RELOAD:
 				reload(ses, -1);
 				goto x;
+			case ACT_ABORT_CONNECTION:
+				abort_conn_with_state(ses->loading.c, S_INTERRUPTED);
+				goto x;
 			case ACT_GOTO_URL:
-
 quak:
 				dialog_goto_url(ses,"");
 				goto x;

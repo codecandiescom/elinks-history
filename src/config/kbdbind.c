@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.42 2002/11/28 13:45:22 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.43 2002/12/05 22:48:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,6 +285,7 @@ make_keystroke(unsigned char **str, int *len, long key, long meta)
  * the ACT_* constants in kbdbind.h.  */
 static struct strtonum action_table[] = {
 	{ "none", ACT_NONE },
+	{ "abort-connection", ACT_ABORT_CONNECTION },
 	{ "add-bookmark", ACT_ADD_BOOKMARK },
 	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK},
 	{ "auto-complete", ACT_AUTO_COMPLETE },
@@ -526,6 +527,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_DOWNLOAD, 'D', 0 },
 	{ ACT_RESUME_DOWNLOAD, 'r', 0 },
 	{ ACT_RESUME_DOWNLOAD, 'R', 0 },
+	{ ACT_ABORT_CONNECTION, 'z', 0 },
 	{ ACT_SEARCH, '/', 0 },
 	{ ACT_SEARCH_BACK, '?', 0 },
 	{ ACT_FIND_NEXT, 'n', 0 },

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.65 2003/07/23 12:55:38 pasky Exp $ */
+/* $Id: auth.c,v 1.66 2003/07/24 13:37:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,13 +152,15 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		}
 
 		if (!*entry->user
-		    || strlcmp(entry->user, -1, uri->user, uri->userlen)) {
+		    || (!uri->user || !uri->userlen ||
+			strlcmp(entry->user, -1, uri->user, uri->userlen))) {
 			entry->valid = 0;
 			set_auth_user(entry, uri);
 		}
 
 		if (!*entry->password
-		    || strlcmp(entry->password, -1, uri->password, uri->passwordlen)) {
+		    || (!uri->password || !uri->passwordlen ||
+			strlcmp(entry->password, -1, uri->password, uri->passwordlen))) {
 			entry->valid = 0;
 			set_auth_password(entry, uri);
 		}

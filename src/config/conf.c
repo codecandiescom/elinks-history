@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.89 2003/07/24 00:52:41 pasky Exp $ */
+/* $Id: conf.c,v 1.90 2003/07/24 02:05:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -448,14 +448,18 @@ load_config_file(unsigned char *prefix, unsigned char *name,
 	return 0;
 }
 
+static void
+load_config_from(unsigned char *file, struct option *tree)
+{
+	load_config_file(CONFDIR, file, tree, NULL);
+	load_config_file(elinks_home ? elinks_home : (unsigned char *) "",
+			 file, tree, NULL);
+}
+
 void
 load_config(void)
 {
-	static unsigned char *cf = "elinks.conf";
-
-	load_config_file(CONFDIR, cf, config_options, NULL);
-	load_config_file(elinks_home ? elinks_home : (unsigned char *) "",
-			 cf, config_options, NULL);
+	load_config_from("elinks.conf", config_options);
 }
 
 
@@ -700,8 +704,15 @@ free_cfg_str:
 	return ret;
 }
 
+static void
+write_config_to(unsigned char *file, struct option *tree,
+		struct terminal *term)
+{
+	write_config_file(elinks_home, file, tree, term);
+}
+
 void
 write_config(struct terminal *term)
 {
-	write_config_file(elinks_home, "elinks.conf", config_options, term);
+	write_config_to("elinks.conf", config_options, term);
 }

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.59 2002/12/07 20:05:52 pasky Exp $ */
+/* $Id: conf.c,v 1.60 2002/12/07 22:26:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,12 +18,11 @@
 
 #include "elinks.h"
 
-#include "bfu/msgbox.h"
 #include "config/conf.h"
+#include "config/dialogs.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "config/opttypes.h"
-#include "intl/language.h"
 #include "lowlevel/home.h"
 #include "lowlevel/terminal.h"
 #include "util/error.h"
@@ -610,14 +609,8 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	secure_fputs(ssi, cfg_str);
 	ret = secure_close(ssi);
 
-	if (ret && term) {
-		msg_box(term, NULL,
-			TEXT(T_CONFIG_ERROR), AL_CENTER | AL_EXTD_TEXT,
-			TEXT(T_UNABLE_TO_WRITE_TO_CONFIG_FILE), "\n",
-			config_file, ": ", strerror(ret), NULL,
-			NULL, 1,
-			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
-	}
+	if (ret && term)
+		write_config_error(term, config_file, ret);
 
 free_config_file:
 	mem_free(config_file);

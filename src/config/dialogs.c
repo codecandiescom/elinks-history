@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.3 2002/12/07 20:05:52 pasky Exp $ */
+/* $Id: dialogs.c,v 1.4 2002/12/07 22:26:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,17 @@
 /* The location of the box in the options manager */
 #define	OP_BOX_IND		2
 
+
+void
+write_config_error(struct terminal *term, unsigned char *config_file, int ret)
+{
+	msg_box(term, NULL,
+		TEXT(T_CONFIG_ERROR), AL_CENTER | AL_EXTD_TEXT,
+		TEXT(T_UNABLE_TO_WRITE_TO_CONFIG_FILE), "\n",
+		config_file, ": ", strerror(ret), NULL,
+		NULL, 1,
+		TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+}
 
 /****************************************************************************
   Bookmark manager stuff.

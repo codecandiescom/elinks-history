@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.205 2003/08/23 15:06:01 jonas Exp $ */
+/* $Id: renderer.c,v 1.206 2003/08/23 15:07:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,27 +244,6 @@ xpand_spaces(struct part *p, int l)
 
 
 static inline void
-set_hchar(struct part *part, int x, int y,
-	  unsigned char data, color_t bgcolor, enum screen_char_attr attr)
-{
-	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
-
-	assert(part && part->document);
-	if_assert_failed return;
-
-	if (xpand_lines(part, y)
-	    || xpand_line(part, y, x))
-		return;
-
-	assert(part->document->data);
-	if_assert_failed return;
-
-	POS(x, y).data = data;
-	POS(x, y).color = color;
-	POS(x, y).attr = attr;
-}
-
-static inline void
 set_hchars(struct part *part, int x, int y, int xl,
 	   unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
@@ -291,7 +270,21 @@ void
 xset_hchar(struct part *part, int x, int y,
 	   unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
-	set_hchar(part, x, y, data, bgcolor, attr);
+	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
+
+	assert(part && part->document);
+	if_assert_failed return;
+
+	if (xpand_lines(part, y)
+	    || xpand_line(part, y, x))
+		return;
+
+	assert(part->document->data);
+	if_assert_failed return;
+
+	POS(x, y).data = data;
+	POS(x, y).color = color;
+	POS(x, y).attr = attr;
 }
 
 void

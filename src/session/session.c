@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.135 2003/07/31 17:29:00 jonas Exp $ */
+/* $Id: session.c,v 1.136 2003/08/01 14:34:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -425,12 +425,8 @@ ses_forward(struct session *ses)
 
 x:
 	len = strlen(ses->loading_url);
-	if (have_location(ses)) {
-		int vs_url_len = strlen(cur_loc(ses)->vs.url);
-
-	       	if (len < vs_url_len)
-			len = vs_url_len;
-	}
+	if (have_location(ses))
+		int_lower_bound(&len, strlen(cur_loc(ses)->vs.url));
 
 	l = mem_alloc(sizeof(struct location) + len + 1);
 	if (!l) return;
@@ -440,10 +436,9 @@ x:
 	if (ses->task_target_frame && *ses->task_target_frame) {
 		struct frame *frm;
 
-		if (!have_location(ses)) {
-			internal("no location yet");
-			return;
-		}
+		assertm(have_location(ses), "no location yet");
+		if_assert_failed return;
+
 		copy_location(l, cur_loc(ses));
 		add_to_history(ses, l);
 		frm = ses_change_frame_url(ses, ses->task_target_frame,
@@ -1163,9 +1158,9 @@ create_session(struct window *tab)
 static inline void
 copy_session(struct session *old, struct session *new)
 {
-	if (have_location(old)) {
-		goto_url(new, cur_loc(old)->vs.url);
-	}
+	if (!have_location(old)) return;
+
+	goto_url(new, cur_loc(old)->vs.url);
 }
 
 void *
@@ -1181,7 +1176,7 @@ create_session_info(int cp, unsigned char *url, int *ll)
 
 	i[0] = cp;
 	i[1] = l;
-	memcpy(i + 2, url, l);
+	if (l) memcpy(i + 2, url, l);
 
 	return i;
 }
@@ -1279,10 +1274,10 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 void
 abort_preloading(struct session *ses, int interrupt)
 {
-	if (ses->task) {
-		change_connection(&ses->loading, NULL, PRI_CANCEL, interrupt);
-		free_task(ses);
-	}
+	if (!ses->task) return;
+
+	change_connection(&ses->loading, NULL, PRI_CANCEL, interrupt);
+	free_task(ses);
 }
 
 void
@@ -1520,10 +1515,8 @@ ses_find_frame(struct session *ses, unsigned char *name)
 	struct location *l = cur_loc(ses);
 	struct frame *frm;
 
-	if (!have_location(ses)) {
-		internal("ses_request_frame: no location yet");
-		return NULL;
-	}
+	assertm(have_location(ses), "ses_request_frame: no location yet");
+	if_assert_failed return NULL;
 
 	foreachback (frm, l->frames)
 		if (!strcasecmp(frm->name, name))
@@ -1644,8 +1637,7 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 	 * strncpy(str, here, str_size)
 	 * because we have to stop at POST_CHAR, not only at
 	 * NULL. */
-	if (url_len >= str_size)
-		url_len = str_size - 1;
+	int_upper_bound(&url_len, str_size - 1);
 
 	return safe_strncpy(str, here, url_len + 1);
 }

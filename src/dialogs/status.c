@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.19 2003/12/02 19:57:59 jonas Exp $ */
+/* $Id: status.c,v 1.20 2003/12/02 20:18:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "cache/cache.h"
 #include "document/document.h"
 #include "document/options.h"
+#include "document/renderer.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
 #include "sched/connection.h"
@@ -160,6 +161,10 @@ update_status(void)
 
 		if (show_tabs(show_tabs_bar, tabs) != ses->visible_tabs_bar) {
 			ses->visible_tabs_bar = show_tabs(show_tabs_bar, tabs);
+			/* Force the current document to be rerendered so the
+			 * document view and document height is updated to fit
+			 * into the new dimensions. Related to bug 87. */
+			render_document_frames(ses);
 			dirty = 1;
 		}
 

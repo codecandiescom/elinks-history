@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.193 2005/01/02 14:21:53 jonas Exp $ */
+/* $Id: cookies.c,v 1.194 2005/01/02 15:23:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,8 +94,10 @@ static struct option_info cookies_options[] = {
 		"max_age", 0, -1, 10000, -1,
 		N_("Cookie maximum age (in days):\n"
 		"-1 is use cookie's expiration date if any\n"
-		"0  is force expiration at the end of session, ignoring cookie's expiration date\n"
-		"1+ is use cookie's expiration date, but limit age to the given number of days")),
+		"0  is force expiration at the end of session, ignoring cookie's\n"
+		"   expiration date\n"
+		"1+ is use cookie's expiration date, but limit age to the given\n"
+		"   number of days")),
 
 	INIT_OPT_BOOL("cookies", N_("Paranoid security"),
 		"paranoid_security", 0, 0,
@@ -107,12 +109,12 @@ static struct option_info cookies_options[] = {
 
 	INIT_OPT_BOOL("cookies", N_("Saving"),
 		"save", 0, 1,
-		N_("Load/save cookies from/to disk?")),
+		N_("Whether cookies should be loaded from and save to disk.")),
 
 	INIT_OPT_BOOL("cookies", N_("Resaving"),
 		"resave", 0, 1,
 		N_("Save cookies after each change in cookies list? No effect when\n"
-		"cookies_save is off.")),
+		"cookie saving (cookies.save) is off.")),
 
 	NULL_OPTION_INFO,
 };

@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.10 2003/06/13 23:00:37 zas Exp $ */
+/* $Id: fastfind.c,v 1.11 2003/06/14 00:25:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,10 +87,9 @@ struct fastfind_info {
 	int case_sensitive;
 	int idxtab[FF_LINE_SIZE];
 
-	unsigned short pointers_count;
-	unsigned short lines_count;
+	int pointers_count;
+	int lines_count;
 
-	unsigned char uniq_chars[FF_LINE_SIZE];
 #ifdef FASTFIND_DEBUG
 	unsigned long searches;
 	unsigned long found;
@@ -99,6 +98,8 @@ struct fastfind_info {
 	unsigned long memory_usage;
 	unsigned long total_key_len;
 #endif
+
+	unsigned char uniq_chars[FF_LINE_SIZE];
 };
 
 
@@ -214,12 +215,14 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 	struct fastfind_info *info = ff_init(case_sensitive);
 	register int i;
 
-	if (!info) return NULL;
+	assert(info && reset && next);
 
-	/* First search min, max, count */
+	/* First search min, max, count and uniq_chars. */
 	(*reset)();
 	while ((p = (*next)())) {
 		int key_len = strlen(p->key);
+
+		assert(key_len); /* We do not want empty keys. */
 
 		if (key_len < info->min_key_len)
 			info->min_key_len = key_len;
@@ -240,7 +243,7 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 						break;
 				}
 			}
-			/* FIXME: limit 128 */
+
 			if (!found) {
 				assert(info->uniq_chars_count < FF_LINE_SIZE);
 				info->uniq_chars[info->uniq_chars_count++] = ifcase(p->key[i]);
@@ -256,10 +259,7 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 	init_idxtab(info);
 
 	/* Root line allocation */
-	if (!alloc_line(info)) {
-		fastfind_terminate(info);
-		return NULL;
-	}
+	if (!alloc_line(info)) goto alloc_error;
 
 	info->root_line = info->lines[info->lines_count];
 
@@ -277,7 +277,7 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 
 			/* Convert char to its index value */
 			if (info->case_sensitive)
-				idx = info->idxtab[p->key[i]]; /* Convert char to its index value */
+				idx = info->idxtab[p->key[i]];
 			else
 				idx = info->idxtab[upcase(p->key[i])];
 
@@ -285,18 +285,12 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 				current[idx].e = 1; /* Mark final leaf */
 				/* Memorize pointer to data */
 				current[idx].p = info->pointers_count;
-				if (!add_to_pointers(p->data, key_len, info)) {
-					fastfind_terminate(info);
-					return NULL;
-				}
+				if (!add_to_pointers(p->data, key_len, info))
+					goto alloc_error;
 
 			} else {
 				if (current[idx].l == 0) { /* There's no leaf line yet */
-					if (!alloc_line(info)) {
-						fastfind_terminate(info);
-						return NULL;
-					}
-
+					if (!alloc_line(info)) goto alloc_error;
 					current[idx].l = info->lines_count;
 				}
 
@@ -306,6 +300,10 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 	}
 
 	return (void *) info;
+
+alloc_error:
+	fastfind_terminate(info);
+	return NULL;
 }
 
 /* This one should be called to minimize memory usage of index.
@@ -313,17 +311,17 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 void
 fastfind_index_compress(void *current_, void *fastfind_info)
 {
-	register int i;
 	struct ff_elt *current = (struct ff_elt *)current_;
 	struct fastfind_info *info = (struct fastfind_info *) fastfind_info;
 	int cnt = 0;
 	int pos = -1;
+	register int i = 0;
 
-	if (!info) return;
+	assert(info);
 
 	if (!current) current = info->root_line;
 
-	for (i = 0; i < info->uniq_chars_count; i++) {
+	for (; i < info->uniq_chars_count; i++) {
 		if (current[i].c) continue;
 
 		if (current[i].l) /* There's a leaf line, descend to it, and recurse */
@@ -337,12 +335,10 @@ fastfind_index_compress(void *current_, void *fastfind_info)
 
 	/* Compress if possible ;) */
 	if (pos != -1 && cnt < 2 && !current[pos].c) {
-		int done = 0;
+		int cur = 0;
 		struct ff_elt_c *new = mem_alloc(sizeof(struct ff_elt_c));
 
-#ifdef FASTFIND_DEBUG
-		info->memory_usage += sizeof(struct ff_elt_c);
-#endif
+		if (!new) return;
 
 		new->c = 1;
 		new->e = current[pos].e;
@@ -352,17 +348,20 @@ fastfind_index_compress(void *current_, void *fastfind_info)
 
 		for (i = 1; i < info->lines_count; i++) {
 			if (info->lines[i] == current) {
-				mem_free(info->lines[i]);
-				info->lines[i] = (struct ff_elt *) new;
-#ifdef FASTFIND_DEBUG
-			/*	fprintf(stderr, "comp: %p %d\n", current, i); */
-				info->memory_usage -= sizeof(struct ff_elt) * info->uniq_chars_count;
-#endif
-				done = 1;
+				cur = i;
 				break;
 			}
 		}
-		if (!done) mem_free(new);
+
+		if (cur) {
+			mem_free(info->lines[cur]);
+			info->lines[cur] = (struct ff_elt *) new;
+#ifdef FASTFIND_DEBUG
+			info->memory_usage += sizeof(struct ff_elt_c);
+			info->memory_usage -= sizeof(struct ff_elt) * info->uniq_chars_count;
+#endif
+		} else
+			mem_free(new);
 	}
 }
 
@@ -371,86 +370,75 @@ void *
 fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 {
 	struct fastfind_info *info = (struct fastfind_info *) fastfind_info;
-	register int i;
+	register int i = 0;
 	struct ff_elt *current;
 
+	assert(info);
+
 #ifdef FASTFIND_DEBUG
+#define testinc() info->tests++
+#define iterinc() info->iterations++
+#define foundinc() info->found++
 	info->searches++;
 	info->total_key_len += key_len;
-	info->tests++;
-   	if (!info) return NULL;
-	info->tests++;
-   	if (!key) return NULL;
-	info->tests++;
-	if (key_len > info->max_key_len) return NULL;
-	info->tests++;
-	if (key_len < info->min_key_len) return NULL;
-#endif
 
-	if (!info || !key || key_len > info->max_key_len || key_len < info->min_key_len)
+	testinc();
+   	if (!key) return NULL;
+	testinc();
+	if (key_len > info->max_key_len) return NULL;
+	testinc();
+	if (key_len < info->min_key_len) return NULL;
+#else
+	if (!key || key_len > info->max_key_len || key_len < info->min_key_len)
 		return NULL;
+#endif
 
 	current = info->root_line;
 
-	for (i = 0; i < key_len; i++) {
+	for (; i < key_len; i++) {
 		int lidx;
 
-#ifdef FASTFIND_DEBUG
-		info->tests++;
-#endif
-		/* TODO: Move this test outside loop. Here performance matters. */
+		iterinc();
+
+		/* TODO: Move this test outside loop. Here performance matters.
+		 * We do not count this test in stats as it will disappear. */
 		if (info->case_sensitive)
 			lidx = info->idxtab[key[i]];
 		else
 			lidx = info->idxtab[upcase(key[i])];
 
-#ifdef FASTFIND_DEBUG
-		info->iterations++;
-		info->tests++;
-#endif
+		testinc();
 		if (lidx < 0) return NULL;
 
-#ifdef FASTFIND_DEBUG
-		info->tests++;
-#endif
-		if (current->c) {
-#ifdef FASTFIND_DEBUG
-			info->tests++;
-#endif
+		testinc();
+		if (current->c) { /* Compressed line. */
+
+			testinc();
 			if (((struct ff_elt_c *)(current))->ch != lidx)
 				return NULL;
-#ifdef FASTFIND_DEBUG
-			info->tests++;
-#endif
+
+			testinc();
 			if (current->e && key_len == info->keylen_list[current->p]) {
-#ifdef FASTFIND_DEBUG
-				info->found++;
-				info->tests++;
-#endif
+				testinc();
+				foundinc();
 				return info->pointers[current->p];
 			}
-#ifdef FASTFIND_DEBUG
-			info->tests++;
-#endif
+
+			testinc();
 			if (current->l)
 				current = (struct ff_elt *) info->lines[current->l];
 			else
 				return NULL;
 
-		} else {
-#ifdef FASTFIND_DEBUG
-			info->tests++;
-#endif
+		} else { /* Normal line. */
+			testinc();
 			if (current[lidx].e && key_len == info->keylen_list[current[lidx].p]) {
-#ifdef FASTFIND_DEBUG
-				info->found++;
-				info->tests++;
-#endif
+				testinc();
+				foundinc();
 				return info->pointers[current[lidx].p];
 			}
-#ifdef FASTFIND_DEBUG
-			info->tests++;
-#endif
+
+			testinc();
 			if (current[lidx].l)
 				current = (struct ff_elt *) info->lines[current[lidx].l];
 			else

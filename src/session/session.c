@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.299 2004/01/22 23:29:41 jonas Exp $ */
+/* $Id: session.c,v 1.300 2004/01/25 01:20:51 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -708,7 +708,7 @@ decode_session_info(const void *pdata)
 			str += length;
 			url_len -= length;
 
-			add_to_string_list(&info->url_list, url);
+			add_to_string_list(&info->url_list, url, -1);
 			fmem_free(url);
 		}
 	}

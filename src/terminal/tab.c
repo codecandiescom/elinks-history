@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.47 2004/01/17 01:56:29 jonas Exp $ */
+/* $Id: tab.c,v 1.48 2004/01/25 01:20:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,7 +252,7 @@ open_url_in_new_tab(struct session *ses, unsigned char *url, int in_background)
 
 	info->base_session = ses->id;
 	init_list(info->url_list);
-	if (url) add_to_string_list(&info->url_list, url);
+	if (url) add_to_string_list(&info->url_list, url, -1);
 
 	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);

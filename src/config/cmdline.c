@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.38 2004/01/18 00:59:10 pasky Exp $ */
+/* $Id: cmdline.c,v 1.39 2004/01/25 01:20:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ unknown_option:
 			}
 
 		} else if (url_list) {
-			add_to_string_list(url_list, argv[-1]);
+			add_to_string_list(url_list, argv[-1], -1);
 			if (!location) location = argv[-1];
 		}
 	}

@@ -1,3 +1,80 @@
+Thu Apr 17 17:57:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	This avoids multiple [ Submit ] image inputs on a page like
+	amazon.com's which uses image to record useful/useless
+	recommendations but doesn't have alt attribute set. Patch by Zardoz.  
+
+Thu Apr 17 17:48:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	Two fixes -- one for processing tree below <xbel> node and another
+	to fix crash when freeing attributes. Patch by Zardoz.  
+
+Thu Apr 17 17:44:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	A missing header file is now included.  
+
+Thu Apr 17 15:07:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Compression handling was finally fixed. Patch by Witold Filipczyk.  
+
+Thu Apr 17 15:03:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/: bindtextdom.c, dcgettext.c, dcigettext.c,
+	dcngettext.c, dgettext.c, dngettext.c, finddomain.c, gettext.c,
+	gettextP.h, hash-string.h, l10nflist.c, libgnuintl.h, libintl.h,
+	loadinfo.h, loadmsgcat.c, localealias.c, ngettext.c, plural.c,
+	plural.y, textdomain.c:
+
+	ELinksification. There's still remaining some libc specific stuff...  
+
+Thu Apr 17 13:25:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: string.c, string.h:
+
+	stpcpy() and mempcpy() replacements were added. It will help to
+	simplify gettext code included in ELinks.  
+
+Thu Apr 17 12:28:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/: bindtextdom.c, dcgettext.c, dcigettext.c,
+	dcngettext.c, dgettext.c, explodename.c, finddomain.c, gettext.c,
+	hash-string.h, intl-compat.c, l10nflist.c, libintl.c, loadmsgcat.c,
+	localcharset.c, localealias.c, ngettext.c, plural.c, textdomain.c:
+
+	ELinksified function declarations and labels.  
+
+Thu Apr 17 11:58:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/: bindtextdom.c, dcgettext.c, dcigettext.c,
+	dcngettext.c, dgettext.c, dngettext.c, explodename.c, finddomain.c,
+	gettext.c, intl-compat.c, l10nflist.c, libintl.c, gettext.h,
+	gettextP.h, hash-string.h, libgettext.h, libgnuintl.h, libintl.h,
+	loadinfo.h, loadmsgcat.c, localcharset.c, localealias.c,
+	ngettext.c, plural.c, textdomain.c:
+
+	ELinksified indentation. Still not perfect but should help...  
+
+Thu Apr 17 07:53:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	Fancier features listing in info box, comma separators were added.  
+
+Thu Apr 17 07:44:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os_depx.h:
+
+	Compilation fix. On some systems, PIPE_BUF redefinition causes
+	compilation to fail.  
+
 Wed Apr 16 21:36:24 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/protocol/http/http.c:

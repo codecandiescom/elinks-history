@@ -1,4 +1,4 @@
-/* $Id: language.h,v 1.3 2002/07/11 16:14:56 pasky Exp $ */
+/* $Id: language.h,v 1.4 2003/01/01 20:36:09 pasky Exp $ */
 
 #ifndef EL__LANGUAGE_H
 #define EL__LANGUAGE_H
@@ -20,7 +20,7 @@ int n_languages();
 unsigned char *language_name(int);
 unsigned char *language_iso639_code(int);
 
-#define _(_x_, _y_) get_text_translation(_x_, _y_)
+#define GT(_x_, _y_) get_text_translation(_x_, _y_)
 #define TEXT(x) (dummyarray + x)
 
 #endif

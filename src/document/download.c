@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.66 2003/01/01 20:30:34 pasky Exp $ */
+/* $Id: download.c,v 1.67 2003/01/01 20:36:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,13 +219,13 @@ download_window_function(struct dialog_data *dlg)
 		if (!m) return;
 
 		t = 1;
-		add_to_str(&m, &l, _(TEXT(T_RECEIVED), term));
+		add_to_str(&m, &l, GT(TEXT(T_RECEIVED), term));
 		add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, stat->prg->pos);
 
 		if (stat->prg->size >= 0) {
 			add_to_str(&m, &l, " ");
-			add_to_str(&m, &l, _(TEXT(T_OF),term));
+			add_to_str(&m, &l, GT(TEXT(T_OF),term));
 			add_to_str(&m, &l, " ");
 			add_xnum_to_str(&m, &l, stat->prg->size);
 			add_to_str(&m, &l, " ");
@@ -235,14 +235,14 @@ download_window_function(struct dialog_data *dlg)
 			add_xnum_to_str(&m, &l, stat->prg->pos
 						- stat->prg->start);
 			add_to_str(&m, &l, " ");
-			add_to_str(&m, &l, _(TEXT(T_AFTER_RESUME), term));
+			add_to_str(&m, &l, GT(TEXT(T_AFTER_RESUME), term));
 			add_to_str(&m, &l, ")");
 		}
 		add_to_str(&m, &l, "\n");
 
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
-			add_to_str(&m, &l, _(TEXT(T_AVERAGE_SPEED), term));
-		else add_to_str(&m, &l, _(TEXT(T_SPEED), term));
+			add_to_str(&m, &l, GT(TEXT(T_AVERAGE_SPEED), term));
+		else add_to_str(&m, &l, GT(TEXT(T_SPEED), term));
 
 		add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, (longlong) stat->prg->loaded * 10
@@ -251,7 +251,7 @@ download_window_function(struct dialog_data *dlg)
 
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 			add_to_str(&m, &l, ", ");
-			add_to_str(&m, &l, _(TEXT(T_CURRENT_SPEED), term));
+			add_to_str(&m, &l, GT(TEXT(T_CURRENT_SPEED), term));
 			add_to_str(&m, &l, " ");
 			add_xnum_to_str(&m, &l, stat->prg->cur_loaded
 						/ (CURRENT_SPD_SEC *
@@ -260,13 +260,13 @@ download_window_function(struct dialog_data *dlg)
 		}
 
 		add_to_str(&m, &l, "\n");
-		add_to_str(&m, &l, _(TEXT(T_ELAPSED_TIME), term));
+		add_to_str(&m, &l, GT(TEXT(T_ELAPSED_TIME), term));
 		add_to_str(&m, &l, " ");
 		add_time_to_str(&m, &l, stat->prg->elapsed);
 
 		if (stat->prg->size >= 0 && stat->prg->loaded > 0) {
 			add_to_str(&m, &l, ", ");
-			add_to_str(&m, &l, _(TEXT(T_ESTIMATED_TIME), term));
+			add_to_str(&m, &l, GT(TEXT(T_ESTIMATED_TIME), term));
 			add_to_str(&m, &l, " ");
 #if 0
 			add_time_to_str(&m, &l, stat->prg->elapsed
@@ -280,7 +280,7 @@ download_window_function(struct dialog_data *dlg)
 						* 1000);
 		}
 
-	} else m = stracpy(_(get_err_msg(stat->state), term));
+	} else m = stracpy(GT(get_err_msg(stat->state), term));
 
 	if (!m) return;
 

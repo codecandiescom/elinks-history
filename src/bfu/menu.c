@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.24 2002/12/08 20:30:33 pasky Exp $ */
+/* $Id: menu.c,v 1.25 2003/01/01 20:36:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,10 +142,10 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	for (my = 0; menu->items[my].text; my++) {
 		int s;
 
-		s = strlen(_(menu->items[my].text, term)) +
-		    strlen(_(menu->items[my].rtext, term)) + 4;
+		s = strlen(GT(menu->items[my].text, term)) +
+		    strlen(GT(menu->items[my].rtext, term)) + 4;
 
-		if (_(menu->items[my].rtext, term)[0] != 0)
+		if (GT(menu->items[my].rtext, term)[0] != 0)
 			s += MENU_HOTKEY_SPACE;
 
 		if (s > mx) mx = s;
@@ -233,7 +233,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	for (p = menu->view, s = menu->y + 1;
 	     p < menu->ni && p < menu->view + menu->yw - 2;
 	     p++, s++) {
-		unsigned char *tmptext = _(menu->items[p].text, term);
+		unsigned char *tmptext = GT(menu->items[p].text, term);
 		int h = 0;
 		int co = menu_normal_color;
 
@@ -250,12 +250,12 @@ display_menu(struct terminal *term, struct menu *menu)
 
 		if (menu->items[p].hotkey != M_BAR || (tmptext && tmptext[0])) {
 			unsigned char c;
-			int l = strlen(_(menu->items[p].rtext, term));
+			int l = strlen(GT(menu->items[p].rtext, term));
 			int x;
 
 			for (x = l - 1;
 			     (x >= 0) && (menu->xw - 4 >= l - x) &&
-			     (c = _(menu->items[p].rtext, term)[x]);
+			     (c = GT(menu->items[p].rtext, term)[x]);
 			     x--) {
 				set_char(term, menu->x + menu->xw - 2 - l + x, s, c | co);
 			}
@@ -265,7 +265,7 @@ display_menu(struct terminal *term, struct menu *menu)
 				int ch = co;
 
 				if (!h
-				    && strchr(_(menu->items[p].hotkey, term),
+				    && strchr(GT(menu->items[p].hotkey, term),
 					      upcase(c))) {
 					h = 1;
 					ch = menu_hotkey_color;
@@ -495,7 +495,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 						int i;
 
 						for (i = 0; i < menu->ni; i++) {
-							if (strchr(_(menu->items[i].hotkey, win->term),
+							if (strchr(GT(menu->items[i].hotkey, win->term),
 								   upcase(ev->x))) {
 								menu->selected = i;
 								scroll_menu(menu, 0);
@@ -576,7 +576,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		int j;
 		int co;
 		unsigned char c;
-		unsigned char *tmptext = _(menu->items[i].text, term);
+		unsigned char *tmptext = GT(menu->items[i].text, term);
 
 		if (i == menu->selected) {
 			s = 1;
@@ -596,7 +596,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		p += 2;
 
 		for (j = 0; (c = tmptext[j]); j++, p++) {
-			if (!s && strchr(_(menu->items[i].hotkey, term),
+			if (!s && strchr(GT(menu->items[i].hotkey, term),
 					 upcase(c))) {
 				s = 1;
 				set_char(term, p, 0, mainmenu_hotkey_color | c);
@@ -664,7 +664,7 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 					int o = p;
 					unsigned char *tmptext;
 
-					tmptext = _(menu->items[i].text,
+					tmptext = GT(menu->items[i].text,
 						    win->term);
 					p += strlen(tmptext) + 4;
 
@@ -720,7 +720,7 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 
 				s = 1;
 				for (i = 0; i < menu->ni; i++)
-					if (strchr(_(menu->items[i].hotkey,
+					if (strchr(GT(menu->items[i].hotkey,
 						     win->term),
 						   upcase(ev->x))) {
 						menu->selected = i;

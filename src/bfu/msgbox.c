@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.17 2002/12/08 20:30:33 pasky Exp $ */
+/* $Id: msgbox.c,v 1.18 2003/01/01 20:36:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@ msg_box_fn(struct dialog_data *dlg)
 	if (!text) return;
 
 	for (ptr = dlg->dlg->udata; *ptr; ptr++)
-		add_to_str(&text, &textl, _(*ptr, term));
+		add_to_str(&text, &textl, GT(*ptr, term));
 
 	max_text_width(term, text, &max);
 	min_text_width(term, text, &min);

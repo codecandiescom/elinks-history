@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.7 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: group.c,v 1.8 2003/01/01 20:36:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,12 +29,12 @@ max_group_width(struct terminal *term, unsigned char **texts,
 		if (item->item->type == D_CHECKBOX) {
 			wx = 4;
 		} else if (item->item->type == D_BUTTON) {
-			wx = strlen(_(item->item->text, term)) + 5;
+			wx = strlen(GT(item->item->text, term)) + 5;
 		} else {
 			wx = item->item->dlen + 1;
 		}
 
-		wx += strlen(_(texts[0], term));
+		wx += strlen(GT(texts[0], term));
 		if (n) wx++;
 		ww += wx;
 		texts++;
@@ -54,12 +54,12 @@ min_group_width(struct terminal *term, unsigned char **texts,
 		if (item->item->type == D_CHECKBOX) {
 			wx = 4;
 		} else if (item->item->type == D_BUTTON) {
-			wx = strlen(_(item->item->text, term)) + 5;
+			wx = strlen(GT(item->item->text, term)) + 5;
 		} else {
 			wx = item->item->dlen + 1;
 		}
 
-		wx += strlen(_(texts[0], term));
+		wx += strlen(GT(texts[0], term));
 		if (wx > *w) *w = wx;
 		texts++;
 		item++;
@@ -80,13 +80,13 @@ dlg_format_group(struct terminal *term, struct terminal *t2,
 		if (item->item->type == D_CHECKBOX) {
 			wx = 4;
 		} else if (item->item->type == D_BUTTON) {
-			wx = strlen(_(item->item->text, t2)) + 5;
+			wx = strlen(GT(item->item->text, t2)) + 5;
 		} else {
 			wx = item->item->dlen + 1;
 		}
 
-		if (_(texts[0], t2)[0]) {
-			sl = strlen(_(texts[0], t2));
+		if (GT(texts[0], t2)[0]) {
+			sl = strlen(GT(texts[0], t2));
 		} else {
 			sl = -1;
 		}
@@ -99,7 +99,7 @@ dlg_format_group(struct terminal *term, struct terminal *t2,
 
 		if (term) {
 			print_text(term, x + nx + 4 * (item->item->type == D_CHECKBOX),
-				   *y, strlen(_(texts[0], t2)),	_(texts[0], t2),
+				   *y, strlen(GT(texts[0], t2)),	GT(texts[0], t2),
 				   get_bfu_color(term, "dialog.text"));
 			item->x = x + nx + (sl + 1) * (item->item->type != D_CHECKBOX);
 			item->y = *y;

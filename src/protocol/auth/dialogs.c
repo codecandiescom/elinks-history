@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.15 2002/12/17 11:10:37 zas Exp $ */
+/* $Id: dialogs.c,v 1.16 2003/01/01 20:36:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,9 +144,9 @@ do_auth_dialog(struct session *ses)
 #define DLG_SIZE sizeof(struct dialog) + 5 * sizeof(struct widget)
 
 	d = mem_calloc(1, DLG_SIZE
-			 + strlen(_(TEXT(T_ENTER_USERNAME), term))
+			 + strlen(GT(TEXT(T_ENTER_USERNAME), term))
 			 + (a->realm ? strlen(a->realm) : 0)
-			 + strlen(_(TEXT(T_AT), term)) + strlen(a->url) + 1);
+			 + strlen(GT(TEXT(T_AT), term)) + strlen(a->url) + 1);
 	if (!d) {
 		if (a->uid) {
 			mem_free(a->uid);
@@ -163,9 +163,9 @@ do_auth_dialog(struct session *ses)
 	d->fn = auth_layout;
 
 	d->udata = (char *)d + DLG_SIZE;
-	strcpy(d->udata, _(TEXT(T_ENTER_USERNAME), term));
+	strcpy(d->udata, GT(TEXT(T_ENTER_USERNAME), term));
 	if (a->realm) strcat(d->udata, a->realm);
-	strcat(d->udata, _(TEXT(T_AT), term));
+	strcat(d->udata, GT(TEXT(T_AT), term));
 	strcat(d->udata, a->url);
 
 #undef DLG_SIZE

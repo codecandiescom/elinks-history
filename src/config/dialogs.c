@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.28 2003/01/01 01:58:39 pasky Exp $ */
+/* $Id: dialogs.c,v 1.29 2003/01/01 20:36:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,11 +196,11 @@ layout_edit_dialog(struct dialog_data *dlg)
 	struct option *option = dlg->dlg->udata;
 	unsigned char *name, *type, *value, *desc;
 
-	name = straconcat(_(TEXT(T_NNAME), term), ": ", option->name, NULL);
-	type = straconcat(_(TEXT(T_TYPE), term), ": ",
-			  _(option_types[option->type].name, term), NULL);
-	value= straconcat(_(TEXT(T_VALUE), term), ": ", NULL);
-	desc = straconcat(_(TEXT(T_DESCRIPTION), term), ": \n", option->desc,
+	name = straconcat(GT(TEXT(T_NNAME), term), ": ", option->name, NULL);
+	type = straconcat(GT(TEXT(T_TYPE), term), ": ",
+			  GT(option_types[option->type].name, term), NULL);
+	value= straconcat(GT(TEXT(T_VALUE), term), ": ", NULL);
+	desc = straconcat(GT(TEXT(T_DESCRIPTION), term), ": \n", option->desc,
 			  NULL);
 
 	if (name && type && value && desc)
@@ -636,10 +636,10 @@ push_kbdbind_add_button(struct dialog_data *dlg,
 	hop->keymap = (int) item->udata;
 	hop->action = (int) item->root->udata;
 
-	text = straconcat(_(TEXT(T_ACTION), term), ": ", write_action(hop->action), "\n",
-			  _(TEXT(T_KKEYMAP),term), ": ", write_keymap(hop->keymap), "\n",
-			  "\n", _(TEXT(T_KEYSTROKE_HELP), term), "\n\n",
-			  _(TEXT(T_KEYSTROKE), term), NULL);
+	text = straconcat(GT(TEXT(T_ACTION), term), ": ", write_action(hop->action), "\n",
+			  GT(TEXT(T_KKEYMAP),term), ": ", write_keymap(hop->keymap), "\n",
+			  "\n", GT(TEXT(T_KEYSTROKE_HELP), term), "\n\n",
+			  GT(TEXT(T_KEYSTROKE), term), NULL);
 	if (!text) {
 		mem_free(hop);
 		return 0;

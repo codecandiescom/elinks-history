@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.1 2003/01/01 18:19:54 pasky Exp $ */
+/* $Id: view.c,v 1.2 2003/01/01 20:36:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3441,7 +3441,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			if (!str) return NULL;
 			strl = 0;
 
-			add_to_str(&str, &strl, _(TEXT(T_IMAGE), term));
+			add_to_str(&str, &strl, GT(TEXT(T_IMAGE), term));
 			add_to_str(&str, &strl, " ");
 			url = strip_url_password(link->where_img);
 			if (url) {
@@ -3457,7 +3457,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			if (!str) return NULL;
 			strl = 0;
 
-			add_to_str(&str, &strl, _(TEXT(T_USEMAP), term));
+			add_to_str(&str, &strl, GT(TEXT(T_USEMAP), term));
 			add_to_str(&str, &strl, " ");
 			url = strip_url_password(link->where + 4);
 			if (url) {
@@ -3477,7 +3477,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 
 	if (link->type == L_BUTTON) {
 		if (link->form->type == FC_RESET) {
-			str = stracpy(_(TEXT(T_RESET_FORM), term));
+			str = stracpy(GT(TEXT(T_RESET_FORM), term));
 			return str;
 		}
 
@@ -3490,9 +3490,9 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		strl = 0;
 
 		if (link->form->method == FM_GET)
-			add_to_str(&str, &strl, _(TEXT(T_SUBMIT_FORM_TO), term));
+			add_to_str(&str, &strl, GT(TEXT(T_SUBMIT_FORM_TO), term));
 		else
-			add_to_str(&str, &strl, _(TEXT(T_POST_FORM_TO), term));
+			add_to_str(&str, &strl, GT(TEXT(T_POST_FORM_TO), term));
 		add_to_str(&str, &strl, " ");
 
 		url = strip_url_password(link->form->action);
@@ -3510,25 +3510,25 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		strl = 0;
 
 		if (link->form->type == FC_RADIO)
-			add_to_str(&str, &strl, _(TEXT(T_RADIO_BUTTON), term));
+			add_to_str(&str, &strl, GT(TEXT(T_RADIO_BUTTON), term));
 
 		else if (link->form->type == FC_CHECKBOX)
-			add_to_str(&str, &strl, _(TEXT(T_CHECKBOX), term));
+			add_to_str(&str, &strl, GT(TEXT(T_CHECKBOX), term));
 
 		else if (link->form->type == FC_SELECT)
-			add_to_str(&str, &strl, _(TEXT(T_SELECT_FIELD), term));
+			add_to_str(&str, &strl, GT(TEXT(T_SELECT_FIELD), term));
 
 		else if (link->form->type == FC_TEXT)
-			add_to_str(&str, &strl, _(TEXT(T_TEXT_FIELD), term));
+			add_to_str(&str, &strl, GT(TEXT(T_TEXT_FIELD), term));
 
 		else if (link->form->type == FC_TEXTAREA)
-			add_to_str(&str, &strl, _(TEXT(T_TEXT_AREA), term));
+			add_to_str(&str, &strl, GT(TEXT(T_TEXT_AREA), term));
 
 		else if (link->form->type == FC_FILE)
-			add_to_str(&str, &strl, _(TEXT(T_FILE_UPLOAD), term));
+			add_to_str(&str, &strl, GT(TEXT(T_FILE_UPLOAD), term));
 
 		else if (link->form->type == FC_PASSWORD)
-			add_to_str(&str, &strl, _(TEXT(T_PASSWORD_FIELD), term));
+			add_to_str(&str, &strl, GT(TEXT(T_PASSWORD_FIELD), term));
 
 		else {
 			mem_free(str);
@@ -3537,7 +3537,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 
 		if (link->form->name && link->form->name[0]) {
 			add_to_str(&str, &strl, ", ");
-			add_to_str(&str, &strl, _(TEXT(T_NAME), term));
+			add_to_str(&str, &strl, GT(TEXT(T_NAME), term));
 			add_to_str(&str, &strl, " ");
 			add_to_str(&str, &strl, link->form->name);
 		}
@@ -3547,7 +3547,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		    && link->form->default_value
 		    && link->form->default_value[0]) {
 			add_to_str(&str, &strl, ", ");
-			add_to_str(&str, &strl, _(TEXT(T_VALUE), term));
+			add_to_str(&str, &strl, GT(TEXT(T_VALUE), term));
 			add_to_str(&str, &strl, " ");
 			add_to_str(&str, &strl, link->form->default_value);
 		}
@@ -3556,12 +3556,12 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		    && !has_form_submit(fd->f_data, link->form)
 		    && link->form->action) {
 			add_to_str(&str, &strl, ", ");
-			add_to_str(&str, &strl, _(TEXT(T_HIT_ENTER_TO), term));
+			add_to_str(&str, &strl, GT(TEXT(T_HIT_ENTER_TO), term));
 			add_to_str(&str, &strl, " ");
 			if (link->form->method == FM_GET)
-				add_to_str(&str, &strl, _(TEXT(T_SUBMIT_TO), term));
+				add_to_str(&str, &strl, GT(TEXT(T_SUBMIT_TO), term));
 			else
-				add_to_str(&str, &strl, _(TEXT(T_POST_TO), term));
+				add_to_str(&str, &strl, GT(TEXT(T_POST_TO), term));
 			add_to_str(&str, &strl, " ");
 			url = strip_url_password(link->form->action);
 			if (url) {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.84 2003/01/01 20:30:34 pasky Exp $ */
+/* $Id: session.c,v 1.85 2003/01/01 20:36:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,18 +174,18 @@ get_stat_msg(struct status *stat, struct terminal *term)
 		unsigned char *m = init_str();
 		int l = 0;
 
-		add_to_str(&m, &l, _(TEXT(T_RECEIVED), term));
+		add_to_str(&m, &l, GT(TEXT(T_RECEIVED), term));
 		add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, stat->prg->pos + stat->prg->start);
 		if (stat->prg->size >= 0) {
 			add_to_str(&m, &l, " ");
-			add_to_str(&m, &l, _(TEXT(T_OF), term));
+			add_to_str(&m, &l, GT(TEXT(T_OF), term));
 			add_to_str(&m, &l, " ");
 			add_xnum_to_str(&m, &l, stat->prg->size);
 		}
 		add_to_str(&m, &l, ", ");
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-			add_to_str(&m, &l, _(TEXT(T_AVG), term));
+			add_to_str(&m, &l, GT(TEXT(T_AVG), term));
 			add_to_str(&m, &l, " ");
 		}
 		add_xnum_to_str(&m, &l, (longlong)stat->prg->loaded * 10
@@ -193,7 +193,7 @@ get_stat_msg(struct status *stat, struct terminal *term)
 		add_to_str(&m, &l, "/s");
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 			add_to_str(&m, &l, ", ");
-			add_to_str(&m, &l, _(TEXT(T_CUR), term));
+			add_to_str(&m, &l, GT(TEXT(T_CUR), term));
 			add_to_str(&m, &l, " "),
 			add_xnum_to_str(&m, &l, stat->prg->cur_loaded
 						/ (CURRENT_SPD_SEC
@@ -204,8 +204,8 @@ get_stat_msg(struct status *stat, struct terminal *term)
 		return m;
 	}
 
-	/* debug("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
-	return stracpy(_(get_err_msg(stat->state), term));
+	/* debug("%d -> %s", stat->state, GT(get_err_msg(stat->state), term)); */
+	return stracpy(GT(get_err_msg(stat->state), term));
 }
 
 /* Print statusbar and titlebar, set terminal title. */
@@ -311,7 +311,7 @@ print_error_dialog(struct session *ses, struct status *stat,
 		t,
 		ses, 1,
 		TEXT(T_CANCEL), NULL, B_ENTER | B_ESC /*,
-		_("Retry"), NULL, 0 */ /* !!! FIXME: retry */);
+		GT("Retry"), NULL, 0 */ /* !!! FIXME: retry */);
 }
 
 static void

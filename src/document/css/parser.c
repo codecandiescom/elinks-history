@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.123 2004/09/21 00:21:17 pasky Exp $ */
+/* $Id: parser.c,v 1.124 2004/09/21 00:30:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,7 +273,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		/* Detect whether upcoming tokens are separated by
 		 * whitespace or not (that's important for determining
 		 * whether it's a combinator or specificitier). */
-		if (last_token.string + last_token.length >= scanner->end) {
+		if (last_token.string + last_token.length < scanner->end) {
 			selector_start = last_token.string[last_token.length];
 			selector_start = (selector_start != '#'
 			                  && selector_start != '.'

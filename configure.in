@@ -382,9 +382,9 @@ if test "$enable_guile" = "yes"; then
 		GUILE_LIBS="`guile-config link`"
 		GUILE_CFLAGS="`guile-config compile`"
 		LIBS="$GUILE_LIBS $LIBS"
-		CFLAGS="$CFLAGS $GUILE_CFLAGS"
 		CPPFLAGS="$CPPFLAGS $GUILE_CFLAGS"
 		EL_CONFIG(CONFIG_GUILE, [Guile])
+		AC_SUBST(GUILE_CFLAGS)
 		cat <<EOF
 ***********************************************************************
 The Guile support is incomplete and not so well integrated to ELinks
@@ -434,7 +434,6 @@ if test "$enable_perl" = "yes"; then
 	PERL_LIBS="`perl -MExtUtils::Embed -e ldopts`"
 	PERL_CFLAGS="`perl -MExtUtils::Embed -e ccopts`"
 	LIBS="$PERL_LIBS $LIBS"
-	CFLAGS="$CFLAGS $PERL_CFLAGS"
 	CPPFLAGS="$CPPFLAGS $PERL_CFLAGS"
 	cf_result="yes";
 fi
@@ -443,10 +442,10 @@ if test "$cf_result" != "yes"; then
 	EL_RESTORE_FLAGS
 else
 	EL_CONFIG(CONFIG_PERL, [Perl])
-fi
 
-AC_SUBST(PERL_LIBS)
-AC_SUBST(PERL_CFLAGS)
+	AC_SUBST(PERL_LIBS)
+	AC_SUBST(PERL_CFLAGS)
+fi
 
 if test "$cf_result"; then AC_MSG_RESULT($cf_result); fi
 
@@ -500,10 +499,11 @@ else
 	EL_CONFIG(CONFIG_LUA, [Lua])
 	AC_CHECK_HEADERS(lauxlib.h)
 	AC_CHECK_FUNCS(lua_pcall)
-fi
 
-AC_SUBST(LUA_LIBS)
-AC_SUBST(LUA_CFLAGS)
+	CFLAGS="$CFLAGS_X"
+	AC_SUBST(LUA_LIBS)
+	AC_SUBST(LUA_CFLAGS)
+fi
 
 dnl ===================================================================
 dnl Setup global scripting
@@ -564,12 +564,13 @@ if test "$cf_result" != yes; then
 	EL_RESTORE_FLAGS
 else
 	EL_CONFIG(CONFIG_SPIDERMONKEY, [SpiderMonkey])
+
+	CFLAGS="$CFLAGS_X"
+	AC_SUBST(SPIDERMONKEY_LIBS)
+	AC_SUBST(SPIDERMONKEY_CFLAGS)
 fi
 
 AM_CONDITIONAL(CONFIG_SPIDERMONKEY, test "$CONFIG_SPIDERMONKEY" = yes)
-
-AC_SUBST(SPIDERMONKEY_LIBS)
-AC_SUBST(SPIDERMONKEY_CFLAGS)
 
 EL_CONFIG_DEPENDS(CONFIG_ECMASCRIPT, [CONFIG_SPIDERMONKEY], [ECMAScript (JavaScript)])
 AM_CONDITIONAL(CONFIG_ECMASCRIPT, test "$CONFIG_ECMASCRIPT" = yes)
@@ -620,9 +621,10 @@ else
 			 /usr/pkg /opt /opt/openssl; do
 		if test "$cf_result" = no; then
 			if test -n "$ssldir"; then
+				OPENSSL_CFLAGS="-I$ssldir/include"
 				LIBS="-L$ssldir/lib -lssl -lcrypto $LIBS_X"
-				CFLAGS="$CFLAGS_X -I$ssldir/include"
-				CPPFLAGS="$CPPFLAGS_X -I$ssldir/include"
+				CFLAGS="$CFLAGS_X $OPENSSL_CFLAGS"
+				CPPFLAGS="$CPPFLAGS_X $OPENSSL_CFLAGS"
 #				# FIXME: This created serious portability problems. --pasky
 #				if test "$CC" == "gcc"; then
 #					# I'm not sure about compatibility here. --pasky
@@ -649,6 +651,9 @@ else
 		EL_RESTORE_FLAGS
 	else
 		EL_CONFIG(CONFIG_OPENSSL, [OpenSSL])
+
+		CFLAGS="$CFLAGS_X"
+		AC_SUBST(OPENSSL_CFLAGS)
 	fi
 fi
 
@@ -688,12 +693,12 @@ else
 				if test "$LIBGNUTLS_CONFIG" = "no" ; then
 					cf_result=no
 				else
-					LIBGNUTLS_CFLAGS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --cflags`
-					LIBGNUTLS_LIBS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --libs`
+					GNUTLS_CFLAGS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --cflags`
+					GNUTLS_LIBS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --libs`
 
-					LIBS="$LIBGNUTLS_LIBS $LIBS_X"
-					CFLAGS="$CFLAGS_X $LIBGNUTLS_CFLAGS"
-					CPPFLAGS="$CPPFLAGS_X $LIBGNUTLS_CFLAGS"
+					LIBS="$GNUTLS_LIBS $LIBS_X"
+					CFLAGS="$CFLAGS_X $GNUTLS_CFLAGS"
+					CPPFLAGS="$CPPFLAGS_X $GNUTLS_CFLAGS"
 
 					# Verify if it's really usable
 					AC_TRY_LINK([#include <gnutls/gnutls.h>],
@@ -721,6 +726,9 @@ else
 			EL_RESTORE_FLAGS
 		else
 			EL_CONFIG(CONFIG_GNUTLS, [GNUTLS])
+
+			CFLAGS="$CFLAGS_X"
+			AC_SUBST(GNUTLS_CFLAGS)
 		fi
 	fi
 fi
@@ -764,7 +772,7 @@ dnl ===================================================================
 AC_PATH_X
 if test x"$no_x" != xyes; then
 	if test -n "$x_includes"; then
-		CFLAGS="$CFLAGS -I$x_includes"
+		X_CFLAGS="-I$x_includes"
 		CPPFLAGS="$CPPFLAGS -I$x_includes"
 	fi
 	if test -n "$x_libraries"; then
@@ -772,6 +780,7 @@ if test x"$no_x" != xyes; then
 	fi
 	LIBS="-lX11 $LIBS"
 	EL_DEFINE(HAVE_X11, [X11 for restoring window titles])
+	AC_SUBST(X_CFLAGS)
 fi
 
 
@@ -1018,7 +1027,12 @@ if test "x$ac_cv_prog_gcc" = "xyes"; then
   esac
 fi
 
-EL_LOG_CONFIG(CFLAGS, [Compiler options (CFLAGS)], [])
+# CFLAGS doesn't contain all compile flags. Some will be added only when
+# needed in the respective source directory. To get all compile flags
+# easily just add CPPFLAGS.
+ALL_CFLAGS="$CFLAGS $CPPFLAGS"
+
+EL_LOG_CONFIG(ALL_CFLAGS, [Compiler options (CFLAGS)], [])
 EL_LOG_CONFIG(LIBS, [Linker options (LIBS)], [])
 
 dnl ===================================================================

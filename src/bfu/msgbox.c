@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.40 2003/06/07 23:00:56 zas Exp $ */
+/* $Id: msgbox.c,v 1.41 2003/06/07 23:08:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,13 +92,13 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	if (!text || buttons < 0) return;
 
 	/* Use the @flags to determine whether @text should be free()d. */
-	if (flags & MSGBOX_EXTD_TEXT)
+	if (flags & MSGBOX_FREE_TEXT)
 		add_one_to_ml(&ml, text);
 
 	/* Use the @flags to determine whether strings should be l18n'd. */
 	if (!(flags & MSGBOX_NO_INTL)) {
 		title = _(title, term);
-		if (!(flags & MSGBOX_EXTD_TEXT)) text = _(text, term);
+		if (!(flags & MSGBOX_FREE_TEXT)) text = _(text, term);
 		/* Button labels will be gettextized as will they be extracted
 		 * from @ap. */
 	}

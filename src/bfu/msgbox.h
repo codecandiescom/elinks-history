@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.12 2003/06/07 13:54:28 pasky Exp $ */
+/* $Id: msgbox.h,v 1.13 2003/06/07 23:08:55 zas Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -14,7 +14,7 @@
  * the flags effect. */
 enum msgbox_flags {
 	/* {msg_box(.text)} is dynamically allocated */
-	MSGBOX_EXTD_TEXT = 0x1,
+	MSGBOX_FREE_TEXT = 0x1,
 	/* The msg_box() string parameters should NOT be run through gettext
 	 * and translated. */
 	MSGBOX_NO_INTL = 0x2,
@@ -31,7 +31,7 @@ enum msgbox_flags {
  *		This is useful especially when you pass stuff to @udata
  *		which you want to be free()d when not needed anymore.
  *
- * @flags	If the MSGBOX_EXTD_TEXT flag is passed, @text is free()d upon
+ * @flags	If the MSGBOX_FREE_TEXT flag is passed, @text is free()d upon
  *		the dialog's death. This is equivalent to adding @text to the
  *		@mem_list. Also, when this parameter is passed, @text is not
  *		automagically localized and it is up to the user to do it.
@@ -47,13 +47,13 @@ enum msgbox_flags {
  *
  * @text	The info text of the message box. If the text requires
  *		formatting use msg_text(format, args...). This will allocate
- *		a string so remember to @align |= MSGBOX_EXTD_TEXT.
+ *		a string so remember to @align |= MSGBOX_FREE_TEXT.
  *
  *		If no formatting is needed just pass the string and don't
- *		@align |= MSGBOX_EXTD_TEXT or you will get in trouble. ;)
+ *		@align |= MSGBOX_FREE_TEXT or you will get in trouble. ;)
  *
  *		The @text is automatically localized inside of msg_box(),
- *		unless MSGBOX_NO_INTL or MSGBOX_EXTD_TEXT is passed. That is
+ *		unless MSGBOX_NO_INTL or MSGBOX_FREE_TEXT is passed. That is
  *		because you do NOT want to localize output of msg_text(),
  *		but rather individually the format string and parameters to
  *		its string conversions.

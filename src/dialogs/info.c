@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.53 2003/06/07 14:16:56 pasky Exp $ */
+/* $Id: info.c,v 1.54 2003/06/07 23:08:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 void
 menu_copying(struct terminal *term, void *d, struct session *ses)
 {
-	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Copying"), AL_CENTER,
 		msg_text(term, N_("ELinks %s\n"
 			"\n"
@@ -104,7 +104,7 @@ res_inf(struct terminal *term, void *d, struct session *ses)
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r)	return;
 
-	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Resources"), AL_LEFT,
 		msg_text(term, N_("Resources: %d handles, %d timers.\n"
 			"Connections: %d connections, %d connecting, %d "
@@ -179,7 +179,7 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 		add_to_str(&a, &l, buf);
 	}
 
-	msg_box(term, getml(a, NULL), MSGBOX_EXTD_TEXT,
+	msg_box(term, getml(a, NULL), MSGBOX_FREE_TEXT,
 		N_("Cache info"), AL_LEFT,
 		msg_text(term, N_("Cache content: %s"), a),
 		r, 1,
@@ -198,7 +198,7 @@ memory_inf(struct terminal *term, void *d, struct session *ses)
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r) return;
 
-	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Memory info"), AL_CENTER,
 		msg_text(term, N_("%ld bytes of memory allocated."),
 			mem_amount),

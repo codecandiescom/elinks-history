@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.81 2003/06/07 15:34:42 pasky Exp $ */
+/* $Id: dialogs.c,v 1.82 2003/06/07 23:08:55 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -265,7 +265,7 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 
 	if (bookmark->refcount > 0) {
 		if (bookmark->box_item->type == BI_FOLDER)
-		msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("Delete bookmark"), AL_CENTER,
 			msg_text(term, N_("Sorry, but this bookmark is already "
 				"being used by something right now.\n\n"
@@ -274,7 +274,7 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 			NULL, 1,
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
 		else
-		msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("Delete bookmark"), AL_CENTER,
 			msg_text(term, N_("Sorry, but this bookmark is already "
 				"being used by something right now.\n\n"
@@ -415,7 +415,7 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 		N_("Yes"), really_del_bookmark, B_ENTER,
 		N_("No"), cancel_del_bookmark, B_ESC);
 	else if (bm->box_item->type == BI_FOLDER)
-	msg_box(term, getml(hop, NULL), MSGBOX_EXTD_TEXT,
+	msg_box(term, getml(hop, NULL), MSGBOX_FREE_TEXT,
 		N_("Delete bookmark"), AL_CENTER,
 		msg_text(term, N_("Delete content of folder \"%s\" ?"),
 			bm->title),
@@ -423,7 +423,7 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 		N_("Yes"), really_del_bookmark, B_ENTER,
 		N_("No"), cancel_del_bookmark, B_ESC);
 	else
-	msg_box(term, getml(hop, NULL), MSGBOX_EXTD_TEXT,
+	msg_box(term, getml(hop, NULL), MSGBOX_FREE_TEXT,
 		N_("Delete bookmark"), AL_CENTER,
 		msg_text(term, N_("Delete bookmark \"%s\" ?\n\n"
 			"URL: \"%s\""),

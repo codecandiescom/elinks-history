@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.25 2003/06/07 14:16:56 pasky Exp $ */
+/* $Id: user.c,v 1.26 2003/06/07 23:08:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ prog_func(struct terminal *term, unsigned char *url, unsigned char *proto,
 	if (!prog || !*prog) {
 		/* Shouldn't ever happen, but be paranoid. */
 		/* Happens when you're in X11 and you've no handler for it. */
-		msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("No program"), AL_CENTER,
 			msg_text(term,
 				N_("No program specified for protocol %s."),

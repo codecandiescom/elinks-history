@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.28 2003/06/07 21:39:49 pasky Exp $ */
+/* $Id: dialogs.c,v 1.29 2003/06/07 23:08:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,7 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 	add_to_str(&str, &strl, " -> ");
 	add_to_str(&str, &strl, (unsigned char *) opt->ptr);
 
-	msg_box(term, getml(str, translated, NULL), MSGBOX_EXTD_TEXT,
+	msg_box(term, getml(str, translated, NULL), MSGBOX_FREE_TEXT,
 		N_("Delete extension"), AL_CENTER,
 		msg_text(term, N_("Delete extension %s?"), str),
 		translated, 2,

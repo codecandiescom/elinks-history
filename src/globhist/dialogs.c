@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.28 2003/06/07 15:34:42 pasky Exp $ */
+/* $Id: dialogs.c,v 1.29 2003/06/07 23:08:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,7 +229,7 @@ do_delete_global_history_item(struct terminal *term,
 			      struct global_history_item *historyitem)
 {
 	if (historyitem->refcount > 0) {
-		msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("Delete history item"), AL_CENTER,
 			msg_text(term, N_("Sorry, but this history entry is "
 				"already being used by something right now.\n\n"
@@ -324,7 +324,7 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 	/* XXX: When we add tree-history, remember to add a check for
 	 * historyitem->box_item->type == BI_FOLDER here. -- Miciah */
 	else
-		msg_box(term, getml(ctx, NULL), MSGBOX_EXTD_TEXT,
+		msg_box(term, getml(ctx, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete history item"), AL_CENTER,
 			msg_text(term, N_("Delete history item \"%s\" ?\n\n"
 				"URL: \"%s\""),
@@ -407,7 +407,7 @@ push_info_button(struct dialog_data *dlg,
 	if (!historyitem) return 0;
 	historyitem->refcount++;
 
-	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Info"), AL_LEFT,
 		msg_text(term, N_("Title: %s\n"
 			"URL: %s\n"

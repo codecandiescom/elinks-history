@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.97 2003/06/07 21:41:29 pasky Exp $ */
+/* $Id: view.c,v 1.98 2003/06/07 23:08:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1680,7 +1680,7 @@ error:
 	m1 = stracpy(sv->value);
 	if (!m1) return;
 	m2 = stracpy((unsigned char *) strerror(errno));
-	msg_box(ses->tab->term, getml(m1, m2, NULL), MSGBOX_EXTD_TEXT,
+	msg_box(ses->tab->term, getml(m1, m2, NULL), MSGBOX_FREE_TEXT,
 		N_("Error while posting form"), AL_CENTER,
 		msg_text(ses->tab->term, N_("Could not get file %s: %s"),
 			 m1, m2),
@@ -2506,7 +2506,7 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 	print_screen_status(ses);
 	redraw_from_window(ses->tab);
 #endif
-	msg_box(ses->tab->term, NULL, MSGBOX_EXTD_TEXT,
+	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 		N_("Search"), AL_CENTER,
 		msg_text(ses->tab->term, N_("Search string '%s' not found"),
 			ses->search_word),

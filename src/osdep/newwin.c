@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.11 2004/04/17 01:30:30 jonas Exp $ */
+/* $Id: newwin.c,v 1.12 2004/04/17 01:35:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,17 +17,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-
-static void
-exec_new_elinks(struct terminal *term, unsigned char *xterm,
-		unsigned char *exe_name, unsigned char *param)
-{
-	unsigned char *str = straconcat(xterm, " ", exe_name, " ", param, NULL);
-
-	if (!str) return;
-	exec_on_terminal(term, str, "", 2);
-	mem_free(str);
-}
 
 struct open_in_new oinw[] = {
 	{ ENV_XWIN,	DEFAULT_XTERM_CMD,	    N_("~Xterm") },
@@ -106,5 +95,9 @@ open_new_window(struct terminal *term, unsigned char *exe_name,
 		if (twterm) command = twterm;
 	}
 
-	exec_new_elinks(term, command, exe_name, param);
+	command = straconcat(command, " ", exe_name, " ", param, NULL);
+	if (!command) return;
+
+	exec_on_terminal(term, command, "", 2);
+	mem_free(command);
 }

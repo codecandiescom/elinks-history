@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.32 2005/04/01 16:56:33 jonas Exp $ */
+/* $Id: parse.c,v 1.33 2005/04/04 12:16:10 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -455,7 +455,6 @@ parse_ftp_vms_permissions(const unsigned char *src, int len)
 static struct ftp_file_info *
 parse_ftp_vms_response(struct ftp_file_info *info, unsigned char *src, int len)
 {
-	struct tm mtime;
 	unsigned char *end = src + len;
 	unsigned char *pos;
 
@@ -503,44 +502,17 @@ parse_ftp_vms_response(struct ftp_file_info *info, unsigned char *src, int len)
 	if (src >= end) return NULL;
 
 
-	/* Third/Second column: Date DD-MMM-YYYY. */
+	/* Third/Second column: Date DD-MMM-YYYY and
+	 * Fourth/Third column: Time hh:mm[:ss] */
 
-	memset(&mtime, 0, sizeof(mtime));
-	mtime.tm_isdst = -1;
-
-	mtime.tm_mday = parse_day((const unsigned char **) &src, end);
 	/* If the server produces garbage like
 	 * 'EA95_0PS.GZ;1      No privilege for attempted operation'
-	 * the check for '-' after the day will fail. */
-	if (src + 2 >= end || *src != '-')
+	 * parse_date() will fail. */
+	DBG("%.*s", end - src, src);
+	info->mtime = parse_date(&src, end, 1, 0);
+	if (info->mtime == 0)
 		return NULL;
-
-	src++;
-
-	pos = memchr(src, '-', end - src);
-	if (!pos) return NULL;
-
-	mtime.tm_mon = parse_month((const unsigned char **) &src, pos);
-
-	/* Unknown months are mapped to January */
-	if (mtime.tm_mon < 0)
-		mtime.tm_mon = 0;
-
-	pos++;
-	mtime.tm_year = parse_year((const unsigned char **) &pos, end);
-
-	skip_space_end(pos, end);
-	if (pos >= end) return NULL;
-	src = pos;
-
-
-	/* Fourth/Third column: Time hh:mm[:ss] */
-
-	if (!parse_time((const unsigned char **) &src, &mtime, end))
-		return NULL;
-
-	/* Store the time-stamp */
-	info->mtime = mktime(&mtime);
+	DBG("%.*s", end - src, src);
 
 	/* Be more tolerant from here on ... */
 

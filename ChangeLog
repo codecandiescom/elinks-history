@@ -1,3 +1,245 @@
+Wed Dec 29 22:58:25 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Dec 29 22:52:11 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Dec 29 22:42:30 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Dec 29 22:38:27 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Dec 29 22:35:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, dialogs/options.c:
+
+	More or less sync terminal option captions and text used in the
+	terminal dialog.  
+
+Wed Dec 29 22:30:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/modules/version.c:
+
+	Always put build info in the full static version. We compile it in
+	anyway.  
+
+Wed Dec 29 22:29:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Do not print feature summary when printing --help.  
+
+Wed Dec 29 22:07:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Review command line option captions and descriptions.  
+
+Wed Dec 29 21:30:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	Fix potential bug: memset() the size of the struct not the size of
+	the pointer.  
+
+Wed Dec 29 20:32:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Use copy_struct().  
+
+Wed Dec 29 19:58:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Remove all fuzziness and start on untranslated strings.  
+
+Wed Dec 29 19:54:02 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Dec 29 19:37:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	-dump works for multiple URLs.  
+
+Wed Dec 29 19:25:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	get_form_info(): Improve i18n in favour of a bit more complicated
+	code.  
+
+Wed Dec 29 18:34:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Unify 'could not create file' dialog text.  
+
+Wed Dec 29 18:29:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	s/User/\1 protocols/ as module name.  
+
+Wed Dec 29 18:23:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/nntp/codes.c:
+
+	s/Ok/OK/ which is what we use for other OK buttons.  
+
+Wed Dec 29 18:14:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, protocol/file/file.c:
+
+	Purge DISABLED variations of options. It makes no sense to increase
+	the size of the binary unnecessarily.  
+
+Wed Dec 29 17:24:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	s/Forms History/Form History/ 
+
+Wed Dec 29 17:00:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/: Makefile.in, README:
+
+	Make both PO=<lang> and PO=<lang>.po possible. Update README to
+	reflect that. Also remove the newly added TIP that is already
+	mentioned below and note to maintainer.  
+
+Wed Dec 29 16:49:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	s/forms {history,memory}/form history/.  
+
+Wed Dec 29 16:35:05 2004  Laurent Monin <zas@norz.org>:
+
+	* po/README:
+
+	Update README and mention make update-po PO=<lang>.po.  
+
+Wed Dec 29 16:17:32 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Dec 29 15:59:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/css/parser.c:
+
+	Use copy_struct().  
+
+Wed Dec 29 15:46:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/document.c:
+
+	s/Artificial/Internal/ probably is easier to understand.  
+
+Wed Dec 29 15:43:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/: css/apply.c, html/internal.h, html/parser.c,
+	html/parser.h, html/renderer.c, html/tables.c, html/parser/forms.c,
+	html/parser/link.c, html/parser/parse.c:
+
+	Rename struct text_attrib_beginning to struct text_attrib_style and
+	use it in struct text_attrib. It helps to clean things a bit. Note
+	that format.(fg|bg|attr) becomes format.style.(fg|bg|attr).  
+
+Wed Dec 29 15:13:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.in:
+
+	Make it possible to update only one .po file by running 'make
+	update-po PO=<lang>.po'.  
+
+Wed Dec 29 15:09:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/generic.h:
+
+	Wrap copy_struct() macro body in do { /* ... */ } while(0). Improve
+	comment.  
+
+Wed Dec 29 15:04:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/task.c, terminal/event.c, terminal/kbd.c, util/box.h,
+	viewer/text/view.c, viewer/text/vs.c:
+
+	Use copy_struct().  
+
+Wed Dec 29 14:59:34 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/options.c, document/html/frames.c,
+	document/html/renderer.c, document/sgml/parser.c,
+	lowlevel/connect.c:
+
+	Use copy_struct().  
+
+Wed Dec 29 14:51:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hierbox.c, bfu/menu.c, config/dialogs.c,
+	document/html/parser/stack.c:
+
+	Use copy_struct().  
+
+Wed Dec 29 14:48:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/generic.h:
+
+	Make copy_struct() definition cleaner.  
+
+Wed Dec 29 14:41:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: intl/gettext/dcigettext.c, osdep/generic.h:
+
+	Also move alignof() to the compiler area.  
+
+Wed Dec 29 14:39:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.c, document/css/stylesheet.c, osdep/generic.h:
+
+	Introduce copy_struct() macro wrapping '*a = *b' style copying. Use
+	relevant places.  
+
+Wed Dec 29 14:25:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Oops, last part of previous patch.  
+
+Wed Dec 29 14:25:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	Use = instead of memcpy(). Safer and more efficient, idea by Pasky.  
+
+Wed Dec 29 14:24:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: Makefile.am, math.c, math.h:
+
+	Simplify generic swap_value() to be a macro. It might fix a problem
+	on MacOS X reported by Phillip Pi and I never did like the previous
+	cast-abusing implementation.  
+
 Tue Dec 28 23:04:47 2004  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/link.c:

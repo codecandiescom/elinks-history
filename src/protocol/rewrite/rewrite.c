@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.12 2003/12/23 19:24:06 jonas Exp $ */
+/* $Id: rewrite.c,v 1.13 2003/12/31 06:20:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,7 +228,7 @@ substitute_url(unsigned char *url, unsigned char *current_url, unsigned char *ar
 			if (argc == MAX_URI_ARGS) break;
 			args[argc] = &args[argc - 1][i];
 			i = 0;
-			for (; *args[argc] && *args[argc] == ' '; args[argc]++);
+			for (; *args[argc] == ' '; args[argc]++);
 		} else if (!args[argc][i]) {
 			argslen[argc] = i;
 			argc++;

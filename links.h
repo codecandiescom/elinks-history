@@ -1,4 +1,10 @@
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+#endif
+
+#ifndef __EXTENSION__
+#define __EXTENSION__ /* Helper for SunOS */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

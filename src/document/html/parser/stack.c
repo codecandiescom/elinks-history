@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.22 2004/09/24 01:47:54 pasky Exp $ */
+/* $Id: stack.c,v 1.23 2004/09/24 01:52:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,8 +91,8 @@ kill_html_stack_item(struct html_element *e)
 		/* XXX: The following expression alone amounts two #includes. */
 		add_to_string_list(&html_context.part->document->onload_snippets,
 		                   onload, -1);
-		mem_free(onload);
 	}
+	if (onload) mem_free(onload);
 
 	mem_free_if(e->attr.link);
 	mem_free_if(e->attr.target);

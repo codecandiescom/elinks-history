@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.49 2004/09/26 20:23:57 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.50 2004/09/27 07:33:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -558,7 +558,9 @@ static const JSFunctionSpec document_funcs[] = {
 static JSBool
 document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
+#ifdef CONFIG_LEDS
 	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
+#endif
 
 	VALUE_TO_JSVAL_START;
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.529 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: parser.c,v 1.530 2005/03/07 09:03:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1158,7 +1158,7 @@ process_head(unsigned char *head)
 		 * more. */
 		if (*refresh != ';') {
 			if (isdigit(*refresh)) {
-				unsigned long max_seconds = 2*24*60*60; /* 2 days */
+				unsigned long max_seconds = HTTP_REFRESH_MAX_DELAY;
 
 				errno = 0;
 				seconds = strtoul(refresh, NULL, 10);

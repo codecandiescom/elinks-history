@@ -24,7 +24,7 @@ it to the Links/ELinks mailing list - you can find the address at project
 source tree root in file SITES. If your issue is of more confidential character
 (like grave security hole you happened to stumble upon while doing full-scale
 security audit >:), you may want to contact directly the maintainer - his
-address usually converges to <pasky@ucw.cz>.
+address usually converges to <fonseca@diku.dk>.
 
 Obviously, you can feed us back in other ways as well. Except foods (we prefer
 pizza, some close location of yourself recommended), we accept drinks, nice
@@ -34,4 +34,4 @@ he'll split the stuff properly amongst himself and other developers >:).
 
 
 
-$Id: feedback.txt,v 1.5 2005/01/03 08:12:57 miciah Exp $
+$Id: feedback.txt,v 1.6 2005/01/03 08:14:01 miciah Exp $

@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.35 2003/10/27 23:30:13 jonas Exp $ */
+/* $Id: ssl.c,v 1.36 2003/10/27 23:38:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,8 +41,48 @@
 
 
 #ifdef HAVE_OPENSSL
+
 SSL_CTX *context = NULL;
+
+static void
+init_openssl(struct module *module)
+{
+	unsigned char f_randfile[PATH_MAX];
+
+	/* In a nutshell, on OS's without a /dev/urandom, the OpenSSL library
+	 * cannot initialize the PRNG and so every attempt to use SSL fails.
+	 * It's actually an OpenSSL FAQ, and according to them, it's up to the
+	 * application coders to seed the RNG. -- William Yodlowsky */
+	if (RAND_egd(RAND_file_name(f_randfile, sizeof(f_randfile))) < 0) {
+		/* Not an EGD, so read and write to it */
+		if (RAND_load_file(f_randfile, -1))
+			RAND_write_file(f_randfile);
+	}
+
+	SSLeay_add_ssl_algorithms();
+	context = SSL_CTX_new(SSLv23_client_method());
+	SSL_CTX_set_options(context, SSL_OP_ALL);
+	SSL_CTX_set_default_verify_paths(context);
+}
+
+static void
+done_openssl(struct module *module)
+{
+	if (context) SSL_CTX_free(context);
+}
+
+static struct module openssl_module = struct_module(
+	/* name: */		"OpenSSL",
+	/* options: */		NULL,
+	/* events: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		init_openssl,
+	/* done: */		done_openssl
+);
+
 #elif defined(HAVE_GNUTLS)
+
 GNUTLS_ANON_CLIENT_CREDENTIALS anon_cred = NULL;
 GNUTLS_CERTIFICATE_CLIENT_CREDENTIALS xcred = NULL;
 
@@ -61,29 +101,10 @@ const static int cipher_priority[16] = {
 const static int comp_priority[16] = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
 const static int mac_priority[16] = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
 const static int cert_type_priority[16] = { GNUTLS_CRT_X509, GNUTLS_CRT_OPENPGP, 0 };
-#endif
 
 static void
-init_ssl(struct module *module)
+init_gnutls(struct module *module)
 {
-#ifdef HAVE_OPENSSL
-	unsigned char f_randfile[PATH_MAX];
-
-	/* In a nutshell, on OS's without a /dev/urandom, the OpenSSL library
-	 * cannot initialize the PRNG and so every attempt to use SSL fails.
-	 * It's actually an OpenSSL FAQ, and according to them, it's up to the
-	 * application coders to seed the RNG. -- William Yodlowsky */
-	if (RAND_egd(RAND_file_name(f_randfile, sizeof(f_randfile))) < 0) {
-		/* Not an EGD, so read and write to it */
-		if (RAND_load_file(f_randfile, -1))
-			RAND_write_file(f_randfile);
-	}
-
-	SSLeay_add_ssl_algorithms();
-	context = SSL_CTX_new(SSLv23_client_method());
-	SSL_CTX_set_options(context, SSL_OP_ALL);
-	SSL_CTX_set_default_verify_paths(context);
-#elif defined(HAVE_GNUTLS)
 	int ret;
 
 	ret = gnutls_global_init();
@@ -101,42 +122,27 @@ init_ssl(struct module *module)
 			 gnutls_strerror(ret));
 
 	/* Here, we should load certificate files etc. */
-#endif
 }
 
 static void
-done_ssl(struct module *module)
+done_gnutls(struct module *module)
 {
-#ifdef HAVE_OPENSSL
-	if (context) SSL_CTX_free(context);
-#elif defined(HAVE_GNUTLS)
 	if (xcred) gnutls_certificate_free_sc(xcred);
 	if (anon_cred) gnutls_anon_free_client_sc(anon_cred);
 	gnutls_global_deinit();
-#endif
 }
 
-#ifdef HAVE_OPENSSL
-static struct module openssl_module = struct_module(
-	/* name: */		"OpenSSL",
-	/* options: */		NULL,
-	/* events: */		NULL,
-	/* submodules: */	NULL,
-	/* data: */		NULL,
-	/* init: */		NULL,
-	/* done: */		NULL
-);
-#elif defined(HAVE_GNUTLS)
 static struct module gnutls_module = struct_module(
 	/* name: */		"GnuTLS",
 	/* options: */		NULL,
 	/* events: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,
-	/* init: */		NULL,
-	/* done: */		NULL
+	/* init: */		init_gnutls,
+	/* done: */		done_gnutls
 );
-#endif
+
+#endif /* HAVE_OPENSSL or HAVE_GNUTLS */
 
 static struct module *ssl_modules[] = {
 #ifdef HAVE_OPENSSL
@@ -153,8 +159,8 @@ struct module ssl_module = struct_module(
 	/* events: */		NULL,
 	/* submodules: */	ssl_modules,
 	/* data: */		NULL,
-	/* init: */		init_ssl,
-	/* done: */		done_ssl
+	/* init: */		NULL,
+	/* done: */		NULL
 );
 
 int
@@ -217,7 +223,6 @@ done_ssl_connection(struct connection *conn)
 #endif
 	conn->ssl = NULL;
 }
-
 
 unsigned char *
 get_ssl_connection_cipher(struct connection *conn)

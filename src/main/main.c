@@ -1,11 +1,14 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.57 2002/09/17 17:17:59 pasky Exp $ */
+/* $Id: main.c,v 1.58 2002/10/11 15:51:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -257,6 +260,9 @@ init()
 	int len;
 	unsigned char *u;
 
+#ifdef HAVE_LOCALE_H	
+	setlocale(LC_ALL, "");
+#endif	
 	init_options();
 	init_trans();
 	set_sigcld();

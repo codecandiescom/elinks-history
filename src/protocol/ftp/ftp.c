@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.156 2004/07/23 20:02:52 zas Exp $ */
+/* $Id: ftp.c,v 1.157 2004/07/23 20:07:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1065,7 +1065,7 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 	}
 }
 
-static void
+static int
 ftp_data_accept(struct connection *conn)
 {
 	struct ftp_connection_info *c_i = conn->info;
@@ -1086,7 +1086,7 @@ ftp_data_accept(struct connection *conn)
 			newsock = accept(conn->data_socket, NULL, NULL);
 			if (newsock < 0) {
 				retry_conn_with_state(conn, -errno);
-				return;
+				return -1;
 			}
 			close(conn->data_socket);
 		}
@@ -1096,6 +1096,8 @@ ftp_data_accept(struct connection *conn)
 			     (void (*)(void *)) got_something_from_data_connection,
 			     NULL, NULL, conn);
 	}
+
+	return 0;
 }
 
 static void
@@ -1110,7 +1112,7 @@ got_something_from_data_connection(struct connection *conn)
 
 	set_connection_timeout(conn);
 
-	ftp_data_accept(conn);
+	if (ftp_data_accept(conn)) return;
 
 	if (!conn->cached) conn->cached = get_cache_entry(conn->uri);
 	if (!conn->cached) {

@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.42 2004/01/21 06:19:22 jonas Exp $ */
+/* $Id: value.c,v 1.43 2004/01/22 22:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,6 +219,32 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 
 	} else 	if (css_token_contains(token, "justify")) {
 		value->text_align = AL_BLOCK;
+
+	} else {
+		return 0;
+	}
+
+	skip_css_tokens(scanner, CSS_TOKEN_IDENT);
+	return 1;
+}
+
+
+int
+css_parse_text_decoration_value(struct css_property_info *propinfo,
+				union css_property_value *value,
+				struct css_scanner *scanner)
+{
+	struct css_token *token = get_css_token(scanner);
+
+	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
+
+	if (token->type != CSS_TOKEN_IDENT) return 0;
+
+	if (css_token_contains(token, "underline")) {
+		value->font_attribute.add |= AT_UNDERLINE;
+
+	} else if (css_token_contains(token, "none")) {
+		value->font_attribute.rem |= AT_UNDERLINE;
 
 	} else {
 		return 0;

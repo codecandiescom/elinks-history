@@ -1,5 +1,5 @@
 /* CSS property info */
-/* $Id: property.c,v 1.9 2004/01/22 20:53:27 pasky Exp $ */
+/* $Id: property.c,v 1.10 2004/01/22 22:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@ struct css_property_info css_property_info[CSS_PT_LAST] = {
 	{ "font-style",		CSS_PT_FONT_STYLE,	 CSS_VT_FONT_ATTRIBUTE,	css_parse_font_style_value },
 	{ "font-weight",	CSS_PT_FONT_WEIGHT,	 CSS_VT_FONT_ATTRIBUTE,	css_parse_font_weight_value },
 	{ "text-align",		CSS_PT_TEXT_ALIGN,	 CSS_VT_TEXT_ALIGN,	css_parse_text_align_value },
-	{ "text-decoration",	CSS_PT_TEXT_DECORATION,	 CSS_VT_FONT_ATTRIBUTE,	css_parse_font_style_value },
+	{ "text-decoration",	CSS_PT_TEXT_DECORATION,	 CSS_VT_FONT_ATTRIBUTE,	css_parse_text_decoration_value },
 
 	{ NULL, CSS_PT_NONE, CSS_VT_NONE },
 };

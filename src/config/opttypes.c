@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.88 2004/12/16 14:43:41 zas Exp $ */
+/* $Id: opttypes.c,v 1.89 2004/12/16 15:13:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,7 +346,7 @@ tree_dup(struct option *opt, struct option *template)
 		if (!new_opt->box_item) continue;
 
 		if (new_opt->name && !strcmp(new_opt->name, "_template_"))
-			new_opt->box_item->visible = get_opt_int("config.show_template");
+			new_opt->box_item->visible = get_opt_bool("config.show_template");
 
 		if (opt->box_item) {
 			add_to_list(opt->box_item->child,

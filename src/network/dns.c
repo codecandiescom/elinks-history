@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.52 2004/10/07 02:54:50 jonas Exp $ */
+/* $Id: dns.c,v 1.53 2004/12/16 15:13:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ do_lookup(struct dnsquery *query, int force_async)
 	/* DBG("starting lookup for %s", query->name); */
 
 #ifndef NO_ASYNC_LOOKUP
-	if (force_async || get_opt_int("connection.async_dns")) {
+	if (force_async || get_opt_bool("connection.async_dns")) {
 		query->h = start_thread(lookup_fn, query->name,
 					strlen(query->name) + 1);
 		if (query->h != -1) {

@@ -77,13 +77,13 @@ struct expression {
 /* This is the data structure to pass information to the parser and get
    the result in a thread-safe way.  */
 struct parse_args {
-	const char *cp;
+	const unsigned char *cp;
 	struct expression *res;
 };
 
 /* The representation of an opened message catalog.  */
 struct loaded_domain {
-	const char *data;
+	const unsigned char *data;
 	int use_mmap;
 	size_t mmap_size;
 	int must_swap;
@@ -96,7 +96,7 @@ struct loaded_domain {
 #if HAVE_ICONV
 	iconv_t conv;
 #endif
-	char **conv_tab;
+	unsigned char **conv_tab;
 
 	struct expression *plural;
 	unsigned long int nplurals;
@@ -106,10 +106,10 @@ struct loaded_domain {
    from bindtextdomain() and bind_textdomain_codeset().  */
 struct binding {
 	struct binding *next;
-	char *dirname;
+	unsigned char *dirname;
 	int codeset_cntr;	/* Incremented each time codeset changes.  */
-	char *codeset;
-	char domainname[1];
+	unsigned char *codeset;
+	unsigned char domainname[1];
 };
 
 extern unsigned char *LANGUAGE;
@@ -119,46 +119,46 @@ extern unsigned char *LANGUAGE;
    This variable is part of the external ABI of the GNU libintl.  */
 extern int _nl_msg_cat_cntr;
 
-struct loaded_l10nfile *_nl_find_domain(const char *__dirname,
-					char *__locale,
-					const char *__domainname,
+struct loaded_l10nfile *_nl_find_domain(const unsigned char *__dirname,
+					unsigned char *__locale,
+					const unsigned char *__domainname,
 					struct binding *
 					__domainbinding);
 void _nl_load_domain(struct loaded_l10nfile * __domain,
 		     struct binding * __domainbinding);
 void _nl_unload_domain(struct loaded_domain * __domain);
-const char *_nl_init_domain_conv(struct loaded_l10nfile * __domain_file,
+const unsigned char *_nl_init_domain_conv(struct loaded_l10nfile * __domain_file,
 				 struct loaded_domain * __domain,
 				 struct binding * __domainbinding);
 void _nl_free_domain_conv(struct loaded_domain * __domain);
 
-char *_nl_find_msg(struct loaded_l10nfile * domain_file,
+unsigned char *_nl_find_msg(struct loaded_l10nfile * domain_file,
 		   struct binding * domainbinding,
-		   const char *msgid, size_t * lengthp);
+		   const unsigned char *msgid, size_t * lengthp);
 
-extern char *gettext__(const char *__msgid);
-extern char *dgettext__(const char *__domainname, const char *__msgid);
-extern char *dcgettext__(const char *__domainname,
-			 const char *__msgid, int __category);
-extern char *ngettext__(const char *__msgid1, const char *__msgid2,
+extern unsigned char *gettext__(const unsigned char *__msgid);
+extern unsigned char *dgettext__(const unsigned char *__domainname, const unsigned char *__msgid);
+extern unsigned char *dcgettext__(const unsigned char *__domainname,
+			 const unsigned char *__msgid, int __category);
+extern unsigned char *ngettext__(const unsigned char *__msgid1, const unsigned char *__msgid2,
 			unsigned long int __n);
-extern char *dngettext__(const char *__domainname,
-			 const char *__msgid1, const char *__msgid2,
+extern unsigned char *dngettext__(const unsigned char *__domainname,
+			 const unsigned char *__msgid1, const unsigned char *__msgid2,
 			 unsigned long int __n);
-extern char *dcngettext__(const char *__domainname,
-			  const char *__msgid1, const char *__msgid2,
+extern unsigned char *dcngettext__(const unsigned char *__domainname,
+			  const unsigned char *__msgid1, const unsigned char *__msgid2,
 			  unsigned long int __n, int __category);
-extern char *dcigettext__(const char *__domainname,
-			  const char *__msgid1, const char *__msgid2,
+extern unsigned char *dcigettext__(const unsigned char *__domainname,
+			  const unsigned char *__msgid1, const unsigned char *__msgid2,
 			  int __plural, unsigned long int __n,
 			  int __category);
-extern char *textdomain__(const char *__domainname);
-extern char *bindtextdomain__(const char *__domainname,
-			      const char *__dirname);
-extern char *bind_textdomain_codeset__(const char *__domainname,
-				       const char *__codeset);
+extern unsigned char *textdomain__(const unsigned char *__domainname);
+extern unsigned char *bindtextdomain__(const unsigned char *__domainname,
+			      const unsigned char *__dirname);
+extern unsigned char *bind_textdomain_codeset__(const unsigned char *__domainname,
+				       const unsigned char *__codeset);
 
 extern void gettext_free_exp__(struct expression * exp);
-extern int gettextparse__(void *arg);
+extern int __gettextparse(void *arg);
 
 #endif /* gettextP.h  */

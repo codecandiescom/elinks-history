@@ -35,7 +35,7 @@
 #pragma alloca
 #else
 #ifndef alloca
-char *alloca();
+unsigned char *alloca();
 #endif
 #endif
 #endif
@@ -67,7 +67,7 @@ extern int errno;
 
 /* Alignment of types.  */
 #define alignof(TYPE) \
-    ((int) &((struct { char dummy1; TYPE dummy2; } *) 0)->dummy2)
+    ((int) &((struct { unsigned char dummy1; TYPE dummy2; } *) 0)->dummy2)
 
 /* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
 #ifndef offsetof
@@ -142,7 +142,7 @@ extern int errno;
    are stored. */
 struct known_translation_t {
 	/* Domain in which to search.  */
-	char *domainname;
+	unsigned char *domainname;
 
 	/* The category.  */
 	int category;
@@ -154,11 +154,11 @@ struct known_translation_t {
 	struct loaded_l10nfile *domain;
 
 	/* And finally the translation.  */
-	const char *translation;
+	const unsigned char *translation;
 	size_t translation_length;
 
 	/* Pointer to the string in question.  */
-	char msgid[1];
+	unsigned char msgid[1];
 };
 
 /* Root of the search tree with known translations.  We can use this
@@ -198,13 +198,13 @@ transcmp(const void *p1, const void *p2)
 
 /* Name of the default domain used for gettext(3) prior any call to
    textdomain(3).  The default value for this is "messages".  */
-const char _nl_default_default_domain__[] = "messages";
+const unsigned char _nl_default_default_domain__[] = "messages";
 
 /* Value used as the default domain for gettext(3).  */
-const char *_nl_current_default_domain__ = _nl_default_default_domain__;
+const unsigned char *_nl_current_default_domain__ = _nl_default_default_domain__;
 
 /* Contains the default location of the message catalogs.  */
-const char _nl_default_dirname__[] = LOCALEDIR;
+const unsigned char _nl_default_dirname__[] = LOCALEDIR;
 
 /* Contains application-specific LANGUAGE variation, taking precedence to the
  * $LANGUAGE environment variable.  */
@@ -215,15 +215,15 @@ unsigned char *LANGUAGE = NULL;
 struct binding *_nl_domain_bindings__;
 
 /* Prototypes for local functions.  */
-static char *plural_lookup(struct loaded_l10nfile * domain,
+static unsigned char *plural_lookup(struct loaded_l10nfile * domain,
 			   unsigned long int n,
-			   const char *translation,
+			   const unsigned char *translation,
 			   size_t translation_len);
 static unsigned long int plural_eval(struct expression * pexp,
 				     unsigned long int n);
-static const char *category_to_name(int category);
-static const char *guess_category_value(int category,
-					const char *categoryname);
+static const unsigned char *category_to_name(int category);
+static const unsigned char *guess_category_value(int category,
+					const unsigned char *categoryname);
 
 /* For those loosing systems which don't have `alloca' we have to add
    some additional code emulating it.  */
@@ -294,8 +294,8 @@ static int enable_secure;
 /* Look up MSGID in the DOMAINNAME message catalog for the current
    CATEGORY locale and, if PLURAL is nonzero, search over string
    depending on the plural form determined by N.  */
-char *
-dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
+unsigned char *
+dcigettext__(const unsigned char *domainname, const unsigned char *msgid1, const unsigned char *msgid2,
 	   int plural, unsigned long int n, int category)
 {
 #ifndef HAVE_ALLOCA
@@ -303,11 +303,11 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 #endif
 	struct loaded_l10nfile *domain;
 	struct binding *binding;
-	const char *categoryname;
-	const char *categoryvalue;
-	char *dirname, *xdomainname;
-	char *single_locale;
-	char *retval;
+	const unsigned char *categoryname;
+	const unsigned char *categoryvalue;
+	unsigned char *dirname, *xdomainname;
+	unsigned char *single_locale;
+	unsigned char *retval;
 	size_t retlen;
 	int saved_errno;
 
@@ -337,7 +337,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 		alloca(offsetof(struct known_translation_t, msgid) + msgid_len);
 
 	memcpy(search->msgid, msgid1, msgid_len);
-	search->domainname = (char *) domainname;
+	search->domainname = (unsigned char *) domainname;
 	search->category = category;
 
 	foundp = (struct known_translation_t **) tfind(search, &root, transcmp);
@@ -348,7 +348,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 					       (*foundp)->translation,
 					       (*foundp)->translation_length);
 		else
-			retval = (char *) (*foundp)->translation;
+			retval = (unsigned char *) (*foundp)->translation;
 
 		return retval;
 	}
@@ -376,20 +376,20 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 	}
 
 	if (binding == NULL)
-		dirname = (char *) _nl_default_dirname__;
+		dirname = (unsigned char *) _nl_default_dirname__;
 	else if (IS_ABSOLUTE_PATH(binding->dirname))
 		dirname = binding->dirname;
 	else {
 		/* We have a relative path.  Make it absolute now.  */
 		size_t dirname_len = strlen(binding->dirname) + 1;
 		size_t path_max;
-		char *ret;
+		unsigned char *ret;
 
 		path_max = (unsigned int) PATH_MAX;
 		path_max += 2;	/* The getcwd docs say to do this.  */
 
 		for(;;) {
-			dirname = (char *) alloca(path_max + dirname_len);
+			dirname = (unsigned char *) alloca(path_max + dirname_len);
 			ADD_BLOCK(block_list, dirname);
 
 			errno = 0;
@@ -406,9 +406,9 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 			   error but simply return the default string.  */
 			FREE_BLOCKS(block_list);
 			errno = saved_errno;
-			return (plural == 0 ? (char *) msgid1
+			return (plural == 0 ? (unsigned char *) msgid1
 				/* Use the Germanic plural rule.  */
-				: n == 1 ? (char *) msgid1 : (char *) msgid2);
+				: n == 1 ? (unsigned char *) msgid1 : (unsigned char *) msgid2);
 		}
 
 		stpcpy(stpcpy(strchr(dirname, '\0'), "/"), binding->dirname);
@@ -419,7 +419,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 	categoryvalue = guess_category_value(category, categoryname);
 
 	domainname_len = strlen(domainname);
-	xdomainname = (char *) alloca(strlen(categoryname)
+	xdomainname = (unsigned char *) alloca(strlen(categoryname)
 				      + domainname_len + 5);
 	ADD_BLOCK(block_list, xdomainname);
 
@@ -427,7 +427,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 		       domainname, domainname_len), ".mo");
 
 	/* Creating working area.  */
-	single_locale = (char *) alloca(strlen(categoryvalue) + 1);
+	single_locale = (unsigned char *) alloca(strlen(categoryvalue) + 1);
 	ADD_BLOCK(block_list, single_locale);
 
 	/* Search for the given string.  This is a loop because we perhaps
@@ -444,7 +444,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 			single_locale[0] = 'C';
 			single_locale[1] = '\0';
 		} else {
-			char *cp = single_locale;
+			unsigned char *cp = single_locale;
 
 			while (categoryvalue[0] != '\0'
 			       && categoryvalue[0] != ':')
@@ -464,9 +464,9 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 		    || strcmp(single_locale, "POSIX") == 0) {
 			FREE_BLOCKS(block_list);
 			errno = saved_errno;
-			return (plural == 0 ? (char *) msgid1
+			return (plural == 0 ? (unsigned char *) msgid1
 				/* Use the Germanic plural rule.  */
-				: n == 1 ? (char *) msgid1 : (char *) msgid2);
+				: n == 1 ? (unsigned char *) msgid1 : (unsigned char *) msgid2);
 		}
 
 		/* Find structure describing the message catalog matching the
@@ -558,14 +558,14 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 	/* NOTREACHED */
 }
 
-char *
+unsigned char *
 _nl_find_msg(struct loaded_l10nfile *domain_file,
 			       struct binding *domainbinding,
-			       const char *msgid, size_t *lengthp)
+			       const unsigned char *msgid, size_t *lengthp)
 {
 	struct loaded_domain *domain;
 	size_t act;
-	char *result;
+	unsigned char *result;
 	size_t resultlen;
 
 	if (domain_file->decided == 0)
@@ -644,7 +644,7 @@ _nl_find_msg(struct loaded_l10nfile *domain_file,
 found:
 	/* The translation was found at index ACT.  If we have to convert the
 	   string to use a different character set, this is the time.  */
-	result = ((char *) domain->data
+	result = ((unsigned char *) domain->data
 		  + W(domain->must_swap, domain->trans_tab[act].offset));
 	resultlen = W(domain->must_swap, domain->trans_tab[act].length) + 1;
 
@@ -669,13 +669,13 @@ found:
 		   NULs.  */
 
 		if (domain->conv_tab == NULL
-		    && ((domain->conv_tab = (char **) calloc(domain->nstrings,
-							     sizeof(char *)))
+		    && ((domain->conv_tab = (unsigned char **) calloc(domain->nstrings,
+							     sizeof(unsigned char *)))
 			== NULL))
 			/* Mark that we didn't succeed allocating a table.  */
-			domain->conv_tab = (char **) -1;
+			domain->conv_tab = (unsigned char **) -1;
 
-		if (domain->conv_tab == (char **) -1)
+		if (domain->conv_tab == (unsigned char **) -1)
 			/* Nothing we can do, no more memory.  */
 			goto converted;
 
@@ -700,9 +700,9 @@ found:
 			malloc_count = 0;
 			while (1) {
 				transmem_block_t *newmem;
-				const char *inptr = (const char *) inbuf;
+				const unsigned char *inptr = (const unsigned char *) inbuf;
 				size_t inleft = resultlen;
-				char *outptr = (char *) outbuf;
+				char *outptr = (unsigned char *) outbuf;
 				size_t outleft;
 
 				if (freemem_size < sizeof(size_t))
@@ -749,7 +749,7 @@ resize_freemem:
 			/* We have now in our buffer a converted string.  Put this
 			   into the table of conversions.  */
 			*(size_t *) freemem = outbuf - freemem - sizeof(size_t);
-			domain->conv_tab[act] = (char *) freemem;
+			domain->conv_tab[act] = (unsigned char *) freemem;
 			/* Shrink freemem, but keep it aligned.  */
 			freemem_size -= outbuf - freemem;
 			freemem = outbuf;
@@ -774,14 +774,14 @@ converted:
 }
 
 /* Look up a plural variant.  */
-static char *
+static unsigned char *
 plural_lookup(struct loaded_l10nfile *domain, unsigned long int n,
-	      const char *translation, size_t translation_len)
+	      const unsigned char *translation, size_t translation_len)
 {
 	struct loaded_domain *domaindata =
 		(struct loaded_domain *) domain->data;
 	unsigned long int index;
-	const char *p;
+	const unsigned char *p;
 
 	index = plural_eval(domaindata->plural, n);
 	if (index >= domaindata->nplurals)
@@ -801,9 +801,9 @@ plural_lookup(struct loaded_l10nfile *domain, unsigned long int n,
 			/* This should never happen.  It means the plural expression
 			   evaluated to a value larger than the number of variants
 			   available for MSGID1.  */
-			return (char *) translation;
+			return (unsigned char *) translation;
 	}
-	return (char *) p;
+	return (unsigned char *) p;
 }
 
 /* Function to evaluate the plural expression and return an index value.  */
@@ -901,10 +901,10 @@ default:
 }
 
 /* Return string representation of locale CATEGORY.  */
-static const char *
+static const unsigned char *
 category_to_name(int category)
 {
-	const char *retval;
+	const unsigned char *retval;
 
 	switch (category) {
 #ifdef LC_COLLATE
@@ -958,11 +958,11 @@ default:
 }
 
 /* Guess value of current locale from value of the environment variables.  */
-static const char *
-guess_category_value(int category, const char *categoryname)
+static const unsigned char *
+guess_category_value(int category, const unsigned char *categoryname)
 {
-	const char *language;
-	const char *retval;
+	const unsigned char *language;
+	const unsigned char *retval;
 
 	/* Takes precedence to anything else, damn it's what the application wants!
 	 * ;-) --pasky  */

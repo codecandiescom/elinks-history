@@ -24,8 +24,8 @@
 
 /* Look up MSGID in the DOMAINNAME message catalog for the current CATEGORY
    locale.  */
-char *
-dcgettext__(const char *domainname, const char *msgid, int category)
+unsigned char *
+dcgettext__(const unsigned char *domainname, const unsigned char *msgid, int category)
 {
 	return dcigettext__(domainname, msgid, NULL, 0, 0, category);
 }

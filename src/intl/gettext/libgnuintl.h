@@ -48,47 +48,47 @@ extern "C" {
 /* Look up MSGID in the current default message catalog for the current
    LC_MESSAGES locale.  If not found, returns MSGID itself (the default
    text).  */
-	extern char *gettext(const char *__msgid);
+	extern unsigned char *gettext(const unsigned char *__msgid);
 
 /* Look up MSGID in the DOMAINNAME message catalog for the current
    LC_MESSAGES locale.  */
-	extern char *dgettext(const char *__domainname, const char *__msgid);
+	extern unsigned char *dgettext(const unsigned char *__domainname, const unsigned char *__msgid);
 
 /* Look up MSGID in the DOMAINNAME message catalog for the current CATEGORY
    locale.  */
-	extern char *dcgettext(const char *__domainname, const char *__msgid,
+	extern unsigned char *dcgettext(const unsigned char *__domainname, const unsigned char *__msgid,
 			       int __category);
 
 /* Similar to `gettext' but select the plural form corresponding to the
    number N.  */
-	extern char *ngettext(const char *__msgid1, const char *__msgid2,
+	extern unsigned char *ngettext(const unsigned char *__msgid1, const unsigned char *__msgid2,
 			      unsigned long int __n);
 
 /* Similar to `dgettext' but select the plural form corresponding to the
    number N.  */
-	extern char *dngettext(const char *__domainname, const char *__msgid1,
-			       const char *__msgid2, unsigned long int __n);
+	extern unsigned char *dngettext(const unsigned char *__domainname, const unsigned char *__msgid1,
+			       const unsigned char *__msgid2, unsigned long int __n);
 
 /* Similar to `dcgettext' but select the plural form corresponding to the
    number N.  */
-	extern char *dcngettext(const char *__domainname, const char *__msgid1,
-			        const char *__msgid2, unsigned long int __n,
+	extern unsigned char *dcngettext(const unsigned char *__domainname, const unsigned char *__msgid1,
+			        const unsigned char *__msgid2, unsigned long int __n,
 			        int __category);
 
 /* Set the current default message catalog to DOMAINNAME.
    If DOMAINNAME is null, return the current default.
    If DOMAINNAME is "", reset to the default of "messages".  */
-	extern char *textdomain(const char *__domainname);
+	extern unsigned char *textdomain(const unsigned char *__domainname);
 
 /* Specify that the DOMAINNAME message catalog will be found
    in DIRNAME rather than in the system locale data base.  */
-	extern char *bindtextdomain(const char *__domainname,
-				    const char *__dirname);
+	extern unsigned char *bindtextdomain(const unsigned char *__domainname,
+				    const unsigned char *__dirname);
 
 /* Specify the character encoding in which the messages from the
    DOMAINNAME message catalog will be returned.  */
-	extern char *bind_textdomain_codeset(const char *__domainname,
-					     const char *__codeset);
+	extern unsigned char *bind_textdomain_codeset(const unsigned char *__domainname,
+					     const unsigned char *__codeset);
 
 /* Optimized version of the functions above.  */
 #if defined __OPTIMIZED

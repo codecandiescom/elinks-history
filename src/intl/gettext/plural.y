@@ -58,8 +58,8 @@ static inline struct expression *new_exp_3(enum operator op,
 					   struct expression *bexp,
 					   struct expression *tbranch,
 					   struct expression *fbranch);
-static int yylex(YYSTYPE *lval, const char **pexp);
-static void yyerror(const char *str);
+static int yylex(YYSTYPE *lval, const unsigned char **pexp);
+static void yyerror(const unsigned char *str);
 
 /* Allocation of expressions.  */
 
@@ -235,9 +235,9 @@ gettext_free_exp__(struct expression *exp)
 
 
 static int
-yylex(YYSTYPE *lval, const char **pexp)
+yylex(YYSTYPE *lval, const unsigned char **pexp)
 {
-  const char *exp = *pexp;
+  const unsigned char *exp = *pexp;
   int result;
 
   while (1)
@@ -378,7 +378,7 @@ yylex(YYSTYPE *lval, const char **pexp)
 
 
 static void
-yyerror(const char *str)
+yyerror(const unsigned char *str)
 {
   /* Do nothing.  We don't print error messages here.  */
 }

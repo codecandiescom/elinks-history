@@ -33,15 +33,15 @@
 #endif
 
 /* Contains the default location of the message catalogs.  */
-extern const char _nl_default_dirname__[];
+extern const unsigned char _nl_default_dirname__[];
 
 /* List with bindings of specific domains.  */
 extern struct binding *_nl_domain_bindings__;
 
 /* Prototypes for local functions.  */
-static void set_binding_values(const char *domainname,
-			       const char **dirnamep,
-			       const char **codesetp);
+static void set_binding_values(const unsigned char *domainname,
+			       const unsigned char **dirnamep,
+			       const unsigned char **codesetp);
 
 /* Specifies the directory name *DIRNAMEP and the output codeset *CODESETP
    to be used for the DOMAINNAME message catalog.
@@ -50,9 +50,9 @@ static void set_binding_values(const char *domainname,
    If DIRNAMEP or CODESETP is NULL, the corresponding attribute is neither
    modified nor returned.  */
 static void
-set_binding_values(const char *domainname,
-		   const char **dirnamep,
-		   const char **codesetp)
+set_binding_values(const unsigned char *domainname,
+		   const unsigned char **dirnamep,
+		   const unsigned char **codesetp)
 {
 	struct binding *binding;
 	int modified;
@@ -84,7 +84,7 @@ set_binding_values(const char *domainname,
 
 	if (binding != NULL) {
 		if (dirnamep) {
-			const char *dirname = *dirnamep;
+			const unsigned char *dirname = *dirnamep;
 
 			if (dirname == NULL)
 				/* The current binding has be to returned.  */
@@ -93,12 +93,12 @@ set_binding_values(const char *domainname,
 				/* The domain is already bound.  If the new value and the old
 				   one are equal we simply do nothing.  Otherwise replace the
 				   old binding.  */
-				char *result = binding->dirname;
+				unsigned char *result = binding->dirname;
 
 				if (strcmp(dirname, result) != 0) {
 					if (strcmp(dirname, _nl_default_dirname__)
 					    == 0)
-						result = (char *)
+						result = (unsigned char *)
 							_nl_default_dirname__;
 					else {
 						result = strdup(dirname);
@@ -118,7 +118,7 @@ set_binding_values(const char *domainname,
 		}
 
 		if (codesetp) {
-			const char *codeset = *codesetp;
+			const unsigned char *codeset = *codesetp;
 
 			if (codeset == NULL)
 				/* The current binding has be to returned.  */
@@ -127,7 +127,7 @@ set_binding_values(const char *domainname,
 				/* The domain is already bound.  If the new value and the old
 				   one are equal we simply do nothing.  Otherwise replace the
 				   old binding.  */
-				char *result = binding->codeset;
+				unsigned char *result = binding->codeset;
 
 				if (result == NULL
 				    || strcmp(codeset, result) != 0) {
@@ -165,7 +165,7 @@ set_binding_values(const char *domainname,
 		memcpy(new_binding->domainname, domainname, len);
 
 		if (dirnamep) {
-			const char *dirname = *dirnamep;
+			const unsigned char *dirname = *dirnamep;
 
 			if (dirname == NULL)
 				/* The default value.  */
@@ -174,7 +174,7 @@ set_binding_values(const char *domainname,
 				if (strcmp(dirname, _nl_default_dirname__) == 0)
 					dirname = _nl_default_dirname__;
 				else {
-					char *result;
+					unsigned char *result;
 
 					result = strdup(dirname);
 					if (result == NULL)
@@ -183,18 +183,18 @@ set_binding_values(const char *domainname,
 				}
 			}
 			*dirnamep = dirname;
-			new_binding->dirname = (char *) dirname;
+			new_binding->dirname = (unsigned char *) dirname;
 		} else
 			/* The default value.  */
-			new_binding->dirname = (char *) _nl_default_dirname__;
+			new_binding->dirname = (unsigned char *) _nl_default_dirname__;
 
 		new_binding->codeset_cntr = 0;
 
 		if (codesetp) {
-			const char *codeset = *codesetp;
+			const unsigned char *codeset = *codesetp;
 
 			if (codeset != NULL) {
-				char *result;
+				unsigned char *result;
 
 				result = strdup(codeset);
 				if (result == NULL)
@@ -203,7 +203,7 @@ set_binding_values(const char *domainname,
 				new_binding->codeset_cntr++;
 			}
 			*codesetp = codeset;
-			new_binding->codeset = (char *) codeset;
+			new_binding->codeset = (unsigned char *) codeset;
 		} else
 			new_binding->codeset = NULL;
 
@@ -249,18 +249,18 @@ failed:
 
 /* Specify that the DOMAINNAME message catalog will be found
    in DIRNAME rather than in the system locale data base.  */
-char *
-bindtextdomain__(const char *domainname, const char *dirname)
+unsigned char *
+bindtextdomain__(const unsigned char *domainname, const unsigned char *dirname)
 {
 	set_binding_values(domainname, &dirname, NULL);
-	return (char *) dirname;
+	return (unsigned char *) dirname;
 }
 
 /* Specify the character encoding in which the messages from the
    DOMAINNAME message catalog will be returned.  */
-char *
-bind_textdomain_codeset__(const char *domainname, const char *codeset)
+unsigned char *
+bind_textdomain_codeset__(const unsigned char *domainname, const unsigned char *codeset)
 {
 	set_binding_values(domainname, NULL, &codeset);
-	return (char *) codeset;
+	return (unsigned char *) codeset;
 }

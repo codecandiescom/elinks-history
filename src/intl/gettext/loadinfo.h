@@ -42,8 +42,8 @@
 #define XPG_SPECIFIC	(XPG_CODESET|XPG_NORM_CODESET|XPG_MODIFIER)
 
 struct loaded_l10nfile {
-	const char *filename;
-	const char *langdirname;
+	const unsigned char *filename;
+	const unsigned char *langdirname;
 	int langdirnamelen;
 
 	int decided;
@@ -58,30 +58,30 @@ struct loaded_l10nfile {
    names.  Normalization allows the user to use any of the common
    names.  The return value is dynamically allocated and has to be
    freed by the caller.  */
-extern const char *_nl_normalize_codeset(const char *codeset,
+extern const unsigned char *_nl_normalize_codeset(const unsigned char *codeset,
 					 size_t name_len);
 
 extern struct loaded_l10nfile *_nl_make_l10nflist(
-        struct loaded_l10nfile ** l10nfile_list, const char *dirlist,
-	size_t dirlist_len, int mask, const char *language,
-	const char *territory, const char *codeset,
-	const char *normalized_codeset, const char *modifier,
-	const char *special, const char *sponsor, const char *revision,
-	const char *filename, int do_allocate);
+        struct loaded_l10nfile ** l10nfile_list, const unsigned char *dirlist,
+	size_t dirlist_len, int mask, const unsigned char *language,
+	const unsigned char *territory, const unsigned char *codeset,
+	const unsigned char *normalized_codeset, const unsigned char *modifier,
+	const unsigned char *special, const unsigned char *sponsor, const unsigned char *revision,
+	const unsigned char *filename, int do_allocate);
 
-extern const char *_nl_expand_alias(const char *name);
+extern const unsigned char *_nl_expand_alias(const unsigned char *name);
 
 /* normalized_codeset is dynamically allocated and has to be freed by
    the caller.  */
-extern int _nl_explode_name(char *name, const char **language,
-			    const char **modifier,
-			    const char **territory,
-			    const char **codeset,
-			    const char **normalized_codeset,
-			    const char **special,
-			    const char **sponsor,
-			    const char **revision);
+extern int _nl_explode_name(unsigned char *name, const unsigned char **language,
+			    const unsigned char **modifier,
+			    const unsigned char **territory,
+			    const unsigned char **codeset,
+			    const unsigned char **normalized_codeset,
+			    const unsigned char **special,
+			    const unsigned char **sponsor,
+			    const unsigned char **revision);
 
-extern char *_nl_find_language(const char *name);
+extern unsigned char *_nl_find_language(const unsigned char *name);
 
 #endif /* loadinfo.h */

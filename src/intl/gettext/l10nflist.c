@@ -52,10 +52,10 @@
 
 #if !defined HAVE___ARGZ_COUNT
 /* Returns the number of strings in ARGZ.  */
-static size_t argz_count__(const char *argz, size_t len);
+static size_t argz_count__(const unsigned char *argz, size_t len);
 
 static size_t
-argz_count__(const char *argz, size_t len)
+argz_count__(const unsigned char *argz, size_t len)
 {
 	size_t count = 0;
 
@@ -76,10 +76,10 @@ argz_count__(const char *argz, size_t len)
 #if !defined HAVE___ARGZ_STRINGIFY
 /* Make '\0' separated arg vector ARGZ printable by converting all the '\0's
    except the last into the character SEP.  */
-static void argz_stringify__(char *argz, size_t len, int sep);
+static void argz_stringify__(unsigned char *argz, size_t len, int sep);
 
 static void
-argz_stringify__(char *argz, size_t len, int sep)
+argz_stringify__(unsigned char *argz, size_t len, int sep)
 {
 	while (len > 0) {
 		size_t part_len = strlen(argz);
@@ -96,17 +96,17 @@ argz_stringify__(char *argz, size_t len, int sep)
 #endif /* !HAVE___ARGZ_STRINGIFY */
 
 #if !defined HAVE___ARGZ_NEXT
-static char *argz_next__(char *argz, size_t argz_len,
-			 const char *entry);
+static unsigned char *argz_next__(unsigned char *argz, size_t argz_len,
+			 const unsigned char *entry);
 
-static char *
-argz_next__(char *argz, size_t argz_len, const char *entry)
+static unsigned char *
+argz_next__(unsigned char *argz, size_t argz_len, const unsigned char *entry)
 {
 	if (entry) {
 		if (entry < argz + argz_len)
 			entry = strchr(entry, '\0') + 1;
 
-		return entry >= argz + argz_len ? NULL : (char *) entry;
+		return entry >= argz + argz_len ? NULL : (unsigned char *) entry;
 	} else if (argz_len > 0)
 		return argz;
 	else
@@ -134,30 +134,30 @@ pop(int x)
 
 struct loaded_l10nfile *
 _nl_make_l10nflist(struct loaded_l10nfile **l10nfile_list,
-		   const char *dirlist,
+		   const unsigned char *dirlist,
 		   size_t dirlist_len,
 		   int mask,
-		   const char *language,
-		   const char *territory,
-		   const char *codeset,
-		   const char *normalized_codeset,
-		   const char *modifier,
-		   const char *special,
-		   const char *sponsor,
-		   const char *revision,
-		   const char *filename,
+		   const unsigned char *language,
+		   const unsigned char *territory,
+		   const unsigned char *codeset,
+		   const unsigned char *normalized_codeset,
+		   const unsigned char *modifier,
+		   const unsigned char *special,
+		   const unsigned char *sponsor,
+		   const unsigned char *revision,
+		   const unsigned char *filename,
 		   int do_allocate)
 {
-	char *abs_filename, *abs_langdirname;
+	unsigned char *abs_filename, *abs_langdirname;
 	int abs_langdirnamelen;
 	struct loaded_l10nfile *last = NULL;
 	struct loaded_l10nfile *retval;
-	char *cp;
+	unsigned char *cp;
 	size_t entries;
 	int cnt;
 
 	/* Allocate room for the full file name.  */
-	abs_filename = (char *) malloc(dirlist_len + strlen(language)
+	abs_filename = (unsigned char *) malloc(dirlist_len + strlen(language)
 				       + ((mask & TERRITORY) != 0
 					  ? strlen(territory) + 1 : 0)
 				       + ((mask & XPG_CODESET) != 0
@@ -286,10 +286,10 @@ _nl_make_l10nflist(struct loaded_l10nfile **l10nfile_list,
 		    && ((cnt & XPG_CODESET) == 0
 			|| (cnt & XPG_NORM_CODESET) == 0)) {
 			/* Iterate over all elements of the DIRLIST.  */
-			char *dir = NULL;
+			unsigned char *dir = NULL;
 
 			while ((dir =
-				__argz_next((char *) dirlist, dirlist_len, dir))
+				__argz_next((unsigned char *) dirlist, dirlist_len, dir))
 			       != NULL)
 				retval->successor[entries++]
 					= _nl_make_l10nflist(l10nfile_list, dir,
@@ -310,13 +310,13 @@ _nl_make_l10nflist(struct loaded_l10nfile **l10nfile_list,
    names.  Normalization allows the user to use any of the common
    names.  The return value is dynamically allocated and has to be
    freed by the caller.  */
-const char *
-_nl_normalize_codeset(const char *codeset, size_t name_len)
+const unsigned char *
+_nl_normalize_codeset(const unsigned char *codeset, size_t name_len)
 {
 	int len = 0;
 	int only_digit = 1;
-	char *retval;
-	char *wp;
+	unsigned char *retval;
+	unsigned char *wp;
 	size_t cnt;
 
 	for(cnt = 0; cnt < name_len; ++cnt)
@@ -327,7 +327,7 @@ _nl_normalize_codeset(const char *codeset, size_t name_len)
 				only_digit = 0;
 		}
 
-	retval = (char *) malloc((only_digit ? 3 : 0) + len + 1);
+	retval = (unsigned char *) malloc((only_digit ? 3 : 0) + len + 1);
 
 	if (retval != NULL) {
 		if (only_digit)
@@ -344,5 +344,5 @@ _nl_normalize_codeset(const char *codeset, size_t name_len)
 		*wp = '\0';
 	}
 
-	return (const char *) retval;
+	return (const unsigned char *) retval;
 }

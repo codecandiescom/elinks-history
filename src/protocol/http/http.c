@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.71 2002/11/29 16:26:13 zas Exp $ */
+/* $Id: http.c,v 1.72 2002/12/02 15:50:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,6 +122,8 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 		eurl = memacpy(url_data, post - url_data - 1);
 	}
 
+	if (!eurl) return;
+	
 	p = p1 = eurl;
 	while (*(p += strcspn(p, " \t\r\n"))) {
 		*p = 0;
@@ -398,8 +400,11 @@ http_send_header(struct connection *c)
 		}
 		ustr = subst_user_agent(optstr, VERSION_STRING, system_name,
 					ts);
-                add_to_str(&hdr, &l, ustr);
-		mem_free(ustr);
+                
+		if (ustr) {
+			add_to_str(&hdr, &l, ustr);
+			mem_free(ustr);
+		}
 
 		add_to_str(&hdr, &l, "\r\n");
         }
@@ -487,30 +492,32 @@ http_send_header(struct connection *c)
 		int i;
 
 		ac = init_str();
-		for (i = 0; (cs = get_cp_mime_name(i)); i++) {
-			if (aclen) {
-				add_to_str(&ac, &aclen, ", ");
-			} else {
-				add_to_str(&ac, &aclen, "Accept-Charset: ");
+		if (ac) {
+			for (i = 0; (cs = get_cp_mime_name(i)); i++) {
+				if (aclen) {
+					add_to_str(&ac, &aclen, ", ");
+				} else {
+					add_to_str(&ac, &aclen, "Accept-Charset: ");
+				}
+				add_to_str(&ac, &aclen, cs);
 			}
-			add_to_str(&ac, &aclen, cs);
-		}
 
-		if (aclen) {
-			add_to_str(&ac, &aclen, "\r\n");
-		}
+			if (aclen) {
+				add_to_str(&ac, &aclen, "\r\n");
+			}
 
-		/* Never freed until exit(), if you found a  better solution,
-		 * let us now ;)
-		 * Do not use mem_alloc() here. */
-		accept_charset = malloc(strlen(ac) + 1);
-		if (accept_charset) {
-			strcpy(accept_charset, ac);
-		} else {
-			accept_charset = "";
-		}
+			/* Never freed until exit(), if you found a  better solution,
+			 * let us now ;)
+			 * Do not use mem_alloc() here. */
+			accept_charset = malloc(strlen(ac) + 1);
+			if (accept_charset) {
+				strcpy(accept_charset, ac);
+			} else {
+				accept_charset = "";
+			}
 
-		mem_free(ac);
+			mem_free(ac);
+		}
 	}
 
 	if (!(info->bl_flags & BL_NO_CHARSET)) {
@@ -625,7 +632,7 @@ http_send_header(struct connection *c)
 
 	write_to_socket(c, c->sock1, hdr, strlen(hdr), http_get_header);
 
-	mem_free(hdr);
+	if (hdr) mem_free(hdr);
 	setcstate(c, S_SENT);
 }
 
@@ -752,7 +759,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		if (r > 0) *new_len += r;
 	}
 
-	if (r < 0) {
+	if (r < 0 && output) {
 		mem_free(output);
 		output = NULL;
 	}

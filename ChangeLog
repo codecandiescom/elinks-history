@@ -1,3 +1,390 @@
+Fri Jun 18 21:24:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	Tidy up.  
+
+Fri Jun 18 21:00:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	draw_textarea(): Use temporary variable to get rid of weird
+	wrapping.  
+
+Fri Jun 18 20:56:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	draw_textarea(): No need to test fs->value. format_text() already
+	asserts it.  
+
+Fri Jun 18 20:53:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	draw_textarea(): Decrease indentation.  
+
+Fri Jun 18 20:53:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Ooops, forgot to use @nlen, fixed.  
+
+Fri Jun 18 20:35:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	html_li(): code simplification and tidy up.  
+
+Fri Jun 18 20:22:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Minor optimizatio: cache strlen(n).  
+
+Fri Jun 18 20:19:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Really fix <li value=12345><li> bug.  
+
+Fri Jun 18 20:11:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fixed <li value=12345><li>, the next <li> didn't have number 12346.
+	Reported by zas.  
+
+Fri Jun 18 19:16:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	Fix last patch. Stupid brain.  
+
+Fri Jun 18 19:05:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	Fix format_text() to preallocate the ending entries since it is
+	possible to bypass the loop obviously.  
+
+Fri Jun 18 18:48:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix translation of 1.2.3.4:5 so IP address part won't be interpreted
+	as the protocol name. Spotted by pasky.  
+
+Fri Jun 18 16:38:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Use isspace(), ASCII_LF, ASCII_CR where applicable.  
+
+Fri Jun 18 16:22:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Restore old scroll right behavior, it was a feature, not a bug.
+	Sorry, pasky ;).  
+
+Fri Jun 18 16:02:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Drop allocation of memory for parsed line, just use si->text one.
+	Get rid off @line_end2.  
+
+Fri Jun 18 15:05:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Add check of memrchr().  
+
+Fri Jun 18 15:04:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/stub.c:
+
+	elinks_memrchr(): Fix off by one thing .. I hope.  
+
+Fri Jun 18 15:02:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	format_text(): Use memrchr() for handling wrapping.  
+
+Fri Jun 18 15:00:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op(): Use memrchr() for kill-to-bol handling.  
+
+Fri Jun 18 14:59:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: stub.c, stub.h:
+
+	Introduce memrchr() stub.  
+
+Fri Jun 18 14:27:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	format_text(): Wrap the wrap handling in a not so deep way.  
+
+Fri Jun 18 14:20:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_end(): Cleanup wrap handling.  
+
+Fri Jun 18 14:16:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	Improve comment situation.  
+
+Fri Jun 18 14:00:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Fix invertion when ensuring contrast for 256 color mode.  
+
+Fri Jun 18 13:55:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser/forms.c, viewer/text/form.h,
+	viewer/text/textarea.c:
+
+	Introduce enum form_wrap used for form_control->wrap member.  
+
+Fri Jun 18 13:48:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	Make format_text() take an extra parameter controling whether to
+	modify the text value passed to it.  
+
+Fri Jun 18 13:40:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Fix for bug 346: Detection of filenames/directories was greatly
+	improved, now it should work in most cases (ie with files with more
+	than one space in name), though stuff involved is complex and
+	behavior is still not perfect. The definitive solution is to use
+	libsmbclient instead of smbclient command. Please test a lot and
+	report issues.  
+
+Fri Jun 18 13:33:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	format_text(): Preallocate the two last entries in the line info
+	table and get rid of goto.  
+
+Fri Jun 18 13:17:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	Make all textarea ops cache old value of fs->state and modify
+	fs->state directly so that refreshing is only done when needed.  
+
+Fri Jun 18 13:09:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	y -> current. Idea by Miciah.  
+
+Fri Jun 18 13:04:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_eob(): Use get_textarea_line_number() to seek the index
+	of the last.  
+
+Fri Jun 18 12:38:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_eob(): Remove need for goto.  
+
+Fri Jun 18 12:34:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_end(): Remove need for goto.  
+
+Fri Jun 18 11:27:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	Wrap a long line from revision 1.93 in draw_textarea.  
+
+Fri Jun 18 11:11:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	Remove an extra newline.  
+
+Fri Jun 18 11:10:08 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	Introduce get_textarea_line_number, which takes a |struct line_info|
+	array and a cursor position and returns the index of the line where
+	the cursor is located. Idea and code by Jonas.  
+
+Fri Jun 18 09:54:37 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	In area_cursor, rename |int q| to |int ret|.  
+
+Fri Jun 18 09:46:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: textarea.c, textarea.h, view.c:
+
+	Remove the |struct session *ses| parameter from set_textarea: It has
+	been unused since revision 1.86.  
+
+Fri Jun 18 09:33:50 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: form.c, form.h, textarea.c, textarea.h, view.c:
+
+	Drop the |rep| parameter from field_op and textarea_op_*: Only
+	textarea_op_up and textarea_op_down used the argument, and the
+	effect of calling either those routines with a non-zero value for
+	|rep| can be had by calling textarea_op_bob or textarea_op_eob.  
+
+Fri Jun 18 09:30:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Tidy up and improved comments.  
+
+Fri Jun 18 09:15:58 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.h:
+
+	Update the prototypes for textarea_op_*: the parameter |struct
+	form_control *frm| is now named |fc|.  
+
+Fri Jun 18 09:13:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Define SMBCLIENT to handle executable name.  
+
+Fri Jun 18 09:10:19 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	Use int_upper_bound in textarea_op_bob and textarea_op_eob.  
+
+Fri Jun 18 08:40:35 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	In format_text, change |begin| from a pointer to an index variable.  
+
+Fri Jun 18 08:38:02 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	In format_text, use an index variable instead of modifying |text|.  
+
+Fri Jun 18 08:25:20 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	In format_text's inner loop, make |s| an index instead of a pointer.  
+
+Fri Jun 18 08:23:44 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	Reformat the inner loop in format_text.  
+
+Fri Jun 18 06:29:26 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	Change the |start| and |end| members of |struct line_info| from
+	character pointers to integers.  
+
+Fri Jun 18 06:23:52 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	In textarea_op_bob, when calculating the new cursor position by
+	subtracting the start of the current line from |fs->state| (this is
+	to keep the cursor on the same column while repositioning it to the
+	first line), include |fs->state| in the calculation.  
+	
+	This fixes a bug introduced in revision 1.89 whereby
+	beginning-of-buffer did not always go to the beginning of the
+	buffer.  
+
+Fri Jun 18 04:52:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Use whole palette for background colors in 256 mode. It doesn't have
+	same restrictions as 16 and it makes some of the backgrounds in the
+	menus visible like the right menu on fm.  
+
+Fri Jun 18 04:46:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Rename enum typeahead_code values to better match what they are
+	mapped to.  
+
+Thu Jun 17 23:53:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	draw_form_entry(): Cleanup.  
+
+Thu Jun 17 23:51:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	draw_form_entry(): Decrease indentation.  
+
+Thu Jun 17 23:41:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op(): In the switch's default label don.t refresh view if
+	field is readonly. Use insert_in_string() to do all the dirty work
+	of memory reallocation.  
+
+Thu Jun 17 22:42:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_bob(): If state is the same don.t refresh.  
+
+Thu Jun 17 22:41:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_home(): Use state variable to get rid of goto. If state
+	is the same don.t refresh.  
+
+Thu Jun 17 22:36:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_bob(): Use state variable to remove need for gotos.  
+
+Thu Jun 17 22:24:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_enter(): Cleanup and use insert_in_string(). Even though
+	it is a bit slower it remove a lot of code duplication.  
+
 Thu Jun 17 21:25:50 2004  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/view.c:

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.94 2003/06/07 12:58:21 pasky Exp $ */
+/* $Id: renderer.c,v 1.95 2003/06/08 10:49:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1348,7 +1348,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		n->yw = ys - n->y + part->y;
 	}
 
-	foreach(fc, part->uf) destroy_fc(fc);
+	foreach (fc, part->uf) destroy_fc(fc);
 	free_list(part->uf);
 
 ret:
@@ -1585,7 +1585,7 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 		struct form_control *form;
 		unsigned char *qq;
 		fprintf(f,"FORM:\n");
-		foreach(form, screen->forms) {
+		foreach (form, screen->forms) {
 			fprintf(f, "g=%d f=%d c=%d t:%d\n",
 				form->g_ctrl_num, form->form_num,
 				form->ctrl_num, form->type);
@@ -1755,10 +1755,10 @@ formatted_info(int type)
 
 	switch (type) {
 		case CI_FILES:
-			foreach(ce, format_cache) i++;
+			foreach (ce, format_cache) i++;
 			return i;
 		case CI_LOCKED:
-			foreach(ce, format_cache) i += !!ce->refcount;
+			foreach (ce, format_cache) i += !!ce->refcount;
 			return i;
 		default:
 			internal("formatted_info: bad request");
@@ -1988,7 +1988,7 @@ sdbg(struct f_data *f)
 {
 	struct node *n;
 
-	foreachback(n, f->nodes) {
+	foreachback (n, f->nodes) {
 		int xm = n->x + n->xw, ym = n->y + n->yw;
 		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
 		fflush(stdout);

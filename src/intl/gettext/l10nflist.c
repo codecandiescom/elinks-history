@@ -231,7 +231,7 @@ _nl_make_l10nflist(struct loaded_l10nfile **l10nfile_list,
 	/* Look in list of already loaded domains whether it is already
 	   available.  */
 	last = NULL;
-	for(retval = *l10nfile_list; retval != NULL; retval = retval->next)
+	for (retval = *l10nfile_list; retval != NULL; retval = retval->next)
 		if (retval->filename != NULL) {
 			int compare = strcmp(retval->filename, abs_filename);
 
@@ -280,7 +280,7 @@ _nl_make_l10nflist(struct loaded_l10nfile **l10nfile_list,
 	   a real file.  So we have to use the DIRLIST separation mechanism
 	   of the inner loop.  */
 	cnt = __argz_count(dirlist, dirlist_len) == 1 ? mask - 1 : mask;
-	for(; cnt >= 0; --cnt)
+	for (; cnt >= 0; --cnt)
 		if ((cnt & ~mask) == 0
 		    && ((cnt & CEN_SPECIFIC) == 0 || (cnt & XPG_SPECIFIC) == 0)
 		    && ((cnt & XPG_CODESET) == 0
@@ -319,7 +319,7 @@ _nl_normalize_codeset(const unsigned char *codeset, size_t name_len)
 	unsigned char *wp;
 	size_t cnt;
 
-	for(cnt = 0; cnt < name_len; ++cnt)
+	for (cnt = 0; cnt < name_len; ++cnt)
 		if (isalnum(codeset[cnt])) {
 			++len;
 
@@ -335,7 +335,7 @@ _nl_normalize_codeset(const unsigned char *codeset, size_t name_len)
 		else
 			wp = retval;
 
-		for(cnt = 0; cnt < name_len; ++cnt)
+		for (cnt = 0; cnt < name_len; ++cnt)
 			if (isalpha(codeset[cnt]))
 				*wp++ = tolower(codeset[cnt]);
 			else if (isdigit(codeset[cnt]))

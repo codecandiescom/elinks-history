@@ -1,5 +1,5 @@
 /* Some ELinks' auxiliary routines (ELinks<->gettext support) */
-/* $Id: libintl.c,v 1.10 2003/06/05 14:38:17 zas Exp $ */
+/* $Id: libintl.c,v 1.11 2003/06/08 10:49:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ iso639_to_language(unsigned char *iso639)
 
 	/* Exact match. */
 
-	for(i = 0; languages[i].name; i++) {
+	for (i = 0; languages[i].name; i++) {
 		if (strcmp(languages[i].iso639, l))
 			continue;
 		mem_free(l);
@@ -99,7 +99,7 @@ iso639_to_language(unsigned char *iso639)
 
 	if (p) {
 		*p = '\0';
-		for(i = 0; languages[i].name; i++) {
+		for (i = 0; languages[i].name; i++) {
 			if (strcmp(languages[i].iso639, l))
 				continue;
 			mem_free(l);
@@ -110,7 +110,7 @@ iso639_to_language(unsigned char *iso639)
 	/* Any dialect match. */
 
 	ll = strlen(l);
-	for(i = 0; languages[i].name; i++) {
+	for (i = 0; languages[i].name; i++) {
 		int il = strcspn(languages[i].iso639, "-");
 
 		if (strncmp(languages[i].iso639, l, il > ll ? ll : il))
@@ -146,7 +146,7 @@ name_to_language(unsigned char *name)
 {
 	int i;
 
-	for(i = 0; languages[i].name; i++) {
+	for (i = 0; languages[i].name; i++) {
 		if (strcasecmp(languages[i].name, name))
 			continue;
 		return i;

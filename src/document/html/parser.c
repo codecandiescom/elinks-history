@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.101 2003/06/07 21:39:49 pasky Exp $ */
+/* $Id: parser.c,v 1.102 2003/06/08 10:49:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -375,7 +375,7 @@ debug_stack(void)
 	struct html_element *e;
 
 	printf("HTML stack debug: \n");
-	foreachback(e, html_stack) {
+	foreachback (e, html_stack) {
 		int i;
 
 		printf("\"");
@@ -2821,11 +2821,11 @@ ng:;
 						struct html_element *e;
 
 						if (ei->nopair == 2) {
-							foreach(e, html_stack) {
+							foreach (e, html_stack) {
 								if (e->dontkill) break;
 								if (e->linebreak || !ei->linebreak) break;
 							}
-						} else foreach(e, html_stack) {
+						} else foreach (e, html_stack) {
 							if (e->linebreak && !ei->linebreak) break;
 							if (e->dontkill) break;
 							if (e->namelen == namelen && !strncasecmp(e->name, name, e->namelen)) break;
@@ -2858,7 +2858,7 @@ ng:;
 				was_br = 0;
 				if (ei->nopair == 1 || ei->nopair == 3) break;
 				/*debug_stack();*/
-				foreach(e, html_stack) {
+				foreach (e, html_stack) {
 					if (e->linebreak && !ei->linebreak && ei->name) xxx = 1;
 					if (e->namelen != namelen || strncasecmp(e->name, name, e->namelen)) {
 						if (e->dontkill)

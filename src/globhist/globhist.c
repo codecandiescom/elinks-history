@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.30 2003/06/05 14:38:17 zas Exp $ */
+/* $Id: globhist.c,v 1.31 2003/06/08 10:49:26 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -175,7 +175,7 @@ free_globhist_cache(void)
 		struct hash_item *item;
 		int i;
 
-		foreach_hash_item(item, *globhist_cache, i)
+		foreach_hash_item (item, *globhist_cache, i)
 			if (item->value)
 				mem_free(item->value);
 

@@ -1,5 +1,5 @@
 /* CSS tree utility tools */
-/* $Id: tree.c,v 1.2 2003/06/05 14:38:17 zas Exp $ */
+/* $Id: tree.c,v 1.3 2003/06/08 10:49:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ done_stylesheet(struct stylesheet *stylesheet)
 	struct hash_item *item;
 	int i;
 
-	foreach_hash_item(item, *stylesheet->hash, i)
+	foreach_hash_item (item, *stylesheet->hash, i)
 		if (item->value) {
 			struct css_hash_item *element = item->value;
 			struct css_node *node;

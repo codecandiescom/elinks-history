@@ -1,5 +1,5 @@
 /* CSS scanner utilities */
-/* $Id: scanner.c,v 1.2 2003/06/05 14:38:17 zas Exp $ */
+/* $Id: scanner.c,v 1.3 2003/06/08 10:49:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ css_init_scan_table(void)
 	int index;
 
 	/* Initialize */
-	for(index = 0; index < SCAN_TABLE_SIZE; index++)
+	for (index = 0; index < SCAN_TABLE_SIZE; index++)
 		css_scan_table[index] = 0;
 
 	css_scan_table['\\'] = IS_IDENT_START;

@@ -122,7 +122,7 @@ get_charset_aliases(void)
 			size_t res_size = 0;
 			size_t l1, l2;
 
-			for(;;) {
+			for (;;) {
 				c = getc(fp);
 				if (c == EOF)
 					break;
@@ -254,7 +254,7 @@ locale_charset(void)
 		codeset = "";
 
 	/* Resolve alias. */
-	for(aliases = get_charset_aliases();
+	for (aliases = get_charset_aliases();
 	    *aliases != '\0';
 	    aliases += strlen(aliases) + 1, aliases += strlen(aliases) + 1)
 		if (strcmp(codeset, aliases) == 0

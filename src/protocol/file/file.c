@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.43 2003/06/04 10:12:11 zas Exp $ */
+/* $Id: file.c,v 1.44 2003/06/08 10:49:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,9 +52,9 @@
 static inline void
 setrwx(int m, unsigned char *p)
 {
-	if(m & S_IRUSR) p[0] = 'r';
-	if(m & S_IWUSR) p[1] = 'w';
-	if(m & S_IXUSR) p[2] = 'x';
+	if (m & S_IRUSR) p[0] = 'r';
+	if (m & S_IWUSR) p[1] = 'w';
+	if (m & S_IXUSR) p[2] = 'x';
 }
 
 

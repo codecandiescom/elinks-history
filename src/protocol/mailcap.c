@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.15 2003/06/05 14:38:18 zas Exp $ */
+/* $Id: mailcap.c,v 1.16 2003/06/08 10:49:28 zas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -385,7 +385,7 @@ mailcap_init(void)
 	unsigned char *path;
 	unsigned int priority = 0;
 
-	if(!get_opt_bool("protocol.mailcap.enable"))
+	if (!get_opt_bool("protocol.mailcap.enable"))
 		return; /* and leave mailcap_map = NULL */
 
 	mailcap_map = init_hash(8, &strhash);
@@ -430,7 +430,7 @@ mailcap_exit(void)
 		int i;
 
 		/* We do not free key here. */
-		foreach_hash_item(item, *mailcap_map, i)
+		foreach_hash_item (item, *mailcap_map, i)
 			if (item->value) {
 				struct mailcap_entry *entry = item->value;
 

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.18 2003/05/02 13:31:25 pasky Exp $ */
+/* $Id: hash.c,v 1.19 2003/06/08 10:49:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,7 +238,7 @@ strhash(unsigned char *k, /* the key */
 
 	/*------------------------------------- handle the last 11 bytes */
 	c += length;
-	switch(len) {	/* all the case statements fall through */
+	switch (len) {	/* all the case statements fall through */
 		case 11: c += ((hash_value)(k[10])<<24);
 		case 10: c += ((hash_value)(k[9])<<16);
 		case 9 : c += ((hash_value)(k[8])<<8);

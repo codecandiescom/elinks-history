@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.8 2003/06/07 23:42:31 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.9 2003/06/08 10:49:28 zas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -56,7 +56,7 @@ free_mimetypes_entry(struct mimetypes_entry *entry)
  * Comments starts with '#'. */
 
 #define skip_whitespace(string_) \
-	do { while (isspace(*(string_))) (string_)++; } while(0)
+	do { while (isspace(*(string_))) (string_)++; } while (0)
 
 static inline void
 parse_mimetypes_extensions(unsigned char *token, unsigned char *ctype)
@@ -194,7 +194,7 @@ done_mimetypes(void)
 	if (!mimetypes_map)
 		return;
 
-	foreach_hash_item(item, *mimetypes_map, i)
+	foreach_hash_item (item, *mimetypes_map, i)
 		if (item->value) {
 			struct mimetypes_entry *entry = item->value;
 
@@ -217,7 +217,7 @@ mimetypes_change_hook(struct session *ses, struct option *current,
 	} else if (!strncasecmp(changed->name, "enable", 6)) {
 		int enable = *((int *) changed->ptr);
 
-		if(enable && !mimetypes_map)
+		if (enable && !mimetypes_map)
 			init_mimetypes();
 		else if (!enable && mimetypes_map)
 			done_mimetypes();

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.30 2003/06/05 14:38:18 zas Exp $ */
+/* $Id: terminal.c,v 1.31 2003/06/08 10:49:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -411,7 +411,7 @@ redraw_all_terminals(void)
 {
 	struct terminal *term;
 
-	foreach(term, terminals)
+	foreach (term, terminals)
 		redraw_screen(term);
 }
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.23 2003/05/03 21:44:00 pasky Exp $ */
+/* $Id: xbel.c,v 1.24 2003/06/08 10:49:25 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -166,7 +166,7 @@ indentation(struct secure_save_info *ssi, int num)
 {
 	int i;
 
-	for(i = 0; i < num; i++)
+	for (i = 0; i < num; i++)
 		secure_fputs(ssi, "    ");
 }
 
@@ -213,7 +213,7 @@ write_bookmarks_list(struct secure_save_info *ssi,
 {
 	struct bookmark *bm;
 
-	foreach(bm, *bookmarks_list) {
+	foreach (bm, *bookmarks_list) {
 		indentation(ssi, n + 1);
 
 		if (bm->box_item->type == BI_FOLDER) {
@@ -320,7 +320,7 @@ delete_whites(unsigned char *s)
 
 	for (i = 0; i < len; i++) {
 		if (isspace(s[i])) {
-			if(count == 1) continue;
+			if (count == 1) continue;
 			else count = 1;
 		}
 		else count = 0;
@@ -473,7 +473,7 @@ get_attribute_value(struct attributes *attr, unsigned char *name)
 {
 	struct attributes *attribute;
 
-	foreachback(attribute, *attr) {
+	foreachback (attribute, *attr) {
 		if (!strcmp(attribute->name, name)) {
 			return attribute->prev->name;
 		}
@@ -509,7 +509,7 @@ free_node(struct tree_node *node)
 	struct attributes *attribute;
 
 	if (node->attrs) {
-		foreachback(attribute, *node->attrs) {
+		foreachback (attribute, *node->attrs) {
 			if (attribute->name)
 				mem_free(attribute->name);
 		}

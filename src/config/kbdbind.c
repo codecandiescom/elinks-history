@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.70 2003/06/06 23:13:01 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.71 2003/06/08 10:49:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -591,7 +591,7 @@ bind_config_string(unsigned char **file, int *len)
 	struct keybinding *keybinding;
 
 	for (keymap = 0; keymap < KM_MAX; keymap++)
-		foreach(keybinding, keymaps[keymap]) {
+		foreach (keybinding, keymaps[keymap]) {
 			unsigned char *keymap_str = write_keymap(keymap);
 			unsigned char *action_str =
 				write_action(keybinding->action);

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.20 2003/06/07 14:40:01 pasky Exp $ */
+/* $Id: sched.c,v 1.21 2003/06/08 10:49:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,16 +101,16 @@ connect_info(int type)
 
 	switch (type) {
 		case CI_FILES:
-			foreach(ce, queue) i++;
+			foreach (ce, queue) i++;
 			return i;
 		case CI_CONNECTING:
-			foreach(ce, queue) i += ce->state > S_WAIT && ce->state < S_TRANS;
+			foreach (ce, queue) i += ce->state > S_WAIT && ce->state < S_TRANS;
 			return i;
 		case CI_TRANSFER:
-			foreach(ce, queue) i += ce->state == S_TRANS;
+			foreach (ce, queue) i += ce->state == S_TRANS;
 			return i;
 		case CI_KEEP:
-			foreach(cee, keepalive_connections) i++;
+			foreach (cee, keepalive_connections) i++;
 			return i;
 		case CI_LIST:
 			return (long) &queue;
@@ -125,7 +125,7 @@ connection_disappeared(struct connection *c, tcount count)
 {
 	struct connection *d;
 
-	foreach(d, queue)
+	foreach (d, queue)
 		if (c == d && count == d->count)
 			return 0;
 
@@ -139,7 +139,7 @@ is_host_on_list(struct connection *c)
 	struct h_conn *h;
 
 	if (!ho) return NULL;
-	foreach(h, h_conns) if (!strcmp(h->host, ho)) {
+	foreach (h, h_conns) if (!strcmp(h->host, ho)) {
 		mem_free(ho);
 		return h;
 	}
@@ -216,7 +216,7 @@ setcstate(struct connection *c, int state)
 		}
 	}
 
-	foreach(stat, c->statuss) {
+	foreach (stat, c->statuss) {
 		stat->state = state;
 		stat->prev_error = c->prev_error;
 	}
@@ -240,7 +240,7 @@ is_host_on_keepalive_list(struct connection *c)
 	ho = get_host_and_pass(c->url, 1);
 	if (!ho) return NULL;
 
-	foreach(h, keepalive_connections)
+	foreach (h, keepalive_connections)
 		if (h->protocol == ph && h->port == po
 		    && !strcmp(h->host, ho)) {
 			mem_free(ho);
@@ -273,7 +273,7 @@ abort_all_keepalive_connections(void)
 {
 	struct k_conn *k;
 
-	foreach(k, keepalive_connections) {
+	foreach (k, keepalive_connections) {
 		mem_free(k->host);
 		close(k->conn);
 	}
@@ -451,7 +451,7 @@ check_keepalive_connections(void)
 		keepalive_timeout = -1;
 	}
 
-	foreach(kc, keepalive_connections) {
+	foreach (kc, keepalive_connections) {
 		if (can_read(kc->conn) || ct - kc->add_time > kc->timeout) {
 			kc = kc->prev;
 			del_keepalive_socket(kc->next);
@@ -476,7 +476,7 @@ add_to_queue(struct connection *c)
 	struct connection *cc;
 	int pri = getpri(c);
 
-	foreach(cc, queue)
+	foreach (cc, queue)
 		if (getpri(cc) > pri)
 			break;
 
@@ -491,7 +491,7 @@ sort_queue(void)
 
 	do {
 		swp = 0;
-		foreach(c, queue) {
+		foreach (c, queue) {
 			if ((void *)c->next != &queue) {
 				if (getpri(c->next) < getpri(c)) {
 					struct connection *n = c->next;
@@ -532,7 +532,7 @@ try_to_suspend_connection(struct connection *c, unsigned char *ho)
 	int pri = getpri(c);
 	struct connection *d;
 
-	foreachback(d, queue) {
+	foreachback (d, queue) {
 		if (getpri(d) <= pri) return -1;
 		if (d->state == S_WAIT) continue;
 		if (d->unrestartable == 2 && getpri(d) < PRI_CANCEL) continue;
@@ -651,7 +651,7 @@ check_queue_bugs(void)
 
 again:
 	cc = 0;
-	foreach(d, queue) {
+	foreach (d, queue) {
 		int q = getpri(d);
 
 		cc += d->running;
@@ -740,7 +740,7 @@ again:
 	}
 
 again2:
-	foreachback(c, queue) {
+	foreachback (c, queue) {
 		if (getpri(c) < PRI_CANCEL) break;
 		if (c->state == S_WAIT) {
 			setcstate(c, S_INTERRUPTED);
@@ -868,7 +868,7 @@ load_url(unsigned char *url, unsigned char *prev_url,
 	}
 
 #ifdef DEBUG
-	foreach(c, queue) {
+	foreach (c, queue) {
 		struct status *st;
 
 		foreach (st, c->statuss) {
@@ -916,7 +916,7 @@ load_url(unsigned char *url, unsigned char *prev_url,
 		return -1;
 	}
 
-	foreach(c, queue) {
+	foreach (c, queue) {
 		if (c->detached || strcmp(c->url, u))
 			continue;
 
@@ -1139,7 +1139,7 @@ set_timeout(struct connection *c)
 void
 abort_all_connections(void)
 {
-	while(queue.next != &queue) {
+	while (queue.next != &queue) {
 		setcstate(queue.next, S_INTERRUPTED);
 		abort_connection(queue.next);
 	}

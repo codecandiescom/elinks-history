@@ -92,7 +92,7 @@ _nl_find_domain(const unsigned char *dirname, unsigned char *locale, const unsig
 		if (retval->data != NULL)
 			return retval;
 
-		for(cnt = 0; retval->successor[cnt] != NULL; ++cnt) {
+		for (cnt = 0; retval->successor[cnt] != NULL; ++cnt) {
 			if (retval->successor[cnt]->decided == 0)
 				_nl_load_domain(retval->successor[cnt],
 						domainbinding);
@@ -137,7 +137,7 @@ _nl_find_domain(const unsigned char *dirname, unsigned char *locale, const unsig
 	if (retval->data == NULL) {
 		int cnt;
 
-		for(cnt = 0; retval->successor[cnt] != NULL; ++cnt) {
+		for (cnt = 0; retval->successor[cnt] != NULL; ++cnt) {
 			if (retval->successor[cnt]->decided == 0)
 				_nl_load_domain(retval->successor[cnt],
 						domainbinding);

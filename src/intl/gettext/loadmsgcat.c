@@ -453,7 +453,7 @@ default:
 			while (*nplurals != '\0' && isspace(*nplurals))
 				++nplurals;
 
-			for(endp = (unsigned char *) nplurals, n = 0;
+			for (endp = (unsigned char *) nplurals, n = 0;
 			    *endp >= '0' && *endp <= '9'; endp++)
 				n = n * 10 + (*endp - '0');
 

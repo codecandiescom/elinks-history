@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.15 2003/06/05 14:38:18 zas Exp $ */
+/* $Id: auth.c,v 1.16 2003/06/08 10:49:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
         if (!url || !*url) return NULL;
 
-        foreach(tmp_entry, http_auth_basic_list) {
+        foreach (tmp_entry, http_auth_basic_list) {
                 if (!strcasecmp(tmp_entry->url, url)) {
                         /* Found a matching url. */
                         entry = tmp_entry;

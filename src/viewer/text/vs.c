@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.4 2003/05/16 19:13:05 zas Exp $ */
+/* $Id: vs.c,v 1.5 2003/06/08 10:49:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,7 @@ next_frame(struct session *ses, int p)
 	vs = &cur_loc(ses)->vs;
 
 	n = 0;
-	foreach(fd, ses->scrn_frames) {
+	foreach (fd, ses->scrn_frames) {
 		if (!(fd->f_data && fd->f_data->frame))
 			n++;
 	}

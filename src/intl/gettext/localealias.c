@@ -245,7 +245,7 @@ read_alias_file(const unsigned char *fname, int fname_len)
 					if (string_space != new_pool) {
 						size_t i;
 
-						for(i = 0; i < nmap; i++) {
+						for (i = 0; i < nmap; i++) {
 							map[i].alias +=
 								new_pool -
 								string_space;

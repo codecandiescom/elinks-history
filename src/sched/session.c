@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.93 2003/06/07 23:08:56 zas Exp $ */
+/* $Id: session.c,v 1.94 2003/06/08 10:49:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,7 @@ print_screen_status(struct session *ses)
 			if (stat->state == S_OK) {
 				struct file_to_load *ftl;
 
-				foreach(ftl, ses->more_files) {
+				foreach (ftl, ses->more_files) {
 					if (ftl->req_sent
 					    && ftl->stat.state >= 0) {
 						stat = &ftl->stat;
@@ -364,7 +364,7 @@ abort_files_load(struct session *ses, int interrupt)
 
 	do {
 		q = 0;
-		foreach(ftl, ses->more_files) {
+		foreach (ftl, ses->more_files) {
 			if (ftl->stat.state >= 0 && ftl->req_sent) {
 				q = 1;
 				change_connection(&ftl->stat, NULL, PRI_CANCEL, interrupt);
@@ -379,7 +379,7 @@ free_files(struct session *ses)
 	struct file_to_load *ftl;
 
 	abort_files_load(ses, 0);
-	foreach(ftl, ses->more_files) {
+	foreach (ftl, ses->more_files) {
 		if (ftl->ce) ftl->ce->refcount--;
 		if (ftl->url) mem_free(ftl->url);
 	}
@@ -398,7 +398,7 @@ ses_forward(struct session *ses)
 		struct frame *frm;
 
 		l = cur_loc(ses);
-		foreach(frm, l->frames)
+		foreach (frm, l->frames)
 			frm->vs.f = NULL;
 		l->vs.f = NULL;
 	}
@@ -711,7 +711,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 		return;
 	}
 
-	foreach(frm, loc->frames) {
+	foreach (frm, loc->frames) {
 		if (strcasecmp(frm->name, name))
 			continue;
 
@@ -977,7 +977,7 @@ request_additional_file(struct session *ses, unsigned char *url, int pri)
 {
 	struct file_to_load *ftl;
 
-	foreach(ftl, ses->more_files) {
+	foreach (ftl, ses->more_files) {
 		if (!strcmp(ftl->url, url)) {
 			if (ftl->pri > pri) {
 				ftl->pri = pri;
@@ -1043,7 +1043,7 @@ process_file_requests(struct session *ses)
 
 	while (more) {
 		more = 0;
-		foreach(ftl, ses->more_files) {
+		foreach (ftl, ses->more_files) {
 			if (ftl->req_sent)
 				continue;
 
@@ -1301,7 +1301,7 @@ destroy_session(struct session *ses)
 		mem_free(ses->screen);
 	}
 
-	foreach(fdc, ses->scrn_frames)
+	foreach (fdc, ses->scrn_frames)
 		detach_formatted(fdc);
 
 	free_list(ses->scrn_frames);
@@ -1514,7 +1514,7 @@ ses_find_frame(struct session *ses, unsigned char *name)
 		return NULL;
 	}
 
-	foreachback(frm, l->frames)
+	foreachback (frm, l->frames)
 		if (!strcasecmp(frm->name, name))
 			return frm;
 
@@ -1534,7 +1534,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 		return NULL;
 	}
 
-	foreachback(frm, l->frames) {
+	foreachback (frm, l->frames) {
 		if (strcasecmp(frm->name, name)) continue;
 
 		if (url_len > strlen(frm->vs.url)) {
@@ -1547,7 +1547,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 
 			nf->prev->next = nf->next->prev = nf;
 
-			foreach(fd, ses->scrn_frames)
+			foreach (fd, ses->scrn_frames)
 				if (fd->vs == &frm->vs)
 					fd->vs = &nf->vs;
 

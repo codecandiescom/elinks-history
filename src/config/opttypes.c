@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.54 2003/05/03 21:44:01 pasky Exp $ */
+/* $Id: opttypes.c,v 1.55 2003/06/08 10:49:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,7 +282,7 @@ str_rd(struct option *opt, unsigned char **file)
 			/* FIXME: This won't work on crlf systems. */
 			if (str[1] == '\n') { str[1] = ' '; str++; }
 			/* When there's '"', we will just move on there, thus
-			 * we will never test for it in while() condition and
+			 * we will never test for it in while () condition and
 			 * we will treat it just as '"', ignoring the backslash
 			 * itself. */
 			if (str[1] == '"') str++;

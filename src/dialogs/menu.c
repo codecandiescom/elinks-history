@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.106 2003/06/07 21:39:49 pasky Exp $ */
+/* $Id: menu.c,v 1.107 2003/06/08 10:49:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,7 +278,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 	struct menu_item *mi = NULL;
 	int n = 0;
 
-	foreach(l, ses->unhistory) {
+	foreach (l, ses->unhistory) {
 		unsigned char *url, *pc;
 
 		if (!mi) {
@@ -316,7 +316,7 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 	struct menu_item *mi = NULL;
 	int n = 0;
 
-	foreachback(d, downloads) {
+	foreachback (d, downloads) {
 		unsigned char *url, *pc;
 
 		if (!mi) {

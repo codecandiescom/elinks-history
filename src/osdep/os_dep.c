@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.70 2003/06/05 15:28:03 zas Exp $ */
+/* $Id: os_dep.c,v 1.71 2003/06/08 10:49:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -724,7 +724,7 @@ set_clipboard_text(char *data)
 	if (hab != NULLHANDLE) {
 		hmq = WinCreateMsgQueue(hab, 0);
 		if (hmq != NULLHANDLE) {
-			if(WinOpenClipbrd(hab)) {
+			if (WinOpenClipbrd(hab)) {
 				PVOID pvShrObject = NULL;
 				if (DosAllocSharedMem(&pvShrObject, NULL, strlen(data) + 1, PAG_COMMIT | PAG_WRITE | OBJ_GIVEABLE) == NO_ERROR) {
 					strcpy(pvShrObject, data);
@@ -819,7 +819,7 @@ set_window_title(unsigned char *title)
 		if (hab != NULLHANDLE) {
 			hmq = WinCreateMsgQueue(hab, 0);
 			if (hmq != NULLHANDLE) {
-				if(swData.hwnd)
+				if (swData.hwnd)
 					WinSetWindowText(swData.hwnd, new_title);
 				/* back From PM */
 				WinDestroyMsgQueue(hmq);
@@ -846,21 +846,21 @@ set_window_title(int init, const char *url)
 	HMQ hmq;
 	char new_title[MAXNAMEL];
 
-	switch(init)
+	switch (init)
 	{
 	case 1:
 		DosGetInfoBlocks( &tib, &pib );
 		oldType = pib->pib_ultype;
 		memset( &swData, 0, sizeof swData );
 		hSw = WinQuerySwitchHandle( 0, pib->pib_ulpid );
-		if( hSw!=NULLHANDLE && !WinQuerySwitchEntry( hSw, &swData ) )
+		if ( hSw!=NULLHANDLE && !WinQuerySwitchEntry( hSw, &swData ) )
 		{
 			org_switch_title = mem_alloc( strlen( swData.szSwtitle )+1 );
 			strcpy( org_switch_title, swData.szSwtitle );
 			pib->pib_ultype = 3;
 			hab = WinInitialize( 0 );
 			hmq = WinCreateMsgQueue( hab, 0 );
-			if( hab!=NULLHANDLE && hmq!=NULLHANDLE )
+			if ( hab!=NULLHANDLE && hmq!=NULLHANDLE )
 			{
 				org_win_title = mem_alloc( MAXNAMEL+1 );
 				WinQueryWindowText( swData.hwnd, MAXNAMEL+1, org_win_title );
@@ -874,12 +874,12 @@ set_window_title(int init, const char *url)
 		pib->pib_ultype = 3;
 		hab = WinInitialize( 0 );
 		hmq = WinCreateMsgQueue( hab, 0 );
-		if( hSw!=NULLHANDLE && hab!=NULLHANDLE && hmq!=NULLHANDLE )
+		if ( hSw!=NULLHANDLE && hab!=NULLHANDLE && hmq!=NULLHANDLE )
 		{
 			safe_strncpy( swData.szSwtitle, org_switch_title, MAXNAMEL );
 			WinChangeSwitchEntry( hSw, &swData );
 
-			if( swData.hwnd )
+			if ( swData.hwnd )
 				WinSetWindowText( swData.hwnd, org_win_title );
 			WinDestroyMsgQueue( hmq );
 			WinTerminate( hab );
@@ -896,12 +896,12 @@ set_window_title(int init, const char *url)
 			pib->pib_ultype = 3;
 			hab = WinInitialize( 0 );
 			hmq = WinCreateMsgQueue( hab, 0 );
-			if( hSw!=NULLHANDLE && hab!=NULLHANDLE && hmq!=NULLHANDLE )
+			if ( hSw!=NULLHANDLE && hab!=NULLHANDLE && hmq!=NULLHANDLE )
 			{
 				safe_strncpy( swData.szSwtitle, new_title, MAXNAMEL );
 				WinChangeSwitchEntry( hSw, &swData );
 
-				if( swData.hwnd )
+				if ( swData.hwnd )
 					WinSetWindowText( swData.hwnd, new_title );
 					WinDestroyMsgQueue( hmq );
 					WinTerminate( hab );
@@ -1064,7 +1064,7 @@ terminate_osdep(void)
 	struct active_thread *thrd;
 
 	if (acquire_sem(thr_sem) < B_NO_ERROR) return;
-	foreach(thrd, active_threads) kill_thread(thrd->tid);
+	foreach (thrd, active_threads) kill_thread(thrd->tid);
 
 	while ((p = active_threads.next) != &active_threads) {
 		del_from_list(p);
@@ -1386,7 +1386,7 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 	t->fn = fn;
 	t->h = p[1];
 	memcpy(t->data, ptr, l);*/
-	foreach(ts, thread_stacks) {
+	foreach (ts, thread_stacks) {
 		if (ts->pid == -1 || kill(ts->pid, 0)) {
 			if (ts->l >= l) {
 				goto ts_ok;

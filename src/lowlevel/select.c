@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.29 2003/06/05 14:38:17 zas Exp $ */
+/* $Id: select.c,v 1.30 2003/06/08 10:49:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ select_info(int type)
 					i++;
 			return i;
 		case CI_TIMERS:
-			foreach(ce, timers) i++;
+			foreach (ce, timers) i++;
 			return i;
 		default:
 			internal("cache_info: bad request");
@@ -113,7 +113,7 @@ register_bottom_half(void (*fn)(void *), void *data)
 {
 	struct bottom_half *bh;
 
-	foreach(bh, bottom_halves)
+	foreach (bh, bottom_halves)
 		if (bh->fn == fn && bh->data == data)
 			return 0;
 
@@ -149,10 +149,10 @@ check_timers(void)
 	ttime interval = now - last_time;
 	struct timer *t;
 
-	foreach(t, timers) t->interval -= interval;
+	foreach (t, timers) t->interval -= interval;
 
 ch:
-	foreach(t, timers) if (t->interval <= 0) {
+	foreach (t, timers) if (t->interval <= 0) {
 		struct timer *tt = t;
 
 		del_from_list(tt);
@@ -176,7 +176,7 @@ install_timer(ttime t, void (*func)(void *), void *data)
 	tm->func = func;
 	tm->data = data;
 	tm->id = timer_id++;
-	foreach(tt, timers)
+	foreach (tt, timers)
 		if (tt->interval >= t)
 			break;
 	add_at_pos(tt->prev, tm);
@@ -190,7 +190,7 @@ kill_timer(int id)
 	struct timer *tm;
 	int k = 0;
 
-	foreach(tm, timers) if (tm->id == id) {
+	foreach (tm, timers) if (tm->id == id) {
 		struct timer *tt = tm;
 
 		tm = tm->prev;

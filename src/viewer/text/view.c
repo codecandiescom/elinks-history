@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.98 2003/06/07 23:08:57 zas Exp $ */
+/* $Id: view.c,v 1.99 2003/06/08 10:49:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,7 +124,7 @@ clear_formatted(struct f_data *scr)
 	if (scr->lines1) mem_free(scr->lines1);
 	if (scr->lines2) mem_free(scr->lines2);
 	if (scr->opt.framename) mem_free(scr->opt.framename);
-	foreach(fc, scr->forms) {
+	foreach (fc, scr->forms) {
 		destroy_fc(fc);
 	}
 	free_list(scr->forms);
@@ -187,7 +187,7 @@ find_tag(struct f_data *f, unsigned char *name)
 {
 	struct tag *tag;
 
-	foreach(tag, f->tags)
+	foreach (tag, f->tags)
 		if (!strcasecmp(tag->name, name))
 			return tag->y;
 
@@ -1024,7 +1024,7 @@ draw_frames(struct session *ses)
 
 	if (!ses->screen->f_data->frame) return;
 	n = 0;
-	foreach(f, ses->scrn_frames) f->xl = f->yl = -1, n++;
+	foreach (f, ses->scrn_frames) f->xl = f->yl = -1, n++;
 	l = &cur_loc(ses)->vs.current_link;
 	if (*l < 0) *l = 0;
 	if (!n) n = 1;
@@ -1034,7 +1034,7 @@ draw_frames(struct session *ses)
 	d = 0;
 	do {
 		more = 0;
-		foreach(f, ses->scrn_frames) {
+		foreach (f, ses->scrn_frames) {
 			if (f->depth == d)
 				draw_doc(ses->tab->term, f, f == cf);
 			else if (f->depth > d)
@@ -1376,7 +1376,7 @@ free_succesful_controls(struct list_head *submit)
 {
 	struct submitted_value *v;
 
-	foreach(v, *submit) {
+	foreach (v, *submit) {
 		if (v->name) mem_free(v->name);
 		if (v->value) mem_free(v->value);
 		if (v->file_content) mem_free(v->file_content);
@@ -1408,7 +1408,7 @@ get_succesful_controls(struct f_data_c *f, struct form_control *fc,
 	struct form_control *frm;
 
 	init_list(*subm);
-	foreach(frm, f->f_data->forms) {
+	foreach (frm, f->f_data->forms) {
 		if (frm->form_num == fc->form_num
 		    && ((frm->type != FC_SUBMIT &&
 			 frm->type != FC_IMAGE &&
@@ -1475,7 +1475,7 @@ fi_rep:
 		struct submitted_value *sub, *nx;
 
 		ch = 0;
-		foreach(sub, *subm) if (sub->next != (void *)subm)
+		foreach (sub, *subm) if (sub->next != (void *)subm)
 			if (sub->next->position < sub->position) {
 				nx = sub->next;
 				del_from_list(sub);
@@ -1483,7 +1483,7 @@ fi_rep:
 				sub = nx;
 				ch = 1;
 			}
-		foreachback(sub, *subm) if (sub->next != (void *)subm)
+		foreachback (sub, *subm) if (sub->next != (void *)subm)
 			if (sub->next->position < sub->position) {
 				nx = sub->next;
 				del_from_list(sub);
@@ -1518,7 +1518,7 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 	*data = init_str();
 	if (!*data) return;
 
-	foreach(sv, *l) {
+	foreach (sv, *l) {
 		unsigned char *p = sv->value;
 		struct document_options o;
 
@@ -1581,7 +1581,7 @@ encode_multipart(struct session *ses, struct list_head *l,
 	*data = init_str();
 	if (!*data) return;
 
-	foreach(sv, *l) {
+	foreach (sv, *l) {
 
 bnd:
 		add_to_str(data, len, "--");
@@ -1693,7 +1693,7 @@ reset_form(struct f_data_c *f, int form_num)
 {
 	struct form_control *frm;
 
-	foreach(frm, f->f_data->forms) if (frm->form_num == form_num) {
+	foreach (frm, f->f_data->forms) if (frm->form_num == form_num) {
 		struct form_state *fs = find_form_state(f, frm);
 
 		if (fs) init_ctrl(frm, fs);
@@ -1893,7 +1893,7 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 		} else {
 			struct form_control *fc;
 
-			foreach(fc, fd->f_data->forms) {
+			foreach (fc, fd->f_data->forms) {
 				if (fc->form_num == link->form->form_num
 				    && fc->type == FC_RADIO
 				    && !xstrcmp(fc->name, link->form->name)) {
@@ -2767,7 +2767,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					clear_link(ses->tab->term, fd);
 					n++;
 					i = n;
-					foreachback(node, fd->f_data->nodes) {
+					foreachback (node, fd->f_data->nodes) {
 						if (!i--) {
 							int x, y;
 							for (y = 0; y < node->yw; y++) for (x = 0; x < node->xw && x < 1000; x++) {
@@ -2864,7 +2864,7 @@ current_frame(struct session *ses)
 
 	if (!have_location(ses)) return NULL;
 	i = cur_loc(ses)->vs.current_link;
-	foreach(fd, ses->scrn_frames) {
+	foreach (fd, ses->scrn_frames) {
 		if (fd->f_data && fd->f_data->frame) continue;
 		if (!i--) return fd;
 	}

@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.32 2003/01/19 18:25:59 jonas Exp $ */
+/* $Id: parser.c,v 1.33 2003/06/08 10:49:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -432,7 +432,7 @@ tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 				if (state->root == state->current)
 					state->root = state->current->root;
 			}
-			/* TODO: State switch or while() here. --pasky */
+			/* TODO: State switch or while () here. --pasky */
 			html++, html_len--;
 		}
 

@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.17 2003/06/07 10:57:33 zas Exp $ */
+/* $Id: snprintf.c,v 1.18 2003/06/08 10:49:29 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -192,7 +192,7 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args_in)
 		if (ch == '\0')
 			state = DP_S_DONE;
 
-		switch(state) {
+		switch (state) {
 		case DP_S_DEFAULT:
 			if (ch == '%')
 				state = DP_S_FLAGS;
@@ -724,7 +724,7 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 			printf ("%lf, %lf, %ld\n", temp, fracpart, index);
 #endif
 			fconvert[fplace++] = numbers[index];
-		} while(fracpart && (fplace < 311));
+		} while (fracpart && (fplace < 311));
 		if (fplace == 311) fplace--;
 	}
 	fconvert[fplace] = 0;

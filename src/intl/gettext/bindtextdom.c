@@ -68,7 +68,7 @@ set_binding_values(const unsigned char *domainname,
 
 	modified = 0;
 
-	for(binding = _nl_domain_bindings__; binding != NULL;
+	for (binding = _nl_domain_bindings__; binding != NULL;
 	    binding = binding->next) {
 		int compare = strcmp(domainname, binding->domainname);
 

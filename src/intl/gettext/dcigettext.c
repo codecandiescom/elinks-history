@@ -361,7 +361,7 @@ dcigettext__(const unsigned char *domainname, const unsigned char *msgid1, const
 	DETERMINE_SECURE;
 
 	/* First find matching binding.  */
-	for(binding = _nl_domain_bindings__; binding != NULL;
+	for (binding = _nl_domain_bindings__; binding != NULL;
 	    binding = binding->next) {
 		int compare = strcmp(domainname, binding->domainname);
 
@@ -388,7 +388,7 @@ dcigettext__(const unsigned char *domainname, const unsigned char *msgid1, const
 		path_max = (unsigned int) PATH_MAX;
 		path_max += 2;	/* The getcwd docs say to do this.  */
 
-		for(;;) {
+		for (;;) {
 			dirname = (unsigned char *) alloca(path_max + dirname_len);
 			ADD_BLOCK(block_list, dirname);
 
@@ -480,7 +480,7 @@ dcigettext__(const unsigned char *domainname, const unsigned char *msgid1, const
 			if (retval == NULL) {
 				int cnt;
 
-				for(cnt = 0; domain->successor[cnt] != NULL;
+				for (cnt = 0; domain->successor[cnt] != NULL;
 				    ++cnt) {
 					retval = _nl_find_msg(domain->
 							      successor[cnt],

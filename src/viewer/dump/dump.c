@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.15 2003/06/07 14:56:08 pasky Exp $ */
+/* $Id: dump.c,v 1.16 2003/06/08 10:49:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,7 @@ dump_end(struct status *stat, void *p)
 			struct fragment *frag;
 
 nextfrag:
-			foreach(frag, ce->frag) {
+			foreach (frag, ce->frag) {
 				int d = dump_pos - frag->offset;
 
 				if (d >= 0 && frag->length > d) {

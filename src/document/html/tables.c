@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.257 2004/06/29 01:43:38 jonas Exp $ */
+/* $Id: tables.c,v 1.258 2004/06/29 01:48:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1005,14 +1005,17 @@ format_bad_table_html(struct table *table)
 	int i;
 
 	for (i = 0; i < table->bad_html_size; i++) {
-	    	struct html_start_end *bad_html = table->bad_html;
+		unsigned char *start = table->bad_html[i].start;
+		unsigned char *end = table->bad_html[i].end;
 
-		while (bad_html[i].start < bad_html[i].end && isspace(*bad_html[i].start))
-			bad_html[i].start++;
-		while (bad_html[i].start < bad_html[i].end && isspace(bad_html[i].end[-1]))
-			bad_html[i].end--;
-		if (bad_html[i].start < bad_html[i].end)
-			parse_html(bad_html[i].start, bad_html[i].end, table->part, NULL);
+		while (start < end && isspace(*start))
+			start++;
+
+		while (start < end && isspace(end[-1]))
+			end--;
+
+		if (start < end)
+			parse_html(start, end, table->part, NULL);
 	}
 }
 

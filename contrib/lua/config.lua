@@ -1,13 +1,9 @@
 -- Configuration for hooks.lua file, put in ~/.elinks/ as config.lua.
--- $Id: config.lua,v 1.4 2003/10/02 12:16:04 kuser Exp $
+-- $Id: config.lua,v 1.5 2005/03/27 22:21:58 miciah Exp $
 
 -- ** IMPORTANT **
--- For security reasons, systems functions are not enabled by default.
--- To do so, uncomment the following line, but be careful about
--- including unknown code.  Individual functions may be disabled by
--- assigning them to `nil'.
-
-    -- enable_systems_functions ()
+-- Individual functions may be disabled for security by assigning them
+-- to `nil'.
 
     -- openfile = nil    -- may open files in write mode
     -- readfrom = nil    -- reading from pipe can execute commands
@@ -19,8 +15,7 @@
     -- execute = nil
     -- exit = nil
 
--- Home directory: If you do not enable system functions, you will
--- need to set the following to your home directory.
+-- Home directory:
 
     home_dir = home_dir or (getenv and getenv ("HOME")) or "/home/MYSELF"
     hooks_file = elinks_home.."/hooks.lua"

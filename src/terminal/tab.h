@@ -1,4 +1,4 @@
-/* $Id: tab.h,v 1.34 2004/07/28 16:03:33 jonas Exp $ */
+/* $Id: tab.h,v 1.35 2004/09/26 00:28:24 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TAB_H
 #define EL__TERMINAL_TAB_H
@@ -27,7 +27,7 @@ void close_all_tabs_but_current(struct session *ses);
 #define inactive_tab(win) \
 	((win)->type != WINDOW_NORMAL && (win) != get_current_tab((win->term)))
 
-void open_uri_in_new_tab(struct session *ses, struct uri *uri, int in_background);
+void open_uri_in_new_tab(struct session *ses, struct uri *uri, int in_background, int based);
 void open_current_link_in_new_tab(struct session *ses, int in_background);
 
 void move_current_tab(struct session *ses, int direction);

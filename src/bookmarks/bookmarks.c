@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.137 2004/09/12 11:12:29 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.138 2004/09/26 00:28:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -419,7 +419,7 @@ open_bookmark_folder(struct session *ses, unsigned char *foldername)
 			current = bookmark;
 			goto_uri(ses, uri);
 		} else {
-			open_uri_in_new_tab(ses, uri, 1);
+			open_uri_in_new_tab(ses, uri, 1, 0);
 		}
 
 		done_uri(uri);

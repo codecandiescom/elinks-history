@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.560 2004/09/25 01:04:12 jonas Exp $ */
+/* $Id: session.c,v 1.561 2004/09/26 00:28:24 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -805,7 +805,7 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 		 * inaccessible. Maybe we should not support this kind
 		 * of thing or make the window focus detecting code
 		 * more intelligent. --jonas */
-		open_uri_in_new_tab(ses, uri, 0);
+		open_uri_in_new_tab(ses, uri, 0, 1);
 
 		if (remote & SES_REMOTE_PROMPT_URL) {
 			dialog_goto_url_open(ses);

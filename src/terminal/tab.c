@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.72 2004/09/12 18:08:35 miciah Exp $ */
+/* $Id: tab.c,v 1.73 2004/09/26 00:28:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,10 +235,13 @@ close_all_tabs_but_current(struct session *ses)
 
 
 void
-open_uri_in_new_tab(struct session *ses, struct uri *uri, int in_background)
+open_uri_in_new_tab(struct session *ses, struct uri *uri, int in_background,
+                    int based)
 {
 	assert(ses);
-	init_session(ses, ses->tab->term, uri, in_background);
+	/* @based means whether the current @ses location will be preloaded
+	 * in the tab. */
+	init_session(based ? ses : NULL, ses->tab->term, uri, in_background);
 }
 
 void
@@ -254,7 +257,7 @@ open_current_link_in_new_tab(struct session *ses, int in_background)
 	link = get_current_link(doc_view);
 	if (link) uri = get_link_uri(ses, doc_view, link);
 
-	open_uri_in_new_tab(ses, uri, in_background);
+	open_uri_in_new_tab(ses, uri, in_background, 1);
 	if (uri) done_uri(uri);
 }
 

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.90 2004/09/29 22:12:04 pasky Exp $ */
+/* $Id: frames.c,v 1.91 2004/12/29 14:59:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,7 +223,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 		return;
 	}
 
-	memcpy(&o, op, sizeof(struct document_options));
+	copy_struct(&o, op);
 
 	o.margin = !!o.margin;
 

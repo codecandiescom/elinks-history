@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.114 2004/12/16 15:12:36 jonas Exp $ */
+/* $Id: socket.c,v 1.115 2004/12/29 14:59:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,7 +204,7 @@ sock_error:
 
 	/* Bind it to some port */
 
-	memcpy(&sb, &sa, sizeof(struct sockaddr_in));
+	copy_struct(&sb, &sa);
 	sb.sin_port = 0;
 	if (bind(sock, (struct sockaddr *) &sb, sizeof(sb)))
 		goto sock_error;

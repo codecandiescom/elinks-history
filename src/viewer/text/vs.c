@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.54 2004/12/19 11:19:27 pasky Exp $ */
+/* $Id: vs.c,v 1.55 2004/12/29 15:04:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ copy_vs(struct view_state *dst, struct view_state *src)
 {
 	struct form_view *fv;
 
-	memcpy(dst, src, sizeof(struct view_state));
+	copy_struct(dst, src);
 
 	/* We do not copy ecmascript stuff around since it's specific for
 	 * a single location, offsprings (followups and so) nedd their own. */

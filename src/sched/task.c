@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.146 2004/12/18 23:05:19 jonas Exp $ */
+/* $Id: task.c,v 1.147 2004/12/29 15:04:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,7 +298,7 @@ x:
 	if (!loaded_in_frame) {
 		loc = mem_calloc(1, sizeof(struct location));
 		if (!loc) return NULL;
-		memcpy(&loc->download, &ses->loading, sizeof(struct download));
+		copy_struct(&loc->download, &ses->loading);
 	}
 
 	if (ses->task.target_frame && *ses->task.target_frame) {

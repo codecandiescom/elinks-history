@@ -1,5 +1,5 @@
 /* SGML node handling */
-/* $Id: parser.c,v 1.6 2004/09/26 10:40:43 jonas Exp $ */
+/* $Id: parser.c,v 1.7 2004/12/29 14:59:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,7 @@ parse_sgml_attributes(struct dom_navigator *navigator, struct scanner *scanner)
 			return;
 
 		case SGML_TOKEN_IDENT:
-			memcpy(&name, token, sizeof(struct scanner_token));
+			copy_struct(&name, token);
 
 			/* Skip the attribute name token */
 			token = get_next_scanner_token(scanner);

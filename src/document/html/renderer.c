@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.516 2004/12/24 13:59:47 pasky Exp $ */
+/* $Id: renderer.c,v 1.517 2004/12/29 14:59:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1667,7 +1667,7 @@ ret:
 		tce->key.width = width;
 		tce->key.x = x;
 		tce->key.link_num = link_num;
-		memcpy(&tce->part, part, sizeof(struct part));
+		copy_struct(&tce->part, part);
 
 		if (!add_hash_item(renderer_context.table_cache,
 				   (unsigned char *) &tce->key,

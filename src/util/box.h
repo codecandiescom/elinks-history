@@ -1,4 +1,4 @@
-/* $Id: box.h,v 1.1 2004/05/14 00:18:41 jonas Exp $ */
+/* $Id: box.h,v 1.2 2004/12/29 15:04:21 zas Exp $ */
 
 #ifndef EL__UTIL_BOX_H
 #define EL__UTIL_BOX_H
@@ -43,7 +43,7 @@ set_box(struct box *box, int x, int y, int width, int height)
 static inline void
 copy_box(struct box *dst, struct box *src)
 {
-	memcpy(dst, src, sizeof(struct box));
+	copy_struct(dst, src);
 }
 
 #define dbg_show_box(box) DBG("x=%i y=%i width=%i height=%i", (box)->x, (box)->y, (box)->width, (box)->height)

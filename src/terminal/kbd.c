@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.113 2004/12/26 23:36:47 jonas Exp $ */
+/* $Id: kbd.c,v 1.114 2004/12/29 15:04:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,7 +237,7 @@ setraw(int fd, struct termios *p)
 	memset(&t, 0, sizeof(struct termios));
 	if (tcgetattr(fd, &t)) return -1;
 
-	if (p) memcpy(p, &t, sizeof(struct termios));
+	if (p) copy_struct(p, &t);
 
 	elinks_cfmakeraw(&t);
 	t.c_lflag |= ISIG;

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.79 2004/12/24 02:37:09 jonas Exp $ */
+/* $Id: event.c,v 1.80 2004/12/29 15:04:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,7 +180,7 @@ ignore_mouse_event(struct terminal *term, struct term_event *ev)
 		return 1;
 	}
 
-	memcpy(prev, current, sizeof(struct term_event_mouse));
+	copy_struct(prev, current);
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.80 2003/10/24 23:39:48 pasky Exp $ */
+/* $Id: dialogs.c,v 1.81 2003/10/25 12:28:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ write_config_error(struct terminal *term, struct memory_list *ml,
 ****************************************************************************/
 
 /* The location of the box in the options manager */
-#define	OP_BOX_IND		6
+#define	OP_BOX_IND		7
 
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
@@ -292,10 +292,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	commandline = 0;
 
 	/* Create the dialog */
-	dlg = mem_calloc(1, sizeof(struct dialog)
-			    + (EDIT_DIALOG_FIELDS_NB + 1)
-			    * sizeof(struct widget)
-			    + MAX_STR_LEN);
+	dlg = calloc_dialog(EDIT_DIALOG_FIELDS_NB, MAX_STR_LEN);
 	if (!dlg) {
 		done_string(&tvalue);
 		return;
@@ -490,9 +487,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	int n = 0;
 
 	/* Create the dialog */
-	dlg = mem_calloc(1, sizeof(struct dialog)
-			    + (OP_BOX_IND + 2) * sizeof(struct widget)
-			    + sizeof(struct option) + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(OP_BOX_IND + 1, sizeof(struct option) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	dlg->title = _("Options manager", term);
@@ -727,9 +722,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	int n = 0;
 
 	/* Create the dialog */
-	dlg = mem_calloc(1, sizeof(struct dialog)
-			    + (KB_BOX_IND + 2) * sizeof(struct widget)
-			    + sizeof(struct option) + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(KB_BOX_IND + 1, sizeof(struct option) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	dlg->title = _("Keybinding manager", term);

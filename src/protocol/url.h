@@ -1,4 +1,4 @@
-/* $Id: url.h,v 1.13 2003/06/05 15:28:03 zas Exp $ */
+/* $Id: url.h,v 1.14 2003/06/20 13:56:39 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URL_H
 #define EL__PROTOCOL_URL_H
@@ -31,6 +31,10 @@ unsigned char *extract_position(unsigned char *);
 unsigned char *extract_proxy(unsigned char *);
 void get_filename_from_url(unsigned char *, unsigned char **, int *);
 void get_filenamepart_from_url(unsigned char *, unsigned char **, int *);
+
+/* Returns allocated string containing the biggest possible extension.
+ * If url is 'jabadaba.1.foo.gz' the returned extension is '1.foo.gz' */
+unsigned char *get_extension_from_url(unsigned char *url);
 
 void encode_url_string(unsigned char *, unsigned char **, int *);
 void decode_url_string(unsigned char *);

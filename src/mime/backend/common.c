@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.12 2003/06/20 13:50:33 pasky Exp $ */
+/* $Id: common.c,v 1.13 2003/06/20 13:56:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,27 +119,4 @@ get_next_path_filename(unsigned char **path_ptr, unsigned char separator)
 	}
 
 	return filename;
-}
-
-unsigned char *
-get_extension_from_url(unsigned char *url)
-{
-	int lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
-	unsigned char *extension = NULL;
-
-#define dsep(x) (lo ? dir_sep(x) : (x) == '/')
-
- 	for (; *url && !end_of_dir(*url); url++) {
-		if (*url == '.' && !extension)
-			extension = url + 1;
-		else if (dsep(*url))
-			extension = NULL;
-	}
-
-#undef dsep
-
-	if (extension && extension < url)
-		return memacpy(extension, url - extension);
-
-	return NULL;
 }

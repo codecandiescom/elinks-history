@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.111 2003/10/18 00:38:54 jonas Exp $ */
+/* $Id: screen.c,v 1.112 2003/10/19 18:12:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -358,6 +358,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 {
 	unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
 	unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
+	unsigned char bold = (ch->attr & SCREEN_ATTR_BOLD);
 
 	if (border != state->border && driver->frame_seqs) {
 		state->border = border;
@@ -369,21 +370,15 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		add_term_string(screen, driver->underline[!!underline]);
 	}
 
-#ifdef USE_256_COLORS
-	if ((ch->attr & SCREEN_ATTR_BOLD) != state->bold) {
-		unsigned char bold = (ch->attr & SCREEN_ATTR_BOLD);
-
+	if (bold != state->bold) {
 		state->bold = bold;
 		if (bold) {
 			add_bytes_to_string(screen, "\033[1m", 4);
 		} else {
 			/* Force repainting of the other attributes. */
-			unsigned char fg = TERM_COLOR_FOREGROUND(ch->color) + 1;
-
-			TERM_COLOR_FOREGROUND(state->color) = fg;
+			state->color[0] = ch->color[0] + 1;
 		}
 	}
-#endif
 
 	if (!compare_color(ch->color, state->color)) {
 		copy_color(state->color, ch->color);

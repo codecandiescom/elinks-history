@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.22 2003/05/12 21:18:49 pasky Exp $ */
+/* $Id: conv.c,v 1.23 2003/05/12 21:21:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,12 +91,13 @@ elinks_longcat(unsigned char *s, unsigned int *slen,
 {
 	unsigned char *p = s;
 
-	if (number < 0) {
+	if (number < 0 && width > 0) {
 		if (slen) p[(*slen)++] = '-';
-		else *p++ = '-';
+		else *(p++) = '-';
 		number = -number;
 		width--;
 	}
+
 	return elinks_ulongcat(p, slen, number, width, fillchar);
 }
 

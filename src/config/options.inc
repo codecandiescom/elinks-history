@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.167 2004/12/19 12:32:02 jonas Exp $ */
+/* $Id: options.inc,v 1.168 2004/12/29 18:14:41 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -119,13 +119,6 @@ static struct option_info config_options_info[] = {
 		"try_ipv6", 0, 1,
 		N_("Whether to try to connect to a host over IPv6.\n"
 		"Note that you can also force a given protocol\n"
-		"to be used on a per-connection basis by using an URL\n"
-		"in the style of i.e. http6://elinks.or.cz/.")),
-#else
-	INIT_OPT_BOOL("connection", N_("Try IPv6 when connecting"),
-		"try_ipv6", 0, 1,
-		N_("Whether to try to connect to a host over IPv6 (DISABLED).\n"
-		"Note that you could have also forced a given protocol\n"
 		"to be used on a per-connection basis by using an URL\n"
 		"in the style of i.e. http6://elinks.or.cz/.")),
 #endif
@@ -379,13 +372,6 @@ static struct option_info config_options_info[] = {
 		"0 for plain text searching.\n"
 		"1 for basic regular expression searches.\n"
 		"2 for extended regular expression searches.")),
-#else
-	INIT_OPT_INT("document.browse.search", N_("Regular expressions"),
-		"regex", 0, 0, 2, 0,
-		N_("Enable searching with regular expressions.\n"
-		"0 for plain text searching.\n"
-		"1 for basic regular expression searches. (DISABLED)\n"
-		"2 for extended regular expression searches. (DISABLED)")),
 #endif
 
 	INIT_OPT_BOOL("document.browse.search", N_("Show search hit top or bottom dialogs"),

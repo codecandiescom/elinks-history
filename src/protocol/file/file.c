@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.185 2004/12/19 12:17:07 jonas Exp $ */
+/* $Id: file.c,v 1.186 2004/12/29 18:14:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,18 +51,6 @@ static struct option_info file_options[] = {
 	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
 		"policy", 0, 0,
 		N_("Whether to execute local CGI scripts.")),
-#else
-	INIT_OPT_TREE("protocol.file", N_("Local CGI"),
-		"cgi", 0,
-		N_("Local CGI specific options. (DISABLED)")),
-
-	INIT_OPT_STRING("protocol.file.cgi", N_("Path"),
-		"path", 0, "",
-		N_("Colon separated list of directories, where CGI scripts are stored. (DISABLED)")),
-
-	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
-		"policy", 0, 0,
-		N_("Whether to execute local CGI scripts. (DISABLED)")),
 #endif /* CONFIG_CGI */
 
 	INIT_OPT_BOOL("protocol.file", N_("Allow reading special files"),

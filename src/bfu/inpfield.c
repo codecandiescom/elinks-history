@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.48 2003/09/15 22:18:42 zas Exp $ */
+/* $Id: inpfield.c,v 1.49 2003/09/25 19:17:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,7 +285,7 @@ display_field_pass(struct widget_data *di, struct dialog_data *dlg, int sel)
 
 static void
 init_field(struct widget_data *widget, struct dialog_data *dialog,
-	   struct event *ev)
+	   struct term_event *ev)
 {
 	if (widget->item->history) {
 		struct input_history_item *item;
@@ -307,7 +307,8 @@ init_field(struct widget_data *widget, struct dialog_data *dialog,
 }
 
 static int
-mouse_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
+mouse_field(struct widget_data *di, struct dialog_data *dlg,
+	    struct term_event *ev)
 {
 	if (ev->y != di->y || ev->x < di->x
 	    || ev->x >= di->x + di->l)
@@ -346,7 +347,8 @@ dsp_f:
 
 /* XXX: The world's best candidate for massive goto cleanup! --pasky */
 static int
-kbd_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
+kbd_field(struct widget_data *di, struct dialog_data *dlg,
+	  struct term_event *ev)
 {
 	struct window *win = dlg->win;
 	struct terminal *term = win->term;

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.96 2003/09/25 16:25:29 zas Exp $ */
+/* $Id: menu.c,v 1.97 2003/09/25 19:17:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,8 @@ unsigned char m_submenu[] = ">>";
 unsigned char m_bar = 0;
 
 /* Prototypes */
-static void menu_func(struct window *, struct event *, int);
-static void mainmenu_func(struct window *, struct event *, int);
+static void menu_func(struct window *, struct term_event *, int);
+static void mainmenu_func(struct window *, struct term_event *, int);
 
 
 static inline int
@@ -362,7 +362,7 @@ display_menu(struct terminal *term, struct menu *menu)
 
 
 static void
-menu_func(struct window *win, struct event *ev, int fwd)
+menu_func(struct window *win, struct term_event *ev, int fwd)
 {
 	struct window *w1;
 	struct menu *menu = win->data;
@@ -610,7 +610,8 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 	add_window(term, mainmenu_func, menu);
 
 	if (sel != -1) {
-		struct event ev = {EV_KBD, KBD_ENTER, 0, 0};
+		struct term_event ev =
+			INIT_TERM_EVENT(EV_KBD, KBD_ENTER, 0, 0);
 
 		term_send_event(term, &ev);
 	}
@@ -725,7 +726,7 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 }
 
 static void
-mainmenu_func(struct window *win, struct event *ev, int fwd)
+mainmenu_func(struct window *win, struct term_event *ev, int fwd)
 {
 	int s = 0;
 	struct mainmenu *menu = win->data;

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.102 2003/10/30 16:32:47 zas Exp $ */
+/* $Id: tables.c,v 1.103 2003/10/30 16:36:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ struct table {
 	int *min_c, *max_c;
 	int *columns_width;
 	int *xcols;
-	int *r_heights;
+	int *rows_height;
 	int x, y;
 	int rx, ry;
 	int border, cellpd, vcellpd, cellsp;
@@ -209,7 +209,7 @@ free_table(struct table *t)
 	if (t->min_c) mem_free(t->min_c);
 	if (t->max_c) mem_free(t->max_c);
 	if (t->columns_width) mem_free(t->columns_width);
-	if (t->r_heights) mem_free(t->r_heights);
+	if (t->rows_height) mem_free(t->rows_height);
 	mem_free(t->cols);
 	if (t->xcols) mem_free(t->xcols);
 	mem_free(t->cells);
@@ -732,12 +732,12 @@ scan_done:
 	}
 
 	if (t->y) {
-		t->r_heights = mem_calloc(t->y, sizeof(int));
-		if (!t->r_heights) {
+		t->rows_height = mem_calloc(t->y, sizeof(int));
+		if (!t->rows_height) {
 			free_table(t);
 			return NULL;
 		}
-	} else t->r_heights = NULL;
+	} else t->rows_height = NULL;
 
 	for (x = 0; x < t->c; x++)
 		if (t->cols[x].width != W_AUTO)
@@ -1301,7 +1301,7 @@ get_table_heights(struct table *t)
 					for (k = 1; k < s; k++)
 						p += (get_hline_width(t, j + k) >= 0);
 
-					dst_width(t->r_heights + j, s,
+					dst_width(t->rows_height + j, s,
 						  cell->height - p, NULL);
 
 				} else if (cell->rowspan > s &&
@@ -1321,7 +1321,7 @@ get_table_heights(struct table *t)
 	}
 
 	for (j = 0; j < t->y; j++) {
-		t->rh += t->r_heights[j] +
+		t->rh += t->rows_height[j] +
 			 (j && get_hline_width(t, j) >= 0);
 	}
 }
@@ -1353,7 +1353,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				}
 
 				for (s = 0; s < cell->rowspan; s++) {
-					yw += t->r_heights[j + s] +
+					yw += t->rows_height[j + s] +
 					      (s < cell->rowspan - 1 &&
 					       get_hline_width(t, j + s + 1) >= 0);
 				}
@@ -1408,7 +1408,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				kill_html_stack_item(&html_top);
 			}
 
-			yp += t->r_heights[j] +
+			yp += t->rows_height[j] +
 			      (j < t->y - 1 && get_hline_width(t, j + 1) >= 0);
 		}
 
@@ -1419,7 +1419,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 
 	yp = y;
 	for (j = 0; j < t->y; j++) {
-		yp += t->r_heights[j] +
+		yp += t->rows_height[j] +
 		      (j < t->y - 1 && get_hline_width(t, j + 1) >= 0);
 	}
 
@@ -1503,9 +1503,9 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
  	assertm(pos < 3, "Vertical table position out of bound [%d]", pos);
 	if_assert_failed return;
 
- 	if (pos < 0 || table->r_heights[j] <= 0) return;
+ 	if (pos < 0 || table->rows_height[j] <= 0) return;
 
- 	draw_frame_vchars(table->p, x, y, table->r_heights[j], vltable[pos]);
+ 	draw_frame_vchars(table->p, x, y, table->rows_height[j], vltable[pos]);
 }
 
 static void
@@ -1620,7 +1620,7 @@ cont2:
 			}
 		}
 
-		if (j < t->y) cy += t->r_heights[j];
+		if (j < t->y) cy += t->rows_height[j];
 		/*for (cyy = cy1; cyy < cy; cyy++) expand_line(t->p, cyy, cx - 1);*/
 	}
 

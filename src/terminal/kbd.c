@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.95 2004/07/28 14:21:41 jonas Exp $ */
+/* $Id: kbd.c,v 1.96 2004/07/28 14:35:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -828,6 +828,21 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 	return el;
 }
 
+static void
+set_kbd_event(struct term_event *ev, int key, int modifier)
+{
+	ev->x = key;
+	ev->y = modifier;
+
+	if (ev->x == ASCII_TAB) ev->x = KBD_TAB;
+	else if (ev->x == ASCII_BS || ev->x == ASCII_DEL) ev->x = KBD_BS;
+	else if (ev->x == ASCII_LF || ev->x == ASCII_CR) ev->x = KBD_ENTER;
+	if (ev->x < ' ') {
+		ev->x += 'A' - 1;
+		ev->y = KBD_CTRL;
+	}
+}
+
 /* I feeeeeel the neeeed ... to rewrite this ... --pasky */
 /* Just Do it ! --Zas */
 static int
@@ -872,14 +887,12 @@ process_queue(struct itrm *itrm)
 				     itrm->kqueue[2] == 'O')) {
 					el = 1;
 				}
-				ev.x = KBD_ESC;
+
+				set_kbd_event(&ev, KBD_ESC, 0);
 
 			} else {
-				ev.x = itrm->kqueue[1];
-				ev.y = KBD_ALT;
+				set_kbd_event(&ev, itrm->kqueue[1], KBD_ALT);
 			}
-
-			goto l2;
 		}
 
 		goto l1;
@@ -893,16 +906,7 @@ process_queue(struct itrm *itrm)
 		goto l1;
 	}
 	el = 1;
-	ev.x = itrm->kqueue[0];
-
-l2:
-	if (ev.x == ASCII_TAB) ev.x = KBD_TAB;
-	else if (ev.x == ASCII_BS || ev.x == ASCII_DEL) ev.x = KBD_BS;
-	else if (ev.x == ASCII_LF || ev.x == ASCII_CR) ev.x = KBD_ENTER;
-	if (ev.x < ' ') {
-		ev.x += 'A' - 1;
-		ev.y = KBD_CTRL;
-	}
+	set_kbd_event(&ev, itrm->kqueue[0], 0);
 
 l1:
 	assertm(itrm->qlen >= el, "event queue underflow");

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.68 2004/05/07 17:27:46 jonas Exp $ */
+/* $Id: user.c,v 1.69 2004/05/28 23:44:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,9 +73,9 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 			case 'u':
 			{
 				unsigned char *url = struri(uri);
+				int length = get_real_uri_length(uri);
 
-				add_shell_safe_to_string(&string, url,
-							 strlen(url));
+				add_shell_safe_to_string(&string, url, length);
 				break;
 			}
 			case 'h':
@@ -129,7 +129,6 @@ static unsigned char *
 get_subject_from_query(unsigned char *query)
 {
 	unsigned char *subject;
-	unsigned char *subject_end;
 
 	if (strncmp(query, "subject=", 8)) {
 		subject = strstr(query, "&subject=");
@@ -139,9 +138,8 @@ get_subject_from_query(unsigned char *query)
 		subject = query + 8;
 	}
 
-	subject_end = strchr(subject, '&');
-	return memacpy(subject,
-		       subject_end ? subject_end - subject : strlen(subject));
+	/* Return subject until next '&'-value, POST_CHAR or end of string */
+	return memacpy(subject, strcspn(subject, "&\001"));
 }
 
 void
@@ -169,7 +167,7 @@ user_protocol_handler(struct session *ses, struct uri *uri)
 
 	if (uri->data && uri->datalen) {
 		/* Some mailto specific stuff follows... */
-		subj = strchr(uri->data, '?');
+		subj = memchr(uri->data, '?', uri->datalen);
 		if (subj) {
 			subj++;
 			subj = get_subject_from_query(subj);

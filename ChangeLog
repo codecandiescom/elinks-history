@@ -1,3 +1,330 @@
+Sun Jun 13 22:08:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: link.c, view.c, view.h:
+
+	Drop now useless rep_ev() parameter.  
+
+Sun Jun 13 22:02:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	scroll_{mouse_}{left|right}() were introduced.  
+
+Sun Jun 13 21:49:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	scroll_mouse_{up|down}() were introduced.  
+
+Sun Jun 13 21:37:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Make scroll() static and introduce scroll_{up|down}().  
+
+Sun Jun 13 21:19:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	move_{up|down}() were introduced, logic from page_{up|down}() was
+	moved to them. Third parameter of up(),down(),page_up(), page_down()
+	is not used, it will help to cleanup find_links().  
+
+Sun Jun 13 20:20:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Fix the comments to reflect that most of the
+	session info is now part of the terminal_info struct.  
+
+Sun Jun 13 19:00:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): No need for ugly casting anymore.  
+
+Sun Jun 13 18:56:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, sched/session.c, terminal/event.h, terminal/kbd.c,
+	terminal/kbd.h, terminal/terminal.c:
+
+	Pass the remote session flags by using special
+	INTERLINK_REMOTE_MAGIC to figure out what the session info integer
+	holds.  
+
+Sun Jun 13 18:45:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Cleanup magic varialbe usage.  
+
+Sun Jun 13 18:43:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Only check saved sessions when handling the
+	'new' format. Comment updated.  
+
+Sun Jun 13 18:39:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/event.h, terminal/kbd.c:
+
+	Define INTERLINK_NORMAL_MAGIC macro.  
+
+Sun Jun 13 18:08:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	next_in_view(): @p -> @current, @d -> @direction, @p1 -> @start, @p2
+	-> @end, tidy up.  
+
+Sun Jun 13 17:58:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	next_in_view(): @yl -> @height, use int_max() instead of
+	int_upper_bound().  
+
+Sun Jun 13 17:55:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	in_view{x|y}: minor optimizations.  
+
+Sun Jun 13 17:51:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/event.h, terminal/kbd.c:
+
+	Make base session id and magic part of the terminal_info struct.
+	Much easier. SESSION_MAGIC() -> INTERLINK_MAGIC().  
+
+Sun Jun 13 17:43:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	get_{first|last}_link(): tidy up and minor optimizations.  
+
+Sun Jun 13 17:42:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, terminal/event.c:
+
+	Pass terminal_info struct to decode_session_info().  
+
+Sun Jun 13 17:22:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Draw_link() was splitted to draw_link_do(), @l -> @number.  
+
+Sun Jun 13 14:53:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Another bug introduced by me in my clueless patch rampage. No
+	freaking data in HTTP Auth URIs.  
+
+Sun Jun 13 13:57:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/: auth.c, auth.h, dialogs.c:
+
+	Store URI struct in the auth info struct.  
+
+Sun Jun 13 13:43:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/auth.c:
+
+	Simplify the auth URI passing.  
+
+Sun Jun 13 13:25:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/terminal.c:
+
+	destroy_all_terminals(): Use list_empty().  
+
+Sun Jun 13 12:48:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, sched/session.c, sched/session.h:
+
+	Move stuff away from init() to encode_session_info().  
+
+Sun Jun 13 12:29:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	Fix comment.  
+
+Sun Jun 13 12:20:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	Pass the terminal_info to check_terminal_name().  
+
+Sun Jun 13 12:18:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: event.c, event.h, kbd.c:
+
+	Change terminal_info->term to ->name.  
+
+Sun Jun 13 12:14:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: event.c, screen.c, terminal.h:
+
+	Remove the term->term member. We can just use term->spec->name and
+	it will even make more sense for the screen driver thing.  
+
+Sun Jun 13 12:04:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Fix off by one error in handling of query part in the
+	base URI. Spotted by zas.  
+
+Sun Jun 13 04:03:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	handle_interlink_event(): Use redraw_terminal_cls() for hanling
+	Ctrl-L even though it is not as fast it is more clear what is going
+	on.  
+
+Sun Jun 13 03:57:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	handle_interlink_event(): Cleanup KBD_CTRL_C handling.  
+
+Sun Jun 13 03:49:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	check_terminal_name(): Make error handling simpler.  
+
+Sun Jun 13 03:47:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	check_terminal_name(): Use for loop. Group strcpy() with strcat().  
+
+Sun Jun 13 03:45:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	check_terminal_name(): Cleanup.  
+
+Sun Jun 13 03:43:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	handle_interlink_event(): Split out terminal name checking to
+	check_terminal_name().  
+
+Sun Jun 13 03:37:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	in_term(): Compile fix ;) but most important a cleanup and
+	description of the loop. We now add stuff back to the
+	term->qfreespace counter before stopping the loop if term->qlen gets
+	zeroed.  
+
+Sun Jun 13 03:25:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	in_term(): r -> event_size in the loop.  
+
+Sun Jun 13 03:23:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	in_term(): Make goto loop into while loop.  
+
+Sun Jun 13 03:21:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	Oops forgot the crucial part of last patch.  
+
+Sun Jun 13 03:13:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	in_term(): Move switch to separate function.  
+
+Sun Jun 13 00:54:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/: menu.c, menu.h:
+
+	Compile fix.  
+
+Sun Jun 13 00:46:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, viewer/text/link.c:
+
+	link_menu(): Add submit form and open in new tab items. Make the
+	open in new window action implicit.  
+
+Sun Jun 13 00:39:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	link_menu(): Use switch.  
+
+Sun Jun 13 00:30:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listmenu.c, viewer/text/form.c, viewer/text/form.h,
+	viewer/text/link.c, viewer/text/link.h:
+
+	get_current_state(): Move to form file.  
+
+Sun Jun 13 00:25:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, link.h:
+
+	Remove print_current_link().  
+
+Sun Jun 13 00:24:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	frame_ev(): Use get_current_link_info() for the copy clipboard
+	thing.  
+
+Sun Jun 13 00:24:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	display_status_bar(): Optimize current_frame() calling and use
+	get_current_link_info() so we don.t call it 3 times.  
+
+Sun Jun 13 00:17:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, viewer/text/form.c, viewer/text/form.h,
+	viewer/text/link.c, viewer/text/link.h:
+
+	Pass session to get_form_info() and get_current_link_info().  
+
+Sun Jun 13 00:12:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, viewer/text/link.c, viewer/text/link.h:
+
+	get_current_link_title(): No use to pass term.  
+
+Sun Jun 13 00:06:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, viewer/text/link.c, viewer/text/link.h,
+	viewer/text/link.c:
+
+	print_current_link_title_do() -> get_current_link_title(),
+	print_current_link_do() -> get_current_link_info().  
+
+Sat Jun 12 23:50:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	init_remote_session(): Assert that remote session flags is not
+	masked out.  
+
 Sat Jun 12 19:43:36 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/form.c:

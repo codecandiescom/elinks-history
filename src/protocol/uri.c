@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.249 2004/06/12 01:17:32 jonas Exp $ */
+/* $Id: uri.c,v 1.250 2004/06/13 12:04:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -733,7 +733,7 @@ join_urls(struct uri *base, unsigned char *rel)
 			: get_real_uri_length(base);
 
 		uristring = memchr(base->data, '?', base->datalen);
-		if (uristring) length = uristring - struri(base) - 1;
+		if (uristring) length = uristring - struri(base);
 
 	} else if (rel[0] == '/' && rel[1] == '/') {
 		if (!get_protocol_need_slashes(base->protocol))

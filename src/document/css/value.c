@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.19 2004/01/18 15:25:47 pasky Exp $ */
+/* $Id: value.c,v 1.20 2004/01/18 15:29:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,17 +89,37 @@ css_parse_color_value(struct css_property_info *propinfo,
 
 
 int
-css_parse_font_attribute_value(struct css_property_info *propinfo,
-				union css_property_value *value,
-				unsigned char **string)
+css_parse_font_style_value(struct css_property_info *propinfo,
+			   union css_property_value *value,
+			   unsigned char **string)
 {
 	unsigned char *nstring;
 	int weight;
 
-	/* This is triggered with a lot of various properties, basically
-	 * everything just touching font_attribute. */
+	if (!strncasecmp(*string, "normal", 6)) {
+		(*string) += 6;
+		value->font_attribute.rem |= AT_ITALIC;
+		return 1;
+	}
 
-	/* font-weight */
+	if (!strncasecmp(*string, "italic", 6) ||
+	    !strncasecmp(*string, "oblique", 7)) {
+		(*string) += 6 + (**string == 'o');
+		value->font_attribute.add |= AT_ITALIC;
+		return 1;
+	}
+
+	return 0;
+}
+
+
+int
+css_parse_font_weight_value(struct css_property_info *propinfo,
+			    union css_property_value *value,
+			    unsigned char **string)
+{
+	unsigned char *nstring;
+	int weight;
 
 	if (!strncasecmp(*string, "bolder", 6)) {
 		(*string) += 6;
@@ -121,21 +141,9 @@ css_parse_font_attribute_value(struct css_property_info *propinfo,
 
 	if (!strncasecmp(*string, "normal", 6)) {
 		(*string) += 6;
-		/* XXX: font-weight/font-style distinction */
-		value->font_attribute.rem |= AT_BOLD | AT_ITALIC;
+		value->font_attribute.rem |= AT_BOLD;
 		return 1;
 	}
-
-	/* font-style */
-
-	if (!strncasecmp(*string, "italic", 6) ||
-	    !strncasecmp(*string, "oblique", 7)) {
-		(*string) += 6 + (**string == 'o');
-		value->font_attribute.add |= AT_ITALIC;
-		return 1;
-	}
-
-	/* font-weight II. */
 
 	/* TODO: Comma separated list of weights?! */
 	weight = strtol(*string, (char **) &nstring, 10);

@@ -1,4 +1,4 @@
-/* $Id: value.h,v 1.7 2004/01/18 15:25:47 pasky Exp $ */
+/* $Id: value.h,v 1.8 2004/01/18 15:29:10 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_VALUE_H
 #define EL__DOCUMENT_CSS_VALUE_H
@@ -25,9 +25,14 @@ int css_parse_color_value(struct css_property_info *propinfo,
 			  unsigned char **string);
 
 /* Takes no parser_data. */
-int css_parse_font_attribute_value(struct css_property_info *propinfo,
-				   union css_property_value *value,
-				   unsigned char **string);
+int css_parse_font_style_value(struct css_property_info *propinfo,
+				union css_property_value *value,
+				unsigned char **string);
+
+/* Takes no parser_data. */
+int css_parse_font_weight_value(struct css_property_info *propinfo,
+				union css_property_value *value,
+				unsigned char **string);
 
 /* Takes no parser_data. */
 int css_parse_text_align_value(struct css_property_info *propinfo,

@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre12.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-22 22:06+0100\n"
-"PO-Revision-Date: 2003-12-22 09:00+0200\n"
+"PO-Revision-Date: 2003-12-23 08:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4259,7 +4259,7 @@ msgstr "Z~amknij wszystkie za wyj±tekiem tego"
 
 #: src/dialogs/menu.c:373
 msgid "Open new ~tab"
-msgstr "Otwórz w nowej ~karcie"
+msgstr "O~twórz w nowej karcie"
 
 #: src/dialogs/menu.c:374
 msgid "Open new tab in backgroun~d"
@@ -4787,61 +4787,58 @@ msgstr "Historia globalna"
 
 #
 #: src/intl/gettext/libintl.c:24
-#, fuzzy
 msgid "System"
-msgstr "Fastmem"
+msgstr "System"
 
 #: src/intl/gettext/libintl.c:25
 msgid "English"
-msgstr ""
+msgstr "Angielski"
 
 #: src/intl/gettext/libintl.c:26
 msgid "Belarusian"
-msgstr ""
+msgstr "Bia³oruski"
 
 #: src/intl/gettext/libintl.c:27
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Brazylijski portugalski"
 
 #: src/intl/gettext/libintl.c:28
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bu³garski"
 
 #: src/intl/gettext/libintl.c:29
 msgid "Catalan"
-msgstr ""
+msgstr "Kataloñski"
 
 #
 #: src/intl/gettext/libintl.c:30
-#, fuzzy
 msgid "Croatian"
-msgstr "Czas trwania"
+msgstr "Chorwacki"
 
 #
 #: src/intl/gettext/libintl.c:31
-#, fuzzy
 msgid "Czech"
-msgstr "Pamiêæ podrêczna"
+msgstr "Czeski"
 
 #: src/intl/gettext/libintl.c:32
 msgid "Danish"
-msgstr ""
+msgstr "Duñski"
 
 #: src/intl/gettext/libintl.c:33
 msgid "Dutch"
-msgstr ""
+msgstr "Holenderski"
 
 #: src/intl/gettext/libintl.c:34
 msgid "Estonian"
-msgstr ""
+msgstr "Estoñski"
 
 #: src/intl/gettext/libintl.c:35
 msgid "Finnish"
-msgstr ""
+msgstr "Fiñski"
 
 #: src/intl/gettext/libintl.c:36
 msgid "French"
-msgstr ""
+msgstr "Francuski"
 
 #: src/intl/gettext/libintl.c:37
 msgid "Galician"
@@ -4849,79 +4846,76 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:38
 msgid "German"
-msgstr ""
+msgstr "Niemiecki"
 
 #: src/intl/gettext/libintl.c:39
 msgid "Greek"
-msgstr ""
+msgstr "Grecki"
 
 #: src/intl/gettext/libintl.c:40
 msgid "Hungarian"
-msgstr ""
+msgstr "Wêgierski"
 
 #: src/intl/gettext/libintl.c:41
 msgid "Icelandic"
-msgstr ""
+msgstr "Islandzki"
 
 #: src/intl/gettext/libintl.c:42
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonezyjski"
 
 #: src/intl/gettext/libintl.c:43
 msgid "Italian"
-msgstr ""
+msgstr "W³oski"
 
 #: src/intl/gettext/libintl.c:44
-#, fuzzy
 msgid "Leet"
-msgstr "Odrzucenie"
+msgstr "Leet"
 
 #: src/intl/gettext/libintl.c:45
 msgid "Lithuanian"
-msgstr ""
+msgstr "Litewski"
 
 #: src/intl/gettext/libintl.c:46
 msgid "Norwegian"
-msgstr ""
+msgstr "Norweski"
 
 #: src/intl/gettext/libintl.c:47
-#, fuzzy
 msgid "Polish"
-msgstr "Polisa"
+msgstr "Polski"
 
 #: src/intl/gettext/libintl.c:48
 msgid "Portuguese"
-msgstr ""
+msgstr "Portugalski"
 
 #
 #: src/intl/gettext/libintl.c:49
-#, fuzzy
 msgid "Romanian"
-msgstr "Domena"
+msgstr "Rumuñski"
 
 #: src/intl/gettext/libintl.c:50
 msgid "Russian"
-msgstr ""
+msgstr "Rosyjski"
 
 #: src/intl/gettext/libintl.c:51
 msgid "Slovak"
-msgstr ""
+msgstr "S³owacki"
 
 #: src/intl/gettext/libintl.c:52
 msgid "Spanish"
-msgstr ""
+msgstr "Hiszpañski"
 
 #: src/intl/gettext/libintl.c:53
 msgid "Swedish"
-msgstr ""
+msgstr "Szwedzki"
 
 #: src/intl/gettext/libintl.c:54
 msgid "Turkish"
-msgstr ""
+msgstr "Turecki"
 
 #: src/intl/gettext/libintl.c:55
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukraiñski"
 
 #: src/lowlevel/home.c:121
 #, c-format

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.267 2004/06/26 23:19:20 pasky Exp $ */
+/* $Id: link.c,v 1.268 2004/06/27 14:06:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,7 +445,7 @@ get_link_x_bounds(struct link *link, int y, int *min_x, int *max_x)
 	if (max_x) *max_x = 0;
 
 	for (point = 0; point < link->npoints; point++) {
-		if (y >= 0 && link->points[0].y != y)
+		if (y >= 0 && link->points[point].y != y)
 			continue;
 		if (min_x) int_upper_bound(min_x, link->points[point].x);
 		if (max_x) int_lower_bound(max_x, link->points[point].x);

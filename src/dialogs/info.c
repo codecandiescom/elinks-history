@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.58 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: info.c,v 1.59 2003/07/21 05:16:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,8 +127,7 @@ res_inf(struct terminal *term, void *d, struct session *ses)
 void
 cache_inf(struct terminal *term, void *d, struct session *ses)
 {
-	unsigned char *a;
-	int l = 0;
+	struct string info;
 	struct refresh *r;
 	struct cache_entry *ce, *cache;
 	unsigned int count = 0;
@@ -137,8 +136,7 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r)	return;
 
-	a = init_str();
-	if (!a) {
+	if (!init_string(&info)) {
 		mem_free(r);
 		return;
 	}
@@ -146,42 +144,42 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 	cache = (struct cache_entry *) cache_info(INFO_LIST);
 	foreach (ce, *cache) {
 		if (count++ < term->y - 10) { /* 10 seems a kool value. --Zas */
-			add_chr_to_str(&a, &l, '\n');
+			add_char_to_string(&info, '\n');
 #ifdef DEBUG
 			if (ce->incomplete)
-				add_chr_to_str(&a, &l, '*');
+				add_char_to_string(&info, '*');
 			else /* number of references */
-				add_num_to_str(&a, &l, ce->refcount);
-			add_chr_to_str(&a, &l, ' ');
+				add_long_to_string(&info, ce->refcount);
+			add_char_to_string(&info, ' ');
 #endif
 			/* FIXME: What to do with long urls ? they wrap for now
 			 * but if one is very long then no other is displayed. */
-			add_to_str(&a, &l, ce->url);
+			add_to_string(&info, ce->url);
 
 #ifdef DEBUG
 			/* size */
-			add_chr_to_str(&a, &l, ' ');
-			add_knum_to_str(&a, &l, ce->data_size);
+			add_char_to_string(&info, ' ');
+			add_knum_to_string(&info, ce->data_size);
 #endif
 		} else if (!truncated) truncated = count;
 	}
 
 	if (!count) {
-		add_chr_to_str(&a, &l, '\n');
-		add_to_str(&a, &l, _("No entry.", term));
+		add_char_to_string(&info, '\n');
+		add_to_string(&info, _("No entry.", term));
 	} else if (truncated) {
 		unsigned char buf[256];
 
-		add_chr_to_str(&a, &l, '\n');
+		add_char_to_string(&info, '\n');
 
 		snprintf(buf, 64, _("%ld more entries.", term),
 			count - truncated + 1);
-		add_to_str(&a, &l, buf);
+		add_to_string(&info, buf);
 	}
 
-	msg_box(term, getml(a, NULL), MSGBOX_FREE_TEXT,
+	msg_box(term, getml(info.source, NULL), MSGBOX_FREE_TEXT,
 		N_("Cache info"), AL_LEFT,
-		msg_text(term, N_("Cache content: %s"), a),
+		msg_text(term, N_("Cache content: %s"), info.source),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

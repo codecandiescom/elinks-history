@@ -169,6 +169,9 @@ Grzegorz Golawski <grzegol@pld.org.pl>
 Gianluca Montecchi <gianluca@pluto.linux.it>
 	Italian translation
 
+Hugo Haas <hugo@larve.net>
+	Link tag title patch
+
 Ingo Blechschmidt <iblech@web.de>
 	German translation updates
 
@@ -198,7 +201,7 @@ Jonas Fonseca <fonseca@diku.dk>
 
 John <martian202002@yahoo.com>
 	Tab browsing initial patch
-	
+
 José Luis González González <jlg80@mi.madritel.es>
 	MIME types documentation
 	Referred as 'Jose'
@@ -433,4 +436,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.121 2003/05/03 02:12:35 pasky Exp $
+$Id: AUTHORS,v 1.122 2003/05/10 11:33:05 zas Exp $

@@ -71,7 +71,7 @@ AC_HEADER_TIME
 AC_STRUCT_TM
 
 dnl AC_CHECK_SPECIAL_TYPE(type, define, include sys types, code)
-AC_DEFUN([AC_CHECK_SPECIAL_TYPE],
+AC_DEFUN([EL_CHECK_SPECIAL_TYPE],
 [
 	$2=yes
 	AC_MSG_CHECKING([for $1])
@@ -91,10 +91,10 @@ AC_DEFUN([AC_CHECK_SPECIAL_TYPE],
 	AC_MSG_RESULT([$]$2)
 ])
 
-AC_CHECK_SPECIAL_TYPE(typeof, HAVE_TYPEOF, 0, [int a; typeof(a) b;])
-AC_CHECK_SPECIAL_TYPE(long long, HAVE_LONG_LONG, 0, [unsigned long long a;])
-AC_CHECK_SPECIAL_TYPE(int32_t, HAVE_INT32_T, 1, [int32_t a;])
-AC_CHECK_SPECIAL_TYPE(uint32_t, HAVE_UINT32_T, 1, [uint32_t a;])
+EL_CHECK_SPECIAL_TYPE(typeof, HAVE_TYPEOF, 0, [int a; typeof(a) b;])
+EL_CHECK_SPECIAL_TYPE(long long, HAVE_LONG_LONG, 0, [unsigned long long a;])
+EL_CHECK_SPECIAL_TYPE(int32_t, HAVE_INT32_T, 1, [int32_t a;])
+EL_CHECK_SPECIAL_TYPE(uint32_t, HAVE_UINT32_T, 1, [uint32_t a;])
 
 AC_CHECK_SIZEOF(char, 1)
 AC_CHECK_SIZEOF(short, 2)
@@ -234,7 +234,7 @@ dnl ===================================================================
 
 dnl TODO: Move to m4/
 
-AC_DEFUN([AC_SAVE_FLAGS],
+AC_DEFUN([EL_SAVE_FLAGS],
 [
 	CFLAGS_X="$CFLAGS";
 	CPPFLAGS_X="$CPPFLAGS";
@@ -242,7 +242,7 @@ AC_DEFUN([AC_SAVE_FLAGS],
 	LIBS_X="$LIBS";
 ])
 
-AC_DEFUN([AC_RESTORE_FLAGS],
+AC_DEFUN([EL_RESTORE_FLAGS],
 [
 	CFLAGS="$CFLAGS_X";
 	CPPFLAGS="$CPPFLAGS_X";
@@ -256,7 +256,7 @@ dnl ===================================================================
 
 dnl AC_CHECK_OPTIONAL_LIBRARY(name, header, lib, function, confhelp)
 
-AC_DEFUN([AC_CHECK_OPTIONAL_LIBRARY],
+AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 [
 	AC_ARG_WITH($1, [$5],
 	[ if test "$withval" = no; then withval=""; disable_$1=yes; fi])
@@ -266,7 +266,7 @@ AC_DEFUN([AC_CHECK_OPTIONAL_LIBRARY],
 
 	if test -z "$disable_$1"; then
 		AC_MSG_RESULT(yes)
-		AC_SAVE_FLAGS
+		EL_SAVE_FLAGS
 		if test -d "$withval"; then
 			CFLAGS="$CFLAGS -I$withval/include";
 			CPPFLAGS="$CPPFLAGS -I$withval/include";
@@ -279,20 +279,20 @@ AC_DEFUN([AC_CHECK_OPTIONAL_LIBRARY],
 		fi
 
 		if test "$cf_result" != yes; then
-			AC_RESTORE_FLAGS
+			EL_RESTORE_FLAGS
 		fi
 	else
 		AC_MSG_RESULT(disabled)
 	fi
 ])
 
-AC_CHECK_OPTIONAL_LIBRARY(gpm, gpm.h, gpm, Gpm_Open,
+EL_CHECK_OPTIONAL_LIBRARY(gpm, gpm.h, gpm, Gpm_Open,
 	[  --without-gpm           disable gpm (mouse) support])
 
-AC_CHECK_OPTIONAL_LIBRARY(zlib, zlib.h, z, gzdopen,
+EL_CHECK_OPTIONAL_LIBRARY(zlib, zlib.h, z, gzdopen,
 	[  --without-zlib          disable zlib support])
 
-AC_CHECK_OPTIONAL_LIBRARY(bzlib, bzlib.h, bz2, BZ2_bzReadOpen,
+EL_CHECK_OPTIONAL_LIBRARY(bzlib, bzlib.h, bz2, BZ2_bzReadOpen,
 	[  --without-bzlib         disable bzlib support])
 
 dnl ===================================================================
@@ -311,7 +311,7 @@ dnl ===================================================================
 
 AC_MSG_CHECKING([for OS/2 threads])
 
-AC_SAVE_FLAGS
+EL_SAVE_FLAGS
 CFLAGS="$CFLAGS -Zmt"
 
 AC_TRY_LINK([#include <stdlib.h>],
@@ -321,7 +321,7 @@ AC_MSG_RESULT($cf_result)
 if test "$cf_result" = yes; then
 	AC_DEFINE(HAVE_BEGINTHREAD)
 else
-	AC_RESTORE_FLAGS
+	EL_RESTORE_FLAGS
 fi
 
 AC_CHECK_FUNC(MouOpen, AC_DEFINE(HAVE_MOUOPEN))
@@ -329,7 +329,7 @@ AC_CHECK_FUNC(_read_kbd, AC_DEFINE(HAVE_READ_KBD))
 
 AC_MSG_CHECKING([for XFree for OS/2])
 
-AC_SAVE_FLAGS
+EL_SAVE_FLAGS
 
 cf_result=no
 
@@ -348,7 +348,7 @@ if test -n "$X11ROOT"; then
 fi
 
 if test "$cf_result" != yes; then
-	AC_RESTORE_FLAGS
+	EL_RESTORE_FLAGS
 else
 	AC_DEFINE(X2)
 fi
@@ -430,7 +430,7 @@ AC_MSG_CHECKING([for Perl])
 
 cf_result=no
 
-AC_SAVE_FLAGS
+EL_SAVE_FLAGS
 
 if test "$enable_perl" = "yes"; then
 	PERL_LIBS="`perl -MExtUtils::Embed -e ldopts`"
@@ -442,7 +442,7 @@ if test "$enable_perl" = "yes"; then
 fi
 
 if test "$cf_result" != "yes"; then
-	AC_RESTORE_FLAGS
+	EL_RESTORE_FLAGS
 else
 	AC_DEFINE(HAVE_PERL)
 	AC_DEFINE(HAVE_SCRIPTING)
@@ -466,7 +466,7 @@ AC_MSG_CHECKING([for Lua])
 
 if test "$withval" = yes; then withval=""; fi
 
-AC_SAVE_FLAGS
+EL_SAVE_FLAGS
 cf_result=no
 
 if test -z "$disable_lua"; then
@@ -509,7 +509,7 @@ fi
 AC_MSG_RESULT($cf_result)
 
 if test "$cf_result" != yes; then
-	AC_RESTORE_FLAGS
+	EL_RESTORE_FLAGS
 else
 	AC_DEFINE(HAVE_LUA)
 	AC_DEFINE(HAVE_SCRIPTING)
@@ -554,7 +554,7 @@ dnl ---- OpenSSL
 
 AC_MSG_CHECKING([for OpenSSL])
 
-AC_SAVE_FLAGS
+EL_SAVE_FLAGS
 cf_result="no"
 
 if test "$disable_openssl" = yes; then
@@ -597,7 +597,7 @@ else
 		if test "$withval" = yes; then
 			AC_MSG_ERROR("OpenSSL not found")
 		fi
-		AC_RESTORE_FLAGS
+		EL_RESTORE_FLAGS
 	else
 		AC_DEFINE(HAVE_OPENSSL)
 		AC_DEFINE(HAVE_SSL)
@@ -613,7 +613,7 @@ dnl it looks ugly then.
 if test "$cf_result" = yes; then
 	cf_result="not used"
 else
-	AC_SAVE_FLAGS
+	EL_SAVE_FLAGS
 	cf_result="no"
 
 	if test -z "$disable_gnutls"; then
@@ -655,7 +655,7 @@ else
 				AC_MSG_CHECKING([for GNU TLS])
 				AC_MSG_ERROR("GNUTLS not found")
 			fi
-			AC_RESTORE_FLAGS
+			EL_RESTORE_FLAGS
 		else
 			AC_DEFINE(HAVE_GNUTLS)
 			AC_DEFINE(HAVE_SSL)

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.519 2005/01/28 14:56:44 jonas Exp $ */
+/* $Id: parser.c,v 1.520 2005/02/23 23:42:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -950,6 +950,15 @@ html_li(unsigned char *a)
 		par_format.leftmargin += nlen + c + 2;
 		par_format.align = ALIGN_LEFT;
 		html_top.next->parattr.list_number = par_format.list_number + 1;
+
+		{
+			struct html_element *element;
+
+			element = search_html_stack("ol");
+			if (element)
+				element->parattr.list_number = par_format.list_number + 1;
+		}
+
 		par_format.list_number = 0;
 	}
 

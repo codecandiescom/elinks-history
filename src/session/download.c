@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.342 2005/02/09 09:32:58 jonas Exp $ */
+/* $Id: download.c,v 1.343 2005/02/23 23:42:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1020,6 +1020,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	int widgets = TYPE_QUERY_WIDGETS_COUNT;
 	struct terminal *term = type_query->ses->tab->term;
 	struct memory_list *ml;
+	struct dialog_data *dlg_data;
 
 	mem_free_set(&type_query->external_handler, NULL);
 
@@ -1144,7 +1145,12 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 		return;
 	}
 
-	do_dialog(term, dlg, ml);
+	dlg_data = do_dialog(term, dlg, ml);
+	/* When there's some username, but no password, automagically jump at
+	 * the password. */
+	if (dlg_data) {
+		select_widget_by_id(dlg_data, 2);
+	}
 }
 
 struct {

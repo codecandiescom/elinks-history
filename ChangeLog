@@ -1,3 +1,36 @@
+Sun Nov 30 19:45:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, dialogs/Makefile.am, dialogs/download.c,
+	dialogs/status.c, dialogs/status.h, document/renderer.c,
+	sched/history.c, sched/session.c, sched/session.h,
+	viewer/text/link.c, viewer/text/view.c:
+
+	Move session status management to separate file.  
+
+Sun Nov 30 18:36:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, sched/session.c:
+
+	Move ses->visible_(title|status)_bar management to change_hook.  
+
+Sun Nov 30 16:13:36 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation updates/fixes.  
+
+Sun Nov 30 06:42:48 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/: http.c, http.h:
+
+	Preparation for CGI support.  
+
+Sun Nov 30 00:22:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Change horizontal scrolling back to it was before (1.276 -> 1.277) 
+
 Sat Nov 29 23:01:56 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/sched/session.c:

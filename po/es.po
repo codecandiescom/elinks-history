@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-06 23:56+0100\n"
+"POT-Creation-Date: 2003-12-08 19:09+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: David Mediavilla <r96x6a79yki40001@sneakemail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -36,14 +36,14 @@ msgstr "Información"
 #: src/config/dialogs.c:509 src/dialogs/auth.c:77 src/dialogs/document.c:50
 #: src/dialogs/document.c:235 src/dialogs/document.c:305
 #: src/dialogs/document.c:317 src/dialogs/edit.c:99 src/dialogs/info.c:48
-#: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:562
-#: src/dialogs/menu.c:573 src/dialogs/menu.c:604 src/dialogs/mime.c:159
-#: src/dialogs/options.c:189 src/dialogs/options.c:263
-#: src/protocol/protocol.c:61 src/protocol/user.c:158 src/protocol/user.c:174
+#: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:565
+#: src/dialogs/menu.c:576 src/dialogs/menu.c:607 src/dialogs/mime.c:159
+#: src/dialogs/options.c:190 src/dialogs/options.c:264
+#: src/protocol/protocol.c:63 src/protocol/user.c:158 src/protocol/user.c:174
 #: src/sched/download.c:170 src/sched/download.c:254 src/sched/download.c:280
 #: src/sched/download.c:551 src/sched/error.c:42 src/sched/session.c:121
-#: src/sched/session.c:565 src/sched/session.c:582 src/sched/session.c:606
-#: src/sched/session.c:851 src/scripting/lua/core.c:401
+#: src/sched/session.c:569 src/sched/session.c:586 src/sched/session.c:610
+#: src/sched/session.c:855 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:482 src/scripting/lua/core.c:589
 #: src/scripting/lua/core.c:718 src/viewer/text/form.c:657
 #: src/viewer/text/search.c:856 src/viewer/text/search.c:882
@@ -91,13 +91,13 @@ msgstr "Borrar elemento de historial"
 
 #: src/bfu/hierbox.c:567 src/bfu/hierbox.c:588 src/bfu/hierbox.c:602
 #: src/bfu/hierbox.c:661 src/dialogs/menu.c:205 src/dialogs/mime.c:86
-#: src/formhist/formhist.c:492 src/sched/task.c:168 src/terminal/tab.c:190
+#: src/formhist/formhist.c:492 src/sched/task.c:169 src/terminal/tab.c:190
 msgid "Yes"
 msgstr "Sí"
 
 #: src/bfu/hierbox.c:568 src/bfu/hierbox.c:589 src/bfu/hierbox.c:603
 #: src/bfu/hierbox.c:662 src/dialogs/menu.c:206 src/dialogs/mime.c:87
-#: src/formhist/formhist.c:493 src/sched/task.c:169 src/terminal/tab.c:191
+#: src/formhist/formhist.c:493 src/sched/task.c:170 src/terminal/tab.c:191
 msgid "No"
 msgstr "No"
 
@@ -247,9 +247,9 @@ msgstr "Nombre de la carpeta"
 
 #: src/bookmarks/dialogs.c:191 src/config/dialogs.c:263
 #: src/config/dialogs.c:339 src/config/dialogs.c:455 src/config/dialogs.c:510
-#: src/dialogs/auth.c:78 src/dialogs/edit.c:103 src/dialogs/menu.c:562
-#: src/dialogs/menu.c:573 src/dialogs/menu.c:604 src/dialogs/mime.c:160
-#: src/dialogs/options.c:192 src/dialogs/options.c:264
+#: src/dialogs/auth.c:78 src/dialogs/edit.c:103 src/dialogs/menu.c:565
+#: src/dialogs/menu.c:576 src/dialogs/menu.c:607 src/dialogs/mime.c:160
+#: src/dialogs/options.c:193 src/dialogs/options.c:265
 #: src/sched/download.c:467 src/sched/download.c:963 src/sched/download.c:972
 #: src/sched/download.c:999 src/sched/download.c:1011
 #: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
@@ -297,7 +297,7 @@ msgstr "Buscar..."
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:383 src/config/dialogs.c:361
 #: src/config/dialogs.c:532 src/cookies/dialogs.c:134
-#: src/dialogs/options.c:191 src/formhist/dialogs.c:147
+#: src/dialogs/options.c:192 src/formhist/dialogs.c:147
 #: src/globhist/dialogs.c:192 src/sched/download.c:961
 #: src/sched/download.c:997
 msgid "Save"
@@ -503,8 +503,8 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/config/dialogs.c:200 src/protocol/protocol.c:58 src/sched/session.c:118
-#: src/sched/session.c:847 src/viewer/text/textarea.c:269
+#: src/config/dialogs.c:200 src/protocol/protocol.c:60 src/sched/session.c:118
+#: src/sched/session.c:851 src/viewer/text/textarea.c:269
 msgid "Error"
 msgstr "Error"
 
@@ -989,73 +989,73 @@ msgstr "Error escribiendo en el socket"
 msgid "Unrecognised action (internal error)"
 msgstr ""
 
-#: src/config/options.c:723 src/config/options.c:747 src/config/opttypes.c:38
+#: src/config/options.c:730 src/config/options.c:754 src/config/opttypes.c:38
 msgid "Parameter expected"
 msgstr ""
 
-#: src/config/options.c:748
+#: src/config/options.c:755
 msgid "Too many parameters"
 msgstr ""
 
-#: src/config/options.c:753
+#: src/config/options.c:760
 #, fuzzy
 msgid "error"
 msgstr "Error"
 
-#: src/config/options.c:755 src/sched/error.c:47
+#: src/config/options.c:762 src/sched/error.c:47
 msgid "Host not found"
 msgstr "Máquina no encontrada"
 
-#: src/config/options.c:769
+#: src/config/options.c:776
 #, fuzzy
 msgid "Resolver error"
 msgstr "Error al grabar"
 
-#: src/config/options.c:791
+#: src/config/options.c:798
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
 msgstr ""
 
-#: src/config/options.c:831
+#: src/config/options.c:838
 msgid "Template option folder"
 msgstr ""
 
-#: src/config/options.c:854
+#: src/config/options.c:861
 #, c-format
 msgid "(default: %ld)"
 msgstr ""
 
-#: src/config/options.c:859 src/config/options.c:893
+#: src/config/options.c:866 src/config/options.c:900
 #, c-format
 msgid "(default: \"%s\")"
 msgstr ""
 
-#: src/config/options.c:864
+#: src/config/options.c:871
 #, c-format
 msgid "(alias for %s)"
 msgstr ""
 
-#: src/config/options.c:869 src/config/options.c:879
+#: src/config/options.c:876 src/config/options.c:886
 #, c-format
 msgid "(default: %s)"
 msgstr ""
 
-#: src/config/options.c:883
+#: src/config/options.c:890
 #, c-format
 msgid "(default: #%06x)"
 msgstr ""
 
-#: src/config/options.c:1009
+#: src/config/options.c:1016
 msgid "Configuration options:\n"
 msgstr ""
 
-#: src/config/options.c:1012
+#: src/config/options.c:1019
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 msgstr ""
 
-#: src/config/options.c:1013
+#: src/config/options.c:1020
 msgid "Options:\n"
 msgstr ""
 
@@ -1557,7 +1557,7 @@ msgstr "Cuadro de texto"
 msgid "Invert the fore- and background color so the link stands out."
 msgstr ""
 
-#: src/config/options.inc:220 src/dialogs/options.c:186
+#: src/config/options.inc:220 src/dialogs/options.c:187
 msgid "Underline"
 msgstr ""
 
@@ -2563,7 +2563,7 @@ msgid ""
 "only the subset of UTF8 according to terminal codepage is used."
 msgstr ""
 
-#: src/config/options.inc:834 src/dialogs/options.c:183
+#: src/config/options.inc:834 src/dialogs/options.c:184
 msgid "Restrict frames in cp850/852"
 msgstr "Restringir caracteres de recuadros a los de CP850/852"
 
@@ -3772,7 +3772,7 @@ msgstr "Información de cabecera"
 msgid "No header info."
 msgstr ""
 
-#: src/dialogs/download.c:240 src/dialogs/menu.c:603 src/sched/download.c:277
+#: src/dialogs/download.c:240 src/dialogs/menu.c:606 src/sched/download.c:277
 msgid "Download"
 msgstr "Descargar"
 
@@ -3856,16 +3856,16 @@ msgstr "bytes de memoria reservados"
 msgid "Memory info"
 msgstr "Información de memoria"
 
-#: src/dialogs/menu.c:106 src/dialogs/menu.c:456
+#: src/dialogs/menu.c:106 src/dialogs/menu.c:441
 msgid "Nex~t tab"
 msgstr ""
 
-#: src/dialogs/menu.c:109 src/dialogs/menu.c:457
+#: src/dialogs/menu.c:109 src/dialogs/menu.c:442
 #, fuzzy
 msgid "Pre~v tab"
 msgstr "No hay busqueda anterior"
 
-#: src/dialogs/menu.c:113 src/dialogs/menu.c:458
+#: src/dialogs/menu.c:113 src/dialogs/menu.c:443
 #, fuzzy
 msgid "~Close tab"
 msgstr "Cerrar"
@@ -3897,7 +3897,7 @@ msgstr "~Abrir en nueva ventana"
 
 #: src/dialogs/menu.c:335
 #, fuzzy
-msgid "Open new t~ab in background"
+msgid "Open new tab in backgroun~d"
 msgstr "2º plano"
 
 #: src/dialogs/menu.c:337
@@ -3918,237 +3918,245 @@ msgstr "~Historial"
 
 #: src/dialogs/menu.c:341
 #, fuzzy
-msgid "Unh~istory"
+msgid "~Unhistory"
 msgstr "Historia~l posterior"
 
 #: src/dialogs/menu.c:346
 #, fuzzy
-msgid "Global ~history"
-msgstr "Gestor de historial"
-
-#: src/dialogs/menu.c:349
-#, fuzzy
-msgid "~Bookmarks"
-msgstr "Mar~cadores"
-
-#: src/dialogs/menu.c:351
-#, fuzzy
-msgid "~Cache"
-msgstr "Cancelar"
-
-#: src/dialogs/menu.c:352
-msgid "~Downloads"
-msgstr "~Descargas"
-
-#: src/dialogs/menu.c:354
-msgid "Coo~kies"
-msgstr ""
-
-#: src/dialogs/menu.c:357
-#, fuzzy
-msgid "~Form history"
-msgstr "No queda memoria libre"
-
-#: src/dialogs/menu.c:364
-msgid "Sa~ve as"
+msgid "~Save as"
 msgstr "~Grabar como..."
 
-#: src/dialogs/menu.c:365
-msgid "Save ~URL as"
+#: src/dialogs/menu.c:347
+#, fuzzy
+msgid "Save UR~L as"
 msgstr "Grabar ~URL como..."
 
-#: src/dialogs/menu.c:366
+#: src/dialogs/menu.c:348
 msgid "Save formatted ~document"
 msgstr "Grabar ~documento con formato..."
 
-#: src/dialogs/menu.c:371
+#: src/dialogs/menu.c:350
 #, fuzzy
-msgid "Ki~ll background connections"
+msgid "Bookm~ark document"
+msgstr "documentos"
+
+#: src/dialogs/menu.c:356
+#, fuzzy
+msgid "~Kill background connections"
 msgstr "Cortar cone~xiones en segundo plano"
 
-#: src/dialogs/menu.c:372
-msgid "~Flush all caches"
+#: src/dialogs/menu.c:357
+#, fuzzy
+msgid "Flush all ~caches"
 msgstr "Vaciar todas las cach~es"
 
-#: src/dialogs/menu.c:373
+#: src/dialogs/menu.c:358
 #, fuzzy
-msgid "Resource i~nfo"
+msgid "Resource ~info"
 msgstr "In~formación de recursos..."
 
-#: src/dialogs/menu.c:375
+#: src/dialogs/menu.c:360
 msgid "~Memory info"
 msgstr "Información de ~memoria"
 
-#: src/dialogs/menu.c:382
+#: src/dialogs/menu.c:367
 msgid "E~xit"
 msgstr "~Salir..."
 
-#: src/dialogs/menu.c:401
+#: src/dialogs/menu.c:386
 msgid "~New window"
 msgstr "~Nueva ventana"
 
-#: src/dialogs/menu.c:420
+#: src/dialogs/menu.c:405
 msgid "~OS shell"
 msgstr "Shell del S~O"
 
-#: src/dialogs/menu.c:427
+#: src/dialogs/menu.c:412
 #, fuzzy
 msgid "Resize t~erminal"
 msgstr "Tamaño de la ~terminal..."
 
-#: src/dialogs/menu.c:443
+#: src/dialogs/menu.c:428
 msgid "~Search"
 msgstr "~Buscar..."
 
-#: src/dialogs/menu.c:444
+#: src/dialogs/menu.c:429
 msgid "Search ~backward"
 msgstr "Buscar ~atrás..."
 
-#: src/dialogs/menu.c:445
+#: src/dialogs/menu.c:430
 msgid "Find ~next"
 msgstr "Buscar ~siguiente"
 
-#: src/dialogs/menu.c:446
+#: src/dialogs/menu.c:431
 msgid "Find ~previous"
 msgstr "Buscar a~nterior"
 
-#: src/dialogs/menu.c:448
+#: src/dialogs/menu.c:433
 msgid "Toggle ~html/plain"
 msgstr "HTML ~fuente <-> interpretado"
 
-#: src/dialogs/menu.c:449
+#: src/dialogs/menu.c:434
 #, fuzzy
 msgid "Toggle i~mages"
 msgstr "Mostrar título <-> URL"
 
-#: src/dialogs/menu.c:450
+#: src/dialogs/menu.c:435
 #, fuzzy
 msgid "Toggle ~link numbering"
 msgstr "Introduzca nº de enlace"
 
-#: src/dialogs/menu.c:451
+#: src/dialogs/menu.c:436
 msgid "Toggle ~document colors"
 msgstr ""
 
-#: src/dialogs/menu.c:452
+#: src/dialogs/menu.c:437
 msgid "Document ~info"
 msgstr "~Información del documento..."
 
-#: src/dialogs/menu.c:453
+#: src/dialogs/menu.c:438
 msgid "H~eader info"
 msgstr "Información de cabecera"
 
-#: src/dialogs/menu.c:454
+#: src/dialogs/menu.c:439
 msgid "Frame at ~full-screen"
 msgstr "~Marco en pantalla completa"
 
-#: src/dialogs/menu.c:464
+#: src/dialogs/menu.c:449
 msgid "~ELinks homepage"
 msgstr "La página oficial de ~ELinks"
 
-#: src/dialogs/menu.c:465
+#: src/dialogs/menu.c:450
 #, fuzzy
 msgid "~Documentation"
 msgstr "~Información del documento..."
 
-#: src/dialogs/menu.c:466
+#: src/dialogs/menu.c:451
 msgid "~Keys"
 msgstr "~Teclas..."
 
-#: src/dialogs/menu.c:469
+#: src/dialogs/menu.c:454
 msgid "~Bugs information"
 msgstr ""
 
-#: src/dialogs/menu.c:470
+#: src/dialogs/menu.c:455
 #, fuzzy
 msgid "~ELinks CvsWeb"
 msgstr "La página oficial de ~ELinks"
 
-#: src/dialogs/menu.c:473
+#: src/dialogs/menu.c:458
 msgid "~Copying"
 msgstr "~Licencia..."
 
-#: src/dialogs/menu.c:474
+#: src/dialogs/menu.c:459
 msgid "~About"
 msgstr "~Acerca de..."
 
-#: src/dialogs/menu.c:480
+#: src/dialogs/menu.c:465
 msgid "~Add"
 msgstr "~Añadir"
 
-#: src/dialogs/menu.c:481
+#: src/dialogs/menu.c:466
 msgid "~Modify"
 msgstr "~Modificar"
 
-#: src/dialogs/menu.c:482
+#: src/dialogs/menu.c:467
 msgid "~Delete"
 msgstr "Eliminar"
 
-#: src/dialogs/menu.c:494 src/dialogs/menu.c:507
+#: src/dialogs/menu.c:479 src/dialogs/menu.c:492
 msgid "~Language"
 msgstr "~Idioma"
 
-#: src/dialogs/menu.c:496 src/dialogs/menu.c:508
+#: src/dialogs/menu.c:481 src/dialogs/menu.c:493
 msgid "C~haracter set"
 msgstr "~Juego de caracteres"
 
-#: src/dialogs/menu.c:497 src/dialogs/menu.c:509
+#: src/dialogs/menu.c:482 src/dialogs/menu.c:494
 msgid "~Terminal options"
 msgstr "Opciones de ~terminal..."
 
-#: src/dialogs/menu.c:498
+#: src/dialogs/menu.c:483
 msgid "File ~extensions"
 msgstr "~Extensiones de fichero"
 
-#: src/dialogs/menu.c:500
+#: src/dialogs/menu.c:485
 msgid "~Options manager"
 msgstr "Gestor de opciones"
 
-#: src/dialogs/menu.c:501
+#: src/dialogs/menu.c:486
 msgid "~Keybinding manager"
 msgstr ""
 
-#: src/dialogs/menu.c:502
+#: src/dialogs/menu.c:487
 msgid "~Save options"
 msgstr "~Grabar opciones"
 
-#: src/dialogs/menu.c:541
+#: src/dialogs/menu.c:500
+#, fuzzy
+msgid "Global ~history"
+msgstr "Gestor de historial"
+
+#: src/dialogs/menu.c:503
+#, fuzzy
+msgid "~Bookmarks"
+msgstr "Mar~cadores"
+
+#: src/dialogs/menu.c:505
+#, fuzzy
+msgid "~Cache"
+msgstr "Cancelar"
+
+#: src/dialogs/menu.c:506
+msgid "~Downloads"
+msgstr "~Descargas"
+
+#: src/dialogs/menu.c:508
+msgid "Coo~kies"
+msgstr ""
+
+#: src/dialogs/menu.c:511
+#, fuzzy
+msgid "~Form history"
+msgstr "No queda memoria libre"
+
+#: src/dialogs/menu.c:544
 msgid "~File"
 msgstr "~Fichero"
 
-#: src/dialogs/menu.c:542
+#: src/dialogs/menu.c:545
 msgid "~View"
 msgstr "~Ver"
 
-#: src/dialogs/menu.c:543
+#: src/dialogs/menu.c:546
 msgid "~Link"
 msgstr "~Enlace"
 
-#: src/dialogs/menu.c:544
+#: src/dialogs/menu.c:547
 msgid "~Tools"
 msgstr ""
 
-#: src/dialogs/menu.c:545
+#: src/dialogs/menu.c:548
 msgid "~Setup"
 msgstr "~Configuración"
 
-#: src/dialogs/menu.c:546
+#: src/dialogs/menu.c:549
 msgid "~Help"
 msgstr "~Ayuda"
 
-#: src/dialogs/menu.c:561
+#: src/dialogs/menu.c:564
 msgid "Go to URL"
 msgstr "Ir a URL..."
 
-#: src/dialogs/menu.c:561 src/dialogs/menu.c:572
+#: src/dialogs/menu.c:564 src/dialogs/menu.c:575
 msgid "Enter URL"
 msgstr "Introduzca el URL"
 
-#: src/dialogs/menu.c:572
+#: src/dialogs/menu.c:575
 msgid "Save URL"
 msgstr "Grabar URL"
 
-#: src/dialogs/menu.c:603
+#: src/dialogs/menu.c:606
 msgid "Save to file"
 msgstr "Grabar en fichero"
 
@@ -4198,45 +4206,50 @@ msgid "Linux or OS/2 frames"
 msgstr "Recuadros de OS/2 o Linux"
 
 #: src/dialogs/options.c:173
+#, fuzzy
+msgid "FreeBSD frames"
+msgstr "No usar recuadros"
+
+#: src/dialogs/options.c:174
 msgid "KOI8-R frames"
 msgstr "Recuadros de KOI8-R"
 
-#: src/dialogs/options.c:175
+#: src/dialogs/options.c:176
 #, fuzzy
 msgid "Color mode:"
 msgstr "Color"
 
-#: src/dialogs/options.c:176
+#: src/dialogs/options.c:177
 msgid "No colors (mono)"
 msgstr ""
 
-#: src/dialogs/options.c:177
+#: src/dialogs/options.c:178
 #, fuzzy
 msgid "16 colors"
 msgstr "Título del enlace"
 
-#: src/dialogs/options.c:179
+#: src/dialogs/options.c:180
 #, fuzzy
 msgid "256 colors"
 msgstr "Título del enlace"
 
-#: src/dialogs/options.c:182
+#: src/dialogs/options.c:183
 msgid "Use ^[[11m"
 msgstr "Escribir con ESC[11m"
 
-#: src/dialogs/options.c:184
+#: src/dialogs/options.c:185
 msgid "Block the cursor"
 msgstr "El cursor es un bloque"
 
-#: src/dialogs/options.c:185
+#: src/dialogs/options.c:186
 msgid "Transparency"
 msgstr "Transparencia"
 
-#: src/dialogs/options.c:187
+#: src/dialogs/options.c:188
 msgid "UTF-8 I/O"
 msgstr "Entrada/salida en UTF-8"
 
-#: src/dialogs/options.c:257
+#: src/dialogs/options.c:258
 #, fuzzy
 msgid "Resize terminal"
 msgstr "Tamaño de la ~terminal..."
@@ -4723,8 +4736,76 @@ msgstr "~Pantalla completa"
 msgid "~BeOS terminal"
 msgstr "Terminal ~BeOS"
 
-#: src/protocol/protocol.c:59
+#: src/protocol/protocol.c:61
 msgid "JavaScript is currently not supported."
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:41
+msgid "URI rewriting"
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:43
+msgid ""
+"Rules for rewriting URIs entered in the goto dialog.\n"
+"It makes it possible to define a set of prefixes that will\n"
+"be expanded if they match a string entered in the goto dialog.\n"
+"The prefixes can be dumb, meaning that they work only like\n"
+"URI abbreviations, or smart ones, making it possible to pass\n"
+"arguments to them like search engine keywords."
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:50
+msgid "Enable dumb prefixes"
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:52
+msgid "Enable dumb prefixes."
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:54
+msgid "Enable smart prefixes"
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:56
+msgid "Enable smart prefixes."
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:58
+msgid "Dumb Prefixes"
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:60
+msgid "Dumb prefixes."
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:64
+#, c-format
+msgid ""
+"Replacement URI for this dumbprefix.\n"
+"%c in the string means the current URL\n"
+"%% in the string means '%'"
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:68
+msgid "Smart Prefixes"
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:70
+msgid "Smart prefixes."
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:76
+msgid ""
+"Replacement URI for this smartprefix.\n"
+"%c in the string means the current URL\n"
+"%s in the string means the whole argument to smartprefix\n"
+"%0,%1,...,%9 means argument 0, 1, ..., 9\n"
+"%% in the string means '%'"
+msgstr ""
+
+#. name:
+#: src/protocol/rewrite/rewrite.c:243
+msgid "URI rewrite"
 msgstr ""
 
 #: src/protocol/user.c:155 src/sched/error.c:51
@@ -4976,11 +5057,11 @@ msgstr "Esta versión de ELinks no está preparada para SSL/TSL"
 msgid "Unknown error"
 msgstr "Error desconocido"
 
-#: src/sched/session.c:560
+#: src/sched/session.c:564
 msgid "Welcome"
 msgstr "Bienvenido"
 
-#: src/sched/session.c:561
+#: src/sched/session.c:565
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -4990,11 +5071,11 @@ msgstr ""
 "Pulse ESC para menú. Seleccione Ayuda->Manual en el menú para el manual de "
 "usuario."
 
-#: src/sched/session.c:570 src/sched/session.c:590 src/sched/task.c:165
+#: src/sched/session.c:574 src/sched/session.c:594 src/sched/task.c:166
 msgid "Warning"
 msgstr "Atención"
 
-#: src/sched/session.c:571
+#: src/sched/session.c:575
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5005,7 +5086,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:591
+#: src/sched/session.c:595
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5018,23 +5099,23 @@ msgid ""
 "for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:848
+#: src/sched/session.c:852
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through options system."
 msgstr ""
 
-#: src/sched/task.c:154
+#: src/sched/task.c:155
 #, fuzzy, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "¿Quiere seguir la redirección y enviar los datos del formulario al URL"
 
-#: src/sched/task.c:157
+#: src/sched/task.c:158
 #, fuzzy, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "¿Quiere enviar los datos del formulario al URL"
 
-#: src/sched/task.c:159
+#: src/sched/task.c:160
 #, fuzzy, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "¿Quiere reenviar los datos del formulario al URL"

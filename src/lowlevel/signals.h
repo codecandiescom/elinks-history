@@ -1,16 +1,10 @@
 /* Signals handling. */
-/* $Id: signals.h,v 1.3 2003/05/25 09:41:44 zas Exp $ */
+/* $Id: signals.h,v 1.4 2003/09/07 20:04:25 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_SIGNALS_H
 #define EL__LOWLEVEL_SIGNALS_H
 
 #define NUM_SIGNALS	32
-
-struct signal_handler {
-	void (*fn)(void *);
-	void *data;
-	int critical;
-};
 
 extern int critical_section;
 

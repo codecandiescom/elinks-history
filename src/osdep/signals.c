@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.8 2003/08/01 14:44:48 zas Exp $ */
+/* $Id: signals.c,v 1.9 2003/09/07 20:04:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,9 +217,14 @@ unhandle_basic_signals(struct terminal *term)
 #endif
 }
 
+struct signal_info {
+	void (*handler)(void *);
+	void *data;
+	int critical;
+	int mask;
+};
 
-static int signal_mask[NUM_SIGNALS];
-static struct signal_handler signal_handlers[NUM_SIGNALS];
+static struct signal_info signal_info[NUM_SIGNALS];
 int critical_section = 0;
 
 static void check_for_select_race(void);
@@ -231,19 +236,23 @@ static void check_for_select_race(void);
 static void
 got_signal(int sig)
 {
+	struct signal_info *s;
+
 	if (sig >= NUM_SIGNALS || sig < 0) {
 		error(gettext("Bad signal number: %d"), sig);
 		return;
 	}
 
-	if (!signal_handlers[sig].fn) return;
+	s = &signal_info[sig];
 
-	if (signal_handlers[sig].critical) {
-		signal_handlers[sig].fn(signal_handlers[sig].data);
+	if (!s->handler) return;
+
+	if (s->critical) {
+		s->handler(s->data);
 		return;
 	}
 
-	signal_mask[sig] = 1;
+	s->mask = 1;
 	check_for_select_race();
 }
 
@@ -264,9 +273,9 @@ install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 	sigfillset(&sa.sa_mask);
 	/*sa.sa_flags = SA_RESTART;*/
 	if (!fn) sigaction(sig, &sa, NULL);
-	signal_handlers[sig].fn = fn;
-	signal_handlers[sig].data = data;
-	signal_handlers[sig].critical = critical;
+	signal_info[sig].handler = fn;
+	signal_info[sig].data = data;
+	signal_info[sig].critical = critical;
 	if (fn) sigaction(sig, &sa, NULL);
 }
 
@@ -322,8 +331,7 @@ set_sigcld(void)
 void
 clear_signal_mask_and_handlers(void)
 {
-	memset(signal_mask, 0, sizeof(signal_mask));
-	memset(signal_handlers, 0, sizeof(signal_handlers));
+	memset(signal_info, 0, sizeof(struct signal_info));
 }
 
 int
@@ -331,14 +339,17 @@ check_signals(void)
 {
 	int i, r = 0;
 
-	for (i = 0; i < NUM_SIGNALS; i++)
-		if (signal_mask[i]) {
-			signal_mask[i] = 0;
-			if (signal_handlers[i].fn)
-				signal_handlers[i].fn(signal_handlers[i].data);
-			check_bottom_halves();
-			r = 1;
-		}
+	for (i = 0; i < NUM_SIGNALS; i++) {
+		struct signal_info *s = &signal_info[i];
+
+		if (!s->mask) continue;
+
+		s->mask = 0;
+		if (s->handler)
+			s->handler(s->data);
+		check_bottom_halves();
+		r = 1;
+	}
 
 	return r;
 }

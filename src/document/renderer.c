@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.80 2004/09/24 10:54:23 jonas Exp $ */
+/* $Id: renderer.c,v 1.81 2004/09/24 19:54:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,15 +57,15 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 	if (!*current) {
 		doc_current = doc_snippets->next;
 	} else {
-		struct string_list_item *iter = queued_snippets->next;
+		struct string_list_item *iterator = queued_snippets->next;
 
-		doc_current = (struct string_list_item *) doc_snippets;
+		doc_current = doc_snippets->next;
 		assert(!list_empty(*queued_snippets));
-		while (iter != *current) {
+		while (iterator != *current) {
 			doc_current = doc_current->next;
-			iter = iter->next;
+			iterator = iterator->next;
 
-			if (iter == (struct string_list_item *) queued_snippets) {
+			if (iterator == (struct string_list_item *) queued_snippets) {
 				INTERNAL("process_snippets(): current (%p) got off queued_snippets!", *current);
 				return;
 			}
@@ -77,7 +77,9 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 	}
 
 	assert(doc_current);
-	for (; doc_current != (struct string_list_item *) doc_snippets; doc_current = doc_current->next) {
+	for (doc_current = doc_current->next;
+	     doc_current != (struct string_list_item *) doc_snippets;
+	     doc_current = doc_current->next) {
 		add_to_string_list(queued_snippets, doc_current->string.source,
 		                   doc_current->string.length);
 		/* TODO: Support for external references. --pasky */

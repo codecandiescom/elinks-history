@@ -1,9 +1,9 @@
-/* $Id: session.h,v 1.164 2004/09/30 21:11:28 pasky Exp $ */
+/* $Id: session.h,v 1.165 2004/11/19 16:54:21 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
 
-#include "bfu/leds.h"
+#include "bfu/dialog.h"
 #include "cache/cache.h"
 #include "sched/connection.h"
 #include "sched/history.h"

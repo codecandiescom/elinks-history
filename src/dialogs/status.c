@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.92 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: status.c,v 1.93 2004/11/19 16:54:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,6 @@
 
 #include "elinks.h"
 
-#include "bfu/leds.h"
 #include "bfu/dialog.h"
 #include "config/options.h"
 #include "cache/cache.h"

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.137 2004/04/30 13:27:14 zas Exp $ */
+/* $Id: screen.c,v 1.138 2004/04/30 13:33:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -442,7 +442,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		}
 
 		/* Check if the char should be rendered bold. */
-		if (ch->attr & SCREEN_ATTR_BOLD) {
+		if (bold) {
 			add_bytes_to_string(screen, ";1", 2);
 		}
 

@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.30 2004/07/02 15:09:32 zas Exp $ */
+/* $Id: dialogs.c,v 1.31 2004/07/02 16:17:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,9 +116,9 @@ delete_formhist_data(struct listbox_item *item, int last)
 
 static struct listbox_ops_messages formhist_messages = {
 	/* cant_delete_item */
-	N_("Sorry, but this form \"%s\" cannot be deleted."),
+	N_("Sorry, but form \"%s\" cannot be deleted."),
 	/* cant_delete_used_item */
-	N_("Sorry, but this form \"%s\" is being used by something else."),
+	N_("Sorry, but form \"%s\" is being used by something else."),
 	/* cant_delete_folder */
 	NULL,
 	/* cant_delete_used_folder */

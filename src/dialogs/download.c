@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.56 2004/07/02 15:09:32 zas Exp $ */
+/* $Id: download.c,v 1.57 2004/07/02 16:17:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -399,9 +399,9 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 
 static struct listbox_ops_messages download_messages = {
 	/* cant_delete_item */
-	N_("Sorry, but this file \"%s\" cannot be deleted."),
+	N_("Sorry, but download \"%s\" cannot be interrupted."),
 	/* cant_delete_used_item */
-	N_("Sorry, but this file \"%s\" is being used by something else."),
+	N_("Sorry, but download \"%s\" is being used by something else."),
 	/* cant_delete_folder */
 	NULL,
 	/* cant_delete_used_folder */

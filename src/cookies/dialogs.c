@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.61 2004/07/02 15:09:32 zas Exp $ */
+/* $Id: dialogs.c,v 1.62 2004/07/02 16:17:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,13 +138,13 @@ delete_cookie(struct listbox_item *item, int last)
 
 static struct listbox_ops_messages cookies_messages = {
 	/* cant_delete_item */
-	N_("Sorry, but this cookie \"%s\" cannot be deleted."),
+	N_("Sorry, but cookie \"%s\" cannot be deleted."),
 	/* cant_delete_used_item */
-	N_("Sorry, but this cookie \"%s\" is being used by something else."),
+	N_("Sorry, but cookie \"%s\" is being used by something else."),
 	/* cant_delete_folder */
-	N_("Sorry, but this cookie's folder \"%s\" cannot be deleted."),
+	N_("Sorry, but cookie's folder \"%s\" cannot be deleted."),
 	/* cant_delete_used_folder */
-	N_("Sorry, but this cookie's folder \"%s\" is being used by something else."),
+	N_("Sorry, but cookie's folder \"%s\" is being used by something else."),
 	/* delete_marked_items_title */
 	N_("Delete marked cookies"),
 	/* delete_marked_items */

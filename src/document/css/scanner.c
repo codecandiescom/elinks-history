@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.9 2004/01/18 21:29:29 jonas Exp $ */
+/* $Id: scanner.c,v 1.10 2004/01/18 22:25:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 
 
 /* Define if you want a talking scanner */
-/* #define CSS_SCANNER_DEBUG */
+ #define CSS_SCANNER_DEBUG 
 
 #define	SCAN_TABLE_SIZE	256
 
@@ -72,8 +72,13 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			    ? CSS_TOKEN_IDENTIFIER : CSS_TOKEN_NAME;
 		scan_css(string, CSS_CHAR_IDENT);
 
+		if (token->type == CSS_TOKEN_IDENTIFIER && *string == '(') {
+			token->type = CSS_TOKEN_FUNCTION;
+			string++;
+		}
+
 	} else {
-		/* TODO: Strings and maybe function token having "<ident>(" */
+		/* TODO: Strings */
 		/* TODO: Better composing of error tokens. For now we just
 		 * split them down into char tokens */
 		if (!first_char) {

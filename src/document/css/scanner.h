@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.15 2004/01/18 21:31:01 jonas Exp $ */
+/* $Id: scanner.h,v 1.16 2004/01/18 22:25:43 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -21,6 +21,7 @@ struct css_token {
 		/* Char tokens have type (integer values) from 255 and down and
 		 * non char tokens have values from 256 and up. */
 		CSS_TOKEN_DIGIT = 256,
+		CSS_TOKEN_FUNCTION,
 		CSS_TOKEN_HEX_COLOR,
 		CSS_TOKEN_IDENTIFIER,
 		CSS_TOKEN_NAME,

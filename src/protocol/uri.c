@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.125 2004/04/04 07:40:30 jonas Exp $ */
+/* $Id: uri.c,v 1.126 2004/04/04 16:02:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1016,13 +1016,17 @@ get_uri(unsigned char *string, int length)
 {
 	struct uri_cache_entry *entry;
 
+	assert(string);
+
+	if (length == -1) length = strlen(string);
+	if (!length) return NULL;
+
 	if (!is_object_used(&uri_cache)) {
 		uri_cache.map = init_hash(hash_size(3), strhash);
 		if (!uri_cache.map) return NULL;
 		object_nolock(&uri_cache, "uri_cache");
 	}
 
-	if (length == -1) length = strlen(string);
 	entry = get_uri_cache_entry(string, length);
 	if (!entry) {
 		if (!is_object_used(&uri_cache))

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
+/* $Id: cache.c,v 1.3 2002/03/26 16:45:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,10 +167,12 @@ int add_fragment(struct cache_entry *e, int offset, unsigned char *data, int len
 		mem_free(nf);
 	}
 	if (trunc) truncate_entry(e, offset + length, 0);
-	/*{
+#if 0
+	{
 		foreach(f, e->frag) fprintf(stderr, "%d, %d, %d\n", f->offset, f->length, f->real_length);
 		debug("a-");
-	}*/
+	}
+#endif
 	return a;
 }
 
@@ -191,11 +193,13 @@ void defrag_entry(struct cache_entry *e)
 	n->offset = 0;
 	n->length = l;
 	n->real_length = l;
-	/*{
+#if 0
+	{
 		struct fragment *f;
 		foreach(f, e->frag) fprintf(stderr, "%d, %d, %d\n", f->offset, f->length, f->real_length);
 		debug("d1-");
-	}*/
+	}
+#endif
 	for (l = 0, h = f; h != g; h = h->next) {
 		memcpy(n->data + l, h->data, h->length);
 		l += h->length;
@@ -205,16 +209,23 @@ void defrag_entry(struct cache_entry *e)
 		mem_free(x);
 	}
 	add_to_list(e->frag, n);
-	/*{
+#if 0
+	{
 		foreach(f, e->frag) fprintf(stderr, "%d, %d, %d\n", f->offset, f->length, f->real_length);
 		debug("d-");
-	}*/
+	}
+#endif
 }
 
 void truncate_entry(struct cache_entry *e, int off, int final)
 {
 	struct fragment *f, *g;
-	if (e->length > off) e->length = off;
+	
+	if (e->length > off) {
+		e->length = off;
+		e->incomplete = 1;
+	}
+
 	foreach(f, e->frag) {
 		if (f->offset >= off) {
 			del:
@@ -337,7 +348,9 @@ void garbage_collection(int u)
 		f = f->next;
 		if (f->prev->tgc) delete_cache_entry(f->prev);
 	}
-	/*if (!no && cache_size > memory_cache_size * MEMORY_CACHE_GC_PERCENT) {
+#if 0
+	if (!no && cache_size > memory_cache_size * MEMORY_CACHE_GC_PERCENT) {
 		internal("garbage collection doesn't work, cache size %ld", cache_size);
-	}*/
+	}
+#endif
 }

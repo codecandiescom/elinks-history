@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.62 2004/10/22 09:56:41 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.63 2004/10/22 18:47:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -894,7 +894,7 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 	assert(interpreter && interpreter->vs && interpreter->vs->doc_view
 	       && interpreter->vs->doc_view->session
 	       && interpreter->vs->doc_view->session->tab);
-	if_assert_failed return;
+	if_assert_failed goto reported;
 
 	term = interpreter->vs->doc_view->session->tab->term;
 
@@ -903,7 +903,7 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 #endif
 
 	if (!get_opt_bool("ecmascript.error_reporting"))
-		return;
+		goto reported;
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("JavaScript Error"), ALIGN_CENTER,
@@ -928,6 +928,10 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 		,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
+
+reported:
+	/* Do not break the script execution. TODO: Configurable? --pasky */
+	JS_ClearPendingException(ctx);
 }
 
 static JSBool

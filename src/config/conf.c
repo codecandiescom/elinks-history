@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.38 2002/07/01 13:19:09 pasky Exp $ */
+/* $Id: conf.c,v 1.39 2002/07/01 14:44:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ enum parse_error {
 /* Parse a command. Returns error code. */
 
 enum parse_error
-parse_set(unsigned char **file, int *line)
+parse_set(struct list_head *opt_tree, unsigned char **file, int *line)
 {
 	unsigned char *optname;
 	unsigned char bin;
@@ -118,7 +118,7 @@ parse_set(unsigned char **file, int *line)
 		struct option *opt;
 		unsigned char *str;
 
-		opt = get_opt_rec(root_options, optname);
+		opt = get_opt_rec(opt_tree, optname);
 		mem_free(optname);
 
 		if (!opt || (opt->flags & OPT_HIDDEN))
@@ -140,7 +140,7 @@ parse_set(unsigned char **file, int *line)
 }
 
 enum parse_error
-parse_bind(unsigned char **file, int *line)
+parse_bind(struct list_head *opt_tree, unsigned char **file, int *line)
 {
 	unsigned char *keymap, *keystroke, *action;
 	enum parse_error error;
@@ -191,7 +191,7 @@ parse_bind(unsigned char **file, int *line)
 int load_config_file(unsigned char *, unsigned char *);
 
 enum parse_error
-parse_include(unsigned char **file, int *line)
+parse_include(struct list_head *opt_tree, unsigned char **file, int *line)
 {
 	unsigned char *fname;
 
@@ -205,7 +205,9 @@ parse_include(unsigned char **file, int *line)
 
 	/* XXX: We should try /etc/elinks/<file> when proceeding
 	 * /etc/elinks/<otherfile> ;). --pasky */
-	if (load_config_file(fname[0] == '/' ? "" : elinks_home, fname)) {
+	if (load_config_file(fname[0] == '/' ? (unsigned char *) ""
+					     : elinks_home,
+			     fname)) {
 		mem_free(fname);
 		return ERROR_VALUE;
 	}
@@ -217,7 +219,7 @@ parse_include(unsigned char **file, int *line)
 
 struct parse_handler {
 	unsigned char *command;
-	enum parse_error (*handler)(unsigned char **file, int *line);
+	enum parse_error (*handler)(struct list_head *opt_tree, unsigned char **file, int *line);
 };
 
 struct parse_handler parse_handlers[] = {
@@ -229,7 +231,8 @@ struct parse_handler parse_handlers[] = {
 
 
 void
-parse_config_file(unsigned char *name, unsigned char *file)
+parse_config_file(struct list_head *opt_tree, unsigned char *name,
+		  unsigned char *file)
 {
 	int line = 1;
 	int error_occured = 0;
@@ -259,7 +262,7 @@ parse_config_file(unsigned char *name, unsigned char *file)
 				if (!strncmp(file, handler->command, len)
 				    && WHITECHAR(file[len])) {
 					file += len;
-					error = handler->handler(&file, &line);
+					error = handler->handler(opt_tree, &file, &line);
 					goto test_end;
 				}
 			}
@@ -351,7 +354,7 @@ load_config_file(unsigned char *prefix, unsigned char *name)
 		}
 	}
 
-	parse_config_file(config_file, config_str);
+	parse_config_file(root_options, config_file, config_str);
 
 	mem_free(config_str);
 	mem_free(config_file);

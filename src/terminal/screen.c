@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.138 2004/04/30 13:33:50 zas Exp $ */
+/* $Id: screen.c,v 1.139 2004/04/30 13:53:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,39 +462,39 @@ static inline void
 add_char_color(struct string *screen, struct string *seq, unsigned char color)
 {
 	unsigned char color_buf[3];
-	unsigned char *color_pos;
-	int seq_pos, color_len;
+	unsigned char *color_pos = color_buf;
+	register int seq_pos = 0;
+       	int color_len = 1;
 
 	check_string_magic(seq);
-	for (seq_pos = 0; seq->source[seq_pos] != '%'; seq_pos++) ;
+	for (; seq->source[seq_pos] != '%'; seq_pos++) ;
 
 	add_bytes_to_string(screen, seq->source, seq_pos);
 
-	if (color > 9) {
-		int color2;
+	if (color < 10) {
+		color_pos += 2;
+	} else {
+		register int color2;
 
-		if (color > 199) {
-			color_buf[0] = '2';
-			color_pos = color_buf;
-			color_len = 3;
-			color -= 200;
-		} else if (color > 99) {
-			color_buf[0] = '1';
-			color_pos = color_buf;
-			color_len = 3;
-			color -= 100;
+		++color_len;
+		if (color < 100) {
+			color_pos += 1;
 		} else {
-			color_len = 2;
-			color_pos = color_buf + 1;
+			++color_len;
+
+			if (color < 200) {
+				color_buf[0] = '1';
+				color -= 100;
+			} else {
+				color_buf[0] = '2';
+				color -= 200;
+			}
 		}
 
 		color2 = (color % 10);
 		color /= 10;
 		color_buf[1] = '0' + color;
 		color = color2;
-	} else {
-		color_len = 1;
-		color_pos = color_buf + 2;
 	}
 
 	color_buf[2] = '0' + color;

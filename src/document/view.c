@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.71 2002/08/30 10:12:01 pasky Exp $ */
+/* $Id: view.c,v 1.72 2002/09/05 15:26:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,8 @@
 
 void init_formatted(struct f_data *scr)
 {
-	memset(((struct f_data **)scr) + 2, 0, sizeof(struct f_data) - 2 * sizeof(struct f_data *));
+	memset(((struct f_data **)scr) + 2, 0,
+	       sizeof(struct f_data) - 2 * sizeof(struct f_data *));
 	scr->data = DUMMY;
 	scr->nlinks = 0;
 	scr->links = DUMMY;
@@ -89,8 +90,11 @@ void clear_formatted(struct f_data *scr)
 	struct form_control *fc;
 
 	if (!scr) return;
-	if (!find_in_cache(scr->url, &ce) || !ce) internal("no cache entry for document");
-	else ce->refcount--;
+	if (!find_in_cache(scr->url, &ce) || !ce)
+		internal("no cache entry for document");
+	else
+		ce->refcount--;
+
 	if (scr->url) mem_free(scr->url);
 	if (scr->title) mem_free(scr->title);
 	if (scr->frame_desc) {
@@ -149,8 +153,15 @@ void detach_formatted(struct f_data_c *scr)
 		scr->f_data = NULL;
 	}
 	scr->vs = NULL;
-	if (scr->link_bg) mem_free(scr->link_bg), scr->link_bg = NULL, scr->link_bg_n = 0;
-	if (scr->name) mem_free(scr->name), scr->name = NULL;
+	if (scr->link_bg) {
+		mem_free(scr->link_bg);
+		scr->link_bg = NULL;
+		scr->link_bg_n = 0;
+	}
+	if (scr->name) {
+		mem_free(scr->name);
+		scr->name = NULL;
+	}
 }
 
 void set_link(struct f_data_c *f)
@@ -163,7 +174,10 @@ int find_tag(struct f_data *f, unsigned char *name)
 {
 	struct tag *tag;
 
-	foreach(tag, f->tags) if (!strcasecmp(tag->name, name)) return tag->y;
+	foreach(tag, f->tags)
+		if (!strcasecmp(tag->name, name))
+			return tag->y;
+
 	return -1;
 }
 
@@ -174,16 +188,23 @@ int comp_links(struct link *l1, struct link *l2)
 
 void sort_links(struct f_data *f)
 {
-	int i;
+	int i, size;
 
-	if (f->nlinks) qsort(f->links, f->nlinks, sizeof(struct link), (void *)comp_links);
-	if (!(f->lines1 = mem_alloc(f->y * sizeof(struct link *)))) return;
-	if (!(f->lines2 = mem_alloc(f->y * sizeof(struct link *)))) {
+	if (f->nlinks)
+		qsort(f->links, f->nlinks, sizeof(struct link),
+		      (void *) comp_links);
+
+	size = f->y * sizeof(struct link *);
+	f->lines1 = mem_alloc(size);
+	if (!f->lines1) return;
+	f->lines2 = mem_alloc(size);
+	if (!f->lines2) {
 		mem_free(f->lines1);
 		return;
 	}
-	memset(f->lines1, 0, f->y * sizeof(struct link *));
-	memset(f->lines2, 0, f->y * sizeof(struct link *));
+	memset(f->lines1, 0, size);
+	memset(f->lines2, 0, size);
+
 	for (i = 0; i < f->nlinks; i++) {
 		int p, q, j;
 		struct link *link = &f->links[i];
@@ -194,8 +215,9 @@ void sort_links(struct f_data *f)
 			if (link->title) mem_free(link->title);
 			if (link->where_img) mem_free(link->where_img);
 			if (link->pos) mem_free(link->pos);
-			memmove(link, link + 1, (f->nlinks - i - 1) * sizeof(struct link));
-			f->nlinks --;
+			memmove(link, link + 1,
+				(f->nlinks - i - 1) * sizeof(struct link));
+			f->nlinks--;
 			i--;
 			continue;
 		}
@@ -232,11 +254,12 @@ struct line_info *format_text(unsigned char *text, int width, int wrap)
 
 		if (*text == '\n') {
 			sk = 1;
-			put:
-			if (!(lnn & (ALLOC_GR-1))) {
-				struct line_info *_ln;
 
-				if (!(_ln = mem_realloc(ln, (lnn + ALLOC_GR) * sizeof(struct line_info)))) {
+put:
+			if (!(lnn & (ALLOC_GR - 1))) {
+				struct line_info *_ln = mem_realloc(ln, (lnn + ALLOC_GR) * sizeof(struct line_info));
+
+				if (!_ln) {
 					mem_free(ln);
 					return NULL;
 				}
@@ -259,12 +282,14 @@ struct line_info *format_text(unsigned char *text, int width, int wrap)
 		sk = 0;
 		goto put;
 	}
+
 	if (ps < 2) {
 		ps++;
 		sk = 0;
 		goto put;
 	}
 	ln[lnn - 1].st = ln[lnn - 1].en = NULL;
+
 	return ln;
 }
 
@@ -279,7 +304,8 @@ int _area_cursor(struct form_control *form, struct form_state *fs)
 		return 0;
 
 	for (y = 0; ln[y].st; y++) {
-		if (fs->value + fs->state >= ln[y].st && fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
+		if (fs->value + fs->state >= ln[y].st
+		    && fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
 			x = fs->value + fs->state - ln[y].st;
 			if (form->wrap && x == form->cols) x--;
 			if (x >= form->cols + fs->vpos) fs->vpos = x - form->cols + 1;
@@ -292,6 +318,7 @@ int _area_cursor(struct form_control *form, struct form_state *fs)
 			break;
 		}
 	}
+
 	mem_free(ln);
 	return q;
 }
@@ -336,8 +363,11 @@ void draw_link(struct terminal *t, struct f_data_c *scr, int l)
 				if (fs) q = _area_cursor(link->form, fs);
 				/*else internal("link has no form control");*/
 			}
-			if (!(scr->link_bg = mem_alloc(link->n * sizeof(struct link_bg)))) return;
+
+			scr->link_bg = mem_alloc(link->n * sizeof(struct link_bg));
+			if (!scr->link_bg) return;
 			scr->link_bg_n = link->n;
+
 			for (i = 0; i < link->n; i++) {
 				int x = link->pos[i].x + xp - vx;
 				int y = link->pos[i].y + yp - vy;
@@ -356,7 +386,10 @@ void draw_link(struct terminal *t, struct f_data_c *scr, int l)
 						int xx = x, yy = y;
 
 						if (link->type != L_FIELD && link->type != L_AREA) {
-							if (((co >> 8) & 0x38) != (link->sel_color & 0x38)) xx = xp + xw - 1, yy = yp + yw - 1;
+							if (((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
+							       xx = xp + xw - 1;
+							       yy = yp + yw - 1;
+							}
 						}
 						set_cursor(t, x, y, xx, yy);
 						set_window_ptr(get_root_window(t), x, y);
@@ -366,7 +399,8 @@ void draw_link(struct terminal *t, struct f_data_c *scr, int l)
 				} else scr->link_bg[i].x = scr->link_bg[i].y = scr->link_bg[i].c = -1;
 			}
 			break;
-		default: internal("bad link type");
+		default:
+			internal("bad link type");
 	}
 }
 
@@ -383,8 +417,10 @@ void clear_link(struct terminal *t, struct f_data_c *scr)
 {
 	if (scr->link_bg) {
 		int i;
+
 		for (i = scr->link_bg_n - 1; i >= 0; i--)
-			set_char(t, scr->link_bg[i].x, scr->link_bg[i].y, scr->link_bg[i].c);
+			set_char(t, scr->link_bg[i].x, scr->link_bg[i].y,
+				 scr->link_bg[i].c);
 		free_link(scr);
 	}
 }
@@ -397,25 +433,36 @@ int srch_cmp(unsigned char c1, unsigned char c2)
 	return casecmp(&c1, &c2, 1);
 }
 
-int get_range(struct f_data *f, int y, int yw, int l, struct search **s1, struct search **s2)
+int get_range(struct f_data *f, int y, int yw, int l,
+	      struct search **s1, struct search **s2)
 {
 	int i;
 
 	*s1 = *s2 = NULL;
 	for (i = y < 0 ? 0 : y; i < y + yw && i < f->y; i++) {
-		if (f->slines1[i] && (!*s1 || f->slines1[i] < *s1)) *s1 = f->slines1[i];
-		if (f->slines2[i] && (!*s2 || f->slines2[i] > *s2)) *s2 = f->slines2[i];
+		if (f->slines1[i] && (!*s1 || f->slines1[i] < *s1))
+			*s1 = f->slines1[i];
+		if (f->slines2[i] && (!*s2 || f->slines2[i] > *s2))
+			*s2 = f->slines2[i];
 	}
 	if (!*s1 || !*s2) return -1;
+
 	*s1 -= l;
-	if (*s1 < f->search) *s1 = f->search;
-	if (*s2 + l > f->search + f->nsearch) *s2 = f->search + f->nsearch - l;
-	if (*s1 > *s2) *s1 = *s2 = NULL;
-	if (!*s1 || !*s2) return -1;
+
+	if (*s1 < f->search)
+		*s1 = f->search;
+	if (*s2 + l > f->search + f->nsearch)
+		*s2 = f->search + f->nsearch - l;
+	if (*s1 > *s2)
+		*s1 = *s2 = NULL;
+	if (!*s1 || !*s2)
+		return -1;
+
 	return 0;
 }
 
-int is_in_range(struct f_data *f, int y, int yw, unsigned char *txt, int *min, int *max)
+int is_in_range(struct f_data *f, int y, int yw, unsigned char *txt,
+		int *min, int *max)
 {
 	int found = 0;
 	int l = strlen(txt);
@@ -427,10 +474,13 @@ int is_in_range(struct f_data *f, int y, int yw, unsigned char *txt, int *min, i
 		int i;
 
 		if (srch_cmp(s1->c, txt[0])) {
-			unable_to_handle_kernel_paging_request___oops:
+
+unable_to_handle_kernel_paging_request___oops:
 			continue;
 		}
-		for (i = 1; i < l; i++) if (srch_cmp(s1[i].c, txt[i])) goto unable_to_handle_kernel_paging_request___oops;
+		for (i = 1; i < l; i++)
+			if (srch_cmp(s1[i].c, txt[i]))
+				goto unable_to_handle_kernel_paging_request___oops;
 		if (s1[i].y < y || s1[i].y >= y + yw) continue;
 		if (!min && !max) return 1;
 		found = 1;
@@ -456,18 +506,27 @@ void get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 	struct point *points = DUMMY;
 	int len = 0;
 
-	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0]) return;
+	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
+		return;
 	get_search_data(scr->f_data);
 	l = strlen(*scr->search_word);
 	c = (*scr->search_word)[0];
-	if (get_range(scr->f_data, scr->vs->view_pos, scr->yw, l, &s1, &s2)) goto ret;
+	if (get_range(scr->f_data, scr->vs->view_pos, scr->yw, l, &s1, &s2))
+		goto ret;
+
 	for (; s1 <= s2; s1++) {
 		int i, j;
 
 		if (srch_cmp(s1->c, c)) {
-			c:continue;
+
+c:
+			continue;
 		}
-		for (i = 1; i < l; i++) if (srch_cmp(s1[i].c, (*scr->search_word)[i])) goto c;
+
+		for (i = 1; i < l; i++)
+			if (srch_cmp(s1[i].c, (*scr->search_word)[i]))
+				goto c;
+
 		for (i = 0; i < l; i++) for (j = 0; j < s1[i].n; j++) {
 			int x = s1[i].x + j + xp - vx;
 			int y = s1[i].y + yp - vy;
@@ -478,9 +537,9 @@ void get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 				co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
 				set_color(t, x, y, co);*/
 				if (!(len & ALLOC_GR)) {
-					struct point *npt;
+					struct point *npt = mem_realloc(points, sizeof(struct point) * (len + ALLOC_GR));
 
-					if (!(npt = mem_realloc(points, sizeof(struct point) * (len + ALLOC_GR)))) continue;
+					if (!npt) continue;
 					points = npt;
 				}
 				points[len].x = s1[i].x + j;
@@ -488,7 +547,8 @@ void get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 			}
 		}
 	}
-	ret:
+
+ret:
 	*pt = points;
 	*pl = len;
 }
@@ -502,10 +562,12 @@ void draw_searched(struct terminal *t, struct f_data_c *scr)
 	struct point *pt;
 	int len, i;
 
-	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0]) return;
+	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
+		return;
 	get_searched(scr, &pt, &len);
 	for (i = 0; i < len; i++) {
-		int x = pt[i].x + xp - vx, y = pt[i].y + yp - vy;
+		int x = pt[i].x + xp - vx;
+		int y = pt[i].y + yp - vy;
 		unsigned co = get_char(t, x, y);
 
 		co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
@@ -526,7 +588,8 @@ struct link *get_first_link(struct f_data_c *f)
 	struct link *l = f->f_data->links + f->f_data->nlinks;
 
 	for (i = f->vs->view_pos; i < f->vs->view_pos + f->yw; i++)
-		if (i >= 0 && i < f->f_data->y && f->f_data->lines1[i] && f->f_data->lines1[i] < l)
+		if (i >= 0 && i < f->f_data->y && f->f_data->lines1[i]
+		    && f->f_data->lines1[i] < l)
 			l = f->f_data->lines1[i];
 	if (l == f->f_data->links + f->f_data->nlinks) l = NULL;
 	return l;
@@ -547,7 +610,11 @@ void fixup_select_state(struct form_control *fc, struct form_state *fs)
 {
 	int i;
 
-	if (fs->state >= 0 && fs->state < fc->nvalues && !strcmp(fc->values[fs->state], fs->value)) return;
+	if (fs->state >= 0
+	    && fs->state < fc->nvalues
+	    && !strcmp(fc->values[fs->state], fs->value))
+		return;
+
 	for (i = 0; i < fc->nvalues; i++) {
 		if (!strcmp(fc->values[i], fs->value)) {
 			fs->state = i;
@@ -556,13 +623,16 @@ void fixup_select_state(struct form_control *fc, struct form_state *fs)
 	}
 	fs->state = 0;
 	if (fs->value) mem_free(fs->value);
-	if (fc->nvalues) fs->value = stracpy(fc->values[0]);
-	else fs->value = stracpy("");
+
+	fs->value = stracpy(fc->nvalues ? fc->values[0] : (unsigned char *) "");
 }
 
 void init_ctrl(struct form_control *form, struct form_state *fs)
 {
-	if (fs->value) mem_free(fs->value), fs->value = NULL;
+	if (fs->value) {
+		mem_free(fs->value);
+		fs->value = NULL;
+	}
 	switch (form->type) {
 		case FC_TEXT:
 		case FC_PASSWORD:
@@ -602,18 +672,18 @@ struct form_state *find_form_state(struct f_data_c *f, struct form_control *form
 
 	if (n < vs->form_info_len) fs = &vs->form_info[n];
 	else {
-		if (!(fs = mem_realloc(vs->form_info, (n + 1) * sizeof(struct form_state))))
-			return NULL;
+		fs = mem_realloc(vs->form_info, (n + 1) * sizeof(struct form_state));
+		if (!fs) return NULL;
 		vs->form_info = fs;
 		memset(fs + vs->form_info_len, 0, (n + 1 - vs->form_info_len) * sizeof(struct form_state));
 		vs->form_info_len = n + 1;
 		fs = &vs->form_info[n];
 	}
-	if (fs->form_num == form->form_num &&
-	    fs->ctrl_num == form->ctrl_num &&
-	    fs->g_ctrl_num == form->g_ctrl_num &&
-	    fs->position == form->position &&
-	    fs->type == form->type)
+	if (fs->form_num == form->form_num
+	    && fs->ctrl_num == form->ctrl_num
+	    && fs->g_ctrl_num == form->g_ctrl_num
+	    && fs->position == form->position
+	    && fs->type == form->type)
 		return fs;
 	if (fs->value) mem_free(fs->value);
 	memset(fs, 0, sizeof(struct form_state));
@@ -643,7 +713,10 @@ void draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 		internal("link %d has no form", (int)(l - f->f_data->links));
 		return;
 	}
-	if (!(fs = find_form_state(f, form))) return;
+
+	fs = find_form_state(f, form);
+	if (!fs) return;
+
 	switch (form->type) {
 		unsigned char *s;
 		struct line_info *ln, *lnx;
@@ -652,10 +725,13 @@ void draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 		case FC_TEXT:
 		case FC_PASSWORD:
 		case FC_FILE:
-			if (fs->state >= fs->vpos + form->size) fs->vpos = fs->state - form->size + 1;
-			if (fs->state < fs->vpos) fs->vpos = fs->state;
+			if (fs->state >= fs->vpos + form->size)
+				fs->vpos = fs->state - form->size + 1;
+			if (fs->state < fs->vpos)
+				fs->vpos = fs->state;
 			if (!l->n) break;
-			x = l->pos[0].x + xp - vx; y = l->pos[0].y + yp - vy;
+			x = l->pos[0].x + xp - vx;
+			y = l->pos[0].y + yp - vy;
 			for (i = 0; i < form->size; i++, x++)
 				if (x >= xp && y >= yp && x < xp+xw && y < yp+yw) {
 					if (fs->value && i >= -fs->vpos
@@ -668,7 +744,8 @@ void draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			if (!l->n) break;
 			x = l->pos[0].x + xp - vx; y = l->pos[0].y + yp - vy;
 			_area_cursor(form, fs);
-			if (!(lnx = format_text(fs->value, form->cols, form->wrap))) break;
+			lnx = format_text(fs->value, form->cols, form->wrap);
+			if (!lnx) break;
 			ln = lnx;
 			sl = fs->vypos;
 			while (ln->st && sl) sl--, ln++;
@@ -728,11 +805,13 @@ void draw_forms(struct terminal *t, struct f_data_c *f)
 	struct link *l2 = get_last_link(f);
 
 	if (!l1 || !l2) {
-		if (l1 || l2) internal("get_first_link == %p, get_last_link == %p", l1, l2);
+		if (l1 || l2)
+			internal("get_first_link == %p, get_last_link == %p", l1, l2);
 		return;
 	}
 	do {
-		if (l1->type != L_LINK) draw_form_entry(t, f, l1);
+		if (l1->type != L_LINK)
+			draw_form_entry(t, f, l1);
 	} while (l1++ < l2);
 }
 
@@ -789,17 +868,23 @@ void draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 	}
 	check_vs(scr);
 	vs = scr->vs;
-	if (vs->goto_position && (vy = find_tag(scr->f_data, vs->goto_position)) != -1) {
-		if (vy > scr->f_data->y) vy = scr->f_data->y - 1;
-		if (vy < 0) vy = 0;
-		vs->view_pos = vy;
-		set_link(scr);
-		mem_free(vs->goto_position);
-		vs->goto_position = NULL;
+	if (vs->goto_position) {
+		vy = find_tag(scr->f_data, vs->goto_position);
+	       	if (vy != -1) {
+			if (vy > scr->f_data->y) vy = scr->f_data->y - 1;
+			if (vy < 0) vy = 0;
+			vs->view_pos = vy;
+			set_link(scr);
+			mem_free(vs->goto_position);
+			vs->goto_position = NULL;
+		}
 	}
 	vx = vs->view_posx;
 	vy = vs->view_pos;
-	if (scr->xl == vx && scr->yl == vy && scr->xl != -1 && (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])) {
+	if (scr->xl == vx
+	    && scr->yl == vy
+	    && scr->xl != -1
+	    && (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])) {
 		clear_link(t, scr);
 		draw_forms(t, scr);
 		if (active) draw_current_link(t, scr);
@@ -810,6 +895,7 @@ void draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 	scr->yl = vy;
 	fill_area(t, xp, yp, xw, yw, scr->f_data->y ? scr->f_data->bg : ' ');
 	if (!scr->f_data->y) return;
+
 	while (vs->view_pos >= scr->f_data->y) vs->view_pos -= yw;
 	if (vs->view_pos < 0) vs->view_pos = 0;
 	if (vy != vs->view_pos) vy = vs->view_pos, check_vs(scr);
@@ -844,8 +930,10 @@ void draw_frames(struct session *ses)
 	do {
 		more = 0;
 		foreach(f, ses->scrn_frames) {
-			if (f->depth == d) draw_doc(ses->term, f, f == cf);
-			else if (f->depth > d) more = 1;
+			if (f->depth == d)
+				draw_doc(ses->term, f, f == cf);
+			else if (f->depth > d)
+				more = 1;
 		}
 		d++;
 	} while (more);
@@ -872,7 +960,8 @@ int in_viewx(struct f_data_c *f, struct link *l)
 	int i;
 
 	for (i = 0; i < l->n; i++) {
-		if (l->pos[i].x >= f->vs->view_posx && l->pos[i].x < f->vs->view_posx + f->xw)
+		if (l->pos[i].x >= f->vs->view_posx
+		    && l->pos[i].x < f->vs->view_posx + f->xw)
 			return 1;
 	}
 	return 0;
@@ -883,7 +972,8 @@ int in_viewy(struct f_data_c *f, struct link *l)
 	int i;
 
 	for (i = 0; i < l->n; i++) {
-		if (l->pos[i].y >= f->vs->view_pos && l->pos[i].y < f->vs->view_pos + f->yw)
+		if (l->pos[i].y >= f->vs->view_pos
+		    && l->pos[i].y < f->vs->view_pos + f->yw)
 		return 1;
 	}
 	return 0;
@@ -896,7 +986,8 @@ int in_view(struct f_data_c *f, struct link *l)
 
 int c_in_view(struct f_data_c *f)
 {
-	return f->vs->current_link != -1 && in_view(f, &f->f_data->links[f->vs->current_link]);
+	return (f->vs->current_link != -1
+		&& in_view(f, &f->f_data->links[f->vs->current_link]));
 }
 
 int next_in_view(struct f_data_c *f, int p, int d,
@@ -935,7 +1026,8 @@ void set_pos_x(struct f_data_c *f, struct link *l)
 	int xl = MAXINT;
 
 	for (i = 0; i < l->n; i++) {
-		if (l->pos[i].y >= f->vs->view_pos && l->pos[i].y < f->vs->view_pos + f->yw) {
+		if (l->pos[i].y >= f->vs->view_pos
+		    && l->pos[i].y < f->vs->view_pos + f->yw) {
 			if (l->pos[i].x >= xm) xm = l->pos[i].x + 1;
 			if (l->pos[i].x < xl) xl = l->pos[i].x;
 		}
@@ -956,7 +1048,8 @@ void set_pos_y(struct f_data_c *f, struct link *l)
 		if (l->pos[i].y >= ym) ym = l->pos[i].y + 1;
 		if (l->pos[i].y < yl) yl = l->pos[i].y;
 	}
-	if ((f->vs->view_pos = (ym + yl) / 2 - f->f_data->opt.yw / 2) > f->f_data->y - f->f_data->opt.yw)
+	f->vs->view_pos = (ym + yl) / 2 - f->f_data->opt.yw / 2;
+	if (f->vs->view_pos > f->f_data->y - f->f_data->opt.yw)
 		f->vs->view_pos = f->f_data->y - f->f_data->opt.yw;
 	if (f->vs->view_pos < 0) f->vs->view_pos = 0;
 }
@@ -978,9 +1071,14 @@ void find_link(struct f_data_c *f, int p, int s)
 	if (y < 0 || y >= f->f_data->y) goto nolink;
 	link = NULL;
 	do {
-		if (line[y] && (!link || (p > 0 ? line[y] < link : line[y] > link))) link = line[y];
+		if (line[y]
+		    && (!link || (p > 0 ? line[y] < link : line[y] > link)))
+			link = line[y];
 		y += p;
-	} while (!(y < 0 || y < f->vs->view_pos || y >= f->vs->view_pos + f->f_data->opt.yw || y >= f->f_data->y));
+	} while (!(y < 0
+		   || y < f->vs->view_pos
+		   || y >= f->vs->view_pos + f->f_data->opt.yw
+		   || y >= f->f_data->y));
 	if (!link) goto nolink;
 	l = link - f->f_data->links;
 	if (s == 0) {
@@ -990,13 +1088,15 @@ void find_link(struct f_data_c *f, int p, int s)
 	f->vs->current_link = l;
 	set_pos_x(f, link);
 	return;
-	nolink:
+
+nolink:
 	f->vs->current_link = -1;
 }
 
 void page_down(struct session *ses, struct f_data_c *f, int a)
 {
-	if (f->vs->view_pos + f->f_data->opt.yw < f->f_data->y) f->vs->view_pos += f->f_data->opt.yw, find_link(f, 1, a);
+	if (f->vs->view_pos + f->f_data->opt.yw < f->f_data->y)
+		f->vs->view_pos += f->f_data->opt.yw, find_link(f, 1, a);
 	else find_link(f, -1, a);
 }
 
@@ -1016,7 +1116,8 @@ static void down(struct session *ses, struct f_data_c *fd, int a)
 {
 	int current_link = fd->vs->current_link;
 
-	if (get_opt_int("document.browse.links.wraparound") && current_link >= fd->f_data->nlinks - 1) {
+	if (get_opt_int("document.browse.links.wraparound")
+	    && current_link >= fd->f_data->nlinks - 1) {
 		/* FIXME: This is not working :/. */
 		jump_to_link_number(ses, fd, 0);
 	}
@@ -1036,7 +1137,8 @@ static void up(struct session *ses, struct f_data_c *fd, int a)
 {
 	int current_link = fd->vs->current_link;
 
-	if (get_opt_int("document.browse.links.wraparound") && current_link == 0) {
+	if (get_opt_int("document.browse.links.wraparound")
+	    && current_link == 0) {
 		/* FIXME: This is not working :/. */
 		jump_to_link_number(ses, fd, fd->f_data->nlinks - 1);
 	}
@@ -1057,9 +1159,11 @@ static void up(struct session *ses, struct f_data_c *fd, int a)
 
 void scroll(struct session *ses, struct f_data_c *f, int a)
 {
-	if (f->vs->view_pos + f->f_data->opt.yw >= f->f_data->y && a > 0) return;
+	if (f->vs->view_pos + f->f_data->opt.yw >= f->f_data->y && a > 0)
+		return;
 	f->vs->view_pos += a;
-	if (f->vs->view_pos > f->f_data->y - f->f_data->opt.yw && a > 0) f->vs->view_pos = f->f_data->y - f->f_data->opt.yw;
+	if (f->vs->view_pos > f->f_data->y - f->f_data->opt.yw && a > 0)
+		f->vs->view_pos = f->f_data->y - f->f_data->opt.yw;
 	if (f->vs->view_pos < 0) f->vs->view_pos = 0;
 	if (c_in_view(f)) return;
 	find_link(f, a < 0 ? -1 : 1, 0);
@@ -1068,7 +1172,8 @@ void scroll(struct session *ses, struct f_data_c *f, int a)
 void hscroll(struct session *ses, struct f_data_c *f, int a)
 {
 	f->vs->view_posx += a;
-	if (f->vs->view_posx >= f->f_data->x) f->vs->view_posx = f->f_data->x - 1;
+	if (f->vs->view_posx >= f->f_data->x)
+		f->vs->view_posx = f->f_data->x - 1;
 	if (f->vs->view_posx < 0) f->vs->view_posx = 0;
 	if (c_in_view(f)) return;
 	find_link(f, 1, 0);
@@ -1084,7 +1189,8 @@ void home(struct session *ses, struct f_data_c *f, int a)
 void x_end(struct session *ses, struct f_data_c *f, int a)
 {
 	f->vs->view_posx = 0;
-	if (f->vs->view_pos < f->f_data->y - f->f_data->opt.yw) f->vs->view_pos = f->f_data->y - f->f_data->opt.yw;
+	if (f->vs->view_pos < f->f_data->y - f->f_data->opt.yw)
+		f->vs->view_pos = f->f_data->y - f->f_data->opt.yw;
 	if (f->vs->view_pos < 0) f->vs->view_pos = 0;
 	find_link(f, -1, 0);
 }
@@ -1142,7 +1248,8 @@ unsigned char *encode_textarea(unsigned char *t)
 	return o;
 }
 
-void get_succesful_controls(struct f_data_c *f, struct form_control *fc, struct list_head *subm)
+void get_succesful_controls(struct f_data_c *f, struct form_control *fc,
+			    struct list_head *subm)
 {
 	int ch;
 	struct form_control *form;
@@ -1155,17 +1262,23 @@ void get_succesful_controls(struct f_data_c *f, struct form_control *fc, struct 
 			 form->type != FC_RESET) || form == fc)
 		    && form->name && form->name[0]) {
 			struct submitted_value *sub;
-			struct form_state *fs;
 			int fi = 0;
+			struct form_state *fs = find_form_state(f, form);
 
-			if (!(fs = find_form_state(f, form))) continue;
-			if ((form->type == FC_CHECKBOX || form->type == FC_RADIO) && !fs->state) continue;
-			if (form->type == FC_SELECT && !form->nvalues) continue;
+			if (!fs) continue;
+			if ((form->type == FC_CHECKBOX
+			     || form->type == FC_RADIO)
+			    && !fs->state)
+				continue;
+			if (form->type == FC_SELECT && !form->nvalues)
+				continue;
 fi_rep:
-			if (!(sub = mem_alloc(sizeof(struct submitted_value)))) continue;
+			sub = mem_alloc(sizeof(struct submitted_value));
+			if (!sub) continue;
 			memset(sub, 0, sizeof(struct submitted_value));
 			sub->type = form->type;
 			sub->name = stracpy(form->name);
+
 			switch (form->type) {
 				case FC_TEXT:
 				case FC_PASSWORD:
@@ -1246,6 +1359,7 @@ void encode_controls(struct list_head *l, unsigned char **data, int *len,
 	foreach(sv, *l) {
 		unsigned char *p = sv->value;
 		struct document_options o;
+
 		memset(&o, 0, sizeof(o));
 		o.plain = 1;
 		d_opt = &o;
@@ -1271,7 +1385,8 @@ void encode_controls(struct list_head *l, unsigned char **data, int *len,
 
 #define BL	32
 
-void encode_multipart(struct session *ses, struct list_head *l, unsigned char **data, int *len,
+void encode_multipart(struct session *ses, struct list_head *l,
+		      unsigned char **data, int *len,
 		      unsigned char *bound, int cp_from, int cp_to)
 {
 	int *nbp, *bound_ptrs = DUMMY;
@@ -1287,14 +1402,17 @@ void encode_multipart(struct session *ses, struct list_head *l, unsigned char **
 	*len = 0;
 	*data = init_str();
 	foreach(sv, *l) {
-		bnd:
+
+bnd:
 		add_to_str(data, len, "--");
 		if (!(nbound_ptrs & (ALLOC_GR-1))) {
-			if (!(nbp = mem_realloc(bound_ptrs, (nbound_ptrs + ALLOC_GR) * sizeof(int)))) goto xx;
+			nbp = mem_realloc(bound_ptrs, (nbound_ptrs + ALLOC_GR) * sizeof(int));
+			if (!nbp) goto xx;
 			bound_ptrs = nbp;
 		}
 		bound_ptrs[nbound_ptrs++] = *len;
-		xx:
+
+xx:
 		add_bytes_to_str(data, len, bound, BL);
 		if (flg) break;
 		add_to_str(data, len, "\r\nContent-Disposition: form-data; name=\"");
@@ -1335,10 +1453,13 @@ void encode_multipart(struct session *ses, struct list_head *l, unsigned char **
 				goto error;
 			}*/
 			if (*sv->value) {
-				if (get_opt_int_tree(cmdline_options, "anonymous")) goto error;
-				if ((fh = open(sv->value, O_RDONLY)) == -1) goto error;
+				if (get_opt_int_tree(cmdline_options, "anonymous"))
+					goto error;
+				fh = open(sv->value, O_RDONLY);
+				if (fh == -1) goto error;
 				do {
-					if ((rd = read(fh, buffer, F_BUFLEN)) == -1) goto error;
+					rd = read(fh, buffer, F_BUFLEN);
+					if (rd == -1) goto error;
 					if (rd) add_bytes_to_str(data, len, buffer, rd);
 				} while (rd);
 				close(fh);
@@ -1353,19 +1474,22 @@ void encode_multipart(struct session *ses, struct list_head *l, unsigned char **
 	}
 	add_to_str(data, len, "--\r\n");
 	memset(bound, '0', BL);
-	again:
+
+again:
 	for (i = 0; i <= *len - BL; i++) {
 		for (j = 0; j < BL; j++) if ((*data)[i + j] != bound[j]) goto nb;
 		for (j = BL - 1; j >= 0; j--)
 			if (bound[j]++ >= '9') bound[j] = '0';
 			else goto again;
 		internal("Counld not assing boundary");
-		nb:;
+
+nb:;
 	}
 	for (i = 0; i < nbound_ptrs; i++) memcpy(*data + bound_ptrs[i], bound, BL);
 	mem_free(bound_ptrs);
 	return;
-	error:
+
+error:
 	mem_free(bound_ptrs);
 	mem_free(*data);
 	*data = NULL;
@@ -1383,13 +1507,14 @@ void reset_form(struct f_data_c *f, int form_num)
 	struct form_control *form;
 
 	foreach(form, f->f_data->forms) if (form->form_num == form_num) {
-		struct form_state *fs;
+		struct form_state *fs = find_form_state(f, form);
 
-		if ((fs = find_form_state(f, form))) init_ctrl(form, fs);
+		if (fs) init_ctrl(form, fs);
 	}
 }
 
-unsigned char *get_form_url(struct session *ses, struct f_data_c *f, struct form_control *form)
+unsigned char *get_form_url(struct session *ses, struct f_data_c *f,
+			    struct form_control *form)
 {
 	struct list_head *opt_tree = (struct list_head *) ses->term->spec->ptr;
 	struct list_head submit;
@@ -1414,20 +1539,22 @@ unsigned char *get_form_url(struct session *ses, struct f_data_c *f, struct form
 		encode_multipart(ses, &submit, &data, &len, bound, cp_from, cp_to);
 	if (!data) goto ff;
 	if (form->method == FM_GET) {
-		if ((go = mem_alloc(strlen(form->action) + 1 + len + 1))) {
+		go = mem_alloc(strlen(form->action) + 1 + len + 1);
+		if (go) {
 			unsigned char *pos;
 
 			strcpy(go, form->action);
-			if ((pos = strchr(go, '#'))) {
+			pos = strchr(go, '#');
+			if (pos) {
 				unsigned char *poss = pos;
 
 				pos = stracpy(pos);
 				*poss = 0;
 			}
 			if (strchr(go, '?'))
-			  strcat(go, "&");
+				strcat(go, "&");
 			else
-			  strcat(go, "?");
+				strcat(go, "?");
 			strcat(go, data);
 			if (pos) strcat(go, pos), mem_free(pos);
 		}
@@ -1439,8 +1566,9 @@ unsigned char *get_form_url(struct session *ses, struct f_data_c *f, struct form
 		if (!go) goto x;
 		add_to_str(&go, &l, form->action);
 		add_chr_to_str(&go, &l, POST_CHAR);
-		if (form->method == FM_POST) add_to_str(&go, &l, "application/x-www-form-urlencoded\n");
-		else {
+		if (form->method == FM_POST) {
+			add_to_str(&go, &l, "application/x-www-form-urlencoded\n");
+		} else {
 			add_to_str(&go, &l, "multipart/form-data; boundary=");
 			add_bytes_to_str(&go, &l, bound, BL);
 			add_to_str(&go, &l, "\n");
@@ -1452,16 +1580,19 @@ unsigned char *get_form_url(struct session *ses, struct f_data_c *f, struct form
 			add_to_str(&go, &l, p);
 		}
 	}
-	x:
+
+x:
 	mem_free(data);
-	ff:
+
+ff:
 	free_succesful_controls(&submit);
 	return go;
 }
 
 #undef BL
 
-unsigned char *get_link_url(struct session *ses, struct f_data_c *f, struct link *l)
+unsigned char *get_link_url(struct session *ses, struct f_data_c *f,
+			    struct link *l)
 {
 	if (l->type == L_LINK) {
 		if (!l->where) return stracpy(l->where_img);
@@ -1619,8 +1750,10 @@ void selected_item(struct terminal *term, void *pitem, struct session *ses)
 	if (f->vs->current_link == -1) return;
 	l = &f->f_data->links[f->vs->current_link];
 	if (l->type != L_SELECT) return;
-	if ((fs = find_form_state(f, l->form))) {
-		struct form_control *form= l->form;
+
+	fs = find_form_state(f, l->form);
+	if (fs) {
+		struct form_control *form = l->form;
 
 		if (item >= 0 && item < form->nvalues) {
 			fs->state = item;
@@ -1629,6 +1762,7 @@ void selected_item(struct terminal *term, void *pitem, struct session *ses)
 		}
 		fixup_select_state(form, fs);
 	}
+
 	draw_doc(ses->term, f, 1);
 	print_screen_status(ses);
 	redraw_from_window(ses->win);
@@ -1647,7 +1781,8 @@ int get_current_state(struct session *ses)
 	if (f->vs->current_link == -1) return -1;
 	l = &f->f_data->links[f->vs->current_link];
 	if (l->type != L_SELECT) return -1;
-	if ((fs = find_form_state(f, l->form))) return fs->state;
+	fs = find_form_state(f, l->form);
+	if (fs) return fs->state;
 	return -1;
 }
 
@@ -1700,7 +1835,6 @@ void textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		}
 
 		taf = fdopen(h, "w");
-
 		if (!taf) {
 			mem_free(fn); fn = NULL; fs = NULL;
 			return;
@@ -1766,7 +1900,8 @@ void textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 }
 
 
-int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct event *ev, int rep)
+int field_op(struct session *ses, struct f_data_c *f, struct link *l,
+	     struct event *ev, int rep)
 {
 	struct form_control *form = l->form;
 	struct form_state *fs;
@@ -1777,12 +1912,23 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 		return 0;
 	}
 	if (l->form->ro == 2) return 0;
-	if (!(fs = find_form_state(f, form))) return 0;
+	fs = find_form_state(f, form);
+	if (!fs) return 0;
 	if (!fs->value) return 0;
 	if (ev->ev == EV_KBD) {
 		switch (kbd_action(KM_EDIT, ev, NULL)) {
-			case ACT_LEFT: fs->state = fs->state ? fs->state - 1 : 0; break;
-			case ACT_RIGHT: fs->state = fs->state < strlen(fs->value) ? fs->state + 1 : strlen(fs->value); break;
+			case ACT_LEFT:
+				fs->state = fs->state ? fs->state - 1 : 0;
+				break;
+			case ACT_RIGHT:
+				{
+					int fsv_len = strlen(fs->value);
+
+					fs->state = fs->state < fsv_len
+						    ? fs->state + 1
+						      : fsv_len;
+				}
+				break;
 			case ACT_HOME:
 				if (form->type == FC_TEXTAREA) {
 					struct line_info *ln;
@@ -1820,7 +1966,8 @@ x:
 								goto b;
 							}
 							fs->state -= ln[y].st - ln[y-1].st;
-							if (fs->value + fs->state > ln[y-1].en) fs->state = ln[y-1].en - fs->value;
+							if (fs->value + fs->state > ln[y-1].en)
+								fs->state = ln[y-1].en - fs->value;
 							goto xx;
 						}
 					}
@@ -1848,7 +1995,8 @@ rep2:
 								goto b;
 							}
 							fs->state += ln[y+1].st - ln[y].st;
-							if (fs->value + fs->state > ln[y+1].en) fs->state = ln[y+1].en - fs->value;
+							if (fs->value + fs->state > ln[y+1].en)
+								fs->state = ln[y+1].en - fs->value;
 							goto yy;
 						}
 					}
@@ -1876,7 +2024,7 @@ yy:
 							if (fs->state && fs->state < strlen(fs->value)
 							    && ln[y+1].st == ln[y].en)
 								fs->state--;
-							
+
 							goto yyyy;
 						}
 					}
@@ -1901,13 +2049,17 @@ yyyy:
 				char *clipboard = get_clipboard_text();
 
 				if (!clipboard) break;
-				if (!form->ro && strlen(clipboard) <= form->maxlength) {
-					unsigned char *v;
+				if (!form->ro) {
+					int cb_len = strlen(clipboard);
 
-					if ((v = mem_realloc(fs->value, strlen(clipboard) + 1))) {
-						fs->value = v;
-						memmove(v, clipboard, strlen(clipboard) + 1);
-						fs->state = strlen(fs->value);
+					if (cb_len <= form->maxlength) {
+						unsigned char *v = mem_realloc(fs->value, cb_len + 1);
+
+						if (v) {
+							fs->value = v;
+							memmove(v, clipboard, cb_len + 1);
+							fs->state = strlen(fs->value);
+						}
 					}
 				}
 				mem_free(clipboard);
@@ -1916,16 +2068,15 @@ yyyy:
 			case ACT_ENTER:
 				if (form->type == FC_TEXTAREA) {
 					if (!form->ro && strlen(fs->value) < form->maxlength) {
-						unsigned char *v;
+						unsigned char *v = mem_realloc(fs->value, strlen(fs->value) + 2);
 
-						if ((v = mem_realloc(fs->value, strlen(fs->value) + 2))) {
+						if (v) {
 							fs->value = v;
 							memmove(v + fs->state + 1, v + fs->state, strlen(v + fs->state) + 1);
 							v[fs->state++] = '\n';
 						}
 					}
-				}
-				else x = 0;
+				} else x = 0;
 				break;
 			case ACT_BACKSPACE:
 				if (!form->ro && fs->state)
@@ -1950,20 +2101,22 @@ yyyy:
 			default:
 				if (!ev->y && (ev->x >= 32 && ev->x < 256)) {
 					if (!form->ro && strlen(fs->value) < form->maxlength) {
-						unsigned char *v;
+						unsigned char *v = mem_realloc(fs->value, strlen(fs->value) + 2);
 
-						if ((v = mem_realloc(fs->value, strlen(fs->value) + 2))) {
+						if (v) {
 							fs->value = v;
 							memmove(v + fs->state + 1, v + fs->state, strlen(v + fs->state) + 1);
 							v[fs->state++] = ev->x;
 						}
 					}
 				} else {
-					b:
+
+b:
 					x = 0;
 				}
 		}
 	} else x = 0;
+
 	if (x) {
 		draw_form_entry(ses->term, f, l);
 		redraw_from_window(ses->win);
@@ -2041,7 +2194,8 @@ int find_next_link_in_search(struct f_data_c *f, int d)
 		d /= 2;
 		find_link(f, d, 0);
 		if (f->vs->current_link == -1) return 1;
-	} else nx:if (f->vs->current_link == -1 || !(next_in_view(f, f->vs->current_link + d, d, in_view, NULL))) {
+	} else nx:if (f->vs->current_link == -1
+		      || !(next_in_view(f, f->vs->current_link + d, d, in_view, NULL))) {
 		find_link(f, d, 0);
 		return 1;
 	}
@@ -2076,13 +2230,17 @@ void find_next(struct session *ses, struct f_data_c *f, int a)
 		}
 		ses->search_word = stracpy(ses->last_search_word);
 	}
+
 	get_search_data(f->f_data);
+
 	do {
 		if (is_in_range(f->f_data, p, f->yw, ses->search_word, &min, &max)) {
 			f->vs->view_pos = p;
 			if (max >= min) {
-				if (max > f->vs->view_posx + f->xw) f->vs->view_posx = max - f->xw;
-				if (min < f->vs->view_posx) f->vs->view_posx = min;
+				if (max > f->vs->view_posx + f->xw)
+					f->vs->view_posx = max - f->xw;
+				if (min < f->vs->view_posx)
+					f->vs->view_posx = min;
 			}
 			set_link(f);
 			find_next_link_in_search(f, ses->search_direction * 2);
@@ -2091,13 +2249,15 @@ void find_next(struct session *ses, struct f_data_c *f, int a)
 			redraw_from_window(ses->win);*/
 			return;
 		}
-		if ((p += ses->search_direction * f->yw) > f->f_data->y) p = 0;
+		p += ses->search_direction * f->yw;
+		if (p > f->f_data->y) p = 0;
 		if (p < 0) {
 			p = 0;
 			while (p < f->f_data->y) p += f->yw;
 			p -= f->yw;
 		}
 	} while ((c += f->yw) < f->f_data->y + f->yw);
+
 	/*draw_doc(ses->term, f, 1);
 	print_screen_status(ses);
 	redraw_from_window(ses->win);*/
@@ -2115,7 +2275,9 @@ void find_next_back(struct session *ses, struct f_data_c *f, int a)
 	ses->search_direction = - ses->search_direction;
 }
 
-void rep_ev(struct session *ses, struct f_data_c *fd, void (*f)(struct session *, struct f_data_c *, int), int a)
+void rep_ev(struct session *ses, struct f_data_c *fd,
+	    void (*f)(struct session *, struct f_data_c *, int),
+	    int a)
 {
 	int i = ses->kbdprefix.rep ? ses->kbdprefix.rep_num : 1;
 
@@ -2130,16 +2292,22 @@ struct link *choose_mouse_link(struct f_data_c *f, struct event *ev)
 	int i;
 
 	if (!f->f_data->nlinks) return NULL;
-	if (ev->x < 0 || ev->y < 0 || ev->x >= f->xw || ev->y >= f->yw) return NULL;
-	for (i = f->vs->view_pos; i < f->f_data->y && i < f->vs->view_pos + f->yw; i++) {
-		if (f->f_data->lines1[i] && f->f_data->lines1[i] < l1) l1 = f->f_data->lines1[i];
-		if (f->f_data->lines2[i] && f->f_data->lines2[i] > l2) l2 = f->f_data->lines2[i];
+	if (ev->x < 0 || ev->y < 0 || ev->x >= f->xw || ev->y >= f->yw)
+		return NULL;
+	for (i = f->vs->view_pos;
+	     i < f->f_data->y && i < f->vs->view_pos + f->yw;
+	     i++) {
+		if (f->f_data->lines1[i] && f->f_data->lines1[i] < l1)
+			l1 = f->f_data->lines1[i];
+		if (f->f_data->lines2[i] && f->f_data->lines2[i] > l2)
+			l2 = f->f_data->lines2[i];
 	}
 	for (l = l1; l <= l2; l++) {
 		int i;
 
 		for (i = 0; i < l->n; i++)
-			if (l->pos[i].x - f->vs->view_posx == ev->x && l->pos[i].y - f->vs->view_pos == ev->y)
+			if (l->pos[i].x - f->vs->view_posx == ev->x
+			    && l->pos[i].y - f->vs->view_pos == ev->y)
 				return l;
 	}
 	return NULL;
@@ -2161,7 +2329,9 @@ static void goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 
 	jump_to_link_number(ses, fd, n);
 
-	if (get_opt_int("document.browse.accesskey.auto_follow") && link->type != L_AREA && link->type != L_FIELD)
+	if (get_opt_int("document.browse.accesskey.auto_follow")
+	    && link->type != L_AREA
+	    && link->type != L_FIELD)
 		enter(ses, fd, 0);
 }
 
@@ -2244,7 +2414,8 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			return 1;
 		}
 
-		if (get_opt_int("document.browse.accesskey.priority") >= 2 && try_document_key(ses, fd, ev)) {
+		if (get_opt_int("document.browse.accesskey.priority") >= 2
+		    && try_document_key(ses, fd, ev)) {
 			/* The document ate the key! */
 			return 1;
 		}
@@ -2258,7 +2429,7 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 				char *current_link = print_current_link(ses);
 
 				if (current_link) {
-					set_clipboard_text( current_link );
+					set_clipboard_text(current_link);
 					mem_free(current_link);
 				}
 				break;
@@ -2317,7 +2488,11 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					nl = f_data->nlinks, lnl = 1;
 					while (nl) nl /= 10, lnl++;
 					if (lnl > 1)
-						input_field(ses->term, NULL, TEXT(T_GO_TO_LINK), TEXT(T_ENTER_LINK_NUMBER), TEXT(T_OK), TEXT(T_CANCEL), ses, NULL, lnl, d, 1, f_data->nlinks, check_number, (void (*)(void *, unsigned char *)) goto_link_number, NULL);
+						input_field(ses->term, NULL, TEXT(T_GO_TO_LINK),
+							    TEXT(T_ENTER_LINK_NUMBER), TEXT(T_OK),
+							    TEXT(T_CANCEL), ses, NULL, lnl, d, 1,
+							    f_data->nlinks, check_number,
+							    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
 				}
 #if 0
 				else if (ev->x == 'x') {
@@ -2445,7 +2620,9 @@ int send_to_frame(struct session *ses, struct event *ev)
 	return r;
 }
 
-void do_for_frame(struct session *ses, void (*f)(struct session *, struct f_data_c *, int), int a)
+void do_for_frame(struct session *ses,
+		  void (*f)(struct session *, struct f_data_c *, int),
+		  int a)
 {
 	struct f_data_c *fd = current_frame(ses);
 
@@ -2466,7 +2643,8 @@ void do_mouse_event(struct session *ses, struct event *ev)
 	o = &fd->f_data->opt;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
 	    ev->y >= o->yp && ev->y < o->yp + o->yw) goto ok;
-	r:
+
+r:
 	next_frame(ses, 1);
 	fdd = current_frame(ses);
 	o = &fdd->f_data->opt;
@@ -2478,7 +2656,8 @@ void do_mouse_event(struct session *ses, struct event *ev)
 	}
 	if (fdd != fd) goto r;
 	return;
-	ok:
+
+ok:
 	memcpy(&evv, ev, sizeof(struct event));
 	evv.x -= fd->xp;
 	evv.y -= fd->yp;
@@ -2522,15 +2701,17 @@ void send_event(struct session *ses, struct event *ev)
 				reload(ses, -1);
 				goto x;
 			case ACT_GOTO_URL:
-		  		quak:
+
+quak:
 				dialog_goto_url(ses,"");
 				goto x;
 			case ACT_GOTO_URL_CURRENT: {
-				unsigned char *s;
+				unsigned char *s, *postchar;
 
 				if (!have_location(ses)) goto quak;
 				s = stracpy(cur_loc(ses)->vs.url);
-				if (strchr(s, POST_CHAR)) *strchr(s, POST_CHAR) = 0;
+				postchar = strchr(s, POST_CHAR);
+				if (postchar) *postchar = 0;
 				dialog_goto_url(ses, s);
 				mem_free(s);
 				goto x;
@@ -2558,16 +2739,21 @@ void send_event(struct session *ses, struct event *ev)
 				menu_save_formatted(ses->term, (void *) 1, ses);
 				goto x;
 			case ACT_ADD_BOOKMARK:
-				if (!get_opt_int_tree(cmdline_options, "anonymous")) launch_bm_add_doc_dialog(ses->term, NULL, ses);
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+					launch_bm_add_doc_dialog(ses->term, NULL, ses);
 				goto x;
 			case ACT_BOOKMARK_MANAGER:
-				if (!get_opt_int_tree(cmdline_options, "anonymous")) menu_bookmark_manager(ses->term, NULL, ses);
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+					menu_bookmark_manager(ses->term, NULL, ses);
 				goto x;
 			case ACT_HISTORY_MANAGER:
-				if (!get_opt_int_tree(cmdline_options, "anonymous")) menu_history_manager(ses->term, NULL, ses);
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+					menu_history_manager(ses->term, NULL, ses);
 				goto x;
 			case ACT_COOKIES_LOAD:
-				if (!get_opt_int_tree(cmdline_options, "anonymous") && get_opt_int("cookies.save")) load_cookies();
+				if (!get_opt_int_tree(cmdline_options, "anonymous")
+				    && get_opt_int("cookies.save"))
+					load_cookies();
 				goto x;
 			case ACT_REALLY_QUIT:
 				exit_prog(ses->term, (void *)1, ses);
@@ -2583,7 +2769,8 @@ void send_event(struct session *ses, struct event *ev)
 #endif
 				break;
 			case ACT_QUIT:
-		  		quit:
+
+quit:
 				exit_prog(ses->term, (void *)(ev->x == KBD_CTRL_C), ses);
 				goto x;
 			case ACT_DOCUMENT_INFO:
@@ -2630,7 +2817,8 @@ void send_event(struct session *ses, struct event *ev)
 				}
 		}
 
-		if (get_opt_int("document.browse.accesskey.priority") <= 0 && current_frame(ses)
+		if (get_opt_int("document.browse.accesskey.priority") <= 0
+		    && current_frame(ses)
 		    && try_document_key(ses, current_frame(ses), ev)) {
 			/* The document ate the key! */
 			draw_doc(ses->term, current_frame(ses), 1);
@@ -2639,6 +2827,7 @@ void send_event(struct session *ses, struct event *ev)
 			return;
 		}
 	}
+
 	if (ev->ev == EV_MOUSE) {
 		if (ev->y == 0 && (ev->b & BM_ACT) == B_DOWN) {
 			struct window *m;
@@ -2650,8 +2839,10 @@ void send_event(struct session *ses, struct event *ev)
 		}
 		do_mouse_event(ses, ev);
 	}
+
 	return;
-	x:
+
+x:
 	ses->kbdprefix.rep = 0;
 }
 
@@ -2680,7 +2871,8 @@ void frm_download(struct session *ses, struct f_data_c *fd)
 	if (ses->dn_url) mem_free(ses->dn_url), ses->dn_url = NULL;
 	link = &fd->f_data->links[fd->vs->current_link];
 	if (link->type != L_LINK && link->type != L_BUTTON) return;
-	if ((ses->dn_url = get_link_url(ses, fd, link))) {
+	ses->dn_url = get_link_url(ses, fd, link);
+	if (ses->dn_url) {
 		if (!casecmp(ses->dn_url, "MAP@", 4)) {
 			mem_free(ses->dn_url);
 			ses->dn_url = NULL;
@@ -2701,7 +2893,8 @@ void send_download_image(struct terminal *term, void *xxx, struct session *ses)
 	if (!fd) return;
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if ((ses->dn_url = stracpy(fd->f_data->links[fd->vs->current_link].where_img))) {
+	ses->dn_url = stracpy(fd->f_data->links[fd->vs->current_link].where_img);
+	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
@@ -2717,7 +2910,8 @@ void send_download(struct terminal *term, void *xxx, struct session *ses)
 	if (!fd) return;
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if ((ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]))) {
+	ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]);
+	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
@@ -2735,7 +2929,8 @@ void send_open_in_new_xterm(struct terminal *term,
 	if (!fd) return;
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if ((ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]))) {
+	ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]);
+	if (ses->dn_url) {
 		unsigned char *enc_url = encode_url(ses->dn_url);
 
 		open_window(term, path_to_exe, enc_url);
@@ -2763,19 +2958,23 @@ void open_in_new_window(struct terminal *term,
 			struct session *ses)
 {
 	struct menu_item *mi;
-	struct open_in_new *oin, *oi;
+	struct open_in_new *oi;
+	struct open_in_new *oin = get_open_in_new(term->environment);
 
-	if (!(oin = get_open_in_new(term->environment))) return;
+	if (!oin) return;
 	if (!oin[1].text) {
 		xxx(term, oin[0].fn, ses);
 		mem_free(oin);
 		return;
 	}
-	if (!(mi = new_menu(FREE_LIST))) {
+
+	mi = new_menu(FREE_LIST);
+	if (!mi) {
 		mem_free(oin);
 		return;
 	}
-	for (oi = oin; oi->text; oi++) add_to_menu(&mi, oi->text, "", oi->hk, MENU_FUNC xxx, oi->fn, 0);
+	for (oi = oin; oi->text; oi++)
+		add_to_menu(&mi, oi->text, "", oi->hk, MENU_FUNC xxx, oi->fn, 0);
 	mem_free(oin);
 	do_menu(term, mi, ses);
 }
@@ -2795,11 +2994,11 @@ int can_open_in_new(struct terminal *term)
 
 void save_url(struct session *ses, unsigned char *url)
 {
-	struct f_data_c *fd = current_frame(ses);
-	unsigned char *u;
 	int l = 0;
+	struct f_data_c *fd = current_frame(ses);
+	unsigned char *u = translate_url(url, ses->term->cwd);
 
-	if (!(u = translate_url(url, ses->term->cwd))) {
+	if (!u) {
 		struct status stat = { NULL, NULL, NULL, NULL, S_BAD_URL, PRI_CANCEL, 0, NULL, NULL };
 
 		print_error_dialog(ses, &stat, TEXT(T_ERROR));
@@ -2820,7 +3019,8 @@ void send_image(struct terminal *term, void *xxx, struct session *ses)
 
 	if (!fd) return;
 	if (fd->vs->current_link == -1) return;
-	if (!(u = fd->f_data->links[fd->vs->current_link].where_img)) return;
+	u = fd->f_data->links[fd->vs->current_link].where_img;
+	if (!u) return;
 	goto_url(ses, u);
 }
 
@@ -2833,7 +3033,8 @@ void save_as(struct terminal *term, void *xxx, struct session *ses)
 	if (!have_location(ses)) return;
 	l = cur_loc(ses);
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if ((ses->dn_url = stracpy(l->vs.url))) {
+	ses->dn_url = stracpy(l->vs.url);
+	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &len, fd->f_data->url);
@@ -2844,10 +3045,11 @@ void save_as(struct terminal *term, void *xxx, struct session *ses)
 void save_formatted(struct session *ses, unsigned char *file)
 {
 	int h;
-	struct f_data_c *f;
+	struct f_data_c *f = current_frame(ses);
 
-	if (!(f = current_frame(ses)) || !f->f_data) return;
-	if ((h = create_download_file(ses->term, file, 0)) == -1) return;
+	if (!f || !f->f_data) return;
+	h = create_download_file(ses->term, file, 0);
+	if (h == -1) return;
 	if (dump_to_file(f->f_data, h)) {
 		msg_box(ses->term, NULL,
 			TEXT(T_SAVE_ERROR), AL_CENTER,
@@ -2860,9 +3062,9 @@ void save_formatted(struct session *ses, unsigned char *file)
 
 void menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct f_data_c *f;
+	struct f_data_c *f = current_frame(ses);
 
-	if (!(f = current_frame(ses)) || !f->f_data) return;
+	if (!f || !f->f_data) return;
 	query_file(ses, f->vs->url, save_formatted, NULL, !((int) xxx));
 }
 

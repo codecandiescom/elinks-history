@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.10 2003/04/29 08:34:11 zas Exp $ */
+/* $Id: mailcap.c,v 1.11 2003/04/30 23:55:58 zas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -637,13 +637,9 @@ mailcap_lookup(unsigned char *type, unsigned char *file)
 			if (item && item->value)
 				wildcard = check_entries(item->value, file);
 
-			if (entry && wildcard) {
-				/* Do the actual prioritizing */
-				if (wildcard->priority < entry->priority)
-					entry = wildcard;
-			} else {
+			if (wildcard &&
+			    (!entry || (wildcard->priority < entry->priority)))
 				entry = wildcard;
-			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.24 2003/06/06 20:22:31 jonas Exp $ */
+/* $Id: mailcap.c,v 1.25 2003/06/06 20:34:49 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -518,38 +518,29 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 	if (!entry || get_opt_bool("mime.mailcap.prioritize")) {
 		/* The type lookup has either failed or we need to check
 		 * the priorities so get the wild card handler */
-		unsigned char *ptr;
+		struct mailcap_entry *wildcard = NULL;
+		unsigned char *wildpos = strchr(type, '/');
 
-		/* Find length of basetype */
-		ptr = strchr(type, '/');
-		if (ptr) {
-			unsigned char *wildcardtype;
-			int wildcardlen;
+		if (wildpos) {
+			int wildlen = wildpos - type + 1; /* include '/' */
+			unsigned char *wildtype = memacpy(type, wildlen + 2);
 
-			wildcardlen = ptr - type + 1; /* including '/' */
+			if (!wildtype)
+				return NULL;
 
-			wildcardtype = mem_alloc(wildcardlen + 2);
-			if (!wildcardtype) return NULL;
-			memcpy(wildcardtype, type, wildcardlen);
+			wildtype[wildlen++] = '*';
+			wildtype[wildlen] = '\0';
 
-			wildcardtype[wildcardlen++] = '*';
-			wildcardtype[wildcardlen] = '\0';
+			item = get_hash_item(mailcap_map, wildtype, wildlen);
+			mem_free(wildtype);
 
-			item = get_hash_item(mailcap_map, wildcardtype, wildcardlen);
-
-			mem_free(wildcardtype);
-
-			if (item && item->value) {
-				struct mailcap_entry *wildcard;
-
+			if (item && item->value)
 				wildcard = check_entries(item->value);
-
-				if (wildcard &&
-			    	    (!entry ||
-				     (wildcard->priority < entry->priority)))
-					entry = wildcard;
-			}
 		}
+
+		/* Use @wildcard if its priority is better or @entry is NULL */
+		if (wildcard && (!entry || (wildcard->priority < entry->priority)))
+			entry = wildcard;
 	}
 
 	if (entry) {

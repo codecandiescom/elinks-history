@@ -1,5 +1,5 @@
 Mac latin 2
-"x-mac-ce", "mac-ce", "maclatin2", "10029"
+"x-mac-ce", "mac-ce", "maclatin2", "10029", "cp10029"
 #
 #    Name:     cp10029_MacLatin2 to Unicode table
 #    Unicode version: 2.0

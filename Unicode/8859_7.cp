@@ -1,5 +1,5 @@
 ISO 8859-7
-"ISO-8859-7", "8859-7", "iso-ir-126", "elot-928"
+"ISO-8859-7", "iso8859-7", "8859-7", "iso-ir-126", "elot-928"
 #
 #	Name:             ISO 8859-7:1987 to Unicode
 #	Unicode version:  3.0

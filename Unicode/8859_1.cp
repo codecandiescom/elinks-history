@@ -1,5 +1,5 @@
 ISO 8859-1
-"ISO-8859-1", "8859-1", "iso-ir-100", "latin1", "l1", "819"
+"ISO-8859-1", "iso8859-1", "8859-1", "iso-ir-100", "latin1", "l1", "il1", "819", "cp819"
 0x20	0x0020	#SPACE
 0x21	0x0021	#EXCLAMATION MARK
 0x22	0x0022	#QUOTATION MARK

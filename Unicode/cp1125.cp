@@ -1,5 +1,5 @@
 CP 1125 (Ukrainian)
-"x-cp866-u", "ruscii", "1125"
+"x-cp866-u", "ruscii", "1125", "cp1125"
 #
 # DOS Ukrainian (RUSCII, cp1125) to UNICODE translation table
 #

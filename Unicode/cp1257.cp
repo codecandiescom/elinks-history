@@ -1,5 +1,5 @@
 Window$ 1257
-"windows-1257", "1257"
+"windows-1257", "windows1257", "1257", "cp1257"
 #
 #    Name:     cp1257 to Unicode table
 #    Unicode version: 2.0

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.62 2003/05/08 01:16:02 pasky Exp $ */
+/* $Id: os_dep.c,v 1.63 2003/05/08 01:18:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1797,13 +1797,16 @@ void
 open_in_new_tab(struct terminal *term, unsigned char *exe_name,
                 unsigned char *param)
 {
-	int base = -1;
+	int base_session = -1;
 	unsigned char *url = NULL;
 
-	/* FIXME: This is way too ugly to survive in the codebase. --pasky */
+	/* FIXME: This param parsing is way too ugly (and could prepare nice
+	 * surprises to us in the future) to survive in the codebase. We should
+	 * call some common creating the commandline directly in the open_in_..
+	 * function. --pasky */
 
-	if (!strncmp(param, "-base-session ",13)) {
-		base = atoi(param + strlen("-base-session "));
+	if (!strncmp(param, "-base-session ", 13)) {
+		base_session = atoi(param + strlen("-base-session "));
 	} else {
 		url = param;
 	}
@@ -1822,7 +1825,7 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 			return;
 		}
 
-		info->base_session = base;
+		info->base_session = base_session;
 		if (url) info->url = decode_url(url);
 
 		ev.b = (long) info;

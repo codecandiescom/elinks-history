@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.438 2004/06/18 20:53:04 zas Exp $ */
+/* $Id: parser.c,v 1.439 2004/06/20 21:19:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -320,7 +320,7 @@ html_focusable(unsigned char *a)
 
 	accesskey = get_attr_val(a, "accesskey");
 	if (accesskey) {
-		accesskey[0] = upcase(accesskey[0]);
+		accesskey[0] = toupper(accesskey[0]);
 		format.accesskey = read_key(accesskey);
 		mem_free(accesskey);
 	}
@@ -751,7 +751,7 @@ html_li(unsigned char *a)
 			if (t == P_ROMAN) {
 				register unsigned char *x;
 
-				for (x = n; *x; x++) *x = upcase(*x);
+				for (x = n; *x; x++) *x = toupper(*x);
 			}
 
 		} else {

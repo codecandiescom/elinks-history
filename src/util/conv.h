@@ -1,17 +1,10 @@
-/* $Id: conv.h,v 1.33 2004/06/12 15:19:14 jonas Exp $ */
+/* $Id: conv.h,v 1.34 2004/06/20 21:19:30 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
 
 #include "util/string.h"
 #include "util/ttime.h" /* ttime type */
-
-static inline unsigned char
-upcase(unsigned char ch)
-{
-	if (ch >= 'a' && ch <= 'z') ch -= 0x20;
-	return ch;
-}
 
 static inline int
 is_safe_in_shell(unsigned char c)

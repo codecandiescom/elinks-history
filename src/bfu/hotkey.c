@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.21 2004/06/14 00:53:47 jonas Exp $ */
+/* $Id: hotkey.c,v 1.22 2004/06/20 21:19:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			 * used by another entry. We mark it to be able to highlight
 			 * this hotkey in menus. --Zas */
 			if (items[i].hotkey_pos) {
-				unsigned char *used = &used_hotkeys[upcase(text[items[i].hotkey_pos])];
+				unsigned char *used = &used_hotkeys[toupper(text[items[i].hotkey_pos])];
 
 				if (*used) {
 					int n = *used - 1;
@@ -147,15 +147,14 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 	if (key_pos < 0) key_pos = -key_pos;
 #endif
 
-	return (key_pos && text
-		&& (upcase(text[key_pos]) == key));
+	return (key_pos && text && (toupper(text[key_pos]) == key));
 }
 
 /* Returns true if a hotkey was found in the menu, and set menu->selected. */
 int
 check_hotkeys(struct menu *menu, unsigned char hotkey, struct terminal *term)
 {
-	unsigned char key = upcase(hotkey);
+	unsigned char key = toupper(hotkey);
 	int i = menu->selected;
 	int start;
 
@@ -186,7 +185,7 @@ check_hotkeys(struct menu *menu, unsigned char hotkey, struct terminal *term)
 int
 check_not_so_hot_keys(struct menu *menu, unsigned char key, struct terminal *term)
 {
-	unsigned char k = upcase(key);
+	unsigned char k = toupper(key);
 	int i = menu->selected;
 	int start;
 
@@ -209,7 +208,7 @@ check_not_so_hot_keys(struct menu *menu, unsigned char key, struct terminal *ter
 		if (mi_text_translate(menu->items[i])) text = _(text, term);
 		if (!*text) continue;
 
-		if (upcase(text[0]) == k) {
+		if (toupper(text[0]) == k) {
 			menu->selected = i;
 			return 1;
 		}

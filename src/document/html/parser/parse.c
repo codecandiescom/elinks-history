@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.42 2004/06/20 10:24:29 zas Exp $ */
+/* $Id: parse.c,v 1.43 2004/06/20 21:19:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,7 +146,7 @@ next_attr:
 	n = name;
 	name_start = e;
 
-	while (atchr(*n) && atchr(*e) && upcase(*e) == upcase(*n)) e++, n++;
+	while (atchr(*n) && atchr(*e) && toupper(*e) == toupper(*n)) e++, n++;
 	found = !*n && !atchr(*e);
 
 	if (found && (flags & HTML_ATTR_TEST)) return name_start;

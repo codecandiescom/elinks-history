@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.291 2004/05/25 17:35:47 jonas Exp $ */
+/* $Id: http.c,v 1.292 2004/06/20 21:19:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,8 +151,8 @@ get_http_code(unsigned char *head, int *code, struct http_version *version)
 	while (*head == ' ') head++;
 
 	/* HTTP/ */
-	if (upcase(*head) != 'H' || upcase(*++head) != 'T' ||
-	    upcase(*++head) != 'T' || upcase(*++head) != 'P'
+	if (toupper(*head) != 'H' || toupper(*++head) != 'T' ||
+	    toupper(*++head) != 'T' || toupper(*++head) != 'P'
 	    || *++head != '/')
 		return -1;
 

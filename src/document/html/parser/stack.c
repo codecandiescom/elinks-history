@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.11 2004/06/05 21:03:18 jonas Exp $ */
+/* $Id: stack.c,v 1.12 2004/06/20 21:19:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,8 +189,8 @@ kill_html_stack_until(int ls, ...)
 		    || (!strlcasecmp(e->name, e->namelen, "TABLE", 5)))
 			break;
 
-		if (e->namelen == 2 && upcase(e->name[0]) == 'T') {
-			unsigned char c = upcase(e->name[1]);
+		if (e->namelen == 2 && toupper(e->name[0]) == 'T') {
+			unsigned char c = toupper(e->name[1]);
 
 			if (c == 'D' || c == 'H' || c == 'R')
 				break;

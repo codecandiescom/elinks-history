@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.57 2004/06/12 15:19:14 jonas Exp $ */
+/* $Id: conv.c,v 1.58 2004/06/20 21:19:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,7 +340,7 @@ strtolx(unsigned char *str, unsigned char **end)
 	if (errno) return 0;
 	if (!*end) return num;
 
-	postfix = upcase(**end);
+	postfix = toupper(**end);
 	if (postfix == 'K') {
 		(*end)++;
 		if (num < -MAXINT / 1024) return -MAXINT;

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.181 2004/06/20 21:08:56 zas Exp $ */
+/* $Id: tables.c,v 1.182 2004/06/20 21:19:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -579,8 +579,8 @@ qwe:
 	/* /TR /TD /TH */
 	if (t_namelen == 3
 	    && t_name[0] == '/'
-	    && upcase(t_name[1]) == 'T') {
-	        unsigned char c = upcase(t_name[2]);
+	    && toupper(t_name[1]) == 'T') {
+	        unsigned char c = toupper(t_name[2]);
 
 		if (c == 'R' || c == 'D' || c == 'H') {
 	 		if (c_span)
@@ -598,10 +598,10 @@ qwe:
 	}
 
 	/* All following tags have T as first letter. */
-	if (upcase(t_name[0]) != 'T') goto see;
+	if (toupper(t_name[0]) != 'T') goto see;
 
 	/* TR */
-	if (t_namelen == 2 && upcase(t_name[1]) == 'R') {
+	if (t_namelen == 2 && toupper(t_name[1]) == 'R') {
 		if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
 
 		if (p) {
@@ -643,8 +643,8 @@ qwe:
 
 	/* TD TH */
 	if (t_namelen != 2
-	    || (upcase(t_name[1]) != 'D'
-		&& upcase(t_name[1]) != 'H'))
+	    || (toupper(t_name[1]) != 'D'
+		&& toupper(t_name[1]) != 'H'))
 		goto see;
 
 	if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
@@ -686,7 +686,7 @@ qwe:
 		l_fragment_id = NULL;
 	}
 
-	cell->is_header = (upcase(t_name[1]) == 'H');
+	cell->is_header = (toupper(t_name[1]) == 'H');
 	if (cell->is_header) cell->align = AL_CENTER;
 
 	if (group == 1) cell->group = 1;

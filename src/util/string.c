@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.98 2004/04/21 13:48:00 zas Exp $ */
+/* $Id: string.c,v 1.99 2004/06/20 21:19:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -225,7 +225,7 @@ int
 elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 		   const unsigned char *s2, size_t n2)
 {
-	strlcmp_device("strlcasecmp", s1, n1, s2, n2, upcase(s1[p]), upcase(s2[p]));
+	strlcmp_device("strlcasecmp", s1, n1, s2, n2, toupper(s1[p]), toupper(s2[p]));
 }
 
 

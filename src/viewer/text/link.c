@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.239 2004/06/20 21:02:40 jonas Exp $ */
+/* $Id: link.c,v 1.240 2004/06/20 21:19:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -778,7 +778,7 @@ try_document_key(struct session *ses, struct document_view *doc_view,
 	assert(ses && doc_view && doc_view->document && doc_view->vs && ev);
 	if_assert_failed return 0;
 
-	x = (ev->x < 0x100) ? upcase(ev->x) : ev->x;
+	x = (ev->x < 0x100) ? toupper(ev->x) : ev->x;
 	if (x >= 'A' && x <= 'Z' && ev->y != KBD_ALT) {
 		/* We accept those only in alt-combo. */
 		return 0;

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.150 2004/06/17 10:02:20 zas Exp $ */
+/* $Id: cookies.c,v 1.151 2004/06/20 21:19:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,7 +199,7 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 	}
 
 	for (i = server_len - domain_len, j = 0; domain[j]; i++, j++)
-		if (upcase(server[i]) != upcase(domain[j]))
+		if (toupper(server[i]) != toupper(domain[j]))
 			return 0;
 
 	/* Also test if domain is secure enough.. */

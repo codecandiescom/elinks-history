@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.1 2004/05/21 11:38:05 jonas Exp $ */
+/* $Id: header.c,v 1.2 2004/06/20 21:19:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@ parse_http_header(unsigned char *head, unsigned char *item,
 			unsigned char *itempos;
 
 			for (itempos = item; *itempos && *pos; itempos++, pos++)
-				if (upcase(*itempos) != upcase(*pos))
+				if (toupper(*itempos) != toupper(*pos))
 					goto cont;
 		}
 
@@ -114,11 +114,11 @@ get_http_header_param(unsigned char *e, unsigned char *name)
 	int i = 0;
 
 again:
-	while (*e && upcase(*e++) != upcase(*name));
+	while (*e && toupper(*e++) != toupper(*name));
 	if (!*e) return NULL;
 
 	n = name + 1;
-	while (*n && upcase(*e) == upcase(*n)) e++, n++;
+	while (*n && toupper(*e) == toupper(*n)) e++, n++;
 	if (*n) goto again;
 
 	while (isspace(*e)) e++;

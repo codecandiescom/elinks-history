@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.51 2004/04/16 16:35:52 zas Exp $ */
+/* $Id: fastfind.c,v 1.52 2004/06/20 21:19:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,7 +318,7 @@ init_idxtab(struct fastfind_info *info)
 		info->idxtab[i] = char2idx((unsigned char) i, info);
 }
 
-#define ifcase(c) ((info->case_sensitive) ? (c) : upcase(c))
+#define ifcase(c) ((info->case_sensitive) ? (c) : toupper(c))
 
 struct fastfind_info *
 fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
@@ -555,7 +555,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	if (info->case_sensitive)
 		FF_SEARCH(key[i]);
 	else
-		FF_SEARCH(upcase(key[i]));
+		FF_SEARCH(toupper(key[i]));
 
 	return NULL;
 }

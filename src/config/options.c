@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.300 2003/10/17 20:57:29 jonas Exp $ */
+/* $Id: options.c,v 1.301 2003/10/17 23:27:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1151,7 +1151,7 @@ register_options(void)
 
 	add_opt_bool("document.browse.links.active_link", N_("Enable color"),
 		"enable_color", 0, 0,
-		N_("Enable use of the active link background and text color "
+		N_("Enable use of the active link background and text color\n"
 		"settings instead of browse.links from the document."));
 
 	add_opt_bool("document.browse.links.active_link", N_("Invert colors"),
@@ -1346,7 +1346,7 @@ register_options(void)
 		N_("Allow dark colors on black background."));
 
 	add_opt_bool("document.colors", N_("Ensure contrast"),
-		"ensure_contrast", 0, 0,
+		"ensure_contrast", 0, 1,
 		N_("Makes sure that the back- and foreground color is never "
 		"equal."));
 

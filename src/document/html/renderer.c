@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.360 2003/10/31 22:37:17 pasky Exp $ */
+/* $Id: renderer.c,v 1.361 2003/11/05 22:51:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1550,10 +1550,10 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 void
 html_interpret(struct session *ses)
 {
-	struct document_options o;
+	struct document_options doc_opts;
 	struct document_view *doc_view;
 	struct document_view *current_doc_view = NULL;
-	struct view_state *l = NULL;
+	struct view_state *vs = NULL;
 
 	if (!ses->doc_view) {
 		ses->doc_view = mem_calloc(1, sizeof(struct document_view));
@@ -1561,33 +1561,33 @@ html_interpret(struct session *ses)
 		ses->doc_view->search_word = &ses->search_word;
 	}
 
-	if (have_location(ses)) l = &cur_loc(ses)->vs;
+	if (have_location(ses)) vs = &cur_loc(ses)->vs;
 
-	init_document_options(&o);
+	init_document_options(&doc_opts);
 
-	/* XXX: Sets 0.yw and 0.xw so keep after init_document_options(). */
-	init_bars_status(ses, NULL, &o);
+	/* XXX: Sets 0.height and 0.width so keep after init_document_options(). */
+	init_bars_status(ses, NULL, &doc_opts);
 
-	o.color_mode = get_opt_int_tree(ses->tab->term->spec, "colors");
+	doc_opts.color_mode = get_opt_int_tree(ses->tab->term->spec, "colors");
 	if (!get_opt_int_tree(ses->tab->term->spec, "underline"))
-		o.color_flags |= COLOR_ENHANCE_UNDERLINE;
+		doc_opts.color_flags |= COLOR_ENHANCE_UNDERLINE;
 
-	o.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
+	doc_opts.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
 
-	if (l) {
-		if (l->plain < 0) l->plain = 0;
-		o.plain = l->plain;
+	if (vs) {
+		if (vs->plain < 0) vs->plain = 0;
+		doc_opts.plain = vs->plain;
 	} else {
-		o.plain = 1;
+		doc_opts.plain = 1;
 	}
 
 	foreach (doc_view, ses->scrn_frames) doc_view->used = 0;
 
-	if (l) cached_format_html(l, ses->doc_view, &o);
+	if (vs) cached_format_html(vs, ses->doc_view, &doc_opts);
 
 	if (document_has_frames(ses->doc_view->document)) {
 		current_doc_view = current_frame(ses);
-		format_frames(ses, ses->doc_view->document->frame_desc, &o, 0);
+		format_frames(ses, ses->doc_view->document->frame_desc, &doc_opts, 0);
 	}
 
 	foreach (doc_view, ses->scrn_frames) {

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.112 2004/08/16 10:14:23 miciah Exp $ */
+/* $Id: renderer.c,v 1.113 2004/08/16 10:27:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,10 +195,10 @@ add_document_line(struct plain_renderer *renderer,
 				if (backspaces * 2 < line_pos) {
 					backspaces++;
 					expanded -= 2;
-					was_alpha_char = 0;
 				} else {
 					expanded--;
 				}
+				was_alpha_char = 0;
 
 			} else {
 				/* We only want to detect url if there is at least

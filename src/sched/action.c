@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.21 2004/01/08 01:09:39 jonas Exp $ */
+/* $Id: action.c,v 1.22 2004/01/08 01:26:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "sched/event.h"
 #include "sched/session.h"
 #include "sched/task.h"
+#include "viewer/text/link.h"
 #include "viewer/text/search.h"
 #include "viewer/text/view.h"
 
@@ -131,13 +132,13 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_ADD_BOOKMARK:
 #ifdef CONFIG_BOOKMARKS
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
-				launch_bm_add_doc_dialog(ses->tab->term, NULL, ses);
+				launch_bm_add_doc_dialog(term, NULL, ses);
 #endif
 			break;
 		case ACT_ADD_BOOKMARK_LINK:
 #ifdef CONFIG_BOOKMARKS
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
-				launch_bm_add_link_dialog(ses->tab->term, NULL, ses);
+				launch_bm_add_link_dialog(term, NULL, ses);
 #endif
 			break;
 		case ACT_ADD_BOOKMARK_TABS:
@@ -181,6 +182,10 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_DOCUMENT_INFO:
 			state_msg(ses);
+			break;
+
+		case ACT_DOWNLOAD_IMAGE:
+			send_download_image(term, NULL, ses);
 			break;
 
 		case ACT_DOWNLOAD_MANAGER:
@@ -242,6 +247,10 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_KILL_BACKGROUNDED_CONNECTIONS:
 			abort_background_connections();
+			break;
+
+		case ACT_LINK_MENU:
+			link_menu(term, NULL, ses);
 			break;
 
 		case ACT_MENU:
@@ -396,6 +405,10 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			go_unback(ses);
 			break;
 
+		case ACT_VIEW_IMAGE:
+			send_image(term, NULL, ses);
+			break;
+
 		case ACT_ZOOM_FRAME:
 			do_frame_action(ses, set_frame);
 			break;
@@ -410,7 +423,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_DELETE:
 		case ACT_DOWN:
 		case ACT_DOWNLOAD:
-		case ACT_DOWNLOAD_IMAGE:
 		case ACT_EDIT:
 		case ACT_END:
 		case ACT_END_OF_BUFFER:
@@ -421,7 +433,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_KILL_TO_BOL:
 		case ACT_KILL_TO_EOL:
 		case ACT_LEFT:
-		case ACT_LINK_MENU:
 		case ACT_JUMP_TO_LINK:
 		case ACT_LUA_CONSOLE:
 		case ACT_MARK_SET:
@@ -442,7 +453,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_SELECT:
 		case ACT_UNEXPAND:
 		case ACT_UP:
-		case ACT_VIEW_IMAGE:
 		default:
 			if (verbose) {
 				INTERNAL("No action handling defined for '%s'.",

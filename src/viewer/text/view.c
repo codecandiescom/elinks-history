@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.344 2004/01/08 00:57:03 jonas Exp $ */
+/* $Id: view.c,v 1.345 2004/01/08 01:26:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -707,9 +707,6 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_ENTER_RELOAD: x = enter(ses, doc_view, 1); break;
 			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 0); break;
 			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 1); break;
-			case ACT_VIEW_IMAGE: send_image(ses->tab->term, NULL, ses); break;
-			case ACT_DOWNLOAD_IMAGE: send_download_image(ses->tab->term, NULL, ses); break;
-			case ACT_LINK_MENU: link_menu(ses->tab->term, NULL, ses); break;
 			case ACT_JUMP_TO_LINK: x = 2; break;
 			case ACT_MARK_SET:
 				ses->kbdprefix.mark = KP_MARK_SET;

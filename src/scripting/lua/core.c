@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.165 2004/08/07 22:03:53 miciah Exp $ */
+/* $Id: core.c,v 1.166 2004/08/08 06:33:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -657,7 +657,7 @@ handle_ret_goto_url(struct session *ses)
 	unsigned char *url = (unsigned char *) lua_tostring(L, -1);
 
 	if (url) {
-		goto_url(ses, url);
+		goto_url_with_hook(ses, url);
 		return;
 	}
 

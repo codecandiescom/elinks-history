@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.19 2004/04/17 17:52:26 jonas Exp $ */
+/* $Id: listmenu.c,v 1.20 2004/04/17 18:01:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,8 +61,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 	/* name == NULL - up;	data == -1 - down */
 {
 	struct menu_item *new_menu_item = NULL; /* no uninitialized warnings */
-	struct menu_item *top, *item;
-	size_t size = 0;
+	struct menu_item **items;
 
 	if (!name) {
 		menu->stack_size--;
@@ -82,7 +81,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 		if (stack) {
 			menu->stack = stack;
-			new_menu_item = mem_calloc(1, sizeof(struct menu_item));
+			new_menu_item = new_menu(NO_INTL);
 			menu->stack[menu->stack_size] = new_menu_item;
 		}
 
@@ -103,40 +102,25 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 		return;
 	}
 
-	top = menu->stack[menu->stack_size - 1];
+	items = &menu->stack[menu->stack_size - 1];
 
-	foreach_menu_item (item, top) size++;
-
-	top = mem_realloc(top, (size + 2) * sizeof(struct menu_item));
-	if (!top) {
-		if (data == -1) mem_free(new_menu_item);
-		mem_free(name);
-		return;
+	if (data == -1) {
+		add_to_menu(items, name, NULL, ACT_MAIN_NONE,
+			    (menu_func) do_select_submenu,
+			    new_menu_item, SUBMENU);
+		menu->stack_size++;
+	} else {
+		add_to_menu(items, name, NULL, ACT_MAIN_NONE,
+			    (menu_func) selected_item,
+			    (void *) data, (fullname ? MENU_FULLNAME : 0));
 	}
 
-	item = top + size;
-	menu->stack[menu->stack_size - 1] = top;
 	if (menu->stack_size >= 2) {
 		struct menu_item *below = menu->stack[menu->stack_size - 2];
 
 		while (below->text) below++;
-		below[-1].data = top;
+		below[-1].data = *items;
 	}
-
-	if (data == -1) {
-		SET_MENU_ITEM(item, name, NULL, ACT_MAIN_NONE, do_select_submenu,
-			new_menu_item, SUBMENU | NO_INTL,
-			0, 0);
-		menu->stack_size++;
-	} else {
-		SET_MENU_ITEM(item, name, NULL, ACT_MAIN_NONE, selected_item,
-			data, (fullname ? MENU_FULLNAME : 0) | NO_INTL,
-			0, 0);
-	}
-
-	item++;
-	/* TODO: recheck that --Zas */
-	memset(item, 0, sizeof(struct menu_item));
 }
 
 void

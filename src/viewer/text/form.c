@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.68 2003/12/21 14:56:56 zas Exp $ */
+/* $Id: form.c,v 1.69 2003/12/24 00:31:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,7 @@
 #include "terminal/window.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
@@ -569,11 +570,18 @@ xx:
 			add_to_string(data, "\"\r\n\r\n");
 
 			if (*sv->value) {
+				unsigned char *filename;
+
 				if (get_opt_int_tree(cmdline_options, "anonymous"))
 					goto encode_error;
 
 				/* FIXME: DO NOT COPY FILE IN MEMORY !! --Zas */
-				fh = open(sv->value, O_RDONLY);
+				filename = expand_tilde(sv->value);
+				if (!filename) goto encode_error;
+
+				fh = open(filename, O_RDONLY);
+				mem_free(filename);
+
 				if (fh == -1) goto encode_error;
 				set_bin(fh);
 				do {

@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.21 2004/11/20 00:44:43 jonas Exp $ */
+/* $Id: digest.c,v 1.22 2004/11/20 00:46:59 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1], md5_hex_digest hex)
 }
 
 static void
-random_cnonce(md5_hex_digest cnonce)
+init_random_cnonce(md5_hex_digest cnonce)
 {
 	unsigned char md5[MD5_DIGEST_LENGTH + 1];
 	int random;
@@ -124,7 +124,7 @@ get_http_auth_digest_response(struct auth_entry *entry, struct uri *uri)
 	if (!init_string(&string))
 		return NULL;
 
-	random_cnonce(cnonce);
+	init_random_cnonce(cnonce);
 	digest_calc_response(response, entry, uri, cnonce);
 
 	add_to_string(&string, "username=\"");

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.374 2004/04/17 01:10:39 jonas Exp $ */
+/* $Id: session.c,v 1.375 2004/04/20 15:03:51 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -79,7 +79,7 @@ enum remote_session_flags remote_session_flags;
 static int session_id = 1;
 
 
-struct file_to_load * request_additional_file(struct session *,
+static struct file_to_load * request_additional_file(struct session *,
 						unsigned char *, struct uri *, int);
 
 
@@ -261,7 +261,7 @@ load_frames(struct session *ses, struct document_view *doc_view)
 	request_frameset(ses, document->frame_desc);
 }
 
-inline void
+static inline void
 load_css_imports(struct session *ses, struct document_view *doc_view)
 {
 	struct document *document = doc_view->document;
@@ -426,7 +426,7 @@ doc_end_load(struct download *stat, struct session *ses)
 	}
 }
 
-void
+static void
 file_end_load(struct download *stat, struct file_to_load *ftl)
 {
 	if (ftl->stat.cached) {
@@ -452,7 +452,7 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 	doc_end_load(stat, ftl->ses);
 }
 
-struct file_to_load *
+static struct file_to_load *
 request_additional_file(struct session *ses, unsigned char *name, struct uri *uri, int pri)
 {
 	struct file_to_load *ftl;

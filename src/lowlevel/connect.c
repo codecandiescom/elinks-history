@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.89 2004/08/01 09:14:52 jonas Exp $ */
+/* $Id: connect.c,v 1.90 2004/08/01 09:18:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,7 +499,7 @@ struct write_buffer {
 	 * _different_ from read_buffer.done !). */
 	void (*done)(struct connection *);
 
-	int sock;
+	struct connection_socket *socket;
 	int len;
 	int pos;
 
@@ -539,7 +539,7 @@ write_select(struct connection *conn)
 #endif
 	{
 		assert(wb->len - wb->pos > 0);
-		wr = safe_write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
+		wr = safe_write(wb->socket->fd, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) {
 			retry_conn_with_state(conn, wr ? -errno : S_CANT_WRITE);
 			return;
@@ -552,7 +552,7 @@ write_select(struct connection *conn)
 		void (*f)(struct connection *) = wb->done;
 
 		conn->buffer = NULL;
-		set_handlers(wb->sock, NULL, NULL, NULL, NULL);
+		set_handlers(wb->socket->fd, NULL, NULL, NULL, NULL);
 		mem_free(wb);
 		f(conn);
 	}
@@ -575,7 +575,7 @@ write_to_socket(struct connection *conn, struct connection_socket *socket,
 		return;
 	}
 
-	wb->sock = socket->fd;
+	wb->socket = socket;
 	wb->len = len;
 	wb->pos = 0;
 	wb->done = done;

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.173 2004/12/27 10:24:22 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.174 2004/12/27 10:26:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1343,16 +1343,13 @@ form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct document_view *doc_view = vs->doc_view;
 	struct form_view *fv = JS_GetPrivate(ctx, obj);
 	struct form *form = find_form_by_form_view(doc_view->document, fv);
-	struct jsval_property prop;
-
-	set_prop_boolean(&prop, 0);
 
 	assert(form);
 
 	do_reset_form(doc_view, form);
 	draw_forms(doc_view->session->tab->term, doc_view);
 
-	value_to_jsval(ctx, rval, &prop);
+	boolean_to_jsval(ctx, rval, 0);
 
 	return JS_TRUE;
 }
@@ -1367,14 +1364,11 @@ form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct session *ses = doc_view->session;
 	struct form_view *fv = JS_GetPrivate(ctx, obj);
 	struct form *form = find_form_by_form_view(doc_view->document, fv);
-	struct jsval_property prop;
-
-	set_prop_boolean(&prop, 0);
 
 	assert(form);
 	submit_given_form(ses, doc_view, form);
 
-	value_to_jsval(ctx, rval, &prop);
+	boolean_to_jsval(ctx, rval, 0);
 
 	return JS_TRUE;
 }

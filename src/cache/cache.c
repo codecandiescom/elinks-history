@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.132 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: cache.c,v 1.133 2004/04/03 14:51:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,10 +99,7 @@ struct cache_entry *
 find_in_cache(struct uri *uri)
 {
 	struct cache_entry *cached;
-	struct cache_entry *found = NULL;
-	struct uri *proxy_uri = NULL;
-
-	assert(uri);
+	int proxy = (uri->protocol == PROTOCOL_PROXY); 
 
 	/* If only the caller has a reference it will most definitely not be in
 	 * the cache unless the caller uses an URI from a cache_entry in which
@@ -110,25 +107,20 @@ find_in_cache(struct uri *uri)
 	if (get_object_refcount(uri) == 1)
 		return NULL;
 
-	if (uri->protocol == PROTOCOL_PROXY) {
-		uri = proxy_uri = get_proxied_uri(uri);
-		if (!proxy_uri) return NULL;
-	}
-
 	foreach (cached, cache_entries) {
-		if (!cached->valid || cached->uri != uri) continue;
+		if (!cached->valid
+		    || (proxy && cached->proxy_uri != uri)
+		    || (!proxy && cached->uri != uri))
+			continue;
 
 		/* Move it on the top of the list. */
 		del_from_list(cached);
 		add_to_list(cache_entries, cached);
 
-		found = cached;
-		break;
+		return cached;
 	}
 
-	if (proxy_uri) done_uri(proxy_uri);
-
-	return found;
+	return NULL;
 }
 
 struct cache_entry *
@@ -149,6 +141,7 @@ get_cache_entry(struct uri *uri)
 		return NULL;
 	}
 
+	cached->proxy_uri = get_uri_reference(uri);
 	cached->incomplete = 1;
 	cached->valid = 1;
 	init_list(cached->frag);
@@ -477,6 +470,7 @@ delete_cache_entry(struct cache_entry *cached)
 
 	if (cached->box_item) done_listbox_item(&cache_browser, cached->box_item);
 	if (cached->uri) done_uri(cached->uri);
+	if (cached->proxy_uri) done_uri(cached->proxy_uri);
 	if (cached->head) mem_free(cached->head);
 	if (cached->last_modified) mem_free(cached->last_modified);
 	if (cached->redirect) done_uri(cached->redirect);

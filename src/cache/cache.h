@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.80 2004/04/03 13:49:06 jonas Exp $ */
+/* $Id: cache.h,v 1.81 2004/04/03 14:51:53 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -33,6 +33,7 @@ struct cache_entry {
 	struct list_head frag;
 
 	struct uri *uri;
+	struct uri *proxy_uri;
 	struct uri *redirect;
 
 	unsigned char *head;

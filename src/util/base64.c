@@ -1,5 +1,5 @@
 /* Base64 encode/decode implementation. */
-/* $Id: base64.c,v 1.12 2003/08/02 08:42:26 zas Exp $ */
+/* $Id: base64.c,v 1.13 2003/08/19 07:26:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,6 +102,8 @@ base64_decode(register unsigned char *in)
         	} else {
             		bits <<= 6;
         	}
+
+		++in;
 	}
 
 	if (!*in) {

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.78 2004/02/09 01:41:47 jonas Exp $ */
+/* $Id: inphist.c,v 1.79 2004/02/09 02:59:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,11 +25,10 @@
 
 
 static void
-tab_compl_n(struct terminal *term, unsigned char *item, int len,
-	    struct window *win)
+tab_compl_n(struct dialog_data *dlg_data, unsigned char *item, int len)
 {
+	struct terminal *term = dlg_data->win->term;
 	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->width, term->height, 0);
-	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
 	struct widget_data *widget_data = selected_widget(dlg_data);
 
 	int_upper_bound(&len, widget_data->widget->datalen - 1);
@@ -37,22 +36,20 @@ tab_compl_n(struct terminal *term, unsigned char *item, int len,
 	widget_data->cdata[len] = 0;
 	widget_data->info.field.cpos = len;
 	widget_data->info.field.vpos = 0;
-	dialog_func(win, &ev, 0);
+	dialog_func(dlg_data->win, &ev, 0);
 }
 
 static inline void
-tab_compl(struct terminal *term, unsigned char *item, struct window *win)
+tab_compl(struct terminal *term, unsigned char *item, struct dialog_data *dlg_data)
 {
-	tab_compl_n(term, item, strlen(item), win);
+	tab_compl_n(dlg_data, item, strlen(item));
 }
 
 /* Complete to last unambiguous character, and display menu for all possible
  * further completions. */
 void
-do_tab_compl(struct terminal *term, struct list_head *history,
-	     struct window *win)
+do_tab_compl(struct dialog_data *dlg_data, struct list_head *history)
 {
-	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
 	struct widget_data *widget_data = selected_widget(dlg_data);
 	int cdata_len = strlen(widget_data->cdata);
 	int n = 0;
@@ -71,13 +68,15 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 	}
 
 	if (n) {
+		struct terminal *term = dlg_data->win->term;
+
 		if (n == 1) {
-			tab_compl(term, items->data, win);
+			tab_compl(term, items->data, dlg_data);
 			mem_free(items);
 			return;
 		}
 
-		do_menu_selected(term, items, win, n - 1, 0);
+		do_menu_selected(term, items, dlg_data, n - 1, 0);
 	} else {
 		mem_free(items);
 	}
@@ -88,10 +87,8 @@ do_tab_compl(struct terminal *term, struct list_head *history,
  * completes `go' to `google.com' and `google.com/' to `google.com/search?q='.
  */
 void
-do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
-			 struct window *win)
+do_tab_compl_unambiguous(struct dialog_data *dlg_data, struct list_head *history)
 {
-	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
 	struct widget_data *widget_data = selected_widget(dlg_data);
 	int base_len = strlen(widget_data->cdata);
 	/* Maximum number of characters in a match. Characters after this
@@ -134,7 +131,7 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 
 	if (!match) return;
 
-	tab_compl_n(term, match, longest_common_match, win);
+	tab_compl_n(dlg_data, match, longest_common_match);
 }
 
 

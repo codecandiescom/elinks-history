@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.125 2004/02/09 01:33:30 jonas Exp $ */
+/* $Id: inpfield.c,v 1.126 2004/02/09 02:59:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -424,14 +424,14 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
 
-			do_tab_compl(term, &widget_data->info.field.history, win);
+			do_tab_compl(dlg_data, &widget_data->info.field.history);
 			goto dsp_f;
 
 		case ACT_EDIT_AUTO_COMPLETE_UNAMBIGUOUS:
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
 
-			do_tab_compl_unambiguous(term, &widget_data->info.field.history, win);
+			do_tab_compl_unambiguous(dlg_data, &widget_data->info.field.history);
 			goto dsp_f;
 
 		case ACT_EDIT_REDRAW:

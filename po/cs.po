@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-16 20:57+0100\n"
-"PO-Revision-Date: 2003-12-13 00:13+0100\n"
+"PO-Revision-Date: 2003-12-17 15:53+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -202,9 +202,8 @@ msgid "No title"
 msgstr "Bez názvu"
 
 #: src/bookmarks/backend/xbel.c:392
-#, fuzzy
 msgid "No URL"
-msgstr "Bì¾ na URL"
+msgstr "®ádná URL"
 
 #. name:
 #: src/bookmarks/bookmarks.c:42 src/bookmarks/bookmarks.c:99
@@ -932,7 +931,7 @@ msgstr "Zpìtné hledání textu"
 
 #: src/config/kbdbind.c:452
 msgid "Search link text by typing ahead"
-msgstr ""
+msgstr "Interaktivní hledání v textu odkazù"
 
 #: src/config/kbdbind.c:453 src/terminal/tab.c:187
 msgid "Close tab"
@@ -1624,15 +1623,15 @@ msgstr "Zobrazovat u odkazù jejich èísla."
 
 #: src/config/options.inc:233
 msgid "Wraparound typeahead"
-msgstr ""
+msgstr "Cyklit interaktivní vyhledávání"
 
 #: src/config/options.inc:235
 msgid "Wrap around when searching for the next link matching a typeahead."
-msgstr ""
+msgstr "Pokud interaktivní vyhledávání dosáhne konce dokumentu, pokraèovat na zaèátku."
 
 #: src/config/options.inc:237
 msgid "Typeahead error handling"
-msgstr ""
+msgstr "Obsluha chyb pøi interaktivním vyhledávání"
 
 #: src/config/options.inc:239
 msgid ""
@@ -1641,6 +1640,10 @@ msgid ""
 "1 means beep the terminal\n"
 "2 means pop up message box"
 msgstr ""
+"Co dìlat, kdy¾ není nalezen ¾ádný výskyt:\n"
+"0 znamená nedìlat nic\n"
+"1 znamená pípnout\n"
+"2 znamená ukázat chybovou zprávu"
 
 #: src/config/options.inc:244
 msgid "Use tabindex"
@@ -4580,7 +4583,7 @@ msgstr "pøedpokládaný èas"
 #: src/dialogs/status.c:203
 #, c-format
 msgid "Typeahead: %s (-> %s)"
-msgstr ""
+msgstr "Interaktivní hledání %s (-> %s)"
 
 #: src/dialogs/status.c:295
 msgid "Untitled"
@@ -5768,14 +5771,13 @@ msgid "Search string '%s' not found"
 msgstr "Nena¹el jsem øetìzec '%s'"
 
 #: src/viewer/text/search.c:999
-#, fuzzy
 msgid "Typeahead"
-msgstr "Typ"
+msgstr "Interaktivní vyhledávání"
 
 #: src/viewer/text/search.c:1000
 #, c-format
 msgid "Could not find a link with the text '%s'."
-msgstr ""
+msgstr "Nena¹el jsem odkaz obsahující text '%s'."
 
 #: src/viewer/text/search.c:1147
 msgid "Normal search"

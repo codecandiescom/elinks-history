@@ -1,3 +1,275 @@
+Sun Dec 28 20:56:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Use explicit constants instead of hardcoded numbers.  
+
+Sun Dec 28 20:02:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Use a while loop instead of a goto.  
+
+Sun Dec 28 20:01:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Improve/fix scroll meter drawing by removing adjustment of widget
+	height according to y set by dlg_format_text_do() and by scaling
+	current to be last when it should be.  
+
+Sun Dec 28 19:53:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Take in account space used by right scroll main menu indicator
+	(appears when term width is insufficent to display all the main menu
+	entries).  
+
+Sun Dec 28 19:27:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Even with minimum width for stuff like "\n\n" this line should be
+	added. Also allow starting space needed when scrolling so we do not
+	ignore empty lines. Fixes scrolling in text widget.  
+
+Sun Dec 28 18:45:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Use ACT_ENTER for 'Follow link' and ACT_ENTER_RELOAD for 'Follow
+	link and reload' in the link menu. Could the actions also be used
+	for submit form (and reload)? 
+
+Sun Dec 28 15:44:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Assertions and debugging code were added to help to track down nul
+	chars insertion in plain renderer output, an ssertion is triggered
+	now for that. Help is welcomed here. Note previous patch fixed bug
+	317.  
+
+Sun Dec 28 13:58:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Use strlen() to gather true length of line after convert_string()
+	call. It fixes trailing chars garbage in some cases.  
+
+Sun Dec 28 10:42:43 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Dec 28 09:24:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Colors the status bar with white background, so the progress bar
+	works.  
+
+Sun Dec 28 06:25:40 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Sort protocol.file.cgi.*.  
+
+Sun Dec 28 06:24:56 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Sort protocol.file.*.  
+
+Sun Dec 28 06:12:26 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/osdep/osdep.c:
+
+	Set window title in GNU Screen. (Backport from 1.81.2.1->1.81.2.2,
+	ELUSION branch.) 
+
+Sun Dec 28 06:11:19 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Sun Dec 28 06:11:19 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/osdep/osdep.c:
+
+	Introduce is_gnuscreen(). (Backport from 1.81->1.81.2.1, ELUSION
+	branch.) 
+
+Sun Dec 28 05:58:35 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/menu.c:
+
+	Fix a hotkey conflict on the ~Help menu between ~ELinks homepage and
+	~ELinks CvsWeb (now ~ELinks CvsWeb). See bug 350 for why this wasn't
+	spotted long ago.  
+
+Sun Dec 28 05:21:37 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hotkey.c:
+
+	In is_hotkey, declare and assign @key_pos outside the DEBUG code and
+	eliminate the thus superfluous braces and duplicate return
+	statement.  
+
+Sun Dec 28 05:19:13 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Improvements in Polish translation. Patch by Mikolaj Machowski.  
+
+Sun Dec 28 05:05:57 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Hook change_hook_html to the document.codepage option tree.  
+
+Sun Dec 28 04:56:34 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	Give the "V~iew image" menu item the correct @action argument.  
+
+Sun Dec 28 03:34:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Drop whitespaces on empty lines and trailing whitespaces before
+	rendering plain text. It reduces memory usage a bit, please tell me
+	if it has any other impact.  
+
+Sun Dec 28 03:14:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Support for goto marked listbox_items. Fixes bug 123.  
+
+Sun Dec 28 02:58:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES is now bind by default to "w"
+	(like whitespaces/lines).  
+
+Sun Dec 28 02:55:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Compress_empty_lines now handles line containing only whitespaces
+	too. It gives obvious result on BZ source.  
+
+Sun Dec 28 02:39:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Add mono/colors ui.color options together to ensure sync and slim
+	code (removes ~300 lines of code. :-) 
+
+Sun Dec 28 02:36:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.inc:
+
+	quiting ->quitting.  
+
+Sun Dec 28 02:19:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Add mono trees together with the color one.  
+
+Sun Dec 28 02:16:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, viewer/text/view.c:
+
+	Keyact ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES was added. No default
+	keystroke.  
+
+Sun Dec 28 02:12:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Introduce INIT_OPT_COLOR_TREE() for adding relative color trees.  
+
+Sun Dec 28 02:07:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Getting ready to unify colors/mono color option declaration.  
+
+Sun Dec 28 02:00:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Use a copy since first hop may be freed. It fixes a segfault when
+	adding an already used keystoke.  
+
+Sun Dec 28 01:58:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Simplify tab color options.  
+
+Sun Dec 28 01:55:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Simplify status and searched color options.  
+
+Sun Dec 28 01:53:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Simplify dialog color options.  
+
+Sun Dec 28 01:45:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Simplify menu bar color options.  
+
+Sun Dec 28 01:34:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/bookmarks.h,
+	config/options.inc, sched/session.c, terminal/terminal.c:
+
+	A hackish prototype for auto save/restoring session (as in tabs)
+	using ui.auto_save_restore_session option. 0 is off, 1 is save but
+	no restore, 2 is save and restore if no URI is given.  
+
+Sun Dec 28 01:31:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Clean the folder where the terminal tabs should be bookmarked under.  
+
+Sun Dec 28 01:31:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	A change hook was added to document.plain. It prevents reload of
+	document after changing document.plain.compress_empty_lines option.  
+
+Sun Dec 28 01:06:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Plain renderer was inserting useless nul chars in formatted
+	document, these were invisible on screen but visible in a file
+	generated by save formatted as. Jonas please review carefully.  
+
+Sat Dec 27 23:33:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h, listbox.c:
+
+	Save state of the latest selected item in a browser.  
+
 Sat Dec 27 23:06:07 2003  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

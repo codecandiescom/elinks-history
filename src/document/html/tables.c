@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.252 2004/06/28 20:23:16 jonas Exp $ */
+/* $Id: tables.c,v 1.253 2004/06/28 21:42:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,6 +209,8 @@ get_vline_width(struct table *table, int col)
 	return width;
 }
 
+#define has_vline_width(table, col) (get_vline_width(table, col) >= 0)
+
 static int
 get_hline_width(struct table *table, int row)
 {
@@ -279,7 +281,7 @@ get_column_widths(struct table *table)
 				int k, p = 0;
 
 				for (k = 1; k < colspan; k++)
-					p += (get_vline_width(table, col + k) >= 0);
+					p += has_vline_width(table, col + k);
 
 				distribute_values(&table->min_cols_widths[col],
 						  colspan,
@@ -318,7 +320,7 @@ get_table_width(struct table *table)
 	int col;
 
 	for (col = 0; col < table->cols; col++) {
-		int vl = (get_vline_width(table, col) >= 0);
+		int vl = has_vline_width(table, col);
 
 		min += vl + table->min_cols_widths[col];
 		max += vl + table->max_cols_widths[col];
@@ -515,7 +517,7 @@ check_table_widths(struct table *table)
 
 		for (k = 0; k < cell->colspan; k++) {
 			p += table->cols_widths[col + k] +
-			     (k && get_vline_width(table, col + k) >= 0);
+			     (k && has_vline_width(table, col + k));
 		}
 
 		get_cell_width(cell->start, cell->end, table->cellpadding, p, 1, &cell->width,
@@ -540,7 +542,7 @@ check_table_widths(struct table *table)
 				int k, p = 0;
 
 				for (k = 1; k < colspan; k++)
-					p += (get_vline_width(table, col + k) >= 0);
+					p += has_vline_width(table, col + k);
 
 				distribute_values(&widths[col],
 						  colspan,
@@ -604,7 +606,7 @@ get_table_heights(struct table *table)
 			for (sp = 0; sp < cell->colspan; sp++) {
 				width += table->cols_widths[col + sp] +
 				         (sp < cell->colspan - 1 &&
-				          get_vline_width(table, col + sp + 1) >= 0);
+				          has_vline_width(table, col + sp + 1));
 			}
 
 			part = format_cell(table, col, row, NULL, 2, 2, width);
@@ -702,7 +704,7 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 				for (s = 0; s < cell->colspan; s++) {
 					xw += table->cols_widths[col + s] +
 					      (s < cell->colspan - 1 &&
-					       get_vline_width(table, col + s + 1) >= 0);
+					       has_vline_width(table, col + s + 1));
 				}
 
 				for (s = 0; s < cell->rowspan; s++) {
@@ -764,7 +766,7 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 		}
 
 		if (col < table->cols - 1) {
-			xp += table->cols_widths[col] + (get_vline_width(table, col + 1) >= 0);
+			xp += table->cols_widths[col] + has_vline_width(table, col + 1);
 		}
 	}
 
@@ -958,7 +960,7 @@ cont2:
 
 		} else if (row < table->rows) {
 			for (col = 0; col <= table->cols; col++) {
-				if ((col > 0 && col < table->cols && get_vline_width(table, col) >= 0)
+				if ((col > 0 && col < table->cols && has_vline_width(table, col))
 				    || (col == 0 && table_frames.left)
 				    || (col == table->cols && table_frames.right)) {
 					draw_frame_vline(table, frame, cx, cy, col, row,

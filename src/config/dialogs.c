@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.82 2003/10/25 13:49:03 pasky Exp $ */
+/* $Id: dialogs.c,v 1.83 2003/10/26 13:12:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,7 +77,7 @@ option_dialog_abort_handler(struct dialog_data *dlg_data)
 {
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg_data->dlg->items[OP_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_BOX_IND].data;
 
 	del_from_list(box);
 	/* Delete the box structure */
@@ -102,7 +102,7 @@ push_info_button(struct dialog_data *dlg_data,
 	struct option *option;
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg_data->dlg->items[OP_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_BOX_IND].data;
 
 	/* Show history item info */
 	if (!box->sel || !box->sel->udata) return 0;
@@ -303,7 +303,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	dlg->udata = option;
 	dlg->udata2 = ses;
 
-	value = (unsigned char *) &dlg->items[EDIT_DIALOG_FIELDS_NB + 1];
+	value = (unsigned char *) &dlg->widgets[EDIT_DIALOG_FIELDS_NB + 1];
 	safe_strncpy(value, tvalue.source, MAX_STR_LEN);
 	done_string(&tvalue);
 
@@ -329,7 +329,7 @@ push_edit_button(struct dialog_data *dlg_data,
 	struct option *option;
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg_data->dlg->items[OP_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_BOX_IND].data;
 
 	/* Show history item info */
 	if (!box->sel || !box->sel->udata) return 0;
@@ -370,7 +370,7 @@ push_add_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box =
-		(struct listbox_data *) dlg_data->dlg->items[OP_BOX_IND].data;
+		(struct listbox_data *) dlg_data->dlg->widgets[OP_BOX_IND].data;
 	struct option *option;
 
 	if (!box->sel || !box->sel->udata) {
@@ -438,7 +438,7 @@ push_del_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box =
-		(struct listbox_data *) dlg_data->dlg->items[OP_BOX_IND].data;
+		(struct listbox_data *) dlg_data->dlg->widgets[OP_BOX_IND].data;
 	struct option *option;
 
 	if (!box->sel || !box->sel->udata) {
@@ -546,7 +546,7 @@ kbdbind_dialog_abort_handler(struct dialog_data *dlg_data)
 {
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg_data->dlg->items[KB_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->widgets[KB_BOX_IND].data;
 
 	del_from_list(box);
 	/* Delete the box structure */
@@ -584,7 +584,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box
-		= (struct listbox_data *) dlg_data->dlg->items[KB_BOX_IND].data;
+		= (struct listbox_data *) dlg_data->dlg->widgets[KB_BOX_IND].data;
 	struct listbox_item *item = box->sel;
 	struct kbdbind_add_hop *hop;
 	unsigned char *text;
@@ -677,7 +677,7 @@ push_kbdbind_del_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box =
-		(struct listbox_data *) dlg_data->dlg->items[KB_BOX_IND].data;
+		(struct listbox_data *) dlg_data->dlg->widgets[KB_BOX_IND].data;
 	struct keybinding *keybinding;
 
 	if (!box->sel || box->sel->depth < 2) {

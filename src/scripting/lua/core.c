@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.90 2003/10/26 12:52:33 zas Exp $ */
+/* $Id: core.c,v 1.91 2003/10/26 13:12:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,7 +429,7 @@ l_edit_bookmark_dialog(LS)
 	dlg = calloc_dialog(L_EDIT_BMK_DLG_SIZE, sizeof(struct lua_dlg_data));
 	if (!dlg) return 0;
 
-	data = (struct lua_dlg_data *)&dlg->items[L_EDIT_BMK_DLG_SIZE + 1];
+	data = (struct lua_dlg_data *)&dlg->widgets[L_EDIT_BMK_DLG_SIZE + 1];
 	data->state = S;
 	safe_strncpy(data->cat, (uchar *)lua_tostring(S, 1), MAX_STR_LEN-1);
 	safe_strncpy(data->name, (uchar *)lua_tostring(S, 2), MAX_STR_LEN-1);
@@ -566,7 +566,7 @@ l_xdialog(LS)
 	dlg = calloc_dialog(nitems, sizeof(struct lua_xdialog_data));
 	if (!dlg) return 0;
 
-	data = (struct lua_xdialog_data *)&dlg->items[nitems + 1];
+	data = (struct lua_xdialog_data *)&dlg->widgets[nitems + 1];
 	data->state = S;
 	data->nfields = nfields;
 	for (i = 0; i < nfields; i++)
@@ -581,9 +581,9 @@ l_xdialog(LS)
 	dlg->refresh_data = data;
 
 	for (i = 0; i < nfields; i++) {
-		dlg->items[i].type = D_FIELD;
-		dlg->items[i].dlen = MAX_STR_LEN;
-		dlg->items[i].data = data->fields[i];
+		dlg->widgets[i].type = D_FIELD;
+		dlg->widgets[i].dlen = MAX_STR_LEN;
+		dlg->widgets[i].data = data->fields[i];
 	}
 
 	add_dlg_button(dlg, i, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);

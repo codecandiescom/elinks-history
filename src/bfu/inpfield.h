@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.11 2003/10/24 23:39:47 pasky Exp $ */
+/* $Id: inpfield.h,v 1.12 2003/10/26 13:12:06 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -12,13 +12,13 @@
 
 #define add_dlg_field_do(dlg, n, t, min, max, handler, len, field, hist)	\
 	do {								\
-		(dlg)->items[n].type = (t);				\
-		(dlg)->items[n].gid = (min);				\
-		(dlg)->items[n].gnum = (max);				\
-		(dlg)->items[n].fn = (handler);				\
-		(dlg)->items[n].dlen = (len);				\
-		(dlg)->items[n].data = (field);				\
-		(dlg)->items[n].history = (hist);			\
+		(dlg)->widgets[n].type = (t);				\
+		(dlg)->widgets[n].gid = (min);				\
+		(dlg)->widgets[n].gnum = (max);				\
+		(dlg)->widgets[n].fn = (handler);				\
+		(dlg)->widgets[n].dlen = (len);				\
+		(dlg)->widgets[n].data = (field);				\
+		(dlg)->widgets[n].history = (hist);			\
 		(n)++;							\
 	} while (0)
 

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.48 2003/10/26 12:52:32 zas Exp $ */
+/* $Id: dialog.c,v 1.49 2003/10/26 13:12:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	int n = 0;
 
 	/* FIXME: maintain a counter, and don't recount each time. --Zas */
-	for (widget = dlg->items; widget->type != D_END; widget++) n++;
+	for (widget = dlg->widgets; widget->type != D_END; widget++) n++;
 
 	dlg_data = mem_alloc(sizeof(struct dialog_data) +
 		             sizeof(struct widget_data) * n);
@@ -123,7 +123,7 @@ init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
 	struct widget_data *widget = &dlg_data->items[i];
 
 	memset(widget, 0, sizeof(struct widget_data));
-	widget->widget = &dlg_data->dlg->items[i];
+	widget->widget = &dlg_data->dlg->widgets[i];
 
 	if (widget->widget->dlen) {
 		widget->cdata = mem_alloc(widget->widget->dlen);
@@ -203,8 +203,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			/* Look up for a button with matching starting letter. */
 			if (ev->x > ' ' && ev->x < 0x100) {
 				for (i = 0; i < dlg_data->n; i++)
-					if (dlg_data->dlg->items[i].type == D_BUTTON
-					    && upcase(dlg_data->dlg->items[i].text[0])
+					if (dlg_data->dlg->widgets[i].type == D_BUTTON
+					    && upcase(dlg_data->dlg->widgets[i].text[0])
 					       == upcase(ev->x)) {
 						select_dlg_item(dlg_data, i);
 						return;
@@ -217,8 +217,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 				|| di->widget->type == D_FIELD_PASS
 				|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
 				for (i = 0; i < dlg_data->n; i++)
-					if (dlg_data->dlg->items[i].type == D_BUTTON
-					    && dlg_data->dlg->items[i].gid & B_ENTER) {
+					if (dlg_data->dlg->widgets[i].type == D_BUTTON
+					    && dlg_data->dlg->widgets[i].gid & B_ENTER) {
 						select_dlg_item(dlg_data, i);
 						return;
 					}
@@ -227,8 +227,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			/* Cancel button. */
 			if (ev->x == KBD_ESC) {
 				for (i = 0; i < dlg_data->n; i++)
-					if (dlg_data->dlg->items[i].type == D_BUTTON
-					    && dlg_data->dlg->items[i].gid & B_ESC) {
+					if (dlg_data->dlg->widgets[i].type == D_BUTTON
+					    && dlg_data->dlg->widgets[i].gid & B_ESC) {
 						select_dlg_item(dlg_data, i);
 						return;
 					}
@@ -288,13 +288,13 @@ check_dialog(struct dialog_data *dlg_data)
 	int i;
 
 	for (i = 0; i < dlg_data->n; i++) {
-		if (dlg_data->dlg->items[i].type != D_CHECKBOX &&
-		    dlg_data->dlg->items[i].type != D_FIELD &&
-		    dlg_data->dlg->items[i].type != D_FIELD_PASS)
+		if (dlg_data->dlg->widgets[i].type != D_CHECKBOX &&
+		    dlg_data->dlg->widgets[i].type != D_FIELD &&
+		    dlg_data->dlg->widgets[i].type != D_FIELD_PASS)
 			continue;
 
-		if (dlg_data->dlg->items[i].fn &&
-		    dlg_data->dlg->items[i].fn(dlg_data, &dlg_data->items[i])) {
+		if (dlg_data->dlg->widgets[i].fn &&
+		    dlg_data->dlg->widgets[i].fn(dlg_data, &dlg_data->items[i])) {
 			dlg_data->selected = i;
 			redraw_dialog(dlg_data);
 			return 1;
@@ -317,9 +317,9 @@ update_dialog_data(struct dialog_data *dlg_data, struct widget_data *di)
 	int i;
 
 	for (i = 0; i < dlg_data->n; i++)
-		memcpy(dlg_data->dlg->items[i].data,
+		memcpy(dlg_data->dlg->widgets[i].data,
 		       dlg_data->items[i].cdata,
-		       dlg_data->dlg->items[i].dlen);
+		       dlg_data->dlg->widgets[i].dlen);
 
 	return 0;
 }
@@ -344,10 +344,10 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *di)
 	int i;
 
 	for (i = 0; i < dlg_data->n; i++) {
-		if (dlg_data->dlg->items[i].type != D_FIELD &&
-		    dlg_data->dlg->items[i].type != D_FIELD_PASS)
+		if (dlg_data->dlg->widgets[i].type != D_FIELD &&
+		    dlg_data->dlg->widgets[i].type != D_FIELD_PASS)
 			continue;
-		memset(dlg_data->items[i].cdata, 0, dlg_data->dlg->items[i].dlen);
+		memset(dlg_data->items[i].cdata, 0, dlg_data->dlg->widgets[i].dlen);
 		dlg_data->items[i].cpos = 0;
 	}
 

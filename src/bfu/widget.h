@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.16 2003/10/26 12:52:32 zas Exp $ */
+/* $Id: widget.h,v 1.17 2003/10/26 13:12:06 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -22,7 +22,7 @@ enum widget_type {
 
 #define add_dlg_end(dlg, n)						\
 	do {								\
-		(dlg)->items[n].type = D_END;				\
+		(dlg)->widgets[n].type = D_END;				\
 	} while (0)
 
 struct widget_ops {

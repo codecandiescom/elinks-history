@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.59 2003/10/26 12:52:32 zas Exp $ */
+/* $Id: inpfield.c,v 1.60 2003/10/26 13:12:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ input_field_ok(struct dialog_data *dlg_data, struct widget_data *di)
 
 	if (check_dialog(dlg_data)) return 1;
 
-	add_to_input_history(dlg_data->dlg->items->history, text, 1);
+	add_to_input_history(dlg_data->dlg->widgets->history, text, 1);
 
 	if (fn) fn(data, text);
 	ok_dialog(dlg_data, di);
@@ -130,8 +130,8 @@ input_field_fn(struct dialog_data *dlg_data)
 	text_width(term, dlg_data->dlg->udata, &min, &max);
 	buttons_width(term, dlg_data->items + 1, 2, &min, &max);
 
-	if (max < dlg_data->dlg->items->dlen)
-		max = dlg_data->dlg->items->dlen;
+	if (max < dlg_data->dlg->widgets->dlen)
+		max = dlg_data->dlg->widgets->dlen;
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;

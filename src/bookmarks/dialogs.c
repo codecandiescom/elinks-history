@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.99 2003/10/26 12:52:32 zas Exp $ */
+/* $Id: dialogs.c,v 1.100 2003/10/26 13:12:07 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -78,7 +78,7 @@ bookmark_dlg_box_build(void)
 static void
 bookmark_dialog_abort_handler(struct dialog_data *dlg_data)
 {
-	struct widget *widget = &(dlg_data->dlg->items[BM_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[BM_BOX_IND]);
 	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	del_from_list(box);
@@ -179,7 +179,7 @@ push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *di)
 static int
 push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
 {
-	struct widget *widget = &(dlg_data->dlg->items[BM_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[BM_BOX_IND]);
 	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	/* Do nothing with a folder */
@@ -204,7 +204,7 @@ static void
 bookmark_edit_done(struct dialog *dlg) {
 	struct bookmark *bm = (struct bookmark *) dlg->udata2;
 
-	update_bookmark(bm, dlg->items[0].data, dlg->items[1].data);
+	update_bookmark(bm, dlg->widgets[0].data, dlg->widgets[1].data);
 	bm->refcount--;
 
 #ifdef BOOKMARKS_RESAVE
@@ -223,7 +223,7 @@ bookmark_edit_cancel(struct dialog *dlg) {
 static int
 push_edit_button(struct dialog_data *dlg_data, struct widget_data *edit_btn)
 {
-	struct widget *widget = &(dlg_data->dlg->items[BM_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[BM_BOX_IND]);
 	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	/* Follow the bookmark */
@@ -437,7 +437,7 @@ push_delete_button(struct dialog_data *dlg_data,
 		   struct widget_data *some_useless_delete_button)
 {
 	struct terminal *term = dlg_data->win->term;
-	struct widget *widget = &(dlg_data->dlg->items[BM_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[BM_BOX_IND]);
 	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	listbox_delete_bookmark(term, box);
@@ -652,7 +652,7 @@ bookmark_add_add(struct dialog *dlg)
 		}
 	}
 
-	bm = add_bookmark(bm, 1, dlg->items[0].data, dlg->items[1].data);
+	bm = add_bookmark(bm, 1, dlg->widgets[0].data, dlg->widgets[1].data);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -706,8 +706,8 @@ test_search(struct listbox_item *item, void *data_, int *offset) {
 static void
 bookmark_search_do(struct dialog *dlg)
 {
-	unsigned char *search_title = dlg->items[0].data;
-	unsigned char *search_url = dlg->items[1].data;
+	unsigned char *search_title = dlg->widgets[0].data;
+	unsigned char *search_url = dlg->widgets[1].data;
 	struct bookmark_search_ctx ctx = NULL_BOOKMARK_SEARCH_CTX;
 	struct widget_data *widget_data = NULL;
 	struct listbox_data *box = NULL;

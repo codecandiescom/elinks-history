@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.47 2003/10/25 12:45:08 zas Exp $ */
+/* $Id: edit.c,v 1.48 2003/10/26 13:12:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ static unsigned char *edit_add_msg[] = {
 static int
 my_cancel_dialog(struct dialog_data *dlg_data, struct widget_data *wd)
 {
-	((void (*)(struct dialog *)) dlg_data->dlg->items[4].data)(dlg_data->dlg);
+	((void (*)(struct dialog *)) dlg_data->dlg->widgets[4].data)(dlg_data->dlg);
 	return cancel_dialog(dlg_data, wd);
 }
 
@@ -118,7 +118,7 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	dlg = calloc_dialog(EDIT_DIALOG_FIELDS_NB, 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
-	name = (unsigned char *) &dlg->items[EDIT_DIALOG_FIELDS_NB + 1];
+	name = (unsigned char *) &dlg->widgets[EDIT_DIALOG_FIELDS_NB + 1];
 	url = name + MAX_STR_LEN;
 
 	/* Get the name */
@@ -147,17 +147,17 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	dlg->udata2 = done_data;
 
 	add_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, name, NULL);
-	if (dialog_type == EDIT_DLG_ADD) dlg->items[n - 1].fn = check_nonempty;
+	if (dialog_type == EDIT_DLG_ADD) dlg->widgets[n - 1].fn = check_nonempty;
 
 	add_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, url, NULL);
-	/* if (dialog_type == EDIT_DLG_ADD) d->items[n - 1].fn = check_nonempty; */
+	/* if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty; */
 
 	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, n, 0, clear_dialog, _("Clear", term), NULL);
 
 	add_dlg_button(dlg, n, B_ESC, when_cancel ? my_cancel_dialog : cancel_dialog,
 			_("Cancel", term), NULL);
-	dlg->items[n - 1].data = (void *) when_cancel;
+	dlg->widgets[n - 1].data = (void *) when_cancel;
 
 	add_dlg_end(dlg, n);
 

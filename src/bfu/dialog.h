@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.8 2003/10/25 12:17:56 zas Exp $ */
+/* $Id: dialog.h,v 1.9 2003/10/26 13:12:06 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -29,7 +29,7 @@ struct dialog {
 
 	enum format_align align;
 
-	struct widget items[1]; /* must be at end of struct */
+	struct widget widgets[1]; /* must be at end of struct */
 };
 
 /* Allocate a struct dialog for n widgets, one is already reserved in struct (for dialog end).

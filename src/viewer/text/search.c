@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.66 2003/10/26 12:52:33 zas Exp $ */
+/* $Id: search.c,v 1.67 2003/10/26 13:12:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -984,7 +984,7 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *di)
 
 	if (check_dialog(dlg_data)) return 1;
 
-	add_to_input_history(dlg_data->dlg->items->history, text, 1);
+	add_to_input_history(dlg_data->dlg->widgets->history, text, 1);
 
 	if (fn) fn(data, text);
 	ok_dialog(dlg_data, di);
@@ -1008,7 +1008,7 @@ search_dlg_fn(struct dialog_data *dlg_data)
 	min_group_width(term, 1, case_labels, dlg_data->items + 4, 2, &min);
 	buttons_width(term, dlg_data->items + 6, 2, &min, &max);
 
-	if (max < dlg_data->dlg->items->dlen) max = dlg_data->dlg->items->dlen;
+	if (max < dlg_data->dlg->widgets->dlen) max = dlg_data->dlg->widgets->dlen;
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;

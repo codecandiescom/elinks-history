@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.48 2003/10/26 12:52:33 zas Exp $ */
+/* $Id: dialogs.c,v 1.49 2003/10/26 13:12:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ history_dialog_abort_handler(struct dialog_data *dlg_data)
 {
 	struct listbox_data *box;
 	struct history_dialog_list_item *item;
-	struct widget *widget = &(dlg_data->dlg->items[HISTORY_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_BOX_IND]);
 
 	box = (struct listbox_data *) widget->data;
 
@@ -131,7 +131,7 @@ history_search_do(struct dialog *dlg)
 	struct listbox_item *item = gh_box_items.next;
 	struct listbox_data *box;
 
-	if (!globhist_simple_search(dlg->items[1].data, dlg->items[0].data)) return;
+	if (!globhist_simple_search(dlg->widgets[1].data, dlg->widgets[0].data)) return;
 	if (list_empty(gh_box_items)) return;
 
 	foreach (box, *item->box) {
@@ -208,7 +208,7 @@ push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
 {
 	struct global_history_item *historyitem;
 	struct listbox_data *box;
-	struct widget *widget = &(dlg_data->dlg->items[HISTORY_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_BOX_IND]);
 
 	box = (struct listbox_data *) widget->data;
 
@@ -350,7 +350,7 @@ push_delete_button(struct dialog_data *dlg_data,
 {
 	struct listbox_data *box;
 	struct terminal *term = dlg_data->win->term;
-	struct widget *widget = &(dlg_data->dlg->items[HISTORY_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_BOX_IND]);
 
 	box = (struct listbox_data *) widget->data;
 	listbox_delete_historyitem(term, box);
@@ -375,7 +375,7 @@ push_clear_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box;
-	struct widget *widget = &(dlg_data->dlg->items[HISTORY_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_BOX_IND]);
 
 	box = (struct listbox_data *) widget->data;
 
@@ -405,7 +405,7 @@ push_info_button(struct dialog_data *dlg_data,
 	struct terminal *term = dlg_data->win->term;
 	struct global_history_item *historyitem;
 	struct listbox_data *box;
-	struct widget *widget = &(dlg_data->dlg->items[HISTORY_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_BOX_IND]);
 
 	box = (struct listbox_data *) widget->data;
 

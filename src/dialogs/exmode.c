@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.23 2004/01/28 05:07:59 jonas Exp $ */
+/* $Id: exmode.c,v 1.24 2004/01/28 05:18:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,12 +35,8 @@
  * (just like in vi), especially actions, events (where they make sense) and
  * config-file commands. */
 
-#define EXMODE_BUFFER_SIZE 80
-
-struct exmode_data {
-	struct dialog dlg;
-	unsigned char buffer[EXMODE_BUFFER_SIZE];
-};
+#define EXMODE_BUFFER_SIZE	80
+#define EXMODE_WIDGETS		1
 
 struct input_history exmode_history = {
 	/* items: */	{ D_LIST_HEAD(exmode_history.entries) },
@@ -189,7 +185,7 @@ exmode_layouter(struct dialog_data *dlg_data)
 static int
 exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 {
-	struct exmode_data *data = dlg_data->dlg->udata;
+	unsigned char *buffer = dlg_data->dlg->udata;
 	struct session *ses = dlg_data->dlg->udata2;
 
 	switch (ev->ev) {
@@ -206,14 +202,14 @@ exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 
 			switch (kbd_action(KM_EDIT, ev, NULL)) {
 				case ACT_EDIT_ENTER:
-					exmode_exec(ses, data->buffer);
+					exmode_exec(ses, buffer);
 					/* Falling */
 				case ACT_EDIT_CANCEL:
 					cancel_dialog(dlg_data, NULL);
 					break;
 
 				case ACT_EDIT_BACKSPACE:
-					if (*data->buffer)
+					if (*buffer)
 						return EVENT_NOT_PROCESSED;
 
 					cancel_dialog(dlg_data, NULL);
@@ -234,23 +230,26 @@ exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 void
 exmode_start(struct session *ses)
 {
-	struct exmode_data *data;
+	struct dialog *dlg;
+	unsigned char *buffer;
 
 	assert(ses);
 
-	data = mem_calloc(1, sizeof(struct exmode_data));
-	if (!data) return;
+	dlg = calloc_dialog(EXMODE_WIDGETS, EXMODE_BUFFER_SIZE);
+	if (!dlg) return;
 
-	data->dlg.handle_event = exmode_handle_event;
-	data->dlg.layouter = exmode_layouter;
-	data->dlg.layout.only_widgets = 1;
-	data->dlg.udata = data;
-	data->dlg.udata2 = ses;
-	data->dlg.widgets->info.field.float_label = 1;
+	buffer = get_dialog_offset(dlg, EXMODE_WIDGETS);
 
-	add_dlg_field(&data->dlg, ":", 0, 0, NULL, 80, data->buffer, &exmode_history);
+	dlg->handle_event = exmode_handle_event;
+	dlg->layouter = exmode_layouter;
+	dlg->layout.only_widgets = 1;
+	dlg->udata = buffer;
+	dlg->udata2 = ses;
+	dlg->widgets->info.field.float_label = 1;
 
-	do_dialog(ses->tab->term, &data->dlg, getml(data, NULL));
+	add_dlg_field(dlg, ":", 0, 0, NULL, 80, buffer, &exmode_history);
+
+	do_dialog(ses->tab->term, dlg, getml(dlg, NULL));
 }
 
 #endif /* CONFIG_EXMODE */

@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.51 2004/02/26 23:47:10 miciah Exp $ */
+/* $Id: tab.c,v 1.52 2004/03/03 18:07:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -263,13 +263,13 @@ open_current_link_in_new_tab(struct session *ses, int in_background)
 {
 	struct document_view *doc_view = current_frame(ses);
 	unsigned char *url = NULL;
+	struct link *link;
 
 	if (doc_view) assert(doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	if (doc_view && doc_view->vs->current_link != -1)
-		url = get_link_url(ses, doc_view,
-			&doc_view->document->links[doc_view->vs->current_link]);
+	link = get_current_link(doc_view);
+	if (link) url = get_link_url(ses, doc_view, link);
 
 	open_url_in_new_tab(ses, url, in_background);
 	if (url) mem_free(url);

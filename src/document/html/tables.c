@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.365 2004/07/08 17:17:49 jonas Exp $ */
+/* $Id: tables.c,v 1.366 2004/07/08 21:06:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -816,7 +816,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 		/* The line expansion draws the _remaining_ background color of
 		 * both untouched lines and lines that doesn't stretch the
 		 * whole cell width. */
-		expand_lines(table->part, x + width, y, height, cell->bgcolor);
+		expand_lines(table->part, x + width - 1, y, height, cell->bgcolor);
 
 		if (cell->fragment_id)
 			add_fragment_identifier(part, cell->fragment_id);
@@ -864,10 +864,7 @@ draw_table_cells(struct table *table, int x, int y)
 
 	/* Finish the table drawing by aligning the right and bottom edge of
 	 * the table */
-	/* If there are table borders involved don't draw passed the table
-	 * border. FIXME: This could be fixed by always expanding table cells
-	 * with the ``width - 1''. --jonas */
-	x += table->real_width - !!table->border;
+	x += table->real_width - 1;
 	expand_lines(table->part, x, y, table->real_height, table->bgcolor);
 
 	/* Do a sanity check whether the height is correct */

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.27 2003/12/05 18:11:21 pasky Exp $ */
+/* $Id: cgi.c,v 1.28 2003/12/05 18:12:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,6 +197,9 @@ set_vars(struct connection *conn, unsigned char *script)
 
 	/* Protection against vim cindent bugs ;-). */
 	setenv("HTTP_ACCEPT", "*/" "*", 1);
+
+	/* We do not set HTTP_ACCEPT_ENCODING. Yeah, let's let the CGI script
+	 * gzip the stuff so that the CPU doesn't at least sit idle. */
 
 	return 0;
 }

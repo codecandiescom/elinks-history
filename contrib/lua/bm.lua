@@ -1,5 +1,5 @@
 -- Bookmark system for Links-Lua.
--- $Id: bm.lua,v 1.3 2003/11/24 13:30:01 zas Exp $
+-- $Id: bm.lua,v 1.4 2005/03/25 05:13:40 miciah Exp $
 
 -----------------------------------------------------------------------
 --  User options
@@ -299,6 +299,41 @@ end
 function bm_move_bookmark_down ()
     if not bm_auto_sort_bookmarks then return bm_do_move_bookmark (1) end
 end
+
+
+function bookmarks_follow_url_hook (url)
+    if bm_is_category (url) then
+	return nil,true
+    else
+	url = bm_get_bookmark_url (url)
+	if url then return url,true end
+    end
+
+    return nil,nil
+end
+table.insert(follow_url_hooks, bookmarks_follow_url_hook)
+
+
+function bookmarks_quit_hook ()
+    bm_save_bookmarks ()
+end
+table.insert(quit_hooks, bookmarks_quit_hook)
+
+
+-- Be careful not to load bookmarks if this script is being
+-- reloaded while in ELinks, or we will lose unsaved changes.
+if not bm_bookmarks or table.getn (bm_bookmarks) == 0 then
+    bm_load_bookmarks ()
+end
+
+
+-- My bookmark key bindings.
+--    bind_key ('main', 'a', bm_add_bookmark)
+--    bind_key ('main', 's', bm_view_bookmarks)
+--    bind_key ('main', 'Alt-e', bm_edit_bookmark)
+--    bind_key ('main', 'Alt-d', bm_delete_bookmark)
+--    bind_key ('main', 'Alt-k', bm_move_bookmark_up)
+--    bind_key ('main', 'Alt-j', bm_move_bookmark_down)
 
 
 -- vim: shiftwidth=4 softtabstop=4

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.57 2005/03/25 05:11:33 miciah Exp $
+-- $Id: hooks.lua.in,v 1.58 2005/03/25 05:13:40 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -355,25 +355,6 @@ end
 table.insert(goto_url_hooks, complete_uri_prefix)
 
 
------------------------------------------------------------------------
---  follow_url_hook
----------------------------------------------------------------------
-
-function bookmarks_follow_url_hook (url)
-    if bookmark_addon then
-	if bm_is_category (url) then
-	    return nil,true
-	else
-	    url = bm_get_bookmark_url (url)
-	    if url then return url,true end
-	end
-    end
-
-    return nil,nil
-end
-table.insert(follow_url_hooks, bookmarks_follow_url_hook)
-
-
 ----------------------------------------------------------------------
 --  pre_format_html_hook
 ----------------------------------------------------------------------
@@ -603,14 +584,6 @@ if not tmp_files then
     tmp_files = {}
 end
 
-function bookmarks_quit_hook ()
-    if bookmark_addon then
-	bm_save_bookmarks ()
-    end
-end
-table.insert(quit_hooks, bookmarks_quit_hook)
-
-
 function delete_tmp_files ()
     if tmp_files and os and os.remove then
         tmp_files.n = nil
@@ -637,33 +610,6 @@ table.insert(quit_hooks, delete_tmp_files)
 
     bind_key ("main", "Alt-m",
 	      function () mangle_blank_alt = not mangle_blank_alt end)
-
-
-----------------------------------------------------------------------
---  Bookmark addon
-----------------------------------------------------------------------
-
-if bookmark_addon then
-
-    dofile (elinks_home.."/bm.lua")
-
-    -- Add/change any bookmark options here.
-
-    -- Be careful not to load bookmarks if this script is being
-    -- reloaded while in ELinks, or we will lose unsaved changes.
-    if not bm_bookmarks or table.getn (bm_bookmarks) == 0 then
-	bm_load_bookmarks ()
-    end
-
-    -- My bookmark key bindings.
---    bind_key ('main', 'a', bm_add_bookmark)
---    bind_key ('main', 's', bm_view_bookmarks)
---    bind_key ('main', 'Alt-e', bm_edit_bookmark)
---    bind_key ('main', 'Alt-d', bm_delete_bookmark)
---    bind_key ('main', 'Alt-k', bm_move_bookmark_up)
---    bind_key ('main', 'Alt-j', bm_move_bookmark_down)
-
-end
 
 
 -- vim: shiftwidth=4 softtabstop=4

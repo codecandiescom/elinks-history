@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.259 2004/04/11 14:28:41 jonas Exp $ */
+/* $Id: download.c,v 1.260 2004/04/11 14:34:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -833,33 +833,32 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	assert(codw_hop->tq->uri);
 	assert(codw_hop->tq->ses);
 
-	if (!codw_hop->real_file) goto cancel;
-
 	tq = codw_hop->tq;
+	if (!codw_hop->real_file) goto cancel;
 
 	file_download = init_file_download(tq->uri, tq->ses,
 					   codw_hop->real_file, fd);
 	if (!file_download) goto cancel;
 
-	if (codw_hop->tq->prog) {
-		file_download->prog = subst_file(codw_hop->tq->prog, codw_hop->file);
+	if (tq->prog) {
+		file_download->prog = subst_file(tq->prog, codw_hop->file);
 		file_download->delete = 1;
 		mem_free(codw_hop->file);
-		mem_free(codw_hop->tq->prog);
-		codw_hop->tq->prog = NULL;
+		mem_free(tq->prog);
+		tq->prog = NULL;
 	}
 
-	file_download->prog_flags = codw_hop->tq->prog_flags;
+	file_download->prog_flags = tq->prog_flags;
 
-	change_connection(&codw_hop->tq->download, &file_download->download, PRI_DOWNLOAD, 0);
-	tp_free(codw_hop->tq);
+	change_connection(&tq->download, &file_download->download, PRI_DOWNLOAD, 0);
+	tp_free(tq);
 
 	mem_free(codw_hop);
 	return;
 
 cancel:
-	tp_cancel(codw_hop->tq);
-	if (codw_hop->tq->prog && codw_hop->file) mem_free(codw_hop->file);
+	tp_cancel(tq);
+	if (tq->prog && codw_hop->file) mem_free(codw_hop->file);
 	if (file_download) {
 		if (file_download->uri) done_uri(file_download->uri);
 		mem_free(file_download);

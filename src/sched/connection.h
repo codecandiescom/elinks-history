@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.2 2003/01/07 19:57:29 pasky Exp $ */
+/* $Id: connection.h,v 1.3 2003/01/07 23:18:59 pasky Exp $ */
 
 #ifndef EL__SCHED_SCHED_H
 #define EL__SCHED_SCHED_H
@@ -157,6 +157,8 @@ struct status {
 	void *data;
 	struct remaining_info *prg;
 };
+
+extern struct list_head queue;
 
 void check_queue();
 long connect_info(int);

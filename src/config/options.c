@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.328 2003/10/22 20:07:49 jonas Exp $ */
+/* $Id: options.c,v 1.329 2003/10/22 20:56:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -911,7 +911,6 @@ change_hook_stemplate(struct session *ses, struct option *current, struct option
 static int
 change_hook_language(struct session *ses, struct option *current, struct option *changed)
 {
-	/* FIXME */ /* Fix what? ;) --jonas */
 #ifdef ENABLE_NLS
 	set_language(changed->value.number);
 #endif

@@ -1,9 +1,10 @@
-/* $Id: screen.h,v 1.19 2003/10/17 15:20:30 jonas Exp $ */
+/* $Id: screen.h,v 1.20 2003/12/01 14:24:20 pasky Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
 
-#include "terminal/draw.h"
+struct screen_char;
+struct terminal;
 
 /* The terminal's screen manages */
 struct terminal_screen {

@@ -1,10 +1,12 @@
-/* $Id: window.h,v 1.5 2003/11/05 10:46:53 zas Exp $ */
+/* $Id: window.h,v 1.6 2003/12/01 14:24:21 pasky Exp $ */
 
 #ifndef EL__TERMINAL_WINDOW_H
 #define EL__TERMINAL_WINDOW_H
 
-#include "terminal/terminal.h"
 #include "util/lists.h"
+
+struct term_event;
+struct terminal;
 
 struct window {
 	LIST_HEAD(struct window);

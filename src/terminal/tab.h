@@ -1,11 +1,10 @@
-/* $Id: tab.h,v 1.17 2003/11/13 18:44:15 jonas Exp $ */
+/* $Id: tab.h,v 1.18 2003/12/01 14:24:21 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TAB_H
 #define EL__TERMINAL_TAB_H
 
 #include "terminal/terminal.h"
 #include "terminal/window.h"
-#include "util/lists.h"
 
 struct session;
 

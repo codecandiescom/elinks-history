@@ -1,10 +1,10 @@
-/* $Id: draw.h,v 1.41 2003/11/06 14:34:25 pasky Exp $ */
+/* $Id: draw.h,v 1.42 2003/12/01 14:24:20 pasky Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
 
-#include "util/color.h"
-#include "terminal/terminal.h"
+struct color_pair;
+struct terminal;
 
 /* All attributes should fit inside an unsigned char. */
 /* XXX: The bold mask is used as part of the color encoding. */

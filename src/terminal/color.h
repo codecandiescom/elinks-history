@@ -1,10 +1,10 @@
-/* $Id: color.h,v 1.28 2003/10/18 00:09:25 jonas Exp $ */
+/* $Id: color.h,v 1.29 2003/12/01 14:24:20 pasky Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
 
-#include "terminal/draw.h"
-#include "util/color.h"
+struct color_pair;
+struct screen_char;
 
 /* Terminal color encoding: */
 /* Below color pairs are encoded to terminal colors. Both the terminal fore-

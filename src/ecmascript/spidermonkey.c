@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.35 2004/09/25 01:04:12 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.36 2004/09/25 12:46:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,12 +234,24 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	VALUE_TO_JSVAL_END(vp);
 }
 
+static JSBool location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+
 static JSBool
 window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSVAL_TO_VALUE_START;
 
 	switch (JSVAL_TO_INT(id)) {
+	case JSP_WIN_LOC:
+	{
+		jsval location;
+
+		if (!JS_GetProperty(ctx, obj, "location", &location))
+			break;
+		location_set_property(ctx, JSVAL_TO_OBJECT(location),
+		                      /* JSP_LOC_HREF */ 0, vp);
+		break;
+	}
 	default:
 		INTERNAL("Invalid ID %d in window_set_property().", JSVAL_TO_INT(id));
 		goto bye;
@@ -340,7 +352,6 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 
 static JSBool location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
-static JSBool location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 
 static const JSClass location_class = {
 	"location",
@@ -401,6 +412,20 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	}
 
 	JSVAL_TO_VALUE_END;
+}
+
+static JSBool location_toString(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+
+static const JSFunctionSpec location_funcs[] = {
+	{ "toString",		location_toString,	0 },
+	{ "toLocaleString",	location_toString,	0 },
+	{ NULL }
+};
+
+static JSBool
+location_toString(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	return JS_GetProperty(ctx, obj, "href", rval);
 }
 
 
@@ -607,7 +632,8 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 
 	location_obj = JS_InitClass(ctx, window_obj, NULL,
 				    (JSClass *) &location_class, NULL, 0,
-				    (JSPropertySpec *) location_props, NULL,
+				    (JSPropertySpec *) location_props,
+				    (JSFunctionSpec *) location_funcs,
 				    NULL, NULL);
 
 	menubar_obj = JS_InitClass(ctx, window_obj, NULL,

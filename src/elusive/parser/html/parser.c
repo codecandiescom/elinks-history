@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.24 2002/12/30 18:04:50 pasky Exp $ */
+/* $Id: parser.c,v 1.25 2002/12/31 10:32:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,18 +108,6 @@ spawn_syntree_node(struct parser_state *state)
 	state->current = node;
 
 	return node;
-}
-
-static void
-attrib_add(struct parser_state *state, unsigned char *name, int name_len,
-	   unsigned char *value, int value_len)
-{
-	struct attribute *attrib;
-
-	attrib = mem_calloc(1, sizeof(struct attribute));
-	attrib->name = name; attrib->namelen = name_len;
-	attrib->value = value; attrib->valuelen = value_len;
-	add_to_list(state->current->attrs, attrib);
 }
 
 
@@ -512,7 +500,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 		pstate = html_state_pop(state);
 	}
 	if (!pstate->data.attr.ate_eq && *html != '=') {
-		attrib_add(state,
+		add_attrib(state->current->attrs,
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,
 			html, 0);
 		pstate = html_state_pop(state);
@@ -549,7 +537,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 
 		pstate = html_state_pop(state);
 
-		attrib_add(state,
+		add_attrib(state->current->attrs,
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,
 			attr, attr_len - html_len);
 

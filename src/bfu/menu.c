@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.130 2003/12/26 09:34:43 zas Exp $ */
+/* $Id: menu.c,v 1.131 2003/12/26 09:41:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,7 +154,8 @@ count_menu_size(struct terminal *term, struct menu *menu)
 		if (mi_has_left_text(menu->items[my])) {
 			unsigned char *text = menu->items[my].text;
 
-			if (!(menu->items[my].flags & NO_INTL)) text = _(text, term);
+			if (mi_text_translate(menu->items[my]))
+				text = _(text, term);
 
 			if (text[0])
 				s += strlen(text) + 1
@@ -164,7 +165,8 @@ count_menu_size(struct terminal *term, struct menu *menu)
 		if (mi_has_right_text(menu->items[my])) {
 			unsigned char *rtext = menu->items[my].rtext;
 
-			if (!(menu->items[my].flags & NO_INTL)) rtext = _(rtext, term);
+			if (mi_text_translate(menu->items[my]))
+				rtext = _(rtext, term);
 
 			if (rtext[0])
 				s += MENU_HOTKEY_SPACE + strlen(rtext);
@@ -283,8 +285,11 @@ display_menu(struct terminal *term, struct menu *menu)
 				int l = menu->items[p].hotkey_pos;
 				unsigned char *text = menu->items[p].text;
 
-				if (!(menu->items[p].flags & NO_INTL)) text = _(text, term);
-				if (mi_is_unselectable(menu->items[p])) l = 0;
+				if (mi_text_translate(menu->items[p]))
+					text = _(text, term);
+
+				if (mi_is_unselectable(menu->items[p]))
+					l = 0;
 
 				if (l) {
 					int xbase = mx + 1;
@@ -334,7 +339,8 @@ display_menu(struct terminal *term, struct menu *menu)
 			if (mi_has_right_text(menu->items[p])) {
 				unsigned char *rtext = menu->items[p].rtext;
 
-				if (!(menu->items[p].flags & NO_INTL)) rtext = _(rtext, term);
+				if (mi_text_translate(menu->items[p]))
+					rtext = _(rtext, term);
 
 				if (*rtext) {
 					/* There's a right text, so print it */
@@ -646,7 +652,8 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		if (key_pos < 0) key_pos = -key_pos, double_hk = 1;
 #endif
 
-		if (!(menu->items[i].flags & NO_INTL)) tmptext = _(tmptext, term);
+		if (mi_text_translate(menu->items[i]))
+			tmptext = _(tmptext, term);
 
 		if (i == menu->selected) {
 			int tmptextlen = strlen(tmptext) - !!key_pos;
@@ -729,7 +736,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 					if (mi_has_left_text(menu->items[i])) {
 						unsigned char *text = menu->items[i].text;
 
-						if (!(menu->items[i].flags & NO_INTL))
+						if (mi_text_translate(menu->items[i]))
 							text = _(text, win->term);
 
 						p += strlen(text) + 4

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.35 2003/12/26 09:34:43 zas Exp $ */
+/* $Id: menu.h,v 1.36 2003/12/26 09:41:53 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -51,6 +51,11 @@ enum menu_item_flags {
  * Submenu item
  */
 #define mi_is_submenu(mi) ((mi).flags & SUBMENU)
+
+/*
+ * Texts should be translated
+ */
+#define mi_text_translate(mi) (!((mi).flags & NO_INTL))
 
 /*
  * End of menu items list

@@ -1,3 +1,212 @@
+Thu Jun 26 22:09:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	An obsolete TODO comment was removed.  
+
+Thu Jun 26 21:50:04 2003  Laurent Monin <zas@norz.org>:
+
+	* po/README:
+
+	Some notes about #~ and make update-po were added.  
+
+Thu Jun 26 21:39:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: protocol.c, protocol.h, url.c:
+
+	enum uri_scheme -> enum protocol, @scheme -> @protocol. This
+	finalizes the 'scheme' term evaporation.  
+
+Thu Jun 26 21:34:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h, url.c:
+
+	Rename: SCHEME_* -> PROTOCOL_*, requested by pasky.  
+
+Thu Jun 26 21:19:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: protocol/protocol.c, protocol/protocol.h, sched/sched.c,
+	sched/session.c:
+
+	The protocol (external) handler function has now its own type
+	(protocol_(external_)handler) ! This could ease things a little for
+	those with weaker in-mind C parser.  
+
+Thu Jun 26 21:15:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/https.c:
+
+	Great! Pasky joins the fun and every goes down the drain! ;) fix
+	func -> handler rename.  
+
+Thu Jun 26 21:09:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: protocol/protocol.c, protocol/protocol.h, sched/sched.c,
+	sched/session.c:
+
+	Normalize some methods: get_protocol_handle() ->
+	get_protocol_handler(), get_external_protocol_function() ->
+	get_protocol_external_handler().  
+
+Thu Jun 26 21:07:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: file.c, finger.c, ftp.c, protocol.c, protocol.h,
+	user.c, http/http.c, http/https.c:
+
+	protocol_backend.(func -> handler, nc_func (which was NoCache_func)
+	-> external_handler). Have a nice night spent by conflicts
+	resolving, Jonas :-).  
+
+Thu Jun 26 20:57:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/protocol.c:
+
+	Minor tidyup and reindentation.  
+
+Thu Jun 26 20:19:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h, url.c:
+
+	Add and user accessors for protocol backends members. I feel better
+	already :) 
+
+Thu Jun 26 20:04:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: file.c, file.h, finger.c, finger.h, ftp.c, ftp.h,
+	protocol.c, user.c, user.h, http/http.c, http/http.h, http/https.c,
+	http/https.h:
+
+	Move all protocol backend declarations out. (Warning big patch, but
+	simple) + fix some unconforming guards in the header files met on
+	the way.  
+
+Thu Jun 26 19:17:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h, url.c:
+
+	Use enum uri_scheme.  
+
+Thu Jun 26 19:11:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/href_tests.html:
+
+	Added file://localhost/ test ;) 
+
+Thu Jun 26 18:35:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.h:
+
+	Introduce uri_scheme enum.  
+
+Thu Jun 26 18:34:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h:
+
+	Make struct protocol_backend public for now atleast.  
+
+Thu Jun 26 18:14:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Start the process of backending the protocol/ handling.  
+
+Thu Jun 26 17:06:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/Makefile.am, protocol/url.c, protocol/url.h,
+	sched/sched.c, sched/session.c:
+
+	Integrate and use file added by last commit.  
+
+Thu Jun 26 17:02:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h:
+
+	The basic protocol implementation management moved from
+	protocol/url.* 
+
+Thu Jun 26 16:49:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/url.c:
+
+	Encapsulate @protocols access even further so we easier split it
+	out.  
+
+Thu Jun 26 16:37:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.in:
+
+	Add README to DISTFILES ...  
+
+Thu Jun 26 16:24:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/README:
+
+	Idea by zas. Needs reviewing.  
+
+Thu Jun 26 14:28:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/.cvsignore:
+
+	Add elinks.pot just in case.  
+
+Thu Jun 26 13:55:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, intl/charsets.c, intl/charsets.h,
+	document/html/colors.c, document/html/colors.h,
+	document/html/parser.c, document/html/parser.h:
+
+	fastfind initializations are now done at start, using
+	init_xxx_lookup() functions. This prevents a superfluous test at
+	search time.  
+
+Thu Jun 26 13:26:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, intl/charsets.c:
+
+	get_cp_index() now uses fastfind (if USE_FASTFIND is defined).  
+
+Thu Jun 26 11:24:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Reverted part of the patch. Do test for '..' ;).  
+
+Thu Jun 26 11:10:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Misc small cleanups and optimizations and fixes: 
+		Don't test for ".." when comparing directory entries.  
+		Only pass the @dirpath length to add_dir_entry().  
+		Only iterate over @entries if nonempty, and test before free()ing
+		it.  
+
+Thu Jun 26 09:39:37 2003  Laurent Monin <zas@norz.org>:
+
+	* Unicode/7bit.cp, Unicode/7bitrepl.lnx, Unicode/8859_1.cp,
+	Unicode/8859_10.cp, Unicode/8859_13.cp, Unicode/8859_14.cp,
+	Unicode/8859_15.cp, Unicode/8859_16.cp, Unicode/8859_2.cp,
+	Unicode/8859_3.cp, Unicode/8859_4.cp, Unicode/8859_5.cp,
+	Unicode/8859_6.cp, Unicode/8859_7.cp, Unicode/8859_8.cp,
+	Unicode/8859_9.cp, Unicode/cp1250.cp, Unicode/cp1251.cp,
+	Unicode/cp1256.cp, Unicode/cp1257.cp, Unicode/cp437.cp,
+	Unicode/cp850.cp, Unicode/cp852.cp, Unicode/cp866.cp,
+	Unicode/koi8_r.cp, Unicode/macroman.cp, Unicode/tcvn5712.cp,
+	Unicode/tr7bit.awk, Unicode/viscii.cp, src/intl/codepage.inc,
+	src/intl/uni_7b.inc:
+
+	Charsets aliases were updated using information from iana.org, and
+	GNU recode utility.  
+
+Thu Jun 26 08:29:15 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced. A bg.po warning was fixed.  
+
 Wed Jun 25 10:30:46 2003  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/renderer.c:

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.60 2004/07/27 16:11:42 jonas Exp $ */
+/* $Id: button.c,v 1.61 2004/08/17 08:03:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ dlg_format_buttons(struct terminal *term,
 			}
 		}
 
-		*y += BUTTON_VSPACING + 1 /* height of button */;
+		*y += BUTTON_VSPACING + 1; /* height of button */
 		i1 = i2;
 	}
 }

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.132 2004/08/17 07:54:31 miciah Exp $ */
+/* $Id: renderer.c,v 1.133 2004/08/17 08:03:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,7 +190,7 @@ print_document_link(struct plain_renderer *renderer, int lineno,
 	line[link_end] = '\0';
 
 	if (0)
-		/* Shut up compiler */ ;
+		; /* Shut up compiler */
 #ifdef CONFIG_GLOBHIST
 	else if (get_global_history_item(start))
 		optstring = "document.colors.vlink";

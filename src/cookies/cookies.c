@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.161 2004/08/12 08:40:32 miciah Exp $ */
+/* $Id: cookies.c,v 1.162 2004/08/17 08:03:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,7 +325,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 			if (max_age == 0) cookie->expires = 0; /* Always expires at session end. */
 			else if (max_age > 0) {
-				ttime deadline = time(NULL) + max_age*24*3600 /* days->seconds.*/;
+				ttime deadline = time(NULL) + max_age*24*3600; /* days->seconds.*/
 
 				if (cookie->expires > deadline) /* Over-aged cookie ? */
 					cookie->expires = deadline;

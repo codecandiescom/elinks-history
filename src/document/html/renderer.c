@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.354 2003/10/31 12:42:42 jonas Exp $ */
+/* $Id: renderer.c,v 1.355 2003/10/31 17:11:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1351,6 +1351,7 @@ end:
 	return part;
 }
 
+/* TODO: Move to protocol/http --jonas */
 struct conv_table *
 get_convert_table(unsigned char *head, int to_cp,
 		  int default_cp, int *from_cp,
@@ -1411,14 +1412,12 @@ get_convert_table(unsigned char *head, int to_cp,
 void
 render_html_document(struct document *document, struct cache_entry *ce)
 {
-	struct fragment *fr;
+	struct fragment *fr = ce->frag.next;
 	struct part *rp;
-	unsigned char *url;
 	unsigned char *start = NULL;
 	unsigned char *end = NULL;
 	struct string title;
 	struct string head;
-	int i;
 
 	assert(ce && document);
 	if_assert_failed return;
@@ -1426,11 +1425,6 @@ render_html_document(struct document *document, struct cache_entry *ce)
 	if (!init_string(&head)) return;
 
 	g_ctrl_num = 0;
-	url = ce->url;
-	d_opt = &document->options;
-	document->id_tag = ce->id_tag;
-	defrag_entry(ce);
-	fr = ce->frag.next;
 
 	if (!((void *)fr == &ce->frag || fr->offset || !fr->length)) {
 		start = fr->data;
@@ -1439,21 +1433,19 @@ render_html_document(struct document *document, struct cache_entry *ce)
 
 	if (ce->head) add_to_string(&head, ce->head);
 
-	init_html_parser(url, &document->options, start, end, &head, &title,
+	init_html_parser(ce->url, &document->options, start, end, &head, &title,
 			 (void (*)(void *, unsigned char *, int)) put_chars_conv,
 			 (void (*)(void *)) line_break,
 			 (void (*)(void *)) html_init,
 			 (void *(*)(void *, enum html_special_type, ...)) html_special);
 
-	i = d_opt->plain;
 	convert_table = get_convert_table(head.source, document->options.cp,
 					  document->options.assume_cp,
 					  &document->cp,
 					  &document->cp_status,
 					  document->options.hard_assume);
-	d_opt->plain = 0;
+
 	document->title = convert_string(convert_table, title.source, title.length, CSM_DEFAULT);
-	d_opt->plain = i;
 	done_string(&title);
 
 	rp = format_html_part(start, end, par_format.align,
@@ -1462,18 +1454,6 @@ render_html_document(struct document *document, struct cache_entry *ce)
 	if (rp) mem_free(rp);
 
 	done_string(&head);
-
-	document->width = 0;
-
-	for (i = document->height - 1; i >= 0; i--) {
-		if (!document->data[i].l) {
-			if (document->data[i].d) mem_free(document->data[i].d);
-			document->height--;
-		} else break;
-	}
-
-	for (i = 0; i < document->height; i++)
-		document->width = int_max(document->width, document->data[i].l);
 
 	document->bgcolor = par_format.bgcolor;
 

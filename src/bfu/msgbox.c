@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.88 2003/11/29 01:46:26 jonas Exp $ */
+/* $Id: msgbox.c,v 1.89 2004/05/02 13:01:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,19 +115,6 @@ msg_text_do(unsigned char *format, va_list ap)
 			info[infolen] = '\0';
 		}
 	}
-
-	return info;
-}
-
-unsigned char *
-msg_text_ni(unsigned char *format, ...)
-{
-	unsigned char *info;
-	va_list ap;
-
-	va_start(ap, format);
-	info = msg_text_do(format, ap);
-	va_end(ap);
 
 	return info;
 }

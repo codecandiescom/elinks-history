@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.21 2003/10/01 17:16:15 zas Exp $ */
+/* $Id: conv.h,v 1.22 2003/10/02 16:37:06 kuser Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -54,7 +54,7 @@ struct string *add_time_to_string(struct string *string, ttime time);
  * backends for encoder. */
 
 /* A simple generic encoder. Should maybe take @replaceable as a string so we
- * could also use if for adding shell safe strings. */
+ * could also use it for adding shell safe strings. */
 struct string *
 add_string_replace(struct string *string, unsigned char *src, int len,
 		   unsigned char replaceable, unsigned char replacement);

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.1 2003/08/02 14:59:54 jonas Exp $ */
+/* $Id: formhist.c,v 1.2 2003/08/02 15:03:30 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -31,7 +31,7 @@ static int loaded = 0;
 static int
 load_saved_forms(void)
 {
-	struct formsmem_data *form;
+	struct form_history_item *form;
 	struct submitted_value *sv;
 	unsigned char name[MAX_STR_LEN], value[MAX_STR_LEN];
 	unsigned char tmp[MAX_STR_LEN], *file;
@@ -49,7 +49,7 @@ load_saved_forms(void)
 
 		tmp[strlen(tmp) - 1] = '\0';
 
-		form = mem_alloc(sizeof(struct formsmem_data));
+		form = mem_alloc(sizeof(struct form_history_item));
 		if (!form) return 0;
 
 		init_list(*form);
@@ -104,7 +104,7 @@ fail:
 unsigned char *
 get_saved_control_value(unsigned char *url, unsigned char *name)
 {
-	struct formsmem_data *form;
+	struct form_history_item *form;
 	struct submitted_value *sv;
 
 	if (!loaded && !load_saved_forms()) return NULL;
@@ -127,7 +127,7 @@ get_saved_control_value(unsigned char *url, unsigned char *name)
 int
 form_already_saved(unsigned char *url, struct list_head *submit)
 {
-	struct formsmem_data *form;
+	struct form_history_item *form;
 	struct submitted_value *sv, *savedsv;
 
 	if (!loaded && !load_saved_forms()) return 0;
@@ -162,14 +162,14 @@ form_already_saved(unsigned char *url, struct list_head *submit)
  * returns 1 on success
  *         0 on failure */
 int
-remember_form(struct formsmem_data *fmem_data)
+remember_form(struct form_history_item *fmem_data)
 {
-	struct formsmem_data *form, *tmpform;
+	struct form_history_item *form, *tmpform;
 	struct submitted_value *sv;
 	struct secure_save_info *ssi;
 	unsigned char *file;
 
-	form = mem_calloc(1, sizeof(struct formsmem_data));
+	form = mem_calloc(1, sizeof(struct form_history_item));
 	if (!form) return 0;
 
 	init_list(*form);
@@ -245,14 +245,14 @@ fail:
 void
 free_formsmemory(void)
 {
-	struct formsmem_data *form;
+	struct form_history_item *form;
 
 	foreach(form, saved_forms)
 		free_form(form);
 }
 
 void
-free_form(struct formsmem_data *form)
+free_form(struct form_history_item *form)
 {
 	if (form->url) mem_free(form->url);
 

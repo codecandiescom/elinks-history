@@ -110,6 +110,8 @@ static inline int getpgrp()
 #endif
 */
 
+#define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
+
 /* error.c */
 
 void do_not_optimize_here(void *p);

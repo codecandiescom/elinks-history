@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.14 2002/11/29 19:52:51 zas Exp $ */
+/* $Id: kbd.c,v 1.15 2002/11/30 18:10:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -793,17 +793,40 @@ process_queue(struct itrm *itrm)
 						xterm_button = itrm->kqueue[el] - ' ';
 						el += 5;
 					} else {
+						/* See kbd.h about details of the mouse reporting protocol
+						 * and ev->b bitmask structure. */
 						ev.x = itrm->kqueue[el+1] - ' ' - 1;
 						ev.y = itrm->kqueue[el+2] - ' ' - 1;
-						ev.b = B_DOWN;
-						if (itrm->kqueue[el] & 4) ev.b = B_DRAG;
-						if ((ev.b |= (itrm->kqueue[el] & BM_BUTT) | B_DOWN) == 3) {
-							ev.b = B_UP;
-							if (xterm_button != -1) ev.b |= xterm_button;
+
+						/* There are rumours arising from remnants of code dating to
+						 * the ancient Mikulas' times that bit 4 indicated B_DRAG.
+						 * However, I didn't find on what terminal it should be ever
+						 * supposed to work and it conflicts with wheels. So I removed
+						 * the last remnants of the code as well. --pasky */
+
+						ev.b = (itrm->kqueue[el] & 7) | B_DOWN;
+						/* smartglasses1 - rxvt wheel: */
+						if (ev.b == 3 && xterm_button != -1) {
+							ev.b = xterm_button | B_UP;
 						}
-						/*if ((itrm->kqueue[el] & 4) && ev.b != B_UP) ev.b |= B_DRAG;*/
+						/* xterm wheel: */
+						if ((itrm->kqueue[el] & 96) == 96) {
+							ev.b = (itrm->kqueue[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
+						}
+
 						xterm_button = -1;
-						if ((ev.b & BM_ACT) == B_DOWN) xterm_button = ev.b & BM_BUTT;
+						/* XXX: Eterm/aterm uses rxvt-like reporting, but sends the
+						 * release sequence for wheel. rxvt itself sends only press
+						 * sequence. Since we can't reliably guess what we're talking
+						 * with from $TERM, we will rather support Eterm/aterm, as in
+						 * rxvt, at least each second wheel up move will work. */
+						if ((ev.b & BM_ACT) == B_DOWN)
+#if 0
+						    && !(getenv("TERM") && strstr("rxvt", getenv("TERM"))
+							 && (ev.b & BM_BUTT) >= B_WHEEL_UP))
+#endif
+							xterm_button = ev.b & BM_BUTT;
+
 						el += 3;
 					}
 					ev.ev = EV_MOUSE;

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.45 2002/11/29 18:22:22 zas Exp $ */
+/* $Id: listbox.c,v 1.46 2002/11/30 18:10:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -431,7 +431,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 		}
 	}
 #if 0
-	else if ((ev->b & BM_ACT) == B_DRAG) {
+	else if (ev->b & BM_DRAG) {
 		debug("drag");
 	}
 #endif

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.6 2003/12/01 11:15:25 jonas Exp $ */
+/* $Id: cgi.c,v 1.7 2003/12/01 12:30:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ send_post_data(struct connection *conn)
 	postend = strchr(post, '\n');
 	if (postend) post = postend + 1;
 
-/* FIXME: Code duplication with protocol/http/http.c! --witekfl */	
+	/* FIXME: Code duplication with protocol/http/http.c! --witekfl */	
 	while (post[0] && post[1]) {
 		register int h1, h2;
 
@@ -101,7 +101,7 @@ send_request(struct connection *conn)
 	else close_pipe_and_read(conn);
 }
 
-/* This function sets CGI environment variables */
+/* This function sets CGI environment variables. */
 static int
 set_vars(struct connection *conn, unsigned char *script)
 {
@@ -191,13 +191,10 @@ execute_cgi(struct connection *conn)
 		int res;
 
 		res = test_path(script, last_slash - script);
-		if (res) {
-		/* If script is not in cgi_path and hasn't got extension .cgi: */
-			if (scriptlen < 4
-			    || strcasecmp(script + scriptlen - 4, ".cgi")) {
-				state = S_FILE_CGI_BAD_PATH;
-				goto end1;
-			}
+		if (res && (scriptlen < 4
+			    || strcasecmp(script + scriptlen - 4, ".cgi"))) {
+			state = S_FILE_CGI_BAD_PATH;
+			goto end1;
 		}
 	} else {
 		state = S_FILE_CGI_BAD_PATH;
@@ -231,7 +228,7 @@ execute_cgi(struct connection *conn)
 		if (execl(script, script, NULL)) {
 			_exit(3);
 		}
-	} else { /* elinks */
+	} else { /* ELinks */
 		struct http_connection_info *info;
 		
 		info = mem_calloc(1, sizeof(struct http_connection_info));

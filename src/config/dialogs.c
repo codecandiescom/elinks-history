@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.202 2004/12/29 14:51:49 zas Exp $ */
+/* $Id: dialogs.c,v 1.203 2005/01/12 16:32:56 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -63,7 +63,7 @@ write_config_dialog(struct terminal *term, unsigned char *config_file,
 			strerr = _("Cannot read the file", term);
 			break;
 		case SS_ERR_STAT:
-			strerr = _("Cannot stat the file", term);
+			strerr = _("Cannot get file status", term);
 			break;
 		case SS_ERR_ACCESS:
 			strerr = _("Cannot access the file", term);
@@ -86,7 +86,7 @@ write_config_dialog(struct terminal *term, unsigned char *config_file,
 		case SS_ERR_NONE: /* Impossible. */
 		case SS_ERR_OTHER:
 		default:
-			strerr = _("Secure file error", term);
+			strerr = _("Secure file saving error", term);
 			break;
 	}
 

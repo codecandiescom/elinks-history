@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.262 2004/12/30 23:42:02 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.263 2005/01/12 16:32:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -456,7 +456,7 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "goto-url-current", ACT_MAIN_GOTO_URL_CURRENT, DACT(N_("Open \"Go to URL\" dialog box containing the current URL")) },
 	{ "goto-url-current-link", ACT_MAIN_GOTO_URL_CURRENT_LINK, DACT(N_("Open \"Go to URL\" dialog box containing the current link URL")) },
 	{ "goto-url-home", ACT_MAIN_GOTO_URL_HOME, DACT(N_("Go to the homepage")) },
-	{ "header-info", ACT_MAIN_HEADER_INFO, DACT(N_("Show information about the current page HTTP headers")) },
+	{ "header-info", ACT_MAIN_HEADER_INFO, DACT(N_("Show information about the current page protocol headers")) },
 	{ "history-manager", ACT_MAIN_HISTORY_MANAGER, DACT(N_("Open history manager")) },
 	{ "history-move-back", ACT_MAIN_HISTORY_MOVE_BACK, DACT(N_("Return to the previous document in history")) },
 	{ "history-move-forward", ACT_MAIN_HISTORY_MOVE_FORWARD, DACT(N_("Go forward in history")) },

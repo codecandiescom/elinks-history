@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.609 2004/10/10 01:58:58 miciah Exp $ */
+/* $Id: view.c,v 1.610 2004/10/10 02:23:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,6 +161,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	count = int_max(ses->kbdprefix.repeat_count, 1);
+	ses->kbdprefix.repeat_count = 0;
 
 	if (doc_view->document->nlinks == 0) {
 		/* There are no links, therefore the only sensible value for
@@ -219,6 +220,7 @@ move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, in
 
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 	count = int_max(ses->kbdprefix.repeat_count, 1);
+	ses->kbdprefix.repeat_count = 0;
 
 	while (count--) {
 		int current_link = doc_view->vs->current_link;

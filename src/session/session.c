@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.549 2004/07/27 03:07:54 jonas Exp $ */
+/* $Id: session.c,v 1.550 2004/07/27 03:10:37 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -578,9 +578,8 @@ request_additional_file(struct session *ses, unsigned char *name, struct uri *ur
 }
 
 static void
-load_file_from_doc_view(struct file_to_load *ftl,
-			struct document_view *doc_view,
-			enum cache_mode cache_mode)
+load_additional_file(struct file_to_load *ftl, struct document_view *doc_view,
+		     enum cache_mode cache_mode)
 {
 	struct uri *referrer = doc_view && doc_view->document
 			     ? doc_view->document->uri : NULL;
@@ -606,7 +605,7 @@ process_file_requests(struct session *ses)
 
 			ftl->req_sent = 1;
 
-			load_file_from_doc_view(ftl, doc_view, CACHE_MODE_NORMAL);
+			load_additional_file(ftl, doc_view, CACHE_MODE_NORMAL);
 			more = 1;
 		}
 	} while (more);
@@ -1030,7 +1029,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *) file_end_load;
 
-			load_file_from_doc_view(ftl, doc_view, cache_mode);
+			load_additional_file(ftl, doc_view, cache_mode);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.7 2002/09/17 21:43:31 pasky Exp $ */
+/* $Id: dialogs.c,v 1.8 2002/10/05 09:20:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,8 +434,4 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 }
 
-#else /* GLOBHIST */
-
-void menu_history_manager(struct terminal *t, void *d, struct session *s) {}
-
-#endif
+#endif /* GLOBHIST */

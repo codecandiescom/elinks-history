@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.71 2003/12/25 12:04:06 pasky Exp $ */
+/* $Id: form.c,v 1.72 2003/12/25 12:10:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -838,12 +838,191 @@ submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
 
 
 int
+field_op_do(struct session *ses, struct document_view *doc_view,
+	    struct form_control *frm, struct form_state *fs, struct link *l,
+	    struct term_event *ev, int rep)
+{
+	int x = 1;
+
+	switch (kbd_action(KM_EDIT, ev, NULL)) {
+		case ACT_LEFT:
+			fs->state = int_max(fs->state - 1, 0);
+			break;
+		case ACT_RIGHT:
+			fs->state = int_min(fs->state + 1, strlen(fs->value));
+			break;
+		case ACT_HOME:
+			if (frm->type == FC_TEXTAREA) {
+				if (textarea_op_home(fs, frm, rep)) {
+					x = 0;
+					break;
+				}
+			} else {
+				fs->state = 0;
+			}
+			break;
+		case ACT_UP:
+			if (frm->type == FC_TEXTAREA) {
+				if (textarea_op_up(fs, frm, rep)) {
+					x = 0;
+					break;
+				}
+			} else {
+				x = 0;
+			}
+			break;
+		case ACT_DOWN:
+			if (frm->type == FC_TEXTAREA) {
+				if (textarea_op_down(fs, frm, rep)) {
+					x = 0;
+					break;
+				}
+			} else {
+				x = 0;
+			}
+			break;
+		case ACT_END:
+			if (frm->type == FC_TEXTAREA) {
+				if (textarea_op_end(fs, frm, rep)) {
+					x = 0;
+					break;
+				}
+			} else {
+				fs->state = strlen(fs->value);
+			}
+			break;
+		case ACT_EDIT:
+			if (frm->type == FC_TEXTAREA && !frm->ro)
+			  	textarea_edit(0, ses->tab->term, frm, fs, doc_view, l);
+			break;
+		case ACT_COPY_CLIPBOARD:
+			set_clipboard_text(fs->value);
+			break;
+		case ACT_CUT_CLIPBOARD:
+			set_clipboard_text(fs->value);
+			if (!frm->ro) fs->value[0] = 0;
+			fs->state = 0;
+			break;
+		case ACT_PASTE_CLIPBOARD: {
+			char *clipboard = get_clipboard_text();
+
+			if (!clipboard)
+				break;
+			if (!frm->ro) {
+				int cb_len = strlen(clipboard);
+
+				if (cb_len <= frm->maxlength) {
+					unsigned char *v = mem_realloc(fs->value, cb_len + 1);
+
+					if (v) {
+						fs->value = v;
+						memmove(v, clipboard, cb_len + 1);
+						fs->state = strlen(fs->value);
+					}
+				}
+			}
+			mem_free(clipboard);
+			break;
+		}
+		case ACT_ENTER:
+			if (frm->type == FC_TEXTAREA) {
+				if (textarea_op_enter(fs, frm, rep)) {
+					x = 0;
+					break;
+				}
+			} else {
+				x = 0;
+			}
+			break;
+		case ACT_BACKSPACE:
+			if (!frm->ro && fs->state)
+				memmove(fs->value + fs->state - 1, fs->value + fs->state,
+					strlen(fs->value + fs->state) + 1),
+				fs->state--;
+			break;
+		case ACT_DELETE:
+			if (!frm->ro && fs->state < strlen(fs->value))
+				memmove(fs->value + fs->state, fs->value + fs->state + 1,
+					strlen(fs->value + fs->state));
+			break;
+		case ACT_KILL_TO_BOL:
+			if (!frm->ro && fs->state > 0) {
+				unsigned char *prev;
+
+				/* TODO: Make this memrchr(), and
+				 * introduce stub for that function
+				 * into util/string.*. --pasky */
+				for (prev = fs->value + fs->state - 1;
+				     prev > fs->value
+					&& *prev != ASCII_LF;
+				     prev--)
+					;
+
+				if (prev > fs->value
+				    && fs->value[fs->state - 1]
+					    != ASCII_LF)
+					prev++;
+
+				memmove(prev,
+					fs->value + fs->state,
+					strlen(fs->value + fs->state)
+					 + 1);
+
+				fs->state = (int) (prev - fs->value);
+			}
+			break;
+		case ACT_KILL_TO_EOL:
+			if (!frm->ro && fs->value[fs->state]) {
+				unsigned char *rest;
+
+				rest = strchr(fs->value + fs->state,
+					      ASCII_LF);
+
+				if (!rest) {
+					fs->value[fs->state] = '\0';
+					break;
+				}
+
+				if (fs->value[fs->state] == ASCII_LF)
+					++rest;
+
+				memmove(fs->value + fs->state, rest,
+					strlen(rest) + 1);
+			}
+			break;
+
+		case ACT_REDRAW:
+			redraw_terminal_cls(ses->tab->term);
+			x = 0;
+			break;
+
+		default:
+			if (!ev->y && (ev->x >= 32 && ev->x < 256)) {
+				int value_len = strlen(fs->value);
+
+				if (!frm->ro && value_len < frm->maxlength) {
+					unsigned char *v = mem_realloc(fs->value, value_len + 2);
+
+					if (v) {
+						fs->value = v;
+						memmove(v + fs->state + 1, v + fs->state, strlen(v + fs->state) + 1);
+						v[fs->state++] = ev->x;
+					}
+				}
+				break;
+			}
+			x = 0;
+			break;
+	}
+}
+
+int
 field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 	 struct term_event *ev, int rep)
 {
 	struct form_control *frm;
 	struct form_state *fs;
-	int x = 1;
+	int x;
 
 	assert(ses && doc_view && l && ev);
 	if_assert_failed return 0;
@@ -856,177 +1035,7 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 	if (!fs || !fs->value) return 0;
 
 	if (ev->ev == EV_KBD) {
-		switch (kbd_action(KM_EDIT, ev, NULL)) {
-			case ACT_LEFT:
-				fs->state = int_max(fs->state - 1, 0);
-				break;
-			case ACT_RIGHT:
-				fs->state = int_min(fs->state + 1, strlen(fs->value));
-				break;
-			case ACT_HOME:
-				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_home(fs, frm, rep)) {
-						x = 0;
-						break;
-					}
-				} else {
-					fs->state = 0;
-				}
-				break;
-			case ACT_UP:
-				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_up(fs, frm, rep)) {
-						x = 0;
-						break;
-					}
-				} else {
-					x = 0;
-				}
-				break;
-			case ACT_DOWN:
-				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_down(fs, frm, rep)) {
-						x = 0;
-						break;
-					}
-				} else {
-					x = 0;
-				}
-				break;
-			case ACT_END:
-				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_end(fs, frm, rep)) {
-						x = 0;
-						break;
-					}
-				} else {
-					fs->state = strlen(fs->value);
-				}
-				break;
-			case ACT_EDIT:
-				if (frm->type == FC_TEXTAREA && !frm->ro)
-				  	textarea_edit(0, ses->tab->term, frm, fs, doc_view, l);
-				break;
-			case ACT_COPY_CLIPBOARD:
-				set_clipboard_text(fs->value);
-				break;
-			case ACT_CUT_CLIPBOARD:
-				set_clipboard_text(fs->value);
-				if (!frm->ro) fs->value[0] = 0;
-				fs->state = 0;
-				break;
-			case ACT_PASTE_CLIPBOARD: {
-				char *clipboard = get_clipboard_text();
-
-				if (!clipboard)
-					break;
-				if (!frm->ro) {
-					int cb_len = strlen(clipboard);
-
-					if (cb_len <= frm->maxlength) {
-						unsigned char *v = mem_realloc(fs->value, cb_len + 1);
-
-						if (v) {
-							fs->value = v;
-							memmove(v, clipboard, cb_len + 1);
-							fs->state = strlen(fs->value);
-						}
-					}
-				}
-				mem_free(clipboard);
-				break;
-			}
-			case ACT_ENTER:
-				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_enter(fs, frm, rep)) {
-						x = 0;
-						break;
-					}
-				} else {
-					x = 0;
-				}
-				break;
-			case ACT_BACKSPACE:
-				if (!frm->ro && fs->state)
-					memmove(fs->value + fs->state - 1, fs->value + fs->state,
-						strlen(fs->value + fs->state) + 1),
-					fs->state--;
-				break;
-			case ACT_DELETE:
-				if (!frm->ro && fs->state < strlen(fs->value))
-					memmove(fs->value + fs->state, fs->value + fs->state + 1,
-						strlen(fs->value + fs->state));
-				break;
-			case ACT_KILL_TO_BOL:
-				if (!frm->ro && fs->state > 0) {
-					unsigned char *prev;
-
-					/* TODO: Make this memrchr(), and
-					 * introduce stub for that function
-					 * into util/string.*. --pasky */
-					for (prev = fs->value + fs->state - 1;
-					     prev > fs->value
-						&& *prev != ASCII_LF;
-					     prev--)
-						;
-
-					if (prev > fs->value
-					    && fs->value[fs->state - 1]
-						    != ASCII_LF)
-						prev++;
-
-					memmove(prev,
-						fs->value + fs->state,
-						strlen(fs->value + fs->state)
-						 + 1);
-
-					fs->state = (int) (prev - fs->value);
-				}
-				break;
-			case ACT_KILL_TO_EOL:
-				if (!frm->ro && fs->value[fs->state]) {
-					unsigned char *rest;
-
-					rest = strchr(fs->value + fs->state,
-						      ASCII_LF);
-
-					if (!rest) {
-						fs->value[fs->state] = '\0';
-						break;
-					}
-
-					if (fs->value[fs->state] == ASCII_LF)
-						++rest;
-
-					memmove(fs->value + fs->state, rest,
-						strlen(rest) + 1);
-				}
-				break;
-
-			case ACT_REDRAW:
-				redraw_terminal_cls(ses->tab->term);
-				x = 0;
-				break;
-
-			default:
-				if (!ev->y && (ev->x >= 32 && ev->x < 256)) {
-					int value_len = strlen(fs->value);
-
-					if (!frm->ro && value_len < frm->maxlength) {
-						unsigned char *v = mem_realloc(fs->value, value_len + 2);
-
-						if (v) {
-							fs->value = v;
-							memmove(v + fs->state + 1, v + fs->state, strlen(v + fs->state) + 1);
-							v[fs->state++] = ev->x;
-						}
-					}
-					break;
-				}
-				x = 0;
-				break;
-		}
-
+		x = field_op_do(ses, doc_view, frm, fs, l, ev, rep);
 	} else {
 		x = 0;
 	}

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.126 2003/11/28 20:53:13 jonas Exp $ */
+/* $Id: listbox.c,v 1.127 2003/12/20 22:07:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -535,6 +535,9 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	return EVENT_NOT_PROCESSED;
 }
 
+#define keyboard_combo(event, special, key) \
+	((event)->y == (special) && upcase((event)->x) == (key))
+
 static int
 kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	    struct term_event *ev)
@@ -548,7 +551,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		case EV_KBD:
 			/* Moving the box */
 			if (ev->x == KBD_DOWN
-			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'N')) {
+			    || keyboard_combo(ev, KBD_CTRL, 'N')) {
 				box_sel_move(dlg_item, 1);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
@@ -556,7 +559,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			}
 
 			if (ev->x == KBD_UP
-			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'P')) {
+			    || keyboard_combo(ev, KBD_CTRL, 'P')) {
 				box_sel_move(dlg_item, -1);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
@@ -564,27 +567,25 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			}
 
 			if (ev->x == KBD_PAGE_DOWN
-			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'V')
-			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'F')) {
-				box_sel_move(dlg_item,
-					     dlg_item->h / 2);
+			    || keyboard_combo(ev, KBD_CTRL, 'V')
+			    || keyboard_combo(ev, KBD_CTRL, 'F')) {
+				box_sel_move(dlg_item, dlg_item->h / 2);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_PAGE_UP
-			    || (ev->y == KBD_ALT && upcase(ev->x) == 'V')
-			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'B')) {
-				box_sel_move(dlg_item,
-					     -dlg_item->h / 2);
+			    || keyboard_combo(ev, KBD_ALT, 'V')
+			    || keyboard_combo(ev, KBD_CTRL, 'B')) {
+				box_sel_move(dlg_item, -dlg_item->h / 2);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_HOME
-			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'A')) {
+			    || keyboard_combo(ev, KBD_CTRL, 'A')) {
 				box_sel_move(dlg_item, -MAXINT);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
@@ -592,7 +593,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			}
 
 			if (ev->x == KBD_END
-			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'E')) {
+			    || keyboard_combo(ev, KBD_CTRL, 'E')) {
 				box_sel_move(dlg_item, MAXINT);
 				display_dlg_item(dlg_data, dlg_item, 1);
 

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.263 2004/06/26 23:03:56 pasky Exp $ */
+/* $Id: link.c,v 1.264 2004/06/26 23:06:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -339,7 +339,7 @@ in_viewx(struct document_view *doc_view, struct link *link)
 }
 
 int
-in_viewy(struct document_view *doc_view, struct link *link)
+link_in_view_y(struct document_view *doc_view, struct link *link)
 {
 	int i, dy, height;
 
@@ -360,11 +360,11 @@ in_viewy(struct document_view *doc_view, struct link *link)
 }
 
 int
-in_view(struct document_view *doc_view, struct link *link)
+link_in_view(struct document_view *doc_view, struct link *link)
 {
 	assert(doc_view && link);
 	if_assert_failed return 0;
-	return in_viewy(doc_view, link) && in_viewx(doc_view, link);
+	return link_in_view_y(doc_view, link) && in_viewx(doc_view, link);
 }
 
 int
@@ -376,7 +376,7 @@ current_link_is_visible(struct document_view *doc_view)
 	if_assert_failed return 0;
 
 	link = get_current_link(doc_view);
-	return (link && in_view(doc_view, link));
+	return (link && link_in_view(doc_view, link));
 }
 
 /* Look for the first and the last link currently visible in our
@@ -725,7 +725,7 @@ find_link(struct document_view *doc_view, int direction, int page_mode)
 	link_pos = link - doc_view->document->links;
 	if (page_mode) {
 		/* PAGE */
-		next_link_in_view(doc_view, link_pos, direction, in_view, NULL);
+		next_link_in_view(doc_view, link_pos, direction, link_in_view, NULL);
 		return;
 	}
 	doc_view->vs->current_link = link_pos;

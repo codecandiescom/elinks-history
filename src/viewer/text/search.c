@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.248 2004/06/26 23:03:25 pasky Exp $ */
+/* $Id: search.c,v 1.249 2004/06/26 23:06:35 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -814,7 +814,7 @@ find_next_link_in_search(struct document_view *doc_view, int direction)
 
 	while (doc_view->vs->current_link != -1
 	       && next_link_in_view(doc_view, doc_view->vs->current_link + direction,
-	                            direction, in_view, NULL)) {
+	                            direction, link_in_view, NULL)) {
 		struct point *pt = NULL;
 		struct link *link;
 		int len;

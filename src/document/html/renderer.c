@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.170 2003/07/15 20:18:08 jonas Exp $ */
+/* $Id: renderer.c,v 1.171 2003/07/20 21:02:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1377,9 +1377,14 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	while (&html_top != e) {
 		kill_html_stack_item(&html_top);
+#if 0
+		/* I've preserved this bit to show an example of the Old Code
+		 * of the Mikulas days (I _HOPE_ it's by Mikulas, at least ;-).
+		 * I think this assert() can never fail, for one. --pasky */
 		assertm(&html_top && (void *)&html_top != (void *)&html_stack,
 			"html stack trashed");
 		if_assert_failed break;
+#endif
 	}
 
 	html_top.dontkill = 0;

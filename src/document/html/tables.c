@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.203 2004/06/25 10:06:08 zas Exp $ */
+/* $Id: tables.c,v 1.204 2004/06/25 10:09:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -901,7 +901,7 @@ get_cell_widths(struct table *table)
 }
 
 static inline void
-dst_width(int *values, int n, int w, int *limits)
+distribute_values(int *values, int n, int w, int *limits)
 {
 	register int i;
 	int s = 0, d, r, t;
@@ -934,7 +934,7 @@ again:
 	}
 
 	if (w) {
-		assertm(limits, "bug in dst_width");
+		assertm(limits, "bug in distribute_values");
 		limits = NULL;
 		s = 0;
 		goto again;
@@ -1032,13 +1032,15 @@ get_column_widths(struct table *table)
 				for (k = 1; k < colspan; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
-				dst_width(&table->min_cols_widths[i], colspan,
-				  	  cell->min_width - p,
-					  &table->max_cols_widths[i]);
+				distribute_values(&table->min_cols_widths[i],
+						  colspan,
+						  cell->min_width - p,
+						  &table->max_cols_widths[i]);
 
-				dst_width(&table->max_cols_widths[i], colspan,
-				  	  cell->max_width - p,
-					  NULL);
+				distribute_values(&table->max_cols_widths[i],
+						  colspan,
+						  cell->max_width - p,
+						  NULL);
 
 				for (k = 0; k < colspan; k++) {
 					int tmp = i + k;
@@ -1289,9 +1291,10 @@ check_table_widths(struct table *table)
 				for (k = 1; k < colspan; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
-				dst_width(&widths[i], colspan,
-					  cell->width - p,
-					  &table->max_cols_widths[i]);
+				distribute_values(&widths[i],
+						  colspan,
+						  cell->width - p,
+						  &table->max_cols_widths[i]);
 
 			} else if (cell->colspan > colspan
 				   && cell->colspan < new_colspan) {
@@ -1378,8 +1381,10 @@ get_table_heights(struct table *table)
 					for (k = 1; k < rowspan; k++)
 						p += (get_hline_width(table, j + k) >= 0);
 
-					dst_width(&table->rows_heights[j], rowspan,
-						  cell->height - p, NULL);
+					distribute_values(&table->rows_heights[j],
+							  rowspan,
+							  cell->height - p,
+							  NULL);
 
 				} else if (cell->rowspan > rowspan &&
 					   cell->rowspan < new_rowspan) {

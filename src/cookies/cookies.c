@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.87 2003/11/15 17:02:20 pasky Exp $ */
+/* $Id: cookies.c,v 1.88 2003/11/15 17:20:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 
 /* #define COOKIES_DEBUG */
 
+#include "bfu/msgbox.h"
 #include "cookies/cookies.h"
 #include "cookies/parser.h"
 #include "config/kbdbind.h"
@@ -58,6 +59,7 @@ struct cookie {
 };
 
 static INIT_LIST_HEAD(cookies);
+static INIT_LIST_HEAD(cookie_queries);
 
 struct c_domain {
 	LIST_HEAD(struct c_domain);
@@ -102,7 +104,7 @@ static struct option_info cookies_options[] = {
 		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, COOKIES_ACCEPT_ALL,
 		N_("Cookies accepting policy:\n"
 		"0 is accept no cookies\n"
-		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
+		"1 is ask for confirmation before accepting cookie\n"
 		"2 is accept all cookies")),
 
 	INIT_OPT_INT("cookies", N_("Maximum age"),
@@ -216,6 +218,8 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 	if (need_dots > 0) return 0;
 	return 1;
 }
+
+static void accept_cookie_dialog(struct session *ses);
 
 int
 set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
@@ -388,14 +392,14 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 		return 0;
 	}
 
-	if (get_cookies_accept_policy() != COOKIES_ACCEPT_ALL) {
-		/* TODO */
-		free_cookie(cookie);
+	/* We have already check COOKIES_ACCEPT_NONE */
+	if (get_cookies_accept_policy() == COOKIES_ACCEPT_ASK) {
+		add_to_list(cookie_queries, cookie);
+		add_questions_entry(accept_cookie_dialog);
 		return 1;
 	}
 
 ok:
-	cookies_dirty = 1;
 	accept_cookie(cookie);
 
 	return 0;
@@ -420,6 +424,7 @@ accept_cookie(struct cookie *c)
 	}
 
 	add_to_list(cookies, c);
+	cookies_dirty = 1;
 
 	foreach (cd, c_domains)
 		if (!strcasecmp(cd->domain, c->domain))
@@ -529,6 +534,35 @@ accept_cookie_never(void *idp)
 	reject_cookie(idp);
 }
 #endif
+
+static void
+accept_cookie_dialog(struct session *ses)
+{
+	struct cookie *cookie = cookie_queries.next;
+
+	assert(ses);
+
+	if (list_empty(cookie_queries)) return;
+
+	del_from_list(cookie);
+
+	/* TODO: Format the expire data to be readable for mortals too ;) */
+	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+		N_("Accept cookie?"), AL_LEFT,
+		msg_text(ses->tab->term, N_("Do you want to accept a cookie "
+		"from %s?\n\n"
+		"Name: %s\n"
+		"Value: %s\n"
+		"Domain: %s\n"
+		"Expires: %d\n"
+		"Secure: %s\n"),
+		cookie->server, cookie->name, cookie->value,
+		cookie->domain, cookie->expires,
+		_(cookie->secure ? N_("yes") : N_("no"), ses->tab->term)),
+		cookie, 2,
+		N_("Accept"), accept_cookie, B_ENTER,
+		N_("Reject"), free_cookie, B_ESC);
+}
 
 
 static int
@@ -763,6 +797,13 @@ done_cookies(struct module *module)
 
 	while (!list_empty(cookies)) {
 		struct cookie *cookie = cookies.next;
+
+		del_from_list(cookie);
+		free_cookie(cookie);
+	}
+
+	while (!list_empty(cookie_queries)) {
+		struct cookie *cookie = cookie_queries.next;
 
 		del_from_list(cookie);
 		free_cookie(cookie);

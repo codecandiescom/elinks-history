@@ -1,7 +1,9 @@
-/* $Id: module.h,v 1.3 2003/10/25 21:40:37 pasky Exp $ */
+/* $Id: module.h,v 1.4 2003/10/25 21:43:29 pasky Exp $ */
 
 #ifndef EL__MODULES_MODULE_H
 #define EL__MODULES_MODULE_H
+
+/* The module record */
 
 struct module {
 	/* The name of the module. It needs to be unique in its class (ie. in
@@ -18,7 +20,7 @@ struct module {
 	 * The table should end with NULL. */
 	struct module **submodules;
 
-	/* Lifecycle functions. */
+	/* Lifecycle functions */
 
 	/* This function should initialize the module. */
 	void (*init)(struct module *module);
@@ -30,7 +32,7 @@ struct module {
 #define INIT_MODULE(name, options, submods, init, done) \
 	{ name, options, submods, init, done }
 
-/* Interface for handling single modules. */
+/* Interface for handling single modules */
 
 void register_module_options(struct module *module);
 void unregister_module_options(struct module *module);
@@ -38,7 +40,7 @@ void unregister_module_options(struct module *module);
 void init_module(struct module *module);
 void done_module(struct module *module);
 
-/* Interface for handling builtin modules. */
+/* Interface for handling builtin modules */
 
 void register_modules_options(void);
 void unregister_modules_options(void);

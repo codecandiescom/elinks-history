@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.113 2004/05/30 03:11:41 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.114 2004/05/31 00:51:14 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -8,6 +8,7 @@ struct listbox_item;
 
 #include "config/options.h"
 #include "terminal/terminal.h"
+#include "util/object.h"
 #include "util/string.h"
 
 struct strtonum {
@@ -211,6 +212,7 @@ struct keybinding {
 	int func_ref;
 	int flags;
 	struct listbox_item *box_item;
+	struct object object;
 };
 
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.172 2004/05/30 18:52:49 jonas Exp $ */
+/* $Id: dialogs.c,v 1.173 2004/05/31 00:51:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -491,6 +491,90 @@ options_manager(struct session *ses)
   Keybinding manager stuff.
 ****************************************************************************/
 
+/* Implementation of the listbox operations */
+
+/* XXX: If anything but delete button will use these object_*() requiring
+ * functions we have to check if it is action or keymap box items. */
+
+static void
+lock_keybinding(struct listbox_item *item)
+{
+	object_lock((struct keybinding *)item->udata);
+}
+
+static void
+unlock_keybinding(struct listbox_item *item)
+{
+	object_unlock((struct keybinding *)item->udata);
+}
+
+static int
+is_keybinding_used(struct listbox_item *item)
+{
+	return is_object_used((struct keybinding *)item->udata);
+}
+
+static unsigned char *
+get_keybinding_info(struct listbox_item *item, struct terminal *term,
+		  enum listbox_info listbox_info)
+{
+	struct keybinding *keybinding = item->udata;
+	unsigned char *action, *keymap;
+	struct string info;
+
+	switch (listbox_info) {
+	case LISTBOX_TEXT:
+		return stracpy(item->text);
+
+	case LISTBOX_URI:
+		return NULL;
+
+	case LISTBOX_ALL:
+		break;
+	}
+
+	if (!init_string(&info))
+		return NULL;
+
+	action = write_action(keybinding->keymap, keybinding->action);
+	keymap = write_keymap(keybinding->keymap);
+
+	add_format_to_string(&info, "%s: ", _("Keystroke", term));
+	make_keystroke(&info, keybinding->key, keybinding->meta, 0);
+	add_format_to_string(&info, "\n%s: %s", _("Action", term), action);
+	add_format_to_string(&info, "\n%s: %s", _("Keymap", term), keymap);
+
+	return info.source;
+}
+
+static int
+can_delete_keybinding(struct listbox_item *item)
+{
+	return item->depth == 2;
+}
+
+
+static void
+delete_keybinding_item(struct listbox_item *item, int last)
+{
+	struct keybinding *keybinding = item->udata;
+
+	assert(!is_object_used(keybinding));
+
+	free_keybinding(keybinding);
+}
+
+static struct listbox_ops keybinding_listbox_ops = {
+	lock_keybinding,
+	unlock_keybinding,
+	is_keybinding_used,
+	get_keybinding_info,
+	can_delete_keybinding,
+	delete_keybinding_item,
+	NULL,
+};
+
+
 struct kbdbind_add_hop {
 	struct terminal *term;
 	int action, keymap;
@@ -631,48 +715,6 @@ push_kbdbind_toggle_display_button(struct dialog_data *dlg_data,
 
 /* FIXME: Races here, we need to lock the entry..? --pasky */
 
-static void
-really_delete_keybinding(void *data)
-{
-	struct keybinding *keybinding = data;
-
-	free_keybinding(keybinding);
-}
-
-static int
-push_kbdbind_del_button(struct dialog_data *dlg_data,
-		struct widget_data *some_useless_info_button)
-{
-	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-	struct keybinding *keybinding;
-
-	if (!box->sel || box->sel->depth < 2) {
-		msg_box(term, NULL, 0,
-			N_("Delete keybinding"), AL_CENTER,
-			N_("This item is not a keybinding. Try to press a space"
-			   " in order to get to the keybindings themselves."),
-			NULL, 1,
-			N_("OK"), NULL, B_ESC | B_ENTER);
-		return 0;
-	}
-
-	keybinding = box->sel->udata;
-
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Delete keybinding"), AL_CENTER,
-		msg_text(term, N_("Really delete the keybinding \"%s\" "
-			"(action \"%s\", keymap \"%s\")?"),
-			box->sel->text, write_action(keybinding->keymap, keybinding->action),
-			write_keymap(keybinding->keymap)),
-		keybinding, 2,
-		N_("OK"), really_delete_keybinding, B_ENTER,
-		N_("Cancel"), NULL, B_ESC);
-
-	return 0;
-}
-
-
 static int
 push_kbdbind_save_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
@@ -687,7 +729,7 @@ static INIT_LIST_HEAD(keybinding_dialog_list);
 
 static struct hierbox_browser_button keybinding_buttons[] = {
 	{ N_("Add"),		push_kbdbind_add_button,		0 },
-	{ N_("Delete"),		push_kbdbind_del_button,		0 },
+	{ N_("Delete"),		push_hierbox_delete_button,		0 },
 	{ N_("Toggle display"),	push_kbdbind_toggle_display_button,	1 },
 	{ N_("Save"),		push_kbdbind_save_button,		0 },
 };
@@ -696,7 +738,7 @@ struct_hierbox_browser(
 	keybinding_browser,
 	N_("Keybinding manager"),
 	keybinding_buttons,
-	NULL
+	&keybinding_listbox_ops
 );
 
 /* Builds the "Keybinding manager" dialog */

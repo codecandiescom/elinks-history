@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.211 2004/05/30 03:11:41 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.212 2004/05/31 00:51:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 
 	is_default = delete_keybinding(km, key, meta) == 2;
 
-	kb = mem_alloc(sizeof(struct keybinding));
+	kb = mem_calloc(1, sizeof(struct keybinding));
 	if (!kb) return NULL;
 
 	kb->keymap = km;
@@ -79,6 +79,8 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 	kb->meta = meta;
 	kb->func_ref = func_ref;
 	kb->flags = is_default * KBDB_DEFAULT;
+
+	object_nolock(kb, "keybinding");
 	add_to_list(keymaps[km], kb);
 
 	if (action == ACT_MAIN_NONE) {

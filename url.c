@@ -443,7 +443,6 @@ unsigned char *join_urls(unsigned char *base, unsigned char *rel)
 
 unsigned char *translate_url(unsigned char *url, unsigned char *cwd)
 {
-	static int r = 0;
 	unsigned char *ch;
 	unsigned char *newurl;
 	

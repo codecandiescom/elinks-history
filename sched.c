@@ -202,13 +202,17 @@ void free_connection_data(struct connection *c)
 		internal("active connections underflow");
 		active_connections = 0;
 	}
-	if (c->state != S_WAIT) if ((h = is_host_on_list(c))) {
-		if (!--h->conn) {
-			del_from_list(h);
-			mem_free(h->host);
-			mem_free(h);
+	if (c->state != S_WAIT) {
+		if ((h = is_host_on_list(c))) {
+			if (!--h->conn) {
+				del_from_list(h);
+				mem_free(h->host);
+				mem_free(h);
+			}
+		} else {
+			internal("suspending connection that is not on the list (state %d)", c->state);
 		}
-	} else internal("suspending connection that is not on the list (state %d)", c->state);
+	}
 }
 
 void send_connection_info(struct connection *c)
@@ -436,14 +440,19 @@ int try_connection(struct connection *c)
 {
 	struct h_conn *hc = NULL;
 	if ((hc = is_host_on_list(c))) {
-		if (hc->conn >= max_connections_to_host)
-			if (try_to_suspend_connection(c, hc->host)) return 0;
-			else return -1;
+		if (hc->conn >= max_connections_to_host) {
+			if (try_to_suspend_connection(c, hc->host))
+				return 0;
+			else
+				return -1;
+		}
 	}
-	if (active_connections >= max_connections)
-		if (try_to_suspend_connection(c, NULL)) return 0;
-		else return -1;
-	connect_ok:
+	if (active_connections >= max_connections) {
+		if (try_to_suspend_connection(c, NULL))
+			return 0;
+		else
+			return -1;
+	}
 	run_connection(c);
 	return 1;
 }

@@ -281,7 +281,12 @@ unsigned char *convert_string(struct conv_table *ct, unsigned char *c, int l)
 		if (c[pp] < 128 && c[pp] != '&') {
 			putc:
 			buffer[bp++] = c[pp++];
-			if (!(bp & (ALLOC_GR - 1))) if ((b = mem_realloc(buffer, bp + ALLOC_GR))) buffer = b; else bp--;
+			if (!(bp & (ALLOC_GR - 1))) {
+				if ((b = mem_realloc(buffer, bp + ALLOC_GR)))
+					buffer = b;
+				else
+					bp--;
+			}
 			continue;
 		}
 		if (c[pp] != '&') {
@@ -309,12 +314,22 @@ unsigned char *convert_string(struct conv_table *ct, unsigned char *c, int l)
 		if (!e[0]) continue;
 		if (!e[1]) {
 			buffer[bp++] = e[0];
-			if (!(bp & (ALLOC_GR - 1))) if ((b = mem_realloc(buffer, bp + ALLOC_GR))) buffer = b; else bp--;
+			if (!(bp & (ALLOC_GR - 1))) {
+				if ((b = mem_realloc(buffer, bp + ALLOC_GR)))
+					buffer = b;
+				else
+					bp--;
+			}
 			continue;
 		}
 		while (*e) {
 			buffer[bp++] = *(e++);
-			if (!(bp & (ALLOC_GR - 1))) if ((b = mem_realloc(buffer, bp + ALLOC_GR))) buffer = b; else bp--;
+			if (!(bp & (ALLOC_GR - 1))) {
+				if ((b = mem_realloc(buffer, bp + ALLOC_GR)))
+					buffer = b;
+				else
+					bp--;
+			}
 		}
 	}
 	buffer[bp] = 0;

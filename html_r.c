@@ -140,9 +140,9 @@ static inline int fg_color(int fg, int bg)
 		|| (l == 2 && (h == 6))
 		|| (l == 3 && (h == 5 || h == 12))
 		|| ((l == 4 || l == 5) && (h == 8 || h == 12))
-		|| (d_opt->avoid_dark_on_black &&
-			   (l == 0 && (h == 4 || h == 12))
-			|| (l == 1 && (h == 8))
+		|| (d_opt->avoid_dark_on_black && /* FIXME: when possibility to change bg color... */
+			   ((l == 0 && (h == 4 || h == 12)) ||
+			    (l == 1 && (h == 8)))
 		   )
 	   )
 		return (fg == 4 || fg == 12) && (bg == 0 || bg == 8) ? 6 : (7 - 7 * (bg == 2 || bg == 6 || bg == 7));
@@ -289,9 +289,14 @@ static inline void move_links(struct part *p, int xf, int yf, int xt, int yt)
 			/*printf("ml: %d %d %d %d",link->pos[0].x,link->pos[0].y,X(xf),Y(yf));fflush(stdout);sleep(1);*/
 		for (i = 0; i < link->n; i++) if (link->pos[i].y == Y(yf)) {
 			w = 1;
-			if (link->pos[i].x >= X(xf))
-				if (yt >= 0) link->pos[i].y = Y(yt), link->pos[i].x += -xf + xt;
-				else memmove(&link->pos[i], &link->pos[i+1], (link->n-i-1) * sizeof(struct point)), link->n--, i--;
+			if (link->pos[i].x >= X(xf)) {
+				if (yt >= 0)
+					link->pos[i].y = Y(yt), link->pos[i].x += -xf + xt;
+				else
+					memmove(&link->pos[i], &link->pos[i+1],
+						(link->n-i-1) * sizeof(struct point)),
+					link->n--, i--;
+			}
 		}
 		/*if (!link->n) {
 			if (link->where) mem_free(link->where);

@@ -309,7 +309,7 @@ int exe(char *path)
 char *get_clipboard_text()	/* !!! FIXME */
 {
 	char *ret = 0;
-	if (ret = mem_alloc(1)) ret[0] = 0;
+	if ((ret = mem_alloc(1))) ret[0] = 0;
 	return ret;
 }
 

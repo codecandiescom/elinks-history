@@ -260,7 +260,6 @@ unsigned char *unbind_rd(struct option *o, unsigned char *line)
 	else 
 		delete_keybinding(kmap, x, y);
 
-	x:
 	if (ckey) mem_free(ckey);
 	if (ckmap) mem_free(ckmap);
 	return err;

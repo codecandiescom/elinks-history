@@ -852,8 +852,6 @@ unsigned char *printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 	for (option = links_options; option->cmd_name || option->cfg_name; option++) {
 		if (option->cmd_name) {
-			int len;
-			
 			printf("-%s ", option->cmd_name);
 			
 			if (option->rd_cfg == num_rd)

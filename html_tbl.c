@@ -541,7 +541,7 @@ static inline void check_cell_widths(struct table *t)
 {
 	int i, j;
 	for (j = 0; j < t->y; j++) for (i = 0; i < t->x; i++) {
-		int min, max, nl;
+		int min, max;
 		struct table_cell *c = CELL(t, i, j);
 		if (!c->start) continue;
 		get_cell_width(c->start, c->end, t->cellpd, 0, 0, &min, &max, c->link_num, NULL);

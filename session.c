@@ -1734,12 +1734,11 @@ void win_func(struct window *win, struct event *ev, int fw)
 }
 
 /* 
-  Gets the url being viewed by this session. Writes it into str.
-  A maximum of str_size bytes (including null) will be written.
-*/  
+ * Gets the url being viewed by this session. Writes it into str.
+ * A maximum of str_size bytes (including null) will be written.
+ */  
 unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t str_size) {
 	unsigned char *here, *end_of_url;
-	int l = 0;
 	size_t url_len = 0;
 
 	/* Not looking at anything */
@@ -1749,7 +1748,7 @@ unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t s
 	here = cur_loc(ses)->vs.url;
 
 	/* Find the length of the url */
-	if (end_of_url = strchr(here, POST_CHAR)) {
+	if ((end_of_url = strchr(here, POST_CHAR))) {
 		url_len = (size_t)(end_of_url - (unsigned char *)here);
 	} else {
 		url_len = strlen(here);
@@ -1768,9 +1767,9 @@ unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t s
 
 
 /* 
-  Gets the title of the page being viewed by this session. Writes it into str.
-  A maximum of str_size bytes (including null) will be written.
-*/  
+ * Gets the title of the page being viewed by this session. Writes it into str.
+ * A maximum of str_size bytes (including null) will be written.
+ */  
 unsigned char *get_current_title(struct session *ses, unsigned char *str, size_t str_size) {
 	struct f_data_c *fd;
 	fd = (struct f_data_c *)current_frame(ses);
@@ -1783,9 +1782,9 @@ unsigned char *get_current_title(struct session *ses, unsigned char *str, size_t
 }
 
 /* 
-  Gets the url of the link currently selected. Writes it into str.
-  A maximum of str_size bytes (including null) will be written.
-*/  
+ * Gets the url of the link currently selected. Writes it into str.
+ * A maximum of str_size bytes (including null) will be written.
+ */  
 unsigned char *get_current_link_url(struct session *ses, unsigned char *str, size_t str_size) {
 	struct f_data_c *fd;
     struct link *l;

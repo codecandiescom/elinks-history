@@ -1943,6 +1943,7 @@ int get_num(unsigned char *, unsigned char *);
 int get_width(unsigned char *, unsigned char *, int);
 int get_color(unsigned char *, unsigned char *, struct rgb *);
 int get_bgcolor(unsigned char *, struct rgb *);
+int decode_color(unsigned char *, struct rgb *);
 void html_stack_dup();
 void kill_html_stack_item(struct html_element *);
 unsigned char *skip_comment(unsigned char *, unsigned char *);

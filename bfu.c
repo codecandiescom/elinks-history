@@ -1561,8 +1561,12 @@ void input_field(struct terminal *term, struct memory_list *ml, unsigned char *t
 		return;
 	memset(dlg, 0, sizeof(struct dialog) + 4 * sizeof(struct dialog_item) + l);
 	*(field = (unsigned char *)dlg + sizeof(struct dialog) + 4 * sizeof(struct dialog_item)) = 0;
-	if (def) if (strlen(def) + 1 > l) memcpy(field, def, l - 1);
-		 else strcpy(field, def);
+	if (def) {
+		if (strlen(def) + 1 > l)
+			memcpy(field, def, l - 1);
+		else
+			strcpy(field, def);
+	}
 	dlg->title = title;
 	dlg->fn = input_field_fn;
 	dlg->udata = text;
@@ -1652,7 +1656,6 @@ void show_dlg_item_box(struct dialog_data *dlg, struct dialog_item_data *box_ite
 	struct terminal *term = dlg->win->term;
 	struct dlg_data_item_data_box *box;
 	struct box_item *citem;	/* Item currently being shown */
-	struct box_item *items;	/* List of items to be shown */
 	int n;	/* Index of item currently being displayed */
 
 	box = (struct dlg_data_item_data_box *)(box_item_data->item->data);

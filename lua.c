@@ -71,7 +71,7 @@ static int l_current_document(LS)
 static int l_current_document_formatted(LS)
 {
 	extern unsigned char frame_dumb[];
-	int width, old_width;
+	int width, old_width = 0;
 	struct f_data_c *f;
 	struct f_data *fd;
 	int x, y;
@@ -269,7 +269,7 @@ static int l_edit_bookmark_dialog(LS)
 	}
 	
 	sz = sizeof(struct dialog) + 6 * sizeof(struct dialog_item) + sizeof *data;
-	if (!(d = mem_alloc(sz))) return;
+	if (!(d = mem_alloc(sz))) return 0;
 	memset(d, 0, sz);
 	
 	data = (struct dlg_data *)&d->items[6];
@@ -315,10 +315,12 @@ static int l_edit_bookmark_dialog(LS)
 
 #define XDIALOG_MAX_FIELDS	5
 
+#if 0
 static unsigned char *xdialog_msg[] = {
 	TEXT(T_XDIALOG_FIELD),
 	""
 };
+#endif
 
 struct xdialog_data {
 	lua_State *state;
@@ -399,7 +401,7 @@ static int l_xdialog(LS)
 	if (!lua_isfunction(S, nargs)) goto error;
 		
 	sz = sizeof(struct dialog) + nitems * sizeof(struct dialog_item) + sizeof *data;
-	if (!(d = mem_alloc(sz))) return;
+	if (!(d = mem_alloc(sz))) return 0;
 	memset(d, 0, sz);
 	
 	data = (struct xdialog_data *)&d->items[nitems];

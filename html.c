@@ -526,15 +526,18 @@ void kill_until(int ls, ...)
 		while (1) {
 			char *s = va_arg(arg, char *);
 			if (!s) break;
-			if (!*s) sk++;
-			else if (e->namelen == strlen(s) && !casecmp(e->name, s, strlen(s)))
+			if (!*s) {
+				sk++;
+			} else if (e->namelen == strlen(s) && !casecmp(e->name, s, strlen(s))) {
 				if (!sk) {
 					if (e->dontkill) break;
 					goto killll;
-				}
-				else if (sk == 1) {
+				} else if (sk == 1) {
 					goto killl;
-				} else break;
+				} else {
+					break;
+				}
+			}
 		}
 		if (e->dontkill || (e->namelen == 5 && !casecmp(e->name, "TABLE", 5))) break;
 		if (e->namelen == 2 && upcase(e->name[0]) == 'T' && (upcase(e->name[1]) == 'D' || upcase(e->name[1]) == 'H' || upcase(e->name[1]) == 'R')) break;
@@ -1620,9 +1623,15 @@ void do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *e
 	fc->type = FC_TEXTAREA;;
 	fc->ro = has_attr(attr, "disabled") ? 2 : has_attr(attr, "readonly") ? 1 : 0;
 	fc->default_value = memacpy(html, p - html);
-	for (p = fc->default_value; p && p[0]; p++) if (p[0] == '\r')
-		if (p[1] == '\n' || (p > fc->default_value && p[-1] == '\n')) memcpy(p, p + 1, strlen(p)), p--;
-		else p[0] = '\n';
+	for (p = fc->default_value; p && p[0]; p++) {
+		if (p[0] == '\r') {
+			if (p[1] == '\n' || (p > fc->default_value && p[-1] == '\n')) {
+				memcpy(p, p + 1, strlen(p)), p--;
+			} else {
+				p[0] = '\n';
+			}
+		}
+	}
 	if ((cols = get_num(attr, "cols")) <= 0) cols = 20;
 	if ((rows = get_num(attr, "rows")) <= 0) rows = 1;
 	if (cols > d_opt->xw) cols = d_opt->xw;
@@ -2157,9 +2166,12 @@ void parse_html(unsigned char *html, unsigned char *eof, void (*put_chars)(void 
 				/*debug_stack();*/
 				foreach(e, html_stack) {
 					if (e->linebreak && !ei->linebreak && ei->name) xxx = 1;
-					if (e->namelen != namelen || casecmp(e->name, name, e->namelen))
-						if (e->dontkill) break;
-						else continue;
+					if (e->namelen != namelen || casecmp(e->name, name, e->namelen)) {
+						if (e->dontkill)
+							break;
+						else
+							continue;
+					}
 					if (xxx) {
 						kill_html_stack_item(e);
 						break;

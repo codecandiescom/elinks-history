@@ -357,7 +357,6 @@ bookmark_id bookmark_dlg_box_id_get(struct dlg_data_item_data_box *box) {
 /* Cleans up after the bookmark dialog */
 void bookmark_dialog_abort_handler(struct dialog_data *dlg) {
 	struct dlg_data_item_data_box *box;
-	struct box_item *citem;	/* Item currently being shown */
 
 	box = (struct dlg_data_item_data_box *)(dlg->dlg->items[BM_BOX_IND].data);
 
@@ -531,7 +530,6 @@ void layout_bookmark_manager(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	struct list_head bms;
 	struct terminal *term;
 
 	term = dlg->win->term;
@@ -658,7 +656,6 @@ struct push_del_button_hop_struct {
 /* Called to _really_ delete a bookmark (a confirm in the delete dialog) */
 void really_del_bookmark(void *vhop) {
 	struct push_del_button_hop_struct *hop;
-	struct bookmark *bm;
 	int last;
 
 	hop = (struct push_del_button_hop_struct *)vhop;
@@ -723,7 +720,6 @@ void menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses
 		           + (BM_BOX_IND + 2) * sizeof(struct dialog_item) \
 			   + sizeof(struct bookmark) + 2 * MAX_STR_LEN)
 	
-	int fc = (int)fcp;
 	struct bookmark *new_bm;
 	struct dialog *d;
 
@@ -876,7 +872,7 @@ void layout_add_dialog(struct dialog_data *dlg)
 {
 	int max = 0, min = 0;
 	int w, rw;
-	int x, y = -1;
+	int y = -1;
 	struct terminal *term;
 
 	term = dlg->win->term;
@@ -944,8 +940,6 @@ void bookmark_edit_dialog(
 				+ sizeof(struct extension) + 2 * MAX_STR_LEN )
 	
 	unsigned char *name, *url;
-	struct bookmark *new_bm;
-
 	struct dialog *d;
 
 	/* Create the dialog */

@@ -155,12 +155,12 @@ msgid "No"
 msgstr "Nej"
 
 #: src/bookmarks/dialogs.c:420
-#, fuzzy, c-format
+#, c-format
 msgid "Delete content of folder \"%s\"?"
 msgstr "Slet indholdet af mappen \"%s\"?"
 
 #: src/bookmarks/dialogs.c:428
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete bookmark \"%s\"?\n"
 "\n"
@@ -272,7 +272,7 @@ msgstr ""
 "Værdi: %s\n"
 "\n"
 "Beskrivelse:\n"
-"%s\n"
+"%s"
 
 #: src/config/dialogs.c:126 src/config/dialogs.c:138 src/config/dialogs.c:213
 msgid "N/A"
@@ -289,7 +289,7 @@ msgstr ""
 "Navn: %s\n"
 "Type: %s\n"
 "Beskrivelse:\n"
-"%s\n"
+"%s"
 
 #: src/config/dialogs.c:189 src/protocol/url.c:64 src/sched/session.c:332
 #: src/viewer/text/view.c:2029
@@ -832,9 +832,8 @@ msgid "Configuration handling options."
 msgstr ""
 
 #: src/config/options.c:906
-#, fuzzy
 msgid "Comments"
-msgstr "dokumenter"
+msgstr "Kommentarer"
 
 #: src/config/options.c:908
 msgid ""
@@ -846,9 +845,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:914
-#, fuzzy
 msgid "Indentation"
-msgstr "SSL forhandling"
+msgstr "Indentering"
 
 #: src/config/options.c:916
 msgid ""
@@ -885,7 +883,7 @@ msgstr ""
 
 #: src/config/options.c:936
 msgid "Show template"
-msgstr ""
+msgstr "Vis skabelon"
 
 #: src/config/options.c:938
 msgid ""
@@ -898,22 +896,20 @@ msgid "Connections"
 msgstr "Forbindelser"
 
 #: src/config/options.c:945
-#, fuzzy
 msgid "Connection options."
-msgstr "Forbindelser"
+msgstr "Forbindelsesindstillinger"
 
 #: src/config/options.c:949 src/util/version.c:64
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: src/config/options.c:951
-#, fuzzy
 msgid "SSL options."
-msgstr "Gem ind~stillinger"
+msgstr "SSL indstillinger"
 
 #: src/config/options.c:954 src/config/options.c:959 src/config/options.c:964
 msgid "Verify certificates"
-msgstr ""
+msgstr "Verificer certifikater"
 
 #: src/config/options.c:956
 msgid ""
@@ -940,27 +936,24 @@ msgid "Use asynchronous DNS resolver?"
 msgstr ""
 
 #: src/config/options.c:974
-#, fuzzy
 msgid "Maximum connections"
-msgstr "Forbinder"
+msgstr "Maksimal antal forbindelser"
 
 #: src/config/options.c:976
 msgid "Maximum number of concurrent connections."
-msgstr ""
+msgstr "Maksimal antal af samtidige forbindelser."
 
 #: src/config/options.c:978
-#, fuzzy
 msgid "Maximum connections per host"
-msgstr "Forbinder"
+msgstr "Maksimal antal forbindelser pr. værtsmaskine"
 
 #: src/config/options.c:980
 msgid "Maximum number of concurrent connections to a given host."
-msgstr ""
+msgstr "Maksimal antal af samtidige forbindelser til en given værtsmaskine."
 
 #: src/config/options.c:982
-#, fuzzy
 msgid "Connection retries"
-msgstr "Forbindelser"
+msgstr "Forbindelse genforsøg"
 
 #: src/config/options.c:984
 msgid ""
@@ -973,13 +966,12 @@ msgid "Receive timeout"
 msgstr "Ventetid udløbet for overførsel"
 
 #: src/config/options.c:989
-#, fuzzy
 msgid "Receive timeout (in seconds)."
-msgstr "Ventetid udløbet for overførsel"
+msgstr "Modtagelsestimeout (i sekunder)"
 
 #: src/config/options.c:991
 msgid "Timeout for non-restartable connections"
-msgstr ""
+msgstr "Timeout for ikke-genstartbare forbindelser"
 
 #: src/config/options.c:993
 msgid "Timeout for non-restartable connections (in seconds)."
@@ -987,12 +979,11 @@ msgstr ""
 
 #: src/config/options.c:997 src/util/version.c:82
 msgid "Cookies"
-msgstr ""
+msgstr "Cookies"
 
 #: src/config/options.c:999
-#, fuzzy
 msgid "Cookies options."
-msgstr "Gem ind~stillinger"
+msgstr "Cookieindstillinger."
 
 #: src/config/options.c:1001
 msgid "Accept policy"
@@ -1018,13 +1009,12 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1015
-#, fuzzy
 msgid "Saving"
-msgstr "gennemsnitlig"
+msgstr "Gemning"
 
 #: src/config/options.c:1017
 msgid "Load/save cookies from/to disk?"
-msgstr ""
+msgstr "Læs/gem cookies fra/til disken?"
 
 #: src/config/options.c:1019
 msgid "Resaving"
@@ -1037,14 +1027,12 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1026
-#, fuzzy
 msgid "Document"
-msgstr "dokumenter"
+msgstr "Dokument"
 
 #: src/config/options.c:1028
-#, fuzzy
 msgid "Document options."
-msgstr "Dokument~information"
+msgstr "Dokumentindstillinger."
 
 #: src/config/options.c:1030
 msgid "Browsing"
@@ -1096,9 +1084,8 @@ msgid "Options for handling of the forms interaction."
 msgstr ""
 
 #: src/config/options.c:1059
-#, fuzzy
 msgid "Submit form automatically"
-msgstr "Send formular til"
+msgstr "Send formular automatisk"
 
 #: src/config/options.c:1061
 msgid ""
@@ -1112,16 +1099,15 @@ msgstr ""
 
 #: src/config/options.c:1066
 msgid "Ask for confirmation when submitting a form."
-msgstr ""
+msgstr "Spørg for bekræftigelse, når en formular sendes."
 
 #: src/config/options.c:1069
-#, fuzzy
 msgid "Images"
-msgstr "Billede"
+msgstr "Billeder"
 
 #: src/config/options.c:1071
 msgid "Options for handling of images."
-msgstr ""
+msgstr "Indstillinger til håndtering af billeder."
 
 #: src/config/options.c:1073
 msgid "Display style for image links"
@@ -1173,9 +1159,8 @@ msgid "Display links to images."
 msgstr ""
 
 #: src/config/options.c:1101
-#, fuzzy
 msgid "Links"
-msgstr "~Lænker"
+msgstr "Lænker"
 
 #: src/config/options.c:1103
 msgid "Options for handling of links to other documents."
@@ -1260,18 +1245,16 @@ msgid "Move by columns in table, instead of rows."
 msgstr ""
 
 #: src/config/options.c:1149
-#, fuzzy
 msgid "Cache"
-msgstr "Annuller"
+msgstr "Cache"
 
 #: src/config/options.c:1151
-#, fuzzy
 msgid "Cache options."
-msgstr "Gem ind~stillinger"
+msgstr "Cacheindstillinger."
 
 #: src/config/options.c:1154
 msgid "Cache informations about redirects"
-msgstr ""
+msgstr "Cacheinformationer om omstillinger"
 
 #: src/config/options.c:1156
 msgid ""
@@ -1305,31 +1288,28 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1179
-#, fuzzy
 msgid "Formatted documents"
-msgstr "Cache for behandlede dokumenter"
+msgstr "Behandlede dokumenter"
 
 #: src/config/options.c:1181
 msgid "Format cache options."
 msgstr ""
 
 #: src/config/options.c:1183
-#, fuzzy
 msgid "Number"
-msgstr "Ugyldigt nummer"
+msgstr "Nummer"
 
 #: src/config/options.c:1185
 msgid "Number of cached formatted pages."
-msgstr ""
+msgstr "Antal behandlede sider i cache."
 
 #: src/config/options.c:1187
 msgid "Memory cache"
 msgstr "Hukommelsescache"
 
 #: src/config/options.c:1189
-#, fuzzy
 msgid "Memory cache options."
-msgstr "Hukommelsescache"
+msgstr "Indstillinger for hukommelsescache."
 
 #: src/config/options.c:1191 src/dialogs/document.c:100
 msgid "Size"
@@ -1337,17 +1317,15 @@ msgstr "Størrelse"
 
 #: src/config/options.c:1193
 msgid "Memory cache size (in kilobytes)."
-msgstr ""
+msgstr "Størrelse for hukommelsescache (i kilobytes)."
 
 #: src/config/options.c:1197
-#, fuzzy
 msgid "Charset"
-msgstr "Tegnsætindstillinger"
+msgstr "Tegnsæt"
 
 #: src/config/options.c:1199
-#, fuzzy
 msgid "Charset options."
-msgstr "Gem ind~stillinger"
+msgstr "Tegnsætindstillinger"
 
 #: src/config/options.c:1201
 msgid "Default codepage"
@@ -1401,9 +1379,8 @@ msgstr ""
 #: src/config/options.c:2440 src/config/options.c:2452
 #: src/config/options.c:2469 src/config/options.c:2481
 #: src/config/options.c:2493
-#, fuzzy
 msgid "Text color"
-msgstr "Tekstområde"
+msgstr "Tekstfarve"
 
 #: src/config/options.c:1218 src/config/options.c:1782
 #: src/config/options.c:1794 src/config/options.c:1839
@@ -1429,7 +1406,7 @@ msgstr "Tekstområde"
 #: src/config/options.c:2471 src/config/options.c:2483
 #: src/config/options.c:2495
 msgid "Default text color."
-msgstr ""
+msgstr "Standard tekstfarve."
 
 #: src/config/options.c:1220 src/config/options.c:1784
 #: src/config/options.c:1796 src/config/options.c:1816
@@ -1459,9 +1436,8 @@ msgstr ""
 #: src/config/options.c:2444 src/config/options.c:2456
 #: src/config/options.c:2473 src/config/options.c:2485
 #: src/config/options.c:2497
-#, fuzzy
 msgid "Background color"
-msgstr "Udfør i baggrunden"
+msgstr "Baggrundsfarve"
 
 #: src/config/options.c:1222 src/config/options.c:1786
 #: src/config/options.c:1798 src/config/options.c:1843
@@ -1487,18 +1463,16 @@ msgstr "Udfør i baggrunden"
 #: src/config/options.c:2446 src/config/options.c:2458
 #: src/config/options.c:2475 src/config/options.c:2487
 #: src/config/options.c:2499
-#, fuzzy
 msgid "Default background color."
-msgstr "Dræb baggrundsforbindelse"
+msgstr "Standard baggrundsfarve."
 
 #: src/config/options.c:1224
-#, fuzzy
 msgid "Link color"
-msgstr "Lænketitel"
+msgstr "Farve for henvisninger"
 
 #: src/config/options.c:1226
 msgid "Default link color."
-msgstr ""
+msgstr "Standard farve for henvisninger."
 
 #: src/config/options.c:1228
 msgid "Visited-link color"
@@ -1546,9 +1520,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1257
-#, fuzzy
 msgid "Downloading"
-msgstr "Hent"
+msgstr "Nedhentning"
 
 #: src/config/options.c:1259
 msgid "Options regarding files downloading and handling."
@@ -1566,9 +1539,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1267
-#, fuzzy
 msgid "Default download directory"
-msgstr "Overførselsfejl"
+msgstr "Standard nedhentningsmappe"
 
 #: src/config/options.c:1269
 msgid "Default download directory."
@@ -1636,9 +1608,8 @@ msgid "Width of screen in characters when dumping a HTML document."
 msgstr ""
 
 #: src/config/options.c:1306
-#, fuzzy
 msgid "History"
-msgstr "~Historik"
+msgstr "Historik"
 
 #: src/config/options.c:1308
 msgid "History options."
@@ -1649,17 +1620,15 @@ msgid "Global history"
 msgstr "Historik håndtering"
 
 #: src/config/options.c:1312
-#, fuzzy
 msgid "Global history options."
-msgstr "Historik håndtering"
+msgstr "Global historikindstillinger."
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/config/options.c:1315 src/config/options.c:1429
 #: src/config/options.c:1464 src/config/options.c:1660
 #: src/config/options.c:2529 src/config/options.c:2536
-#, fuzzy
 msgid "Enable"
-msgstr "Navn"
+msgstr "Slå til"
 
 #: src/config/options.c:1317
 msgid "Enable global history (\"history of all pages visited\")."
@@ -1674,9 +1643,8 @@ msgid "Maximum number of entries in the global history."
 msgstr ""
 
 #: src/config/options.c:1323
-#, fuzzy
 msgid "Display style"
-msgstr "Vis ~usemap"
+msgstr "Vis stil"
 
 #: src/config/options.c:1325
 msgid ""
@@ -1686,42 +1654,37 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1329
-#, fuzzy
 msgid "Keep unhistory"
-msgstr "Omvend~t historik"
+msgstr "Behold omvendt historik"
 
 #: src/config/options.c:1331
 msgid "Keep unhistory (\"forward history\")?"
 msgstr ""
 
 #: src/config/options.c:1335
-#, fuzzy
 msgid "HTML rendering"
-msgstr "Overfører"
+msgstr "HTML visning"
 
 #: src/config/options.c:1337
 msgid "Options concerning the display of HTML pages."
 msgstr ""
 
 #: src/config/options.c:1340
-#, fuzzy
 msgid "Display frames"
-msgstr "Vis"
+msgstr "Vis rammer"
 
 #: src/config/options.c:1342
-#, fuzzy
 msgid "Display frames."
-msgstr "Vis"
+msgstr "Vis rammer."
 
 #: src/config/options.c:1344
-#, fuzzy
 msgid "Display tables"
-msgstr "Vis"
+msgstr "Vis tabeller"
 
 #: src/config/options.c:1346
-#, fuzzy
 msgid "Display tables."
-msgstr "Vis"
+msgstr "Vis tabeller."
+
 
 #: src/config/options.c:1348
 #, fuzzy
@@ -1743,7 +1706,7 @@ msgstr ""
 
 #: src/config/options.c:1358
 msgid "MIME"
-msgstr ""
+msgstr "MIME"
 
 #: src/config/options.c:1360
 msgid "MIME-related options (handlers of various MIME types)."

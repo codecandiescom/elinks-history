@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.2 2002/12/10 23:02:52 pasky Exp $ */
+/* $Id: xbel.c,v 1.3 2002/12/10 23:15:47 pasky Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -11,13 +11,12 @@
 #include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#include <stdlib.h>
-
 #ifdef HAVE_LIBEXPAT
 
 #include <ctype.h>
 #include <expat.h>
 #include <stdio.h>
+#include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -26,6 +25,7 @@
 
 #include "bfu/listbox.h"
 #include "bookmarks/bookmarks.h"
+#include "bookmarks/backend/common.h"
 #include "bookmarks/backend/xbel.h"
 #include "util/conv.h"
 #include "util/lists.h"
@@ -496,6 +496,10 @@ struct bookmarks_backend xbel_bookmarks_backend = {
 };
 
 #else
+
+#include <stdlib.h>
+
+#include "bookmarks/backend/common.h"
 
 struct bookmarks_backend xbel_bookmarks_backend = {
 	NULL,

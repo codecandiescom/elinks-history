@@ -2,25 +2,25 @@ See ChangeLog for recent changes, bugfixes and new features.
 
 ELinks-now:
 
-* simple CSS support
+* simple CSS
 * simple JavaScript/ECMAScript support by the SpiderMonkey Mozilla JS engine
-* support plain-text mark-up (_^Hx to underline, x^Hx to embolden)
-* HTML source highlighting using DOM implementation (experimental)
+* plain-text mark-up (_^Hx to underline, x^Hx to embolden)
+* HTML source high-lighting using DOM implementation (experimental)
 * multiple URIs on the command line
 * tabs moving (press Alt-'>' or Alt-'<')
 * exmode CLI support (press ':' followed by action and args) (experimental)
 * cursor routing (aka w3m-style navigation)
 * modal text-input form-fields editing (disabled by default) 
-* manual cookies creating and editing support
+* manual cookies creating and editing
 * typeahead text searching (press '#/')
 * PERL scripting back-end (experimental)
 * build-time configurability and feature documentation through features.conf
 * Mozilla-compatible -remote option (http://www.mozilla.org/unix/remote.html)
 * support for specifying IP family as protocol postfix (i.e. http4 or ftp6)
-* support for internationalized domain names via libidn (RFC 3490)
-* support for the data URI scheme (RFC 2397)
-* gopher protocol support (RFC 1436)
-* NNTP protocol support (RFC 977 and 2980) (experimental)
+* internationalized domain names via libidn (RFC 3490)
+* data URI protocol (RFC 2397)
+* gopher protocol (RFC 1436)
+* NNTP protocol (RFC 977 and 2980) (experimental)
 * build system fine-tuned to use automake conditionals
 * -localhost option to block connections to remote hosts
 * -verbose option to control messages printed at startup
@@ -58,7 +58,7 @@ ELinks-0.9.0:
 * 256 colors support
 * regex searches
 * cookies manager, cache manager and download manager
-* marks support
+* document marks support
 * displaying URIs in plain documents as links
 * SMB protocol support (requires smbclient)
 * builtin user prefixes support (enter 'gg' or 'gg:elinks' to the goto dialog)

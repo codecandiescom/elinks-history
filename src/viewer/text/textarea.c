@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.9 2003/07/15 20:18:11 jonas Exp $ */
+/* $Id: textarea.c,v 1.10 2003/07/21 22:38:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,9 +206,8 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 unsigned char *
 encode_textarea(struct submitted_value *sv)
 {
-	unsigned char *newtext;
+	struct string newtext;
 	void *blabla;
-	int len = 0;
 	register int i;
 
 	assert(sv && sv->value);
@@ -219,17 +218,16 @@ encode_textarea(struct submitted_value *sv)
 	blabla = format_text(sv->value, sv->frm->cols, sv->frm->wrap);
 	if (blabla) mem_free(blabla);
 
-	newtext = init_str();
-	if (!newtext) return NULL;
+	if (!init_string(&newtext)) return NULL;
 
 	for (i = 0; sv->value[i]; i++) {
 		if (sv->value[i] != '\n')
-			add_chr_to_str(&newtext, &len, sv->value[i]);
+			add_char_to_string(&newtext, sv->value[i]);
 		else
-			add_to_str(&newtext, &len, "\r\n");
+			add_to_string(&newtext, "\r\n");
 	}
 
-	return newtext;
+	return newtext.source;
 }
 
 

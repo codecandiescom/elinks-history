@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.87 2003/10/20 15:38:33 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.88 2003/10/23 22:22:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -479,7 +479,7 @@ init_action_listboxes(void)
 		keyact_box_items[act->num] = box_item =
 			mem_calloc(1, sizeof(struct listbox_item));
 		if (!box_item) continue;
-		add_to_list_bottom(kbdbind_box_items, box_item);
+		add_to_list_end(kbdbind_box_items, box_item);
 		box_item->root = NULL;
 		init_list(box_item->child);
 		box_item->visible = (act->num != ACT_SCRIPTING_FUNCTION); /* XXX */
@@ -496,7 +496,7 @@ init_action_listboxes(void)
 
 			keymap = mem_calloc(1, sizeof(struct listbox_item));
 			if (!keymap) continue;
-			add_to_list_bottom(box_item->child, keymap);
+			add_to_list_end(box_item->child, keymap);
 			keymap->root = box_item;
 			init_list(keymap->child);
 			keymap->visible = 1;

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.19 2003/10/23 21:43:29 pasky Exp $ */
+/* $Id: frames.c,v 1.20 2003/10/23 22:22:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,7 +121,7 @@ add_frame_to_list(struct session *ses, struct document_view *doc_view)
 		}
 	}
 
-	add_to_list_bottom(ses->scrn_frames, doc_view);
+	add_to_list_end(ses->scrn_frames, doc_view);
 }
 
 static struct document_view *

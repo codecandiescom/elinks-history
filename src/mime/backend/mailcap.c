@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.54 2003/10/22 21:44:22 jonas Exp $ */
+/* $Id: mailcap.c,v 1.55 2003/10/23 22:22:50 pasky Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -144,7 +144,7 @@ add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type, int typelen)
 		mitem = item->value;
 	}
 
-	add_to_list_bottom(mitem->entries, entry);
+	add_to_list_end(mitem->entries, entry);
 	mailcap_map_size++;
 }
 

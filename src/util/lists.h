@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.30 2003/06/08 13:59:09 pasky Exp $ */
+/* $Id: lists.h,v 1.31 2003/10/23 22:22:50 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -155,7 +155,7 @@ do { \
 #ifdef HAVE_TYPEOF
 
 #define add_to_list(l,x) add_at_pos((typeof(x)) &(l), (x))
-#define add_to_list_bottom(l,x) add_at_pos((typeof(x)) (l).prev, (x))
+#define add_to_list_end(l,x) add_at_pos((typeof(x)) (l).prev, (x))
 
 #define foreach(e,l) \
 	for ((e) = (l).next; \
@@ -171,7 +171,7 @@ do { \
 
 #define add_to_list(l,x) \
 	add_at_pos((struct xlist_head *) &(l), (struct xlist_head *) (x))
-#define add_to_list_bottom(l,x) \
+#define add_to_list_end(l,x) \
 	add_at_pos((struct xlist_head *) (l).prev, (struct xlist_head *) (x))
 
 #define foreach(e,l) \

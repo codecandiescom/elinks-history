@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.27 2003/07/15 20:18:09 jonas Exp $ */
+/* $Id: history.c,v 1.28 2003/09/15 14:06:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,11 +178,13 @@ void
 go_back(struct session *ses)
 {
 	unsigned char *url;
+	struct location *loc;
 
 	if (go_away(ses, -1) < 1)
 		return;
 
-	url = stracpy(((struct location *) ses->history.next)->next->vs.url);
+	loc = ((struct location *) ses->history.next)->next;
+	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, TASK_BACK, NULL,
@@ -193,11 +195,13 @@ void
 go_unback(struct session *ses)
 {
 	unsigned char *url;
+	struct location *loc;
 
 	if (go_away(ses, 1) < 1)
 		return;
 
-	url = stracpy(((struct location *) ses->unhistory.next)->vs.url);
+	loc = (struct location *) ses->unhistory.next;
+	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, TASK_UNBACK, NULL,

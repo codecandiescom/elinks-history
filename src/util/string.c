@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.26 2003/04/21 20:38:21 zas Exp $ */
+/* $Id: string.c,v 1.27 2003/05/01 23:21:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -309,55 +309,6 @@ xstrcmp(unsigned char *s1, unsigned char *s2)
 	return strcmp(s1, s2);
 }
 
-#ifndef HAVE_STRCASECMP
-int
-strcasecmp(const unsigned char *c1, const unsigned char *c2)
-{
-	for (; *c1 && *c2; c1++, c2++)
-		if (upcase(*c1) != upcase(*c2))
-			return 1;
-
-	return 0;
-}
-#endif /* !HAVE_STRCASECMP */
-
-#ifndef HAVE_STRNCASECMP
-int
-strncasecmp(const unsigned char *c1, const unsigned char *c2, size_t len)
-{
-	int i;
-
-	for (i = 0; i < len; i++)
-		if (upcase(c1[i]) != upcase(c2[i]))
-			return 1;
-
-	return 0;
-}
-#endif /* !HAVE_STRNCASECMP */
-
-#ifndef HAVE_STRCASESTR
-/* Stub for strcasestr(), GNU extension */
-unsigned char *
-strcasestr(const unsigned char *haystack, const unsigned char *needle)
-{
-	size_t haystack_length = strlen(haystack);
-	size_t needle_length = strlen(needle);
-	int i;
-
-	if (haystack_length < needle_length)
-		return NULL;
-
-	for (i = haystack_length - needle_length + 1; i; i--) {
-		if (!strncasecmp(haystack, needle, needle_length))
-			return haystack;
-		haystack++;
-	}
-
-	return NULL;
-}
-#endif
-
-
 /* Copies at most dst_size chars into dst. Ensures null termination of dst. */
 unsigned char *
 safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
@@ -373,80 +324,6 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 
 	return dst;
 }
-
-#ifndef HAVE_STRDUP
-unsigned char *
-strdup(const unsigned char *str)
-{
-	int str_len = strlen(str);
-	unsigned char *new = malloc(str_len + 1);
-
-	if (new) {
-		if (str_len) memcpy(new, str, str_len);
-		new[str_len] = 0;
-	}
-	return new;
-}
-#endif
-
-#ifndef HAVE_STRERROR
-/* Many older systems don't have this, but have the global sys_errlist array
- * instead. */
-char *
-strerror(int errno)
-{
-	extern int sys_nerr;
-	extern char *sys_errlist[];
-
-	if (errno < 0 || errno > sys_nerr)
-		return "Unknown Error";
-	else
-		return sys_errlist[errno];
-}
-#endif
-
-#ifndef HAVE_STRSTR
-/* From http://www.unixpapa.com/incnote/string.html */
-char *
-strstr(const char *s, const char *p)
-{
-	char *sp, *pp;
-
-	for(sp = s, pp = p; *sp && *pp;)
-	{
-		if (*sp == *pp) {
-			sp++;
-			pp++;
-		} else {
-			sp = sp - (pp - p) + 1;
-			pp = p;
-		}
-	}
-	return (*pp ? NULL : sp - (pp - p));
-}
-#endif
-
-#if !defined(HAVE_MEMMOVE) && !defined(HAVE_BCOPY)
-/* The memmove() function is a bit rarer than the other memory functions -
- * some systems that have the others don't have this. It is identical to
- * memcpy() but is guaranteed to work even if the strings overlap.
- * Most systems that don't have memmove() do have
- * the BSD bcopy() though some really old systems have neither.
- * Note that bcopy() has the order of the source and destination
- * arguments reversed.
- * From http://www.unixpapa.com/incnote/string.html */
-/* XXX: Perhaps not the best place for it. --Zas */
-inline char *
-memmove(char *dst, const char *src, size_t n)
-{
-	if (src > dst)
-		for ( ; n > 0; n--)
-			*(dst++)= *(src++);
-	else
-		for (dst+= n-1, src+= n-1; n > 0; n--)
-			*(dst--)= *(src--);
-}
-#endif
 
 /* Trim starting and ending chars from a string.
  * Pointer to the string is passed.
@@ -468,18 +345,144 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	return s;
 }
 
-#ifndef HAVE_STPCPY
-unsigned char *
-stpcpy(unsigned char *dest, unsigned const char *src)
+
+#ifndef HAVE_STRCASECMP
+inline int
+elinks_strcasecmp(const unsigned char *c1, const unsigned char *c2)
 {
-	while ((*dest++ = *src++) != '\0')
-	return dest - 1;
+	for (; *c1 && *c2; c1++, c2++)
+		if (upcase(*c1) != upcase(*c2))
+			return 1;
+
+	return 0;
+}
+#endif /* !HAVE_STRCASECMP */
+
+#ifndef HAVE_STRNCASECMP
+inline int
+elinks_strncasecmp(const unsigned char *c1, const unsigned char *c2, size_t len)
+{
+	int i;
+
+	for (i = 0; i < len; i++)
+		if (upcase(c1[i]) != upcase(c2[i]))
+			return 1;
+
+	return 0;
+}
+#endif /* !HAVE_STRNCASECMP */
+
+#ifndef HAVE_STRCASESTR
+/* Stub for strcasestr(), GNU extension */
+inline unsigned char *
+elinks_strcasestr(const unsigned char *haystack, const unsigned char *needle)
+{
+	size_t haystack_length = strlen(haystack);
+	size_t needle_length = strlen(needle);
+	int i;
+
+	if (haystack_length < needle_length)
+		return NULL;
+
+	for (i = haystack_length - needle_length + 1; i; i--) {
+		if (!strncasecmp(haystack, needle, needle_length))
+			return (unsigned char *)haystack;
+		haystack++;
+	}
+
+	return NULL;
+}
+#endif
+
+#ifndef HAVE_STRDUP
+inline unsigned char *
+elinks_strdup(const unsigned char *str)
+{
+	int str_len = strlen(str);
+	unsigned char *new = malloc(str_len + 1);
+
+	if (new) {
+		if (str_len) memcpy(new, str, str_len);
+		new[str_len] = '\0';
+	}
+	return new;
+}
+#endif
+
+#ifndef HAVE_STRERROR
+/* Many older systems don't have this, but have the global sys_errlist array
+ * instead. */
+inline char *
+elinks_strerror(int errno)
+{
+	extern int sys_nerr;
+	extern char *sys_errlist[];
+
+	if (errno < 0 || errno > sys_nerr)
+		return "Unknown Error";
+	else
+		return sys_errlist[errno];
+}
+#endif
+
+#ifndef HAVE_STRSTR
+/* From http://www.unixpapa.com/incnote/string.html */
+inline char *
+elinks_strstr(const char *s, const char *p)
+{
+	char *sp, *pp;
+
+	for (sp = (char *)s, pp = (char *)p; *sp && *pp; )
+	{
+		if (*sp == *pp) {
+			sp++;
+			pp++;
+		} else {
+			sp = sp - (pp - p) + 1;
+			pp = (char *)p;
+		}
+	}
+	return (*pp ? NULL : sp - (pp - p));
+}
+#endif
+
+#if !defined(HAVE_MEMMOVE) && !defined(HAVE_BCOPY)
+/* The memmove() function is a bit rarer than the other memory functions -
+ * some systems that have the others don't have this. It is identical to
+ * memcpy() but is guaranteed to work even if the strings overlap.
+ * Most systems that don't have memmove() do have
+ * the BSD bcopy() though some really old systems have neither.
+ * Note that bcopy() has the order of the source and destination
+ * arguments reversed.
+ * From http://www.unixpapa.com/incnote/string.html */
+/* XXX: Perhaps not the best place for it. --Zas */
+inline char *
+elinks_memmove(char *dst, const char *src, size_t n)
+{
+	if (src > dst)
+		for (; n > 0; n--)
+			*(dst++) = *(src++);
+	else
+		for (dst += n - 1, src+= n - 1;
+		     n > 0;
+		     n--)
+			*(dst--) = *(src--);
+}
+#endif
+
+
+#ifndef HAVE_STPCPY
+inline unsigned char *
+elinks_stpcpy(unsigned char *dest, unsigned const char *src)
+{
+	while ((*dest++ = *src++));
+	return (dest - 1);
 }
 #endif
 
 #ifndef HAVE_MEMPCPY
-void *
-mempcpy(void *dest, const void *src, size_t n)
+inline void *
+elinks_mempcpy(void *dest, const void *src, size_t n)
 {
 	return (void *) ((unsigned char *) memcpy(dest, src, n) + n);
 }

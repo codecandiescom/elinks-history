@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-03 01:53+0100\n"
-"PO-Revision-Date: 2003-12-01 19:28+0100\n"
+"PO-Revision-Date: 2003-12-04 00:17+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,7 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "Bohu¾el polo¾ku \"%s\" nelze smazat."
 
@@ -64,7 +64,7 @@ msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Bohu¾el s polo¾kou \"%s\" právì pracuje nìco jiného."
 
 #: src/bfu/hierbox.c:441
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Bohu¾el slo¾ku \"%s\" nelze smazat."
 
@@ -719,7 +719,6 @@ msgid "Download the current image"
 msgstr "Stáhnout obrázek"
 
 #: src/config/kbdbind.c:396
-#, fuzzy
 msgid "Open download manager"
 msgstr "Správce downloadù"
 
@@ -2534,22 +2533,20 @@ msgstr ""
 "lokálních adresáøù uvedeny."
 
 #: src/config/options.inc:710
-#, fuzzy
 msgid "Local CGI"
-msgstr "Lokální soubory"
+msgstr "Lokální CGI skripty"
 
 #: src/config/options.inc:712
-#, fuzzy
 msgid "Local CGI specific options."
-msgstr "Nastavení jednotlivých protokolù."
+msgstr "Nastavení spou¹tìní lokálních CGI skriptù."
 
 #: src/config/options.inc:714
 msgid "Allow local CGI"
-msgstr ""
+msgstr "Povolit lokální CGI skripty"
 
 #: src/config/options.inc:716
 msgid "Whether to execute local CGI scripts."
-msgstr ""
+msgstr "Zdalipak se mají spou¹tìt lokální CGI skripty."
 
 #: src/config/options.inc:718 src/mime/backend/mailcap.c:102
 #: src/mime/backend/mimetypes.c:59
@@ -2558,7 +2555,7 @@ msgstr "Cesta"
 
 #: src/config/options.inc:720
 msgid "Colon separated list of directories, where CGI scripts are stored."
-msgstr ""
+msgstr "Seznam adresáøù (oddìlených dvojteèkou), kde jsou ulo¾eny CGI skripty."
 
 #: src/config/options.inc:722
 msgid "User protocols"
@@ -3005,24 +3002,20 @@ msgid "Dialog frame colors."
 msgstr "Barva rámeèku dialogového okna."
 
 #: src/config/options.inc:1054 src/config/options.inc:1499
-#, fuzzy
 msgid "Scrollbar"
-msgstr "Okraj textu citlivý na scrollování"
+msgstr "Scrollovátko"
 
 #: src/config/options.inc:1056 src/config/options.inc:1501
-#, fuzzy
 msgid "Scrollbar colors."
-msgstr "Barvy li¹ty s titulkem."
+msgstr "Barvy scrollovátka."
 
 #: src/config/options.inc:1066 src/config/options.inc:1511
-#, fuzzy
 msgid "Scrollbar selected"
-msgstr "Posun v textu doleva"
+msgstr "Vybrané scrollovátko"
 
 #: src/config/options.inc:1068 src/config/options.inc:1513
-#, fuzzy
 msgid "Scrollbar selected colors."
-msgstr "Barvy vybraného tabu."
+msgstr "Barvy vybraného scrollovátka."
 
 #: src/config/options.inc:1078 src/config/options.inc:1523
 #: src/dialogs/document.c:84
@@ -4040,9 +4033,8 @@ msgstr "Ukonèit"
 
 #. This requires more work to make locking work and query the user
 #: src/dialogs/download.c:250 src/dialogs/download.c:417
-#, fuzzy
 msgid "Abort and delete file"
-msgstr "Chyba pøi ètení ze do souboru"
+msgstr "Ukonèit a smazat soubor"
 
 #: src/dialogs/download.c:423
 msgid "Download manager"
@@ -4486,9 +4478,8 @@ msgid "Average speed"
 msgstr "Prùmìrná rychlost"
 
 #: src/dialogs/status.c:85
-#, fuzzy
 msgid "average speed"
-msgstr "Prùmìrná rychlost"
+msgstr "prùmìrná rychlost"
 
 #: src/dialogs/status.c:86
 msgid "avg"
@@ -4499,9 +4490,8 @@ msgid "Speed"
 msgstr "Rychlost"
 
 #: src/dialogs/status.c:89
-#, fuzzy
 msgid "speed"
-msgstr "Rychlost"
+msgstr "rychlost"
 
 #: src/dialogs/status.c:100
 msgid "current speed"
@@ -4516,9 +4506,8 @@ msgid "Elapsed time"
 msgstr "Uplynulý èas"
 
 #: src/dialogs/status.c:112
-#, fuzzy
 msgid "elapsed time"
-msgstr "Uplynulý èas"
+msgstr "uplynulý èas"
 
 #: src/dialogs/status.c:119
 msgid "estimated time"
@@ -5216,7 +5205,7 @@ msgstr "Chybièka pøi ètení souboru"
 
 #: src/sched/error.c:62
 msgid "CGI script not in CGI path"
-msgstr ""
+msgstr "CGI skript není v cestì povolených skriptù"
 
 #: src/sched/error.c:64
 msgid "Bad FTP response"
@@ -5510,7 +5499,7 @@ msgstr "~Vygumovat formuláø"
 
 #: src/viewer/text/link.c:933
 msgid "Open in ~external editor"
-msgstr ""
+msgstr "Otevøít v ~externím editoru"
 
 #: src/viewer/text/link.c:937
 msgid "~Submit form"

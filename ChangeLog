@@ -1,3 +1,9 @@
+Sun Apr  3 18:21:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	html_dd(): minor code simplification.  
+
 Sat Apr  2 05:41:03 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/hooks.pl:

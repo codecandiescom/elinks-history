@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.10 2004/01/18 14:41:02 pasky Exp $ */
+/* $Id: property.h,v 1.11 2004/01/18 14:43:03 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -19,24 +19,24 @@ struct css_property {
 	 * name, just uppercase it and tr/-/_/. */
 
 	enum css_property_type {
-		CSS_DP_NONE,
-		CSS_DP_BACKGROUND_COLOR,
-		CSS_DP_COLOR,
-		CSS_DP_FONT_STYLE,
-		CSS_DP_FONT_WEIGHT,
-		CSS_DP_TEXT_ALIGN,
-		CSS_DP_LAST,
+		CSS_PT_NONE,
+		CSS_PT_BACKGROUND_COLOR,
+		CSS_PT_COLOR,
+		CSS_PT_FONT_STYLE,
+		CSS_PT_FONT_WEIGHT,
+		CSS_PT_TEXT_ALIGN,
+		CSS_PT_LAST,
 	} type;
 
 	/* Property value. If it is a pointer, it points always to a memory
 	 * to be free()d together with this structure. */
 
 	enum css_property_value_type {
-		CSS_DV_NONE,
-		CSS_DV_COLOR,
-		CSS_DV_FONT_ATTRIBUTE,
-		CSS_DV_TEXT_ALIGN,
-		CSS_DV_LAST,
+		CSS_VT_NONE,
+		CSS_VT_COLOR,
+		CSS_VT_FONT_ATTRIBUTE,
+		CSS_VT_TEXT_ALIGN,
+		CSS_VT_LAST,
 	} value_type;
 	union css_property_value {
 		void *none;

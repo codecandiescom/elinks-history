@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.14 2004/01/18 14:23:28 pasky Exp $ */
+/* $Id: value.c,v 1.15 2004/01/18 14:43:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,11 +188,11 @@ css_parse_text_align_value(union css_property_value *value, unsigned char **stri
 }
 
 
-static css_value_parser_t css_value_parsers[CSS_DV_LAST] = {
-	/* CSS_DV_NONE */		NULL,
-	/* CSS_DV_COLOR */		css_parse_color_value,
-	/* CSS_DV_FONT_ATTRIBUTE */	css_parse_font_attribute_value,
-	/* CSS_DV_TEXT_ALIGN */		css_parse_text_align_value,
+static css_value_parser_t css_value_parsers[CSS_VT_LAST] = {
+	/* CSS_VT_NONE */		NULL,
+	/* CSS_VT_COLOR */		css_parse_color_value,
+	/* CSS_VT_FONT_ATTRIBUTE */	css_parse_font_attribute_value,
+	/* CSS_VT_TEXT_ALIGN */		css_parse_text_align_value,
 };
 
 int
@@ -200,7 +200,7 @@ css_parse_value(enum css_property_value_type valtype,
 		union css_property_value *value,
 		unsigned char **string)
 {
-	assert(string && value && valtype < CSS_DV_LAST);
+	assert(string && value && valtype < CSS_VT_LAST);
 	assert(css_value_parsers[valtype]);
 
 	/* Skip the leading whitespaces. */

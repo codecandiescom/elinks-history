@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.360 2004/07/24 13:47:06 zas Exp $ */
+/* $Id: menu.c,v 1.361 2004/07/24 13:58:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,29 +159,29 @@ static struct menu_item no_hist_menu[] = {
 static void
 history_menu_common(struct terminal *term, struct session *ses, int unhist)
 {
-	struct location *loc;
 	struct menu_item *mi = NULL;
 
-	if (!have_location(ses)) goto loop_done;
+	if (have_location(ses)) {
+		struct location *loc;
 
-	for (loc = unhist ? cur_loc(ses)->next : cur_loc(ses)->prev;
-	     loc != (struct location *) &ses->history.history;
-	     loc = unhist ? loc->next : loc->prev) {
-		unsigned char *url;
+		for (loc = unhist ? cur_loc(ses)->next : cur_loc(ses)->prev;
+		     loc != (struct location *) &ses->history.history;
+		     loc = unhist ? loc->next : loc->prev) {
+			unsigned char *url;
 
-		if (!mi) {
-			mi = new_menu(FREE_LIST | FREE_TEXT | NO_INTL);
-			if (!mi) return;
-		}
+			if (!mi) {
+				mi = new_menu(FREE_LIST | FREE_TEXT | NO_INTL);
+				if (!mi) return;
+			}
 
-		url = get_uri_string(loc->vs.uri, URI_PUBLIC);
-		if (url) {
-			add_to_menu(&mi, url, NULL, ACT_MAIN_NONE,
-				    (menu_func) go_historywards,
-			    	    (void *) loc, 0);
+			url = get_uri_string(loc->vs.uri, URI_PUBLIC);
+			if (url) {
+				add_to_menu(&mi, url, NULL, ACT_MAIN_NONE,
+					    (menu_func) go_historywards,
+				    	    (void *) loc, 0);
+			}
 		}
 	}
-loop_done:
 
 	if (!mi)
 		do_menu(term, no_hist_menu, ses, 0);

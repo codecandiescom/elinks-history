@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.62 2004/04/14 00:09:22 jonas Exp $ */
+/* $Id: connection.h,v 1.63 2004/04/14 00:35:42 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -32,6 +32,9 @@ enum connection_priority {
 #define is_system_error(state)		(S_OK < (state) || (state) < S_WAIT)
 #define is_in_result_state(state)	((state) < 0)
 #define is_in_progress_state(state)	((state) >= 0)
+#define is_in_connecting_state(state)	(S_WAIT < (state) && (state) < S_TRANS)
+#define is_in_transfering_state(state)	((state) >= S_TRANS)
+#define is_in_queued_state(state)	(is_in_connecting_state(state) || (state) == S_WAIT)
 
 enum connection_state {
 	/* States >= 0 are used for connections still in progress. */

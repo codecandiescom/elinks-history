@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.267 2004/04/13 18:44:39 jonas Exp $ */
+/* $Id: download.c,v 1.268 2004/04/14 00:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,7 +289,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	if (!ses) goto abort;
 	term = ses->tab->term;
 
-	if (download->state >= 0) {
+	if (is_in_progress_state(download->state)) {
 		if (file_download->dlg_data)
 			redraw_dialog(file_download->dlg_data, 1);
 		return;
@@ -374,7 +374,7 @@ download_data(struct download *download, struct file_download *file_download)
 
 	if (!cached) goto store;
 
-	if (download->state >= S_WAIT && download->state < S_TRANS)
+	if (is_in_queued_state(download->state))
 		goto store;
 
 	if (cached->last_modified)

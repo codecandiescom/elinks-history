@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.163 2004/04/14 00:09:22 jonas Exp $ */
+/* $Id: connection.c,v 1.164 2004/04/14 00:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,10 +96,11 @@ connect_info(int type)
 			break;
 		case INFO_CONNECTING:
 			foreach (conn, queue)
-				info += (conn->state > S_WAIT && conn->state < S_TRANS);
+				info += is_in_connecting_state(conn->state);
 			break;
 		case INFO_TRANSFER:
-			foreach (conn, queue) info += (conn->state == S_TRANS);
+			foreach (conn, queue)
+				info += is_in_transfering_state(conn->state);
 			break;
 		case INFO_KEEP:
 			foreach (keep_conn, keepalive_connections) info++;

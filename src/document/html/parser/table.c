@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.9 2004/06/29 01:37:41 jonas Exp $ */
+/* $Id: table.c,v 1.10 2004/06/29 02:29:39 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -18,10 +18,14 @@
 #include "document/html/parser/parse.h"
 #include "document/html/parser/table.h"
 #include "document/html/parser.h"
+#include "document/options.h"
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
+
+/* Unsafe macros */
+#include "document/html/internal.h"
 
 
 #define INIT_REAL_COLS		2
@@ -49,6 +53,44 @@ add_bad_table_html_end(struct table *table, unsigned char *end)
 	    && !table->bad_html[table->bad_html_size - 1].end)
 		table->bad_html[table->bad_html_size - 1].end = end;
 }
+
+
+static int
+get_bordercolor(unsigned char *a, color_t *rgb)
+{
+	unsigned char *at;
+	int r;
+
+	if (!use_document_fg_colors(global_doc_opts))
+		return -1;
+
+	at = get_attr_val(a, "bordercolor");
+	/* Try some other MSIE-specific attributes if any. */
+	if (!at) at = get_attr_val(a, "bordercolorlight");
+	if (!at) at = get_attr_val(a, "bordercolordark");
+	if (!at) return -1;
+
+	r = decode_color(at, strlen(at), rgb);
+	mem_free(at);
+
+	return r;
+}
+
+static void
+parse_table_attributes(struct table *table, unsigned char *attr, int real)
+{
+	table->fragment_id = get_attr_val(attr, "id");
+
+	get_bordercolor(attr, &table->bordercolor);
+
+	table->width = get_width(attr, "width", real);
+	if (table->width == -1) {
+		table->width = par_format.width - par_format.leftmargin - par_format.rightmargin;
+		if (table->width < 0) table->width = 0;
+		table->full_width = 1;
+	}
+}
+
 
 static void
 get_align(unsigned char *attr, int *a)
@@ -350,7 +392,7 @@ skip_table(unsigned char *html, unsigned char *eof)
 struct table *
 parse_table(unsigned char *html, unsigned char *eof,
 	    unsigned char **end, color_t bgcolor,
-	    int sh)
+	    unsigned char *attr, int sh)
 {
 	struct table *table;
 	struct table_cell *cell;
@@ -374,6 +416,9 @@ parse_table(unsigned char *html, unsigned char *eof,
 	if (!table) return NULL;
 
 	table->bgcolor = bgcolor;
+
+	parse_table_attributes(table, attr, sh);
+
 se:
 	en = html;
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.263 2004/06/29 02:24:15 jonas Exp $ */
+/* $Id: tables.c,v 1.264 2004/06/29 02:29:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -978,43 +978,6 @@ cont2:
 	fmem_free(frame[0]);
 }
 
-static int
-get_bordercolor(unsigned char *a, color_t *rgb)
-{
-	unsigned char *at;
-	int r;
-
-	if (!use_document_fg_colors(global_doc_opts))
-		return -1;
-
-	at = get_attr_val(a, "bordercolor");
-	/* Try some other MSIE-specific attributes if any. */
-	if (!at) at = get_attr_val(a, "bordercolorlight");
-	if (!at) at = get_attr_val(a, "bordercolordark");
-	if (!at) return -1;
-
-	r = decode_color(at, strlen(at), rgb);
-	mem_free(at);
-
-	return r;
-}
-
-static void
-parse_table_attributes(struct table *table, unsigned char *attr, int real)
-{
-	table->fragment_id = get_attr_val(attr, "id");
-
-	get_bordercolor(attr, &table->bordercolor);
-
-	table->width = get_width(attr, "width", real);
-	if (table->width == -1) {
-		table->width = par_format.width - par_format.leftmargin - par_format.rightmargin;
-		if (table->width < 0) table->width = 0;
-		table->full_width = 1;
-	}
-
-}
-
 static void
 format_bad_table_html(struct table *table)
 {
@@ -1129,16 +1092,13 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		mem_free(al);
 	}
 
-	table = parse_table(html, eof, end, bgcolor, (part->document || part->box.x));
+	table = parse_table(html, eof, end, bgcolor, attr, (part->document || part->box.x));
 	if (!table) {
 		goto ret0;
 	}
 
 	table->part = part;
 	table->border = border;
-
-	parse_table_attributes(table, attr, part->document || part->box.x);
-
 	table->cellpadding = cellpadding;
 	table->vcellpadding = vcellpadding;
 	table->cellspacing = cellspacing;

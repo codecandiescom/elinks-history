@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.4 2002/04/27 13:15:52 pasky Exp $ */
+/* $Id: cache.c,v 1.5 2002/05/04 08:09:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,16 +53,26 @@ unsigned char *extract_proxy(unsigned char *url)
 	return a + 1;
 }
 
-int find_in_cache(unsigned char *url, struct cache_entry **f)
+/* Return 0 and save cache entry to 'f' if there's matching one, otherwise
+ * return -1. Yes, it's silly. */
+int
+find_in_cache(unsigned char *url, struct cache_entry **f)
 {
 	struct cache_entry *e;
+
 	url = extract_proxy(url);
-	foreach(e, cache) if (!strcmp(e->url, url)) {
+
+	foreach(e, cache) {
+		if (strcmp(e->url, url)) continue;
+
+		/* Move it on the top of the list. */
 		del_from_list(e);
 		add_to_list(cache, e);
+
 		*f = e;
 		return 0;
 	}
+
 	return -1;
 }
 

@@ -1,4 +1,4 @@
-/* $Id: stack.h,v 1.2 2004/04/23 23:06:40 pasky Exp $ */
+/* $Id: stack.h,v 1.3 2004/04/23 23:08:12 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_STACK_H
 #define EL__DOCUMENT_HTML_PARSER_STACK_H
@@ -7,7 +7,7 @@
 
 struct html_element;
 
-struct html_element *search_html_stack(char *name);
+struct html_element *search_html_stack(unsigned char *name);
 
 void html_stack_dup(enum html_element_type type);
 

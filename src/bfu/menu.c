@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.111 2003/09/28 16:10:03 jonas Exp $ */
+/* $Id: menu.c,v 1.112 2003/09/28 18:23:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -799,10 +799,8 @@ new_menu(enum item_free item_free)
 }
 
 void
-add_to_menu(struct menu_item **mi, unsigned char *text,
-	    unsigned char *rtext,
-	    void (*func)(struct terminal *, void *, void *),
-	    void *data, int submenu, int no_intl)
+add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
+	    menu_func func, void *data, int submenu, int no_intl)
 {
 	struct menu_item *mii;
 	int n = count_items(*mi);

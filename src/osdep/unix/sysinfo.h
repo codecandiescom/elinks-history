@@ -1,9 +1,9 @@
-/* $Id: sysinfo.h,v 1.3 2004/05/25 17:39:20 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.4 2004/08/14 23:23:47 jonas Exp $ */
 
 #ifndef EL__OSDEP_UNIX_SYSINFO_H
 #define EL__OSDEP_UNIX_SYSINFO_H
 
-#ifdef UNIX
+#ifdef CONFIG_UNIX
 
 static inline int dir_sep(char x) { return x == '/'; }
 #define FS_UNIX_RIGHTS

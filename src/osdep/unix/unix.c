@@ -1,13 +1,11 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.18 2004/07/28 15:43:51 jonas Exp $ */
+/* $Id: unix.c,v 1.19 2004/08/14 23:23:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include "osdep/system.h"
-
-#ifdef UNIX
 
 #ifdef HAVE_GPM_H
 #include <gpm.h>
@@ -145,7 +143,5 @@ resume_mouse(void *h)
 
 	set_handlers(gms->h, (void (*)(void *)) gpm_mouse_in, NULL, NULL, gms);
 }
-
-#endif
 
 #endif

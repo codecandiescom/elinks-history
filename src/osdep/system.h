@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.16 2004/08/14 23:18:58 jonas Exp $ */
+/* $Id: system.h,v 1.17 2004/08/14 23:23:46 jonas Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -13,13 +13,10 @@
 
 /* FIXME: Remove all usage of defines below and only use CONFIG_<OS> one */
 
-#undef UNIX
 #undef WIN32
 
 #if defined(CONFIG_WIN32)
 # define WIN32
-#elif defined(CONFIG_UNIX)
-# define UNIX
 #endif
 
 #if !defined(CONFIG_BEOS) \

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.147 2004/08/14 23:18:58 jonas Exp $ */
+/* $Id: osdep.c,v 1.148 2004/08/14 23:23:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,7 +211,7 @@ get_terminal_size(int fd, int *x, int *y)
 
 /* Pipe */
 
-#if defined(UNIX) || defined(CONFIG_BEOS) || defined(CONFIG_RISCOS)
+#if defined(CONFIG_UNIX) || defined(CONFIG_BEOS) || defined(CONFIG_RISCOS)
 
 void
 set_bin(int fd)
@@ -270,7 +270,7 @@ is_gnuscreen(void)
 }
 
 
-#if defined(UNIX) || defined(WIN32)
+#if defined(CONFIG_UNIX) || defined(WIN32)
 
 int
 is_xterm(void)
@@ -615,7 +615,7 @@ get_input_handle(void)
 #endif
 
 
-#if defined(UNIX) || defined(CONFIG_OS2) || defined(CONFIG_RISCOS)
+#if defined(CONFIG_UNIX) || defined(CONFIG_OS2) || defined(CONFIG_RISCOS)
 
 void
 terminate_osdep(void)
@@ -709,7 +709,7 @@ get_common_env(void)
 	return env;
 }
 
-#if defined(UNIX) || defined(CONFIG_RISCOS)
+#if defined(CONFIG_UNIX) || defined(CONFIG_RISCOS)
 int
 get_system_env(void)
 {

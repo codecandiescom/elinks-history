@@ -1,3 +1,44 @@
+Mon Apr 14 15:44:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/: libintl.c, libintl.h:
+
+	Accept-Language header is now correct with language "system". Patch
+	by Fabio Bonelli.  
+
+Mon Apr 14 15:35:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Partial fix for weird cursor behavior in some textareas (see
+	https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=62368). Patch
+	by Tim Waugh.  
+
+Mon Apr 14 15:22:23 2003  Laurent Monin <zas@norz.org>:
+
+	* po/pl.po:
+
+	Polish translation was updated. Patch by Witold Filipczyk.  
+
+Mon Apr 14 15:18:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	A bug concerning document decompression was fixed. Patch by Witold
+	Filipczyk.  
+
+Mon Apr 14 15:05:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, main.h, lowlevel/ttime.c, lowlevel/ttime.h:
+
+	Trivial cleanups. Patch by José Luis González González.  
+
+Mon Apr 14 13:26:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.c:
+
+	A test against a zero-length string copy was added. It prevents a
+	forced segfault with --enable-debug.  
+
 Tue Feb 25 14:17:25 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/elusive/parser/css/: tree.c, tree.h:

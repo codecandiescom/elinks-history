@@ -1,3 +1,256 @@
+Thu Sep 25 21:47:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Add some probably useless MRU mechanism and fix some whitespasms.  
+
+Thu Sep 25 21:08:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Use intermediate variables to clarify code.  
+
+Thu Sep 25 20:52:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/dialogs.c:
+
+	Use widget and widget_data intermediate variables to clarify code.  
+
+Thu Sep 25 20:13:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/tables.c, globhist/dialogs.c:
+
+	Ending spaces fix.  
+
+Thu Sep 25 19:54:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os_dep.c:
+
+	struct event -> struct term_event. No more.  
+
+Thu Sep 25 19:50:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: form.c, form.h, link.c, link.h, textarea.c,
+	view.c, view.h:
+
+	struct event -> struct term_event. More ...  
+
+Thu Sep 25 19:45:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: event.c, kbd.c, terminal.c, window.c:
+
+	struct event -> struct term_event. More ...  
+
+Thu Sep 25 19:44:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	Fix get-proxy hook bug from last patch.  
+
+Thu Sep 25 19:37:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: download.c, session.c, session.h:
+
+	struct event -> struct term_event. More ...  
+
+Thu Sep 25 19:32:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/timer.c, osdep/os_dep.c:
+
+	struct event -> struct term_event. More ...  
+
+Thu Sep 25 19:26:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/dialogs.c:
+
+	struct event -> struct term_event. More ...  
+
+Thu Sep 25 19:21:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/hierbox.c,
+	dialogs/hierbox.h:
+
+	struct event -> struct term_event. More ...  
+
+Thu Sep 25 19:18:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/hooks.c:
+
+	Correctly handle propagation in the get-proxy hook.  
+
+Thu Sep 25 19:17:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: inpfield.c, inphist.c, listbox.c, menu.c:
+
+	struct event -> struct term_event. A macro INIT_TERM_EVENT was added
+	to replace hard initializations of current struct event.  
+
+Thu Sep 25 19:11:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: terminal/event.h, terminal/terminal.h, terminal/window.h,
+	bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/dialog.h,
+	bfu/widget.h:
+
+	struct event -> struct term_event. A macro INIT_TERM_EVENT was added
+	to replace hard initializations of current struct event.  
+
+Thu Sep 25 18:53:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	Cleanup and make the get-proxy handler propagate the event when an
+	error occurs.  
+
+Thu Sep 25 18:44:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/TODO:
+
+	For now only one comment by pasky but please feed more ideas to this
+	file.  
+
+Thu Sep 25 17:08:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/core.c:
+
+	It is guile_scripting_backend instead of lua_scripting_backend! 
+
+Thu Sep 25 16:56:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Ooops, forgot some and made an error, fixed.  
+
+Thu Sep 25 16:43:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hotkey.c:
+
+	Make use of enum hotkey_state values instead of hardcoded integer
+	values.  
+
+Thu Sep 25 16:42:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/events.txt, src/sched/session.c, src/scripting/guile/hooks.c,
+	src/scripting/lua/hooks.c:
+
+	Rearrange and reduce the number of variables passed to
+	pre-format-html.  
+
+Thu Sep 25 16:39:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	*MENU_ITEM macros are now used everywhere in this file.  
+
+Thu Sep 25 16:25:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hotkey.c, bfu/menu.c, bfu/menu.h, dialogs/menu.c:
+
+	ignore_hotkey field was renamed hotkey_state and is now an enum.
+	Macros were introduced to wrap struct menu item initializations.
+	Transition partly done.  
+
+Thu Sep 25 16:08:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/hooks.c:
+
+	Cleanup.  
+
+Thu Sep 25 16:02:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	Some forgotten str_event_code() calls was changed to just return
+	EHS_* code.  
+
+Thu Sep 25 16:00:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/events.txt, src/sched/session.c, src/scripting/guile/hooks.c,
+	src/scripting/lua/hooks.c:
+
+	Next step in jonas' insane and untested scripting hacks. Minimize
+	the number of variables passed to goto-url and follow-url events.  
+
+Thu Sep 25 15:48:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	script_hook_(goto|follow_url(): Be more strict and propagate the
+	event if an error occurs. Only set @new_url if the hook function
+	returns smt. valid.  
+
+Thu Sep 25 15:25:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	Explicitly use EHS_* and return EHS_NEXT without modifying.  
+
+Thu Sep 25 14:59:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	script_hook_goto_url(): Bring the code back to look and work as the
+	original one.  
+
+Thu Sep 25 14:55:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Alphabetize #includes 
+
+Thu Sep 25 14:29:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/dialogs.c, dialogs/edit.c, dialogs/edit.h,
+	globhist/dialogs.c:
+
+	Use an enum instead of an int for edit dialog type and remove
+	obsolete BM_ in macros.  
+
+Thu Sep 25 14:17:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/events.txt:
+
+	Improve descriptions.  
+
+Thu Sep 25 01:05:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Really really rename newurl to new_url in goto_url_with_hook().  
+
+Thu Sep 25 00:50:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/hooks.c:
+
+	Weed out comments that are covered by doc/events.txt or not relevant
+	anymore.  
+
+Thu Sep 25 00:46:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	Weed out comments that are covered by doc/events.txt or not relevant
+	anymore.  
+
+Thu Sep 25 00:41:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	Rename variables and change hooks function for goto-url and
+	follow-url to act like the original ones.  
+
+Thu Sep 25 00:38:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	A few renames and changes to support the original scripting hook
+	interface when handling goto-url and follow-url.  
+
+Thu Sep 25 00:36:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/events.txt:
+
+	Describe the scripting events in use.  
+
 Tue Sep 23 20:30:43 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/scripting/: scripting.c, scripting.h, guile/core.c,

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.48 2003/10/23 21:54:38 pasky Exp $ */
+/* $Id: session.h,v 1.49 2003/10/23 22:20:10 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -148,12 +148,12 @@ extern struct list_head sessions; /* -> struct session */
 
 /* This returns a pointer to the current location inside of the given session.
  * That's nice for encapsulation and alrady paid out once ;-). */
-#define cur_loc(x) ((struct location *) ((x)->history.history.next))
+#define cur_loc(x) ((x)->history.current)
 
 /* Return if we have anything being loaded in this session already. */
 static inline int
 have_location(struct session *ses) {
-	return !list_empty(ses->history.history);
+	return !!ses->history.current;
 }
 
 

@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.20 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: rewrite.c,v 1.21 2004/04/01 14:45:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,7 +324,7 @@ goto_url_hook(va_list ap, void *data)
 
 
 	if (uu) {
-		uu = rewrite_uri(uu, cur_loc(ses)->vs.url, arg);
+		uu = rewrite_uri(uu, struri(cur_loc(ses)->vs.uri), arg);
 		if (uu) {
 			mem_free(*url);
 			*url = uu;

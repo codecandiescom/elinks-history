@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.79 2004/04/01 05:03:27 jonas Exp $ */
+/* $Id: document.c,v 1.80 2004/04/01 14:45:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,7 +86,7 @@ loc_msg(struct terminal *term, struct location *location,
 
 	add_char_to_string(&msg, '\n');
 
-	ce = get_cache_entry(location->vs.url);
+	ce = get_cache_entry(struri(location->vs.uri));
 	if (ce) {
 		unsigned char *a;
 
@@ -150,7 +150,7 @@ loc_msg(struct terminal *term, struct location *location,
 		add_format_to_string(&msg, "\n%s: ",
 				     _("Last visit time", term));
 
-		historyitem = get_global_history_item(location->vs.url);
+		historyitem = get_global_history_item(struri(location->vs.uri));
 
 		if (historyitem) last_visit = ctime(&historyitem->last_visit);
 
@@ -249,7 +249,7 @@ head_msg(struct session *ses)
 		return;
 	}
 
-	ce = find_in_cache(cur_loc(ses)->vs.url);
+	ce = find_in_cache(struri(cur_loc(ses)->vs.uri));
 	if (ce && ce->head) {
 		unsigned char *headers = stracpy(ce->head);
 

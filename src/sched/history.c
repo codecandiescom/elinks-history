@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.69 2004/04/01 05:02:46 jonas Exp $ */
+/* $Id: history.c,v 1.70 2004/04/01 14:45:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,7 @@ compress_history(struct ses_history *history, struct location *loc)
 	if ((current->vs.uri == loc->vs.uri)
 	    || (current->download.ce->redirect
 		&& !strlcasecmp(current->download.ce->redirect, -1,
-				loc->vs.url, loc->vs.url_len))) {
+				struri(loc->vs.uri), -1))) {
 		del_from_history(history, current);
 		destroy_location(current);
 	}
@@ -154,7 +154,7 @@ go_history(struct session *ses, struct location *loc)
 
 	set_session_referrer(ses, NULL);
 
-	url = memacpy(loc->vs.url, loc->vs.url_len);
+	url = stracpy(struri(loc->vs.uri));
 	if (!url) return;
 
 	ses_goto(ses, url, NULL, loc,

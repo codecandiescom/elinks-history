@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.117 2004/12/19 00:17:55 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.118 2004/12/19 01:24:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1214,8 +1214,8 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	if (argc != 1)
 		goto bye;
 
-	JSVAL_REQUIRE(&argv[0], NUMBER);
-	index = DOUBLE_TO_JSVAL(v.number);
+	JSVAL_REQUIRE(&argv[0], STRING);
+	index = atol(v.string);
 
 	foreach (fv, vs->forms) {
 		counter++;

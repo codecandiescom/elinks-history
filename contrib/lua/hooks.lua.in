@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.38 2005/03/24 21:18:11 miciah Exp $
+-- $Id: hooks.lua.in,v 1.39 2005/03/24 21:23:59 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -380,6 +380,8 @@ end
 function highlight (url, html)
   local ret=nil
 
+  if not highlight_enable then return nil,nil end
+
 -- highlight patches
   if string.find (url, "%.patch$") then
 	local tmp = tmpname ()
@@ -433,8 +435,10 @@ function highlight (url, html)
         os.remove (tmp)
         ret = 1
     end
-    return ret, html
+
+    return (ret and html),nil
 end
+table.insert(pre_format_html_hooks, highlight)
 
 
 function pre_format_html_hook_ (url, html)
@@ -452,11 +456,6 @@ function pre_format_html_hook_ (url, html)
 --        os.remove (tmp)
 --        ret = 1
 --    end
-
-    -- Highlight the source code
-    if highlight_enable then
-        ret, html = highlight(url, html)
-    end
 
     -- Mangle ALT="" in IMG tags.
     if mangle_blank_alt then

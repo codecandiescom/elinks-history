@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.36 2003/11/05 20:08:17 jonas Exp $ */
+/* $Id: hierbox.c,v 1.37 2003/11/05 20:28:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,7 +157,7 @@ layout_hierbox_browser(struct dialog_data *dlg_data)
 	rw = w;
 
 	y += 1;	/* Blankline between top and top of box */
-	dlg_format_box(NULL, term, &dlg_data->widgets_data[n], dlg_data->x + DIALOG_LB,
+	dlg_format_box(term, &dlg_data->widgets_data[n], dlg_data->x + DIALOG_LB,
 		       &y, w, NULL, AL_LEFT);
 	y += 1;	/* Blankline between box and menu */
 	dlg_format_buttons(NULL, dlg_data->widgets_data, n, 0,
@@ -171,7 +171,7 @@ layout_hierbox_browser(struct dialog_data *dlg_data)
 
 	y = dlg_data->y + DIALOG_TB;
 	y++;
-	dlg_format_box(term, term, &dlg_data->widgets_data[n], dlg_data->x + DIALOG_LB,
+	dlg_format_box(term, &dlg_data->widgets_data[n], dlg_data->x + DIALOG_LB,
 		       &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, &dlg_data->widgets_data[0], n,

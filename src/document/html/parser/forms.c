@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.62 2005/01/12 02:35:21 jonas Exp $ */
+/* $Id: forms.c,v 1.63 2005/01/30 23:42:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,11 +70,19 @@ html_form(unsigned char *a)
 	if (al) form->name = al;
 
 	al = get_attr_val(a, "action");
-	if (al) {
+	/* The HTML specification at
+	 * http://www.w3.org/TR/REC-html40/interact/forms.html#h-17.3 states
+	 * that the behavior of an empty action attribute should be undefined.
+	 * Mozilla handles action="" as action="<current-URI>" which seems
+	 * reasonable. (bug 615) */
+	if (al && *al) {
 		form->action = join_urls(html_context.base_href, trim_chars(al, ' ', 0));
 		mem_free(al);
+
 	} else {
 		enum uri_component components = URI_ORIGINAL;
+
+		mem_free_if(al);
 
 		/* We have to do following for GET method, because we would end
 		 * up with two '?' otherwise. */

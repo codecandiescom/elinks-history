@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-23 17:46+0200\n"
-"PO-Revision-Date: 2003-10-23 23:46+0200\n"
+"PO-Revision-Date: 2003-10-24 03:02+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4379,11 +4379,11 @@ msgstr "~Pøípony souborù"
 
 #: src/dialogs/menu.c:544
 msgid "~Options manager"
-msgstr "Správce nastavení"
+msgstr "Správce ~nastavení"
 
 #: src/dialogs/menu.c:545
 msgid "~Keybinding manager"
-msgstr "Správce kláves"
+msgstr "Správce ~kláves"
 
 #: src/dialogs/menu.c:546
 msgid "~Save options"

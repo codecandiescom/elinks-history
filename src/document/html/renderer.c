@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.54 2002/12/22 00:04:59 pasky Exp $ */
+/* $Id: renderer.c,v 1.55 2002/12/22 00:05:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1526,7 +1526,7 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 		form.target = NULL;
 	}
 
-	screen->bg = find_nearest_color(&par_format.bgcolor, 8);
+	screen->bg = find_nearest_color(&par_format.bgcolor, 8) << 11;
 
 	kill_html_stack_item(html_stack.next);
 

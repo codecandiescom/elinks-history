@@ -1,5 +1,8 @@
 Known bugs:
 
+	Deleting marked bookmarks causes segfaults. Compiling with --enable-debug
+seems to prevent this.
+
 	Frames don't work if there's more frames with same name. Turn them off
 in such case.
 
@@ -26,6 +29,6 @@ top/bottom of screen.
 
 	Call to OS Shell doesn't release mouse handler.
 
-$Id: BUGS,v 1.30 2003/04/22 08:57:36 zas Exp $
+$Id: BUGS,v 1.31 2003/04/22 15:51:57 zas Exp $
 
 vim: textwidth=80

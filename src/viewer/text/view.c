@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.625 2004/10/17 20:21:14 miciah Exp $ */
+/* $Id: view.c,v 1.626 2004/10/17 20:31:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -619,6 +619,40 @@ try_jump_to_link_number(struct session *ses, struct document_view *doc_view)
 	return 1;
 }
 
+enum frame_event_status
+try_mark_key(struct session *ses, struct document_view *doc_view,
+	     struct term_event *ev)
+{
+#ifdef CONFIG_MARKS
+	if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
+		/* Marks */
+		unsigned char mark = get_kbd_key(ev);
+
+		switch (ses->kbdprefix.mark) {
+			case KP_MARK_NOTHING:
+				assert(0);
+				break;
+
+			case KP_MARK_SET:
+				/* It is intentional to set the mark
+				 * to NULL if !doc_view->vs. */
+				set_mark(mark, doc_view->vs);
+				break;
+
+			case KP_MARK_GOTO:
+				goto_mark(mark, doc_view->vs);
+				break;
+		}
+
+		ses->kbdprefix.repeat_count = 0;
+		ses->kbdprefix.mark = KP_MARK_NOTHING;
+		return FRAME_EVENT_REFRESH;
+	}
+#endif
+
+	return FRAME_EVENT_IGNORED;
+}
+
 static enum frame_event_status
 frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 		    struct term_event *ev)
@@ -674,32 +708,9 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 {
 	enum frame_event_status status = FRAME_EVENT_IGNORED;
 
-#ifdef CONFIG_MARKS
-	if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
-		/* Marks */
-		unsigned char mark = get_kbd_key(ev);
-
-		switch (ses->kbdprefix.mark) {
-			case KP_MARK_NOTHING:
-				assert(0);
-				break;
-
-			case KP_MARK_SET:
-				/* It is intentional to set the mark
-				 * to NULL if !doc_view->vs. */
-				set_mark(mark, doc_view->vs);
-				break;
-
-			case KP_MARK_GOTO:
-				goto_mark(mark, doc_view->vs);
-				break;
-		}
-
-		ses->kbdprefix.repeat_count = 0;
-		ses->kbdprefix.mark = KP_MARK_NOTHING;
-		return FRAME_EVENT_REFRESH;
-	}
-#endif
+	status = try_mark_key(ses, doc_view, ev);
+	if (status != FRAME_EVENT_IGNORED)
+		return status;
 
 	if (get_opt_int("document.browse.accesskey.priority") >= 2) {
 		status = try_document_key(ses, doc_view, ev);

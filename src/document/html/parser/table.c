@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.10 2004/06/29 02:29:39 jonas Exp $ */
+/* $Id: table.c,v 1.11 2004/06/29 02:46:15 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -79,6 +79,8 @@ get_bordercolor(unsigned char *a, color_t *rgb)
 static void
 parse_table_attributes(struct table *table, unsigned char *attr, int real)
 {
+	unsigned char *al;
+
 	table->fragment_id = get_attr_val(attr, "id");
 
 	get_bordercolor(attr, &table->bordercolor);
@@ -89,6 +91,69 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 		if (table->width < 0) table->width = 0;
 		table->full_width = 1;
 	}
+
+	/* From http://www.w3.org/TR/html4/struct/tables.html#adef-border-TABLE
+	 * The following settings should be observed by user agents for
+	 * backwards compatibility.
+	 * Setting border="0" implies frame="void" and, unless otherwise
+	 * specified, rules="none".
+	 * Other values of border imply frame="border" and, unless otherwise
+	 * specified, rules="all".
+	 * The value "border" in the start tag of the TABLE element should be
+	 * interpreted as the value of the frame attribute. It implies
+	 * rules="all" and some default (non-zero) value for the border
+	 * attribute. */
+	table->border = get_num(attr, "border");
+ 	if (table->border == -1) {
+		table->border = has_attr(attr, "border")
+				|| has_attr(attr, "rules")
+				|| has_attr(attr, "frame");
+	}
+
+	if (table->border) {
+		int_upper_bound(&table->border, 2);
+
+		table->cellspacing = get_num(attr, "cellspacing");
+		int_bounds(&table->cellspacing, 1, 2);
+
+		table->frame = TABLE_FRAME_BOX;
+		al = get_attr_val(attr, "frame");
+		if (al) {
+			if (!strcasecmp(al, "void")) table->frame = TABLE_FRAME_VOID;
+			else if (!strcasecmp(al, "above")) table->frame = TABLE_FRAME_ABOVE;
+			else if (!strcasecmp(al, "below")) table->frame = TABLE_FRAME_BELOW;
+			else if (!strcasecmp(al, "hsides")) table->frame = TABLE_FRAME_HSIDES;
+			else if (!strcasecmp(al, "vsides")) table->frame = TABLE_FRAME_VSIDES;
+			else if (!strcasecmp(al, "lhs")) table->frame = TABLE_FRAME_LHS;
+			else if (!strcasecmp(al, "rhs")) table->frame = TABLE_FRAME_RHS;
+			else if (!strcasecmp(al, "box")) table->frame = TABLE_FRAME_BOX;
+			else if (!strcasecmp(al, "border")) table->frame = TABLE_FRAME_BOX;
+			mem_free(al);
+		}
+	} else {
+		table->frame = TABLE_FRAME_VOID;
+	}
+
+	table->cellpadding = get_num(attr, "cellpadding");
+	if (table->cellpadding == -1) {
+		table->vcellpadding = 0;
+		table->cellpadding = !!table->border;
+	} else {
+		table->vcellpadding = (table->cellpadding >= HTML_CHAR_HEIGHT / 2 + 1);
+		table->cellpadding = (table->cellpadding >= HTML_CHAR_WIDTH / 2 + 1);
+	}
+
+	table->rules = table->border ? TABLE_RULE_ALL : TABLE_RULE_NONE;
+	al = get_attr_val(attr, "rules");
+	if (al) {
+		if (!strcasecmp(al, "none")) table->rules = TABLE_RULE_NONE;
+		else if (!strcasecmp(al, "groups")) table->rules = TABLE_RULE_GROUPS;
+		else if (!strcasecmp(al, "rows")) table->rules = TABLE_RULE_ROWS;
+		else if (!strcasecmp(al, "cols")) table->rules = TABLE_RULE_COLS;
+		else if (!strcasecmp(al, "all")) table->rules = TABLE_RULE_ALL;
+		mem_free(al);
+	}
+
 }
 
 

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.49 2002/10/09 13:01:29 zas Exp $ */
+/* $Id: ftp.c,v 1.50 2002/10/11 18:32:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,6 +66,7 @@ struct ftp_connection_info {
 unsigned char ftp_dirlist_head[] = "<html>\n<head><title>/";
 unsigned char ftp_dirlist_head2[] = "</title></head>\n<body>\n<h2>Directory /";
 unsigned char ftp_dirlist_head3[] = "</h2>\n<pre>";
+unsigned char ftp_dirlist_updir[] = "<A HREF=\"../\">[&lt;--]</A>\n";
 unsigned char ftp_dirlist_end[] = "</pre>\n<hr>\n</body>\n</html>";
 
 
@@ -1093,7 +1094,9 @@ out_of_mem:
 		A(ftp_dirlist_head2);
 		if (url_data) A(url_data);
 		A(ftp_dirlist_head3);
-
+		if (url_data && *url_data)
+			A(ftp_dirlist_updir);
+		
 		if (url_data)
 			mem_free(url_data);
 

@@ -11150,7 +11150,7 @@ struct translation translation_ukrainian [] = {
   {T_TEXT_MARGIN, "В╕дступ"},
   {T_IGNORE_CHARSET_INFO_SENT_BY_SERVER, "╤гнорувати над╕слане сервером кодування"},
   {T_USE_DOCUMENT_COLOURS, "Використовувати кольори, визначен╕ в документ╕"},
-  {T_ALLOW_DARK_ON_BLACK, NULL},
+  {T_ALLOW_DARK_ON_BLACK, "Дозволити темн╕ кольори на чорному тл╕"},
   {T_HTML_OPTIONS, "Параметри HTML"},
   {T_DEFAULT_CODEPAGE, "Кодування за замовчанням"},
   {T_GOTO_URL, "Пeрейти до..."},
@@ -11192,7 +11192,7 @@ struct translation translation_ukrainian [] = {
   {T_ENTER_URL, "Введ╕ть URL"},
   {T_SAVE_URL, "Зберегти URL"},
   {T_DOWNLOAD, "Завантаження"},
-  {T_DOWNLOAD_COMPLETE, NULL},
+  {T_DOWNLOAD_COMPLETE, "Завантаження зак╕нчено"},
   {T_SAVE_TO_FILE, "Записати до файлу"},
   {T_SEARCH_FOR_TEXT, "Пошук тексту"},
   {T_WAITING_IN_QUEUE, "Оч╕кування в черз╕"},
@@ -11244,7 +11244,7 @@ struct translation translation_ukrainian [] = {
   {T_ELAPSED_TIME, "Витрачений час"},
   {T_ESTIMATED_TIME, "Оч╕куваний час"},
   {T_BACKGROUND, "На тл╕"},
-  {T_BACKGROUND_NOTIFY, NULL},
+  {T_BACKGROUND_NOTIFY, "На тл╕ з пов╕домленням"},
   {T_ABORT, "Перервати"},
   {T_YES, "Так"},
   {T_NO, "Н╕"},
@@ -11476,7 +11476,7 @@ struct translation translation_ukrainian [] = {
   {T_ADD_BOOKMARK_LINK, "Додати посилання до закладок"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Бажана мова (список розд╕лених комою ISO-код╕в)"},
-  {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, "Використовувати мову ╕нтерфейсу як Accept-Language (невелике зменшення безпеки)"},
   {0, NULL}
 };
 

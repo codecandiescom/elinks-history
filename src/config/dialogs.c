@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.211 2005/03/23 11:24:27 zas Exp $ */
+/* $Id: dialogs.c,v 1.212 2005/03/23 14:00:54 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -833,7 +833,7 @@ check_keystroke(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	info_box(hop->term, 0, N_("Add keybinding"), ALIGN_CENTER,
 		 N_("Invalid keystroke."));
-	
+
 	return EVENT_NOT_PROCESSED;
 }
 
@@ -877,23 +877,26 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		hop->keymap = strtonum->num;
 	}
 
-	text = straconcat(_("Action", term), ": ", write_action(hop->keymap, hop->action), "\n",
-			  _("Keymap", term), ": ", write_keymap(hop->keymap), "\n",
-			  "\n", _("Keystroke should be written in the format: "
-				  "[Prefix-]Key\nPrefix: Shift, Ctrl, Alt\n"
-				  "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,"
-				  "Tab,Enter,Insert,F5,...", term), "\n\n",
-			  _("Keystroke", term), NULL);
-	if (!text) {
-		mem_free(hop);
-		return EVENT_PROCESSED;
-	}
+	text = msg_text(term,
+			"Action: %s\n"
+			"Keymap: %s\n"
+			"\n"
+			"Keystroke should be written in the format: "
+			"[Prefix-]Key\n"
+			"Prefix: Shift, Ctrl, Alt\n"
+			"Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,"
+			"Tab,Enter,Insert,F5,..."
+			"\n\n"
+			"Keystroke",
+			write_action(hop->keymap, hop->action),
+			write_keymap(hop->keymap));
 
-	input_field(term, getml(text, hop, NULL), 0,
-		_("Add keybinding", term), text,
-		_("OK", term), _("Cancel", term), hop, NULL,
+	input_field(term, getml(hop, text, NULL), 1,
+		N_("Add keybinding"), text,
+		N_("OK"), N_("Cancel"), hop, NULL,
 		MAX_STR_LEN, "", 0, 0, check_keystroke,
 		really_add_keybinding, NULL);
+
 	return EVENT_PROCESSED;
 }
 

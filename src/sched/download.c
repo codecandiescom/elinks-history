@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.274 2004/04/21 22:35:19 jonas Exp $ */
+/* $Id: download.c,v 1.275 2004/04/21 22:39:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -774,7 +774,6 @@ resume_download(void *ses, unsigned char *file)
 
 
 static void tp_cancel(void *);
-static void tp_free(struct tq *);
 
 
 static void continue_download_do(struct terminal *, int, void *, int);
@@ -845,7 +844,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->prog_flags = tq->prog_flags;
 
 	change_connection(&tq->download, &file_download->download, PRI_DOWNLOAD, 0);
-	tp_free(tq);
+	done_tq(tq);
 
 	mem_free(codw_hop);
 	return;
@@ -887,8 +886,8 @@ init_tq(struct session *ses, struct download *download,
 	return tq;
 }
 
-static void
-tp_free(struct tq *tq)
+void
+done_tq(struct tq *tq)
 {
 	object_unlock(tq->cached);
 	done_uri(tq->uri);
@@ -899,13 +898,14 @@ tp_free(struct tq *tq)
 	mem_free(tq);
 }
 
+
 static void
 tp_cancel(void *data)
 {
 	struct tq *tq = data;
 	/* XXX: Should we really abort? (1 vs 0 as the last param) --pasky */
 	change_connection(&tq->download, NULL, PRI_CANCEL, 1);
-	tp_free(tq);
+	done_tq(tq);
 }
 
 
@@ -958,7 +958,7 @@ tp_display(struct tq *tq)
 	}
 
 	display_timer(ses);
-	tp_free(tq);
+	done_tq(tq);
 }
 
 

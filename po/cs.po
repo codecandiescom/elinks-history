@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-25 02:38+0200\n"
-"PO-Revision-Date: 2003-10-25 02:53+0200\n"
+"PO-Revision-Date: 2003-10-25 18:32+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -252,7 +252,7 @@ msgstr "Hledat"
 #: src/bookmarks/dialogs.c:617 src/config/dialogs.c:510
 #: src/config/dialogs.c:745 src/globhist/dialogs.c:476
 msgid "Close"
-msgstr "Zavøi"
+msgstr "Zavøít"
 
 #: src/bookmarks/dialogs.c:757 src/bookmarks/dialogs.c:784
 msgid "Add bookmark"

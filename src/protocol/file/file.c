@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.148 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: file.c,v 1.149 2004/03/28 19:01:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -330,7 +330,7 @@ add_dir_entry(struct directory_entry *entry, struct string *page,
 /* This function decides whether a file should be shown in directory listing or
  * not. Returns according boolean value. */
 static inline int
-file_visible(unsigned char *name, int show_hidden_files)
+file_visible(unsigned char *name, int show_hidden_files, int is_root_directory)
 {
 	/* Always show everything not beginning with a dot. */
 	if (name[0] != '.')
@@ -340,9 +340,9 @@ file_visible(unsigned char *name, int show_hidden_files)
 	if (name[1] == '\0')
 		return 0;
 
-	/* Always show the ".." directory. */
+	/* Always show the ".." directory (but for root directory). */
 	if (name[1] == '.' && name[2] == '\0')
-		return 1;
+		return !is_root_directory;
 
 	/* Others like ".x" or "..foo" are shown if show_hidden_files
 	 * == 1. */
@@ -360,6 +360,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct string *page)
 	struct dirent *entry;
 	unsigned char dircolor[8];
 	int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
+	int is_root_directory = dirpath[0] == '/' && !dirpath[1];
 
 	/* Setup @dircolor so it's easy to check if we should color dirs. */
 	if (get_opt_int("document.browse.links.color_dirs")) {
@@ -375,7 +376,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct string *page)
 		unsigned char *name;
 		struct string attrib;
 
-		if (!file_visible(entry->d_name, show_hidden_files))
+		if (!file_visible(entry->d_name, show_hidden_files, is_root_directory))
 			continue;
 
 		new_entries = mem_realloc(entries, (size + 1) *

@@ -1,4 +1,4 @@
-/* $Id: object.h,v 1.4 2003/11/17 21:31:38 pasky Exp $ */
+/* $Id: object.h,v 1.5 2003/11/17 21:32:02 pasky Exp $ */
 
 #ifndef EL__UTIL_OBJECT_H
 #define EL__UTIL_OBJECT_H
@@ -8,6 +8,7 @@
 #endif
 
 #ifdef DEBUG_REFCOUNT
+#include "util/error.h"
 #define object_lock_debug(obj, info) \
 	debug("object %p lock %s now %d", obj, info, (obj)->refcount)
 #else

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.416 2004/02/06 18:38:22 jonas Exp $ */
+/* $Id: renderer.c,v 1.417 2004/02/10 17:17:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -918,6 +918,7 @@ process_link(struct part *part, enum link_state link_state,
 	     unsigned char *chars, int charslen)
 {
 	struct link *link;
+	int x_offset = 0;
 
 	if (link_state == LINK_STATE_SAME) {
 		if (!part->document) return;
@@ -946,6 +947,15 @@ process_link(struct part *part, enum link_state link_state,
 				     format.image, format.form);
 		if (!part->document) return;
 
+		/* Trim leading space from the link text */
+		while (x_offset < charslen && chars[x_offset] <= ' ')
+			x_offset++;
+
+		if (x_offset) {
+			charslen -= x_offset;
+			chars += x_offset;
+		}
+
 		link = new_link(part->document, part->link_num, chars, charslen);
 		if (!link) return;
 	}
@@ -953,7 +963,7 @@ process_link(struct part *part, enum link_state link_state,
 	/* Add new canvas positions to the link. */
 	if (realloc_points(link, link->n + charslen)) {
 		struct point *point = &link->pos[link->n];
-		int x = X(part->cx);
+		int x = X(part->cx) + x_offset;
 		int y = Y(part->cy);
 
 		link->n += charslen;

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.250 2004/06/28 20:12:36 jonas Exp $ */
+/* $Id: tables.c,v 1.251 2004/06/28 20:16:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,27 +48,6 @@ get_table_frames(struct table *table, struct table_frames *result)
 	} else {
 		memset(result, 0, sizeof(struct table_frames));
 	}
-}
-
-static void
-free_table(struct table *table)
-{
-	int col, row;
-
-	mem_free_if(table->min_cols_widths);
-	mem_free_if(table->max_cols_widths);
-	mem_free_if(table->cols_widths);
-	mem_free_if(table->rows_heights);
-	mem_free_if(table->fragment_id);
-	mem_free_if(table->cols_x);
-
-	for (col = 0; col < table->cols; col++)
-		for (row = 0; row < table->rows; row++)
-			mem_free_if(CELL(table, col, row)->fragment_id);
-
-	mem_free(table->cells);
-	mem_free(table->columns);
-	mem_free(table);
 }
 
 static inline struct part *

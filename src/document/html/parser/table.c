@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: table.c,v 1.1 2004/06/28 20:12:36 jonas Exp $ */
+/* $Id: table.c,v 1.2 2004/06/28 20:16:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,7 +115,7 @@ new_table(void)
 	return table;
 }
 
-static void
+void
 free_table(struct table *table)
 {
 	int col, row;

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.24 2002/07/01 14:53:08 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.25 2002/07/01 14:58:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,6 @@
 
 #define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 
-static void add_default_keybindings();
 
 struct keybinding {
 	struct keybinding *next;
@@ -34,6 +33,26 @@ struct keybinding {
 };
 
 static struct list_head keymaps[KM_MAX];
+
+static void add_default_keybindings();
+
+
+static void
+add_keybinding(enum keymap km, int act, long x, long y, int func_ref)
+{
+	struct keybinding *kb;
+
+	delete_keybinding(km, x, y);
+
+	kb = mem_alloc(sizeof(struct keybinding));
+	if (kb) {
+		kb->act = act;
+		kb->x = x;
+		kb->y = y;
+		kb->func_ref = func_ref;
+		add_to_list(keymaps[km], kb);
+	}
+}
 
 static void
 delete_keybinding(enum keymap km, long x, long y)
@@ -54,22 +73,6 @@ delete_keybinding(enum keymap km, long x, long y)
 	}
 }
 
-static void
-add_keybinding(enum keymap km, int act, long x, long y, int func_ref)
-{
-	struct keybinding *kb;
-
-	delete_keybinding(km, x, y);
-
-	kb = mem_alloc(sizeof(struct keybinding));
-	if (kb) {
-		kb->act = act;
-		kb->x = x;
-		kb->y = y;
-		kb->func_ref = func_ref;
-		add_to_list(keymaps[km], kb);
-	}
-}
 
 void
 init_keymaps()
@@ -91,6 +94,7 @@ free_keymaps()
 		free_list(keymaps[i]);
 }
 
+
 int
 kbd_action(enum keymap kmap, struct event *ev, int *func_ref)
 {
@@ -110,6 +114,7 @@ kbd_action(enum keymap kmap, struct event *ev, int *func_ref)
 
 	return -1;
 }
+
 
 /*
  * Config file helpers.
@@ -329,6 +334,7 @@ bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
 }
 #endif
 
+
 /*
  * Default keybindings.
  */
@@ -450,6 +456,10 @@ static void
 add_default_keybindings()
 {
 	struct default_kb *kb;
+
+	/* Maybe we shouldn't delete old keybindings. But on the other side, we
+	 * can't trust clueless users what they'll push into sources modifying
+	 * defaults, can we? ;)) */
 
 	for (kb = default_main_keymap; kb->x; kb++)
 		add_keybinding(KM_MAIN, kb->act, kb->x, kb->y, LUA_NOREF);

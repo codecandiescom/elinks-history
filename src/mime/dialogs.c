@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.8 2002/12/21 20:21:07 zas Exp $ */
+/* $Id: dialogs.c,v 1.9 2002/12/21 20:52:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,13 +121,13 @@ add_ext_fn(struct dialog_data *dlg)
 }
 
 
-static void
+static inline void
 free_translated(void *fcp)
 {
 	mem_free(fcp);
 }
 
-static void
+static inline void
 really_del_ext(void *fcp)
 {
 	struct option *opt;
@@ -140,27 +140,23 @@ really_del_ext(void *fcp)
 void
 menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 {
-	unsigned char *translated = stracpy((unsigned char *) fcp);
+	unsigned char *translated = fcp ? stracpy((unsigned char *) fcp) : NULL;
 	struct option *opt;
 	unsigned char *str;
 	int strl;
+	int i;
 
-	if (translated) {
-		int i;
+	if (!translated) goto end;
 
-		for (i = strlen(translated) - 1; i >= 0; i--)
-			if (translated[i] == '.')
-				translated[i] = '*';
-	} else {
-		mem_free(fcp);
-		return;
-	}
+	for (i = strlen(translated) - 1; i >= 0; i--)
+		if (translated[i] == '.')
+			translated[i] = '*';
 
 	opt = get_real_opt("mime.extension", translated);
-	if (!opt) { mem_free(fcp); return; }
+	if (!opt) goto end;
 
 	str = init_str();
-	if (!str) { mem_free(fcp); return; }
+	if (!str) goto end;
 	strl = 0;
 	add_to_str(&str, &strl, (unsigned char *) fcp);
 	add_to_str(&str, &strl, " -> ");
@@ -173,7 +169,8 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 		TEXT(T_YES), really_del_ext, B_ENTER,
 		TEXT(T_NO), free_translated, B_ESC);
 
-	mem_free(fcp);
+end:
+	if (fcp) mem_free(fcp);
 }
 
 
@@ -187,20 +184,22 @@ static void
 really_add_ext(void *fcp)
 {
 	struct extension *ext = (struct extension *) fcp;
-	unsigned char *translated = stracpy(ext->ext);
+	unsigned char *translated;
 	unsigned char *name;
+	int i;
 
-	if (translated) {
-		int i;
+	if (!ext) return;
 
-		for (i = strlen(translated) - 1; i >= 0; i--)
-			if (translated[i] == '.')
-				translated[i] = '*';
-	} else return;
+	translated = stracpy(ext->ext);
+	if (!translated) return;
 
-	name = straconcat("mime.extension", ".", translated, NULL);
-	if (!name) return;
+	for (i = strlen(translated) - 1; i >= 0; i--)
+		if (translated[i] == '.')
+			translated[i] = '*';
+
+	name = straconcat("mime.extension.", translated, NULL);
 	mem_free(translated);
+	if (!name) return;
 
 	really_del_ext(ext->ext_orig); /* ..or rename ;) */
 	safe_strncpy(get_opt_str(name), ext->ct, MAX_STR_LEN);
@@ -217,21 +216,21 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	unsigned char *ct;
 	unsigned char *ext_orig;
 	struct dialog *d;
+	int i;
 
 	if (translated) {
-		int i;
 
 		for (i = strlen(translated) - 1; i >= 0; i--)
 			if (translated[i] == '.')
 				translated[i] = '*';
-	}
 
-	if (translated) opt = get_real_opt("mime.extension", translated);
+		opt = get_real_opt("mime.extension", translated);
+	}
 
 	d = mem_calloc(1, sizeof(struct dialog) + 5 * sizeof(struct widget)
 			  + sizeof(struct extension) + 3 * MAX_STR_LEN);
 	if (!d) {
-		mem_free(fcp);
+		if (fcp) mem_free(fcp);
 		return;
 	}
 
@@ -241,11 +240,12 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	new->ext_orig = ext_orig = ct + MAX_STR_LEN;
 
 	if (opt) {
-		safe_strncpy(ext, (unsigned char *) fcp, MAX_STR_LEN);
-		safe_strncpy(ct, (unsigned char *) opt->ptr, MAX_STR_LEN);
-		safe_strncpy(ext_orig, translated ? translated
-						  : (unsigned char *) "",
-			     MAX_STR_LEN);
+		#define no_null(x) ((x) ? (unsigned char *) (x) \
+					: (unsigned char *) "")
+		safe_strncpy(ext, no_null(fcp), MAX_STR_LEN);
+		safe_strncpy(ct, no_null(opt->ptr), MAX_STR_LEN);
+		safe_strncpy(ext_orig, no_null(translated), MAX_STR_LEN);
+		#undef no_null
 	}
 
 	if (translated) mem_free(translated);
@@ -299,25 +299,38 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 
 	foreachback (opt, *opt_tree) {
 		unsigned char *translated;
+		unsigned char *translated2;
+		unsigned char *optptr2;
+		int i;
 
 		if (!strcmp(opt->name, "_template_")) continue;
 
 		translated = stracpy(opt->name);
-		if (translated) {
-			int i;
+		if (!translated) continue;
 
-			for (i = strlen(translated) - 1; i >= 0; i--)
-				if (translated[i] == '*')
-					translated[i] = '.';
-		} else continue;
+		for (i = strlen(translated) - 1; i >= 0; i--)
+			if (translated[i] == '*')
+				translated[i] = '.';
+
 
 		if (!mi) {
 			mi = new_menu(FREE_LIST | FREE_TEXT | FREE_RTEXT | FREE_DATA);
 		       	if (!mi) { mem_free(translated); return; }
 		}
-		add_to_menu(&mi, translated,
-			    stracpy((unsigned char *) opt->ptr),
-			    "", MENU_FUNC fn, stracpy(translated), 0);
+
+		translated2 = stracpy(translated);
+		optptr2 = stracpy(opt->ptr);
+
+		if (translated2 && optptr2) {
+			add_to_menu(&mi, translated,
+				    optptr2,
+				    "", MENU_FUNC fn, translated2, 0);
+		} else {
+			if (optptr2) mem_free(optptr2);
+			if (translated2) mem_free(translated2);
+			if (translated) mem_free(translated);
+		}
+
 	}
 
 	if (!mi)

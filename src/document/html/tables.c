@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.191 2004/06/24 15:29:45 zas Exp $ */
+/* $Id: tables.c,v 1.192 2004/06/24 15:36:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,9 +103,9 @@ struct table {
 	color_t bgcolor;
 	color_t bordercolor;
 	int *min_c, *max_c;
-	int *columns_width;
+	int *cols_widths;
 	int *xcols;
-	int *rows_height;
+	int *rows_heights;
 	int x, y;
 	int rx, ry;
 	int border;
@@ -238,8 +238,8 @@ free_table(struct table *table)
 
 	mem_free_if(table->min_c);
 	mem_free_if(table->max_c);
-	mem_free_if(table->columns_width);
-	mem_free_if(table->rows_height);
+	mem_free_if(table->cols_widths);
+	mem_free_if(table->rows_heights);
 	mem_free_if(table->fragment_id);
 	mem_free_if(table->xcols);
 
@@ -786,12 +786,12 @@ scan_done:
 	}
 
 	if (table->y) {
-		table->rows_height = mem_calloc(table->y, sizeof(int));
-		if (!table->rows_height) {
+		table->rows_heights = mem_calloc(table->y, sizeof(int));
+		if (!table->rows_heights) {
 			free_table(table);
 			return NULL;
 		}
-	} else table->rows_height = NULL;
+	} else table->rows_heights = NULL;
 
 	for (x = 0; x < table->columns_count; x++)
 		if (table->columns[x].width != WIDTH_AUTO)
@@ -992,9 +992,9 @@ get_column_widths(struct table *table)
 		}
 	}
 
-	if (!table->columns_width) {
-		table->columns_width = mem_calloc(table->x, sizeof(int));
-		if (!table->columns_width) {
+	if (!table->cols_widths) {
+		table->cols_widths = mem_calloc(table->x, sizeof(int));
+		if (!table->cols_widths) {
 			mem_free_set(&table->min_c, NULL);
 			mem_free_set(&table->max_c, NULL);
 			return -1;
@@ -1090,7 +1090,7 @@ distribute_widths(struct table *table, int width)
 		int_lower_bound(&mmax_c, table->max_c[i]);
 
 	tx_size = table->x * sizeof(int);
-	memcpy(table->columns_width, table->min_c, tx_size);
+	memcpy(table->cols_widths, table->min_c, tx_size);
 	table->real_width = width;
 
 	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
@@ -1114,10 +1114,10 @@ distribute_widths(struct table *table, int width)
 		for (i = 0; i < table->x; i++) {
 			switch (om) {
 				case 0:
-					if (table->columns_width[i] < table->xcols[i]) {
+					if (table->cols_widths[i] < table->xcols[i]) {
 						w[i] = 1;
 						mx[i] = int_min(table->xcols[i], table->max_c[i])
-							- table->columns_width[i];
+							- table->cols_widths[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 
@@ -1125,7 +1125,7 @@ distribute_widths(struct table *table, int width)
 				case 1:
 					if (table->xcols[i] <= WIDTH_RELATIVE) {
 						w[i] = WIDTH_RELATIVE - table->xcols[i];
-						mx[i] = table->max_c[i] - table->columns_width[i];
+						mx[i] = table->max_c[i] - table->cols_widths[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 					break;
@@ -1134,8 +1134,8 @@ distribute_widths(struct table *table, int width)
 						break;
 					/* Fall-through */
 				case 3:
-					if (table->columns_width[i] < table->max_c[i]) {
-						mx[i] = table->max_c[i] - table->columns_width[i];
+					if (table->cols_widths[i] < table->max_c[i]) {
+						mx[i] = table->max_c[i] - table->cols_widths[i];
 						if (mmax_c) {
 							w[i] = 5 + table->max_c[i] * 10 / mmax_c;
 						} else {
@@ -1146,7 +1146,7 @@ distribute_widths(struct table *table, int width)
 				case 4:
 					if (table->xcols[i] >= 0) {
 						w[i] = 1;
-						mx[i] = table->xcols[i] - table->columns_width[i];
+						mx[i] = table->xcols[i] - table->cols_widths[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 					break;
@@ -1197,16 +1197,16 @@ a:
 		}
 
 		if (mii != -1) {
-			int q = table->columns_width[mii];
+			int q = table->cols_widths[mii];
 
 			if (u) u[mii] = 1;
-			table->columns_width[mii] += mss;
-			d -= table->columns_width[mii] - q;
+			table->cols_widths[mii] += mss;
+			d -= table->cols_widths[mii] - q;
 			while (d < 0) {
-				table->columns_width[mii]--;
+				table->cols_widths[mii]--;
 				d++;
 			}
-			assertm(table->columns_width[mii] >= q, "shrinking cell");
+			assertm(table->cols_widths[mii] >= q, "shrinking cell");
 			wq = 1;
 			if (d) goto a;
 		} else if (!wq) om++;
@@ -1242,7 +1242,7 @@ check_table_widths(struct table *table)
 		if (!cell->start) continue;
 
 		for (k = 0; k < cell->colspan; k++) {
-			p += table->columns_width[i + k] +
+			p += table->cols_widths[i + k] +
 			     (k && get_vline_width(table, i + k) >= 0);
 		}
 
@@ -1280,7 +1280,7 @@ check_table_widths(struct table *table)
 
 	s = ns = 0;
 	for (i = 0; i < table->x; i++) {
-		s += table->columns_width[i];
+		s += table->cols_widths[i];
 		ns += widths[i];
 	}
 
@@ -1299,8 +1299,8 @@ check_table_widths(struct table *table)
 	if (max != -1) {
 		widths[max_index] += s - ns;
 		if (widths[max_index] <= table->max_c[max_index]) {
-			mem_free(table->columns_width);
-			table->columns_width = widths;
+			mem_free(table->cols_widths);
+			table->cols_widths = widths;
 			return;
 		}
 	}
@@ -1325,7 +1325,7 @@ get_table_heights(struct table *table)
 			if (!cell->is_used || cell->is_spanned) continue;
 
 			for (sp = 0; sp < cell->colspan; sp++) {
-				xw += table->columns_width[i + sp] +
+				xw += table->cols_widths[i + sp] +
 				      (sp < cell->colspan - 1 &&
 				       get_vline_width(table, i + sp + 1) >= 0);
 			}
@@ -1354,7 +1354,7 @@ get_table_heights(struct table *table)
 					for (k = 1; k < s; k++)
 						p += (get_hline_width(table, j + k) >= 0);
 
-					dst_width(&table->rows_height[j], s,
+					dst_width(&table->rows_heights[j], s,
 						  cell->height - p, NULL);
 
 				} else if (cell->rowspan > s &&
@@ -1373,7 +1373,7 @@ get_table_heights(struct table *table)
 		get_table_frames(table, &table_frames);
 		table->real_height = table_frames.top + table_frames.bottom;
 		for (j = 0; j < table->y; j++) {
-			table->real_height += table->rows_height[j] +
+			table->real_height += table->rows_heights[j] +
 				 (j && get_hline_width(table, j) >= 0);
 		}
 	}
@@ -1401,13 +1401,13 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 
 		for (j = 0; j < table->y; j++) {
 			struct table_cell *cell = CELL(table, i, j);
-			int rows_height = table->rows_height[j] +
+			int row_height = table->rows_heights[j] +
 				(j < table->y - 1 && get_hline_width(table, j + 1) >= 0);
 			int row;
 
 			par_format.bgcolor = default_bgcolor;
 			for (row = table->part->cy;
-			     row < yp + rows_height + table_frames.top;
+			     row < yp + row_height + table_frames.top;
 			     row++) {
 				expand_lines(table->part, row);
 				expand_line(table->part, row, x - 1);
@@ -1420,13 +1420,13 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 				struct html_element *state;
 
 				for (s = 0; s < cell->colspan; s++) {
-					xw += table->columns_width[i + s] +
+					xw += table->cols_widths[i + s] +
 					      (s < cell->colspan - 1 &&
 					       get_vline_width(table, i + s + 1) >= 0);
 				}
 
 				for (s = 0; s < cell->rowspan; s++) {
-					yw += table->rows_height[j + s] +
+					yw += table->rows_heights[j + s] +
 					      (s < cell->rowspan - 1 &&
 					       get_hline_width(table, j + s + 1) >= 0);
 				}
@@ -1466,7 +1466,7 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 						for (yt = 0; yt < part->box.height; yt++) {
 							expand_lines(table->part, yp + yt);
 							expand_line(table->part, yp + yt,
-								    xp + table->columns_width[i]);
+								    xp + table->cols_widths[i]);
 						}
 
 						if (cell->fragment_id)
@@ -1479,18 +1479,18 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 				done_html_parser_state(state);
 			}
 
-			yp += table->rows_height[j] +
+			yp += table->rows_heights[j] +
 			      (j < table->y - 1 && get_hline_width(table, j + 1) >= 0);
 		}
 
 		if (i < table->x - 1) {
-			xp += table->columns_width[i] + (get_vline_width(table, j + 1) >= 0);
+			xp += table->cols_widths[i] + (get_vline_width(table, j + 1) >= 0);
 		}
 	}
 
 	yp = y;
 	for (j = 0; j < table->y; j++) {
-		yp += table->rows_height[j] +
+		yp += table->rows_heights[j] +
 		      (j < table->y - 1 && get_hline_width(table, j + 1) >= 0);
 	}
 
@@ -1555,9 +1555,9 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
  	assertm(pos < 3, "Horizontal table position out of bound [%d]", pos);
 	if_assert_failed return;
 
- 	if (pos < 0 || table->columns_width[i] <= 0) return;
+ 	if (pos < 0 || table->cols_widths[i] <= 0) return;
 
- 	draw_frame_hchars(table->part, x, y, table->columns_width[i], hltable[pos],
+ 	draw_frame_hchars(table->part, x, y, table->cols_widths[i], hltable[pos],
 			  bgcolor, fgcolor);
 }
 
@@ -1571,9 +1571,9 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
  	assertm(pos < 3, "Vertical table position out of bound [%d]", pos);
 	if_assert_failed return;
 
- 	if (pos < 0 || table->rows_height[j] <= 0) return;
+ 	if (pos < 0 || table->rows_heights[j] <= 0) return;
 
- 	draw_frame_vchars(table->part, x, y, table->rows_height[j], vltable[pos],
+ 	draw_frame_vchars(table->part, x, y, table->rows_heights[j], vltable[pos],
 			  bgcolor, fgcolor);
 }
 
@@ -1662,7 +1662,7 @@ cont2:
 
 				draw_frame_hline(table, frame, cx, cy, i, j,
 						 par_format.bgcolor, table->bordercolor);
-				cx += table->columns_width[i];
+				cx += table->cols_widths[i];
 			}
 
 			if (table_frames.right) {
@@ -1685,11 +1685,11 @@ cont2:
 							 par_format.bgcolor, table->bordercolor);
 					cx++;
 				}
-				if (i < table->x) cx += table->columns_width[i];
+				if (i < table->x) cx += table->cols_widths[i];
 			}
 		}
 
-		if (j < table->y) cy += table->rows_height[j];
+		if (j < table->y) cy += table->rows_heights[j];
 		/*for (cyy = cy1; cyy < cy; cyy++) expand_line(table->p, cyy, cx - 1);*/
 	}
 

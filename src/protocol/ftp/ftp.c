@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.131 2004/04/03 01:22:47 jonas Exp $ */
+/* $Id: ftp.c,v 1.132 2004/04/03 14:32:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -908,14 +908,14 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 		/* Requested action not taken.
 		 * File unavailable (e.g., file not found, no access). */
 
-		if (!conn->cache)
-			conn->cache = get_cache_entry(conn->uri);
-		if (!conn->cache) {
+		if (!conn->cached)
+			conn->cached = get_cache_entry(conn->uri);
+		if (!conn->cached) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
 		}
 
-		if (!redirect_cache(conn->cache, "/", 1, 0)) {
+		if (!redirect_cache(conn->cached, "/", 1, 0)) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
 		}
@@ -944,7 +944,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 
 /* Display directory entry formatted in HTML. */
 static int
-display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
+display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 		  int colorize_dir, unsigned char *dircolor,
 		  struct ftpparse *ftp_info)
 {
@@ -1033,7 +1033,7 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 	}
 	add_char_to_string(&string, '\n');
 
-	if (add_fragment(c_e, *pos, string.source, string.length)) *tries = 0;
+	if (add_fragment(cached, *pos, string.source, string.length)) *tries = 0;
 	*pos += string.length;
 
 	done_string(&string);
@@ -1042,7 +1042,7 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 
 /* List a directory in html format. */
 static int
-ftp_process_dirlist(struct cache_entry *c_e, int *pos,
+ftp_process_dirlist(struct cache_entry *cached, int *pos,
 		    unsigned char *buffer, int buflen, int last,
 		    int *tries, int colorize_dir, unsigned char *dircolor)
 {
@@ -1083,7 +1083,7 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos,
 				&& ftp_info.name[1] == '.'))
 				continue;
 
-			retv = display_dir_entry(c_e, pos, tries, colorize_dir,
+			retv = display_dir_entry(cached, pos, tries, colorize_dir,
 						dircolor, &ftp_info);
 			if (retv < 0)
 				return retv;
@@ -1132,8 +1132,8 @@ conn_error:
 		return;
 	}
 
-	if (!conn->cache) conn->cache = get_cache_entry(conn->uri);
-	if (!conn->cache) {
+	if (!conn->cached) conn->cached = get_cache_entry(conn->uri);
+	if (!conn->cached) {
 out_of_mem:
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
@@ -1166,11 +1166,11 @@ out_of_mem:
 		add_html_to_string(&string, url, url_len);
 
 #define ADD_CONST(str) { \
-	add_fragment(conn->cache, conn->from, str, sizeof(str) - 1); \
+	add_fragment(conn->cached, conn->from, str, sizeof(str) - 1); \
 	conn->from += (sizeof(str) - 1); }
 
 #define ADD_STRING() { \
-	add_fragment(conn->cache, conn->from, string.source, string.length); \
+	add_fragment(conn->cached, conn->from, string.source, string.length); \
 	conn->from += string.length; }
 
 		ADD_CONST("<html>\n<head><title>");
@@ -1200,16 +1200,16 @@ out_of_mem:
 			ftp_info.perm = 0;
 			ftp_info.permlen = 0;
 
-			display_dir_entry(conn->cache, &conn->from, &conn->tries,
+			display_dir_entry(conn->cached, &conn->from, &conn->tries,
 					  colorize_dir, dircolor, &ftp_info);
 		}
 
-		if (!conn->cache->head) {
-			conn->cache->head = stracpy("\r\n");
-			if (!conn->cache->head) goto out_of_mem;
+		if (!conn->cached->head) {
+			conn->cached->head = stracpy("\r\n");
+			if (!conn->cached->head) goto out_of_mem;
 		}
 
-		add_to_strn(&conn->cache->head, "Content-Type: text/html\r\n");
+		add_to_strn(&conn->cached->head, "Content-Type: text/html\r\n");
 	}
 
 	len = safe_read(conn->data_socket, c_i->ftp_buffer + c_i->buf_pos,
@@ -1219,7 +1219,7 @@ out_of_mem:
 	if (len > 0) {
 		if (!c_i->dir) {
 			conn->received += len;
-			if (add_fragment(conn->cache, conn->from,
+			if (add_fragment(conn->cached, conn->from,
 					 c_i->ftp_buffer, len) == 1)
 				conn->tries = 0;
 			conn->from += len;
@@ -1228,7 +1228,7 @@ out_of_mem:
 			int proceeded;
 
 			conn->received += len;
-			proceeded = ftp_process_dirlist(conn->cache,
+			proceeded = ftp_process_dirlist(conn->cached,
 							&conn->from,
 							c_i->ftp_buffer,
 							len + c_i->buf_pos,
@@ -1249,7 +1249,7 @@ out_of_mem:
 		return;
 	}
 
-	if (ftp_process_dirlist(conn->cache, &conn->from,
+	if (ftp_process_dirlist(conn->cached, &conn->from,
 				c_i->ftp_buffer, c_i->buf_pos, 1,
 				&conn->tries, colorize_dir,
 				(unsigned char *) dircolor) == -1)
@@ -1275,9 +1275,9 @@ ftp_end_request(struct connection *conn, enum connection_state state)
 {
 	set_connection_state(conn, state);
 
-	if (conn->state == S_OK && conn->cache) {
-		truncate_entry(conn->cache, conn->from, 1);
-		conn->cache->incomplete = 0;
+	if (conn->state == S_OK && conn->cached) {
+		truncate_entry(conn->cached, conn->from, 1);
+		conn->cached->incomplete = 0;
 	}
 
 	add_keepalive_connection(conn, FTP_KEEPALIVE_TIMEOUT);

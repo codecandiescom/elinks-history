@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.108 2004/04/03 14:13:48 jonas Exp $ */
+/* $Id: dump.c,v 1.109 2004/04/03 14:32:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,7 @@ dump_pre_start(struct list_head *url_list)
 void
 dump_end(struct download *status, void *p)
 {
-	struct cache_entry *cached = status->ce;
+	struct cache_entry *cached = status->cached;
 	int fd = get_output_handle();
 
 	if (fd == -1) return;

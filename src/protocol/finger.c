@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.31 2004/04/03 14:13:48 jonas Exp $ */
+/* $Id: finger.c,v 1.32 2004/04/03 14:32:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ finger_get_response(struct connection *conn, struct read_buffer *rb)
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
-	conn->cache = cached;
+	conn->cached = cached;
 
 	if (rb->close == 2) {
 		finger_end_request(conn, S_OK);
@@ -80,7 +80,7 @@ finger_get_response(struct connection *conn, struct read_buffer *rb)
 	l = rb->len;
 	conn->received += l;
 
-	if (add_fragment(conn->cache, conn->from, rb->data, l) == 1)
+	if (add_fragment(conn->cached, conn->from, rb->data, l) == 1)
 		conn->tries = 0;
 
 	conn->from += l;
@@ -95,9 +95,9 @@ finger_end_request(struct connection *conn, enum connection_state state)
 	set_connection_state(conn, state);
 
 	if (conn->state == S_OK) {
-		if (conn->cache) {
-			truncate_entry(conn->cache, conn->from, 1);
-			conn->cache->incomplete = 0;
+		if (conn->cached) {
+			truncate_entry(conn->cached, conn->from, 1);
+			conn->cached->incomplete = 0;
 		}
 	}
 	abort_connection(conn);

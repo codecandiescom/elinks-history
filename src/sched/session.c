@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.353 2004/04/03 14:13:48 jonas Exp $ */
+/* $Id: session.c,v 1.354 2004/04/03 14:32:15 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -371,7 +371,7 @@ doc_end_load(struct download *stat, struct session *ses)
 
 	if (stat->state < 0) {
 #ifdef HAVE_SCRIPTING
-		maybe_pre_format_html(stat->ce, ses);
+		maybe_pre_format_html(stat->cached, ses);
 #endif
 		if (ses->display_timer != -1) {
 			kill_timer(ses->display_timer);
@@ -429,9 +429,9 @@ doc_end_load(struct download *stat, struct session *ses)
 void
 file_end_load(struct download *stat, struct file_to_load *ftl)
 {
-	if (ftl->stat.ce) {
+	if (ftl->stat.cached) {
 		if (ftl->cached) object_unlock(ftl->cached);
-		ftl->cached = ftl->stat.ce;
+		ftl->cached = ftl->stat.cached;
 		object_lock(ftl->cached);
 	}
 

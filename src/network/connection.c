@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.155 2004/04/03 14:13:48 jonas Exp $ */
+/* $Id: connection.c,v 1.156 2004/04/03 14:32:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -390,7 +390,7 @@ send_connection_info(struct connection *conn)
 	struct download *download = conn->downloads.next;
 
 	while ((void *)download != &conn->downloads) {
-		download->ce = conn->cache;
+		download->cached = conn->cached;
 		download = download->next;
 		if (download->prev->end)
 			download->prev->end(download->prev, download->prev->data);
@@ -763,7 +763,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 
 	if (download) {
 		download->conn = NULL;
-		download->ce = NULL;
+		download->cached = NULL;
 		download->pri = pri;
 		download->state = S_OUT_OF_MEM;
 		download->prev_error = 0;
@@ -795,7 +795,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			cached = NULL;
 		} else {
 			if (download) {
-				download->ce = cached;
+				download->cached = cached;
 				download->state = S_OK;
 			/* XXX: This doesn't work since sometimes stat->prg is
 			 * undefined and contains random memory locations. It's
@@ -843,7 +843,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		if (download) {
 			download->prg = &conn->prg;
 			download->conn = conn;
-			download->ce = conn->cache;
+			download->cached = conn->cached;
 			add_to_list(conn->downloads, download);
 			set_connection_state(conn, conn->state);
 		}
@@ -868,7 +868,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	if (download) {
 		download->prg = &conn->prg;
 		download->conn = conn;
-		download->ce = NULL;
+		download->cached = NULL;
 		add_to_list(conn->downloads, download);
 	}
 
@@ -894,7 +894,7 @@ change_connection(struct download *old, struct download *new,
 
 	if (is_in_result_state(old->state)) {
 		if (new) {
-			new->ce = old->ce;
+			new->cached = old->cached;
 			new->state = old->state;
 			new->prev_error = old->prev_error;
 			if (new->end) new->end(new, new->data);
@@ -921,7 +921,7 @@ change_connection(struct download *old, struct download *new,
 		new->prev_error = conn->prev_error;
 		new->pri = newpri;
 		new->conn = conn;
-		new->ce = conn->cache;
+		new->cached = conn->cached;
 
 	} else if (conn->detached || interrupt) {
 		abort_conn_with_state(conn, S_INTERRUPTED);
@@ -946,7 +946,7 @@ detach_connection(struct download *download, int pos)
 		int total_len;
 		int i, total_pri = 0;
 
-		if (!conn->cache)
+		if (!conn->cached)
 			return;
 
 		total_len = (conn->est_length == -1) ? conn->from
@@ -967,7 +967,7 @@ detach_connection(struct download *download, int pos)
 		/* Pre-clean cache. */
 		shrink_format_cache(0);
 
-		if (total_pri != 1 || is_object_used(conn->cache)) {
+		if (total_pri != 1 || is_object_used(conn->cached)) {
 			/* We're too important, or someone uses our cache
 			 * entry. */
 			return;
@@ -976,12 +976,12 @@ detach_connection(struct download *download, int pos)
 		/* DBG("detached"); */
 
 		/* We aren't valid cache entry anymore. */
-		conn->cache->valid = 0;
+		conn->cached->valid = 0;
 		conn->detached = 1;
 	}
 
 	/* Strip the entry. */
-	free_entry_to(conn->cache, pos);
+	free_entry_to(conn->cached, pos);
 }
 
 static void

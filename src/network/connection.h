@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.57 2004/04/01 06:06:20 jonas Exp $ */
+/* $Id: connection.h,v 1.58 2004/04/03 14:32:15 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -119,7 +119,7 @@ struct connection {
 	struct conn_info *conn_info;
 	void *info;
 	void *buffer;
-	struct cache_entry *cache;
+	struct cache_entry *cached;
 	/* This is in fact (ssl_t *), but we don't want to know. Noone cares
 	 * and ssl.h inclusion costs a lot of compilation time. --pasky */
 	void *ssl;
@@ -176,7 +176,7 @@ struct download {
 	LIST_HEAD(struct download);
 
 	struct connection *conn;
-	struct cache_entry *ce;
+	struct cache_entry *cached;
 	void (*end)(struct download *, void *);
 	void *data;
 	struct remaining_info *prg;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.262 2004/04/03 02:11:07 jonas Exp $ */
+/* $Id: http.c,v 1.263 2004/04/03 14:32:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,11 +251,11 @@ http_end_request(struct connection *conn, enum connection_state state,
 	set_connection_state(conn, state);
 	uncompress_shutdown(conn);
 
-	if (conn->state == S_OK && conn->cache) {
-		if (!notrunc) truncate_entry(conn->cache, conn->from, 1);
-		conn->cache->incomplete = 0;
+	if (conn->state == S_OK && conn->cached) {
+		if (!notrunc) truncate_entry(conn->cached, conn->from, 1);
+		conn->cached->incomplete = 0;
 #ifdef HAVE_SCRIPTING
-		conn->cache->done_pre_format_html_hook = 0;
+		conn->cached->done_pre_format_html_hook = 0;
 #endif
 	}
 
@@ -590,11 +590,11 @@ http_send_header(struct connection *conn)
 		}
 	}
 
-	if (conn->cache) {
-		if (!conn->cache->incomplete && conn->cache->head && conn->cache->last_modified
+	if (conn->cached) {
+		if (!conn->cached->incomplete && conn->cached->head && conn->cached->last_modified
 		    && conn->cache_mode <= CACHE_MODE_CHECK_IF_MODIFIED) {
 			add_to_string(&header, "If-Modified-Since: ");
-			add_to_string(&header, conn->cache->last_modified);
+			add_to_string(&header, conn->cached->last_modified);
 			add_to_string(&header, "\r\n");
 		}
 	}
@@ -873,7 +873,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 
 		data = uncompress_data(conn, rb->data, len, &data_len);
 
-		if (add_fragment(conn->cache, conn->from, data, data_len) == 1)
+		if (add_fragment(conn->cached, conn->from, data, data_len) == 1)
 			conn->tries = 0;
 
 		if (data && data != rb->data) mem_free(data);
@@ -959,7 +959,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 
 			data = uncompress_data(conn, rb->data, len, &data_len);
 
-			if (add_fragment(conn->cache, conn->from,
+			if (add_fragment(conn->cached, conn->from,
 					 data, data_len) == 1)
 				conn->tries = 0;
 
@@ -1206,42 +1206,42 @@ again:
 		return;
 	}
 
-	conn->cache = get_cache_entry(conn->uri);
-	if (!conn->cache) {
+	conn->cached = get_cache_entry(conn->uri);
+	if (!conn->cached) {
 		mem_free(head);
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
-	if (conn->cache->head) mem_free(conn->cache->head);
-	conn->cache->head = head;
+	if (conn->cached->head) mem_free(conn->cached->head);
+	conn->cached->head = head;
 
 	if (!get_opt_bool("document.cache.ignore_cache_control")) {
-		if ((d = parse_http_header(conn->cache->head, "Cache-Control", NULL))
-		    || (d = parse_http_header(conn->cache->head, "Pragma", NULL)))
+		if ((d = parse_http_header(conn->cached->head, "Cache-Control", NULL))
+		    || (d = parse_http_header(conn->cached->head, "Pragma", NULL)))
 		{
 			if (strstr(d, "no-cache"))
-				conn->cache->cache_mode = CACHE_MODE_NEVER;
+				conn->cached->cache_mode = CACHE_MODE_NEVER;
 			mem_free(d);
 		}
 	}
 
 #ifdef HAVE_SSL
 	if (conn->ssl) {
-		if (conn->cache->ssl_info) mem_free(conn->cache->ssl_info);
-		conn->cache->ssl_info = get_ssl_connection_cipher(conn);
+		if (conn->cached->ssl_info) mem_free(conn->cached->ssl_info);
+		conn->cached->ssl_info = get_ssl_connection_cipher(conn);
 	}
 #endif
 
 	if (h == 301 || h == 302 || h == 303 || h == 307) {
-		d = parse_http_header(conn->cache->head, "Location", NULL);
+		d = parse_http_header(conn->cached->head, "Location", NULL);
 		if (d) {
-			redirect_cache(conn->cache, d, h == 303, -1);
+			redirect_cache(conn->cached, d, h == 303, -1);
 			mem_free(d);
 		}
 	}
 
 	if (h == 401) {
-		d = parse_http_header(conn->cache->head, "WWW-Authenticate", NULL);
+		d = parse_http_header(conn->cached->head, "WWW-Authenticate", NULL);
 		if (d) {
 			if (!strncasecmp(d, "Basic", 5)) {
 				unsigned char *realm = get_http_header_param(d, "realm");
@@ -1266,8 +1266,8 @@ again:
 	info->recv_version.major = version.major;
 	info->recv_version.minor = version.minor;
 
-	if ((d = parse_http_header(conn->cache->head, "Connection", NULL))
-	     || (d = parse_http_header(conn->cache->head, "Proxy-Connection", NULL))) {
+	if ((d = parse_http_header(conn->cached->head, "Connection", NULL))
+	     || (d = parse_http_header(conn->cached->head, "Proxy-Connection", NULL))) {
 		if (!strcasecmp(d, "close")) info->close = 1;
 		mem_free(d);
 	} else if (PRE_HTTP_1_1(version))
@@ -1275,7 +1275,7 @@ again:
 
 	cf = conn->from;
 	conn->from = 0;
-	d = parse_http_header(conn->cache->head, "Content-Range", NULL);
+	d = parse_http_header(conn->cached->head, "Content-Range", NULL);
 	if (d) {
 		if (strlen(d) > 6) {
 			d[5] = 0;
@@ -1301,10 +1301,10 @@ again:
 #if 0
 	{
 		struct status *s;
-		foreach (s, conn->statuss) {
+		foreach (s, conn->downloads) {
 			fprintf(stderr, "conn %p status %p pri %d st %d er %d :: ce %s",
 				conn, s, s->pri, s->state, s->prev_error,
-				s->ce ? s->ce->url : (unsigned char *) "N-U-L-L");
+				s->cached ? s->cached->url : (unsigned char *) "N-U-L-L");
 		}
 	}
 #endif
@@ -1315,7 +1315,7 @@ again:
 	}
 	conn->prg.start = conn->from;
 
-	d = parse_http_header(conn->cache->head, "Content-Length", NULL);
+	d = parse_http_header(conn->cached->head, "Content-Length", NULL);
 	if (d) {
 		unsigned char *ep;
 		int l;
@@ -1332,7 +1332,7 @@ again:
 	}
 
 	if (!conn->unrestartable) {
-		d = parse_http_header(conn->cache->head, "Accept-Ranges", NULL);
+		d = parse_http_header(conn->cached->head, "Accept-Ranges", NULL);
 
 		if (d) {
 			if (!strcasecmp(d, "none"))
@@ -1344,7 +1344,7 @@ again:
 		}
 	}
 
-	d = parse_http_header(conn->cache->head, "Transfer-Encoding", NULL);
+	d = parse_http_header(conn->cached->head, "Transfer-Encoding", NULL);
 	if (d) {
 		if (!strcasecmp(d, "chunked")) {
 			info->length = LEN_CHUNKED;
@@ -1354,10 +1354,10 @@ again:
 	}
 	if (!info->close && info->length == -1) info->close = 1;
 
-	d = parse_http_header(conn->cache->head, "Last-Modified", NULL);
+	d = parse_http_header(conn->cached->head, "Last-Modified", NULL);
 	if (d) {
-		if (conn->cache->last_modified && strcasecmp(conn->cache->last_modified, d)) {
-			delete_entry_content(conn->cache);
+		if (conn->cached->last_modified && strcasecmp(conn->cached->last_modified, d)) {
+			delete_entry_content(conn->cached);
 			if (conn->from) {
 				conn->from = 0;
 				mem_free(d);
@@ -1365,19 +1365,19 @@ again:
 				return;
 			}
 		}
-		if (!conn->cache->last_modified) conn->cache->last_modified = d;
+		if (!conn->cached->last_modified) conn->cached->last_modified = d;
 		else mem_free(d);
 	}
-	if (!conn->cache->last_modified) {
-		d = parse_http_header(conn->cache->head, "Date", NULL);
-		if (d) conn->cache->last_modified = d;
+	if (!conn->cached->last_modified) {
+		d = parse_http_header(conn->cached->head, "Date", NULL);
+		if (d) conn->cached->last_modified = d;
 	}
 
 	/* FIXME: parse only if http 1.1 or later ? --Zas */
-	d = parse_http_header(conn->cache->head, "ETag", NULL);
+	d = parse_http_header(conn->cached->head, "ETag", NULL);
 	if (d) {
-		if (conn->cache->etag)  {
-			unsigned char *old_tag = conn->cache->etag;
+		if (conn->cached->etag)  {
+			unsigned char *old_tag = conn->cached->etag;
 			unsigned char *new_tag = d;
 
 			/* http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19 */
@@ -1389,7 +1389,7 @@ again:
 				old_tag += 2;
 
 			if (strcmp(new_tag, old_tag)) {
-				delete_entry_content(conn->cache);
+				delete_entry_content(conn->cached);
 				if (conn->from) {
 					conn->from = 0;
 					mem_free(d);
@@ -1399,13 +1399,13 @@ again:
 			}
 		}
 
-		if (!conn->cache->etag)
-			conn->cache->etag = d;
+		if (!conn->cached->etag)
+			conn->cached->etag = d;
 		else
 			mem_free(d);
 	}
 
-	d = parse_http_header(conn->cache->head, "Content-Encoding", NULL);
+	d = parse_http_header(conn->cached->head, "Content-Encoding", NULL);
 	if (d) {
 		unsigned char *extension = get_extension_from_uri(uri);
 		enum stream_encoding file_encoding;
@@ -1430,8 +1430,8 @@ again:
 	}
 
 	if (conn->content_encoding != ENCODING_NONE) {
-		if (conn->cache->encoding_info) mem_free(conn->cache->encoding_info);
-		conn->cache->encoding_info = stracpy(get_encoding_name(conn->content_encoding));
+		if (conn->cached->encoding_info) mem_free(conn->cached->encoding_info);
+		conn->cached->encoding_info = stracpy(get_encoding_name(conn->content_encoding));
 	}
 
 	if (info->length == -1

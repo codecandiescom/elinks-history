@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.245 2004/04/03 14:13:48 jonas Exp $ */
+/* $Id: download.c,v 1.246 2004/04/03 14:32:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,7 +332,7 @@ abort:
 static void
 download_data(struct download *download, struct file_download *file_download)
 {
-	struct cache_entry *cached = download->ce;
+	struct cache_entry *cached = download->cached;
 
 	if (!cached) goto store;
 

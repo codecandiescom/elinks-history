@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.39 2004/04/03 01:22:47 jonas Exp $ */
+/* $Id: smb.c,v 1.40 2004/04/03 14:32:15 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -67,14 +67,14 @@ struct smb_connection_info {
 static void end_smb_connection(struct connection *conn);
 
 
-/* Return 0 if @conn->cache was set. */
+/* Return 0 if @conn->cached was set. */
 static int
 smb_get_cache(struct connection *conn)
 {
-	if (conn->cache) return 0;
+	if (conn->cached) return 0;
 
-	conn->cache = get_cache_entry(conn->uri);
-	if (conn->cache) return 0;
+	conn->cached = get_cache_entry(conn->uri);
+	if (conn->cached) return 0;
 
 	abort_conn_with_state(conn, S_OUT_OF_MEM);
 	return -1;
@@ -148,7 +148,7 @@ smb_got_data(struct connection *conn)
 	if (smb_get_cache(conn)) return;
 
 	conn->received += r;
-	if (add_fragment(conn->cache, conn->from, buffer, r) == 1)
+	if (add_fragment(conn->cached, conn->from, buffer, r) == 1)
 		conn->tries = 0;
 	conn->from += r;
 }
@@ -171,8 +171,8 @@ end_smb_connection(struct connection *conn)
 	if (smb_get_cache(conn)) return;
 
 	if (conn->from) {
-		truncate_entry(conn->cache, conn->from, 1);
-		conn->cache->incomplete = 0;
+		truncate_entry(conn->cached, conn->from, 1);
+		conn->cached->incomplete = 0;
 		goto bye;
 	}
 
@@ -186,7 +186,7 @@ end_smb_connection(struct connection *conn)
 	    && conn->uri->datalen
 	    && conn->uri->data[conn->uri->datalen - 1] != '/'
 	    && conn->uri->data[conn->uri->datalen - 1] != '\\') {
-		redirect_cache(conn->cache, "/", 1, 0);
+		redirect_cache(conn->cached, "/", 1, 0);
 
 	} else {
 		unsigned char *line_start, *line_end, *line_end2;
@@ -375,15 +375,15 @@ ignored:
 
 		add_to_string(&page, "</pre></body></html>");
 
-		add_fragment(conn->cache, 0, page.source, page.length);
+		add_fragment(conn->cached, 0, page.source, page.length);
 		conn->from += page.length;
-		truncate_entry(conn->cache, page.length, 1);
-		conn->cache->incomplete = 0;
+		truncate_entry(conn->cached, page.length, 1);
+		conn->cached->incomplete = 0;
 		done_string(&page);
 
-		if (!conn->cache->head)
-			conn->cache->head = stracpy("\r\n");
-		add_to_strn(&conn->cache->head, "Content-Type: text/html\r\n");
+		if (!conn->cached->head)
+			conn->cached->head = stracpy("\r\n");
+		add_to_strn(&conn->cached->head, "Content-Type: text/html\r\n");
 	}
 
 bye:
@@ -435,7 +435,7 @@ smb_func(struct connection *conn)
 	} else if (conn->uri->datalen) {
 		if (smb_get_cache(conn)) return;
 
-		redirect_cache(conn->cache, "/", 1, 0);
+		redirect_cache(conn->cached, "/", 1, 0);
 		abort_conn_with_state(conn, S_OK);
 		return;
 

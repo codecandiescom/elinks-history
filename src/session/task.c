@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.58 2004/04/03 14:13:48 jonas Exp $ */
+/* $Id: task.c,v 1.59 2004/04/03 14:32:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,7 +301,7 @@ do_move(struct session *ses, struct download **stat)
 	if (ses->task.type == TASK_IMGMAP && (*stat)->state >= 0)
 		return 0;
 
-	cached = (*stat)->ce;
+	cached = (*stat)->cached;
 	if (!cached) return 0;
 
 	if (cached->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {

@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.40 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: frames.h,v 1.41 2004/09/28 20:08:41 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -22,6 +22,8 @@ struct frame_desc {
 
 struct frameset_desc {
 	int n;
+	/* This is an *EXOTIC* box. It doesn't say anything about the physical
+	 * dimensions, rather about the frame_desc contents.  */
 	struct box box;
 
 	struct frame_desc frame_desc[1]; /* must be last of struct. --Zas */
@@ -29,6 +31,7 @@ struct frameset_desc {
 
 struct frameset_param {
 	struct frameset_desc *parent;
+	/* This x, y is a number of items in the appropriate arrays below. */
 	int x, y;
 	int *width, *height;
 };

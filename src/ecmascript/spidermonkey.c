@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.149 2004/12/24 23:19:05 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.150 2004/12/24 23:21:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -771,12 +771,12 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	assert(fc);
 	assert(fc->form && fs);
 
+	if (!JSVAL_IS_INT(id))
+		return JS_TRUE;
+
 	linknum = get_form_control_link(document, fc);
 	/* Hiddens have no link. */
 	if (linknum >= 0) link = &document->links[linknum];
-
-	if (!JSVAL_IS_INT(id))
-		return JS_TRUE;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_INPUT_ACCESSKEY:

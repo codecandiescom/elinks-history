@@ -1,3 +1,35 @@
+Sat Jun 22 21:20:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/bfu.c, bookmarks/bookmarks.c, cookies/cookies.c,
+	cookies/parser.c, document/globhist.c, document/location.c,
+	intl/charsets.c, intl/language.c, lowlevel/home.c, protocol/file.c,
+	protocol/mailto.c, protocol/url.c, util/conv.c, util/memdebug.c,
+	util/memlist.c, util/secsave.c, util/string.h:
+
+	Compilation fixes - missing includes.  
+
+Sat Jun 22 16:45:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/download.c, protocol/types.c,
+	protocol/types.h:
+
+	Reworked MIME types saving; now we've mime.type.class.id =
+	handlername and mime.handler.handlername.system.*. Clarified
+	mime.extension.* description.  
+
+Sat Jun 22 16:34:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/conf.c:
+
+	Fix reading of option with no read handler.  
+
+Sat Jun 22 10:42:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	Save '.' in extension as '-' (so we now allow it again). Don't match
+	only the part after last dot, but the whole extension, if possible.  
+
 Fri Jun 21 20:28:25 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/terminal.c, util/string.c, util/string.h:

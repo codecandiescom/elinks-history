@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.113 2003/07/17 08:56:30 zas Exp $ */
+/* $Id: main.c,v 1.114 2003/07/24 15:33:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,6 +58,8 @@
 #include "sched/error.h"
 #include "sched/connection.h"
 #include "sched/session.h"
+#include "scripting/guile/core.h"
+#include "scripting/guile/hooks.h"
 #include "scripting/lua/core.h"
 #include "scripting/lua/hooks.h"
 #include "terminal/kbd.h"
@@ -183,6 +185,9 @@ init(void)
 	init_ssl();
 #ifdef HAVE_LUA
     	init_lua();
+#endif
+#ifdef HAVE_GUILE
+    	init_guile();
 #endif
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||

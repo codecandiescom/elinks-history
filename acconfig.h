@@ -33,8 +33,11 @@
 /* Define to 1 if we should use pthreads */
 #undef HAVE_PTHREADS
 
-/* Define to 1 if we should use scripting (currently Lua only) */
+/* Define to 1 if we should use scripting */
 #undef HAVE_SCRIPTING
+
+/* Define to 1 if we should use Guile */
+#undef HAVE_GUILE
 
 /* Define to 1 if we should use Lua */
 #undef HAVE_LUA

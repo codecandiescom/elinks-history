@@ -196,6 +196,8 @@ if test x"$el_cv_HAVE_C99_VSNPRINTF" = x"yes"; then
     AC_DEFINE(HAVE_C99_VSNPRINTF)
 fi
 
+AC_CHECK_LIB(dl, dlopen) # OpenSSL and Lua frequently needs it
+
 dnl ===================================================================
 dnl Checks for libraries.
 dnl ===================================================================
@@ -402,10 +404,70 @@ fi
 AC_MSG_RESULT($cf_result)
 
 dnl ===================================================================
-dnl Check for Lua, optional even if installed.
+dnl Check for Guile, optional even if installed.
 dnl ===================================================================
 
-AC_CHECK_LIB(dl, dlopen) # OpenSSL and Lua frequently needs it
+enable_guile="no";
+
+AC_ARG_WITH(guile, [  --with-guile            enable Guile support (don't!)],
+            [
+if test "$withval" = yes; then
+	withval="";
+	enable_guile=yes;
+	cat <<EOF
+***********************************************************************
+It was BAD idea to enable Guile, you know! It is incomplete and not
+well integrated to ELinks yet. That means, ie., that you can NOT use
+Guile and Lua at one time. And you have no Guile console. And so on.
+See src/scripting/guile/README for further details and hints.
+***********************************************************************
+EOF
+fi
+	    ])
+
+# The following is probably bad, ugly and so on. Stolen from Guile's (1.4)
+# GUILE_FLAGS but I really don't want to require people to have Guile in order
+# to compile CVS. Also, the macro seems to be really stupid regarding searching
+# for Guile in $PATH etc. --pasky
+
+AC_MSG_CHECKING([for Guile])
+
+cf_result=no
+
+CFLAGS_X="$CFLAGS"
+LIBS_X="$LIBS"
+
+if test "$enable_guile" = "yes"; then
+	## Based on the GUILE_FLAGS macro.
+
+	## TODO: Support for looking up guile-config in specified dirs! --pasky
+
+	## First, let's just see if we can find Guile at all.
+	if guile-config --version 2>/dev/null >/dev/null; then
+		GUILE_LIBS="`guile-config link`"
+		GUILE_CFLAGS="`guile-config compile`"
+		LIBS="$GUILE_LIBS $LIBS"
+		CFLAGS="$CFLAGS $GUILE_CFLAGS"
+		cf_result="yes";
+	fi
+fi
+
+if test "$cf_result" != "yes"; then
+	CFLAGS="$CFLAGS_X"
+	LIBS="$LIBS_X"
+else
+	AC_DEFINE(HAVE_GUILE)
+	AC_DEFINE(HAVE_SCRIPTING)
+fi
+
+AC_SUBST(GUILE_LIBS)
+AC_SUBST(GUILE_CFLAGS)
+
+if test "$cf_result"; then AC_MSG_RESULT($cf_result); fi
+
+dnl ===================================================================
+dnl Check for Lua, optional even if installed.
+dnl ===================================================================
 
 dnl Do this the long way, as FreeBSD reportedly needs -L<dir> for
 dnl anything other than /usr/lib, and Lua is very often in /usr/local/lib.
@@ -419,6 +481,14 @@ if test "$withval" = yes; then withval=""; fi
 CFLAGS_X="$CFLAGS"
 LIBS_X="$LIBS"
 cf_result=no
+
+if test "$enable_guile" = "yes" && test -z "$disable_lua"; then
+	AC_MSG_RESULT([pah!]) # Get rid of previous AC_MSG_CHECKING.
+	AC_MSG_WARN([You enabled Guile but did not disable Lua!])
+	AC_MSG_WARN([Sorry, but you cannot use both. Disabling Lua.])
+	disable_lua=yes
+	AC_MSG_CHECKING([for Lua])
+fi
 
 if test -z "$disable_lua"; then
 	if test ! -d "$withval"; then
@@ -872,6 +942,7 @@ AC_OUTPUT([ \
  src/protocol/http/Makefile \
  src/sched/Makefile \
  src/scripting/Makefile \
+ src/scripting/guile/Makefile \
  src/scripting/lua/Makefile \
  src/ssl/Makefile \
  src/terminal/Makefile \

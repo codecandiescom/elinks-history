@@ -510,6 +510,12 @@ if test -z "$disable_lua"; then
 			LIBS="$LUA_LIBS $LIBS_X"
 			CFLAGS="$CFLAGS_X $LUA_CFLAGS"
 
+			#Without this, in some conditions a configure time warning is echoed:
+			#WARNING: lauxlib.h: accepted by the compiler, rejected by the preprocessor!
+			#WARNING: lauxlib.h: proceeding with the preprocessor's result
+			#Feel free to provide a cleaner fix.
+			CPPFLAGS="$CFLAGS_X $LUA_CFLAGS"
+
 			AC_TRY_LINK([#include <lua.h>],
 				    [lua_close(0)],
 				    cf_result=yes, cf_result=no)
@@ -525,6 +531,7 @@ if test "$cf_result" != yes; then
 else
 	AC_DEFINE(HAVE_LUA)
 	AC_DEFINE(HAVE_SCRIPTING)
+	#See previous note near CPPFLAGS.
 	AC_CHECK_HEADERS(lauxlib.h)
 	AC_CHECK_FUNCS(lua_pcall)
 fi

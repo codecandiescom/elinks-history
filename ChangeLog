@@ -1,3 +1,11 @@
+Thu Mar  7 22:33:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* bfu.c, default.c, links.h:
+	
+	don't check duplicates in history when loading it; saves huge
+	amount of cpu work; patch by zas, let's see if it'll broke
+	anything; also contains cleanup of some history managment
+
 Thu Mar  7 22:05:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html_r.c:

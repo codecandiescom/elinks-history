@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.257 2004/04/11 14:18:59 jonas Exp $ */
+/* $Id: download.c,v 1.258 2004/04/11 14:22:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -751,8 +751,8 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	file_download->last_pos = resume ? (int) buf.st_size : 0;
 
-	load_uri(file_download->uri, ses->referrer, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
-		 (resume ? file_download->last_pos : 0));
+	load_uri(file_download->uri, ses->referrer, &file_download->download,
+		 PRI_DOWNLOAD, CACHE_MODE_NORMAL, file_download->last_pos);
 
 download_error:
 	mem_free(cmdw_hop);

@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.17 2003/11/29 13:00:33 pasky Exp $ */
+/* $Id: header.c,v 1.18 2003/11/29 13:01:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,40 +19,40 @@ unsigned char *
 parse_http_header(unsigned char *head, unsigned char *item,
 		  unsigned char **ptr)
 {
-	unsigned char *f;
+	unsigned char *pos;
 
 	if (!head) return NULL;
 
-	for (f = head; *f; f++) {
+	for (pos = head; *pos; pos++) {
 		unsigned char *i;
 
-		if (*f != '\n') continue;
+		if (*pos != '\n') continue;
 
-		f++;
-		for (i = item; *i && *f; i++, f++)
-			if (upcase(*i) != upcase(*f))
+		pos++;
+		for (i = item; *i && *pos; i++, pos++)
+			if (upcase(*i) != upcase(*pos))
 				goto cont;
-		if (!*f) break;
+		if (!*pos) break;
 
-		if (f[0] == ':') {
+		if (pos[0] == ':') {
 			unsigned char *g, *h = NULL;
 
-			while (f[1] == ' ') f++;
-			for (g = ++f; *g >= ' '; g++);
-			while (g > f && g[-1] == ' ') g--;
+			while (pos[1] == ' ') pos++;
+			for (g = ++pos; *g >= ' '; g++);
+			while (g > pos && g[-1] == ' ') g--;
 
-			h = mem_alloc(g - f + 1);
+			h = mem_alloc(g - pos + 1);
 
 			if (h) {
-				memcpy(h, f, g - f);
-				h[g - f] = '\0';
-				if (ptr) *ptr = f;
+				memcpy(h, pos, g - pos);
+				h[g - pos] = '\0';
+				if (ptr) *ptr = pos;
 				return h;
 			}
 		}
 
 cont:
-		f--;
+		pos--;
 	}
 
 	return NULL;

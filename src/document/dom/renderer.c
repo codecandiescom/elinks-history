@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.5 2004/09/24 02:34:51 pasky Exp $ */
+/* $Id: renderer.c,v 1.6 2004/09/24 02:53:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,6 +286,7 @@ render_dom_text(struct dom_renderer *renderer, struct screen_char *template,
 	}
 }
 
+#ifdef DOM_TREE_RENDERER
 static void
 render_dom_printf(struct dom_renderer *renderer, struct screen_char *template,
 		  unsigned char *format, ...)
@@ -310,6 +311,7 @@ render_dom_printf(struct dom_renderer *renderer, struct screen_char *template,
 free_va_args:
 	va_end(ap);
 }
+#endif /* DOM_TREE_RENDERER */
 
 #define realloc_document_links(doc, size) \
 	ALIGN_LINK(&(doc)->links, (doc)->nlinks, size)
@@ -358,6 +360,7 @@ add_dom_link(struct dom_renderer *renderer, unsigned char *uri, int length)
 
 /* DOM Tree Renderer */
 
+#ifdef DOM_TREE_RENDERER
 static struct dom_node *
 render_dom_tree(struct dom_navigator *navigator, struct dom_node *node, void *data)
 {
@@ -459,7 +462,7 @@ static dom_navigator_callback_T dom_tree_renderer_callbacks[DOM_NODES] = {
 	/* DOM_NODE_DOCUMENT_FRAGMENT	*/ render_dom_tree_id_leaf,
 	/* DOM_NODE_NOTATION		*/ render_dom_tree_id_leaf,
 };
-
+#endif /* DOM_TREE_RENDERER */
 
 /* DOM Source Renderer */
 
@@ -620,11 +623,10 @@ render_dom_document(struct cache_entry *cached, struct document *document,
 	struct dom_node *root = parse_sgml(cached, document, buffer);
 	struct dom_renderer renderer;
 	struct conv_table *convert_table;
-	dom_navigator_callback_T *callbacks = document->options.plain
-					    ? dom_source_renderer_callbacks
-					    : dom_tree_renderer_callbacks;
+	dom_navigator_callback_T *callbacks = dom_source_renderer_callbacks;
 	struct dom_navigator navigator;
 
+	assert(document->options.plain);
 	if (!root) return;
 
 	convert_table = get_convert_table(head, document->options.cp,

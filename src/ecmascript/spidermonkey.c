@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.104 2004/12/17 15:52:10 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.105 2004/12/17 20:24:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -450,8 +450,8 @@ static JSBool
 window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
-	struct document_view *doc_view;
-	struct session *ses;
+	struct document_view *doc_view = vs->doc_view;
+	struct session *ses = doc_view->session;
 	union jsval_union v;
 	unsigned char *url;
 	struct uri *uri;
@@ -479,7 +479,6 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	assert(url);
 	/* TODO: Support for window naming and perhaps some window features? */
 
-	doc_view = vs->doc_view;
 	url = join_urls(doc_view->document->uri,
 	                trim_chars(url, ' ', 0));
 	if (!url) goto bye;
@@ -487,7 +486,6 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	mem_free(url);
 	if (!uri) goto bye;
 
-	ses = doc_view->session;
 	if (!get_cmd_opt_bool("no-connect")
 	    && !get_cmd_opt_bool("no-home")
 	    && !get_cmd_opt_bool("anonymous")
@@ -646,14 +644,13 @@ form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
-	struct document_view *doc_view;
+	struct document_view *doc_view = vs->doc_view;
 	VALUE_TO_JSVAL_START;
 
 	P_BOOLEAN(0);
 
 	assert(fc);
 
-	doc_view = vs->doc_view;
 	do_reset_form(doc_view, fc->form_num);
 	draw_forms(doc_view->session->tab->term, doc_view);
 

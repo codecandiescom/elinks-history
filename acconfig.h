@@ -74,3 +74,6 @@
 
 /* Directory containing default config */
 #undef CONFDIR
+
+/* Enable direct use of system allocation functions */
+#undef FASTMEM

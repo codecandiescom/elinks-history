@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.8 2004/01/30 15:15:33 jonas Exp $ */
+/* $Id: scanner.h,v 1.9 2004/02/02 13:54:53 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -120,7 +120,10 @@ struct scanner {
 	int line;
 #endif
 
-	/* The table continain already scanned tokens. It is maintained in
+	/* Some state indicator only meaningful to the scanner internals */
+	int state;
+
+	/* The table contain already scanned tokens. It is maintained in
 	 * order to optimize the scanning a bit and make it possible to look
 	 * ahead at the next token. You should always use the accessors
 	 * (defined below) for getting tokens from the scanner. */
@@ -177,5 +180,9 @@ skip_scanner_tokens(struct scanner *scanner, int skipto, int precedence);
 int
 map_scanner_string(struct scanner *scanner,
 		   unsigned char *ident, unsigned char *end, int base_type);
+
+#ifdef SCANNER_DEBUG
+void dump_scanner(struct scanner *scanner);
+#endif
 
 #endif

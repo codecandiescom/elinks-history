@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.205 2005/03/12 00:17:25 zas Exp $ */
+/* $Id: ftp.c,v 1.206 2005/03/12 00:25:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -586,6 +586,11 @@ add_eprtcmd_to_string(struct string *string, struct sockaddr_in6 *addr)
 }
 #endif
 
+/* Depending on options, get proper ftp data socket and command.
+ * It appends ftp command (either PASV,PORT,EPSV or EPRT) to @command
+ * string.
+ * When PORT or EPRT are used, related sockets are created.
+ * It returns 0 on error (data socket creation failure). */
 static int
 get_ftp_data_socket(struct connection *conn, struct string *command)
 {

@@ -1,18 +1,19 @@
 # Slovak ELinks translation.
 # Radovan Stas <radoone@skmi.science.upjs.sk>
-# Peter Samek <samek@upc.uniba.sk>, 2002
+# Peter Samek <samek@upc.uniba.sk>, 2002 - 2004
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2004-01-18 00:13+0100\n"
-"PO-Revision-Date: 2004-01-14 13:23+0100\n"
+"PO-Revision-Date: 2004-02-13 19:07+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: \n"
+"X-Generator: KBabel 1.0.2\n"
 
 #: src/bfu/hierbox.c:358
 msgid "Close"
@@ -513,25 +514,23 @@ msgstr ""
 
 #: src/config/cmdline.c:441
 msgid "Name of directory with configuration file"
-msgstr ""
+msgstr "Názov adresára s konfiguraèným súborom"
 
 #: src/config/cmdline.c:443
-#, fuzzy
 msgid ""
 "ELinks will read and write its config files to the given\n"
 "directory instead of ~/.elinks. If the path begins with\n"
 "a '/' its used as an absolute path. Else it is assumed to\n"
 "be relative to your HOME dir."
 msgstr ""
-"Nastavi» konfiguraèný adresár na danú cestu. ELinks odtiaµ bude\n"
-"èíta» a zapisova» z konfig. súborov. Ak cesta zaèína lomítkom\n"
-"'/', je pova¾ovaná za absolútnu cestu, inak sa predpokladá,\n"
-"¾e je relatívna k domovskému adreáru."
+"ELinks bude èíta» a zapisova» konfiguraèné súbory v danom\n"
+"adresári namiesto ~/.elinks. Cesta zaèínajúca lomítkom '/' je\n"
+"pova¾ovaná za absolútnu cestu. Inak sa predpokladá, ¾e je\n"
+"relatívna k domovskému adresáru."
 
 #: src/config/cmdline.c:448
-#, fuzzy
 msgid "Name of configuration file"
-msgstr "Meno konfiguraèného súboru"
+msgstr "Názov konfiguraèného súboru"
 
 #: src/config/cmdline.c:450
 msgid ""
@@ -559,8 +558,7 @@ msgstr "Vypísa» formátovanú verziu daného URL na ¹tandardný výstup"
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
-msgstr ""
-"Vypísa» plaintextovú verziu daného HTML dokumentu na ¹tandardný výstup."
+msgstr "Vypísa» plaintextovú verziu daného HTML dokumentu na ¹tandardný výstup."
 
 #: src/config/cmdline.c:463
 msgid "Codepage to use with -dump"
@@ -657,8 +655,7 @@ msgstr "Nepou¾íva» súbory v ~/.elinks"
 
 #: src/config/cmdline.c:513
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
-msgstr ""
-"Nepokú¹a» sa vytvori»/pou¾i» domovský konfiguraèný adresár (~/.elinks/)."
+msgstr "Nepokú¹a» sa vytvori»/pou¾i» domovský konfiguraèný adresár (~/.elinks/)."
 
 #: src/config/cmdline.c:515
 msgid "Connect to session ring with given ID"
@@ -726,8 +723,7 @@ msgstr ""
 
 #: src/config/cmdline.c:550
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
-msgstr ""
-"Pou¾íva» súbory v ~/.elinks aj pri spustení s -no-connect/-session-ring"
+msgstr "Pou¾íva» súbory v ~/.elinks aj pri spustení s -no-connect/-session-ring"
 
 #: src/config/cmdline.c:552
 msgid ""
@@ -1011,9 +1007,8 @@ msgid "Menu mapping"
 msgstr ""
 
 #: src/config/kbdbind.c:392
-#, fuzzy
 msgid "Do nothing"
-msgstr "S»ahovanie"
+msgstr "Nerobi» niè"
 
 #: src/config/kbdbind.c:393
 msgid "Abort connection"
@@ -1048,9 +1043,8 @@ msgid "Delete character in front of the cursor"
 msgstr "Zmaza» znak pred kurzorom"
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Go to the first line of the buffer"
-msgstr "Ís» na zaèiatok stránky alebo riadku"
+msgstr "Ís» na prvý riadok buffra"
 
 #: src/config/kbdbind.c:402
 msgid "Open bookmark manager"
@@ -1118,9 +1112,8 @@ msgid "Go to the end of the page/line"
 msgstr "Ís» na koniec stránky/riadku"
 
 #: src/config/kbdbind.c:418
-#, fuzzy
 msgid "Go to the last line of the buffer"
-msgstr "Ís» na zaèiatok stránky alebo riadku"
+msgstr "Ís» na posledný riadok buffra"
 
 #: src/config/kbdbind.c:419
 msgid "Follow the current link"
@@ -1191,9 +1184,8 @@ msgid "Open keybinding manager"
 msgstr "Otvori» správcu klávesových skratiek"
 
 #: src/config/kbdbind.c:436
-#, fuzzy
 msgid "Kill all backgrounded connections"
-msgstr "Ukonèi» spojenia na pozadí"
+msgstr "Ukonèi» v¹etky spojenia na pozadí"
 
 #: src/config/kbdbind.c:437
 msgid "Delete to beginning of line"
@@ -1342,19 +1334,19 @@ msgstr "Ulo¾i» URL ako"
 #. internal use only
 #: src/config/kbdbind.c:477
 msgid "Scroll down"
-msgstr ""
+msgstr "Posun v texte smerom dole"
 
 #: src/config/kbdbind.c:478
 msgid "Scroll left"
-msgstr ""
+msgstr "Posun v texte smerom vµavo"
 
 #: src/config/kbdbind.c:479
 msgid "Scroll right"
-msgstr ""
+msgstr "Posun v texte smerom vpravo"
 
 #: src/config/kbdbind.c:480
 msgid "Scroll up"
-msgstr ""
+msgstr "Posun v texte smerom hore"
 
 #: src/config/kbdbind.c:481
 msgid "Search for a text pattern"
@@ -1373,7 +1365,6 @@ msgid "Select current highlighted item"
 msgstr "Vybra» práve zvýraznenú polo¾ku"
 
 #: src/config/kbdbind.c:485
-#, fuzzy
 msgid "Show terminal options dialog"
 msgstr "Nastavenie terminálu"
 
@@ -1426,13 +1417,12 @@ msgid "Toggle displaying of links numbers"
 msgstr "Prepnú» èíslovanie odkazov"
 
 #: src/config/kbdbind.c:498
-#, fuzzy
 msgid "Toggle plain renderer compression of empty lines"
-msgstr "Prepnú» zobrazovanie tabuliek"
+msgstr "Prepnú» zluèovanie prázdnych riadkov"
 
 #: src/config/kbdbind.c:499
 msgid "Go forward in the unhistory"
-msgstr "Ís» dopredu v antihistórii"
+msgstr "Ís» dopredu v spätnej histórii"
 
 #: src/config/kbdbind.c:500
 msgid "Collapse item"
@@ -1440,7 +1430,7 @@ msgstr "Zvinú» polo¾ku"
 
 #: src/config/kbdbind.c:501
 msgid "Move cursor upwards"
-msgstr ""
+msgstr "Posunú» kurzor smerom hore"
 
 #: src/config/kbdbind.c:502
 msgid "View the current image"
@@ -1472,7 +1462,7 @@ msgstr "Nastavenie systému konfigurácie."
 
 #: src/config/options.inc:23
 msgid "Comments"
-msgstr "Poznámky"
+msgstr "Komentáre"
 
 #: src/config/options.inc:25
 msgid ""
@@ -2806,8 +2796,7 @@ msgstr "Pou¾íva» pasívny re¾im (IPv4)"
 
 #: src/config/options.inc:724
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
-msgstr ""
-"Pou¾i» príkaz PASV namiesto PORT (pasívny vs. aktívny re¾im, iba IPv4)."
+msgstr "Pou¾i» príkaz PASV namiesto PORT (pasívny vs. aktívny re¾im, iba IPv4)."
 
 #: src/config/options.inc:726 src/config/options.inc:730
 msgid "Use passive mode (IPv6)"
@@ -2815,8 +2804,7 @@ msgstr "Pou¾íva» pasívny re¾im (IPv6)"
 
 #: src/config/options.inc:728
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
-msgstr ""
-"Pou¾i» príkaz EPSV namiesto EPRT (pasívny vs. aktívny re¾im, iba IPv6)."
+msgstr "Pou¾i» príkaz EPSV namiesto EPRT (pasívny vs. aktívny re¾im, iba IPv6)."
 
 #: src/config/options.inc:732
 msgid ""
@@ -2858,22 +2846,21 @@ msgstr "Povoli» lokálne CGI skripty"
 
 #: src/config/options.inc:753
 msgid "Whether to execute local CGI scripts."
-msgstr ""
+msgstr "Povolenie spú¹»ania lokálnych CGI skriptov."
 
 #: src/config/options.inc:757
 msgid "Local CGI specific options. (DISABLED)"
 msgstr "Nastavenie spú¹»ania lokálnych CGI skriptov.(VYPNUTÉ)"
 
 #: src/config/options.inc:761
-msgid ""
-"Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
+msgid "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "Zoznam adresárov (oddelených dvojbodkou), kde sú ulo¾ené CGI skripty."
 "(VYPNUTÉ)"
 
 #: src/config/options.inc:765
 msgid "Whether to execute local CGI scripts. (DISABLED)"
-msgstr ""
+msgstr "Povolenie spú¹tania lokálnych CGI skriptov. (VYPNUTÉ)"
 
 #: src/config/options.inc:768
 msgid "Allow reading special files"
@@ -2884,8 +2871,8 @@ msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
 msgstr ""
-"Povoli» èítanie zo ¹peciálnych súborov? (NEBEZPEÈNÉ - èítaniezo súborov ako /"
-"dev/urandom alebo /dev/zero vám spôsobí dos»veµké problémy"
+"Povoli» èítanie zo ¹peciálnych súborov? (NEBEZPEÈNÉ - èítanie zo súborov\n"
+"ako /dev/urandom alebo /dev/zero vám mô¾e spôsobi» veµké problémy.)"
 
 #: src/config/options.inc:773
 msgid "Show hidden files in directory listing"
@@ -3516,6 +3503,8 @@ msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
+"Naèasovaná akcia, ktorá sa spustí po urèitom èase neèinnosti u¾ívateµa.\n"
+"Niekomu sa to mô¾e hodi», aj keï tomu nemusíte veri»."
 
 #: src/config/options.inc:1152
 msgid ""
@@ -3524,6 +3513,10 @@ msgid ""
 "1 is count down, but don't show the timer\n"
 "2 is count down and show the timer near LEDs"
 msgstr ""
+"Zapínanie èasovaèa:\n"
+"0 = niè neodpoèítava»\n"
+"1 = odpoèítava», ale potichu (niè neukazova»)\n"
+"2 = odpoèítava» a ukazova» zostávajúci èas pri LED indikátoroch"
 
 #: src/config/options.inc:1159
 msgid ""
@@ -3532,14 +3525,18 @@ msgid ""
 "1 is count down, but don't show the timer\n"
 "2 is count down and show the timer near LEDs (DISABLED)"
 msgstr ""
+"Zapínanie èasovaèa:\n"
+"0 = niè neodpoèítava»\n"
+"1 = odpoèítava», ale potichu (niè neukazova»)\n"
+"2 = odpoèítava» a ukazova» zostávajúci èas pri LED indikátoroch (VYPNUTÉ)"
 
 #: src/config/options.inc:1165
 msgid "Duration"
-msgstr ""
+msgstr "Då¾ka trvania"
 
 #: src/config/options.inc:1167
 msgid "Inactivity timeout. One day should be enough for just everyone (TM)."
-msgstr ""
+msgstr "Èas neèinnosti u¾ívateµa. Jeden deò by mal ka¾dému staèi» (TM)."
 
 #: src/config/options.inc:1171
 msgid "Key-binding action to be triggered when timer reaches zero."
@@ -3551,7 +3548,7 @@ msgstr "Taby"
 
 #: src/config/options.inc:1176
 msgid "Window tabs settings."
-msgstr ""
+msgstr "Nastavenie tabov."
 
 #: src/config/options.inc:1178
 msgid "Display tabs bar"
@@ -3564,34 +3561,40 @@ msgid ""
 "1 means only if two or more tabs.\n"
 "2 means always."
 msgstr ""
+"Kedy zobrazova» na obrazovke li¹tu s tabmi:\n"
+"0 znamená nikdy\n"
+"1 znamená iba ak je otvorených 2 a viac tabov\n"
+"2 znamená v¾dy"
 
 #: src/config/options.inc:1185
 msgid "Wrap-around tabs cycling"
-msgstr ""
+msgstr "Cyklické prechádzanie medzi tabmi"
 
 #: src/config/options.inc:1187
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
-msgstr ""
+msgstr "Pri presune z posledného tabu ïalej doprava preskoèi» na prvý tab a naopak."
 
 #: src/config/options.inc:1190
 msgid "Confirm tab closing"
-msgstr ""
+msgstr "Potvrdzova» zatváranie tabov"
 
 #: src/config/options.inc:1192
 msgid "When closing a tab show confirmation dialog."
-msgstr ""
+msgstr "Pri zatváraní tabu zobrazi» potvrdzovací dialóg."
 
 #: src/config/options.inc:1196 src/config/opttypes.c:373
 msgid "Language"
-msgstr ""
+msgstr "Jazyk"
 
 #: src/config/options.inc:1198
 msgid ""
 "Language of user interface. System means that the language will\n"
 "be extracted from the environment dynamically."
 msgstr ""
+"Jazyk pou¾ívateµského rozhrania. \"System\" znamená, ¾e jazyk bude\n"
+"pri ka¾dom spustení zis»ovaný z premenných prostredia."
 
 #: src/config/options.inc:1201
 msgid "Display status bar"
@@ -3599,7 +3602,7 @@ msgstr "Zobrazi» stavový riadok"
 
 #: src/config/options.inc:1203
 msgid "Show status bar on the screen."
-msgstr ""
+msgstr "Zobrazi» na obrazovke stavový riadok."
 
 #: src/config/options.inc:1205
 msgid "Display title bar"
@@ -3607,19 +3610,19 @@ msgstr "Zobrazi» riadok s titulkom"
 
 #: src/config/options.inc:1207
 msgid "Show title bar on the screen."
-msgstr ""
+msgstr "Zobrazi» na obrazovke riadok s titulkom."
 
 #: src/config/options.inc:1209
 msgid "Display goto dialog on startup"
-msgstr ""
+msgstr "Pri ¹tarte zobrazi» dialóg \"Choï na\""
 
 #: src/config/options.inc:1211
 msgid "Pop up goto dialog on startup when there's no homepage set."
-msgstr ""
+msgstr "Ak nie je nastavená domovská stránka, zobraz pri ¹tarte okno \"Choï na\"."
 
 #: src/config/options.inc:1213
 msgid "Show a message box when file is saved sucessfully"
-msgstr ""
+msgstr "Zobraz dialógové okienko keï bol súbor úspe¹ne ulo¾ený"
 
 #: src/config/options.inc:1215
 msgid ""
@@ -4719,8 +4722,7 @@ msgstr "ukrajinèina"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 
 #: src/lowlevel/home.c:126
@@ -6120,3 +6122,4 @@ msgstr "Chyba pri zápise do súboru"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Èakám na potvrdenie presmerovania"
+

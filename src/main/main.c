@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.228 2004/12/16 15:03:32 jonas Exp $ */
+/* $Id: main.c,v 1.229 2004/12/30 23:50:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,13 +23,13 @@
 #include "elinks.h"
 
 #include "bfu/dialog.h"
+#include "cache/cache.h"
 #include "config/cmdline.h"
 #include "config/conf.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "config/urlhist.h"
 #include "dialogs/menu.h"
-#include "cache/cache.h"
 #include "document/document.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"

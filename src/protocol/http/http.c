@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.387 2004/12/22 04:01:13 miciah Exp $ */
+/* $Id: http.c,v 1.388 2004/12/30 23:50:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,9 +21,9 @@
 
 #include "elinks.h"
 
+#include "cache/cache.h"
 #include "config/options.h"
 #include "cookies/cookies.h"
-#include "cache/cache.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/connect.h"

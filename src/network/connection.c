@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.210 2004/11/19 05:07:45 miciah Exp $ */
+/* $Id: connection.c,v 1.211 2004/12/30 23:50:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,8 +13,8 @@
 
 #include "elinks.h"
 
-#include "config/options.h"
 #include "cache/cache.h"
+#include "config/options.h"
 #include "document/document.h"
 #include "encoding/encoding.h"
 #include "intl/gettext/libintl.h"

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.468 2004/12/16 15:19:23 zas Exp $ */
+/* $Id: options.c,v 1.469 2004/12/30 23:50:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,19 +10,19 @@
 
 #include "elinks.h"
 
-#include "main.h" /* shrink_memory() */
 #include "bfu/dialog.h"
+#include "cache/cache.h"
 #include "config/conf.h"
 #include "config/dialogs.h"
 #include "config/options.h"
 #include "config/opttypes.h"
-#include "cache/cache.h"
 #include "dialogs/status.h"
 #include "document/options.h"
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
+#include "main.h" /* shrink_memory() */
 #include "sched/session.h"
 #include "terminal/color.h"
 #include "terminal/screen.h"

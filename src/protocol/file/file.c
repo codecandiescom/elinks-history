@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.186 2004/12/29 18:14:42 jonas Exp $ */
+/* $Id: file.c,v 1.187 2004/12/30 23:50:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,8 +19,8 @@
 
 #include "elinks.h"
 
-#include "config/options.h"
 #include "cache/cache.h"
+#include "config/options.h"
 #include "encoding/encoding.h"
 #include "intl/gettext/libintl.h"
 #include "modules/module.h"

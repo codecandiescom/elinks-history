@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.174 2004/12/25 20:42:46 zas Exp $ */
+/* $Id: core.c,v 1.175 2004/12/30 23:50:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,8 +19,8 @@
 #include "elinks.h"
 
 #include "bfu/dialog.h"
-#include "config/kbdbind.h"
 #include "cache/cache.h"
+#include "config/kbdbind.h"
 #include "document/document.h"
 #include "document/renderer.h"
 #include "document/view.h"

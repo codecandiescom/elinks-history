@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.276 2004/06/29 03:25:18 jonas Exp $ */
+/* $Id: tables.c,v 1.277 2004/06/29 03:29:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,6 +47,28 @@ get_table_frames(struct table *table, struct table_frames *result)
 	} else {
 		memset(result, 0, sizeof(struct table_frames));
 	}
+}
+
+static int
+get_table_margin(struct table *table)
+{
+	int ww = par_format.width - table->real_width;
+	int align = table->align;
+	int x;
+
+	if (align == ALIGN_NONE || align == ALIGN_JUSTIFY) align = ALIGN_LEFT;
+
+	if (align == ALIGN_CENTER)
+		x = (ww + par_format.leftmargin - par_format.rightmargin) >> 1;
+	else if (align == ALIGN_RIGHT)
+		x = ww - par_format.rightmargin;
+	else
+		x = par_format.leftmargin;
+
+	if (x > ww) x = ww;
+	if (x < 0) x = 0;
+
+	return x;
 }
 
 static inline struct part *
@@ -1085,24 +1107,6 @@ again:
 	check_table_widths(table);
 #endif
 
-	{
-		int ww = par_format.width - table->real_width;
-		int align = table->align;
-
-		if (align == ALIGN_NONE || align == ALIGN_JUSTIFY) align = ALIGN_LEFT;
-
-		if (align == ALIGN_CENTER)
-			x = (ww + par_format.leftmargin
-		     	     - par_format.rightmargin) >> 1;
-		else if (align == ALIGN_RIGHT)
-			x = ww - par_format.rightmargin;
-		else
-			x = par_format.leftmargin;
-
-		if (x > ww) x = ww;
-		if (x < 0) x = 0;
-	}
-
 	get_table_heights(table);
 
 	if (!part->document) {
@@ -1113,6 +1117,8 @@ again:
 
 	node = part->document->nodes.next;
 	node->box.height = part->box.y - node->box.y + part->cy;
+
+	x = get_table_margin(table);
 
 	display_complicated_table(table, x, part->cy);
 	display_table_frames(table, x, part->cy);

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.55 2004/01/31 00:37:28 pasky Exp $ */
+/* $Id: socket.c,v 1.56 2004/01/31 00:40:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,8 +267,8 @@ dns_found(void *data, int state)
 	struct conn_info *c_i = conn->conn_info;
 	int i;
 	int trno = c_i->triedno;
-	int not_local_count = trno;
 	int only_local = get_opt_int_tree(cmdline_options, "localhost");
+	int local = 0;
 	
 	if (state < 0) {
 		abort_conn_with_state(conn, S_NO_DNS);
@@ -286,7 +286,6 @@ dns_found(void *data, int state)
 #else
 		struct sockaddr_in addr = *((struct sockaddr_in *) &c_i->addr[i]);
 #endif
-		int local = 0;
 
 		c_i->triedno++;
 
@@ -301,9 +300,6 @@ dns_found(void *data, int state)
 			
 			/* This forbids connections to anything but local, if option is set. */
 			if (!local) continue;
-			
-			/* Count external attempts. */
-			not_local_count += !local;
 		}
 
 #ifdef IPV6
@@ -357,7 +353,11 @@ dns_found(void *data, int state)
 	if (i >= c_i->addrno) {
 		/* Tried everything, but it didn't help :(. */
 
-		if (only_local && not_local_count >= c_i->triedno - 1) {
+		if (only_local && !local) {
+			/* Yes we might hit a local address and fail in the
+			 * process, but what matters is the last one because
+			 * we do not know the previous one's errno, and the
+			 * added complexity wouldn't really be worth it. */
 			abort_conn_with_state(conn, S_LOCAL_ONLY);
 			return;
 		}

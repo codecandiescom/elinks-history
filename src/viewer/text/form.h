@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.20 2004/06/09 21:05:53 zas Exp $ */
+/* $Id: form.h,v 1.21 2004/06/12 16:31:42 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -86,18 +86,17 @@ struct submitted_value {
 	int position;
 };
 
-struct uri *get_form_uri(struct session *, struct document_view *,
-			 struct form_control *);
+struct uri *get_form_uri(struct session *ses, struct document_view *doc_view, struct form_control *fc);
 
-void selected_item(struct terminal *, void *, struct session *);
-struct form_state *find_form_state(struct document_view *doc_view, struct form_control *frm);
+void selected_item(struct terminal *term, void *pitem, struct session *ses);
+struct form_state *find_form_state(struct document_view *doc_view, struct form_control *fc);
 
-int field_op(struct session *ses, struct document_view *doc_view, struct link *l, struct term_event *ev, int rep);
+int field_op(struct session *ses, struct document_view *doc_view, struct link *link, struct term_event *ev, int rep);
 
-void draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link *l);
-void draw_forms(struct terminal *t, struct document_view *doc_view);
+void draw_form_entry(struct terminal *term, struct document_view *doc_view, struct link *link);
+void draw_forms(struct terminal *term, struct document_view *doc_view);
 
-int has_form_submit(struct document *document, struct form_control *frm);
+int has_form_submit(struct document *document, struct form_control *fc);
 
 void reset_form(struct session *ses, struct document_view *doc_view, int a);
 void submit_form(struct session *ses, struct document_view *doc_view, int do_reload);

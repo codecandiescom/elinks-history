@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.47 2002/09/05 10:10:22 zas Exp $ */
+/* $Id: menu.c,v 1.48 2002/09/09 14:26:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,7 +379,8 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	int x;
 	int o;
 	struct menu_item *file_menu, *e, *f;
-
+	int anonymous = get_opt_int_tree(cmdline_options, "anonymous");
+	
 	file_menu = mem_alloc(sizeof(file_menu11) + sizeof(file_menu12)
 			      + sizeof(file_menu21) + sizeof(file_menu22)
 			      + sizeof(file_menu3)
@@ -390,7 +391,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	memcpy(e, file_menu11, sizeof(file_menu11));
 	e += sizeof(file_menu11) / sizeof(struct menu_item);
 
-	if (!get_opt_int_tree(cmdline_options, "anonymous")) {
+	if (!anonymous) {
 		memcpy(e, file_menu12, sizeof(file_menu12));
 		e += sizeof(file_menu12) / sizeof(struct menu_item);
 	}
@@ -407,7 +408,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e++;
 	}
 
-	if (!get_opt_int_tree(cmdline_options, "anonymous")) {
+	if (!anonymous) {
 		memcpy(e, file_menu21, sizeof(file_menu21));
 		e += sizeof(file_menu21) / sizeof(struct menu_item);
 	}
@@ -418,8 +419,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	TEXT(T_OS_SHELL), "", TEXT(T_HK_OS_SHELL), MENU_FUNC menu_shell, NULL, 0, 0,*/
 
 	x = 1;
-	if (!get_opt_int_tree(cmdline_options, "anonymous")
-	    && can_open_os_shell(term->environment)) {
+	if (!anonymous && can_open_os_shell(term->environment)) {
 		e->text = TEXT(T_OS_SHELL);
 		e->rtext = "";
 		e->hotkey = TEXT(T_HK_OS_SHELL);

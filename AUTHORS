@@ -8,7 +8,7 @@ or some of your contributions is, tell me):
 Adam Harvey <matlhdam@iinet.net.au>
 	Fixed sometimes badly posted form
 
-<akishan@cs.stanford.edu>
+Arun Upadhyaya Kishan <akishan@cs.stanford.edu>
 	ftpparse.{c,h} update for gcc 2.95	
 
 Alberto García <berto@gpul.org>
@@ -384,4 +384,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.89 2002/10/01 16:28:01 zas Exp $
+$Id: AUTHORS,v 1.90 2002/10/02 07:29:44 zas Exp $

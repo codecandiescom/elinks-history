@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.178 2004/12/27 10:49:27 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.179 2004/12/27 13:20:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1335,6 +1335,8 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 		return JS_TRUE;
 
 	index = atol(jsval_to_string(ctx, &argv[0]));
+
+	undef_to_jsval(ctx, rval);
 
 	foreach (fv, vs->forms) {
 		counter++;

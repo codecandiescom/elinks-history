@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.8 2003/01/07 23:20:32 pasky Exp $ */
+/* $Id: sched.c,v 1.9 2003/01/19 14:24:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -843,16 +843,33 @@ get_proxy_worker(unsigned char *url, unsigned char *proxy)
 	if (!no_proxy || !*no_proxy) no_proxy = getenv("no_proxy");
 
 	if (proxy) {
-		if (!*proxy) proxy = NULL;  /* "" from script_hook_get_proxy() */
+		if (!*proxy) proxy = NULL; /* "" from script_hook_get_proxy() */
 	} else {
-		if (http_proxy && *http_proxy && l >= 7
-		    && !strncasecmp(url, "http://", 7)
-		    && !proxy_probe_no_proxy(url + 7, no_proxy))
-			proxy = http_proxy;
-		if (ftp_proxy && *ftp_proxy && l >= 6
-		    && !strncasecmp(url, "ftp://", 6)
-		    && !proxy_probe_no_proxy(url + 6, no_proxy))
-			proxy = ftp_proxy;
+		unsigned char *slash;
+
+		if (http_proxy && *http_proxy) {
+			if (!strncasecmp(http_proxy, "http://", 7))
+				http_proxy += 7;
+
+			slash = strchr(http_proxy, '/');
+			if (slash) *slash = 0;
+
+			if (l >= 7 && !strncasecmp(url, "http://", 7)
+			    && !proxy_probe_no_proxy(url + 7, no_proxy))
+				proxy = http_proxy;
+		}
+
+		if (ftp_proxy && *ftp_proxy) {
+			if (!strncasecmp(ftp_proxy, "ftp://", 6))
+				ftp_proxy += 6;
+
+			slash = strchr(ftp_proxy, '/');
+			if (slash) *slash = 0;
+
+			if (l >= 6 && !strncasecmp(url, "ftp://", 6)
+			    && !proxy_probe_no_proxy(url + 6, no_proxy))
+				proxy = ftp_proxy;
+		}
 	}
 
 	if (proxy) {

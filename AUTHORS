@@ -25,6 +25,9 @@ Alexander Mai <st002279@hrzpub.tu-darmstadt.de>
 	Fix includes for AIX
 	Updated manpage
 
+Alexey Tourbin <at@turbinal.org>
+	Proxy support fixes
+
 Alejandros Diamandidis <adia@egnatia.ee.auth.gr>
 	Greek codepages & translation
 
@@ -419,4 +422,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.116 2003/01/04 13:09:02 pasky Exp $
+$Id: AUTHORS,v 1.117 2003/01/19 14:24:19 pasky Exp $

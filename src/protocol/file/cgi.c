@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.74 2004/08/01 20:54:11 jonas Exp $ */
+/* $Id: cgi.c,v 1.75 2004/09/14 20:56:36 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,7 +140,7 @@ set_vars(struct connection *conn, unsigned char *script)
 
 	if (setenv("REQUEST_METHOD", post ? "POST" : "GET", 1)) return -1;
 	if (setenv("SERVER_SOFTWARE", "ELinks/" VERSION, 1)) return -1;
-	if (setenv("SERVER_PROTOCOL", "HTTP/1.1", 1)) return -1;
+	if (setenv("SERVER_PROTOCOL", "HTTP/1.0", 1)) return -1;
 	/* XXX: Maybe it is better to set this to an empty string? --pasky */
 	if (setenv("SERVER_NAME", "localhost", 1)) return -1;
 	/* XXX: Maybe it is better to set this to an empty string? --pasky */
@@ -149,6 +149,8 @@ set_vars(struct connection *conn, unsigned char *script)
 	/* This is the path name extracted from the URI and decoded, per
 	 * http://cgi-spec.golux.com/draft-coar-cgi-v11-03-clean.html#8.1 */
 	if (setenv("SCRIPT_NAME", script, 1)) return -1;
+	if (setenv("SCRIPT_FILENAME", script, 1)) return -1;
+	if (setenv("PATH_TRANSLATED", script, 1)) return -1;
 
 	/* From now on, just HTTP-like headers are being set. Missing variables
 	 * due to full environment are not a problem according to the CGI/1.1

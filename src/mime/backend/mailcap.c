@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.38 2003/06/11 14:43:48 jonas Exp $ */
+/* $Id: mailcap.c,v 1.39 2003/06/11 14:54:37 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -113,11 +113,10 @@ init_mailcap_entry(unsigned char *command, int priority)
 }
 
 static inline void
-add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type)
+add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type, int typelen)
 {
 	struct mailcap_hash_item *mitem;
 	struct hash_item *item;
-	int typelen = strlen(type);
 
 	/* Time to get the entry into the mailcap_map */
 	/* First check if the type is already checked in */
@@ -287,9 +286,12 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 
 	while ((line = file_read_line(line, &linelen, file, &lineno))) {
 		struct mailcap_entry *entry;
-		unsigned char *type;
-		unsigned char *command;
 		unsigned char *linepos;
+		unsigned char *command;
+		unsigned char *basetypeend;
+		unsigned char *type;
+		int typelen;
+
 
 		/* Ignore comments */
 		if (*line == '#') continue;
@@ -311,9 +313,29 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 			done_mailcap_entry(entry);
 			error("Bad formated entry for type %s in \"%s\" line %d",
 			      type, filename, lineno);
-		} else {
-			add_mailcap_entry(entry, type);
+			continue;
 		}
+
+		basetypeend = strchr(type, '/');
+		typelen = strlen(type);
+
+		if (!basetypeend) {
+			unsigned char implicitwild[64];
+
+			if (typelen + 3 > 64) {
+				done_mailcap_entry(entry);
+				continue;
+			}
+
+			memcpy(implicitwild, type, typelen);
+			implicitwild[typelen++] = '/';
+			implicitwild[typelen++] = '*';
+			implicitwild[typelen++] = '\0';
+			add_mailcap_entry(entry, implicitwild, typelen);
+			continue;
+		}
+
+		add_mailcap_entry(entry, type, typelen);
 	}
 
 	fclose(file);

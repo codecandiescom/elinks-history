@@ -1,12 +1,23 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.8 2003/10/27 01:38:55 pasky Exp $ */
+/* $Id: win32.c,v 1.9 2003/10/27 01:50:17 pasky Exp $ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #if defined(_WIN32)
 
 #include <windows.h>
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
+
+#include "elinks.h"
+
+#include "osdep/os_depx.h"
+#include "terminal/terminal.h"
+
 
 static int w32_input_pid;
 
@@ -223,4 +234,4 @@ open_in_new_win32(struct terminal *term, unsigned char *exe_name,
 	exec_new_elinks(term, "", exe_name, param);
 }
 
-# endif
+#endif

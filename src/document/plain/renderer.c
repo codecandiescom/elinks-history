@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.55 2003/12/29 11:33:21 miciah Exp $ */
+/* $Id: renderer.c,v 1.56 2003/12/29 11:42:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,6 +144,14 @@ add_document_line(struct document *document, int lineno,
 	struct screen_char *pos, *end;
 	int line_pos, expanded = 0;
 
+	for (line_pos = 0; line_pos < width; line_pos++) {
+		unsigned char line_char = line[line_pos];
+
+		if ((line_char != ASCII_TAB && line_char < ' ')
+		    || line_char == ASCII_ESC)
+			line[line_pos] = '.';
+	}
+
 	line = convert_string(convert_table, line, width, CSM_DEFAULT);
 	if (!line) return 0;
 
@@ -163,11 +171,8 @@ add_document_line(struct document *document, int lineno,
 
 			expanded += tab_width;
 
-		} else if (line_char < ' ' || line_char == ASCII_ESC) {
-			line[line_pos] = '.';
-
-		} else 	if (document->options.plain_display_links
-			    && isalpha(line_char) ) {
+		} else if (document->options.plain_display_links
+			   && isalpha(line_char) ) {
 			unsigned char *start = &line[line_pos];
 			int len = get_uri_length(start, width - line_pos);
 			int x = line_pos + expanded;

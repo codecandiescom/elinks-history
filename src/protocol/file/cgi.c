@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.20 2003/12/05 17:48:29 pasky Exp $ */
+/* $Id: cgi.c,v 1.21 2003/12/05 17:49:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,6 +109,7 @@ static int
 set_vars(struct connection *conn, unsigned char *script)
 {
 	unsigned char *post = conn->uri.post;
+	unsigned char *question_mark = strchr(conn->uri.data, '?');
 
 	if (post) {
 		unsigned char *postend = strchr(post, '\n');
@@ -127,14 +128,13 @@ set_vars(struct connection *conn, unsigned char *script)
 		if (setenv("CONTENT_LENGTH", buf, 1)) return -1;
 		if (setenv("REQUEST_METHOD", "POST", 1)) return -1;
 	} else {
-		unsigned char *question_mark = strchr(conn->uri.data, '?');
-
 		if (setenv("REQUEST_METHOD", "GET", 1)) return -1;
-		if (question_mark) {
-			if (setenv("QUERY_STRING", question_mark + 1, 1)) return -1;
-		} else {
-			if (setenv("QUERY_STRING", "", 1)) return -1;
-		}
+	}
+
+	if (question_mark) {
+		if (setenv("QUERY_STRING", question_mark + 1, 1)) return -1;
+	} else {
+		if (setenv("QUERY_STRING", "", 1)) return -1;
 	}
 
 	if (setenv("SERVER_SOFTWARE", "ELinks/" VERSION, 1)) return -1;

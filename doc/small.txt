@@ -4,7 +4,8 @@ Use dietlibc (http://www.fefe.de/dietlibc/) or similar stuff (uClibc, ...):
 export CC='diet gcc'
 
 Use compilers flags to optimize for size:
-export CFLAGS='-Os -s -fno-inline'
+export CFLAGS='-Os -s -fno-inline -nostdinc -march=i386 -fomit-frame-pointer \
+               -malign-functions=1 -malign-jumps=1 -malign-loops=1 -mpreferred-stack-boundary=2'
 
 Disable some compile-time options:
 ./configure --disable-ipv6 --disable-backtrace --disable-nls --enable-fastmem \
@@ -28,15 +29,18 @@ Dependencies over external libs must be removed using related configure options.
 --without-openssl	removes libssl dependency (ssl support)
 --without-x 		removes libx11 dependency (setting terminal title)
 
-With these, using gcc 3.2, dietlibc 0.23 and elinks 0.5pre7 from cvs,
+With these, using gcc 3.2, CFLAGS='-Os -s -fno-inline', dietlibc 0.23 and elinks 0.5pre7 from cvs,
 I obtain a small static binary with the following features:
 Standard, Fastmem, No Backtrace, Bookmarks, Cookies, Global History, Mailcap, Mimetypes files, Forms memory
 
 and a size of:
 -rwxr-xr-x    1 zas      zas        453412 2003-10-19 12:50 src/elinks
 
+It seems gcc 2.95.x do not generate as small binaries than gcc 3.2.x with
+same flags.
+
 Not so bad :)
 
 
 
-/* $Id: small.txt,v 1.3 2003/10/19 22:29:36 jonas Exp $ */
+/* $Id: small.txt,v 1.4 2003/10/20 08:49:27 zas Exp $ */

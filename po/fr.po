@@ -4486,9 +4486,8 @@ msgid "Rows"
 msgstr "Lignes"
 
 #: src/dialogs/options.c:318
-#, fuzzy
 msgid "Resize terminal"
-msgstr "Redimensionner le ~terminal"
+msgstr "Redimensionner le terminal"
 
 #: src/formhist/formhist.c:335 src/util/version.c:107
 msgid "Forms memory"

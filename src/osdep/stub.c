@@ -1,19 +1,28 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.19 2005/02/05 05:22:07 jonas Exp $ */
+/* $Id: stub.c,v 1.20 2005/02/11 19:07:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <ctype.h>
 #include <errno.h>
+#include <ctype.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <sys/types.h>
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>		/* SunOS needs this after sys/types.h */
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>		/* OS/2 needs this after sys/types.h */
+#endif
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
 #endif
 
 #include "elinks.h"
@@ -319,7 +328,7 @@ elinks_inet_ntop6(const unsigned char *src, char *dst, size_t size)
 		if (i == 6 && best.base == 0
 		    && (best.len == 6 || (best.len == 5 && words[5] == 0xffff))) {
 
-			if (!inet_ntop4(src+12, tp, sizeof(tmp) - (tp - tmp))) {
+			if (!elinks_inet_ntop4(src + 12, tp, sizeof(tmp) - (tp - tmp))) {
 				SET_ERRNO(ENOSPC);
 				return NULL;
 			}
@@ -337,12 +346,12 @@ elinks_inet_ntop6(const unsigned char *src, char *dst, size_t size)
 	*tp++ = '\0';
 
 	/* Check for overflow, copy, and we're done. */
-	if ((size_t)(tp - tmp) > size) {
+	if ((size_t) (tp - tmp) > size) {
 		SET_ERRNO(ENOSPC);
 		return NULL;
 	}
 
-	return strcpy (dst, tmp);
+	return strcpy(dst, tmp);
 }
 #endif  /* CONFIG_IPV6 */
 

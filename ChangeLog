@@ -1,3 +1,9 @@
+Wed Mar  6 01:26:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* view.c:
+	
+	i'm stupid .. segfault fix, thank for report goes to zas
+
 Tue Mar  5 14:54:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:

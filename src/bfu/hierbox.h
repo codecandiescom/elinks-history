@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.38 2003/11/26 11:29:40 miciah Exp $ */
+/* $Id: hierbox.h,v 1.39 2003/11/26 21:39:20 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -13,6 +13,9 @@ typedef int (*hierbox_button_handler)(struct dialog_data *dlg_data, struct widge
 struct hierbox_browser_button {
 	unsigned char *label;
 	hierbox_button_handler handler;
+
+	/* Should the button be displayed in anonymous mode */
+	unsigned int anonymous:1;
 };
 
 #define HIERBOX_BROWSER_BUTTONS_SIZE(buttons) \

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.40 2004/04/01 16:42:43 jonas Exp $ */
+/* $Id: task.c,v 1.41 2004/04/01 17:13:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ abort_preloading(struct session *ses, int interrupt)
 
 struct task {
 	struct session *ses;
-	unsigned char *url;
+	struct uri *uri;
 	int pri;
 	enum cache_mode cache_mode;
 	enum task_type type;
@@ -77,9 +77,6 @@ static void
 post_yes(struct task *task)
 {
 	struct session *ses = task->ses;
-	struct uri *uri = get_uri(task->url);
-
-	if (!uri) return;
 
 	abort_preloading(task->ses, 0);
 	if (task->ses->goto_position) mem_free(task->ses->goto_position);
@@ -87,7 +84,7 @@ post_yes(struct task *task)
 	ses->goto_position = null_or_stracpy(task->pos);
 	ses->loading.end = (void (*)(struct download *, void *)) task->fn;
 	ses->loading.data = task->ses;
-	ses->loading_uri = uri;
+	ses->loading_uri = task->uri; /* XXX: Make the session inherit the URI. */
 
 	ses->task.type = task->type;
 	ses->task.target_frame = task->target_frame;
@@ -101,6 +98,7 @@ static void
 post_no(struct task *task)
 {
 	reload(task->ses, CACHE_MODE_NORMAL);
+	done_uri(task->uri);
 }
 
 void
@@ -114,7 +112,9 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 	struct task *task = mem_alloc(sizeof(struct task));
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
-	unsigned char *post_char_pos = post_data_start(url);
+	struct uri *uri = get_uri(url); /* XXX: Check return type */
+
+	mem_free(url);
 
 	if (ses->doc_view
 	    && ses->doc_view->document
@@ -123,8 +123,8 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 	}
 
 	if (!task
+	    || !uri->post
 	    || !get_opt_int("document.browse.forms.confirm_submit")
-	    || !post_char_pos
 	    || (cache_mode == CACHE_MODE_ALWAYS
 		&& (e = find_in_cache(url))
 		&& !e->incomplete)) {
@@ -136,8 +136,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 
 		ses->loading.end = (void (*)(struct download *, void *)) fn;
 		ses->loading.data = ses;
-		ses->loading_uri = get_uri(url);
-		mem_free(url);
+		ses->loading_uri = uri;
 		if (!ses->loading_uri) return;
 
 		ses->task.type = task_type;
@@ -151,7 +150,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 	}
 
 	task->ses = ses;
-	task->url = url;
+	task->uri = uri;
 	task->pri = pri;
 	task->cache_mode = cache_mode;
 	task->type = task_type;
@@ -169,8 +168,8 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 		m1 = N_("Do you want to repost form data to URL %s?");
 	}
 
-	m2 = memacpy(url, post_char_pos - url);
-	msg_box(ses->tab->term, getml(m2, task, task->url, task->pos,
+	m2 = get_uri_string(uri, ~URI_POST);
+	msg_box(ses->tab->term, getml(m2, task, task->pos,
 				 NULL), MSGBOX_FREE_TEXT,
 		N_("Warning"), AL_CENTER,
 		msg_text(ses->tab->term, m1, m2),

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.71 2004/05/14 08:49:07 zas Exp $ */
+/* $Id: frames.c,v 1.72 2004/06/04 13:27:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,7 +186,8 @@ repeat:
 
 	if (cached->redirect && frame->redirect_cnt < MAX_REDIRECTS) {
 		frame->redirect_cnt++;
-		ses_change_frame_uri(ses, name, cached->redirect);
+		done_uri(vs->uri);
+		vs->uri = get_uri_reference(cached->redirect);
 		o->plain = plain;
 		goto repeat;
 	}

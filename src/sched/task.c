@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.94 2004/05/31 17:16:50 jonas Exp $ */
+/* $Id: task.c,v 1.95 2004/06/04 13:27:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,9 +226,8 @@ x:
 			copy_location(loc, cur_loc(ses));
 			add_to_history(&ses->history, loc);
 		}
-		frame = ses_change_frame_uri(ses, ses->task.target_frame,
-					     ses->loading_uri);
 
+		frame = ses_find_frame(ses, ses->task.target_frame);
 		if (!frame) {
 			if (!loaded_in_frame) {
 				del_from_history(&ses->history, loc);
@@ -239,6 +238,8 @@ x:
 		}
 
 		vs = &frame->vs;
+		done_uri(vs->uri);
+		vs->uri = get_uri_reference(ses->loading_uri);
 		if (!loaded_in_frame) {
 			destroy_vs(vs);
 			init_vs(vs, ses->loading_uri, vs->plain);

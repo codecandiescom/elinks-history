@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.129 2004/05/27 12:19:57 jonas Exp $ */
+/* $Id: session.h,v 1.130 2004/06/04 13:27:01 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -217,7 +217,6 @@ void reload(struct session *, enum cache_mode);
 void load_frames(struct session *, struct document_view *);
 
 struct frame *ses_find_frame(struct session *, unsigned char *);
-struct frame *ses_change_frame_uri(struct session *, unsigned char *, struct uri *);
 
 void free_files(struct session *);
 void display_timer(struct session *ses);

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.146 2004/07/03 09:58:40 zas Exp $ */
+/* $Id: ftp.c,v 1.147 2004/07/03 10:28:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,7 +288,7 @@ ftp_login(struct connection *conn)
 	} else {
 		add_to_string(&cmd, "anonymous");
 	}
-	add_to_string(&cmd, "\r\n");
+	add_crlf_to_string(&cmd);
 
 	send_cmd(conn, cmd.source, cmd.length, (void *) ftp_got_info, S_SENT);
 }
@@ -392,7 +392,7 @@ ftp_pass(struct connection *conn)
 	} else {
 		add_to_string(&cmd, get_opt_str("protocol.ftp.anon_passwd"));
 	}
-	add_to_string(&cmd, "\r\n");
+	add_crlf_to_string(&cmd);
 
 	send_cmd(conn, cmd.source, cmd.length, (void *) ftp_pass_info, S_LOGIN);
 }
@@ -470,7 +470,6 @@ add_portcmd_to_string(struct string *string, unsigned char *pc)
 	add_long_to_string(string, pc[4]);
 	add_char_to_string(string, ',');
 	add_long_to_string(string, pc[5]);
-	add_to_string(string, "\r\n");
 }
 
 #ifdef CONFIG_IPV6
@@ -497,7 +496,7 @@ add_eprtcmd_to_string(struct string *string, struct sockaddr_in6 *addr)
 	add_to_string(string, addr_str);
 	add_char_to_string(string, '|');
 	add_long_to_string(string, ntohs(addr->sin6_port));
-	add_to_string(string, "|\r\n");
+	add_char_to_string(string, '|');
 }
 #endif
 
@@ -569,26 +568,30 @@ add_file_cmd_to_str(struct connection *conn)
 		c_i->pending_commands = 4;
 
 		/* ASCII */
-		add_to_string(&command, "TYPE A\r\n");
+		add_to_string(&command, "TYPE A");
+		add_crlf_to_string(&command);
 
 #ifdef CONFIG_IPV6
 		if (conn->pf == 2)
 			if (c_i->use_epsv)
-				add_to_string(&command, "EPSV\r\n");
+				add_to_string(&command, "EPSV");
 			else
 				add_eprtcmd_to_string(&command, &data_addr);
 		else
 #endif
 			if (c_i->use_pasv)
-				add_to_string(&command, "PASV\r\n");
+				add_to_string(&command, "PASV");
 			else
 				add_portcmd_to_string(&command, pc);
 
+		add_crlf_to_string(&command);
+
 		add_to_string(&command, "CWD ");
 		add_uri_to_string(&command, conn->uri, URI_PATH);
-		add_to_string(&command, "\r\n");
+		add_crlf_to_string(&command);
 
-		add_to_string(&command, "LIST\r\n");
+		add_to_string(&command, "LIST");
+		add_crlf_to_string(&command);
 
 		conn->from = 0;
 
@@ -599,27 +602,30 @@ add_file_cmd_to_str(struct connection *conn)
 		c_i->pending_commands = 3;
 
 		/* BINARY */
-		add_to_string(&command, "TYPE I\r\n");
+		add_to_string(&command, "TYPE I");
+		add_crlf_to_string(&command);
 
 #ifdef CONFIG_IPV6
 		if (conn->pf == 2)
 			if (c_i->use_epsv)
-				add_to_string(&command, "EPSV\r\n");
+				add_to_string(&command, "EPSV");
 			else
 				add_eprtcmd_to_string(&command, &data_addr);
 		else
 #endif
 			if (c_i->use_pasv)
-				add_to_string(&command, "PASV\r\n");
+				add_to_string(&command, "PASV");
 			else
 				add_portcmd_to_string(&command, pc);
-
+		
+		add_crlf_to_string(&command);
+		
 		if (conn->from || (conn->prg.start > 0)) {
 			add_to_string(&command, "REST ");
 			add_long_to_string(&command, conn->from
 							? conn->from
 							: conn->prg.start);
-			add_to_string(&command, "\r\n");
+			add_crlf_to_string(&command);
 
 			c_i->rest_sent = 1;
 			c_i->pending_commands++;
@@ -627,7 +633,7 @@ add_file_cmd_to_str(struct connection *conn)
 
 		add_to_string(&command, "RETR ");
 		add_uri_to_string(&command, conn->uri, URI_PATH);
-		add_to_string(&command, "\r\n");
+		add_crlf_to_string(&command);
 	}
 
 	c_i->opc = c_i->pending_commands;

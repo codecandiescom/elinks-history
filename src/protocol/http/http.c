@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.295 2004/07/02 23:14:22 zas Exp $ */
+/* $Id: http.c,v 1.296 2004/07/03 10:27:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,11 +367,11 @@ http_send_header(struct connection *conn)
 	add_long_to_string(&header, info->sent_version.major);
 	add_char_to_string(&header, '.');
 	add_long_to_string(&header, info->sent_version.minor);
-	add_to_string(&header, "\r\n");
+	add_crlf_to_string(&header);
 
 	add_to_string(&header, "Host: ");
 	add_uri_to_string(&header, uri, URI_HTTP_HOST);
-	add_to_string(&header, "\r\n");
+	add_crlf_to_string(&header);
 
 	optstr = get_opt_str("protocol.http.proxy.user");
 	if (optstr[0]) {
@@ -386,7 +386,7 @@ http_send_header(struct connection *conn)
 			if (proxy_64) {
 				add_to_string(&header, "Proxy-Authorization: Basic ");
 				add_to_string(&header, proxy_64);
-				add_to_string(&header, "\r\n");
+				add_crlf_to_string(&header);
 				mem_free(proxy_64);
 			}
 			mem_free(proxy_data);
@@ -415,7 +415,7 @@ http_send_header(struct connection *conn)
 			mem_free(ustr);
 		}
 
-		add_to_string(&header, "\r\n");
+		add_crlf_to_string(&header);
 	}
 
 	switch (get_opt_int("protocol.http.referer.policy")) {
@@ -428,24 +428,25 @@ http_send_header(struct connection *conn)
 			if (!optstr[0]) break;
 			add_to_string(&header, "Referer: ");
 			add_to_string(&header, optstr);
-			add_to_string(&header, "\r\n");
+			add_crlf_to_string(&header);
 			break;
 
 		case REFERER_TRUE:
 			if (!conn->referrer) break;
 			add_to_string(&header, "Referer: ");
 			add_url_to_http_string(&header, conn->referrer, URI_PUBLIC);
-			add_to_string(&header, "\r\n");
+			add_crlf_to_string(&header);
 			break;
 
 		case REFERER_SAME_URL:
 			add_to_string(&header, "Referer: ");
 			add_url_to_http_string(&header, uri, URI_PUBLIC);
-			add_to_string(&header, "\r\n");
+			add_crlf_to_string(&header);
 			break;
 	}
 
-	add_to_string(&header, "Accept: */*\r\n");
+	add_to_string(&header, "Accept: */*");
+	add_crlf_to_string(&header);
 
 	/* TODO: Make this encoding.c function. */
 #if defined(CONFIG_GZIP) || defined(CONFIG_BZIP2)
@@ -461,7 +462,7 @@ http_send_header(struct connection *conn)
 #endif
 	add_to_string(&header, "gzip");
 #endif
-	add_to_string(&header, "\r\n");
+	add_crlf_to_string(&header);
 #endif
 
 	if (!accept_charset) {
@@ -481,7 +482,7 @@ http_send_header(struct connection *conn)
 			}
 
 			if (ac.length) {
-				add_to_string(&ac, "\r\n");
+				add_crlf_to_string(&header);
 			}
 
 			/* Never freed until exit(), if you found a  better solution,
@@ -507,7 +508,7 @@ http_send_header(struct connection *conn)
 	if (optstr[0]) {
 		add_to_string(&header, "Accept-Language: ");
 		add_to_string(&header, optstr);
-		add_to_string(&header, "\r\n");
+		add_crlf_to_string(&header);
 	}
 #ifdef ENABLE_NLS
 	else if (get_opt_bool("protocol.http.accept_ui_language")) {
@@ -516,7 +517,7 @@ http_send_header(struct connection *conn)
 		if (code) {
 			add_to_string(&header, "Accept-Language: ");
 			add_to_string(&header, code);
-			add_to_string(&header, "\r\n");
+			add_crlf_to_string(&header);
 		}
 	}
 #endif
@@ -530,10 +531,11 @@ http_send_header(struct connection *conn)
 		}
 
 		if (!uri->post || !get_opt_int("protocol.http.bugs.post_no_keepalive")) {
-			add_to_string(&header, "Keep-Alive\r\n");
+			add_to_string(&header, "Keep-Alive");
 		} else {
-			add_to_string(&header, "close\r\n");
+			add_to_string(&header, "close");
 		}
+		add_crlf_to_string(&header);
 	}
 
 	if (conn->cached) {
@@ -541,13 +543,15 @@ http_send_header(struct connection *conn)
 		    && conn->cache_mode <= CACHE_MODE_CHECK_IF_MODIFIED) {
 			add_to_string(&header, "If-Modified-Since: ");
 			add_to_string(&header, conn->cached->last_modified);
-			add_to_string(&header, "\r\n");
+			add_crlf_to_string(&header);
 		}
 	}
 
 	if (conn->cache_mode >= CACHE_MODE_FORCE_RELOAD) {
-		add_to_string(&header, "Pragma: no-cache\r\n");
-		add_to_string(&header, "Cache-Control: no-cache\r\n");
+		add_to_string(&header, "Pragma: no-cache");
+		add_crlf_to_string(&header);
+		add_to_string(&header, "Cache-Control: no-cache");
+		add_crlf_to_string(&header);
 	}
 
 	if (conn->from || (conn->prg.start > 0)) {
@@ -556,14 +560,15 @@ http_send_header(struct connection *conn)
 		 * etc we have everything interesting in conn->from already. */
 		add_to_string(&header, "Range: bytes=");
 		add_long_to_string(&header, conn->from ? conn->from : conn->prg.start);
-		add_to_string(&header, "-\r\n");
+		add_char_to_string(&header, '-');
+		add_crlf_to_string(&header);
 	}
 
 	host_data = find_auth(uri);
 	if (host_data) {
 		add_to_string(&header, "Authorization: Basic ");
 		add_to_string(&header, host_data);
-		add_to_string(&header, "\r\n");
+		add_crlf_to_string(&header);
 		mem_free(host_data);
 	}
 
@@ -573,13 +578,13 @@ http_send_header(struct connection *conn)
 		if (postend) {
 			add_to_string(&header, "Content-Type: ");
 			add_bytes_to_string(&header, uri->post, postend - uri->post);
-			add_to_string(&header, "\r\n");
+			add_crlf_to_string(&header);
 		}
 
 		post_data = postend ? postend + 1 : uri->post;
 		add_to_string(&header, "Content-Length: ");
 		add_long_to_string(&header, strlen(post_data) / 2);
-		add_to_string(&header, "\r\n");
+		add_crlf_to_string(&header);
 	}
 
 #ifdef CONFIG_COOKIES
@@ -589,13 +594,13 @@ http_send_header(struct connection *conn)
 		if (cookies) {
 			add_to_string(&header, "Cookie: ");
 			add_string_to_string(&header, cookies);
-			add_to_string(&header, "\r\n");
+			add_crlf_to_string(&header);
 			done_string(cookies);
 		}
 	}
 #endif
 
-	add_to_string(&header, "\r\n");
+	add_crlf_to_string(&header);
 
 	if (post_data) {
 #define POST_BUFFER_SIZE 4096

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.275 2003/09/29 23:44:56 jonas Exp $ */
+/* $Id: options.c,v 1.276 2003/09/30 16:22:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1785,7 +1785,7 @@ register_options(void)
 
 	add_opt_int("terminal._template_", N_("Color mode"),
 		"colors", 0, 0, 2, 0,
-		N_("The color mode controls what colors are used and how they are"
+		N_("The color mode controls what colors are used and how they are\n"
 		"output to the terminal. The color modes are:\n"
 		"0 is mono mode, only 2 colors are used\n"
 		"1 is 16 color mode, uses the common ANSI colors\n"

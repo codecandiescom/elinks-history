@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.23 2004/04/02 18:15:11 jonas Exp $ */
+/* $Id: refresh.c,v 1.24 2004/04/06 11:13:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,6 +93,14 @@ start_document_refresh(struct document_refresh *refresh, struct session *ses)
 {
 	int minimum = get_opt_int("document.browse.minimum_refresh_time");
 	int time = int_max(1000 * refresh->seconds, minimum);
+	struct tq *type_query;
+
+	/* Like bug 289 another sourceforge download thingy this time with
+	 * number 434. It should take care when refreshing to the same URI or
+	 * what ever the cause is. */
+	foreach (type_query, ses->tq)
+		if (refresh->uri == type_query->uri)
+			return;
 
 	refresh->timer = install_timer(time, do_document_refresh, ses);
 }

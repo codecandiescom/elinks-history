@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.62 2003/12/28 02:19:51 jonas Exp $ */
+/* $Id: options.inc,v 1.63 2003/12/28 02:36:25 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1489,10 +1489,10 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_INT("ui", N_("Auto save and restore session"),
 		"auto_save_restore_session", 0, 0, 4, 0,
-		N_("Automatically save and restore the session when quiting so\n"
+		N_("Automatically save and restore the session when quitting so\n"
 		"it can be continued later. Requires bookmark support:\n"
 		"0 means no auto saving and restoring\n"
-		"1 means auto save session when quiting\n"
+		"1 means auto save session when quitting\n"
 		"2 means auto save and restore session")),
 
 

@@ -1,3 +1,18 @@
+Sun Sep 15 21:03:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Stupid BSD; gotta really hate it. Compilation fixes there.  
+
+Sun Sep 15 15:32:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/bookmarks.c,
+	bookmarks/bookmarks.h, bookmarks/dialogs.c:
+
+	Added flags field to the bookmarks file, now each listbox_item is
+	either a folder or a leaf, saved which folders are expanded and
+	which aren't.  
+
 Sat Sep 14 21:58:33 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/: bookmarks.c, dialogs.c:

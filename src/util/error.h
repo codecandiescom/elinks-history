@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.39 2003/12/21 14:56:56 zas Exp $ */
+/* $Id: error.h,v 1.40 2004/01/01 16:34:42 jonas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -180,9 +180,9 @@ void do_not_optimize_here(void *x);
  * tells it to be extremely careful and not use dynamic memory allocation
  * functions etc (useful in SIGSEGV handler etc). */
 /* Note that this function just calls system-specific backend provided by the
- * libc, so it is available only on some systems. BACKTRACE is defined if it
- * is available on yours. */
-#ifdef BACKTRACE
+ * libc, so it is available only on some systems. CONFIG_BACKTRACE is defined
+ * if it is available on yours. */
+#ifdef CONFIG_BACKTRACE
 #include <stdio.h>
 void dump_backtrace(FILE *f, int trouble);
 #endif

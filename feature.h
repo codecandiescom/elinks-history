@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.32 2004/01/01 15:54:37 jonas Exp $ */
+/* $Id: feature.h,v 1.33 2004/01/01 16:34:41 jonas Exp $ */
 
 #ifndef EL__DOTDOT_FEATURE_H
 #define EL__DOTDOT_FEATURE_H
@@ -241,9 +241,9 @@
  *
  * Default: enabled if the libc supports it (only glibc) */
 
-#ifdef BACKTRACE
+#ifdef CONFIG_BACKTRACE
 /* Uncomment the following line if you want to always have this disabled: */
-/* #undef BACKTRACE */
+/* #undef CONFIG_BACKTRACE */
 #endif
 
 

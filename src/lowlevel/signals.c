@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.17 2004/01/01 15:24:44 pasky Exp $ */
+/* $Id: signals.c,v 1.18 2004/01/01 16:34:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ sig_cont(struct terminal *t)
 	if (!unblock_itrm(0)) resize_terminal();
 }
 
-#ifdef BACKTRACE
+#ifdef CONFIG_BACKTRACE
 static void
 sig_segv(struct terminal *t)
 {
@@ -139,7 +139,7 @@ handle_basic_signals(struct terminal *term)
 #ifdef SIGCONT
 	install_signal_handler(SIGCONT, (void (*)(void *))sig_cont, term, 0);
 #endif
-#ifdef BACKTRACE
+#ifdef CONFIG_BACKTRACE
 	install_signal_handler(SIGSEGV, (void (*)(void *))sig_segv, term, 1);
 #endif
 }
@@ -161,7 +161,7 @@ unhandle_terminal_signals(struct terminal *term)
 #ifdef SIGCONT
 	install_signal_handler(SIGCONT, NULL, NULL, 0);
 #endif
-#ifdef BACKTRACE
+#ifdef CONFIG_BACKTRACE
 	install_signal_handler(SIGSEGV, NULL, NULL, 0);
 #endif
 }
@@ -184,7 +184,7 @@ unhandle_basic_signals(struct terminal *term)
 #ifdef SIGCONT
 	install_signal_handler(SIGCONT, NULL, NULL, 0);
 #endif
-#ifdef BACKTRACE
+#ifdef CONFIG_BACKTRACE
 	install_signal_handler(SIGSEGV, NULL, NULL, 0);
 #endif
 }

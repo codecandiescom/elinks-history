@@ -83,7 +83,7 @@
 
 /* Define to 1 if we should include a generic backtrace printing infrastructure */
 /* (you will still need some support from the libc) */
-#undef BACKTRACE
+#undef CONFIG_BACKTRACE
 
 /* Define to 1 to reduce binary size as far as possible. */
 #undef ELINKS_SMALL

@@ -775,7 +775,7 @@ dnl ===================================================================
 AC_CHECK_HEADERS(execinfo.h, have_execinfo=yes, have_execinfo=no)
 # possible checks for other system-specific means go here
 if test "$have_execinfo" = yes; then
-	AC_DEFINE(BACKTRACE)
+	AC_DEFINE(CONFIG_BACKTRACE)
 fi
 
 

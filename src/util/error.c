@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.78 2003/12/21 13:53:30 pasky Exp $ */
+/* $Id: error.c,v 1.79 2004/01/01 16:34:41 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -153,7 +153,7 @@ do_not_optimize_here(void *p)
 }
 
 
-#ifdef BACKTRACE
+#ifdef CONFIG_BACKTRACE
 
 /* The backtrace corner. */
 

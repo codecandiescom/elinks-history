@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.34 2002/11/26 22:48:07 pasky Exp $ */
+/* $Id: error.c,v 1.35 2002/11/28 22:51:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,8 +25,9 @@
 void
 force_dump()
 {
-	fprintf(stderr, "\n\033[1m%s\033[0m\n", "Forcing core dump");
-	fprintf(stderr, "Man the Lifeboats! Women and children first!\n");
+	fprintf(stderr,
+		"\n\033[1m%s\033[0m %s\n", "Forcing core dump!",
+	        "Man the Lifeboats! Women and children first!\n");
 	fflush(stderr);
 	raise(SIGSEGV);
 }

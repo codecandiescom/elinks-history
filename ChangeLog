@@ -1,3 +1,30 @@
+Mon Dec 31 19:59:46 2001  Petr Baudis <pasky@ji.cz>:
+
+	* url.c:
+	
+	Hopefully fix for making link to ?foo at bar.cgi/baz to
+	bar.cgi/?foo rather than to bar.cgi/baz?foo.
+
+Mon Dec 31 18:43:24 2001  Petr Baudis <pasky@ji.cz>:
+
+	* language.h, language.inc, view.c, intl/brazilian_portuguese.lng,
+	intl/bulgarian.lng, intl/catalan.lng, intl/czech.lng,
+	intl/english.lng, intl/estonian.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/italian.lng,
+	intl/lithuanian.lng, intl/polish.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng:
+	
+	Pop up error message when trying to edit textarea externally from
+	slave terminal.
+
+Mon Dec 31 18:01:03 2001  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/md5check.lua:
+	
+	Another lua script from Peter Wang
+
 Sun Dec 30 01:43:50 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, links.h, sched.c:

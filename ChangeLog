@@ -1,3 +1,36 @@
+Mon Oct 13 21:49:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/version.c:
+
+	Show whether mailcap and/or mimetypes are compiled in.  
+
+Mon Oct 13 21:45:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/mime/backend/mimetypes.c:
+
+	assert(mimetypes_tree), something weird seems to happen there...  
+
+Mon Oct 13 18:55:36 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* doc/: README, bookmarks.txt, color-model.txt, configure.txt,
+	events.txt, feedback.txt, hacking.txt:
+
+	Bunch of typo fixes.  
+
+Mon Oct 13 18:39:13 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* README:
+
+	Fixed a typo.  
+
+Mon Oct 13 12:50:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Textarea wrap attribute value is now by default virtual (as almost
+	everyone else does as well, it seems); implemented wrap=(none|off).
+	Idea by Benjamin Schwenk (DerBenni).  
+
 Sun Oct 12 21:55:13 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

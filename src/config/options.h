@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.59 2003/07/23 00:55:53 jonas Exp $ */
+/* $Id: options.h,v 1.60 2003/07/23 01:04:17 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -186,11 +186,6 @@ extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 	unsigned char *ptr = mem_alloc(MAX_STR_LEN); \
 	add_opt(tree, path, capt, name, flags, OPT_STRING, 0, MAX_STR_LEN, ptr, desc); \
 	safe_strncpy(ptr, def, MAX_STR_LEN); } while (0)
-
-#define add_opt_codepage_tree(tree, path, capt, name, flags, def, desc) do { \
-	int *ptr = mem_alloc(sizeof(int)); \
-	add_opt(tree, path, capt, name, flags, OPT_CODEPAGE, 0, 0, ptr, desc); \
-	*ptr = def; } while (0)
 
 #define add_opt_codepage_tree(tree, path, capt, name, flags, def, desc) do { \
 	int *ptr = mem_alloc(sizeof(int)); \

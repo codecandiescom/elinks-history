@@ -1,5 +1,5 @@
 /* Renderer frontend */
-/* $Id: renderer.c,v 1.2 2002/12/31 01:44:04 pasky Exp $ */
+/* $Id: renderer.c,v 1.3 2002/12/31 01:48:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #include "elusive/renderer/text/renderer.h"
 
 struct renderer_backend *renderer_backends[] = {
-	text_renderer_backend,
+	&text_renderer_backend,
 	NULL,
 };
 

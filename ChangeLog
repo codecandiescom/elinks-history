@@ -1,3 +1,57 @@
+Sat May 11 16:49:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/italian.lng, src/intl/language.inc:
+
+	Italian translation update, patch by Fabio Bonelli.  
+
+Sat May 11 16:47:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/danish.lng, intl/dutch.lng,
+	intl/english.lng, intl/estonian.lng, intl/finnish.lng,
+	intl/french.lng, intl/galician.lng, intl/german.lng,
+	intl/greek.lng, intl/hungarian.lng, intl/icelandic.lng,
+	intl/indonesian.lng, intl/italian.lng, intl/lithuanian.lng,
+	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
+	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng, intl/ukrainian.lng, src/config/options.c,
+	src/config/options.h, src/dialogs/options.c, src/intl/lang_defs.h,
+	src/intl/language.inc, src/protocol/http/http.c:
+
+	Support for Accept-language, patch by Fabio Bonelli.  
+
+Sat May 11 15:20:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/session.c:
+
+	maybe_pre_format_html() now takes cache_entry instead of status;
+	patch by Peter Wang.  
+
+Sat May 11 14:38:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/links.h:
+
+	Temporarily always define LEAK_DEBUG and LEAK_DEBUG_LIST now :(.  
+
+Sat May 11 12:24:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/links.h:
+
+	We will never use non-debug code for memacpy(), as it's completely
+	redundant. Comment added, should be removed soon.  
+
+Sat May 11 12:05:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/osdep/os_dep.c:
+
+	Include <io.h> in os_dep.c, for win32 (by mikulas, from 0.97).  
+
+Sat May 11 11:49:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/info.c:
+
+	Fix in displaying Debug in feature list.  
+
 Fri May 10 22:06:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* README:

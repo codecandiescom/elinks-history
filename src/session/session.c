@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.33 2003/05/04 20:06:51 pasky Exp $ */
+/* $Id: session.c,v 1.34 2003/05/04 20:39:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -361,7 +361,7 @@ print_screen_status(struct session *ses)
 		}
 	}
 
-	redraw_from_window(ses->win);
+	redraw_from_window(ses->tab);
 #ifdef USE_LEDS
 	draw_leds(term);
 #endif
@@ -1122,7 +1122,7 @@ create_basic_session(struct window *win)
 	init_list(ses->scrn_frames);
 	init_list(ses->more_files);
         ses->term = win->term;
-	ses->win = win;
+	ses->tab = win;
 	ses->id = session_id++;
 	ses->screen = NULL;
 	ses->wtd = WTD_NO;

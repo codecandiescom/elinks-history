@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.50 2003/05/04 20:35:14 pasky Exp $ */
+/* $Id: view.c,v 1.51 2003/05/04 20:39:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1049,7 +1049,7 @@ draw_formatted(struct session *ses)
 	draw_doc(ses->term, ses->screen, 1);
 	draw_frames(ses);
 	print_screen_status(ses);
-	redraw_from_window(ses->win);
+	redraw_from_window(ses->tab);
 }
 
 static int
@@ -1920,7 +1920,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 
 	draw_doc(ses->term, f, 1);
 	print_screen_status(ses);
-	redraw_from_window(ses->win);
+	redraw_from_window(ses->tab);
 	/*if (!has_form_submit(f->f_data, l->form)) {
 		goto_form(ses, f, l->form, l->target);
 	}*/
@@ -2299,7 +2299,7 @@ b:
 
 	if (x) {
 		draw_form_entry(ses->term, f, l);
-		redraw_from_window(ses->win);
+		redraw_from_window(ses->tab);
 	}
 	return x;
 }
@@ -2443,7 +2443,7 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 #if 0
 			draw_doc(ses->term, f, 1);
 			print_screen_status(ses);
-			redraw_from_window(ses->win);
+			redraw_from_window(ses->tab);
 #endif
 			return;
 		}
@@ -2461,7 +2461,7 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 
 	/*draw_doc(ses->term, f, 1);
 	print_screen_status(ses);
-	redraw_from_window(ses->win);*/
+	redraw_from_window(ses->tab);*/
 	msg_box(ses->term, NULL,
 		N_("Search"), AL_CENTER,
 		N_("Search string not found"),
@@ -2765,7 +2765,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 
 				draw_doc(ses->term, fd, 1);
 				print_screen_status(ses);
-				redraw_from_window(ses->win);
+				redraw_from_window(ses->tab);
 
 				if ((ev->b & BM_BUTT) < B_MIDDLE)
 					x = enter(ses, fd, 0);
@@ -2837,7 +2837,7 @@ send_to_frame(struct session *ses, struct event *ev)
 	if (r == 1) {
 		draw_doc(ses->term, fd, 1);
 		print_screen_status(ses);
-		redraw_from_window(ses->win);
+		redraw_from_window(ses->tab);
 	}
 
 	return r;
@@ -2912,7 +2912,7 @@ send_event(struct session *ses, struct event *ev)
 				draw_formatted(ses);
 				/*draw_frames(ses);
 				  print_screen_status(ses);
-				  redraw_from_window(ses->win);*/
+				  redraw_from_window(ses->tab);*/
 				goto x;
 			case ACT_PREVIOUS_FRAME:
 				next_frame(ses, -1);
@@ -3094,7 +3094,7 @@ quit:
 			/* The document ate the key! */
 			draw_doc(ses->term, current_frame(ses), 1);
 			print_screen_status(ses);
-			redraw_from_window(ses->win);
+			redraw_from_window(ses->tab);
 			return;
 		}
 	}

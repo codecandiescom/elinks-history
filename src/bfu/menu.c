@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.195 2004/03/09 12:24:34 jonas Exp $ */
+/* $Id: menu.c,v 1.196 2004/03/17 09:08:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -531,10 +531,9 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 
 		} else {
 			struct window *w1;
+			struct window *end = (struct window *)&win->term->windows;
 
-			for (w1 = win;
-			     (void *)w1 != &win->term->windows;
-			     w1 = w1->next) {
+			for (w1 = win; w1 != end; w1 = w1->next) {
 				struct menu *m1;
 
 				if (w1->handler == mainmenu_handler) {
@@ -550,8 +549,10 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 				if (ev->x > m1->x
 				    && ev->x < m1->x + m1->width - 1
 				    && ev->y > m1->y
-				    && ev->y < m1->y + m1->height - 1)
+				    && ev->y < m1->y + m1->height - 1) {
 					delete_window_ev(win, ev);
+					break;
+				}
 			}
 		}
 

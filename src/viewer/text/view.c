@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.249 2003/10/30 17:53:15 jonas Exp $ */
+/* $Id: view.c,v 1.250 2003/10/30 18:12:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,6 @@ find_tag(struct document *document, unsigned char *name)
 
 	return -1;
 }
-
 
 static void
 draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
@@ -582,7 +581,7 @@ frm_download(struct session *ses, struct document_view *doc_view, int resume)
 		ses->dn_url = NULL;
 	}
 	link = &doc_view->document->links[doc_view->vs->current_link];
-	if (link->type != L_LINK && link->type != L_BUTTON) return;
+	if (link->type != LINK_HYPERTEXT && link->type != LINK_BUTTON) return;
 
 	ses->dn_url = get_link_url(ses, doc_view, link);
 	if (ses->dn_url) {
@@ -607,8 +606,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 	if_assert_failed return 1;
 
 	if (doc_view->vs->current_link >= 0
-	    && (doc_view->document->links[doc_view->vs->current_link].type == L_FIELD ||
-		doc_view->document->links[doc_view->vs->current_link].type == L_AREA)
+	    && link_is_textinput(&doc_view->document->links[doc_view->vs->current_link])
 	    && field_op(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link], ev, 0))
 		return 1;
 
@@ -775,8 +773,8 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			x = 1;
 			doc_view->vs->current_link = link - doc_view->document->links;
 
-			if ((link->type == L_LINK || link->type == L_BUTTON ||
-			     link->type == L_CHECKBOX || link->type == L_SELECT)
+			if ((link->type == LINK_HYPERTEXT || link->type == LINK_BUTTON ||
+			     link->type == LINK_CHECKBOX || link->type == LINK_SELECT)
 			    && (ev->b & BM_ACT) == B_UP) {
 
 				draw_doc(ses->tab->term, doc_view, 1);

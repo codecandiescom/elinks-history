@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.94 2003/10/30 17:45:05 jonas Exp $ */
+/* $Id: link.c,v 1.95 2003/10/30 18:12:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,24 +151,24 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	switch (link->type) {
 		struct form_state *fs;
 
-		case L_LINK:
-		case L_SELECT:
+		case LINK_HYPERTEXT:
+		case LINK_SELECT:
 			break;
 
-		case L_CHECKBOX:
+		case LINK_CHECKBOX:
 			cursor_offset = 1;
 			break;
 
-		case L_BUTTON:
+		case LINK_BUTTON:
 			cursor_offset = 2;
 			break;
 
-		case L_FIELD:
+		case LINK_FIELD:
 			fs = find_form_state(doc_view, link->form);
 			if (fs) cursor_offset = fs->state - fs->vpos;
 			break;
 
-		case L_AREA:
+		case LINK_AREA:
 			fs = find_form_state(doc_view, link->form);
 			if (fs) cursor_offset = area_cursor(link->form, fs);
 			break;
@@ -546,11 +546,11 @@ get_link_url(struct session *ses, struct document_view *doc_view, struct link *l
 	assert(ses && doc_view && l);
 	if_assert_failed return NULL;
 
-	if (l->type == L_LINK) {
+	if (l->type == LINK_HYPERTEXT) {
 		if (!l->where) return stracpy(l->where_img);
 		return stracpy(l->where);
 	}
-	if (l->type != L_BUTTON && l->type != L_FIELD) return NULL;
+	if (l->type != LINK_BUTTON && l->type != LINK_FIELD) return NULL;
 	return get_form_url(ses, doc_view, l->form);
 }
 
@@ -605,7 +605,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	if (doc_view->vs->current_link == -1) return 1;
 	link = &doc_view->document->links[doc_view->vs->current_link];
 
-	if (link->type == L_LINK || link->type == L_BUTTON
+	if (link->type == LINK_HYPERTEXT || link->type == LINK_BUTTON
 	    || ((has_form_submit(doc_view->document, link->form)
 		 || get_opt_int("document.browse.forms.auto_submit"))
 		&& (link_is_textinput(link)))) {
@@ -619,7 +619,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		 * 			 get_opt_int("..")) */
 		down(ses, doc_view, 0);
 
-	} else if (link->type == L_CHECKBOX) {
+	} else if (link->type == LINK_CHECKBOX) {
 		struct form_state *fs = find_form_state(doc_view, link->form);
 
 		if (link->form->ro) return 1;
@@ -643,7 +643,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 			fs->state = 1;
 		}
 
-	} else if (link->type == L_SELECT) {
+	} else if (link->type == LINK_SELECT) {
 		if (link->form->ro)
 			return 1;
 
@@ -677,7 +677,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 	if_assert_failed return;
 	if (doc_view->vs->current_link == -1) return;
 	l = &doc_view->document->links[doc_view->vs->current_link];
-	if (l->type != L_SELECT) return;
+	if (l->type != LINK_SELECT) return;
 
 	fs = find_form_state(doc_view, l->form);
 	if (fs) {
@@ -716,7 +716,7 @@ get_current_state(struct session *ses)
 	if_assert_failed return -1;
 	if (doc_view->vs->current_link == -1) return -1;
 	l = &doc_view->document->links[doc_view->vs->current_link];
-	if (l->type != L_SELECT) return -1;
+	if (l->type != LINK_SELECT) return -1;
 	fs = find_form_state(doc_view, l->form);
 	if (fs) return fs->state;
 	return -1;
@@ -869,7 +869,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (doc_view->vs->current_link < 0) goto end;
 
 	link = &doc_view->document->links[doc_view->vs->current_link];
-	if (link->type == L_LINK && link->where) {
+	if (link->type == LINK_HYPERTEXT && link->where) {
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
 			add_to_menu(&mi, N_("Display ~usemap"), M_SUBMENU,
@@ -989,7 +989,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 
 	link = &doc_view->document->links[doc_view->vs->current_link];
 
-	if (link->type == L_LINK) {
+	if (link->type == LINK_HYPERTEXT) {
 		struct string str;
 		unsigned char *uristring;
 
@@ -1018,7 +1018,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 
 	if (!link->form) return NULL;
 
-	if (link->type == L_BUTTON) {
+	if (link->type == LINK_BUTTON) {
 		struct string str;
 
 		if (link->form->type == FC_RESET)
@@ -1040,7 +1040,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 		return str.source;
 	}
 
-	if (link->type == L_CHECKBOX || link->type == L_SELECT
+	if (link->type == LINK_CHECKBOX || link->type == LINK_SELECT
 	    || link_is_textinput(link)) {
 		struct string str;
 
@@ -1089,7 +1089,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 			add_to_string(&str, link->form->default_value);
 		}
 
-		if (link->type == L_FIELD
+		if (link->type == LINK_FIELD
 		    && !has_form_submit(doc_view->document, link->form)
 		    && link->form->action) {
 			add_to_string(&str, ", ");

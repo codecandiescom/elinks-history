@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.53 2003/10/30 12:04:59 zas Exp $ */
+/* $Id: form.c,v 1.54 2003/10/30 18:12:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,7 +291,7 @@ draw_forms(struct terminal *t, struct document_view *doc_view)
 		return;
 	}
 	do {
-		if (l1->type == L_LINK) continue;
+		if (l1->type == LINK_HYPERTEXT) continue;
 #ifdef FORMS_MEMORY
 		if (l1->form->type == FC_TEXT
 		    || l1->form->type == FC_PASSWORD) {

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.346 2003/10/30 17:01:39 pasky Exp $ */
+/* $Id: renderer.c,v 1.347 2003/10/30 18:12:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -735,7 +735,7 @@ new_link(struct document *document, int link_number,
 	link->where_img = format.image ? stracpy(format.image) : NULL;
 
 	if (!format.form) {
-		link->type = L_LINK;
+		link->type = LINK_HYPERTEXT;
 		link->where = format.link ? stracpy(format.link) : NULL;
 		link->target = format.target ? stracpy(format.target) : NULL;
 		link->name = memacpy(name, namelen);
@@ -747,20 +747,20 @@ new_link(struct document *document, int link_number,
 		case FC_TEXT:
 		case FC_PASSWORD:
 		case FC_FILE:
-			link->type = L_FIELD;
+			link->type = LINK_FIELD;
 			break;
 		case FC_TEXTAREA:
-			link->type = L_AREA;
+			link->type = LINK_AREA;
 			break;
 		case FC_CHECKBOX:
 		case FC_RADIO:
-			link->type = L_CHECKBOX;
+			link->type = LINK_CHECKBOX;
 			break;
 		case FC_SELECT:
-			link->type = L_SELECT;
+			link->type = LINK_SELECT;
 			break;
 		default:
-			link->type = L_BUTTON;
+			link->type = LINK_BUTTON;
 		}
 		link->form = form;
 		link->target = form->target ? stracpy(form->target) : NULL;

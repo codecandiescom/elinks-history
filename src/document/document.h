@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.11 2003/10/30 17:45:04 jonas Exp $ */
+/* $Id: document.h,v 1.12 2003/10/30 18:12:45 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -60,16 +60,16 @@ struct document_refresh {
 };
 
 enum link_type {
-	L_LINK,
-	L_BUTTON,
-	L_CHECKBOX,
-	L_SELECT,
-	L_FIELD,
-	L_AREA,
+	LINK_HYPERTEXT,
+	LINK_BUTTON,
+	LINK_CHECKBOX,
+	LINK_SELECT,
+	LINK_FIELD,
+	LINK_AREA,
 };
 
 #define link_is_textinput(link) \
-	((link)->type == L_FIELD || (link)->type == L_AREA)
+	((link)->type == LINK_FIELD || (link)->type == LINK_AREA)
 
 struct point {
 	int x, y;

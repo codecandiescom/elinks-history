@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.199 2003/10/30 17:01:42 pasky Exp $ */
+/* $Id: session.c,v 1.200 2003/10/30 18:12:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1800,8 +1800,8 @@ get_current_link(struct session *ses)
 
 		link = &doc_view->document->links[doc_view->vs->current_link];
 
-		/* Only return a link */
-		if (link->type == L_LINK) return link;
+		/* Only return a hyper text link */
+		if (link->type == LINK_HYPERTEXT) return link;
 	}
 
 	return NULL;

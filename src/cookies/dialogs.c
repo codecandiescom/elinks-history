@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.63 2004/07/02 17:03:33 zas Exp $ */
+/* $Id: dialogs.c,v 1.64 2004/07/06 10:25:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ lock_cookie(struct listbox_item *item)
 	if (item->type == BI_LEAF)
 		object_lock((struct cookie *) item->udata);
 	else
-		object_lock((struct c_server *) item->udata);
+		object_lock((struct cookie_server *) item->udata);
 }
 
 static void
@@ -47,7 +47,7 @@ unlock_cookie(struct listbox_item *item)
 	if (item->type == BI_LEAF)
 		object_unlock((struct cookie *) item->udata);
 	else
-		object_unlock((struct c_server *) item->udata);
+		object_unlock((struct cookie_server *) item->udata);
 }
 
 static int
@@ -71,7 +71,7 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
                 enum listbox_info listbox_info)
 {
 	struct cookie *cookie = item->udata;
-	struct c_server *server;
+	struct cookie_server *server;
 	struct string string;
 
 	switch (listbox_info) {
@@ -324,7 +324,7 @@ push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
 	struct cookie *new_cookie;
-	struct c_server *server;
+	struct cookie_server *server;
 
 	if (!box->sel && box->sel->udata) return 0;
 

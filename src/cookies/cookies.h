@@ -1,4 +1,4 @@
-/* $Id: cookies.h,v 1.23 2004/05/31 12:39:04 jonas Exp $ */
+/* $Id: cookies.h,v 1.24 2004/07/06 10:25:28 jonas Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
@@ -17,8 +17,8 @@ enum cookies_accept {
 	COOKIES_ACCEPT_ALL
 };
 
-struct c_server {
-	LIST_HEAD(struct c_server);
+struct cookie_server {
+	LIST_HEAD(struct cookie_server);
 
 	struct listbox_item *box_item;
 	struct object object;
@@ -31,7 +31,7 @@ struct cookie {
 	unsigned char *name, *value;
 	unsigned char *path, *domain;
 
-	struct c_server *server;	/* The host the cookie originated from */
+	struct cookie_server *server;	/* The host the cookie originated from */
 	ttime expires;			/* Expiration time. Zero means undefined */
 	int secure;			/* Did it have 'secure' attribute */
 
@@ -41,7 +41,7 @@ struct cookie {
 	struct object object;
 };
 
-struct c_server *get_cookie_server(unsigned char *host, int hostlen);
+struct cookie_server *get_cookie_server(unsigned char *host, int hostlen);
 void accept_cookie(struct cookie *);
 void free_cookie(struct cookie *);
 void set_cookie(struct uri *, unsigned char *);

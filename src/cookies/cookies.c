@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.159 2004/07/02 23:14:22 zas Exp $ */
+/* $Id: cookies.c,v 1.160 2004/07/06 10:25:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ struct c_domain {
 
 static INIT_LIST_HEAD(c_domains);
 
-static INIT_LIST_HEAD(c_servers);
+static INIT_LIST_HEAD(cookie_servers);
 
 static int cookies_dirty = 0;
 
@@ -121,13 +121,13 @@ static struct option_info cookies_options[] = {
 #define get_cookies_save()		get_opt_cookies(COOKIES_SAVE).number
 #define get_cookies_resave()		get_opt_cookies(COOKIES_RESAVE).number
 
-struct c_server *
+struct cookie_server *
 get_cookie_server(unsigned char *host, int hostlen)
 {
-	struct c_server *sort_spot = NULL;
-	struct c_server *cs;
+	struct cookie_server *sort_spot = NULL;
+	struct cookie_server *cs;
 
-	foreach (cs, c_servers) {
+	foreach (cs, cookie_servers) {
 		/* XXX: We must count with cases like "x.co" vs "x.co.uk"
 		 * below! */
 		int cslen = strlen(cs->host);
@@ -146,7 +146,7 @@ get_cookie_server(unsigned char *host, int hostlen)
 		return cs;
 	}
 
-	cs = mem_calloc(1, sizeof(struct c_server) + hostlen);
+	cs = mem_calloc(1, sizeof(struct cookie_server) + hostlen);
 	if (!cs) return NULL;
 
 	memcpy(cs->host, host, hostlen);
@@ -158,13 +158,13 @@ get_cookie_server(unsigned char *host, int hostlen)
 
 	if (!sort_spot) {
 		/* No sort spot found, therefore this sorts at the end. */
-		add_to_list_end(c_servers, cs);
+		add_to_list_end(cookie_servers, cs);
 		del_from_list(cs->box_item);
 		add_to_list_end(cookie_browser.root.child, cs->box_item);
 	} else {
 		/* Sort spot found, sort after it. */
 		add_at_pos(sort_spot, cs);
-		if (sort_spot != (struct c_server *) &c_servers) {
+		if (sort_spot != (struct cookie_server *) &cookie_servers) {
 			del_from_list(cs->box_item);
 			add_at_pos(sort_spot->box_item, cs->box_item);
 		} /* else we are already at the top anyway. */
@@ -174,7 +174,7 @@ get_cookie_server(unsigned char *host, int hostlen)
 }
 
 static void
-done_cookie_server(struct c_server *cs)
+done_cookie_server(struct cookie_server *cs)
 {
 	object_unlock(cs);
 	if (is_object_used(cs)) return;

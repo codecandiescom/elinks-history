@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.123 2004/04/04 07:19:21 jonas Exp $ */
+/* $Id: uri.c,v 1.124 2004/04/04 07:34:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,24 +218,19 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 int
 get_uri_port(struct uri *uri)
 {
-	int port = -1;
+	assert(VALID_PROTOCOL(uri->protocol));
 
 	if (uri->port && uri->portlen) {
-		int n;
+		unsigned char *end = uri->port;
+		int port = strtol(uri->port, (char **) &end, 10);
 
-		errno = 0;
-		n = strtol(uri->port, NULL, 10);
-		if (!errno && n >= LOWEST_PORT && n <= HIGHEST_PORT)
-			port = n;
+		if (end != uri->port) {
+			assert(port >= LOWEST_PORT && port <= HIGHEST_PORT);
+			return port;
+		}
 	}
 
-	if (port == -1 && uri->protocol != PROTOCOL_UNKNOWN) {
-		port = get_protocol_port(uri->protocol);
-	}
-
-	assertm(port != -1, "Invalid uri");
-	/* Recovery path: we return -1 ;-). */
-	return port;
+	return get_protocol_port(uri->protocol);
 }
 
 /* We might need something more intelligent than this Swiss army knife. */

@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.6 2005/03/05 22:14:32 zas Exp $ */
+/* $Id: date.c,v 1.7 2005/03/29 00:21:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ parse_day(const unsigned char **date_p)
 	return day;
 }
 
-/* Expects HH:MM:SS, with HH <= 23, MM <= 59, SS <= 59.
+/* Expects HH:MM[:SS] or HH:MM[P|A]M, with HH <= 23, MM <= 59, SS <= 59.
  * Updates tm and returns 0 on failure, otherwise 1. */
 static int
 parse_time(const unsigned char *date, struct tm *tm)
@@ -116,18 +116,35 @@ parse_time(const unsigned char *date, struct tm *tm)
 
 	h1 = *date++; if (!isdigit(h1)) return 0;
 	h2 = *date++; if (!isdigit(h2)) return 0;
+
 	if (*date++ != ':') return 0;
 
 	m1 = *date++; if (!isdigit(m1)) return 0;
 	m2 = *date++; if (!isdigit(m2)) return 0;
-	if (*date++ != ':') return 0;
-
-	s1 = *date++; if (!isdigit(s1)) return 0;
-	s2 = *date++; if (!isdigit(s2)) return 0;
 
 	tm->tm_hour = (h1 - '0') * 10 + h2 - '0';
-	tm->tm_min = (m1 - '0') * 10 + m2 - '0';
-	tm->tm_sec = (s1 - '0') * 10 + s2 - '0';
+	tm->tm_min  = (m1 - '0') * 10 + m2 - '0';
+
+	if (*date == ':') {
+		date++;
+
+		s1 = *date++; if (!isdigit(s1)) return 0;
+		s2 = *date++; if (!isdigit(s2)) return 0;
+
+		tm->tm_sec = (s1 - '0') * 10 + s2 - '0';
+
+	} else if (*date == 'A' || *date == 'P') {
+		/* Adjust hour from AM/PM. The sequence goes 11:00AM, 12:00PM,
+		 * 01:00PM ... 11:00PM, 12:00AM, 01:00AM. --wget */
+		if (tm->tm_hour == 12)
+			tm->tm_hour = 0;
+
+		if (*date++ == 'P')
+			tm->tm_hour += 12;
+
+		if (*date++ != 'M')
+			return 0;
+	}
 
 	return (tm->tm_hour <= 23 && tm->tm_min <= 59 && tm->tm_sec <= 59);
 }

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.54 2004/01/31 00:36:29 pasky Exp $ */
+/* $Id: socket.c,v 1.55 2004/01/31 00:37:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,7 +282,7 @@ dns_found(void *data, int state)
 
 	for (i = c_i->triedno + 1; i < c_i->addrno; i++) {
 #ifdef IPV6
-		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &c_i->addr[i]);
+		struct sockaddr_in6 addr = *((struct sockaddr_in6 *)&c_i->addr[i]);
 #else
 		struct sockaddr_in addr = *((struct sockaddr_in *) &c_i->addr[i]);
 #endif
@@ -293,10 +293,11 @@ dns_found(void *data, int state)
 		if (only_local) {
 #ifdef IPV6
 			if (addr.sin6_family == AF_INET6)
-				local = IN6_IS_ADDR_LOOPBACK(&(((struct sockaddr_in6 *)&addr)->sin6_addr));
+				local = IN6_IS_ADDR_LOOPBACK(&(((struct sockaddr_in6 *) &addr)->sin6_addr));
 			else
 #endif
-				local = (ntohl(((struct sockaddr_in *)&addr)->sin_addr.s_addr) >> 24) == IN_LOOPBACKNET;
+				local = (ntohl(((struct sockaddr_in *) &addr)->sin_addr.s_addr) >> 24)
+					== IN_LOOPBACKNET;
 			
 			/* This forbids connections to anything but local, if option is set. */
 			if (!local) continue;
@@ -331,13 +332,15 @@ dns_found(void *data, int state)
 #ifdef IPV6
 		if (addr.sin6_family == AF_INET6) {
 			conn->pf = 2;
-			if (connect(sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in6)) == 0)
+			if (connect(sock, (struct sockaddr *) &addr,
+					sizeof(struct sockaddr_in6)) == 0)
 				break;
 		} else
 #endif
 		{
 			conn->pf = 1;
-			if (connect(sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in)) == 0)
+			if (connect(sock, (struct sockaddr *) &addr,
+					sizeof(struct sockaddr_in)) == 0)
 				break; /* success */
 		}
 

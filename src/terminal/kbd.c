@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.17 2003/07/22 02:54:07 jonas Exp $ */
+/* $Id: kbd.c,v 1.18 2003/07/28 16:43:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,9 @@ write_ev_queue(struct itrm *itrm)
 	int l;
 	int qlen = itrm->eqlen;
 
-	if (!qlen) internal("event queue empty");
+	assertm(qlen, "event queue empty");
+	if_assert_failed return;
+
 	if (qlen > 128) qlen = 128;
 
 	l = write(itrm->sock_out, itrm->ev_queue, qlen);
@@ -93,6 +95,7 @@ write_ev_queue(struct itrm *itrm)
 	}
 
 	itrm->eqlen -= l;
+	assert(itrm->eqlen >= 0);
 	if (!itrm->eqlen) {
 		set_handlers(itrm->sock_out,
 			     get_handler(itrm->sock_out, H_READ),
@@ -363,12 +366,7 @@ unblock_itrm(int fd)
 	struct itrm *itrm = ditrm;
 
 	if (!itrm) return -1;
-#if 0
-	if (ditrm->sock_out != fd) {
-		internal("unblock_itrm: bad fd: %d", fd);
-		return -1;
-	}
-#endif
+
 	if (itrm->ctl_in >= 0 && setraw(itrm->ctl_in, NULL)) return -1;
 	itrm->blocked = 0;
 	send_init_sequence(itrm->std_out, itrm->flags);
@@ -389,12 +387,7 @@ block_itrm(int fd)
 	struct itrm *itrm = ditrm;
 
 	if (!itrm) return;
-#if 0
-	if (ditrm->sock_out != fd) {
-		internal("block_itrm: bad fd: %d", fd);
-		return;
-	}
-#endif
+
 	itrm->blocked = 1;
 	block_stdin();
 	unhandle_terminal_resize(itrm->ctl_in);
@@ -510,6 +503,7 @@ ex:
 	}
 
 	i++;
+	assert(OUT_BUF_SIZE - i > 0);
 	memmove(buf, buf + i, OUT_BUF_SIZE - i);
 	c -= i;
 	p = 0;
@@ -585,6 +579,7 @@ ex:
 nasty_thing:
 	done_string(&path);
 	done_string(&delete);
+	assert(OUT_BUF_SIZE - p > 0);
 	memmove(buf, buf + p, OUT_BUF_SIZE - p);
 	c -= p;
 
@@ -608,15 +603,13 @@ kbd_timeout(struct itrm *itrm)
 		return;
 	}
 
-	if (!itrm->qlen) {
-		internal("timeout on empty queue");
-		return;
-	}
+	assertm(itrm->qlen, "timeout on empty queue");
+	if_assert_failed return;
 
 	queue_event(itrm, (char *)&ev, sizeof(struct event));
 
 	if (--itrm->qlen)
-		memmove(itrm->kqueue, itrm->kqueue+1, itrm->qlen);
+		memmove(itrm->kqueue, itrm->kqueue + 1, itrm->qlen);
 
 	while (process_queue(itrm));
 }
@@ -900,19 +893,16 @@ l2:
 	}
 
 l1:
-	if (itrm->qlen < el) {
-		internal("event queue underflow");
-		itrm->qlen = el;
-	}
+	assertm(itrm->qlen >= el, "event queue underflow");
+	if_assert_failed { itrm->qlen = el; }
 
 	itrm->qlen -= el;
 
 	if (ev.x != -1)
 		queue_event(itrm, (char *)&ev, sizeof(struct event));
-	/* else printf("%d %d\n", itrm->qlen, el); fflush(stdout);*/
 
-	memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
-
+	if (itrm->qlen)
+		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
 
 end:
 	if (itrm->qlen < IN_BUF_SIZE)

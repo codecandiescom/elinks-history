@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.62 2003/05/09 16:30:15 zas Exp $ */
+/* $Id: session.c,v 1.63 2003/05/09 17:27:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,7 +282,7 @@ print_screen_status(struct session *ses)
 
 	if (ses->visible_status_bar && ses_tab_is_current) {
 		static int last_current_link;
-		int tab_info_len = 0;
+		unsigned int tab_info_len = 0;
 		struct status *stat = NULL;
 
 		if (ses->wtd)
@@ -324,10 +324,14 @@ print_screen_status(struct session *ses)
 			  get_bfu_color(term, "status.status-bar"));
 
 		if (!ses->visible_tabs_bar && tabs_count > 1) {
-			unsigned char tab_info[64];
+			unsigned char tab_info[8];
 
-			snprintf(tab_info, 64, "[%d] ", term->current_tab + 1);
-			tab_info_len = strlen(tab_info);
+			tab_info[tab_info_len++] = '[';
+			ulongcat(&tab_info, &tab_info_len, term->current_tab + 1, 4, 0);
+			tab_info[tab_info_len++] = ']';
+			tab_info[tab_info_len++] = ' ';
+			tab_info[tab_info_len] = '\0';
+
 			print_text(term, 0, term->y - 1, tab_info_len,
 			   	   tab_info,
 				   get_bfu_color(term, "status.status-text"));

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.122 2004/01/22 16:22:21 pasky Exp $ */
+/* $Id: osdep.c,v 1.123 2004/01/22 18:19:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,7 +216,6 @@ int
 is_xterm(void)
 {
 	static int xt = -1;
-	unsigned char *display;
 
 	if (xt == -1) {
 		unsigned char *display = getenv("DISPLAY");

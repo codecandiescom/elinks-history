@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.359 2004/07/08 14:05:24 jonas Exp $ */
+/* $Id: tables.c,v 1.360 2004/07/08 15:29:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -793,8 +793,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 	}
 
 	if (table->border) {
-		par_format.bgcolor = table->bgcolor;
-		expand_lines(table->part, x - 1, y, height);
+		expand_lines(table->part, x - 1, y, height, table->bgcolor);
 	}
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, cell->align, 0, 0);
@@ -823,7 +822,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 			/* The line expansion draws the _remaining_ background
 			 * color of both untouched lines and lines that doesn't
 			 * stretch the whole cell width. */
-			expand_lines(table->part, x + width, y, height);
+			expand_lines(table->part, x + width, y, height, cell->bgcolor);
 
 			if (cell->fragment_id)
 				add_fragment_identifier(part, cell->fragment_id);
@@ -840,7 +839,7 @@ draw_table_cells(struct table *table, int x, int y)
 {
 	int col, row;
 	int xp;
-	color_t default_bgcolor = par_format.bgcolor;
+	color_t bgcolor = par_format.bgcolor;
 	struct table_frames table_frames;
 
 	get_table_frames(table, &table_frames);
@@ -850,7 +849,7 @@ draw_table_cells(struct table *table, int x, int y)
 
 	/* Expand using the background color of the ``parent context'' all the
 	 * way down the start of the left edge of the table. */
-	expand_lines(table->part, x - 1, y, table->real_height);
+	expand_lines(table->part, x - 1, y, table->real_height, bgcolor);
 
 	xp = x + table_frames.left;
 	for (col = 0; col < table->cols; col++) {
@@ -864,8 +863,7 @@ draw_table_cells(struct table *table, int x, int y)
 			 * at how @yp is initialized. Bug? --jonas */
 			int lines = yp + row_height + table_frames.top - part->cy;
 
-			par_format.bgcolor = default_bgcolor;
-			expand_lines(table->part, x - 1, part->cy, lines);
+			expand_lines(table->part, x - 1, part->cy, lines, bgcolor);
 
 			draw_table_cell(table, col, row, xp, yp);
 
@@ -879,12 +877,11 @@ draw_table_cells(struct table *table, int x, int y)
 
 	/* Finish the table drawing by aligning the right and bottom edge of
 	 * the table */
-	par_format.bgcolor = table->bgcolor;
 	/* If there are table borders involved don't draw passed the table
 	 * border. This could be fixed by always expanding table cells with the
 	 * ``width - 1''. */
 	x += table->real_width - !!table->border;
-	expand_lines(table->part, x, y, table->real_height);
+	expand_lines(table->part, x, y, table->real_height, table->bgcolor);
 
 	/* Do a sanity check whether the height is correct */
 	check_table_height(table, &table_frames, y);

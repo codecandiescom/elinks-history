@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.492 2004/06/12 11:30:33 jonas Exp $ */
+/* $Id: session.c,v 1.493 2004/06/12 11:35:08 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -775,7 +775,7 @@ int
 decode_session_info(struct terminal *term, int len, const int *data)
 {
 	struct session *info = NULL;
-	struct session *base_session;
+	struct session *ses;
 	enum remote_session_flags remote = 0;
 	struct uri *current_uri;
 	unsigned char *str;
@@ -787,7 +787,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	 * comparing it to possibly supplied -base-session here, and clone the
 	 * session with id of base-session (its current document association
 	 * only, rather) to the newly created session. */
-	base_session = get_session(*(data++));
+	ses = get_session(*(data++));
 	magic = *(data++);
 
 	switch (magic) {
@@ -810,8 +810,8 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		 * want to hook up with the master. */
 		if (!remote) break;
 
-		base_session = get_master_session();
-		if (!base_session) return 0;
+		ses = get_master_session();
+		if (!ses) return 0;
 
 		break;
 
@@ -838,16 +838,16 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 	if (len <= 0) {
 		if (!remote)
-			return !!init_session(base_session, term, NULL, 0);
+			return !!init_session(ses, term, NULL, 0);
 
 		/* Even though there are no URIs we still have to
 		 * handle remote stuff. */
-		init_remote_session(base_session, &remote, NULL);
+		init_remote_session(ses, &remote, NULL);
 		return 0;
 	}
 
-	current_uri = base_session && have_location(base_session)
-		    ? cur_loc(base_session)->vs.uri : NULL;
+	current_uri = ses && have_location(ses)
+		    ? cur_loc(ses)->vs.uri : NULL;
 
 	/* TODO: Warn about bad syntax. --jonas */
 
@@ -867,14 +867,14 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		 * ASAP. */
 		if (uri) {
 			if (remote) {
-				init_remote_session(base_session, &remote, uri);
+				init_remote_session(ses, &remote, uri);
 
 			} else if (!info) {
-				info = init_session(base_session, term, uri, 0);
+				info = init_session(ses, term, uri, 0);
 				if (!info) return 0;
 
 			} else {
-				init_session(base_session, term, uri, 1);
+				init_session(ses, term, uri, 1);
 			}
 			done_uri(uri);
 		}

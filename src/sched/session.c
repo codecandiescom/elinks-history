@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.390 2004/04/24 02:11:44 jonas Exp $ */
+/* $Id: session.c,v 1.391 2004/04/24 11:41:25 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -817,7 +817,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 				goto_url_with_hook(ses, url);
 				first = 0;
 
-			} else if (info->remote & SES_REMOTE_BOOKMARK) {
+			} else if (info->remote & SES_REMOTE_ADD_BOOKMARK) {
 #ifdef CONFIG_BOOKMARKS
 				add_bookmark(NULL, 1, url, url);
 #endif

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.83 2004/04/24 02:13:21 jonas Exp $ */
+/* $Id: cmdline.c,v 1.84 2004/04/24 11:41:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,13 +196,13 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 			REMOTE_METHOD_OPENURL,
 			REMOTE_METHOD_PING,
 			REMOTE_METHOD_XFEDOCOMMAND,
-			REMOTE_METHOD_BOOKMARK,
+			REMOTE_METHOD_ADDBOOKMARK,
 			REMOTE_METHOD_NOT_SUPPORTED,
 		} type;
 	} remote_methods[] = {
 		{ "openURL",	  REMOTE_METHOD_OPENURL },
 		{ "ping",	  REMOTE_METHOD_PING },
-		{ "bookmark",	  REMOTE_METHOD_BOOKMARK },
+		{ "addBookmark",  REMOTE_METHOD_ADDBOOKMARK },
 		{ "xfeDoCommand", REMOTE_METHOD_XFEDOCOMMAND },
 		{ NULL,		  REMOTE_METHOD_NOT_SUPPORTED },
 	};
@@ -284,10 +284,10 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		remote_session_flags = SES_REMOTE_PING;
 		break;
 
-	case REMOTE_METHOD_BOOKMARK:
+	case REMOTE_METHOD_ADDBOOKMARK:
 		if (arg == argend) break;
 		remote_url = memacpy(arg, argend - arg);
-		remote_session_flags = SES_REMOTE_BOOKMARK;
+		remote_session_flags = SES_REMOTE_ADD_BOOKMARK;
 		break;
 
 	case REMOTE_METHOD_NOT_SUPPORTED:

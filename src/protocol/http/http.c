@@ -1,10 +1,11 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.57 2002/10/13 17:30:30 zas Exp $ */
+/* $Id: http.c,v 1.58 2002/10/13 18:35:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1097,7 +1098,10 @@ again:
 			internal("Eek! We've NULL down (c->stat->data) even when "
 				 "we got c->prg.start! Call pasky@ji.cz immediatelly, "
 				 "please. And expect segfault right now.");
-		lseek(down->handle, c->from, SEEK_SET);
+		if (lseek(down->handle, c->from, SEEK_SET) < 0) {
+			abort_conn_with_state(c, -errno);
+			return;
+		}
 		c->prg.start = down->last_pos = c->from;
 	}
 

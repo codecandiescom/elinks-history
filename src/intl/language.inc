@@ -2015,7 +2015,7 @@ struct translation translation_czech [] = {
   {T_NEED_MASTER_TERMINAL, "Tohle mù¾e¹ jen na øídícím terminálu"},
   {T_SEARCH_BOOKMARK, "Hledej v bookmarcích"},
   {T_CLEAR, "Zresetovat"},
-  {T_ADD_BOOKMARK_LINK, "Pøidej link do bookmarkù"},
+  {T_ADD_BOOKMARK_LINK, "Pøidat link do bookmarkù"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {0, NULL}
 };

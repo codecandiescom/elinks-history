@@ -275,16 +275,18 @@ void go_backwards(struct terminal *term, void *psteps, struct session *ses)
 	if (ses->search_word)
 		mem_free(ses->search_word), ses->search_word = NULL;
 #endif
-	
+
 	abort_loading(ses);
+
+	/* Move all intermediate items to unhistory... */
 
 	while (steps-- > 1) {
 		struct location *loc = ses->history.next;
-
-		/* First item in history/unhistory is something special and
-		 * precious... like... like... */
 		
 		if ((void *) loc == &ses->history) return;
+
+		/* First item in history/unhistory is something special and
+		 * precious... like... like... the current location? */
 
 		loc = loc->next;
 		if ((void *) loc == &ses->history) return;
@@ -292,6 +294,8 @@ void go_backwards(struct terminal *term, void *psteps, struct session *ses)
 		del_from_list(loc);
 		add_to_list(ses->unhistory, loc);
 	}
+
+	/* ..and now go back in history by one as usual. */
 
 	if (steps >= 0) /* => psteps >= 1 */
 		go_back(ses);
@@ -303,17 +307,19 @@ void go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 
 	abort_loading(ses);
 
+	/* Move all intermediate items to history... */
+
 	while (steps--) {
 	    	struct location *loc = ses->unhistory.next;
 		
 		if ((void *) loc == &ses->unhistory) return;
-#if 0		
-		loc = loc->next;
-		if ((void *) loc == &ses->history) return;
-#endif
+
 		del_from_list(loc);
-		add_to_list(ses->history, loc);
+		/* Skip the first entry, which is current location. */
+		add_to_list(cur_loc(ses)->next, loc);
 	}
+
+	/* ..and now go unback in unhistory by one as usual. */
 
 	go_unback(ses);
 }

@@ -278,12 +278,14 @@ void ses_back(struct session *ses)
 	
 	free_files(ses);
 	
+	/* This is the current location. */
 	loc = ses->history.next;
 	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
 	if ((void *)loc == &ses->history) return;
     	del_from_list(loc);
 	add_to_list(ses->unhistory, loc);
 	
+	/* This was the previous location (where we came back now). */
 	loc = ses->history.next;
 	if ((void *)loc == &ses->history) return;
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
@@ -302,6 +304,7 @@ void ses_unback(struct session *ses)
 	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
 	if ((void *)loc == &ses->unhistory) return;
 	del_from_list(loc);
+	/* Save it as the current location! */
 	add_to_list(ses->history, loc);
 }
 

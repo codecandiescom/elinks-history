@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.418 2004/05/25 06:54:39 jonas Exp $ */
+/* $Id: view.c,v 1.419 2004/05/29 13:54:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,39 +167,41 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 }
 
 void
-draw_doc(struct terminal *t, struct document_view *doc_view, int active)
+draw_doc(struct session *ses, struct document_view *doc_view, int active)
 {
 	struct color_pair color = INIT_COLOR_PAIR(0, 0);
 	struct view_state *vs;
+	struct terminal *term;
 	struct box *box;
 	int vx, vy;
 	int y;
 
-	assert(t && doc_view);
+	assert(ses && ses->tab && ses->tab->term && doc_view);
 	if_assert_failed return;
 
 	box = &doc_view->box;
+	term = ses->tab->term;
 
 	/* The code in this function assumes that both width and height are
 	 * bigger than 1 so we have to bail out here. */
 	if (box->width < 2 || box->height < 2) return;
 
 	if (active) {
-		set_cursor(t, box->x + box->width - 1, box->y + box->height - 1, 1);
-		set_window_ptr(get_current_tab(t), box->x, box->y);
+		set_cursor(term, box->x + box->width - 1, box->y + box->height - 1, 1);
+		set_window_ptr(get_current_tab(term), box->x, box->y);
 	}
 
 	if (doc_view->document->height)
 		color.background = doc_view->document->bgcolor;
 
 	if (!doc_view->vs) {
-		draw_box(t, box, ' ', 0, &color);
+		draw_box(term, box, ' ', 0, &color);
 		return;
 	}
 
 	if (document_has_frames(doc_view->document)) {
-	 	draw_box(t, box, ' ', 0, &color);
-		draw_frame_lines(t, doc_view->document->frame_desc, box->x, box->y);
+	 	draw_box(term, box, ' ', 0, &color);
+		draw_frame_lines(term, doc_view->document->frame_desc, box->x, box->y);
 		if (doc_view->vs && doc_view->vs->current_link == -1)
 			doc_view->vs->current_link = 0;
 		return;
@@ -222,15 +224,15 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	    && doc_view->last_x == vx
 	    && doc_view->last_y == vy
 	    && !has_search_word(doc_view)) {
-		clear_link(t, doc_view);
-		draw_forms(t, doc_view);
-		if (active) draw_current_link(t, doc_view);
+		clear_link(term, doc_view);
+		draw_forms(term, doc_view);
+		if (active) draw_current_link(term, doc_view);
 		return;
 	}
 	free_link(doc_view);
 	doc_view->last_x = vx;
 	doc_view->last_y = vy;
-	draw_box(t, box, ' ', 0, &color);
+	draw_box(term, box, ' ', 0, &color);
 	if (!doc_view->document->height) return;
 
 	while (vs->y >= doc_view->document->height) vs->y -= box->height;
@@ -244,11 +246,11 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 				 box->width + vx);
 
 		if (en - st <= 0) continue;
-		draw_line(t, box->x + st - vx, box->y + y - vy, en - st,
+		draw_line(term, box->x + st - vx, box->y + y - vy, en - st,
 			  &doc_view->document->data[y].chars[st]);
 	}
-	draw_forms(t, doc_view);
-	if (active) draw_current_link(t, doc_view);
+	draw_forms(term, doc_view);
+	if (active) draw_current_link(term, doc_view);
 	if (has_search_word(doc_view))
 		doc_view->last_x = doc_view->last_y = -1;
 }
@@ -279,7 +281,7 @@ draw_frames(struct session *ses)
 		more = 0;
 		foreach (doc_view, ses->scrn_frames) {
 			if (doc_view->depth == d)
-				draw_doc(ses->tab->term, doc_view, doc_view == current_doc_view);
+				draw_doc(ses, doc_view, doc_view == current_doc_view);
 			else if (doc_view->depth > d)
 				more = 1;
 		}
@@ -312,7 +314,7 @@ draw_formatted(struct session *ses, int rerender)
 	if (!ses->doc_view->vs && have_location(ses))
 		ses->doc_view->vs = &cur_loc(ses)->vs;
 	ses->doc_view->last_x = ses->doc_view->last_y = -1;
-	draw_doc(ses->tab->term, ses->doc_view, 1);
+	draw_doc(ses, ses->doc_view, 1);
 	draw_frames(ses);
 	print_screen_status(ses);
 	redraw_from_window(ses->tab);
@@ -650,7 +652,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 						    ses->kbdprefix.rep_num
 							- 1);
 
-				draw_doc(ses->tab->term, doc_view, 1);
+				draw_doc(ses, doc_view, 1);
 				print_screen_status(ses);
 				redraw_from_window(ses->tab);
 		}
@@ -746,7 +748,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			if (!link_is_textinput(link)
 			    && check_mouse_action(ev, B_UP)) {
 
-				draw_doc(ses->tab->term, doc_view, 1);
+				draw_doc(ses, doc_view, 1);
 				print_screen_status(ses);
 				redraw_from_window(ses->tab);
 
@@ -832,7 +834,7 @@ send_to_frame(struct session *ses, struct term_event *ev)
 
 	r = frame_ev(ses, doc_view, ev);
 	if (r == 1) {
-		draw_doc(ses->tab->term, doc_view, 1);
+		draw_doc(ses, doc_view, 1);
 		print_screen_status(ses);
 		redraw_from_window(ses->tab);
 	}
@@ -939,7 +941,7 @@ quit:
 		    && get_opt_int("document.browse.accesskey.priority") <= 0
 		    && try_document_key(ses, doc_view, ev)) {
 			/* The document ate the key! */
-			draw_doc(ses->tab->term, doc_view, 1);
+			draw_doc(ses, doc_view, 1);
 			print_screen_status(ses);
 			redraw_from_window(ses->tab);
 			return;

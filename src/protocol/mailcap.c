@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.12 2003/05/01 00:04:20 zas Exp $ */
+/* $Id: mailcap.c,v 1.13 2003/05/01 00:16:46 zas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -54,14 +54,14 @@ static int mailcap_map_entries = 0;
 static struct hash *mailcap_map = NULL;
 
 
-static struct mailcap_entry *
+static inline struct mailcap_entry *
 mailcap_new_entry(void)
 {
 	/*
 	 * Clear memory to make freeing it safer laterand we get
 	 * needsterminal and copiousoutput inialized for free.
 	 */
-	return  mem_calloc(1, sizeof(struct mailcap_entry));
+	return mem_calloc(1, sizeof(struct mailcap_entry));
 }
 
 static void
@@ -245,7 +245,7 @@ static void
 mailcap_parse(unsigned char *filename, unsigned int priority)
 {
 	FILE *file;
-	unsigned char *line = NULL;
+	unsigned char *line;
 	size_t linelen;
 	int lineno = 0;
 	struct mailcap_entry *entry = NULL;
@@ -360,7 +360,7 @@ mailcap_parse(unsigned char *filename, unsigned int priority)
 	/* Clean up from previous iterations */
 	if (entry) mailcap_free_entry(entry);
 
-	fclose (file);
+	fclose(file);
 	if (line) mem_free(line); /* Alloced by file_read_line() */
 }
 

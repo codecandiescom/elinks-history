@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.295 2004/10/18 05:08:40 miciah Exp $ */
+/* $Id: search.c,v 1.296 2004/10/30 02:21:43 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1318,7 +1318,9 @@ text_typeahead_handler(struct input_line *line, int action)
 			/* We need to check |*buffer| here because
 			 * the input-line code will call this handler
 			 * even after it handles a back-space press. */
-			if (error != FIND_ERROR_NONE && *buffer)
+			if (error != FIND_ERROR_HIT_TOP
+			    && error != FIND_ERROR_HIT_BOTTOM
+			    && error != FIND_ERROR_NONE && *buffer)
 				return INPUT_LINE_REWIND;
 	}
 

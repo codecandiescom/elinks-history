@@ -1,5 +1,4 @@
 english
 finnish
 icelandic
-lithuanian
 norwegian

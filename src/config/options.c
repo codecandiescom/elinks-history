@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.65 2002/07/03 12:42:25 pasky Exp $ */
+/* $Id: options.c,v 1.66 2002/07/03 15:03:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1021,7 +1021,7 @@ register_options()
 		"Make lookup for specified host.");
 
 	add_opt_bool_tree(cmdline_options, "",
-		"no_connect", 0, 0,
+		"no-connect", 0, 0,
 		"Run ELinks as a separate instance - instead of connecting to\n"
 		"existing instance.");
 

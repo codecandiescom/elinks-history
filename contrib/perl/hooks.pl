@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.36 2005/03/26 17:19:25 pasky Exp $
+# $Id: hooks.pl,v 1.37 2005/03/26 17:23:03 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -410,7 +410,7 @@ sub goto_url_hook
 	# Babelfish ("babelfish german english"  or  "bf de en")
 	if (($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]* [a-zA-Z]*)$')
 	    or ($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$'
-	        and (loadrc("language") ne "no") and $current_url))
+	        and loadrc("language") and $current_url))
 	{
 		$url = 'http://babelfish.altavista.com' if ($url =~ /^[a-z]*$/);
 		if ($url =~ /^[a-z]* /) {
@@ -651,7 +651,7 @@ sub loadrc
 {
 	my ($preference) = @_;
 	my $configperl = $ENV{'HOME'} . '/.elinks/config.pl';
-	my $answer = 'no';
+	my $answer = '';
 
 	open RC, "<$configperl" or return $answer;
 	while (<RC>) {
@@ -747,7 +747,8 @@ sub search
 	my $key = $search ? 'search' : 'home';
 
 	# Google is the default, Google is the best!
-	$engine = 'google' unless $search_engines_{$engine}->{$key};
+	$engine = 'google' unless $search_engines_{$engine}
+	                          and $search_engines_{$engine}->{$key};
 	my $url = $search_engines_{$engine}->{$key};
 
 	if ($engine eq 'google') {

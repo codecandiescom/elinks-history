@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.224 2003/10/22 16:57:02 zas Exp $ */
+/* $Id: parser.c,v 1.225 2003/10/23 08:49:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,10 +172,10 @@ get_attr_val(register unsigned char *e, unsigned char *name)
 
 next_attr:
 	while (WHITECHAR(*e)) e++;
-	if (*e == '>' || *e == '<') return NULL;
+	if (*e == '>' || *e == '<' || !atchr(*e)) return NULL;
 	n = name;
 
-	while (*n && upcase(*e) == upcase(*n)) e++, n++;
+	while (atchr(*n) && atchr(*e) && upcase(*e) == upcase(*n)) e++, n++;
 	found = !*n && !atchr(*e);
 
 	while (atchr(*e)) e++;

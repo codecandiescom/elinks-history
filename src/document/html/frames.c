@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.78 2004/07/04 10:54:46 jonas Exp $ */
+/* $Id: frames.c,v 1.79 2004/07/04 11:04:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,7 @@ extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_ch
 		unsigned long number;
 		int val = -1;	/* Wildcard */
 
-		skip_whitespace(str);
+		skip_space(str);
 
 		/* Some platforms (FreeBSD) set errno when the first char is
 		 * not a digit others (GNU/Linux) don't so ignore errno. */

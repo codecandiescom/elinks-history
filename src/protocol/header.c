@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.8 2004/07/04 10:54:47 jonas Exp $ */
+/* $Id: header.c,v 1.9 2004/07/04 11:04:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,10 +122,10 @@ again:
 	while (*n && toupper(*e) == toupper(*n)) e++, n++;
 	if (*n) goto again;
 
-	skip_whitespace(e);
+	skip_space(e);
 	if (*e++ != '=') return NULL;
 
-	skip_whitespace(e);
+	skip_space(e);
 	start = e;
 
 	if (!IS_QUOTE(*e)) {

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.97 2004/06/27 18:34:30 pasky Exp $ */
+/* $Id: cmdline.c,v 1.98 2004/07/04 11:04:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,7 +219,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 	arg = strchr(&command[len], '(');
 	if (arg) {
 		arg++;
-		skip_whitespace(arg);
+		skip_space(arg);
 
 		argend = strchr(arg, ')');
 	}

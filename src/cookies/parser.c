@@ -1,5 +1,5 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.15 2004/06/27 18:34:00 jonas Exp $ */
+/* $Id: parser.c,v 1.16 2004/07/04 11:04:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ parse_cookie_str(struct cookie_str *cstr, unsigned char *str)
 
 	cstr->nam_end = str;
 
-	skip_whitespace(str);
+	skip_space(str);
 
 	switch (*str) {
 	case '\0':
@@ -74,7 +74,7 @@ parse_cookie_str(struct cookie_str *cstr, unsigned char *str)
 		return NULL;
 	}
 
-	skip_whitespace(str);
+	skip_space(str);
 
 	/* Parse value token */
 

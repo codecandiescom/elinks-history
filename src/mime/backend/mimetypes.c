@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.41 2004/06/17 10:02:21 zas Exp $ */
+/* $Id: mimetypes.c,v 1.42 2004/07/04 11:04:34 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-2004 The ELinks Project */
@@ -97,7 +97,7 @@ parse_mimetypes_extensions(unsigned char *token, unsigned char *ctype)
 		struct hash_item *item;
 		int extlen;
 
-		skip_whitespace(token);
+		skip_space(token);
 
 		extension = token;
 		while (*token && !isspace(*token))
@@ -150,7 +150,7 @@ parse_mimetypes_file(unsigned char *filename)
 		if (token)
 			*token = '\0';
 
-		skip_whitespace(ctype);
+		skip_space(ctype);
 
 		/* Position on the next field in this line */
 		token = ctype;
@@ -168,8 +168,6 @@ parse_mimetypes_file(unsigned char *filename)
 
 	fclose(file);
 }
-
-#undef skip_whitespace
 
 static struct hash *
 init_mimetypes_map(void)

@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.23 2004/07/02 18:07:39 jonas Exp $ */
+/* $Id: proxy.c,v 1.24 2004/07/04 11:04:34 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -30,7 +30,7 @@ proxy_probe_no_proxy(unsigned char *url, unsigned char *no_proxy)
 	while (no_proxy && *no_proxy) {
 		unsigned char *jumper = strchr(no_proxy, ',');
 
-		skip_whitespace(no_proxy);
+		skip_space(no_proxy);
 		if (jumper) *jumper = '\0';
 
 		if (strcasestr(url, no_proxy)) {

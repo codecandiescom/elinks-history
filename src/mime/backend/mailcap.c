@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.84 2004/06/17 10:02:21 zas Exp $ */
+/* $Id: mailcap.c,v 1.85 2004/07/04 11:04:34 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -240,7 +240,7 @@ get_mailcap_field(unsigned char **next)
 	if (!next || !*next) return NULL;
 
 	field = *next;
-	skip_whitespace(field);
+	skip_space(field);
 	fieldend = field;
 
 	/* End field at the next occurence of ';' but not escaped '\;' */
@@ -257,7 +257,7 @@ get_mailcap_field(unsigned char **next)
 		*next = fieldend;
 		fieldend--;
 		(*next)++;
-		skip_whitespace(*next);
+		skip_space(*next);
 	} else {
 		*next = NULL;
 		fieldend = field + strlen(field) - 1;
@@ -278,19 +278,17 @@ get_mailcap_field(unsigned char **next)
 static unsigned char *
 get_mailcap_field_text(unsigned char *field)
 {
-	skip_whitespace(field);
+	skip_space(field);
 
 	if (*field == '=') {
 		field++;
-		skip_whitespace(field);
+		skip_space(field);
 
 		return stracpy(field);
 	}
 
 	return NULL;
 }
-
-#undef skip_whitespace
 
 /* Parse optional extra definitions. Zero return value means syntax error  */
 static inline int

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.7 2002/06/17 15:12:22 pasky Exp $ */
+/* $Id: conv.c,v 1.8 2002/06/21 17:32:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,14 +15,6 @@
 
 #include "util/conv.h"
 #include "util/string.h"
-
-
-unsigned char
-upcase(unsigned char ch)
-{
-	if (ch >= 'a' && ch <= 'z') ch -= 0x20;
-	return ch;
-}
 
 
 /* Return 0 if it went ok, 1 if it doesn't fit there. */

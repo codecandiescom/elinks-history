@@ -1,9 +1,14 @@
-/* $Id: conv.h,v 1.3 2002/06/16 21:22:13 pasky Exp $ */
+/* $Id: conv.h,v 1.4 2002/06/21 17:32:48 pasky Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
 
-unsigned char upcase(unsigned char);
+static inline unsigned char
+upcase(unsigned char ch)
+{
+	if (ch >= 'a' && ch <= 'z') ch -= 0x20;
+	return ch;
+}
 
 int snprint(unsigned char *, int, unsigned);
 int snzprint(unsigned char *, int, int);

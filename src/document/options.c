@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.6 2002/06/21 14:11:05 pasky Exp $ */
+/* $Id: options.c,v 1.7 2002/07/05 17:24:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@ mk_document_options(struct document_options *doo)
 	doo->assume_cp = get_opt_int("document.codepage.assume");
 	doo->hard_assume = get_opt_int("document.codepage.force_assumed");
 	doo->use_document_colours = get_opt_int("document.colors.use_document_colors");
-	doo->avoid_dark_on_black = get_opt_int("document.colors.allow_dark_on_black");
+	doo->allow_dark_on_black = get_opt_int("document.colors.allow_dark_on_black");
 	doo->tables = get_opt_int("document.html.display_tables");
 	doo->frames = get_opt_int("document.html.display_frames");
 	doo->images = get_opt_int("document.browse.images.show_as_links");
@@ -45,7 +45,7 @@ compare_opt(struct document_options *o1, struct document_options *o2)
 	    o1->assume_cp == o2->assume_cp &&
 	    o1->hard_assume == o2->hard_assume &&
 	    o1->use_document_colours == o2->use_document_colours &&
-	    o1->avoid_dark_on_black == o2->avoid_dark_on_black &&
+	    o1->allow_dark_on_black == o2->allow_dark_on_black &&
 	    o1->tables == o2->tables &&
 	    o1->frames == o2->frames &&
 	    o1->images == o2->images &&

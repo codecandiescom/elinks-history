@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.34 2002/07/03 23:15:14 pasky Exp $ */
+/* $Id: renderer.c,v 1.35 2002/07/05 17:24:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,9 +240,8 @@ static inline int fg_color(int fg, int bg)
 		|| (l == 2 && (h == 6))
 		|| (l == 3 && (h == 5 || h == 12))
 		|| ((l == 4 || l == 5) && (h == 8 || h == 12))
-		|| (!d_opt->avoid_dark_on_black &&
+		|| (!d_opt->allow_dark_on_black &&
 			/* ^- FIXME: when possibility to change bg color... */
-			/* ^- XXX: now it means allow_dark_on_black !! */
 			   ((l == 0 && (h == 4 || h == 12)) ||
 			    (l == 1 && (h == 8)))
 		   )

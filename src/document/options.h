@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.3 2002/05/25 13:46:04 pasky Exp $ */
+/* $Id: options.h,v 1.4 2002/07/05 17:24:31 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -10,7 +10,7 @@ struct document_options {
 	int xp, yp; /* pos of window */
 	int col, cp, assume_cp, hard_assume;
 	int use_document_colours;
-	int avoid_dark_on_black;
+	int allow_dark_on_black;
 	/* if you add anything, fix it in compare_opt */
 	int tables, frames, images, margin;
 	int plain;

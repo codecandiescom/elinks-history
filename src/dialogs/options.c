@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.26 2002/07/05 16:09:01 zas Exp $ */
+/* $Id: options.c,v 1.27 2002/07/05 17:24:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -784,7 +784,7 @@ unsigned char *html_texts[] = {
 	"",
 	TEXT(T_IGNORE_CHARSET_INFO_SENT_BY_SERVER),
 	TEXT(T_USE_DOCUMENT_COLOURS),
-	TEXT(T_AVOID_DARK_ON_BLACK)
+	TEXT(T_ALLOW_DARK_ON_BLACK)
 };
 
 int

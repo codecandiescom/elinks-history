@@ -79,7 +79,7 @@
 #define T_TEXT_MARGIN     75	
 #define T_IGNORE_CHARSET_INFO_SENT_BY_SERVER     76	
 #define T_USE_DOCUMENT_COLOURS     77	
-#define T_AVOID_DARK_ON_BLACK     78	
+#define T_ALLOW_DARK_ON_BLACK     78	
 #define T_HTML_OPTIONS     79	
 #define T_DEFAULT_CODEPAGE     80	
 #define T_GOTO_URL     81	

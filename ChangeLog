@@ -1,3 +1,34 @@
+Tue Sep 17 21:43:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/dialog.c, bfu/listbox.c, dialogs/hierbox.c,
+	globhist/dialogs.c:
+
+	Moving most of listbox kbd event handlers to bfu/listbox.* from
+	various copies all around the code. A bit hackish, but better than
+	before, I'd say.  
+
+Tue Sep 17 21:08:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: button.c, checkbox.c, dialog.c, inpfield.c, listbox.c,
+	widget.c, widget.h:
+
+	Added select widget handler, cleanups.  
+
+Tue Sep 17 20:33:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: button.c, checkbox.c, dialog.c, inpfield.c, listbox.c,
+	widget.h:
+
+	Added keyboard event widget handler, moved input field kbd handler
+	from bfu/dialog.* to bgu/inpfield.*.  
+
+Tue Sep 17 18:42:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: button.c, checkbox.c, dialog.c, inpfield.c, listbox.c:
+
+	Mouse event widget handlers now return EVENT_(NOT_)PROCESSED isntead
+	of simple 0/1.  
+
 Tue Sep 17 17:17:59 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/main.c:

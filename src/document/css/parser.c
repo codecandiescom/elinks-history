@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.133 2004/09/21 12:10:22 pasky Exp $ */
+/* $Id: parser.c,v 1.134 2004/09/21 13:00:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,8 @@ struct selector_pkg {
 };
 
 struct css_selector *
-reparent_selector(struct list_head *sels, struct css_selector *selector)
+reparent_selector(struct list_head *sels, struct css_selector *selector,
+                  struct css_selector **watch)
 {
 	struct css_selector *twin = find_css_selector(sels, selector->type,
 	                                              selector->name, -1);
@@ -184,8 +185,10 @@ reparent_selector(struct list_head *sels, struct css_selector *selector)
 		while (selector->leaves.next != &selector->leaves) {
 			struct css_selector *leaf = selector->leaves.next;
 
-			reparent_selector(&twin->leaves, leaf);
+			reparent_selector(&twin->leaves, leaf, watch);
 		}
+		if (*watch == selector)
+			*watch = twin;
 		done_css_selector(selector);
 	} else {
 		if (selector->next) del_from_list(selector);
@@ -371,7 +374,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 				assert(prev_element_selector);
 				prev_element_selector =
 					reparent_selector(&css->selectors,
-					                 prev_element_selector);
+					                 prev_element_selector,
+							 &pkg->selector);
 			}
 
 			selector->relation = reltype;

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.261 2004/08/09 05:18:10 miciah Exp $ */
+/* $Id: search.c,v 1.262 2004/08/09 05:58:46 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -836,16 +836,23 @@ nt:
 	return 1;
 }
 
-void
-find_next(struct session *ses, struct document_view *doc_view, int direction)
+enum find_error {
+	FIND_ERROR_NONE,
+	FIND_ERROR_NO_PREVIOUS_SEARCH,
+	FIND_ERROR_HIT_TOP,
+	FIND_ERROR_HIT_BOTTOM,
+	FIND_ERROR_NOT_FOUND,
+};
+
+static enum find_error
+find_next_do(struct session *ses, struct document_view *doc_view, int direction)
 {
 	int p, min, max, c = 0;
 	int step, hit_bottom = 0, hit_top = 0;
-	int show_hit_top_bottom = get_opt_bool("document.browse.search.show_hit_top_bottom");
 	int height;
 
 	assert(ses && ses->tab && ses->tab->term && doc_view && doc_view->vs && direction);
-	if_assert_failed return;
+	if_assert_failed return FIND_ERROR_NONE;
 
 	direction *= ses->search_direction;
 	p = doc_view->vs->y;
@@ -853,21 +860,17 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 	step = direction * height;
 
 	if (ses->search_word) {
-		if (!find_next_link_in_search(doc_view, direction)) return;
+		if (!find_next_link_in_search(doc_view, direction))
+			return FIND_ERROR_NONE;
 		p += step;
 	}
 
 	if (!ses->search_word) {
 		if (!ses->last_search_word) {
-			msg_box(ses->tab->term, NULL, 0,
-				N_("Search"), ALIGN_CENTER,
-				N_("No previous search"),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
-			return;
+			return FIND_ERROR_NO_PREVIOUS_SEARCH;
 		}
 		ses->search_word = stracpy(ses->last_search_word);
-		if (!ses->search_word) return;
+		if (!ses->search_word) return FIND_ERROR_NONE;
 	}
 
 	get_search_data(doc_view->document);
@@ -883,16 +886,13 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 			set_link(doc_view);
 			find_next_link_in_search(doc_view, direction * 2);
 
-			if (!show_hit_top_bottom || (!hit_top && !hit_bottom))
-				return;
+			if (hit_top)
+				return FIND_ERROR_HIT_TOP;
 
-			msg_box(ses->tab->term, NULL, 0,
-				N_("Search"), ALIGN_CENTER,
-				hit_top ? N_("Search hit top, continuing at bottom.")
-					: N_("Search hit bottom, continuing at top."),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
-			return;
+			if (hit_bottom)
+				return FIND_ERROR_HIT_BOTTOM;
+
+			return FIND_ERROR_NONE;
 		}
 		p += step;
 		if (p > doc_view->document->height) {
@@ -908,21 +908,57 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 		c += height;
 	} while (c < doc_view->document->height + height);
 
-	switch (get_opt_int("document.browse.search.show_not_found")) {
-		case 2:
-			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+	return FIND_ERROR_NOT_FOUND;
+}
+
+void
+find_next(struct session *ses, struct document_view *doc_view, int direction)
+{
+	int hit_top = 0;
+
+	switch (find_next_do(ses, doc_view, direction)) {
+		case FIND_ERROR_HIT_TOP:
+			hit_top = 1;
+		case FIND_ERROR_HIT_BOTTOM:
+			if (!get_opt_bool("document.browse.search.show_hit_top_bottom"))
+				break;
+
+			msg_box(ses->tab->term, NULL, 0,
 				N_("Search"), ALIGN_CENTER,
-				msg_text(ses->tab->term,
-					 N_("Search string '%s' not found"),
-					 ses->search_word),
-				ses, 1,
+				hit_top ? N_("Search hit top, continuing at bottom.")
+					: N_("Search hit bottom, continuing at top."),
+				NULL, 1,
 				N_("OK"), NULL, B_ENTER | B_ESC);
 			break;
+		case FIND_ERROR_NO_PREVIOUS_SEARCH:
+			msg_box(ses->tab->term, NULL, 0,
+				N_("Search"), ALIGN_CENTER,
+				N_("No previous search"),
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
+			break;
+		case FIND_ERROR_NOT_FOUND:
+			switch (get_opt_int("document.browse.search.show_not_found")) {
+				case 2:
+					msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+						N_("Search"), ALIGN_CENTER,
+						msg_text(ses->tab->term,
+							 N_("Search string '%s' not found"),
+							 ses->search_word),
+						ses, 1,
+						N_("OK"), NULL, B_ENTER | B_ESC);
+					break;
 
-		case 1:
-			beep_terminal(ses->tab->term);
+				case 1:
+					beep_terminal(ses->tab->term);
 
-		default:
+				default:
+					break;
+			}
+
+			break;
+
+		case FIND_ERROR_NONE:
 			break;
 	}
 }

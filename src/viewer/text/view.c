@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.644 2004/11/12 16:10:23 zas Exp $ */
+/* $Id: view.c,v 1.645 2004/11/12 16:16:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,14 +723,16 @@ static enum frame_event_status
 frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
 	enum frame_event_status status = FRAME_EVENT_IGNORED;
+	int accesskey_priority;
 
 #ifdef CONFIG_MARKS
 	status = try_mark_key(ses, doc_view, ev);
 	if (status != FRAME_EVENT_IGNORED)
 		return status;
 #endif
+	accesskey_priority = get_opt_int("document.browse.accesskey.priority");
 
-	if (get_opt_int("document.browse.accesskey.priority") >= 2) {
+	if (accesskey_priority >= 2) {
 		status = try_document_key(ses, doc_view, ev);
 
 		if (status != FRAME_EVENT_IGNORED) {
@@ -743,7 +745,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	if (status != FRAME_EVENT_IGNORED)
 		return status;
 
-	if (get_opt_int("document.browse.accesskey.priority") == 1) {
+	if (accesskey_priority == 1) {
 		status = try_document_key(ses, doc_view, ev);
 
 		if (status != FRAME_EVENT_IGNORED) {

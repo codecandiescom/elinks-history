@@ -1,3 +1,220 @@
+Tue Jun  8 19:33:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/listbox.h, bookmarks/dialogs.c,
+	cache/dialogs.c, config/dialogs.c, cookies/dialogs.c,
+	dialogs/download.c, formhist/dialogs.c, globhist/dialogs.c,
+	protocol/auth/dialogs.c:
+
+	Add a get_uri() method to the listbox operations.  
+
+Tue Jun  8 17:01:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	get_hooked_uri(): Use oneliner.  
+
+Tue Jun  8 16:54:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	get_translated_uri(): Don't be so anal about @cwd.  
+
+Tue Jun  8 16:51:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Move event stuff from goto_url_with_hook() to get_hooked_uri().  
+
+Tue Jun  8 16:36:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: view.c, vs.c:
+
+	Oops vs->did_fragment should be touched now.  
+
+Tue Jun  8 16:21:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	@yw -> @height, and is_in_range_*() interface uniformization.  
+
+Tue Jun  8 16:14:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Move lowered_string() near its user.  
+
+Tue Jun  8 16:13:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h:
+
+	The free_syntax member of the protocol_backend structure is not used
+	anymore.  
+
+Tue Jun  8 16:12:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	@s -> @text, @l,@len -> @textlen.  
+
+Tue Jun  8 16:10:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix and improve file:// handling. Especially '#' handling.  
+
+Tue Jun  8 15:12:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Hrmf.  
+
+Tue Jun  8 15:08:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser.c, document/html/parser.h,
+	sched/task.c:
+
+	Pass the loading session URI deep into the HTML parser so no
+	allocation is needed.  
+
+Tue Jun  8 14:51:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, session.h, task.c:
+
+	Remove session member imgmap_href_base and simply use loading_uri.  
+
+Tue Jun  8 14:46:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, session.h, task.c:
+
+	Remove session member imgmap_target_base and simply use
+	task.target_frame.  
+
+Tue Jun  8 14:26:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: proxy.c, proxy.h, uri.h:
+
+	Move get_proxied_uri() to proxy subsystem and make it into a real
+	function.  
+
+Tue Jun  8 14:20:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: proxy.c, proxy.h, uri.h:
+
+	Merge get_proxy_uri() macro stuff into get_proxy() and name it all
+	get_proxy_uri().  
+
+Tue Jun  8 14:15:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, document/refresh.c, protocol/proxy.c,
+	protocol/uri.h, sched/download.c, sched/download.h,
+	sched/session.c, sched/session.h, sched/task.c:
+
+	Remove lots of those new goto_uri members. Now the fun begins to see
+	what it breaks. Also we have to 'rethink' stuff like how
+	get_current_url() should behave. Should bookmarking add the fragment
+	or not.  
+
+Tue Jun  8 13:54:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, document/html/parser.c, protocol/uri.c,
+	protocol/uri.h, sched/task.c, viewer/dump/dump.c:
+
+	Remove extract_fragment() and cleanup get_translated_uri()
+	interface.  
+
+Tue Jun  8 13:49:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, dialogs/document.c, protocol/uri.c,
+	sched/download.c, sched/download.h, sched/history.c,
+	sched/session.c, sched/session.h, sched/task.c, sched/task.h,
+	viewer/text/view.c, viewer/text/vs.c, viewer/text/vs.h:
+
+	Actually use the new URI fragment member. All the way down the goto
+	chain previous goto_position member that contained the fragment part
+	of the URI has been replaced by goto URI. Only exception is
+	view_state and find_in_cache()'s URI comparison has been changed to
+	reflect this.  
+	
+	Note: A lot of error checking has not been added since a lot is
+	still temporary.  
+
+Tue Jun  8 13:37:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	compare_uri(): Compile fix.  
+
+Tue Jun  8 13:34:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	find_in_cache(): Remove clever optimization. With fragments in URIs
+	assuming not in cache when refcount is one is no longer correct.  
+
+Tue Jun  8 13:32:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	compare_uri(): Fix post comparison.  
+
+Tue Jun  8 12:42:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	compare_uri(): Only check special and idn URI flag.  
+
+Tue Jun  8 12:23:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	compare_uri(): Add support for compare the remaining URI members.  
+
+Tue Jun  8 12:19:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Add fragment member to URI struct.  
+
+Tue Jun  8 11:30:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Only free vs->goto_position when the cache entry is complete.  
+
+Tue Jun  8 10:54:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	Fix compilation failure spotted by zas.  
+
+Tue Jun  8 00:04:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: proxy.c, uri.h:
+
+	Oops URI_PROXY needs URI_IDN even though it only works in theory.  
+
+Tue Jun  8 00:00:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: proxy.c, uri.h:
+
+	A little cleanup in the URI components.  
+
+Mon Jun  7 23:38:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, document/refresh.c, document/html/frames.c,
+	document/html/parser.c, protocol/proxy.c, protocol/uri.c,
+	protocol/uri.h, sched/task.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/view.c:
+
+	get_uri(): Take uri_component flags instead of length. Uses
+	get_composed_uri() as backend.  
+
+Mon Jun  7 23:21:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	redirect_cache(): Correctly renew @redirect member.  
+
 Mon Jun  7 17:46:52 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: cache/cache.c, cache/cache.h, cache/dialogs.c,

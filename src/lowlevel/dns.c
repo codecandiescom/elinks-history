@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.36 2003/10/26 19:49:01 zas Exp $ */
+/* $Id: dns.c,v 1.37 2003/10/27 02:40:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ struct dnsentry {
 
 
 struct dnsquery {
-#ifndef THREAD_SAFE_LOOKUP
+#ifdef THREAD_SAFE_LOOKUP
 	struct dnsquery *next_in_queue;
 #endif
 	void (*fn)(void *, int);
@@ -61,7 +61,7 @@ struct dnsquery {
 };
 
 
-#ifndef THREAD_SAFE_LOOKUP
+#ifdef THREAD_SAFE_LOOKUP
 static struct dnsquery *dns_queue = NULL;
 #endif
 
@@ -264,7 +264,7 @@ sync_lookup:
 static int
 do_queued_lookup(struct dnsquery *query)
 {
-#ifndef THREAD_SAFE_LOOKUP
+#ifdef THREAD_SAFE_LOOKUP
 	query->next_in_queue = NULL;
 
 	if (!dns_queue) {
@@ -309,7 +309,7 @@ end_dns_lookup(struct dnsquery *q, int res)
 
 	/* debug("end lookup %s (%d)", q->name, res); */
 
-#ifndef THREAD_SAFE_LOOKUP
+#ifdef THREAD_SAFE_LOOKUP
 	if (q->next_in_queue) {
 		/* debug("processing next in queue: %s", q->next_in_queue->name); */
 		do_lookup(q->next_in_queue, 1);

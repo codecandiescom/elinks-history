@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.4 2003/10/27 02:37:53 pasky Exp $ */
+/* $Id: system.h,v 1.5 2003/10/27 02:40:12 pasky Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -35,7 +35,7 @@
 #include "osdep/beos.h"
 #include "osdep/riscos.h"
 
-#if !defined(HAVE_BEGINTHREAD) && !defined(BEOS)
+#if defined(HAVE_BEGINTHREAD) || defined(BEOS)
 #define THREAD_SAFE_LOOKUP
 #endif
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.25 2003/09/01 13:00:58 zas Exp $ */
+/* $Id: hierbox.c,v 1.26 2003/09/13 06:55:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,16 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 
+static void
+recursively_set_expanded(struct listbox_item *box, int expanded)
+{
+	struct listbox_item *child;
+
+	box->expanded = expanded;
+
+	foreach (child, box->child)
+		recursively_set_expanded(child, expanded);
+}
 
 int
 hierbox_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
@@ -26,29 +36,51 @@ hierbox_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 		case EV_KBD:
 		{
 			int n = dlg->n - 1;
+			struct listbox_data *box;
 
                         if (dlg->items[n].item->ops->kbd
 			    && dlg->items[n].item->ops->kbd(&dlg->items[n], dlg, ev)
 			       == EVENT_PROCESSED)
 				return EVENT_PROCESSED;
 
-			if (ev->x == ' ') {
-				struct listbox_data *box;
+			box = (struct listbox_data *) dlg->items[n].item->data;
 
-				box = (struct listbox_data *) dlg->items[n].item->data;
+			if (ev->x == ' ') {
 				if (box->sel) {
 					box->sel->expanded = !box->sel->expanded;
-#ifdef BOOKMARKS
-					/* FIXME - move from here to bookmarks/dialogs.c! */
-					bookmarks_dirty = 1;
-#endif
+					goto display_dlg;
 				}
-				display_dlg_item(dlg, &dlg->items[n], 1);
-
 				return EVENT_PROCESSED;
 			}
+
+			if (ev->x == '[' || ev->x == '-' || ev->x == '_') {
+				if (box->sel) {
+					recursively_set_expanded(box->sel, 0);
+					goto display_dlg;
+				}
+				return EVENT_PROCESSED;
+			}
+
+			if (ev->x == ']' || ev->x == '+' || ev->x == '=') {
+				if (box->sel) {
+					recursively_set_expanded(box->sel, 1);
+					goto display_dlg;
+				}
+				return EVENT_PROCESSED;
+			}
+
+			return EVENT_NOT_PROCESSED;
+
+display_dlg:
+#ifdef BOOKMARKS
+			/* FIXME - move from here to bookmarks/dialogs.c! */
+			bookmarks_dirty = 1;
+#endif
+			display_dlg_item(dlg, &dlg->items[n], 1);
+
+			return EVENT_PROCESSED;
 		}
-			break;
+		break;
 
 		case EV_INIT:
 		case EV_RESIZE:

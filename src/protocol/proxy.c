@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.33 2004/07/20 22:04:27 zas Exp $ */
+/* $Id: proxy.c,v 1.34 2004/07/20 22:05:58 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -95,9 +95,8 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 
 			protocol_proxy = http_proxy;
 		}
-	}
 
-	if (uri->protocol == PROTOCOL_HTTPS) {
+	} else if (uri->protocol == PROTOCOL_HTTPS) {
 		unsigned char *https_proxy;
 
 		https_proxy = get_opt_str("protocol.https.proxy.host");
@@ -110,9 +109,8 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 
 			protocol_proxy = https_proxy;
 		}
-	}
 
-	if (uri->protocol == PROTOCOL_FTP) {
+	} else if (uri->protocol == PROTOCOL_FTP) {
 		unsigned char *ftp_proxy;
 
 		ftp_proxy = get_opt_str("protocol.ftp.proxy.host");

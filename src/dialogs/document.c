@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.105 2004/10/19 05:40:04 miciah Exp $ */
+/* $Id: document.c,v 1.106 2004/10/19 05:40:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -246,7 +246,7 @@ no_header_info:
 	 * documents (ie. file:// directory listings) text/html. */
 	artificial = (*cached->head == '\r');
 #ifdef CONFIG_DEBUG
-	if (*cached->head)  {
+	if (*cached->head) {
 #else
 	if (*cached->head && !artificial) {
 #endif

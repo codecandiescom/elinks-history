@@ -63,7 +63,8 @@ Benjamin Michotte <binny@baby-linux.net>
 	User-Agent browser ID string changing support
 
 Bennett Todd <bet@rahul.net>
-	RPM's elinks.spec updates
+	RPM elinks.spec updates
+	Support for HTTP TRACE request
 
 Bunch <kisto@go2.pl>
 	HTML renderer hacking
@@ -422,4 +423,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.117 2003/01/19 14:24:19 pasky Exp $
+$Id: AUTHORS,v 1.118 2003/01/26 19:48:56 pasky Exp $

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.96 2003/01/23 02:29:28 pasky Exp $ */
+/* $Id: http.c,v 1.97 2003/01/26 19:48:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -281,6 +281,7 @@ http_send_header(struct connection *c)
 	unsigned char *host = GET_REAL_URL(c->url);
 	struct http_connection_info *info;
 	int http10 = get_opt_int("protocol.http.bugs.http10");
+	int trace = get_opt_bool("protocol.http.trace");
 	unsigned char *post;
 
 	struct cache_entry *e = NULL;
@@ -319,7 +320,9 @@ http_send_header(struct connection *c)
 		return;
 	}
 
-	if (!post) {
+	if (trace) {
+		add_to_str(&hdr, &l, "TRACE ");
+	} else if (!post) {
 		add_to_str(&hdr, &l, "GET ");
 	} else {
 		add_to_str(&hdr, &l, "POST ");

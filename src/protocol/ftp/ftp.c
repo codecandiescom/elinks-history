@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.127 2004/03/31 20:31:22 jonas Exp $ */
+/* $Id: ftp.c,v 1.128 2004/04/01 04:15:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -918,7 +918,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 		if (conn->cache->redirect)
 			mem_free(conn->cache->redirect);
 
-		conn->cache->redirect = stracpy(struri(conn->uri));
+		conn->cache->redirect = get_uri_string(conn->uri, ~0);
 		if (!conn->cache->redirect) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;

@@ -1,3 +1,305 @@
+Mon Jul 28 21:45:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	get_attr_val(): Use attrlen instead of calling strlen(attr), and
+	memchr() instead of strchr().  
+
+Mon Jul 28 20:53:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Some old staled code was removed, and an attempt to optimize a set
+	of tests was done (please review).  
+
+Mon Jul 28 20:28:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: event.c, screen.c, screen.h, terminal.c:
+
+	alloc_screen() - rename to resize_screen().  
+
+Mon Jul 28 20:23:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	alloc_screen() - Replaced possible init_screen() call with
+	assertion. term->screen is allocated in init_term().  
+
+Mon Jul 28 20:20:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	draw_frame_lines() - Fix assertion failure when calling set_xchar().  
+
+Mon Jul 28 19:36:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Optimization of atchr(): isA() is redundant with test (c > ' ' && c
+	!= '=' ...) since all chars valid for isA() make this test true and
+	since we do isA() || the_test, any char > ' ' and < 'z' is valide
+	but '=', '>', '<'. I change that for an optimized test, which match
+	4 additionnal chars (> 'z' && < 127). This should not be a problem.  
+
+Mon Jul 28 19:34:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	set_line_color() - removed.  
+
+Mon Jul 28 19:33:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	set_xchar() - rename variables, use assertion, decrease indentaion.  
+
+Mon Jul 28 19:29:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	erase_screen() - Tidyup.  
+
+Mon Jul 28 17:05:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Old staled code was removed, cleanup and assertification.  
+
+Mon Jul 28 16:43:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Assertification and minor cleanup.  
+
+Mon Jul 28 16:18:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, sched/session.c, sched/session.h:
+
+	destroy_all_sessions() was removed, since it does nothing.  
+
+Mon Jul 28 16:15:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Indentation and whitespaces fixes, assertification, and some
+	optimizations.  
+
+Mon Jul 28 10:14:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: screen.c, screen.h, terminal.c:
+
+	init_screen() - introduced; fix leak from previous patch.  
+
+Mon Jul 28 10:04:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Rearrange alloc_screen() and move macro #define closer to user.  
+
+Mon Jul 28 09:59:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: terminal/draw.c, terminal/draw.h, viewer/text/view.c:
+
+	set_xchar() - Moved to terminal/draw.* 
+
+Mon Jul 28 09:53:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: terminal/draw.c, terminal/screen.c, terminal/screen.h,
+	viewer/text/view.c:
+
+	Add and use #define SCREEN_ATTR_FRAME 0x80.  
+
+Mon Jul 28 09:39:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.h, terminal/draw.c, terminal/draw.h,
+	viewer/text/link.c, viewer/text/view.c:
+
+	get_char() - return screen_char position.  set_xchar() - access
+	screen_char position directly.  struct link_bg now uses screen_char.  
+
+Mon Jul 28 09:30:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	Trivial renames and use of local terminal_screen var.  
+
+Mon Jul 28 09:18:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	redraw_screen() - Fix test of finalized string length.  
+
+Mon Jul 28 09:05:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/draw.c, terminal/screen.c,
+	terminal/screen.h, terminal/tab.c, terminal/terminal.c,
+	terminal/terminal.h:
+
+	Move terminal->dirty inside terminal->screen.  
+
+Mon Jul 28 09:00:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Ouch, typo fix: close the comment ;) 
+
+Mon Jul 28 08:57:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Refresh time extraction was added. Not yet used so enclosed in #if
+	0/#endif.  
+
+Mon Jul 28 08:51:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: draw.c, screen.c, screen.h, terminal.c,
+	terminal.h:
+
+	Move cursor positioning into struct terminal_screen. Also resulted
+	in a little renaming in redraw_screen().  
+
+Mon Jul 28 08:48:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Print meta refresh original URL value as label.  
+
+Mon Jul 28 08:35:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Support for relative url was added to META Refresh handling code.  
+
+Mon Jul 28 08:25:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: draw.c, screen.c, screen.h, terminal.c,
+	terminal.h:
+
+	First move towards restructuring the terminal screen layer.  
+
+Mon Jul 28 07:33:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Bad memmove() was prevented, it fixes bug 231. Patch by Zardoz.  
+
+Mon Jul 28 07:02:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Mark term as dirty at end of print_text().  
+
+Mon Jul 28 06:54:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Assertion failure was fixed, no need to call set_line() with l = 0.  
+
+Mon Jul 28 06:53:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Cleanup and optimization.  
+
+Mon Jul 28 06:18:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: screen.c, terminal.c:
+
+	alloc_screen() - Allocate @screen and @last_screen in one chunk.  
+
+Mon Jul 28 05:54:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	print_short_help() - Fix logic and string handling.  
+
+Mon Jul 28 04:42:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	redraw_screen() - Tidyup.  
+
+Mon Jul 28 04:16:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	redraw_screen() - Use add_bytes_... when string length is known.  
+
+Mon Jul 28 03:57:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	redraw_screen(): Rewrite. Rename. Recomment. Reformat.  
+
+Mon Jul 28 02:57:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	redraw_screen(): Move term option updating to fill_option_cache().  
+
+Sun Jul 27 23:59:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	print_text(): Optimize to update term->screen directly.  
+
+Sun Jul 27 23:35:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_link(): Tidy up.  
+
+Sun Jul 27 23:30:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_link(): Move initialization of loop vars closer to the loop.
+	Also move calculation before the loop.  
+
+Sun Jul 27 23:17:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_link(): Move 'not in view' and failure setting up to decrease
+	indentation. Remove useless test.  
+
+Sun Jul 27 23:14:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_link(): Fix last patch. cursor_offset should atleast be 0.  
+
+Sun Jul 27 23:04:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_link(): Rename @q -> @cursor_offset and use it to testing
+	cursor updating.  
+
+Sun Jul 27 22:54:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_doc(): Set @q in the switch for L_FIELD and L_AREA.  
+
+Sun Jul 27 22:48:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_link(): Move most of function body outside the switch.  
+
+Sun Jul 27 22:45:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Renames in and around set_xchar().  
+
+Sun Jul 27 22:44:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	Tidy up.  
+
 Sun Jul 27 21:47:40 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/view.c:

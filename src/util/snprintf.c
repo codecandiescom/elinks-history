@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.5 2003/06/07 00:49:14 zas Exp $ */
+/* $Id: snprintf.c,v 1.6 2003/06/07 01:04:05 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -492,10 +492,10 @@ fmtint(char *buffer, size_t *currlen, size_t maxlen,
 	int signvalue = 0;
 	unsigned long uvalue;
 	char convert[20];
+	char *numbers = &hexnumbers;
 	int place = 0;
 	int spadlen = 0; /* amount to space pad */
 	int zpadlen = 0; /* amount to zero pad */
-	int caps = 0;
 
 	if (max < 0)
 		max = 0;
@@ -514,12 +514,13 @@ fmtint(char *buffer, size_t *currlen, size_t maxlen,
 		}
 	}
 
-	if (flags & DP_F_UP) caps = 1; /* Should characters be upper case? */
+	if (flags & DP_F_UP) {
+		 /* Should characters be upper case? */
+		numbers = &HEXnumbers;
+	}
 
 	do {
-		convert[place++] =
-			(caps ? HEXnumbers : hexnumbers)
-			[uvalue % (unsigned) base];
+		convert[place++] = numbers[uvalue % (unsigned) base];
 		uvalue = (uvalue / (unsigned) base);
 	} while (uvalue && (place < 20));
 	if (place == 20) place--;
@@ -658,15 +659,16 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 	double ufvalue;
 	char iconvert[311];
 	char fconvert[311];
+	char *numbers = &hexnumbers;
 	int iplace = 0;
 	int fplace = 0;
 	int padlen = 0; /* amount to pad */
 	int zpadlen = 0;
-	int caps = 0;
 	int index;
 	double intpart;
 	double fracpart;
 	double temp;
+	LDOUBLE pow;
 
 	/*
 	 * AIX manpage says the default is 0, but Solaris says the default
@@ -689,7 +691,10 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 	}
 
 #if 0
-	if (flags & DP_F_UP) caps = 1; /* Should characters be upper case? */
+	if (flags & DP_F_UP) {
+		caps = 1; /* Should characters be upper case? */
+		numbers = &HEXnumbers;
+	}
 #endif
 
 #if 0
@@ -703,6 +708,8 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 	if (max > 16)
 		max = 16;
 
+	pow = my_pow10(max);
+
 	/* We "cheat" by converting the fractional part to integer by
 	 * multiplying by a factor of 10
 	 */
@@ -710,13 +717,12 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 	temp = ufvalue;
 	my_modf(temp, &intpart);
 
-	fracpart = my_round((my_pow10(max)) * (ufvalue - intpart));
+	fracpart = my_round(pow * (ufvalue - intpart));
 
-	if (fracpart >= my_pow10(max)) {
+	if (fracpart >= pow) {
 		intpart++;
-		fracpart -= my_pow10(max);
+		fracpart -= pow;
 	}
-
 
 	/* Convert integer part */
 	do {
@@ -727,8 +733,7 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 		index = (int) (((double)(temp*0.1) -intpart +0.05) *10.0);
 		printf ("%llf, %f, %x\n", temp, intpart, index);
 #endif
-		iconvert[iplace++] =
-			(caps ? HEXnumbers : hexnumbers)[index];
+		iconvert[iplace++] = numbers[index];
 	} while (intpart && (iplace < 311));
 	if (iplace == 311) iplace--;
 	iconvert[iplace] = 0;
@@ -743,8 +748,7 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 			index = (int) ((((temp/10) -fracpart) +0.05) *10);
 			printf ("%lf, %lf, %ld\n", temp, fracpart, index);
 #endif
-			fconvert[fplace++] =
-				(caps ? HEXnumbers : hexnumbers)[index];
+			fconvert[fplace++] = numbers[index];
 		} while(fracpart && (fplace < 311));
 		if (fplace == 311) fplace--;
 	}

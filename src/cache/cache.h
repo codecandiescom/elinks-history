@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.32 2003/11/08 13:11:41 zas Exp $ */
+/* $Id: cache.h,v 1.33 2003/11/08 16:24:29 zas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -30,7 +30,7 @@ struct cache_entry {
 
 	int length;
 	int data_size;
-	int locks;
+	int locks; /* No direct access, use provided macros for that. */
 
 #ifdef HAVE_SCRIPTING
 	unsigned int done_pre_format_html_hook:1;

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.21 2003/11/08 16:20:24 zas Exp $ */
+/* $Id: document.h,v 1.22 2003/11/08 16:24:29 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -125,7 +125,7 @@ struct document {
 
 	unsigned int id_tag; /* Used to check cache entries. */
 
-	int locks;
+	int locks; /* No direct access, use provided macros for that. */
 	int cp;
 	int width, height; /* size of document */
 	int nlinks;

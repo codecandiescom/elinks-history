@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.65 2003/11/21 10:22:21 zas Exp $ */
+/* $Id: dump.c,v 1.66 2003/11/21 23:17:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,9 +274,6 @@ dump_to_file(struct document *document, int fd)
 				unsigned char attr = document->data[y].chars[x].attr;
 
 				c = document->data[y].chars[x].data;
-
-				/* &nbsp; was replaced by a special char. */
-				if (c == NBSP_CHAR) c = ' ';
 
 				if ((attr & SCREEN_ATTR_FRAME)
 				    && c >= 176 && c < 224)

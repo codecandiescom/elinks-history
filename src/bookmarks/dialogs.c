@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.217 2005/03/30 10:21:37 zas Exp $ */
+/* $Id: dialogs.c,v 1.218 2005/03/30 10:28:13 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -32,10 +32,6 @@
  * (add/modify/delete). */
 #define BOOKMARKS_RESAVE	1
 
-
-/* Last searched values */
-unsigned char *bm_last_searched_title = NULL;
-unsigned char *bm_last_searched_url = NULL;
 
 static void
 lock_bookmark(struct listbox_item *item)
@@ -493,9 +489,7 @@ struct_hierbox_browser(
 void
 bookmark_manager(struct session *ses)
 {
-	/* Reset momorized search criterias */
-	mem_free_set(&bm_last_searched_title, NULL);
-	mem_free_set(&bm_last_searched_url, NULL);
+	free_last_searched_bookmark();
 	bookmark_browser.expansion_callback = bookmarks_set_dirty;
 	hierbox_browser(&bookmark_browser, ses);
 }
@@ -555,6 +549,17 @@ test_search(struct listbox_item *item, void *data_, int *offset) {
 	ctx->offset++;
 
 	return 0;
+}
+
+/* Last searched values */
+static unsigned char *bm_last_searched_title = NULL;
+static unsigned char *bm_last_searched_url = NULL;
+
+void
+free_last_searched_bookmark(void)
+{
+	mem_free_set(&bm_last_searched_title, NULL);
+	mem_free_set(&bm_last_searched_url, NULL);
 }
 
 static int

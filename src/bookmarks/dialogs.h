@@ -1,4 +1,4 @@
-/* $Id: dialogs.h,v 1.15 2005/03/30 10:09:03 zas Exp $ */
+/* $Id: dialogs.h,v 1.16 2005/03/30 10:28:13 zas Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
@@ -8,9 +8,6 @@
 #include "terminal/terminal.h"
 #include "sched/session.h"
 
-/* Search memorization */
-extern unsigned char *bm_last_searched_title;
-extern unsigned char *bm_last_searched_url;
 extern struct hierbox_browser bookmark_browser;
 
 /* Launch the bookmark manager */
@@ -36,5 +33,8 @@ void launch_bm_add_link_dialog(struct terminal *term,
 			       struct session *ses);
 
 void bookmark_terminal_tabs_dialog(struct terminal *term);
+
+/* Free search memorization */
+void free_last_searched_bookmark(void);
 
 #endif

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.152 2004/01/06 21:00:56 jonas Exp $ */
+/* $Id: menu.c,v 1.153 2004/01/07 00:58:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,7 +133,7 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 	if (action != ACT_NONE && !func) {
 		struct session *ses = data;
 
-		do_action(ses, action, it_data);
+		do_action(ses, action, it_data, 1);
 		return;
 	}
 

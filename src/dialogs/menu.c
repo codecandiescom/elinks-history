@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.260 2004/01/07 00:38:03 jonas Exp $ */
+/* $Id: menu.c,v 1.261 2004/01/07 00:58:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -538,8 +538,8 @@ free_history_lists(void)
 /* This could gradually become some mulitplexor / switch noodle containing
  * most if not all default handling of actions (for the main mapping) that
  * frame_ev() and/or send_event() could use as a backend. */
-void
-do_action(struct session *ses, enum keyact action, void *data)
+enum keyact
+do_action(struct session *ses, enum keyact action, void *data, int verbose)
 {
 	struct terminal *term = ses->tab->term;
 
@@ -698,7 +698,13 @@ do_action(struct session *ses, enum keyact action, void *data)
 		case ACT_VIEW_IMAGE:
 		case ACT_ZOOM_FRAME:
 		default:
-			INTERNAL("No action handling defined for '%s'.",
-				 write_action(action));
+			if (verbose) {
+				INTERNAL("No action handling defined for '%s'.",
+					 write_action(action));
+			}
+
+			return ACT_NONE;
 	}
+
+	return action;
 }

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.75 2004/09/24 10:54:23 jonas Exp $ */
+/* $Id: document.h,v 1.76 2004/09/25 19:51:49 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -13,6 +13,7 @@
 struct cache_entry;
 struct document_refresh;
 struct form_control;
+struct frame_desc;
 struct frameset_desc;
 struct module;
 struct screen_char;
@@ -135,7 +136,8 @@ struct document {
 	struct uri *uri;
 	unsigned char *title;
 
-	struct frameset_desc *frame_desc;
+	struct frame_desc *frame;
+	struct frameset_desc *frame_desc; /* RENAME ME */
 	struct document_refresh *refresh;
 
 	struct line *data;

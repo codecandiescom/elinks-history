@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-11-27 13:00+0100\n"
+"POT-Creation-Date: 2003-11-27 13:23+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 msgid "Close"
 msgstr "Fermer"
 
-#: src/bfu/hierbox.c:392 src/cache/dialogs.c:145 src/config/dialogs.c:348
+#: src/bfu/hierbox.c:392 src/cache/dialogs.c:145 src/config/dialogs.c:357
 #: src/cookies/dialogs.c:131 src/dialogs/document.c:41
 #: src/dialogs/document.c:229 src/dialogs/download.c:430
 #: src/formhist/dialogs.c:143 src/globhist/dialogs.c:182
@@ -28,10 +28,10 @@ msgstr "Info"
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
 #: src/bfu/hierbox.c:395 src/bfu/hierbox.c:469 src/bfu/inpfield.c:47
 #: src/bfu/inpfield.c:56 src/bfu/inpfield.c:76 src/bookmarks/dialogs.c:191
-#: src/config/dialogs.c:45 src/config/dialogs.c:194 src/config/dialogs.c:253
-#: src/config/dialogs.c:283 src/config/dialogs.c:318 src/config/dialogs.c:330
-#: src/config/dialogs.c:397 src/config/dialogs.c:419 src/config/dialogs.c:446
-#: src/config/dialogs.c:487 src/config/dialogs.c:500 src/dialogs/auth.c:80
+#: src/config/dialogs.c:45 src/config/dialogs.c:203 src/config/dialogs.c:262
+#: src/config/dialogs.c:292 src/config/dialogs.c:327 src/config/dialogs.c:339
+#: src/config/dialogs.c:406 src/config/dialogs.c:428 src/config/dialogs.c:455
+#: src/config/dialogs.c:496 src/config/dialogs.c:509 src/dialogs/auth.c:80
 #: src/dialogs/document.c:47 src/dialogs/document.c:232
 #: src/dialogs/document.c:302 src/dialogs/document.c:314
 #: src/dialogs/edit.c:101 src/dialogs/info.c:49 src/dialogs/info.c:90
@@ -154,8 +154,8 @@ msgid "LEDs"
 msgstr "LEDs"
 
 #: src/bfu/leds.c:66
-msgid "LEDs options."
-msgstr "Options concernant les LEDs."
+msgid "LEDs (visual indicators) options."
+msgstr "Options concernant les LEDs (indicateurs visuels)"
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/bfu/leds.c:68 src/config/options.inc:1725 src/config/options.inc:1732
@@ -165,11 +165,15 @@ msgid "Enable"
 msgstr "Activation"
 
 #: src/bfu/leds.c:70
-msgid "Enable LEDs."
-msgstr "Activer les LEDs."
+msgid ""
+"Enable LEDs.\n"
+"These visual indicators will inform you about various states."
+msgstr ""
+"Activer les LEDs.\n"
+"Ces indicateurs visuels informent de différents états."
 
 #. name:
-#: src/bfu/leds.c:238
+#: src/bfu/leds.c:239
 msgid "LED indicators"
 msgstr "Indicateurs LED"
 
@@ -245,8 +249,8 @@ msgstr "Créer dossier"
 msgid "Folder name"
 msgstr "Nom du dossier"
 
-#: src/bookmarks/dialogs.c:191 src/config/dialogs.c:254
-#: src/config/dialogs.c:330 src/config/dialogs.c:446 src/config/dialogs.c:501
+#: src/bookmarks/dialogs.c:191 src/config/dialogs.c:263
+#: src/config/dialogs.c:339 src/config/dialogs.c:455 src/config/dialogs.c:510
 #: src/dialogs/auth.c:81 src/dialogs/edit.c:105 src/dialogs/menu.c:510
 #: src/dialogs/menu.c:521 src/dialogs/menu.c:552 src/dialogs/mime.c:165
 #: src/dialogs/options.c:192 src/dialogs/options.c:267
@@ -267,13 +271,13 @@ msgstr "Modifier"
 msgid "Goto"
 msgstr "Aller à"
 
-#: src/bookmarks/dialogs.c:375 src/config/dialogs.c:220
-#: src/config/dialogs.c:278 src/config/dialogs.c:349
+#: src/bookmarks/dialogs.c:375 src/config/dialogs.c:229
+#: src/config/dialogs.c:287 src/config/dialogs.c:358
 msgid "Edit"
 msgstr "Modifier"
 
 #: src/bookmarks/dialogs.c:376 src/cache/dialogs.c:147
-#: src/config/dialogs.c:351 src/config/dialogs.c:521 src/cookies/dialogs.c:132
+#: src/config/dialogs.c:360 src/config/dialogs.c:530 src/cookies/dialogs.c:132
 #: src/formhist/dialogs.c:144 src/globhist/dialogs.c:186
 msgid "Delete"
 msgstr "Supprimer"
@@ -282,8 +286,8 @@ msgstr "Supprimer"
 msgid "Move"
 msgstr "Déplacer"
 
-#: src/bookmarks/dialogs.c:379 src/config/dialogs.c:350
-#: src/config/dialogs.c:520
+#: src/bookmarks/dialogs.c:379 src/config/dialogs.c:359
+#: src/config/dialogs.c:529
 msgid "Add"
 msgstr "Ajouter"
 
@@ -295,8 +299,8 @@ msgid "Search"
 msgstr "Chercher"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:383 src/config/dialogs.c:352
-#: src/config/dialogs.c:523 src/cookies/dialogs.c:134
+#: src/bookmarks/dialogs.c:383 src/config/dialogs.c:361
+#: src/config/dialogs.c:532 src/cookies/dialogs.c:134
 #: src/dialogs/options.c:191 src/formhist/dialogs.c:147
 #: src/globhist/dialogs.c:192 src/sched/download.c:975
 #: src/sched/download.c:1011
@@ -482,11 +486,15 @@ msgstr "Erreur de configuration"
 msgid "Unable to write to config file %s: %s"
 msgstr "Impossible d'écrire dans le fichier de configuration %s: %s"
 
-#: src/config/dialogs.c:87 src/config/dialogs.c:235
+#: src/config/dialogs.c:89
+msgid "(expand by pressing space)"
+msgstr "(déployer en pressant espace)"
+
+#: src/config/dialogs.c:92 src/config/dialogs.c:244
 msgid "N/A"
 msgstr "N/A"
 
-#: src/config/dialogs.c:99
+#: src/config/dialogs.c:104
 #, c-format
 msgid ""
 "Name: %s\n"
@@ -503,7 +511,7 @@ msgstr ""
 "Description: \n"
 "%s"
 
-#: src/config/dialogs.c:106
+#: src/config/dialogs.c:111
 #, c-format
 msgid ""
 "Name: %s\n"
@@ -518,34 +526,34 @@ msgstr ""
 "Description:\n"
 "%s"
 
-#: src/config/dialogs.c:191 src/protocol/protocol.c:57 src/sched/session.c:413
+#: src/config/dialogs.c:200 src/protocol/protocol.c:57 src/sched/session.c:413
 #: src/sched/session.c:1561 src/viewer/text/textarea.c:265
 msgid "Error"
 msgstr "Erreur"
 
-#: src/config/dialogs.c:192
+#: src/config/dialogs.c:201
 msgid "Bad option value."
 msgstr "Mauvaise valeur"
 
-#: src/config/dialogs.c:229 src/config/dialogs.c:329 src/dialogs/edit.c:94
+#: src/config/dialogs.c:238 src/config/dialogs.c:338 src/dialogs/edit.c:94
 #: src/scripting/lua/core.c:396 src/scripting/lua/core.c:397
 #: src/scripting/lua/core.c:479
 msgid "Name"
 msgstr "Nom"
 
-#: src/config/dialogs.c:230
+#: src/config/dialogs.c:239
 msgid "Type"
 msgstr "Type"
 
-#: src/config/dialogs.c:232
+#: src/config/dialogs.c:241
 msgid "Value"
 msgstr "Valeur"
 
-#: src/config/dialogs.c:233
+#: src/config/dialogs.c:242
 msgid "Description"
 msgstr "Description"
 
-#: src/config/dialogs.c:279
+#: src/config/dialogs.c:288
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
@@ -554,39 +562,39 @@ msgstr ""
 "spéciale (comme un dossier), essayez de presser la touche ESPACE pour voir "
 "son contenu."
 
-#: src/config/dialogs.c:315 src/config/dialogs.c:329
+#: src/config/dialogs.c:324 src/config/dialogs.c:338
 msgid "Add option"
 msgstr "Ajouter option"
 
-#: src/config/dialogs.c:316
+#: src/config/dialogs.c:325
 msgid "Cannot add an option here."
 msgstr "Impossible d'ajouter cette option ici."
 
-#: src/config/dialogs.c:356
+#: src/config/dialogs.c:365
 msgid "Option manager"
 msgstr "Gestion des options"
 
-#: src/config/dialogs.c:394 src/config/dialogs.c:416 src/config/dialogs.c:445
+#: src/config/dialogs.c:403 src/config/dialogs.c:425 src/config/dialogs.c:454
 msgid "Add keybinding"
 msgstr "Ajouter une association de touches"
 
-#: src/config/dialogs.c:395
+#: src/config/dialogs.c:404
 msgid "Invalid keystroke."
 msgstr "Touche invalide."
 
-#: src/config/dialogs.c:417
+#: src/config/dialogs.c:426
 msgid "Need to select a keymap."
 msgstr "Vous devez sélectionner une table."
 
-#: src/config/dialogs.c:432 src/config/options.inc:1744
+#: src/config/dialogs.c:441 src/config/options.inc:1744
 msgid "Action"
 msgstr "Action"
 
-#: src/config/dialogs.c:433
+#: src/config/dialogs.c:442
 msgid "Keymap"
 msgstr "Table"
 
-#: src/config/dialogs.c:434
+#: src/config/dialogs.c:443
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
@@ -596,31 +604,31 @@ msgstr ""
 "Prefix: Shift, Ctrl, Alt\n"
 "Touche: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
-#: src/config/dialogs.c:438
+#: src/config/dialogs.c:447
 msgid "Keystroke"
 msgstr "Touches"
 
-#: src/config/dialogs.c:483 src/config/dialogs.c:494
+#: src/config/dialogs.c:492 src/config/dialogs.c:503
 msgid "Delete keybinding"
 msgstr "Supprimer l'association de touches"
 
-#: src/config/dialogs.c:484
+#: src/config/dialogs.c:493
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr "Cet objet n'est pas une association de touches."
 
-#: src/config/dialogs.c:495
+#: src/config/dialogs.c:504
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 "Supprimer l'association de touches \"%s\" (action \"%s\", keymap \"%s\")?"
 
-#: src/config/dialogs.c:522 src/globhist/dialogs.c:188
+#: src/config/dialogs.c:531 src/globhist/dialogs.c:188
 msgid "Toggle display"
 msgstr "Commuter affich."
 
-#: src/config/dialogs.c:527
+#: src/config/dialogs.c:536
 msgid "Keybinding manager"
 msgstr "Gestion des associations de touches"
 
@@ -5548,3 +5556,9 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1466
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid "LEDs options."
+#~ msgstr "Options concernant les LEDs."
+
+#~ msgid "Enable LEDs."
+#~ msgstr "Activer les LEDs."

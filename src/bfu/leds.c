@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.35 2003/11/22 20:47:42 jonas Exp $ */
+/* $Id: leds.c,v 1.36 2003/11/27 12:42:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,11 +63,12 @@ enum led_option {
 static struct option_info led_options[] = {
 	INIT_OPT_TREE("ui", N_("LEDs"),
 		"leds", 0,
-		N_("LEDs options.")),
+		N_("LEDs (visual indicators) options.")),
 
 	INIT_OPT_BOOL("ui.leds", N_("Enable"),
 		"enable", 0, 1,
-		N_("Enable LEDs.")),
+		N_("Enable LEDs.\n"
+		   "These visual indicators will inform you about various states.")),
 
 	NULL_OPTION_INFO,
 };

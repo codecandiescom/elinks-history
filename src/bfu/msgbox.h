@@ -1,9 +1,10 @@
-/* $Id: msgbox.h,v 1.20 2003/12/01 15:19:53 pasky Exp $ */
+/* $Id: msgbox.h,v 1.21 2003/12/27 04:34:33 miciah Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
 
 #include "bfu/button.h"
+#include "bfu/dialog.h"
 #include "bfu/style.h"
 #include "util/memlist.h"
 

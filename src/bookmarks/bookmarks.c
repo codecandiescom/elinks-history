@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.49 2002/09/22 16:34:24 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.50 2002/10/08 21:15:56 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -282,8 +282,7 @@ read_bookmarks()
 		/* Load depth. */
 
 		depth_str = strchr(url, '\t');
-		if (depth_str && (depth_str - url > MAX_STR_LEN - 1
-				  || depth_str == url))
+		if (!depth_str || (depth_str - url > MAX_STR_LEN - 1))
 			continue;
 
 		if (depth_str) {

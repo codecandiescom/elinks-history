@@ -1,3 +1,71 @@
+Sun Apr 28 11:49:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/menu.c, dialogs/edit.c, document/view.c,
+	lowlevel/dns.c:
+
+	Removed stale lines commented out by //.  
+
+Sun Apr 28 11:48:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, bookmarks/bookmarks.c, config/conf.c,
+	config/options.c, config/options.h, cookies/cookies.c,
+	document/globhist.c, document/session.c, lowlevel/Makefile.am,
+	lowlevel/af_unix.c, lowlevel/home.c, lowlevel/home.h,
+	lowlevel/sysname.c, lowlevel/sysname.h, lua/lua.c,
+	protocol/http/http.c:
+
+	Moved home and sysname detection from config/conf.* and
+	config/options.* to lowlevel/home.* and lowlevel/sysname.*.  
+
+Sun Apr 28 11:17:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/Makefile.am, dialogs/document.c,
+	dialogs/document.h, dialogs/menu.c, document/view.c,
+	document/view.h:
+
+	Moved header and document info dialog to dialogs/document.* 
+
+Sun Apr 28 10:55:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/file.c:
+
+	Fixed segfault introduced by add_htmlesc_str() patch. We must use
+	init_str() instead of stracpy(). Reported by Zas.  
+
+Sat Apr 27 22:03:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+
+	Removed some stale entries, little reordering.  
+
+Sat Apr 27 21:58:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/conf.c:
+
+	Emphasized warning about automatically generated links.cfg.  
+
+Sat Apr 27 21:46:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	When extension starts with dot, we survive it and handle it
+	intuitively.  
+
+Sat Apr 27 21:43:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Fixed double mailto option entry, reported by mmc.  
+
+Sat Apr 27 21:30:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, test/README, test/align.html, test/bigtextarea.html,
+	test/erreurs_en.htm, test/longtitle.html, test/poocs.net.html,
+	test/portlink.html, test/tabindex.html:
+
+	Created subdir test/ with various testing documents hanging all
+	around and polluting my disk assembled there.  
+
 Sat Apr 27 21:21:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: protocol/file.c, protocol/ftp.c, util/conv.c, util/conv.h:

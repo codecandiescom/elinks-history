@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.29 2003/05/07 16:29:40 zas Exp $ */
+/* $Id: string.c,v 1.30 2003/05/09 12:42:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,7 +346,6 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 }
 
 
-#if 0 /* This one will perhaps be of some use soon. Don't remove. --Zas */
 /* This function appends a unsigned long number, up to a limit of width
  * digits, to a string.
  * Optionnaly if slen points to the current length of the string, then
@@ -388,7 +387,6 @@ ulongcat(unsigned char *s, unsigned int *slen,
 		number /= 10;
         }
 }
-#endif
 
 #ifndef HAVE_STRCASECMP
 inline int

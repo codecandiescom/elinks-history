@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.23 2003/05/08 21:50:09 zas Exp $ */
+/* $Id: string.h,v 1.24 2003/05/09 12:42:13 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -47,6 +47,7 @@ int xstrcmp(unsigned char *, unsigned char *);
 
 unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);
 unsigned char *trim_chars(unsigned char *, unsigned char, int *);
+void ulongcat(unsigned char *s, unsigned int *slen, unsigned long number, unsigned int width);
 
 #define WHITECHAR(x) ((x) == ' ' || ((x) >= ASCII_TAB && (x) <= ASCII_CR))
 #define IS_QUOTE(x) ((x) == '"' || (x) == '\'')

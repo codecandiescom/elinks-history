@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.88 2003/05/08 21:50:07 zas Exp $ */
+/* $Id: parser.c,v 1.89 2003/05/09 12:42:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1271,7 +1271,9 @@ html_li(unsigned char *a)
 
 				for (x = n; *x; x++) *x = upcase(*x);
 			}
-		} else sprintf(n, "%d", par_format.list_number); /* FIXME: hmmmm.... --Zas */
+		} else ulongcat((unsigned char *) &n, (int *) NULL,
+				(unsigned long) par_format.list_number,
+				(int) (sizeof(n) - 1));
 
 		put_chrs(n, strlen(n), put_chars_f, ff);
 		put_chrs(".&nbsp;", 7, put_chars_f, ff);

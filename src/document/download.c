@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.45 2002/10/13 13:27:45 pasky Exp $ */
+/* $Id: download.c,v 1.46 2002/10/13 18:20:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -745,16 +745,17 @@ common_download(struct session *ses, unsigned char *file, int resume)
 	down = mem_calloc(1, sizeof(struct download));
 	if (!down) return;
 
+	if (resume) fstat(h, &buf);
+
 	down->url = stracpy(url);
 	down->stat.end = (void (*)(struct status *, void *)) download_data;
 	down->stat.data = down;
-	down->last_pos = 0;
+	down->last_pos = (resume ? (int) buf.st_size : 0);
 	down->file = stracpy(file);
 	down->handle = h;
 	down->ses = ses;
 	down->remotetime = 0;
 
-	if (resume) fstat(h, &buf);
 	add_to_list(downloads, down);
 	load_url(url, ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE,
 		 (resume ? (int) buf.st_size : 0));

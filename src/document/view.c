@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.100 2002/11/30 22:42:36 pasky Exp $ */
+/* $Id: view.c,v 1.101 2002/12/01 18:15:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -509,7 +509,7 @@ unable_to_handle_kernel_paging_request___oops:
 	return found;
 }
 
-void
+static void
 get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 {
 	int xp = scr->xp;
@@ -579,7 +579,7 @@ draw_searched(struct terminal *t, struct f_data_c *scr)
 	int yp = scr->yp;
 	int vx = scr->vs->view_posx;
 	int vy = scr->vs->view_pos;
-	struct point *pt;
+	struct point *pt = NULL;
 	int len, i;
 
 	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
@@ -2294,7 +2294,7 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 int
 find_next_link_in_search(struct f_data_c *f, int d)
 {
-	struct point *pt;
+	struct point *pt = NULL;
 	int len;
 	struct link *link;
 
@@ -2313,7 +2313,7 @@ find_next_link_in_search(struct f_data_c *f, int d)
 		mem_free(pt);
 		return 0;
 	}
-	mem_free(pt);
+	if (pt) mem_free(pt);
 	goto nx;
 }
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.8 2002/03/19 20:40:04 pasky Exp $ */
+/* $Id: parser.c,v 1.9 2002/03/21 18:05:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1235,6 +1235,10 @@ void clr_spaces(unsigned char *name)
 			memmove(nm, nm + 1, strlen(nm));
 }
 
+
+/* TODO: Move following stuff to special file. */
+
+
 int menu_stack_size;
 struct menu_item **menu_stack;
 
@@ -1502,6 +1506,10 @@ int do_html_select(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	special_f(ff, SP_CONTROL, fc);
 	return 0;
 }
+
+
+
+
 
 void html_textarea(unsigned char *a)
 {
@@ -2114,7 +2122,11 @@ void parse_html(unsigned char *html, unsigned char *eof, void (*put_chars)(void 
 	was_br = 0;
 }
 
-int get_image_map(unsigned char *head, unsigned char *s, unsigned char *eof, unsigned char *tag, struct menu_item **menu, struct memory_list **ml, unsigned char *href_base, unsigned char *target_base, int to, int def, int hdef)
+/* TODO: Split this function so that we can get rid of that gotos. */
+int get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
+		  unsigned char *tag, struct menu_item **menu,
+		  struct memory_list **ml, unsigned char *href_base,
+		  unsigned char *target_base, int to, int def, int hdef)
 {
 	unsigned char *name, *attr, *al, *label, *href, *target;
 	int namelen, lblen;
@@ -2125,125 +2137,200 @@ int get_image_map(unsigned char *head, unsigned char *s, unsigned char *eof, uns
 	unsigned char *hd = init_str();
 	int hdl = 0;
 	struct conv_table *ct;
+	
 	if (head) add_to_str(&hd, &hdl, head);
-	scan_http_equiv(s, eof, &hd, &hdl, NULL);
+	scan_http_equiv(pos, eof, &hd, &hdl, NULL);
 	ct = get_convert_table(hd, to, def, NULL, NULL, hdef);
 	mem_free(hd);
-	if (!(*menu = mem_alloc(sizeof(struct menu_item)))) return -1;
+	
+	*menu = mem_alloc(sizeof(struct menu_item));
+	if (!*menu) return -1;
 	memset(*menu, 0, sizeof(struct menu_item));
-	/*(*menu)->text = NULL;*/
-	se:
-	while (s < eof && *s != '<') {
-		sp:
-		s++;
+	
+look_for_map:
+	while (pos < eof && *pos != '<') {
+		pos++;
 	}
-	if (s >= eof) {
+	
+	if (pos >= eof) {
 		mem_free(*menu);
 		return -1;
 	}
-	if (s + 2 <= eof && (s[1] == '!' || s[1] == '?')) {
-		s = skip_comment(s, eof);
-		goto se;
+	
+	if (pos + 2 <= eof && (pos[1] == '!' || pos[1] == '?')) {
+		pos = skip_comment(pos, eof);
+		goto look_for_map;
 	}
-	if (parse_element(s, eof, &name, &namelen, &attr, &s)) goto sp;
-	if (namelen != 3 || casecmp(name, "MAP", 3)) goto se;
+	
+	if (parse_element(pos, eof, &name, &namelen, &attr, &pos)) {
+		pos++;
+		goto look_for_map;
+	}
+	
+	if (namelen != 3 || casecmp(name, "MAP", 3)) {
+		goto look_for_map;
+	}
+	
 	if (tag && *tag) {
-		if (!(al = get_attr_val(attr, "name"))) goto se;
+		al = get_attr_val(attr, "name");
+		if (!al) goto look_for_map;
+		
 		if (strcasecmp(al, tag)) {
 			mem_free(al);
-			goto se;
+			goto look_for_map;
 		}
+		
 		mem_free(al);
 	}
+	
 	*ml = getml(NULL);
-	se2:
-	while (s < eof && *s != '<') {
-		sp2:
-		s++;
+	
+look_for_link:
+	while (pos < eof && *pos != '<') {
+		pos++;
 	}
-	if (s >= eof) {
+	
+	if (pos >= eof) {
 		freeml(*ml);
 		mem_free(*menu);
 		return -1;
 	}
-	if (s + 2 <= eof && (s[1] == '!' || s[1] == '?')) {
-		s = skip_comment(s, eof);
-		goto se2;
+	
+	if (pos + 2 <= eof && (pos[1] == '!' || pos[1] == '?')) {
+		pos = skip_comment(pos, eof);
+		goto look_for_link;
 	}
-	if (parse_element(s, eof, &name, &namelen, &attr, &s)) goto sp2;
+	
+	if (parse_element(pos, eof, &name, &namelen, &attr, &pos)) {
+		pos++;
+		goto look_for_link;
+	}
+	
 	if (namelen == 1 && !casecmp(name, "A", 1)) {
-		unsigned char *ss;
+		unsigned char *pos2;
+		
 		label = init_str();
 		lblen = 0;
-		se3:
-		ss = s;
-		while (ss < eof && *ss != '<') ss++;
-		if (ss >= eof) {
+		
+look_for_tag:
+		pos2 = pos;
+		while (pos2 < eof && *pos2 != '<') {
+			pos2++;
+		}
+		
+		if (pos2 >= eof) {
 			mem_free(label);
 			freeml(*ml);
 			mem_free(*menu);
 			return -1;
 		}
-		add_bytes_to_str(&label, &lblen, s, ss - s);
-		s = ss;
-		if (s + 2 <= eof && (s[1] == '!' || s[1] == '?')) {
-			s = skip_comment(s, eof);
-			goto se3;
+		
+		add_bytes_to_str(&label, &lblen, pos, pos2 - pos);
+		
+		pos = pos2;
+		
+		if (pos + 2 <= eof && (pos[1] == '!' || pos[1] == '?')) {
+			pos = skip_comment(pos, eof);
+			goto look_for_tag;
 		}
-		if (parse_element(s, eof, NULL, NULL, NULL, &ss)) goto se3;
+		
+		if (parse_element(pos, eof, NULL, NULL, NULL, &pos2)) {
+			goto look_for_tag;
+		}
+		
 		if (!((namelen == 1 && !casecmp(name, "A", 1)) ||
 		      (namelen == 2 && !casecmp(name, "/A", 2)) ||
 		      (namelen == 3 && !casecmp(name, "MAP", 3)) ||
 		      (namelen == 4 && !casecmp(name, "/MAP", 4)) ||
 		      (namelen == 4 && !casecmp(name, "AREA", 4)) ||
 		      (namelen == 5 && !casecmp(name, "/AREA", 5)))) {
-				s = ss;
-				goto se3;
+			pos = pos2;
+			goto look_for_tag;
 		}
+		
 	} else if (namelen == 4 && !casecmp(name, "AREA", 4)) {
-		unsigned char *l = get_attr_val(attr, "alt");
-		if (l) label = convert_string(ct, l, strlen(l)), mem_free(l);
-		else label = NULL;
-	} else if (namelen == 4 && !casecmp(name, "/MAP", 4)) goto done;
-	else goto se2;
-	if (!(href = get_url_val(attr, "href"))) {
-		if (label) mem_free(label);
-		goto se2;
+		unsigned char *alt = get_attr_val(attr, "alt");
+		
+		if (alt) {
+			label = convert_string(ct, alt, strlen(alt));
+			mem_free(alt);
+		} else {
+			label = NULL;
+		}
+		
+	} else if (namelen == 4 && !casecmp(name, "/MAP", 4)) {
+		/* This is the only successful return from here! */
+		add_to_ml(ml, *menu, NULL);
+		return 0;
+		
+	} else {
+		goto look_for_link;
 	}
-	if (!(target = get_target(attr)) && !(target = stracpy(target_base)))
-		target = stracpy("");
-	if (!(ld = mem_alloc(sizeof(struct link_def)))) {
+	
+	target = get_target(attr);
+	if (!target) target = stracpy(target_base);
+	if (!target) target = stracpy("");
+	
+	ld = mem_alloc(sizeof(struct link_def));
+	if (!ld) {
 		if (label) mem_free(label);
-		mem_free(href);
 		mem_free(target);
-		goto se2;
+		goto look_for_link;
 	}
-	if (!(ld->link = join_urls(href_base, href))) {
-		mem_free(href);
+	
+	href = get_url_val(attr, "href");
+	if (!href) {
+		if (label) mem_free(label);
 		mem_free(target);
-		f:
 		mem_free(ld);
-		if (label) mem_free(label);
-		goto se2;
+		goto look_for_link;
 	}
+
+	ld->link = join_urls(href_base, href);
+	if (!ld->link) {
+		if (label) mem_free(label);
+		mem_free(target);
+		mem_free(ld);
+		mem_free(href);
+		goto look_for_link;
+	}
+	
 	mem_free(href);
+	
 	ld->target = target;
 	for (i = 0; i < nmenu; i++) {
 		struct link_def *ll = (*menu)[i].data;
-		if (!strcmp(ll->link, ld->link) && !strcmp(ll->target, ld->target)) {
+		
+		if (!strcmp(ll->link, ld->link) &&
+		    !strcmp(ll->target, ld->target)) {
 			mem_free(ld->link);
 			mem_free(ld->target);
-			goto f;
+			mem_free(ld);
+			if (label) mem_free(label);
+			goto look_for_link;
 		}
 	}
-	if (label) clr_spaces(label);
-	if (label && !*label) mem_free(label), label = NULL;
-	if (!label) if (!(label = stracpy(ld->link))) {
-		mem_free(href);
-		mem_free(target);
-		goto se2;
+	
+	if (label) {
+		clr_spaces(label);
+	
+		if (!*label) {
+			mem_free(label);
+			label = NULL;
+		}
 	}
-	if ((nm = mem_realloc(*menu, (nmenu + 2) * sizeof(struct menu_item)))) {
+	
+	if (!label) {
+		label = stracpy(ld->link);
+		if (!label) {
+			mem_free(href);
+			mem_free(target);
+			goto look_for_link;
+		}
+	}
+	
+	nm = mem_realloc(*menu, (nmenu + 2) * sizeof(struct menu_item));
+	if (nm) {
 		*menu = nm;
 		memset(&nm[nmenu], 0, 2 * sizeof(struct menu_item));
 		nm[nmenu].text = label;
@@ -2253,11 +2340,10 @@ int get_image_map(unsigned char *head, unsigned char *s, unsigned char *eof, uns
 		nm[nmenu].data = ld;
 		nm[++nmenu].text = NULL;
 	}
+	
 	add_to_ml(ml, ld, ld->link, ld->target, label, NULL);
-	goto se2;
-	done:
-	add_to_ml(ml, *menu, NULL);
-	return 0;
+
+	goto look_for_link;
 }
 
 void scan_http_equiv(unsigned char *s, unsigned char *eof, unsigned char **head, int *hdl, unsigned char **title)

@@ -1,3 +1,292 @@
+Thu Jul 15 17:51:32 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/renderer.c:
+
+	- Compilation fix.  
+
+Thu Jul 15 16:20:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/blacklist.c:
+
+	add_blacklist_entry(): Use get_blacklist_entry().  
+
+Thu Jul 15 16:19:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/blacklist.c:
+
+	add_blacklist_entry(): @b -> @entry 
+
+Thu Jul 15 16:18:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/blacklist.c:
+
+	del_blacklist_entry(): Use get_blacklist_entry() and cleanup.  
+
+Thu Jul 15 16:13:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: blacklist.c, blacklist.h:
+
+	Introduce SERVER_BLACKLIST_NONE for the code bloat.  
+
+Thu Jul 15 16:12:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: blacklist.c, blacklist.h:
+
+	get_blacklist_flags(): Return enum blacklist_flags.  
+
+Thu Jul 15 16:11:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/blacklist.c:
+
+	get_blacklist_flags(): Move assertions and blacklist lookup to
+	get_blacklist_entry().  
+
+Thu Jul 15 16:03:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/blacklist.c:
+
+	Make @blacklist static.  
+
+Thu Jul 15 16:01:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: blacklist.c, blacklist.h, http.c:
+
+	Server blacklist functions now take URI struct.  
+
+Thu Jul 15 15:54:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/hierbox.c, bfu/inpfield.c, bfu/listbox.c,
+	bfu/menu.c, bfu/text.c, config/dialogs.c, config/kbdbind.c,
+	config/kbdbind.h, dialogs/exmode.c, dialogs/info.c,
+	lowlevel/timer.c, sched/action.c, viewer/text/form.c,
+	viewer/text/view.c:
+
+	enum keymap: KM -> KEYMAP 
+
+Thu Jul 15 15:52:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: blacklist.h, http.c:
+
+	enum blacklist_flags: BL -> SERVER_BLACKLIST 
+
+Thu Jul 15 15:44:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/rewrite/rewrite.c, sched/event.c, sched/event.h,
+	scripting/guile/hooks.c, scripting/lua/core.c,
+	scripting/lua/hooks.c, scripting/perl/hooks.c:
+
+	enum evhook_status: s/EHS_/EVENT_HOOK_STATUS_/ 
+
+Thu Jul 15 15:38:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: event.c, tab.c, tab.h, window.c, window.h:
+
+	enum window_type: s/WT_/WINDOW_/ 
+
+Thu Jul 15 15:35:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/hierbox.c, bfu/inpfield.c, bfu/listbox.c,
+	bfu/menu.c, config/kbdbind.c, lowlevel/timer.c, osdep/os2/os2.c,
+	osdep/unix/unix.c, sched/session.c, terminal/event.c,
+	terminal/event.h, terminal/kbd.c, terminal/terminal.h,
+	terminal/window.c, viewer/text/form.c, viewer/text/view.c:
+
+	enum term_event_type: s/EV_/EVENT_/ 
+
+Thu Jul 15 15:24:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser/forms.c, viewer/text/form.c,
+	viewer/text/form.h, viewer/text/link.c:
+
+	enum form_method: s/FM/FORM_METHOD/ ... and remove double ;; from
+	last patch.  
+
+Thu Jul 15 15:20:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.c, document/document.h,
+	document/html/renderer.c, sched/session.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/search.c, viewer/text/textarea.c:
+
+	Move link->name and link->form_control members into a union.  
+	Introduce get_link_name() and get_link_form_control() macros to wrap
+	access.  It saves ~20kB when having fm an /. opened in two tabs.  
+	The link->form_control using code is now even uglier.  
+
+Thu Jul 15 14:03:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	done_listbox_item(): Assert listbox_item->child is empty.  
+
+Thu Jul 15 12:55:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/opttypes.c:
+
+	tree_dup(): Initialize option->root.  
+
+Thu Jul 15 12:50:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Revert last patch. It triggers 'Orphaned unregistered option ...'
+	errors.  
+
+Thu Jul 15 10:54:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	delete_option(): Double funny looking del_from_list() to make things
+	clearer.  
+
+Thu Jul 15 10:42:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/action.c,
+	viewer/text/view.c:
+
+	tab_menu(): Drop @term arg.  
+
+Thu Jul 15 08:42:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/group.c, document/html/tables.c,
+	document/html/parser/table.h, sched/connection.c,
+	viewer/text/form.c, viewer/text/link.c, viewer/text/search.c,
+	viewer/text/textarea.c, viewer/text/view.c:
+
+	Drop bunch of useless/obsolete comments.  
+
+Thu Jul 15 08:29:08 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	Remove a stale comment listing the callers of goto_current_link: 
+	submit_form_do has been renamed and there are now many other
+	callers.  
+
+Thu Jul 15 08:13:16 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/action.c,
+	viewer/text/view.c:
+
+	Add a |place_above_cursor| parameter to tab_menu to indicate whether
+	to draw the menu with the top at |y| or the bottom.  This allows us
+	to position the menu appropriately when one right-clicks the tab bar
+	and when one right-clicks the document canvas.  
+
+Thu Jul 15 08:03:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/action.c,
+	viewer/text/view.c:
+
+	Add |x| and |y| parameters to tab_menu instead of relying on callers 
+	to call set_window_ptr.  
+
+Thu Jul 15 07:38:14 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/action.c,
+	viewer/text/view.c:
+
+	Drop the |tab| parameter from tab_menu as the tab can be obtained
+	from |ses|.  Remember to update the prototype this time.  
+
+Thu Jul 15 07:30:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/menu.c:
+
+	In tab_menu, take |struct window *tab| directly instead of taking a
+	void pointer.  
+
+Thu Jul 15 07:13:04 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Give a NULL value for the |messages| field of the
+	options_listbox_ops and keybinding_listbox_ops structures.  
+
+Thu Jul 15 07:03:52 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/options.c:
+
+	In charset_list, do not initialise |i| twice. The extra
+	initialisation was introduced in src/dialogs/options.c 1.150.  
+
+Thu Jul 15 06:53:56 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	In get_image_text, fix the loop that truncates everything before and
+	including the last slash to delete the slash even if it is at the
+	start of the string.  
+
+Thu Jul 15 06:22:30 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	In get_image_text, adjust |len| by the difference between |start|
+	and |src| instead of calling strcspn a second time.  
+
+Thu Jul 15 00:49:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/parsetst.c:
+
+	Drop unneeded guards.  
+
+Thu Jul 15 00:45:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/: bookmarks.h, dialogs.h, backend/common.c,
+	backend/default.c, backend/xbel.c:
+
+	Remove unneeded guards and move decls after #includes.  
+
+Thu Jul 15 00:45:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/: dialogs.h, globhist.h:
+
+	Remove unneded #include. Move decls after #includes which seems to
+	be the norm.  
+
+Thu Jul 15 00:43:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: mailcap.h, mimetypes.h:
+
+	Remove unneeded guards.  
+
+Thu Jul 15 00:36:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/: bookmarks.c, bookmarks.h:
+
+	Drop return value from delete_bookmark().  
+
+Thu Jul 15 00:17:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/.cvsignore:
+
+	Ignore .html (test) and .patch (probe) files often found in (my)
+	src/ dir.  
+
+Wed Jul 14 22:16:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: menu.c, menu.h:
+
+	pass_uri_to_command(): @a -> @xxx, since it is not used.  
+
+Wed Jul 14 22:14:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Minor indentation and comment fixes.  
+
+Wed Jul 14 22:13:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: menu.c, menu.h:
+
+	dialog_goto_url(): char *url -> unsigned char *url.  
+
+Wed Jul 14 22:11:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: menu.c, menu.h:
+
+	tab_menu(): @d -> @tab_.  
+
 Wed Jul 14 22:08:30 2004  Laurent Monin <zas@norz.org>:
 
 	* src/dialogs/menu.c:

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.34 2003/11/22 19:07:11 jonas Exp $ */
+/* $Id: leds.c,v 1.35 2003/11/22 20:47:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,20 +111,10 @@ draw_leds(struct session *ses)
 	/* We need a working copy because changing members of @led_color is
 	 * bad since we might not be the only user. */
 	struct color_pair color;
-	struct color_pair *led_color;
-	int i, xpos, ypos;
-
-	if (!get_leds_enable()) return;
-
-	led_color = get_bfu_color(term, "status.status-text");
-	if (!led_color) {
-		if (!drawing && redraw_timer < 0)
-			redraw_timer = install_timer(100, redraw_leds, NULL);
-		return;
-	}
-
-	xpos = term->width - LEDS_COUNT - 3;
-	ypos = term->height - 1;
+	struct color_pair *led_color = NULL;
+	int i;
+	int xpos = term->width - LEDS_COUNT - 3;
+	int ypos = term->height - 1;
 
 	/* This should be done elsewhere, but this is very nice place where we
 	 * could do that easily. */
@@ -133,9 +123,18 @@ draw_leds(struct session *ses)
 
 		snprintf(s, 256, "[%d]", timer_duration);
 		l = strlen(s);
+		led_color = get_bfu_color(term, "status.status-text");
+		if (!led_color) goto end;
 
 		for (i = l - 1; i >= 0; i--)
 			draw_char(term, xpos - (l - i), ypos, s[i], 0, led_color);
+	}
+
+	if (!get_leds_enable()) return;
+
+	if (!led_color) {
+		led_color = get_bfu_color(term, "status.status-text");
+		if (!led_color) goto end;
 	}
 
 	/* We must shift the whole thing by one char to left, because we don't
@@ -156,6 +155,7 @@ draw_leds(struct session *ses)
 
 	draw_char(term, xpos + LEDS_COUNT + 1, ypos, ']', 0, led_color);
 
+end:
 	/* Redraw each 100ms. */
 	if (!drawing && redraw_timer < 0)
 		redraw_timer = install_timer(100, redraw_leds, NULL);
@@ -191,7 +191,8 @@ redraw_leds(void *xxx)
 {
 	struct session *ses;
 
-	if (!get_leds_enable()) {
+	if (!get_leds_enable()
+	    && get_opt_int("ui.timer.enable") != 2) {
 		redraw_timer = -1;
 		return;
 	}

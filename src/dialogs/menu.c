@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.377 2004/11/25 23:53:05 miciah Exp $ */
+/* $Id: menu.c,v 1.378 2004/11/27 16:03:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,9 +131,13 @@ exit_prog(struct session *ses, int query)
 {
 	assert(ses);
 
-	if (!ses->exit_query
-	    && (query || (ses->tab->term->next == ses->tab->term->prev
-			  && are_there_downloads()))) {
+	/* An exit query is in progress. */
+	if (ses->exit_query)
+		return;
+
+	/* Force a query if the last terminal is exiting with downloads still in
+	 * progress. */
+	if (query || (list_is_singleton(terminals) && are_there_downloads())) {
 		query_exit(ses);
 		return;
 	}

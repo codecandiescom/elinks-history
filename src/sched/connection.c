@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.169 2004/04/29 23:22:14 jonas Exp $ */
+/* $Id: connection.c,v 1.170 2004/05/28 21:16:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -424,8 +424,7 @@ init_keepalive_connection(struct connection *conn, ttime timeout)
 	struct keepalive_connection *keep_conn;
 	struct uri *uri = conn->uri;
 	unsigned char *host = uri->user ? uri->user : uri->host;
-	int hostlen  = (uri->port ? uri->port + uri->portlen - host
-				  : uri->host + uri->hostlen - host);
+	int hostlen = get_uri_hostlen(uri, host);
 
 	assert(uri->host);
 	if_assert_failed return NULL;
@@ -452,8 +451,7 @@ get_keepalive_connection(struct connection *conn)
 	protocol_handler *handler = get_protocol_handler(uri->protocol);
 	int port = get_uri_port(uri);
 	unsigned char *host = uri->user ? uri->user : uri->host;
-	int hostlen  = (uri->port ? uri->port + uri->portlen - host
-				  : uri->host + uri->hostlen - host);
+	int hostlen = get_uri_hostlen(uri, host);
 
 	if (!uri->host) return NULL;
 

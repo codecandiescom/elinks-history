@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.102 2004/05/28 16:50:43 jonas Exp $ */
+/* $Id: uri.h,v 1.103 2004/05/28 21:16:54 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -249,6 +249,13 @@ static inline int
 end_of_dir(unsigned char c)
 {
 	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
+}
+
+static inline int
+get_uri_hostlen(struct uri *uri, unsigned char *from)
+{
+	return uri->port ? uri->port + uri->portlen - from
+			 : uri->host + uri->hostlen - from;
 }
 
 #endif

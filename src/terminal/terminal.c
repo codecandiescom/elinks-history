@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.58 2004/04/14 05:50:10 jonas Exp $ */
+/* $Id: terminal.c,v 1.59 2004/04/14 21:53:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,8 +81,12 @@ redraw_terminal_ev(struct terminal *term, int e)
 	clear_terminal(term);
 	term->redrawing = 2;
 
+	/* We want to propagate EV_RESIZE even to inactive tabs! Nothing wrong
+	 * will get drawn (in the final result) as the active tab is always the
+	 * first one, thus will be drawn last here. Thanks, Witek!
+	 * --pasky */
 	foreachback (win, term->windows)
-		if (!inactive_tab(win))
+		if (!inactive_tab(win) || e == EV_RESIZE)
 			win->handler(win, &ev, 0);
 
 	term->redrawing = 0;

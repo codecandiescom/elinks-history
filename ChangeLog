@@ -1,3 +1,39 @@
+Wed Aug  7 00:18:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/user.c:
+
+	One innocent note...  
+
+Wed Aug  7 00:09:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, protocol/user.c:
+
+	Support for %<letter> expansions in user protocol handlers.  
+
+Tue Aug  6 23:26:31 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, protocol/Makefile.am, protocol/mailto.c,
+	protocol/mailto.h, protocol/url.c, protocol/user.c,
+	protocol/user.h:
+
+	protocol/mailto.* -> protocol/user.* 
+
+Tue Aug  6 23:19:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL, contrib/conv/conf-links2elinks.awk,
+	contrib/conv/conf-links2elinks.pl:
+
+	conf-links2elinks.awk -> conf-links2elinks.pl 
+
+Tue Aug  6 22:54:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/conf.c, src/config/options.c, src/protocol/types.c,
+	contrib/conv/conf-links2elinks.awk:
+
+	Use '*' in place of '.' in extensions and mime types ('-' was
+	substituting char in extensions before, you MUST change that in your
+	config files).  
+
 Tue Aug  6 10:10:48 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/lua/hooks.c:

@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.31 2004/05/25 16:29:00 jonas Exp $ */
+/* $Id: color.h,v 1.32 2004/06/16 13:53:21 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -37,8 +37,10 @@ enum color_flags {
 	 * contrast. */
 	COLOR_INCREASE_CONTRAST = 4,
 
-	/* Adjust the contrast if the back- and foregroundcolor is equal. */
+	/* Adjust the contrast if the back- and foregroundcolor is equal.
+	 * If inverting should be done also pass the latter flag. */
 	COLOR_ENSURE_CONTRAST = 8,
+	COLOR_ENSURE_INVERTED_CONTRAST = 16,
 };
 
 enum color_mode {

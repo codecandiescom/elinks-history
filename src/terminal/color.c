@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.73 2004/05/25 18:05:49 jonas Exp $ */
+/* $Id: color.c,v 1.74 2004/06/16 13:53:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,7 +208,14 @@ set_term_color16(struct screen_char *schar, enum color_flags flags,
 	/* Adjusts the foreground color to be more visible. */
 	if ((flags & COLOR_INCREASE_CONTRAST)
 	    || (bg == fg && (flags & COLOR_ENSURE_CONTRAST))) {
-		fg = fg_color[fg][bg];
+		if (flags & COLOR_ENSURE_INVERTED_CONTRAST) {
+			unsigned char contrastbg = fg_color[fg][bg];
+
+			fg = bg;
+			bg = contrastbg;
+		} else {
+			fg = fg_color[fg][bg];
+		}
 	}
 
 	if (fg & SCREEN_ATTR_BOLD) {

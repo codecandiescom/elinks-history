@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.18 2004/03/03 17:42:20 jonas Exp $ */
+/* $Id: view.h,v 1.19 2004/03/03 18:03:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
@@ -33,7 +33,9 @@ struct document_view {
 };
 
 #define get_current_link(doc_view) \
-	(((doc_view) && (doc_view)->vs->current_link != -1) \
+	(((doc_view) \
+	  && (doc_view)->vs->current_link >= 0 \
+	  && (doc_view)->vs->current_link < (doc_view)->document->nlinks) \
 	? &(doc_view)->document->links[(doc_view)->vs->current_link] : NULL)
 
 #endif

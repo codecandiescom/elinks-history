@@ -1973,7 +1973,7 @@ msgstr "Gwarancja kontrastu"
 
 #: src/config/options.c:1373
 msgid "Makes sure that the back- and foreground color is never equal."
-msgstr "Zapewnia, ¿e kolor t³a nigdy nie jest identyczny z kolorem tekstu.""
+msgstr "Zapewnia, ¿e kolor t³a nigdy nie jest identyczny z kolorem tekstu."
 
 #. If you change this please also change ACT_DOCUMENT_COLORS action
 #. * handling.

@@ -1,4 +1,4 @@
-/* $Id: ecmascript.h,v 1.2 2004/09/22 21:57:55 pasky Exp $ */
+/* $Id: ecmascript.h,v 1.3 2004/09/23 13:56:24 jonas Exp $ */
 
 #ifndef EL__ECMASCRIPT_ECMASCRIPT_H
 #define EL__ECMASCRIPT_ECMASCRIPT_H
@@ -11,6 +11,7 @@
 
 struct document_view;
 struct string;
+struct uri;
 
 struct ecmascript_interpreter {
 	struct document_view *doc_view;
@@ -28,6 +29,10 @@ struct ecmascript_interpreter *ecmascript_get_interpreter(struct document_view *
 void ecmascript_put_interpreter(struct ecmascript_interpreter *interpreter);
 
 unsigned char *ecmascript_eval_stringback(struct ecmascript_interpreter *interpreter, struct string *code);
+
+/* Takes line with the syntax javascript:<ecmascript code>. Activated when user
+ * follows a link with this synstax. */
+void ecmascript_protocol_handler(struct session *ses, struct uri *uri);
 
 extern struct module ecmascript_module;
 

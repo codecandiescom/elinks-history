@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.17 2003/08/01 15:14:22 jonas Exp $ */
+/* $Id: leds.c,v 1.18 2003/08/01 15:17:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,8 +166,7 @@ register_led(int number)
 void
 unregister_led(struct led *led)
 {
-	if (!led->__used)
-		internal("Attempted to unregister unused led!");
+	assertm(led->__used, "Attempted to unregister unused led!");
 	led->__used = 0;
 	led->value = '-';
 	led->color = 070;

@@ -1,3 +1,256 @@
+Sun Jun 15 15:20:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre1 
+
+Sun Jun 15 15:10:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/book/Makefile.am:
+
+	Typo fix.  
+
+Sun Jun 15 15:04:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Upgrade myself to doc/book keeper.  
+
+Sun Jun 15 15:01:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/setup.h:
+
+	ELINKS_CVSWEB_URL changed to http://cvsweb.elinks.or.cz/ ;-).  
+
+Sun Jun 15 14:39:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: download.c, location.c, location.h, session.c:
+
+	Reverted the last Jonas' patch, it ignored my remarks --- the
+	direction argument is reverse than how it is commonly used and
+	set_session_location() doesn't belong to sched/location.*.  
+
+Sun Jun 15 14:35:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/: elinks.conf.5, elinkskeys.5:
+
+	Oops. DISABLED notices removed.  
+
+Sun Jun 15 14:28:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	First version using help2doc so a lot of changes. It's maybe needs
+	some more work but _template_ and language help printing makes
+	updating a must.  
+
+Sun Jun 15 14:24:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/elinks.1.in:
+
+	First version using the output from help2doc.  
+
+Sun Jun 15 14:19:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Improve the description of ui.window_title so it contains the word
+	xterm. Idea by Jeremy C. Reed <reed@reedmedia.net> 
+
+Sun Jun 15 14:05:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, location.c, location.h, session.c:
+
+	Encapsulate setting of the session location.  
+
+Sun Jun 15 13:59:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Tadaaaaaaaaaaaaaaaaam. Use go_(un)back() in the loops traversing
+	history/unhistory when moving by n>1 steps, instad of just manually
+	moving the locations between lists. Accidentally, this also fixes
+	the famous Bug 114. Good, time to start huge celebration! 0.5pre1 on
+	its way.  
+
+Sun Jun 15 13:59:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	No need to access session variables through task 
+
+Sun Jun 15 12:59:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	First Tab, then Tab in background.  
+
+Sun Jun 15 12:38:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/colors.c, document/html/parser.c,
+	util/fastfind.c, util/fastfind.h:
+
+	fastfind_terminate() -> fastfind_done() 
+
+Sun Jun 15 12:36:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	Finish the trampoline -> leafset change.  
+
+Sun Jun 15 12:20:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Compilation fix.  
+
+Sun Jun 15 12:07:19 2003  Laurent Monin <zas@norz.org>:
+
+	* test/color.html:
+
+	Color chart was added.  
+
+Sun Jun 15 11:55:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	Minor cleanup of fastfind_node_compress().  
+
+Sun Jun 15 11:29:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	Minor tidyup.  
+
+Sun Jun 15 11:25:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	_Some_ current -> leafset changes.  
+
+Sun Jun 15 11:18:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, document/html/parser.c, document/html/parser.h:
+
+	free_tags_cache -> free_tags_lookup 
+
+Sun Jun 15 11:18:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	Comment fix.  
+
+Sun Jun 15 11:17:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	trampoline -> leafset. Let's see how long _this_ name will stand :).  
+
+Sun Jun 15 11:14:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	fastfind_node_compress() now takes directly @current.  
+
+Sun Jun 15 11:13:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/colors.c:
+
+	Removed useless ff_info_colors NULL initialization. It's static.
+	It's static. Yadda yadda. It's static ;-).  
+
+Sun Jun 15 11:09:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	Compilation fix.  
+
+Sun Jun 15 11:06:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/parser.c, util/fastfind.c, util/fastfind.h,
+	document/html/colors.c:
+
+	fastfind_index_compress() -> fastfind_node_compress(). Support for
+	NULL @current removed. fastfind_index_compress() is now just a
+	wrapper around fastfind_node_compress() passing it the
+	@handle.root_trampoline as @current. fastfind_index_compress() now
+	also takes only the @fastfind_handle argument.  
+
+Sun Jun 15 11:06:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, document/html/colors.c, document/html/colors.h:
+
+	Colors lookup is now fastfind enabled ;).  
+
+Sun Jun 15 10:55:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Removed useless NULL initialization of ff_info_tags (it's static,
+	thus preinitialized).  
+
+Sun Jun 15 10:54:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	ff_elt* -> ff_node* 
+
+Sun Jun 15 10:48:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	line -> trampoline.. a bit longer and sounding perhaps a bit weird,
+	but hopefully MUCH less confusing. All identifiers containing that
+	token converted.  
+
+Sun Jun 15 10:43:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Initialize struct fastfind_info * to NULL, since it may not be
+	modified.  
+
+Sun Jun 15 10:01:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Now useless #ifdef/#endif was removed, it prevented usage of
+	fastfind...  
+
+Sun Jun 15 02:00:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Cleanup the long help print function. Adding both language and
+	_template_ support. Sorry pasky, this ended up as an all or nothing
+	config.  
+
+Sun Jun 15 00:21:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Fix for bug 200 was buggy, this one should fix it, please check.  
+
+Sat Jun 14 23:42:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: osdep/os_dep.c, terminal/tab.c, terminal/tab.h:
+
+	stay_here -> in_background. Suggestion by Jonas.  
+
+Sat Jun 14 22:36:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	Tried to guess the algorithm behind fastfind. May not be accurate,
+	please correct. Wasn't that easy to figure out due to the funny
+	alphabets translations. Please document your code better, zas :-).  
+
+Sat Jun 14 22:31:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Put short help printing in separate function and clean it up.  
+
 Sat Jun 14 22:07:15 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/fastfind.c:

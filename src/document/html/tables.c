@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.356 2004/07/08 12:44:32 jonas Exp $ */
+/* $Id: tables.c,v 1.357 2004/07/08 13:32:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -848,6 +848,10 @@ draw_table_cells(struct table *table, int x, int y)
 	if (table->fragment_id)
 		add_fragment_identifier(table->part, table->fragment_id);
 
+	/* Expand using the background color of the ``parent context'' all the
+	 * way down the start of the left edge of the table. */
+	expand_lines(table->part, x - 1, y, table->real_height);
+
 	xp = x + table_frames.left;
 	for (col = 0; col < table->cols; col++) {
 		int yp = y + table_frames.top;
@@ -872,6 +876,11 @@ draw_table_cells(struct table *table, int x, int y)
 			xp += table->cols_widths[col] + has_vline_width(table, col + 1);
 		}
 	}
+
+	/* Finish the table drawing by aligning the right and bottom edge of
+	 * the table */
+	par_format.bgcolor = table->bgcolor;
+	expand_lines(table->part, x + table->real_width - 1, y, table->real_height);
 
 	/* Do a sanity check whether the height is correct */
 	check_table_height(table, &table_frames, y);

@@ -1,3 +1,59 @@
+Sun Mar 28 19:01:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file/file.c:
+
+	Fix: do not show .. for / directory.  
+
+Sun Mar 28 18:37:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	One more use for table_frames stuff.  
+
+Sun Mar 28 18:29:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Use bitfields in struct table_frames.  
+
+Sun Mar 28 18:25:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@tf -> @table_frames.  
+
+Sun Mar 28 18:23:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Assert @result too in get_table_frames().  
+
+Sun Mar 28 18:21:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Struct table_frames was introduced, it helps to get frames info from
+	table frame fields through new get_table_frames() function.  
+
+Sun Mar 28 18:00:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Minor code cleanup.  
+
+Sun Mar 28 17:58:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Table frames related calculations cleanup.  
+
+Sun Mar 28 17:48:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Unwanted background color appearing at left of tables was fixed (bug
+	398). Patch by Jonas.  
+
 Sat Mar 27 16:31:21 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/bfu/hierbox.c:

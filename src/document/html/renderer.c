@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.310 2003/10/18 17:04:52 jonas Exp $ */
+/* $Id: renderer.c,v 1.311 2003/10/18 17:10:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -296,17 +296,17 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 		static enum color_mode color_mode;
 		static enum color_flags color_flags = DEFAULT_COLOR_FLAGS;
 
-		if (part->document) {
-			color_mode = part->document->opt.color_mode;
+		if (d_opt) {
+			color_mode = d_opt->color_mode;
 			color_flags = 0;
 
-			if (!part->document->opt.underline)
+			if (!d_opt->underline)
 				color_flags |= COLOR_ENHANCE_UNDERLINE;
 
-			if (!part->document->opt.allow_dark_on_black)
+			if (!d_opt->allow_dark_on_black)
 				color_flags |= COLOR_INCREASE_CONTRAST;
 
-			if (part->document->opt.ensure_contrast)
+			if (d_opt->ensure_contrast)
 				color_flags |= COLOR_ENSURE_CONTRAST;
 		}
 

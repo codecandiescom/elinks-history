@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.211 2005/03/27 21:43:59 jonas Exp $ */
+/* $Id: ftp.c,v 1.212 2005/03/27 21:57:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1030,13 +1030,10 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 		  int colorize_dir, unsigned char *dircolor,
 		  struct ftp_file_info *ftp_info)
 {
-	int is_dir = 0;
 	struct string string;
 	unsigned char permissions[10] = "---------";
 
 	if (!init_string(&string)) return -1;
-
-	is_dir  = ftp_info->type == FTP_FILE_DIRECTORY;
 
 	add_char_to_string(&string, ftp_info->type);
 
@@ -1094,7 +1091,7 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 
 	add_char_to_string(&string, ' ');
 
-	if (is_dir && colorize_dir) {
+	if (ftp_info->type == FTP_FILE_DIRECTORY && colorize_dir) {
 		add_to_string(&string, "<font color=\"");
 		add_to_string(&string, dircolor);
 		add_to_string(&string, "\"><b>");
@@ -1102,14 +1099,16 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 
 	add_to_string(&string, "<a href=\"");
 	add_html_to_string(&string, ftp_info->name.source, ftp_info->name.length);
-	if (is_dir)
+	if (ftp_info->type == FTP_FILE_DIRECTORY)
 		add_char_to_string(&string, '/');
 	add_to_string(&string, "\">");
 	add_html_to_string(&string, ftp_info->name.source, ftp_info->name.length);
 	add_to_string(&string, "</a>");
-	if (is_dir && colorize_dir) {
+
+	if (ftp_info->type == FTP_FILE_DIRECTORY && colorize_dir) {
 		add_to_string(&string, "</b></font>");
 	}
+
 	if (ftp_info->symlink.length) {
 		add_to_string(&string, " -&gt; ");
 		add_html_to_string(&string, ftp_info->symlink.source,

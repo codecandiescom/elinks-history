@@ -13,7 +13,7 @@ the newly added 256 color mode.
 For 16 colors the adjustment is done by doing a few lookups in a hard coded
 color table. This is fine when there are only 16 * 8 fore- and background
 combinations but would probably be too painful for 256 * 256 combinations. Also
-the hardcoded table - although doing a good job - does not leave much up for the
+the hard-coded table - although doing a good job - does not leave much up for the
 users preferences. So the second goal is to also make the adjustment more
 configurable so people with color deficiencies can tune the rendering to their
 needs.
@@ -30,10 +30,10 @@ less discernible rather than the individual colors themselves.
 
 Ie. current allow/forbid dark on black colors will be really simple and far
 more universal.  Zas is currently researching about rules to preserve page
-readibility by eliminating bad colors combinations (like dark red on dark red,
+readability by eliminating bad colors combinations (like dark red on dark red,
 or even primary red / primary blue, yellow on white, green on grey, ...) One
 cool side effect, is that we can adapt a color model to take in account some
-user's visual deficience (ie. rule like "do not use red colors at all", "forbid
+user's visual deficiencies (ie. rule like "do not use red colors at all", "forbid
 orange on red", ...) Another color model may take in account screen environment:
 "ensure very high lightness contrast".
 
@@ -261,10 +261,10 @@ Jonas: I agree that the color adjustment should be optional like the current
 one. Especially since the development of this will probably require quite a lot
 of tuning before being really usable. In the future with some kind of CSS
 implementation the user will have further possibility to override any unreadable
-styling. Whether this kind of fixup will still be necessary only time will show.
+styling. Whether this kind of fix-up will still be necessary only time will show.
 Anyway since even 256 colors are pretty limited 
 
-Of course some people want to always force readibility over the web page's
+Of course some people want to always force readability over the web page's
 author color choice (there is some really sick stuff color-wise around the web;
 and of course there are the "secret" black-on-black or white-on-white texts ;-),
 and people with all sorts of color disabilities (which are quite frequent in the
@@ -281,7 +281,7 @@ Below are listed links to documents that have inspired this work.
 
 http://citeseer.nj.nec.com/macintyre91constraintbased.html
 
-	Selecting harmonious colours for traditional window systems can be a
+	Selecting harmonious colors for traditional window systems can be a
 	difficult and frustrating endeavor....
 
 http://130.113.54.154/~monger/hsl-rgb.html
@@ -294,5 +294,5 @@ http://www.lighthouse.org/color_contrast.htm
 
 	Basic introduction to usage of HSL colors.
 
-$Id: color-model.txt,v 1.10 2003/10/13 18:55:36 fabio Exp $
+$Id: color-model.txt,v 1.11 2003/10/19 22:29:36 jonas Exp $
 vim: textwidth=80

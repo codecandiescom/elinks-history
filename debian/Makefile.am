@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2005/01/11 00:02:17 jonas Exp $
+## $Id: Makefile.am,v 1.2 2005/01/11 00:05:32 jonas Exp $
 
 EXTRA_DIST = \
  README.Debian \
@@ -8,7 +8,6 @@ EXTRA_DIST = \
  control \
  control.in \
  copyright \
- elinks.conf \
  elinks.desktop \
  elinks.postinst \
  elinks.preinst \

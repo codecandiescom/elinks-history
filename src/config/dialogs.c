@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.167 2004/05/04 01:43:40 jonas Exp $ */
+/* $Id: dialogs.c,v 1.168 2004/05/14 14:59:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,7 +437,7 @@ invalid_option:
 
 	input_field(term, NULL, 1, N_("Add option"), N_("Name"),
 		N_("OK"), N_("Cancel"), option, NULL,
-		MAX_STR_LEN, "", 0, 0, NULL,
+		MAX_STR_LEN, "", 0, 0, check_nonempty,
 		add_option_to_tree, NULL);
 	return 0;
 }

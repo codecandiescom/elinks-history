@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.87 2002/12/26 21:47:09 pasky Exp $ */
+/* $Id: http.c,v 1.88 2003/01/01 01:01:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,9 @@
 #endif
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
+#endif
+#ifdef HAVE_LIMITS_H
+#include <limits.h>
 #endif
 
 #include "elinks.h"

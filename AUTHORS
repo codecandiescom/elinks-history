@@ -151,6 +151,7 @@ Fabrice Haberer-Proust <fric@gmx.li>
 
 Felix von Leitner <felix@convergence.de>
 	Set file date/time when downloading
+	Random fixes
 
 Flemming Frandsen <ff@partyticket.net>
 	Random hacking
@@ -417,4 +418,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.109 2003/01/01 00:51:14 pasky Exp $
+$Id: AUTHORS,v 1.110 2003/01/01 01:01:30 pasky Exp $

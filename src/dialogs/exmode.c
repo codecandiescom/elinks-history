@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.9 2004/01/26 05:45:22 jonas Exp $ */
+/* $Id: exmode.c,v 1.10 2004/01/26 05:50:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 
 #include "bfu/dialog.h"
 #include "bfu/inpfield.h"
+#include "bfu/inphist.h"
 #include "bfu/style.h"
 #include "bfu/widget.h"
 #include "config/kbdbind.h"
@@ -43,6 +44,13 @@ struct exmode_data {
 	unsigned char buffer[EXMODE_BUFFER_SIZE];
 };
 
+struct input_history exmode_history = {
+	/* items: */	{ D_LIST_HEAD(exmode_history.entries) },
+	/* size: */	0,
+	/* dirty: */	0,
+	/* nosave: */	0,
+};
+
 
 static void
 exmode_exec(struct exmode_data *data)
@@ -56,6 +64,10 @@ exmode_exec(struct exmode_data *data)
 	unsigned char *command = data->dlg_data->widgets_data->cdata;
 	unsigned char *end = command;
 	unsigned char end_char = 0;
+
+	if (!*command) return;
+
+	add_to_input_history(&exmode_history, command, 1);
 
 	while (*end && !isspace(*end)) end++;
 	if (*end) {
@@ -142,8 +154,6 @@ exmode_start(struct session *ses)
 
 	assert(ses);
 
-	/* TODO: History */
-
 	data = mem_calloc(1, sizeof(struct exmode_data));
 	if (!data) return;
 
@@ -154,7 +164,7 @@ exmode_start(struct session *ses)
 	data->dlg.udata2 = ses;
 	data->dlg.widgets->info.field.float_label = 1;
 
-	add_dlg_field(&data->dlg, ":", 0, 0, NULL, 80, data->buffer, NULL);
+	add_dlg_field(&data->dlg, ":", 0, 0, NULL, 80, data->buffer, &exmode_history);
 
 	dlg_data = do_dialog(ses->tab->term, &data->dlg, getml(data, NULL));
 	if (dlg_data) data->dlg_data = dlg_data;

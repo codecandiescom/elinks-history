@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.285 2004/01/25 13:17:22 jonas Exp $ */
+/* $Id: menu.c,v 1.286 2004/01/26 05:50:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "config/urlhist.h"
 #include "document/document.h"
 #include "document/view.h"
+#include "dialogs/exmode.h"
 #include "dialogs/info.h"
 #include "dialogs/menu.h"
 #include "dialogs/options.h"
@@ -488,6 +489,7 @@ free_history_lists(void)
 {
 	free_list(goto_url_history.entries);
 	free_list(file_history.entries);
+	free_list(exmode_history.entries);
 #ifdef HAVE_SCRIPTING
 	trigger_event_name("free-history");
 #endif

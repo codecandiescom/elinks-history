@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.37 2003/12/13 00:32:42 jonas Exp $ */
+/* $Id: options.inc,v 1.38 2003/12/18 20:34:18 fabio Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -236,7 +236,7 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_INT("document.browse.links", N_("Typeahead error handling"),
 		"typeahead_error", 0, 0, 2, 2,
-		N_("How to handler errors when typeahead doesn't match any links:\n"
+		N_("How to handle errors when typeahead doesn't match any links:\n"
 		"0 means do nothing\n"
 		"1 means beep the terminal\n"
 		"2 means pop up message box")),

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.20 2002/11/29 18:01:52 pasky Exp $ */
+/* $Id: tables.c,v 1.21 2002/12/01 19:21:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -769,17 +769,6 @@ check_cell_widths(struct table *t)
 	}
 }
 
-
-#define g_c_w(cc) \
-do { \
-	struct table_cell *c = cc; \
-	if (!c->start) continue; \
-	c->link_num = nl; \
-	get_cell_width(c->start, c->end, t->cellpd, 0, 0, \
-		       &c->min_width, &c->max_width, nl, &nl); \
-} while (0)
-
-
 void
 get_cell_widths(struct table *t)
 {
@@ -788,12 +777,24 @@ get_cell_widths(struct table *t)
 
 	if (!d_opt->table_order)
 		for (j = 0; j < t->y; j++)
-			for (i = 0; i < t->x; i++)
-				g_c_w(CELL(t, i, j));
+			for (i = 0; i < t->x; i++) {
+				struct table_cell *c = CELL(t, i, j);
+
+				if (!c->start) continue;
+				c->link_num = nl;
+				get_cell_width(c->start, c->end, t->cellpd, 0, 0,
+					       &c->min_width, &c->max_width, nl, &nl);
+			}
 	else
 		for (i = 0; i < t->x; i++)
-			for (j = 0; j < t->y; j++)
-				g_c_w(CELL(t, i, j));
+			for (j = 0; j < t->y; j++) {
+				struct table_cell *c = CELL(t, i, j);
+
+				if (!c->start) continue;
+				c->link_num = nl;
+				get_cell_width(c->start, c->end, t->cellpd, 0, 0,
+					       &c->min_width, &c->max_width, nl, &nl);
+			}
 
 	t->link_num = nl;
 }
@@ -1410,14 +1411,16 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				cell->ypos = yp;
 				cell->xw = xw;
 				cell->yw = yw;
-
-				for (yt = 0; yt < p->y; yt++) {
-					expand_lines(t->p, yp + yt);
-					expand_line(t->p, yp + yt, xp + t->w_c[i]);
+				
+				if (p) {
+					for (yt = 0; yt < p->y; yt++) {
+						expand_lines(t->p, yp + yt);
+						expand_line(t->p, yp + yt, xp + t->w_c[i]);
+					}
+					mem_free(p);
 				}
 
 				kill_html_stack_item(&html_top);
-				mem_free(p);
 			}
 
 			cell->xpos = xp;

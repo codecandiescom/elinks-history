@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.132 2004/04/13 16:20:59 jonas Exp $ */
+/* $Id: inpfield.c,v 1.133 2004/04/13 16:30:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,8 +87,26 @@ dlg_format_field(struct terminal *term,
 		 struct widget_data *widget_data,
 		 int x, int *y, int w, int *rw, enum format_align align)
 {
+	static int max_label_width;
+	static int *prev_y; /* Assert the uniqueness of y */
 	unsigned char *label = widget_data->widget->text;
 	struct color_pair *text_color = NULL;
+	int label_width = 0;
+
+	if (widget_data->widget->info.field.float_label && label) {
+		label_width = strlen(label);
+		if (prev_y == y) {
+			int_lower_bound(&max_label_width, label_width);
+		} else {
+			max_label_width = label_width;
+			prev_y = y;
+		}
+
+		/* Right align the floating label up against the
+		 * input field */
+		x += max_label_width - label_width;
+		w -= max_label_width - label_width;
+	}
 
 	if (label) {
 		if (term) text_color = get_bfu_color(term, "dialog.text");
@@ -99,8 +117,6 @@ dlg_format_field(struct terminal *term,
 	/* XXX: We want the field and label on the same line if the terminal
 	 * width allows it. */
 	if (widget_data->widget->info.field.float_label && label) {
-		int label_width = strlen(label);
-
 		(*y)--;
 		dlg_format_text_do(term, ":", x + label_width, y, w, rw, text_color, AL_LEFT);
 

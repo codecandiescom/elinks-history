@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.92 2003/11/18 05:51:36 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.93 2003/11/20 01:14:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,8 +147,7 @@ delete_bookmark(struct bookmark *bm)
 	bookmarks_dirty = 1;
 
 	/* Now wipe the bookmark */
-	del_from_list(bm->box_item);
-	mem_free(bm->box_item);
+	done_browser_box(&bookmark_browser, bm->box_item);
 
 	mem_free(bm->title);
 	mem_free(bm->url);

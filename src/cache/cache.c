@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.98 2003/11/19 01:45:04 jonas Exp $ */
+/* $Id: cache.c,v 1.99 2003/11/20 01:14:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -463,11 +463,7 @@ delete_cache_entry(struct cache_entry *ce)
 	delete_entry_content(ce);
 	del_from_list(ce);
 
-	if (ce->box_item) {
-		del_from_list(ce->box_item);
-		mem_free(ce->box_item);
-	}
-
+	if (ce->box_item) done_browser_box(&cache_browser, ce->box_item);
 	if (struri(ce->uri)) mem_free(struri(ce->uri));
 	if (ce->head) mem_free(ce->head);
 	if (ce->last_modified) mem_free(ce->last_modified);

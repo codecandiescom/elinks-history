@@ -1,15 +1,17 @@
-/* $Id: dialogs.h,v 1.8 2003/11/08 05:21:14 miciah Exp $ */
+/* $Id: dialogs.h,v 1.9 2003/11/20 01:14:16 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
 
 #include "bfu/dialog.h"
+#include "bfu/hierbox.h"
 #include "terminal/terminal.h"
 #include "sched/session.h"
 
 /* Search memorization */
 extern unsigned char *bm_last_searched_name;
 extern unsigned char *bm_last_searched_url;
+extern struct hierbox_browser bookmark_browser;
 
 /* Launch the bookmark manager */
 void menu_bookmark_manager(struct terminal *term, void *fcp,

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.98 2003/11/19 01:55:15 jonas Exp $ */
+/* $Id: cookies.c,v 1.99 2003/11/20 01:14:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,11 +135,7 @@ static void accept_cookie(struct cookie *);
 static void
 free_cookie(struct cookie *c)
 {
-	if (c->box_item) {
-		del_from_list(c->box_item);
-		mem_free(c->box_item);
-	}
-
+	if (c->box_item) done_browser_box(&cookie_browser, c->box_item);
 	if (c->name) mem_free(c->name);
 	if (c->value) mem_free(c->value);
 	if (c->server) mem_free(c->server);

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.99 2003/11/18 22:46:17 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.100 2003/11/20 01:14:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 
 #include "bfu/listbox.h"
 #include "config/conf.h"
+#include "config/dialogs.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
@@ -98,16 +99,15 @@ boom:
 		kb->box_item->type = BI_LEAF;
 		kb->box_item->depth = keymap->depth + 1;
 		kb->box_item->box = &kbdbind_boxes;
+
+		update_hierbox_browser(&keybinding_browser);
 	}
 }
 
 void
 free_keybinding(struct keybinding *kb)
 {
-	if (kb->box_item) {
-		del_from_list(kb->box_item);
-		mem_free(kb->box_item);
-	}
+	if (kb->box_item) done_browser_box(&keybinding_browser, kb->box_item);
 #ifdef HAVE_SCRIPTING
 /* TODO: unref function must be implemented. */
 /*	if (kb->func_ref != EVENT_NONE)

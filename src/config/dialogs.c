@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.116 2003/11/19 01:45:05 jonas Exp $ */
+/* $Id: dialogs.c,v 1.117 2003/11/20 01:14:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@
 
 static INIT_LIST_HEAD(option_dialog_list);
 
-static struct hierbox_browser option_browser = {
+struct hierbox_browser option_browser = {
 	&option_boxes,
 	NULL,	/* Set in menu_options_manager() */
 	&option_dialog_list,
@@ -43,7 +43,7 @@ static struct hierbox_browser option_browser = {
 
 static INIT_LIST_HEAD(keybinding_dialog_list);
 
-static struct hierbox_browser keybinding_browser = {
+struct hierbox_browser keybinding_browser = {
 	&kbdbind_boxes,
 	&kbdbind_box_items,
 	&keybinding_dialog_list,

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.402 2003/11/18 21:52:05 pasky Exp $ */
+/* $Id: options.c,v 1.403 2003/11/20 01:14:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "main.h" /* shrink_memory() */
 #include "bfu/listbox.h"
 #include "config/conf.h"
+#include "config/dialogs.h"
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "cache/cache.h"
@@ -330,6 +331,8 @@ init_option_listbox_item(struct option *option)
 	box->udata = option;
 	box->type = (option->type == OPT_TREE) ? BI_FOLDER : BI_LEAF;
 
+	update_hierbox_browser(&option_browser);
+
 	return box;
 }
 
@@ -445,11 +448,8 @@ delete_option_do(struct option *option, int recursive)
 			break;
 	}
 
-	if (option->box_item) {
-		if (option->box_item->next)
-			del_from_list(option->box_item);
-		mem_free(option->box_item);
-	}
+	if (option->box_item)
+		done_browser_box(&option_browser, option->box_item);
 
 	if (option->flags & OPT_ALLOC) {
 		if (option->name) mem_free(option->name);

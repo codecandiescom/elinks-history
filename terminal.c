@@ -1,3 +1,16 @@
+/* Terminal interface - low-level displaying implementation */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <errno.h>
+#include <string.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 #include "links.h"
 
 int hard_write(int fd, unsigned char *p, int l)

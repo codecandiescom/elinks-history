@@ -1,3 +1,17 @@
+/* Internal cookies implementation */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#ifdef HAVE_TIME_H
+#include <time.h>
+#endif
+
 #include "links.h"
 
 /* #define COOKIES_DEBUG */

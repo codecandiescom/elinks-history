@@ -1,3 +1,14 @@
+/* Connections managment */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <string.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 #include "links.h"
 
 tcount connection_count = 0;

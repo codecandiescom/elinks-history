@@ -1,4 +1,17 @@
+/* Internal "https" protocol implementation */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_SSL
+#include <openssl/ssl.h>
+#endif
+
 #include "links.h"
+
+/* FIXME: As you can see, SSL is currently implemented in very, erm,
+ * decentralized manner. */
 
 #ifdef HAVE_SSL
 

@@ -1,3 +1,12 @@
+/* HTML renderer */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <stdarg.h>
+#include <string.h>
+
 #include "links.h"
 
 static inline int color_distance(struct rgb *c1, struct rgb *c2)

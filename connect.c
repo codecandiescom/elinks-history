@@ -1,3 +1,36 @@
+/* Sockets-o-matic */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <errno.h>
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h>
+#endif
+#include <netinet/in.h>
+#ifdef HAVE_SSL
+#include <openssl/ssl.h>
+#endif
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+/* This is for some exotic TOS mangling when creating passive FTP sockets. */
+#ifdef HAVE_NETINET_IN_SYSTM_H
+#include <netinet/in_systm.h>
+#else
+#ifdef HAVE_NETINET_IN_SYSTEM_H
+#include <netinet/in_system.h>
+#endif
+#endif
+#ifdef HAVE_NETINET_IP_H
+#include <netinet/ip.h>
+#endif
+
 #include "links.h"
 
 /*

@@ -1,5 +1,18 @@
 /* AF_UNIX inter-instances socket interface */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <errno.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 #include "links.h"
 
 #ifdef DONT_USE_AF_UNIX

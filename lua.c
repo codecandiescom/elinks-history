@@ -1,8 +1,18 @@
+/* Lua interface (scripting engine) */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <setjmp.h>
+#include <signal.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 #include "links.h"
 
 #ifdef HAVE_LUA
-
-#include <setjmp.h>
 
 lua_State *lua_state;
 

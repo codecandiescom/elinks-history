@@ -1,8 +1,24 @@
-#include "links.h"
+/* Features which vary with the OS */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h>
+#endif
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
 #endif
+#include <sys/signal.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+#include "links.h"
 
 #if defined(HAVE_LIBGPM) && defined(HAVE_GPM_H)
 #define USE_GPM

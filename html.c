@@ -1,4 +1,20 @@
+/* HTML parser */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h> /* XXX: only for debug_stack() */
+#endif
+
 #include "links.h"
+
+/* TODO: This needs rewrite. Yes, no kidding. */
 
 struct list_head html_stack = {&html_stack, &html_stack};
 

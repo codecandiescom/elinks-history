@@ -1,3 +1,12 @@
+/* HTML tables renderer */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <stdlib.h>
+#include <string.h>
+
 #include "links.h"
 
 #define AL_TR		-1

@@ -1,3 +1,9 @@
+/* Support for multiple languages */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "links.h"
 
 struct translation {

@@ -1,13 +1,32 @@
+/* Menu system */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_LUA
+#include <lua.h>
+#include <lualib.h>
+#endif
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 #include "links.h"
 
-/*static inline struct session *get_term_session(struct terminal *term)
+#if 0
+static inline struct session *get_term_session(struct terminal *term)
 {
 	if ((void *)term->windows.prev == &term->windows) {
 		internal("terminal has no windows");
 		return NULL;
 	}
 	return ((struct window *)term->windows.prev)->data;
-}*/
+}
+#endif
 
 void menu_about(struct terminal *term, void *d, struct session *ses)
 {

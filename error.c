@@ -1,3 +1,16 @@
+/* Error handling and debugging stuff */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <signal.h>
+#include <stdarg.h>
+#include <stdio.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 #include "links.h"
 
 void do_not_optimize_here(void *p)

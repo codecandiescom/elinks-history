@@ -1,3 +1,16 @@
+/* Support for keyboard interface */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <stdlib.h>
+#include <string.h>
+#include <termios.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
 #include "links.h"
 
 #define OUT_BUF_SIZE	16384

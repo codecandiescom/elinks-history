@@ -1,95 +1,52 @@
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
-#endif
+/* Global include with common functions and definitions for elinks */
 
 #ifndef __EXTENSION__
 #define __EXTENSION__ /* Helper for SunOS */
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+/* Includes for internal functions */
 
-#include "os_dep.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-#include <string.h>
-#include <errno.h>
 #ifdef HAVE_LIMITS_H
 #include <limits.h>
 #endif
+#include <stdlib.h>
+#include <string.h>
+
+/* Temporary global includes, which we unfortunately still need. */
+
+/* dns.c */
+#include <sys/socket.h>
 #include <sys/types.h>
 
-#ifdef TIME_WITH_SYS_TIME
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#endif
-#ifdef HAVE_TIME_H
-#include <time.h>
-#endif
-#else
-#if defined(TM_IN_SYS_TIME) && defined(HAVE_SYS_TIME_H)
-#include <sys/time.h>
-#elif defined(HAVE_TIME_H)
-#include <time.h>
-#endif
+/* sched.c, https.c */
+#ifdef HAVE_SSL
+#include <openssl/ssl.h>
 #endif
 
-#include <sys/stat.h>
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#endif
-#ifdef HAVE_DIRENT_H
-#include <dirent.h>
-#endif
-#include <signal.h>
-#ifdef HAVE_SYS_WAIT_H
-#include <sys/wait.h>
-#endif
-#ifdef HAVE_SYS_RESOURCE_H
-#include <sys/resource.h>
-#endif
-#ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
-#endif
-
-#ifdef HAVE_NETINET_IN_SYSTM_H
-#include <netinet/in_systm.h>
-#else
-#ifdef HAVE_NETINET_IN_SYSTEM_H
-#include <netinet/in_system.h>
-#endif
-#endif
-#include <netdb.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#ifdef HAVE_NETINET_IP_H
-#include <netinet/ip.h>
-#endif
-#ifdef HAVE_ARPA_INET_H
-#include <arpa/inet.h>
-#endif
-#include <utime.h>
-
-#ifdef HAVE_LONG_LONG
-#define longlong long long
-#else
-#define longlong long
-#endif
-
-#include <termios.h>
-
+/* lua.c */
 #ifdef HAVE_LUA
 #include <lua.h>
 #include <lualib.h>
 #endif
 
-#ifdef HAVE_SSL
-#include <openssl/ssl.h>
+#include "os_dep.h"
+
+#if 0
+
+/* These are residuum from old links - dunno what they were meant for? */
+
+#ifdef HAVE_SYS_RESOURCE_H
+#  include <sys/resource.h>
+#endif
+
+#ifdef HAVE_NETINET_IN_SYSTM_H
+#  include <netinet/in_systm.h>
+#else
+#  ifdef HAVE_NETINET_IN_SYSTEM_H
+#    include <netinet/in_system.h>
+#  endif
+#endif
+
 #endif
 
 #include "os_depx.h"

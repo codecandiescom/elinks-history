@@ -1,3 +1,15 @@
+/* Internal "http" protocol implementation */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_SSL
+#include <openssl/ssl.h>
+#endif
+#include <stdlib.h>
+#include <string.h>
+
 #include "links.h"
 
 struct http_connection_info {

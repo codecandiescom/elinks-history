@@ -1,3 +1,38 @@
+/* Internal "file" protocol implementation */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <errno.h>
+#ifdef HAVE_DIRENT_H
+#include <dirent.h>
+#endif
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h>
+#endif
+#include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+#ifdef TIME_WITH_SYS_TIME
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
+#ifdef HAVE_TIME_H
+#include <time.h>
+#endif
+#else
+#if defined(TM_IN_SYS_TIME) && defined(HAVE_SYS_TIME_H)
+#include <sys/time.h>
+#elif defined(HAVE_TIME_H)
+#include <time.h>
+#endif
+#endif
+
 #include "links.h"
 
 #ifdef FS_UNIX_RIGHTS

@@ -15,6 +15,7 @@
 #endif*/
 
 #ifndef HAVE_CFMAKERAW
+#include <termios.h>
 void cfmakeraw(struct termios *t);
 #endif
 

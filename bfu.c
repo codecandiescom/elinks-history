@@ -1,5 +1,11 @@
 /* This routines are the bones of user interface. */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <string.h>
+
 #include "links.h"
 
 /*

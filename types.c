@@ -1,3 +1,11 @@
+/* Internal MIME types implementation */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <string.h>
+
 #include "links.h"
 
 struct list_head mailto_prog = { &mailto_prog, &mailto_prog };

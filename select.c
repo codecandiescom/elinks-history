@@ -1,3 +1,37 @@
+/* File descriptors managment and switching */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <errno.h>
+#ifdef HAVE_SYS_SELECT_H
+#include <sys/select.h>
+#endif
+#include <sys/signal.h>
+#include <sys/types.h>
+#ifdef HAVE_SYS_WAIT_H
+#include <sys/wait.h>
+#endif
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+#ifdef TIME_WITH_SYS_TIME
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
+#ifdef HAVE_TIME_H
+#include <time.h>
+#endif
+#else
+#if defined(TM_IN_SYS_TIME) && defined(HAVE_SYS_TIME_H)
+#include <sys/time.h>
+#elif defined(HAVE_TIME_H)
+#include <time.h>
+#endif
+#endif
+
 #include "links.h"
 
 struct thread {

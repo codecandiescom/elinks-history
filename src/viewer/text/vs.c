@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.3 2003/05/16 19:06:40 zas Exp $ */
+/* $Id: vs.c,v 1.4 2003/05/16 19:13:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,13 +78,14 @@ check_vs(struct f_data_c *f)
 	if (vs->current_link >= f->f_data->nlinks)
 		vs->current_link = f->f_data->nlinks - 1;
 
-	if (vs->current_link != -1 && !c_in_view(f)) {
-		set_pos_x(f, &f->f_data->links[f->vs->current_link]);
-		set_pos_y(f, &f->f_data->links[f->vs->current_link]);
-	}
-
-	if (vs->current_link == -1)
+	if (vs->current_link != -1) {
+		if (!c_in_view(f)) {
+			set_pos_x(f, &f->f_data->links[vs->current_link]);
+			set_pos_y(f, &f->f_data->links[vs->current_link]);
+		}
+	} else {
 		find_link(f, 1, 0);
+	}
 }
 
 void

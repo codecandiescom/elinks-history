@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.91 2004/07/28 13:27:31 jonas Exp $ */
+/* $Id: kbd.c,v 1.92 2004/07/28 13:29:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -646,11 +646,6 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 
 	if (itrm->qlen < 3) return -1;
 
-	el = get_esc_code(itrm->kqueue, itrm->qlen, &c, &v);
-#ifdef DEBUG_ITRM_QUEUE
-	fprintf(stderr, "esc code: %c v=%d c=%c el=%d\n", itrm->kqueue[1], v, c, el);
-	fflush(stderr);
-#endif
 	if (itrm->kqueue[2] == '[') {
 		if (itrm->qlen >= 4
 		    && itrm->kqueue[3] >= 'A'
@@ -661,6 +656,12 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 
 		return -1;
 	}
+
+	el = get_esc_code(itrm->kqueue, itrm->qlen, &c, &v);
+#ifdef DEBUG_ITRM_QUEUE
+	fprintf(stderr, "esc code: %c v=%d c=%c el=%d\n", itrm->kqueue[1], v, c, el);
+	fflush(stderr);
+#endif
 
 	switch (c) {
 	case 0: return -1;

@@ -274,9 +274,9 @@ static int l_edit_bookmark_dialog(LS)
 	
 	data = (struct dlg_data *)&d->items[6];
 	data->state = S;
-	strncpy(data->cat, (uchar *)lua_tostring(S, 1), MAX_STR_LEN-1);
-	strncpy(data->name, (uchar *)lua_tostring(S, 2), MAX_STR_LEN-1);
-	strncpy(data->url, (uchar *)lua_tostring(S, 3), MAX_STR_LEN-1);
+	safe_strncpy(data->cat, (uchar *)lua_tostring(S, 1), MAX_STR_LEN-1);
+	safe_strncpy(data->name, (uchar *)lua_tostring(S, 2), MAX_STR_LEN-1);
+	safe_strncpy(data->url, (uchar *)lua_tostring(S, 3), MAX_STR_LEN-1);
 	lua_pushvalue(S, 4);
 	data->func_ref = lua_ref(S, 1);
 	
@@ -408,7 +408,7 @@ static int l_xdialog(LS)
 	data->state = S;
 	data->nfields = nfields;
 	for (i = 0; i < nfields; i++)
-		strncpy(data->fields[i], (uchar *)lua_tostring(S, i+1), MAX_STR_LEN-1);
+		safe_strncpy(data->fields[i], (uchar *)lua_tostring(S, i+1), MAX_STR_LEN-1);
 	lua_pushvalue(S, nargs);
 	data->func_ref = lua_ref(S, 1);
 	

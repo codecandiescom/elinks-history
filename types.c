@@ -255,9 +255,9 @@ void menu_add_ct(struct terminal *term, void *fcp, void *xxx2)
 	new->ct = ct = label + MAX_STR_LEN;
 	new->prog = prog = ct + MAX_STR_LEN;
 	if (from) {
-		strncpy(label, from->label, MAX_STR_LEN - 1);
-		strncpy(ct, from->ct, MAX_STR_LEN - 1);
-		strncpy(prog, from->prog, MAX_STR_LEN - 1);
+		safe_strncpy(label, from->label, MAX_STR_LEN - 1);
+		safe_strncpy(ct, from->ct, MAX_STR_LEN - 1);
+		safe_strncpy(prog, from->prog, MAX_STR_LEN - 1);
 		new->block = from->block;
 		new->cons = from->cons;
 		new->xwin = from->xwin;
@@ -441,8 +441,8 @@ void menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	new->ext = ext = (unsigned char *)(new + 1);
 	new->ct = ct = ext + MAX_STR_LEN;
 	if (from) {
-		strncpy(ext, from->ext, MAX_STR_LEN - 1);
-		strncpy(ct, from->ct, MAX_STR_LEN - 1);
+		safe_strncpy(ext, from->ext, MAX_STR_LEN - 1);
+		safe_strncpy(ct, from->ct, MAX_STR_LEN - 1);
 		new->cnt = from->cnt;
 	}
 	d->title = TEXT(T_EXTENSION);
@@ -499,8 +499,7 @@ void update_prog(struct list_head *l, unsigned char *p, int s)
 	repl->system = s;
 	ss:
 	if ((repl->prog = mem_alloc(MAX_STR_LEN))) {
-		strncpy(repl->prog, p, MAX_STR_LEN);
-		repl->prog[MAX_STR_LEN - 1] = 0;
+		safe_strncpy(repl->prog, p, MAX_STR_LEN);
 	}
 }
 

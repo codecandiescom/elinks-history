@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.13 2003/10/24 23:49:12 jonas Exp $ */
+/* $Id: options.inc,v 1.14 2003/10/24 23:53:03 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -15,25 +15,6 @@
  * 5. Love thy option system! :) */
 
 struct option_info config_options_info[] = {
-	INIT_OPT_TREE("", N_("Bookmarks"),
-		"bookmarks", 0,
-		N_("Bookmark options.")),
-
-#ifdef HAVE_LIBEXPAT
-	INIT_OPT_INT("bookmarks", N_("File format"),
-		"file_format", 0, 0, 1, 0,
-		N_("File format for bookmarks (affects both reading and saving):\n"
-		"0 is the default ELinks (Links 0.9x compatible) format\n"
-		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)")),
-#else
-	INIT_OPT_INT("bookmarks", N_("File format"),
-		"file_format", 0, 0, 1, 0,
-		N_("File format for bookmarks (affects both reading and saving):\n"
-		"0 is the default ELinks (Links 0.9x compatible) format\n"
-		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
-		"  (DISABLED)")),
-#endif
-
 	INIT_OPT_TREE("", N_("Configuration system"),
 		"config", 0,
 		N_("Configuration handling options.")),

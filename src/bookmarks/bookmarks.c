@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.78 2003/10/24 23:46:22 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.79 2003/10/24 23:53:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/dialogs.h"
 #include "bookmarks/backend/common.h"
+#include "config/options.h"
 #include "lowlevel/home.h"
 #include "util/conv.h"
 #include "util/memory.h"
@@ -276,6 +277,29 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 void
 init_bookmarks(void)
 {
+	struct option_info bookmark_options_info[] = {
+		INIT_OPT_TREE("", N_("Bookmarks"),
+			"bookmarks", 0,
+			N_("Bookmark options.")),
+
+#ifdef HAVE_LIBEXPAT
+		INIT_OPT_INT("bookmarks", N_("File format"),
+			"file_format", 0, 0, 1, 0,
+			N_("File format for bookmarks (affects both reading and saving):\n"
+			"0 is the default ELinks (Links 0.9x compatible) format\n"
+			"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)")),
+#else
+		INIT_OPT_INT("bookmarks", N_("File format"),
+			"file_format", 0, 0, 1, 0,
+			N_("File format for bookmarks (affects both reading and saving):\n"
+			"0 is the default ELinks (Links 0.9x compatible) format\n"
+			"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
+			"  (DISABLED)")),
+#endif
+
+		NULL_OPTION_INFO
+	};
+
 	read_bookmarks();
 }
 

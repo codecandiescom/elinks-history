@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.80 2003/10/23 22:42:49 jonas Exp $ */
+/* $Id: options.h,v 1.81 2003/10/24 23:53:03 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -230,12 +230,14 @@ do { \
 	add_opt(tree, path, capt, name, flags, OPT_TREE, 0, 0, init_options_tree(), DESC(desc));
 
 
-/* Types and macros for builtin options. */
+/* Builtin options */
 
 struct option_info {
 	struct option option;
 	unsigned char *path;
 };
+
+extern void register_option_info(struct option_info info[], struct option *tree);
 
 #define NULL_OPTION_INFO \
 	{ INIT_OPTION(NULL, 0, 0, 0, 0, NULL, NULL, NULL), NULL }

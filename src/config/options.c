@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.355 2003/10/24 19:43:25 jonas Exp $ */
+/* $Id: options.c,v 1.356 2003/10/24 23:53:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1013,7 +1013,7 @@ static struct change_hook_info change_hooks[] = {
 
 #include "config/options.inc"
 
-static void
+void
 register_option_info(struct option_info info[], struct option *tree)
 {
 	int i;

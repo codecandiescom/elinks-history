@@ -1,3 +1,120 @@
+Fri May 28 21:18:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	translate_uri(): Take URI port into consideration when calculating
+	the offset where to add the missing host slash.  
+
+Fri May 28 21:16:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.h, sched/connection.c:
+
+	Don't know if it is worth it but factor out host length calculation
+	to get_uri_hostlen().  
+
+Fri May 28 20:19:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Changed protocol.http.referer.policy default from 1 to 3. Another
+	user just got burnt by that (thanks to dsuch for an impuls), so
+	let's be RFC compliant for once! 
+
+Fri May 28 18:39:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/options.c:
+
+	comare_opt(): Compare x and y members. This is as far as I recall
+	the old behaviour. Before I moved the x and y members of document
+	options so they would not be compared. I did that out of ignorance.
+	This I fully regret. Fixes bug 452.  
+
+Fri May 28 17:35:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Clearify uri->form usage instead of uri->post.  
+
+Fri May 28 16:51:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Fix confirm submit URI string. Now it uses the URI_PUBLIC class.  
+
+Fri May 28 16:50:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.h, sched/task.c, viewer/text/form.c:
+
+	Check if ses->referrer is incomplete when posting stuff. The patch
+	adds a new URI flag named 'form' which is set by get_form_uri(), it
+	is needed because uri->post might be empty.  
+
+Fri May 28 16:37:08 2004  Laurent Monin <zas@norz.org>:
+
+	* ABOUT-NLS, doc/color-model.txt:
+
+	Remove trailing spaces.  
+
+Fri May 28 15:43:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: listmenu.c, text.c:
+
+	Drop trailing spaces.  
+
+Fri May 28 15:40:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listmenu.c:
+
+	Cache and assert (@order - 1).  
+
+Fri May 28 15:40:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Code simplification.  
+
+Fri May 28 13:42:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/: dcigettext.c, dgettext.c, dngettext.c,
+	gettext.c, ngettext.c:
+
+	Always include locale.h via the libgnuintl.h. Fixes compilation of
+	solaris.  
+
+Fri May 28 13:02:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/: bzip2.c, encoding.c, encoding.h, gzip.c:
+
+	Revert putting the extensions in the encoding backend. Older gcc
+	don't like it.  
+
+Fri May 28 11:57:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* autogen.sh:
+
+	Revert bad things.  
+
+Fri May 28 11:55:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* autogen.sh, configure.in, src/encoding/Makefile.am,
+	src/encoding/bzip2.c, src/encoding/bzip2.h,
+	src/encoding/encoding.c, src/encoding/encoding.h,
+	src/encoding/gzip.c, src/encoding/gzip.h:
+
+	Split up encoding backends.  
+
+Thu May 27 12:54:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Fix buggy reference counting breaking URI list stuff.  
+
+Thu May 27 12:19:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, session.h, task.c:
+
+	Revert goto_rewritten_uri(). It broke to many things to fix easy.  
+
 Wed May 26 21:31:01 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/menu.c:

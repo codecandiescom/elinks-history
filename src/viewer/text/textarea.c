@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.127 2004/06/19 13:02:29 jonas Exp $ */
+/* $Id: textarea.c,v 1.128 2004/06/19 13:10:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,7 +288,30 @@ encode_textarea(struct submitted_value *sv)
 int textarea_editor = 0;
 
 static unsigned char *
-read_textarea_file(unsigned char *filename, int maxlength)
+save_textarea_file(unsigned char *value)
+{
+	unsigned char *filename;
+	FILE *file = NULL;
+	int h;
+
+	filename = get_tempdir_filename("elinks-area-XXXXXX");
+	if (!filename) return NULL;
+
+	h = safe_mkstemp(filename);
+	if (h >= 0) file = fdopen(h, "w");
+
+	if (file) {
+		fwrite(value, strlen(value), 1, file);
+		fclose(file);
+	} else {
+		mem_free(filename);
+	}
+
+	return filename;
+}
+
+static unsigned char *
+load_textarea_file(unsigned char *filename, int maxlength)
 {
 	unsigned char *value = NULL;
 	FILE *file = fopen(filename, "r+");
@@ -361,22 +384,11 @@ textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
 	if (term_) term = term_;
 
 	if (op == 0 && !textarea_editor) {
-		FILE *taf;
 		unsigned char *ed = getenv("EDITOR");
 		unsigned char *ex;
-		int h;
 
-		fn = get_tempdir_filename("elinks-area-XXXXXX");
+		fn = save_textarea_file(fs->value);
 		if (!fn) goto free_and_return;
-
-		h = safe_mkstemp(fn);
-		if (h < 0) goto free_and_return;
-
-		taf = fdopen(h, "w");
-		if (!taf) goto free_and_return;
-
-		fwrite(fs->value, strlen(fs->value), 1, taf);
-		fclose(taf);
 
 		if (!ed || !*ed) ed = "vi";
 
@@ -392,7 +404,7 @@ textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
 		textarea_editor = 1;
 
 	} else if (op == 1 && fs) {
-		unsigned char *value = read_textarea_file(fn, fc_maxlength);
+		unsigned char *value = load_textarea_file(fn, fc_maxlength);
 
 		if (value) {
 			mem_free(fs->value);

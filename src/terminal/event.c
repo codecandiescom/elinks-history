@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.7 2003/07/26 11:16:28 zas Exp $ */
+/* $Id: event.c,v 1.8 2003/07/26 11:26:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,18 +197,21 @@ send_redraw:
 		term->redrawing = 0;
 	}
 
-	if (ev->ev == EV_KBD || ev->ev == EV_MOUSE) {
+	if (ev->ev == EV_MOUSE) {
 		reset_timer();
-		if (ev->ev == EV_KBD && upcase(ev->x) == 'L'
-		    && ev->y == KBD_CTRL) {
+		term_send_event(term, ev);
+	} else if (ev->ev == EV_KBD) {
+		reset_timer();
+
+		if (ev->y == KBD_CTRL && upcase(ev->x) == 'L') {
 			ev->ev = EV_REDRAW;
 			ev->x = term->x;
 			ev->y = term->y;
 			goto send_redraw;
 		}
-		else if (ev->ev == EV_KBD && ev->x == KBD_CTRL_C)
+		else if (ev->x == KBD_CTRL_C)
 			((struct window *) &term->windows)->prev->handler(term->windows.prev, ev, 0);
-		else if (ev->ev == EV_KBD) {
+		else {
 			int utf8_io = -1;
 
 			if (term->utf_8.len) {
@@ -250,7 +253,7 @@ send_redraw:
 				goto mm;
 			}
 			term_send_ucs(term, ev, UCS_NO_CHAR);
-		} else term_send_event(term, ev);
+		};
 	}
 
 	if (ev->ev == EV_ABORT) destroy_terminal(term);

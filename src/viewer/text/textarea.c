@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.13 2003/07/24 10:38:37 miciah Exp $ */
+/* $Id: textarea.c,v 1.14 2003/07/24 10:43:04 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -402,7 +402,7 @@ textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
 
-rep1:
+rep:
 	for (y = 0; ln[y].st; y++) {
 		if (fs->value + fs->state >= ln[y].st &&
 		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
@@ -420,7 +420,7 @@ rep1:
 	return 1;
 
 xx:
-	if (rep) goto rep1;
+	if (rep) goto rep;
 	mem_free(ln);
 	return 0;
 }
@@ -437,7 +437,7 @@ textarea_op_down(struct form_state *fs, struct form_control *frm, int rep)
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
 
-rep2:
+rep:
 	for (y = 0; ln[y].st; y++) {
 		if (fs->value + fs->state >= ln[y].st &&
 		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
@@ -454,7 +454,7 @@ rep2:
 	mem_free(ln);
 	return 1;
 yy:
-	if (rep) goto rep2;
+	if (rep) goto rep;
 	mem_free(ln);
 	return 0;
 }

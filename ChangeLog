@@ -1,3 +1,8 @@
+Wed Nov  7 14:49:39 CET 2001 Alexander M Vandiver <alexmv@MIT.EDU>:
+
+	Textarea double encoding (that means especially multiplying
+	of newlines) fix.
+
 Sun Oct 28 14:16:06 CET 2001 pasky:
 
 	Merged things from links-0.96-pb3, except crfix and editarea:

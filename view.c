@@ -1084,10 +1084,8 @@ void get_succesful_controls(struct f_data_c *f, struct form_control *fc, struct 
 				case FC_TEXT:
 				case FC_PASSWORD:
 				case FC_FILE:
-					sub->value = stracpy(fs->value);
-					break;
 				case FC_TEXTAREA:
-					sub->value = encode_textarea(fs->value);
+					sub->value = stracpy(fs->value);
 					break;
 				case FC_CHECKBOX:
 				case FC_RADIO:

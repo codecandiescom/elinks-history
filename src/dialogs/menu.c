@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.363 2004/07/27 22:41:00 jonas Exp $ */
+/* $Id: menu.c,v 1.364 2004/07/27 22:45:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -391,7 +391,6 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ACTION(N_("Rel~oad document"), ACT_MAIN_RELOAD),
 	INIT_MENU_ACTION(N_("~Rerender document"), ACT_MAIN_RERENDER),
 	INIT_MENU_ACTION(N_("Frame at ~full-screen"), ACT_MAIN_FRAME_MAXIMIZE),
-	INIT_MENU_ACTION(N_("Pass ~URI to external command"), ACT_MAIN_FRAME_EXTERNAL_COMMAND),
 	BAR_MENU_ITEM,
 	INIT_MENU_ACTION(N_("Nex~t tab"), ACT_MAIN_TAB_NEXT),
 	INIT_MENU_ACTION(N_("Pre~v tab"), ACT_MAIN_TAB_PREV),

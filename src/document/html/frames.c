@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.40 2003/11/16 12:57:41 pasky Exp $ */
+/* $Id: frames.c,v 1.41 2003/11/16 13:01:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,7 +189,7 @@ repeat:
 	ce = find_in_cache(vs->url);
 	if (!ce) return NULL;
 	plain = o->plain;
-	if (vs->plain == -1) o->plain = vs->plain;
+	if (vs->plain != -1) o->plain = vs->plain;
 
 	if (ce->redirect && frame->redirect_cnt < MAX_REDIRECTS) {
 		unsigned char *u = join_urls(vs->url, ce->redirect);

@@ -4,7 +4,7 @@ MANUAL	= $(OUTDIR)/elinks-manual
 OUTDIR	= generated
 TARGET	= manual.xml
 
-all: html html_tgz html_zip pdf ps txt
+alldocs: html html_tgz html_zip pdf ps txt
 
 outdir:
 	mkdir -p $(OUTDIR)

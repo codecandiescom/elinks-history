@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.22 2003/07/21 04:51:35 jonas Exp $ */
+/* $Id: uri.c,v 1.23 2003/07/21 15:52:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,7 +228,7 @@ get_uri_string(struct uri *uri, enum uri_component components)
 		add_char_to_string(&string, '@');
  	}
  
- 	if (wants(URI_HOST) && uri->host) {
+ 	if (wants(URI_HOST) && uri->hostlen) {
 #ifdef IPV6
  		int brackets = !!memchr(uri->host, ':', uri->hostlen);
  

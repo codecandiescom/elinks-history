@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.224 2004/04/21 00:42:33 jonas Exp $ */
+/* $Id: menu.c,v 1.225 2004/04/21 01:10:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -880,17 +880,19 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 		/* We don't initialize to menu->first here, since it breaks
 		 * horizontal scrolling using mouse in some cases. --Zas */
 		foreach_menu_item (item, menu->items) {
-			if (mi_has_left_text(*item)) {
-				unsigned char *text = item->text;
+			unsigned char *text = item->text;
 
-				if (mi_text_translate(*item))
-					text = _(text, win->term);
+			if (!mi_has_left_text(*item)) continue;
 
-				p += L_MAINTEXT_SPACE + L_TEXT_SPACE
-					+ strlen(text)
-					- !!item->hotkey_pos
-					+ R_TEXT_SPACE + R_MAINTEXT_SPACE;
-			}
+			if (mi_text_translate(*item))
+				text = _(item->text, win->term);
+
+			/* The label width is made up of a little padding on
+			 * the sides followed by the text width substracting
+			 * one char if it has hotkeys (the '~' char) */
+			p += L_MAINTEXT_SPACE + L_TEXT_SPACE
+			  + strlen(text) - !!item->hotkey_pos
+			  + R_TEXT_SPACE + R_MAINTEXT_SPACE;
 
 			if (ev->x < p) {
 				scroll = (item - menu->items) - menu->selected;

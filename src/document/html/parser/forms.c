@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.6 2004/05/01 19:16:07 zas Exp $ */
+/* $Id: forms.c,v 1.7 2004/05/01 19:20:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,22 +162,15 @@ html_button(unsigned char *a)
 {
 	unsigned char *al;
 	struct form_control *fc;
+	enum form_type type = FC_SUBMIT;
 
 	find_form_for_input(a);
 	html_focusable(a);
 
-	fc = mem_calloc(1, sizeof(struct form_control));
-	if (!fc) return;
-
 	al = get_attr_val(a, "type");
-	if (!al) {
-		fc->type = FC_SUBMIT;
-		goto no_type_attr;
-	}
+	if (!al) goto no_type_attr;
 
-	if (!strcasecmp(al, "submit")) fc->type = FC_SUBMIT;
-	else if (!strcasecmp(al, "reset")) fc->type = FC_RESET;
-	else if (!strcasecmp(al, "button")) {
+	if (!strcasecmp(al, "button")) {
 		mem_free(al);
 		put_chrs(" [&nbsp;", 8, put_chars_f, ff);
 
@@ -185,19 +178,28 @@ html_button(unsigned char *a)
 		if (al) {
 			put_chrs(al, strlen(al), put_chars_f, ff);
 			mem_free(al);
-		} else put_chrs("BUTTON", 6, put_chars_f, ff);
+		} else {
+			/* no value */
+			put_chrs("BUTTON", 6, put_chars_f, ff);
+		}
 
 		put_chrs("&nbsp;] ", 8, put_chars_f, ff);
-		mem_free(fc);
 		return;
-	} else {
+	}
+
+	if (!strcasecmp(al, "reset")) type = FC_RESET;
+	else if (strcasecmp(al, "submit")) {
+		/* unknown type */
 		mem_free(al);
-		mem_free(fc);
 		return;
 	}
 	mem_free(al);
 
 no_type_attr:
+	fc = mem_calloc(1, sizeof(struct form_control));
+	if (!fc) return;
+
+	fc->type = type;
 	fc->form_num = last_form_tag - startf;
 	fc->ctrl_num = a - last_form_tag;
 	fc->position = a - startf;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.246 2003/11/21 04:52:23 witekfl Exp $ */
+/* $Id: session.c,v 1.247 2003/11/21 04:54:33 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,6 +62,7 @@ struct file_to_load {
 	int req_sent;
 	int pri;
 	struct cache_entry *ce;
+	unsigned char *target_frame;
 	unsigned char *url;
 	struct download stat;
 };
@@ -74,11 +75,12 @@ static int session_id = 1;
 
 void check_questions_queue(struct session *ses);
 struct file_to_load * request_additional_file(struct session *,
-					      unsigned char *, int);
+					      unsigned char *, unsigned char *, int);
+#if 0
 struct file_to_load *request_additional_loading_file(struct session *,
 						     unsigned char *,
 						     struct download *, int);
-
+#endif
 
 static unsigned char *
 get_stat_msg(struct download *stat, struct terminal *term)
@@ -459,6 +461,7 @@ free_files(struct session *ses)
 	foreach (ftl, ses->more_files) {
 		if (ftl->ce) object_unlock(ftl->ce);
 		if (ftl->url) mem_free(ftl->url);
+		if (ftl->target_frame) mem_free(ftl->target_frame);
 	}
 	free_list(ses->more_files);
 }
@@ -890,7 +893,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 
 found:
 	if (*url)
-		request_additional_file(ses, url, PRI_FRAME);
+		request_additional_file(ses, name, url, PRI_FRAME);
 	mem_free(url);
 }
 
@@ -1120,7 +1123,7 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 }
 
 struct file_to_load *
-request_additional_file(struct session *ses, unsigned char *url, int pri)
+request_additional_file(struct session *ses, unsigned char *name, unsigned char *url, int pri)
 {
 	struct file_to_load *ftl;
 
@@ -1142,7 +1145,8 @@ request_additional_file(struct session *ses, unsigned char *url, int pri)
 		mem_free(ftl);
 		return NULL;
 	}
-
+	ftl->target_frame = stracpy(name);
+	
 	ftl->stat.end = (void (*)(struct download *, void *)) file_end_load;
 	ftl->stat.data = ftl;
 	ftl->pri = pri;
@@ -1152,7 +1156,7 @@ request_additional_file(struct session *ses, unsigned char *url, int pri)
 
 	return ftl;
 }
-
+#if 0
 struct file_to_load *
 request_additional_loading_file(struct session *ses, unsigned char *url,
 				struct download *stat, int pri)
@@ -1172,7 +1176,7 @@ request_additional_loading_file(struct session *ses, unsigned char *url,
 
 	return ftl;
 }
-
+#endif
 void
 process_file_requests(struct session *ses)
 {

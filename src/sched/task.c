@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.156 2005/03/02 16:06:31 zas Exp $ */
+/* $Id: task.c,v 1.157 2005/03/02 16:31:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,9 +59,7 @@ struct task {
 	struct session *ses;
 	struct uri *uri;
 	enum cache_mode cache_mode;
-	enum task_type type;
-	unsigned char *target_frame;
-	struct location *target_location;
+	struct session_task session_task;
 };
 
 static void
@@ -75,9 +73,10 @@ post_yes(struct task *task)
 	ses->loading.data = task->ses;
 	ses->loading_uri = task->uri; /* XXX: Make the session inherit the URI. */
 
-	ses->task.type = task->type;
-	ses->task.target_frame = task->target_frame;
-	ses->task.target_location = task->target_location;
+	/* TODO: memcpy(). --Zas */
+	ses->task.type = task->session_task.type;
+	ses->task.target_frame = task->session_task.target_frame;
+	ses->task.target_location = task->session_task.target_location;
 
 	load_uri(ses->loading_uri, ses->referrer, &ses->loading,
 		 PRI_MAIN, task->cache_mode, -1);
@@ -224,9 +223,9 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	task->ses = ses;
 	task->uri = get_uri_reference(uri);
 	task->cache_mode = cache_mode;
-	task->type = task_type;
-	task->target_frame = target_frame;
-	task->target_location = target_location;
+	task->session_task.type = task_type;
+	task->session_task.target_frame = target_frame;
+	task->session_task.target_location = target_location;
 
 	if (malicious_uri) {
 		unsigned char *host = memacpy(uri->host, uri->hostlen);
@@ -403,7 +402,7 @@ do_redirect(struct session *ses, struct download **download_p, struct cache_entr
 
 	if (task == TASK_HISTORY && !have_location(ses))
 		return DO_MOVE_DISPLAY;
-	
+
 	assertm(compare_uri(cached->uri, ses->loading_uri, URI_BASE),
 		"Redirecting using bad base URI");
 

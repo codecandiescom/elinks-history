@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.360 2004/04/04 06:12:06 jonas Exp $ */
+/* $Id: session.c,v 1.361 2004/04/04 16:05:58 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -239,7 +239,7 @@ request_frameset(struct session *ses, struct frameset_desc *frameset_desc)
 
 			if (frame_desc->subframe) {
 				request_frameset(ses, frame_desc->subframe);
-			} else if (frame_desc->name) {
+			} else if (frame_desc->name && frame_desc->uri) {
 				request_frame(ses, frame_desc->name,
 					      frame_desc->uri);
 			}

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.300 2003/10/17 20:57:30 jonas Exp $ */
+/* $Id: renderer.c,v 1.301 2003/10/18 16:02:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,6 +187,28 @@ realloc_spaces(struct part *part, int length)
 #define POS(x, y)	LINE(y).d[X(x)]
 #define LEN(y)		int_max(LINE(y).l - part->xp, 0)
 
+
+/* When we clear chars we want to preserve and use the background colors
+ * already in place else we could end up ``staining'' the background especial
+ * when drawing table cells. So make the cleared chars share the colors in
+ * place. */
+static inline void
+clear_hchars(struct part *part, int x, int y, int xl)
+{
+	assert(part && part->document && xl > 0);
+	if_assert_failed return;
+
+	if (realloc_line(part->document, Y(y), X(x) + xl - 1))
+		return;
+
+	assert(part->document->data);
+	if_assert_failed return;
+
+	for (; xl; xl--, x++) {
+		POS(x, y).data = ' ';
+		POS(x, y).attr = 0;
+	}
+}
 
 /* If @bgcolor is NULL don't touch any color. */
 static inline void
@@ -474,11 +496,8 @@ shift_chars(struct part *part, int y, int shift)
 	if (!a) return;
 
 	copy_screen_chars(a, &POS(0, y), len);
-	/* When we shift chars we want to preserve and use the background
-	 * colors already in place else we could end up ``staining'' the background
-	 * especial when drawing table cells. So make the shifted chars share the
-	 * colors in place. */
-	set_hchars(part, 0, y, shift, ' ', NULL, 0);
+
+	clear_hchars(part, 0, y, shift);
 	copy_chars(part, shift, y, len, a);
 	mem_free(a);
 
@@ -642,8 +661,7 @@ justify_line(struct part *part, int y)
 		int prev_end = 0;
 		int word;
 
-		/* See shift_chars() about why we pass a NULL bg color. */
-		set_hchars(part, 0, y, overlap(par_format), ' ', NULL, 0);
+		clear_hchars(part, 0, y, overlap(par_format));
 
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of

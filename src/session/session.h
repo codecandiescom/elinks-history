@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.80 2003/12/06 16:44:24 pasky Exp $ */
+/* $Id: session.h,v 1.81 2003/12/06 17:04:32 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -223,12 +223,6 @@ struct session *create_basic_session(struct window *);
 
 void tabwin_func(struct window *, struct term_event *, int);
 
-struct view_state *ses_forward(struct session *, int);
-void ses_goto(struct session *, unsigned char *, unsigned char *, struct location *,
-	      int, enum cache_mode, enum task_type, unsigned char *,
-	      void (*)(struct download *, struct session *), int);
-
-void end_load(struct download *, struct session *);
 void doc_end_load(struct download *, struct session *);
 
 void abort_loading(struct session *, int);
@@ -252,7 +246,7 @@ unsigned char *get_current_link_url(struct session *, unsigned char *, size_t);
 unsigned char *get_current_link_name(struct session *, unsigned char *, size_t);
 
 extern struct list_head questions_queue;
-
 void add_questions_entry(void *);
+void check_questions_queue(struct session *ses);
 
 #endif

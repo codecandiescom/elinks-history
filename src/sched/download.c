@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.198 2003/12/06 16:44:24 pasky Exp $ */
+/* $Id: download.c,v 1.199 2003/12/06 17:04:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,7 @@
 #include "sched/history.h"
 #include "sched/location.h"
 #include "sched/session.h"
+#include "sched/task.h"
 #include "terminal/draw.h"
 #include "terminal/screen.h"
 #include "terminal/terminal.h"

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.49 2002/11/23 19:20:40 zas Exp $ */
+/* $Id: download.c,v 1.50 2002/11/26 16:53:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -450,7 +450,7 @@ download_data(struct status *stat, struct download *down)
 		}
 
 		load_url(down->url, ce->url, &down->stat, PRI_DOWNLOAD,
-			 NC_CACHE, stat->prg->start);
+			 NC_CACHE, stat->prg ? stat->prg->start : 0);
 
 		return;
 	}

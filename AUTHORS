@@ -137,6 +137,9 @@ Flemming Frandsen <ff@partyticket.net>
 Fuzzy European King <james@place.org>
 	Fixed lua stack overflow
 
+Grzegorz Golawski <grzegol@pld.org.pl>
+	Polish translation updates
+
 Gianluca Montecchi <gianluca@pluto.linux.it>
 	Italian translation
 
@@ -347,4 +350,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.74 2002/08/28 23:27:31 pasky Exp $
+$Id: AUTHORS,v 1.75 2002/08/29 12:58:08 pasky Exp $

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.13 2004/05/21 15:33:43 jonas Exp $ */
+/* $Id: scanner.h,v 1.14 2004/05/24 13:12:26 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -226,10 +226,12 @@ begin_token_scanning(struct scanner *scanner)
 
 /* Updates the @scanner struct after scanning has been done. The position
  * _after_ the last valid token is taken as the @end argument. */
+/* It is ok for @end to be < scanner->table since scanner->tokens will become
+ * <= 0 anyway. */
 static inline struct scanner_token *
 end_token_scanning(struct scanner *scanner, struct scanner_token *end)
 {
-	assert(scanner->table <= end && end <= scanner->table + SCANNER_TOKENS);
+	assert(end <= scanner->table + SCANNER_TOKENS);
 
 	scanner->tokens = (end - scanner->table);
 	scanner->current = scanner->table;

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.6 2002/11/30 03:12:10 pasky Exp $
+-- $Id: hooks.lua.in,v 1.7 2002/12/10 21:09:00 pasky Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -40,8 +40,23 @@ function match (prefix, url)
     return strsub (url, 1, strlen (prefix)) == prefix
 end
 
-function plusify (str)
-    return gsub (str, "%s", "+")
+function mod (dividend, divisor)
+    while dividend >= divisor
+    do dividend = dividend - divisor
+    end
+    return dividend
+end
+
+function hx (c)
+    return strchar((c >= 10 and (c - 10) + strbyte ('A')) or c + strbyte ('0'))
+end
+
+function char2hex (c)
+    return '%'..hx (strbyte (c) / 16)..hx (mod(strbyte (c), 16))
+end
+
+function escape (str)
+    return gsub (str, "(%W)", char2hex)
 end
 
 -- You can write smt like "gg" to goto URL dialog and it'll go to google.com.
@@ -105,7 +120,7 @@ function goto_url_hook (url, current_url)
     if strfind(url,'%s') or strfind(url, ':') then
         local _,_,nick,val = strfind(url, "^([^%s]+)[:%s]%s*(.-)%s*$")
         if nick and smartprefixes[nick] then
-            val = plusify(val)
+            val = escape(val)
             return format(smartprefixes[nick], val)
         end
     end

@@ -11,6 +11,5 @@ hungarian
 icelandic
 lithuanian
 norwegian
-romanian
 russian
 swedish

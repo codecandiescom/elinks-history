@@ -12,5 +12,9 @@
 #
 # These two scripts were contributed by Len Trigg <len@reeltwo.com>.
 #
+# XXX: Please note that elinks now ``natively'' support passing URLs from
+# external programs by using the --remote command line argument. It is
+# documented in the doc/remote.txt file.
+#
 
 echo $* >$HOME/.elinks/external.url

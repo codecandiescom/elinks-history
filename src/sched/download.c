@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.30 2003/05/12 20:37:46 pasky Exp $ */
+/* $Id: download.c,v 1.31 2003/05/15 21:43:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,22 +340,30 @@ download_window_function(struct dialog_data *dlg)
 			dialog_text_color, AL_LEFT);
 
 	if (t && status->prg->size >= 0) {
-		unsigned char q[10];
+		/* FIXME: not yet perfect, pasky will improve it later. --Zas */
+		/* Note : values > 100% are theorically possible and were seen. */
+		unsigned char q[] = "XXXX%"; /* Reduce or enlarge at will. */
+		const unsigned int qwidth = sizeof(q) - 1;
 		unsigned int qlen = 0;
-		int p = w - 6;
+		int p = w - qwidth; /* width for gauge meter */
+		int progress = (int) ((longlong) 100 * (longlong) status->prg->pos
+				      / (longlong) status->prg->size);
+		int barprogress = p * progress / 100;
+
+		if (barprogress > p) barprogress = p; /* Limit to preserve display. */
+
+		if (ulongcat(q, &qlen, progress, qwidth - 1, 0) > 0)
+			memset(q, '?', qlen); /* Too long, we limit to preserve display. */
+
+		q[qlen++] = '%'; /* on error, will print '%' only, should not occur. */
+		q[qlen] = '\0';
 
 		y++;
 		set_only_char(term, x, y, '[');
-		set_only_char(term, x + w - 5, y, ']');
-		fill_area(term, x + 1, y,
-			  (int) ((longlong) p * (longlong) status->prg->pos
-				 / (longlong) status->prg->size),
+		set_only_char(term, x + w - qwidth, y, ']');
+		fill_area(term, x + 1, y, barprogress,
 			  1, get_bfu_color(term, "dialog.meter"));
-		ulongcat(q, &qlen, ((longlong) 100 * (longlong) status->prg->pos
-				    / (longlong) status->prg->size), 8, ' ');
-		q[qlen++] = '%';
-		q[qlen] = '\0';
-		print_text(term, x + w - 4, y, qlen, q, dialog_text_color);
+		print_text(term, x + w - qlen + 1, y, qlen, q, dialog_text_color);
 		y++;
 	}
 

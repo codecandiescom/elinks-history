@@ -10,13 +10,8 @@ You can't upload large files; it takes _lots_ of memory.
 
 You shouldn't press '^Z' when you are in a viewer
 
-When site has more RR records, links probes only the first one, even if
-connection is refused.
-
 Handling of &#13; is not lynx-compatible in <pre> tag (should be newline).
 
-Textarea editor calling is broken.
-
-$Id: BUGS,v 1.5 2002/01/26 15:21:47 pasky Exp $
+$Id: BUGS,v 1.6 2002/01/26 19:42:35 pasky Exp $
 
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.195 2004/06/25 08:18:44 zas Exp $ */
+/* $Id: tables.c,v 1.196 2004/06/25 08:22:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1257,7 +1257,7 @@ check_table_widths(struct table *table)
 	colspan = 1;
 	do {
 		int new_colspan = MAXINT;
-		
+
 		for (i = 0; i < table->x; i++) for (j = 0; j < table->y; j++) {
 			struct table_cell *cell = CELL(table, i, j);
 
@@ -1317,7 +1317,7 @@ end:
 static void
 get_table_heights(struct table *table)
 {
-	int s = 1;
+	int rowspan;
 	register int i, j;
 
 	for (j = 0; j < table->y; j++) {
@@ -1343,8 +1343,9 @@ get_table_heights(struct table *table)
 		}
 	}
 
+	rowspan = 1;
 	do {
-		int ns = MAXINT;
+		int new_rowspan = MAXINT;
 
 		for (j = 0; j < table->y; j++) {
 			for (i = 0; i < table->x; i++) {
@@ -1352,24 +1353,24 @@ get_table_heights(struct table *table)
 
 				if (!cell->is_used || cell->is_spanned) continue;
 
-				if (cell->rowspan == s) {
+				if (cell->rowspan == rowspan) {
 					register int k, p = 0;
 
-					for (k = 1; k < s; k++)
+					for (k = 1; k < rowspan; k++)
 						p += (get_hline_width(table, j + k) >= 0);
 
-					dst_width(&table->rows_heights[j], s,
+					dst_width(&table->rows_heights[j], rowspan,
 						  cell->height - p, NULL);
 
-				} else if (cell->rowspan > s &&
-					   cell->rowspan < ns) {
-					ns = cell->rowspan;
+				} else if (cell->rowspan > rowspan &&
+					   cell->rowspan < new_rowspan) {
+					new_rowspan = cell->rowspan;
 				}
 
 			}
 		}
-		s = ns;
-	} while (s != MAXINT);
+		rowspan = new_rowspan;
+	} while (rowspan != MAXINT);
 
 	{
 		struct table_frames table_frames;

@@ -35,7 +35,7 @@ void input_function (int fd)
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
 	/* let's put up a meaningful console title */
-	bSuccess = SetConsoleTitle("Links - Console mode browser");
+	bSuccess = SetConsoleTitle("ELinks - Console mode browser");
 
 	/* get the standard handles */
 	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);

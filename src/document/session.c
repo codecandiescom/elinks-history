@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.19 2002/04/01 20:48:36 pasky Exp $ */
+/* $Id: session.c,v 1.20 2002/04/16 12:45:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,7 +201,7 @@ void print_screen_status(struct session *ses)
 			}
 		}
 
-		msg = stracpy("Links");
+		msg = stracpy("ELinks");
 		if (msg) {
 			if (ses->screen && ses->screen->f_data
 			    && ses->screen->f_data->title

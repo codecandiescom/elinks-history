@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.79 2003/10/23 22:16:08 jonas Exp $ */
+/* $Id: options.h,v 1.80 2003/10/23 22:42:49 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -246,7 +246,7 @@ struct option_info {
 #define INIT_OPT_INT(path, capt, name, flags, min, max, def, desc) \
 	{ INIT_OPTION(name, flags, OPT_INT, min, max, def, DESC(desc), capt), path }
 
-#define INIT_OPT_LONGadd_opt_long(path, capt, name, flags, min, max, def, desc) \
+#define INIT_OPT_LONG(path, capt, name, flags, min, max, def, desc) \
 	{ INIT_OPTION(name, flags, OPT_LONG, min, max, def, DESC(desc), capt), path }
 
 #define INIT_OPT_STRING(path, capt, name, flags, def, desc) \

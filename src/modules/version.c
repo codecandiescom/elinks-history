@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.17 2003/09/29 21:15:45 zas Exp $ */
+/* $Id: version.c,v 1.18 2003/10/13 21:49:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,6 +96,12 @@ get_dyn_full_version(struct terminal *term, int more)
 #endif
 #ifdef HAVE_BZLIB_H
 		comma, "bzip2",
+#endif
+#ifdef MAILCAP
+		comma, _("Mailcap", term),
+#endif
+#ifdef MIMETYPES
+		comma, _("Mimetypes files", term),
 #endif
 #ifdef FORMS_MEMORY
 		comma, _("Forms memory", term),

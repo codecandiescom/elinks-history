@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.28 2003/10/08 07:49:13 miciah Exp $ */
+/* $Id: hierbox.c,v 1.29 2003/10/19 11:31:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
 						if (box->sel->root) {
 							struct ctx ctx =
 								{ box->sel, 1 };
-						
+
 							traverse_listbox_items_list(
 									box->sel
 									 ->root,
@@ -86,7 +86,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
 								&dlg->items[n],
 								ctx.offset);
 						}
-					} else { 
+					} else {
 						recursively_set_expanded(
 								box->sel, 0);
 					}

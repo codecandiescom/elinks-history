@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.314 2003/10/19 11:19:42 zas Exp $ */
+/* $Id: options.c,v 1.315 2003/10/19 11:31:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -904,7 +904,7 @@ register_options(void)
 		" (DISABLED)")
 #endif
 	);
-	
+
 	add_opt_tree("", N_("Configuration system"),
 		"config", 0,
 		N_("Configuration handling options."));

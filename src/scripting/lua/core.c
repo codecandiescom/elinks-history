@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.80 2003/10/17 13:50:31 jonas Exp $ */
+/* $Id: core.c,v 1.81 2003/10/19 11:31:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,7 +317,7 @@ l_bind_key(LS)
 	ref = lua_ref(S, 1);
 	add_format_to_string(&event_name, "lua-run-func %i", ref);
 	event_id = register_event(event_name.source);
-	event_id = register_event_hook(event_id, run_lua_func, 0, (void *)ref); 
+	event_id = register_event_hook(event_id, run_lua_func, 0, (void *)ref);
 	done_string(&event_name);
 	if (event_id == EVENT_NONE) goto lua_error;
 
@@ -663,7 +663,7 @@ init_lua(void)
 	lua_register(L, "bind_key", l_bind_key);
 	lua_register(L, "edit_bookmark_dialog", l_edit_bookmark_dialog);
 	lua_register(L, "xdialog", l_xdialog);
-	
+
 	lua_dostring(L, "function set_elinks_home(s) elinks_home = s end");
 	lua_getglobal(L, "set_elinks_home");
 	lua_pushstring(L, elinks_home ? elinks_home : (unsigned char *)CONFDIR);

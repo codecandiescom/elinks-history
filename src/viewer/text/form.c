@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.44 2003/10/17 14:08:31 jonas Exp $ */
+/* $Id: form.c,v 1.45 2003/10/19 11:31:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,7 +329,7 @@ has_form_submit(struct document *document, struct form_control *frm)
 		if (fc->type == FC_SUBMIT || fc->type == FC_IMAGE)
 			break;
 	}
-	
+
 	assertm(found, "form is not on list");
 	/* Return path :-). */
 	return found;

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.78 2003/10/18 22:00:55 pasky Exp $ */
+/* $Id: link.c,v 1.79 2003/10/19 11:31:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,7 +428,7 @@ next_in_view(struct document_view *doc_view, int p, int d,
 		}
 		p += d;
 	}
-	
+
 	doc_view->vs->current_link = -1;
 	return 0;
 }
@@ -890,10 +890,10 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					     c - 1 ? M_SUBMENU : (unsigned char *) "",
 					     (menu_func) open_in_new_window,
 					     send_open_in_new_window, c - 1, 0);
-	
+
 			add_to_menu(&mi, N_("Open in new ~tab"), "",
 				     (menu_func) open_in_new_tab, (void *) 1, 0, 0);
-	
+
 			add_to_menu(&mi, N_("Open in new tab in ~background"), "",
 				     (menu_func) open_in_new_tab_in_background, (void *) 1, 0, 0);
 
@@ -988,7 +988,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 	    || doc_view->vs->current_link == -1
 	    || doc_view->vs->current_link >= doc_view->document->nlinks)
 		return NULL;
-	
+
 	link = &doc_view->document->links[doc_view->vs->current_link];
 
 	if (link->type == L_LINK) {

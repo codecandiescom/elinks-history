@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.62 2003/10/18 01:19:34 jonas Exp $ */
+/* $Id: color.c,v 1.63 2003/10/19 11:31:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,7 +248,7 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		return;
 
 	case COLOR_MODE_MONO:
-		/* TODO: A better way if possible to find out whether to 
+		/* TODO: A better way if possible to find out whether to
 		 * inverse the fore- and backgroundcolor. Else figure out what:
 		 *
 		 *	CMPCODE(c) (((c) << 1 | (c) >> 2) & TERM_COLOR_MASK)

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.263 2004/12/19 16:03:19 pasky Exp $ */
+/* $Id: form.c,v 1.264 2004/12/19 16:15:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1493,11 +1493,15 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	switch (fc->type) {
 	case FC_CHECKBOX:
 	case FC_RADIO:
-		if (!fc->default_value || !fc->default_value[0])
+	{
+		struct form_state *fs = find_form_state(doc_view, fc);
+
+		if (!fs->value || !fs->value[0])
 			break;
 
 		add_form_attr_to_string(&str, term, N_("value"), fs->value);
 		break;
+	}
 
 	case FC_TEXT:
 	case FC_PASSWORD:

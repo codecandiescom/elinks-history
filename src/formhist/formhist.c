@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.59 2003/11/24 12:00:34 zas Exp $ */
+/* $Id: formhist.c,v 1.60 2003/11/24 16:23:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "elinks.h"
 
 #include "bfu/msgbox.h"
+#include "formhist/dialogs.h"
 #include "formhist/formhist.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
@@ -96,15 +97,18 @@ new_form(unsigned char *url)
 	if (!form->submit) return NULL;
 
 	init_list(*form->submit);
+	form->box_item = init_browser_box(&formhist_browser, form->url, form);
 
 	return form;
 }
 
-static void
+void
 free_form(struct formhist_data *form)
 {
 	free_form_in_list(form);
 	mem_free(form->submit);
+	if (form->box_item)
+		done_browser_box(&formhist_browser, form->box_item);
 	mem_free(form);
 }
 
@@ -175,7 +179,7 @@ fail:
 	return 0;
 }
 
-static int
+int
 save_saved_forms(void)
 {
 	struct secure_save_info *ssi;

@@ -12,6 +12,11 @@ dnl ===================================================================
 AC_PROG_CC
 AC_PROG_AWK
 
+dnl gcc specific options
+if test "x$ac_cv_prog_gcc" = "xyes"; then
+  CFLAGS="$CFLAGS -Wall"
+fi
+
 dnl ===================================================================
 dnl Checks for special OSes.
 dnl ===================================================================

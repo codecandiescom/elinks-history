@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.486 2004/06/11 23:05:16 jonas Exp $ */
+/* $Id: session.c,v 1.487 2004/06/11 23:05:58 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -546,35 +546,6 @@ setup_first_session(struct session *ses, struct uri *uri)
 {
 	struct terminal *term = ses->tab->term;
 
-	if (uri) {
-		goto_uri(ses, uri);
-
-	} else if (first_use) {
-		/* Only open the goto URL dialog if no URI was passed on the
-		 * command line. */
-		void *handler = uri ? dialog_goto_url_open : NULL;
-
-		msg_box(term, NULL, 0,
-			N_("Welcome"), AL_CENTER,
-			N_("Welcome to ELinks!\n\n"
-			"Press ESC for menu. Documentation is available in "
-			"Help menu."),
-			ses, 1,
-			N_("OK"), handler, B_ENTER | B_ESC);
-
-#ifdef CONFIG_BOOKMARKS
-	} else if (get_opt_bool("ui.sessions.auto_restore")) {
-		unsigned char *folder;
-
-		folder = get_opt_str("ui.sessions.auto_save_foldername");
-		open_bookmark_folder(ses, folder);
-#endif
-	} else {
-		goto_url_home(ses);
-	}
-
-	first_use = 0;
-
 	if (!*get_opt_str("protocol.http.user_agent")) {
 		msg_box(term, NULL, 0,
 			N_("Warning"), AL_CENTER,
@@ -616,6 +587,35 @@ setup_first_session(struct session *ses, struct uri *uri)
 				N_("OK"), NULL, B_ENTER | B_ESC);
 		}
 	}
+
+	if (uri) {
+		goto_uri(ses, uri);
+
+	} else if (first_use) {
+		/* Only open the goto URL dialog if no URI was passed on the
+		 * command line. */
+		void *handler = uri ? dialog_goto_url_open : NULL;
+
+		msg_box(term, NULL, 0,
+			N_("Welcome"), AL_CENTER,
+			N_("Welcome to ELinks!\n\n"
+			"Press ESC for menu. Documentation is available in "
+			"Help menu."),
+			ses, 1,
+			N_("OK"), handler, B_ENTER | B_ESC);
+
+#ifdef CONFIG_BOOKMARKS
+	} else if (get_opt_bool("ui.sessions.auto_restore")) {
+		unsigned char *folder;
+
+		folder = get_opt_str("ui.sessions.auto_save_foldername");
+		open_bookmark_folder(ses, folder);
+#endif
+	} else {
+		goto_url_home(ses);
+	}
+
+	first_use = 0;
 }
 
 /* First load the current URI of the base session. In most cases it will just

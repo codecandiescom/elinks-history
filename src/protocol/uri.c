@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.245 2004/06/12 00:55:21 jonas Exp $ */
+/* $Id: uri.c,v 1.246 2004/06/12 01:01:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -708,9 +708,9 @@ static unsigned char *translate_url(unsigned char *url, unsigned char *cwd);
 unsigned char *
 join_urls(struct uri *base, unsigned char *rel)
 {
-	unsigned char *n, *path;
+	unsigned char *uristring, *path;
 	int add_slash = 0;
-	int tmp;
+	int length;
 
 	/* See RFC 1808 */
 	/* TODO: Support for ';' ? (see the RFC) --pasky */
@@ -719,44 +719,47 @@ join_urls(struct uri *base, unsigned char *rel)
 	 * expensive since it uses granular allocation scheme. I wouldn't
 	 * personally mind tho' because it would be cleaner. --jonas */
 	if (rel[0] == '#') {
-		int length = base->fragment
-			   ? base->fragment - struri(base) - 1
-			   : get_real_uri_length(base);
+		length  = base->fragment
+			? base->fragment - struri(base) - 1
+			: get_real_uri_length(base);
 
-		n = memacpy(struri(base), length);
-		if (!n) return NULL;
+		uristring = memacpy(struri(base), length);
+		if (!uristring) return NULL;
 
-		add_to_strn(&n, rel);
+		add_to_strn(&uristring, rel);
 
-		return normalize_uri_reparse(n);
+		return normalize_uri_reparse(uristring);
 	} else if (rel[0] == '?') {
-		int length = base->fragment
-			   ? base->fragment - struri(base) - 1
-			   : get_real_uri_length(base);
+		length  = base->fragment
+			? base->fragment - struri(base) - 1
+			: get_real_uri_length(base);
 
-		n = memchr(base->data, '?', base->datalen);
-		if (n) length = n - struri(base) - 1;
+		uristring = memchr(base->data, '?', base->datalen);
+		if (uristring) length = uristring - struri(base) - 1;
 
-		n = memacpy(struri(base), length);
-		if (!n) return NULL;
+		uristring = memacpy(struri(base), length);
+		if (!uristring) return NULL;
 
-		add_to_strn(&n, rel);
+		add_to_strn(&uristring, rel);
 
-		return normalize_uri_reparse(n);
+		return normalize_uri_reparse(uristring);
 	} else if (rel[0] == '/' && rel[1] == '/') {
 		if (!get_protocol_need_slashes(base->protocol))
 			return NULL;
 
 		/* Get `<protocol>://' and add stuff after `//' from @rel */
-		n = get_uri_string(base, URI_PROTOCOL);
-		if (n) add_to_strn(&n, rel + 2);
-		return n;
+		uristring = get_uri_string(base, URI_PROTOCOL);
+		if (!uristring) return NULL;
+
+		add_to_strn(&uristring, rel + 2);
+
+		return uristring;
 	}
 
 	/* Check if there is some protocol name to go for */
-	tmp = get_protocol_length(rel);
-	if (tmp) {
-		switch (get_protocol(rel, tmp)) {
+	length = get_protocol_length(rel);
+	if (length) {
+		switch (get_protocol(rel, length)) {
 		case PROTOCOL_UNKNOWN:
 		case PROTOCOL_PROXY:
 			/* Mysteriously proxy URIs are breaking here ... */
@@ -766,8 +769,8 @@ join_urls(struct uri *base, unsigned char *rel)
 			/* FIXME: Use get_uri_string(base, URI_PATH) as cwd arg
 			 * to translate_url(). */
 		default:
-			n = translate_url(rel, NULL);
-			if (n) return n;
+			uristring = translate_url(rel, NULL);
+			if (uristring) return uristring;
 		}
 	}
 
@@ -813,15 +816,15 @@ join_urls(struct uri *base, unsigned char *rel)
 		}
 	}
 
-	tmp = path - struri(base);
-	n = mem_alloc(tmp + strlen(rel) + add_slash + 1);
-	if (!n) return NULL;
+	length = path - struri(base);
+	uristring = mem_alloc(length + strlen(rel) + add_slash + 1);
+	if (!uristring) return NULL;
 
-	memcpy(n, struri(base), tmp);
-	if (add_slash) n[tmp] = '/';
-	strcpy(n + tmp + add_slash, rel);
+	memcpy(uristring, struri(base), length);
+	if (add_slash) uristring[length] = '/';
+	strcpy(uristring + length + add_slash, rel);
 
-	return normalize_uri_reparse(n);
+	return normalize_uri_reparse(uristring);
 }
 
 

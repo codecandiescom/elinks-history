@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.200 2003/05/02 15:41:15 zas Exp $ */
+/* $Id: options.c,v 1.201 2003/05/02 16:08:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2414,6 +2414,10 @@ register_options()
 	add_opt_bool("ui", N_("Display status bar"),
 		"show_status_bar", 0, 1,
 		N_("Show status bar on the screen."));
+
+	add_opt_bool("ui", N_("Cycle tabs bar"),
+		"cycle_tabs_bar", 0, 1,
+		N_("Cycle at left/right when swapping tabs."));
 
 	add_opt_int("ui", N_("Display tabs bar"),
 		"show_tabs_bar",  0, 0, 2, 1,

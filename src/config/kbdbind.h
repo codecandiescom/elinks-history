@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.126 2004/06/26 21:29:57 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.127 2004/06/27 12:29:21 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -206,6 +206,8 @@ enum menu_action {
 enum kbdbind_flags {
 	KBDB_WATERMARK = 1,
 	KBDB_TOUCHED = 2,
+	/* Marks wether the keybinding combination also ``belongs'' to a
+	 * default keybinding. */
 	KBDB_DEFAULT = 4,
 };
 

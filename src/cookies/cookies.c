@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.168 2004/11/10 12:11:40 zas Exp $ */
+/* $Id: cookies.c,v 1.169 2004/11/10 12:16:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -385,12 +385,11 @@ set_cookie(struct uri *uri, unsigned char *str)
 		memmove(cookie->domain, cookie->domain + 1,
 			strlen(cookie->domain));
 
+	/* cookie->secure is set to 0 by default by calloc(). */
 	secure = parse_header_param(str, "secure");
 	if (secure) {
 		cookie->secure = 1;
 		mem_free(secure);
-	} else {
-		cookie->secure = 0;
 	}
 
 #ifdef DEBUG_COOKIES

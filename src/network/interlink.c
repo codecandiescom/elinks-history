@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.71 2004/04/23 19:26:46 pasky Exp $ */
+/* $Id: interlink.c,v 1.72 2004/06/11 14:00:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -337,7 +337,7 @@ af_unix_connection(struct socket_info *info)
 		return;
 	}
 
-	init_term(ns, ns, tabwin_func);
+	init_term(ns, ns);
 
 	set_highpri();
 }

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.67 2004/06/11 13:58:01 jonas Exp $ */
+/* $Id: terminal.c,v 1.68 2004/06/11 14:00:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,8 +59,7 @@ cls_redraw_all_terminals(void)
 }
 
 struct terminal *
-init_term(int fdin, int fdout,
-	  void (*root_window)(struct window *, struct term_event *, int))
+init_term(int fdin, int fdout)
 {
 	struct terminal *term = mem_calloc(1, sizeof(struct terminal));
 
@@ -341,7 +340,7 @@ attach_terminal(int in, int out, int ctl, void *info, int len)
 	if (set_nonblocking_fd(terminal_pipe[1]) < 0) return NULL;
 	handle_trm(in, out, out, terminal_pipe[1], ctl, info, len);
 
-	term = init_term(terminal_pipe[0], out, tabwin_func);
+	term = init_term(terminal_pipe[0], out);
 	if (!term) {
 		close_terminal_pipes();
 		return NULL;

@@ -1,4 +1,4 @@
-/* $Id: os2.h,v 1.3 2003/10/27 02:46:12 pasky Exp $ */
+/* $Id: os2.h,v 1.4 2003/10/27 02:47:08 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS2_H
 #define EL__OSDEP_OS2_H
@@ -21,7 +21,7 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define THREAD_SAFE_LOOKUP
 #endif
 #if defined(HAVE_MOUOPEN) && defined(USE_MOUSE)
-#define USING_OS2_MOUSE
+#define OS2_MOUSE
 #endif
 
 #ifdef __EMX__

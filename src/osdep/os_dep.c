@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.108 2003/10/27 02:19:13 pasky Exp $ */
+/* $Id: os_dep.c,v 1.109 2003/10/27 02:47:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -489,7 +489,7 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 
 #endif
 
-#ifndef USING_OS2_MOUSE
+#ifndef OS2_MOUSE
 void
 want_draw(void)
 {
@@ -552,7 +552,7 @@ elinks_cfmakeraw(struct termios *t)
 #if defined(USE_GPM) && defined(USE_MOUSE)
 
 
-#elif !defined(USING_OS2_MOUSE)
+#elif !defined(OS2_MOUSE)
 
 void *
 handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),

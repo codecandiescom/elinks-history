@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.7 2003/10/27 02:44:45 pasky Exp $ */
+/* $Id: os2.c,v 1.8 2003/10/27 02:47:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -450,7 +450,7 @@ resize_window(int x, int y)
 }
 
 
-#if USING_OS2_MOUSE
+#if OS2_MOUSE
 
 #ifdef HAVE_SYS_FMUTEX_H
 _fmutex mouse_mutex;
@@ -627,7 +627,7 @@ done_draw(void)
 #endif
 }
 
-#endif /* USING_OS2_MOUSE */
+#endif /* OS2_MOUSE */
 
 
 int

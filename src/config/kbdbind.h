@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.5 2002/05/04 09:00:03 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.6 2002/05/05 14:52:53 zas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -44,6 +44,7 @@ enum keyact {
 	ACT_KILL_TO_BOL,
 	ACT_KILL_TO_EOL,
 	ACT_LEFT,
+	ACT_LINK_MENU,
 	ACT_LUA_CONSOLE,
 	ACT_LUA_FUNCTION,
 	ACT_MENU,

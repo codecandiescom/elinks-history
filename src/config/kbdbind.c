@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.8 2002/05/04 09:00:03 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.9 2002/05/05 14:52:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,7 @@ static int parse_act(unsigned char *s)
 {
 	int i;
 	/* Please keep this table in alphabetical order, and in sync with
-	 * the ACT_* constants in links.h.  */
+	 * the ACT_* constants in kbdbind.h.  */
 	unsigned char *table[] = {
 		"add-bookmark",
 		"auto-complete",
@@ -193,6 +193,7 @@ static int parse_act(unsigned char *s)
 		"kill-to-bol",
 		"kill-to-eol",
 		"left",
+		"link-menu",
 		"lua-console",
 		" *lua-function*", /* internal use only */
 		"menu",
@@ -380,6 +381,8 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_MENU, KBD_F9 },
 	{ ACT_FILE_MENU, KBD_F10 },
 	{ ACT_LUA_CONSOLE, ',' },
+	{ ACT_LINK_MENU, 'l' },
+	{ ACT_LINK_MENU, 'L' },
 	{ 0, 0, 0 }
 };
 

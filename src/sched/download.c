@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.263 2004/04/11 15:47:03 jonas Exp $ */
+/* $Id: download.c,v 1.264 2004/04/11 16:08:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,21 +215,18 @@ destroy_downloads(struct session *ses)
 static void
 download_error_dialog(struct file_download *file_download, int saved_errno)
 {
-	unsigned char *msg = stracpy(file_download->file);
-	unsigned char *emsg = stracpy((unsigned char *) strerror(saved_errno));
+	unsigned char *emsg = strerror(saved_errno);
 	struct session *ses = get_download_ses(file_download);
 
-	if (msg && emsg && ses) {
+	if (ses) {
 		struct terminal *term = ses->tab->term;
 
-		msg_box(term, getml(msg, emsg, NULL), MSGBOX_FREE_TEXT,
+		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("Download error"), AL_CENTER,
-			msg_text(term, N_("Could not create file %s: %s"), msg, emsg),
+			msg_text(term, N_("Could not create file %s: %s"),
+				 file_download->file, emsg),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
-	} else {
-		if (msg) mem_free(msg);
-		if (emsg) mem_free(emsg);
 	}
 }
 

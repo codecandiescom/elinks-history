@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.373 2004/01/23 19:18:18 zas Exp $ */
+/* $Id: parser.c,v 1.374 2004/01/24 02:05:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "config/kbdbind.h"
 #include "document/css/apply.h"
 #include "document/css/parser.h"
+#include "document/css/stylesheet.h"
 #include "document/html/frames.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
@@ -3062,7 +3063,7 @@ ng:;
 						goto set_lt;
 					}
 					if (ei->func == html_style && global_doc_opts->css_enable) {
-							css_parse_stylesheet(&css_styles, html);
+						css_parse_stylesheet(&css_styles, html);
 					}
 					if (ei->nopair == 2 || ei->nopair == 3) {
 						struct html_element *e;

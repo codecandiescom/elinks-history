@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.41 2004/01/23 19:27:27 jonas Exp $ */
+/* $Id: apply.c,v 1.42 2004/01/24 02:04:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "document/css/parser.h"
 #include "document/css/property.h"
 #include "document/css/scanner.h"
+#include "document/css/stylesheet.h"
 #include "document/html/parser.h"
 #include "document/options.h"
 #include "util/color.h"

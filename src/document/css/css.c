@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.25 2004/01/24 01:17:29 jonas Exp $ */
+/* $Id: css.c,v 1.26 2004/01/24 02:05:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "config/options.h"
 #include "document/css/css.h"
 #include "document/css/parser.h"
+#include "document/css/stylesheet.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "modules/module.h"

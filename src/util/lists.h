@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.40 2004/07/14 00:03:12 jonas Exp $ */
+/* $Id: lists.h,v 1.41 2004/07/14 00:24:24 jonas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -173,16 +173,20 @@ do { \
 	     (list_typeof(e)) (e) != (list_typeof(e)) &(l); \
 	     (e) = (e)->prev)
 
+#define foreachsafe(e, n, l) \
+	for ((e) = (l).next, (n) = (e)->next; \
+	     (list_typeof(e)) (e) != (list_typeof(e)) &(l); \
+	     (e) = (n), (n) = (e)->next)
+
 #define free_list(l) \
 do { \
-	struct xlist_head *head; \
+	struct xlist_head *head, *next; \
 \
 	list_magic_check(&(l), "free_list"); \
 	do_not_optimize_here_gcc_2_7(&l); \
 	foreach (head, (l)) do_not_optimize_here_gcc_3_x(head); /* AA */ \
 	foreachback (head, (l)) do_not_optimize_here_gcc_3_x(head); /* AA */ \
-	while ((l).next != &(l)) { \
-		head = (l).next; \
+	foreachsafe (head, next, l) { \
 		del_from_list(head); \
 		mem_free(head); \
 	} \

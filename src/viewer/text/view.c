@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.117 2003/07/01 21:06:44 zas Exp $ */
+/* $Id: view.c,v 1.118 2003/07/01 21:24:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -817,22 +817,33 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			x = l->pos[0].x + xp - vx;
 			y = l->pos[0].y + yp - vy;
 			ye = y + frm->rows;
+
 			for (; ln->st && y < ye; ln++, y++) {
+				if (y < yp || y >= yp + yw) continue;
+
 				for (i = 0; i < frm->cols; i++) {
-					if (x + i >= xp && y >= yp &&
-					    x + i < xp + xw && y < yp + yw) {
-						if (fs->value && i >= -fs->vpos
-						    && i + fs->vpos < ln->en - ln->st)
-							set_only_char(t, x+i, y, ln->st[i + fs->vpos]);
-						else set_only_char(t, x+i, y, '_');
+					int xi = x + i;
+
+					if (xi >= xp && xi < xp + xw) {
+						if (fs->value &&
+						    i >= -fs->vpos &&
+						    i + fs->vpos < ln->en - ln->st)
+							set_only_char(t, xi, y,
+								      ln->st[i + fs->vpos]);
+						else
+							set_only_char(t, xi, y, '_');
 					}
 				}
 			}
+
 			for (; y < ye; y++) {
+				if (y < yp || y >= yp + yw) continue;
+
 				for (i = 0; i < frm->cols; i++) {
-					if (x + i >= xp && y >= yp &&
-					    x + i < xp + xw && y < yp + yw)
-						set_only_char(t, x+i, y, '_');
+					int xi = x + i;
+
+					if (xi >= xp && xi < xp + xw)
+						set_only_char(t, xi, y, '_');
 				}
 			}
 

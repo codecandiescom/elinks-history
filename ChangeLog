@@ -1,3 +1,9 @@
+Tue Dec 25 17:58:32 2001  Petr Baudis <pasky@ji.cz>:
+
+	* default.c, links.h:
+	
+	rewritten options handling
+
 Mon Dec 24 13:42:03 2001  Petr Baudis <pasky@ji.cz>:
 
 	* links.h, terminal.c, view.c:

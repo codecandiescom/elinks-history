@@ -1,9 +1,9 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.60 2005/03/27 11:26:23 pasky Exp $
+# $Id: hooks.pl,v 1.61 2005/03/27 11:30:52 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
-# To get the complete documentation for this file in a user-friendly
+# To get the complete user documentation for this file in a user-friendly
 # manner, do either
 #	pod2html hooks.pl > hooks.html && elinks hooks.html
 # or
@@ -64,6 +64,41 @@ and does not contain the default values:
 	#          ask jeeves
 
 =cut
+
+
+sub loadrc($)
+{
+	my ($preference) = @_;
+	my $configperl = $ENV{'HOME'} . '/.elinks/config.pl';
+	my $answer = '';
+
+	open RC, "<$configperl" or return $answer;
+	while (<RC>)
+	{
+		s/\s*#.*$//;
+		next unless (m/(.*):\s*(.*)/);
+		my $setting = $1;
+		my $switch = $2;
+		next unless ($setting eq $preference);
+
+		if ($switch =~ /^(yes|1|on|yea|yep|sure|ok|okay|yeah|why.*not)$/)
+		{
+			$answer = "yes";
+		}
+		elsif ($switch =~ /^(no|0|off|nay|nope|nah|hell.*no)$/)
+		{
+			$answer = "no";
+		}
+		else
+		{
+			$answer = lc($switch);
+		}
+	}
+	close RC;
+
+	return $answer;
+}
+
 
 =head1 PREFIXES
 
@@ -127,6 +162,7 @@ and anything in quotes with no prefix.
 B<g> or B<google>
 
 =cut
+
 	'^(g|google)(| .*)$' => 'google',
 
 =item Yahoo
@@ -950,39 +986,6 @@ sub quit_hook
 	}
 	close COOKIES;
 	print "\n", $fortune;
-}
-
-
-################################################################################
-### Configuration ##############################################################
-sub loadrc
-{
-	my ($preference) = @_;
-	my $configperl = $ENV{'HOME'} . '/.elinks/config.pl';
-	my $answer = '';
-	open RC, "<$configperl" or return $answer;
-	while (<RC>)
-	{
-		s/\s*#.*$//;
-		next unless (m/(.*):\s*(.*)/);
-		my $setting = $1;
-		my $switch = $2;
-		next unless ($setting eq $preference);
-		if ($switch =~ /^(yes|1|on|yea|yep|sure|ok|okay|yeah|why.*not)$/)
-		{
-			$answer = "yes";
-		}
-		elsif ($switch =~ /^(no|0|off|nay|nope|nah|hell.*no)$/)
-		{
-			$answer = "no";
-		}
-		else
-		{
-			$answer = lc($switch);
-		}
-	}
-	close RC;
-	return $answer;
 }
 
 

@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.27 2003/12/01 16:05:48 jonas Exp $ */
+/* $Id: tab.c,v 1.28 2003/12/01 23:44:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,12 +172,6 @@ push_yes_button(struct session *ses)
 	switch_to_tab(term, term->current_tab - 1, num_tabs - 1);
 }
 
-static void
-push_no_button(struct session *ses)
-{
-	/* m33p */
-}
-
 void
 close_tab(struct terminal *term, struct session *ses)
 {
@@ -194,7 +188,7 @@ close_tab(struct terminal *term, struct session *ses)
 			N_("Do you really want to close the current tab?"),
 			ses, 2,
 			N_("Yes"), (void (*)(void *)) push_yes_button, B_ENTER,
-			N_("No"), (void (*)(void *)) push_no_button, B_ESC);
+			N_("No"), NULL, B_ESC);
 
 	} else {
 		delete_window(get_current_tab(term));

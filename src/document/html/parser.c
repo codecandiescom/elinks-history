@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.233 2003/10/29 22:11:02 jonas Exp $ */
+/* $Id: parser.c,v 1.234 2003/10/29 22:18:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3549,47 +3549,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 	return 1;
 }
 
-int
-get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
-	      unsigned char *tag, struct menu_item **menu,
-	      struct memory_list **ml, unsigned char *href_base,
-	      unsigned char *target_base, int to, int def, int hdef)
-{
-	struct conv_table *ct;
-	struct string hd;
-
-	if (!init_string(&hd)) return -1;
-
-	if (head) add_to_string(&hd, head);
-	scan_http_equiv(pos, eof, &hd, NULL);
-	ct = get_convert_table(hd.source, to, def, NULL, NULL, hdef);
-	done_string(&hd);
-
-	*menu = mem_calloc(1, sizeof(struct menu_item));
-	if (!*menu) return -1;
-
-	while (look_for_map(&pos, eof, tag));
-
-	if (pos >= eof) {
-		mem_free(*menu);
-		return -1;
-	}
-
-	*ml = NULL;
-
-	while (look_for_link(&pos, eof, tag, menu, ml,
-			     href_base, target_base, ct));
-
-	if (pos >= eof) {
-		freeml(*ml);
-		mem_free(*menu);
-		return -1;
-	}
-
-	return 0;
-}
-
-void
+static void
 scan_http_equiv(unsigned char *s, unsigned char *eof, struct string *head,
 		struct string *title)
 {
@@ -3660,6 +3620,46 @@ xsp:
 	mem_free(he);
 	add_to_string(head, "\r\n");
 	goto se;
+}
+
+int
+get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
+	      unsigned char *tag, struct menu_item **menu,
+	      struct memory_list **ml, unsigned char *href_base,
+	      unsigned char *target_base, int to, int def, int hdef)
+{
+	struct conv_table *ct;
+	struct string hd;
+
+	if (!init_string(&hd)) return -1;
+
+	if (head) add_to_string(&hd, head);
+	scan_http_equiv(pos, eof, &hd, NULL);
+	ct = get_convert_table(hd.source, to, def, NULL, NULL, hdef);
+	done_string(&hd);
+
+	*menu = mem_calloc(1, sizeof(struct menu_item));
+	if (!*menu) return -1;
+
+	while (look_for_map(&pos, eof, tag));
+
+	if (pos >= eof) {
+		mem_free(*menu);
+		return -1;
+	}
+
+	*ml = NULL;
+
+	while (look_for_link(&pos, eof, tag, menu, ml,
+			     href_base, target_base, ct));
+
+	if (pos >= eof) {
+		freeml(*ml);
+		mem_free(*menu);
+		return -1;
+	}
+
+	return 0;
 }
 
 struct html_element *

@@ -1,5 +1,5 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.7 2004/04/23 15:52:08 pasky Exp $ */
+/* $Id: core.c,v 1.8 2004/04/24 00:25:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 
 #include "main.h"
 #include "lowlevel/home.h"
-#include "module/module.h"
+#include "modules/module.h"
 #include "scripting/perl/core.h"
 #include "scripting/perl/hooks.h"
 #include "util/file.h"

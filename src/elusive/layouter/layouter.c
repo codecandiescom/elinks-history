@@ -1,5 +1,5 @@
-/* Parser frontend */
-/* $Id: layouter.c,v 1.1 2002/12/30 17:58:37 pasky Exp $ */
+/* Layouter frontend */
+/* $Id: layouter.c,v 1.2 2002/12/30 18:04:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

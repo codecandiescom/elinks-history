@@ -1,5 +1,5 @@
-/* Syntax tree utility tools */
-/* $Id: rectangle.c,v 1.1 2002/12/30 16:30:28 pasky Exp $ */
+/* Layout rectangle utility tools */
+/* $Id: rectangle.c,v 1.2 2002/12/30 18:04:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

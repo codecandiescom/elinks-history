@@ -1,5 +1,5 @@
-/* Parser frontend */
-/* $Id: parser.c,v 1.23 2002/12/30 17:49:02 pasky Exp $ */
+/* Parser HTML backend */
+/* $Id: parser.c,v 1.24 2002/12/30 18:04:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

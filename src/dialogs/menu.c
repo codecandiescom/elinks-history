@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.132 2003/09/25 16:56:06 zas Exp $ */
+/* $Id: menu.c,v 1.133 2003/09/27 13:56:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,13 +174,6 @@ static void
 go_backwards(struct terminal *term, void *psteps, struct session *ses)
 {
 	int steps = (int) psteps;
-
-#if 0
-	if (ses->tq_goto_position)
-		--steps;
-	if (ses->search_word)
-		mem_free(ses->search_word), ses->search_word = NULL;
-#endif
 
 	abort_loading(ses, 0);
 
@@ -394,7 +387,7 @@ static struct menu_item file_menu22[] = {
 	INIT_MENU_ITEM(N_("~Kill background connections"), "", menu_kill_background_connections, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("~Flush all caches"), "", flush_caches, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("Resource ~info"), "", res_inf, NULL, FREE_NOTHING, 0),
-#if 1 /* Always visible ? --Zas */
+#ifdef DEBUG
 	INIT_MENU_ITEM(N_("~Cache info"), "", cache_inf, NULL, FREE_NOTHING, 0),
 #endif
 #ifdef LEAK_DEBUG
@@ -412,19 +405,17 @@ static struct menu_item file_menu3[] = {
 static void
 do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 {
-	int x;
-	int o;
 	struct menu_item *file_menu, *e, *f;
 	int anonymous = get_opt_int_tree(cmdline_options, "anonymous");
+	int x, o;
 
 	file_menu = mem_alloc(sizeof(file_menu11) + sizeof(file_menu12)
 			      + sizeof(file_menu21) + sizeof(file_menu22)
 			      + sizeof(file_menu3)
 			      + 3 * sizeof(struct menu_item));
-
 	if (!file_menu) return;
-	e = file_menu;
 
+	e = file_menu;
 	o = can_open_in_new(term);
 	if (o) {
 		SET_MENU_ITEM(e, N_("~New window"), o - 1 ? M_SUBMENU : (unsigned char *) "",
@@ -436,7 +427,6 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	memcpy(e, file_menu11, sizeof(file_menu11));
 	e += sizeof(file_menu11) / sizeof(struct menu_item);
 
-
 	if (!anonymous) {
 		memcpy(e, file_menu12, sizeof(file_menu12));
 		e += sizeof(file_menu12) / sizeof(struct menu_item);
@@ -447,8 +437,6 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	memcpy(e, file_menu22, sizeof(file_menu22));
 	e += sizeof(file_menu22) / sizeof(struct menu_item);
-	/*"", M_BAR, NULL, NULL, 0, 0,
-	N_("~OS shell"), "", MENU_FUNC menu_shell, NULL, 0, 0,*/
 
 	x = 1;
 	if (!anonymous && can_open_os_shell(term->environment)) {
@@ -468,7 +456,8 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	memcpy(e, file_menu3 + x, sizeof(file_menu3) - x * sizeof(struct menu_item));
 	e += sizeof(file_menu3) / sizeof(struct menu_item);
 
-	for (f = file_menu; f < e; f++) f->item_free = FREE_LIST;
+	for (f = file_menu; f < e; f++)
+		f->item_free = FREE_LIST;
 
 	do_menu(term, file_menu, ses, 1);
 }
@@ -544,14 +533,7 @@ static struct menu_item setup_menu_anon[] = {
 static void
 do_view_menu(struct terminal *term, void *xxx, struct session *ses)
 {
-#if 0
-	if (!get_opt_int_tree(cmdline_options, "anonymous"))
-		do_menu(term, view_menu, ses, 1);
-	else
-		do_menu(term, view_menu_anon, ses, 1);
-#else
 	do_menu(term, view_menu, ses, 1);
-#endif
 }
 
 static void
@@ -569,8 +551,6 @@ do_help_menu(struct terminal *term, void *xxx, struct session *ses)
 	do_menu(term, help_menu, ses, 1);
 }
 
-
-
 static struct menu_item main_menu[] = {
 	INIT_MENU_ITEM(N_("~File"), "", do_file_menu, NULL, FREE_LIST, 1),
 	INIT_MENU_ITEM(N_("~View"), "", do_view_menu, NULL, FREE_LIST, 1),
@@ -580,8 +560,6 @@ static struct menu_item main_menu[] = {
 	INIT_MENU_ITEM(N_("~Help"), "", do_help_menu, NULL, FREE_LIST, 1),
 	NULL_MENU_ITEM
 };
-
-
 
 void
 activate_bfu_technology(struct session *ses, int item)

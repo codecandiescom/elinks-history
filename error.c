@@ -47,6 +47,7 @@ void er(int b, unsigned char *m, va_list l)
 	if (b) fprintf(stderr, "%c", (char)7);
 	vfprintf(stderr, m, l);
 	fprintf(stderr, "\n");
+	fflush(stderr);
 	sleep(1);
 }
 

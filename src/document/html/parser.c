@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.178 2003/07/25 09:34:04 zas Exp $ */
+/* $Id: parser.c,v 1.179 2003/07/25 09:49:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2717,7 +2717,8 @@ html_link(unsigned char *a)
 
 	/* Ignore few annoying links.. */
 	if (link_display < 5 &&
-	    (link.type == LT_ICON ||
+	    (link.direction == LD_REV || /* printing rev links is a non-sense here */
+	     link.type == LT_ICON ||
 	     link.type == LT_AUTHOR ||
 	     link.type == LT_STYLESHEET ||
 	     link.type == LT_ALTERNATE_STYLESHEET)) goto free_and_return;

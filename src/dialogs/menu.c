@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.159 2003/10/24 00:18:24 pasky Exp $ */
+/* $Id: menu.c,v 1.160 2003/10/24 00:22:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,6 +174,7 @@ static void
 go_backwards(struct terminal *term, void *psteps, struct session *ses)
 {
 	int steps = (int) psteps;
+	struct location *cur = cur_loc(ses);
 
 	abort_loading(ses, 0);
 
@@ -187,13 +188,25 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 	/* FIXME: If we've stop because of the sanity check for not hitting the
 	 * history begin, go_back() will do nothing. But this situation should
 	 * never happen anyway ;-). Same applies to unhistory. --pasky */
-	go_back(ses, ses->history.current->prev);
+
+	{
+		/* XXX: We should have the original document as the current
+		 * location in go_back(), as it calls a lot of cleanup stuff
+		 * which assumes cur_loc() really returns the current document
+		 * BEFORE move. */
+		struct location *newcur = ses->history.current;
+
+		ses->history.current = cur;
+		go_back(ses, newcur->prev);
+		ses->history.current = newcur;
+	}
 }
 
 static void
 go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 {
 	int steps = (int) psteps + 1;
+	struct location *cur = cur_loc(ses);
 
 	abort_loading(ses, 0);
 
@@ -204,7 +217,17 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 		steps--;
 	}
 
-	go_unback(ses, ses->history.current->next);
+	{
+		/* XXX: We should have the original document as the current
+		 * location in go_unback(), as it calls a lot of cleanup stuff
+		 * which assumes cur_loc() really returns the current document
+		 * BEFORE move. */
+		struct location *newcur = ses->history.current;
+
+		ses->history.current = cur;
+		go_unback(ses, newcur->next);
+		ses->history.current = newcur;
+	}
 }
 
 static struct menu_item no_hist_menu[] = {

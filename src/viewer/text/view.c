@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.178 2003/07/31 15:04:17 jonas Exp $ */
+/* $Id: view.c,v 1.179 2003/08/01 10:11:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,7 +321,7 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 	while (vs->view_pos >= scr->document->y) vs->view_pos -= yw;
 	if (vs->view_pos < 0) vs->view_pos = 0;
 	if (vy != vs->view_pos) vy = vs->view_pos, check_vs(scr);
-	for (y = vy <= 0 ? 0 : vy; y < (-vy + scr->document->y <= yw ? scr->document->y : yw + vy); y++) {
+	for (y = vy <= 0 ? 0 : vy; y < int_min(scr->document->y, yw + vy); y++) {
 		int st = vx <= 0 ? 0 : vx;
 		int en = (scr->document->data[y].l - vx <= xw)
 			 ? scr->document->data[y].l

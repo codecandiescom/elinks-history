@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.41 2003/07/31 17:29:00 jonas Exp $ */
+/* $Id: inpfield.c,v 1.42 2003/08/01 10:11:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,7 +256,7 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 
 	{
 		int len = strlen(di->cdata + di->vpos);
-		int l = (len <= di->l) ? len : di->l;
+		int l = int_min(len, di->l);
 
 		if (!hide) {
 			print_text(term, di->x, di->y, l,

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.177 2004/07/07 02:24:49 jonas Exp $ */
+/* $Id: hierbox.c,v 1.178 2004/07/07 02:59:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -393,7 +393,7 @@ init_listbox_context(struct listbox_data *box, struct terminal *term,
 	context = mem_calloc(1, sizeof(struct listbox_context));
 	if (!context) return NULL;
 
-	context->item = item;;
+	context->item = item;
 	context->term = term;
 	context->box = box;
 

@@ -1,3 +1,36 @@
+Mon May  3 21:40:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.c:
+
+	Use macros to make calculations explicit, clarifying things.  
+
+Mon May  3 14:32:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix sed magic on FreeBSD.  
+
+Mon May  3 13:11:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/modules/version.c:
+
+	Try to wrap the module feature listing between 70-80 to make it more
+	readable.  
+
+Mon May  3 13:10:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Improve the feature pretty printing to be more portable and faster
+	by using sed exclusively.  
+
+Sun May  2 23:05:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	All hail to the bloat. Print configuration summary _after_ the
+	'creating' messages and in a pretty printed way.  
+
 Sun May  2 13:49:07 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/util/Makefile.am:

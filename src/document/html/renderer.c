@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.492 2004/08/21 21:38:13 miciah Exp $ */
+/* $Id: renderer.c,v 1.493 2004/08/21 21:47:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1046,6 +1046,7 @@ process_link(struct part *part, enum link_state link_state,
 
 	} else {
 		assert(link_state == LINK_STATE_NEW);
+		if_assert_failed return;
 
 		part->link_num++;
 

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.211 2004/01/13 14:41:41 zas Exp $ */
+/* $Id: download.c,v 1.212 2004/01/14 18:22:44 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -850,9 +850,9 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	add_to_list(downloads, file_download);
 	change_connection(&codw_hop->tq->download, &file_download->download, PRI_DOWNLOAD, 0);
-	tp_free(codw_hop->tq);
 
 	display_download(codw_hop->tq->ses->tab->term, file_download, codw_hop->tq->ses);
+	tp_free(codw_hop->tq);
 
 	mem_free(codw_hop);
 	return;

@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.11 2003/06/15 22:53:12 jonas Exp $ */
+/* $Id: default.c,v 1.12 2003/06/15 23:12:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,6 +140,8 @@ get_mime_handler_default(unsigned char *type, int have_x)
 
 			if (opt)
 				desc = opt->ptr;
+		} else {
+			desc = "";
 		}
 
 		handler = mem_alloc(sizeof(struct mime_handler));

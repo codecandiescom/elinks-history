@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.252 2004/01/06 22:55:22 jonas Exp $ */
+/* $Id: menu.c,v 1.253 2004/01/06 23:02:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,12 +93,6 @@ menu_save_url_as(struct terminal *term, void *d, struct session *ses)
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) save_url,
 		    NULL);
-}
-
-static inline void
-menu_reload(struct terminal *term, void *d, struct session *ses)
-{
-	reload(ses, CACHE_MODE_INCREMENT);
 }
 
 void
@@ -284,8 +278,7 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 		    (menu_func) launch_bm_add_doc_dialog, NULL, 0);
 #endif
 
-	add_to_menu(&menu, N_("~Reload"), NULL, ACT_RELOAD,
-		    (menu_func) menu_reload, NULL, 0);
+	add_menu_action(&menu, N_("~Reload"), ACT_RELOAD, NULL, 0);
 
 	if (ses->doc_view && document_has_frames(ses->doc_view->document))
 		add_to_menu(&menu, N_("Frame at ~full-screen"), NULL, ACT_ZOOM_FRAME,
@@ -326,7 +319,7 @@ static struct menu_item file_menu11[] = {
 	INIT_MENU_ITEM(N_("~Go to URL"), NULL, ACT_GOTO_URL, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("Go ~back"), NULL, ACT_BACK, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("Go ~forward"), NULL, ACT_UNBACK, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("~Reload"), NULL, ACT_RELOAD, menu_reload, NULL, 0),
+	INIT_MENU_ITEM(N_("~Reload"), NULL, ACT_RELOAD, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("~History"), NULL, ACT_NONE, history_menu, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("~Unhistory"), NULL, ACT_NONE, unhistory_menu, NULL, SUBMENU),
 };
@@ -632,6 +625,10 @@ do_action(struct session *ses, enum keyact action, void *data)
 
 		case ACT_GOTO_URL:
 			dialog_goto_url(ses, "");
+			break;
+
+		case ACT_RELOAD:
+			reload(ses, CACHE_MODE_INCREMENT);
 			break;
 
 		case ACT_TAB_NEXT:

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.36 2003/12/01 16:05:48 jonas Exp $ */
+/* $Id: textarea.c,v 1.37 2003/12/22 03:02:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,6 +397,8 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 int
 textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 {
+	unsigned char *position = fs->value + fs->state;
+	unsigned char *prev_end = NULL;
 	struct line_info *ln;
 	int y;
 
@@ -406,9 +408,9 @@ textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
 
-	for (y = 0; ln[y].st; y++) {
-		if (fs->value + fs->state >= ln[y].st &&
-		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
+	for (y = 0; ln[y].st; prev_end = ln[y].en, y++) {
+		if (position >= ln[y].st &&
+		    position < ln[y].en + (ln[y].st != prev_end)) {
 			fs->state = ln[y].st - fs->value;
 			goto x;
 		}

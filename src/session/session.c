@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.347 2004/04/02 23:52:01 jonas Exp $ */
+/* $Id: session.c,v 1.348 2004/04/03 00:10:44 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -77,7 +77,7 @@ static int session_id = 1;
 
 
 struct file_to_load * request_additional_file(struct session *,
-					      unsigned char *, unsigned char *, int);
+						unsigned char *, struct uri *, int);
 
 
 struct download *
@@ -226,7 +226,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	add_to_list(loc->frames, frame);
 
 found:
-	request_additional_file(ses, name, struri(frame->vs.uri), PRI_FRAME);
+	request_additional_file(ses, name, frame->vs.uri, PRI_FRAME);
 }
 
 static void
@@ -270,9 +270,11 @@ load_css_imports(struct session *ses, struct document_view *doc_view)
 	if (!document) return;
 
 	foreach (import, document->css_imports) {
-		unsigned char *url = import->string.source;
+		struct uri *uri = get_uri(import->string.source, -1);
 
-		request_additional_file(ses, "", url, PRI_CSS);
+		if (!uri) continue;
+		request_additional_file(ses, "", uri, PRI_CSS);
+		done_uri(uri);
 	}
 }
 
@@ -449,12 +451,11 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 }
 
 struct file_to_load *
-request_additional_file(struct session *ses, unsigned char *name, unsigned char *url, int pri)
+request_additional_file(struct session *ses, unsigned char *name, struct uri *uri, int pri)
 {
 	struct file_to_load *ftl;
-	enum protocol protocol = known_protocol(url, NULL);
 
-	if (protocol == PROTOCOL_UNKNOWN) {
+	if (uri->protocol == PROTOCOL_UNKNOWN) {
 		return NULL;
 	}
 
@@ -463,13 +464,13 @@ request_additional_file(struct session *ses, unsigned char *name, unsigned char 
 	 * (normally the foreach() right below catches them all). Anyway,
 	 * having <frame src="mailto:foo"> would be just weird, wouldn't it?
 	 * --pasky */
-	if (protocol != PROTOCOL_INVALID
-	    && get_protocol_external_handler(protocol)) {
+	if (uri->protocol != PROTOCOL_INVALID
+	    && get_protocol_external_handler(uri->protocol)) {
 		return NULL;
 	}
 
 	foreach (ftl, ses->more_files) {
-		if (!strcmp(struri(ftl->uri), url)) {
+		if (ftl->uri == uri) {
 			if (ftl->pri > pri) {
 				ftl->pri = pri;
 				change_connection(&ftl->stat, &ftl->stat, pri, 0);
@@ -481,13 +482,8 @@ request_additional_file(struct session *ses, unsigned char *name, unsigned char 
 	ftl = mem_calloc(1, sizeof(struct file_to_load));
 	if (!ftl) return NULL;
 
-	ftl->uri = get_uri(url, -1);
-	if (!ftl->uri) {
-		mem_free(ftl);
-		return NULL;
-	}
+	ftl->uri = get_uri_reference(uri);
 	ftl->target_frame = stracpy(name);
-
 	ftl->stat.end = (void (*)(struct download *, void *)) file_end_load;
 	ftl->stat.data = ftl;
 	ftl->pri = pri;

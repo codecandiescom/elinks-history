@@ -15,8 +15,8 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 
-#ifndef _LIBINTL_H
-#define _LIBINTL_H	1
+#ifndef EL__INTL_GETTEXT_LIBGNUINTL_H
+#define EL__INTL_GETTEXT_LIBGNUINTL_H	1
 
 #include <locale.h>
 

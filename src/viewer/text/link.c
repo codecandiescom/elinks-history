@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.251 2004/06/26 15:44:31 pasky Exp $ */
+/* $Id: link.c,v 1.252 2004/06/26 16:52:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -381,7 +381,7 @@ current_link_is_visible(struct document_view *doc_view)
 
 /* Look for the first and the last link currently visible in our
  * viewport. */
-void
+static void
 get_visible_links_range(struct document_view *doc_view, int *first, int *last)
 {
 	struct document *document = doc_view->document;

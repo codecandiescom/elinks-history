@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.107 2003/07/15 05:52:50 miciah Exp $ */
+/* $Id: file.c,v 1.108 2003/07/15 06:02:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,7 +433,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 /* Generates a HTML page listing the content of @directory with the path
  * @dirpath. */
 /* Returns a connection state. S_OK if all is well. */
-static inline int
+static inline enum connection_state
 list_directory(DIR *directory, unsigned char *dirpath, struct file_data *data)
 {
 	unsigned char *fragment = init_str();
@@ -512,7 +512,7 @@ try_encoding_extensions(unsigned char *filename, int filenamelen, int *fd)
 
 /* Reads the file from @stream in chunks of size @readsize. */
 /* Returns a connection state. S_OK if all is well. */
-static inline int
+static inline enum connection_state
 read_file(struct stream_encoded *stream, int readsize, struct file_data *data)
 {
 	/* + 1 is there because of bug in Linux. Read returns -EACCES when
@@ -536,7 +536,7 @@ read_file(struct stream_encoded *stream, int readsize, struct file_data *data)
 			 * But it's I/O error in 90% of cases anyway.. ;)
 			 * --pasky */
 			mem_free(fragment);
-			return -errno;
+			return (enum connection_state) -errno;
 		}
 
 		fragmentlen += readlen;

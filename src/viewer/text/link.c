@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.219 2004/06/13 22:50:37 jonas Exp $ */
+/* $Id: link.c,v 1.220 2004/06/13 22:55:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,16 +143,30 @@ init_link_drawing(struct document_view *doc_view, struct link *link)
 	return template;
 }
 
-static inline void
-draw_link_do(struct terminal *term, struct document_view *doc_view,
-	     struct link *link, int cursor_offset)
+void
+draw_current_link(struct terminal *term, struct document_view *doc_view)
 {
-	struct screen_char *template = init_link_drawing(doc_view, link);
+	struct screen_char *template;
+	struct link *link;
+	int cursor_offset;
 	int xpos, ypos;
 	int i;
 
+	assert(term && doc_view && doc_view->vs);
+	if_assert_failed return;
+
+	assertm(!doc_view->link_bg, "link background not empty");
+	if_assert_failed mem_free(doc_view->link_bg);
+
+	link = get_current_link(doc_view);
+	if (!link) return;
+
+	template = init_link_drawing(doc_view, link);
+	if (!template) return;
+
 	xpos = doc_view->box.x - doc_view->vs->x;
 	ypos = doc_view->box.y - doc_view->vs->y;
+	cursor_offset = get_link_cursor_offset(doc_view, link);
 
 	for (i = 0; i < link->npoints; i++) {
 		int x = link->points[i].x + xpos;
@@ -182,25 +196,6 @@ draw_link_do(struct terminal *term, struct document_view *doc_view,
  		template->data = co->data;
  		copy_screen_chars(co, template, 1);
 	}
-}
-
-void
-draw_current_link(struct terminal *term, struct document_view *doc_view)
-{
-	struct link *link;
-	int cursor_offset;
-
-	assert(term && doc_view && doc_view->vs);
-	if_assert_failed return;
-	assertm(!doc_view->link_bg, "link background not empty");
-	if_assert_failed mem_free(doc_view->link_bg);
-
-	link = get_current_link(doc_view);
-	if (!link) return;
-
-	cursor_offset = get_link_cursor_offset(doc_view, link);
-
-	draw_link_do(term, doc_view, link, cursor_offset);
 }
 
 void

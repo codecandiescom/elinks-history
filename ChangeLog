@@ -1,3 +1,32 @@
+Mon Apr 29 20:53:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Minor tidyup of frame_ev(). Now, when you click to margin of
+	document displayed (3 vert., 6 horiz.), the document gets scrolled
+	in appropriate direction. Thanks to thement for the idea.  
+
+Mon Apr 29 19:03:34 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.c:
+
+	Tidy up. parse_url() calls were reindented. Small optimization of 
+	encode_url_string(), snprintf() is no more called.  
+
+Mon Apr 29 18:40:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	In help, show 15 leading whitespaces near descritpion rather than
+	35.  
+
+Mon Apr 29 17:28:01 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/mailto.c:
+
+	Tidy up. A call to parse_url() was replaced by calls to wrapping
+	functions.  
+
 Sun Apr 28 18:03:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/: conf.c, options.c, options.h:

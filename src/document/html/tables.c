@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.100 2003/10/30 14:09:41 zas Exp $ */
+/* $Id: tables.c,v 1.101 2003/10/30 14:28:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1378,7 +1378,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				format.bg = cell->bgcolor;
 				par_format.bgcolor = cell->bgcolor;
  				{
-					int tmpy = t->p->yp + yp;
+					int tmpy = t->p->y + yp;
 
 					if (cell->valign == VAL_MIDDLE)
 						tmpy += (yw - cell->height)>>1;
@@ -1390,7 +1390,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 							     cell->align,
 							     t->cellpd, xw,
 							     document,
-							     t->p->xp + xp,
+							     t->p->x + xp,
 							     tmpy, NULL,
 							     cell->link_num);
 				}
@@ -1724,14 +1724,14 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	wf = 0;
-	width = get_width(attr, "width", (p->document || p->xp));
+	width = get_width(attr, "width", (p->document || p->x));
 	if (width == -1) {
 		width = par_format.width - par_format.leftmargin - par_format.rightmargin;
 		if (width < 0) width = 0;
 		wf = 1;
 	}
 
-	t = parse_table(html, eof, end, bgcolor, (p->document || p->xp), &bad_html, &bad_html_n);
+	t = parse_table(html, eof, end, bgcolor, (p->document || p->x), &bad_html, &bad_html_n);
 	if (!t) {
 		if (bad_html) mem_free(bad_html);
 		goto ret0;
@@ -1772,7 +1772,7 @@ again:
 	get_table_width(t);
 
 	margins = par_format.leftmargin + par_format.rightmargin;
-	if (!p->document && !p->xp) {
+	if (!p->document && !p->x) {
 		if (!wf) int_upper_bound(&t->max_t, width);
 		int_lower_bound(&t->max_t, t->min_t);
 
@@ -1802,7 +1802,7 @@ again:
 	else
 		distribute_widths(t, width);
 
-	if (!p->document && p->xp == 1) {
+	if (!p->document && p->x == 1) {
 		int ww = t->rw + margins;
 
 		int_bounds(&ww, t->rw, par_format.width);
@@ -1840,7 +1840,7 @@ again:
 	}
 
 	node = p->document->nodes.next;
-	node->width = p->yp - node->y + p->cy;
+	node->width = p->y - node->y + p->cy;
 
 	display_complicated_table(t, x, p->cy, &cye);
 	display_table_frames(t, x, p->cy);
@@ -1848,7 +1848,7 @@ again:
 	new_node = mem_alloc(sizeof(struct node));
 	if (new_node) {
 		new_node->x = node->x;
-		new_node->y = p->yp + cye;
+		new_node->y = p->y + cye;
 		new_node->width = node->width;
 		add_to_list(p->document->nodes, new_node);
 	}

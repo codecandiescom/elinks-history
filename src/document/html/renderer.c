@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.343 2003/10/30 14:09:40 zas Exp $ */
+/* $Id: renderer.c,v 1.344 2003/10/30 14:27:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,8 +90,8 @@ static struct hash *table_cache = NULL;
 void line_break(struct part *);
 void put_chars(struct part *, unsigned char *, int);
 
-#define X(x)	(part->xp + (x))
-#define Y(y)	(part->yp + (y))
+#define X(x_)	(part->x + (x_))
+#define Y(y_)	(part->y + (y_))
 
 #define LINES_GRANULARITY	0x7F
 #define LINE_GRANULARITY	0x0F
@@ -185,9 +185,9 @@ realloc_spaces(struct part *part, int length)
 }
 
 
-#define LINE(y)		part->document->data[Y(y)]
-#define POS(x, y)	LINE(y).d[X(x)]
-#define LEN(y)		int_max(LINE(y).l - part->xp, 0)
+#define LINE(y_)	part->document->data[Y(y_)]
+#define POS(x_, y_)	LINE(y_).d[X(x_)]
+#define LEN(y_)		int_max(LINE(y_).l - part->x, 0)
 
 
 /* When we clear chars we want to preserve and use the background colors
@@ -1292,8 +1292,8 @@ format_html_part(unsigned char *start, unsigned char *end,
 	if (!part) goto ret;
 
 	part->document = document;
-	part->xp = xs;
-	part->yp = ys;
+	part->x = xs;
+	part->y = ys;
 	part->cx = -1;
 	part->cy = 0;
 	part->link_num = link_num;

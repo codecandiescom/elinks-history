@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.57 2003/06/22 16:47:48 jonas Exp $ */
+/* $Id: file.c,v 1.58 2003/06/22 17:24:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,22 +301,18 @@ file_func(struct connection *c)
 
 	d = opendir(filename);
 	if (d) {
-		struct dirs *dir;
-		int dirl;
+		struct dirs *dir = NULL;
+		int dirl = 0;
 		int i;
 		struct dirent *de;
 		unsigned char dircolor[8];
 		int colorize_dir = get_opt_int("document.browse.links.color_dirs");
 		int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
 
-		dir = NULL;
-		dirl = 0;
-
 		if (colorize_dir) {
 			color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
 				(unsigned char *) &dircolor);
 		}
-
 
 		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
 			if (get_cache_entry(c->url, &e)) {
@@ -325,12 +321,12 @@ file_func(struct connection *c)
 				abort_conn_with_state(c, S_OUT_OF_MEM);
 				return;
 			}
+
 			c->cache = e;
 
 			if (e->redirect) mem_free(e->redirect);
 			e->redirect_get = 1;
-			e->redirect = stracpy(c->url);
-			if (e->redirect) add_to_strn(&e->redirect, "/");
+			e->redirect = straconcat(c->url, "/", NULL);
 			mem_free(filename);
 			closedir(d);
 
@@ -343,6 +339,8 @@ file_func(struct connection *c)
 		fragmentlen = 0;
 
 		if (!fragment) {
+			mem_free(filename);
+			closedir(d);
 			abort_conn_with_state(c, S_OUT_OF_MEM);
 			return;
 		}
@@ -477,9 +475,8 @@ file_func(struct connection *c)
 					add_to_str(&n, &nl, filename);
 					add_htmlesc_str(&n, &nl,
 							dir[i].f, strlen(dir[i].f));
-					if (!stat(n, &st))
-						if (S_ISDIR(st.st_mode))
-							add_chr_to_str(&fragment, &fragmentlen, '/');
+					if (!stat(n, &st) && S_ISDIR(st.st_mode))
+						add_chr_to_str(&fragment, &fragmentlen, '/');
 					mem_free(n);
 				}
 			}
@@ -526,9 +523,8 @@ file_func(struct connection *c)
 		struct stat stt;
 		enum stream_encoding encoding = ENCODING_NONE;
 		int fd = open(filename, O_RDONLY | O_NOCTTY);
-		int saved_errno;
+		int saved_errno = errno;
 
-		saved_errno = errno;
 		if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
 			int enc;
 
@@ -555,7 +551,6 @@ file_func(struct connection *c)
 						/* Ok, found one, use it. */
 						mem_free(filename);
 						filename = tname;
-						filenamelen = strlen(tname);
 						encoding = enc;
 						enc = ENCODINGS_KNOWN;
 						break;
@@ -618,6 +613,8 @@ file_func(struct connection *c)
 		stream = open_encoded(fd, encoding);
 		fragmentlen = 0;
 		while ((readlen = read_encoded(stream, fragment + fragmentlen, stt.st_size))) {
+			unsigned char *tmp;
+
 			if (readlen < 0) {
 				/* FIXME: We should get the correct error
 				 * value. But it's I/O error in 90% of cases
@@ -644,8 +641,9 @@ file_func(struct connection *c)
 			}
 #endif
 
-			fragment = mem_realloc(fragment, fragmentlen + stt.st_size);
-			if (!fragment) {
+			tmp = mem_realloc(fragment, fragmentlen + stt.st_size);
+			if (!tmp) {
+				mem_free(fragment);
 				close_encoded(stream);
 				abort_conn_with_state(c, S_OUT_OF_MEM);
 				return;

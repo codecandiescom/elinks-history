@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.16 2003/07/09 23:03:08 jonas Exp $ */
+/* $Id: leds.c,v 1.17 2003/08/01 15:14:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,19 +91,19 @@ draw_leds(struct terminal *term)
 
 		for (i = l - 1; i >= 0; i--)
 			set_char(term, term->x - LEDS_COUNT - 3 - (l - i),
-				 term->y - 1, s[i] | COL(070));
+				 term->y - 1, s[i], 070);
 	}
 
 	/* We must shift the whole thing by one char to left, because we don't
 	 * draft the char in the right-down corner :(. */
 
-	set_char(term, term->x - LEDS_COUNT - 3, term->y - 1, '[' | COL(070));
+	set_char(term, term->x - LEDS_COUNT - 3, term->y - 1, '[', 070);
 
 	for (i = 0; i < LEDS_COUNT; i++)
 		set_char(term, term->x - LEDS_COUNT - 2 + i, term->y - 1,
-			 leds[i].value | leds[i].color);
+			 leds[i].value, leds[i].color);
 
-	set_char(term, term->x - 2, term->y - 1, ']' | COL(070));
+	set_char(term, term->x - 2, term->y - 1, ']', 070);
 
 	/* Redraw each 100ms. */
 	if (!drawing && redraw_timer < 0)
@@ -170,7 +170,7 @@ unregister_led(struct led *led)
 		internal("Attempted to unregister unused led!");
 	led->__used = 0;
 	led->value = '-';
-	led->color = COL(070);
+	led->color = 070;
 }
 
 #endif

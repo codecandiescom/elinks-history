@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.19 2003/05/16 21:57:03 zas Exp $ */
+/* $Id: lists.h,v 1.20 2003/05/24 21:08:18 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -16,6 +16,8 @@
 #ifdef DEBUG
 #define LISTDEBUG
 #endif
+
+
 
 #ifndef LISTDEBUG
 
@@ -57,6 +59,7 @@ do { \
 	do_not_optimize_here(p); \
 } while (0)
 
+
 #ifdef HAVE_TYPEOF
 
 #define add_to_list(l,x) add_at_pos((typeof(x)) &(l), (x))
@@ -88,6 +91,7 @@ do { \
 
 #endif /* HAVE_TYPEOF */
 
+
 #define free_list(l) \
 do { \
 	do_not_optimize_here(&l); \
@@ -105,7 +109,13 @@ do { \
 #define LIST_HEAD(x) x *next; x *prev
 #define LIST_SET_MAGIC(x)
 
+
+
+
 #else /* LISTDEBUG */
+
+
+
 
 #define LISTMAGIC1 ((void *) 0xdadababa)
 #define LISTMAGIC2 ((void *) 0xd0d0b0b0)
@@ -121,14 +131,12 @@ struct list_head {
 };
 
 #ifndef HAVE_TYPEOF
-
 struct xlist_head {
 	void *magic1;
 	struct xlist_head *next;
 	struct xlist_head *prev;
 	void *magic2;
 };
-
 #endif
 
 #define init_list(x) \
@@ -171,6 +179,7 @@ do { \
 	do_not_optimize_here(p); \
 } while (0)
 
+
 #ifdef HAVE_TYPEOF
 
 #define add_to_list(l,x) add_at_pos((typeof(x)) &(l), (x))
@@ -202,6 +211,7 @@ do { \
 
 #endif /* HAVE_TYPEOF */
 
+
 #define free_list(l) \
 do { \
 	if ((l).magic1 != LISTMAGIC1 || (l).magic2 != LISTMAGIC2) \
@@ -222,5 +232,8 @@ do { \
 #define LIST_SET_MAGIC(x) do { x->magic1 = LISTMAGIC1; x->magic2 = LISTMAGIC2 } while (0)
 
 #endif /* LISTDEBUG */
+
+
+
 
 #endif /* EL__UTIL_LISTS_H */

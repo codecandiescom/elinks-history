@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.258 2004/01/07 00:12:29 jonas Exp $ */
+/* $Id: menu.c,v 1.259 2004/01/07 00:21:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,8 +146,7 @@ go_historywards(struct terminal *term, struct location *target,
 }
 
 static struct menu_item no_hist_menu[] = {
-	INIT_MENU_ITEM(N_("No history"), NULL, ACT_NONE,
-		       NULL, NULL, NO_SELECT),
+	INIT_MENU_ITEM(N_("No history"), NULL, ACT_NONE, NULL, NULL, NO_SELECT),
 	NULL_MENU_ITEM
 };
 
@@ -246,9 +245,8 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	add_menu_action(&menu, N_("~Close tab"), ACT_TAB_CLOSE, NULL, 0);
 
 	if (tabs > 1) {
-		add_to_menu(&menu, N_("C~lose all tabs but the current"), "",
-			    ACT_TAB_CLOSE_ALL_BUT_CURRENT,
-			    (menu_func) close_all_tabs_but_current, NULL, 0);
+		add_menu_action(&menu, N_("C~lose all tabs but the current"),
+				ACT_TAB_CLOSE_ALL_BUT_CURRENT, NULL, 0);
 #ifdef CONFIG_BOOKMARKS
 		add_to_menu(&menu, N_("B~ookmark all tabs"), "", ACT_ADD_BOOKMARK_TABS,
 			    (menu_func) menu_bookmark_terminal_tabs, NULL, 0);
@@ -606,6 +604,10 @@ do_action(struct session *ses, enum keyact action, void *data)
 			close_tab(term, ses);
 			break;
 
+		case ACT_TAB_CLOSE_ALL_BUT_CURRENT:
+			close_all_tabs_but_current(ses);
+			break;
+
 		case ACT_TOGGLE_DISPLAY_IMAGES:
 			toggle_images(ses, ses->doc_view, 0);
 			break;
@@ -706,7 +708,6 @@ do_action(struct session *ses, enum keyact action, void *data)
 		case ACT_SEARCH_TYPEAHEAD:
 		case ACT_SELECT:
 		case ACT_SHOW_TERM_OPTIONS:
-		case ACT_TAB_CLOSE_ALL_BUT_CURRENT:
 		case ACT_TAB_MENU:
 		case ACT_TOGGLE_DISPLAY_TABLES:
 		case ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:

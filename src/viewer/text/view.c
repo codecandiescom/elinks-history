@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.328 2004/01/05 06:14:10 miciah Exp $ */
+/* $Id: view.c,v 1.329 2004/01/07 00:21:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1211,7 +1211,7 @@ quit:
 				ses = NULL; /* Disappeared in EV_ABORT handler. */
 				goto x;
 			case ACT_TAB_CLOSE_ALL_BUT_CURRENT:
-				close_all_tabs_but_current(ses->tab->term, NULL, NULL);
+				close_all_tabs_but_current(ses);
 				ses = NULL;
 				goto x;
 			case ACT_TAB_MENU:

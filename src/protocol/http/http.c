@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.206 2003/11/16 03:19:48 jonas Exp $ */
+/* $Id: http.c,v 1.207 2003/11/30 06:42:48 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,36 +41,9 @@
 #include "ssl/ssl.h"
 #include "terminal/terminal.h"
 #include "util/base64.h"
-#include "util/blacklist.h"
 #include "util/conv.h"
 #include "util/memory.h"
 #include "util/string.h"
-
-
-struct http_version {
-	int major;
-	int minor;
-};
-
-struct http_connection_info {
-	enum blacklist_flags bl_flags;
-	struct http_version recv_version;
-	struct http_version sent_version;
-
-	int close;
-
-#define LEN_CHUNKED -2 /* == we get data in unknown number of chunks */
-#define LEN_FINISHED 0
-	int length;
-
-	/* Either bytes coming in this chunk yet or "parser state". */
-#define CHUNK_DATA_END	-3
-#define CHUNK_ZERO_SIZE	-2
-#define CHUNK_SIZE	-1
-	int chunk_remaining;
-
-	int http_code;
-};
 
 static void uncompress_shutdown(struct connection *);
 
@@ -1045,7 +1018,7 @@ get_header(struct read_buffer *rb)
 	return 0;
 }
 
-static void
+void
 http_got_header(struct connection *conn, struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
@@ -1073,15 +1046,15 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 		uri = &conn->uri;
 	}
 
-	/* Sanity check for a host */
-	assert(uri && uri->host);
+	/* Sanity check for a uri */
+	assert(uri);
 	if_assert_failed {
 		abort_conn_with_state(conn, S_BAD_URL);
 		return;
 	}
 
 	if (rb->close == 2) {
-		if (!conn->tries) {
+		if (!conn->tries && uri->host) {
 			unsigned char *hstr = uri->host;
 			int len = uri->hostlen;
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.560 2004/07/23 02:27:01 miciah Exp $ */
+/* $Id: view.c,v 1.561 2004/07/23 02:36:23 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -652,16 +652,20 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			break;
 
 		case ACT_MAIN_COPY_CLIPBOARD: {
-			/* This looks bogus. Why print_current_link()
-			 * it adds all kins of stuff that is not part
-			 * of the current link. I'd propose to use
-			 * get_link_uri() or something. --jonas */
+			struct link *link;
+			struct uri *uri;
 			unsigned char *uristring;
 
 			if (try_jump_to_link_number(ses, doc_view))
 				return FRAME_EVENT_OK;
 
-			uristring = get_current_link_info(ses, doc_view);
+			link = get_current_link(doc_view);
+			if (!link) return FRAME_EVENT_OK;
+
+			uri = get_link_uri(ses, doc_view, link);
+			if (!uri) return FRAME_EVENT_OK;
+
+			uristring = get_uri_string(uri, URI_ORIGINAL);
 
 			if (uristring) {
 				set_clipboard_text(uristring);

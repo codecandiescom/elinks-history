@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.53 2004/06/27 13:01:21 pasky Exp $ */
+/* $Id: socket.c,v 1.54 2004/06/27 13:03:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,6 +212,8 @@ ssl_connect(struct connection *conn, int sock)
 
 #elif defined(CONFIG_GNUTLS)
 	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl), (gnutls_transport_ptr) sock);
+
+	/* TODO: Some certificates fuss. --pasky */
 #endif
 
 	ret = ssl_do_connect(conn);

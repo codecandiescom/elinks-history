@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.206 2004/04/17 11:58:45 jonas Exp $ */
+/* $Id: menu.c,v 1.207 2004/04/17 14:14:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,10 +60,11 @@ static void mainmenu_handler(struct window *, struct term_event *, int);
 static inline int
 count_items(struct menu_item *items)
 {
+	struct menu_item *item;
 	register int i = 0;
 
 	if (items)
-		for (; !mi_is_end_of_menu(items[i]); i++);
+		foreach_menu_item (item, items) i++;
 
 	return i;
 }
@@ -71,17 +72,17 @@ count_items(struct menu_item *items)
 static void
 free_menu_items(struct menu_item *items)
 {
-	int i;
+	struct menu_item *item;
 
 	if (!items) return;
 
 	/* Note that flags & FREE_DATA applies only when menu is aborted;
 	 * it is zeroed when some menu field is selected. */
 
-	for (i = 0; !mi_is_end_of_menu(items[i]); i++) {
-		if (items[i].flags & FREE_TEXT) mem_free_if(items[i].text);
-		if (items[i].flags & FREE_RTEXT) mem_free_if(items[i].rtext);
-		if (items[i].flags & FREE_DATA) mem_free_if(items[i].data);
+	foreach_menu_item (item, items) {
+		if (item->flags & FREE_TEXT) mem_free_if(item->text);
+		if (item->flags & FREE_RTEXT) mem_free_if(item->rtext);
+		if (item->flags & FREE_DATA) mem_free_if(item->data);
 	}
 
 	mem_free(items);

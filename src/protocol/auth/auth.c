@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.22 2003/07/10 04:28:24 jonas Exp $ */
+/* $Id: auth.c,v 1.23 2003/07/10 04:38:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,20 +40,20 @@ get_auth_url(struct uri *uri)
 	add_bytes_to_str(&str, &len, uri->protocol, uri->protocollen);
 	add_to_str(&str, &len, "://");
 	add_bytes_to_str(&str, &len, uri->host, uri->hostlen);
+	add_chr_to_str(&str, &len, ':');
 
 	if (uri->port && uri->portlen) {
-		add_chr_to_str(&str, &len, ':');
 		add_bytes_to_str(&str, &len, uri->port, uri->portlen);
 	} else {
-		/* TODO Use get_protocol_port() and ulongcat --jonas */
-		if (!strcasecmp(uri->protocol, "http")) {
-			/* RFC2616 section 3.2.2
-			 * If the port is empty or not given, port 80 is
-			 * assumed. */
-			add_to_str(&str, &len, ":80");
-		} else if (!strcasecmp(uri->protocol, "https")) {
-			add_to_str(&str, &len, ":443");
-		}
+		/* Should user protocols ports be configurable? */
+		enum protocol protocol = check_protocol(uri->protocol,
+							uri->protocollen);
+		int port = get_protocol_port(protocol);
+
+		/* RFC2616 section 3.2.2:
+		 * "If the port is empty or not given, port 80 is assumed." */
+		/* Port 0 comes from user protocol backend so be httpcentric. */
+		add_num_to_str(&str, &len, (port != 0 ? port : 80));
 	}
 
 	return str;

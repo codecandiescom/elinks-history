@@ -1,3 +1,169 @@
+Sun Jul 20 21:19:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/elinks.spec.in:
+
+	Vendor (ELinks project) email addy should be elinks-users mailing
+	list instead of my mail addy ;-).  
+
+Sun Jul 20 21:15:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/elinks.spec.in:
+
+	Described recommended process of getting in changes to the
+	elinks.spec.in file.  
+
+Sun Jul 20 21:10:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/elinks.spec.in:
+
+	s/Copyright/License/, as Silviu Cojocaru <silviucc@home.ro> and vim
+	syntax highlighting hints ;-).  
+
+Sun Jul 20 21:02:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Commented out funny assertm() which (I _hope_) can never fail ;-).  
+
+Sun Jul 20 20:33:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file.c:
+
+	Use sprintf() instead of ulongcat() for printing the UID/GID
+	numerical value, since we want to pad from right, not from left.
+	Sorry, zas, that's something ulongcat() doesn't seem to be able to
+	do so far ;-).  
+
+Sun Jul 20 20:23:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file.c:
+
+	Simplify the final ..<->.foo decision procedure, it should be much
+	more straightforward (and elegant) now. This should hopefully also
+	be the final fix to the ..foo being shown bug.  
+
+Sun Jul 20 20:19:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file.c:
+
+	Distributed the decision procedure comment in file_visible() to the
+	individual steps.  
+
+Sun Jul 20 20:18:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file.c:
+
+	file_visible(): @d_name -> @name 
+
+Sun Jul 20 20:17:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file.c:
+
+	Ehm. Compilation fix.  
+
+Sun Jul 20 20:17:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file.c:
+
+	Code flow naturalization in file_visible().  
+
+Sun Jul 20 20:14:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file.c:
+
+	Commented the file_visible() function, minor inner comment fix.  
+
+Sun Jul 20 20:11:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file.c:
+
+	Moved hidden-file decision procedure to new file_visible() function.  
+
+Sun Jul 20 15:44:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: uri.c, http/auth.c:
+
+	Tidyup of the get_uri_string() calls.  
+
+Sun Jul 20 15:44:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	get_uri_string()'s @components is of type enum uri_component.  
+
+Sun Jul 20 15:43:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	Moved the enum uri_component declaration near get_uri_string.  
+
+Sun Jul 20 15:43:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	Updated get_uri_string()'s comment.  
+
+Sun Jul 20 15:37:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/auth.c:
+
+	Use the new MIN() macro.  
+
+Sun Jul 20 15:31:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elinks.h:
+
+	Defined global macros MIN() and MAX(). I dreamed about their
+	existence for a long time already, so here they go, for purely my
+	personal pleasure! ;p 
+
+Sun Jul 20 15:30:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, http/auth.c:
+
+	get_uri_string() now add the marked components. Users do ~(URI_*).  
+
+Sun Jul 20 15:12:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Use assertm() instead of if <-> internal() pairs at few places.  
+
+Sun Jul 20 14:41:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, document/html/parser.c:
+
+	Reverted the HTML <link> tag handling rework. Too big, changing
+	option meaning without changing option name, removing useful option.
+	Difficult to see what was changed and how. Please split and
+	recheckin as gradual changes.  
+
+Sun Jul 20 10:17:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, document/html/parser.c:
+
+	Html link tag handling was reworked. Feel free to improve (tip: bfu
+	menu for these).  
+
+Sat Jul 19 23:40:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	Rename: add_opt_string() -> add_opt_str() by kuser.  
+
+Sat Jul 19 23:12:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.h:
+
+	Some dummy comment about why option is defined as it is. Pasky is
+	sleepy.  
+
+Sat Jul 19 22:29:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Comment of uri_component enum. CVS IS BACK! Weeeeee :))) 
+
 Thu Jul 17 08:56:30 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: main.c, bfu/align.h, config/cmdline.c, config/conf.c,

@@ -1,13 +1,6 @@
 TODO list for ELinks (sorted approximatelly by priority):
 
-	Speed optimalizations
-
 	Some rules for sane handling of texinfo documentation
-
-	Generic supports for adding of new protocols and external handlers
-for them; dummy javascript support (just an error message)
-
-	Use real lines instead of ASCII art for the hiearchic bookmarks
 
 	Show all downloads in one window, kind of "download manager"
 
@@ -47,10 +40,19 @@ current link to external command (?)).
 	Insert should toggle insert/overwrite mode.
 
 	Disk cache
-	
+
 	Bandwidth limiter for file downloads.
 
 	Copy url to X clipboard (using X selections).
+
+
+Permanent goals:
+
+	Generic code cleanup
+
+	Write some more documentation.. docs, a lot of docs!
+
+	Speed optimalizations
 
 
 These are more long-term goals:
@@ -67,9 +69,5 @@ These are more long-term goals:
 	Possibility to use commandline-driven interface instead of BFU
 optionally.
 
-	Generic code cleanup
 
-	Write some more documentation.. docs, a lot of docs!
-
-
-$Id: TODO,v 1.41 2003/01/20 11:09:12 pasky Exp $
+$Id: TODO,v 1.42 2003/02/05 09:17:06 zas Exp $

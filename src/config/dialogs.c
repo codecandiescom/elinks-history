@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.15 2002/12/10 22:12:45 pasky Exp $ */
+/* $Id: dialogs.c,v 1.16 2002/12/11 21:09:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,6 +137,7 @@ check_valid_option(struct dialog_data *dlg, struct widget_data *di)
 {
 	struct terminal *term = dlg->win->term;
 	struct option *option = dlg->dlg->udata;
+	struct session *ses = dlg->dlg->udata2;
 	unsigned char *value = di->cdata;
 	unsigned char *chinon;
 
@@ -145,7 +146,25 @@ check_valid_option(struct dialog_data *dlg, struct widget_data *di)
 	if (chinon) {
 		if (option_types[option->type].set &&
 		    option_types[option->type].set(option, chinon)) {
+			struct option *current = option;
+
 			option->flags |= OPT_TOUCHED;
+
+			/* Notify everyone out there! */
+
+			/* This boolean thing can look a little weird - it
+			 * basically says that we should proceed when there's
+			 * no change_hook or there's one and it's return value
+			 * was zero. */
+			while (current && (!current->change_hook ||
+				!current->change_hook(ses, current, option))) {
+				if (current->box_item &&
+				    current->box_item->root)
+					current = current->box_item->root->udata;
+				else
+					break;
+			}
+
 			commandline = 0;
 			mem_free(chinon);
 			return 0;
@@ -241,7 +260,8 @@ layout_edit_dialog(struct dialog_data *dlg)
 }
 
 static void
-build_edit_dialog(struct terminal *term, struct option *option)
+build_edit_dialog(struct terminal *term, struct session *ses,
+		  struct option *option)
 {
 #define EDIT_DIALOG_FIELDS_NB 3
 	struct dialog *d;
@@ -268,6 +288,7 @@ build_edit_dialog(struct terminal *term, struct option *option)
 	d->title = TEXT(T_EDIT);
 	d->fn = layout_edit_dialog;
 	d->udata = option;
+	d->udata2 = ses;
 
 	value = (unsigned char *) &d->items[EDIT_DIALOG_FIELDS_NB + 1];
 	safe_strncpy(value, tvalue, MAX_STR_LEN);
@@ -297,7 +318,7 @@ build_edit_dialog(struct terminal *term, struct option *option)
 
 static int
 push_edit_button(struct dialog_data *dlg,
-		struct widget_data *some_useless_info_button)
+		 struct widget_data *some_useless_info_button)
 {
 	struct terminal *term = dlg->win->term;
 	struct option *option;
@@ -321,7 +342,7 @@ push_edit_button(struct dialog_data *dlg,
 		return 0;
 	}
 
-	build_edit_dialog(term, option);
+	build_edit_dialog(term, dlg->dlg->udata, option);
 
 	return 0;
 }

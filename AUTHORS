@@ -264,6 +264,9 @@ Karvinen Ilkka <ik@iki.fi>
 Kevin Keverets <keverets@users.sourceforge.net>
 	Show actual document's URL in xterm title bar
 
+Kevin B. McCarty <kmccarty@princeton.edu>
+	Fixed hooks file loading for Lua version 5.0
+
 Laurent Monin <zas@norz.org>
 	Updated French translation
 	Bookmarks hacking
@@ -488,4 +491,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.158 2004/02/18 21:46:22 pasky Exp $
+$Id: AUTHORS,v 1.159 2004/03/31 00:11:44 jonas Exp $

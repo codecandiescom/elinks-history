@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.141 2004/03/03 17:27:16 jonas Exp $ */
+/* $Id: core.c,v 1.142 2004/03/31 00:11:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -503,11 +503,20 @@ static void
 do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 {
 	unsigned char *file = straconcat(prefix, "/", filename, NULL);
-	int oldtop = lua_gettop(S);
+	FILE *hooks_file = file ? fopen(file, "r") : NULL;
 
-	lua_dofile(S, file);
-	mem_free(file);
-	lua_settop(S, oldtop);
+	/* Test file existence to avoid Lua error reporting (under version 5.x)
+	 * Fixes debian bug #231760 ('dbug 231760' using URI rewrite) */
+	if (hooks_file) {
+		int oldtop = lua_gettop(S);
+
+		fclose(hooks_file);
+
+		lua_dofile(S, file);
+		lua_settop(S, oldtop);
+	}
+
+	if (file) mem_free(file);
 }
 
 static void

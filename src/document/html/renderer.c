@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.253 2003/09/09 21:16:42 jonas Exp $ */
+/* $Id: renderer.c,v 1.254 2003/09/09 21:33:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -869,10 +869,6 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 
 		if (!(format.link || format.image || format.form)) return;
 
-		if (d_opt->num_links_display) {
-			put_link_number(part);
-		}
-
 		part->link_num++;
 		last_link = format.link ? stracpy(format.link) : NULL;
 		last_target = format.target ? stracpy(format.target) : NULL;
@@ -950,6 +946,8 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
+	int is_link;
+
 	assert(part);
 	if_assert_failed return;
 
@@ -981,11 +979,19 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if (nowrap && part->cx + charslen > overlap(par_format))
 		return;
 
+	is_link = (format.link || format.image || format.form);
+
+	/* Put the link number when the link is new. */
+	if (d_opt->num_links_display
+	    && is_link && !last_link && !last_image && !last_form) {
+		put_link_number(part);
+	}
+
 	set_hline(part, chars, charslen);
 
-	if (last_link || last_image || last_form || format.link
-	    || format.image || format.form)
+	if (is_link || last_link || last_image || last_form) {
 		process_link(part, chars, charslen);
+	}
 
 	part->cx += charslen;
 	nobreak = 0;

@@ -1,7 +1,7 @@
-/* $Id: kbd.h,v 1.1 2003/05/04 17:24:00 pasky Exp $ */
+/* $Id: kbd.h,v 1.2 2003/05/04 17:26:55 pasky Exp $ */
 
-#ifndef EL__LOWLEVEL_KBD_H
-#define EL__LOWLEVEL_KBD_H
+#ifndef EL__TERMINAL_KBD_H
+#define EL__TERMINAL_KBD_H
 
 /* The mouse reporting button byte looks like:
  *

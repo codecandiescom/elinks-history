@@ -1,7 +1,7 @@
-/* $Id: terminal.h,v 1.1 2003/05/04 17:24:00 pasky Exp $ */
+/* $Id: terminal.h,v 1.2 2003/05/04 17:26:55 pasky Exp $ */
 
-#ifndef EL__LOWLEVEL_TERMINAL_H
-#define EL__LOWLEVEL_TERMINAL_H
+#ifndef EL__TERMINAL_TERMINAL_H
+#define EL__TERMINAL_TERMINAL_H
 
 #include "config/options.h"
 #include "intl/charsets.h"

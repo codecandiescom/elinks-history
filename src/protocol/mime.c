@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: mime.c,v 1.2 2002/08/08 18:12:00 pasky Exp $ */
+/* $Id: mime.c,v 1.3 2002/08/29 00:36:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,11 +53,6 @@ get_content_type(unsigned char *head, unsigned char *url)
 	/* Guess type accordingly to the extension */
 
 	url_len = strlen(url);
-
-	/* TODO: This is superfluous, isn't it? --pasky */
-	if ((!casecmp(url + url_len - 4, ".htm", 3)) ||
-	    (!casecmp(url + url_len - 5, ".html", 4)))
-		return stracpy("text/html");
 
 	{
 		struct option *opt_tree = get_opt_rec_real(root_options,

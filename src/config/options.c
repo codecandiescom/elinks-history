@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.92 2002/08/28 23:57:52 pasky Exp $ */
+/* $Id: options.c,v 1.93 2002/08/29 00:36:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -953,10 +953,10 @@ register_options()
 		"3 is KOI-8");
 
 	add_opt_bool("terminal._template_",
-		"m11_hack", 0, 1,
-		"If using Linux terminal, switch font when drawing lines,\n"
-		"enabling both local characters and lines working at the same\n"
-		"time.");
+		"m11_hack", 0, 0,
+		"Switch font when drawing lines, enabling both local characters\n"
+		"and lines working at the same time. Makes sense only with linux\n"
+		"terminal.");
 
 	add_opt_bool("terminal._template_",
 		"utf_8_io", 0, 0,
@@ -1694,21 +1694,22 @@ register_options()
 		"Print ELinks version information and exit.");
 
 
+	/* Some default pre-autocreated options. Doh. */
 
-	/* config-file-only options */
-	/* These will disappear */
+	get_opt_int("terminal.linux.type") = 2;
+	get_opt_bool("terminal.linux.colors") = 1;
+	get_opt_bool("terminal.linux.m11_hack") = 1;
+	get_opt_int("terminal.vt100.type") = 1;
+	get_opt_int("terminal.vt110.type") = 1;
+	get_opt_int("terminal.xterm.type") = 1;
+	get_opt_int("terminal.xterm-color.type") = 1;
+	get_opt_bool("terminal.xterm-color.colors") = 1;
 
-#if 0
-	add_opt_void("",
-		"association", 0, OPT_MIME_TYPE,
-		NULL);
-
-	add_opt_void("",
-		"bind", 0, OPT_KEYBIND,
-		NULL);
-
-	add_opt_void("",
-		"unbind", 0, OPT_KEYUNBIND,
-		NULL);
-#endif
+	strcpy(get_opt_str("mime.extension.gif"), "image/gif");
+	strcpy(get_opt_str("mime.extension.jpg"), "image/jpeg");
+	strcpy(get_opt_str("mime.extension.jpeg"), "image/jpeg");
+	strcpy(get_opt_str("mime.extension.png"), "image/png");
+	strcpy(get_opt_str("mime.extension.txt"), "text/plain");
+	strcpy(get_opt_str("mime.extension.htm"), "text/html");
+	strcpy(get_opt_str("mime.extension.html"), "text/html");
 }

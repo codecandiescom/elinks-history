@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.26 2004/01/01 14:24:07 jonas Exp $ */
+/* $Id: feature.h,v 1.27 2004/01/01 14:47:33 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -74,11 +74,12 @@
  * Frequently, you know you will not need it, then you can of course happily
  * forcibly remove support for it and save few bytes.
  *
- * Default: enabled if libexpat (required library) found */
+ * Default: enabled if libexpat (required library) found and bookmarks are
+ * enabled */
 
-#ifdef HAVE_LIBEXPAT
-/* Uncomment the following line if you want to always have this disabled: */
-/* #undef HAVE_LIBEXPAT */
+#if defined(HAVE_LIBEXPAT) && defined(CONFIG_BOOKMARKS)
+/* Comment out the following line if you want to always have this disabled: */
+#define CONFIG_XBEL_BOOKMARKS
 #endif
 
 

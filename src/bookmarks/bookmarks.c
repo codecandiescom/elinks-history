@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.105 2004/01/01 14:24:08 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.106 2004/01/01 14:47:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ static struct option_info bookmark_options_info[] = {
 		"bookmarks", 0,
 		N_("Bookmark options.")),
 
-#ifdef HAVE_LIBEXPAT
+#ifdef CONFIG_XBEL_BOOKMARKS
 	INIT_OPT_INT("bookmarks", N_("File format"),
 		"file_format", 0, 0, 1, 0,
 		N_("File format for bookmarks (affects both reading and saving):\n"

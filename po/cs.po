@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2004-06-21 19:27+0200\n"
-"PO-Revision-Date: 2004-01-24 21:37+0100\n"
+"PO-Revision-Date: 2004-06-23 22:24+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -160,14 +160,12 @@ msgid "Empty string not allowed"
 msgstr "Napi¹ tam nìco"
 
 #: src/bfu/leds.c:74
-#, fuzzy
 msgid "Clock"
-msgstr "Barva"
+msgstr "Hodiny"
 
 #: src/bfu/leds.c:75
-#, fuzzy
 msgid "Digital clock in the statusbar."
-msgstr "Barva titulku dialogového okna."
+msgstr "Digitální hodiny na stavové li¹tì."
 
 #: src/bfu/leds.c:79 src/bfu/leds.c:85 src/bfu/leds.c:105
 #: src/config/options.inc:1210 src/config/options.inc:1217
@@ -191,9 +189,8 @@ msgid ""
 msgstr ""
 
 #: src/bfu/leds.c:92
-#, fuzzy
 msgid "Format"
-msgstr "Formuláøe"
+msgstr "Formát"
 
 #: src/bfu/leds.c:94
 msgid ""
@@ -369,9 +366,8 @@ msgid "Enter folder name"
 msgstr "Napi¹ název slo¾ky"
 
 #: src/cache/dialogs.c:76
-#, fuzzy
 msgid "Proxy URL"
-msgstr "®ádná URL"
+msgstr "URL proxy serveru"
 
 #: src/cache/dialogs.c:81
 msgid "Redirect"
@@ -439,9 +435,8 @@ msgid "Template option folder"
 msgstr "©ablonová slo¾ka"
 
 #: src/config/cmdline.c:578
-#, fuzzy
 msgid "Internal consistency error"
-msgstr "Vnitøní chyba"
+msgstr "Chyba vnitøní inkonzistence"
 
 #: src/config/cmdline.c:595
 msgid "Restrict to anonymous mode"
@@ -500,7 +495,6 @@ msgid "Name of configuration file"
 msgstr "Jméno konfiguraèního souboru"
 
 #: src/config/cmdline.c:624
-#, fuzzy
 msgid ""
 "Name of the file with configuration, from which and to\n"
 "which all the configuration shall be written. It should be\n"
@@ -644,7 +638,6 @@ msgid "Do not number links in dump output"
 msgstr "Neèíslovat odkazy v dump výstupu"
 
 #: src/config/cmdline.c:697
-#, fuzzy
 msgid ""
 "Prevents numbering of links (and showing their list at the end of\n"
 "the dumped document) in the -dump output; this was the default behaviour\n"
@@ -1024,9 +1017,8 @@ msgid "Bookmark all open tabs"
 msgstr "Bookmarknout v¹echny otevøené taby"
 
 #: src/config/kbdbind.c:442
-#, fuzzy
 msgid "Open authentication manager"
-msgstr "Správce historie"
+msgstr "Správce autentikaèních informací"
 
 #: src/config/kbdbind.c:443
 msgid "Open bookmark manager"
@@ -1118,9 +1110,8 @@ msgid "Return to the previous document in history"
 msgstr "Návrat k pøedchozímu dokumentu v historii"
 
 #: src/config/kbdbind.c:465
-#, fuzzy
 msgid "Go forward in history"
-msgstr "Jít kupøedu ve zpìtné historii"
+msgstr "Jít kupøedu v historii"
 
 #: src/config/kbdbind.c:466
 msgid "Jump to link"
@@ -1184,44 +1175,36 @@ msgid "Activate the menu"
 msgstr "Aktivovat menu"
 
 #: src/config/kbdbind.c:484
-#, fuzzy
 msgid "Move cursor down"
-msgstr "Posun kurzoru dolù"
+msgstr "Posunout kurzoru dolù"
 
 #: src/config/kbdbind.c:485
-#, fuzzy
 msgid "Move cursor left"
 msgstr "Posunout kurzor doleva"
 
 #: src/config/kbdbind.c:486
-#, fuzzy
 msgid "Move cursor right"
 msgstr "Posunout kurzot doprava"
 
 #: src/config/kbdbind.c:487
-#, fuzzy
 msgid "Move cursor up"
 msgstr "Pøesunout kurzor smìrem nahoru"
 
 #: src/config/kbdbind.c:488
-#, fuzzy
 msgid "Move to the end of the document"
-msgstr "Jít na konec stránky èi øádky"
+msgstr "Jít na konec dokumentu"
 
 #: src/config/kbdbind.c:489
-#, fuzzy
 msgid "Move to the start of the document"
-msgstr "Jít na zaèátek øádky èi stránky"
+msgstr "Jít na zaèátek dokumentu"
 
 #: src/config/kbdbind.c:490
-#, fuzzy
 msgid "Move downwards one link"
-msgstr "Pøesunout se o stránku ní¾e"
+msgstr "Pøesunout se o odkaz ní¾e"
 
 #: src/config/kbdbind.c:491
-#, fuzzy
 msgid "Move upwards one link"
-msgstr "Pøesunout se o stránku vý¹e"
+msgstr "Pøesunout se o odkaz vý¹e"
 
 #: src/config/kbdbind.c:492 src/config/kbdbind.c:592
 msgid "Move downwards by a page"
@@ -1288,9 +1271,8 @@ msgid "Reload the current page"
 msgstr "Obnovit souèasnou stránku"
 
 #: src/config/kbdbind.c:508
-#, fuzzy
 msgid "Re-render the current page"
-msgstr "Obnovit souèasnou stránku"
+msgstr "Pøekreslit souèasnou stránku"
 
 #: src/config/kbdbind.c:509
 msgid "Reset form items to their initial values"
@@ -1345,14 +1327,12 @@ msgid "Search link text by typing ahead"
 msgstr "Interaktivní hledání v textu odkazù"
 
 #: src/config/kbdbind.c:523
-#, fuzzy
 msgid "Search document text by typing ahead"
-msgstr "Interaktivní hledání v textu odkazù"
+msgstr "Interaktivní hledání v textu"
 
 #: src/config/kbdbind.c:524
-#, fuzzy
 msgid "Search document text backwards by typing ahead"
-msgstr "Interaktivní hledání v textu odkazù"
+msgstr "Interaktivní zpìtné hledání v textu"
 
 #: src/config/kbdbind.c:525
 msgid "Show terminal options dialog"
@@ -1379,14 +1359,12 @@ msgid "Open the tab menu"
 msgstr "Otevøít kontextové menu tabu"
 
 #: src/config/kbdbind.c:531
-#, fuzzy
 msgid "Move the current tab to the left"
-msgstr "Otevøít odkaz v novém tabu"
+msgstr "Pøesunout souèasný tab doleva"
 
 #: src/config/kbdbind.c:532
-#, fuzzy
 msgid "Move the current tab to the right"
-msgstr "Otevøít odkaz v novém tabu"
+msgstr "Pøesunout souèasný tab doprava"
 
 #: src/config/kbdbind.c:533
 msgid "Next tab"
@@ -1397,9 +1375,8 @@ msgid "Previous tab"
 msgstr "Pøedchozí tab"
 
 #: src/config/kbdbind.c:535
-#, fuzzy
 msgid "Toggle rendering of page using CSS"
-msgstr "Pøepnout zobrazování tabulek"
+msgstr "Pøepnout pou¾ívání kaskádových stylù (CSS)"
 
 #: src/config/kbdbind.c:536
 msgid "Toggle displaying of links to images"
@@ -1426,9 +1403,8 @@ msgid "Toggle plain renderer compression of empty lines"
 msgstr "Pøepnout sluèování prázdných øádkù"
 
 #: src/config/kbdbind.c:542
-#, fuzzy
 msgid "Toggle wrapping of text"
-msgstr "Pøepnout zobrazování tabulek"
+msgstr "Pøepnout zalamování textu"
 
 #: src/config/kbdbind.c:543
 msgid "View the current image"
@@ -1506,9 +1482,8 @@ msgid "Paste text from the clipboard"
 msgstr "Vlo¾it text ze schránky"
 
 #: src/config/kbdbind.c:571 src/config/kbdbind.c:594
-#, fuzzy
 msgid "Move to the previous item"
-msgstr "Pøesunout se do pøedchozího rámce"
+msgstr "Pøesunout se na pøedchozí polo¾ku"
 
 #: src/config/kbdbind.c:573 src/config/kbdbind.c:596
 msgid "Move the cursor right"
@@ -2062,19 +2037,16 @@ msgstr ""
 "a naopak."
 
 #: src/config/options.inc:273
-#, fuzzy
 msgid "Scrolling"
-msgstr "Posun v textu doprava"
+msgstr "Posun v textu"
 
 #: src/config/options.inc:275
-#, fuzzy
 msgid "Scrolling options."
-msgstr "Nastavení terminálu."
+msgstr "Nastavení týkající se posouvání textu v¹emo¾nými smìry."
 
 #: src/config/options.inc:277
-#, fuzzy
 msgid "Horizontal step"
-msgstr "Horizontální okraj textu"
+msgstr "Horizontální krok"
 
 #: src/config/options.inc:279
 #, fuzzy
@@ -2087,9 +2059,8 @@ msgstr ""
 "èíselný prefix."
 
 #: src/config/options.inc:282
-#, fuzzy
 msgid "Margin"
-msgstr "Upozornìní"
+msgstr "Okraj"
 
 #: src/config/options.inc:284
 msgid ""
@@ -2394,9 +2365,8 @@ msgid "Default visited link color."
 msgstr "Výchozí barva nav¹tíveného odkazu."
 
 #: src/config/options.inc:447
-#, fuzzy
 msgid "Image-link color"
-msgstr "Barva nav¹tíveného odkazu"
+msgstr "Barva obrázkového odkazu"
 
 #: src/config/options.inc:449
 #, fuzzy
@@ -2404,9 +2374,8 @@ msgid "Default image link color."
 msgstr "Výchozí barva odkazu."
 
 #: src/config/options.inc:451
-#, fuzzy
 msgid "Bookmarked-link color"
-msgstr "Barva nav¹tíveného odkazu"
+msgstr "Barva zazálo¾kovaného odkazu"
 
 #: src/config/options.inc:453
 #, fuzzy
@@ -2560,9 +2529,8 @@ msgid "Header string used in dumps. %u is substituted by URL."
 msgstr ""
 
 #: src/config/options.inc:536
-#, fuzzy
 msgid "Footer"
-msgstr "Slo¾ka"
+msgstr "Patièka"
 
 #: src/config/options.inc:538
 #, c-format
@@ -2570,9 +2538,8 @@ msgid "Footer string used in dumps. %u is substituted by URL."
 msgstr ""
 
 #: src/config/options.inc:540
-#, fuzzy
 msgid "Separator"
-msgstr "Oddìlovaè v li¹tì s taby"
+msgstr "Oddìlovaè"
 
 #: src/config/options.inc:542
 msgid "String which separates two dumps."
@@ -2739,14 +2706,14 @@ msgid "Rules for passing URIs to external commands."
 msgstr ""
 
 #: src/config/options.inc:627
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
-"URI, které se má pou¾ít místo tohoto prefixu.\n"
+"URI, které se má pou¾ít pøi pøedávání adresy externímu pøíkazu.\n"
 "%c v øetìzci znamená aktuální adresu\n"
 "%% v øetìzci znamená '%'"
 
@@ -3854,7 +3821,6 @@ msgid "Language"
 msgstr "Jazyk"
 
 #: src/config/options.inc:1258
-#, fuzzy
 msgid ""
 "Language of user interface. 'System' means that the language will\n"
 "be extracted from the environment dynamically."
@@ -3879,9 +3845,8 @@ msgid "Show title bar on the screen."
 msgstr "Zobrazit na obrazovce øádek s titulkem."
 
 #: src/config/options.inc:1269
-#, fuzzy
 msgid "Display goto dialog in new tabs"
-msgstr "Zobrazit pøi startu okno \"Jít na\""
+msgstr "Zobrazit v nových tabech okno \"Jít na\""
 
 #: src/config/options.inc:1271
 msgid ""

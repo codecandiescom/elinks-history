@@ -1,4 +1,4 @@
-/* $Id: charsets.h,v 1.9 2003/08/21 13:03:55 zas Exp $ */
+/* $Id: charsets.h,v 1.10 2003/10/29 13:26:45 zas Exp $ */
 
 #ifndef EL__CHARSETS_H
 #define EL__CHARSETS_H
@@ -22,6 +22,7 @@ struct conv_table {
 enum convert_string_mode {
 	CSM_DEFAULT, /* Convert any char. */
 	CSM_QUERY, /* Special handling of '&' and '=' chars. */
+	CSM_FORM, /* Special handling of '&' and '=' chars in forms. */
 };
 
 struct conv_table *get_translation_table(int, int);

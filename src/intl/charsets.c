@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.65 2003/10/28 16:38:02 zas Exp $ */
+/* $Id: charsets.c,v 1.66 2003/10/29 13:26:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -628,7 +628,7 @@ decode:
 			int start = charspos + 1;
 			register int i = start;
 
-			if (d_opt->plain) PUTC;
+			if (d_opt->plain || mode == CSM_FORM) PUTC;
 			while (i < charslen
 			       && ((chars[i] >= 'A' && chars[i] <= 'Z')
 				   || (chars[i] >= 'a' && chars[i] <= 'z')
@@ -640,7 +640,7 @@ decode:
 			 * in URL query strings. */
 			/* XXX: But this disables &nbsp&nbsp usage, which
 			 * appears to be relatively common! --pasky */
-			if ((mode != CSM_QUERY || (chars[i] != '&' && chars[i] != '='))
+			if ((mode == CSM_DEFAULT || (chars[i] != '&' && chars[i] != '='))
 			    && i > start && !isalnum(chars[i])) {
 				translit = get_entity_string(&chars[start], i - start,
 						      d_opt->cp);

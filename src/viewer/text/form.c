@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.48 2003/10/27 23:58:31 pasky Exp $ */
+/* $Id: form.c,v 1.49 2003/10/29 13:26:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -479,11 +479,6 @@ encode_controls(struct list_head *l, struct string *data,
 
 	foreach (sv, *l) {
 		unsigned char *p2 = NULL;
-		struct document_options o;
-
-		memset(&o, 0, sizeof(o));
-		o.plain = 1;
-		d_opt = &o;
 
 		if (lst)
 			add_char_to_string(data, '&');
@@ -504,7 +499,7 @@ encode_controls(struct list_head *l, struct string *data,
 					convert_table = get_translation_table(cp_from, cp_to);
 
 				p2 = convert_string(convert_table, p,
-						    strlen(p), CSM_QUERY);
+						    strlen(p), CSM_FORM);
 				mem_free(p);
 			}
 		} else if (sv->type == FC_TEXT ||
@@ -513,7 +508,7 @@ encode_controls(struct list_head *l, struct string *data,
 				convert_table = get_translation_table(cp_from, cp_to);
 
 			p2 = convert_string(convert_table, sv->value,
-					    strlen(sv->value), CSM_QUERY);
+					    strlen(sv->value), CSM_FORM);
 		} else {
 			p2 = stracpy(sv->value);
 		}
@@ -593,13 +588,7 @@ xx:
 			}
 #undef F_BUFLEN
 		} else {
-			struct document_options o;
-
 			add_to_string(data, "\"\r\n\r\n");
-
-			memset(&o, 0, sizeof(o));
-			o.plain = 1;
-			d_opt = &o;
 
 			/* Convert back to original encoding (see
 			 * html_form_control() for the original recoding). */
@@ -612,7 +601,7 @@ xx:
 									      cp_to);
 
 				p = convert_string(convert_table, sv->value,
-						   strlen(sv->value), CSM_QUERY);
+						   strlen(sv->value), CSM_FORM);
 				if (p) {
 					add_to_string(data, p);
 					mem_free(p);

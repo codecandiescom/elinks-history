@@ -1,10 +1,11 @@
 /* File utilities */
-/* $Id: file.c,v 1.13 2003/06/08 14:29:21 jonas Exp $ */
+/* $Id: file.c,v 1.14 2003/06/08 14:39:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -116,7 +117,6 @@ unsigned char *
 file_read_line(unsigned char *line, size_t *size, FILE *file, int *lineno)
 {
 	size_t offset = 0;
-	unsigned char *ch;
 
 	if (!line) {
 		line = mem_alloc(MAX_STR_LEN);
@@ -126,41 +126,47 @@ file_read_line(unsigned char *line, size_t *size, FILE *file, int *lineno)
 		*size = MAX_STR_LEN;
 	}
 
-	while (1) {
-		if (safe_fgets(line + offset, *size - offset, file) == NULL) {
-			if (line) mem_free(line);
-			return NULL;
-		}
+	while (safe_fgets(line + offset, *size - offset, file)) {
+		unsigned char *linepos = strchr(line + offset, '\n');
 
-		if ((ch = strchr(line + offset, '\n')) != NULL) {
-			(*lineno)++;
-			*ch = 0;
-			if (ch > line && *(ch - 1) == '\r')
-				*--ch = 0;
-			if (ch == line || *(ch - 1) != '\\')
-				return line;
-			offset = ch - line - 1;
-		} else {
-			int c;
-			/*
-			 * This is kind of a hack. We want to know if the
-			 * char at the current point in the input stream is EOF.
-			 * feof() will only tell us if we've already hit EOF, not
-			 * if the next character is EOF. So, we need to read in
-			 * the next character and manually check if it is EOF.
-			 */
-			c = getc(file);
-			if (c == EOF) {
-				/* The last line of file isn't \n terminated */
+		if (!linepos) {
+			/* Test if the line buffer should be increase because
+			 * it was continued and could not fit. */
+			unsigned char *newline;
+			int next = getc(file);
+
+			if (next == EOF) {
+				/* We are on the last line. */
 				(*lineno)++;
 				return line;
-			} else {
-				ungetc(c, file); /* undo our dammage */
-				/* There wasn't room for the line -- increase ``line'' */
-				offset = *size - 1; /* overwrite the terminating 0 */
-				*size += MAX_STR_LEN;
-				mem_realloc(line, *size);
 			}
+
+			/* Undo our dammage */
+			ungetc(next, file);
+			offset = *size - 1;
+			*size += MAX_STR_LEN;
+
+			newline = mem_realloc(line, *size);
+			if (!newline)
+				break;
+			line = newline;
+			continue;
 		}
+
+		/* A whole line was read. Fetch next into the buffer if
+		 * the line is 'continued'. */
+		(*lineno)++;
+
+		while (line < linepos && isspace(*linepos))
+			linepos--;
+
+		if (*linepos != '\\') {
+			*(linepos + 1) = '\0';
+			return line;
+		}
+		offset = linepos - line - 1;
 	}
+
+	if (line) mem_free(line);
+	return NULL;
 }

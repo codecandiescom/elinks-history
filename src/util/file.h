@@ -1,4 +1,4 @@
-/* $Id: file.h,v 1.5 2003/06/08 14:29:21 jonas Exp $ */
+/* $Id: file.h,v 1.6 2003/06/08 14:39:57 jonas Exp $ */
 
 #ifndef EL__UTIL_FILE_H
 #define EL__UTIL_FILE_H
@@ -17,9 +17,8 @@ unsigned char *expand_tilde(unsigned char *filename);
 unsigned char *get_unique_name(unsigned char *fileprefix);
 
 /* Read a line from @file into the dynamically allocated @line, increasing
- * @line if necessary. The ending "\n" or "\r\n" is removed.  If a line ends
- * with "\", this char and the linefeed is removed, and the next line is read
- * too. */
+ * @line if necessary. Ending whitespace is trimmed. If a line ends
+ * with "\" the next line is read too. */
 /* If @line is NULL the returned line is allocated and if file reading fails
  * @line is free()d. */
 unsigned char *file_read_line(unsigned char *line, size_t *linesize,

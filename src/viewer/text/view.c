@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.666 2004/12/29 15:04:21 zas Exp $ */
+/* $Id: view.c,v 1.667 2005/01/05 11:00:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1006,7 +1006,6 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 {
 	struct terminal *term = ses->tab->term;
 	struct term_event_mouse *mouse = &ev->info.mouse;
-	int bars;
 
 	if (mouse->y == 0
 	    && check_mouse_action(ev, B_DOWN)
@@ -1020,11 +1019,8 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 		return ses;
 	}
 
-	bars = 0;
-	if (ses->status.show_tabs_bar) bars++;
-	if (ses->status.show_status_bar) bars++;
-
-	if (mouse->y == term->height - bars) {
+	if (ses->status.show_tabs_bar
+	    && mouse->y == term->height - 1 - !!ses->status.show_status_bar) {
 		int tab_num = get_tab_number_by_xpos(term, mouse->x);
 		struct window *tab = get_current_tab(term);
 
@@ -1060,9 +1056,20 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 	}
 
 	if (!do_mouse_event(ses, ev, doc_view)
+	    && ses->status.show_tabs_bar
 	    && check_mouse_button(ev, B_RIGHT)) {
 		tab_menu(ses, mouse->x, mouse->y, 0);
+		return NULL;
 	}
+
+#ifdef CONFIG_LEDS
+	if (ses->status.show_leds
+	    && mouse->y == term->height - 1
+	    && mouse->x >= term->width - LEDS_COUNT - 3) {
+		menu_leds_info(term, NULL, NULL);
+		return NULL;
+	}
+#endif
 
 	return NULL;
 }

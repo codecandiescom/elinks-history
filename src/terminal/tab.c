@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.17 2003/10/17 15:08:28 jonas Exp $ */
+/* $Id: tab.c,v 1.18 2003/10/18 20:27:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,4 +165,53 @@ close_tab(struct terminal *term)
 
 	delete_window(get_current_tab(term));
 	switch_to_tab(term, term->current_tab - 1, num_tabs - 1);
+}
+
+
+static void
+do_open_in_new_tab(struct terminal *term, unsigned char *exe_name,
+	           unsigned char *param, int in_background)
+{
+	struct window *tab;
+	struct initial_session_info *info;
+	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
+
+	tab = init_tab(term, in_background);
+	if (!tab) return;
+
+	info = mem_calloc(1, sizeof(struct initial_session_info));
+	if (!info) {
+		mem_free(tab);
+		return;
+	}
+	info->base_session = -1;
+
+	/* FIXME: This param parsing is way too ugly (and could prepare us some
+	 * nice surprises in the future) to survive in the codebase. We should
+	 * call some common creating the commandline directly in the open_in_..
+	 * function. --pasky */
+
+	if (!strncmp(param, "-base-session ", 13)) {
+		info->base_session = atoi(param + strlen("-base-session "));
+	} else {
+		info->url = decode_shell_safe_url(param);
+	}
+
+	ev.b = (long) info;
+	tab->handler(tab, &ev, 0);
+}
+
+void
+open_in_new_tab(struct terminal *term, unsigned char *exe_name,
+                unsigned char *param)
+{
+	do_open_in_new_tab(term, exe_name, param, 0);
+}
+
+void
+open_in_new_tab_in_background(struct terminal *term,
+			      unsigned char *exe_name,
+                	      unsigned char *param)
+{
+	do_open_in_new_tab(term, exe_name, param, 1);
 }

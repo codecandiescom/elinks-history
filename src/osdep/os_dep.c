@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.88 2003/10/05 12:37:37 pasky Exp $ */
+/* $Id: os_dep.c,v 1.89 2003/10/18 20:27:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1780,54 +1780,6 @@ exec_new_elinks(struct terminal *term, unsigned char *xterm,
 	if (!str) return;
 	exec_on_terminal(term, str, "", 2);
 	mem_free(str);
-}
-
-static void
-do_open_in_new_tab(struct terminal *term, unsigned char *exe_name,
-	           unsigned char *param, int in_background)
-{
-	struct window *tab;
-	struct initial_session_info *info;
-	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
-
-	tab = init_tab(term, in_background);
-	if (!tab) return;
-
-	info = mem_calloc(1, sizeof(struct initial_session_info));
-	if (!info) {
-		mem_free(tab);
-		return;
-	}
-	info->base_session = -1;
-
-	/* FIXME: This param parsing is way too ugly (and could prepare us some
-	 * nice surprises in the future) to survive in the codebase. We should
-	 * call some common creating the commandline directly in the open_in_..
-	 * function. --pasky */
-
-	if (!strncmp(param, "-base-session ", 13)) {
-		info->base_session = atoi(param + strlen("-base-session "));
-	} else {
-		info->url = decode_shell_safe_url(param);
-	}
-
-	ev.b = (long) info;
-	tab->handler(tab, &ev, 0);
-}
-
-static void
-open_in_new_tab(struct terminal *term, unsigned char *exe_name,
-                unsigned char *param)
-{
-	do_open_in_new_tab(term, exe_name, param, 0);
-}
-
-static void
-open_in_new_tab_in_background(struct terminal *term,
-			      unsigned char *exe_name,
-                	      unsigned char *param)
-{
-	do_open_in_new_tab(term, exe_name, param, 1);
 }
 
 static void

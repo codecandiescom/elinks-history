@@ -1,4 +1,4 @@
-/* $Id: tab.h,v 1.12 2003/09/18 13:07:11 zas Exp $ */
+/* $Id: tab.h,v 1.13 2003/10/18 20:27:25 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TAB_H
 #define EL__TERMINAL_TAB_H
@@ -19,5 +19,10 @@ void close_tab(struct terminal *);
 
 #define get_current_tab(term) get_tab_by_number((term), (term)->current_tab)
 #define inactive_tab(win) ((win)->type != WT_NORMAL && (win) != get_current_tab((win->term)))
+
+void open_in_new_tab(struct terminal *term, unsigned char *exe_name,
+		     unsigned char *param);
+void open_in_new_tab_in_background(struct terminal *term,
+		     unsigned char *exe_name, unsigned char *param);
 
 #endif

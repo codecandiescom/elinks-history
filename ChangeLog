@@ -1,3 +1,10 @@
+Sat Feb 19 21:51:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	The caching of the CSS selector is broken, since t can lead to wrong
+	styles being applied to following elements, so disabled for now.  
+
 Thu Feb 17 17:35:57 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

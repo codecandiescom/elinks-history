@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.50 2004/08/02 23:37:48 jonas Exp $ */
+/* $Id: ssl.c,v 1.51 2004/08/03 00:50:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,11 +202,11 @@ struct module ssl_module = struct_module(
 );
 
 int
-init_ssl_connection(struct connection *conn)
+init_ssl_connection(struct connection_socket *socket)
 {
 #ifdef CONFIG_OPENSSL
-	conn->socket.ssl /* FIXME: Assuming ssl handle */ = SSL_new(context);
-	if (!conn->socket.ssl /* FIXME: Assuming ssl handle */) return S_SSL_ERROR;
+	socket->ssl = SSL_new(context);
+	if (!socket->ssl) return S_SSL_ERROR;
 #elif defined(CONFIG_GNUTLS)
 	const unsigned char server_name[] = "localhost";
 	ssl_t *state = mem_alloc(sizeof(GNUTLS_STATE));
@@ -243,7 +243,7 @@ init_ssl_connection(struct connection *conn)
 	gnutls_set_server_name(*state, GNUTLS_NAME_DNS, server_name,
 			       sizeof(server_name) - 1);
 
-	conn->socket.ssl /* FIXME: Assuming ssl handle */ = state;
+	socket->ssl = state;
 #endif
 
 	return S_OK;

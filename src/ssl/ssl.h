@@ -1,4 +1,4 @@
-/* $Id: ssl.h,v 1.20 2004/08/02 23:37:48 jonas Exp $ */
+/* $Id: ssl.h,v 1.21 2004/08/03 00:50:50 jonas Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
@@ -12,7 +12,7 @@ extern struct module ssl_module;
 
 /* Initializes the SSL connection data. Returns S_OK on success and S_SSL_ERROR
  * on failure. */
-int init_ssl_connection(struct connection *conn);
+int init_ssl_connection(struct connection_socket *socket);
 
 /* Releases the SSL connection data */
 void done_ssl_connection(struct connection_socket *socket);

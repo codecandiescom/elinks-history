@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.316 2004/03/22 01:04:20 jonas Exp $ */
+/* $Id: session.c,v 1.317 2004/03/22 02:43:48 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -184,7 +184,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 			}
 		}
 
-		url = memacpy(frame->vs.url, frame->vs.url_len);
+		url = get_vs_url_copy(&frame->vs);
 		if (!url) return;
 #if 0
 		/* This seems not to be needed anymore, it looks like this

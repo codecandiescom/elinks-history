@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.373 2004/03/21 22:43:41 jonas Exp $ */
+/* $Id: view.c,v 1.374 2004/03/22 02:43:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1194,7 +1194,7 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 	if (!have_location(ses)) return;
 	loc = cur_loc(ses);
 	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = memacpy(loc->vs.url, loc->vs.url_len);
+	ses->dn_url = get_vs_url_copy(&loc->vs);
 	if (ses->dn_url) {
 		struct document_view *doc_view = current_frame(ses);
 

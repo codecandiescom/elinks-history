@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.78 2003/10/23 21:29:31 jonas Exp $ */
+/* $Id: options.h,v 1.79 2003/10/23 22:16:08 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -240,34 +240,34 @@ struct option_info {
 #define NULL_OPTION_INFO \
 	{ INIT_OPTION(NULL, 0, 0, 0, 0, NULL, NULL, NULL), NULL }
 
-#define add_opt_bool(path, capt, name, flags, def, desc) \
+#define INIT_OPT_BOOL(path, capt, name, flags, def, desc) \
 	{ INIT_OPTION(name, flags, OPT_BOOL, 0, 1, def, DESC(desc), capt), path }
 
-#define add_opt_int(path, capt, name, flags, min, max, def, desc) \
+#define INIT_OPT_INT(path, capt, name, flags, min, max, def, desc) \
 	{ INIT_OPTION(name, flags, OPT_INT, min, max, def, DESC(desc), capt), path }
 
-#define add_opt_long(path, capt, name, flags, min, max, def, desc) \
+#define INIT_OPT_LONGadd_opt_long(path, capt, name, flags, min, max, def, desc) \
 	{ INIT_OPTION(name, flags, OPT_LONG, min, max, def, DESC(desc), capt), path }
 
-#define add_opt_str(path, capt, name, flags, def, desc) \
+#define INIT_OPT_STRING(path, capt, name, flags, def, desc) \
 	{ INIT_OPTION(name, flags, OPT_STRING, 0, MAX_STR_LEN, def, DESC(desc), capt), path }
 
-#define add_opt_codepage(path, capt, name, flags, def, desc) \
+#define INIT_OPT_CODEPAGE(path, capt, name, flags, def, desc) \
 	{ INIT_OPTION(name, flags, OPT_CODEPAGE, 0, 0, def, DESC(desc), capt), path }
 
-#define add_opt_color(path, capt, name, flags, def, desc) \
+#define INIT_OPT_COLOR(path, capt, name, flags, def, desc) \
 	{ INIT_OPTION(name, flags, OPT_COLOR, 0, 0, def, DESC(desc), capt), path }
 
-#define add_opt_lang(path, capt, name, flags, desc) \
+#define INIT_OPT_LANGUAGE(path, capt, name, flags, desc) \
 	{ INIT_OPTION(name, flags, OPT_LANGUAGE, 0, 0, 0, DESC(desc), capt), path }
 
-#define add_opt_command(path, capt, name, flags, cmd, desc) \
+#define INIT_OPT_COMMAND(path, capt, name, flags, cmd, desc) \
 	{ INIT_OPTION(name, flags, OPT_COMMAND, 0, 0, cmd, DESC(desc), capt), path }
 
-#define add_opt_alias(path, capt, name, flags, def, desc) \
+#define INIT_OPT_ALIAS(path, capt, name, flags, def, desc) \
 	{ INIT_OPTION(name, flags, OPT_ALIAS, 0, sizeof(def) - 1, def, DESC(desc), capt), path }
 
-#define add_opt_tree(path, capt, name, flags, desc) \
+#define INIT_OPT_TREE(path, capt, name, flags, desc) \
 	{ INIT_OPTION(name, flags, OPT_TREE, 0, 0, NULL, DESC(desc), capt), path }
 
 

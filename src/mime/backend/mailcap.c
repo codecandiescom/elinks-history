@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.7 2003/06/05 13:49:56 jonas Exp $ */
+/* $Id: mailcap.c,v 1.8 2003/06/05 14:00:30 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -229,6 +229,55 @@ get_field_text(unsigned char *field)
 	return NULL;
 }
 
+/* Parse optional extra definitions. Zero return value means syntax error  */
+static inline int
+parse_optional_fields(struct mailcap_entry *entry, unsigned char *line)
+{
+	int error_code = 1;
+
+	while (0xf131d5) {
+		unsigned char *field = get_field(&line);
+
+		if (!field) break;
+
+		if (!strcasecmp(field, "needsterminal")) {
+				entry->needsterminal = 1;
+
+		} else if (!strcasecmp(field, "copiousoutput")) {
+			entry->copiousoutput = 1;
+
+		} else if (!strncasecmp(field, "test", 4)) {
+			field = get_field_text(field + 4);
+			if (!field) {
+				error_code = 0;
+				continue;
+			}
+
+			entry->testcommand = convert_command(field, 0);
+			mem_free(field);
+
+			/* Find out wether testing requires filename */
+			field = entry->testcommand;
+			for (field = entry->testcommand; *field; field++) {
+				if (*field == '%') {
+					entry->testneedsfile = 1;
+					break;
+				}
+			}
+		} else if (!strncasecmp(field, "description", 11)) {
+			field = get_field_text(field + 11);
+			if (!field) {
+				error_code = 0;
+				continue;
+			}
+
+			entry->description = field;
+		}
+	}
+
+	return error_code;
+}
+
 /* Parses hole mailcap files line by line adding entries to the map
  * assigning them the given @priority */
 static void
@@ -247,8 +296,6 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 	if (!file) return;
 
 	while ((line = file_read_line(line, &linelen, file, &lineno))) {
-		int error_free;
-
 		/* Ignore comments */
 		if (*line == '#') continue;
 
@@ -278,50 +325,7 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 		if (!field) continue;
 		entry->command = field;
 
-		error_free = 1;
-		/* Parse the optional fields */
-		while (field) {
-			field = get_field(&next);
-			if (!field) break;
-
-			if (!strcasecmp(field, "needsterminal")) {
-				entry->needsterminal = 1;
-
-			} else if (!strcasecmp(field, "copiousoutput")) {
-				entry->copiousoutput = 1;
-
-			} else if (!strncasecmp(field, "test", 4)) {
-				field = get_field_text(field + 4);
-				if (!field) {
-					error_free = 0;
-					continue;
-				}
-
-				entry->testcommand = convert_command(field, 0);
-				mem_free(field);
-
-				/* Find out wether testing requires filename */
-				field = entry->testcommand;
-				for (field = entry->testcommand; *field; field++) {
-					if (*field == '%') {
-						entry->testneedsfile = 1;
-						break;
-					}
-				}
-			} else if (!strncasecmp(field, "description", 11)) {
-				field = get_field_text(field + 11);
-				if (!field) {
-					error_free = 0;
-					continue;
-				}
-
-				entry->description = field;
-
-			}
-			/* Other optional fields are not currently useful */
-		}
-
-		if (!error_free) {
+		if (!parse_optional_fields(entry, next)) {
 			error("Bad formated entry for type %s in \"%s\" line %d",
 			      entry->type, filename, lineno);
 		}

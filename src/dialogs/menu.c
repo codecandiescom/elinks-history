@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.290 2004/03/09 12:24:35 jonas Exp $ */
+/* $Id: menu.c,v 1.291 2004/03/22 02:44:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,7 +143,7 @@ name__(struct terminal *term, void *ddd, struct session *ses) 		\
  									\
 		url = get_no_post_url(loc->vs.url, NULL); 		\
 		if (url) { 						\
-			add_to_menu(&mi, url, NULL, ACT_MAIN_NONE, 		\
+			add_to_menu(&mi, url, NULL, ACT_MAIN_NONE, 	\
 				    (menu_func) go_historywards,	\
 			    	    (void *) loc, NO_INTL); 		\
 		} 							\

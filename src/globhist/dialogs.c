@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.62 2003/11/09 00:19:41 jonas Exp $ */
+/* $Id: dialogs.c,v 1.63 2003/11/09 03:12:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,35 +90,6 @@ history_dialog_abort_handler(struct dialog_data *dlg_data)
 
 	del_from_list(box);
 	mem_free(box);
-}
-
-static int
-history_dialog_event_handler(struct dialog_data *dlg_data,
-			     struct term_event *ev)
-{
-	switch (ev->ev) {
-		case EV_KBD:
-		{
-			struct widget_data *widget_data = dlg_data->widgets_data;
-			struct widget *widget = dlg_data->dlg->widgets;
-
-			assert(widget->type == WIDGET_LISTBOX);
-			if (widget->ops->kbd)
-				return widget->ops->kbd(widget_data, dlg_data, ev);
-			break;
-		}
-		case EV_INIT:
-		case EV_RESIZE:
-		case EV_REDRAW:
-		case EV_MOUSE:
-		case EV_ABORT:
-			break;
-
-		default:
-			internal("Unknown event received: %d", ev->ev);
-	}
-
-	return EVENT_NOT_PROCESSED;
 }
 
 
@@ -471,7 +442,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	dlg->title = _("Global history", term);
 	dlg->layouter = hierbox_browser_layouter;
-	dlg->handle_event = history_dialog_event_handler;
+	dlg->handle_event = hierbox_dialog_event_handler;
 	dlg->abort = history_dialog_abort_handler;
 	dlg->udata = ses;
 

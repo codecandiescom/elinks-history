@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.14 2003/01/20 15:08:52 pasky Exp $ */
+/* $Id: string.h,v 1.15 2003/01/20 15:09:38 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -70,18 +70,18 @@ void add_chr_to_str(unsigned char **, int *, unsigned char);
 
 int xstrcmp(unsigned char *, unsigned char *);
 
-/* #ifndef HAVE_STRCASECMP */
+#ifndef HAVE_STRCASECMP
 int strcasecmp(const unsigned char *, const unsigned char *);
-/* #endif */
-/* #ifndef HAVE_STRNCASECMP */
+#endif
+#ifndef HAVE_STRNCASECMP
 int strncasecmp(const unsigned char *, const unsigned char *, size_t);
-/* #endif */
-/* #ifndef HAVE_STRCASESTR */
+#endif
+#ifndef HAVE_STRCASESTR
 unsigned char *strcasestr(const unsigned char *, const unsigned char *);
-/* #endif */
-/* #ifndef HAVE_STRDUP */
+#endif
+#ifndef HAVE_STRDUP
 unsigned char *strdup(const unsigned char *);
-/* #endif */
+#endif
 
 unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);
 unsigned char *trim_chars(unsigned char *, unsigned char, int *);

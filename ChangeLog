@@ -1,3 +1,9 @@
+Mon Dec 23 21:36:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memory.h:
+
+	Attempt to fix cygwin compilation failure.  
+
 Sun Dec 22 18:14:34 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: document/html/TODO, elusive/README:

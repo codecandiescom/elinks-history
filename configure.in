@@ -67,12 +67,20 @@ dnl ===================================================================
 dnl EL_DEFINE(define, what)
 AC_DEFUN([EL_DEFINE], [AC_DEFINE($1, 1, [Define if you have $2])])
 
-dnl EL_CHECK_SPECIAL_TYPE(type, define, include sys types, code)
-AC_DEFUN([EL_CHECK_SPECIAL_TYPE],
+dnl EL_CHECK_TYPE(type, define, includes, code)
+AC_DEFUN([EL_CHECK_TYPE],
 [
 	$2=yes
 	AC_MSG_CHECKING([for $1])
-	AC_TRY_COMPILE([
+	AC_TRY_COMPILE([$3], [$4], [EL_DEFINE($2, [$1])], $2=no)
+	AC_MSG_RESULT([$]$2)
+])
+
+
+dnl EL_CHECK_SPECIAL_TYPE(type, define, include sys types, code)
+AC_DEFUN([EL_CHECK_SPECIAL_TYPE],
+[
+	EL_CHECK_TYPE([$1], [$2], [
 #if $3
 #include <sys/types.h>
 #ifdef HAVE_STDINT_H
@@ -82,8 +90,7 @@ AC_DEFUN([EL_CHECK_SPECIAL_TYPE],
 #include <inttypes.h>
 #endif
 #endif
-	], [$4], [EL_DEFINE($2, [$1])],	$2=no)
-	AC_MSG_RESULT([$]$2)
+	], [$4])
 ])
 
 

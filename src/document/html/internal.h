@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.33 2004/06/30 16:56:41 zas Exp $ */
+/* $Id: internal.h,v 1.34 2004/07/02 23:04:34 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -30,6 +30,22 @@ struct html_context {
 	unsigned char *eoff; /* For parser/forms.c too */
 	int line_breax;
 	int position;
+	/* -1 means that we are either starting a new "block" or ended the
+	 * last segment of the current "block" by a whitespace and we should
+	 * eat the leading whitespace of the next segment passed to put_chrs(),
+	 * if it starts by any. This prevents HTML whitespaces to indent new
+	 * blocks by one or create two consecutive whitespaces in the middle
+	 * of a block.
+	 *
+	 * 0 means do not do anything special.
+	 *
+	 * 1 means that we should start the next segment with a whitespace
+	 * (if it won't start by any on its own). It is used in an
+	 * "x  </y>  z" scenario when the parser hits </y> - it renders "x"
+	 * and sets this, so that it will then render " z". XXX: Then we could
+	 * of course render "x " and set -1. But we test for this value in
+	 * parse_html() if we hit an opening tag of an element and potentially
+	 * put_chrs(" "). That needs more investigation yet. --pasky */
 	int putsp;
 	int was_br; /* For parser/forms.c too */
 	int was_li;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.198 2003/09/05 13:40:33 jonas Exp $ */
+/* $Id: view.c,v 1.199 2003/09/06 20:36:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -655,7 +655,6 @@ frame_ev(struct session *ses, struct document_view *fd, struct event *ev)
 			/* Repeat count */
 
 			if (!ses->kbdprefix.rep) {
-				ses->kbdprefix.rep_num = 0;
 				ses->kbdprefix.rep_num = ev->x - '0';
 			} else {
 				ses->kbdprefix.rep_num = ses->kbdprefix.rep_num * 10

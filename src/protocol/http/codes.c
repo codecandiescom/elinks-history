@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.17 2004/02/20 16:01:44 jonas Exp $ */
+/* $Id: codes.c,v 1.18 2004/02/20 16:03:15 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -105,7 +105,7 @@ get_http_error_document(struct terminal *term, int code)
 
 	if (!codestr) codestr = "Unknown error";
 
-	/* TODO: l10n this but without all the HTML code. --pasky */
+	/* TODO: l10n this but without all the HTML code. --jonas */
 	return asprintfa(
 "<html>\n"
 " <head>\n"

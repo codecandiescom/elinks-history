@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.59 2005/03/25 05:36:58 miciah Exp $
+-- $Id: hooks.lua.in,v 1.60 2005/03/25 05:37:20 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -10,7 +10,6 @@
 --  Taken from Lua's compat.lua.
 ----------------------------------------------------------------------
 
-enable_systems_functions()
 _OUTPUT = io.stdout
 
 function writeto (name)

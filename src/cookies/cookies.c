@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.79 2003/09/22 15:06:49 zas Exp $ */
+/* $Id: cookies.c,v 1.80 2003/10/11 12:30:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,10 +135,10 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 		 * also no other browser probably does it. --pasky */
 		/* Mikulas' comment: Some countries have generic 2-nd level
 		 * domains (like .com.pl, .co.uk ...) and it would be very bad
-		 * if someone set cookies for these genegic domains.  Imagine
+		 * if someone set cookies for these generic domains.  Imagine
 		 * for example that server http://brutalporn.com.pl sets cookie
 		 * Set-Cookie: user_is=perverse_pig; domain=.com.pl -- then
-		 * this cookies would be sent to all commercial servers in
+		 * this cookie would be sent to all commercial servers in
 		 * Poland. */
 		need_dots = 2;
 		if (domain_len > 4 && domain[domain_len - 4] == '.') {

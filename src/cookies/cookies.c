@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.30 2002/06/22 21:20:52 pasky Exp $ */
+/* $Id: cookies.c,v 1.31 2002/08/27 03:22:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,8 +260,8 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	}
 
 #ifdef COOKIES_DEBUG
-	debug("Got cookie %s = %s from %s, domain %s, expires at %d, secure %d\n",
-	      cookie->name, cookie->value, cookie->server, cookie->domain,
+	debug("Got cookie %s = %s from %s (%s), domain %s, expires at %d, secure %d\n",
+	      cookie->name, cookie->value, cookie->server, server, cookie->domain,
 	      cookie->expires, cookie->secure);
 #endif
 
@@ -499,7 +499,9 @@ ok:
 			continue;
 		}
 
-		if (c->secure) continue;
+		/* Not sure if this is 100% right..? --pasky */
+		if (c->secure && strncmp(url, "https://", 8))
+			continue;
 
 		if (!nc) {
 			add_to_str(s, l, "Cookie: ");
@@ -511,7 +513,9 @@ ok:
 		add_to_str(s, l, c->name);
 		add_to_str(s, l, "=");
 		add_to_str(s, l, c->value);
-
+#ifdef COOKIES_DEBUG
+		debug("Cookie: %s=%s", c->name, c->value);
+#endif
 	}
 
 	if (nc)

@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.8 2002/05/08 13:55:06 pasky Exp $ */
+/* $Id: date.c,v 1.9 2002/08/27 03:22:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,7 +133,7 @@ static int parse_time(const char *date, struct tm *tm) {
 time_t my_timegm(struct tm tm) {
 	time_t t = 0;
 	
-	/* Okay, the next part of the code is somewhat problematic. Now, we use
+	/* Okay, the next part of the code is somehow problematic. Now, we use
 	 * own code for calculating the number of seconds from 1.1.1970,
 	 * brought here by SC from w3m. I don't like it a lot, but it's 100%
 	 * portable, it's faster and it's shorter. */
@@ -218,7 +218,7 @@ time_t parse_http_date(const char *date)
 
 		/* Eat day */
 
-		date++;
+		/* date++; */
 		tm.tm_mday = parse_day(&date);
 		if (tm.tm_mday > 31) return 0;
 

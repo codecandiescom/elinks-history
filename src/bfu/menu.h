@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.31 2003/12/01 15:19:53 pasky Exp $ */
+/* $Id: menu.h,v 1.32 2003/12/05 22:30:10 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -103,7 +103,7 @@ do {									\
 	struct menu_item *items;	\
 	void *data;			\
 	int selected;			\
-	int ni;
+	int ni
 
 struct menu_head {
 	MENU_HEAD;

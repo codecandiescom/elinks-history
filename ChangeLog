@@ -1,3 +1,210 @@
+Wed Nov 10 22:41:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Introduce del_from_cookie_list() and reduce code redundancy.  
+
+Wed Nov 10 22:19:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	accept_cookie(): @d -> @c, @e -> @tmp and make them more local.  
+
+Wed Nov 10 22:17:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	accept_cookie(): @c -> @cookie.  
+
+Wed Nov 10 22:10:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	send_cookies(): minor cleanup.  
+
+Wed Nov 10 22:09:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Pop up 'Bad URL' error dialog if get_hooked_uri() returns NULL for
+	non-remote sessions instead of bailing out. It was reproducable when
+	passing URIs like http://?.  
+
+Wed Nov 10 21:53:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Bail out if host is missing and slash after host is missing. Should
+	fix bug 561 about infinite loop in translate_url().  
+
+Wed Nov 10 21:31:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Decode the URI string used for titles.  
+
+Wed Nov 10 21:30:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	Decoded any document title derived from an URI string. Add check for
+	allocation failure.  
+
+Wed Nov 10 21:22:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, document/renderer.c, protocol/data.c,
+	protocol/uri.c, protocol/uri.h, protocol/file/cgi.c,
+	protocol/file/file.c, protocol/gopher/gopher.c, sched/download.c,
+	viewer/text/link.c:
+
+	Make decode_uri_string() take {struct string *} arg and introduce
+	decode_uri() which just takes char pointer. Should make it a little
+	easier to figure out.  
+
+Wed Nov 10 21:20:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Fix typo in comment.  
+
+Wed Nov 10 21:08:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: gopher/gopher.c, nntp/connection.c,
+	nntp/response.c:
+
+	Remove unneded system #includes.  
+
+Wed Nov 10 20:06:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Improve handling of URI_ERRNO_NO_SLASHES to check how many slashes
+	is missing.  
+
+Wed Nov 10 20:00:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix off by one error in the URI sanitizers.  
+
+Wed Nov 10 19:57:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Trim trailing '.'s in the host component of URIs.  
+
+Wed Nov 10 19:24:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	is_domain_security_ok(): Test if @domain is a 'complete' substring
+	of @server by comparing the lengths of the two strings. Eliminates
+	one strncasecmp().  
+
+Wed Nov 10 19:15:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	is_domain_security_ok(): Simplify the test of @domain being a
+	substring of @server.  
+
+Wed Nov 10 18:39:44 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	s/uncompress/decompress/ Even smaller first read in decompress_data.
+	If this doesn't help code will need rewrite.  
+
+Wed Nov 10 17:43:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Clarify is_in_domain().  
+
+Wed Nov 10 17:26:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Rename check_domain_security() to is_domain_security_ok(). Idea by
+	Lindi.  
+
+Wed Nov 10 17:21:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Fix wrong returned value in check_domain_security().  
+
+Wed Nov 10 17:20:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Fix wrong format string in cookies debugging code.  
+
+Wed Nov 10 16:47:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/win32/win32.c:
+
+	Minor space tidyup.  
+
+Wed Nov 10 16:46:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/dialogs/menu.c, src/sched/download.c:
+
+	URL decode filenames when saving. Patch by Omar Khayam
+	<omark@cyentec.com>.  
+
+Wed Nov 10 15:58:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Simplify cookie loading code, and fix debugging cookie code (causing
+	segfault).  
+
+Wed Nov 10 15:47:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/ftp/ftp.c, sched/download.c:
+
+	Remove silly |return;| statements at end of functions.  
+
+Wed Nov 10 15:44:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/conv.c:
+
+	Let arithmic operators breathe.  
+
+Wed Nov 10 12:25:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Use intermediate variable @path to shorten lines.  
+
+Wed Nov 10 12:16:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	cookie->secure is 0 by default so no need to set again.  
+
+Wed Nov 10 12:11:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Code related to cookie expiration was rewritten and simplified,
+	preventing useless allocation when max_age is 0.  
+
+Wed Nov 10 11:39:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Minor tidy up.  
+
+Wed Nov 10 11:06:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.inc, cookies/cookies.c, dialogs/options.c,
+	protocol/data.c, protocol/http/http.c, protocol/http/http.h,
+	protocol/smb/smb.c, sched/connection.c, util/conv.c:
+
+	Whitespaces fixes.  
+
 Tue Nov  9 14:42:42 2004  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/view.c:

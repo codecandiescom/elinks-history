@@ -1,6 +1,6 @@
 See ChangeLog for recent changes, bugfixes and new features.
 
-ELinks-0.10.0: (codename Thelma)
+ELinks-0.10.0 (codename Thelma):
 
 * simple CSS
 * simple JavaScript/ECMAScript support by the SpiderMonkey Mozilla JS engine
@@ -46,7 +46,7 @@ ELinks-0.9.1:
 * 'fresh' color for any tab that has not been selected
   since its document was loaded
 
-ELinks-0.9.0: (codename Skyrider)
+ELinks-0.9.0 (codename Skyrider):
 
 * used gettext for internationalization
 * support for background document colors
@@ -66,7 +66,7 @@ ELinks-0.9.0: (codename Skyrider)
 * HTTPS proxy support
 * typeahead link searching (press '#')
 
-ELinks-0.4.0: (codename Iceberg)
+ELinks-0.4.0 (codename Iceberg):
 
 * merged HTTP_AUTH
 * basic proxy auth support

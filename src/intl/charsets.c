@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.95 2004/08/12 11:28:15 miciah Exp $ */
+/* $Id: charsets.c,v 1.96 2004/09/09 10:13:13 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -255,6 +255,8 @@ free_utf_table(void)
 		mem_free(utf_table[i].u.str);
 }
 
+#define SYSTEM_CHARSET_FLAG 128
+
 static struct conv_table *
 get_translation_table_to_utf_8(int from)
 {
@@ -262,6 +264,7 @@ get_translation_table_to_utf_8(int from)
 	static int lfr = -1;
 
 	if (from == -1) return NULL;
+	from &= ~SYSTEM_CHARSET_FLAG;
 	if (from == lfr) return utf_table;
 	if (utf_table_init)
 		memset(utf_table, 0, sizeof(struct conv_table) * 256),
@@ -310,12 +313,15 @@ free_conv_table(void)
 	new_translation_table(table);
 }
 
+
 struct conv_table *
 get_translation_table(int from, int to)
 {
 	static int lfr = -1;
 	static int lto = -1;
 
+	from &= ~SYSTEM_CHARSET_FLAG;
+	to &= ~SYSTEM_CHARSET_FLAG;
 	if (first) {
 		memset(table, 0, sizeof(struct conv_table) * 256);
 		first = 0;
@@ -685,6 +691,7 @@ flush:
 	return buffer;
 }
 
+
 #ifndef USE_FASTFIND
 int
 get_cp_index(unsigned char *name)
@@ -695,7 +702,7 @@ get_cp_index(unsigned char *name)
 	if (!strcasecmp(name, "System")) {
 #if HAVE_LANGINFO_CODESET
 		name = nl_langinfo(CODESET);
-		syscp = 1;
+		syscp = SYSTEM_CHARSET_FLAG;
 #else
 		name = "us-ascii";
 #endif
@@ -716,12 +723,12 @@ get_cp_index(unsigned char *name)
 			 */
 
 			if (!strcasecmp(name, codepages[i].aliases[a]))
-				return i;
+				return i | syscp;
 		}
 	}
 
 	if (syscp) {
-		return get_cp_index("us-ascii");
+		return get_cp_index("us-ascii") | syscp;
 	} else {
 		return -1;
 	}
@@ -774,7 +781,7 @@ get_cp_index(unsigned char *name)
 	if (!strcasecmp(name, "System")) {
 #if HAVE_LANGINFO_CODESET
 		name = nl_langinfo(CODESET);
-		syscp = 1;
+		syscp = SYSTEM_CHARSET_FLAG;
 #else
 		name = "us-ascii";
 #endif
@@ -783,10 +790,10 @@ get_cp_index(unsigned char *name)
 	codepage = fastfind_search(name, strlen(name), ff_info_charsets);
 	if (codepage) {
 		assert(codepages <= codepage && codepage < codepages + N_CODEPAGES);
-		return codepage - codepages;
+		return (codepage - codepages) | syscp;
 
 	} else if (syscp) {
-		return get_cp_index("us-ascii");
+		return get_cp_index("us-ascii") | syscp;
 
 	} else {
 		return -1;
@@ -818,6 +825,7 @@ unsigned char *
 get_cp_name(int cp_index)
 {
 	if (cp_index < 0) return "none";
+	if (cp_index & SYSTEM_CHARSET_FLAG) return "System";
 
 	return codepages[cp_index].name;
 }
@@ -826,6 +834,7 @@ unsigned char *
 get_cp_mime_name(int cp_index)
 {
 	if (cp_index < 0) return "none";
+	if (cp_index & SYSTEM_CHARSET_FLAG) return "System";
 	if (!codepages[cp_index].aliases) return NULL;
 
 	return codepages[cp_index].aliases[0];
@@ -834,5 +843,6 @@ get_cp_mime_name(int cp_index)
 int
 is_cp_special(int cp_index)
 {
+	cp_index &= ~SYSTEM_CHARSET_FLAG;
 	return codepages[cp_index].table == table_utf_8;
 }

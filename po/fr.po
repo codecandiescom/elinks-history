@@ -90,7 +90,7 @@ msgstr "Supprimer les items sélectionnés"
 
 #: src/bfu/hierbox.c:700
 msgid "Delete marked items?"
-msgstr "Supprimer les items sélectionnés?"
+msgstr "Supprimer les items sélectionnés ?"
 
 #: src/bfu/hierbox.c:702 src/bfu/hierbox.c:729 src/bfu/hierbox.c:743
 #: src/bfu/hierbox.c:805 src/config/dialogs.c:638 src/dialogs/menu.c:124
@@ -113,7 +113,7 @@ msgstr "Supprimer un dossier"
 #: src/bfu/hierbox.c:726
 #, c-format
 msgid "Delete the folder \"%s\" and its content?"
-msgstr "Supprimer le dossier \"%s\" et son contenu?"
+msgstr "Supprimer le dossier \"%s\" et son contenu ?"
 
 #: src/bfu/hierbox.c:738
 msgid "Delete item"
@@ -126,7 +126,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Supprimer \"%s\"?\n"
+"Supprimer \"%s\" ?\n"
 "\n"
 "%s"
 
@@ -136,7 +136,7 @@ msgstr "Effacer tous les items"
 
 #: src/bfu/hierbox.c:803
 msgid "Do you really want to remove all items?"
-msgstr "Êtes-vous sûr de vouloir effacer tous les items?"
+msgstr "Êtes-vous sûr de vouloir effacer tous les items ?"
 
 #: src/bfu/inpfield.c:46 src/bfu/inpfield.c:55
 msgid "Bad number"
@@ -1677,7 +1677,7 @@ msgstr "Résolution DNS asynchrone"
 
 #: src/config/options.inc:78
 msgid "Use asynchronous DNS resolver?"
-msgstr "Utiliser la résolution DNS asynchrone?"
+msgstr "Utiliser la résolution DNS asynchrone ?"
 
 #: src/config/options.inc:80
 msgid "Maximum connections"
@@ -2598,7 +2598,7 @@ msgstr "Historique inverse"
 
 #: src/config/options.inc:556
 msgid "Keep unhistory (\"forward history\")?"
-msgstr "Historique inverse (\"forward history\")?"
+msgstr "Historique inverse (\"forward history\") ?"
 
 #: src/config/options.inc:559
 msgid "HTML rendering"
@@ -4165,7 +4165,7 @@ msgid ""
 "Expires: %s\n"
 "Secure: %s\n"
 msgstr ""
-"Voulez-vous accepter le cookie de %s?\n"
+"Voulez-vous accepter le cookie de %s ?\n"
 "\n"
 "Nom: %s\n"
 "Valeur: %s\n"
@@ -4920,7 +4920,7 @@ msgid ""
 "\n"
 "If you are using a valuable password, answer NO."
 msgstr ""
-"Mémoriser cette authentification?\n"
+"Mémoriser cette authentification ?\n"
 "\n"
 "Note: les mots de passe sont encodés (mais non cryptés) dans un fichier sur "
 "votre disque dur.\n"
@@ -5357,7 +5357,7 @@ msgstr "Supprimer l'extension"
 #: src/mime/dialogs.c:72
 #, c-format
 msgid "Delete extension %s -> %s?"
-msgstr "Supprimer l'extension %s -> %s?"
+msgstr "Supprimer l'extension %s -> %s ?"
 
 #: src/mime/dialogs.c:128
 msgid "Extension"
@@ -5696,7 +5696,7 @@ msgstr "Type inconnu"
 #: src/sched/download.c:1002
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher?"
+msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher ?"
 
 #: src/sched/download.c:1008 src/sched/download.c:1017
 #: src/sched/download.c:1037 src/sched/download.c:1049
@@ -5706,7 +5706,7 @@ msgstr "Afficher"
 #: src/sched/download.c:1013
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr "Voulez-vous afficher le fichier '%s' (type: %s)?"
+msgstr "Voulez-vous afficher le fichier '%s' (type: %s) ?"
 
 #: src/sched/download.c:1028 src/sched/download.c:1041
 msgid "What to do?"
@@ -5985,7 +5985,7 @@ msgid ""
 "Do you want to post to URL %s?"
 msgstr ""
 "Le formulaire que vous tentez de soumettre est peut-être incomplet.\n"
-"Voulez-vous le soumettre à l'URL %s?"
+"Voulez-vous le soumettre à l'URL %s ?"
 
 #: src/sched/task.c:173
 #, c-format
@@ -6100,7 +6100,7 @@ msgstr "Impossible de lire l'évenement: %d (%s)"
 
 #: src/terminal/tab.c:193
 msgid "Do you really want to close the current tab?"
-msgstr "Êtes-vous sûr de vouloir fermer l'onglet courant?"
+msgstr "Êtes-vous sûr de vouloir fermer l'onglet courant ?"
 
 #: src/terminal/tab.c:229
 msgid "Do you really want to close all except the current tab?"

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.113 2004/06/10 14:54:29 jonas Exp $ */
+/* $Id: task.c,v 1.114 2004/06/11 12:36:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,7 +470,7 @@ follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 {
 #ifdef CONFIG_SCRIPTING
 	static int follow_url_event_id = EVENT_NONE;
-	unsigned char *uristring = get_uri_string(uri, URI_ORIGINAL);
+	unsigned char *uristring = get_uri_string(uri, URI_BASE);
 
 	if (!uristring) return;
 
@@ -483,6 +483,9 @@ follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 	}
 
 	/* FIXME: Compare if uristring and struri(uri) are equal */
+	/* FIXME: When uri->post will no longer be an encoded string (but
+	 * hopefully some refcounted object) we will have to asign the post
+	 * data object to the translated URI. */
 	uri = get_translated_uri(uristring, ses->tab->term->cwd);
 	mem_free(uristring);
 #endif

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.635 2004/10/17 21:31:05 miciah Exp $ */
+/* $Id: view.c,v 1.636 2004/10/17 21:33:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -707,16 +707,17 @@ try_form_action(struct session *ses, struct document_view *doc_view,
 {
 	enum frame_event_status status;
 
-	if (link && link_is_textinput(link)) {
-		status = field_op(ses, doc_view, link, ev);
+	if (!link || !link_is_textinput(link))
+		return FRAME_EVENT_IGNORED;
 
-		if (status != FRAME_EVENT_IGNORED) {
-			if (ses->insert_mode == INSERT_MODE_ON) {
-				assert(link == get_current_link(doc_view));
-			}
+	status = field_op(ses, doc_view, link, ev);
 
-			return status;
+	if (status != FRAME_EVENT_IGNORED) {
+		if (ses->insert_mode == INSERT_MODE_ON) {
+			assert(link == get_current_link(doc_view));
 		}
+
+		return status;
 	}
 
 	return FRAME_EVENT_IGNORED;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.196 2003/04/20 08:35:09 zas Exp $ */
+/* $Id: options.c,v 1.197 2003/04/20 08:54:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -969,7 +969,7 @@ register_options()
 
 	add_opt_int("connection", N_("Connection retries"),
 		"retries", 0, 0, 16, 3,
-		N_("Number of tries to establish a connection."
+		N_("Number of tries to establish a connection.\n"
 		   "Zero means try forever."));
 
 	add_opt_int("connection", N_("Receive timeout"),

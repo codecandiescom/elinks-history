@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.77 2003/10/02 12:54:36 kuser Exp $ */
+/* $Id: core.c,v 1.78 2003/10/04 14:01:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -316,7 +316,7 @@ l_bind_key(LS)
 	}
 
 	if (!init_string(&event_name)) goto lua_error;
-		
+
 	lua_pushvalue(S, 3);
 	ref = lua_ref(S, 1);
 	add_format_to_string(&event_name, "lua-run-func %i", ref);
@@ -417,7 +417,7 @@ dialog_fn(struct dialog_data *dlg)
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB;
 	dlg_format_text(term, term, dlg_msg[0], dlg->x + DIALOG_LB, &y, w, NULL,
-			 dialog_text_color, AL_LEFT);
+			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[0], dlg->x + DIALOG_LB, &y, w,
 			 NULL, AL_LEFT);
 	y++;
@@ -550,9 +550,9 @@ xdialog_fn(struct dialog_data *dlg)
 	/*rw = 0;*/
 	/*HACK*/ w = rw = 50;
 	for (i = 0; i < nfields; i++) {
-	    dlg_format_text(NULL, term, dlg_msg[0], 0, &y, w, &rw,
-			    dialog_text_color, AL_LEFT);
-	    y += 2;
+		dlg_format_text(NULL, term, dlg_msg[0], 0, &y, w, &rw,
+				dialog_text_color, AL_LEFT);
+		y += 2;
 	}
 	dlg_format_buttons(NULL, term, dlg->items + nfields, 2,
 			   0, &y, w, &rw, AL_CENTER);
@@ -563,13 +563,13 @@ xdialog_fn(struct dialog_data *dlg)
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB;
 	for (i = 0; i < nfields; i++) {
-	    dlg_format_text(term, term, dlg_msg[0],
-			    dlg->x + DIALOG_LB, &y, w, NULL,
-			    dialog_text_color, AL_LEFT);
-	    dlg_format_field(term, term, &dlg->items[i],
-			     dlg->x + DIALOG_LB, &y, w,
-			     NULL, AL_LEFT);
-	    y++;
+		dlg_format_text(term, term, dlg_msg[0],
+				dlg->x + DIALOG_LB, &y, w, NULL,
+				dialog_text_color, AL_LEFT);
+		dlg_format_field(term, term, &dlg->items[i],
+				 dlg->x + DIALOG_LB, &y, w,
+				 NULL, AL_LEFT);
+		y++;
 	}
 	dlg_format_buttons(term, term, &dlg->items[nfields],
 			   2, dlg->x + DIALOG_LB, &y, w,
@@ -635,12 +635,10 @@ lua_error:
 	return 1;
 }
 
-/* End xdialog bit.  */
+/* End xdialog bit. */
 
 
-/*
- * Initialisation
- */
+/* Initialisation */
 
 static void
 do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
@@ -685,11 +683,9 @@ cleanup_lua(void)
 	lua_close(L);
 }
 
-/*
- * Attempt to handle infinite loops by trapping SIGINT.  If we get a
+/* Attempt to handle infinite loops by trapping SIGINT.  If we get a
  * SIGINT, we longjump to where prepare_lua was called.  finish_lua()
- * disables the trapping.
- */
+ * disables the trapping. */
 
 static void
 handle_sigint(void *data)
@@ -720,9 +716,7 @@ finish_lua(void)
 }
 
 
-/*
- * Error reporting.
- */
+/* Error reporting. */
 
 void
 alert_lua_error(unsigned char *msg)
@@ -752,11 +746,9 @@ alert_lua_error2(unsigned char *msg, unsigned char *msg2)
 }
 
 
-/*
- * The following stuff is to handle the return values of
+/* The following stuff is to handle the return values of
  * lua_console_hook and keystroke functions, and also the xdialog
- * function.  It expects two values on top of the stack.
- */
+ * function.  It expects two values on top of the stack. */
 
 static void
 handle_ret_eval(struct session *ses)
@@ -825,9 +817,7 @@ handle_standard_lua_returns(unsigned char *from)
 }
 
 
-/*
- * Console stuff.
- */
+/* Console stuff. */
 
 static struct input_history lua_console_history = { 0, {D_LIST_HEAD(lua_console_history.items)} };
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.27 2003/11/24 12:00:33 zas Exp $ */
+/* $Id: xbel.c,v 1.28 2003/12/16 19:54:56 fabio Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -375,14 +375,21 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 
 	while (node) {
 		if (!strcmp(node->name, "bookmark")) {
+			unsigned char *href;
+
 			title = get_child(node, "title");
+			href = get_attribute_value(node->attrs, "href");
 
 			tmp = add_bookmark(current_parent, 0,
 					   /* The <title> element is optional */
 					   title ? title->text
 						 : (unsigned char *) gettext("No title"),
-					   /* The href attribute isn't optional */
-					   get_attribute_value(node->attrs, "href"));
+					   /* XXX: The href attribute isn't optional but
+					    * we don't validate the source XML yet, so
+					    * we can't always assume a non NULL value for
+					    * get_attribute_value() */
+					   href ? href
+						: (unsigned char *) gettext("No URL"));
 
 			/* Out of memory */
 			if (!tmp) return 0;

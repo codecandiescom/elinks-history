@@ -1,10 +1,5 @@
-# translation of hu.po to 
-# translation of hu.po to
-# translation of hu.po to
-# translation of hu.po to Hungarian
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
-# Varga Balázs <vinnui@broadband.hu>
 # Varga Balazs <vinnui@ent.hu>, 2003.
 # Varga Balazs <vinnui@freemail.hu>, 2003.
 #
@@ -12,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2003-10-28 03:44+0100\n"
-"PO-Revision-Date: 2003-10-27 10:26+0100\n"
+"PO-Revision-Date: 2003-10-28 08:54+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -291,6 +286,9 @@ msgid ""
 "## options through UI, however only option values will be altered\n"
 "## and all your formatting, own comments etc will be kept as-is.\n"
 msgstr ""
+"## Ez az ELinks konfigurációs állománya. Szerkesztheted kézzel is.\n"
+"## Ha az ELinksbõl mented a beállításokat, csak az értékek változnak,\n"
+"## minden általad szerkesztett formázás vagy megjegyzés megmarad.\n"
 
 #: src/config/conf.c:596
 msgid ""
@@ -302,6 +300,12 @@ msgid ""
 "## it is NOT counted as missing. Note that all your formatting,\n"
 "## own comments and so on will be kept as-is.\n"
 msgstr ""
+"## Ez az ELinks konfigurációs állománya. Szerkesztheted kézzel is.\n"
+"## Ha az ELinksbõl mented a beállításokat, csak az értékek változnak,\n"
+"## minden általad szerkesztett formázás vagy megjegyzés megmarad,\n"
+"## és a hiányzó opciók a fájl végére kerülnek. Ha egy opció nincs ebben\n"
+"## a fáljban, de egy ez a fálj hivatkozik egy másikra amiben szerepel,\n"
+"## akkor nem számít hiányzónak opciónak.\n"
 
 #: src/config/conf.c:606
 msgid ""
@@ -310,6 +314,9 @@ msgid ""
 "## by ELinks when you save options through UI and you are out of\n"
 "## luck with your formatting and own comments then, so beware.\n"
 msgstr ""
+"## Ez az ELinks konfigurációs állománya. Szerkesztheted kézzel is,\n"
+"## de ha az ELinksbõl mented a beállításokat, felülíródnak, és a\n"
+"## formázásod, megjegyzéseid elveszhetnek.\n"
 
 #: src/config/conf.c:619
 msgid ""
@@ -317,6 +324,8 @@ msgid ""
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
+"## Ha nem szereted ahogyan az ELinks megváltoztatja ezt a fájlt,\n"
+"## állítsd a config.saving_style opciót.\n"
 
 #: src/config/conf.c:634
 msgid "Automatically saved options\n"
@@ -507,8 +516,7 @@ msgstr ""
 #: src/config/dialogs.c:697
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:728
 msgid "Keybinding manager"
@@ -637,8 +645,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:399
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:400
 msgid "Go to the homepage"
@@ -1116,8 +1123,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:119
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:125
@@ -1459,8 +1465,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:238
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:241 src/dialogs/options.c:138
 msgid "Underline"
@@ -1476,8 +1481,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:248
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:250
 msgid "Number links"
@@ -1519,8 +1523,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:274
 msgid "Searching"
@@ -1681,8 +1684,7 @@ msgstr ""
 
 #: src/config/options.inc:364
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:366
 msgid ""
@@ -3407,8 +3409,7 @@ msgstr "Ne próbálja irni/használni a fáljokat a ~/.elinks könyvtárban."
 
 #: src/config/options.inc:1895
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/options.inc:1897
 msgid ""
@@ -3820,12 +3821,11 @@ msgstr "Kilépés"
 
 #: src/dialogs/menu.c:145
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr ""
-"Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
+msgstr "Biztos, hogy kilépsz az ELinksbõl (és megszakítod a letöltéseket)?"
 
 #: src/dialogs/menu.c:147
 msgid "Do you really want to exit ELinks?"
-msgstr "Biztos, hogy kilépsz a Links-böl?"
+msgstr "Biztos, hogy kilépsz az ELinksbõl?"
 
 #: src/dialogs/menu.c:183
 msgid "No history"
@@ -4207,13 +4207,12 @@ msgstr ""
 
 #. name:
 #: src/formhist/formhist.c:373
-#, fuzzy
 msgid "Forms History"
-msgstr "Ûrlap memória"
+msgstr "Ûrlap lista"
 
 #: src/globhist/dialogs.c:147
 msgid "Search history"
-msgstr "Keresés"
+msgstr "Keresési lista"
 
 #: src/globhist/dialogs.c:240 src/globhist/dialogs.c:326
 #: src/globhist/dialogs.c:335
@@ -4320,8 +4319,7 @@ msgstr "Látogatott lapok"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -4486,7 +4484,6 @@ msgstr ""
 
 #. name:
 #: src/mime/backend/default.c:227
-#, fuzzy
 msgid "Option system"
 msgstr "Konfigurációs rendszer"
 
@@ -4511,7 +4508,7 @@ msgstr ""
 
 #: src/mime/backend/mailcap.c:110
 msgid "Ask before using the handlers defined by mailcap."
-msgstr ""
+msgstr "Kérjen megerõsítést a mailcap által elõírt kezelõ használata elõtt."
 
 #: src/mime/backend/mailcap.c:114
 msgid ""
@@ -5422,3 +5419,4 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
+

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.135 2003/06/21 12:01:15 pasky Exp $ */
+/* $Id: http.c,v 1.136 2003/06/21 12:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1019,9 +1019,9 @@ thats_all_folks:
 
 		ulongcat(errs, NULL, info->error_code, 3, '0');
 
-		str = straconcat("<HTML><HEAD><TITLE>HTTP ERROR ", errs,
-				 "</TITLE></HEAD><BODY>HTTP ERROR ", errs,
-				 "</BODY></HTML>", NULL);
+		str = straconcat("<html><head><title>HTTP error ", errs,
+				 "</title></head><body>HTTP error ", errs,
+				 "</body></html>", NULL);
 		if (str) {
 			int strl = strlen(str);
 

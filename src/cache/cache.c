@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.53 2003/10/16 08:20:19 zas Exp $ */
+/* $Id: cache.c,v 1.54 2003/10/16 08:28:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,6 +149,9 @@ resize_entry(struct cache_entry *e, int size)
 
 #define CACHE_PAD(x) (((x) | 0x3fff) + 1)
 
+/* One byte is reserved for data in struct fragment. */
+#define FRAGSIZE(x) (sizeof(struct fragment) + (x) - 1)
+
 /* Add fragment to cache. Returns -1 upon error, 1 if cache entry was enlarged,
  * 0 if only old data were overwritten. Maybe. And maybe not. */
 /* Note that this function is maybe overcommented, but I'm certainly not
@@ -218,7 +221,7 @@ add_fragment(struct cache_entry *e, int offset,
 
 	/* Make up new fragment. */
 	/* One byte is reserved for data in struct fragment. */
-	nf = mem_calloc(1, sizeof(struct fragment) + CACHE_PAD(length) - 1);
+	nf = mem_calloc(1, FRAGSIZE(CACHE_PAD(length)));
 	if (!nf) return -1;
 
 	nf->offset = offset;
@@ -245,9 +248,7 @@ remove_overlaps:
 			/* We end before end of the following fragment, though.
 			 * So try to append overlapping part of that fragment
 			 * to us. */
-			nf = mem_realloc(f, sizeof(struct fragment)
-					    + end_offset - f->offset
-					    - 1); /* One byte is in struct fragment. */
+			nf = mem_realloc(f, FRAGSIZE(end_offset - f->offset));
 			if (!nf) goto ff;
 
 			nf->prev->next = nf;
@@ -316,7 +317,7 @@ defrag_entry(struct cache_entry *e)
 		l += h->length;
 
 	/* One byte is reserved for data in struct fragment. */
-	nf = mem_calloc(1, sizeof(struct fragment) + l - 1);
+	nf = mem_calloc(1, FRAGSIZE(l));
 	if (!nf) return;
 	nf->length = l;
 	nf->real_length = l;
@@ -370,9 +371,7 @@ del:
 			if (final) {
 				struct fragment *nf;
 
-				nf = mem_realloc(f, sizeof(struct fragment)
-						   + f->length
-						   - 1); /* One byte is in struct fragment. */
+				nf = mem_realloc(f, FRAGSIZE(f->length));
 				if (nf) {
 					nf->next->prev = nf;
 					nf->prev->next = nf;

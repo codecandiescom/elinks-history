@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.24 2003/05/04 00:17:25 zas Exp $ */
+/* $Id: session.c,v 1.25 2003/05/04 01:21:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,40 +212,36 @@ void
 print_screen_status(struct session *ses)
 {
 	struct terminal *term = ses->term;
-	struct status *stat = NULL;
 	unsigned char *msg = NULL;
-	int tabs_count = 0;
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
 	int show_tab_bar = get_opt_int("ui.tabs.show_bar");
+	int tabs_count = number_of_tabs(term);
 
-	if (show_title_bar)
-		fill_area(term, 0, 0, term->x, 1, get_bfu_color(term, "title.title-bar"));
-	if (show_status_bar)
-		fill_area(term, 0, term->y - 1, term->x, 1, get_bfu_color(term, "status.status-bar"));
-
-	if (ses->wtd)
-		stat = &ses->loading;
-	else if (have_location(ses))
-		stat = &cur_loc(ses)->stat;
-
-	if (stat && stat->state == S_OK) {
-		struct file_to_load *ftl;
-
-		foreach(ftl, ses->more_files) {
-			if (ftl->req_sent && ftl->stat.state >= 0) {
-				stat = &ftl->stat;
-				break;
-			}
-		}
-	}
-
-	tabs_count = number_of_tabs(term);
-	ses->visible_tab_bar = (show_tab_bar > 0) && !(show_tab_bar == 1 && tabs_count < 2);
+	ses->visible_tab_bar = (show_tab_bar > 0) &&
+		 	       !(show_tab_bar == 1 && tabs_count < 2);
 
 	if (show_status_bar) {
 		static int last_current_link;
 		int tab_info_len = 0;
+		struct status *stat = NULL;
+
+		if (ses->wtd)
+			stat = &ses->loading;
+		else if (have_location(ses))
+			stat = &cur_loc(ses)->stat;
+
+		if (stat && stat->state == S_OK) {
+			struct file_to_load *ftl;
+
+			foreach(ftl, ses->more_files) {
+				if (ftl->req_sent
+				    && ftl->stat.state >= 0) {
+					stat = &ftl->stat;
+					break;
+				}
+			}
+		}
 
 		/* Show S_INTERRUPTED message *once* but then show links
 		 * again as usual. */
@@ -264,6 +260,9 @@ print_screen_status(struct session *ses)
 			if (!msg)
 				msg = get_stat_msg(stat, term);
 		}
+
+		fill_area(term, 0, term->y - 1, term->x, 1,
+			  get_bfu_color(term, "status.status-bar"));
 
 		if (!ses->visible_tab_bar && tabs_count > 1) {
 			unsigned char tab_info[64];
@@ -311,10 +310,17 @@ print_screen_status(struct session *ses)
 				  color);
 			print_text(term, tab * tab_width, ypos, msglen, msg,
 				   color);
+			if (tab_width * tabs_count < term->x)
+				fill_area(term, (tab + 1) * tab_width, ypos,
+					  term->x - (tab_width * tabs_count), 1,
+				  	  color);
+
 		}
 	}
 
 	if (show_title_bar) {
+		fill_area(term, 0, 0, term->x, 1,
+			  get_bfu_color(term, "title.title-bar"));
 		msg = print_current_title(ses);
 		if (msg) {
 			int msglen = strlen(msg);
@@ -329,14 +335,27 @@ print_screen_status(struct session *ses)
 
 	msg = stracpy("ELinks");
 	if (msg) {
+		static unsigned char *last_title = NULL;
+		int msglen;
+		int do_it = 0;
+
 		if (ses->screen && ses->screen->f_data
 		    && ses->screen->f_data->title
 		    && ses->screen->f_data->title[0]) {
 			add_to_strn(&msg, " - ");
 			add_to_strn(&msg, ses->screen->f_data->title);
 		}
-		set_terminal_title(term, msg);
-		mem_free(msg);
+
+		msglen = strlen(msg);
+		if (!last_title ||
+		    strlen(last_title) != msglen ||
+		    memcmp(last_title, msg, msglen)) {
+			last_title = msg;
+			do_it = 1;
+		}
+
+		if (do_it) set_terminal_title(term, msg);
+		else mem_free(msg);
 	}
 
 	redraw_from_window(ses->win);

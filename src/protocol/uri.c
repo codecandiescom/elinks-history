@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.247 2004/06/12 01:07:04 jonas Exp $ */
+/* $Id: uri.c,v 1.248 2004/06/12 01:10:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -715,8 +715,8 @@ join_urls(struct uri *base, unsigned char *rel)
 	/* See RFC 1808 */
 	/* TODO: Support for ';' ? (see the RFC) --pasky */
 
-	/* For '#' and '?' we could use get_uri_string() but it might be too
-	 * expensive since it uses granular allocation scheme. I wouldn't
+	/* For '#', '?' and '//' we could use get_uri_string() but it might be
+	 * too expensive since it uses granular allocation scheme. I wouldn't
 	 * personally mind tho' because it would be cleaner. --jonas */
 	if (rel[0] == '#') {
 		/* Strip fragment and post part from the base URI and append
@@ -753,11 +753,14 @@ join_urls(struct uri *base, unsigned char *rel)
 		if (!get_protocol_need_slashes(base->protocol))
 			return NULL;
 
-		/* Get `<protocol>://' and add stuff after `//' from @rel */
-		uristring = get_uri_string(base, URI_PROTOCOL);
+		/* Get `<protocol>:' from the base URI and append the `//' part
+		 * from @rel. */
+		length = base->protocollen + 1;
+
+		uristring = memacpy(struri(base), length);
 		if (!uristring) return NULL;
 
-		add_to_strn(&uristring, rel + 2);
+		add_to_strn(&uristring, rel);
 
 		return uristring;
 	}

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.6 2003/06/26 20:19:50 jonas Exp $ */
+/* $Id: protocol.c,v 1.7 2003/06/26 20:57:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "util/string.h"
 
 /* Backends dynamic area: */
+
 #include "protocol/file.h"
 #include "protocol/finger.h"
 #include "protocol/ftp.h"
@@ -45,7 +46,7 @@ static struct protocol_backend *protocol_backends[] = {
 
 	/* Internal protocol for mapping to protocol.user.* handlers. Placed
 	 * last because it's checked first and else should be ignored. */
-	/* SCHEME_USER */	&user_protocol_backend
+	/* SCHEME_USER */	&user_protocol_backend,
 };
 
 
@@ -68,6 +69,7 @@ static struct protocol_backend dummyjs_protocol_backend = {
 	/* need_slashes: */		0,
 	/* need_slash_after_host: */	0,
 };
+
 
 static struct protocol_backend lua_protocol_backend = {
 	/* name: */			"user",
@@ -97,11 +99,12 @@ check_protocol(unsigned char *p, int l)
 		return SCHEME_USER;
 	}
 
-	for (i = 0; i < SCHEME_UNKNOWN; i++)
-		if (!strcasecmp(protocol_backends[i]->name, p)) {
-			p[l] = ':';
-			return i;
-		}
+	for (i = 0; i < SCHEME_UNKNOWN; i++) {
+		if (strcasecmp(protocol_backends[i]->name, p))
+			continue;
+		p[l] = ':';
+		return i;
+	}
 
 	p[l] = ':';
 	return SCHEME_UNKNOWN;

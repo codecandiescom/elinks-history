@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.2 2003/05/20 09:41:34 zas Exp $ */
+/* $Id: version.c,v 1.3 2003/05/20 09:43:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,7 @@ init_static_version()
 {
 	unsigned char *s = get_dyn_full_version((struct terminal *) NULL);
 
-	memset(full_static_version, 0, sizeof(full_static_version));
+	full_static_version[0] = '\0';
 	if (s) {
 		safe_strncpy(full_static_version, s, sizeof(full_static_version));
 		mem_free(s);

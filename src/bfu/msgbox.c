@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.21 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: msgbox.c,v 1.22 2003/06/04 22:02:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,8 +157,9 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	dlg = mem_calloc(1, sizeof(struct dialog) +
 			    (buttons + 1) * sizeof(struct widget));
 	if (!dlg) {
-		mem_free(info);
 		va_end(ap);
+		mem_free(info);
+		freeml(ml);
 		return;
 	}
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.447 2004/06/10 17:02:21 jonas Exp $ */
+/* $Id: session.c,v 1.448 2004/06/10 17:19:52 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -105,6 +105,21 @@ get_session(int id)
 	foreach (ses, sessions)
 		if (ses->id == id)
 			return ses;
+
+	return NULL;
+}
+
+static struct session *
+get_master_session(void)
+{
+	struct session *ses;
+
+	foreach (ses, sessions)
+		if (ses->tab->term->master) {
+			struct window *tab = get_current_tab(ses->tab->term);
+
+			return tab ? tab->data : NULL;
+		}
 
 	return NULL;
 }
@@ -728,6 +743,14 @@ decode_session_info(struct terminal *term, int len, const int *data)
 			return NULL;
 
 		remote = *(data++);
+
+		/* If processing session info from a -remote instance we just
+		 * want to hook up with the master. */
+		if (remote) {
+			base_session = get_master_session();
+			if (!base_session) return NULL;
+		}
+
 		len -= 3 * sizeof(int);
 
 		break;
@@ -798,27 +821,19 @@ static struct session *
 process_session_info(struct session *ses, struct initial_session_info *info)
 {
 	enum term_env_type term_env = 0;
-	struct session *s;
 
 	if (!info) return NULL;
 
-	foreach (s, sessions) {
-		/* If processing session info from a -remote instance we just
-		 * want to hook up with the master. */
-		if (info->remote && s->tab->term->master) {
-			struct window *tab = get_current_tab(s->tab->term);
+	if (info->remote) {
+		assert(info->base_session);
+		ses = info->base_session;
 
-			if (can_open_in_new(s->tab->term))
-				term_env = s->tab->term->environment;
+		if (can_open_in_new(ses->tab->term))
+			term_env = ses->tab->term->environment;
 
-			assert(tab);
-			ses = tab->data;
-			break;
-		}
-	}
-
-	if (info->base_session)
+	} else if (info->base_session) {
 		copy_session(info->base_session, ses);
+	}
 
 	if (info->uri_list.size) {
 		int first = !info->remote || (info->remote & SES_REMOTE_CURRENT_TAB);

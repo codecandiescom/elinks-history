@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.133 2004/10/08 16:36:56 zas Exp $ */
+/* $Id: task.c,v 1.134 2004/10/08 16:44:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,11 +304,11 @@ ses_imgmap(struct session *ses)
 }
 
 static int
-do_move(struct session *ses, struct download **stat)
+do_move(struct session *ses, struct download **download_p)
 {
 	struct cache_entry *cached;
 
-	assert(stat && *stat);
+	assert(download_p && *download_p);
 	assertm(ses->loading_uri, "no ses->loading_uri");
 	if_assert_failed return 0;
 
@@ -317,10 +317,10 @@ do_move(struct session *ses, struct download **stat)
 
 	/* Handling image map needs to scan the source of the loaded document
 	 * so all of it has to be available. */
-	if (ses->task.type == TASK_IMGMAP && is_in_progress_state((*stat)->state))
+	if (ses->task.type == TASK_IMGMAP && is_in_progress_state((*download_p)->state))
 		return 0;
 
-	cached = (*stat)->cached;
+	cached = (*download_p)->cached;
 	if (!cached) return 0;
 
 	if (cached->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
@@ -337,9 +337,9 @@ do_move(struct session *ses, struct download **stat)
 
 		abort_loading(ses, 0);
 		if (have_location(ses))
-			*stat = &cur_loc(ses)->download;
+			*download_p = &cur_loc(ses)->download;
 		else
-			*stat = NULL;
+			*download_p = NULL;
 
 		set_session_referrer(ses, get_cache_uri(cached));
 
@@ -354,7 +354,7 @@ do_move(struct session *ses, struct download **stat)
 			fn = get_protocol_external_handler(uri->protocol);
 			if (fn) {
 				fn(ses, uri);
-				*stat = NULL;
+				*download_p = NULL;
 				return 0;
 			}
 		}
@@ -405,9 +405,9 @@ b:
 			break;
 	}
 
-	if (is_in_progress_state((*stat)->state)) {
-		*stat = &cur_loc(ses)->download;
-		change_connection(&ses->loading, *stat, PRI_MAIN, 0);
+	if (is_in_progress_state((*download_p)->state)) {
+		*download_p = &cur_loc(ses)->download;
+		change_connection(&ses->loading, *download_p, PRI_MAIN, 0);
 	} else {
 		cur_loc(ses)->download.state = ses->loading.state;
 	}

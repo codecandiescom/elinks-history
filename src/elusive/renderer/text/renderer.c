@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.7 2003/01/17 22:38:26 pasky Exp $ */
+/* $Id: renderer.c,v 1.8 2003/01/17 23:06:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,8 +145,8 @@ text_init(struct renderer_state *state)
 	state->layouter_state = elusive_layouter_init(state->layouter,
 							state->parser);
 
-	state->output = mem_calloc(1, sizeof(struct f_data_c));
 	if (!state->output) return;
+	state->output = mem_calloc(1, sizeof(struct f_data_c));
 	console_frame_data = state->output;
 
 	console_frame_data->xw = document_options->xw;
@@ -173,7 +173,16 @@ text_render(struct renderer_state *state, unsigned char **str, int *len)
 static void
 text_done(struct renderer_state *state)
 {
+	struct f_data_c *console_frame_data = state->output;
+	struct f_data *frame_data = console_frame_data->f_data;
+	int i;
+
 	elusive_layouter_done(state->layouter_state);
+
+	for (i = 0; i < frame_data->y; i++)
+		if (frame_data->data[i].l > frame_data->x)
+			frame_data->x = frame_data->data[i].l;
+
 }
 
 

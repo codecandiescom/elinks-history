@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.33 2002/06/23 10:37:07 zas Exp $ */
+/* $Id: parser.c,v 1.34 2002/07/01 15:07:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -649,7 +649,7 @@ html_focusable(unsigned char *a)
 
 	if (accesskey) {
 		accesskey[0] = upcase(accesskey[0]);
-		format.accesskey = parse_key(accesskey);
+		format.accesskey = read_key(accesskey);
 #if 0
 		if (!format.accesskey)
 			internal("Invalid accesskey %s", accesskey);

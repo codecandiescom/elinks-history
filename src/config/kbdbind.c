@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.26 2002/07/01 15:06:06 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.27 2002/07/01 15:07:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,7 @@ static struct strtonum keymap_table[] = {
 };
 
 static int
-parse_keymap(unsigned char *keymap)
+read_keymap(unsigned char *keymap)
 {
 
 	return strtonum(keymap_table, keymap);
@@ -186,7 +186,7 @@ static struct strtonum key_table[] = {
 };
 
 long
-parse_key(unsigned char *key)
+read_key(unsigned char *key)
 {
 	return (strlen(key) == 1) ? *key : strtonum(key_table, key);
 }
@@ -206,7 +206,7 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 		s += 4;
 	}
 
-	*key = parse_key(s);
+	*key = read_key(s);
 	return (*key < 0) ? -1 : 0;
 }
 
@@ -279,7 +279,7 @@ static struct strtonum action_table[] = {
 };
 
 static int
-parse_action(unsigned char *action)
+read_action(unsigned char *action)
 {
 
 	return strtonum(action_table, action);
@@ -297,12 +297,12 @@ bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 	int keymap_, action_;
 	long key_, meta_;
 
-	keymap_ = parse_keymap(keymap);
+	keymap_ = read_keymap(keymap);
 	if (keymap_ < 0) return 1;
 
 	if (parse_keystroke(keystroke, &key_, &meta_) < 0) return 2;
 
-	action_= parse_action(action);
+	action_= read_action(action);
 	if (action_ < 0) return 3;
 
 	add_keybinding(keymap_, action_, key_, meta_, LUA_NOREF);
@@ -321,13 +321,13 @@ bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
 	unsigned char *err = NULL;
 	long key, meta;
 	int action;
-	int kmap = parse_keymap(ckmap);
+	int kmap = read_keymap(ckmap);
 
 	if (kmap < 0)
 		err = "Unrecognised keymap";
 	else if (parse_keystroke(ckey, &key, &meta) < 0)
 		err = "Error parsing keystroke";
-	else if ((action = parse_action(" *lua-function*")) < 0)
+	else if ((action = read_action(" *lua-function*")) < 0)
 		err = "Unrecognised action (internal error)";
 	else
 		add_keybinding(kmap, action, key, meta, func_ref);

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.13 2002/06/30 21:11:44 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.14 2002/07/01 15:07:53 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -82,7 +82,7 @@ enum keyact {
 void init_keymaps();
 void free_keymaps();
 
-long parse_key(unsigned char *);
+long read_key(unsigned char *);
 int kbd_action(enum keymap, struct event *, int *);
 
 int bind_do(unsigned char *, unsigned char *, unsigned char *);

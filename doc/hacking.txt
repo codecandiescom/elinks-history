@@ -410,7 +410,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.13 2003/06/24 20:58:28 pasky Exp $ */
+	/* $Id: hacking.txt,v 1.14 2003/09/26 17:44:42 zas Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -428,6 +428,26 @@ Coding practices:
   field). HOWEVER please ALWAYS specify signedness of all such fields. It is
   very easy to reach the top bit in these cases, and with int foo:1, foo would
   be either 0 or -1, which is probably not what you want.
+
+- Please wrap hard initializations of structures with macros, it will ease any
+  future change in structure (ie. moving fields), like that:
+
+  struct example {
+	int a;
+	int b;
+	char *c;
+  }
+  #define INIT_EXAMPLE(a, b, c) {a, b, c}
+  #define NULL_EXAMPLE {0, 0, NULL}
+
+  struct example t[] = {
+	INIT_EXAMPLE(1, 2, "abc"),
+	INIT_EXAMPLE(3, 4, "def"),
+	NULL_EXAMPLE
+  };
+
+  struct example t = NULL_EXAMPLE;
+
 
 
 4, Patches
@@ -489,4 +509,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.13 2003/06/24 20:58:28 pasky Exp $
+$Id: hacking.txt,v 1.14 2003/09/26 17:44:42 zas Exp $

@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.20 2004/06/08 13:49:10 jonas Exp $ */
+/* $Id: vs.h,v 1.21 2004/08/19 20:57:17 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -19,8 +19,8 @@ struct view_state {
 	int current_link;
 
 	int plain;
-	int wrap:1;
-	int did_fragment:1;
+	unsigned int wrap:1;
+	unsigned int did_fragment:1;
 };
 
 void init_vs(struct view_state *, struct uri *uri, int);

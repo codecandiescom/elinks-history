@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.21 2004/01/17 16:36:16 pasky Exp $ */
+/* $Id: apply.c,v 1.22 2004/01/17 16:46:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,10 +50,11 @@ css_apply_font_weight(struct html_element *element, struct css_property *prop)
 	element->attr.attr |= prop->value.font_attribute;
 }
 
+/* XXX: Sort like the css_decl_property */
 static css_applier_t css_appliers[CSS_DP_LAST] = {
 	/* CSS_DP_NONE */		NULL,
-	/* CSS_DP_COLOR */		css_apply_color,
 	/* CSS_DP_BACKGROUND_COLOR */	css_apply_background_color,
+	/* CSS_DP_COLOR */		css_apply_color,
 	/* CSS_DP_FONT_WEIGHT */	css_apply_font_weight,
 };
 

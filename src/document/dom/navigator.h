@@ -1,4 +1,4 @@
-/* $Id: navigator.h,v 1.3 2004/09/25 22:19:29 jonas Exp $ */
+/* $Id: navigator.h,v 1.4 2004/11/04 17:17:25 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOM_NAVIGATOR_H
 #define EL__DOCUMENT_DOM_NAVIGATOR_H
@@ -34,7 +34,7 @@ enum dom_exception_code {
 typedef struct dom_node *
 	(*dom_navigator_callback_T)(struct dom_navigator *, struct dom_node *, void *);
 
-#define DOM_NAVIGATOR_MAX_DEPTH	512
+#define DOM_NAVIGATOR_MAX_DEPTH	4096
 
 struct dom_navigator_state {
 	struct dom_node *node;

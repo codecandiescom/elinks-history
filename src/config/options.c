@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.286 2003/10/06 20:07:43 pasky Exp $ */
+/* $Id: options.c,v 1.287 2003/10/06 21:35:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1173,6 +1173,11 @@ register_options(void)
 	add_opt_tree("document.browse", N_("Searching"),
 		"search", 0,
 		N_("Options for searching."));
+
+	add_opt_bool("document.browse.search", N_("Case sensitivity"),
+		"case", 0, 0,
+		N_("Whether the search should match the document text while maintaining\n"
+		"case sensitivity."));
 
 	add_opt_bool("document.browse.search", N_("Overlapping matches"),
 		"overlap", 0, 0,

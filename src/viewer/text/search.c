@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.39 2003/10/06 19:38:34 pasky Exp $ */
+/* $Id: search.c,v 1.40 2003/10/06 21:35:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,6 +291,8 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	int found = 0;
 	int reg_extended = get_opt_int("document.browse.search.regex") == 2
 			   ? REG_EXTENDED : 0;
+	int case_insensitive = get_opt_int("document.browse.search.case")
+				? 0 : REG_ICASE;
 	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
 	register int i;
 	regex_t regex;
@@ -309,7 +311,8 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	}
 	doc[doclen] = 0;
 
-	if (regcomp(&regex, text, REG_ICASE | REG_NEWLINE | reg_extended)) {
+	if (regcomp(&regex, text,
+		    REG_NEWLINE | case_insensitive | reg_extended)) {
 		mem_free(doc);
 		return 0;
 	}
@@ -355,8 +358,9 @@ is_in_range_plain(struct document *f, int y, int yy, unsigned char *text, int l,
 {
 	unsigned char *txt;
 	int found = 0;
+	int case_sensitive = get_opt_int("document.browse.search.case");
 
-	txt = lowered_string(text, l);
+	txt = case_sensitive ? stracpy(text) : lowered_string(text, l);
 	if (!txt) return 0;
 
 	/* TODO: This is a great candidate for nice optimizations. Fresh CS
@@ -365,16 +369,18 @@ is_in_range_plain(struct document *f, int y, int yy, unsigned char *text, int l,
 	 * maybe some other Boyer-Moore variant, I don't feel that strong in
 	 * this area), hmm?  >:) --pasky */
 
+#define maybe_tolower(c) (case_sensitive ? (c) : tolower(c))
+
 	for (; s1 <= s2; s1++) {
 		register int i;
 
-		if (tolower(s1->c) != txt[0]) {
+		if (maybe_tolower(s1->c) != txt[0]) {
 srch_failed:
 			continue;
 		}
 
 		for (i = 1; i < l; i++)
-			if (tolower(s1[i].c) != txt[i])
+			if (maybe_tolower(s1[i].c) != txt[i])
 				goto srch_failed;
 
 		if (s1[i].y < y || s1[i].y >= yy)
@@ -389,6 +395,8 @@ srch_failed:
 			int_lower_bound(max, s1[i].x + s1[i].n);
 		}
 	}
+
+#undef maybe_tolower
 
 	mem_free(txt);
 
@@ -431,8 +439,10 @@ get_searched_plain(struct document_view *scr, struct point **pt, int *pl,
 	int xx, yy;
 	int xpv, ypv;
 	int len = 0;
+	int case_sensitive = get_opt_int("document.browse.search.case");
 
-	txt = lowered_string(*scr->search_word, l);
+	txt = case_sensitive ? stracpy(*scr->search_word)
+			     : lowered_string(*scr->search_word, l);
 	if (!txt) return;
 
 	xp = scr->xp;
@@ -442,16 +452,18 @@ get_searched_plain(struct document_view *scr, struct point **pt, int *pl,
 	xpv= xp - scr->vs->view_posx;
 	ypv= yp - scr->vs->view_pos;
 
+#define maybe_tolower(c) (case_sensitive ? (c) : tolower(c))
+
 	for (; s1 <= s2; s1++) {
 		register int i;
 
-		if (tolower(s1[0].c) != txt[0]) {
+		if (maybe_tolower(s1[0].c) != txt[0]) {
 srch_failed:
 			continue;
 		}
 
 		for (i = 1; i < l; i++)
-			if (tolower(s1[i].c) != txt[i])
+			if (maybe_tolower(s1[i].c) != txt[i])
 				goto srch_failed;
 
 		for (i = 0; i < l; i++) {
@@ -477,6 +489,8 @@ srch_failed:
 		}
 	}
 
+#undef maybe_tolower
+
 	mem_free(txt);
 	*pt = points;
 	*pl = len;
@@ -497,6 +511,8 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	int len = 0;
 	int reg_extended = get_opt_int("document.browse.search.regex") == 2
 			   ? REG_EXTENDED : 0;
+	int case_insensitive = get_opt_int("document.browse.search.case")
+				? 0 : REG_ICASE;
 	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
 	register int i;
 	regex_t regex;
@@ -516,7 +532,8 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	doc[doclen] = 0;
 
 	/* TODO: show error message */
-	if (regcomp(&regex, *scr->search_word, REG_ICASE | REG_NEWLINE | reg_extended)) {
+	if (regcomp(&regex, *scr->search_word,
+		    REG_NEWLINE | case_insensitive | reg_extended)) {
 		mem_free(doc);
 		goto ret;
 	}

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.144 2003/06/17 15:07:56 pasky Exp $ */
+/* $Id: renderer.c,v 1.145 2003/06/17 15:26:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -833,7 +833,8 @@ process_link:
 	    && !xstrcmp(format.target, last_target)
 	    && !xstrcmp(format.image, last_image)
 	    && format.form == last_form) {
-		if (part->data && part->data->nlinks > 0) {
+		if (part->data) {
+			assertm(part->data->nlinks > 0, "no link");
 			link = &part->data->links[part->data->nlinks - 1];
 			goto set_link;
 		}

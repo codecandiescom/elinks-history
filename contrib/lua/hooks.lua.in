@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.20 2003/09/13 04:50:36 miciah Exp $
+-- $Id: hooks.lua.in,v 1.21 2003/09/13 04:57:06 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -139,12 +139,14 @@ smartprefixes = {
     bb_fr_en = "http://babelfish.altavista.com/babelfish/tr?lp=fr_en&submit=1&urltext=%s",
     bb_en_fr = "http://babelfish.altavista.com/babelfish/tr?lp=en_fr&submit=1&urltext=%s",
     bug = "http://bugzilla.elinks.or.cz/show_bug.cgi?id=%s",
+    cambridge = "http://dictionary.cambridge.org/results.asp?searchword=%s",
     cliki = "http://www.cliki.net/admin/search?words=%s",
     -- If you want to add a smartprefix for another project's CVSweb,
     -- just create a lambda like this. Aren't high-level languages fun?
     cvs = function (x) return cvsweb ("http://cvsweb.elinks.or.cz/cvsweb.cgi/", "elinks", x) end,
     d = "http://www.dict.org/bin/Dict?Query=%s&Form=Dict1&Strategy=*&Database=*&submit=Submit+query",
     debcontents = debian_contents,
+    dmoz = "http://search.dmoz.org/cgi-bin/search?search=%s",
     foldoc = "http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?%s",
     g  = "http://www.google.com/search?q=%s&btnG=Google+Search",
     gd = "http://www.google.com/search?q=%s&cat=gwd/Top",

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.242 2004/06/21 09:49:47 miciah Exp $ */
+/* $Id: link.c,v 1.243 2004/06/21 09:50:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -684,7 +684,7 @@ get_link_at_coordinates(struct document_view *doc_view, int x, int y)
 	/* If no link in document, nothing to do. */
 	if (!doc_view->document->nlinks) return NULL;
 
-	/* If mouse is outside document view, no need to go further. */
+	/* If the coordinates are outside document view, no need to go further. */
 	if (x < 0 || x >= doc_view->box.width) return NULL;
 	if (y < 0 || y >= doc_view->box.height) return NULL;
 
@@ -715,8 +715,8 @@ get_link_at_coordinates(struct document_view *doc_view, int x, int y)
 
 	for (link = l1; link <= l2; link++) {
 		for (i = 0; i < link->npoints; i++)
-			if (link->points[i].x == mouse_x
-			    && link->points[i].y == mouse_y)
+			if (link->points[i].x == x
+			    && link->points[i].y == y)
 				return link;
 	}
 

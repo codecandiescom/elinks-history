@@ -1,4 +1,4 @@
-/* $Id: checkbox.h,v 1.23 2003/11/06 16:43:45 jonas Exp $ */
+/* $Id: checkbox.h,v 1.24 2003/11/07 18:45:39 jonas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
@@ -31,7 +31,6 @@
 	} while (0)
 
 extern struct widget_ops checkbox_ops;
-void checkboxes_width(struct terminal *term, struct widget_data *widget_data, int n, int *minwidth, int *maxwidth);
 void dlg_format_checkboxes(struct terminal *, struct widget_data *, int, int, int *, int, int *);
 
 #endif

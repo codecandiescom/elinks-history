@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.46 2003/11/07 18:32:30 jonas Exp $ */
+/* $Id: text.c,v 1.47 2003/11/07 18:45:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,31 +16,6 @@
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
-
-void
-text_width(struct terminal *term, register unsigned char *text,
-	   int *minwidth, int *maxwidth)
-{
-	do {
-		register int cmax = 0;
-		register int cmin = 0;
-		int cmin_stop = 0;
-
-		while (*text && *text != '\n') {
-			if (!cmin_stop) {
-				if (*text == ' ')
-					cmin_stop = 1;
-				cmin++;
-			}
-			cmax++;
-			text++;
-		}
-
-		if (maxwidth && cmax > *maxwidth) *maxwidth = cmax;
-		if (minwidth && cmin > *minwidth) *minwidth = cmin;
-
-	} while (*(text++));
-}
 
 #define is_unsplitable(pos) (*(pos) && *(pos) != '\n' && *(pos) != ' ')
 

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.47 2003/11/07 13:32:59 jonas Exp $ */
+/* $Id: group.c,v 1.48 2003/11/07 18:45:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,34 +29,6 @@ base_group_width(struct widget_data *widget_data)
 		return strlen(widget_data->widget->text) + 5;
 
 	return widget_data->widget->datalen + 1;
-}
-
-inline void
-group_width(struct terminal *term,
-  	    struct widget_data *widget_data, int n,
-	    int *min_width, int *max_width)
-{
-	int base = base_group_width(widget_data);
-	int minw = 0;
-	int maxw = 0;
-
-	while (n--) {
-		int wx_min;
-		int wx_max;
-		unsigned char *text = widget_data->widget->text;
-
-		wx_min = strlen(text);
-		wx_max = base + wx_min;
-
-		int_lower_bound(&minw, wx_min);
-		if (n) wx_max++;
-		maxw += wx_max;
-
-		widget_data++;
-	}
-
-	if (min_width) *min_width = minw + base;
-	if (max_width) int_lower_bound(max_width, maxw);
 }
 
 void

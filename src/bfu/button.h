@@ -1,4 +1,4 @@
-/* $Id: button.h,v 1.20 2003/11/05 20:08:16 jonas Exp $ */
+/* $Id: button.h,v 1.21 2003/11/07 18:45:39 jonas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
@@ -23,7 +23,6 @@
 	} while (0)
 
 extern struct widget_ops button_ops;
-void buttons_width(struct widget_data *widget_data, int n, int *minwidth, int *maxwidth);
 void dlg_format_buttons(struct terminal *, struct widget_data *, int, int, int *, int, int *, enum format_align);
 
 #endif

@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.18 2004/06/12 00:12:22 jonas Exp $ */
+/* $Id: forms.c,v 1.19 2004/06/17 00:12:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,6 +186,14 @@ put_button(unsigned char *a)
 	put_chrs("&nbsp;] ", 8, put_chars_f, ff);
 }
 
+int
+get_form_mode(unsigned char *attr)
+{
+	if (has_attr(attr, "disabled")) return 2;
+	if (has_attr(attr, "readonly")) return 1;
+	return 0;
+}
+
 void
 html_button(unsigned char *a)
 {
@@ -224,13 +232,13 @@ no_type_attr:
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(a, "name");
+	fc->ro = get_form_mode(a);
 
 	fc->default_value = get_attr_val(a, "value");
 	if (!fc->default_value && fc->type == FC_SUBMIT) fc->default_value = stracpy("Submit");
 	if (!fc->default_value && fc->type == FC_RESET) fc->default_value = stracpy("Reset");
 	if (!fc->default_value) fc->default_value = stracpy("");
 
-	fc->ro = has_attr(a, "disabled") ? 2 : has_attr(a, "readonly") ? 1 : 0;
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
 	special_f(ff, SP_CONTROL, fc);
 	format.form = fc;
@@ -281,6 +289,7 @@ no_type_attr:
 	fc->action = null_or_stracpy(form.action);
 	fc->target = null_or_stracpy(form.target);
 	fc->name = get_attr_val(a, "name");
+	fc->ro = get_form_mode(a);
 
 	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
 	if (!fc->default_value && fc->type == FC_CHECKBOX) fc->default_value = stracpy("on");
@@ -296,7 +305,6 @@ no_type_attr:
 	fc->maxlength = get_num(a, "maxlength");
 	if (fc->maxlength == -1) fc->maxlength = MAXINT;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
-	fc->ro = has_attr(a, "disabled") ? 2 : has_attr(a, "readonly") ? 1 : 0;
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
 	if (fc->type == FC_HIDDEN) goto hid;
 
@@ -592,7 +600,7 @@ end_parse:
 	fc->type = FC_SELECT;
 	fc->default_state = preselect < 0 ? 0 : preselect;
 	fc->default_value = order ? stracpy(values[fc->default_state]) : stracpy("");
-	fc->ro = has_attr(attr, "disabled") ? 2 : has_attr(attr, "readonly") ? 1 : 0;
+	fc->ro = get_form_mode(attr);
 	fc->nvalues = order;
 	fc->values = values;
 	fc->menu = detach_menu(&lnk_menu);
@@ -662,7 +670,7 @@ pp:
 	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(attr, "name");
 	fc->type = FC_TEXTAREA;;
-	fc->ro = has_attr(attr, "disabled") ? 2 : has_attr(attr, "readonly") ? 1 : 0;
+	fc->ro = get_form_mode(attr);
 	fc->default_value = memacpy(html, p - html);
 	for (p = fc->default_value; p && p[0]; p++) {
 		/* FIXME: We don't cope well with entities here. Bugzilla uses

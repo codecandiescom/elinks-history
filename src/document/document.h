@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.29 2003/11/15 16:36:39 pasky Exp $ */
+/* $Id: document.h,v 1.30 2003/11/15 16:37:38 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -130,6 +130,7 @@ struct document {
 #endif
 
 #ifdef DEBUG
+#include "util/error.h"
 #define doc_sanity_check(doc) \
 do { \
 	assert(doc); \

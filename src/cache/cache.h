@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.54 2003/11/15 16:35:17 pasky Exp $ */
+/* $Id: cache.h,v 1.55 2003/11/15 16:37:37 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -66,6 +66,7 @@ struct cache_entry {
 #endif
 
 #ifdef DEBUG
+#include "util/error.h"
 #define ce_sanity_check(ce) \
 do { \
 	assert(ce); \

@@ -524,6 +524,14 @@ AC_TRY_COMPILE([#include<sys/types.h>
                have_sa_in6=yes, have_sa_in6=no)
 AC_MSG_RESULT($have_sa_in6)
 
+AC_MSG_CHECKING([for addrinfo])
+AC_TRY_COMPILE([#include<sys/types.h>
+		#include<sys/socket.h>
+                #include<netdb.h>],
+               [int x = sizeof(struct addrinfo);],
+               have_addrinfo=yes, have_addrinfo=no)
+AC_MSG_RESULT($have_addrinfo)
+
 AC_CHECK_FUNC(getaddrinfo, have_gai=yes, have_gai=no)
 if test "$have_gai" != yes; then
   AC_CHECK_LIB(inet6, getaddrinfo, have_gai=yes, have_gai=no)
@@ -541,6 +549,7 @@ cf_result=no
 if test -z "$disable_ipv6" &&
    test "$have_sa_storage" = yes &&
    test "$have_sa_in6" = yes &&
+   test "$have_addrinfo" = yes &&
    test "$have_gai" = yes; then
 	AC_DEFINE(IPV6)
 	cf_result=yes

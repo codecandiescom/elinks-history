@@ -1,3 +1,36 @@
+Fri Feb  4 21:49:26 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/dialogs.h:
+
+	Declare @cookie_queries as extern in the .h file. It was probably
+	utterly broken until now. Also fixes compilation with outrageous
+	CFLAGS like some of the Gentoo people like to have
+	(http://bugs.gentoo.org/show_bug.cgi?id=80226).  
+
+Fri Feb  4 00:41:28 2005  adamg:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Fri Feb  4 00:21:49 2005  adamg:
+
+	* src/protocol/file/cgi.c:
+
+	One more casting fix 
+
+Thu Feb  3 23:36:58 2005  adamg:
+
+	* src/: bfu/listmenu.c, dialogs/info.c, dialogs/options.c,
+	document/html/renderer.c, protocol/http/codes.c, sched/session.c,
+	scripting/lua/core.c, terminal/kbd.c, terminal/terminal.c,
+	util/error.c, viewer/text/form.c:
+
+	- some casting improvements (fixes build with --enable-debug on
+	  amd64): 
+	(int) -> (long) 
+	  (void *) -> (void *) (long) 
+
 Thu Feb  3 22:28:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/download.c:

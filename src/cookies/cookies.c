@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.175 2004/11/10 17:43:01 zas Exp $ */
+/* $Id: cookies.c,v 1.176 2004/11/10 19:15:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,12 +198,13 @@ free_cookie(struct cookie *c)
 	mem_free(c);
 }
 
+
 /* Check whether cookie's domain matches server.
  * It returns 1 if ok, 0 else. */
 static int
 is_domain_security_ok(unsigned char *domain, unsigned char *server, int server_len)
 {
-	int i, j;
+	int i;
 	int domain_len;
 	int need_dots;
 
@@ -224,9 +225,10 @@ is_domain_security_ok(unsigned char *domain, unsigned char *server, int server_l
 		return 1;
 	}
 
-	for (i = server_len - domain_len, j = 0; domain[j]; i++, j++)
-		if (toupper(server[i]) != toupper(domain[j]))
-			return 0;
+	/* Ensure thay the domain is atleast a substring of the server before
+	 * continuing. */
+	if (strncasecmp(domain, server + server_len - domain_len, domain_len))
+		return 0;
 
 	/* Also test if domain is secure enough.. */
 

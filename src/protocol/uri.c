@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.228 2004/06/07 23:38:54 jonas Exp $ */
+/* $Id: uri.c,v 1.229 2004/06/08 12:19:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,10 +241,20 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		return URI_ERRNO_NO_HOST_SLASH;
 	}
 
-	prefix_end = strchr(host_end, POST_CHAR);
+	/* Look for #fragment or POST_CHAR */
+	prefix_end = host_end + strcspn(host_end, "#\001");
 	uri->data = host_end;
-	uri->datalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
-	uri->post = prefix_end ? (prefix_end + 1) : NULL;
+	uri->datalen = prefix_end - host_end;
+
+	if (*prefix_end == '#') {
+		uri->fragment = prefix_end + 1;
+		uri->fragmentlen = strcspn(uri->fragment, "\001");
+		prefix_end = uri->fragment + uri->fragmentlen;
+	}
+
+	if (*prefix_end == POST_CHAR) {
+		uri->post = prefix_end;
+	}
 
 	return URI_ERRNO_OK;
 }
@@ -429,6 +439,11 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		query++;
 		/* Check fragment and POST_CHAR */
 		return add_bytes_to_string(string, query, strcspn(query, "#\001"));
+	}
+
+	if (wants(URI_FRAGMENT) && uri->fragmentlen) {
+		add_char_to_string(string, '#');
+		add_bytes_to_string(string, uri->fragment, uri->fragmentlen);
 	}
 
 	if (wants(URI_POST) && uri->post) {

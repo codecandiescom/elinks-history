@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.121 2004/06/08 00:04:19 jonas Exp $ */
+/* $Id: uri.h,v 1.122 2004/06/08 12:19:06 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -35,6 +35,7 @@ struct uri {
 	/* @data can contain both the path and query uri fields.
 	 * It can never be NULL but can have zero length. */
 	unsigned char *data;
+	unsigned char *fragment;
 	/* @post can contain some special encoded form data, used internally
 	 * to make form data handling more efficient. The data is marked by
 	 * POST_CHAR in the uri string. */
@@ -48,6 +49,7 @@ struct uri {
 	int hostlen:16;
 	int portlen:8;
 	int datalen:16;
+	int fragmentlen:16;
 
 	/* Flags */
 	unsigned int ipv6:1;	/* URI contains IPv6 host */
@@ -90,6 +92,7 @@ enum uri_component {
 	URI_PORT		= (1 << 4),
 	URI_DEFAULT_PORT	= (1 << 5),
 	URI_DATA		= (1 << 6),
+	URI_FRAGMENT		= (1 << 7),
 	URI_POST		= (1 << 8),
 
 	/* Control for ``encoding'' URIs into Internationalized Domain Names.
@@ -122,10 +125,10 @@ enum uri_component {
 	URI_ORIGINAL		= ~URI_RARE,
 
 	/* Used for getting the URI with no #fragment */
-	URI_BASE		= URI_ORIGINAL | URI_POST,
+	URI_BASE		= ~(URI_RARE | URI_FRAGMENT) | URI_POST,
 
 	/* Used in the HTTP Auth code */
-	URI_HTTP_AUTH		= ~URI_RARE,
+	URI_HTTP_AUTH		= ~(URI_RARE | URI_FRAGMENT),
 
 	/* Used for the value of HTTP "Host" header info */
 	URI_HTTP_HOST		= URI_HOST | URI_PORT,

@@ -1,3 +1,7 @@
+/* Long list of color names and their rgb values, used by UI, and html stuff.
+ * This is used by src/util/color.c */
+/* $Id: color.inc,v 1.2 2004/02/14 00:53:04 zas Exp $ */
+
 	{ "alice blue",			0xF0F8FF },
 	{ "aliceblue",			0xF0F8FF },
 	{ "antique white",		0xFAEBD7 },

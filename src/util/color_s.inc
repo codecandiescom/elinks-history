@@ -1,3 +1,7 @@
+/* Short list of color names and their rgb values, used by UI, and html stuff.
+ * This is used by src/util/color.c when ELINKS_SMALL is defined. */
+/* $Id: color_s.inc,v 1.2 2004/02/14 00:53:04 zas Exp $ */
+
 	{"aliceblue",		0xF0F8FF},
 	{"antiquewhite",	0xFAEBD7},
 	{"aqua",		0x00FFFF},

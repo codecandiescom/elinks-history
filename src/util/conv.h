@@ -1,10 +1,10 @@
-/* $Id: conv.h,v 1.41 2004/11/25 23:50:15 miciah Exp $ */
+/* $Id: conv.h,v 1.42 2005/03/05 22:14:32 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
 
 #include "util/string.h"
-#include "util/ttime.h" /* ttime type */
+#include "util/ttime.h" /* time_T type */
 
 static inline int
 is_safe_in_shell(unsigned char c)
@@ -49,12 +49,12 @@ unhx(register unsigned char a)
 struct string *add_long_to_string(struct string *string, long number);
 struct string *add_knum_to_string(struct string *string, long number);
 struct string *add_xnum_to_string(struct string *string, int number);
-struct string *add_time_to_string(struct string *string, ttime time);
+struct string *add_time_to_string(struct string *string, time_T time);
 
 #ifdef HAVE_STRFTIME
 /* Uses strftime() to add @fmt time format to @string. If @time is NULL
  * time(NULL) will be used. */
-struct string *add_date_to_string(struct string *string, unsigned char *format, ttime *time);
+struct string *add_date_to_string(struct string *string, unsigned char *format, time_T *time);
 #endif
 
 

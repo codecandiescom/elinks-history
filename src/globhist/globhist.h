@@ -1,4 +1,4 @@
-/* $Id: globhist.h,v 1.21 2004/07/15 00:45:07 jonas Exp $ */
+/* $Id: globhist.h,v 1.22 2005/03/05 22:14:31 zas Exp $ */
 
 #ifndef EL__GLOBHIST_GLOBHIST_H
 #define EL__GLOBHIST_GLOBHIST_H
@@ -18,7 +18,7 @@ struct global_history_item {
 	unsigned char *title;
 	unsigned char *url;
 
-	ttime last_visit;
+	time_T last_visit;
 	struct object object; /* No direct access, use provided macros for that. */
 };
 
@@ -31,7 +31,7 @@ extern struct module global_history_module;
 
 void delete_global_history_item(struct global_history_item *);
 struct global_history_item *get_global_history_item(unsigned char *);
-void add_global_history_item(unsigned char *, unsigned char *, ttime);
+void add_global_history_item(unsigned char *, unsigned char *, time_T);
 int globhist_simple_search(unsigned char *, unsigned char *);
 
 #endif

@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.228 2005/03/05 21:04:49 jonas Exp $ */
+/* $Id: connection.c,v 1.229 2005/03/05 22:14:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,8 +47,8 @@ struct keepalive_connection {
 	/* Function called when the keepalive has timed out or is deleted */
 	void (*done)(struct connection *);
 
-	ttime timeout;
-	ttime add_time;
+	time_T timeout;
+	time_T add_time;
 
 	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
 	int socket;
@@ -265,7 +265,7 @@ static void
 update_progress(struct connection *conn)
 {
 	struct progress *progress = &conn->progress;
-	ttime a = get_time() - progress->last_time;
+	time_T a = get_time() - progress->last_time;
 
 	progress->loaded = conn->received;
 	progress->size = conn->est_length;
@@ -470,7 +470,7 @@ done_keepalive_connection(struct keepalive_connection *keep_conn)
 }
 
 static struct keepalive_connection *
-init_keepalive_connection(struct connection *conn, ttime timeout,
+init_keepalive_connection(struct connection *conn, time_T timeout,
 			  void (*done)(struct connection *))
 {
 	struct keepalive_connection *keep_conn;
@@ -526,7 +526,7 @@ has_keepalive_connection(struct connection *conn)
 }
 
 void
-add_keepalive_connection(struct connection *conn, ttime timeout,
+add_keepalive_connection(struct connection *conn, time_T timeout,
 			 void (*done)(struct connection *))
 {
 	struct keepalive_connection *keep_conn;
@@ -564,7 +564,7 @@ void
 check_keepalive_connections(void)
 {
 	struct keepalive_connection *keep_conn, *next;
-	ttime ct = get_time();
+	time_T ct = get_time();
 	int p = 0;
 
 	kill_timer(&keepalive_timeout);

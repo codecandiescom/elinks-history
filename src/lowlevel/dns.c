@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.55 2005/02/28 13:51:28 zas Exp $ */
+/* $Id: dns.c,v 1.56 2005/03/05 22:14:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ struct dnsentry {
 	LIST_HEAD(struct dnsentry);
 
 	struct sockaddr_storage *addr; /* pointer to array of addresses */
-	ttime get_time;
+	time_T get_time;
 	int addrno; /* array len / sizeof(sockaddr_storage) */
 	unsigned char name[1]; /* Must be last */
 };
@@ -489,7 +489,7 @@ shrink_dns_cache(int whole)
 			del_dns_cache_entry(&d);
 
 	} else {
-		ttime oldest = get_time() - DNS_TIMEOUT;
+		time_T oldest = get_time() - DNS_TIMEOUT;
 
 		foreach (d, dns_cache)
 			if (d->get_time < oldest)

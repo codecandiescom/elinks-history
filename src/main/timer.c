@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timer.c,v 1.7 2005/03/04 21:14:26 zas Exp $ */
+/* $Id: timer.c,v 1.8 2005/03/05 22:14:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 struct timer {
 	LIST_HEAD(struct timer);
 
-	ttime interval;
+	time_T interval;
 	void (*func)(void *);
 	void *data;
 };
@@ -32,10 +32,10 @@ count_timers(void)
 }
 
 void
-check_timers(ttime *last_time)
+check_timers(time_T *last_time)
 {
-	ttime now = get_time();
-	ttime interval = now - *last_time;
+	time_T now = get_time();
+	time_T interval = now - *last_time;
 	struct timer *timer;
 
 	foreach (timer, timers) timer->interval -= interval;
@@ -55,7 +55,7 @@ check_timers(ttime *last_time)
 }
 
 void
-install_timer(timer_id_T *id, ttime time, void (*func)(void *), void *data)
+install_timer(timer_id_T *id, time_T time, void (*func)(void *), void *data)
 {
 	struct timer *new_timer, *timer;
 
@@ -94,7 +94,7 @@ int
 get_next_timer_time(struct timeval *tv)
 {
 	if (!list_empty(timers)) {
-		ttime tt = ((struct timer *) &timers)->next->interval + 1;
+		time_T tt = ((struct timer *) &timers)->next->interval + 1;
 
 		if (tt < 0) tt = 0;
 		tv->tv_sec = tt / 1000;

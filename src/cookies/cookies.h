@@ -1,4 +1,4 @@
-/* $Id: cookies.h,v 1.26 2004/12/17 22:40:38 pasky Exp $ */
+/* $Id: cookies.h,v 1.27 2005/03/05 22:14:31 zas Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
@@ -32,7 +32,7 @@ struct cookie {
 	unsigned char *path, *domain;
 
 	struct cookie_server *server;	/* The host the cookie originated from */
-	ttime expires;			/* Expiration time. Zero means undefined */
+	time_T expires;			/* Expiration time. Zero means undefined */
 	int secure;			/* Did it have 'secure' attribute */
 
 	/* This is indeed maintained by cookies.c, not dialogs.c; much easier

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.92 2005/03/05 21:11:03 zas Exp $ */
+/* $Id: connection.h,v 1.93 2005/03/05 22:14:32 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -103,9 +103,9 @@ enum connection_state {
 };
 
 struct progress {
-	ttime elapsed;
-	ttime last_time;
-	ttime dis_b;
+	time_T elapsed;
+	time_T last_time;
+	time_T dis_b;
 
 	unsigned int valid:1;
 	int size, loaded, last_loaded, cur_loaded;
@@ -230,7 +230,7 @@ long connect_info(int);
 void set_connection_state(struct connection *, int);
 
 int has_keepalive_connection(struct connection *);
-void add_keepalive_connection(struct connection *, ttime,
+void add_keepalive_connection(struct connection *, time_T,
 			      void (*done)(struct connection *));
 
 void retry_connection(struct connection *);

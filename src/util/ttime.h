@@ -1,4 +1,4 @@
-/* $Id: ttime.h,v 1.8 2004/11/12 09:49:05 zas Exp $ */
+/* $Id: ttime.h,v 1.9 2005/03/05 22:14:32 zas Exp $ */
 
 #ifndef EL__UTIL_TTIME_H
 #define EL__UTIL_TTIME_H
@@ -10,14 +10,14 @@
 #include <time.h>
 #endif
 
-/* WARNING: may cause overflows since ttime holds values 1000 times
+/* WARNING: may cause overflows since time_T holds values 1000 times
  * bigger than usual time_t */
-typedef time_t ttime;
+typedef time_t time_T;
 
-ttime get_time(void);
+time_T get_time(void);
 
 /* Is using atol() in this way acceptable? It seems
- * non-portable to me; ttime might not be a long. -- Miciah */
-#define str_to_ttime(s) ((ttime) atol(s))
+ * non-portable to me; time_T might not be a long. -- Miciah */
+#define str_to_time_T(s) ((time_T) atol(s))
 
 #endif

@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: ttime.c,v 1.8 2005/02/05 22:36:37 jonas Exp $ */
+/* $Id: ttime.c,v 1.9 2005/03/05 22:14:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,11 +18,11 @@
 #include "util/ttime.h"
 
 
-ttime
+time_T
 get_time(void)
 {
 	struct timeval tv;
 
 	gettimeofday(&tv, NULL);
-	return (ttime) tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	return (time_T) tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }

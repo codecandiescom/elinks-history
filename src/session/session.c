@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.610 2005/03/05 21:21:27 zas Exp $ */
+/* $Id: session.c,v 1.611 2005/03/05 22:14:32 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -393,7 +393,7 @@ load_frames(struct session *ses, struct document_view *doc_view)
 void
 display_timer(struct session *ses)
 {
-	ttime t = get_time();
+	time_T t = get_time();
 
 	draw_formatted(ses, 3);
 

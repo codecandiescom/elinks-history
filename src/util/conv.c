@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.70 2004/11/25 23:50:15 miciah Exp $ */
+/* $Id: conv.c,v 1.71 2005/03/05 22:14:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,7 +198,7 @@ add_xnum_to_string(struct string *string, int xnum)
 }
 
 struct string *
-add_time_to_string(struct string *string, ttime time)
+add_time_to_string(struct string *string, time_T time)
 {
 	unsigned char q[64];
 	int qlen = 0;
@@ -236,10 +236,10 @@ add_time_to_string(struct string *string, ttime time)
 
 #ifdef HAVE_STRFTIME
 struct string *
-add_date_to_string(struct string *string, unsigned char *fmt, ttime *date)
+add_date_to_string(struct string *string, unsigned char *fmt, time_T *date)
 {
 	unsigned char buffer[MAX_STR_LEN];
-	ttime when_time = date ? *date : time(NULL);
+	time_T when_time = date ? *date : time(NULL);
 	struct tm *when_local = localtime(&when_time);
 
 	if (strftime(buffer, sizeof(buffer), fmt, when_local) <= 0)

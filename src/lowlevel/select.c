@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.67 2005/03/04 13:19:37 zas Exp $ */
+/* $Id: select.c,v 1.68 2005/03/05 22:14:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,7 @@ set_handlers(int fd, void (*read_func)(void *), void (*write_func)(void *),
 void
 select_loop(void (*init)(void))
 {
-	static ttime last_time;
+	static time_T last_time;
 	int select_errors = 0;
 
 	clear_signal_mask_and_handlers();

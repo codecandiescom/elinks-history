@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.195 2005/02/28 10:24:46 zas Exp $ */
+/* $Id: cookies.c,v 1.196 2005/03/05 22:14:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,14 +343,14 @@ set_cookie(struct uri *uri, unsigned char *str)
 		unsigned char *date = parse_header_param(str, "expires");
 
 		if (date) {
-			ttime expires = parse_date(date); /* Convert date to seconds. */
+			time_T expires = parse_date(date); /* Convert date to seconds. */
 
 			mem_free(date);
 
 			if (expires) {
 				if (max_age > 0) {
 					int seconds = max_age*24*3600;
-					ttime deadline = time(NULL) + seconds;
+					time_T deadline = time(NULL) + seconds;
 
 					if (expires > deadline) /* Over-aged cookie ? */
 						expires = deadline;
@@ -710,7 +710,7 @@ load_cookies(void) {
 			unsigned char *pos;
 			int len;
 		} members[MEMBERS];
-		ttime expires;
+		time_T expires;
 
 		/* First find all members. */
 		for (member = NAME; member < MEMBERS; member++, q = ++p) {
@@ -728,7 +728,7 @@ load_cookies(void) {
 		if (member != MEMBERS) continue;	/* Invalid line. */
 
 		/* Skip expired cookies if any. */
-		expires = str_to_ttime(members[EXPIRES].pos);
+		expires = str_to_time_T(members[EXPIRES].pos);
 		if (is_dead(expires)) {
 			cookies_dirty = 1;
 			continue;

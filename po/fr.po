@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2004-01-26 12:43+0100\n"
+"POT-Creation-Date: 2004-01-30 11:07+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -33,7 +33,7 @@ msgstr "Pressez espace pour déployer le dossier."
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
 #: src/bfu/hierbox.c:449 src/bfu/hierbox.c:471 src/bfu/hierbox.c:609
-#: src/bfu/inpfield.c:47 src/bfu/inpfield.c:56 src/bfu/inpfield.c:76
+#: src/bfu/inpfield.c:48 src/bfu/inpfield.c:57 src/bfu/inpfield.c:77
 #: src/bfu/msgbox.c:185 src/bookmarks/dialogs.c:192
 #: src/bookmarks/dialogs.c:606 src/config/dialogs.c:45 src/config/dialogs.c:71
 #: src/config/dialogs.c:255 src/config/dialogs.c:327 src/config/dialogs.c:357
@@ -42,7 +42,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/config/dialogs.c:613 src/dialogs/document.c:50
 #: src/dialogs/document.c:230 src/dialogs/document.c:300
 #: src/dialogs/document.c:312 src/dialogs/edit.c:99 src/dialogs/info.c:48
-#: src/dialogs/info.c:132 src/dialogs/info.c:153 src/dialogs/menu.c:64
+#: src/dialogs/info.c:137 src/dialogs/info.c:158 src/dialogs/menu.c:64
 #: src/dialogs/menu.c:445 src/dialogs/menu.c:476 src/dialogs/options.c:192
 #: src/dialogs/options.c:265 src/formhist/dialogs.c:132 src/mime/dialogs.c:159
 #: src/protocol/auth/dialogs.c:77 src/protocol/protocol.c:67
@@ -52,11 +52,12 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/sched/session.c:627 src/sched/session.c:651 src/sched/session.c:949
 #: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:591 src/scripting/lua/core.c:720
-#: src/viewer/text/form.c:664 src/viewer/text/search.c:861
-#: src/viewer/text/search.c:889 src/viewer/text/search.c:911
-#: src/viewer/text/search.c:947 src/viewer/text/search.c:1239
-#: src/viewer/text/search.c:1250 src/viewer/text/textarea.c:270
-#: src/viewer/text/view.c:721 src/viewer/text/view.c:1236
+#: src/viewer/text/form.c:664 src/viewer/text/search.c:869
+#: src/viewer/text/search.c:897 src/viewer/text/search.c:919
+#: src/viewer/text/search.c:961 src/viewer/text/search.c:1320
+#: src/viewer/text/search.c:1331 src/viewer/text/textarea.c:270
+#: src/viewer/text/textarea.c:279 src/viewer/text/view.c:707
+#: src/viewer/text/view.c:1222
 msgid "OK"
 msgstr "OK"
 
@@ -138,23 +139,23 @@ msgstr "Effacer tous les items"
 msgid "Do you really want to remove all items?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les items?"
 
-#: src/bfu/inpfield.c:44 src/bfu/inpfield.c:53
+#: src/bfu/inpfield.c:45 src/bfu/inpfield.c:54
 msgid "Bad number"
 msgstr "Nombre incorrect"
 
-#: src/bfu/inpfield.c:45
+#: src/bfu/inpfield.c:46
 msgid "Number expected in field"
 msgstr "Saisir un nombre"
 
-#: src/bfu/inpfield.c:54
+#: src/bfu/inpfield.c:55
 msgid "Number out of range"
 msgstr "Nombre hors intervalle"
 
-#: src/bfu/inpfield.c:73
+#: src/bfu/inpfield.c:74
 msgid "Bad string"
 msgstr "Mauvaise chaine"
 
-#: src/bfu/inpfield.c:74
+#: src/bfu/inpfield.c:75
 msgid "Empty string not allowed"
 msgstr "Chaine vide non autorisée"
 
@@ -276,8 +277,8 @@ msgstr "Nom du dossier"
 #: src/sched/download.c:998 src/sched/download.c:1007
 #: src/sched/download.c:1027 src/sched/download.c:1039
 #: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
-#: src/scripting/lua/core.c:720 src/viewer/text/search.c:1239
-#: src/viewer/text/search.c:1250 src/viewer/text/view.c:721
+#: src/scripting/lua/core.c:720 src/viewer/text/search.c:1320
+#: src/viewer/text/search.c:1331 src/viewer/text/view.c:707
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -311,8 +312,8 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: src/bookmarks/dialogs.c:381 src/globhist/dialogs.c:187
-#: src/viewer/text/search.c:858 src/viewer/text/search.c:885
-#: src/viewer/text/search.c:907 src/viewer/text/search.c:1249
+#: src/viewer/text/search.c:866 src/viewer/text/search.c:893
+#: src/viewer/text/search.c:915 src/viewer/text/search.c:1330
 msgid "Search"
 msgstr "Chercher"
 
@@ -761,7 +762,7 @@ msgstr "Afficher la version et quitter"
 msgid "Print ELinks version information and exit."
 msgstr "Afficher la version d'ELinks et quitter."
 
-#: src/config/conf.c:604
+#: src/config/conf.c:647
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -773,7 +774,7 @@ msgstr ""
 "## des options, mais seules les valeurs des options seront\n"
 "## modifiées; votre formatage et commentaires seront préservés.\n"
 
-#: src/config/conf.c:612
+#: src/config/conf.c:655
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -791,7 +792,7 @@ msgstr ""
 "## dans un fichier inclus, l'option ne sera pas considérée comme\n"
 "## manquante. Votre formatage et commentaires seront préservés.\n"
 
-#: src/config/conf.c:622
+#: src/config/conf.c:665
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so, but keep in mind that this file is overwritten\n"
@@ -804,7 +805,7 @@ msgstr ""
 "## des options, votre formatage et commentaires peuvent ne pas\n"
 "## être préservés.\n"
 
-#: src/config/conf.c:633
+#: src/config/conf.c:676
 msgid ""
 "## Obviously, if you don't like what ELinks is going to do with\n"
 "## this file, you can change it by altering the config.saving_style\n"
@@ -813,47 +814,47 @@ msgstr ""
 "## Evidemment, si vous n'aimez pas ce que ELinks fait avec ce fichier,\n"
 "## vous pouvez modifier la valeur de l'option config.saving_style.\n"
 
-#: src/config/conf.c:648
+#: src/config/conf.c:691
 msgid "Automatically saved options\n"
 msgstr "Options sauvées automatiquement\n"
 
-#: src/config/conf.c:662
+#: src/config/conf.c:705
 msgid "Automatically saved keybindings\n"
 msgstr "Associations de touches sauvées automatiquement\n"
 
-#: src/config/conf.c:711
+#: src/config/conf.c:754
 msgid "Secure file error"
 msgstr "Erreur de fichier fiable"
 
-#: src/config/conf.c:717
+#: src/config/conf.c:760
 msgid "Cannot read the file"
 msgstr "Échec de lecture du fichier"
 
-#: src/config/conf.c:720
+#: src/config/conf.c:763
 msgid "Cannot stat the file"
 msgstr "Échec d'obtention du statut du fichier"
 
-#: src/config/conf.c:723
+#: src/config/conf.c:766
 msgid "Cannot access the file"
 msgstr "Échec d'accès au fichier"
 
-#: src/config/conf.c:726
+#: src/config/conf.c:769
 msgid "Cannot create temp file"
 msgstr "Échec de création de fichier temporaire"
 
-#: src/config/conf.c:729
+#: src/config/conf.c:772
 msgid "Cannot rename the file"
 msgstr "Échec du renommage du fichier"
 
-#: src/config/conf.c:732
+#: src/config/conf.c:775
 msgid "File saving disabled by option"
 msgstr "Sauvegarde de fichier désactivée par option"
 
-#: src/config/conf.c:735 src/sched/error.c:46
+#: src/config/conf.c:778 src/sched/error.c:46
 msgid "Out of memory"
 msgstr "Mémoire saturée"
 
-#: src/config/conf.c:738
+#: src/config/conf.c:781
 msgid "Cannot write the file"
 msgstr "Ecriture du fichier impossible"
 
@@ -912,6 +913,7 @@ msgstr "Description"
 
 #: src/config/dialogs.c:252 src/protocol/protocol.c:64 src/sched/session.c:120
 #: src/sched/session.c:945 src/viewer/text/textarea.c:267
+#: src/viewer/text/textarea.c:276
 msgid "Error"
 msgstr "Erreur"
 
@@ -1005,7 +1007,7 @@ msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 "Supprimer l'association de touches \"%s\" (action \"%s\", keymap \"%s\")?"
 
-#: src/config/dialogs.c:635 src/dialogs/info.c:133 src/globhist/dialogs.c:188
+#: src/config/dialogs.c:635 src/dialogs/info.c:138 src/globhist/dialogs.c:188
 msgid "Toggle display"
 msgstr "Commuter affich."
 
@@ -1025,7 +1027,7 @@ msgstr "Edition"
 msgid "Menu mapping"
 msgstr "Menu"
 
-#: src/config/kbdbind.c:452 src/config/kbdbind.c:557 src/config/kbdbind.c:586
+#: src/config/kbdbind.c:452 src/config/kbdbind.c:558 src/config/kbdbind.c:587
 msgid "Do nothing"
 msgstr "Ne rien faire"
 
@@ -1070,11 +1072,11 @@ msgstr "Ouvrir le gestionnaire de cookies"
 msgid "Reload cookies file"
 msgstr "Recharger le fichier de cookies"
 
-#: src/config/kbdbind.c:464 src/config/kbdbind.c:564
+#: src/config/kbdbind.c:464 src/config/kbdbind.c:565
 msgid "Copy text to clipboard"
 msgstr "Copier le texte vers le tampon"
 
-#: src/config/kbdbind.c:465 src/config/kbdbind.c:566 src/config/kbdbind.c:589
+#: src/config/kbdbind.c:465 src/config/kbdbind.c:567 src/config/kbdbind.c:590
 msgid "Delete character under cursor"
 msgstr "Supprimer le caractère sous le curseur"
 
@@ -1082,7 +1084,7 @@ msgstr "Supprimer le caractère sous le curseur"
 msgid "Show information about the current page"
 msgstr "Informations concernant la page courante"
 
-#: src/config/kbdbind.c:467 src/config/kbdbind.c:567 src/config/kbdbind.c:590
+#: src/config/kbdbind.c:467 src/config/kbdbind.c:568 src/config/kbdbind.c:591
 msgid "Move cursor downwards"
 msgstr "Déplacer le curseur vers le bas"
 
@@ -1098,16 +1100,16 @@ msgstr "Télécharger l'image courante"
 msgid "Open download manager"
 msgstr "Ouvrir le gestionnaire de téléchargements"
 
-#: src/config/kbdbind.c:471 src/config/kbdbind.c:568
+#: src/config/kbdbind.c:471 src/config/kbdbind.c:569
 msgid "Begin editing"
 msgstr "Débuter l'édition"
 
 #. FIXME
-#: src/config/kbdbind.c:472 src/config/kbdbind.c:569 src/config/kbdbind.c:591
+#: src/config/kbdbind.c:472 src/config/kbdbind.c:570 src/config/kbdbind.c:592
 msgid "Go to the end of the page/line"
 msgstr "Aller à la fin de la page/ligne"
 
-#: src/config/kbdbind.c:473 src/config/kbdbind.c:571 src/config/kbdbind.c:592
+#: src/config/kbdbind.c:473 src/config/kbdbind.c:572 src/config/kbdbind.c:593
 msgid "Follow the current link"
 msgstr "Suivre le lien courant"
 
@@ -1163,7 +1165,7 @@ msgstr "Informations sur les entêtes HTTP"
 msgid "Open history manager"
 msgstr "Ouvrir le gestionnaire d'historique"
 
-#: src/config/kbdbind.c:487 src/config/kbdbind.c:572 src/config/kbdbind.c:594
+#: src/config/kbdbind.c:487 src/config/kbdbind.c:573 src/config/kbdbind.c:595
 msgid "Go to the start of the page/line"
 msgstr "Aller au début de la page/ligne"
 
@@ -1179,7 +1181,7 @@ msgstr "Ouvrir le gestionnaire d'associations de touches"
 msgid "Kill all backgrounded connections"
 msgstr "Tuer les connexions en arrière-plan"
 
-#: src/config/kbdbind.c:491 src/config/kbdbind.c:575 src/config/kbdbind.c:595
+#: src/config/kbdbind.c:491 src/config/kbdbind.c:576 src/config/kbdbind.c:596
 msgid "Move the cursor left"
 msgstr "Déplacer le curseur vers la gauche"
 
@@ -1243,11 +1245,11 @@ msgstr "Ouvrir une ligne de commandes (shell)"
 msgid "Open options manager"
 msgstr "Ouvrir le gestionnaire d'options"
 
-#: src/config/kbdbind.c:510 src/config/kbdbind.c:598
+#: src/config/kbdbind.c:510 src/config/kbdbind.c:599
 msgid "Move downwards by a page"
 msgstr "Descendre d'une page"
 
-#: src/config/kbdbind.c:511 src/config/kbdbind.c:599
+#: src/config/kbdbind.c:511 src/config/kbdbind.c:600
 msgid "Move upwards by a page"
 msgstr "Monter d'une page"
 
@@ -1263,7 +1265,7 @@ msgstr "Ouvrir le dialogue de confirmation pour quitter"
 msgid "Quit without confirmation"
 msgstr "Quitter sans confirmation"
 
-#: src/config/kbdbind.c:515 src/config/kbdbind.c:578 src/config/kbdbind.c:600
+#: src/config/kbdbind.c:515 src/config/kbdbind.c:579 src/config/kbdbind.c:601
 msgid "Redraw the terminal"
 msgstr "Redessiner le terminal"
 
@@ -1287,7 +1289,7 @@ msgstr "Informations à propos des ressources utilisées"
 msgid "Attempt to resume download of the current link"
 msgstr "Reprendre le téléchargement du lien courant"
 
-#: src/config/kbdbind.c:521 src/config/kbdbind.c:579 src/config/kbdbind.c:601
+#: src/config/kbdbind.c:521 src/config/kbdbind.c:580 src/config/kbdbind.c:602
 msgid "Move the cursor right"
 msgstr "Déplacer le curseur vers la droite"
 
@@ -1372,116 +1374,120 @@ msgid "Toggle displaying of links to images"
 msgstr "Commuter l'affichage des liens vers les images."
 
 #: src/config/kbdbind.c:542
+msgid "Toggle rendering of page using CSS"
+msgstr "Commuter le rendu avec CSS"
+
+#: src/config/kbdbind.c:543
 msgid "Toggle rendering of tables"
 msgstr "Commuter le rendu des tableaux"
 
-#: src/config/kbdbind.c:543
+#: src/config/kbdbind.c:544
 msgid "Toggle usage of document specific colors"
 msgstr "Commuter l'utilisation des couleurs spécifiques au document"
 
-#: src/config/kbdbind.c:544
+#: src/config/kbdbind.c:545
 msgid "Toggle rendering page as HTML / plain text"
 msgstr "Commuter le rendu de la page en HTML/texte plein"
 
-#: src/config/kbdbind.c:545
+#: src/config/kbdbind.c:546
 msgid "Toggle displaying of links numbers"
 msgstr "Commuter l'affichage des numéros de liens"
 
-#: src/config/kbdbind.c:546
+#: src/config/kbdbind.c:547
 msgid "Toggle plain renderer compression of empty lines"
 msgstr "Commuter la compression des lignes vides dans le rendu plein texte"
 
-#: src/config/kbdbind.c:547
+#: src/config/kbdbind.c:548
 msgid "Toggle wrapping of text"
 msgstr "Commuter la césure auto du texte (wrapping)"
 
-#: src/config/kbdbind.c:548
+#: src/config/kbdbind.c:549
 msgid "Go forward in the unhistory"
 msgstr "Avancer dans l'historique inverse"
 
-#: src/config/kbdbind.c:549 src/config/kbdbind.c:580 src/config/kbdbind.c:604
+#: src/config/kbdbind.c:550 src/config/kbdbind.c:581 src/config/kbdbind.c:605
 msgid "Move cursor upwards"
 msgstr "Déplacer le curseur vers le haut"
 
-#: src/config/kbdbind.c:550
+#: src/config/kbdbind.c:551
 msgid "View the current image"
 msgstr "Voir l'image courante"
 
-#: src/config/kbdbind.c:551
+#: src/config/kbdbind.c:552
 msgid "Maximize the current frame"
 msgstr "Maximiser le cadre courant"
 
 #. internal use only
-#: src/config/kbdbind.c:559
+#: src/config/kbdbind.c:560
 msgid "Attempt to auto-complete the input"
 msgstr "Compléter automatiquement l'entrée si possible"
 
-#: src/config/kbdbind.c:560
+#: src/config/kbdbind.c:561
 msgid "Attempt to unambiguously auto-complete the input"
 msgstr "Compléter automatiquement et sans ambiguité l'entrée si possible"
 
-#: src/config/kbdbind.c:561
+#: src/config/kbdbind.c:562
 msgid "Delete character in front of the cursor"
 msgstr "Supprimer le caractère devant le curseur"
 
-#: src/config/kbdbind.c:562
+#: src/config/kbdbind.c:563
 msgid "Go to the first line of the buffer"
 msgstr "Aller à la première ligne du buffer"
 
 #. internal use only
-#: src/config/kbdbind.c:563 src/config/kbdbind.c:588
+#: src/config/kbdbind.c:564 src/config/kbdbind.c:589
 msgid "Cancel current state"
 msgstr "Annuler l'état courant"
 
-#: src/config/kbdbind.c:565
+#: src/config/kbdbind.c:566
 msgid "Delete text from clipboard"
 msgstr "Effacer le texte du tampon"
 
-#: src/config/kbdbind.c:570
+#: src/config/kbdbind.c:571
 msgid "Go to the last line of the buffer"
 msgstr "Aller à la dernière ligne du buffer"
 
-#: src/config/kbdbind.c:573
+#: src/config/kbdbind.c:574
 msgid "Delete to beginning of line"
 msgstr "Supprimer jusqu'au début de la ligne"
 
-#: src/config/kbdbind.c:574
+#: src/config/kbdbind.c:575
 msgid "Delete to end of line"
 msgstr "Supprimer jusqu'à la fin de la ligne"
 
-#: src/config/kbdbind.c:576 src/config/kbdbind.c:597
+#: src/config/kbdbind.c:577 src/config/kbdbind.c:598
 msgid "Move to the next item"
 msgstr "Se déplacer à l'item suivant"
 
-#: src/config/kbdbind.c:577
+#: src/config/kbdbind.c:578
 msgid "Paste text from the clipboard"
 msgstr "Coller le texte du tampon"
 
-#: src/config/kbdbind.c:593
+#: src/config/kbdbind.c:594
 msgid "Expand item"
 msgstr "Déployer l'item"
 
-#: src/config/kbdbind.c:596
+#: src/config/kbdbind.c:597
 msgid "Mark item"
 msgstr "Marquer l'item"
 
-#: src/config/kbdbind.c:602
+#: src/config/kbdbind.c:603
 msgid "Select current highlighted item"
 msgstr "Sélectionne l'item courant"
 
-#: src/config/kbdbind.c:603
+#: src/config/kbdbind.c:604
 msgid "Collapse item"
 msgstr "Rétracter l'item"
 
-#: src/config/kbdbind.c:737
+#: src/config/kbdbind.c:738
 msgid "Unrecognised keymap"
 msgstr "Table d'associations de touches non reconnue"
 
-#: src/config/kbdbind.c:739
+#: src/config/kbdbind.c:740
 msgid "Error parsing keystroke"
 msgstr "Erreur d'interprétation de touche"
 
-#: src/config/kbdbind.c:741
+#: src/config/kbdbind.c:742
 msgid "Unrecognised action (internal error)"
 msgstr "Action non reconnue (erreur interne)"
 
@@ -4078,15 +4084,15 @@ msgstr "Gestionnaire de téléchargements"
 msgid "About"
 msgstr "Info"
 
-#: src/dialogs/info.c:129
+#: src/dialogs/info.c:134
 msgid "Keys"
 msgstr "Touches"
 
-#: src/dialogs/info.c:141
+#: src/dialogs/info.c:146
 msgid "Copying"
 msgstr "Licence"
 
-#: src/dialogs/info.c:142
+#: src/dialogs/info.c:147
 #, c-format
 msgid ""
 "ELinks %s\n"
@@ -4107,7 +4113,7 @@ msgstr ""
 "selon les termes de la GNU General Public License version 2 publiée par la "
 "Free Software Foundation."
 
-#: src/dialogs/info.c:160
+#: src/dialogs/info.c:165
 #, c-format
 msgid ""
 "Resources: %d handles, %d timers.\n"
@@ -4121,16 +4127,16 @@ msgstr ""
 "Cache mémoire: %d octets, %d fichiers, %d verrouillés, %d en chargement.\n"
 "Cache documents formatés: %d documents, %d verrouillés."
 
-#: src/dialogs/info.c:177
+#: src/dialogs/info.c:182
 msgid "Resources"
 msgstr "Ressources"
 
-#: src/dialogs/info.c:186
+#: src/dialogs/info.c:191
 #, c-format
 msgid "%ld bytes of memory allocated."
 msgstr "%ld octets alloués en mémoire."
 
-#: src/dialogs/info.c:192
+#: src/dialogs/info.c:197
 msgid "Memory info"
 msgstr "État de la mémoire vive"
 
@@ -4565,15 +4571,11 @@ msgstr "temps restant estimé"
 msgid "ETA"
 msgstr "ETA"
 
-#: src/dialogs/status.c:210 src/viewer/text/search.c:942
-msgid "Typeahead"
-msgstr "Préfrappe"
-
-#: src/dialogs/status.c:325
+#: src/dialogs/status.c:311
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/dialogs/status.c:327
+#: src/dialogs/status.c:313
 msgid "No document"
 msgstr "Aucun document"
 
@@ -5982,72 +5984,80 @@ msgstr "Envoi à"
 msgid "post to"
 msgstr "Transfert à"
 
-#: src/viewer/text/search.c:859
+#: src/viewer/text/search.c:867
 msgid "No previous search"
 msgstr "Aucune clef de recherche"
 
-#: src/viewer/text/search.c:886
+#: src/viewer/text/search.c:894
 msgid "Search hit top, continuing at bottom."
 msgstr "La recherche a atteint le haut du document, poursuite à partir du bas."
 
-#: src/viewer/text/search.c:887
+#: src/viewer/text/search.c:895
 msgid "Search hit bottom, continuing at top."
 msgstr "La recherche a atteint le bas du document, poursuite à partir du haut."
 
-#: src/viewer/text/search.c:908
+#: src/viewer/text/search.c:916
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Chaîne recherchée '%s' introuvable"
 
-#: src/viewer/text/search.c:943
+#: src/viewer/text/search.c:956
+msgid "Typeahead"
+msgstr "Préfrappe"
+
+#: src/viewer/text/search.c:957
 #, c-format
 msgid "Could not find a link with the text '%s'."
 msgstr "Ne peut trouver un lien avec le texte '%s'."
 
-#: src/viewer/text/search.c:1218
+#: src/viewer/text/search.c:1299
 msgid "Normal search"
 msgstr "Plein texte"
 
-#: src/viewer/text/search.c:1219
+#: src/viewer/text/search.c:1300
 msgid "Regexp search"
 msgstr "Expression régulière"
 
-#: src/viewer/text/search.c:1220
+#: src/viewer/text/search.c:1301
 msgid "Extended regexp search"
 msgstr "Expression régulière étendue"
 
-#: src/viewer/text/search.c:1221
+#: src/viewer/text/search.c:1302
 msgid "Case sensitive"
 msgstr "Respecter la casse"
 
-#: src/viewer/text/search.c:1222
+#: src/viewer/text/search.c:1303
 msgid "Case insensitive"
 msgstr "Ignorer la casse"
 
-#: src/viewer/text/search.c:1238
+#: src/viewer/text/search.c:1319
 msgid "Search backward"
 msgstr "Chercher en arrière"
 
-#: src/viewer/text/search.c:1238 src/viewer/text/search.c:1249
+#: src/viewer/text/search.c:1319 src/viewer/text/search.c:1330
 msgid "Search for text"
 msgstr "Recherche du texte"
 
 #: src/viewer/text/textarea.c:268
+msgid "You cannot launch an external editor in the anonymous mode."
+msgstr "Vous ne pouvez utiliser un éditeur externe en mode anonyme."
+
+#: src/viewer/text/textarea.c:277
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:720
+#: src/viewer/text/view.c:706
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:720
+#: src/viewer/text/view.c:706
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1233
+#: src/viewer/text/view.c:1219
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1234
+#: src/viewer/text/view.c:1220
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"

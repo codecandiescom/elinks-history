@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.23 2003/07/10 04:38:29 jonas Exp $ */
+/* $Id: auth.c,v 1.24 2003/07/10 12:05:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,6 +160,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		/* Copy user and pass info if any in passed url. */
 		entry->uid = mem_alloc(MAX_UID_LEN);
 		if (!entry->uid) {
+			if (entry->realm) mem_free(entry->realm);
 			mem_free(entry);
 			goto end;
 		}
@@ -167,6 +168,8 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 
 		entry->passwd = mem_alloc(MAX_PASSWD_LEN);
 		if (!entry->passwd) {
+			if (entry->realm) mem_free(entry->realm);
+			if (entry->uid) mem_free(entry->uid);
 			mem_free(entry);
 			goto end;
 		}

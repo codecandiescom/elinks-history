@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.20 2003/12/10 01:45:21 jonas Exp $ */
+/* $Id: download.c,v 1.21 2003/12/10 01:49:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,6 @@ download_abort_function(struct dialog_data *dlg_data)
 static void
 download_progress_bar(struct terminal *term,
 	     	      int x, int *y, int width,
-		      struct color_pair *text_color,
 		      longlong current, longlong total)
 {
 	/* FIXME: not yet perfect, pasky will improve it later. --Zas */
@@ -201,7 +200,6 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	if (t && download->prg->size >= 0)
 		download_progress_bar(term, x, &y, w,
-				      dialog_text_color,
 				      download->prg->pos,
 				      download->prg->size);
 
@@ -363,7 +361,6 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 	x += width - meter;
 
 	download_progress_bar(context->term, x, &temp_y, meter,
-			      get_bfu_color(context->term, "dialog.text"),
 			      download->prg->pos,
 			      download->prg->size);
 }

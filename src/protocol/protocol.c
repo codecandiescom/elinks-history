@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.68 2004/08/23 00:29:35 miciah Exp $ */
+/* $Id: protocol.c,v 1.69 2004/08/23 17:03:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,23 +197,27 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 	case PROTOCOL_JAVASCRIPT:
 		state = S_NO_JAVASCRIPT;
 		break;
-#ifndef CONFIG_SSL
-	case PROTOCOL_HTTPS:
-		state = S_NO_SSL;
-		break;
-#endif
-#ifndef CONFIG_FINGER
-	case PROTOCOL_FINGER:
-		state = S_NO_FINGER;
-		break;
-#endif
-#ifndef CONFIG_SMB
-	case PROTOCOL_SMB:
-		state = S_NO_SMB;
-		break;
-#endif
-	default:
+
+	case PROTOCOL_UNKNOWN:
 		state = S_UNKNOWN_PROTOCOL;
+		break;
+
+	default:
+#ifndef CONFIG_SSL
+		if (get_protocol_need_ssl(uri->protocol)) {
+			state = S_NO_SSL;
+			break;
+		}
+#endif
+		msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+			_("Error", ses->tab->term), ALIGN_CENTER,
+			msg_text(ses->tab->term,
+				N_("This version of ELinks does not contain "
+				"%s protocol support"),
+				protocol_backends[uri->protocol].name),
+			ses, 1,
+			_("OK", ses->tab->term), NULL, B_ENTER | B_ESC);
+		return;
 	}
 
 	print_error_dialog(ses, state, PRI_CANCEL);

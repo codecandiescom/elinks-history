@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.32 2004/08/19 14:11:24 jonas Exp $ */
+/* $Id: state.c,v 1.33 2004/08/23 17:03:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,14 +88,6 @@ struct s_msg_dsc {
 #endif
 
 	{S_NO_JAVASCRIPT,	N_("JavaScript is currently not supported.")},
-
-#ifndef CONFIG_FINGER
-	{S_NO_FINGER,		N_("This version of ELinks does not contain finger protocol support")},
-#endif
-
-#ifndef CONFIG_SMB
-	{S_NO_SMB,		N_("This version of ELinks does not contain SMB protocol support")},
-#endif
 
 #ifdef CONFIG_NNTP
 	{S_NNTP_ERROR,		N_("Bad NNTP response")},

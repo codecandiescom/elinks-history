@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.82 2003/11/09 15:05:18 pasky Exp $ */
+/* $Id: auth.c,v 1.83 2003/11/09 15:16:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,59 +23,6 @@
 #include "util/memory.h"
 #include "util/snprintf.h"
 
-
-static void
-auth_dialog_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = dialog_max_width(term);
-	int rw = 0;
-	int y = -1;
-	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
-
-	if (dlg_data->dlg->udata) {
-		dlg_format_text_do(NULL,
-				dlg_data->dlg->udata, 0, &y, w, &rw,
-				dialog_text_color, AL_LEFT);
-		y++;
-	}
-
-	dlg_format_field(NULL,
-			 &dlg_data->widgets_data[0],
-			 0, &y, w, &rw, AL_LEFT);
-	y++;
-	dlg_format_field(NULL,
-			 &dlg_data->widgets_data[1],
-			 0, &y, w, &rw, AL_LEFT);
-	y++;
-	dlg_format_buttons(NULL,
-			   dlg_data->widgets_data + 2, 2,
-			   0, &y, w, &rw, AL_CENTER);
-	w = rw;
-
-	draw_dialog(dlg_data, w, y);
-
-	y = dlg_data->y + DIALOG_TB;
-	if (dlg_data->dlg->udata) {
-		dlg_format_text_do(term,
-				dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
-				&y, w, NULL,
-				dialog_text_color, AL_LEFT);
-		y++;
-	}
-
-	dlg_format_field(term,
-			 &dlg_data->widgets_data[0],
-			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
-	y++;
-	dlg_format_field(term,
-			 &dlg_data->widgets_data[1],
-			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
-	y++;
-	dlg_format_buttons(term,
-			   &dlg_data->widgets_data[2], 2,
-			   dlg_data->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
-}
 
 static int
 auth_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
@@ -103,7 +50,7 @@ do_auth_dialog(struct session *ses)
 	struct dialog_data *dlg_data;
 	struct terminal *term = ses->tab->term;
 	struct http_auth_basic *a = get_invalid_auth_entry();
-	unsigned char sticker[MAX_STR_LEN];
+	unsigned char sticker[MAX_STR_LEN], *text;
 
 	if (!a || a->blocked) return;
 	a->blocked = 1;
@@ -112,19 +59,20 @@ do_auth_dialog(struct session *ses)
 		_("Authentication required for %s at %s", term),
 		a->realm, a->url);
 
-#define AUTH_WIDGETS_COUNT 4
+#define AUTH_WIDGETS_COUNT 5
 	dlg = calloc_dialog(AUTH_WIDGETS_COUNT, strlen(sticker) + 1);
 	if (!dlg) return;
 
 	dlg->title = _("HTTP Authentication", term);
-	dlg->layouter = auth_dialog_layouter;
+	dlg->layouter = generic_dialog_layouter;
 
-	dlg->udata = (char *)dlg + sizeof_dialog(AUTH_WIDGETS_COUNT, 0);
-	strcpy(dlg->udata, sticker);
+	text = (unsigned char *) dlg + sizeof_dialog(AUTH_WIDGETS_COUNT, 0);
+	strcpy(text, sticker);
 
 	dlg->udata2 = a;
 	dlg->refresh_data = ses;
 
+	add_dlg_text(dlg, text, AL_LEFT);
 	add_dlg_field(dlg, _("Login", term), 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
 	add_dlg_field_pass(dlg, _("Password", term), 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password);
 

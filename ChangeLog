@@ -1,3 +1,45 @@
+Sun Jun 23 18:27:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Typo fixes by Jonas Fonesca.  
+
+Sun Jun 23 13:17:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+
+	Some more comments.  
+
+Sun Jun 23 13:00:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	mime.handler._template_._template_ not OPT_AUTOCREATE anymore.  
+
+Sun Jun 23 11:42:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	Fixed adding extensions.  
+
+Sun Jun 23 10:37:07 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Tidy up, minor optimizations.  
+
+Sun Jun 23 09:37:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+
+	TODO updates 
+
+Sat Jun 22 22:39:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/globhist.c, util/secsave.c:
+
+	Another #include fixes.  
+
 Sat Jun 22 21:20:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/bfu.c, bookmarks/bookmarks.c, cookies/cookies.c,

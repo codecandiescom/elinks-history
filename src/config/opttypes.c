@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.72 2003/11/25 12:51:33 jonas Exp $ */
+/* $Id: opttypes.c,v 1.73 2003/11/25 21:45:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,75 +90,38 @@ exec_cmd(struct option *o, unsigned char ***argv, int *argc)
  * possibly changing ptr to structure containing target name and pointer to
  * options list? --pasky */
 
+#define wrap_or_(name_, call_, ret_) \
+{ \
+	struct option *real = get_opt_rec(config_options, opt->value.string); \
+ \
+	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->value.string); \
+	if_assert_failed { return ret_; } \
+ \
+	if (option_types[real->type].name_) \
+		return option_types[real->type].call_; \
+ \
+	return ret_; \
+}
+
 static unsigned char *
 redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
-{
-	struct option *real = get_opt_rec(config_options, opt->value.string);
-
-	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->value.string);
-	if_assert_failed { return NULL; }
-
-	if (option_types[real->type].cmdline)
-		return option_types[real->type].cmdline(real, argv, argc);
-
-	return NULL;
-}
+	wrap_or_(cmdline, cmdline(real, argv, argc), NULL);
 
 static unsigned char *
 redir_rd(struct option *opt, unsigned char **file)
-{
-	struct option *real = get_opt_rec(config_options, opt->value.string);
-
-	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->value.string);
-	if_assert_failed { return NULL; }
-
-	if (option_types[real->type].read)
-		return option_types[real->type].read(real, file);
-
-	return NULL;
-}
+	wrap_or_(read, read(real, file), NULL);
 
 static int
 redir_set(struct option *opt, unsigned char *str)
-{
-	struct option *real = get_opt_rec(config_options, opt->value.string);
-
-	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->value.string);
-	if_assert_failed { return 0; }
-
-	if (option_types[real->type].set)
-		return option_types[real->type].set(real, str);
-
-	return 0;
-}
+	wrap_or_(set, set(real, str), 0);
 
 static int
 redir_add(struct option *opt, unsigned char *str)
-{
-	struct option *real = get_opt_rec(config_options, opt->value.string);
-
-	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->value.string);
-	if_assert_failed { return 0; }
-
-	if (option_types[real->type].add)
-		return option_types[real->type].add(real, str);
-
-	return 0;
-}
+	wrap_or_(add, add(real, str), 0);
 
 static int
 redir_remove(struct option *opt, unsigned char *str)
-{
-	struct option *real = get_opt_rec(config_options, opt->value.string);
-
-	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->value.string);
-	if_assert_failed { return 0; }
-
-	if (option_types[real->type].remove)
-		return option_types[real->type].remove(real, str);
-
-	return 0;
-}
+	wrap_or_(remove, remove(real, str), 0);
 
 
 /* Support functions for config file parsing. */

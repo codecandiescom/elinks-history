@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.222 2003/06/11 15:38:09 pasky Exp $ */
+/* $Id: options.c,v 1.223 2003/06/13 13:34:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1556,8 +1556,8 @@ register_options(void)
 	add_opt_bool("protocol.file", N_("Try encoding extensions"),
 		"try_encoding_extensions", 0, 1,
 		N_("When set, if we can't open a file named 'filename', we'll try\n"
-		"to open 'filename' + some encoding extensions (ie.\n"
-		"'filename.gz'); it depends on the supported encodings."));
+		"to open 'filename' with some encoding extension appended\n"
+		"(ie. 'filename.gz'); it depends on the supported encodings."));
 
 
 	add_opt_tree("protocol", N_("User protocols"),

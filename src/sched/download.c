@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.305 2004/07/22 21:54:35 zas Exp $ */
+/* $Id: download.c,v 1.306 2004/07/22 21:56:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,7 +346,8 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		exec_on_terminal(term, file_download->prog, file_download->file,
 				 !!file_download->prog_flags);
 		file_download->delete = 0;
-		goto abort;
+		abort_download_and_beep(file_download, term);
+		return;
 	}
 
 	if (file_download->notify) {
@@ -380,7 +381,6 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		utime(file_download->file, &foo);
 	}
 
-abort:
 	abort_download_and_beep(file_download, term);
 }
 

@@ -483,7 +483,6 @@ msgid "Delete character under cursor"
 msgstr "|)3|_373 (|-|4R4(73R under cursor"
 
 #: src/config/kbdbind.c:379
-#, fuzzy
 msgid "Show information about the current page"
 msgstr "Show inf0|2|V|ations 480U7 the current page"
 
@@ -549,7 +548,6 @@ msgid "Go to the homepage"
 msgstr "60 70 the homepage"
 
 #: src/config/kbdbind.c:395
-#, fuzzy
 msgid "Show information about the current page HTTP headers"
 msgstr "Show inf0|2|V|ations 480U7 the current page HTTP |-|34|)3Rs"
 
@@ -707,9 +705,8 @@ msgid "Toggle displaying of links numbers"
 msgstr "709913 displaying of |1N|<s |\\|U|V|83Rs"
 
 #: src/config/kbdbind.c:438
-#, fuzzy
 msgid "Toggle usage of document specific colors"
-msgstr "|_|53 |)0(U|V|3N7-specified (0|_0Rs"
+msgstr "7o99le U5463 of |)0(U|V|3N7 specific (0|_0Rs"
 
 #: src/config/kbdbind.c:439
 msgid "Go forward in the unhistory"
@@ -789,9 +786,8 @@ msgid "    %s%s%s %s (default: %s)"
 msgstr "    %s%s%s %s (|)34fU@|7: %s)"
 
 #: src/config/options.c:674
-#, fuzzy, c-format
 msgid "    %s%s%s %s (default: #%06x)"
-msgstr "    %s%s%s %s (|)34fU@|7: %d)"
+msgstr "    %s%s%s %s (|)34fU@|7: %06x)"
 
 #: src/config/options.c:792
 msgid "Configuration options:\n"
@@ -1052,9 +1048,8 @@ msgstr ""
 "2 is accept all cookies"
 
 #: src/config/options.c:1025
-#, fuzzy
 msgid "Maximum age"
-msgstr "Maximum (0|\\||\\|3(710N5"
+msgstr "Maximum 493"
 
 #: src/config/options.c:1027
 msgid ""
@@ -1300,7 +1295,6 @@ msgid "Number keys select links"
 msgstr "|\\|U|V|83R |<3`/5 53|3(7 |1N|<s"
 
 #: src/config/options.c:1150
-#, fuzzy
 msgid ""
 "Number keys select links rather than specify command prefixes. This\n"
 "is a tristate:\n"
@@ -1330,14 +1324,12 @@ msgstr ""
 "vice versa."
 
 #: src/config/options.c:1164
-#, fuzzy
 msgid "Searching"
-msgstr "534R(H"
+msgstr "534R(HiN9"
 
 #: src/config/options.c:1166
-#, fuzzy
 msgid "Options for searching."
-msgstr "0P710|\\|5 for handling of 1|V|463s."
+msgstr "0P710|\\|5 for 534R(HiN9."
 
 #: src/config/options.c:1168
 msgid "Case sensitivity"
@@ -1362,9 +1354,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1181 src/config/options.c:1188
-#, fuzzy
 msgid "Regular expressions"
-msgstr "3|\\|73R expression"
+msgstr "R36ul4r expressions"
 
 #: src/config/options.c:1183
 msgid ""
@@ -1443,7 +1434,6 @@ msgid "Cache options."
 msgstr "(4(|-|3 0p710Ns."
 
 #: src/config/options.c:1230
-#, fuzzy
 msgid "Cache information about redirects"
 msgstr "(4(|-|3 inf0|2|V|ations 480U7 R3o|1R3(7s"
 
@@ -2106,7 +2096,6 @@ msgid "Path"
 msgstr "Path"
 
 #: src/config/options.c:1534
-#, fuzzy
 msgid ""
 "Mailcap search path. Colon-separated list of files.\n"
 "Leave as \"\" to use MAILCAP environment variable or\n"
@@ -2157,7 +2146,6 @@ msgid "Mimetypes files"
 msgstr "Mime7`/P3s f1|3s"
 
 #: src/config/options.c:1559
-#, fuzzy
 msgid ""
 "Options for the support of mimetypes files. Mimetypes files\n"
 "can be used to find the content type of an URL by looking at the\n"
@@ -2172,7 +2160,6 @@ msgid "Enable mime.types support."
 msgstr "Enable mime.7`/P3s support."
 
 #: src/config/options.c:1569
-#, fuzzy
 msgid ""
 "Mimetypes search path. Colon-separated list of files.\n"
 "Leave as \"\" to use built-in default instead."
@@ -2667,9 +2654,8 @@ msgstr ""
 "so that inversed text is displayed correctly."
 
 #: src/config/options.c:1843
-#, fuzzy
 msgid "Color mode"
-msgstr "(0|_0R"
+msgstr "(0|_0R M0d3"
 
 #: src/config/options.c:1845
 msgid ""
@@ -2703,9 +2689,8 @@ msgid "Use underline"
 msgstr ""
 
 #: src/config/options.c:1861
-#, fuzzy
 msgid "If we should use underline or enhance the color instead."
-msgstr "If we should |_|53 (0|_0Rs."
+msgstr "If we should |_|53 uNda|iN3 0r 3n}{4n(3 7h3 (0|_0R iN5734d."
 
 #: src/config/options.c:1865
 msgid "Codepage of charset used for displaying content on terminal."

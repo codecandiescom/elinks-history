@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.14 2004/09/23 16:23:27 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.15 2004/09/24 20:18:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,6 +349,7 @@ spidermonkey_eval(struct ecmascript_interpreter *interpreter,
 
 	assert(interpreter);
 	ctx = interpreter->backend_data;
+	/* FIXME: IMPORTANT! Some guard timer against infinite loops. */
 	JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
 	                  code->source, code->length, "", 0, &rval);
 }
@@ -365,6 +366,7 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 
 	assert(interpreter);
 	ctx = interpreter->backend_data;
+	/* FIXME: IMPORTANT! Some guard timer against infinite loops. */
 	if (JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
 			      code->source, code->length, "", 0, &rval)
 	    == JS_FALSE)

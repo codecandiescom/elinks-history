@@ -1,15 +1,14 @@
 ## Base file for Makefile.am files in the tree, contains common stuff.
-## $Id: Makefile.base,v 1.5 2004/04/24 00:25:24 pasky Exp $
+## $Id: Makefile.base,v 1.6 2004/04/29 14:11:11 jonas Exp $
 
-INCLUDES = -I$(top_srcdir)/src
+INCLUDES = -I$(top_builddir) -I$(top_srcdir)/src
 
 # The author of automake should be shot, quartered and forced to code in COBOL
 # for the rest of his days for the **** he designed - anything forcing me to
 # -I. -I$(srcdir) regardless if I want or not is just idiotic. Another totally
 # dumb thing is that you can't just use @CONFIG_INCLUDE_SPEC@ in your own .am.
 
-COMPILE = $(CC) @DEFS@ -I`dirname $(CONFIG_HEADER)` $(INCLUDES) \
-$(AM_CFLAGS) $(CFLAGS)
+COMPILE = $(CC) @DEFS@ $(INCLUDES) $(AM_CFLAGS) $(CFLAGS)
 
 # Rule for getting test dependencies right. This is a workaround since
 # automake doesn't support defining subdirs sources.

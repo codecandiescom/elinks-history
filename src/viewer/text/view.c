@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.452 2004/06/13 21:19:02 zas Exp $ */
+/* $Id: view.c,v 1.453 2004/06/13 21:37:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -457,8 +457,9 @@ up(struct session *ses, struct document_view *doc_view, int xxxx)
 /* Fix namespace clash on MacOS. */
 #define scrool scroll_elinks
 
-void
-scroll(struct session *ses, struct document_view *doc_view, int a)
+/* @steps > 0 -> down */
+static void
+scroll(struct session *ses, struct document_view *doc_view, int steps)
 {
 	int max_height;
 
@@ -466,13 +467,39 @@ scroll(struct session *ses, struct document_view *doc_view, int a)
 	if_assert_failed return;
 
 	max_height = doc_view->document->height - doc_view->box.height;
-	if (a > 0 && doc_view->vs->y >= max_height) return;
-	doc_view->vs->y += a;
-	if (a > 0) int_upper_bound(&doc_view->vs->y, max_height);
+	if (steps > 0 && doc_view->vs->y >= max_height) return;
+	doc_view->vs->y += steps;
+	if (steps > 0) int_upper_bound(&doc_view->vs->y, max_height);
 	int_lower_bound(&doc_view->vs->y, 0);
 
 	if (!current_link_is_visible(doc_view))
-		find_link(doc_view, a < 0 ? -1 : 1, 0);
+		find_link(doc_view, steps < 0 ? -1 : 1, 0);
+}
+
+void
+scroll_up(struct session *ses, struct document_view *doc_view, int xxxx)
+{
+	int steps;
+
+	if (ses->kbdprefix.rep)
+		steps = ses->kbdprefix.rep_num;
+	else
+		steps = get_opt_int("document.browse.scroll_step");
+
+	scroll(ses, doc_view, -steps);
+}
+
+void
+scroll_down(struct session *ses, struct document_view *doc_view, int xxxx)
+{
+	int steps;
+
+	if (ses->kbdprefix.rep)
+		steps = ses->kbdprefix.rep_num;
+	else
+		steps = get_opt_int("document.browse.scroll_step");
+
+	scroll(ses, doc_view, steps);
 }
 
 static void
@@ -693,8 +720,8 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			}
 
 			/* XXX: Code duplication of following for mouse */
-			case ACT_MAIN_SCROLL_UP: scroll(ses, doc_view, ses->kbdprefix.rep ? -ses->kbdprefix.rep_num : -get_opt_int("document.browse.scroll_step")); break;
-			case ACT_MAIN_SCROLL_DOWN: scroll(ses, doc_view, ses->kbdprefix.rep ? ses->kbdprefix.rep_num : get_opt_int("document.browse.scroll_step")); break;
+			case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view, 0); break;
+			case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view, 0); break;
 			case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, hscroll, -1 - 7 * !ses->kbdprefix.rep); break;
 			case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, hscroll, 1 + 7 * !ses->kbdprefix.rep); break;
 

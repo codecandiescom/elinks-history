@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.102 2004/12/17 15:25:53 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.103 2004/12/17 15:48:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,61 +66,62 @@ enum prop_type {
 	JSPT_OBJECT,
 };
 
-union prop_union {
-	int boolean;
-	int number;
-	JSObject *object;
-	unsigned char *string;
+struct property__ {
+	enum prop_type type;
+	union {
+		int boolean;
+		int number;
+		JSObject *object;
+		unsigned char *string;
+	} value;
 };
 
 #define P_UNDEF() do { \
-	memset(&p, 'J', sizeof(p)); /* Active security ;) */\
-	prop_type = JSPT_UNDEF; \
+	memset(&prop, 'J', sizeof(prop)); /* Active security ;) */\
+	prop.type = JSPT_UNDEF; \
 	if (0) goto bye;	/* Prevent unused label errors */ \
 } while (0)
 
-#define P_OBJECT(x) do { p.object = (x); prop_type = JSPT_OBJECT; } while (0)
-#define P_BOOLEAN(x) do { p.boolean = (x); prop_type = JSPT_BOOLEAN; } while (0)
-#define P_STRING(x) do { p.string = (x); prop_type = JSPT_STRING; } while (0)
-#define P_ASTRING(x) do { p.string = (x); prop_type = JSPT_ASTRING; } while (0)
-#define P_INT(x) do { p.number = (x); prop_type = JSPT_INT; } while (0)
+#define P_OBJECT(x) do { prop.value.object = (x); prop.type = JSPT_OBJECT; } while (0)
+#define P_BOOLEAN(x) do { prop.value.boolean = (x); prop.type = JSPT_BOOLEAN; } while (0)
+#define P_STRING(x) do { prop.value.string = (x); prop.type = JSPT_STRING; } while (0)
+#define P_ASTRING(x) do { prop.value.string = (x); prop.type = JSPT_ASTRING; } while (0)
+#define P_INT(x) do { prop.value.number = (x); prop.type = JSPT_INT; } while (0)
 
 
 #define VALUE_TO_JSVAL_START \
-	enum prop_type prop_type; \
-	union prop_union p; \
+	struct property__ prop; \
  \
 	P_UNDEF();
 
 #define VALUE_TO_JSVAL_END(vp) \
-	value_to_jsval(ctx, vp, prop_type, &p); \
+	value_to_jsval(ctx, vp, &prop); \
  \
 bye: \
 	return JS_TRUE;
 
 
 static void
-value_to_jsval(JSContext *ctx, jsval *vp, enum prop_type prop_type,
-	       union prop_union *prop)
+value_to_jsval(JSContext *ctx, jsval *vp, struct property__ *prop)
 {
-	switch (prop_type) {
+	switch (prop->type) {
 	case JSPT_STRING:
 	case JSPT_ASTRING:
-		if (!prop->string) {
+		if (!prop->value.string) {
 			*vp = JSVAL_NULL;
 			break;
 		}
-		*vp = STRING_TO_JSVAL(JS_NewStringCopyZ(ctx, prop->string));
-		if (prop_type == JSPT_ASTRING)
-			mem_free(prop->string);
+		*vp = STRING_TO_JSVAL(JS_NewStringCopyZ(ctx, prop->value.string));
+		if (prop->type == JSPT_ASTRING)
+			mem_free(prop->value.string);
 		break;
 
 	case JSPT_BOOLEAN:
-		*vp = BOOLEAN_TO_JSVAL(prop->boolean);
+		*vp = BOOLEAN_TO_JSVAL(prop->value.boolean);
 		break;
 
 	case JSPT_OBJECT:
-		*vp = OBJECT_TO_JSVAL(prop->object);
+		*vp = OBJECT_TO_JSVAL(prop->value.object);
 		break;
 
 	case JSPT_UNDEF:

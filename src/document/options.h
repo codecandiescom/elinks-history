@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.52 2004/09/28 13:55:13 pasky Exp $ */
+/* $Id: options.h,v 1.53 2004/12/20 11:07:31 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -24,6 +24,9 @@ struct document_options {
 	color_t default_bg;
 	color_t default_link;
 	color_t default_vlink;
+#ifdef CONFIG_BOOKMARKS
+	color_t default_bookmark_link;
+#endif
 
 	/* Color model/optimizations */
 	enum color_flags color_flags;

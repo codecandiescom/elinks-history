@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.511 2004/12/18 01:42:18 pasky Exp $ */
+/* $Id: parser.c,v 1.512 2004/12/20 11:07:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1506,6 +1506,9 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	format.bg = options->default_bg;
 	format.clink = options->default_link;
 	format.vlink = options->default_vlink;
+#ifdef CONFIG_BOOKMARKS
+	format.bookmark_link = options->default_bookmark_link;
+#endif
 
 	par_format.align = ALIGN_LEFT;
 	par_format.leftmargin = options->margin;

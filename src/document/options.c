@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.55 2004/12/16 15:12:36 jonas Exp $ */
+/* $Id: options.c,v 1.56 2004/12/20 11:07:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,9 @@ init_document_options(struct document_options *doo)
 	doo->default_bg = get_opt_color("document.colors.background");
 	doo->default_link = get_opt_color("document.colors.link");
 	doo->default_vlink = get_opt_color("document.colors.vlink");
+#ifdef CONFIG_BOOKMARKS
+	doo->default_bookmark_link = get_opt_color("document.colors.bookmark");
+#endif
 
 	doo->active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
 	doo->active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.73 2004/12/15 19:05:52 jonas Exp $ */
+/* $Id: link.c,v 1.74 2004/12/20 11:07:32 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ html_a(unsigned char *a)
 #endif
 #ifdef CONFIG_BOOKMARKS
 		} else if (get_bookmark(format.link)) {
-			format.fg = get_opt_color("document.colors.bookmark");
+			format.fg = format.bookmark_link;
 			html_top.pseudo_class &= ~ELEMENT_VISITED;
 			/* XXX: Really set ELEMENT_LINK? --pasky */
 			html_top.pseudo_class |= ELEMENT_LINK;

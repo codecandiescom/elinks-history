@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.16 2004/10/01 10:52:14 jonas Exp $ */
+/* $Id: renderer.c,v 1.17 2004/12/20 11:07:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -354,7 +354,7 @@ add_dom_link(struct dom_renderer *renderer, unsigned char *string, int length)
 #endif
 #ifdef CONFIG_BOOKMARKS
 	else if (get_bookmark(where))
-		fgcolor = get_opt_color("document.colors.bookmark");
+		fgcolor = document->options.default_bookmark_link;
 #endif
 	else
 		fgcolor = document->options.default_link;

@@ -26,7 +26,7 @@ Notes:
 Dependencies over external libs must be removed using related configure options.
 --without-zlib		removes libz dependency (compression)
 --without-bzlib		removes libbz2 dependency (compression)
---without-xbel		removes libxml dependency (xbel bookmarks support)
+--without-xbel		removes expat dependency (xbel bookmarks support)
 --without-lua		removes liblua dependency (lua scripting)
 --without-gnutls	removes libtls dependency (ssl support)
 --without-openssl	removes libssl dependency (ssl support)
@@ -57,4 +57,4 @@ Details about --enable-small configure option effects:
 - it disables fastfind feature (reducing performance, but also reducing a lot
   memory usage, and a bit the executable size).
 
-/* $Id: small.txt,v 1.8 2003/10/20 16:22:51 pasky Exp $ */
+/* $Id: small.txt,v 1.9 2003/10/22 21:14:44 fabio Exp $ */

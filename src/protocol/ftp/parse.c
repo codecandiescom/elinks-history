@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.7 2005/03/27 14:24:58 jonas Exp $ */
+/* $Id: parse.c,v 1.8 2005/03/27 14:27:59 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -52,54 +52,6 @@ parse_ftp_number(unsigned char **src, unsigned char *end, long from, long to)
 		return -1;
 
 	return number;
-}
-
-
-/* Converts Un*x-style symbolic permissions to number-style ones, e.g. string
- * rwxr-xr-x to 755. For now, it knows nothing of setuid/setgid/sticky. ACLs are
- * ignored. */
-static int
-parse_ftp_unix_permissions(const unsigned char *src, int len)
-{
-	int perms = 0, i;
-
-	if (len < 9)
-		return 0;
-
-	for (i = 0; i < 3; i++, src += 3) {
-		perms <<= 3;
-		perms += (((src[0] == 'r') << 2)
-		      +   ((src[1] == 'w') << 1)
-		      +    (src[2] == 'x'
-			 || src[2] == 's'));
-	}
-
-	return perms;
-}
-
-/* Converts VMS symbolic permissions to number-style ones, e.g. string
- * RWED,RWE,RE to 755. "D" (delete) is taken to be equal to "W" (write).
- * Inspired by a patch of Stoyan Lekov <lekov@eda.bg>. */
-static int
-parse_ftp_vms_permissions(const unsigned char *src, int len)
-{
-	int perms = 0;
-	int pos;
-
-	for (pos = 0; pos < len; pos++) {
-		switch (src[pos]) {
-		case ',': perms <<= 3; break;
-		case 'R': perms  |= 4; break;
-		case 'W': perms  |= 2; break;
-		case 'D': perms  |= 2; break;
-		case 'E': perms  |= 1; break;
-		default:
-			 /* Wrong VMS permissons! */
-			  return 0;
-		}
-	}
-
-	return perms;
 }
 
 
@@ -201,6 +153,28 @@ enum ftp_unix {
 	FTP_UNIX_TIME,
 	FTP_UNIX_NAME
 };
+
+/* Converts Un*x-style symbolic permissions to number-style ones, e.g. string
+ * rwxr-xr-x to 755. For now, it knows nothing of setuid/setgid/sticky. ACLs are
+ * ignored. */
+static int
+parse_ftp_unix_permissions(const unsigned char *src, int len)
+{
+	int perms = 0, i;
+
+	if (len < 9)
+		return 0;
+
+	for (i = 0; i < 3; i++, src += 3) {
+		perms <<= 3;
+		perms += (((src[0] == 'r') << 2)
+		      +   ((src[1] == 'w') << 1)
+		      +    (src[2] == 'x'
+			 || src[2] == 's'));
+	}
+
+	return perms;
+}
 
 static struct ftp_file_info *
 parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
@@ -405,6 +379,32 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
  * And non-MutliNet VMS:
  * "CII-MANUAL.TEX;1  213/216  29-JAN-1996 03:33:12  [ANONYMOU,ANONYMOUS]   (RWED,RWED,,)"
  */
+
+/* Converts VMS symbolic permissions to number-style ones, e.g. string
+ * RWED,RWE,RE to 755. "D" (delete) is taken to be equal to "W" (write).
+ * Inspired by a patch of Stoyan Lekov <lekov@eda.bg>. */
+static int
+parse_ftp_vms_permissions(const unsigned char *src, int len)
+{
+	int perms = 0;
+	int pos;
+
+	for (pos = 0; pos < len; pos++) {
+		switch (src[pos]) {
+		case ',': perms <<= 3; break;
+		case 'R': perms  |= 4; break;
+		case 'W': perms  |= 2; break;
+		case 'D': perms  |= 2; break;
+		case 'E': perms  |= 1; break;
+		default:
+			 /* Wrong VMS permissons! */
+			  return 0;
+		}
+	}
+
+	return perms;
+}
+
 static struct ftp_file_info *
 parse_ftp_vms_response(struct ftp_file_info *info, unsigned char *src, int len)
 {

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.109 2003/09/28 15:49:09 jonas Exp $ */
+/* $Id: menu.c,v 1.110 2003/09/28 16:04:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,18 +103,17 @@ do_menu(struct terminal *term, struct menu_item *items, void *data, int hotkeys)
 }
 
 static void
-select_menu(struct terminal *term, struct menu *menu)
+select_menu_item(struct terminal *term, struct menu_item *it, void *data2)
 {
-	struct menu_item *it = &menu->items[menu->selected];
 	void (*func)(struct terminal *, void *, void *);
 	void *data1 = it->data;
-	void *data2 = menu->data;
+
+	assertm(it->func, "No menu function");
+	if_assert_failed return;
+
+	if (it->rtext == M_BAR) return;
 
 	func = it->func;
-
-	if (menu->selected < 0 || menu->selected >= menu->ni
-	    || it->rtext == M_BAR)
-		return;
 
 	if (!it->submenu) {
 		/* Don't free data! */
@@ -132,6 +131,15 @@ select_menu(struct terminal *term, struct menu *menu)
 	}
 
 	func(term, data1, data2);
+}
+
+static inline void
+select_menu(struct terminal *term, struct menu *menu)
+{
+	if (menu->selected < 0 || menu->selected >= menu->ni)
+		return;
+
+	select_menu_item(term, &menu->items[menu->selected], menu->data);
 }
 
 static void
@@ -674,38 +682,13 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	redraw_from_window(menu->win);
 }
 
-static void
+static inline void
 select_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
-	struct menu_item *it = &menu->items[menu->selected];
-
-	if (menu->selected < 0 || menu->selected >= menu->ni
-	    || it->rtext == M_BAR)
+	if (menu->selected < 0 || menu->selected >= menu->ni)
 		return;
 
-	if (!it->submenu) {
-		/* Don't free data! */
-		it->item_free &= ~FREE_DATA;
-
-		while (!list_empty(term->windows)) {
-			struct window *win = term->windows.next;
-
-			if (win->handler != menu_handler
-			    && win->handler != mainmenu_handler)
-				break;
-
-			delete_window(win);
-		}
-	}
-
-#ifdef DEBUG
-	if (!it->func) {
-	       	internal("No menu function");
-		return;
-	}
-#endif
-	/* Why is this working here but causes segfaults in select_menu() ?? --Zas */
-	it->func(term, it->data, menu->data);
+	select_menu_item(term, &menu->items[menu->selected], menu->data);
 }
 
 static void

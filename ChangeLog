@@ -1,3 +1,84 @@
+Sat Sep 14 21:58:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/: bookmarks.c, dialogs.c:
+
+	Space now (un)expands folders. All folders are now unexpanded upon
+	startup.  
+
+Sat Sep 14 21:48:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/listbox.c:
+
+	Enhancements in hiearchic listboxes (bookmarks) rendering - now no
+	superfluous lines are drawn (we're now better than Links ;), and
+	also cute mini-asciiart is used for the ends of the lines.  
+
+Sat Sep 14 21:24:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Fixed sometimes misinterpreted depth of bookmarks when loading them.  
+
+Sat Sep 14 21:21:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Fixed writing of hiearchic bookmarks.  
+
+Sat Sep 14 20:53:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/dialogs.c:
+
+	Removed order item of struct listbox_data - now redundant.  
+
+Sat Sep 14 20:20:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/bulgarian.lng, src/intl/language.inc:
+
+	Bulgarian translation updated by Dimitar Dimitrov
+	<mitaka_ddd@yahoo.com>.  
+
+Sat Sep 14 19:56:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bookmarks/bookmarks.c, bookmarks/dialogs.c:
+
+	Hiearchical bookmarks support. It's here. Along with various fixes
+	regarding to translate() and fixes in rendering of hiearchical
+	listboxes. Also again normalizes bookmarks listbox items order. But
+	it's all mainly about hiearchical bookmarks support ;-). Yet you
+	can't create them from the UI yet, and it looks a bit ugly - will be
+	fixed in next commits.  
+
+Sat Sep 14 14:13:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/main.c:
+
+	Fixed one possible warning about exit(), thanks to Dmitry.  
+
+Sat Sep 14 12:09:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: listbox.c, listbox.h:
+
+	Preliminary support for rendering of multi-depth lists.  
+
+Sat Sep 14 11:10:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/download.c:
+
+	Minor goto cleanup based on patch by Jonas.  
+
+Sat Sep 14 09:16:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/ssl/connect.c:
+
+	Compilation fix, thanks, Dmitry.  
+
+Sat Sep 14 07:48:49 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng, src/intl/language.inc:
+
+	French translation was updated.  
+
 Fri Sep 13 21:06:35 2002  Petr Baudis <pasky@ji.cz>:
 
 	* HACKING, README:

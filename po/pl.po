@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-16 00:21+0100\n"
-"PO-Revision-Date: 2003-11-14 07:00+0200\n"
+"PO-Revision-Date: 2003-11-16 07:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -2101,24 +2101,20 @@ msgstr "Podkre¶laj odno¶niki."
 
 #
 #: src/config/options.inc:531
-#, fuzzy
 msgid "Plain rendering"
-msgstr "Renderowanie HTML-a"
+msgstr "Renderowanie zwyk³ego tekstu"
 
 #: src/config/options.inc:533
-#, fuzzy
 msgid "Options concerning the display of plain text pages."
-msgstr "Ustawienia dotycz±ce wy¶wietlania stron HTML."
+msgstr "Ustawienia dotycz±ce wy¶wietlania zwyk³ego tekstu."
 
 #: src/config/options.inc:535
-#, fuzzy
 msgid "Display URIs"
-msgstr "Wy¶wietl"
+msgstr "Wy¶wietlanie URI"
 
 #: src/config/options.inc:537
-#, fuzzy
 msgid "Display URIs in the document as links."
-msgstr "Sposób wy¶wietlania odno¶ników na obrazkach"
+msgstr "Wy¶wietlanie URI w dokumencie jako odno¶niki."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:543
@@ -3296,14 +3292,12 @@ msgid ""
 msgstr "Przeskakiwanie z ostatniego taba na pierwszego i na odwrót."
 
 #: src/config/options.inc:1759
-#, fuzzy
 msgid "Confirm tab closing"
-msgstr "Potwierdzenie chêci wys³ania"
+msgstr "Potwierdzenie zamkniêcia taba"
 
 #: src/config/options.inc:1761
-#, fuzzy
 msgid "When closing a tab show confirmation dialog."
-msgstr "Otwórz okno dialogowe potwierdzania zakoñczenia dzia³ania"
+msgstr "Przy zamykaniu taba pokazuj okienko dialogowe potwierdzania."
 
 #: src/config/options.inc:1765 src/config/opttypes.c:396
 msgid "Language"
@@ -3728,7 +3722,6 @@ msgid "Accept policy"
 msgstr "Polisa akceptacji"
 
 #: src/cookies/cookies.c:105
-#, fuzzy
 msgid ""
 "Cookies accepting policy:\n"
 "0 is accept no cookies\n"
@@ -3737,7 +3730,7 @@ msgid ""
 msgstr ""
 "Akceptowanie ciasteczek:\n"
 "0 - brak zgody na ciasteczka\n"
-"1 - pytaj o zgodê na ciasteczko (NIEZAIMPLEMENTOWANE)\n"
+"1 - pytaj o zgodê na ciasteczko\n"
 "2 - akceptuj wszystkie ciasteczka"
 
 #
@@ -3795,9 +3788,8 @@ msgstr ""
 "Bez efektu, gdy cookies_save jest wy³±czone."
 
 #: src/cookies/cookies.c:562
-#, fuzzy
 msgid "Accept cookie?"
-msgstr "Polisa akceptacji"
+msgstr "Akceptujesz ciasteczko?"
 
 #: src/cookies/cookies.c:563
 #, c-format
@@ -3810,30 +3802,33 @@ msgid ""
 "Expires: %s\n"
 "Secure: %s\n"
 msgstr ""
+"Czy akceptujesz ciasteczko z %s?\n"
+"\n"
+"Nazwa: %s\n"
+"Warto¶æ: %s\n"
+"Domena: %s\n"
+"Wa¿ne do: %s\n"
+"Bezpieczeñstwo: %s\n"
 
 #: src/cookies/cookies.c:572
-#, fuzzy
 msgid "unknown"
-msgstr "Nieznany"
+msgstr "nieznany"
 
 #: src/cookies/cookies.c:573
-#, fuzzy
 msgid "yes"
-msgstr "Tak"
+msgstr "tak"
 
 #: src/cookies/cookies.c:573
-#, fuzzy
 msgid "no"
-msgstr "Informacja"
+msgstr "nie"
 
 #: src/cookies/cookies.c:575
-#, fuzzy
 msgid "Accept"
-msgstr "Polisa akceptacji"
+msgstr "Akceptacja"
 
 #: src/cookies/cookies.c:576
 msgid "Reject"
-msgstr ""
+msgstr "Odrzucenie"
 
 #: src/dialogs/auth.c:59
 #, c-format
@@ -5163,9 +5158,8 @@ msgid "SSL error"
 msgstr "B³±d SSL"
 
 #: src/sched/error.c:70
-#, fuzzy
 msgid "This version of ELinks does not contain SSL/TLS support"
-msgstr "Ta wersja ELinksa nie posiada wsparcia dla SSL/TSL"
+msgstr "Ta wersja ELinksa nie zawiera wsparcia dla SSL/TSL"
 
 #: src/sched/error.c:99
 msgid "Unknown error"
@@ -5379,9 +5373,8 @@ msgid "Too many bytes read from the itrm!"
 msgstr "Zbyt du¿o bajtów przeczytanych z itrm!"
 
 #: src/terminal/tab.c:193
-#, fuzzy
 msgid "Do you really want to close the current tab?"
-msgstr "Czy na pewno chcesz wyj¶æ z ELinksa?"
+msgstr "Czy na pewno chcesz zamkn±æ bie¿±cy tab?"
 
 #: src/viewer/dump/dump.c:77
 #, c-format
@@ -5594,18 +5587,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1407
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "Overlapping matches"
-#~ msgstr "Zachodz±ce na siebie dopasowania"
-
-#~ msgid ""
-#~ "Let matches overlap (only relevant to regex search).\n"
-#~ "0 means matches should not overlap.\n"
-#~ "1 means matches can overlap (CAUTION: can be cpu intensive with\n"
-#~ "  some expressions!)"
-#~ msgstr ""
-#~ "Pozwól dopasowaniom zachodziæ na siebie (istotne tylko dla szukania\n"
-#~ "z u¿yciem wyra¿eñ regularnych).\n"
-#~ "0 - dopasowania nie powinny zachodziæ na siebie.\n"
-#~ "1 - dopasowania mog± zachodziæ na siebie (UWAGA: mo¿e mocno obci±¿aæ\n"
-#~ "  procesor dla niektórych wyra¿eñ!)"

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.56 2004/10/06 13:48:31 zas Exp $ */
+/* $Id: leds.c,v 1.57 2004/11/19 17:46:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,6 @@
 #include "elinks.h"
 
 #include "bfu/leds.h"
-#include "bfu/style.h"
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"

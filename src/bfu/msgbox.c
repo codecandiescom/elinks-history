@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.91 2004/11/19 10:04:45 zas Exp $ */
+/* $Id: msgbox.c,v 1.92 2004/11/19 17:46:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,6 @@
 #include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/msgbox.h"
-#include "bfu/style.h"
 #include "bfu/text.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/terminal.h"

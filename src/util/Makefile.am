@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.43 2004/08/14 21:30:24 miciah Exp $
+## $Id: Makefile.am,v 1.44 2004/11/19 17:46:05 zas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -32,6 +32,7 @@ libutil_a_LIBADD = \
  $(scannerobj)
 
 libutil_a_SOURCES = \
+ align.h \
  base64.c \
  base64.h \
  box.h	\

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.72 2004/11/19 10:30:50 zas Exp $ */
+/* $Id: button.c,v 1.73 2004/11/19 17:46:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,11 +11,11 @@
 
 #include "bfu/button.h"
 #include "bfu/dialog.h"
-#include "bfu/style.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
 #include "terminal/mouse.h"
 #include "terminal/terminal.h"
+#include "util/align.h"
 
 /* Vertical spacing between buttons. */
 #define BUTTON_VSPACING	1

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.80 2004/11/19 17:19:05 zas Exp $ */
+/* $Id: widget.h,v 1.81 2004/11/19 17:46:05 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -14,7 +14,6 @@
 #include "bfu/msgbox.h"
 #include "bfu/leds.h"
 #include "bfu/listbox.h"
-#include "bfu/style.h"
 #include "bfu/text.h"
 #include "util/lists.h"
 #include "util/box.h"

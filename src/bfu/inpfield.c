@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.178 2004/11/19 11:01:54 zas Exp $ */
+/* $Id: inpfield.c,v 1.179 2004/11/19 17:46:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,6 @@
 #include "bfu/inpfield.h"
 #include "bfu/inphist.h"
 #include "bfu/msgbox.h"
-#include "bfu/style.h"
 #include "bfu/text.h"
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"

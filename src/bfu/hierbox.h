@@ -1,19 +1,17 @@
-/* $Id: hierbox.h,v 1.63 2004/11/19 15:40:20 zas Exp $ */
+/* $Id: hierbox.h,v 1.64 2004/11/19 17:46:05 zas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
 
+#include "bfu/common.h"
 #include "bfu/listbox.h"
 #include "util/lists.h"
 
 struct session;
 
-
-typedef t_handler_event_status (*hierbox_button_handler)(struct dialog_data *dlg_data, struct widget_data *button);
-
 struct hierbox_browser_button {
 	unsigned char *label;
-	hierbox_button_handler handler;
+	WIDGET_HANDLER_FUNC(handler);
 
 	/* Should the button be displayed in anonymous mode */
 	unsigned int anonymous:1;

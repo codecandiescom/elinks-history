@@ -1,9 +1,8 @@
-/* $Id: property.h,v 1.17 2004/06/30 05:51:10 jonas Exp $ */
+/* $Id: property.h,v 1.18 2004/11/19 17:46:05 zas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
 
-#include "bfu/style.h"
 #include "document/html/parser.h"
 #include "util/color.h"
 #include "util/lists.h"

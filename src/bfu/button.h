@@ -1,9 +1,9 @@
-/* $Id: button.h,v 1.30 2004/11/19 17:07:18 zas Exp $ */
+/* $Id: button.h,v 1.31 2004/11/19 17:46:04 zas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
 
-#include "bfu/style.h"
+#include "util/align.h"
 
 struct dialog;
 struct terminal;

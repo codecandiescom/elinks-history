@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.283 2004/11/11 20:29:40 miciah Exp $ */
+/* $Id: menu.c,v 1.284 2004/11/19 17:46:05 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -17,7 +17,6 @@
 #include "bfu/hotkey.h"
 #include "bfu/inpfield.h"
 #include "bfu/menu.h"
-#include "bfu/style.h"
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "sched/action.h"

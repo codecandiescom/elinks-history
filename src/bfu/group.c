@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.62 2004/11/19 09:39:25 zas Exp $ */
+/* $Id: group.c,v 1.63 2004/11/19 17:46:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,6 @@
 #include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/group.h"
-#include "bfu/style.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"

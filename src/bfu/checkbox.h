@@ -1,9 +1,7 @@
-/* $Id: checkbox.h,v 1.36 2004/11/19 17:14:56 zas Exp $ */
+/* $Id: checkbox.h,v 1.37 2004/11/19 17:46:04 zas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
-
-#include "bfu/style.h"
 
 struct dialog;
 struct terminal;

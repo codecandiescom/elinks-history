@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.114 2004/11/19 11:12:53 zas Exp $ */
+/* $Id: text.c,v 1.115 2004/11/19 17:46:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,6 @@
 #include "elinks.h"
 
 #include "bfu/dialog.h"
-#include "bfu/style.h"
 #include "bfu/text.h"
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"

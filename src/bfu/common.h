@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.2 2004/11/19 15:40:20 zas Exp $ */
+/* $Id: common.h,v 1.3 2004/11/19 17:46:04 zas Exp $ */
 
 #ifndef EL__BFU_COMMON_H
 #define EL__BFU_COMMON_H
@@ -20,5 +20,6 @@ enum widget_type {
 	WIDGET_LISTBOX,
 	WIDGET_TEXT,
 };
+
 
 #endif /* EL__BFU_COMMON_H */

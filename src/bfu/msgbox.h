@@ -1,10 +1,8 @@
-/* $Id: msgbox.h,v 1.24 2004/11/19 16:08:24 jonas Exp $ */
+/* $Id: msgbox.h,v 1.25 2004/11/19 17:46:05 zas Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
 
-#include "bfu/style.h"
-#include "bfu/widget.h"
 #include "util/memlist.h"
 
 struct terminal;

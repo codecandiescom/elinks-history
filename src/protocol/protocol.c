@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.76 2004/09/23 13:56:24 jonas Exp $ */
+/* $Id: protocol.c,v 1.77 2004/09/23 15:04:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ static const struct protocol_backend protocol_backends[] = {
 	{ "gopher",	  70, gopher_protocol_handler,	1, 1, 0, 0 },
 	{ "http",	  80, http_protocol_handler,	1, 1, 0, 0 },
 	{ "https",	 443, https_protocol_handler,	1, 1, 0, 1 },
-	{ "javascript",	   0, NULL,			0, 0, 0, 0 },
+	{ "javascript",	   0, NULL,			0, 0, 1, 0 },
 	{ "news",	   0, news_protocol_handler,	0, 0, 1, 0 },
 	{ "nntp",	 119, nntp_protocol_handler,	1, 1, 0, 0 },
 	{ "nntps",	 563, nntp_protocol_handler,	1, 1, 0, 1 },

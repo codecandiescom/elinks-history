@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.21 2004/01/27 01:15:59 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.22 2004/01/27 18:45:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,6 +51,8 @@ init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 	init_list(selector->properties);
 
 	if (name) {
+		if (namelen < 0)
+			namelen = strlen(name);
 		selector->element = memacpy(name, namelen);
 		if (!selector->element) {
 			mem_free(selector);

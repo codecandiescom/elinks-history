@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.340 2003/10/23 08:59:03 pasky Exp $ */
+/* $Id: options.c,v 1.341 2003/10/23 08:59:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -711,67 +711,67 @@ print_full_help(struct option *tree, unsigned char *path)
 
 		/* Print the 'title' of each option type. */
 		switch (type) {
-		case OPT_BOOL:
-		case OPT_INT:
-		case OPT_LONG:
-			printf(gettext("(default: %ld)"),
-				(long) option->value.number);
-			break;
+			case OPT_BOOL:
+			case OPT_INT:
+			case OPT_LONG:
+				printf(gettext("(default: %ld)"),
+					(long) option->value.number);
+				break;
 
-		case OPT_STRING:
-			printf(gettext("(default: \"%s\")"),
-				option->value.string);
-			break;
+			case OPT_STRING:
+				printf(gettext("(default: \"%s\")"),
+					option->value.string);
+				break;
 
-		case OPT_ALIAS:
-			printf(gettext("(alias for %s)"),
-				option->value.string);
-			break;
+			case OPT_ALIAS:
+				printf(gettext("(alias for %s)"),
+					option->value.string);
+				break;
 
-		case OPT_CODEPAGE:
-			printf(gettext("(default: %s)"),
-				get_cp_name(option->value.number));
-			break;
+			case OPT_CODEPAGE:
+				printf(gettext("(default: %s)"),
+					get_cp_name(option->value.number));
+				break;
 
-		case OPT_COLOR:
-			printf(gettext("(default: #%06x)"),
-			       option->value.color);
-			break;
+			case OPT_COLOR:
+				printf(gettext("(default: #%06x)"),
+					option->value.color);
+				break;
 
-		case OPT_COMMAND:
-			break;
+			case OPT_COMMAND:
+				break;
 
-		case OPT_LANGUAGE:
-			printf(gettext("(default: \"%s\")"),
-				language_to_name(option->value.number));
-			break;
+			case OPT_LANGUAGE:
+				printf(gettext("(default: \"%s\")"),
+					language_to_name(option->value.number));
+				break;
 
-		case OPT_TREE:
-		{
-			int pathlen = strlen(path);
-			int namelen = strlen(option->name);
+			case OPT_TREE:
+			{
+				int pathlen = strlen(path);
+				int namelen = strlen(option->name);
 
-			if (pathlen + namelen + 2 > MAX_STR_LEN)
-				continue;
+				if (pathlen + namelen + 2 > MAX_STR_LEN)
+					continue;
 
-			/* Append option name to path */
-			if (pathlen > 0) {
-				memcpy(saved, path, pathlen);
-				savedpos = saved + pathlen;
-			} else {
-				savedpos = saved;
+				/* Append option name to path */
+				if (pathlen > 0) {
+					memcpy(saved, path, pathlen);
+					savedpos = saved + pathlen;
+				} else {
+					savedpos = saved;
+				}
+				memcpy(savedpos, option->name, namelen + 1);
+				savedpos += namelen;
+
+				capt = gettext_nonempty(capt);
+				printf("  %s: (%s)", capt, saved);
+				break;
 			}
-			memcpy(savedpos, option->name, namelen + 1);
-			savedpos += namelen;
 
-			capt = gettext_nonempty(capt);
-			printf("  %s: (%s)", capt, saved);
-			break;
-		}
-
-		default:
-			internal("Invalid option type: %d\n", type);
-			break;
+			default:
+				internal("Invalid option type: %d\n", type);
+				break;
 		}
 
 		printf("\n    %8s", "");

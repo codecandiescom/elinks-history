@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.234 2003/12/27 11:37:07 zas Exp $ */
+/* $Id: menu.c,v 1.235 2003/12/27 11:45:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ menu_goto_url(struct terminal *term, void *d, struct session *ses)
 	dialog_goto_url(ses, "");
 }
 
-static inline void
+void
 menu_save_url_as(struct terminal *term, void *d, struct session *ses)
 {
 	input_field(ses->tab->term, NULL, 1,
@@ -387,7 +387,7 @@ static struct menu_item file_menu11[] = {
 static struct menu_item file_menu21[] = {
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("~Save as"), NULL, ACT_SAVE_AS, save_as, NULL, 0),
-	INIT_MENU_ITEM(N_("Save UR~L as"), NULL, ACT_NONE, menu_save_url_as, NULL, 0),
+	INIT_MENU_ITEM(N_("Save UR~L as"), NULL, ACT_SAVE_URL_AS, menu_save_url_as, NULL, 0),
 	INIT_MENU_ITEM(N_("Sa~ve formatted document"), NULL, ACT_SAVE_FORMATTED,
 			menu_save_formatted, NULL, 0),
 #ifdef BOOKMARKS

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.312 2003/12/27 11:37:07 zas Exp $ */
+/* $Id: view.c,v 1.313 2003/12/27 11:45:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1064,6 +1064,10 @@ quak:
 			case ACT_SAVE_AS:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					save_as(ses->tab->term, NULL, ses);
+				goto x;
+			case ACT_SAVE_URL_AS:
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+					menu_save_url_as(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_SAVE_FORMATTED:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))

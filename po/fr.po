@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-20 18:18+0200\n"
+"POT-Creation-Date: 2003-10-21 11:10+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -54,15 +54,15 @@ msgstr "OK"
 
 #: src/bfu/inpfield.c:53
 msgid "Number out of range"
-msgstr "Intervalle non respecté"
+msgstr "Nombre hors intervalle"
 
 #: src/bfu/inpfield.c:72
 msgid "Bad string"
-msgstr "Saisie erronée"
+msgstr "Mauvaise chaine"
 
 #: src/bfu/inpfield.c:73
 msgid "Empty string not allowed"
-msgstr "Saisie obligatoire"
+msgstr "Chaine vide non autorisée"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
@@ -71,7 +71,7 @@ msgstr "read_bookmarks_xbel(): Erreur dans XML_ParserCreate()"
 #: src/bookmarks/backend/xbel.c:110
 #, c-format
 msgid "read_bookmarks_xbel(): Error reading %s"
-msgstr "read_bookmarks_xbel(): Erreur de lecture %s"
+msgstr "read_bookmarks_xbel(): Erreur lors de la lecture de %s"
 
 #: src/bookmarks/backend/xbel.c:119
 #, c-format
@@ -84,7 +84,7 @@ msgstr ""
 
 #: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
 msgid "No title"
-msgstr "Pas de titre"
+msgstr "Sans titre"
 
 #: src/bookmarks/dialogs.c:167 src/bookmarks/dialogs.c:633
 msgid "Add folder"
@@ -125,7 +125,7 @@ msgid ""
 "\n"
 "Title: \"%s\""
 msgstr ""
-"Désolé, mais ce signet est déjà utilisé par quelque chose.\n"
+"Désolé, mais ce signet est déjà en cours d'utilisation.\n"
 "\n"
 "Titre: \"%s\""
 
@@ -137,7 +137,7 @@ msgid ""
 "Title: \"%s\"\n"
 "URL: \"%s\""
 msgstr ""
-"Désolé, mais ce signet est déjà utilisé par quelque chose.\n"
+"Désolé, mais ce signet est déjà en cours d'utilisation.\n"
 "\n"
 "Titre: \"%s\"\n"
 "URL: \"%s\""
@@ -165,7 +165,7 @@ msgstr "Non"
 #: src/bookmarks/dialogs.c:415
 #, c-format
 msgid "Delete content of folder \"%s\"?"
-msgstr "Effacer le contenu du répertoire \"%s\" ?"
+msgstr "Effacer le contenu du dossier \"%s\" ?"
 
 #: src/bookmarks/dialogs.c:423
 #, c-format
@@ -223,7 +223,7 @@ msgstr "Ajouter un signet"
 
 #: src/bookmarks/dialogs.c:799
 msgid "Search bookmarks"
-msgstr "Rechercher des signets"
+msgstr "Recherche parmi les signets"
 
 #: src/config/cmdline.c:57
 #, c-format
@@ -980,7 +980,7 @@ msgstr ""
 "0 Seules les valeurs des options courantes sont modifiées\n"
 "1 Les valeurs des options courantes sont modifiées et les\n"
 "  options manquantes sont ajoutées à la fin du fichier\n"
-"2 Le fichier de configuration est totallement réécrit\n"
+"2 Le fichier de configuration est totalement réécrit\n"
 "3 Les valeurs des options courantes sont modifiées et les\n"
 "  options manquantes MODIFIEES durant cette session d'ELinks\n"
 "  sont ajoutées à la fin du fichier"
@@ -1077,7 +1077,7 @@ msgstr "Résolution DNS asynchrone"
 
 #: src/config/options.c:991
 msgid "Use asynchronous DNS resolver?"
-msgstr "Utiliser le résolveur DNS asynchrone ?"
+msgstr "Utiliser la résolution DNS asynchrone ?"
 
 #: src/config/options.c:993
 msgid "Maximum connections"
@@ -1161,7 +1161,7 @@ msgid ""
 "date\n"
 "1+ is use cookie's expiration date, but limit age to the given number of days"
 msgstr ""
-"Age maximal pour les cookies\n"
+"Age maximal pour les cookies (en jours)\n"
 "-1  Utiliser si possible la date d'expiration du cookie.\n"
 " 0  Forcer l'expiration à la fin de la session courante, ignorant la date "
 "d'expiration du cookie.\n"
@@ -1181,7 +1181,7 @@ msgstr ""
 "Si activé, nous insistons pour avoir 3 points dans le nom de domaine\n"
 "des cookies pour tous les domaines non-internationaux (au lieu de 2 "
 "points).\n"
-"SVP lire le code (cookies.c:check_domain_security()) pour explications."
+"Voir le code (cookies.c:check_domain_security()) pour explications."
 
 #: src/config/options.c:1043
 msgid "Saving"
@@ -1261,7 +1261,7 @@ msgstr ""
 "  en cas d'échec\n"
 "1 Essayer les associations concernant le cadre, puis 'accesskey'\n"
 "  en cas d'échec\n"
-"2 Essayer 'accesskey' en premier. (Ceci peut être dangereux)"
+"2 Essayer 'accesskey' en premier (dangereux)"
 
 #: src/config/options.c:1085
 msgid "Forms"
@@ -1280,7 +1280,7 @@ msgid ""
 "Automagically submit a form when enter is pressed with a text\n"
 "field selected."
 msgstr ""
-"Envoi automatique d'un formulaire quand ENTREE est pressée\n"
+"Envoi automatique d'un formulaire quand entrée est pressée\n"
 "dans un champ texte sélectionné."
 
 #: src/config/options.c:1094
@@ -1301,9 +1301,9 @@ msgid ""
 "This option only disables the dialog, already saved login\n"
 "forms are unaffected."
 msgstr ""
-"Demander si un formulaire d'authentification doit être \n"
+"Demander si un formulaire d'authentification doit être\n"
 "sauvegarder dans un fichier ou non.\n"
-"Cette option désactive seulement le dialogue, les formulaires \n"
+"Cette option désactive seulement le dialogue, les formulaires\n"
 "déjà mémorisés ne sont pas affectés."
 
 #: src/config/options.c:1105
@@ -1345,10 +1345,9 @@ msgid ""
 "2 means always"
 msgstr ""
 "Quand marquer les liens image:\n"
-"0     jamais\n"
-"1     jamais quand les attributs alt ou title sont fournis (ancien "
-"fonctionnement)\n"
-"2     toujours"
+"0 jamais\n"
+"1 jamais si les attributs alt ou title sont fournis\n"
+"2 toujours"
 
 #: src/config/options.c:1124
 msgid "Image link prefix"
@@ -1368,7 +1367,7 @@ msgstr "Chaîne avec laquelle suffixer les liens image."
 
 #: src/config/options.c:1132
 msgid "Display links to images w/o alt"
-msgstr "Afficher les liens vers des images sans attribut alt"
+msgstr "Afficher les liens vers des images sans attribut 'alt'"
 
 #: src/config/options.c:1134
 msgid ""
@@ -1653,7 +1652,7 @@ msgstr "Sensibilité à la casse"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr "Tenir compte ou non de la casse lors des recherches dans le document."
+msgstr "Respecter ou non de la casse lors des recherches dans le document."
 
 #: src/config/options.c:1221
 msgid "Overlapping matches"
@@ -1911,7 +1910,7 @@ msgstr "Autoriser les couleurs sombres sur fond noir."
 
 #: src/config/options.c:1366
 msgid "Ensure contrast"
-msgstr "Forcer le contraste"
+msgstr "Garantir le contraste"
 
 #: src/config/options.c:1368
 msgid "Makes sure that the back- and foreground color is never equal."
@@ -1921,7 +1920,7 @@ msgstr "Forcer l'utilisation de couleurs différentes pour le fond et le texte."
 #. * handling.
 #: src/config/options.c:1373
 msgid "Use document-specified colors"
-msgstr "Utiliser les couleurs spécifiées dans le document"
+msgstr "Utiliser les couleurs spécifiées par le document"
 
 #: src/config/options.c:1375
 msgid ""
@@ -1938,9 +1937,9 @@ msgid ""
 "  and on your terminal."
 msgstr ""
 "Utiliser les couleurs spécifiées dans le document:\n"
-"0 Toujours utiliser les couleurs par défaut\n"
-"1 Utiliser les couleurs du document si possible, mais pas le fond\n"
-"2 Utiliser les couleurs du document, y compris le fond."
+"0 toujours utiliser les couleurs par défaut\n"
+"1 utiliser les couleurs du document, mais pas le fond\n"
+"2 utiliser les couleurs du document, y compris le fond."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1392
@@ -1990,9 +1989,9 @@ msgid ""
 "2 is ask the user."
 msgstr ""
 "Prévenir l'écrasement des fichiers locaux:\n"
-"0 Ecraser les fichiers silencieusement.\n"
-"1 Ajouter un suffixe .{nombre} (par exemple '.1') au nom.\n"
-"2 Demander à l'utilisateur."
+"0 écraser les fichiers silencieusement.\n"
+"1 ajouter un suffixe .{nombre} (par exemple '.1') au nom.\n"
+"2 demander à l'utilisateur."
 
 #: src/config/options.c:1419
 msgid "Notify download completion by bell"
@@ -2006,9 +2005,9 @@ msgid ""
 "2 is always"
 msgstr ""
 "Notification sonore quand un téléchargement est terminé:\n"
-"0 Jamais.\n"
-"1 Quand la notification de fin de tâche de fond est active.\n"
-"2 Toujours."
+"0 jamais.\n"
+"1 quand la notification de fin de tâche de fond est active.\n"
+"2 toujours."
 
 #: src/config/options.c:1427
 msgid "Dump output"
@@ -2082,7 +2081,7 @@ msgid ""
 msgstr ""
 "Labels à afficher dans le dialogue historique global:\n"
 "0 URLs\n"
-"1 Titres des pages"
+"1 titres des pages"
 
 #: src/config/options.c:1465
 msgid "Auto-save interval"
@@ -2358,9 +2357,9 @@ msgid ""
 msgstr ""
 "Type de description à montrer dans le dialogue \"que devons-nous faire avec "
 "ce fichier\"\n"
-"0 Montrer \"mailcap\".\n"
-"1 Montrer le programme à executer.\n"
-"2 Montrer le champ de description mailcap si existent; \"mailcap\" sinon."
+"0 montrer \"mailcap\".\n"
+"1 montrer le programme à éxécuter.\n"
+"2 montrer le champ de description mailcap si existent; \"mailcap\" sinon."
 
 #: src/config/options.c:1619
 msgid "Prioritize entries by file"
@@ -2546,10 +2545,10 @@ msgid ""
 "3 is send previous URL as referer (correct, but insecure)\n"
 msgstr ""
 "Politique d'envoi de référent HTTP:\n"
-"0 Ne pas envoyer de référent\n"
-"1 Envoyer l'URL courante comme référent\n"
-"2 Envoyer un référent fixé\n"
-"3 Envoyer l'URL précédente comme référent (correct, mais risqué)\n"
+"0 ne pas envoyer de référent\n"
+"1 envoyer l'URL courante comme référent\n"
+"2 envoyer un référent fixé\n"
+"3 envoyer l'URL précédente comme référent (correct, mais risqué)\n"
 
 #: src/config/options.c:1717
 msgid "Fake referer URL"
@@ -2616,9 +2615,9 @@ msgid ""
 msgstr ""
 "Changer l'identifiant associé au client.\n"
 "Il s'agit de l'entête UserAgent envoyé aux serveurs:\n"
-"%v dans la chaîne signifie version d'ELinks\n"
-"%s dans la chaîne signifie identifiant du système\n"
-"%t dans la chaîne signifie dimensions du terminal\n"
+"%v dans la chaîne insère la version d'ELinks\n"
+"%s dans la chaîne insère l'identifiant du système\n"
+"%t dans la chaîne insère les dimensions du terminal\n"
 "Utilisez \" \" si vous ne voulez aucun entête User-Agent."
 
 #: src/config/options.c:1752
@@ -2846,7 +2845,7 @@ msgstr ""
 "Type de terminal; concerne seulement les bordures et les cadres:\n"
 "0 ASCII art\n"
 "1 VT100, simple mais portable\n"
-"2 Linux, bordures doubles et plus\n"
+"2 Linux, bordures doubles et autres fonctionnalités\n"
 "3 KOI-8"
 
 #: src/config/options.c:1895
@@ -3450,9 +3449,9 @@ msgid ""
 "2 is count down and show the timer near LEDs"
 msgstr ""
 "Activer le timer:\n"
-"0 Non\n"
-"1 Oui, mais ne pas montrer le timer\n"
-"2 Oui et montrer le timer près des LEDs"
+"0 non\n"
+"1 oui, mais ne pas montrer le timer\n"
+"2 oui et montrer le timer près des LEDs"
 
 #: src/config/options.c:2807
 msgid ""
@@ -3462,9 +3461,9 @@ msgid ""
 "2 is count down and show the timer near LEDs (DISABLED)"
 msgstr ""
 "Activer le timer:\n"
-"0 Non\n"
-"1 Oui, mais ne pas montrer le timer\n"
-"2 Oui et montrer le timer près des LEDs (INACTIF)"
+"0 non\n"
+"1 oui, mais ne pas montrer le timer\n"
+"2 oui et montrer le timer près des LEDs (INACTIF)"
 
 #: src/config/options.c:2813
 msgid "Duration"
@@ -3709,19 +3708,19 @@ msgstr ""
 
 #: src/config/options.c:2956
 msgid "Print usage help and exit"
-msgstr "Afficher l'aide et sortir"
+msgstr "Afficher l'aide et quitter"
 
 #: src/config/options.c:2958
 msgid "Print usage help and exit."
-msgstr "Afficher l'aide et sortir."
+msgstr "Afficher l'aide et quitter."
 
 #: src/config/options.c:2960
 msgid "Print detailed usage help and exit"
-msgstr "Afficher l'aide détaillée et sortir"
+msgstr "Afficher l'aide détaillée et quitter"
 
 #: src/config/options.c:2962
 msgid "Print detailed usage help and exit."
-msgstr "Afficher l'aide détaillée et sortir."
+msgstr "Afficher l'aide détaillée et quitter."
 
 #: src/config/options.c:2964
 msgid "Print help for configuration options"
@@ -3729,19 +3728,19 @@ msgstr "Afficher l'aide pour les options de configuration"
 
 #: src/config/options.c:2966
 msgid "Print help on configuration options and exit."
-msgstr "Afficher l'aide pour les options de configuration et sortir."
+msgstr "Afficher l'aide pour les options de configuration et quitter."
 
 #: src/config/options.c:2968
 msgid "Look up specified host"
-msgstr "Résolution pour le nom d'hôte spécifié"
+msgstr "Résolution du nom de l'hôte spécifié"
 
 #: src/config/options.c:2970
 msgid "Look up specified host."
-msgstr "Résolution pour le nom d'hôte spécifié."
+msgstr "Résolution du nom de l'hôte spécifié."
 
 #: src/config/options.c:2972
 msgid "Run as separate instance"
-msgstr "Exécuter une instance séparée"
+msgstr "Exécuter en tant qu'instance séparée"
 
 #: src/config/options.c:2974
 msgid ""
@@ -3750,7 +3749,7 @@ msgid ""
 "(bookmarks, history and so on) are written to the disk when\n"
 "this option is used. See also -touch-files."
 msgstr ""
-"Exécuter ELinks dans une instance séparée au lieu de se connecter\n"
+"Exécuter ELinks en tant qu'instance séparée au lieu de se connecter\n"
 "à la session en cours. Notez que normalement aucun fichier d'état\n"
 "(signets, historique, ...) n'est modifié quand cette option est\n"
 "utilisée. Voir aussi -touch-files."
@@ -3906,7 +3905,7 @@ msgstr "Alias"
 #. tree
 #: src/config/opttypes.c:455
 msgid "Folder"
-msgstr "Répertoire"
+msgstr "Dossier"
 
 #: src/dialogs/auth.c:35
 msgid "Login"
@@ -4077,7 +4076,8 @@ msgid ""
 "Formatted document cache: %d documents, %d locked."
 msgstr ""
 "Ressources: %d descripteurs, %d timers.\n"
-"Connexions: %d connexions, %d en cours, %d en transfert, %d en maintien.\n"
+"Connexions: %d connexions, %d en établiss., %d en transfert, %d en "
+"maintien.\n"
 "Cache mémoire: %d octets, %d fichiers, %d verrouillés, %d en chargement.\n"
 "Cache documents formatés: %d documents, %d verrouillés."
 
@@ -4114,7 +4114,7 @@ msgstr "Quitter ELinks"
 
 #: src/dialogs/menu.c:143
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr "Interrompre les téléchargements et quitter ELinks ?"
+msgstr "Interrompre les téléchargements en cours et quitter ELinks ?"
 
 #: src/dialogs/menu.c:145
 msgid "Do you really want to exit ELinks?"
@@ -4230,7 +4230,7 @@ msgstr "Chercher le ~précédent"
 
 #: src/dialogs/menu.c:474
 msgid "Toggle ~html/plain"
-msgstr "~Bascule HTML/source"
+msgstr "~Bascule html/source"
 
 #: src/dialogs/menu.c:475
 msgid "Document ~info"
@@ -4765,7 +4765,7 @@ msgstr "Type inconnu"
 #: src/sched/download.c:1248
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou le visualiser?"
+msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher?"
 
 #: src/sched/download.c:1254 src/sched/download.c:1263
 #: src/sched/download.c:1290 src/sched/download.c:1302
@@ -4775,7 +4775,7 @@ msgstr "Afficher"
 #: src/sched/download.c:1259
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr "Voulez-vous visualiser le fichier '%s' (type: %s)?"
+msgstr "Voulez-vous afficher le fichier '%s' (type: %s)?"
 
 #: src/sched/download.c:1281 src/sched/download.c:1294
 msgid "What to do?"
@@ -5314,7 +5314,7 @@ msgstr "Aller au lien"
 
 #: src/viewer/text/view.c:755
 msgid "Enter link number"
-msgstr "Indiquer le numéro du lien"
+msgstr "Entrez le numéro du lien"
 
 #: src/viewer/text/view.c:1481
 msgid "Save error"
@@ -5323,42 +5323,3 @@ msgstr "Erreur d'enregistrement"
 #: src/viewer/text/view.c:1482
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid "Form memory"
-#~ msgstr "Mémorisation de formulaire"
-
-#~ msgid "## This is ELinks configuration file. You can edit it manually,"
-#~ msgstr "## Ceci est le fichier de configuration d'ELinks."
-
-#~ msgid "## if you wish so; this file is edited by ELinks when you save"
-#~ msgstr "## Vous pouvez le modifier manuellement; il est edité par ELinks"
-
-#~ msgid "## options through UI, however only option values will be altered"
-#~ msgstr "## lors de la sauvegarde par l'interface utilisateur, toutefois"
-
-#~ msgid "Display image links"
-#~ msgstr "Afficher les liens images"
-
-#~ msgid "Generic background color"
-#~ msgstr "Couleur du fond"
-
-#~ msgid "Dialog generic background color."
-#~ msgstr "Couleur du fond des dialogues."
-
-#~ msgid "Dialog generic background color"
-#~ msgstr "Couleur générique du fond des dialogues"
-
-#~ msgid ""
-#~ "Whether to enable the timer or not:\n"
-#~ "0 is don't count down anything\n"
-#~ "1 is count down, but don't show the timer\n"
-#~ "2 is count down and show the timer near LEDs (note that this feature is "
-#~ "DISABLED)"
-#~ msgstr ""
-#~ "Activer le timer:\n"
-#~ "0 Non\n"
-#~ "1 Oui, mais ne pas montrer le timer\n"
-#~ "2 Oui et montrer le timer près des LEDs (DESACTIVE)"
-
-#~ msgid "~Tab"
-#~ msgstr "~Onglet"

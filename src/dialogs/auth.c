@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.53 2003/10/24 16:00:07 zas Exp $ */
+/* $Id: auth.c,v 1.54 2003/10/24 16:44:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,6 +124,7 @@ do_auth_dialog(struct session *ses)
 	struct terminal *term = ses->tab->term;
 	struct http_auth_basic *a = get_invalid_auth_entry();
 	unsigned char sticker[MAX_STR_LEN];
+	int n = 0;
 
 	if (!a || a->blocked) return;
 	a->blocked = 1;
@@ -132,41 +133,49 @@ do_auth_dialog(struct session *ses)
 		_("Authentication required for %s at %s", term),
 		a->realm, a->url);
 
-#define DLG_SIZE sizeof(struct dialog) + 5 * sizeof(struct widget)
+#define AUTH_DLG_SIZE 4
+#define SIZEOF_DLG (sizeof(struct dialog) + (AUTH_DLG_SIZE + 1) * sizeof(struct widget))
 
-	dlg = mem_calloc(1, DLG_SIZE + strlen(sticker) + 1);
+	dlg = mem_calloc(1, SIZEOF_DLG + strlen(sticker) + 1);
 	if (!dlg) return;
 
 	dlg->title = _("HTTP Authentication", term);
 	dlg->fn = auth_layout;
 
-	dlg->udata = (char *)dlg + DLG_SIZE;
+	dlg->udata = (char *)dlg + SIZEOF_DLG;
 	strcpy(dlg->udata, sticker);
 
-#undef DLG_SIZE
+#undef SIZEOF_DLG
 
 	dlg->udata2 = a;
 	dlg->refresh_data = ses;
 
-	dlg->items[0].type = D_FIELD;
-	dlg->items[0].dlen = HTTP_AUTH_USER_MAXLEN;
-	dlg->items[0].data = a->user;
+	dlg->items[n].type = D_FIELD;
+	dlg->items[n].dlen = HTTP_AUTH_USER_MAXLEN;
+	dlg->items[n].data = a->user;
+	n++;
 
-	dlg->items[1].type = D_FIELD_PASS;
-	dlg->items[1].dlen = HTTP_AUTH_PASSWORD_MAXLEN;
-	dlg->items[1].data = a->password;
+	dlg->items[n].type = D_FIELD_PASS;
+	dlg->items[n].dlen = HTTP_AUTH_PASSWORD_MAXLEN;
+	dlg->items[n].data = a->password;
+	n++;
 
-	dlg->items[2].type = D_BUTTON;
-	dlg->items[2].gid = B_ENTER;
-	dlg->items[2].fn = auth_ok;
-	dlg->items[2].text = _("OK", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = auth_ok;
+	dlg->items[n].text = _("OK", term);
+	n++;
 
-	dlg->items[3].type = D_BUTTON;
-	dlg->items[3].gid = B_ESC;
-	dlg->items[3].fn = auth_cancel;
-	dlg->items[3].text = _("Cancel", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].fn = auth_cancel;
+	dlg->items[n].text = _("Cancel", term);
+	n++;
 
-	dlg->items[4].type = D_END;
+	assert(n == AUTH_DLG_SIZE);
+
+	dlg->items[n].type = D_END;
+
 	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 	/* When there's some username, but no password, automagically jump at
 	 * the password. */

@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.41 2003/10/24 16:04:50 zas Exp $ */
+/* $Id: edit.c,v 1.42 2003/10/24 16:47:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,6 +110,7 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 
 	unsigned char *name, *url;
 	struct dialog *dlg;
+	int n = 0;
 
 	if (intl) title = _(title, term);
 
@@ -148,33 +149,39 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	dlg->udata = parent;
 	dlg->udata2 = done_data;
 
-	dlg->items[0].type = D_FIELD;
-	dlg->items[0].dlen = MAX_STR_LEN;
-	dlg->items[0].data = name;
-	if (dialog_type == EDIT_DLG_ADD) dlg->items[0].fn = check_nonempty;
+	dlg->items[n].type = D_FIELD;
+	dlg->items[n].dlen = MAX_STR_LEN;
+	dlg->items[n].data = name;
+	if (dialog_type == EDIT_DLG_ADD) dlg->items[n].fn = check_nonempty;
+	n++;
 
-	dlg->items[1].type = D_FIELD;
-	dlg->items[1].dlen = MAX_STR_LEN;
-	dlg->items[1].data = url;
-	/* if (dialog_type == EDIT_DLG_ADD) d->items[1].fn = check_nonempty; */
+	dlg->items[n].type = D_FIELD;
+	dlg->items[n].dlen = MAX_STR_LEN;
+	dlg->items[n].data = url;
+	/* if (dialog_type == EDIT_DLG_ADD) d->items[n].fn = check_nonempty; */
+	n++;
 
-	dlg->items[2].type = D_BUTTON;
-	dlg->items[2].gid = B_ENTER;
-	dlg->items[2].fn = ok_dialog;
-	dlg->items[2].text = _("OK", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = ok_dialog;
+	dlg->items[n].text = _("OK", term);
+	n++;
 
-	dlg->items[3].type = D_BUTTON;
-	dlg->items[3].gid = 0;
-	dlg->items[3].text = _("Clear", term);
-	dlg->items[3].fn = clear_dialog;
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = 0;
+	dlg->items[n].text = _("Clear", term);
+	dlg->items[n].fn = clear_dialog;
+	n++;
 
-	dlg->items[4].type = D_BUTTON;
-	dlg->items[4].gid = B_ESC;
-	dlg->items[4].text = _("Cancel", term);
-	dlg->items[4].data = (void *) when_cancel;
-	dlg ->items[4].fn = when_cancel ? my_cancel_dialog : cancel_dialog;
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].text = _("Cancel", term);
+	dlg->items[n].data = (void *) when_cancel;
+	dlg ->items[n].fn = when_cancel ? my_cancel_dialog : cancel_dialog;
+	n++;
 
-	dlg->items[EDIT_DIALOG_FIELDS_NB].type = D_END;
+	assert(n == EDIT_DIALOG_FIELDS_NB);
+	dlg->items[n].type = D_END;
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 

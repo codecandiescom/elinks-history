@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.70 2004/08/23 17:15:04 jonas Exp $ */
+/* $Id: protocol.c,v 1.71 2004/09/21 19:15:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ static const struct protocol_backend protocol_backends[] = {
 	/* Keep these last! */
 	{ NULL,		   0, NULL,			0, 0, 0, 0 },
 
-	{ "user",	   0, NULL,			0, 0, 1, 0 },
+	{ "user",	   0, NULL,			0, 0, 0, 0 },
 	/* Internal protocol for mapping to protocol.user.* handlers. Placed
 	 * last because it's checked first and else should be ignored. */
 	{ "custom",	   0, NULL,			0, 0, 1, 0 },

@@ -1,9 +1,9 @@
-/* $Id: scripting.h,v 1.9 2003/10/26 13:46:14 jonas Exp $ */
+/* $Id: scripting.h,v 1.10 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifndef EL__SCRIPTING_SCRIPTING_H
 #define EL__SCRIPTING_SCRIPTING_H
 
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 
 #include "modules/module.h"
 

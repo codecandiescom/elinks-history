@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.30 2004/04/29 23:22:14 jonas Exp $ */
+/* $Id: module.c,v 1.31 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ struct module *builtin_modules[] = {
 #ifdef CONFIG_URI_REWRITE
 	&uri_rewrite_module,
 #endif
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 	&scripting_module,
 #endif
 	NULL

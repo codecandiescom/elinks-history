@@ -1,11 +1,11 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.10 2004/03/02 17:06:15 witekfl Exp $ */
+/* $Id: scripting.c,v 1.11 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 
 #include "elinks.h"
 
@@ -22,13 +22,13 @@
 #include "scripting/perl/core.h"
 
 static struct module *scripting_modules[] = {
-#ifdef HAVE_LUA
+#ifdef CONFIG_LUA
 	&lua_scripting_module,
 #endif
-#ifdef HAVE_GUILE
+#ifdef CONFIG_GUILE
 	&guile_scripting_module,
 #endif
-#ifdef HAVE_PERL
+#ifdef CONFIG_PERL
 	&perl_scripting_module,
 #endif
 	NULL,

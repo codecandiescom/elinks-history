@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.61 2004/04/25 17:32:44 zas Exp $ */
+/* $Id: action.c,v 1.62 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,7 +282,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LUA_CONSOLE:
-#ifdef HAVE_LUA
+#ifdef CONFIG_LUA
 			trigger_event_name("dialog-lua-console", ses);
 #endif
 			break;

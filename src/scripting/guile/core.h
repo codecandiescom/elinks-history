@@ -1,9 +1,9 @@
-/* $Id: core.h,v 1.4 2003/10/26 14:02:35 jonas Exp $ */
+/* $Id: core.h,v 1.5 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifndef EL__SCRIPTING_GUILE_CORE_H
 #define EL__SCRIPTING_GUILE_CORE_H
 
-#ifdef HAVE_GUILE
+#ifdef CONFIG_GUILE
 
 #include "modules/module.h"
 

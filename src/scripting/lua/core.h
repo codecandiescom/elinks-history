@@ -1,9 +1,9 @@
-/* $Id: core.h,v 1.13 2003/12/20 22:42:54 pasky Exp $ */
+/* $Id: core.h,v 1.14 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_CORE_H
 #define EL__SCRIPTING_LUA_CORE_H
 
-#ifdef HAVE_LUA
+#ifdef CONFIG_LUA
 
 #include <lua.h>	/* This is standard include. */
 #ifdef HAVE_LAUXLIB_H

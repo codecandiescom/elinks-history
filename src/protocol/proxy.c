@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.14 2004/04/16 16:34:44 zas Exp $ */
+/* $Id: proxy.c,v 1.15 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,7 +121,7 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 struct uri *
 get_proxy(struct uri *uri)
 {
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 	unsigned char *tmp = NULL;
 	static int get_proxy_event_id = EVENT_NONE;
 

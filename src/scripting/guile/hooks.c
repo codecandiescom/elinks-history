@@ -1,11 +1,11 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.24 2003/12/21 06:54:11 miciah Exp $ */
+/* $Id: hooks.c,v 1.25 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_GUILE
+#ifdef CONFIG_GUILE
 
 #include <libguile.h>
 
@@ -194,4 +194,4 @@ struct event_hook_info guile_scripting_hooks[] = {
 	NULL_EVENT_HOOK_INFO,
 };
 
-#endif /* HAVE_GUILE */
+#endif /* CONFIG_GUILE */

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.108 2004/02/26 16:12:35 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.109 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -231,7 +231,7 @@ int bind_do(unsigned char *, unsigned char *, unsigned char *);
 unsigned char *bind_act(unsigned char *, unsigned char *);
 void bind_config_string(struct string *);
 
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 unsigned char *bind_scripting_func(unsigned char *, unsigned char *, int);
 #endif
 

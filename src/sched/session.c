@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.391 2004/04/24 11:41:25 jonas Exp $ */
+/* $Id: session.c,v 1.392 2004/04/29 23:32:18 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -332,7 +332,7 @@ add_questions_entry(void (*callback)(struct session *, void *), void *data)
 	add_to_list(questions_queue, q);
 }
 
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 static void
 maybe_pre_format_html(struct cache_entry *cached, struct session *ses)
 {
@@ -371,7 +371,7 @@ doc_end_load(struct download *stat, struct session *ses)
 	int submit = 0;
 
 	if (is_in_result_state(stat->state)) {
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 		maybe_pre_format_html(stat->cached, ses);
 #endif
 		if (ses->display_timer != -1) {

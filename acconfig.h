@@ -7,16 +7,16 @@
 #undef HAVE_PTHREADS
 
 /* Define to 1 if we should use scripting */
-#undef HAVE_SCRIPTING
+#undef CONFIG_SCRIPTING
 
 /* Define to 1 if we should use Guile */
-#undef HAVE_GUILE
+#undef CONFIG_GUILE
 
 /* Define to 1 if we should use Perl */
-#undef HAVE_PERL
+#undef CONFIG_PERL
 
 /* Define to 1 if we should use Lua */
-#undef HAVE_LUA
+#undef CONFIG_LUA
 
 /* Define to 1 if we should use SSL */
 #undef CONFIG_SSL

@@ -1,11 +1,11 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.8 2004/04/26 12:51:29 zas Exp $ */
+/* $Id: hooks.c,v 1.9 2004/04/29 23:32:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_PERL
+#ifdef CONFIG_PERL
 
 #include "elinks.h"
 

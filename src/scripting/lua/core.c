@@ -1,11 +1,11 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.152 2004/04/23 19:20:18 pasky Exp $ */
+/* $Id: core.c,v 1.153 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_LUA
+#ifdef CONFIG_LUA
 
 #include <setjmp.h>
 #include <signal.h>

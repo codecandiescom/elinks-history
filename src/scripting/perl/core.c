@@ -1,11 +1,11 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.9 2004/04/24 00:32:04 pasky Exp $ */
+/* $Id: core.c,v 1.10 2004/04/29 23:32:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_PERL
+#ifdef CONFIG_PERL
 
 #include <stdio.h>
 #include <stdlib.h>

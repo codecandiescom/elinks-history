@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.204 2004/04/29 23:02:41 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.205 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,7 +130,7 @@ free_keybinding(struct keybinding *kb)
 		kb->box_item = NULL;
 	}
 
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 /* TODO: unref function must be implemented. */
 /*	if (kb->func_ref != EVENT_NONE)
 		scripting_unref(kb->func_ref); */
@@ -490,7 +490,7 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "kill-backgrounded-connections", ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS, DACT(N_("Kill all backgrounded connections")) },
 	{ "left", ACT_MAIN_LEFT,DACT( N_("Move the cursor left")) },
 	{ "link-menu", ACT_MAIN_LINK_MENU, DACT(N_("Open the link context menu")) },
-#ifdef HAVE_LUA
+#ifdef CONFIG_LUA
 	{ "lua-console", ACT_MAIN_LUA_CONSOLE, DACT(N_("Open a Lua console")) },
 #else
 	{ "lua-console", ACT_MAIN_LUA_CONSOLE, DACT(N_("Open a Lua console (DISABLED)")) },
@@ -732,7 +732,7 @@ toggle_display_action_listboxes(void)
  * Bind to Lua function.
  */
 
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 unsigned char *
 bind_scripting_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
 {

@@ -1,9 +1,9 @@
-/* $Id: hooks.h,v 1.4 2003/10/26 13:13:42 jonas Exp $ */
+/* $Id: hooks.h,v 1.5 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifndef EL__SCRIPTING_GUILE_HOOKS_H
 #define EL__SCRIPTING_GUILE_HOOKS_H
 
-#ifdef HAVE_GUILE
+#ifdef CONFIG_GUILE
 
 #include "sched/event.h"
 

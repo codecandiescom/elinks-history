@@ -393,8 +393,8 @@ if test "$enable_guile" = "yes"; then
 		LIBS="$GUILE_LIBS $LIBS"
 		CFLAGS="$CFLAGS $GUILE_CFLAGS"
 		CPPFLAGS="$CPPFLAGS $GUILE_CFLAGS"
-		AC_DEFINE(HAVE_GUILE)
-		AC_DEFINE(HAVE_SCRIPTING)
+		AC_DEFINE(CONFIG_GUILE)
+		AC_DEFINE(CONFIG_SCRIPTING)
 		cat <<EOF
 ***********************************************************************
 The Guile support is incomplete and not so well integrated to ELinks
@@ -450,8 +450,8 @@ fi
 if test "$cf_result" != "yes"; then
 	EL_RESTORE_FLAGS
 else
-	AC_DEFINE(HAVE_PERL)
-	AC_DEFINE(HAVE_SCRIPTING)
+	AC_DEFINE(CONFIG_PERL)
+	AC_DEFINE(CONFIG_SCRIPTING)
 fi
 
 AC_SUBST(PERL_LIBS)
@@ -517,8 +517,8 @@ AC_MSG_RESULT($cf_result)
 if test "$cf_result" != yes; then
 	EL_RESTORE_FLAGS
 else
-	AC_DEFINE(HAVE_LUA)
-	AC_DEFINE(HAVE_SCRIPTING)
+	AC_DEFINE(CONFIG_LUA)
+	AC_DEFINE(CONFIG_SCRIPTING)
 	AC_CHECK_HEADERS(lauxlib.h)
 	AC_CHECK_FUNCS(lua_pcall)
 fi

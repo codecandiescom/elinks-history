@@ -1,9 +1,9 @@
-/* $Id: core.h,v 1.2 2004/04/23 15:51:39 pasky Exp $ */
+/* $Id: core.h,v 1.3 2004/04/29 23:32:19 jonas Exp $ */
 
 #ifndef EL__SCRIPTING_PERL_CORE_H
 #define EL__SCRIPTING_PERL_CORE_H
 
-#ifdef HAVE_PERL
+#ifdef CONFIG_PERL
 
 #include <EXTERN.h>
 #include <perl.h>

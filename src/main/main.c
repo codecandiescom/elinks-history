@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.205 2004/04/23 23:56:32 jonas Exp $ */
+/* $Id: main.c,v 1.206 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ terminate_all_subsystems(void)
 	abort_all_connections();
 
 	if (init_b) {
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 		trigger_event_name("quit");
 #endif
 		save_url_history();

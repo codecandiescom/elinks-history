@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.402 2004/04/23 20:44:30 pasky Exp $ */
+/* $Id: view.c,v 1.403 2004/04/29 23:32:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -900,7 +900,7 @@ quit:
 
 		switch (action) {
 			case ACT_MAIN_SCRIPTING_FUNCTION:
-#ifdef HAVE_SCRIPTING
+#ifdef CONFIG_SCRIPTING
 				trigger_event(func_ref, ses);
 #endif
 				break;

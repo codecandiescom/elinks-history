@@ -1,11 +1,11 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.49 2004/04/01 14:56:09 jonas Exp $ */
+/* $Id: hooks.c,v 1.50 2004/04/29 23:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_LUA
+#ifdef CONFIG_LUA
 
 #include "elinks.h"
 

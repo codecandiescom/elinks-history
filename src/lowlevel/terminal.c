@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.4 2002/03/21 18:34:13 pasky Exp $ */
+/* $Id: terminal.c,v 1.5 2002/04/01 15:25:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,12 +24,19 @@
 #include <lowlevel/terminal.h>
 #include <util/error.h>
 
-int hard_write(int fd, unsigned char *p, int l)
+
+/* TODO: We must use termcap/terminfo if available! --pasky */
+
+/* hard_write() */
+int
+hard_write(int fd, unsigned char *p, int l)
 {
 	int w = 1;
 	int t = 0;
+
 	while (l > 0 && w) {
-		if ((w = write(fd, p, l)) < 0) {
+		w = write(fd, p, l);
+		if (w < 0) {
 			if (errno == EINTR) continue;
 			return -1;
 		}
@@ -37,97 +44,135 @@ int hard_write(int fd, unsigned char *p, int l)
 		p += w;
 		l -= w;
 	}
+
 	return t;
 }
 
+/* hard_read() */
 int hard_read(int fd, unsigned char *p, int l)
 {
 	int r = 1;
 	int t = 0;
+
 	while (l > 0 && r) {
-		if ((r = read(fd, p, l)) < 0) {
+		r = read(fd, p, l);
+		if (r < 0) {
 			if (errno == EINTR) continue;
 			return -1;
 		}
-		/*{int ww;for(ww=0;ww<r;ww++)fprintf(stderr," %02x",(int)p[ww]);fflush(stderr);}*/
-		t += r;
+#if 0
+		{
+		 int ww;
+
+		 for (ww = 0; ww < r; ww++)
+			 fprintf(stderr, " %02x", (int) p[ww]);
+		 fflush(stderr);
+		}
+#endif
+	 	t += r;
 		p += r;
 		l -= r;
 	}
+
 	return t;
 }
 
+
+/* get_cwd() */
 unsigned char *get_cwd()
 {
 	int bufsize = 128;
 	unsigned char *buf;
+
 	while (1) {
-		if (!(buf = mem_alloc(bufsize))) return NULL;
+		buf = mem_alloc(bufsize);
+		if (!buf) return NULL;
 		if (getcwd(buf, bufsize)) return buf;
 		mem_free(buf);
+
 		if (errno == EINTR) continue;
 		if (errno != ERANGE) return NULL;
 		bufsize += 128;
 	}
+
 	return NULL;
 }
 
+/* set_cwd() */
 void set_cwd(unsigned char *path)
 {
 	if (path) while (chdir(path) && errno == EINTR);
 }
 
+
 struct list_head terminals = {&terminals, &terminals};
 
+
+/* alloc_term_screen() */
 void alloc_term_screen(struct terminal *term, int x, int y)
 {
-	unsigned *s, *t;
-	if ((s = mem_realloc(term->screen, x * y * sizeof(unsigned)))) {
-		if ((t = mem_realloc(term->last_screen, x * y * sizeof(unsigned)))) {
-			memset(t, -1, x * y * sizeof(unsigned));
-			term->x = x;
-			term->y = y;
-			term->last_screen = t;
-			memset(s, 0, x * y * sizeof(unsigned));
-			term->screen = s;
-			term->dirty = 1;
-		}
-	}
+	unsigned *s;
+	unsigned *t;
+	int space = x * y * sizeof(unsigned);
+
+	s = mem_realloc(term->screen, space);
+	if (!s) return;
+	t = mem_realloc(term->last_screen, space);
+	if (!t) return;
+
+	memset(t, -1, space);
+	term->x = x;
+	term->y = y;
+	term->last_screen = t;
+	memset(s, 0, space);
+	term->screen = s;
+	term->dirty = 1;
 }
+
 
 void in_term(struct terminal *);
 void destroy_terminal(struct terminal *);
 void check_if_no_terminal();
 
+
+/* clear_terminal() */
 void clear_terminal(struct terminal *term)
 {
 	fill_area(term, 0, 0, term->x, term->y, ' ');
 	set_cursor(term, 0, 0, 0, 0);
 }
 
+/* redraw_terminal_ev() */
 void redraw_terminal_ev(struct terminal *term, int e)
 {
 	struct window *win;
 	struct event ev = {0, 0, 0, 0};
+
 	ev.ev = e;
 	ev.x = term->x;
 	ev.y = term->y;
 	clear_terminal(term);
 	term->redrawing = 2;
-	foreachback(win, term->windows) win->handler(win, &ev, 0);
+
+	foreachback(win, term->windows)
+		win->handler(win, &ev, 0);
+
 	term->redrawing = 0;
 }
 
+/* redraw_terminal() */
 void redraw_terminal(struct terminal *term)
 {
 	redraw_terminal_ev(term, EV_REDRAW);
 }
 
+/* redraw_terminal_all() */
 void redraw_terminal_all(struct terminal *term)
 {
 	redraw_terminal_ev(term, EV_RESIZE);
 }
 
+/* erase_screen() */
 void erase_screen(struct terminal *term)
 {
 	if (!term->master || !is_blocked()) {
@@ -137,6 +182,7 @@ void erase_screen(struct terminal *term)
 	}
 }
 
+/* redraw_terminal_cls() */
 void redraw_terminal_cls(struct terminal *term)
 {
 	erase_screen(term);
@@ -144,20 +190,26 @@ void redraw_terminal_cls(struct terminal *term)
 	redraw_terminal_all(term);
 }
 
+/* cls_redraw_all_terminals() */
 void cls_redraw_all_terminals()
 {
 	struct terminal *term;
-	foreach(term, terminals) redraw_terminal_cls(term);
+
+	foreach(term, terminals)
+		redraw_terminal_cls(term);
 }
 
+/* redraw_from_window() */
 void redraw_from_window(struct window *win)
 {
 	struct terminal *term = win->term;
 	struct window *end = (void *)&term->windows;
 	struct event ev = {EV_REDRAW, 0, 0, 0};
+
 	ev.x = term->x;
 	ev.y = term->y;
 	if (term->redrawing) return;
+
 	term->redrawing = 1;
 	for (win = win->prev; win != end; win = win->prev) {
 		win->handler(win, &ev, 0);
@@ -165,12 +217,14 @@ void redraw_from_window(struct window *win)
 	term->redrawing = 0;
 }
 
+/* redraw_below_window() */
 void redraw_below_window(struct window *win)
 {
 	int tr;
 	struct terminal *term = win->term;
 	struct window *end = win;
 	struct event ev = {EV_REDRAW, 0, 0, 0};
+
 	ev.x = term->x;
 	ev.y = term->y;
 	if (term->redrawing >= 2) return;
@@ -182,16 +236,23 @@ void redraw_below_window(struct window *win)
 	term->redrawing = tr;
 }
 
-void add_window_at_pos(struct terminal *term, void (*handler)(struct window *, struct event *, int), void *data, struct window *at)
+/* add_window_at_pos() */
+void add_window_at_pos(struct terminal *term,
+		       void (*handler)(struct window *, struct event *, int),
+		       void *data, struct window *at)
 {
 	struct event ev = {EV_INIT, 0, 0, 0};
 	struct window *win;
+
 	ev.x = term->x;
 	ev.y = term->y;
-	if (!(win = mem_alloc(sizeof (struct window)))) {
+
+	win = mem_alloc(sizeof (struct window));
+	if (!win) {
 		mem_free(data);
 		return;
 	}
+
 	win->handler = handler;
 	win->data = data;
 	win->term = term;
@@ -200,14 +261,20 @@ void add_window_at_pos(struct terminal *term, void (*handler)(struct window *, s
 	win->handler(win, &ev, 0);
 }
 
-void add_window(struct terminal *term, void (*handler)(struct window *, struct event *, int), void *data)
+/* add_window() */
+void add_window(struct terminal *term,
+		void (*handler)(struct window *, struct event *, int),
+		void *data)
 {
-	add_window_at_pos(term, handler, data, (struct window *)&term->windows);
+	add_window_at_pos(term, handler, data,
+			  (struct window *) &term->windows);
 }
 
+/* delete_window() */
 void delete_window(struct window *win)
 {
 	struct event ev = {EV_ABORT, 0, 0, 0};
+
 	win->handler(win, &ev, 1);
 	del_from_list(win);
 	if (win->data) mem_free(win->data);
@@ -215,38 +282,46 @@ void delete_window(struct window *win)
 	mem_free(win);
 }
 
+/* delete_window_ev() */
 void delete_window_ev(struct window *win, struct event *ev)
 {
 	struct window *w = win->next;
+
 	if ((void *)w == &win->term->windows) w = NULL;
 	delete_window(win);
 	if (ev && w && w->next != w) w->handler(w, ev, 1);
 }
 
+/* set_window_ptr() */
 void set_window_ptr(struct window *win, int x, int y)
 {
 	win->xp = x;
 	win->yp = y;
 }
 
+/* get_parent_ptr() */
 void get_parent_ptr(struct window *win, int *x, int *y)
 {
 	if ((void *)win->next != &win->term->windows) {
 		*x = win->next->xp;
 		*y = win->next->yp;
 	} else {
-		*x = *y = 0;
+		*x = 0;
+		*y = 0;
 	}
 }
 
+/* get_root_window() */
 struct window *get_root_window(struct terminal *term)
 {
 	if (list_empty(term->windows)) {
 		internal("terminal has no windows");
 		return NULL;
 	}
+
 	return (struct window *)term->windows.prev;
 }
+
 
 struct ewd {
 	void (*fn)(void *);
@@ -254,6 +329,8 @@ struct ewd {
 	int b;
 };
 
+
+/* empty_window_handler() */
 void empty_window_handler(struct window *win, struct event *ev, int fwd)
 {
 	struct window *n;
@@ -261,7 +338,9 @@ void empty_window_handler(struct window *win, struct event *ev, int fwd)
 	int x, y;
 	void (*fn)(void *) = ewd->fn;
 	void *data = ewd->data;
+
 	if (ewd->b) return;
+
 	switch (ev->ev) {
 		case EV_INIT:
 		case EV_RESIZE:
@@ -277,6 +356,7 @@ void empty_window_handler(struct window *win, struct event *ev, int fwd)
 			/* Silence compiler warnings */
 			break;
 	}
+
 	ewd->b = 1;
 	n = win->next;
 	delete_window(win);
@@ -284,67 +364,103 @@ void empty_window_handler(struct window *win, struct event *ev, int fwd)
 	if (n->next != n) n->handler(n, ev, fwd);
 }
 
+/* add_empty_window() */
 void add_empty_window(struct terminal *term, void (*fn)(void *), void *data)
 {
-	struct ewd *ewd;
-	if (!(ewd = mem_alloc(sizeof(struct ewd)))) return;
+	struct ewd *ewd = mem_alloc(sizeof(struct ewd));
+
+	if (!ewd) return;
 	ewd->fn = fn;
 	ewd->data = data;
 	ewd->b = 0;
 	add_window(term, empty_window_handler, ewd);
 }
 
+/* free_term_specs() */
 void free_term_specs()
 {
 	free_list(term_specs);
 }
 
-struct list_head term_specs = {&term_specs, &term_specs};
 
+
+
+struct list_head term_specs = {&term_specs, &term_specs};
 struct term_spec dumb_term = { NULL, NULL, "", 0, 0, 0, 0, 0 };
 
+
+/* get_term_spec() */
 struct term_spec *get_term_spec(unsigned char *term)
 {
 	struct term_spec *t;
-	foreach(t, term_specs) if (!strcasecmp(t->term, term)) return t;
+
+	foreach(t, term_specs)
+		if (!strcasecmp(t->term, term))
+			return t;
+
 	return &dumb_term;
 }
 
+/* new_term_spec() */
 struct term_spec *new_term_spec(unsigned char *term)
 {
 	struct term_spec *t;
-	foreach(t, term_specs) if (!strcasecmp(t->term, term)) return t;
-	if (!(t = mem_alloc(sizeof(struct term_spec)))) return NULL;
+
+	foreach(t, term_specs)
+		if (!strcasecmp(t->term, term))
+			return t;
+
+	t = mem_alloc(sizeof(struct term_spec));
+	if (!t) return NULL;
 	memcpy(t, &dumb_term, sizeof(struct term_spec));
-	if (strlen(term) < MAX_TERM_LEN) strcpy(t->term, term);
-	else memcpy(t->term, term, MAX_TERM_LEN - 1), t->term[MAX_TERM_LEN - 1] = 0;
+
+	if (strlen(term) < MAX_TERM_LEN) {
+		strcpy(t->term, term);
+	} else {
+		memcpy(t->term, term, MAX_TERM_LEN - 1);
+		t->term[MAX_TERM_LEN - 1] = 0;
+	}
+
 	add_to_list(term_specs, t);
 	sync_term_specs();
+
 	return t;
 }
 
+/* sync_term_specs() */
 void sync_term_specs()
 {
 	struct terminal *term;
-	foreach (term, terminals) term->spec = get_term_spec(term->term);
+
+	foreach (term, terminals)
+		term->spec = get_term_spec(term->term);
 }
 
-struct terminal *init_term(int fdin, int fdout, void (*root_window)(struct window *, struct event *, int))
+
+
+/* init_term() */
+struct terminal *init_term(int fdin, int fdout,
+			   void (*root_window)(struct window *, struct event *,
+					       int))
 {
-	struct terminal *term;
 	struct window *win;
-	if (!(term = mem_alloc(sizeof (struct terminal)))) {
+	struct terminal *term = mem_alloc(sizeof (struct terminal));
+
+	if (!term) {
 		check_if_no_terminal();
 		return NULL;
 	}
 	memset(term, 0, sizeof(struct terminal));
+
 	term->fdin = fdin;
 	term->fdout = fdout;
 	term->master = term->fdout == get_output_handle();
-	/*term->x = 0;
+#if 0
+	term->x = 0;
 	term->y = 0;
 	term->cx = 0;
-	term->cy = 0;*/
+	term->cy = 0;
+#endif
 	term->lcx = -1;
 	term->lcy = -1;
 	term->dirty = 1;
@@ -357,99 +473,144 @@ struct terminal *init_term(int fdin, int fdout, void (*root_window)(struct windo
 	term->cwd[0] = 0;
 	term->input_queue = DUMMY;
 	term->qlen = 0;
+
 	init_list(term->windows);
-	if (!(win = mem_alloc(sizeof (struct window)))) {
+
+	win = mem_alloc(sizeof (struct window));
+	if (!win) {
 		mem_free(term);
 		check_if_no_terminal();
 		return NULL;
 	}
+
 	win->handler = root_window;
 	win->data = NULL;
 	win->term = term;
+
 	add_to_list(term->windows, win);
 	/*alloc_term_screen(term, 80, 25);*/
 	add_to_list(terminals, term);
-	set_handlers(fdin, (void (*)(void *))in_term, NULL, (void (*)(void *))destroy_terminal, term);
+
+	set_handlers(fdin, (void (*)(void *)) in_term, NULL,
+		     (void (*)(void *)) destroy_terminal, term);
 	return term;
 }
 
+
+/* in_term() */
 void in_term(struct terminal *term)
 {
 	struct event *ev;
 	int r;
 	unsigned char *iq;
-	if (!(iq = mem_realloc(term->input_queue, term->qlen + ALLOC_GR))) {
+
+	iq = mem_realloc(term->input_queue, term->qlen + ALLOC_GR);
+	if (!iq) {
 		destroy_terminal(term);
 		return;
 	}
 	term->input_queue = iq;
-	if ((r = read(term->fdin, iq + term->qlen, ALLOC_GR)) <= 0) {
-		if (r == -1 && errno != ECONNRESET) error("ERROR: error %d on terminal: could not read event", errno);
+
+	r = read(term->fdin, iq + term->qlen, ALLOC_GR);
+	if (r <= 0) {
+		if (r == -1 && errno != ECONNRESET)
+			error("ERROR: error %d on terminal: could not read event", errno);
 		destroy_terminal(term);
 		return;
 	}
 	term->qlen += r;
-	test_queue:
+
+test_queue:
 	if (term->qlen < sizeof(struct event)) return;
 	ev = (struct event *)iq;
 	r = sizeof(struct event);
-	if (ev->ev != EV_INIT && ev->ev != EV_RESIZE && ev->ev != EV_REDRAW && ev->ev != EV_KBD && ev->ev != EV_MOUSE && ev->ev != EV_ABORT) {
+
+	if (ev->ev != EV_INIT
+	    && ev->ev != EV_RESIZE
+	    && ev->ev != EV_REDRAW
+	    && ev->ev != EV_KBD
+	    && ev->ev != EV_MOUSE
+	    && ev->ev != EV_ABORT) {
 		error("ERROR: error on terminal: bad event %d", ev->ev);
 		goto mm;
 	}
+
 	if (ev->ev == EV_INIT) {
 		int init_len;
-		if (term->qlen < sizeof(struct event) + MAX_TERM_LEN + MAX_CWD_LEN + 2 * sizeof(int)) return;
-		init_len = *(int *)(iq + sizeof(struct event) + MAX_TERM_LEN + MAX_CWD_LEN + sizeof(int));
-		if (term->qlen < sizeof(struct event) + MAX_TERM_LEN + MAX_CWD_LEN + 2 * sizeof(int) + init_len) return;
+		int evterm_len = sizeof(struct event) + MAX_TERM_LEN;
+		int evtermcwd_len = evterm_len + MAX_CWD_LEN;
+		int evtermcwd1int_len = evtermcwd_len + sizeof(int);
+		int evtermcwd2int_len = evtermcwd1int_len + sizeof(int);
+
+		if (term->qlen < evtermcwd2int_len) return;
+		init_len = *(int *)(iq + evtermcwd1int_len);
+
+		if (term->qlen < evtermcwd2int_len + init_len) return;
+
 		memcpy(term->term, iq + sizeof(struct event), MAX_TERM_LEN);
 		term->term[MAX_TERM_LEN - 1] = 0;
-		memcpy(term->cwd, iq + sizeof(struct event) + MAX_TERM_LEN, MAX_CWD_LEN);
+
+		memcpy(term->cwd, iq + evterm_len, MAX_CWD_LEN);
 		term->cwd[MAX_CWD_LEN - 1] = 0;
-		term->environment = *(int *)(iq + sizeof(struct event) + MAX_TERM_LEN + MAX_CWD_LEN);
-		ev->b = (long)(iq + sizeof(struct event) + MAX_TERM_LEN + MAX_CWD_LEN + sizeof(int));
-		r = sizeof(struct event) + MAX_TERM_LEN + MAX_CWD_LEN + 2 * sizeof(int) + init_len;
+
+		term->environment = *(int *)(iq + evtermcwd_len);
+		ev->b = (long)(iq + evtermcwd1int_len);
+		r = evtermcwd2int_len + init_len;
 		sync_term_specs();
 	}
+
 	if (ev->ev == EV_REDRAW || ev->ev == EV_RESIZE || ev->ev == EV_INIT) {
 		struct window *win;
-		send_redraw:
+
+send_redraw:
 		if (ev->x < 0 || ev->y < 0) {
-			error("ERROR: bad terminal size: %d, %d", (int)ev->x, (int)ev->y);
+			error("ERROR: bad terminal size: %d, %d",
+			      (int) ev->x, (int) ev->y);
 			goto mm;
 		}
+
 		alloc_term_screen(term, ev->x, ev->y);
 		clear_terminal(term);
 		erase_screen(term);
 		term->redrawing = 1;
-		foreachback(win, term->windows) win->handler(win, ev, 0);
+		foreachback(win, term->windows)
+			win->handler(win, ev, 0);
 		term->redrawing = 0;
 	}
+
 	if (ev->ev == EV_KBD || ev->ev == EV_MOUSE) {
-		if (ev->ev == EV_KBD && upcase(ev->x) == 'L' && ev->y == KBD_CTRL) {
+		if (ev->ev == EV_KBD && upcase(ev->x) == 'L'
+		    && ev->y == KBD_CTRL) {
 			ev->ev = EV_REDRAW;
 			ev->x = term->x;
 			ev->y = term->y;
 			goto send_redraw;
 		}
-		else if (ev->ev == EV_KBD && ev->x == KBD_CTRL_C) ((struct window *)&term->windows)->prev->handler(term->windows.prev, ev, 0);
+		else if (ev->ev == EV_KBD && ev->x == KBD_CTRL_C)
+			((struct window *) &term->windows)->prev->handler(term->windows.prev, ev, 0);
 		else ((struct window *)&term->windows)->next->handler(term->windows.next, ev, 0);
 	}
+
 	if (ev->ev == EV_ABORT) destroy_terminal(term);
-	/*redraw_screen(term);*/
-	mm:
+	/* redraw_screen(term); */
+mm:
 	if (term->qlen == r) term->qlen = 0;
 	else memmove(iq, iq + r, term->qlen -= r);
+
 	goto test_queue;
 }
 
+
+/* getcompcode() */
 inline int getcompcode(int c)
 {
 	return (c<<1 | (c&4)>>2) & 7;
 }
 
+
 unsigned char frame_dumb[48] =	"   ||||++||++++++--|-+||++--|-+----++++++++     ";
 unsigned char frame_vt100[48] =	"aaaxuuukkuxkjjjkmvwtqnttmlvwtqnvvwwmmllnnjla    ";
+
 unsigned char frame_koi[48] = {
 	144,145,146,129,135,178,180,167,
 	166,181,161,168,174,173,172,131,
@@ -458,6 +619,7 @@ unsigned char frame_koi[48] = {
 	186,182,183,170,169,162,164,189,
 	188,133,130,141,140,142,143,139,
 };
+
 unsigned char frame_restrict[48] = {
 	0, 0, 0, 0, 0, 179, 186, 186,
 	205, 0, 0, 0, 0, 186, 205, 0,
@@ -467,58 +629,77 @@ unsigned char frame_restrict[48] = {
 	179, 0, 0, 0, 0, 0, 0, 0,
 };
 
-#define PRINT_CHAR(p)									\
-{											\
-	unsigned ch = term->screen[p];							\
-	unsigned char c = ch & 0xff;							\
-	unsigned char A = ch >> 8 & 0x7f;						\
-	if (s->mode == TERM_LINUX) {							\
-		if (s->m11_hack) {							\
-			if (ch >> 15 != mode) {						\
-				if (!(mode = ch >> 15)) add_to_str(&a, &l, "\033[10m");	\
-				else add_to_str(&a, &l, "\033[11m");			\
-			}								\
-		}									\
-		if (s->restrict_852 && (ch >> 15) && c >= 176 && c < 224) {		\
-			if (frame_restrict[c - 176]) c = frame_restrict[c - 176];	\
-		}									\
-	} else if (s->mode == TERM_VT100) {						\
-		if (ch >> 15 != mode) {							\
-			if (!(mode = ch >> 15)) add_to_str(&a, &l, "\x0f");		\
-			else add_to_str(&a, &l, "\x0e");				\
-		}									\
-		if (mode && c >= 176 && c < 224) c = frame_vt100[c - 176];		\
-	} else if (s->mode == TERM_KOI8 && (ch >> 15) && c >= 176 && c < 224) { c = frame_koi[c - 176];\
-	} else if (s->mode == TERM_DUMB && (ch >> 15) && c >= 176 && c < 224) c = frame_dumb[c - 176];\
-	if (!(A & 0100) && (A >> 3) == (A & 7)) A = (A & 070) | 7 * !(A & 020);		\
-	if (A != attrib) {								\
-		attrib = A;								\
-		add_to_str(&a, &l, "\033[0");						\
-		if (s->col) {								\
-			unsigned char m[4];						\
-			m[0] = ';'; m[1] = '3'; m[3] = 0;				\
-			m[2] = (attrib & 7) + '0';					\
-			add_to_str(&a, &l, m);						\
-			m[1] = '4';							\
-			m[2] = (attrib >> 3 & 7) + '0';					\
-			add_to_str(&a, &l, m);						\
-		} else if (getcompcode(attrib & 7) < getcompcode(attrib >> 3 & 7))	\
-			add_to_str(&a, &l, ";7");					\
-		if (attrib & 0100) add_to_str(&a, &l, ";1");				\
-		add_to_str(&a, &l, "m");						\
-	}										\
-	if (c >= ' ' && c != 127/* && c != 155*/) add_chr_to_str(&a, &l, c);		\
-	else if (!c || c == 1) add_chr_to_str(&a, &l, ' ');				\
-	else add_chr_to_str(&a, &l, '.');						\
-	cx++;										\
-}											\
 
+#define PRINT_CHAR(p)								\
+{										\
+	unsigned ch = term->screen[p];						\
+	unsigned char c = ch & 0xff;						\
+	unsigned char A = ch >> 8 & 0x7f;					\
+										\
+	if (s->mode == TERM_LINUX) {						\
+		if (s->m11_hack) {						\
+			if (ch >> 15 != mode) {					\
+				mode = ch >> 15;				\
+				if (!mode) add_to_str(&a, &l, "\033[10m");	\
+				else add_to_str(&a, &l, "\033[11m");		\
+			}							\
+		}								\
+		if (s->restrict_852) {						\
+			if ((ch >> 15) && c >= 176 && c < 224) {		\
+				if (frame_restrict[c - 176])			\
+					c = frame_restrict[c - 176];		\
+			}							\
+		}								\
+	} else if (s->mode == TERM_VT100) {					\
+		if (ch >> 15 != mode) {						\
+			mode = ch >> 15;					\
+			if (!mode) add_to_str(&a, &l, "\x0f");			\
+			else add_to_str(&a, &l, "\x0e");			\
+		}								\
+		if (mode && c >= 176 && c < 224) c = frame_vt100[c - 176];	\
+	} else if (s->mode == TERM_KOI8 && (ch >> 15) && c >= 176 && c < 224) { \
+		c = frame_koi[c - 176];						\
+	} else if (s->mode == TERM_DUMB && (ch >> 15) && c >= 176 && c < 224)	\
+		c = frame_dumb[c - 176];					\
+										\
+	if (!(A & 0100) && (A >> 3) == (A & 7)) A = (A & 070) | 7 * !(A & 020);	\
+	if (A != attrib) {							\
+		attrib = A;							\
+		add_to_str(&a, &l, "\033[0");					\
+		if (s->col) {							\
+			unsigned char m[4];					\
+										\
+			m[0] = ';';						\
+		       	m[1] = '3';						\
+			m[2] = (attrib & 7) + '0';				\
+		       	m[3] = 0;						\
+			add_to_str(&a, &l, m);					\
+			m[1] = '4';						\
+			m[2] = (attrib >> 3 & 7) + '0';				\
+			add_to_str(&a, &l, m);					\
+		} else if (getcompcode(attrib & 7) < getcompcode(attrib >> 3 & 7))	\
+			add_to_str(&a, &l, ";7");				\
+		if (attrib & 0100) add_to_str(&a, &l, ";1");			\
+		add_to_str(&a, &l, "m");					\
+	}									\
+	if (c >= ' ' && c != 127/* && c != 155*/) add_chr_to_str(&a, &l, c);	\
+	else if (!c || c == 1) add_chr_to_str(&a, &l, ' ');			\
+	else add_chr_to_str(&a, &l, '.');					\
+	cx++;									\
+}										\
+
+
+/* redraw_all_terminals() */
 void redraw_all_terminals()
 {
 	struct terminal *term;
-	foreach(term, terminals) redraw_screen(term);
+
+	foreach(term, terminals)
+		redraw_screen(term);
 }
 
+
+/* redraw_screen() */
 void redraw_screen(struct terminal *term)
 {
 	int x, y, p = 0;
@@ -528,18 +709,35 @@ void redraw_screen(struct terminal *term)
 	int mode = -1;
 	int l = 0;
 	struct term_spec *s;
+
 	if (!term->dirty || (term->master && is_blocked())) return;
-	if (!(a = init_str())) return;
+
+	a = init_str();
+	if (!a) return;
+
 	s = term->spec;
+
 	for (y = 0; y < term->y; y++)
 		for (x = 0; x < term->x; x++, p++) {
 			if (y == term->y - 1 && x == term->x - 1) break;
-			if (term->screen[p] == term->last_screen[p]) continue;
-			if ((term->screen[p] & 0x3800) == (term->last_screen[p] & 0x3800) && ((term->screen[p] & 0xff) == 0 || (term->screen[p] & 0xff) == 1 || (term->screen[p] & 0xff) == ' ') && ((term->last_screen[p] & 0xff) == 0 || (term->last_screen[p] & 0xff) == 1 || (term->last_screen[p] & 0xff) == ' ')) continue;
-			if (cx == x && cy == y) goto pc;/*PRINT_CHAR(p)*/
-			else if (cy == y && x - cx < 10) {
+#define TSP term->screen[p]
+#define TLSP term->last_screen[p]
+			if (TSP == TLSP) continue;
+			if ((TSP & 0x3800) == (TLSP & 0x3800)
+			    && ((TSP & 0xff) == 0 || (TSP & 0xff) == 1 ||
+				(TSP & 0xff) == ' ')
+			    && ((TLSP & 0xff) == 0 || (TLSP & 0xff) == 1 ||
+				(TLSP & 0xff) == ' '))
+				continue;
+#undef TSP
+#undef TLSP
+			if (cx == x && cy == y) {
+				PRINT_CHAR(p);
+			} else if (cy == y && x - cx < 10) {
 				int i;
-				for (i = x - cx; i >= 0; i--) PRINT_CHAR(p - i);
+
+				for (i = x - cx; i >= 0; i--)
+					PRINT_CHAR(p - i);
 			} else {
 				add_to_str(&a, &l, "\033[");
 				add_num_to_str(&a, &l, y + 1);
@@ -547,16 +745,19 @@ void redraw_screen(struct terminal *term)
 				add_num_to_str(&a, &l, x + 1);
 				add_to_str(&a, &l, "H");
 				cx = x; cy = y;
-				pc:
 				PRINT_CHAR(p);
 			}
 		}
+
 	if (l) {
 		if (s->col) add_to_str(&a, &l, "\033[37;40m");
 		add_to_str(&a, &l, "\033[0m");
-		if (s->mode == TERM_LINUX && s->m11_hack) add_to_str(&a, &l, "\033[10m");
-		if (s->mode == TERM_VT100) add_to_str(&a, &l, "\x0f");
+		if (s->mode == TERM_LINUX && s->m11_hack)
+			add_to_str(&a, &l, "\033[10m");
+		if (s->mode == TERM_VT100)
+			add_to_str(&a, &l, "\x0f");
 	}
+
 	if (l || term->cx != term->lcx || term->cy != term->lcy) {
 		term->lcx = term->cx;
 		term->lcy = term->cy;
@@ -566,29 +767,39 @@ void redraw_screen(struct terminal *term)
 		add_num_to_str(&a, &l, term->cx + 1);
 		add_to_str(&a, &l, "H");
 	}
+
 	if (l && term->master) want_draw();
 	hard_write(term->fdout, a, l);
 	if (l && term->master) done_draw();
+
 	mem_free(a);
 	memcpy(term->last_screen, term->screen, term->x * term->y * sizeof(int));
 	term->dirty = 0;
 }
 
+
+/* destroy_terminal() */
 void destroy_terminal(struct terminal *term)
 {
-	while ((term->windows.next) != &term->windows) delete_window(term->windows.next);
-	/*if (term->cwd) mem_free(term->cwd);*/
+	while ((term->windows.next) != &term->windows)
+		delete_window(term->windows.next);
+
+	/* if (term->cwd) mem_free(term->cwd); */
 	if (term->title) mem_free(term->title);
 	mem_free(term->screen);
 	mem_free(term->last_screen);
+
 	set_handlers(term->fdin, NULL, NULL, NULL, NULL);
 	mem_free(term->input_queue);
+
 	if (term->blocked != -1) {
 		close(term->blocked);
 		set_handlers(term->blocked, NULL, NULL, NULL, NULL);
 	}
+
 	del_from_list(term);
 	close(term->fdin);
+
 	if (term->fdout != 1) {
 		if (term->fdout != term->fdin) close(term->fdout);
 	} else {
@@ -600,80 +811,128 @@ void destroy_terminal(struct terminal *term)
 		}
 #endif
 	}
+
 	mem_free(term);
 	check_if_no_terminal();
 }
 
+
+/* destroy_all_terminals() */
 void destroy_all_terminals()
 {
 	struct terminal *term;
-	while ((void *)(term = terminals.next) != &terminals) destroy_terminal(term);
+	while ((void *) (term = terminals.next) != &terminals)
+		destroy_terminal(term);
 }
 
+
+/* check_if_no_terminal() */
 void check_if_no_terminal()
 {
 	if (!list_empty(terminals)) return;
 	terminate = 1;
 }
 
+
+/* set_char() */
 void set_char(struct terminal *t, int x, int y, unsigned c)
 {
 	t->dirty = 1;
-	if (x >= 0 && x < t->x && y >= 0 && y < t->y) t->screen[x + t->x * y] = c;
+	if (x >= 0 && x < t->x && y >= 0 && y < t->y)
+		t->screen[x + t->x * y] = c;
 }
 
+
+/* get_char() */
 unsigned get_char(struct terminal *t, int x, int y)
 {
 	if (x >= t->x) x = t->x - 1;
 	if (x < 0) x = 0;
 	if (y >= t->y) y = t->y - 1;
 	if (y < 0) y = 0;
+
 	return t->screen[x + t->x * y];
 }
 
+
+/* set_color() */
 void set_color(struct terminal *t, int x, int y, unsigned c)
 {
 	t->dirty = 1;
-	if (x >= 0 && x < t->x && y >= 0 && y < t->y) t->screen[x + t->x * y] = (t->screen[x + t->x * y] & 0x80ff) | (c & ~0x80ff);
+	if (x >= 0 && x < t->x && y >= 0 && y < t->y) {
+		int p = x + t->x * y;
+
+		t->screen[p] = (t->screen[p] & 0x80ff) | (c & ~0x80ff);
+	}
 }
 
+
+/* set_only_char() */
 void set_only_char(struct terminal *t, int x, int y, unsigned c)
 {
 	t->dirty = 1;
-	if (x >= 0 && x < t->x && y >= 0 && y < t->y) t->screen[x + t->x * y] = (t->screen[x + t->x * y] & ~0x80ff) | (c & 0x80ff);
+	if (x >= 0 && x < t->x && y >= 0 && y < t->y) {
+		int p = x + t->x * y;
+
+		t->screen[p] = (t->screen[p] & ~0x80ff) | (c & 0x80ff);
+	}
 }
 
+
+/* set_line() */
 void set_line(struct terminal *t, int x, int y, int l, chr *line)
 {
-	int i;
+	int i = (x >= 0) ? 0 : -x;
+	int end = (x + l <= t->x) ? l : t->x - x;
+
 	t->dirty = 1;
-	for (i = x >= 0 ? 0 : -x; i < (x+l <= t->x ? l : t->x-x); i++)
-		t->screen[x+i + t->x * y] = line[i];
+
+	for (; i < end; i++)
+		t->screen[x + i + t->x * y] = line[i];
 }
 
+
+/* set_line_color() */
 void set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 {
-	int i;
+	int i = (x >= 0) ? 0 : -x;
+	int end = (x + l <= t->x) ? l : t->x - x;
+
 	t->dirty = 1;
-	for (i = x >= 0 ? 0 : -x; i < (x+l <= t->x ? l : t->x-x); i++)
-		t->screen[x+i + t->x * y] = (t->screen[x+i + t->x * y] & 0x80ff) | (c & ~0x80ff);
+
+	for (; i < end; i++) {
+		int p = x + i + t->x * y;
+
+		t->screen[p] = (t->screen[p] & 0x80ff) | (c & ~0x80ff);
+	}
 }
 
+
+/* fill_area() */
 void fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 {
-	int i,j;
+	int j = (y >= 0) ? 0 : -y;
+
 	t->dirty = 1;
-	for (j = y >= 0 ? 0 : -y; j < yw && y+j < t->y; j++)
-		for (i = x >= 0 ? 0 : -x; i < xw && x+i < t->x; i++)
-			t->screen[x+i + t->x*(y+j)] = c;
+	for (; j < yw && y+j < t->y; j++) {
+		int i = (x >= 0) ? 0 : -x;
+
+		for (; i < xw && x + i < t->x; i++)
+			t->screen[x + i + t->x * (y + j)] = c;
+	}
 }
+
 
 int p1[] = { 218, 191, 192, 217, 179, 196 };
 int p2[] = { 201, 187, 200, 188, 186, 205 };
 
-void draw_frame(struct terminal *t, int x, int y, int xw, int yw, unsigned c, int w)
+
+/* draw_frame() */
+void draw_frame(struct terminal *t, int x, int y, int xw, int yw,
+		unsigned c, int w)
 {
 	int *p = w > 1 ? p2 : p1;
+
 	c |= ATTR_FRAME;
 	set_char(t, x, y, c+p[0]);
 	set_char(t, x+xw-1, y, c+p[1]);
@@ -685,15 +944,23 @@ void draw_frame(struct terminal *t, int x, int y, int xw, int yw, unsigned c, in
 	fill_area(t, x+1, y+yw-1, xw-2, 1, c+p[5]);
 }
 
-void print_text(struct terminal *t, int x, int y, int l, unsigned char *text, unsigned c)
+
+/* print_text() */
+void print_text(struct terminal *t, int x, int y, int l,
+		unsigned char *text, unsigned c)
 {
 	for (; l-- && *text; text++, x++) set_char(t, x, y, *text + c);
 }
 
+
+/* set_cursor() */
 void set_cursor(struct terminal *term, int x, int y, int altx, int alty)
 {
 	term->dirty = 1;
-	if (term->spec->block_cursor) x = altx, y = alty;
+	if (term->spec->block_cursor) {
+		x = altx;
+		y = alty;
+	}
 	if (x >= term->x) x = term->x - 1;
 	if (y >= term->y) y = term->y - 1;
 	if (x < 0) x = 0;
@@ -702,38 +969,60 @@ void set_cursor(struct terminal *term, int x, int y, int altx, int alty)
 	term->cy = y;
 }
 
+
+/* exec_thread() */
 void exec_thread(unsigned char *path, int p)
 {
+	int plen = strlen(path + 1) + 2;
+
 #if defined(HAVE_SETPGID) && !defined(BEOS) && !defined(HAVE_BEGINTHREAD)
 	if (path[0] == 2) setpgid(0, 0);
 #endif
 	exe(path + 1);
 	close(p);
-	if (path[1 + strlen(path + 1) + 1]) unlink(path + 1 + strlen(path + 1) + 1);
+	if (path[plen]) unlink(path + plen);
 }
 
+
+/* close_handle() */
 void close_handle(void *p)
 {
 	int h = (int)p;
+
 	close(h);
 	set_handlers(h, NULL, NULL, NULL, NULL);
 }
 
+
+/* unblock_terminal() */
 void unblock_terminal(struct terminal *term)
 {
 	close_handle((void *)term->blocked);
 	term->blocked = -1;
-	set_handlers(term->fdin, (void (*)(void *))in_term, NULL, (void (*)(void *))destroy_terminal, term);
+	set_handlers(term->fdin, (void (*)(void *))in_term, NULL,
+		     (void (*)(void *))destroy_terminal, term);
 	unblock_itrm(term->fdin);
 	redraw_terminal_cls(term);
 	if (textarea_editor)	/* XXX */
 		textarea_edit(1, NULL, NULL, NULL, NULL, NULL);
 }
 
-void exec_on_terminal(struct terminal *term, unsigned char *path, unsigned char *delete, int fg)
+
+/* exec_on_terminal() */
+void exec_on_terminal(struct terminal *term, unsigned char *path,
+		      unsigned char *delete, int fg)
 {
+	int plen;
+	int dlen = strlen(delete);
+
 	if (path && !*path) return;
-	if (!path) path="";
+	if (!path) {
+		path = "";
+		plen = 0;
+	} else {
+		plen = strlen(path);
+	}
+
 #ifdef NO_FG_EXEC
 	fg = 0;
 #endif
@@ -742,59 +1031,83 @@ void exec_on_terminal(struct terminal *term, unsigned char *path, unsigned char 
 		else {
 			int blockh;
 			unsigned char *param;
+
 			if (is_blocked() && fg) {
 				unlink(delete);
 				return;
 			}
-			if (!(param = mem_alloc(strlen(path) + strlen(delete) + 3))) return;
+
+			param = mem_alloc(plen + dlen + 3);
+			if (!param) return;
+
 			param[0] = fg;
 			strcpy(param + 1, path);
-			strcpy(param + 1 + strlen(path) + 1, delete);
+			strcpy(param + 1 + plen + 1, delete);
 			if (fg == 1) block_itrm(term->fdin);
-			if ((blockh = start_thread((void (*)(void *, int))exec_thread, param, strlen(path) + strlen(delete) + 3)) == -1) {
+
+			blockh = start_thread((void (*)(void *, int))exec_thread,
+					      param, plen + dlen + 3);
+			if (blockh == -1) {
 				if (fg == 1) unblock_itrm(term->fdin);
 				mem_free(param);
 				return;
 			}
+
 			mem_free(param);
 			if (fg == 1) {
 				term->blocked = blockh;
-				set_handlers(blockh, (void (*)(void *))unblock_terminal, NULL, (void (*)(void *))unblock_terminal, term);
-				set_handlers(term->fdin, NULL, NULL, (void (*)(void *))destroy_terminal, term);
-				/*block_itrm(term->fdin);*/
+				set_handlers(blockh,
+					     (void (*)(void *)) unblock_terminal,
+					     NULL,
+					     (void (*)(void *)) unblock_terminal,
+					     term);
+				set_handlers(term->fdin, NULL, NULL,
+					     (void (*)(void *)) destroy_terminal,
+					     term);
+				/* block_itrm(term->fdin); */
 			} else {
-				set_handlers(blockh, close_handle, NULL, close_handle, (void *)blockh);
+				set_handlers(blockh, close_handle, NULL,
+					     close_handle, (void *) blockh);
 			}
 		}
 	} else {
-		unsigned char *data;
-		if ((data = mem_alloc(strlen(path) + strlen(delete) + 4))) {
+		unsigned char *data = mem_alloc(plen + dlen + 4);
+
+		if (data) {
 			data[0] = 0;
 			data[1] = fg;
 			strcpy(data + 2, path);
-			strcpy(data + 3 + strlen(path), delete);
-			hard_write(term->fdout, data, strlen(path) + strlen(delete) + 4);
+			strcpy(data + 3 + plen, delete);
+			hard_write(term->fdout, data, plen + dlen + 4);
 			mem_free(data);
 		}
-		/*char x = 0;
+#if 0
+		char x = 0;
 		hard_write(term->fdout, &x, 1);
 		x = fg;
 		hard_write(term->fdout, &x, 1);
 		hard_write(term->fdout, path, strlen(path) + 1);
-		hard_write(term->fdout, delete, strlen(delete) + 1);*/
+		hard_write(term->fdout, delete, strlen(delete) + 1);
+#endif
 	}
 }
 
-void do_terminal_function(struct terminal *term, unsigned char code, unsigned char *data)
+
+/* do_terminal_function() */
+void do_terminal_function(struct terminal *term, unsigned char code,
+			  unsigned char *data)
 {
-	unsigned char *x_data;
-	if (!(x_data = mem_alloc(strlen(data) + 2))) return;
+	unsigned char *x_data = mem_alloc(strlen(data) + 2);
+
+	if (!x_data) return;
 	x_data[0] = code;
 	strcpy(x_data + 1, data);
 	exec_on_terminal(term, NULL, x_data, 0);
 	mem_free(x_data);
 }
 
+
+/* set_terminal_title() */
 void set_terminal_title(struct terminal *term, unsigned char *title)
 {
 	if (term->title && !strcmp(title, term->title)) return;

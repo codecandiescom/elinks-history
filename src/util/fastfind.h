@@ -1,4 +1,4 @@
-/* $Id: fastfind.h,v 1.9 2003/06/14 20:21:52 pasky Exp $ */
+/* $Id: fastfind.h,v 1.10 2003/06/15 11:06:20 pasky Exp $ */
 
 #ifndef EL__UTIL_FASTFIND_H
 #define EL__UTIL_FASTFIND_H
@@ -29,12 +29,9 @@ struct fastfind_info *fastfind_index(void (*reset)(void),
 		int case_sensitive);
 
 /* This one should be called to minimize memory usage of index. */
-/* @current		is the element to compress for internal use.
- *			By passing NULL the whole index is compressed.
- * @fastfind_handle	is the handle created with fastfind_index(). */
+/* @fastfind_handle	is the handle created with fastfind_index(). */
 /* Highly recommended but optional. */
-void fastfind_index_compress(void *current,
-		struct fastfind_info *fastfind_handle);
+void fastfind_index_compress(struct fastfind_info *fastfind_handle);
 
 /* The main reason of all that stuff is here. */
 /* Search the index for @key with length @key_len using the

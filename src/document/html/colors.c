@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.18 2003/06/15 11:06:02 zas Exp $ */
+/* $Id: colors.c,v 1.19 2003/06/15 11:07:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,7 +243,7 @@ decode_color(unsigned char *str, struct rgb *col)
 
 		if (do_index) {
 			ff_info_colors = fastfind_index(&colors_list_reset, &colors_list_next, 0);
-			fastfind_index_compress(NULL, ff_info_colors);
+			fastfind_index_compress(ff_info_colors);
 			do_index = 0;
 		}
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.133 2003/06/15 10:55:21 pasky Exp $ */
+/* $Id: parser.c,v 1.134 2003/06/15 11:06:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2899,7 +2899,7 @@ ng:;
 
 			if (do_index) {
 				ff_info_tags = fastfind_index(&tags_list_reset, &tags_list_next, 0);
-				fastfind_index_compress(NULL, ff_info_tags);
+				fastfind_index_compress(ff_info_tags);
 				do_index = 0;
 			}
 

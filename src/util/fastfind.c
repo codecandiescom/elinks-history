@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.26 2003/06/15 10:54:13 pasky Exp $ */
+/* $Id: fastfind.c,v 1.27 2003/06/15 11:06:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -403,7 +403,7 @@ alloc_error:
 }
 
 void
-fastfind_index_compress(void *current_node, struct fastfind_info *info)
+fastfind_node_compress(void *current_node, struct fastfind_info *info)
 {
 	struct ff_node *current = (struct ff_node *) current_node;
 	int cnt = 0;
@@ -412,14 +412,12 @@ fastfind_index_compress(void *current_node, struct fastfind_info *info)
 
 	assert(info);
 
-	if (!current) current = info->root_trampoline;
-
 	for (; i < info->uniq_chars_count; i++) {
 		if (current[i].c) continue;
 
 		if (current[i].l) {
 			/* There's a leaf trampoline, descend to it, and recurse */
-			fastfind_index_compress(info->trampolines[current[i].l],
+			fastfind_node_compress(info->trampolines[current[i].l],
 						info);
 		}
 
@@ -452,6 +450,13 @@ fastfind_index_compress(void *current_node, struct fastfind_info *info)
 		meminc(info, sizeof(struct ff_node_c));
 		meminc(info, sizeof(struct ff_node) * -info->uniq_chars_count);
 	}
+}
+
+void
+fastfind_index_compress(struct fastfind_info *info)
+{
+	assert(info);
+	fastfind_node_compress(info->root_trampoline, info)
 }
 
 void *
@@ -682,7 +687,7 @@ main(int argc, char **argv)
 
 	fprintf(stderr, "--------- COMPRESS PHASE ---------\n");
 	/* Highly recommended but optionnal. */
-	fastfind_index_compress(NULL, info);
+	fastfind_index_compress(info);
 
 	fprintf(stderr, "---------- SEARCH PHASE ----------\n");
 	/* Without this one ... */

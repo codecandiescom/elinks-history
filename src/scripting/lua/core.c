@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.56 2003/07/09 23:03:10 jonas Exp $ */
+/* $Id: core.c,v 1.57 2003/07/15 16:52:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ l_current_link(LS)
 	struct f_data_c *fd = current_frame(lua_ses);
 
 	if (fd && fd->vs->current_link != -1) {
-		struct link *l = &fd->f_data->links[fd->vs->current_link];
+		struct link *l = &fd->document->links[fd->vs->current_link];
 
 		if (l->type == L_LINK) {
 			lua_pushstring(S, l->where);
@@ -114,8 +114,8 @@ l_current_title(LS)
 {
 	struct f_data_c *fd = current_frame(lua_ses);
 
-	if (fd && fd->f_data->title)
-		lua_pushstring(S, fd->f_data->title);
+	if (fd && fd->document->title)
+		lua_pushstring(S, fd->document->title);
 	else
 		lua_pushnil(S);
 
@@ -145,7 +145,7 @@ l_current_document_formatted(LS)
 	extern unsigned char frame_dumb[];
 	int width, old_width = 0;
 	struct f_data_c *f;
-	struct f_data *fd;
+	struct document *fd;
 	int x, y;
 	unsigned char *buf;
 	int l = 0;
@@ -159,7 +159,7 @@ l_current_document_formatted(LS)
 		old_width = lua_ses->tab->term->x, lua_ses->tab->term->x = width;
 		html_interpret(lua_ses);
 	}
-	fd = f->f_data;
+	fd = f->document;
 	buf = init_str();
 	for (y = 0; y < fd->y; y++) for (x = 0; x <= fd->data[y].l; x++) {
 		int c;

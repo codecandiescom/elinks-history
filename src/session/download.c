@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.200 2003/12/19 11:26:22 pasky Exp $ */
+/* $Id: download.c,v 1.201 2003/12/19 11:26:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1034,7 +1034,8 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	int ret = 0;
 	int xwin, i;
 
-	if (!ctype) goto end;
+	if (!ctype)
+		goto free_ct;
 
 	for (i = 0; known_types[i].type; i++) {
 		if (strcasecmp(ctype, known_types[i].type))
@@ -1083,9 +1084,8 @@ do_not_follow:
 	return ret;
 
 free_ct:
-	mem_free(ctype);
+	if (ctype) mem_free(ctype);
 
-end:
 	vs = ses_forward(ses, frame);
 	if (vs) vs->plain = plaintext;
 	return 0;

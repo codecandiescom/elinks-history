@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.448 2004/06/16 05:23:16 miciah Exp $ */
+/* $Id: options.c,v 1.449 2004/06/21 12:01:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,6 +254,69 @@ get_opt_(
 	return &opt->value;
 }
 
+static void
+add_opt_sort(struct option *tree, struct option *option, int abi)
+{
+	struct list_head *cat = tree->value.tree;
+	struct list_head *bcat = &tree->box_item->child;
+	struct option *pos;
+
+	/* The list is empty, just add it there. */
+	if (list_empty(*cat)) {
+		add_to_list(*cat, option);
+		if (abi) add_to_list(*bcat, option->box_item);
+
+	/* This fits as the last list entry, add it there. This
+	 * optimizes the most expensive BUT most common case ;-). */
+	} else if ((option->type != OPT_TREE
+		    || ((struct option *) cat->prev)->type == OPT_TREE)
+		   && strcmp(((struct option *) cat->prev)->name,
+			     option->name) <= 0) {
+append:
+		add_to_list_end(*cat, option);
+		if (abi) add_to_list_end(*bcat, option->box_item);
+
+	/* At the end of the list is tree and we are ordinary. That's
+	 * clear case then. */
+	} else if (option->type != OPT_TREE
+		   && ((struct option *) cat->prev)->type == OPT_TREE) {
+		goto append;
+
+	/* Scan the list linearly. This could be probably optimized ie.
+	 * to choose direction based on the first letter or so. */
+	} else {
+		struct listbox_item *bpos = bcat->next;
+
+		assert(bpos != (struct listbox_item *) bcat);
+
+		foreach (pos, *cat) {
+			if ((option->type != OPT_TREE
+			     || pos->type == OPT_TREE)
+			    && strcmp(pos->name, option->name) <= 0) {
+next:
+				bpos = bpos->next;
+				assert(bpos != (struct listbox_item *) bcat);
+				continue;
+			}
+
+			/* Ordinary options always sort behind trees. */
+			if (option->type != OPT_TREE
+			    && pos->type == OPT_TREE)
+				goto next;
+
+			/* The (struct option) add_at_pos() can mess
+			 * up the order so that we add the box_item
+			 * to itself, so better do it first. */
+			if (abi) add_at_pos(bpos->prev, option->box_item);
+			add_at_pos(pos->prev, option);
+			break;
+		}
+
+		assert(pos != (struct option *) cat);
+		assert(bpos != (struct listbox_item *) bcat);
+	}
+}
+
 /* Add option to tree. */
 static void
 add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
@@ -292,64 +355,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 	}
 
 	if (tree->flags & OPT_SORT) {
-		struct list_head *cat = tree->value.tree;
-		struct list_head *bcat = &tree->box_item->child;
-		struct option *pos;
-
-		/* The list is empty, just add it there. */
-		if (list_empty(*cat)) {
-			add_to_list(*cat, option);
-			if (abi) add_to_list(*bcat, option->box_item);
-
-		/* This fits as the last list entry, add it there. This
-		 * optimizes the most expensive BUT most common case ;-). */
-		} else if ((option->type != OPT_TREE
-			    || ((struct option *) cat->prev)->type == OPT_TREE)
-			   && strcmp(((struct option *) cat->prev)->name,
-				     option->name) <= 0) {
-append:
-			add_to_list_end(*cat, option);
-			if (abi) add_to_list_end(*bcat, option->box_item);
-
-		/* At the end of the list is tree and we are ordinary. That's
-		 * clear case then. */
-		} else if (option->type != OPT_TREE
-			   && ((struct option *) cat->prev)->type == OPT_TREE) {
-			goto append;
-
-		/* Scan the list linearly. This could be probably optimized ie.
-		 * to choose direction based on the first letter or so. */
-		} else {
-			struct listbox_item *bpos = bcat->next;
-
-			assert(bpos != (struct listbox_item *) bcat);
-
-			foreach (pos, *cat) {
-				if ((option->type != OPT_TREE
-				     || pos->type == OPT_TREE)
-				    && strcmp(pos->name, option->name) <= 0) {
-next:
-					bpos = bpos->next;
-					assert(bpos != (struct listbox_item *) bcat);
-					continue;
-				}
-
-				/* Ordinary options always sort behind trees. */
-				if (option->type != OPT_TREE
-				    && pos->type == OPT_TREE)
-					goto next;
-
-				/* The (struct option) add_at_pos() can mess
-				 * up the order so that we add the box_item
-				 * to itself, so better do it first. */
-				if (abi) add_at_pos(bpos->prev, option->box_item);
-				add_at_pos(pos->prev, option);
-				break;
-			}
-
-			assert(pos != (struct option *) cat);
-			assert(bpos != (struct listbox_item *) bcat);
-		}
+		add_opt_sort(tree, option, abi);
 
 	} else {
 		add_to_list_end(*tree->value.tree, option);

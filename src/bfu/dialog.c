@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.94 2003/11/11 14:16:04 zas Exp $ */
+/* $Id: dialog.c,v 1.95 2003/11/11 14:26:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,8 +438,6 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 			dlg_format_buttons(term, wdata, widgets,
 					   x, y, w, rw, AL_CENTER);
 			return;
-		default:
-			internal("Bad widget type or widget not supported.");
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.53 2003/07/25 12:39:05 zas Exp $ */
+/* $Id: charsets.c,v 1.54 2003/07/25 12:56:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -577,20 +577,21 @@ convert_string(struct conv_table *convert_table, unsigned char *chars, int chars
 
 	/* Iterate ;-) */
 
+#define PUTC do { \
+	buffer[bufferpos++] = chars[charspos++]; \
+	e = ""; \
+	goto flush; \
+	} while (0)
+
 	while (charspos < charslen) {
 		unsigned char *e;
-
-		if (chars[charspos] < 128 && chars[charspos] != '&') {
-putc:
-			buffer[bufferpos++] = chars[charspos++];
-			goto flush;
-		}
 
 		if (chars[charspos] != '&') {
 			struct conv_table *t;
 			int i;
 
-			if (!convert_table) goto putc;
+			if (chars[charspos] < 128 || !convert_table) PUTC;
+
 			t = convert_table;
 			i = charspos;
 
@@ -599,7 +600,7 @@ decode:
 				e = t[chars[i]].u.str;
 			} else {
 				t = t[chars[i++]].u.tbl;
-				if (i >= charslen) goto putc;
+				if (i >= charslen) PUTC;
 				goto decode;
 			}
 			charspos = i + 1;
@@ -608,7 +609,7 @@ decode:
 			int start = charspos + 1;
 			int i = start;
 
-			if (d_opt->plain) goto putc;
+			if (d_opt->plain) PUTC;
 			while (i < charslen
 			       && ((chars[i] >= 'A' && chars[i] <= 'Z')
 				   || (chars[i] >= 'a' && chars[i] <= 'z')
@@ -632,23 +633,22 @@ decode:
 					i--;
 				}
 
-				if (!e) goto putc;
+				if (!e) PUTC;
 				charspos = i + (i < charslen);
-			} else goto putc;
+			} else PUTC;
 		}
 
 		if (!e[0]) continue;
 
 		if (!e[1]) {
 			buffer[bufferpos++] = e[0];
-flush:
 			e = "";
-			goto flush1;
+			goto flush;
 		}
 
 		while (*e) {
 			buffer[bufferpos++] = *(e++);
-flush1:
+flush:
 			if (!(bufferpos & (ALLOC_GR - 1))) {
 				unsigned char *b;
 
@@ -662,6 +662,7 @@ flush1:
 	}
 
 	/* Say bye */
+#undef PUTC
 
 	buffer[bufferpos] = 0;
 	return buffer;

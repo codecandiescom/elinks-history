@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.33 2004/09/20 16:22:04 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.34 2004/09/21 08:26:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,6 +67,7 @@ init_css_selector(struct list_head *sels, enum css_selector_type type,
 			mem_free(selector);
 			return NULL;
 		}
+		set_mem_comment(selector, name, namelen);
 	}
 
 	if (sels) {

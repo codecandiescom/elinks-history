@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.145 2004/03/31 20:31:22 jonas Exp $ */
+/* $Id: connection.c,v 1.146 2004/03/31 23:33:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -762,7 +762,7 @@ again2:
 }
 
 int
-load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
+load_url(unsigned char *url, struct uri *referrer, struct download *download,
 	 enum connection_priority pri, enum cache_mode cache_mode, int start)
 {
 	struct cache_entry *ce = NULL;
@@ -851,7 +851,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		return 0;
 	}
 
-	conn = init_connection(u, ref_url, start, cache_mode, pri);
+	conn = init_connection(u, struri(referrer), start, cache_mode, pri);
 	mem_free(u);
 	if (!conn) {
 		if (download) {

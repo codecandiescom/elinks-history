@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.93 2004/03/31 16:47:18 jonas Exp $ */
+/* $Id: dump.c,v 1.94 2004/03/31 23:33:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,7 +260,7 @@ dump_end(struct download *status, void *p)
 			add_to_strn(&u, ce->uri->post);
 		}
 
-		load_url(u, get_cache_uri(ce), status, PRI_MAIN, 0, -1);
+		load_url(u, get_cache_uri_struct(ce), status, PRI_MAIN, 0, -1);
 		mem_free(u);
 		return;
 	}

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.53 2004/03/31 20:31:22 jonas Exp $ */
+/* $Id: connection.h,v 1.54 2004/03/31 23:33:39 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -211,7 +211,7 @@ void set_connection_timeout(struct connection *);
 /* Note that stat's data _MUST_ be struct file_download * if start > 0! Yes,
  * that should be probably something else than data, but... ;-) */
 /* Returns 0 on success and -1 on failure. */
-int load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
+int load_url(unsigned char *url, struct uri *referrer, struct download *download,
 	     enum connection_priority pri, enum cache_mode cache_mode, int start);
 
 #endif

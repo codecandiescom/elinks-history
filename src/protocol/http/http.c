@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.21 2002/05/25 13:46:05 pasky Exp $ */
+/* $Id: http.c,v 1.22 2002/06/09 16:09:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,7 +593,7 @@ void read_http_data(struct connection *c, struct read_buffer *rb)
 			int l;
 			if ((l = is_line_in_buffer(rb))) {
 				unsigned char *de;
-				int n;
+				int n = 0;
 				if (l != -1) n = strtol(rb->data, (char **)&de, 16);
 				if (l == -1 || de == rb->data) {
 					setcstate(c, S_HTTP_ERROR);

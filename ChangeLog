@@ -1,3 +1,50 @@
+Sun Jun  1 18:57:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/kbd.c:
+
+	When we receive \027[^]O\027], always assume it is alt+something,
+	not only if the something is >= ' '. This enables even ie. alt+tab
+	being catched. Based on patch by Miciah, fixing bug 186. Hopefully.  
+
+Sun Jun  1 18:55:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/kbd.c:
+
+	Minor tidyup.  
+
+Sun Jun  1 17:02:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	These are the cosmetical changes (minor indentation fixes).  
+
+Sun Jun  1 16:50:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Prefer withval over default when looking for SSL libs. Perhaps
+	co-fixes bug 7.  
+
+Sun Jun  1 16:46:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Use prefix optionally passed along the --with parameters.  
+
+Sun Jun  1 11:53:43 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	No need to redraw when the user is entering a key prefix (or did I
+	miss some thing?) 
+
+Sun Jun  1 11:37:47 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Fix for bug 187: Check that prefixes don't specify non-existent
+	links.  
+
 Wed May 28 09:59:23 2003  Laurent Monin <zas@norz.org>:
 
 	* src/intl/charsets.c:

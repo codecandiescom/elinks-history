@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.77 2004/09/15 09:12:44 witekfl Exp $ */
+/* $Id: cgi.c,v 1.78 2004/09/15 14:50:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,7 @@ set_vars(struct connection *conn, unsigned char *script)
 {
 	unsigned char *post = conn->uri->post;
 	unsigned char *query = get_uri_string(conn->uri, URI_QUERY);
-	unsigned char *optstr;
+	unsigned char *str;
 	int res = setenv("QUERY_STRING", empty_string_or_(query), 1);
 
 	mem_free_if(query);
@@ -157,8 +157,8 @@ set_vars(struct connection *conn, unsigned char *script)
 	 * standard, so we already filled our environment with we have to have
 	 * there and we won't fail anymore if it won't work out. */
 
-	optstr = get_opt_str("protocol.http.user_agent");
-	if (*optstr && strcmp(optstr, " ")) {
+	str = get_opt_str("protocol.http.user_agent");
+	if (*str && strcmp(str, " ")) {
 		unsigned char *ustr, ts[64] = "";
 
 		if (!list_empty(terminals)) {
@@ -169,8 +169,7 @@ set_vars(struct connection *conn, unsigned char *script)
 			ts[tslen++] = 'x';
 			ulongcat(ts, &tslen, term->height, 3, 0);
 		}
-		ustr = subst_user_agent(optstr, VERSION_STRING, system_name,
-					ts);
+		ustr = subst_user_agent(str, VERSION_STRING, system_name, ts);
 
 		if (ustr) {
 			setenv("HTTP_USER_AGENT", ustr, 1);
@@ -209,9 +208,9 @@ set_vars(struct connection *conn, unsigned char *script)
 	/* We do not set HTTP_ACCEPT_ENCODING. Yeah, let's let the CGI script
 	 * gzip the stuff so that the CPU doesn't at least sit idle. */
 
-	optstr = get_opt_str("protocol.http.accept_language");
-	if (optstr[0]) {
-		setenv("HTTP_ACCEPT_LANGUAGE", optstr, 1);
+	str = get_opt_str("protocol.http.accept_language");
+	if (*str) {
+		setenv("HTTP_ACCEPT_LANGUAGE", str, 1);
 	}
 #ifdef ENABLE_NLS
 	else if (get_opt_bool("protocol.http.accept_ui_language")) {

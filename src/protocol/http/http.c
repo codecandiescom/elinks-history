@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.233 2004/01/01 15:36:18 jonas Exp $ */
+/* $Id: http.c,v 1.234 2004/02/17 19:17:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1361,17 +1361,33 @@ http_error:
 
 	d = parse_http_header(conn->cache->head, "ETag", NULL);
 	if (d) {
-		if (conn->cache->etag && strcasecmp(conn->cache->etag, d)) {
-			delete_entry_content(conn->cache);
-			if (conn->from) {
-				conn->from = 0;
-				mem_free(d);
-				retry_conn_with_state(conn, S_MODIFIED);
-				return;
+		if (conn->cache->etag)  {
+			unsigned char *old_tag = conn->cache->etag;
+			unsigned char *new_tag = d;
+
+			/* http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.19 */
+
+			if (new_tag[0] == 'W' && new_tag[1] == '/')
+				new_tag += 2;
+
+			if (old_tag[0] == 'W' && old_tag[1] == '/')
+				old_tag += 2;
+
+			if (strcmp(new_tag, old_tag)) {
+				delete_entry_content(conn->cache);
+				if (conn->from) {
+					conn->from = 0;
+					mem_free(d);
+					retry_conn_with_state(conn, S_MODIFIED);
+					return;
+				}
 			}
 		}
-		if (!conn->cache->etag) conn->cache->etag = d;
-		else mem_free(d);
+
+		if (!conn->cache->etag)
+			conn->cache->etag = d;
+		else
+			mem_free(d);
 	}
 
 	d = parse_http_header(conn->cache->head, "Content-Encoding", NULL);

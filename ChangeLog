@@ -1,3 +1,197 @@
+Mon Dec 27 21:59:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.c:
+
+	Ditch #else part of '#if 1'. Slowly this is becoming the norm.  
+
+Mon Dec 27 19:35:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Revert last patch it breaks tests from test/ecmascript/ontest.html.
+	Why? 
+
+Mon Dec 27 19:23:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	window_get_property(): call undef_to_jsval().  
+
+Mon Dec 27 13:42:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	document_get_property(): call undef_to_jsval(ctx, vp).  
+
+Mon Dec 27 13:39:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	forms_namedItem(): call undef_to_jsval() before loop.  
+
+Mon Dec 27 13:20:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	forms_item(): call undef_to_jsval() before loop.  
+
+Mon Dec 27 10:51:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/: libintl.c, libintl.h:
+
+	el_gettext_current_charset -> current_charset and move to after the
+	#includes. Should make pasky happy.  
+
+Mon Dec 27 10:49:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Drop last bits of struct jsval_property stuff: set_prop_*(),
+	value_to_jsval() and related stuff are now totally replace by
+	*_to_jsval().  
+
+Mon Dec 27 10:41:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	document_write(), location_get_property(): use *_to_jsval().
+	set_prop_astring() is no more used.  
+
+Mon Dec 27 10:38:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/osdep.c:
+
+	resize_window(): Miciah was right. Fix
+	Copy-and-paste-and-mindlessly-hack-upon error when HAVE_X11 is not
+	defined.  
+
+Mon Dec 27 10:37:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	document_get_property(): use *_to_jsval(). set_prop_object() is not
+	needed anymore.  
+
+Mon Dec 27 10:34:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	get_screen_driver(): Still use memcmp() but fix the bug by comparing
+	'len + 1' bytes. Idea by Miciah.  
+
+Mon Dec 27 10:31:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	forms_item(), forms_namedItem(), forms_get_property(): use
+	*_to_jsval(). set_prop_int() is not needed anymore.  
+
+Mon Dec 27 10:26:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	form_(reset|submit)(): use boolean_to_jsval().  
+
+Mon Dec 27 10:24:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	form_get_property(): use *_to_jsval().  
+
+Mon Dec 27 10:02:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	window_get_property(): undef before switch() and simplify code.  
+
+Mon Dec 27 01:25:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	free_uri_list(): Just in case, zero the uri_list->size.  
+
+Mon Dec 27 01:16:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Use *_to_jsval() in form_elements_namedItem().  
+
+Mon Dec 27 01:14:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Use *_to_jsval() in form_elements_item().  
+
+Mon Dec 27 01:11:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Use *_to_jsval() in form_elements_get_property().  
+
+Mon Dec 27 01:09:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Use boolean_to_jsval() in input_focus().  
+
+Mon Dec 27 01:07:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Use boolean_to_jsval() in input_click().  
+
+Mon Dec 27 01:05:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Introduce (string|int)_to_jsval() and use *_js_val() in
+	input_get_property().  
+
+Mon Dec 27 00:51:57 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Use (boolean|undef)_to_jsval() in window_open().  
+
+Mon Dec 27 00:48:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Use undef_to_jsval() in window_alert().  
+
+Mon Dec 27 00:46:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Introduce (object|boolean|undef)_to_jsval(), it will help to get rid
+	of struct jsval_property. The main goal is to drop stuff related to
+	struct jsval_property: set_prop_*(), value_to_jsval(),
+	*_prop_magic(), and every struct jsval_property *prop among the
+	code.  
+
+Mon Dec 27 00:02:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Fix terminal driver comparison triggered when comparing 'xterm'
+	against 'xterm-color'. This would cause no driver to be initialized
+	and more important the term->spec->change_hook to be NULL.  
+
+Sun Dec 26 23:44:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Hurrah for snprintf(). Terminal resizing should be a lot safer now.  
+
+Sun Dec 26 23:36:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/options.c, osdep/osdep.c, osdep/osdep.h,
+	osdep/os2/os2.c, terminal/kbd.c:
+
+	Make this useless terminal resizing available for the X terminal
+	environment.  The old terminal width and height needs to be send
+	along too in order to scale using the right font size.  
+
 Sun Dec 26 20:26:56 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/intl/gettext/libintl.c:

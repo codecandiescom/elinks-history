@@ -1,4 +1,3 @@
-
 Enhanced/Extended Links (ELinks)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -42,6 +41,6 @@ If you want to write some documentation, well you're welcomed ;)
 If you want to request features or report bugs, use the mailing list as
 mentioned above, or come and see us on irc.openprojects.net #elinks.
 
-$Id: README,v 1.16 2003/06/21 22:39:27 pasky Exp $
+$Id: README,v 1.17 2003/06/21 22:40:09 pasky Exp $
 
 vim: textwidth=80

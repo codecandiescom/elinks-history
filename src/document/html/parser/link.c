@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.59 2004/12/13 04:19:10 miciah Exp $ */
+/* $Id: link.c,v 1.60 2004/12/13 04:22:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,7 +237,6 @@ html_img(unsigned char *a)
 
 		html_stack_dup(ELEMENT_KILLABLE);
 		mem_free_set(&format.link, map_url);
-		mem_free(map_url);
 		format.form = NULL;
 		format.attr |= AT_BOLD;
 		usemap = 1;

@@ -1,3 +1,258 @@
+Fri Nov 28 20:53:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, dialog.h, listbox.c:
+
+	Calculate max dialog height like we calculate max width. This makes
+	manager dialogs scale better.  
+
+Fri Nov 28 19:49:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/widget.h:
+
+	widget_is_focusable() was make static inlined.  
+
+Fri Nov 28 19:49:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	Check if the selected is still focusable after the layouter has been
+	called since dimension changes can affect it.  
+
+Fri Nov 28 19:38:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/msgbox.c, bfu/msgbox.h, bfu/text.c,
+	bfu/text.h, bfu/widget.h, dialogs/info.c:
+
+	Revert my monster scrollable text widget patch.  
+
+Fri Nov 28 18:05:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Like vertical scrolling don't scroll horizontally when the rest of
+	the document is already visible.  
+
+Fri Nov 28 16:55:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Fix compile error.  
+
+Fri Nov 28 16:32:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/msgbox.c, bfu/msgbox.h, bfu/text.c,
+	bfu/text.h, bfu/widget.h, dialogs/info.c:
+
+	Implement support for scrollable text widgets. First usage is the
+	Keys message box.  It is not perfect yet but has not segfaulted for
+	a long time now and I would like to have a reference for further
+	hacking.  
+	
+	Text widgets can now be focusable but only when there is actually
+	anything to scroll.  This is checked after calling the layouter
+	whether we should cycle focus.  
+	
+	Forcing redrawing while the textwidget is scrollable will resize the
+	dialog (and lead to unwanted recalculations of the line splitting.
+	This should maybe be fixed. Also I'd like to have some percentage
+	overview (like the title bar) when we are scrolling.  
+
+Fri Nov 28 16:16:45 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Fri Nov 28 16:12:06 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	More translation updates.  
+
+Fri Nov 28 16:00:18 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Hungarian translation updated.  
+
+Fri Nov 28 15:59:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	Strip the post data part of URL when setting document title.  
+
+Fri Nov 28 14:47:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	ui subtree is now auto-sorted. This should fix misplaced LED folder,
+	reported iirc by zas.  
+
+Fri Nov 28 14:02:20 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/widget.c:
+
+	Remove an unnecessary #include "bfu/listbox.h".  
+
+Fri Nov 28 13:47:48 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Nov 28 10:57:59 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Fri Nov 28 04:59:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Fix whitespace noise in last patch.  
+
+Fri Nov 28 04:58:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, form.h, link.c:
+
+	Add reset action to the link menu.  
+
+Fri Nov 28 04:57:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	Minor simplification.  
+
+Fri Nov 28 03:49:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, sched/download.c, sched/download.h:
+
+	Add support for delete the file when stopping a download. Idea from
+	links-2.1pre8.  
+
+Fri Nov 28 02:24:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, dialogs/download.c,
+	sched/download.c, sched/download.h:
+
+	Make dialog refreshing more controllable like signaling that there
+	is no need to redraw. Add dirty flag to file_download so we only
+	update the dialog when needed. This should restore behaviour from
+	before usage of dialog refreshing.  
+
+Fri Nov 28 02:22:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Fri Nov 28 02:18:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/download.c:
+
+	Stop -> Abort in the downloads manager.  
+
+Fri Nov 28 01:51:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Always beep when download is finished, if we are supposed to.  
+
+Fri Nov 28 01:46:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, sched/download.c:
+
+	Use real dialog refresh for the download dialog.  
+
+Fri Nov 28 01:40:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.c:
+
+	Removed strange and obvious comment.  
+
+Fri Nov 28 01:31:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Reverted making the notify beeping more buggy^Wclever, it breaks
+	document.download.notify_bell == 2 case. Sorry Jonas, shouldn't have
+	advise you w/o actually looking at the code.  
+
+Fri Nov 28 01:06:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Make the notify b33ping even more clever.  
+
+Fri Nov 28 00:57:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/signals.c:
+
+	Eliminate gettext() call and error() calls from check_signals(),
+	both presumably quite unsafe.  
+
+Fri Nov 28 00:53:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, download.h:
+
+	Remove file_download->ask that is apparently unused.  
+
+Fri Nov 28 00:53:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/: link.c, textarea.c, textarea.h:
+
+	Add 'Open in external editor' item to the Link menu for textarea
+	form item. Hope this makes this feature more visible ;-).  
+
+Fri Nov 28 00:48:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/signals.c:
+
+	Documented assertm() being called in signal handler.  
+
+Fri Nov 28 00:46:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/signals.c:
+
+	Eliminate memset() (function unsafe in signal context) from
+	install_signal_handler().  
+
+Fri Nov 28 00:39:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/document.c:
+
+	done_document(): Blast off global document option pointer if the
+	document is the `owner' so we don't have a dangling pointer. Could
+	fix global_doc_opts corruption reported by Zas.  
+
+Fri Nov 28 00:26:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Revert change to src/viewer/text: link.c (1.108 -> 1.109). "Links
+	are sorted horizontally. See bug 11 for reasons." It breaks numbered
+	links.  
+
+Fri Nov 28 00:21:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/: Makefile.am, refresh.c, refresh.h:
+
+	We now have more integrated dialog refreshing so remove the old one.  
+
+Fri Nov 28 00:17:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	Use the generic refreshed message box.  
+
+Fri Nov 28 00:17:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, msgbox.c, msgbox.h:
+
+	Add generic refreshed message box. When refreshing we also have to
+	call the layouter now.  
+
 Thu Nov 27 21:52:56 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/dialogs/download.c:

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.132 2004/06/11 19:38:56 jonas Exp $ */
+/* $Id: form.c,v 1.133 2004/06/11 21:48:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,41 +554,77 @@ struct boundary_info {
 	unsigned char string[BL];
 };
 
+/* Add boundary to string and save the offset */
 static inline void
 add_boundary(struct string *data, struct boundary_info *boundary)
 {
 	add_to_string(data, "--");
+
 	if (realloc_bound_ptrs(&boundary->offsets, boundary->count))
 		boundary->offsets[boundary->count++] = data->length;
 
 	add_bytes_to_string(data, boundary->string, BL);
 }
 
+static inline unsigned char *
+increment_boundary_counter(struct boundary_info *boundary)
+{
+	register int j;
+
+	/* This is just a decimal string incrementation */
+	for (j = BL - 1; j >= 0; j--) {
+		if (boundary->string[j]++ < '9')
+			return boundary->string;
+
+		boundary->string[j] = '0';
+	}
+
+	INTERNAL("Form data boundary counter overflow");
+
+	return NULL;
+}
+
 static inline void
 check_boundary(struct string *data, struct boundary_info *boundary)
 {
 	unsigned char *bound = boundary->string;
-	unsigned char *pos, *end = data->source + data->length - BL;
 	register int i;
 
 	memset(bound, '0', BL);
 
-again:
-	for (pos = data->source; pos <= end; pos++) {
-		register int j;
+	/* Search between all boundaries. There is a starting and an ending
+	 * boundary so assume the range of chars after and before the offsets.
+	 * If some string in the form data matches the boundary string it
+	 * is changed. */
+	for (i = 0; i < boundary->count - 1; i++) {
+		/* Start after the boundary string and also jump past the
+		 * "\r\nContent-Disposition: form-data; name=\"" string added
+		 * before any form data. */
+		int start_offset = boundary->offsets[i] + BL + 40;
 
-		if (memcmp(pos, bound, BL))
-			continue;
+		/* End so that there is atleast BL chars to compare. Subtract 2
+		 * char because there is no need to also compare the '--'
+		 * prefix that is part of the boundary. */
+		int end_offset = boundary->offsets[i + 1] - BL - 2;
+		unsigned char *pos = data->source + start_offset;
+		unsigned char *end = data->source + end_offset;
 
-		for (j = BL - 1; j >= 0; j--)
-			if (bound[j]++ >= '9')
-				bound[j] = '0';
-			else
-				goto again;
+		for (; pos <= end; pos++) {
+			if (memcmp(pos, bound, BL))
+				continue;
 
-		INTERNAL("Could not assing boundary");
+			/* If incrementing causes overflow bail out */
+			if (!increment_boundary_counter(boundary))
+				return;
+
+			/* Else start checking all boundaries using the new
+			 * boundary string */
+			i = 0;
+			break;
+		}
 	}
 
+	/* Now update all the boundaries with the unique boundary string */
 	for (i = 0; i < boundary->count; i++)
 		memcpy(data->source + boundary->offsets[i], bound, BL);
 }

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.63 2005/03/27 12:14:57 pasky Exp $
+# $Id: hooks.pl,v 1.64 2005/03/27 12:21:28 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -576,8 +576,6 @@ my %weather_locators = (
 );
 
 
-################################################################################
-### goto_url_hook ##############################################################
 sub goto_url_hook
 {
 	my $url = shift;
@@ -850,13 +848,26 @@ sub goto_url_hook
 }
 
 
-################################################################################
-### follow_url_hook ############################################################
+
+=head1 GLOBAL URL REWRITES
+
+These rewrites happen everytime ELinks is about to follow an URL and load it.
+So this is even by an order of magnitude more powerful than the Goto URL
+rewrites.
+
+=over 4
+
+=cut
+
 sub follow_url_hook
 {
 	my $url = shift;
 
-	# Bork! Bork! Bork!
+=item Google's Bork!
+
+Rewrites many I<google.com> URIs to use the phenomenal I<xx-bork> localization.
+
+=cut
 	if ($url =~ 'google\.com')
 	{
 		if (loadrc("bork") eq "yes")
@@ -873,7 +884,11 @@ sub follow_url_hook
 		}
 	}
 
-	# NNTP?  Try Google Groups
+=item NNTP over Google
+
+Rewrites any I<nntp:>/I<news:> URIs to Google Groups HTTP URIs.
+
+=cut
 	if ($url =~ '^(nntp|news):' and loadrc("usenet") ne "standard")
 	{
 		my $beta = "groups.google.co.uk";
@@ -890,6 +905,11 @@ sub follow_url_hook
 
 	return $url;
 }
+
+=back
+
+=cut
+
 
 
 ################################################################################

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.148 2004/07/17 19:47:42 zas Exp $ */
+/* $Id: dialog.c,v 1.149 2004/07/17 19:51:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,13 +118,15 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 static void
 select_dlg_item(struct dialog_data *dlg_data, int i)
 {
+	struct widget_data *widget_data = &dlg_data->widgets_data[i];
+
 	if (dlg_data->selected != i) {
 		display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
-		display_dlg_item(dlg_data, &dlg_data->widgets_data[i], 1);
+		display_dlg_item(dlg_data, widget_data, 1);
 		dlg_data->selected = i;
 	}
-	if (dlg_data->widgets_data[i].widget->ops->select)
-		dlg_data->widgets_data[i].widget->ops->select(&dlg_data->widgets_data[i], dlg_data);
+	if (widget_data->widget->ops->select)
+		widget_data->widget->ops->select(widget_data, dlg_data);
 }
 
 static struct widget_ops *widget_type_to_ops[] = {

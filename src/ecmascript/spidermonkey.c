@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.73 2004/11/24 17:42:01 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.74 2004/11/24 18:21:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1233,15 +1233,20 @@ static JSBool
 safeguard(JSContext *ctx, JSScript *script)
 {
 	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
+	int max_exec_time = get_opt_int("ecmascript.max_exec_time");
 
-	if (time(NULL) - interpreter->exec_start > 5) {
+	if (time(NULL) - interpreter->exec_start > max_exec_time) {
+		struct terminal *term = interpreter->vs->doc_view->session->tab->term;
+
 		/* A killer script! Alert! */
-		msg_box(interpreter->vs->doc_view->session->tab->term, NULL, 0,
+		msg_box(term, NULL, 0,
 			N_("JavaScript Emergency"), ALIGN_CENTER,
-			N_("A script embedded in the current document was running "
-			"for more than 5 seconds in line. This probably means "
-			"there is a bug in the script and it could have halted "
-			"the whole ELinks. The script execution was interrupted."),
+			msg_text(term,
+				 N_("A script embedded in the current document was running "
+				    "for more than %d seconds in line. This probably means "
+				    "there is a bug in the script and it could have halted "
+			            "the whole ELinks. The script execution was interrupted."),
+				 max_exec_time),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
 		return JS_FALSE;

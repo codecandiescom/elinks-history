@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.22 2004/10/21 23:22:00 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.23 2004/11/24 18:21:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,14 +32,6 @@
  * messing with your menubar/statusbar visibility, disallow changing the
  * statusbar content etc. --pasky */
 
-enum ecmascript_option {
-	ECMASCRIPT_TREE,
-
-	ECMASCRIPT_ENABLE,
-
-	ECMASCRIPT_OPTIONS,
-};
-
 static struct option_info ecmascript_options[] = {
 	INIT_OPT_TREE("", N_("ECMAScript"),
 		"ecmascript", 0,
@@ -53,11 +45,14 @@ static struct option_info ecmascript_options[] = {
 		"error_reporting", 0, 0,
 		N_("Open a message box when a script reports an error.")),
 
+	INIT_OPT_INT("ecmascript", N_("Max. Execution time"),
+		"max_exec_time", 0, 1, 3600, 5,
+		N_("Maximum execution time in seconds for a script.")),
+
 	NULL_OPTION_INFO,
 };
 
-#define get_opt_ecmascript(which)	ecmascript_options[(which)].option.value
-#define get_ecmascript_enable()		get_opt_ecmascript(ECMASCRIPT_ENABLE).number
+#define get_ecmascript_enable()		get_opt_bool("ecmascript.enable")
 
 
 static void

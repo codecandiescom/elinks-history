@@ -552,6 +552,15 @@ fi
 
 
 dnl ===================================================================
+dnl Gettext grey zone. Beware.
+dnl ===================================================================
+
+ALL_LINGUAS=""
+
+AM_GNU_GETTEXT
+
+
+dnl ===================================================================
 dnl Compile-time features control
 dnl ===================================================================
 
@@ -623,6 +632,7 @@ AC_OUTPUT([ \
  doc/Makefile \
  doc/book/Makefile \
  intl/Makefile \
+ po/Makefile.in \
  src/Makefile \
  src/bfu/Makefile \
  src/bookmarks/Makefile \

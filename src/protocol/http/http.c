@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.191 2003/10/22 10:48:20 jonas Exp $ */
+/* $Id: http.c,v 1.192 2003/10/24 11:21:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -740,8 +740,8 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 
 		if (to_read == PIPE_BUF / 2) {
 			/* ... we aren't finishing yet. */
-			int written = write(conn->stream_pipes[1], data,
-						len > to_read ? to_read : len);
+			int written = safe_write(conn->stream_pipes[1], data,
+						 len > to_read ? to_read : len);
 
 			if (written > 0) {
 				data += written;

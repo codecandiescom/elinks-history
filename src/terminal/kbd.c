@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.33 2003/10/22 12:53:25 zas Exp $ */
+/* $Id: kbd.c,v 1.34 2003/10/24 11:21:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ write_ev_queue(struct itrm *itrm)
 
 	if (qlen > 128) qlen = 128;
 
-	l = write(itrm->sock_out, itrm->ev_queue, qlen);
+	l = safe_write(itrm->sock_out, itrm->ev_queue, qlen);
 	if (l < 1) {
 		if (l == -1) free_trm(itrm);
 		return;
@@ -117,7 +117,7 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 	if (!len) return;
 
 	if (!itrm->eqlen && can_write(itrm->sock_out)) {
-		w = write(itrm->sock_out, data, len);
+		w = safe_write(itrm->sock_out, data, len);
 		if (w <= 0 && HPUX_PIPE) {
 			/* free_trm(itrm); */
 			register_bottom_half((void (*)(void *))free_trm, itrm);
@@ -479,8 +479,8 @@ in_sock(struct itrm *itrm)
 	int fg;
 	int c, i, p;
 	unsigned char buf[OUT_BUF_SIZE];
-
-	c = read(itrm->sock_in, buf, OUT_BUF_SIZE);
+	
+	c = safe_read(itrm->sock_in, buf, OUT_BUF_SIZE);
 	if (c <= 0) {
 fr:
 		free_trm(itrm);
@@ -935,8 +935,8 @@ in_kbd(struct itrm *itrm)
 		return;
 	}
 
-	r = read(itrm->std_in, itrm->kqueue + itrm->qlen,
-		 IN_BUF_SIZE - itrm->qlen);
+	r = safe_read(itrm->std_in, itrm->kqueue + itrm->qlen,
+		      IN_BUF_SIZE - itrm->qlen);
 	if (r <= 0) {
 		free_trm(itrm);
 		return;

@@ -328,20 +328,15 @@ source_success:
 		to_read = size;
 		read_ptr = (unsigned char *) data;
 		do {
-			long int nb = (long int) read(fd, read_ptr, to_read);
+			long int nb = (long int) safe_read(fd, read_ptr, to_read);
 
 			if (nb <= 0) {
-#ifdef EINTR
-				if (nb == -1 && errno == EINTR)
-					continue;
-#endif
 				close(fd);
 				return;
 			}
 			read_ptr += nb;
 			to_read -= nb;
-		}
-		while (to_read > 0);
+		} while (to_read > 0);
 
 		close(fd);
 	}

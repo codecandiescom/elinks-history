@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.45 2003/10/19 11:31:17 zas Exp $ */
+/* $Id: form.c,v 1.46 2003/10/24 11:21:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -584,7 +584,7 @@ xx:
 				if (fh == -1) goto encode_error;
 				set_bin(fh);
 				do {
-					rd = read(fh, buffer, F_BUFLEN);
+					rd = safe_read(fh, buffer, F_BUFLEN);
 					if (rd == -1) goto encode_error;
 					if (rd) add_bytes_to_string(data, buffer, rd);
 				} while (rd);

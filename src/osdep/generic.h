@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.7 2003/10/23 22:37:41 pasky Exp $ */
+/* $Id: generic.h,v 1.8 2003/10/24 11:21:19 zas Exp $ */
 
 #ifndef EL__OS_DEPX_H
 #define EL__OS_DEPX_H
@@ -66,5 +66,46 @@ void elinks_cfmakeraw(struct termios *t);
 #endif
 #define errno 1
 #endif
+
+/* Attempt to workaround the EINTR mess. */
+#ifdef EINTR
+
+#ifdef TEMP_FAILURE_RETRY	/* GNU libc */
+#define safe_read(fd, buf, count) TEMP_FAILURE_RETRY(read(fd, buf, count))
+#define safe_write(fd, buf, count) TEMP_FAILURE_RETRY(write(fd, buf, count))
+#else /* TEMP_FAILURE_RETRY */
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+static inline ssize_t
+safe_read(int fd, void *buf, size_t count) {
+	do {
+		register int r = read(fd, buf, count);
+	
+		if (r == -1 && errno == EINTR) continue;
+		return r;
+	} while (1);
+}
+
+static inline ssize_t
+safe_write(int fd, const void *buf, size_t count) {
+	do {
+		register int w = write(fd, buf, count);
+	
+		if (w == -1 && errno == EINTR) continue;
+		return w;
+	} while (1);
+}
+#endif /* TEMP_FAILURE_RETRY */
+
+#else /* EINTR */
+
+#define safe_read(fd, buf, count) read(fd, buf, count)
+#define safe_write(fd, buf, count) write(fd, buf, count)
+
+#endif /* EINTR */
+
 
 #endif

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.46 2003/07/29 22:43:52 zas Exp $ */
+/* $Id: socket.c,v 1.47 2003/10/24 11:21:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -409,7 +409,7 @@ write_select(struct connection *c)
 		if (wr <= 0) return;
 	} else {
 		assert(wb->len - wb->pos > 0);
-		wr = write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
+		wr = safe_write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) {
 			retry_conn_with_state(c, wr ? -errno : S_CANT_WRITE);
 			return;
@@ -490,7 +490,7 @@ read_select(struct connection *c)
 		rd = ssl_read(c, rb);
 		if (rd <= 0) return;
 	} else {
-		rd = read(rb->sock, rb->data + rb->len, rb->freespace);
+		rd = safe_read(rb->sock, rb->data + rb->len, rb->freespace);
 		if (rd <= 0) {
 			if (rb->close && !rd) {
 				rb->close = 2;

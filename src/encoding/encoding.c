@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.24 2003/06/21 13:43:44 jonas Exp $ */
+/* $Id: encoding.c,v 1.25 2003/10/24 11:21:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ dummy_open(struct stream_encoded *stream, int fd)
 static int
 dummy_read(struct stream_encoded *stream, unsigned char *data, int len)
 {
-	return read(((struct dummy_enc_data *) stream->data)->fd, data, len);
+	return safe_read(((struct dummy_enc_data *) stream->data)->fd, data, len);
 }
 
 static unsigned char *

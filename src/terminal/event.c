@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.12 2003/09/28 00:13:17 zas Exp $ */
+/* $Id: event.c,v 1.13 2003/10/24 11:21:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,11 +84,12 @@ in_term(struct terminal *term)
 		term->qfreespace = newsize - term->qlen;
 	}
 
-	r = read(term->fdin, iq + term->qlen, term->qfreespace);
+	r = safe_read(term->fdin, iq + term->qlen, term->qfreespace);
 	if (r <= 0) {
 		if (r == -1 && errno != ECONNRESET)
 			error(_("Could not read event: %d (%s)", term),
 			      errno, (unsigned char *) strerror(errno));
+		
 		destroy_terminal(term);
 		return;
 	}

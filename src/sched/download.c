@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.109 2003/10/23 22:19:30 zas Exp $ */
+/* $Id: download.c,v 1.110 2003/10/24 11:21:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,7 +523,7 @@ write_cache_entry_to_file(struct cache_entry *ce, struct file_download *file_dow
 			}
 #endif
 
-			w = write(*h, frag->data + remain, frag->length - remain);
+			w = safe_write(*h, frag->data + remain, frag->length - remain);
 			if (w == -1) goto write_error;
 
 			file_download->last_pos += w;

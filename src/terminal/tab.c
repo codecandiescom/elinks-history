@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.74 2004/10/16 19:57:09 jonas Exp $ */
+/* $Id: tab.c,v 1.75 2004/10/16 19:59:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,6 +147,11 @@ switch_current_tab(struct session *ses, int direction)
 
 	if (num_tabs < 2)
 		return;
+
+	if (ses->kbdprefix.repeat_count) {
+		direction *= ses->kbdprefix.repeat_count;
+		ses->kbdprefix.repeat_count = 0;
+	}
 
 	switch_to_tab(term, term->current_tab + direction, num_tabs);
 }

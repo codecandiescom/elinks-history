@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.70 2004/05/10 15:34:32 zas Exp $ */
+/* $Id: checkbox.c,v 1.71 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@ dlg_format_checkbox(struct terminal *term,
 {
 	unsigned char *text = widget_data->widget->text;
 
-	set_rect(&widget_data->dimensions, x, *y, CHECKBOX_LS, 1);
+	set_box(&widget_data->box, x, *y, CHECKBOX_LS, 1);
 
 	if (w <= CHECKBOX_LS) return;
 
@@ -47,7 +47,7 @@ display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data, 
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
 	unsigned char *text;
-	struct rect *pos = &widget_data->dimensions;
+	struct box *pos = &widget_data->box;
 
 	color = get_bfu_color(term, "dialog.checkbox");
 	if (!color) return;
@@ -84,7 +84,7 @@ mouse_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	       struct term_event *ev)
 {
 	if (check_mouse_wheel(ev)
-	    || !is_in_rect(&widget_data->dimensions, ev->x, ev->y))
+	    || !is_in_box(&widget_data->box, ev->x, ev->y))
 		return EVENT_NOT_PROCESSED;
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);

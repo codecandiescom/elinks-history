@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.89 2004/05/13 20:40:06 zas Exp $ */
+/* $Id: draw.c,v 1.90 2004/05/14 00:18:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 #include "terminal/screen.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
-#include "util/rect.h"
+#include "util/box.h"
 
 /* Makes sure that @x and @y are within the dimensions of the terminal. */
 #define check_range(term, x, y) \
@@ -134,7 +134,7 @@ draw_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 }
 
 void
-draw_border(struct terminal *term, struct rect *box,
+draw_border(struct terminal *term, struct box *box,
 	    struct color_pair *color, int width)
 {
 	static enum border_char p1[] = {
@@ -154,17 +154,16 @@ draw_border(struct terminal *term, struct rect *box,
 		BORDER_DHLINE,
 	};
 	enum border_char *p = (width > 1) ? p2 : p1;
-	struct rect borderbox;
+	struct box borderbox;
 
-	set_rect(&borderbox,
-		 box->x - 1, box->y - 1,
-		 box->width + 2, box->height + 2);
+	set_box(&borderbox, box->x - 1, box->y - 1,
+		box->width + 2, box->height + 2);
 
 	if (borderbox.width > 2) {
-		struct rect bbox;
+		struct box bbox;
 
 		/* Horizontal top border */
-		set_rect(&bbox, box->x, borderbox.y, box->width, 1);
+		set_box(&bbox, box->x, borderbox.y, box->width, 1);
 		draw_box(term, &bbox, p[5], SCREEN_ATTR_FRAME, color);
 
 		/* Horizontal bottom border */
@@ -173,10 +172,10 @@ draw_border(struct terminal *term, struct rect *box,
 	}
 
 	if (borderbox.height > 2) {
-		struct rect bbox;
+		struct box bbox;
 
 		/* Vertical left border */
-		set_rect(&bbox, borderbox.x, box->y, 1, box->height);
+		set_box(&bbox, borderbox.x, box->y, 1, box->height);
 		draw_box(term, &bbox, p[4], SCREEN_ATTR_FRAME, color);
 
 		/* Vertical right border */
@@ -222,7 +221,7 @@ draw_char(struct terminal *term, int x, int y,
 }
 
 void
-draw_box(struct terminal *term, struct rect *box,
+draw_box(struct terminal *term, struct box *box,
 	 unsigned char data, enum screen_char_attr attr,
 	 struct color_pair *color)
 {
@@ -268,26 +267,20 @@ draw_box(struct terminal *term, struct rect *box,
 }
 
 void
-draw_shadow(struct terminal *term, struct rect *box,
+draw_shadow(struct terminal *term, struct box *box,
 	    struct color_pair *color, int width, int height)
 {
-	struct rect dbox;
+	struct box dbox;
 
 	/* (horizontal) */
-	set_rect(&dbox,
-		 box->x + width,
-		 box->y + box->height,
-		 box->width - width,
-		 height);
+	set_box(&dbox, box->x + width, box->y + box->height,
+		box->width - width, height);
 
 	draw_box(term, &dbox, ' ', 0, color);
 
 	/* (vertical) */
-	set_rect(&dbox,
-		 box->x + box->width,
-		 box->y + height,
-		 width,
-		 box->height);
+	set_box(&dbox, box->x + box->width, box->y + height,
+		width, box->height);
 
 	draw_box(term, &dbox, ' ', 0, color);
 }
@@ -355,9 +348,9 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 void
 clear_terminal(struct terminal *term)
 {
-	struct rect box;
+	struct box box;
 
-	set_rect(&box, 0, 0, term->width, term->height);
+	set_box(&box, 0, 0, term->width, term->height);
 	draw_box(term, &box, ' ', 0, NULL);
 	set_cursor(term, 0, 0, 1);
 }

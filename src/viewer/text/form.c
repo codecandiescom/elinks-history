@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.94 2004/05/10 17:15:22 zas Exp $ */
+/* $Id: form.c,v 1.95 2004/05/14 00:18:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,7 +191,7 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 	struct form_state *fs;
 	struct form_control *frm;
 	struct view_state *vs;
-	struct rect *box;
+	struct box *box;
 	int vx, vy;
 
 	assert(t && doc_view && doc_view->document && doc_view->vs && l);
@@ -203,7 +203,7 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 	fs = find_form_state(doc_view, frm);
 	if (!fs) return;
 
-	box = &doc_view->dimensions;
+	box = &doc_view->box;
 	
 	vs = doc_view->vs;
 	vx = vs->x;
@@ -221,12 +221,12 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 			if (!l->n) break;
 
 			y = l->pos[0].y + box->y - vy;
-			if (row_is_in_rect(box, y)) {
+			if (row_is_in_box(box, y)) {
 				int len = strlen(fs->value) - fs->vpos;
 
 				x = l->pos[0].x + box->x - vx;
 				for (i = 0; i < frm->size; i++, x++) {
-					if (col_is_in_rect(box, x)) {
+					if (col_is_in_box(box, x)) {
 						if (fs->value &&
 						    i >= -fs->vpos && i < len)
 							draw_char_data(t, x, y,
@@ -247,7 +247,7 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 			if (l->n < 2) break;
 			x = l->pos[1].x + box->x - vx;
 			y = l->pos[1].y + box->y - vy;
-			if (is_in_rect(box, x, y))
+			if (is_in_box(box, x, y))
 				draw_char_data(t, x, y, fs->state ? 'X' : ' ');
 			break;
 		case FC_SELECT:
@@ -261,7 +261,7 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 			for (i = 0; i < l->n; i++) {
 				x = l->pos[i].x + box->x - vx;
 				y = l->pos[i].y + box->y - vy;
-				if (is_in_rect(box, x, y))
+				if (is_in_box(box, x, y))
 					draw_char_data(t, x, y, i < sl ? s[i] : '_');
 			}
 			break;

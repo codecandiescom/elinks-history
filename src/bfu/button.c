@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.53 2004/05/10 15:15:03 zas Exp $ */
+/* $Id: button.c,v 1.54 2004/05/14 00:18:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,11 +78,11 @@ dlg_format_buttons(struct terminal *term,
 			int p = x + (align == AL_CENTER ? (w - mw) / 2 : 0);
 
 			for (i = i1; i < i2; i++) {
-				set_rect(&widget_data[i].dimensions,
+				set_box(&widget_data[i].box,
 					 p, *y,
 					 strlen(widget_data[i].widget->text) + BUTTON_LR_LEN, 1);
 
-				p += widget_data[i].dimensions.width + BUTTON_HSPACING;
+				p += widget_data[i].box.width + BUTTON_HSPACING;
 			}
 		}
 
@@ -96,8 +96,8 @@ display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, in
 {
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
-	struct rect *pos = &widget_data->dimensions;
-	int len = widget_data->dimensions.width - BUTTON_LR_LEN;
+	struct box *pos = &widget_data->box;
+	int len = widget_data->box.width - BUTTON_LR_LEN;
 	int x = pos->x + BUTTON_LEFT_LEN;
 
 	color = get_bfu_color(term, sel ? "dialog.button-selected"
@@ -120,7 +120,7 @@ mouse_button(struct widget_data *widget_data, struct dialog_data *dlg_data, stru
 	if (check_mouse_wheel(ev))
 		return EVENT_NOT_PROCESSED;
 
-	if (!is_in_rect(&widget_data->dimensions, ev->x, ev->y))
+	if (!is_in_box(&widget_data->box, ev->x, ev->y))
 		return EVENT_NOT_PROCESSED;
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.218 2004/05/10 17:15:22 zas Exp $ */
+/* $Id: search.c,v 1.219 2004/05/14 00:18:41 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -443,7 +443,7 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 {
 	unsigned char *txt;
 	struct point *points = NULL;
-	struct rect *box;
+	struct box *box;
 	int xoffset, yoffset;
 	int len = 0;
 	int case_sensitive = get_opt_int("document.browse.search.case");
@@ -452,7 +452,7 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 			     : lowered_string(*doc_view->search_word, l);
 	if (!txt) return;
 
-	box = &doc_view->dimensions;
+	box = &doc_view->box;
 	xoffset = box->x - doc_view->vs->x;
 	yoffset = box->y - doc_view->vs->y;
 
@@ -474,14 +474,14 @@ srch_failed:
 			register int j;
 			int y = s1[i].y + yoffset;
 
-			if (!row_is_in_rect(box, y))
+			if (!row_is_in_box(box, y))
 				continue;
 
 			for (j = 0; j < s1[i].n; j++) {
 				int sx = s1[i].x + j;
 				int x = sx + xoffset;
 
-				if (!col_is_in_rect(box, x))
+				if (!col_is_in_box(box, x))
 					continue;
 
 				if (!realloc_points(&points, len))
@@ -520,7 +520,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	int pos = 0;
 	struct search *search_start = s1;
 	unsigned char save_c;
-	struct rect *box;
+	struct box *box;
 	
 	if (get_opt_int("document.browse.search.regex") == 2)
 		regex_flags |= REG_EXTENDED;
@@ -560,7 +560,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	}
 	doc[doclen] = 0;
 
-	box = &doc_view->dimensions;
+	box = &doc_view->box;
 	xoffset = box->x - doc_view->vs->x;
 	yoffset = box->y - doc_view->vs->y;
 
@@ -588,14 +588,14 @@ find_next:
 			register int j;
 			int y = s1[i].y + yoffset;
 
-			if (!row_is_in_rect(box, y))
+			if (!row_is_in_box(box, y))
 				continue;
 
 			for (j = 0; j < s1[i].n; j++) {
 				int sx = s1[i].x + j;
 				int x = sx + xoffset;
 
-				if (!col_is_in_rect(box, x))
+				if (!col_is_in_box(box, x))
 					continue;
 
 				if (!realloc_points(&points, len))
@@ -637,7 +637,7 @@ get_searched(struct document_view *doc_view, struct point **pt, int *pl)
 	get_search_data(doc_view->document);
 	l = strlen(*doc_view->search_word);
 	if (get_range(doc_view->document, doc_view->vs->y,
-		      doc_view->dimensions.height, l, &s1, &s2)
+		      doc_view->box.height, l, &s1, &s2)
 	   ) {
 		*pt = NULL;
 		*pl = 0;
@@ -670,8 +670,8 @@ draw_searched(struct terminal *term, struct document_view *doc_view)
 	if (len) {
 		register int i;
 		struct color_pair *color = get_bfu_color(term, "searched");
-		int xoffset = doc_view->dimensions.x - doc_view->vs->x;
-		int yoffset = doc_view->dimensions.y - doc_view->vs->y;
+		int xoffset = doc_view->box.x - doc_view->vs->x;
+		int yoffset = doc_view->box.y - doc_view->vs->y;
 
 		for (i = 0; i < len; i++) {
 			int x = pt[i].x + xoffset;
@@ -830,7 +830,7 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 
 	direction *= ses->search_direction;
 	p = doc_view->vs->y;
-	height = doc_view->dimensions.height;
+	height = doc_view->box.height;
 	step = direction * height;
 
 	if (ses->search_word) {
@@ -858,7 +858,7 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 			doc_view->vs->y = p;
 			if (max >= min)
 				doc_view->vs->x = int_min(int_max(doc_view->vs->x,
-								  max - doc_view->dimensions.width),
+								  max - doc_view->box.width),
 								  min);
 
 			set_link(doc_view);
@@ -1010,10 +1010,10 @@ fixup_typeahead_match(struct session *ses, struct document_view *doc_view)
 	int current_link = doc_view->vs->current_link;
 	struct link *link = &doc_view->document->links[current_link];
 
-	doc_view->dimensions.height -= 1;
+	doc_view->box.height -= 1;
 	set_pos_x(doc_view, link);
 	set_pos_y(doc_view, link);
-	doc_view->dimensions.height += 1;
+	doc_view->box.height += 1;
 }
 
 static inline unsigned char
@@ -1028,8 +1028,8 @@ draw_link_text(struct terminal *term, struct document_view *doc_view,
 	       int chars, int offset)
 {
 	struct color_pair *color = get_bfu_color(term, "searched");
-	int xoffset = doc_view->dimensions.x - doc_view->vs->x;
-	int yoffset = doc_view->dimensions.y - doc_view->vs->y;
+	int xoffset = doc_view->box.x - doc_view->vs->x;
+	int yoffset = doc_view->box.y - doc_view->vs->y;
 	int current_link = doc_view->vs->current_link;
 	struct link *link = &doc_view->document->links[current_link];
 	unsigned char *text = link->name ? link->name : link->where;

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.68 2004/05/11 09:32:59 zas Exp $ */
+/* $Id: frames.c,v 1.69 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,20 +42,20 @@ add_frameset_entry(struct frameset_desc *frameset_desc,
 	 * There may exist a true fix for this... --Zas */
 	/* May the one truly fixing this notify'n'close bug 237 in the
 	 * Bugzilla... --pasky */
-	if (frameset_desc->dimensions.y >= frameset_desc-> dimensions.height)
+	if (frameset_desc->box.y >= frameset_desc-> box.height)
 		return;
 
-	offset = frameset_desc->dimensions.x
-		 + frameset_desc->dimensions.y * frameset_desc->dimensions.width;
+	offset = frameset_desc->box.x
+		 + frameset_desc->box.y * frameset_desc->box.width;
 	frame_desc = &frameset_desc->frame_desc[offset];
 	frame_desc->subframe = subframe;
 	frame_desc->name = null_or_stracpy(name);
 	frame_desc->uri = url ? get_uri(url, -1) : NULL;
 
-	frameset_desc->dimensions.x++;
-	if (frameset_desc->dimensions.x >= frameset_desc->dimensions.width) {
-		frameset_desc->dimensions.x = 0;
-		frameset_desc->dimensions.y++;
+	frameset_desc->box.x++;
+	if (frameset_desc->box.x >= frameset_desc->box.width) {
+		frameset_desc->box.x = 0;
+		frameset_desc->box.y++;
 		/* FIXME: check y here ? --Zas */
 	}
 }
@@ -93,8 +93,8 @@ create_frameset(struct frameset_param *fp)
 	}
 
 	fd->n = size;
-	fd->dimensions.width = fp->x;
-	fd->dimensions.height = fp->y;
+	fd->box.width = fp->x;
+	fd->box.height = fp->y;
 
 	if (fp->parent)
 		add_frameset_entry(fp->parent, fd, NULL, NULL);
@@ -111,10 +111,10 @@ add_frame_to_list(struct session *ses, struct document_view *doc_view)
 	if_assert_failed return;
 
 	foreach (ses_doc_view, ses->scrn_frames) {
-		int sx = ses_doc_view->dimensions.x;
-		int sy = ses_doc_view->dimensions.y;
-		int x = doc_view->dimensions.x;
-		int y = doc_view->dimensions.y;
+		int sx = ses_doc_view->box.x;
+		int sy = ses_doc_view->box.y;
+		int x = doc_view->box.x;
+		int y = doc_view->box.y;
 		
 		if (sy > y || (sy == y && sx > x)) {
 			add_at_pos(ses_doc_view->prev, doc_view);
@@ -154,7 +154,7 @@ find_fd(struct session *ses, unsigned char *name,
 	}
 	doc_view->depth = depth;
 	doc_view->search_word = &ses->search_word;
-	set_rect(&doc_view->dimensions, x, y, 0, 0);
+	set_box(&doc_view->box, x, y, 0, 0);
 
 	add_frame_to_list(ses, doc_view);
 
@@ -215,11 +215,11 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 	o.margin = !!o.margin;
 
 	n = 0;
-	for (j = 0; j < fsd->dimensions.height; j++) {
+	for (j = 0; j < fsd->box.height; j++) {
 		register int i;
 
 		o.x = op->x;
-		for (i = 0; i < fsd->dimensions.width; i++) {
+		for (i = 0; i < fsd->box.width; i++) {
 			struct frame_desc *frame_desc = &fsd->frame_desc[n];
 
 			o.width = frame_desc->width;

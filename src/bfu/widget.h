@@ -1,11 +1,11 @@
-/* $Id: widget.h,v 1.53 2004/05/09 21:46:23 zas Exp $ */
+/* $Id: widget.h,v 1.54 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
 
 #include "bfu/style.h"
 #include "util/lists.h"
-#include "util/rect.h"
+#include "util/box.h"
 
 struct dialog_data;
 struct input_history;
@@ -85,7 +85,7 @@ struct widget_data {
 	struct widget *widget;
 	unsigned char *cdata;
 
-	struct rect dimensions;
+	struct box box;
 
 	union {
 		struct {
@@ -142,9 +142,9 @@ void dlg_set_history(struct widget_data *);
 
 #define text_is_scrollable(widget_data) \
 	((widget_data)->widget->info.text.is_scrollable \
-	 && (widget_data)->dimensions.height > 0 \
+	 && (widget_data)->box.height > 0 \
 	 && (widget_data)->info.text.lines > 0 \
-	 && (widget_data)->dimensions.height < (widget_data)->info.text.lines)
+	 && (widget_data)->box.height < (widget_data)->info.text.lines)
 
 static inline int
 widget_is_focusable(struct widget_data *widget_data)

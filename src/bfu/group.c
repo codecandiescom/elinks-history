@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.56 2004/05/11 19:23:17 zas Exp $ */
+/* $Id: group.c,v 1.57 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ dlg_format_group(struct terminal *term,
 			else if (widget_is_textfield(widget_data))
 				width = widget_data->widget->datalen;
 
-			set_rect(&widget_data->dimensions,
+			set_box(&widget_data->box,
 				 xnx + !is_checkbox * (sl + 1), *y,
 				 width, 1);
 		}
@@ -104,11 +104,11 @@ group_layouter(struct dialog_data *dlg_data)
 
 	draw_dialog(dlg_data, w, y);
 
-	y = dlg_data->dimensions.y + DIALOG_TB + 1;
+	y = dlg_data->box.y + DIALOG_TB + 1;
 	dlg_format_group(term, dlg_data->widgets_data, n,
-			 dlg_data->dimensions.x + DIALOG_LB, &y, w, NULL);
+			 dlg_data->box.x + DIALOG_LB, &y, w, NULL);
 
 	y++;
 	dlg_format_buttons(term, dlg_data->widgets_data + n, 2,
-			   dlg_data->dimensions.x + DIALOG_LB, &y, w, &rw, AL_CENTER);
+			   dlg_data->box.x + DIALOG_LB, &y, w, &rw, AL_CENTER);
 }

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.54 2004/05/10 01:51:04 jonas Exp $ */
+/* $Id: document.h,v 1.55 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -7,7 +7,7 @@
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/object.h"
-#include "util/rect.h"
+#include "util/box.h"
 
 struct cache_entry;
 struct document_refresh;
@@ -32,7 +32,7 @@ struct tag {
 struct node {
 	LIST_HEAD(struct node);
 
-	struct rect box;
+	struct box box;
 };
 
 

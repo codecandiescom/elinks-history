@@ -1,10 +1,10 @@
-/* $Id: menu.h,v 1.61 2004/05/09 22:27:37 zas Exp $ */
+/* $Id: menu.h,v 1.62 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
 
 #include "config/kbdbind.h"
-#include "util/rect.h"
+#include "util/box.h"
 
 struct terminal;
 struct window;
@@ -146,7 +146,7 @@ struct menu {
 	int selected;		/* The current selected item. -1 means none */
 	int first, last;	/* The first and last visible menu items */
 	
-	struct rect dimensions; /* The position and dimensions of the visible menu */
+	struct box box;		/* The visible area of the menu */
 	int parent_x, parent_y;	/* The coordinates of the parent window */
 
 	int hotkeys;		/* Whether to check and display hotkeys */

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.98 2004/05/10 12:56:14 zas Exp $ */
+/* $Id: renderer.c,v 1.99 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -293,7 +293,7 @@ add_node(struct plain_renderer *renderer, int x, int width, int height)
 	if (node) {
 		struct document *document = renderer->document;
 
-		set_rect(&node->box, x, renderer->lineno, width, height);
+		set_box(&node->box, x, renderer->lineno, width, height);
 
 		int_lower_bound(&document->width, width);
 		int_lower_bound(&document->height, height);

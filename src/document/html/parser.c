@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.416 2004/05/11 09:33:00 zas Exp $ */
+/* $Id: parser.c,v 1.417 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -878,10 +878,10 @@ html_frameset(unsigned char *a)
 		struct frameset_desc *frameset_desc = html_top.frameset;
 		int offset;
 
-		if (frameset_desc->dimensions.y >= frameset_desc->dimensions.height)
+		if (frameset_desc->box.y >= frameset_desc->box.height)
 			goto free_and_return;
-		offset = frameset_desc->dimensions.x
-			 + frameset_desc->dimensions.y * frameset_desc->dimensions.width;
+		offset = frameset_desc->box.x
+			 + frameset_desc->box.y * frameset_desc->box.width;
 		width = frameset_desc->frame_desc[offset].width;
 		height = frameset_desc->frame_desc[offset].height;
 	}

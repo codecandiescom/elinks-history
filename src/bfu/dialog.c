@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.140 2004/05/13 20:40:06 zas Exp $ */
+/* $Id: dialog.c,v 1.141 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,13 +84,13 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 	}
 
 	if (!dlg_data->dlg->layout.only_widgets) {
-		struct rect box;
+		struct box box;
 
-		set_rect(&box,
-			 dlg_data->dimensions.x + (DIALOG_LEFT_BORDER + 1),
-			 dlg_data->dimensions.y + (DIALOG_TOP_BORDER + 1),
-			 dlg_data->dimensions.width - 2 * (DIALOG_LEFT_BORDER + 1),
-			 dlg_data->dimensions.height - 2 * (DIALOG_TOP_BORDER + 1));
+		set_box(&box,
+			dlg_data->box.x + (DIALOG_LEFT_BORDER + 1),
+			dlg_data->box.y + (DIALOG_TOP_BORDER + 1),
+			dlg_data->box.width - 2 * (DIALOG_LEFT_BORDER + 1),
+			dlg_data->box.height - 2 * (DIALOG_TOP_BORDER + 1));
 
 		draw_border(term, &box, get_bfu_color(term, "dialog.frame"), DIALOG_FRAME);
 
@@ -530,8 +530,8 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 
 	draw_dialog(dlg_data, w, y);
 
-	y = dlg_data->dimensions.y + DIALOG_TB + dlg_data->dlg->layout.padding_top;
-	x = dlg_data->dimensions.x + DIALOG_LB;
+	y = dlg_data->box.y + DIALOG_TB + dlg_data->dlg->layout.padding_top;
+	x = dlg_data->box.x + DIALOG_LB;
 
 	format_widgets(term, dlg_data, x, &y, w, height, NULL);
 }
@@ -544,16 +544,16 @@ draw_dialog(struct dialog_data *dlg_data, int width, int height)
 	int dlg_width = int_min(term->width, width + 2 * DIALOG_LB);
 	int dlg_height = int_min(term->height, height + 2 * DIALOG_TB);
 
-	set_rect(&dlg_data->dimensions,
+	set_box(&dlg_data->box,
 		 (term->width - dlg_width) / 2, (term->height - dlg_height) / 2,
 		 dlg_width, dlg_height);
 
-	draw_box(term, &dlg_data->dimensions, ' ', 0,
+	draw_box(term, &dlg_data->box, ' ', 0,
 		 get_bfu_color(term, "dialog.generic"));
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
 		/* Draw shadow */
-		draw_shadow(term, &dlg_data->dimensions,
+		draw_shadow(term, &dlg_data->box,
 			    get_bfu_color(term, "dialog.shadow"), 2, 1);
 	}
 }

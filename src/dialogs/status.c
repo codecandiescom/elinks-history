@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.67 2004/05/13 09:33:22 zas Exp $ */
+/* $Id: status.c,v 1.68 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,7 +201,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	struct session_status *status = &ses->status;
 	struct color_pair *text_color = NULL;
 	int msglen;
-	struct rect box;
+	struct box box;
 	
 	if (stat) {
 		/* Show S_INTERRUPTED message *once* but then show links
@@ -226,7 +226,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		}
 	}
 
-	set_rect(&box, 0, term->height - 1, term->width, 1);
+	set_box(&box, 0, term->height - 1, term->width, 1);
 	draw_box(term, &box, ' ', 0, get_bfu_color(term, "status.status-bar"));
 
 	if (!status->show_tabs_bar && tabs_count > 1) {
@@ -287,9 +287,9 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 	int tab_remain_width = int_max(0, term->width - tab_total_width);
 	int tab_add = int_max(1, (tab_remain_width / tabs_count));
 	int tab_num;
-	struct rect box;
+	struct box box;
 
-	set_rect(&box, 0, term->height - (status->show_status_bar ? 2 : 1), 0, 1);
+	set_box(&box, 0, term->height - (status->show_status_bar ? 2 : 1), 0, 1);
 	
 	for (tab_num = 0; tab_num < tabs_count; tab_num++) {
 		struct download *stat = NULL;
@@ -378,10 +378,10 @@ display_title_bar(struct session *ses, struct terminal *term)
 	unsigned char buf[80];
 	int buflen = 0;
 	int height;
-	struct rect box;
+	struct box box;
 	
 	/* Clear the old title */
-	set_rect(&box, 0, 0, term->width, 1);
+	set_box(&box, 0, 0, term->width, 1);
 	draw_box(term, &box, ' ', 0, get_bfu_color(term, "title.title-bar"));
 
 	doc_view = current_frame(ses);
@@ -392,7 +392,7 @@ display_title_bar(struct session *ses, struct terminal *term)
 	document = doc_view->document;
 
 	/* Set up the document page info string: '(' %page '/' %pages ')' */
-	height = doc_view->dimensions.height;
+	height = doc_view->box.height;
 	if (height < document->height) {
 		int pos = doc_view->vs->y + height;
 		int page = 1;

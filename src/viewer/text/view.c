@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.407 2004/05/13 09:22:50 zas Exp $ */
+/* $Id: view.c,v 1.408 2004/05/14 00:18:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,21 +100,21 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 	if_assert_failed return;
 
 	y = yp - 1;
-	for (j = 0; j < frameset_desc->dimensions.height; j++) {
+	for (j = 0; j < frameset_desc->box.height; j++) {
 		register int x, i;
-		int height = frameset_desc->frame_desc[j * frameset_desc->dimensions.width].height;
+		int height = frameset_desc->frame_desc[j * frameset_desc->box.width].height;
 
 		x = xp - 1;
-		for (i = 0; i < frameset_desc->dimensions.width; i++) {
+		for (i = 0; i < frameset_desc->box.width; i++) {
 			int width = frameset_desc->frame_desc[i].width;
 
 			if (i) {
-				struct rect box;
+				struct box box;
 
-				set_rect(&box, x, y + 1, 1, height);
+				set_box(&box, x, y + 1, 1, height);
 				draw_box(t, &box, BORDER_SVLINE, SCREEN_ATTR_FRAME, &colors);
 
-				if (j == frameset_desc->dimensions.height - 1)
+				if (j == frameset_desc->box.height - 1)
 					draw_border_cross(t, x, y + height + 1,
 							  BORDER_X_UP, &colors);
 			} else if (j) {
@@ -124,12 +124,12 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 			}
 
 			if (j) {
-				struct rect box;
+				struct box box;
 				
-				set_rect(&box, x + 1, y, width, 1);
+				set_box(&box, x + 1, y, width, 1);
 				draw_box(t, &box, BORDER_SHLINE, SCREEN_ATTR_FRAME, &colors);
 
-				if (i == frameset_desc->dimensions.width - 1
+				if (i == frameset_desc->box.width - 1
 				    && x + width + 1 < t->width)
 					draw_border_cross(t, x + width + 1, y,
 							  BORDER_X_LEFT, &colors);
@@ -146,13 +146,13 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 	}
 
 	y = yp - 1;
-	for (j = 0; j < frameset_desc->dimensions.height; j++) {
+	for (j = 0; j < frameset_desc->box.height; j++) {
 		register int x, i;
-		int pj = j * frameset_desc->dimensions.width;
+		int pj = j * frameset_desc->box.width;
 		int height = frameset_desc->frame_desc[pj].height;
 
 		x = xp - 1;
-		for (i = 0; i < frameset_desc->dimensions.width; i++) {
+		for (i = 0; i < frameset_desc->box.width; i++) {
 			int width = frameset_desc->frame_desc[i].width;
 			int p = pj + i;
 
@@ -171,14 +171,14 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 {
 	struct color_pair color = INIT_COLOR_PAIR(0, 0);
 	struct view_state *vs;
-	struct rect *box;	
+	struct box *box;	
 	int vx, vy;
 	int y;
 
 	assert(t && doc_view);
 	if_assert_failed return;
 
-	box = &doc_view->dimensions;
+	box = &doc_view->box;
 
 	/* The code in this function assumes that both width and height are
 	 * bigger than 1 so we have to bail out here. */
@@ -300,11 +300,11 @@ draw_formatted(struct session *ses, int rerender)
 
 	if (!ses->doc_view || !ses->doc_view->document) {
 		/*INTERNAL("document not formatted");*/
-		struct rect box;
+		struct box box;
 
-		set_rect(&box, 0, 1,
-			 ses->tab->term->width,
-			 ses->tab->term->height - 2);
+		set_box(&box, 0, 1,
+			ses->tab->term->width,
+			ses->tab->term->height - 2);
 		draw_box(ses->tab->term, &box, ' ', 0, NULL);
 		return;
 	}
@@ -326,7 +326,7 @@ page_down(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	newpos = doc_view->vs->y + doc_view->dimensions.height;
+	newpos = doc_view->vs->y + doc_view->box.height;
 	if (newpos < doc_view->document->height)
 		doc_view->vs->y = newpos;
 
@@ -341,7 +341,7 @@ page_up(struct session *ses, struct document_view *doc_view, int a)
 	if_assert_failed return;
 
 	if (doc_view->vs->y == 0) return;
-	doc_view->vs->y -= doc_view->dimensions.height;
+	doc_view->vs->y -= doc_view->box.height;
 	int_lower_bound(&doc_view->vs->y, 0);
 
 	if (!current_link_is_visible(doc_view))
@@ -423,7 +423,7 @@ scroll(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	max_height = doc_view->document->height - doc_view->dimensions.height;
+	max_height = doc_view->document->height - doc_view->box.height;
 	if (a > 0 && doc_view->vs->y >= max_height) return;
 	doc_view->vs->y += a;
 	if (a > 0) int_upper_bound(&doc_view->vs->y, max_height);
@@ -470,7 +470,7 @@ x_end(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	max_height = doc_view->document->height - doc_view->dimensions.height;
+	max_height = doc_view->document->height - doc_view->box.height;
 	doc_view->vs->x = 0;
 	int_lower_bound(&doc_view->vs->y, int_max(0, max_height));
 	find_link(doc_view, -1, 0);
@@ -770,14 +770,14 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			if (ev->y < scrollmargin) {
 				rep_ev(ses, doc_view, scroll, -2);
 			}
-			if (ev->y >= doc_view->dimensions.height - scrollmargin) {
+			if (ev->y >= doc_view->box.height - scrollmargin) {
 				rep_ev(ses, doc_view, scroll, 2);
 			}
 
 			if (ev->x < scrollmargin * 2) {
 				rep_ev(ses, doc_view, hscroll, -8);
 			}
-			if (ev->x >= doc_view->dimensions.width - scrollmargin * 2) {
+			if (ev->x >= doc_view->box.width - scrollmargin * 2) {
 				rep_ev(ses, doc_view, hscroll, 8);
 			}
 		}
@@ -857,9 +857,9 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 		assert(doc_view && doc_view->document);
 		if_assert_failed return;
 
-		/* FIXME: is_in_rect() ? */
-		if (ev->x >= o->x && ev->x < o->x + doc_view->dimensions.width
-		    && ev->y >= o->y && ev->y < o->y + doc_view->dimensions.height) {
+		/* FIXME: is_in_box() ? */
+		if (ev->x >= o->x && ev->x < o->x + doc_view->box.width
+		    && ev->y >= o->y && ev->y < o->y + doc_view->box.height) {
 			matched = doc_view;
 			break;
 		}
@@ -874,8 +874,8 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	if (doc_view != first) draw_formatted(ses, 0);
 
 	memcpy(&evv, ev, sizeof(struct term_event));
-	evv.x -= doc_view->dimensions.x;
-	evv.y -= doc_view->dimensions.y;
+	evv.x -= doc_view->box.x;
+	evv.y -= doc_view->box.y;
 	send_to_frame(ses, &evv);
 }
 #endif /* CONFIG_MOUSE */

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.165 2004/05/11 14:59:10 zas Exp $ */
+/* $Id: tables.c,v 1.166 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1930,8 +1930,8 @@ again:
 
 	new_node = mem_alloc(sizeof(struct node));
 	if (new_node) {
-		set_rect(&new_node->box, node->box.x, p->y + cye,
-			 node->box.width, 0);
+		set_box(&new_node->box, node->box.x, p->y + cye,
+			node->box.width, 0);
 		add_to_list(p->document->nodes, new_node);
 	}
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.231 2004/05/13 20:40:06 zas Exp $ */
+/* $Id: menu.c,v 1.232 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,19 +234,19 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	foreach_menu_item (item, menu->items)
 		int_lower_bound(&mx, get_menuitem_width(term, item, width));
 
-	set_rect(&menu->dimensions,
-		 menu->parent_x, menu->parent_y,
-		 mx + MENU_BORDER_SIZE * 2,
-		 my + MENU_BORDER_SIZE * 2);
+	set_box(&menu->box,
+		menu->parent_x, menu->parent_y,
+		mx + MENU_BORDER_SIZE * 2,
+		my + MENU_BORDER_SIZE * 2);
 
-	int_bounds(&menu->dimensions.x, 0, width - mx);
-	int_bounds(&menu->dimensions.y, 0, height - my);
+	int_bounds(&menu->box.x, 0, width - mx);
+	int_bounds(&menu->box.y, 0, height - my);
 }
 
 static void
 scroll_menu(struct menu *menu, int d)
 {
-	int w = int_max(1, menu->dimensions.height - MENU_BORDER_SIZE * 2);
+	int w = int_max(1, menu->box.height - MENU_BORDER_SIZE * 2);
 	int scr_i = int_min((w - 1) / 2, SCROLL_ITEMS);
 
 	if (!d) return;
@@ -374,19 +374,19 @@ display_menu(struct terminal *term, struct menu *menu)
 	struct color_pair *normal_color = get_bfu_color(term, "menu.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
 	struct color_pair *frame_color = get_bfu_color(term, "menu.frame");
-	struct rect box, nbox;
+	struct box box, nbox;
 	int p, y;
 
-	set_rect(&box,
-		 menu->dimensions.x + MENU_BORDER_SIZE,
-		 menu->dimensions.y + MENU_BORDER_SIZE,
-		 int_max(0, menu->dimensions.width - MENU_BORDER_SIZE * 2),
-		 int_max(0, menu->dimensions.height - MENU_BORDER_SIZE * 2));
+	set_box(&box,
+		menu->box.x + MENU_BORDER_SIZE,
+		menu->box.y + MENU_BORDER_SIZE,
+		int_max(0, menu->box.width - MENU_BORDER_SIZE * 2),
+		int_max(0, menu->box.height - MENU_BORDER_SIZE * 2));
 
 	draw_box(term, &box, ' ', 0, normal_color);
 	draw_border(term, &box, frame_color, 1);
 
-	copy_rect(&nbox, &box);
+	copy_box(&nbox, &box);
 
 	for (p = menu->first, y = box.y;
 	     p < menu->size && p < menu->first + box.height;
@@ -407,13 +407,13 @@ display_menu(struct terminal *term, struct menu *menu)
 			color = selected_color;
 
 			set_cursor(term, box.x, y, 1);
-			set_window_ptr(menu->win, menu->dimensions.x + menu->dimensions.width, y);
+			set_window_ptr(menu->win, menu->box.x + menu->box.width, y);
 			draw_box(term, &nbox, ' ', 0, color);
 		}
 
 		if (mi_is_horizontal_bar(menu->items[p])) {
 			/* Horizontal separator */
-			draw_border_char(term, menu->dimensions.x, y,
+			draw_border_char(term, menu->box.x, y,
 					 BORDER_SRTEE, frame_color);
 
 			draw_box(term, &nbox, BORDER_SHLINE,
@@ -446,7 +446,7 @@ display_menu(struct terminal *term, struct menu *menu)
 
 			if (mi_is_submenu(menu->items[p])) {
 				draw_menu_right_text(term, m_submenu, m_submenu_len,
-						     menu->dimensions.x, y, box.width, color);
+						     menu->box.x, y, box.width, color);
 			} else if (menu->items[p].action != ACT_MAIN_NONE) {
 				struct string keystroke;
 
@@ -466,7 +466,7 @@ display_menu(struct terminal *term, struct menu *menu)
 								KM_MAIN);
 					draw_menu_right_text(term, keystroke.source,
 							     keystroke.length,
-							     menu->dimensions.x, y,
+							     menu->box.x, y,
 							     box.width, color);
 					done_string(&keystroke);
 				}
@@ -480,7 +480,7 @@ display_menu(struct terminal *term, struct menu *menu)
 				if (*rtext) {
 					/* There's a right text, so print it */
 					draw_menu_right_text(term, rtext, -1,
-							     menu->dimensions.x,
+							     menu->box.x,
 							     y, box.width, color);
 				}
 			}
@@ -517,7 +517,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 			return;
 	}
 
-	if (!is_in_rect(&menu->dimensions, ev->x, ev->y)) {
+	if (!is_in_box(&menu->box, ev->x, ev->y)) {
 		if (check_mouse_action(ev, B_DOWN)) {
 			delete_window_ev(win, NULL);
 
@@ -538,7 +538,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 
 				m1 = w1->data;
 
-				if (is_in_rect(&m1->dimensions, ev->x, ev->y)) {
+				if (is_in_box(&m1->box, ev->x, ev->y)) {
 					delete_window_ev(win, ev);
 					break;
 				}
@@ -546,8 +546,8 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 		}
 
 	} else {
-		if (is_in_rect(&menu->dimensions, ev->x, ev->y)) {
-			int sel = ev->y - menu->dimensions.y - 1 + menu->first;
+		if (is_in_box(&menu->box, ev->x, ev->y)) {
+			int sel = ev->y - menu->box.y - 1 + menu->first;
 
 			if (sel >= 0 && sel < menu->size
 			    && mi_is_selectable(menu->items[sel])) {
@@ -765,7 +765,7 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
 	int p = 0;
 	int i;
-	struct rect box;
+	struct box box;
 
 	/* FIXME: menu horizontal scrolling do not work well yet, we need to cache
 	 * menu items width and recalculate them only when needed (ie. language change)
@@ -790,7 +790,7 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 	int_bounds(&menu->last, 0, menu->size - 1);
 	int_bounds(&menu->first, 0, menu->last);
 
-	set_rect(&box, 0, 0, term->width, 1);
+	set_box(&box, 0, 0, term->width, 1);
 	draw_box(term, &box, ' ', 0, normal_color);
 
 	if (menu->first != 0) {
@@ -845,9 +845,9 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 	menu->last = i - 1;
 	int_lower_bound(&menu->last, menu->first);
 	if (menu->last < menu->size - 1) {
-		set_rect(&box,
-			 term->width - R_MAINMENU_SPACE, 0,
-			 R_MAINMENU_SPACE, 1);
+		set_box(&box,
+			term->width - R_MAINMENU_SPACE, 0,
+			R_MAINMENU_SPACE, 1);
 		draw_box(term, &box, '>', 0, normal_color);
 	}
 

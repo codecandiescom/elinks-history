@@ -1,10 +1,10 @@
-/* $Id: draw.h,v 1.47 2004/05/13 20:40:06 zas Exp $ */
+/* $Id: draw.h,v 1.48 2004/05/14 00:18:41 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
 
 struct color_pair;
-struct rect;
+struct box;
 struct terminal;
 
 /* All attributes should fit inside an unsigned char. */
@@ -97,16 +97,16 @@ void draw_char(struct terminal *term, int x, int y,
 	       struct color_pair *color);
 
 /* Draws area defined by @box using the same colors and attributes. */
-void draw_box(struct terminal *term, struct rect *box,
+void draw_box(struct terminal *term, struct box *box,
 	      unsigned char data, enum screen_char_attr attr,
 	      struct color_pair *color);
 
 /* Draws a shadow of @width and @height with color @color around @box. */
-void draw_shadow(struct terminal *term, struct rect *box,
+void draw_shadow(struct terminal *term, struct box *box,
 		 struct color_pair *color, int width, int height);
 
 /* Draw borders. */
-void draw_border(struct terminal *term, struct rect *box,
+void draw_border(struct terminal *term, struct box *box,
 		 struct color_pair *color, int width);
 
 /* Draws @length chars from @text. */

@@ -1,7 +1,9 @@
-/* $Id: frames.h,v 1.39 2004/05/11 09:56:22 zas Exp $ */
+/* $Id: frames.h,v 1.40 2004/05/14 00:18:40 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
+
+#include "util/box.h"
 
 struct document_options;
 struct session;
@@ -20,7 +22,7 @@ struct frame_desc {
 
 struct frameset_desc {
 	int n;
-	struct rect dimensions;
+	struct box box;
 
 	struct frame_desc frame_desc[1]; /* must be last of struct. --Zas */
 };

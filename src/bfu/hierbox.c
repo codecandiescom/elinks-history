@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.63 2003/11/19 07:48:55 miciah Exp $ */
+/* $Id: hierbox.c,v 1.64 2003/11/19 16:49:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,24 +69,6 @@ hierbox_browser_box_build(struct hierbox_browser *browser)
 	add_to_list(*browser->boxes, box);
 
 	return box;
-}
-
-/* Cleans up after the hierbox dialog */
-static void
-hierbox_dialog_abort_handler(struct dialog_data *dlg_data)
-{
-	struct hierbox_browser *browser = dlg_data->dlg->udata2;
-	struct hierbox_dialog_list_item *item;
-
-	if (browser->dialogs) {
-		foreach (item, *browser->dialogs) {
-			if (item->dlg_data == dlg_data) {
-				del_from_list(item);
-				mem_free(item);
-				break;
-			}
-		}
-	}
 }
 
 
@@ -217,12 +199,22 @@ display_dlg:
 
 		case EV_ABORT:
 		{
-			/* Clean up after the dialog */
 			struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+			struct hierbox_browser *browser = dlg_data->dlg->udata2;
+			struct hierbox_dialog_list_item *item;
 
-			del_from_list(box);
 			/* Delete the box structure */
+			del_from_list(box);
 			mem_free(box);
+
+			/* Delete the dialog list entry */
+			foreach (item, *browser->dialogs) {
+				if (item->dlg_data == dlg_data) {
+					del_from_list(item);
+					mem_free(item);
+					break;
+				}
+			}
 			break;
 		}
 	}
@@ -263,7 +255,6 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	dlg->handle_event = hierbox_dialog_event_handler;
 	dlg->udata = udata;
 	dlg->udata2 = browser;
-	dlg->abort = hierbox_dialog_abort_handler;
 
 	add_dlg_listbox(dlg, 12, listbox_data);
 

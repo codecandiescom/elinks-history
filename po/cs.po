@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-11-27 13:23+0100\n"
-"PO-Revision-Date: 2003-11-25 23:03+0100\n"
+"PO-Revision-Date: 2003-11-28 03:22+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -54,25 +54,19 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" can not be deleted."
-msgstr ""
-"Bohu¾el s polo¾kou \"%s\" právì pracuje nìco jiného.\n"
-"\n"
-"%s"
+msgstr "Bohu¾el polo¾ku \"%s\" nelze smazat."
 
 #: src/bfu/hierbox.c:438
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
-msgstr ""
-"Bohu¾el s polo¾kou \"%s\" právì pracuje nìco jiného.\n"
-"\n"
-"%s"
+msgstr "Bohu¾el s polo¾kou \"%s\" právì pracuje nìco jiného."
 
 #: src/bfu/hierbox.c:441
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" can not be deleted."
-msgstr "Bohu¾el se slo¾kou \"%s\" právì pracuje nìco jiného."
+msgstr "Bohu¾el slo¾ku \"%s\" nelze smazat."
 
 #: src/bfu/hierbox.c:442
 #, c-format
@@ -80,9 +74,8 @@ msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr "Bohu¾el se slo¾kou \"%s\" právì pracuje nìco jiného."
 
 #: src/bfu/hierbox.c:466
-#, fuzzy
 msgid "Delete error"
-msgstr "Smazat slo¾ku"
+msgstr "Chyba pøi mazání"
 
 #: src/bfu/hierbox.c:559
 msgid "Delete marked items"
@@ -162,7 +155,7 @@ msgstr "LED indikátory"
 
 #: src/bfu/leds.c:66
 msgid "LEDs (visual indicators) options."
-msgstr ""
+msgstr "Nastavení LEDovek (vizuálních indikátorù)"
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/bfu/leds.c:68 src/config/options.inc:1725 src/config/options.inc:1732
@@ -176,6 +169,8 @@ msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
 msgstr ""
+"Zapnout LEDky.\n"
+"Tyto vizuální indikátory mù¾ou informovat o rùzných stavech... nìèeho."
 
 #. name:
 #: src/bfu/leds.c:239
@@ -495,7 +490,7 @@ msgstr "Nemù¾u zapisovat do konfiguráku %s: %s"
 
 #: src/config/dialogs.c:89
 msgid "(expand by pressing space)"
-msgstr ""
+msgstr "(rozbalí¹ zmáèknutím mezery)"
 
 #: src/config/dialogs.c:92 src/config/dialogs.c:244
 msgid "N/A"
@@ -817,15 +812,13 @@ msgstr "Lua konzole"
 msgid "Open a Lua console (DISABLED)"
 msgstr "Otevøít Lua konzoli (VYPNUTO)"
 
-#. internal use only
 #: src/config/kbdbind.c:423
-#, fuzzy
 msgid "Set a mark"
-msgstr "Hledat v bookmarcích"
+msgstr "Nastavit znaèku"
 
 #: src/config/kbdbind.c:424
 msgid "Go at a specified mark"
-msgstr ""
+msgstr "Pøejít na zadanou znaèku"
 
 #: src/config/kbdbind.c:425
 msgid "Activate the menu"
@@ -2166,7 +2159,7 @@ msgstr "Podtrhávat odkazy."
 
 #: src/config/options.inc:530
 msgid "Wrap non breaking space"
-msgstr ""
+msgstr "Rozdìlovat nedìlitelné mezery"
 
 #: src/config/options.inc:532
 msgid ""
@@ -2174,6 +2167,10 @@ msgid ""
 "but allow to wrap the text. This can help keeping the width\n"
 "of documents down so no horizontal scrolling is needed."
 msgstr ""
+"Pokud je tato volba nastavena, nedìlitelné mezery (entita &nbsp;)\n"
+"budou pova¾ovány za normální mezery a bude na nich rozdìlován text.\n"
+"To mù¾e pomoci proti dokumentùm, které jsou tak ¹iroké, ¾e musíte\n"
+"pøi jejich prohlí¾ení pou¾ít horizontální scrollování."
 
 #: src/config/options.inc:537
 msgid "Plain rendering"
@@ -3849,9 +3846,8 @@ msgstr ""
 "Zabezpeèení %s\n"
 
 #: src/cookies/cookies.c:559
-#, fuzzy
 msgid "at quit time"
-msgstr "Èas poslední náv¹tìvy"
+msgstr "pøi ukonèení"
 
 #: src/cookies/cookies.c:560 src/cookies/dialogs.c:83
 msgid "yes"
@@ -4017,14 +4013,12 @@ msgid "Abort"
 msgstr "Ukonèit"
 
 #: src/dialogs/download.c:431
-#, fuzzy
 msgid "Stop"
-msgstr "~Nastavení"
+msgstr "Stop"
 
 #: src/dialogs/download.c:436
-#, fuzzy
 msgid "Download manager"
-msgstr "Stáhnout o~brázek"
+msgstr "Správce downloadù"
 
 #: src/dialogs/info.c:46
 msgid "About"
@@ -4132,14 +4126,12 @@ msgid "Unh~istory"
 msgstr "An~tihistorie"
 
 #: src/dialogs/menu.c:294
-#, fuzzy
 msgid "Global ~history"
-msgstr "Globální historie"
+msgstr "Globální ~historie"
 
 #: src/dialogs/menu.c:297
-#, fuzzy
 msgid "~Bookmarks"
-msgstr "Bookmarky"
+msgstr "~Bookmarky"
 
 #: src/dialogs/menu.c:299
 msgid "~Cache"
@@ -4154,7 +4146,6 @@ msgid "Coo~kies"
 msgstr "Coo~kies"
 
 #: src/dialogs/menu.c:305
-#, fuzzy
 msgid "~Form history"
 msgstr "~Formuláøová pamì»"
 
@@ -4340,7 +4331,7 @@ msgstr "~Link"
 
 #: src/dialogs/menu.c:492
 msgid "~Tools"
-msgstr ""
+msgstr "Nás~troje"
 
 #: src/dialogs/menu.c:493
 msgid "~Setup"
@@ -4453,16 +4444,15 @@ msgstr "Zmìò velikost terminálu"
 
 #: src/formhist/dialogs.c:68
 msgid "Forms are never saved for this URL."
-msgstr ""
+msgstr "Formuláøe nejsou nikdy ukládány pro tuto URL."
 
 #: src/formhist/dialogs.c:70
 msgid "Forms are saved for this URL."
-msgstr ""
+msgstr "Formuláøe jsou pro tuto URL ukládány."
 
 #: src/formhist/dialogs.c:145
-#, fuzzy
 msgid "Toggle saving"
-msgstr "Pøepnout ~obrázky"
+msgstr "Pøepnout ukládání"
 
 #: src/formhist/dialogs.c:151
 msgid "Form history manager"

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.140 2003/06/17 14:43:53 pasky Exp $ */
+/* $Id: renderer.c,v 1.141 2003/06/17 14:51:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,7 +279,7 @@ set_hline(struct part *part, int x, int y,
 	if (part->data) {
 		if (xpand_lines(part, y)
 		    || xpand_line(part, y, x + charslen - 1))
-		return;
+			return;
 	}
 
 	if (xpand_spaces(part, x + charslen - 1))

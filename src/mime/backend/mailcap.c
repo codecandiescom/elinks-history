@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.61 2003/10/25 22:03:49 jonas Exp $ */
+/* $Id: mailcap.c,v 1.62 2003/10/25 22:09:05 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -100,7 +100,7 @@ static struct option_info mailcap_options[] = {
 		N_("Enable mailcap support.")),
 
 	INIT_OPT_STRING("mime.mailcap", N_("Path"),
-		"path", 0, "",
+		"path", 0, DEFAULT_MAILCAP_PATH,
 		N_("Mailcap search path. Colon-separated list of files.\n"
 		"Leave as \"\" to use MAILCAP environment variable or\n"
 		"built-in defaults instead.")),
@@ -418,7 +418,7 @@ init_mailcap_map(void)
 	/* Try to setup mailcap_path */
 	path = get_mailcap_path();
 	if (!path || !*path) path = getenv("MAILCAP");
-	if (!path) path = DEFAULT_MAILCAP_PATH;
+	if (!path) return mailcap_map;
 
 	while (*path) {
 		unsigned char *filename = get_next_path_filename(&path, ':');

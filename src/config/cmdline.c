@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.91 2004/06/20 17:23:48 pasky Exp $ */
+/* $Id: cmdline.c,v 1.92 2004/06/20 21:36:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,7 +344,8 @@ print_full_help(struct option *tree, unsigned char *path)
 
 		/* Don't print deprecated aliases (if we don't walk command
 		 * line options which use aliases for legitimate options). */
-		if (type == OPT_ALIAS && tree != cmdline_options)
+		if ((type == OPT_ALIAS && tree != cmdline_options)
+		    || (option->flags & OPT_HIDDEN))
 			continue;
 
 		if (!capt && !strncasecmp(option->name, "_template_", 10))
@@ -482,14 +483,13 @@ print_short_help()
 					    : (unsigned char *) "";
 		int len = strlen(option->name);
 
+		/* Avoid printing compatibility options */
+		if (option->flags & OPT_HIDDEN)
+			continue;
+
 		/* When no caption is available the option name is 'stacked'
 		 * and the caption is shared with next options that has one. */
 		if (!option->capt) {
-			/* Avoid printing compatibility options */
-			if (option->type == OPT_COMMAND
-			    && option->value.command == redir_cmd)
-				continue;
-
 			if (!saved) {
 				if (!init_string(&string))
 					continue;
@@ -610,7 +610,7 @@ struct option_info cmdline_options_info[] = {
 		N_("ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it.")),
 
-	INIT_OPT_COMMAND("", NULL, "confdir", 0, redir_cmd, NULL),
+	INIT_OPT_COMMAND("", NULL, "confdir", OPT_HIDDEN, redir_cmd, NULL),
 
 	INIT_OPT_STRING("", N_("Name of directory with configuration file"),
 		"config-dir", 0, "",
@@ -619,7 +619,7 @@ struct option_info cmdline_options_info[] = {
 		"a '/' its used as an absolute path. Else it is assumed to\n"
 		"be relative to your HOME dir.")),
 
-	INIT_OPT_COMMAND("", NULL, "conffile", 0, redir_cmd, NULL),
+	INIT_OPT_COMMAND("", NULL, "conffile", OPT_HIDDEN, redir_cmd, NULL),
 
 	INIT_OPT_STRING("", N_("Name of configuration file"),
 		"config-file", 0, "elinks.conf",
@@ -737,7 +737,7 @@ struct option_info cmdline_options_info[] = {
 		"source", 0, 0,
 		N_("Write the given HTML document in source form to stdout.")),
 
-	INIT_OPT_COMMAND("", NULL, "stdin", 0, redir_cmd, NULL),
+	INIT_OPT_COMMAND("", NULL, "stdin", OPT_HIDDEN, redir_cmd, NULL),
 
 	INIT_OPT_BOOL("", N_("Touch files in ~/.elinks when running with -no-connect/-session-ring"),
 		"touch-files", 0, 0,

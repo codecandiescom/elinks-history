@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.19 2004/09/23 13:12:04 zas Exp $ */
+/* $Id: memory.c,v 1.20 2004/09/25 19:07:56 jonas Exp $ */
 
 #define _GNU_SOURCE /* MREMAP_MAYMOVE */
 
@@ -8,6 +8,7 @@
 #endif
 
 #include <stdlib.h>
+#include <sys/types.h>
 #ifdef HAVE_MMAP
 #include <sys/mman.h>
 #endif

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.159 2004/01/09 10:22:53 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.160 2004/01/13 14:13:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -389,6 +389,7 @@ make_keystroke(struct string *str, long key, long meta, int escape)
 /* Please keep this table in alphabetical order, and in sync with
  * the ACT_* constants in kbdbind.h.  */
 static struct strtonum action_table[KEYACTS + 1] = {
+	{ "none", ACT_NONE, DACT(N_("Do nothing")) },
 	{ "abort-connection", ACT_ABORT_CONNECTION, DACT(N_("Abort connection")) },
 	{ "add-bookmark", ACT_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
 	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
@@ -437,7 +438,6 @@ static struct strtonum action_table[KEYACTS + 1] = {
 	{ "kill-to-eol", ACT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
 	{ "left", ACT_LEFT,DACT( N_("Move the cursor left")) },
 	{ "link-menu", ACT_LINK_MENU, DACT(N_("Open the link context menu")) },
-	{ "none", ACT_NONE, DACT(N_("Do nothing")) },
 #ifdef HAVE_LUA
 	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console")) },
 #else

@@ -7,7 +7,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.3 2002/10/29 23:18:34 pasky Exp $
+# $Id: elinks.spec.in,v 1.4 2002/12/19 15:35:45 pasky Exp $
 
 Summary: Enhanced version of Links (Lynx-like text WWW browser)
 Name: elinks
@@ -46,13 +46,16 @@ make DESTDIR=$RPM_BUILD_ROOT install
 rm -rf $RPM_BUILD_ROOT
 
 %files 
-%doc AUTHORS* BUGS* ChangeLog* COPYING* HACKING* LUA* README* SITES* TODO*
+%doc [A-Z]*
 %{prefix}/bin/elinks
-%{_mandir}/man1/elinks.1.gz
-%{_mandir}/man1/elinkskeys.5.gz
+%doc %{_mandir}/*/*
 
 # date +"%a %b %d %Y"
 %changelog
+* Thu Dec 19 2002 Bennett Todd <bet@rahul.net>
+- wildcarded the above doc and manpage specifications, and tagged the man
+  pages as docs
+
 * Mon May 06 2002 yanek@yankuv.koniec.sk
 - general update - cleanup of .spec file, massive simplifications
 

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.94 2004/09/25 23:57:57 pasky Exp $ */
+/* $Id: parse.c,v 1.95 2004/10/14 14:05:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1044,6 +1044,6 @@ xsp:
 	        mem_free(c);
 	}
 
-	add_to_string(head, "\r\n");
+	add_crlf_to_string(head);
 	goto se;
 }

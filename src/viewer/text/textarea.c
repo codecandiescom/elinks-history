@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.139 2004/10/01 16:03:47 pasky Exp $ */
+/* $Id: textarea.c,v 1.140 2004/10/14 14:05:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,7 +265,7 @@ encode_textarea(struct submitted_value *sv)
 		if (sv->value[i] != '\n')
 			add_char_to_string(&newtext, sv->value[i]);
 		else
-			add_to_string(&newtext, "\r\n");
+			add_crlf_to_string(&newtext);
 	}
 
 	return newtext.source;

@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.20 2004/10/10 20:17:46 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.21 2004/10/21 23:18:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,7 +143,10 @@ ecmascript_protocol_handler(struct session *ses, struct uri *uri)
 	if (!doc_view) /* Blank initial document. TODO: Start at about:blank? */
 		return;
 	assert(doc_view->vs);
-	assert(doc_view->vs->ecmascript);
+	if (doc_view->vs->ecmascript_fragile)
+		ecmascript_reset_state(doc_view->vs);
+	if (!doc_view->vs->ecmascript)
+		return;
 
 	redirect_url = ecmascript_eval_stringback(doc_view->vs->ecmascript,
 		&current_url);

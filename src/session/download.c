@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.48 2003/06/08 13:21:40 jonas Exp $ */
+/* $Id: download.c,v 1.49 2003/06/09 15:34:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -800,20 +800,20 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 	}
 
 	if (h == -1) {
-		unsigned char *msg = stracpy(file);
 		unsigned char *msge = stracpy((unsigned char *) strerror(saved_errno));
 
-		if (msg && msge) {
-			msg_box(term, getml(msg, msge, NULL), MSGBOX_FREE_TEXT,
+		if (msge) {
+			msg_box(term, NULL, MSGBOX_FREE_TEXT,
 				N_("Download error"), AL_CENTER,
-				msg_text(term, N_("Could not create file %s: %s"),
-					msg, msge),
+				msg_text(term, N_("Could not create file '%s':\n%s"),
+					file, msge),
 				NULL, 1,
 				N_("Cancel"), NULL, B_ENTER | B_ESC);
-		} else {
-			if (msg) mem_free(msg);
-			if (msge) mem_free(msge);
+			mem_free(msge);
 		}
+
+		mem_free(file);
+		goto finish;
 
 	} else {
 		set_bin(h);

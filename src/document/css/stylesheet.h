@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.24 2004/09/19 20:38:49 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.25 2004/09/19 20:44:28 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -55,17 +55,17 @@ typedef void (*css_stylesheet_importer)(struct css_stylesheet *,
 					unsigned char *url, int urllen);
 
 /* The {struct css_stylesheet} describes all the useful data that was extracted
- * from the CSS source. Currently we don't cache anything other than the
- * default user stylesheet so it can contain stuff from both <style> tags and
- * @import'ed CSS documents. */
+ * from the CSS source. Currently we don't cache anything but the default user
+ * stylesheet so it can contain stuff from both <style> tags and @import'ed CSS
+ * documents. */
 struct css_stylesheet {
 	/* The import callback function. */
-	/* TODO: Maybe we need some CSS parser struct for these and the
+	/* TODO: Maybe we need some CSS parser struct for these, and some
 	 * possibility to have some import data as well. --jonas */
 	css_stylesheet_importer import;
 
-	/* The list of basic element selectors (which can then possess some
-	 * tree inside). */
+	/* The list of basic element selectors (which can then somehow
+	 * tree up on inside). */
 	struct list_head selectors; /* -> struct css_selector */
 
 	/* How deeply nested are we. Limited by MAX_REDIRECTS. */

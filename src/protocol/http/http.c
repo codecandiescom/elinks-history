@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.1 2002/03/17 17:38:34 pasky Exp $ */
+/* $Id: http.c,v 1.2 2002/03/17 18:02:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 #include <lowlevel/connect.h>
 #include <lowlevel/sched.h>
 #include <lowlevel/terminal.h>
-#include <protocol/http.h>
+#include <protocol/http/http.h>
 #include <protocol/url.h>
 
 struct http_connection_info {

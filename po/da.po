@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-18 23:48+0100\n"
-"PO-Revision-Date: 2005-01-21 20:56+0100\n"
+"POT-Creation-Date: 2005-01-22 14:55+0100\n"
+"PO-Revision-Date: 2005-01-22 15:00+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -45,17 +45,17 @@ msgstr "Tast mellemrum for at udfolde denne mappe."
 #: src/dialogs/info.c:135 src/dialogs/info.c:157 src/dialogs/menu.c:97
 #: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:174
 #: src/dialogs/options.c:254 src/ecmascript/spidermonkey.c:371
-#: src/ecmascript/spidermonkey.c:1930 src/ecmascript/spidermonkey.c:1956
+#: src/ecmascript/spidermonkey.c:1937 src/ecmascript/spidermonkey.c:1963
 #: src/formhist/dialogs.c:179 src/mime/dialogs.c:130
 #: src/protocol/auth/dialogs.c:108 src/protocol/nntp/codes.c:132
 #: src/protocol/protocol.c:227 src/protocol/user.c:268
 #: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:368
 #: src/sched/download.c:507 src/sched/download.c:601 src/sched/error.c:42
-#: src/sched/session.c:240 src/sched/session.c:707 src/sched/session.c:731
-#: src/sched/session.c:748 src/scripting/lua/core.c:395
+#: src/sched/session.c:239 src/sched/session.c:706 src/sched/session.c:730
+#: src/sched/session.c:747 src/scripting/lua/core.c:395
 #: src/scripting/lua/core.c:476 src/scripting/lua/core.c:593
 #: src/scripting/lua/core.c:717 src/scripting/ruby/core.c:63
-#: src/scripting/ruby/core.c:155 src/scripting/ruby/core.c:195
+#: src/scripting/ruby/core.c:159 src/scripting/ruby/core.c:215
 #: src/viewer/text/draw.c:67 src/viewer/text/form.c:857
 #: src/viewer/text/search.c:953 src/viewer/text/search.c:1014
 #: src/viewer/text/search.c:1459 src/viewer/text/search.c:1570
@@ -258,10 +258,10 @@ msgstr "LED-indikatorer"
 msgid ""
 "What the different LEDs indicate:\n"
 "\n"
-"[SIJ---]\n"
+"[SIJP--]\n"
 " |||||`- Unused\n"
 " ||||`-- Unused\n"
-" |||`--- Unused\n"
+" |||`--- A JavaScript pop-up window was blocked\n"
 " ||`---- A JavaScript error has occured\n"
 " |`----- The state of insert mode for text-input form-fields\n"
 " |       'I' means modeless, 'i' means insert mode is on\n"
@@ -271,10 +271,10 @@ msgid ""
 msgstr ""
 "Betydningen af de forskellige LED-indikatorer:\n"
 "\n"
-"[SIJ---]\n"
+"[SIJP--]\n"
 " |||||`- Bruges ikke\n"
 " ||||`-- Bruges ikke\n"
-" |||`--- Bruges ikke\n"
+" |||`--- Et JavaScript pop-up vindue blev blokeret\n"
 " ||`---- En JavaScript fejl er opstået\n"
 " |`----- Tilstanden for indsætningstilstand i indtastningsfelter\n"
 " |       'I' betyder ingen modus, 'i' betyder indsætning aktiveret\n"
@@ -1198,7 +1198,7 @@ msgid "Description"
 msgstr "Beskrivelse"
 
 #: src/config/dialogs.c:338 src/protocol/protocol.c:221
-#: src/sched/session.c:237 src/viewer/text/textarea.c:363
+#: src/sched/session.c:236 src/viewer/text/textarea.c:363
 #: src/viewer/text/textarea.c:372
 msgid "Error"
 msgstr "Fejl"
@@ -5074,7 +5074,7 @@ msgstr ""
 "Sæt til \"\" for at anvende det indbyggede layout."
 
 #. name:
-#: src/ecmascript/ecmascript.c:37 src/ecmascript/ecmascript.c:193
+#: src/ecmascript/ecmascript.c:37 src/ecmascript/ecmascript.c:197
 msgid "ECMAScript"
 msgstr "ECMAScript"
 
@@ -5102,25 +5102,33 @@ msgstr "Maksimal tid for udførelse"
 msgid "Maximum execution time in seconds for a script."
 msgstr "Antal sekunder som et script maksimalt må eksekveres."
 
+#: src/ecmascript/ecmascript.c:53
+msgid "Pop-up window blocking"
+msgstr "Blokering af pop-up-vinduer"
+
+#: src/ecmascript/ecmascript.c:55
+msgid "Whether to disallow scripts to open new windows or tabs."
+msgstr "Om scripts skal forbydes at åbne nye vinduer eller faneblade."
+
 #: src/ecmascript/spidermonkey.c:368
 msgid "JavaScript Alert"
 msgstr "JavaScript advarsel"
 
-#: src/ecmascript/spidermonkey.c:1911
+#: src/ecmascript/spidermonkey.c:1918
 #, c-format
 msgid "A script embedded in the current document raised the following%s%s%s%s"
 msgstr ""
 "Et script indlejret i det aktuelle dokument rejste den følgende%s%s%s%s"
 
-#: src/ecmascript/spidermonkey.c:1928
+#: src/ecmascript/spidermonkey.c:1935
 msgid "JavaScript Error"
 msgstr "JavaScript-fejl"
 
-#: src/ecmascript/spidermonkey.c:1948
+#: src/ecmascript/spidermonkey.c:1955
 msgid "JavaScript Emergency"
 msgstr "JavaScript nødssituation"
 
-#: src/ecmascript/spidermonkey.c:1950
+#: src/ecmascript/spidermonkey.c:1957
 #, c-format
 msgid ""
 "A script embedded in the current document was running\n"
@@ -5882,8 +5890,7 @@ msgstr "Desværre, autentifikationsemnet \"%s\" kan ikke slettes."
 #: src/protocol/auth/dialogs.c:214
 #, c-format
 msgid "Sorry, but auth entry \"%s\" is being used by something else."
-msgstr ""
-"Desværre, autentifikationsemnet \"%s\" er optaget af en anden proces.."
+msgstr "Desværre, autentifikationsemnet \"%s\" er optaget af en anden proces.."
 
 #. delete_marked_items_title
 #: src/protocol/auth/dialogs.c:220
@@ -6888,11 +6895,11 @@ msgstr "Telefonbogsprotokollen CSO understøttes ikke."
 msgid "Unknown error"
 msgstr "Ukendt fejl"
 
-#: src/sched/session.c:695 src/sched/session.c:715 src/sched/task.c:271
+#: src/sched/session.c:694 src/sched/session.c:714 src/sched/task.c:271
 msgid "Warning"
 msgstr "Advarsel"
 
-#: src/sched/session.c:696
+#: src/sched/session.c:695
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -6909,7 +6916,7 @@ msgstr ""
 "standardindstillingen bruges, så slet venligst denne linje fra din "
 "opsætningsfil. Sidstnævnte anbefales."
 
-#: src/sched/session.c:716
+#: src/sched/session.c:715
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -6925,16 +6932,16 @@ msgstr ""
 "Den algoritme som ELinks bruger til at gemme opsætningen er blevet ændret "
 "siden sidste opgradering. Nu er det kun de indstillinger som ændres der "
 "bliver gemt i opsætningsfilen, i stedet for alle indstillingerne. Dette "
-"forenkler tingene meget i de tilfælde hvor en indstilling har en uhensigtsmæssig "
-"standardværdi, eller hvor betydningen af en indstilling ændres. Derfor "
-"anbefales det at sætte værdien af config.saving_style til 3 for at det "
-"fungerer korrekt."
+"forenkler tingene meget i de tilfælde hvor en indstilling har en "
+"uhensigtsmæssig standardværdi, eller hvor betydningen af en indstilling "
+"ændres. Derfor anbefales det at sætte værdien af config.saving_style til 3 "
+"for at det fungerer korrekt."
 
-#: src/sched/session.c:743
+#: src/sched/session.c:742
 msgid "Welcome"
 msgstr "Velkommen"
 
-#: src/sched/session.c:744
+#: src/sched/session.c:743
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -7003,7 +7010,7 @@ msgstr "Indtast udtryk"
 msgid "Ruby Error"
 msgstr "Ruby-fejl"
 
-#: src/scripting/ruby/core.c:152 src/scripting/ruby/core.c:192
+#: src/scripting/ruby/core.c:156 src/scripting/ruby/core.c:212
 msgid "Ruby Message"
 msgstr "Ruby-besked"
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.231 2003/09/03 16:21:32 zas Exp $ */
+/* $Id: renderer.c,v 1.232 2003/09/04 18:16:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,12 @@ void put_chars(struct part *, unsigned char *, int);
 #undef ALIGN
 #endif
 
-#define ALIGN(x) (((x)+0x7f)&~0x7f)
+#define LINES_GRANULARITY	0x7F
+#define LINE_GRANULARITY	0x0F
+
+#define ALIGN(x, gr)	(((x) + (gr)) & ~(gr))
+#define ALIGN_LINES(x)	ALIGN(x, LINES_GRANULARITY)
+#define ALIGN_LINE(x)	ALIGN(x, LINE_GRANULARITY)
 
 static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
 static int sub = 0; /* Activated/deactivated by AT_SUBSCRIPT */
@@ -99,8 +104,8 @@ static int super = 0; /* Activated/deactivated by AT_SUPERSCRIPT */
 static int
 realloc_lines(struct document *document, int y)
 {
-	int newsize = ALIGN(y + 1);
-	int oldsize = ALIGN(document->y);
+	int newsize = ALIGN_LINES(y + 1);
+	int oldsize = ALIGN_LINES(document->y);
 	struct line *lines;
 
 	assert(document);
@@ -126,7 +131,7 @@ static int
 realloc_line(struct document *document, int y, int x)
 {
 	int i;
-	int newsize = ALIGN(x + 1);
+	int newsize = ALIGN_LINE(x + 1);
 	struct line *line;
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char schar;
@@ -136,7 +141,7 @@ realloc_line(struct document *document, int y, int x)
 
 	line = &document->data[y];
 
-	if (newsize > ALIGN(line->l)) {
+	if (newsize > ALIGN_LINE(line->l)) {
 		struct screen_char *l;
 
 		l = mem_realloc(line->d, newsize * sizeof(struct screen_char));
@@ -157,8 +162,6 @@ realloc_line(struct document *document, int y, int x)
 
 	return 0;
 }
-
-#undef ALIGN
 
 static inline int
 xpand_lines(struct part *p, int y)
@@ -1041,7 +1044,7 @@ line_break(struct part *part)
 	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1
 	    && POS(part->cx - 1, part->cy).data == ' ') {
 		del_chars(part, part->cx - 1, part->cy);
-	   	part->cx--;
+		part->cx--;
 	}
 
 	if (part->cx > 0) align_line(part, part->cy, 1);

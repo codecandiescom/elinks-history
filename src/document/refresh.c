@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.11 2003/12/21 20:46:45 pasky Exp $ */
+/* $Id: refresh.c,v 1.12 2003/12/30 08:17:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,8 @@ do_document_refresh(void *data)
 void
 start_document_refresh(struct document_refresh *refresh, struct session *ses)
 {
-	int time = 1000 * refresh->seconds;
+	int minimum = get_opt_int("document.browse.minimum_refresh_time");
+	int time = int_max(1000 * refresh->seconds, minimum);
 
 	refresh->timer = install_timer(time, do_document_refresh, ses);
 };

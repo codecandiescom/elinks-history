@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.68 2003/12/29 21:02:02 zas Exp $ */
+/* $Id: options.inc,v 1.69 2003/12/30 08:17:31 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -301,7 +301,17 @@ struct option_info config_options_info[] = {
 		"refresh", 0, 1,
 		N_("Automatically follow document-specified refresh directives ('<meta>\n"
 		"refresh' tags). Web-page authors use these to instruct the browser\n"
-		"to reload a document at a given interval or to load another page.")),
+		"to reload a document at a given interval or to load another page.\n"
+		"Regardless of the value the refresh URI is accessible as a link.\n"
+		"Use the document.browse.minimum_refresh_time to control the minimum\n"
+		"number of seconds a refresh will take.")),
+
+	INIT_OPT_INT("document.browse", N_("Document meta refresh minimum time"),
+		"minimum_refresh_time", 0, 0, MAXINT, 1000,
+		N_("The minimum number of milliseconds that should pass before\n"
+		"refreshing. If set to zero the document refresh time is used\n"
+		"unchanged. It can fix going back in history for some sites that\n"
+		"use refreshing with zero values.")),
 
 	INIT_OPT_INT("document.browse", N_("Scroll margin"),
 		"scroll_margin", 0, 0, 20, 3,

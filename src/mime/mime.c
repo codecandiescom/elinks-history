@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.47 2004/04/24 16:03:23 jonas Exp $ */
+/* $Id: mime.c,v 1.48 2004/04/24 16:13:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,6 +118,24 @@ check_encoding_type(unsigned char *extension)
 #define debug_extension(extension__)
 #endif
 
+static unsigned char *
+get_extension_content_type(unsigned char *extension)
+{
+	unsigned char *ctype;
+
+	ctype = get_content_type_backends(extension);
+	debug_ctype(ctype);
+	if (ctype) return ctype;
+
+	ctype = check_encoding_type(extension);
+	debug_ctype(ctype);
+	if (ctype) return ctype;
+
+	ctype = check_extension_type(extension);
+	debug_ctype(ctype);
+	return ctype;
+}
+
 unsigned char *
 get_content_type(struct cache_entry *cached)
 {
@@ -153,16 +171,8 @@ get_content_type(struct cache_entry *cached)
 	extension = uri ? get_extension_from_uri(uri) : NULL;
 	debug_extension(extension);
 	if (extension) {
-
-		ctype = get_content_type_backends(extension);
-		debug_ctype(ctype);
-		if (!ctype) ctype = check_encoding_type(extension);
-		debug_ctype(ctype);
-		if (!ctype) ctype = check_extension_type(extension);
-		debug_ctype(ctype);
-
+		ctype = get_extension_content_type(extension);
 		mem_free(extension);
-
 		if (ctype) return ctype;
 	}
 

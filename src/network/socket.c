@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.42 2003/07/14 19:51:31 jonas Exp $ */
+/* $Id: socket.c,v 1.43 2003/07/24 11:06:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,10 +79,9 @@ void
 dns_exception(void *data)
 {
 	struct connection *conn = (struct connection *) data;
-	struct conn_info *c_i = conn->conn_info;
 
 	set_connection_state(conn, S_EXCEPT);
-	close_socket(NULL, c_i->sock);
+	close_socket(NULL, conn->conn_info->sock);
 	dns_found(conn, 0);
 }
 

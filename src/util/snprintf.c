@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.22 2003/09/03 16:03:11 zas Exp $ */
+/* $Id: snprintf.c,v 1.23 2003/12/31 10:44:11 jonas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -151,10 +151,6 @@ static void dopr_outch(char *buffer, size_t *currlen, size_t maxlen, char c);
 #define DP_C_LLONG   4
 
 #define char_to_int(p) ((p)- '0')
-
-#ifndef MAX
-#define MAX(p, q) (((p) >= (q)) ? (p) : (q))
-#endif
 
 static char hexnumbers[] = "0123456789abcdef";
 static char HEXnumbers[] = "0123456789ABCDEF";

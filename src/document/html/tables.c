@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.157 2004/04/23 20:44:29 pasky Exp $ */
+/* $Id: tables.c,v 1.158 2004/04/24 00:18:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "elinks.h"
 
+#include "document/html/parser/parse.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"

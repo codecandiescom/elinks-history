@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.59 2004/04/23 22:01:05 pasky Exp $ */
+/* $Id: parser.h,v 1.60 2004/04/24 00:18:54 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -138,12 +138,6 @@ enum html_special_type {
 	SP_COLOR_LINK_LINES,
 };
 
-/* Interface for both the renderer and the table handling */
-
-void
-parse_html(unsigned char *html, unsigned char *eof,
-	   void *f, unsigned char *head);
-
 /* Interface for the renderer */
 
 void
@@ -160,25 +154,12 @@ void done_html_parser_state(struct html_element *element);
 
 /* Interface for the table handling */
 
-int parse_element(unsigned char *, unsigned char *, unsigned char **, int *, unsigned char **, unsigned char **);
-
-unsigned char *get_attr_val(unsigned char *, unsigned char *);
-int has_attr(unsigned char *, unsigned char *);
-int get_num(unsigned char *, unsigned char *);
-int get_width(unsigned char *, unsigned char *, int);
 int get_bgcolor(unsigned char *, color_t *);
 void set_fragment_identifier(unsigned char *attr_name, unsigned char *attr);
 void add_fragment_identifier(void *part, unsigned char *attr);
 
-unsigned char *skip_comment(unsigned char *, unsigned char *);
-
 /* Interface for the viewer */
 
 int get_image_map(unsigned char *, unsigned char *, unsigned char *, unsigned char *a, struct menu_item **, struct memory_list **, unsigned char *, unsigned char *, int, int, int);
-
-/* Lifecycle functions for the tags fastfind cache, if being in use. */
-
-void free_tags_lookup(void);
-void init_tags_lookup(void);
 
 #endif

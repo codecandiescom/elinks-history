@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.25 2002/09/12 12:46:57 zas Exp $ */
+/* $Id: socket.c,v 1.26 2002/09/12 13:11:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,8 @@
 */
 
 #ifdef LOG_TRANSFER
-void log_data(unsigned char *data, int len)
+void
+log_data(unsigned char *data, int len)
 {
 	int fd = open(LOG_TRANSFER, O_WRONLY | O_APPEND | O_CREAT, 0622);
 
@@ -64,7 +65,8 @@ void dns_found(/* struct connection */ void *, int);
 
 void connected(/* struct connection */ void *);
 
-void close_socket(struct connection *conn, int *s)
+void
+close_socket(struct connection *conn, int *s)
 {
 	if (*s == -1) return;
 	if (conn && conn->ssl) ssl_close(conn);
@@ -73,7 +75,8 @@ void close_socket(struct connection *conn, int *s)
 	*s = -1;
 }
 
-void dns_exception(void *data)
+void
+dns_exception(void *data)
 {
 	struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = (struct conn_info *) conn->conn_info;
@@ -83,15 +86,17 @@ void dns_exception(void *data)
 	dns_found(conn, 0);
 }
 
-void exception(void *data)
+void
+exception(void *data)
 {
 	struct connection *c = (struct connection *) data;
 
 	retry_conn_with_state(c, S_EXCEPT);
 }
 
-void make_connection(struct connection *conn, int port, int *sock,
-		     void (*func)(struct connection *))
+void
+make_connection(struct connection *conn, int port, int *sock,
+		void (*func)(struct connection *))
 {
 	unsigned char *host;
 	struct conn_info *c_i;
@@ -256,7 +261,8 @@ error:
 #endif
 
 
-void dns_found(void *data, int state)
+void
+dns_found(void *data, int state)
 {
 	int sock = -1;
 	struct connection *conn = (struct connection *) data;
@@ -344,7 +350,8 @@ void dns_found(void *data, int state)
 	mem_free(c_i);
 }
 
-void connected(void *data)
+void
+connected(void *data)
 {
 	struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = conn->conn_info;
@@ -382,7 +389,8 @@ void connected(void *data)
 	mem_free(c_i);
 }
 
-void write_select(struct connection *c)
+void
+write_select(struct connection *c)
 {
 	struct write_buffer *wb = c->buffer;
 	int wr;
@@ -424,8 +432,9 @@ void write_select(struct connection *c)
 	}
 }
 
-void write_to_socket(struct connection *c, int s, unsigned char *data,
-		      int len, void (*write_func)(struct connection *))
+void
+write_to_socket(struct connection *c, int s, unsigned char *data,
+		int len, void (*write_func)(struct connection *))
 {
 	struct write_buffer *wb;
 
@@ -450,7 +459,8 @@ void write_to_socket(struct connection *c, int s, unsigned char *data,
 
 #define READ_SIZE 16384
 
-void read_select(struct connection *c)
+void
+read_select(struct connection *c)
 {
 	struct read_buffer *rb = c->buffer;
 	int rd;
@@ -494,7 +504,8 @@ void read_select(struct connection *c)
 	rb->done(c, rb);
 }
 
-struct read_buffer *alloc_read_buffer(struct connection *c)
+struct read_buffer *
+alloc_read_buffer(struct connection *c)
 {
 	struct read_buffer *rb;
 
@@ -508,8 +519,9 @@ struct read_buffer *alloc_read_buffer(struct connection *c)
 	return rb;
 }
 
-void read_from_socket(struct connection *c, int s, struct read_buffer *buf,
-		       void (*read_func)(struct connection *, struct read_buffer *))
+void
+read_from_socket(struct connection *c, int s, struct read_buffer *buf,
+		 void (*read_func)(struct connection *, struct read_buffer *))
 {
 	buf->done = read_func;
 	buf->sock = s;
@@ -519,7 +531,8 @@ void read_from_socket(struct connection *c, int s, struct read_buffer *buf,
 	set_handlers(s, (void (*)())read_select, NULL, (void (*)())exception, c);
 }
 
-void kill_buffer_data(struct read_buffer *rb, int n)
+void
+kill_buffer_data(struct read_buffer *rb, int n)
 {
 	if (n > rb->len || n < 0) {
 		internal("called kill_buffer_data with bad value");

@@ -61,6 +61,7 @@ AWK = @AWK@
 CC = @CC@
 MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
+RANLIB = @RANLIB@
 VERSION = @VERSION@
 
 noinst_LIBRARIES = libbfu.a
@@ -79,7 +80,6 @@ LIBS = @LIBS@
 libbfu_a_LIBADD = 
 libbfu_a_OBJECTS =  bfu.o menu.o
 AR = ar
-RANLIB = @RANLIB@
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)

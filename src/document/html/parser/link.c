@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.36 2004/12/05 21:43:08 miciah Exp $ */
+/* $Id: link.c,v 1.37 2004/12/05 21:48:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,6 @@ get_image_text(unsigned char *attr)
 {
 	unsigned char *text;
 	unsigned char *src = NULL;
-	int max_real_len;
 	int max_len;
 
 	src = null_or_stracpy(object_src);

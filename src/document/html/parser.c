@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.22 2002/05/10 17:45:23 pasky Exp $ */
+/* $Id: parser.c,v 1.23 2002/05/10 17:46:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1593,7 +1593,8 @@ void do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *e
 			}
 		}
 	}
-	if ((cols = get_num(attr, "cols")) <= 0) cols = 20;
+	if ((cols = get_num(attr, "cols")) <= 0) cols = HTML_DEFAULT_INPUT_SIZE;
+	cols++;
 	if ((rows = get_num(attr, "rows")) <= 0) rows = 1;
 	if (cols > d_opt->xw) cols = d_opt->xw;
 	if (rows > d_opt->xw) rows = d_opt->xw;

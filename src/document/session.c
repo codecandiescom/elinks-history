@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.74 2002/12/05 23:16:08 pasky Exp $ */
+/* $Id: session.c,v 1.75 2002/12/07 00:12:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,6 +208,7 @@ get_stat_msg(struct status *stat, struct terminal *term)
 		return m;
 	}
 
+	/* debug("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
 	return stracpy(_(get_err_msg(stat->state), term));
 }
 
@@ -246,6 +247,19 @@ print_screen_status(struct session *ses)
 
 	if (stat) {
 		if (show_status_bar) {
+			static int last_current_link;
+
+			/* Show S_INTERRUPTED message *once* but then show links
+			 * again as usual. */
+			if (current_frame(ses)) {
+				int ncl = current_frame(ses)->vs->current_link;
+
+				if (stat->state == S_INTERRUPTED
+				    && ncl != last_current_link)
+					stat->state = S_OK;
+				last_current_link = ncl;
+			}
+
 			if (stat->state == S_OK)
 				msg = print_current_link(ses);
 			if (!msg)

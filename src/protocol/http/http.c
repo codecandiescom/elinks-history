@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.39 2002/08/27 17:22:01 zas Exp $ */
+/* $Id: http.c,v 1.40 2002/08/27 19:01:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,6 +95,41 @@ subst_user_agent(unsigned char *fmt, unsigned char *version,
 
 	return n;
 }
+
+static void
+add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
+		    unsigned char *post)
+{
+	/* This block substitues spaces in URL by %20s. This is
+	 * certainly not the right place where to do it, but now the
+	 * behaviour is at least improved compared to what we had
+	 * before. We should probably encode all URLs as early as
+	 * possible, and possibly decode them back in protocol
+	 * backends. --pasky */
+
+	/* Nop, this doesn't stand for EuroURL, but Encoded URL. */
+	unsigned char *eurl;
+	unsigned char *p, *p1;
+
+	if (!post) {
+		eurl = stracpy(url_data);
+	} else {
+		eurl = memacpy(url_data, post - url_data - 1);
+	}
+
+	p = p1 = eurl;
+	while (*(p += strcspn(p, " \t\r\n"))) {
+		*p = 0;
+		add_to_str(hdr, l, p1);
+		add_to_str(hdr, l, "%20");
+		p++;
+		p1 = p;
+	}
+
+	add_to_str(hdr, l, p1);
+	mem_free(eurl);
+}
+
 
 static int get_http_code(unsigned char *head, int *code, int *version)
 {
@@ -282,34 +317,7 @@ void http_send_header(struct connection *c)
 		return;
 	}
 
-	{
-		/* This block substitues spaces in URL by %20s. This is
-		 * certainly not the right place where to do it, but now the
-		 * behaviour is at least improved compared to what we had
-		 * before. We should probably encode all URLs as early as
-		 * possible, and possibly decode them back in protocol
-		 * backends. --pasky */
-		
-		/* Nop, this doesn't stand for EuroURL, but Encoded URL. */
-		unsigned char *eurl;
-		unsigned char *p, *p1;
-		
-		if (!post) {
-			eurl = stracpy(url_data);
-		} else {
-			eurl = memacpy(url_data, post - url_data - 1);
-		}
-
-		p = eurl;
-		while ((p1 = strchr(p, ' '))) {
-			*p1 = 0;
-			add_to_str(&hdr, &l, p);
-			add_to_str(&hdr, &l, "%20");
-			p = p1 + 1;
-		}
-		add_to_str(&hdr, &l, p);
-		mem_free(eurl);
-	}
+	add_url_to_http_str(&hdr, &l, url_data, post);
 
 	if (http10) {
 		add_to_str(&hdr, &l, " HTTP/1.0\r\n");
@@ -391,18 +399,11 @@ void http_send_header(struct connection *c)
 
 		case REFERER_TRUE:
 			if (c->prev_url && c->prev_url[0]) {
-				unsigned char *prev_post;
-
 				add_to_str(&hdr, &l, "Referer: ");
 
-				prev_post = strchr(c->prev_url, POST_CHAR);
-
-				if (prev_post) {
-					add_bytes_to_str(&hdr, &l, c->prev_url,
-							 prev_post - c->prev_url);
-				} else {
-					add_to_str(&hdr, &l, c->prev_url);
-				}
+				add_url_to_http_str(&hdr, &l, c->prev_url,
+						    strchr(c->prev_url,
+							   POST_CHAR));
 
 				add_to_str(&hdr, &l, "\r\n");
 			}
@@ -431,12 +432,7 @@ void http_send_header(struct connection *c)
 
 			url_data = get_url_data(extract_proxy(c->url));
 			if (url_data) {
-				if (!post) {
-					add_to_str(&hdr, &l, url_data);
-				} else {
-					add_bytes_to_str(&hdr, &l, url_data,
-							 post - url_data - 1);
-				}
+				add_url_to_http_str(&hdr, &l, url_data, post);
 			}
 
 			add_to_str(&hdr, &l, "\r\n");

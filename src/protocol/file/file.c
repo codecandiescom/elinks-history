@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.140 2004/01/01 13:54:57 jonas Exp $ */
+/* $Id: file.c,v 1.141 2004/01/09 10:27:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,7 +149,7 @@ stat_user(struct string *string, struct stat *stp)
 		return;
 	}
 
-	if (stp->st_uid != last_uid || last_uid == -1) {
+	if (stp->st_uid != last_uid) {
 		struct passwd *pwd = getpwuid(stp->st_uid);
 
 		if (!pwd || !pwd->pw_name)
@@ -178,7 +178,7 @@ stat_group(struct string *string, struct stat *stp)
 		return;
 	}
 
-	if (stp->st_gid != last_gid || last_gid == -1) {
+	if (stp->st_gid != last_gid) {
 		struct group *grp = getgrgid(stp->st_gid);
 
 		if (!grp || !grp->gr_name)

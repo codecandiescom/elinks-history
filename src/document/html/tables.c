@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.116 2003/11/03 09:32:40 zas Exp $ */
+/* $Id: tables.c,v 1.117 2003/11/03 09:37:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1681,7 +1681,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (border) {
 		int_upper_bound(&border, 2);
 
-		cellspacing = get_num(attr, "cellspacingacing");
+		cellspacing = get_num(attr, "cellspacing");
 		int_bounds(&cellspacing, 1, 2);
 
 		frame = TABLE_FRAME_BOX;

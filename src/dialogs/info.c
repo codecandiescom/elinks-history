@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.113 2004/11/14 02:43:34 jonas Exp $ */
+/* $Id: info.c,v 1.114 2004/11/14 02:53:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,15 +179,11 @@ get_resource_info(struct terminal *term, void *data)
 		formatted_info(INFO_FILES), formatted_info(INFO_LOCKED));
 
 #ifdef DEBUG_MEMLEAK
-	add_to_string(&info, "\n\n");
-	add_to_string(&info, _("Memory info", term));
 	add_to_string(&info, "\n");
-
 	add_format_to_string(&info,
-		_("Allocated      : %ld bytes\n"
-		  "Truly allocated: %ld bytes (x%0.2f)", term),
-		mem_stats.amount, mem_stats.true_amount,
-		(double) mem_stats.true_amount / (double) mem_stats.amount);
+		_("Memory allocated: %ld bytes, %ld bytes overhead (%0.2f%%).", term),
+		mem_stats.amount, mem_stats.true_amount - mem_stats.amount,
+		(double) (mem_stats.true_amount - mem_stats.amount) / (double) mem_stats.amount * 100);
 #endif /* DEBUG_MEMLEAK */
 
 	return info.source;

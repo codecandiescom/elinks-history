@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.305 2003/10/18 12:32:48 jonas Exp $ */
+/* $Id: options.c,v 1.306 2003/10/18 13:08:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2784,7 +2784,7 @@ register_options(void)
 		N_("Whether to enable the timer or not:\n"
 		"0 is don't count down anything\n"
 		"1 is count down, but don't show the timer\n"
-		"2 is count down and show the timer near LEDs (note that this feature is DISABLED)"));
+		"2 is count down and show the timer near LEDs (DISABLED)"));
 #endif
 
 	add_opt_int("ui.timer", N_("Duration"),

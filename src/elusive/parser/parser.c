@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.7 2002/12/30 02:04:45 pasky Exp $ */
+/* $Id: parser.c,v 1.8 2002/12/30 14:22:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,11 +45,9 @@ elusive_init(enum parser_backend_type parser)
 void
 elusive_parse(struct parser_state *state, unsigned char **str, int *len)
 {
-	if (!parser_backends[state->parser] ||
-	    !parser_backends[state->parser]->parse)
-		return;
-
-	parser_backends[state->parser]->parse(state, str, len);
+	if (parser_backends[state->parser] &&
+	    parser_backends[state->parser]->parse)
+		parser_backends[state->parser]->parse(state, str, len);
 }
 
 void

@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.13 2004/01/18 16:44:36 pasky Exp $ */
+/* $Id: property.h,v 1.14 2004/01/18 17:43:27 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -59,9 +59,10 @@ struct css_property {
  * have and what internal type they have. */
 
 struct css_property_info;
+struct css_scanner;
 typedef int (*css_property_value_parser)(struct css_property_info *propinfo,
 					 union css_property_value *value,
-					 unsigned char **string);
+					 struct css_scanner *scanner);
 
 struct css_property_info {
 	unsigned char *name;

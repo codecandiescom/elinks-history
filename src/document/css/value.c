@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.26 2004/01/18 17:24:00 jonas Exp $ */
+/* $Id: value.c,v 1.27 2004/01/18 17:43:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,8 +49,8 @@ rgb_component_parser(unsigned char **string, unsigned char terminator)
 	return part;
 }
 
-int
-css_parse_color_value(struct css_property_info *propinfo,
+static int
+do_css_parse_color_value(struct css_property_info *propinfo,
 		      union css_property_value *value,
 		      unsigned char **string)
 {
@@ -90,12 +90,25 @@ css_parse_color_value(struct css_property_info *propinfo,
 	return 1;
 }
 
+int
+css_parse_color_value(struct css_property_info *propinfo,
+		      union css_property_value *value,
+		      struct css_scanner *scanner)
+{
+	struct css_token *token = get_css_token(scanner);
+	unsigned char *string = token->string;
+
+	return do_css_parse_color_value(propinfo, value, &string);
+}
 
 int
 css_parse_background_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
-			   unsigned char **string)
+			   struct css_scanner *scanner)
 {
+	struct css_token *token = get_css_token(scanner);
+	unsigned char *tok_string = token->string;
+	unsigned char **string = &tok_string;
 	int success = 0;
 
 	assert(propinfo->value_type == CSS_VT_COLOR);
@@ -104,7 +117,7 @@ css_parse_background_value(struct css_property_info *propinfo,
 	 * each token as a color. */
 
 	while (**string && **string != ';') {
-		success += css_parse_color_value(propinfo, value, string);
+		success += do_css_parse_color_value(propinfo, value, string);
 		if (**string == ',')
 			(*string)++; /* Uh. */
 		skip_whitespace(*string);
@@ -117,8 +130,12 @@ css_parse_background_value(struct css_property_info *propinfo,
 int
 css_parse_font_style_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
-			   unsigned char **string)
+			   struct css_scanner *scanner)
 {
+	struct css_token *token = get_css_token(scanner);
+	unsigned char *tok_string = token->string;
+	unsigned char **string = &tok_string;
+
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
 	if (!strncasecmp(*string, "normal", 6)) {
@@ -141,8 +158,11 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 int
 css_parse_font_weight_value(struct css_property_info *propinfo,
 			    union css_property_value *value,
-			    unsigned char **string)
+			    struct css_scanner *scanner)
 {
+	struct css_token *token = get_css_token(scanner);
+	unsigned char *tok_string = token->string;
+	unsigned char **string = &tok_string;
 	unsigned char *nstring;
 	int weight;
 
@@ -194,8 +214,12 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 int
 css_parse_text_align_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
-			   unsigned char **string)
+			   struct css_scanner *scanner)
 {
+	struct css_token *token = get_css_token(scanner);
+	unsigned char *tok_string = token->string;
+	unsigned char **string = &tok_string;
+
 	assert(propinfo->value_type == CSS_VT_TEXT_ALIGN);
 
 	if (!strncasecmp(*string, "left", 4)) {
@@ -232,15 +256,13 @@ css_parse_value(struct css_property_info *propinfo,
 		struct css_scanner *scanner)
 {
 	struct css_token *token;
-	unsigned char *string;
 
 	assert(scanner && value && propinfo);
 	assert(propinfo->parser);
 
+	/* Check that we actually have some token to pass on */
 	token = get_css_token(scanner);
 	if (!token) return 0;
 
-	string = token->string;
-
-	return propinfo->parser(propinfo, value, &string);
+	return propinfo->parser(propinfo, value, scanner);
 }

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.169 2003/07/22 10:27:42 zas Exp $ */
+/* $Id: parser.c,v 1.170 2003/07/22 10:31:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2747,16 +2747,12 @@ html_link(unsigned char *a)
 		add_char_to_string(&text, ')');
 
 only_title:
-		if (text.source) {
-			if (text.length)
-				put_link_line("Link: ", text.source, link.href, format.target_base);
-			else
-				put_link_line("Link: ", link.name, link.href, format.target_base);
-			done_string(&text);
-
-		} else {
+		if (text.length)
+			put_link_line("Link: ", text.source, link.href, format.target_base);
+		else
 			put_link_line("Link: ", link.name, link.href, format.target_base);
-		}
+
+		if (text.source) done_string(&text);
 	}
 
 free_and_return:

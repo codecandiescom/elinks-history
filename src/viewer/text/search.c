@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.167 2004/01/28 07:53:54 jonas Exp $ */
+/* $Id: search.c,v 1.168 2004/01/28 07:57:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1008,10 +1008,12 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	}
 
 	assert(charpos && direction);
-
 	assert(i >= 0 && i < doc_view->document->nlinks);
+
+	/* Set up the range of links that should be search in first attempt */
 	upper_link = (direction > 0) ? doc_view->document->nlinks : i + 1;
 	lower_link = (direction > 0) ? i - 1: -1;
+
 	case_sensitive = get_opt_bool("document.browse.search.case");
 
 #define case_compare_chars(c1, c2) \
@@ -1038,6 +1040,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			}
 		}
 
+		/* Check if we are at the end of the first range */
 		if (i == (direction > 0 ? upper_link - 1: lower_link + 1)
 		    && get_opt_bool("document.browse.search.wraparound")) {
 			/* Only wrap around one time. Initialize @i with

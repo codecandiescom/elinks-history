@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.21 2003/06/20 19:02:55 pasky Exp $ */
+/* $Id: encoding.c,v 1.22 2003/06/20 23:02:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,12 +25,11 @@
 #include "util/memory.h"
 
 
-unsigned char *encoding_names[NB_KNOWN_ENCODING];
-
 /* TODO: When more decoders will join the game, we should probably move them
  * to separate files, maybe even to separate directory. --pasky */
 
 struct decoding_handlers {
+	unsigned char *name;
 	int (*open)(struct stream_encoded *stream, int fd);
 	int (*read)(struct stream_encoded *stream, unsigned char *data, int len);
 	unsigned char *(*decode)(struct stream_encoded *stream, unsigned char *data, int len, int *new_len);
@@ -82,6 +81,7 @@ dummy_close(struct stream_encoded *stream)
 static unsigned char *dummy_extensions[] = { NULL };
 
 static struct decoding_handlers dummy_handlers = {
+	"none",
 	dummy_open,
 	dummy_read,
 	dummy_decode,
@@ -128,6 +128,7 @@ gzip_close(struct stream_encoded *stream)
 static unsigned char *gzip_extensions[] = { ".gz", ".tgz", NULL };
 
 static struct decoding_handlers gzip_handlers = {
+	"gzip",
 	gzip_open,
 	gzip_read,
 	gzip_decode,
@@ -217,6 +218,7 @@ bzip2_close(struct stream_encoded *stream)
 static unsigned char *bzip2_extensions[] = { ".bz2", NULL };
 
 static struct decoding_handlers bzip2_handlers = {
+	"bzip2",
 	bzip2_open,
 	bzip2_read,
 	bzip2_decode,
@@ -226,12 +228,6 @@ static struct decoding_handlers bzip2_handlers = {
 
 #endif
 
-
-unsigned char *encoding_names[] = {
-	"none",
-	"gzip",
-	"bzip2",
-};
 
 static struct decoding_handlers *handlers[] = {
 	&dummy_handlers,
@@ -326,4 +322,10 @@ guess_encoding(unsigned char *filename)
 	}
 
 	return ENCODING_NONE;
+}
+
+unsigned char *
+get_encoding_name(enum stream_encoding encoding)
+{
+	return handlers[encoding]->name;
 }

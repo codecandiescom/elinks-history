@@ -1,4 +1,4 @@
-/* $Id: encoding.h,v 1.8 2003/06/20 18:20:51 pasky Exp $ */
+/* $Id: encoding.h,v 1.9 2003/06/20 23:02:44 jonas Exp $ */
 
 #ifndef EL__UTIL_ENCODING_H
 #define EL__UTIL_ENCODING_H
@@ -12,8 +12,6 @@ enum stream_encoding {
 	NB_KNOWN_ENCODING,
 };
 
-extern unsigned char *encoding_names[];
-
 struct stream_encoded {
 	enum stream_encoding encoding;
 	void *data;
@@ -26,5 +24,6 @@ void close_encoded(struct stream_encoded *);
 
 unsigned char **listext_encoded(enum stream_encoding);
 enum stream_encoding guess_encoding(unsigned char *filename);
+unsigned char *get_encoding_name(enum stream_encoding encoding);
 
 #endif

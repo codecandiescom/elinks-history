@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.127 2003/06/20 18:51:37 pasky Exp $ */
+/* $Id: http.c,v 1.128 2003/06/20 23:02:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1346,7 +1346,7 @@ out_of_mem:
 
 	if (conn->content_encoding != ENCODING_NONE) {
 		if (conn->cache->encoding_info) mem_free(conn->cache->encoding_info);
-		conn->cache->encoding_info = stracpy(encoding_names[conn->content_encoding]);
+		conn->cache->encoding_info = stracpy(get_encoding_name(conn->content_encoding));
 	}
 
 	if (info->length == -1 ||

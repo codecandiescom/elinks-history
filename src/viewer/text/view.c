@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.508 2004/06/21 12:05:40 jonas Exp $ */
+/* $Id: view.c,v 1.509 2004/06/21 12:08:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -620,6 +620,10 @@ scroll_mouse_right(struct session *ses, struct document_view *doc_view)
 }
 #endif /* CONFIG_MOUSE */
 
+static enum frame_event_status move_cursor(struct session *ses,
+					   struct document_view *doc_view,
+					   int x, int y);
+
 static void
 move_document_start(struct session *ses, struct document_view *doc_view)
 {
@@ -627,7 +631,11 @@ move_document_start(struct session *ses, struct document_view *doc_view)
 	if_assert_failed return;
 
 	doc_view->vs->y = doc_view->vs->x = 0;
-	find_link_page_down(doc_view);
+
+	if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING)
+		move_cursor(ses, doc_view, doc_view->box.x, doc_view->box.y);
+	else
+		find_link_page_down(doc_view);
 }
 
 static void
@@ -641,7 +649,12 @@ move_document_end(struct session *ses, struct document_view *doc_view)
 	max_height = doc_view->document->height - doc_view->box.height;
 	doc_view->vs->x = 0;
 	int_lower_bound(&doc_view->vs->y, int_max(0, max_height));
-	find_link_page_up(doc_view);
+
+	if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING)
+		move_cursor(ses, doc_view, ses->tab->x,
+			    doc_view->document->height);
+	else
+		find_link_page_up(doc_view);
 }
 
 void

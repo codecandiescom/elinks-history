@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.183 2003/07/28 08:48:03 zas Exp $ */
+/* $Id: parser.c,v 1.184 2003/07/28 08:57:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2893,7 +2893,14 @@ process_head(unsigned char *head)
 		url = parse_http_header_param(refresh, "URL");
 		if (url) {
 			unsigned char *saved_url = url;
+#if 0 /* Future usage, please do not remove. --Zas */
+			/* Extraction of refresh time.
+			unsigned long seconds;
 
+			errno = 0;
+			seconds = strtoul(refresh, NULL, 10);
+			if (errno || seconds > 7200) seconds = 0;
+#endif
 			html_focusable(NULL);
 			url = join_urls(format.href_base, saved_url);
 			put_link_line("Refresh: ", saved_url, url, d_opt->framename);

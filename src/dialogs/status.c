@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.83 2004/09/25 00:50:56 pasky Exp $ */
+/* $Id: status.c,v 1.84 2004/09/28 23:45:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,10 +242,11 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		 * again as usual. */
 		if (doc_view) {
 			static int last_current_link;
-			int ncl = doc_view->vs->current_link;
+			int ncl = doc_view->vs
+				? doc_view->vs->current_link : -1;
 
 			if (stat->state == S_INTERRUPTED
-				&& ncl != last_current_link)
+			    && ncl != last_current_link)
 				stat->state = S_OK;
 			last_current_link = ncl;
 

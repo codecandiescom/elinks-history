@@ -1,5 +1,8 @@
 Known bugs:
 
+- It seems that <meta http-equiv="refresh" content="5;url=http://foo.com/" />
+  tag is interpreted in that text file... Try to open it in ELinks.
+
 - Go to http://www.computing.net/mac/wwwboard/forum/6268.html [;-)]
   Goto the end of page, put cursor in Image URL: field,
   then press up key, cursor will loop in some of the fields, but will never
@@ -53,4 +56,4 @@ Known bugs:
 Key: - nothing done + work in progress * almost fixed
      (reflects only what is already committed to CVS)
 
-$Id: BUGS,v 1.56 2003/05/08 11:07:29 miciah Exp $
+$Id: BUGS,v 1.57 2003/05/08 11:39:23 zas Exp $

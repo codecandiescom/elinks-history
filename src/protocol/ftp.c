@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.41 2002/10/02 08:46:43 zas Exp $ */
+/* $Id: ftp.c,v 1.42 2002/10/02 08:52:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,7 @@ again:
 			if (num_end != rb->data + 3 || response < 100)
 				return -1;
 
-			if (response == 227) {
+			if (response == 227) { /* PASV response parsing. */
 				unsigned char h1, h2, h3, h4, p1, p2;
 				int ret;
 				unsigned char *begin = strchr(num_end, ',');
@@ -123,7 +123,7 @@ again:
 			}
 
 #ifdef IPV6
-			if (response == 229) {
+			if (response == 229) { /* EPSV response parsing. */
 				/* See RFC 2428 */
 				unsigned char h1, h2, h3, h4, p1, p2;
 				unsigned int port;

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.278 2004/07/15 15:24:06 jonas Exp $ */
+/* $Id: link.c,v 1.279 2004/07/16 07:00:07 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1154,7 +1154,7 @@ get_current_link_info(struct session *ses, struct document_view *doc_view)
 	if (!link) return NULL;
 
 	if (link_is_form(link)) {
-		if (get_link_form_control(link)) return NULL;
+		if (!get_link_form_control(link)) return NULL;
 
 		return get_form_info(ses, doc_view);
 	} else {

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.250 2003/09/09 20:07:41 jonas Exp $ */
+/* $Id: renderer.c,v 1.251 2003/09/09 20:19:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -774,8 +774,6 @@ get_format_screen_char(struct part *part)
 		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
 		set_term_color(&schar_cache, &colors, COLOR_DEFAULT);
 
-		/* FIXME:
-		 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */
 		if (d_opt->display_subs) {
 			static int sub = 0;
 

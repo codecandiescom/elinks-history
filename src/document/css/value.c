@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.28 2004/01/18 17:48:11 jonas Exp $ */
+/* $Id: value.c,v 1.29 2004/01/18 17:57:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,29 +168,33 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
-	if (!strncasecmp(*string, "bolder", 6)) {
-		(*string) += 6;
-		value->font_attribute.add |= AT_BOLD;
-		return 1;
+	if (token->type == CSS_TOKEN_IDENTIFIER) {
+		if (!strncasecmp(*string, "bolder", 6)) {
+			(*string) += 6;
+			value->font_attribute.add |= AT_BOLD;
+			return 1;
+		}
+
+		if (!strncasecmp(*string, "lighter", 7)) {
+			(*string) += 7;
+			value->font_attribute.rem |= AT_BOLD;
+			return 1;
+		}
+
+		if (!strncasecmp(*string, "bold", 4)) {
+			(*string) += 4;
+			value->font_attribute.add |= AT_BOLD;
+			return 1;
+		}
+
+		if (!strncasecmp(*string, "normal", 6)) {
+			(*string) += 6;
+			value->font_attribute.rem |= AT_BOLD;
+			return 1;
+		}
 	}
 
-	if (!strncasecmp(*string, "lighter", 7)) {
-		(*string) += 7;
-		value->font_attribute.rem |= AT_BOLD;
-		return 1;
-	}
-
-	if (!strncasecmp(*string, "bold", 4)) {
-		(*string) += 4;
-		value->font_attribute.add |= AT_BOLD;
-		return 1;
-	}
-
-	if (!strncasecmp(*string, "normal", 6)) {
-		(*string) += 6;
-		value->font_attribute.rem |= AT_BOLD;
-		return 1;
-	}
+	if (token->type != CSS_TOKEN_DIGIT) return 0;
 
 	/* TODO: Comma separated list of weights?! */
 	weight = strtol(*string, (char **) &nstring, 10);

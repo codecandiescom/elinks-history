@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.41 2003/12/01 19:03:51 pasky Exp $ */
+/* $Id: document.c,v 1.42 2003/12/01 19:04:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,7 +228,7 @@ shrink_format_cache(int whole)
 		 * out-of-sync. */
 		ce = find_in_cache(document->url);
 		assertm(ce, "cached formatted document has no cache entry");
-		if (ce->id_tag = document->id_tag) continue;
+		if (ce->id_tag == document->id_tag) continue;
 
 		document = document->prev;
 		done_document(document->next);

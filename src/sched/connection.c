@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.55 2003/07/04 01:49:02 jonas Exp $ */
+/* $Id: connection.c,v 1.56 2003/07/04 11:56:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1067,7 +1067,7 @@ connection_timeout(struct connection *c)
 		abort_connection(c);
 	} else if (c->conn_info) {
 		dns_found(c, 0); /* jump to next addr */
-		if (c->conn_info) set_timeout(c);
+		if (c->conn_info) set_connection_timeout(c);
 	} else {
 		retry_connection(c);
 	}
@@ -1082,7 +1082,7 @@ connection_timeout_1(struct connection *c)
 }
 
 void
-set_timeout(struct connection *c)
+set_connection_timeout(struct connection *c)
 {
 	if (c->timer != -1) kill_timer(c->timer);
 	c->timer = install_timer((c->unrestartable ? get_opt_int("connection.unrestartable_receive_timeout")

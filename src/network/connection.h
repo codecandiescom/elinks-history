@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.24 2003/07/04 02:16:35 jonas Exp $ */
+/* $Id: connection.h,v 1.25 2003/07/04 11:56:25 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -190,7 +190,7 @@ void detach_connection(struct download *, int);
 void abort_all_connections(void);
 void abort_background_connections(void);
 
-void set_timeout(struct connection *);
+void set_connection_timeout(struct connection *);
 
 /* Initiates a connection to get the given @url. */
 /* Note that stat's data _MUST_ be struct download * if start > 0! Yes, that

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.147 2003/07/04 00:25:36 jonas Exp $ */
+/* $Id: http.c,v 1.148 2003/07/04 11:56:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,7 +299,7 @@ static void
 http_func(struct connection *conn)
 {
 	/* setcstate(conn, S_CONN); */
-	set_timeout(conn);
+	set_connection_timeout(conn);
 
 	if (get_keepalive_socket(conn)) {
 		int p = get_port(conn->url);
@@ -339,7 +339,7 @@ http_send_header(struct connection *conn)
 	int l = 0;
 	unsigned char *optstr;
 
-	set_timeout(conn);
+	set_connection_timeout(conn);
 
 	info = mem_calloc(1, sizeof(struct http_connection_info));
 	if (!info) {
@@ -855,7 +855,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
 
-	set_timeout(conn);
+	set_connection_timeout(conn);
 
 	if (rb->close == 2) {
 		if (conn->content_encoding && info->length == -1) {
@@ -1081,7 +1081,7 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	struct http_connection_info *info;
 	unsigned char *host = GET_REAL_URL(conn->url);
 
-	set_timeout(conn);
+	set_connection_timeout(conn);
 	info = conn->info;
 
 	if (rb->close == 2) {
@@ -1390,7 +1390,7 @@ http_get_header(struct connection *conn)
 {
 	struct read_buffer *rb;
 
-	set_timeout(conn);
+	set_connection_timeout(conn);
 
 	rb = alloc_read_buffer(conn);
 	if (!rb) return;

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.90 2003/07/04 00:25:36 jonas Exp $ */
+/* $Id: ftp.c,v 1.91 2003/07/04 11:56:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ get_ftp_response(struct connection *conn, struct read_buffer *rb, int part,
 {
 	int pos;
 
-	set_timeout(conn);
+	set_connection_timeout(conn);
 
 again:
 	for (pos = 0; pos < rb->len; pos++) {
@@ -229,7 +229,7 @@ ok:
 static void
 ftp_func(struct connection *conn)
 {
-	set_timeout(conn);
+	set_connection_timeout(conn);
 
 	if (get_keepalive_socket(conn)) {
 		int port = get_port(conn->url);
@@ -1080,7 +1080,7 @@ got_something_from_data_connection(struct connection *conn)
 
 	/* XXX: This probably belongs rather to connect.c ? */
 
-	set_timeout(conn);
+	set_connection_timeout(conn);
 
 	if (!c_i->has_data) {
 		int newsock;

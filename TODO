@@ -38,7 +38,15 @@ suffix appropriate to the file type.
 
 	Possibility to read HTML source from stdin
 
-	Passing url to external command
+	Passing url to external command (possibly make alt+[0-9] to pass
+current link to external command).
+
+	Terminal-specific MIME associations.
+
+	Something like indicator-bar, simple letter-flags indicating current
+state of browser, or changeable thru Lua.
+
+
 
 	Multiple windows in one console
 
@@ -50,9 +58,9 @@ suffix appropriate to the file type.
 
 	Rewrite html parser (?)
 
-	EcmaScript (?)
+	EcmaScript (?) (http://home.worldcom.ch/~jmlugrin/fesi/)
 
 	CSS (?)
 
 
-$Id: TODO,v 1.15 2002/03/28 00:46:26 pasky Exp $
+$Id: TODO,v 1.16 2002/03/29 21:38:09 pasky Exp $

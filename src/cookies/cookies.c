@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.94 2003/11/16 01:11:02 jonas Exp $ */
+/* $Id: cookies.c,v 1.95 2003/11/17 22:10:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 
 #include "bfu/msgbox.h"
 #include "cookies/cookies.h"
+#include "cookies/dialogs.h"
 #include "cookies/parser.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
@@ -47,19 +48,10 @@ static int cookies_nosave = 0;
 
 static unsigned int cookie_id = 0;
 
-struct cookie {
-	LIST_HEAD(struct cookie);
-
-	unsigned char *name, *value;
-	unsigned char *server;
-	unsigned char *path, *domain;
-	ttime expires; /* zero means undefined */
-	int secure;
-	int id;
-};
-
 static INIT_LIST_HEAD(cookies);
 static INIT_LIST_HEAD(cookie_queries);
+INIT_LIST_HEAD(cookie_box_items);
+INIT_LIST_HEAD(cookie_boxes);
 
 struct c_domain {
 	LIST_HEAD(struct c_domain);
@@ -146,6 +138,11 @@ static void save_cookies(void);
 static void
 free_cookie(struct cookie *c)
 {
+	if (c->box_item) {
+		del_from_list(c->box_item);
+		mem_free(c->box_item);
+	}
+
 	if (c->name) mem_free(c->name);
 	if (c->value) mem_free(c->value);
 	if (c->server) mem_free(c->server);
@@ -403,6 +400,23 @@ accept_cookie(struct cookie *c)
 	struct c_domain *cd;
 	struct cookie *d, *e;
 	int domain_len;
+
+	c->box_item = mem_calloc(1, sizeof(struct listbox_item));
+	if (!c->box_item) {
+		free_cookie(c);
+		return;
+	}
+
+	init_list(c->box_item->child);
+	c->box_item->visible = 1;
+
+	c->box_item->text = c->server;
+	c->box_item->box = &cookie_boxes;
+	c->box_item->udata = (void *) c;
+
+	add_to_list(cookie_box_items, c->box_item);
+
+	update_all_cookie_dialogs();
 
 	foreach (d, cookies) {
 		if (strcasecmp(d->name, c->name)

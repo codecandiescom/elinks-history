@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.34 2003/10/28 19:03:56 jonas Exp $ */
+/* $Id: group.c,v 1.35 2003/10/29 23:58:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@ base_group_width(struct terminal *term, struct widget_data *widget_data)
 
 /* TODO: We should join these two functions in one. --Zas */
 inline void
-max_group_width(struct terminal *term, int intl, unsigned char **texts,
+max_group_width(struct terminal *term, int intl,
 		struct widget_data *widget_data, int n, int *w)
 {
 	int ww = 0;
@@ -41,14 +41,13 @@ max_group_width(struct terminal *term, int intl, unsigned char **texts,
 
 	while (n--) {
 		int wx;
-		unsigned char *text = texts[0];
+		unsigned char *text = widget_data->widget->text;
 
 		if (intl) text = _(text, term);
 		wx = base + strlen(text);
 
 		if (n) wx++;
 		ww += wx;
-		texts++;
 		widget_data++;
 	}
 
@@ -56,7 +55,7 @@ max_group_width(struct terminal *term, int intl, unsigned char **texts,
 }
 
 inline void
-min_group_width(struct terminal *term, int intl, unsigned char **texts,
+min_group_width(struct terminal *term, int intl,
 		struct widget_data *widget_data, int n, int *w)
 {
 	int base = base_group_width(term, widget_data);
@@ -64,13 +63,12 @@ min_group_width(struct terminal *term, int intl, unsigned char **texts,
 
 	while (n--) {
 		int wx;
-		unsigned char *text = texts[0];
+		unsigned char *text = widget_data->widget->text;
 
 		if (intl) text = _(text, term);
 		wx = strlen(text);
 
 		int_lower_bound(&wt, wx);
-		texts++;
 		widget_data++;
 	}
 
@@ -78,9 +76,9 @@ min_group_width(struct terminal *term, int intl, unsigned char **texts,
 }
 
 void
-dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
-		 unsigned char **texts, struct widget_data *widget_data,
-		 int n, int x, int *y, int w, int *rw)
+dlg_format_group(struct terminal *term, struct terminal *t2,
+		 struct widget_data *widget_data,
+		 int n, int x, int *y, int w, int *rw, int intl)
 {
 	int nx = 0;
 	int base = base_group_width(t2, widget_data);
@@ -89,7 +87,7 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 	while (n--) {
 		int sl;
 		int wx = base;
-		unsigned char *text = texts[0];
+		unsigned char *text = widget_data->widget->text;
 
 		if (intl) text = _(text, t2);
 
@@ -121,7 +119,6 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 		if (rw) int_bounds(rw, nx + wx, w);
 
 		nx += wx + 1;
-		texts++;
 		widget_data++;
 	}
 	(*y)++;
@@ -136,8 +133,8 @@ group_fn(struct dialog_data *dlg_data)
 	int y = 0;
 	int n = dlg_data->n - 2;
 
-	max_group_width(term, 1, dlg_data->dlg->udata, dlg_data->widgets_data, n, &max);
-	min_group_width(term, 1, dlg_data->dlg->udata, dlg_data->widgets_data, n, &min);
+	max_group_width(term, 1, dlg_data->widgets_data, n, &max);
+	min_group_width(term, 1, dlg_data->widgets_data, n, &min);
 	buttons_width(dlg_data->widgets_data + n, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
@@ -145,8 +142,8 @@ group_fn(struct dialog_data *dlg_data)
 	int_bounds(&w, 1, term->x - 2 * DIALOG_LB);
 
 	rw = 0;
-	dlg_format_group(NULL, term, 1, dlg_data->dlg->udata, dlg_data->widgets_data, n,
-			 0, &y, w, &rw);
+	dlg_format_group(NULL, term, dlg_data->widgets_data, n,
+			 0, &y, w, &rw, 1);
 
 	y++;
 	dlg_format_buttons(NULL, term, dlg_data->widgets_data + n, 2, 0, &y, w,
@@ -160,8 +157,8 @@ group_fn(struct dialog_data *dlg_data)
 	draw_dlg(dlg_data);
 
 	y = dlg_data->y + DIALOG_TB + 1;
-	dlg_format_group(term, term, 1, dlg_data->dlg->udata, dlg_data->widgets_data, n,
-			 dlg_data->x + DIALOG_LB, &y, w, NULL);
+	dlg_format_group(term, term, dlg_data->widgets_data, n,
+			 dlg_data->x + DIALOG_LB, &y, w, NULL, 1);
 
 	y++;
 	dlg_format_buttons(term, term, dlg_data->widgets_data + n, 2,

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.71 2002/11/19 13:43:52 pasky Exp $ */
+/* $Id: ftp.c,v 1.72 2002/11/19 21:43:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -806,13 +806,16 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 						return;
 					}
 					conn->from = 0;
-				} else {
+				} else if (c_i->rest_sent) {
+					/* Following code is related to resume
+					 * feature. */
 					if (response == 350)
 						conn->from = conn->prg.start;
 					/* Come on, don't be nervous ;-). */
 					if (conn->prg.start >= 0) {
 						/* I'm not really sure about
 						 * this. --pasky */
+						/* FIXME */
 						struct download *down =
 							((struct status *)
 							 conn->statuss.next
@@ -842,15 +845,18 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 								"please. And "
 								"expect segfault"
 								" right now.");
-						if (conn->from) {
-							if (lseek(down->handle,
-							    conn->from, SEEK_SET)
-							    < 0) {
-								abort_conn_with_state(
-									conn, -errno);
-								return;
-							}
+						
+						/* FIXME: there's a problem here
+						 * sometimes down->handle == 0
+						 */
+						if (lseek(down->handle,
+						    conn->from, SEEK_SET)
+						    < 0) {
+							abort_conn_with_state(
+								conn, -errno);
+							return;
 						}
+						
 						down->last_pos = conn->from;
 					}
 					conn->prg.start = conn->from;

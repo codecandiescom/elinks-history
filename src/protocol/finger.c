@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.10 2003/06/04 10:17:22 zas Exp $ */
+/* $Id: finger.c,v 1.11 2003/06/26 20:04:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "document/cache.h"
 #include "lowlevel/connect.h"
 #include "protocol/finger.h"
+#include "protocol/protocol.h"
 #include "protocol/url.h"
 #include "sched/sched.h"
 #include "util/memory.h"
@@ -20,7 +21,7 @@ static void finger_sent_request(struct connection *);
 static void finger_get_response(struct connection *, struct read_buffer *);
 static void finger_end_request(struct connection *, int);
 
-void
+static void
 finger_func(struct connection *c)
 {
 	int p;
@@ -114,3 +115,13 @@ finger_end_request(struct connection *c, int state)
 	}
 	abort_connection(c);
 }
+
+struct protocol_backend finger_protocol_backend = {
+	/* name: */			"finger",
+	/* port: */			79,
+	/* func: */			finger_func,
+	/* nc_func: */			NULL,
+	/* free_syntax: */		0,
+	/* need_slashes: */		1,
+	/* need_slash_after_host: */	1,
+};

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.26 2003/06/07 23:08:56 zas Exp $ */
+/* $Id: user.c,v 1.27 2003/06/26 20:04:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,7 @@ prog_func(struct terminal *term, unsigned char *url, unsigned char *proto,
 }
 
 
-void
+static void
 user_func(struct session *ses, unsigned char *url)
 {
 	unsigned char *urldata;
@@ -183,3 +183,13 @@ user_func(struct session *ses, unsigned char *url)
 	mem_free(host);
 	if (proto) mem_free(proto);
 }
+
+struct protocol_backend user_protocol_backend = {
+	/* name: */			"costum",
+	/* port: */			0,
+	/* func: */			NULL,
+	/* nc_func: */			user_func,
+	/* free_syntax: */		0,
+	/* need_slashes: */		0,
+	/* need_slash_after_host: */	0,
+};

@@ -1,11 +1,11 @@
-/* $Id: http.h,v 1.4 2003/01/01 20:30:35 pasky Exp $ */
+/* $Id: http.h,v 1.5 2003/06/26 20:04:40 jonas Exp $ */
 
-#ifndef EL__PROTOCOL_HTTP_H
-#define EL__PROTOCOL_HTTP_H
+#ifndef EL__PROTOCOL_HTTP_HTTP_H
+#define EL__PROTOCOL_HTTP_HTTP_H
 
-#include "sched/sched.h"
+#include "protocol/protocol.h"
 
-void http_func(struct connection *);
-void proxy_func(struct connection *);
+extern struct protocol_backend http_protocol_backend;
+extern struct protocol_backend proxy_protocol_backend;
 
 #endif

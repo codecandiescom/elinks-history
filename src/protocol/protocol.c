@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.4 2003/06/26 19:17:06 jonas Exp $ */
+/* $Id: protocol.c,v 1.5 2003/06/26 20:04:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,38 +12,40 @@
 
 #include "bfu/msgbox.h"
 #include "intl/gettext/libintl.h"
-#include "protocol/file.h"
-#include "protocol/finger.h"
-#include "protocol/ftp.h"
-#include "protocol/http/http.h"
-#include "protocol/http/https.h"
 #include "protocol/protocol.h"
 #include "protocol/url.h"
-#include "protocol/user.h"
 #include "sched/sched.h"
 #include "sched/session.h"
 #include "util/memory.h"
 #include "util/string.h"
 
+/* Backends dynamic area: */
+#include "protocol/file.h"
+#include "protocol/finger.h"
+#include "protocol/ftp.h"
+#include "protocol/http/http.h"
+#include "protocol/http/https.h"
+#include "protocol/user.h"
 
-static void dummyjs_func(struct session *, unsigned char *);
+static struct protocol_backend dummyjs_protocol_backend;
+static struct protocol_backend lua_protocol_backend;
 
-static struct protocol_backend protocol_backends[] = {
-	/* SCHEME_FILE */	{"file", 0, file_func, NULL, 1, 1, 0},
-	/* SCHEME_FINGER */	{"finger", 79, finger_func, NULL, 0, 1, 1},
-	/* SCHEME_FTP */	{"ftp", 21, ftp_func, NULL, 0, 1, 1},
-	/* SCHEME_HTTP */	{"http", 80, http_func, NULL, 0, 1, 1},
-	/* SCHEME_HTTPS */	{"https", 443, https_func, NULL, 0, 1, 1},
-	/* SCHEME_JAVASCRIPT */	{"javascript", 0, NULL, dummyjs_func, 0, 0, 0},
-	/* SCHEME_LUA */	{"user", 0, NULL, NULL, 0, 0, 0}, /* lua */
-	/* SCHEME_PROXY */	{"proxy", 3128, proxy_func, NULL, 0, 1, 1},
+static struct protocol_backend *protocol_backends[] = {
+	/* SCHEME_FILE */	&file_protocol_backend,
+	/* SCHEME_FINGER */	&finger_protocol_backend,
+	/* SCHEME_FTP */	&ftp_protocol_backend,
+	/* SCHEME_HTTP */	&http_protocol_backend,
+	/* SCHEME_HTTPS */	&https_protocol_backend,
+	/* SCHEME_JAVASCRIPT */	&dummyjs_protocol_backend,
+	/* SCHEME_LUA */	&lua_protocol_backend,
+	/* SCHEME_PROXY */	&proxy_protocol_backend,
 
 	/* Keep these two last! */
-	/* SCHEME_UNKNOWN */	{NULL, 0, NULL},
+	/* SCHEME_UNKNOWN */	NULL,
 
 	/* Internal protocol for mapping to protocol.user.* handlers. Placed
 	 * last because it's checked first and else should be ignored. */
-	/* SCHEME_USER */	{"custom", 0, NULL, user_func, 0, 0, 0}
+	/* SCHEME_USER */	&user_protocol_backend
 };
 
 
@@ -56,6 +58,26 @@ dummyjs_func(struct session *ses, unsigned char *url)
 		NULL, 1,
 		N_("Cancel"), NULL, B_ENTER | B_ESC);
 }
+
+static struct protocol_backend dummyjs_protocol_backend = {
+	/* name: */			"javascript",
+	/* port: */			0,
+	/* func: */			NULL,
+	/* nc_func: */			dummyjs_func,
+	/* free_syntax: */		0,
+	/* need_slashes: */		0,
+	/* need_slash_after_host: */	0,
+};
+
+static struct protocol_backend lua_protocol_backend = {
+	/* name: */			"user",
+	/* port: */			0,
+	/* func: */			NULL,
+	/* nc_func: */			NULL,
+	/* free_syntax: */		0,
+	/* need_slashes: */		0,
+	/* need_slash_after_host: */	0,
+};
 
 
 enum uri_scheme
@@ -76,7 +98,7 @@ check_protocol(unsigned char *p, int l)
 	}
 
 	for (i = 0; i < SCHEME_UNKNOWN; i++)
-		if (!strcasecmp(protocol_backends[i].name, p)) {
+		if (!strcasecmp(protocol_backends[i]->name, p)) {
 			p[l] = ':';
 			return i;
 		}
@@ -94,9 +116,9 @@ get_prot_info(unsigned char *prot, int *port,
 
 	if (scheme == SCHEME_UNKNOWN) return -1;
 
-	if (port) *port = protocol_backends[scheme].port;
-	if (func) *func = protocol_backends[scheme].func;
-	if (nc_func) *nc_func = protocol_backends[scheme].nc_func;
+	if (port) *port = protocol_backends[scheme]->port;
+	if (func) *func = protocol_backends[scheme]->func;
+	if (nc_func) *nc_func = protocol_backends[scheme]->nc_func;
 	return 0;
 }
 
@@ -107,11 +129,11 @@ get_prot_url_info(enum uri_scheme scheme, int *free_syntax, int *need_slashes,
 	assert(scheme != SCHEME_UNKNOWN);
 
 	if (free_syntax)
-		*free_syntax = protocol_backends[scheme].free_syntax;
+		*free_syntax = protocol_backends[scheme]->free_syntax;
 	if (need_slashes)
-		*need_slashes = protocol_backends[scheme].need_slashes;
+		*need_slashes = protocol_backends[scheme]->need_slashes;
 	if (need_slash_after_host)
-		*need_slash_after_host = protocol_backends[scheme].need_slash_after_host;
+		*need_slash_after_host = protocol_backends[scheme]->need_slash_after_host;
 }
 
 

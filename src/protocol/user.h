@@ -1,12 +1,12 @@
-/* $Id: user.h,v 1.5 2003/05/04 17:25:55 pasky Exp $ */
+/* $Id: user.h,v 1.6 2003/06/26 20:04:40 jonas Exp $ */
 
-#ifndef EL__MAILTO_H
-#define EL__MAILTO_H
+#ifndef EL__PROTOCOL_USER_H
+#define EL__PROTOCOL_USER_H
 
+#include "protocol/protocol.h"
 #include "terminal/terminal.h"
-#include "sched/session.h"
 
-void user_func(struct session *, unsigned char *);
+extern struct protocol_backend user_protocol_backend;
 
 unsigned char *get_prog(struct terminal *, unsigned char *);
 

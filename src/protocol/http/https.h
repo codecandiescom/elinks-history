@@ -1,10 +1,10 @@
-/* $Id: https.h,v 1.6 2003/01/01 20:30:35 pasky Exp $ */
+/* $Id: https.h,v 1.7 2003/06/26 20:04:40 jonas Exp $ */
 
-#ifndef EL__PROTOCOL_HTTPS_H
-#define EL__PROTOCOL_HTTPS_H
+#ifndef EL__PROTOCOL_HTTP_HTTPS_H
+#define EL__PROTOCOL_HTTP_HTTPS_H
 
-#include "sched/sched.h"
+#include "protocol/protocol.h"
 
-void https_func(struct connection *c);
+extern struct protocol_backend https_protocol_backend;
 
 #endif

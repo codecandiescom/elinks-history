@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.85 2003/06/08 13:21:40 jonas Exp $ */
+/* $Id: ftp.c,v 1.86 2003/06/26 20:04:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,7 +226,7 @@ ok:
 
 
 /* Initialize or continue ftp connection. */
-void
+static void
 ftp_func(struct connection *conn)
 {
 	set_timeout(conn);
@@ -1269,3 +1269,13 @@ ftp_end_request(struct connection *conn, int state)
 
 	add_keepalive_socket(conn, FTP_KEEPALIVE_TIMEOUT);
 }
+
+struct protocol_backend ftp_protocol_backend = {
+	/* name: */			"ftp",
+	/* port: */			21,
+	/* func: */			ftp_func,
+	/* nc_func: */			NULL,
+	/* free_syntax: */		0,
+	/* need_slashes: */		1,
+	/* need_slash_after_host: */	1,
+};

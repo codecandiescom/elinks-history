@@ -271,14 +271,12 @@ msgid ""
 msgstr ""
 
 #: src/config/conf.c:635
-#, fuzzy
 msgid "Automatically saved options\n"
-msgstr "Optionen für den Cache formatierter Dokumente."
+msgstr "Automatisch gespeicherte Optionen\n"
 
 #: src/config/conf.c:649
-#, fuzzy
 msgid "Automatically saved keybindings\n"
-msgstr "Optionen für den Cache formatierter Dokumente."
+msgstr "Automatisch gespeicherte Tastenbelegungen\n"
 
 #: src/config/conf.c:691
 msgid "File saving disabled by option"
@@ -333,7 +331,7 @@ msgid "N/A"
 msgstr "Nicht verfügbar"
 
 #: src/config/dialogs.c:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Name: %s\n"
 "Type: %s\n"
@@ -342,7 +340,7 @@ msgid ""
 "%s"
 msgstr ""
 "Name: %s\n"
-"Typ: %s\n"
+"Typ: %s\n\n"
 "Beschreibung:\n"
 "%s"
 
@@ -830,29 +828,29 @@ msgid "Template option folder"
 msgstr "Vorlage für Optionen-Ordner"
 
 #: src/config/options.c:769
-#, fuzzy, c-format
+#, c-format
 msgid "(default: %ld)"
-msgstr "    %s%s%s %s (Voreinstellung: %d)"
+msgstr "(Voreinstellung: %ld)"
 
 #: src/config/options.c:774 src/config/options.c:797
-#, fuzzy, c-format
+#, c-format
 msgid "(default: \"%s\")"
-msgstr "    %s%s%s %s (Voreinstellung: \"%s\")"
+msgstr "(Voreinstellung: \"%s\")"
 
 #: src/config/options.c:779
-#, fuzzy, c-format
+#, c-format
 msgid "(alias for %s)"
-msgstr "    %s%s%s %s (Alias für %s)"
+msgstr "(Alias für %s)"
 
 #: src/config/options.c:784
-#, fuzzy, c-format
+#, c-format
 msgid "(default: %s)"
-msgstr "    %s%s%s %s (Voreinstellung: %s)"
+msgstr "(Voreinstellung: %s)"
 
 #: src/config/options.c:789
-#, fuzzy, c-format
+#, c-format
 msgid "(default: #%06x)"
-msgstr "    %s%s%s %s (Voreinstellung: #%06x)"
+msgstr "(Voreinstellung: #%06x)"
 
 #: src/config/options.c:916
 msgid "Configuration options:\n"
@@ -895,7 +893,6 @@ msgstr ""
 "  nationalen Zeichen unterstützt!) (ABGESCHALTET)"
 
 #: src/config/options.inc:26
-#, fuzzy
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
@@ -1347,9 +1344,8 @@ msgid "Suffix string to use to mark image links."
 msgstr "Suffix, um Links zu Bildern zu kennzeichnen."
 
 #: src/config/options.inc:252
-#, fuzzy
 msgid "Display links to images w/o alt"
-msgstr "Zeige Links zu Bildern an"
+msgstr "Zeige Links zu Bildern ohne alternativ Beschreibung an"
 
 #: src/config/options.inc:254
 msgid ""
@@ -1532,9 +1528,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:290
-#, fuzzy
 msgid "Bold"
-msgstr "Ordner"
+msgstr "Fett"
 
 #: src/config/options.inc:292
 msgid "Make the active link text bold."
@@ -1680,13 +1675,15 @@ msgstr ""
 #: src/config/options.inc:364
 #, fuzzy
 msgid "Show search hit top or bottom dialogs"
-msgstr "Am Anfang angekommen, führe die Suche am Ende fort."
+msgstr "Dialog anzeigen"
 
 #: src/config/options.inc:366
 msgid ""
 "Whether to show a dialog when the search hits top or bottom of the\n"
 "document."
 msgstr ""
+"Diese Option gibt an, ob ein Fenster angezeigt wird, wenn man bei\n"
+"der Suche auf den Anfang oder das Ende des Dokuments trifft."
 
 #: src/config/options.inc:370
 msgid "Horizontal text margin"
@@ -1698,7 +1695,7 @@ msgstr "Horizontale Textbegrenzung."
 
 #: src/config/options.inc:374
 msgid "Document meta refresh"
-msgstr ""
+msgstr "Dokument-Auffrischung"
 
 #: src/config/options.inc:376
 msgid ""
@@ -1706,6 +1703,10 @@ msgid ""
 "refresh' tags). Web-page authors use these to instruct the browser\n"
 "to reload a document at a given interval or to load another page."
 msgstr ""
+"Im Dokument angegebenen Auffrischungs-Anweisung automatisch folgen\n"
+"('<meta> refresh' Anweisungen). Autoren von Webseiten benutzen diese,\n"
+"um den Browser anzuweisen, ein Dokument nach einem gegebenen Intervall\n"
+"neu zu laden oder eine andere Seite zu laden."
 
 #: src/config/options.inc:380
 msgid "Scroll margin"
@@ -1906,11 +1907,11 @@ msgstr "Erlaube dunkle Farbe vor dunklem Hintergrund."
 
 #: src/config/options.inc:489
 msgid "Ensure contrast"
-msgstr ""
+msgstr "Kontrast sicherstellen"
 
 #: src/config/options.inc:491
 msgid "Makes sure that the back- and foreground color is never equal."
-msgstr ""
+msgstr "Stellt sicher, dass Hinter- und Vordergrundfarbe nie gleich sind."
 
 #. If you change this please also change ACT_DOCUMENT_COLORS action
 #. * handling.
@@ -1962,11 +1963,11 @@ msgstr ""
 
 #: src/config/options.inc:525
 msgid "Default download directory"
-msgstr ""
+msgstr "Verzeichnis-Voreinstellung für Downloads"
 
 #: src/config/options.inc:527
 msgid "Default download directory."
-msgstr ""
+msgstr "Verzeichnis-Voreinstellung für Downloads."
 
 #: src/config/options.inc:529
 msgid "Set original time"
@@ -2133,9 +2134,8 @@ msgid "Display tables."
 msgstr "Tabellen anzeigen."
 
 #: src/config/options.inc:612
-#, fuzzy
 msgid "Expand table columns"
-msgstr "Aktivieren"
+msgstr "Tabellenspalten ausbreiten"
 
 #: src/config/options.inc:614
 msgid ""
@@ -2145,6 +2145,11 @@ msgid ""
 "overall layout. Only useful if you also have\n"
 "document.colors.use_document_colors set to 2. Experimental."
 msgstr ""
+"Aktiviere diese Option, so werden beim der Anzeige von Tabellen\n"
+"die Spalten ausgebreitet, so dass die Zellen bezüglich der\n"
+"Hintergrundfarben genauer ausgerichtet sind, aber ungenauer bezüglich\n"
+"dem Gesamtaussehen. Dies ist nur nützlich, wenn die Option\n"
+"document.colors.use_document_colors den Wert 2 hat. Experimentell."
 
 #: src/config/options.inc:620
 msgid "Display subscripts"
@@ -2322,15 +2327,15 @@ msgstr ""
 #: src/config/options.inc:713 src/config/options.inc:956
 #: src/util/version.c:101
 msgid "Mailcap"
-msgstr ""
+msgstr "Mailcap"
 
 #: src/config/options.inc:715
 msgid "Options for mailcap support."
-msgstr ""
+msgstr "Optionen für die Mailcap-Unterstützung."
 
 #: src/config/options.inc:719
 msgid "Enable mailcap support."
-msgstr ""
+msgstr "Mailcap-Unterstützung einschalten."
 
 #: src/config/options.inc:721 src/config/options.inc:756
 msgid "Path"
@@ -2342,10 +2347,13 @@ msgid ""
 "Leave as \"\" to use MAILCAP environment variable or\n"
 "built-in defaults instead."
 msgstr ""
+"Mailcap-Suchpfad. Ein durch Doppelpunkt getrennte Liste von Dateien.\n"
+"Ist diese Option leer, so wird die MAILCAP-Umgebungsvariable oder\n"
+"eine eingebaute Voreinstellung benutzt."
 
 #: src/config/options.inc:729
 msgid "Ask before using the handlers defined by mailcap."
-msgstr ""
+msgstr "Vor der Benutzung eines durch Mailcap definierten Verarbeiters fragen."
 
 #: src/config/options.inc:731 src/config/options.inc:976
 msgid "Type query string"
@@ -2889,7 +2897,6 @@ msgid "Color mode"
 msgstr "Farbmodus"
 
 #: src/config/options.inc:1038
-#, fuzzy
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -2901,7 +2908,7 @@ msgstr ""
 "auf dem Bildschirm ausgegeben werden. Die Farbmodi sind:\n"
 "0 monochromer Modus, nur 2 Farben werden benutzt\n"
 "1 16-Farbmodus, benutzt die gewöhnlichen ANSI-Farben\n"
-"2 256-Farbmodus, verlangt die Benutzung von xterm256\n"
+"2 256-Farbmodus, verlangt die Benutzung von xterm-256color\n"
 
 #: src/config/options.inc:1044
 msgid "Enable transparency"
@@ -3118,12 +3125,11 @@ msgstr ""
 
 #: src/config/options.inc:1235 src/config/options.inc:1644
 msgid "Generic"
-msgstr ""
+msgstr "Allgemein"
 
 #: src/config/options.inc:1237 src/config/options.inc:1646
-#, fuzzy
 msgid "Generic dialog colors."
-msgstr "Allgemeine Farben für die Titelzeile."
+msgstr "Allgemeine Farben für Dialoge."
 
 #: src/config/options.inc:1247 src/config/options.inc:1656
 msgid "Frame"
@@ -4238,14 +4244,12 @@ msgid "Toggle ~html/plain"
 msgstr "Umschaltung HTML/~Quelltext"
 
 #: src/dialogs/menu.c:494
-#, fuzzy
 msgid "Toggle i~mages"
-msgstr "Anzeige umschalten"
+msgstr "~Bilder ein-/ausschalten"
 
 #: src/dialogs/menu.c:495
-#, fuzzy
 msgid "Toggle ~link numbering"
-msgstr "Linknummer eingeben"
+msgstr "~Linknummern ein-/ausschalten"
 
 #: src/dialogs/menu.c:496
 msgid "Document ~info"

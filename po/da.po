@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-23 10:23+0200\n"
+"POT-Creation-Date: 2003-10-23 11:55+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -804,65 +804,65 @@ msgstr "Fejl ved parsning af tastekombination"
 msgid "Unrecognised action (internal error)"
 msgstr "Ugenkendt handling (intern fejl)"
 
-#: src/config/options.c:586 src/config/options.c:610 src/config/opttypes.c:38
+#: src/config/options.c:600 src/config/options.c:624 src/config/opttypes.c:38
 msgid "Parameter expected"
 msgstr "Parameter forventet"
 
-#: src/config/options.c:611
+#: src/config/options.c:625
 msgid "Too many parameters"
 msgstr "For mange parametre"
 
-#: src/config/options.c:616
+#: src/config/options.c:630
 msgid "error"
 msgstr "fejl"
 
-#: src/config/options.c:618 src/sched/error.c:45
+#: src/config/options.c:632 src/sched/error.c:45
 msgid "Host not found"
 msgstr "Værtsmaskinen kan ikke lokaliseres"
 
-#: src/config/options.c:632
+#: src/config/options.c:646
 msgid "Resolver error"
 msgstr "Fejl ved resolution"
 
-#: src/config/options.c:654
+#: src/config/options.c:668
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
 msgstr "ELinks %s - Tekst WWW browser\n"
 
-#: src/config/options.c:694
+#: src/config/options.c:708
 msgid "Template option folder"
 msgstr "Skabelon indstillingsmappe"
 
-#: src/config/options.c:710
+#: src/config/options.c:731
 #, fuzzy, c-format
-msgid "    %s%s%s %s (default: %ld)"
+msgid "(default: %ld)"
 msgstr "    %s%s%s %s (standardværdi: %d)"
 
-#: src/config/options.c:715 src/config/options.c:739
-#, c-format
-msgid "    %s%s%s %s (default: \"%s\")"
+#: src/config/options.c:736 src/config/options.c:759
+#, fuzzy, c-format
+msgid "(default: \"%s\")"
 msgstr "    %s%s%s %s (standardværdi:\" %s\")"
 
-#: src/config/options.c:720
-#, c-format
-msgid "    %s%s%s %s (alias for %s)"
+#: src/config/options.c:741
+#, fuzzy, c-format
+msgid "(alias for %s)"
 msgstr "    %s%s%s %s (alias til %s)"
 
-#: src/config/options.c:725
-#, c-format
-msgid "    %s%s%s %s (default: %s)"
+#: src/config/options.c:746
+#, fuzzy, c-format
+msgid "(default: %s)"
 msgstr "    %s%s%s %s (standardværdi: %s)"
 
-#: src/config/options.c:732
-#, c-format
-msgid "    %s%s%s %s (default: #%06x)"
+#: src/config/options.c:751
+#, fuzzy, c-format
+msgid "(default: #%06x)"
 msgstr "    %s%s%s %s (standardværdi: %06x)"
 
-#: src/config/options.c:850
+#: src/config/options.c:878
 msgid "Configuration options:\n"
 msgstr "Konfigurationsindstillinger:\n"
 
-#: src/config/options.c:853
+#: src/config/options.c:881
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
@@ -870,7 +870,7 @@ msgstr ""
 "Brug: elinks [INDSTILLING]... [URL]\n"
 "\n"
 
-#: src/config/options.c:854
+#: src/config/options.c:882
 msgid "Options:\n"
 msgstr "Indstilling:\n"
 

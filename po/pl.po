@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
-"POT-Creation-Date: 2003-10-23 10:23+0200\n"
+"POT-Creation-Date: 2003-10-23 11:55+0200\n"
 "PO-Revision-Date: 2003-10-22 15:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -822,66 +822,66 @@ msgstr "B³±d przy odczytywaniu kombinacji klawiszy"
 msgid "Unrecognised action (internal error)"
 msgstr "Nierozpoznana akcja (b³±d wewnêtrzny)"
 
-#: src/config/options.c:586 src/config/options.c:610 src/config/opttypes.c:38
+#: src/config/options.c:600 src/config/options.c:624 src/config/opttypes.c:38
 msgid "Parameter expected"
 msgstr "Spodziewano siê parametru"
 
-#: src/config/options.c:611
+#: src/config/options.c:625
 msgid "Too many parameters"
 msgstr "Zbyt wiele parametrów"
 
-#: src/config/options.c:616
+#: src/config/options.c:630
 msgid "error"
 msgstr "b³±d"
 
-#: src/config/options.c:618 src/sched/error.c:45
+#: src/config/options.c:632 src/sched/error.c:45
 msgid "Host not found"
 msgstr "Nie znaleziono serwera"
 
 #
-#: src/config/options.c:632
+#: src/config/options.c:646
 msgid "Resolver error"
 msgstr "B³±d resolwera"
 
-#: src/config/options.c:654
+#: src/config/options.c:668
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
 msgstr "ELinks %s - Tekstowa przegl±darka WWW\n"
 
-#: src/config/options.c:694
+#: src/config/options.c:708
 msgid "Template option folder"
 msgstr "Folder szablonów opcji"
 
-#: src/config/options.c:710
-#, c-format
-msgid "    %s%s%s %s (default: %ld)"
-msgstr ""
+#: src/config/options.c:731
+#, fuzzy, c-format
+msgid "(default: %ld)"
+msgstr "domy¶lnie"
 
-#: src/config/options.c:715 src/config/options.c:739
-#, c-format
-msgid "    %s%s%s %s (default: \"%s\")"
-msgstr ""
+#: src/config/options.c:736 src/config/options.c:759
+#, fuzzy, c-format
+msgid "(default: \"%s\")"
+msgstr "domy¶lnie"
 
-#: src/config/options.c:720
-#, c-format
-msgid "    %s%s%s %s (alias for %s)"
-msgstr ""
+#: src/config/options.c:741
+#, fuzzy, c-format
+msgid "(alias for %s)"
+msgstr "alias dla"
 
-#: src/config/options.c:725
-#, c-format
-msgid "    %s%s%s %s (default: %s)"
-msgstr ""
+#: src/config/options.c:746
+#, fuzzy, c-format
+msgid "(default: %s)"
+msgstr "domy¶lnie"
 
-#: src/config/options.c:732
-#, c-format
-msgid "    %s%s%s %s (default: #%06x)"
-msgstr ""
+#: src/config/options.c:751
+#, fuzzy, c-format
+msgid "(default: #%06x)"
+msgstr "domy¶lnie"
 
-#: src/config/options.c:850
+#: src/config/options.c:878
 msgid "Configuration options:\n"
 msgstr "Ustawienia:\n"
 
-#: src/config/options.c:853
+#: src/config/options.c:881
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
@@ -889,7 +889,7 @@ msgstr ""
 "U¿ycie: elinks [OPCJA]... [URL]\n"
 "\n"
 
-#: src/config/options.c:854
+#: src/config/options.c:882
 msgid "Options:\n"
 msgstr "Opcje:\n"
 
@@ -5466,9 +5466,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1478
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "default"
-#~ msgstr "domy¶lnie"
-
-#~ msgid "alias for"
-#~ msgstr "alias dla"

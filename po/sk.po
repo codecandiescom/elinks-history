@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-23 10:23+0200\n"
+"POT-Creation-Date: 2003-10-23 11:55+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -802,73 +802,73 @@ msgstr "Chyba pri zapisovaní do socketu"
 msgid "Unrecognised action (internal error)"
 msgstr ""
 
-#: src/config/options.c:586 src/config/options.c:610 src/config/opttypes.c:38
+#: src/config/options.c:600 src/config/options.c:624 src/config/opttypes.c:38
 msgid "Parameter expected"
 msgstr ""
 
-#: src/config/options.c:611
+#: src/config/options.c:625
 msgid "Too many parameters"
 msgstr ""
 
-#: src/config/options.c:616
+#: src/config/options.c:630
 #, fuzzy
 msgid "error"
 msgstr "Chyba"
 
-#: src/config/options.c:618 src/sched/error.c:45
+#: src/config/options.c:632 src/sched/error.c:45
 msgid "Host not found"
 msgstr "Nena¹iel som server"
 
-#: src/config/options.c:632
+#: src/config/options.c:646
 #, fuzzy
 msgid "Resolver error"
 msgstr "Chyba pri ukladaní"
 
-#: src/config/options.c:654
+#: src/config/options.c:668
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
 msgstr ""
 
-#: src/config/options.c:694
+#: src/config/options.c:708
 msgid "Template option folder"
 msgstr ""
 
-#: src/config/options.c:710
+#: src/config/options.c:731
 #, c-format
-msgid "    %s%s%s %s (default: %ld)"
+msgid "(default: %ld)"
 msgstr ""
 
-#: src/config/options.c:715 src/config/options.c:739
+#: src/config/options.c:736 src/config/options.c:759
 #, c-format
-msgid "    %s%s%s %s (default: \"%s\")"
+msgid "(default: \"%s\")"
 msgstr ""
 
-#: src/config/options.c:720
+#: src/config/options.c:741
 #, c-format
-msgid "    %s%s%s %s (alias for %s)"
+msgid "(alias for %s)"
 msgstr ""
 
-#: src/config/options.c:725
+#: src/config/options.c:746
 #, c-format
-msgid "    %s%s%s %s (default: %s)"
+msgid "(default: %s)"
 msgstr ""
 
-#: src/config/options.c:732
+#: src/config/options.c:751
 #, c-format
-msgid "    %s%s%s %s (default: #%06x)"
+msgid "(default: #%06x)"
 msgstr ""
 
-#: src/config/options.c:850
+#: src/config/options.c:878
 msgid "Configuration options:\n"
 msgstr ""
 
-#: src/config/options.c:853
+#: src/config/options.c:881
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 msgstr ""
 
-#: src/config/options.c:854
+#: src/config/options.c:882
 msgid "Options:\n"
 msgstr ""
 

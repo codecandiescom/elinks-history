@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.119 2003/07/01 21:36:38 zas Exp $ */
+/* $Id: view.c,v 1.120 2003/07/01 22:04:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -899,36 +899,46 @@ draw_forms(struct terminal *t, struct f_data_c *f)
 	} while (l1++ < l2);
 }
 
-/* 0 -> 1 <- 2 v 3 ^ */
 
 unsigned char fr_trans[2][4] = {{0xb3, 0xc3, 0xb4, 0xc5}, {0xc4, 0xc2, 0xc1, 0xc5}};
 
+/* 0 -> 1 <- 2 v 3 ^ */
+enum xchar_dir {
+	XD_RIGHT = 0,
+	XD_LEFT,
+	XD_BOTTOM,
+	XD_TOP
+};
+
 static void
-set_xchar(struct terminal *t, int x, int y, unsigned dir)
+set_xchar(struct terminal *t, int x, int y, enum xchar_dir dir)
 {
-       unsigned int c;
+       unsigned int c, d;
 
        if (x < 0 || x >= t->x || y < 0 || y >= t->y) return;
+
        c = get_char(t, x, y);
        if (!(c & ATTR_FRAME)) return;
+
        c &= 0xff;
-       if (c == fr_trans[dir / 2][0])
-	       set_only_char(t, x, y, fr_trans[dir / 2][1 + (dir & 1)] | ATTR_FRAME);
+       d = dir>>1;
+       if (c == fr_trans[d][0])
+	       set_only_char(t, x, y, fr_trans[d][1 + (dir & 1)] | ATTR_FRAME);
        else
-	       if (c == fr_trans[dir / 2][2 - (dir & 1)])
-		       set_only_char(t, x, y, fr_trans[dir / 2][3] | ATTR_FRAME);
+	       if (c == fr_trans[d][2 - (dir & 1)])
+		       set_only_char(t, x, y, fr_trans[d][3] | ATTR_FRAME);
 }
 
 static void
 draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 {
-	int i, j;
-	int x, y;
+	register int y, j;
 
 	if (!fsd) return;
 
 	y = yp - 1;
 	for (j = 0; j < fsd->y; j++) {
+		register int x, i;
 		int wwy = fsd->f[j * fsd->x].yw;
 
 		x = xp - 1;
@@ -937,16 +947,18 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 
 			if (i) {
 				fill_area(t, x, y + 1, 1, wwy, FRAMES_VLINE);
-				if (j == fsd->y - 1) set_xchar(t, x, y + wwy + 1, 3);
+				if (j == fsd->y - 1)
+					set_xchar(t, x, y + wwy + 1, XD_TOP);
 			} else if (j) {
-				set_xchar(t, x, y, 0);
+				set_xchar(t, x, y, XD_RIGHT);
 			}
 
 			if (j) {
 				fill_area(t, x + 1, y, wwx, 1, FRAMES_HLINE);
-				if (i == fsd->x - 1) set_xchar(t, x + wwx + 1, y, 1);
+				if (i == fsd->x - 1)
+					set_xchar(t, x + wwx + 1, y, XD_LEFT);
 			} else if (i) {
-				set_xchar(t, x, y, 2);
+				set_xchar(t, x, y, XD_BOTTOM);
 			}
 
 			if (i && j) set_char(t, x, y, FRAMES_CROSS);
@@ -958,14 +970,18 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 
 	y = yp - 1;
 	for (j = 0; j < fsd->y; j++) {
-		int wwy = fsd->f[j * fsd->x].yw;
+		register int x, i;
+		int pj = j * fsd->x;
+		int wwy = fsd->f[pj].yw;
 
 		x = xp - 1;
 		for (i = 0; i < fsd->x; i++) {
 			int wwx = fsd->f[i].xw;
+			int p = pj + i;
 
-			if (fsd->f[j * fsd->x + i].subframe) {
-				draw_frame_lines(t, fsd->f[j * fsd->x + i].subframe, x + 1, y + 1);
+			if (fsd->f[p].subframe) {
+				draw_frame_lines(t, fsd->f[p].subframe,
+						 x + 1, y + 1);
 			}
 			x += wwx + 1;
 		}

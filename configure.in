@@ -637,6 +637,8 @@ AC_OUTPUT([ \
  src/elusive/layouter/syntree/Makefile \
  src/elusive/parser/Makefile \
  src/elusive/parser/html/Makefile \
+ src/elusive/renderer/Makefile \
+ src/elusive/renderer/text/Makefile \
  src/globhist/Makefile \
  src/intl/Makefile \
  src/lowlevel/Makefile \

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.27 2003/05/24 11:38:34 zas Exp $ */
+/* $Id: charsets.c,v 1.28 2003/05/27 07:58:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -369,9 +369,10 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 unsigned char *
 get_entity_string(unsigned char *st, int l, int encoding)
 {
+/* TODO: caching, entities like &nbsp; are very often used. --Zas */
 	if (l <= 0) return NULL;
 
-	if (*st == '#') { /* Numeric entitie. */
+	if (*st == '#') { /* Numeric entity. */
 		unicode_val n = 0;
 
 		if (l == 1) return NULL; /* &#; ? */
@@ -404,22 +405,23 @@ get_entity_string(unsigned char *st, int l, int encoding)
 
 		return u2cp(n, encoding);
 
-	} else { /* Text entitie. */
-		unsigned long start = 0;
-		unsigned long end = N_ENTITIES - 1;
+	} else { /* Text entity. */
+		long start = 0;
+		long end = N_ENTITIES - 1; /* can be negative. */
 
 		/* Dichotomic search is used there. */
 		while (start <= end) {
-			unsigned long middle = (start + end) >> 1;
+			long middle = (start + end) >> 1;
 			int cmp = xxstrcmp(entities[middle].s, st, l);
 
 			if (!cmp) /* Found. */
 				return u2cp(entities[middle].c, encoding);
 
-			if (cmp > 0)
+			if (cmp > 0) {
 				end = middle - 1;
-			else
+			} else {
 				start = middle + 1;
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# $Id: rules,v 1.1 2005/01/11 00:02:17 jonas Exp $
+# $Id: rules,v 1.2 2005/01/11 00:04:26 jonas Exp $
 # Sample debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 
@@ -58,7 +58,7 @@ install: build
 # upstream CVS bug hack: remove double contrib dirs
 	rm -rf contrib/lua/lua contrib/conv/conv contrib/guile/guile || true
 # remove CVS directories
-	find . -name CVS -exec rm -rf "{}" \; || true
+	find debian/elinks -name CVS -exec rm -rf "{}" \; || true
 # locale.alias causes conflicts and I believe it's not necessary
 	rm -f debian/elinks/usr/share/locale/locale.alias || true
 

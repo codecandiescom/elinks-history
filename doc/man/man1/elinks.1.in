@@ -21,9 +21,10 @@ Frames are supported. You can have different file formats associated
 with external viewers. mailto: and telnet: are supported via external
 clients. 
 .PP
-ELinks can handle both local (file) and remote URLs. The main
-supported protocols are HTTP, FTP and HTTPS (with SSL support compiled in).
-Additional support exists for finger, gopher, smb, data and NNTP.
+ELinks can handle both local files and remote URLs. The main
+supported remote URL protocols are HTTP, HTTPS (with SSL support
+compiled in) and FTP. Additional support exists for finger, Gopher,
+SMB, data and NNTP.
 .SH "OPTIONS"
 .PP
 Most options can be set in the user interface or config file, so
@@ -34,9 +35,9 @@ of commandline options, start ELinks with parameter
 .TP
 \fB-anonymous [0|1] (default: 0) \fR
 Restrict ELinks so that it can run on an anonymous account.
-No local file browsing, no downloads. Execution of viewers
-is allowed, but user can't add or modify entries in
-association table.
+No local file browsing, no downloads and no saving of runtime state
+files. Execution of viewers is allowed, but user can't add or modify
+entries in association table.
 .TP
 \fB-auto-submit [0|1] (default: 0) \fR
 Go and submit the first form you'll stumble upon.
@@ -67,8 +68,7 @@ file. It forces use of default keybindings and will reset
 user-defined ones on save.
 .TP
 \fB-dump [0|1] (default: 0) \fR
-Write a plain-text version of the given HTML document to
-stdout.
+Write a plain-text version of the given URL to stdout.
 .TP
 \fB-dump-charset (alias for document.dump.codepage) \fR
 Codepage used in dump output.
@@ -77,7 +77,7 @@ Codepage used in dump output.
 Width of the dump output.
 .TP
 \fB-eval \fR
-Specify elinks.conf config options on the command-line:
+Specify elinks.conf configuration options on the command-line:
 \fI-eval 'set protocol.file.allow_special_files = 1'\fR.
 .TP
 \fB-force-html \fR
@@ -197,7 +197,7 @@ means show all messages
 Print ELinks version information and exit.
 .SH "ENVIRONMENT VARIABLES"
 .PP
-ELinks uses the following environments variables.
+ELinks uses the following environment variables.
 .TP
 \fB COMSPEC, SHELL \fR
 The shell used for File -> OS Shell on DOS/Windows and UNIX, respectively.

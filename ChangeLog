@@ -1,3 +1,24 @@
+Thu Sep 18 19:04:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/hash.c:
+
+	Removed trailing newlines ;-).  
+
+Thu Sep 18 13:07:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, terminal/tab.c, terminal/tab.h,
+	terminal/window.h, viewer/text/view.c:
+
+	Mouse click detection was improved and fixed regarding variable-size
+	tabs, get_tab_number_by_xpos() function was added.  
+
+Thu Sep 18 12:33:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Distribute remaining spaces among all tabs, and draw last tab
+	correctly. Issue reported by Miciah.  
+
 Wed Sep 17 15:43:22 2003  Laurent Monin <zas@norz.org>:
 
 	* src/dialogs/auth.c:

@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.48 2004/12/19 01:47:17 miciah Exp $ */
+/* $Id: mimetypes.c,v 1.49 2004/12/31 11:22:46 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-2004 The ELinks Project */
@@ -46,9 +46,9 @@ enum mimetypes_option {
 static struct option_info mimetypes_options[] = {
 	INIT_OPT_TREE("mime", N_("Mimetypes files"),
 		"mimetypes", 0,
-		N_("Options for the support of mimetypes files. Mimetypes files\n"
-		"can be used to find the content type of an URL by looking at the\n"
-		"extension of the file name.")),
+		N_("Options for the support of mime.types files. These files\n"
+		"can be used to find the content type of an URL by looking at\n"
+		"the extension of the file name.")),
 
 	INIT_OPT_BOOL("mime.mimetypes", N_("Enable"),
 		"enable", 0, 1,
@@ -56,8 +56,7 @@ static struct option_info mimetypes_options[] = {
 
 	INIT_OPT_STRING("mime.mimetypes", N_("Path"),
 		"path", 0, DEFAULT_MIMETYPES_PATH,
-		N_("Mimetypes search path. Colon-separated list of files.\n"
-		"Leave as \"\" to use built-in default instead.")),
+		N_("The search path for mime.types files. Colon-separated list of files.")),
 
 	NULL_OPTION_INFO,
 };

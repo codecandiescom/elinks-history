@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.87 2004/12/19 01:20:41 jonas Exp $ */
+/* $Id: mailcap.c,v 1.88 2004/12/31 11:22:46 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -98,8 +98,7 @@ static struct option_info mailcap_options[] = {
 	INIT_OPT_STRING("mime.mailcap", N_("Path"),
 		"path", 0, DEFAULT_MAILCAP_PATH,
 		N_("Mailcap search path. Colon-separated list of files.\n"
-		"Leave as \"\" to use MAILCAP environment variable or\n"
-		"built-in defaults instead.")),
+		"Leave as \"\" to use MAILCAP environment variable instead.")),
 
 	INIT_OPT_BOOL("mime.mailcap", N_("Ask before opening"),
 		"ask", 0, 1,
@@ -109,9 +108,9 @@ static struct option_info mailcap_options[] = {
 		"description", 0, 0, 2, 0,
 		N_("Type of description to show in \"what shall I do with this file\"\n"
 		"query dialog:\n"
-		"0 is show \"mailcap\".\n"
-		"1 is show program to be run.\n"
-		"2 is show mailcap description field if any; \"mailcap\" otherwise.")),
+		"0 is show \"mailcap\"\n"
+		"1 is show program to be run\n"
+		"2 is show mailcap description field if any; \"mailcap\" otherwise")),
 
 	INIT_OPT_BOOL("mime.mailcap", N_("Prioritize entries by file"),
 		"prioritize", 0, 1,

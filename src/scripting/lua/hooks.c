@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.58 2005/01/21 14:11:07 jonas Exp $ */
+/* $Id: hooks.c,v 1.59 2005/03/23 10:10:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ script_hook_goto_url(va_list ap, void *data)
 
 	if (prepare_lua(ses)) return EVENT_HOOK_STATUS_NEXT;
 
-	err = lua_call(L, 2, 1);
+	err = lua_pcall(L, 2, 1, 0);
 	finish_lua();
 	if (err) return EVENT_HOOK_STATUS_NEXT;
 
@@ -90,7 +90,7 @@ script_hook_follow_url(va_list ap, void *data)
 
 	if (prepare_lua(ses)) return EVENT_HOOK_STATUS_NEXT;
 
-	err = lua_call(L, 1, 1);
+	err = lua_pcall(L, 1, 1, 0);
 	finish_lua();
 	if (err) return EVENT_HOOK_STATUS_NEXT;
 
@@ -137,7 +137,7 @@ script_hook_pre_format_html(va_list ap, void *data)
 
 	if (prepare_lua(ses)) return EVENT_HOOK_STATUS_NEXT;
 
-	err = lua_call(L, 2, 1);
+	err = lua_pcall(L, 2, 1, 0);
 	finish_lua();
 	if (err) return EVENT_HOOK_STATUS_NEXT;
 
@@ -178,7 +178,7 @@ script_hook_get_proxy(va_list ap, void *data)
 	lua_pushstring(L, url);
 	if (prepare_lua(NULL)) return EVENT_HOOK_STATUS_NEXT;
 
-	err = lua_call(L, 1, 1);
+	err = lua_pcall(L, 1, 1, 0);
 	finish_lua();
 	if (err) return EVENT_HOOK_STATUS_NEXT;
 

@@ -1,4 +1,4 @@
-/* $Id: core.h,v 1.15 2005/01/13 13:29:26 jonas Exp $ */
+/* $Id: core.h,v 1.16 2005/03/23 10:10:38 zas Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_CORE_H
 #define EL__SCRIPTING_LUA_CORE_H
@@ -6,10 +6,6 @@
 #include <lua.h>	/* This is standard include. */
 #ifdef HAVE_LAUXLIB_H
 #include <lauxlib.h>	/* needed for lua_ref, lua_unref */
-#endif
-#ifdef HAVE_LUA_PCALL
-#define lua_call(L,nargs,nresults)     lua_pcall(L,nargs,nresults,0)
-#define lua_open(x)    (lua_open)()
 #endif
 #ifndef LUA_ALERT
 #define LUA_ALERT      "alert"

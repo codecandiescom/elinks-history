@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.179 2005/03/23 04:48:48 miciah Exp $ */
+/* $Id: core.c,v 1.180 2005/03/23 10:10:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,7 +279,7 @@ run_lua_func(va_list ap, void *data)
 
 	lua_getref(L, func_ref);
 	if (prepare_lua(ses)) return EVENT_HOOK_STATUS_NEXT;
-	err = lua_call(L, 0, 2);
+	err = lua_pcall(L, 0, 2, 0);
 	finish_lua();
 	if (!err) handle_standard_lua_returns("keyboard function");
 
@@ -350,7 +350,7 @@ dialog_run_lua(void *data_)
 	lua_pushstring(s, data->name);
 	lua_pushstring(s, data->url);
 	if (prepare_lua(lua_ses)) return;
-	err = lua_call(s, 3, 2);
+	err = lua_pcall(s, 3, 2, 0);
 	finish_lua();
 	lua_unref(s, data->func_ref);
 	handle_standard_lua_returns("post dialog function");
@@ -429,7 +429,7 @@ xdialog_run_lua(void *data_)
 	lua_getref(s, data->func_ref);
 	for (i = 0; i < data->nfields; i++) lua_pushstring(s, data->fields[i]);
 	if (prepare_lua(lua_ses)) return;
-	err = lua_call(s, data->nfields, 2);
+	err = lua_pcall(s, data->nfields, 2, 0);
 	finish_lua();
 	lua_unref(s, data->func_ref);
 	handle_standard_lua_returns("post xdialog function");
@@ -516,7 +516,7 @@ do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 static void
 init_lua(struct module *module)
 {
-	L = lua_open(0);
+	L = lua_open();
 	lua_baselibopen(L);
 	lua_mathlibopen(L);
 	lua_strlibopen(L);
@@ -698,7 +698,7 @@ lua_console(struct session *ses, unsigned char *expr)
 
 	lua_pushstring(L, expr);
 	if (prepare_lua(ses) == 0) {
-		int err = lua_call(L, 1, 2);
+		int err = lua_pcall(L, 1, 2, 0);
 
 		finish_lua();
 		if (!err) handle_standard_lua_returns("lua_console_hook");

@@ -488,7 +488,7 @@ if test -z "$disable_lua"; then
 		withval="";
 	fi
 	for luadir in "$withval" "" /usr /usr/local; do
-		for suffix in "" 40 50; do
+		for suffix in "" 50 51; do
 			if test "$cf_result" = no; then
 				LUA_LIBS="-llua$suffix -llualib$suffix -lm"
 
@@ -501,8 +501,14 @@ if test -z "$disable_lua"; then
 				CFLAGS="$CFLAGS_X $LUA_CFLAGS"
 				CPPFLAGS="$CPPFLAGS_X $LUA_CFLAGS"
 
-				AC_TRY_LINK([#include <lua.h>],
-					    [lua_close(0)],
+				AC_TRY_LINK([	#include <lua.h>
+						#include <lualib.h>],
+					    [	lua_State *L = lua_open();
+						lua_baselibopen(L);
+						lua_mathlibopen(L);
+						lua_strlibopen(L);
+						lua_tablibopen(L);
+						lua_close(L);],
 					    cf_result=yes, cf_result=no)
 			fi
 		done
@@ -516,7 +522,6 @@ if test "$cf_result" != yes; then
 else
 	EL_CONFIG(CONFIG_LUA, [Lua])
 	AC_CHECK_HEADERS(lauxlib.h)
-	AC_CHECK_FUNCS(lua_pcall)
 
 	CFLAGS="$CFLAGS_X"
 	AC_SUBST(LUA_LIBS)

@@ -1,5 +1,8 @@
 See ChangeLog for recent changes, bugfixes and new features.
 
+ELinks 0.10.3:
+* Support for Lua 4.x was dropped, we only support Lua 5.x now.
+
 ELinks 0.10.2:
 
 * Ruby scripting back-end (experimental)

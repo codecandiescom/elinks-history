@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.321 2004/06/08 23:26:45 jonas Exp $ */
+/* $Id: menu.c,v 1.322 2004/06/09 21:22:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,11 +53,11 @@
 static void
 menu_url_shortcut(struct terminal *term, void *d, struct session *ses)
 {
-	unsigned char *u = stracpy((unsigned char *) d);
+	struct uri *uri = get_uri((unsigned char *) d, 0);
 
-	if (!u) return;
-	goto_url(ses, u);
-	mem_free(u);
+	if (!uri) return;
+	goto_uri(ses, uri);
+	done_uri(uri);
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.198 2003/04/24 08:23:38 zas Exp $ */
+/* $Id: options.c,v 1.199 2003/04/30 10:26:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1730,15 +1730,31 @@ register_options()
 
 	add_opt_tree("ui.colors.color.mainmenu", N_("Hotkey"),
 		"hotkey", 0,
-		N_("Unselected main menu bar item hotkey colors."));
+		N_("Main menu hotkey colors."));
 
-	add_opt_color("ui.colors.color.mainmenu.hotkey", N_("Text color"),
+	add_opt_tree("ui.colors.color.mainmenu.hotkey", N_("Unselected hotkey"),
+		"normal", 0,
+		N_("Main menu unselected hotkey colors."));
+
+	add_opt_tree("ui.colors.color.mainmenu.hotkey", N_("Selected hotkey"),
+		"selected", 0,
+		N_("Main menu selected hotkey colors."));
+
+	add_opt_color("ui.colors.color.mainmenu.hotkey.normal", N_("Text color"),
 		"text", 0, "darkred",
-		N_("Default text color."));
+		N_("Main menu unselected hotkey default text color."));
 
-	add_opt_color("ui.colors.color.mainmenu.hotkey", N_("Background color"),
+	add_opt_color("ui.colors.color.mainmenu.hotkey.normal", N_("Background color"),
 		"background", 0, "white",
-		N_("Default background color."));
+		N_("Main menu unselected hotkey default background color."));
+
+	add_opt_color("ui.colors.color.mainmenu.hotkey.selected", N_("Text color"),
+		"text", 0, "darkred",
+		N_("Main menu selected hotkey text color."));
+
+	add_opt_color("ui.colors.color.mainmenu.hotkey.selected", N_("Background color"),
+		"background", 0, "green",
+		N_("Main menu selected hotkey default background color."));
 
 
 	add_opt_tree("ui.colors.color", N_("Menu bar"),
@@ -1771,15 +1787,31 @@ register_options()
 
 	add_opt_tree("ui.colors.color.menu", N_("Hotkey"),
 		"hotkey", 0,
-		N_("Unselected menu item hotkey colors."));
+		N_("Menu item hotkey colors."));
 
-	add_opt_color("ui.colors.color.menu.hotkey", N_("Text color"),
+	add_opt_tree("ui.colors.color.menu.hotkey", N_("Unselected hotkey"),
+		"normal", 0,
+		N_("Menu item unselected hotkey colors."));
+
+	add_opt_tree("ui.colors.color.menu.hotkey", N_("Selected hotkey"),
+		"selected", 0,
+		N_("Menu item selected hotkey colors."));
+
+	add_opt_color("ui.colors.color.menu.hotkey.normal", N_("Text color"),
 		"text", 0, "darkred",
-		N_("Default text color."));
+		N_("Menu item unselected hotkey default text color."));
 
-	add_opt_color("ui.colors.color.menu.hotkey", N_("Background color"),
+	add_opt_color("ui.colors.color.menu.hotkey.normal", N_("Background color"),
 		"background", 0, "white",
-		N_("Default background color."));
+		N_("Menu item unselected hotkey default background color."));
+
+	add_opt_color("ui.colors.color.menu.hotkey.selected", N_("Text color"),
+		"text", 0, "darkred",
+		N_("Menu item selected hotkey default text color."));
+
+	add_opt_color("ui.colors.color.menu.hotkey.selected", N_("Background color"),
+		"background", 0, "green",
+		N_("Menu item selected hotkey background color."));
 
 	add_opt_tree("ui.colors.color.menu", N_("Menu frame"),
 		"frame", 0,
@@ -2024,16 +2056,31 @@ register_options()
 
 	add_opt_tree("ui.colors.mono.mainmenu", N_("Hotkey"),
 		"hotkey", 0,
-		N_("Unselected menu bar item hotkey colors."));
+		N_("Main menu hotkey colors."));
 
-	add_opt_color("ui.colors.mono.mainmenu.hotkey", N_("Text color"),
+	add_opt_tree("ui.colors.mono.mainmenu.hotkey", N_("Unselected hotkey"),
+		"normal", 0,
+		N_("Main menu unselected hotkey colors."));
+
+	add_opt_tree("ui.colors.mono.mainmenu.hotkey", N_("Selected hotkey"),
+		"selected", 0,
+		N_("Main menu selected hotkey colors."));
+
+	add_opt_color("ui.colors.mono.mainmenu.hotkey.normal", N_("Text color"),
 		"text", 0, "black",
-		N_("Default text color."));
+		N_("Main menu unselected hotkey default text color."));
 
-	add_opt_color("ui.colors.mono.mainmenu.hotkey", N_("Background color"),
+	add_opt_color("ui.colors.mono.mainmenu.hotkey.normal", N_("Background color"),
 		"background", 0, "white",
-		N_("Default background color."));
+		N_("Main menu unselected hotkey default background color."));
 
+	add_opt_color("ui.colors.mono.mainmenu.hotkey.selected", N_("Text color"),
+		"text", 0, "black",
+		N_("Main menu selected hotkey default text color."));
+
+	add_opt_color("ui.colors.mono.mainmenu.hotkey.selected", N_("Background color"),
+		"background", 0, "white",
+		N_("Main menu selected hotkey default background color."));
 
 	add_opt_tree("ui.colors.mono", N_("Menu bar"),
 		"menu", 0,
@@ -2065,15 +2112,31 @@ register_options()
 
 	add_opt_tree("ui.colors.mono.menu", N_("Hotkey"),
 		"hotkey", 0,
-		N_("Unselected menu item hotkey colors."));
+		N_("Menu item hotkey colors."));
 
-	add_opt_color("ui.colors.mono.menu.hotkey", N_("Text color"),
+	 add_opt_tree("ui.colors.mono.menu.hotkey", N_("Unselected hotkey"),
+		"normal", 0,
+		N_("Menu unselected hotkey colors."));
+
+	add_opt_tree("ui.colors.mono.menu.hotkey", N_("Selected hotkey"),
+		"selected", 0,
+		N_("Menu selected hotkey colors."));
+
+	add_opt_color("ui.colors.mono.menu.hotkey.normal", N_("Text color"),
 		"text", 0, "gray",
-		N_("Default text color."));
+		N_("Menu unselected hotkey default text color."));
 
-	add_opt_color("ui.colors.mono.menu.hotkey", N_("Background color"),
+	add_opt_color("ui.colors.mono.menu.hotkey.normal", N_("Background color"),
 		"background", 0, "black",
-		N_("Default background color."));
+		N_("Menu unselected hotkey default background color."));
+
+	add_opt_color("ui.colors.mono.menu.hotkey.selected", N_("Text color"),
+		"text", 0, "gray",
+		N_("Menu selected hotkey default text color."));
+
+	add_opt_color("ui.colors.mono.menu.hotkey.selected", N_("Background color"),
+		"background", 0, "black",
+		N_("Menu selected hotkey default background color."));
 
 	add_opt_tree("ui.colors.mono.menu", N_("Menu frame"),
 		"frame", 0,

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.35 2003/04/30 08:49:59 zas Exp $ */
+/* $Id: menu.c,v 1.36 2003/04/30 10:26:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,7 +304,8 @@ display_menu(struct terminal *term, struct menu *menu)
 	int menu_normal_color = get_bfu_color(term, "menu.normal");
 	int menu_frame_color = get_bfu_color(term, "menu.frame");
 	int menu_selected_color = get_bfu_color(term, "menu.selected");
-	int menu_hotkey_color = get_bfu_color(term, "menu.hotkey");
+	int menu_hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
+	int menu_selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
 
 	refresh_hotkeys(term, menu);
 
@@ -319,10 +320,12 @@ display_menu(struct terminal *term, struct menu *menu)
 	     p++, s++) {
 		int h = 0;
 		int co = menu_normal_color;
+		int hkco = menu_hotkey_color;
 
 		if (p == menu->selected) {
 			h = 1;
 			co = menu_selected_color;
+			hkco = menu_selected_hotkey_color;
 		}
 
 		if (h) {
@@ -351,7 +354,7 @@ display_menu(struct terminal *term, struct menu *menu)
 					}
 					if (hk == 1) {
 						set_char(term, menu->x + x - 1 + 2,
-							 s, menu_hotkey_color | c);
+							 s, hkco | c);
 						hk = 2;
 					} else {
 						set_char(term, menu->x + x - (hk ? 1 : 0) + 2,
@@ -675,7 +678,8 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	int p = 2;
 	int mainmenu_normal_color = get_bfu_color(term, "mainmenu.normal");
 	int mainmenu_selected_color = get_bfu_color(term, "mainmenu.selected");
-	int mainmenu_hotkey_color = get_bfu_color(term, "mainmenu.hotkey");
+	int mainmenu_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
+	int mainmenu_selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
 
 	fill_area(term, 0, 0, term->x, 1, mainmenu_normal_color | ' ');
 
@@ -683,6 +687,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		int s = 0;
 		int j;
 		int co = mainmenu_normal_color;
+		int hkco = mainmenu_hotkey_color;
 		int hk = 0;
 		unsigned char c;
 		unsigned char *tmptext = _(menu->items[i].text, term);
@@ -692,6 +697,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		if (i == menu->selected) {
 			s = 1;
 			co = mainmenu_selected_color;
+			hkco = mainmenu_selected_hotkey_color;
 		}
 
 		if (s) {
@@ -712,7 +718,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 				continue;
 			}
 			if (hk == 1) {
-				set_char(term, p, 0, mainmenu_hotkey_color | c);
+				set_char(term, p, 0, hkco | c);
 				hk = 2;
 			} else {
 				set_char(term, p, 0, co | c);

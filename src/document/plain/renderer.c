@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.67 2004/01/21 10:09:01 witekfl Exp $ */
+/* $Id: renderer.c,v 1.68 2004/01/21 18:16:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,7 +300,9 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 		int width, added, only_spaces = 1, spaces = 0, was_spaces = 0;
 		int last_space = 0;
 		int step = 0;
-		int doc_width = document->options.wrap ? (document->options.width < length ? document->options.width : length) : length;
+		int doc_width = document->options.wrap
+			? int_min(document->options.width, length) : length;
+
 		/* End of line detection.
 		 * We handle \r, \r\n and \n types here. */
 		for (width = 0; width < doc_width; width++) {

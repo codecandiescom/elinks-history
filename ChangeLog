@@ -1,3 +1,94 @@
+Sat Jul  5 19:09:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	Add label removed in (void *) -1 cleanup when using GNUTLS. Reported
+	by Zardoz.  
+
+Sat Jul  5 18:13:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	A small fix of the keepalive connection host initialization.  
+
+Sat Jul  5 17:57:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Grouped and further commented host connection management.  
+
+Sat Jul  5 16:13:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Remove INFO_LIST from connect_info(): unused and queue is public
+	anyway.  
+
+Sat Jul  5 13:19:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Use correct option in forcehtml_cmd().  
+
+Sat Jul  5 13:06:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, sched/connection.c:
+
+	Remove captions from aliases introduced in mime/ integration.  
+
+Sat Jul  5 12:45:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, osdep/os_dep.c:
+
+	Some hardcoded in os_dep.c command strings are now defined in
+	setup.h.  
+
+Sat Jul  5 10:24:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/document.c, dialogs/document.h, dialogs/menu.c,
+	viewer/text/view.c:
+
+	Some assertion failures were fixed, some actions require a current
+	document to make sense. nowhere_box() function was introduced, it
+	print You are nowhere! message.  
+
+Sat Jul  5 09:16:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	HTML4 attributes frame, border, rules for tables were not handled as
+	it should. This was fixed accordingly to w3.org recommendations.
+	This fixes bug 29.  
+
+Sat Jul  5 08:07:41 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Sat Jul  5 03:41:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/README:
+
+	Smooth out the rough edges. Add title and CVS Id tag.  
+
+Sat Jul  5 03:20:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/http/https.c, sched/connection.c, ssl/connect.c:
+
+	Initialize connection->ssl in https handler. This way we can get rid
+	of the ugly (void *) -1 hack and bail out earlier. Untested but
+	fairly simple.  
+
+Sat Jul  5 01:20:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre2.CVS 
+
 Sat Jul  5 01:14:46 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

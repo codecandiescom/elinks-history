@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.165 2004/08/03 09:39:42 jonas Exp $ */
+/* $Id: ftp.c,v 1.166 2004/08/14 05:59:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1177,10 +1177,7 @@ out_of_mem:
 					  colorize_dir, dircolor, &ftp_info);
 		}
 
-		if (!conn->cached->head)
-			conn->cached->head = stracpy("\r\n");
-		if (conn->cached->head)
-			add_to_strn(&conn->cached->head, "Content-Type: text/html\r\n");
+		mem_free_set(&conn->cached->content_type, stracpy("text/html"));
 	}
 
 	len = safe_read(conn->data_socket.fd, c_i->ftp_buffer + c_i->buf_pos,

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.56 2004/08/13 20:54:45 jonas Exp $ */
+/* $Id: smb.c,v 1.57 2004/08/14 05:59:21 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -474,10 +474,7 @@ ignored:
 		conn->cached->incomplete = 0;
 		done_string(&page);
 
-		if (!conn->cached->head)
-			conn->cached->head = stracpy("\r\n");
-		if (conn->cached->head)
-			add_to_strn(&conn->cached->head, "Content-Type: text/html\r\n");
+		mem_free_set(&conn->cached->content_type, stracpy("text/html"));
 	}
 
 bye:

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.175 2004/07/23 05:21:11 miciah Exp $ */
+/* $Id: file.c,v 1.176 2004/08/14 05:59:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,7 +186,7 @@ file_protocol_handler(struct connection *connection)
 	unsigned char *redirect_location = NULL;
 	struct string page, name;
 	enum connection_state state;
-	unsigned char *head = "";
+	unsigned char *type = NULL;
 
 	if (get_cmd_opt_int("anonymous")) {
 		/* FIXME: Better connection_state ;-) */
@@ -223,7 +223,7 @@ file_protocol_handler(struct connection *connection)
 			state = S_OK;
 		} else {
 			state = list_directory(name.source, &page);
-			head = "\r\nContent-Type: text/html\r\n";
+			type = "text/html";
 		}
 
 	} else {
@@ -248,7 +248,8 @@ file_protocol_handler(struct connection *connection)
 
 		} else {
 			/* Setup file read or directory listing for viewing. */
-			mem_free_set(&cached->head, stracpy(head));
+			if (type)
+				mem_free_set(&cached->content_type, stracpy(type));
 			cached->incomplete = 0;
 
 			add_fragment(cached, 0, page.source, page.length);

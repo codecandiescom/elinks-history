@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.99 2004/08/03 09:08:48 jonas Exp $ */
+/* $Id: socket.c,v 1.100 2004/08/03 09:11:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,14 +488,11 @@ connected(void *data)
 #endif
 
 	conn->conn_info = NULL;
-	if (conn_info && conn_info->func) {
-		void (*func)(struct connection *) = conn_info->func;
-
-		func(conn);
-	}
+	conn_info->func(conn);
 	mem_free_if(conn_info->addr);
 	mem_free(conn_info);
 }
+
 
 struct write_buffer {
 	/* A routine called when all the data is sent (therefore this is

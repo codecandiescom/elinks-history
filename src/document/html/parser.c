@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.21 2002/05/10 17:43:47 pasky Exp $ */
+/* $Id: parser.c,v 1.22 2002/05/10 17:45:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,8 +124,8 @@ unsigned char *get_attr_val(unsigned char *e, unsigned char *name)
 				mem_free(a);
 				return NULL;
 			}
-			if (!f && *e != 10) {
-				if (*e != 9 && *e != 13) add_chr(a, l, *e);
+			if (!f && *e != 13) {
+				if (*e != 9 && *e != 10) add_chr(a, l, *e);
 				else add_chr(a, l, ' ');
 			}
 			e++;

@@ -1,13 +1,13 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.13 2002/06/20 08:55:25 zas Exp $ */
+/* $Id: select.c,v 1.14 2002/06/20 10:12:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <string.h> /* BSD FD_ZERO() macro calls bzero(), so needed */
 #include <errno.h>
 #include <signal.h>
+#include <string.h> /* FreeBSD FD_ZERO() macro calls bzero() */
 #ifdef HAVE_SYS_SIGNAL_H
 #include <sys/signal.h>
 #endif

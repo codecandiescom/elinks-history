@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.39 2003/06/18 18:39:12 zas Exp $ */
+/* $Id: interlink.c,v 1.40 2003/06/18 18:58:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,13 +78,6 @@ static int s_unix_fd = -1;
 
 #ifdef USE_AF_UNIX
 
-#ifndef SUN_LEN
-/* Evaluate to actual length of the `sockaddr_un' structure.
- * Borrowed from sys/un.h  */
-#define SUN_LEN(ptr) ((size_t) (((struct sockaddr_un *) 0)->sun_path)        \
-                      + strlen ((ptr)->sun_path))
-#endif
-
 static int
 get_address(void)
 {
@@ -92,7 +85,6 @@ get_address(void)
 	unsigned char *path;
 	int pathl = 0;
 	int sun_path_freespace;
-	int sun_size;
 
 	if (!elinks_home) return -1;
 
@@ -138,12 +130,10 @@ get_address(void)
 		goto free_and_error;
 	}
 
-	/* We allocate only needed space. --Zas */
-	sun_size = sizeof(struct sockaddr_un) - sun_path_freespace;
-	addr = mem_calloc(1, sun_size);
+	addr = mem_calloc(1, sizeof(struct sockaddr_un));
 	if (!addr) goto free_and_error;
 
-	s_unix_accept = mem_alloc(sun_size);
+	s_unix_accept = mem_alloc(sizeof(struct sockaddr_un));
 	if (!s_unix_accept) goto free_and_error;
 
 	memcpy(addr->sun_path, path, pathl); /* ending '\0' is done by calloc() */
@@ -157,7 +147,7 @@ get_address(void)
 	 * last byte may or not be needed it depends of....).
 	 * Alternatively we can use SUN_LEN() macro but this one is not always
 	 * defined nor always defined in the same way. --Zas */
-	s_unix_l = sun_size;
+	s_unix_l = sizeof(struct sockaddr_un) - sun_path_freespace;
 
 	return AF_UNIX;
 

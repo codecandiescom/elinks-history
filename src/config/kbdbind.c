@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.63 2003/05/08 21:44:30 zas Exp $ */
+/* $Id: kbdbind.c,v 1.64 2003/05/11 16:28:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,15 +27,12 @@
 
 INIT_LIST_HEAD(kbdbind_box_items);
 INIT_LIST_HEAD(kbdbind_boxes);
+
 static struct listbox_item *keyact_box_items[ACT_ZOOM_FRAME + 1];
-
-
 static struct list_head keymaps[KM_MAX];
 
 static int read_action(unsigned char *);
-
 static void add_default_keybindings(void);
-
 static void init_action_listboxes(void);
 static void free_action_listboxes(void);
 
@@ -307,7 +304,7 @@ static struct strtonum key_table[] = {
 long
 read_key(unsigned char *key)
 {
-	return (strlen(key) == 1) ? *key : strtonum(key_table, key);
+	return (key[0] && !key[1]) ? *key : strtonum(key_table, key);
 }
 
 static unsigned char *
@@ -316,13 +313,14 @@ write_key(long key)
 	static unsigned char dirty[3];
 	unsigned char *bin = numtostr(key_table, key);
 
+	if (bin) return bin;
+
 	dirty[0] = (unsigned char) key;
 	if (key == '\\')
 		dirty[1] = '\\', dirty[2] = '\0';
 	else
 		dirty[1] = '\0';
-
-	return bin ? bin : dirty;
+	return dirty;
 }
 
 

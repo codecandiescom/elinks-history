@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.521 2005/01/01 16:37:53 jonas Exp $ */
+/* $Id: renderer.c,v 1.522 2005/01/12 02:35:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1336,12 +1336,25 @@ html_special_form(struct part *part, struct form *form)
 	}
 
 	if (!list_empty(part->document->forms)) {
-		struct form *nform = part->document->forms.next;
+		struct form *nform;
 
-		form->form_num = nform->form_num + 1;
-	} else {
-		form->form_num = 0;
+		/* Make sure the this new form ``claims'' its slice of the form
+		 * range maintained in the form_num and form_end variables. */
+		foreach (nform, part->document->forms) {
+			if (form->form_num < nform->form_num
+			    || nform->form_end < form->form_num)
+				continue;
+
+			/* The form start is inside an already added form, so
+			 * split the existing form space, so we get |new|old|
+			 * partition. */
+			nform->form_end = form->form_num - 1;
+			assertm(nform->form_num <= nform->form_end,
+				"%d %d", nform->form_num, nform->form_end);
+			break;
+		}
 	}
+
 	add_to_list(part->document->forms, form);
 }
 
@@ -1384,6 +1397,53 @@ html_special_form_control(struct part *part, struct form_control *fc)
 	form = part->document->forms.next;
 	fc->form = form;
 	add_to_list(form->items, fc);
+}
+
+void
+check_html_form_hierarchy(struct part *part)
+{
+	struct document *document = part->document;
+	INIT_LIST_HEAD(form_controls);
+	struct form *form, *next;
+	struct form_control *fc, *next_item;
+
+	if (list_empty(document->forms))
+		return;
+
+	/* Take out all badly placed forms. */
+
+	foreachsafe (form, next, document->forms) {
+
+		assertm(form->form_num <= form->form_end,
+			"%p [%d : %d]", form, form->form_num, form->form_end);
+
+		foreachsafe (fc, next_item, form->items) {
+			if (form->form_num <= fc->position
+			    && fc->position <= form->form_end)
+				continue;
+
+			del_from_list(fc);
+			add_to_list(form_controls, fc);
+		}
+	}
+
+	/* Re-Insert them the correct places. */
+
+	foreachsafe (fc, next_item, form_controls) {
+
+		foreachsafe (form, next, document->forms) {
+			if (fc->position < form->form_num
+			    || form->form_end < fc->position)
+				continue;
+
+			del_from_list(fc);
+			fc->form = form;
+			add_to_list(form->items, fc);
+			break;
+		}
+	}
+
+	assert(list_empty(form_controls));
 }
 
 static inline void
@@ -1752,6 +1812,22 @@ render_html_document(struct cache_entry *cached, struct document *document,
 	document->bgcolor = par_format.bgcolor;
 
 	done_html_parser();
+
+	/* Drop forms which has been serving as a placeholder for form items
+	 * added in the wrong order due to the ordering of table rendering. */
+	{
+		struct form *form;
+
+		foreach (form, document->forms) {
+			if (form->form_num)
+				continue;
+
+			if (list_empty(form->items))
+				done_form(form);
+
+			break;
+		}
+	}
 
 	/* @part was residing in html_context so it has to stay alive until
 	 * done_html_parser(). */

@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.61 2004/12/29 15:43:31 zas Exp $ */
+/* $Id: forms.c,v 1.62 2005/01/12 02:35:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,6 +48,7 @@ html_form(unsigned char *a)
 	if (!form) return;
 
 	form->method = FORM_METHOD_GET;
+	form->form_num = a - html_context.startf;
 
 	al = get_attr_val(a, "method");
 	if (al) {

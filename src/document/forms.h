@@ -1,4 +1,4 @@
-/* $Id: forms.h,v 1.6 2004/12/19 01:15:18 pasky Exp $ */
+/* $Id: forms.h,v 1.7 2005/01/12 02:35:20 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_FORMS_H
 #define EL__DOCUMENT_FORMS_H
@@ -20,7 +20,17 @@ enum form_method {
 struct form {
 	LIST_HEAD(struct form);
 
+	/* The value of @form_num serves both as a unique ID of the form.
+	 * However @form_num and @form_end also stores information about where
+	 * in the source the form is positioned. Combined they are used to
+	 * figured which form items belong to which forms after rendering
+	 * tables.
+	 *
+	 * Initially the range between @form_num and @form_end will stretch from
+	 * 0 to INT_MAX. When a new form is added the range is partitioned so
+	 * the forms each has unique source ranges. */
 	int form_num;
+	int form_end;
 
 	unsigned char *action;
 	unsigned char *name;
@@ -66,7 +76,11 @@ struct form_control {
 
 	struct form *form;
 	int g_ctrl_num;
+
+	/* The value of @position is relative to the place of the form item in
+	 * the source. */
 	int position;
+
 	enum form_type type;
 	enum form_mode mode;
 

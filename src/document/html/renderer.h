@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.70 2004/11/23 17:12:57 witekfl Exp $ */
+/* $Id: renderer.h,v 1.71 2005/01/12 02:35:21 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -29,6 +29,7 @@ struct part {
 };
 
 void expand_lines(struct part *part, int x, int y, int lines, color_t bgcolor);
+void check_html_form_hierarchy(struct part *part);
 
 void draw_frame_hchars(struct part *, int, int, int, unsigned char data, color_t bgcolor, color_t fgcolor);
 void draw_frame_vchars(struct part *, int, int, int, unsigned char data, color_t bgcolor, color_t fgcolor);

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: forms.c,v 1.7 2005/01/01 16:37:53 jonas Exp $ */
+/* $Id: forms.c,v 1.8 2005/01/12 02:35:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,12 @@ init_form(void)
 	struct form *form = mem_calloc(1, sizeof(struct form));
 
 	if (!form) return NULL;
+
+	/* Make the form initially stretch the whole range. */
+	form->form_end = INT_MAX;
+
 	init_list(form->items);
+
 	return form;
 }
 

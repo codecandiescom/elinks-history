@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.373 2004/12/29 15:43:31 zas Exp $ */
+/* $Id: tables.c,v 1.374 2005/01/12 02:35:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -660,6 +660,7 @@ end:
 }
 #endif
 
+
 static void
 check_table_height(struct table *table, struct table_frames *frames, int y)
 {
@@ -900,6 +901,22 @@ draw_table_cells(struct table *table, int x, int y)
 	 * the table */
 	x += table->real_width - 1;
 	expand_lines(table->part, x, y, table->real_height, table->bgcolor);
+
+	/* Tables are renderer column-wise which breaks forms where the
+	 * form items appears in a column before the actual form tag is
+	 * parsed. Consider the folloing example:
+	 *
+	 *	+--------+--------+	Where cell 2 has a <form>-tag
+	 *	| cell 1 | cell 2 |	and cell 3 has an <input>-tag.
+	 *	+--------+--------+
+	 *	| cell 3 | cell 4 |	The table is rendered by drawing
+	 *	+--------+--------+	the cells in the order: 1, 3, 2, 4.
+	 *
+	 * That is the <input>-tag form-item is added before the <form>-tag,
+	 * which means a ``dummy'' form to hold it is added too.
+	 * Calling check_html_form_hierarchy() will join the the form-item
+	 * to the correct form from cell 2. */
+	check_html_form_hierarchy(table->part);
 
 	/* Do a sanity check whether the height is correct */
 	check_table_height(table, &table_frames, y);

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.176 2004/05/31 23:49:25 jonas Exp $ */
+/* $Id: connection.c,v 1.177 2004/05/31 23:56:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,14 +40,13 @@ struct keepalive_connection {
 	LIST_HEAD(struct keepalive_connection);
 
 	/* XXX: This is just the URI of the connection that registered the
-	 * keepalive connection so only rely on the protocol, user, password
-	 * and host part. */
+	 * keepalive connection so only rely on the protocol, user, password,
+	 * host and port part. */
 	struct uri *uri;
 
 	ttime timeout;
 	ttime add_time;
 
-	int port;
 	int pf;
 	int socket;
 };
@@ -435,7 +434,6 @@ init_keepalive_connection(struct connection *conn, ttime timeout)
 	keep_conn = mem_calloc(1, sizeof(struct keepalive_connection));
 	if (!keep_conn) return NULL;
 
-	keep_conn->port = get_uri_port(uri);
 	keep_conn->uri = get_uri_reference(uri);
 	keep_conn->pf = conn->pf;
 	keep_conn->socket = conn->socket;
@@ -449,16 +447,12 @@ static struct keepalive_connection *
 get_keepalive_connection(struct connection *conn)
 {
 	struct keepalive_connection *keep_conn;
-	struct uri *uri = conn->uri;
-	int port = get_uri_port(uri);
 
-	if (!uri->host) return NULL;
+	if (!conn->uri->host) return NULL;
 
-	foreach (keep_conn, keepalive_connections) {
-		if (keep_conn->port == port
-		    && compare_uri(keep_conn->uri, uri, URI_KEEPALIVE))
+	foreach (keep_conn, keepalive_connections)
+		if (compare_uri(keep_conn->uri, conn->uri, URI_KEEPALIVE))
 			return keep_conn;
-	}
 
 	return NULL;
 }

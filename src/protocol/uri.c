@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.216 2004/05/31 23:49:25 jonas Exp $ */
+/* $Id: uri.c,v 1.217 2004/05/31 23:56:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,7 +266,7 @@ get_uri_port(struct uri *uri)
 }
 
 #define can_compare_uri_components(comp) \
-	((comp) == ((comp) & (URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST)))
+	((comp) == ((comp) & (URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST | URI_PORT)))
 
 static inline int
 compare_component(unsigned char *a, int alen, unsigned char *b, int blen)
@@ -306,6 +306,10 @@ compare_uri(struct uri *a, struct uri *b, enum uri_component components)
 
 	if (wants(URI_HOST)
 	    && !compare_component(a->host, a->hostlen, b->host, b->hostlen))
+		return 0;
+
+	if (wants(URI_PORT)
+	    && !compare_component(a->port, a->portlen, b->port, b->portlen))
 		return 0;
 
 	return 1;

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.111 2004/05/31 23:49:25 jonas Exp $ */
+/* $Id: uri.h,v 1.112 2004/05/31 23:56:39 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -141,7 +141,7 @@ enum uri_component {
 	URI_PROXY		= ~URI_SPECIAL,
 
 	/* Used for comparing keepalive connection URIs */
-	URI_KEEPALIVE		= URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST,
+	URI_KEEPALIVE		= URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST | URI_PORT,
 };
 
 

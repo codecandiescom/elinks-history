@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.5 2004/06/12 17:29:15 jonas Exp $ */
+/* $Id: document.h,v 1.6 2004/10/19 05:08:17 miciah Exp $ */
 
 #ifndef EL__DIALOGS_DOCUMENT_H
 #define EL__DIALOGS_DOCUMENT_H
@@ -7,6 +7,7 @@
 
 void nowhere_box(struct terminal *term, unsigned char *title);
 void document_info_dialog(struct session *);
+void cached_header_dialog(struct session *ses, struct cache_entry *cached);
 void protocol_header_dialog(struct session *);
 
 #endif

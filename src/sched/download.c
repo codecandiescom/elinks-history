@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.327 2004/10/14 18:38:40 jonas Exp $ */
+/* $Id: download.c,v 1.328 2004/10/19 05:08:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@
 #include "dialogs/download.h"
 #include "dialogs/menu.h"
 #include "cache/cache.h"
+#include "dialogs/document.h"
 #include "intl/gettext/libintl.h"
 #include "mime/mime.h"
 #include "osdep/osdep.h"
@@ -940,6 +941,44 @@ tp_open(struct type_query *type_query)
 }
 
 
+static void
+download_show_header_callback(struct download *download, struct session *ses)
+{
+	if (!is_in_result_state(download->state))
+		return;
+
+	if (download->state != S_OK) {
+		print_error_dialog(ses, download->state, download->pri);
+		mem_free(download);
+		return;
+	}
+
+	cached_header_dialog(ses, download->cached);
+
+	mem_free(download);
+}
+
+static void
+tp_show_header(struct type_query *type_query)
+{
+	struct session *ses = type_query->ses;
+	struct download *download = mem_alloc(sizeof(struct download));
+
+	if (!download) {
+		change_connection(&type_query->download, NULL, PRI_CANCEL, 1);
+		done_type_query(type_query);
+	}
+
+	download->callback = (void (*)(struct download *, void *))
+				     download_show_header_callback;
+	download->data = ses;
+
+	change_connection(&type_query->download, download, PRI_DOWNLOAD, 0);
+
+	done_type_query(type_query);
+}
+
+
 /* FIXME: We need to modify this function to take frame data instead, as we
  * want to use this function for frames as well (now, when frame has content
  * type text/plain, it is ignored and displayed as HTML). */
@@ -1001,9 +1040,10 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 					 "save the file '%s' (type: %s) "
 					 "or display it?"),
 					 filename.source, ct),
-				type_query, 3,
+				type_query, 4,
 				N_("Save"), tp_save, B_ENTER,
 				N_("Display"), tp_display, 0,
+				N_("Show header"), tp_show_header, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
 			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
@@ -1011,8 +1051,9 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 				msg_text(type_query->ses->tab->term, N_("Would you like to "
 					 "display the file '%s' (type: %s)?"),
 					 filename.source, ct),
-				type_query, 2,
+				type_query, 3,
 				N_("Display"), tp_display, B_ENTER,
+				N_("Show header"), tp_show_header, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		}
 	} else {
@@ -1029,10 +1070,11 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 					 "with '%s', save it or display it?"),
 					 filename.source, ct, desc_sep,
 					 description, handler->program),
-				type_query, 4,
+				type_query, 5,
 				N_("Open"), tp_open, B_ENTER,
 				N_("Save"), tp_save, 0,
 				N_("Display"), tp_display, 0,
+				N_("Show header"), tp_show_header, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
 			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
@@ -1042,9 +1084,10 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 					 "with '%s', or display it?"),
 					 filename.source, ct, desc_sep,
 					 description, handler->program),
-				type_query, 3,
+				type_query, 4,
 				N_("Open"), tp_open, B_ENTER,
 				N_("Display"), tp_display, 0,
+				N_("Show header"), tp_show_header, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		}
 	}

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.100 2004/10/19 05:01:43 miciah Exp $ */
+/* $Id: document.c,v 1.101 2004/10/19 05:08:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,7 +226,7 @@ document_info_dialog(struct session *ses)
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
-static void
+void
 cached_header_dialog(struct session *ses, struct cache_entry *cached)
 {
 	if (cached && cached->head) {

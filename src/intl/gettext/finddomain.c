@@ -30,7 +30,7 @@
 #endif
 
 #include "gettextP.h"
-#include "libgnuintl.h"
+#include "libintl.h"
 #include "util/string.h"
 
 /* List of already loaded domains.  */

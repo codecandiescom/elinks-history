@@ -22,7 +22,7 @@
 #include <stdlib.h>		/* Just for NULL.  */
 
 #include "gettextP.h"
-#include "libgnuintl.h"
+#include "libintl.h"
 
 
 /* Look up MSGID in the current default message catalog for the current

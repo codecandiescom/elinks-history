@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "libgnuintl.h"
+#include "libintl.h"
 #include "gettextP.h"
 #include "util/string.h"
 

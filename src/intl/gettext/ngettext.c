@@ -22,7 +22,7 @@
 #include <stdlib.h>		/* Just for NULL.  */
 
 #include "gettextP.h"
-#include "libgnuintl.h"
+#include "libintl.h"
 
 #include <locale.h>
 

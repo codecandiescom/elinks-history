@@ -22,7 +22,7 @@
 #include <locale.h>
 
 #include "gettextP.h"
-#include "libgnuintl.h"
+#include "libintl.h"
 
 
 /* Look up MSGID in the DOMAINNAME message catalog of the current

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.64 2003/10/27 10:35:25 jonas Exp $ */
+/* $Id: msgbox.c,v 1.65 2003/10/28 14:34:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 {
 	struct dialog *dlg;
 	va_list ap;
-	int button;
+	int button = 0;
 
 	/* Check if the info string is valid. */
 	if (!text || buttons < 0) return;
@@ -115,14 +115,14 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 
 	va_start(ap, buttons);
 
-	for (button = 0; button < buttons; button++) {
+	while (button < buttons) {
 		unsigned char *label;
 		void (*fn)(void *);
-		int button_flags;
+		int flags;
 
 		label = va_arg(ap, unsigned char *);
 		fn = va_arg(ap, void *);
-		button_flags = va_arg(ap, int);
+		flags = va_arg(ap, int);
 
 		if (!label) {
 			/* Skip this button. */
@@ -134,12 +134,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 		if (!(flags & MSGBOX_NO_INTL))
 			label = _(label, term);
 
-		dlg->widgets[button].type = D_BUTTON;
-		dlg->widgets[button].info.button.flags = button_flags;
-		dlg->widgets[button].fn = msg_box_button;
-		dlg->widgets[button].datalen = 0;
-		dlg->widgets[button].text = label;
-		dlg->widgets[button].udata = fn;
+		add_dlg_button(dlg, button, flags, msg_box_button, label, fn);
 	}
 
 	va_end(ap);

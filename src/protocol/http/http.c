@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.376 2004/12/19 02:32:01 miciah Exp $ */
+/* $Id: http.c,v 1.377 2004/12/19 02:38:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,6 +189,43 @@ struct module http_protocol_module = struct_module(
 
 
 static void decompress_shutdown(struct connection *);
+
+static void
+init_accept_charset()
+{
+	struct string ac;
+
+	if (init_string(&ac)) {
+		unsigned char *cs;
+		int i;
+
+		for (i = 0; (cs = get_cp_mime_name(i)); i++) {
+			if (ac.length) {
+				add_to_string(&ac, ", ");
+			} else {
+				add_to_string(&ac, "Accept-Charset: ");
+			}
+			add_to_string(&ac, cs);
+		}
+
+		if (ac.length) {
+			add_crlf_to_string(&ac);
+		}
+
+		/* Never freed until exit(), if you found a  better solution,
+		 * let us now ;)
+		 * Do not use mem_alloc() here. */
+		accept_charset = malloc(ac.length + 1);
+		if (accept_charset) {
+			strcpy(accept_charset, ac.source);
+		} else {
+			accept_charset = "";
+		}
+
+		done_string(&ac);
+	}
+}
+
 
 void
 free_proxy_auth(void)
@@ -658,37 +695,7 @@ http_send_header(struct connection *conn)
 #endif
 
 	if (!accept_charset) {
-		struct string ac;
-
-		if (init_string(&ac)) {
-			unsigned char *cs;
-			int i;
-
-			for (i = 0; (cs = get_cp_mime_name(i)); i++) {
-				if (ac.length) {
-					add_to_string(&ac, ", ");
-				} else {
-					add_to_string(&ac, "Accept-Charset: ");
-				}
-				add_to_string(&ac, cs);
-			}
-
-			if (ac.length) {
-				add_crlf_to_string(&ac);
-			}
-
-			/* Never freed until exit(), if you found a  better solution,
-			 * let us now ;)
-			 * Do not use mem_alloc() here. */
-			accept_charset = malloc(ac.length + 1);
-			if (accept_charset) {
-				strcpy(accept_charset, ac.source);
-			} else {
-				accept_charset = "";
-			}
-
-			done_string(&ac);
-		}
+		init_accept_charset();
 	}
 
 	if (!(info->bl_flags & SERVER_BLACKLIST_NO_CHARSET)

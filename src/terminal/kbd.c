@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.101 2004/07/28 15:43:51 jonas Exp $ */
+/* $Id: kbd.c,v 1.102 2004/07/30 10:09:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -670,8 +670,8 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		if (itrm->qlen - el < 5)
 			return -1;
 
-		ev->info.mouse.x = get_mouse_x_position(itrm, el);
-		ev->info.mouse.y = get_mouse_y_position(itrm, el);
+		mouse->x = get_mouse_x_position(itrm, el);
+		mouse->y = get_mouse_y_position(itrm, el);
 
 		switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
 		    case TW_BUTT_LEFT:   mouse->button = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
@@ -686,8 +686,8 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		/* See terminal/mouse.h about details of the mouse reporting
 		 * protocol and {struct term_event_mouse->button} bitmask
 		 * structure. */
-		ev->info.mouse.x = itrm->kqueue[el+1] - ' ' - 1;
-		ev->info.mouse.y = itrm->kqueue[el+2] - ' ' - 1;
+		mouse->x = itrm->kqueue[el+1] - ' ' - 1;
+		mouse->y = itrm->kqueue[el+2] - ' ' - 1;
 
 		/* There are rumours arising from remnants of code dating to
 		 * the ancient Mikulas' times that bit 4 indicated B_DRAG.

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.35 2003/10/14 15:57:27 fabio Exp $ */
+/* $Id: socket.c,v 1.36 2003/10/15 07:51:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,9 +151,11 @@ ssl_want_read(struct connection *conn)
 		) {
 		case SSL_ERROR_NONE:
 #ifdef HAVE_GNUTLS
-			if (get_opt_bool("connection.ssl.cert_verify"))
-				if (gnutls_certificate_verify_peers(*((ssl_t *) conn->ssl)))
-					goto ssl_error;
+			if (get_opt_bool("connection.ssl.cert_verify")
+			    && gnutls_certificate_verify_peers(*((ssl_t *) conn->ssl))) {
+				retry_conn_with_state(conn, S_SSL_ERROR);
+				return;
+			}
 #endif
 
 			conn->conn_info = NULL;
@@ -167,11 +169,9 @@ ssl_want_read(struct connection *conn)
 
 		default:
 			conn->no_tsl = 1;
-ssl_error:
 			retry_conn_with_state(conn, S_SSL_ERROR);
 	}
 #endif
-	return;
 }
 
 /* Return -1 on error, 0 or success. */

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.136 2004/09/21 17:34:02 jonas Exp $ */
+/* $Id: parser.c,v 1.137 2004/09/21 20:10:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -331,7 +331,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		if (!pkg) {
 			selector = get_css_base_selector(
 			                last_fragment ? css : NULL, seltype,
-					reltype,
+					CSR_ROOT,
 					last_token.string, last_token.length);
 			if (!selector) continue;
 
@@ -374,6 +374,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 				 * wasn't marked so and thus wasn't bound to
 				 * the stylesheet. Let's do that now. */
 				assert(prev_element_selector);
+				prev_element_selector->relation = CSR_ROOT;
 				prev_element_selector =
 					reparent_selector(&css->selectors,
 					                 prev_element_selector,

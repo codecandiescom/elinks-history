@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.41 2005/03/26 18:06:52 pasky Exp $
+# $Id: hooks.pl,v 1.42 2005/03/26 19:08:33 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -7,6 +7,7 @@
 use strict;
 use warnings;
 use diagnostics;
+use Carp;
 
 
 =head1 SAMPLE CONFIGURATION FILE
@@ -149,6 +150,21 @@ my %news_prefixes_ = (
 	'^(sa|sciam)(| .*)$' => 'sciam',
 );
 
+my %locator_prefixes_ = (
+	'^(imdb|movie|flick)(| .*)$' => 'imdb',
+	'^(stock|ticker|quote)(| .*)$' => 'stock',
+	'^(urban|legend|ul)(| .*)$' => 'bs',
+	'^(bittorrent|torrent|bt)(| .*)$' => 'torrent',
+	'^(archive|arc|ar|ia)(| .*)$' => 'archive',
+	'^(freshmeat|fm)(| .*)$' => 'freshmeat',
+	'^(sourceforge|sf)(| .*)$' => 'sourceforge',
+	'^(savannah|sv)(| .*)$' => 'savannah',
+	'^gna(| .*)$' => 'gna',
+	'^(alive|dead)(| .*)$' => 'dead',
+	'^(book|read)(| .*)$' => 'book',
+	'^ipl(| .*)$' => 'ipl',
+);
+
 my %weather_locators_ = (
 	'weather underground' => 'http://wunderground.com/cgi-bin/findweather/getForecast?query=!query!',
 	'google' => 'http://google.com/search?q=weather+"!query!"',
@@ -221,29 +237,21 @@ sub goto_url_hook
 
 	# Locators
 
-	if ($url =~ '^(imdb|movie|flick)(| .*)$'
-	    or $url =~ '^(zip|usps)(| .*)$'
+	foreach my $prefix (keys %locator_prefixes_) {
+		next unless $url =~ /$prefix/;
+		return location($locator_prefixes_{$prefix}, $search, $current_url);
+	}
+
+	if ($url =~ '^(zip|usps)(| .*)$'
 	    or $url =~ '^ip(| .*)$'
 	    or $url =~ '^whois(| .*)$'
 	    or $url =~ '^rfc(| .*)$'
 	    or $url =~ '^(weather|w)(| .*)$'
-	    or $url =~ '^(stock|ticker|quote)(| .*)$'
-	    or $url =~ '^(urban|legend|ul)(| .*)$'
-	    or $url =~ '^(bittorrent|torrent|bt)(| .*)$'
-	    or $url =~ '^(archive|arc|ar|ia)(| .*)$'
-	    or $url =~ '^(freshmeat|fm)(| .*)$'
-	    or $url =~ '^(sourceforge|sf)(| .*)$'
-	    or $url =~ '^(savannah|sv)(| .*)$'
-	    or $url =~ '^gna(| .*)$'
-	    or $url =~ '^(whatis|uptime)(| .*)$'
-	    or $url =~ '^(alive|dead)(| .*)$'
-	    or $url =~ '^(book|read)(| .*)$'
-	    or $url =~ '^ipl(| .*)$') {
+	    or $url =~ '^(whatis|uptime)(| .*)$') {
 		my ($thingy) = $url =~ /^[a-z]* (.*)/;
 		my ($domain) = $current_url =~ /([a-z0-9-]+\.(com|net|org|edu|gov|mil))/;
 
 		my $whois = 'http://reports.internic.net/cgi/whois?type=domain&whois_nic=';
-		my $locator_imdb        = 'http://imdb.com';
 		my $locator_zip         = 'http://usps.com';
 		my $ipv                 = "ipv4-address-space"; $ipv = "ipv6-address-space" if loadrc("ipv6") eq "yes";
 			my $locator_ip  = 'http://www.iana.org/assignments/' . $ipv;
@@ -251,22 +259,10 @@ sub goto_url_hook
 			$locator_whois      = $whois . $domain if $domain;
 		my $locator_rfc         = 'http://ietf.org';
 		my $locator_weather     = 'http://weather.noaa.gov';
-		my $locator_stock       = 'http://nasdr.com';
-		my $locator_bs          = 'http://snopes.com';
-		my $locator_torrent     = 'http://isohunt.com';
-		my $locator_archive     = 'http://web.archive.org/web/*/' . $current_url;
-		my $locator_freshmeat   = 'http://freshmeat.net';
-		my $locator_sourceforge = 'http://sourceforge.net';
-		my $locator_savannah    = 'http://savannah.nongnu.org';
-		my $locator_gna         = 'http://gna.org';
 		my $locator_whatis      = 'http://uptime.netcraft.com';
 			$locator_whatis     = 'http://uptime.netcraft.com/up/graph/?host=' . $domain if $domain;
-		my $locator_dead        = 'http://www.whosaliveandwhosdead.com';
-		my $locator_book        = 'http://gutenberg.org';
-		my $locator_ipl         = 'http://ipl.org';
 
 		if ($thingy) {
-			$locator_imdb        = 'http://imdb.com/Find?select=All&for=' . $thingy;
 			$locator_zip         = 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;
 				$locator_zip     = 'http://zipinfo.com/cgi-local/zipsrch.exe?zip=' . $thingy if $thingy !~ '^[0-9]*$';
 			$locator_ip          = 'http://melissadata.com/lookups/iplocation.asp?ipaddress=' . $thingy;
@@ -278,38 +274,14 @@ sub goto_url_hook
 			$weather           ||= 'weather underground';
 			$locator_weather     = $weather_locators_{$weather};
 			$locator_weather     =~ s/!query!/$thingy/;
-			$locator_stock       = 'http://finance.yahoo.com/l?s=' . $thingy;
-			$locator_bs          = 'http://search.atomz.com/search/?sp-a=00062d45-sp00000000&sp-q=' . $thingy;
-			my $bork = ""; $bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
-				$locator_torrent = 'http://google.com/search?q=filetype:torrent ' . $thingy . $bork;
-			$locator_archive     = 'http://web.archive.org/web/*/' . $thingy;
-			$locator_freshmeat   = 'http://freshmeat.net/search/?q=' . $thingy;
-			$locator_sourceforge = 'http://sourceforge.net/search/?q=' . $thingy;
-			$locator_savannah    = 'http://savannah.nongnu.org/search/?type_of_search=soft&words=' . $thingy;
-			$locator_gna         = 'https://gna.org/search/?type_of_search=soft&words=' . $thingy;
 			$locator_whatis      = 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
-			$locator_dead        = 'http://google.com/search?btnI&sitesearch=' . $locator_dead . '&q=' . $thingy;
-			$locator_book        = 'http://google.com/search?q=book+"' . $thingy . '"';
-			$locator_ipl         = 'http://ipl.org/div/searchresults/?words=' . $thingy;
 		}
-		$url = $locator_imdb        if ($url =~ '^(imdb|movie|flick)(| .*)$');
 		$url = $locator_zip         if ($url =~ '^(zip|usps)(| .*)$');
 		$url = $locator_ip          if ($url =~ '^ip(| .*)$');
 		$url = $locator_whois       if ($url =~ '^whois(| .*)$');
 		$url = $locator_rfc         if ($url =~ '^rfc(| .*)$');
 		$url = $locator_weather     if ($url =~ '^(weather|w)(| .*)$');
-		$url = $locator_stock       if ($url =~ '^(stock|ticker|quote)(| .*)$');
-		$url = $locator_bs          if ($url =~ '^(urban|legend|ul)(| .*)$');
-		$url = $locator_torrent     if ($url =~ '^(bittorrent|torrent|bt)(| .*)$');
-		$url = $locator_archive     if ($url =~ '^(archive|arc|ar|ia)(| .*)$');
-		$url = $locator_freshmeat   if ($url =~ '^(freshmeat|fm)(| .*)$');
-		$url = $locator_sourceforge if ($url =~ '^(sourceforge|sf)(| .*)$');
-		$url = $locator_savannah    if ($url =~ '^(savannah|sv)(| .*)$');
-		$url = $locator_gna         if ($url =~ '^gna(| .*)$');
 		$url = $locator_whatis      if ($url =~ '^(whatis|uptime)(| .*)$');
-		$url = $locator_dead        if ($url =~ '^(alive|dead)(| .*)$');
-		$url = $locator_book        if ($url =~ '^(book|read)(| .*)$');
-		$url = $locator_ipl         if ($url =~ '^ipl(| .*)$');
 		return $url;
 	}
 
@@ -795,5 +767,78 @@ sub news
 	                          and $news_servers_{$server}->{$key};
 	my $url = $news_servers_{$server}->{$key};
 	$url .= $search if $search;
+	return $url;
+}
+
+
+################################################################################
+### Locators ###################################################################
+
+my %locators_ = (
+	'imdb' => {
+		home => 'http://imdb.com',
+		search => 'http://imdb.com/Find?select=All&for=',
+	},
+	'stock' => {
+		home => 'http://nasdr.com',
+		search => 'http://finance.yahoo.com/l?s=',
+	},
+	'bs' => {
+		home => 'http://snopes.com',
+		search => 'http://search.atomz.com/search/?sp-a=00062d45-sp00000000&sp-q=',
+	},
+	'torrent' => {
+		home => 'http://isohunt.com',
+		search => 'http://google.com/search?q=filetype:torrent !query!!bork!',
+	},
+	'archive' => {
+		home => 'http://web.archive.org/web/*/!current!',
+		search => 'http://web.archive.org/web/*/',
+	},
+	'freshmeat' => {
+		home => 'http://freshmeat.net',
+		search => 'http://freshmeat.net/search/?q=',
+	},
+	'sourceforge' => {
+		home => 'http://sourceforge.net',
+		search => 'http://sourceforge.net/search/?q=',
+	},
+	'savannah' => {
+		home => 'http://savannah.nongnu.org',
+		search => 'http://savannah.nongnu.org/search/?type_of_search=soft&words=',
+	},
+	'gna' => {
+		home => 'http://gna.org',
+		search => 'https://gna.org/search/?type_of_search=soft&words=',
+	},
+	'dead' => {
+		home => 'http://www.whosaliveandwhosdead.com',
+		search => 'http://google.com/search?btnI&sitesearch=http://whosaliveandwhosdead.com&q=',
+	},
+	'book' => {
+		home => 'http://gutenberg.org',
+		search => 'http://google.com/search?q=book+"!query!"',
+	},
+	'ipl' => {
+		home => 'http://ipl.org',
+		search => 'http://ipl.org/div/searchresults/?words=',
+	},
+);
+
+sub location
+{
+	my ($server, $search, $current_url) = @_;
+	my $key = $search ? 'search' : 'home';
+
+	croak 'Unknown URL!' unless $locators_{$server}
+	                            and $locators_{$server}->{$key};
+	my $url = $locators_{$server}->{$key};
+
+	my $bork = ""; $bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
+	$url =~ s/!bork!/$bork/g;
+
+	$url =~ s/!current!/$current_url/g;
+	$url .= $search if $search and not $url =~ s/!query!/$search/g;
+
 	return $url;
 }

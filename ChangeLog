@@ -1,3 +1,9 @@
+Mon Mar  1 19:17:51 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: config/options.inc, intl/charsets.c:
+
+	Support for System codepage.  
+
 Sat Feb 28 06:25:18 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:

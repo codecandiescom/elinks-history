@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.110 2003/11/26 23:02:31 jonas Exp $ */
+/* $Id: hierbox.c,v 1.111 2003/11/26 23:03:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -506,14 +506,14 @@ do_delete_item(struct listbox_item *item, struct listbox_context *info,
 static int
 delete_marked(struct listbox_item *item, void *data_, int *offset)
 {
-	struct listbox_context *delete_info = data_;
+	struct listbox_context *context = data_;
 
-	if (item->marked && !delete_info->box->ops->is_used(item)) {
+	if (item->marked && !context->box->ops->is_used(item)) {
 		/* Save the first marked so it can be deleted last */
-		if (!delete_info->item) {
-			delete_info->item = item;
+		if (!context->item) {
+			context->item = item;
 		} else {
-			do_delete_item(item, delete_info, 0);
+			do_delete_item(item, context, 0);
 		}
 
 		return 1;
@@ -523,21 +523,21 @@ delete_marked(struct listbox_item *item, void *data_, int *offset)
 }
 
 static void
-push_ok_delete_button(void *delete_info_)
+push_ok_delete_button(void *context_)
 {
-	struct listbox_context *delete_info = delete_info_;
+	struct listbox_context *context = context_;
 
-	if (delete_info->item) {
-		delete_info->box->ops->unlock(delete_info->item);
+	if (context->item) {
+		context->box->ops->unlock(context->item);
 	} else {
-		traverse_listbox_items_list(delete_info->box->items->next,
-					    delete_info->box, 0, 0,
-					    delete_marked, delete_info);
-		if (!delete_info->item) return;
+		traverse_listbox_items_list(context->box->items->next,
+					    context->box, 0, 0,
+					    delete_marked, context);
+		if (!context->item) return;
 	}
 
 	/* Delete the last one (traversal should save one to delete) */
-	do_delete_item(delete_info->item, delete_info, 1);
+	do_delete_item(context->item, context, 1);
 }
 
 int
@@ -546,55 +546,55 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-	struct listbox_context *delete_info;
+	struct listbox_context *context;
 
 	if (!box->sel || !box->sel->udata) return 0;
 
 	assert(box->ops && box->ops->can_delete && box->ops->delete);
 
-	delete_info = init_listbox_context(box, term, box->sel, scan_for_marks);
-	if (!delete_info) return 0;
+	context = init_listbox_context(box, term, box->sel, scan_for_marks);
+	if (!context) return 0;
 
-	if (!delete_info->item) {
-		msg_box(term, getml(delete_info, NULL), 0,
+	if (!context->item) {
+		msg_box(term, getml(context, NULL), 0,
 			N_("Delete marked items"), AL_CENTER,
 			N_("Delete marked items?"),
-			delete_info, 2,
+			context, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), done_listbox_context, B_ESC);
 		return 0;
 	}
 
-	if (!box->ops->can_delete(delete_info->item)) {
-		msg_box(term, getml(delete_info, NULL), MSGBOX_FREE_TEXT,
+	if (!box->ops->can_delete(context->item)) {
+		msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete item"), AL_CENTER,
 			msg_text(term, N_("Cannot delete \"%s\""),
-				delete_info->item->text),
+				context->item->text),
 			NULL, 1,
 			N_("OK"), NULL, B_ESC | B_ENTER);
 		return 0;
 
-	} else if (delete_info->item->type == BI_FOLDER) {
-		box->ops->lock(delete_info->item);
-		msg_box(term, getml(delete_info, NULL), MSGBOX_FREE_TEXT,
+	} else if (context->item->type == BI_FOLDER) {
+		box->ops->lock(context->item);
+		msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete folder"), AL_CENTER,
 			msg_text(term, N_("Delete the folder \"%s\" and its content?"),
-				 delete_info->item->text),
-			delete_info, 2,
+				 context->item->text),
+			context, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), done_listbox_context, B_ESC);
 	} else {
 		unsigned char *msg;
 
-		msg = box->ops->get_info(delete_info->item, term, LISTBOX_ALL);
-		box->ops->lock(delete_info->item);
+		msg = box->ops->get_info(context->item, term, LISTBOX_ALL);
+		box->ops->lock(context->item);
 
-		msg_box(term, getml(delete_info, msg, NULL), MSGBOX_FREE_TEXT,
+		msg_box(term, getml(context, msg, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete item"), AL_LEFT,
 			msg_text(term, N_("Delete \"%s\"?\n\n"
 				"%s"),
-				delete_info->item->text, empty_string_or_(msg)),
-			delete_info, 2,
+				context->item->text, empty_string_or_(msg)),
+			context, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), done_listbox_context, B_ESC);
 	}

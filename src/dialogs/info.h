@@ -1,4 +1,4 @@
-/* $Id: info.h,v 1.4 2003/05/04 17:25:53 pasky Exp $ */
+/* $Id: info.h,v 1.5 2003/05/07 13:38:44 zas Exp $ */
 
 #ifndef EL__DIALOG_INFO_H
 #define EL__DIALOG_INFO_H
@@ -6,12 +6,12 @@
 #include "terminal/terminal.h"
 #include "sched/session.h"
 
-void menu_about(struct terminal *term, void *d, struct session *ses);
-void menu_keys(struct terminal *term, void *d, struct session *ses);
-void menu_copying(struct terminal *term, void *d, struct session *ses);
+void menu_about(struct terminal *, void *, struct session *);
+void menu_keys(struct terminal *, void *, struct session *);
+void menu_copying(struct terminal *, void *, struct session *);
 
-void res_inf(struct terminal *term, void *d, struct session *ses);
-void cache_inf(struct terminal *term, void *d, struct session *ses);
-void memory_inf(struct terminal *term, void *d, struct session *ses);
+void res_inf(struct terminal *, void *, struct session *);
+void cache_inf(struct terminal *, void *, struct session *);
+void memory_inf(struct terminal *, void *, struct session *);
 
 #endif

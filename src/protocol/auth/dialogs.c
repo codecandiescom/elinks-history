@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.121 2005/03/23 15:43:42 miciah Exp $ */
+/* $Id: dialogs.c,v 1.122 2005/03/23 16:33:12 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,8 +102,8 @@ do_auth_dialog(struct session *ses, void *data)
 	dlg->udata2 = a;
 
 	add_dlg_text(dlg, text, ALIGN_LEFT, 0);
-	add_dlg_field_float(dlg, _("~Login", term), 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
-	add_dlg_field_float_pass(dlg, _("~Password", term), 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password);
+	add_dlg_field_float(dlg, _("Login", term), 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
+	add_dlg_field_float_pass(dlg, _("Password", term), 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password);
 
 	add_dlg_ok_button(dlg, _("~OK", term), B_ENTER, auth_ok, dlg);
 	add_dlg_ok_button(dlg, _("~Cancel", term), B_ESC, auth_cancel, a);

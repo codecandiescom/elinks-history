@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.53 2004/02/03 20:31:35 jonas Exp $ */
+/* $Id: action.c,v 1.54 2004/02/05 19:18:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,7 +398,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_SEARCH_TYPEAHEAD:
-			do_frame_action(ses, search_typeahead, 0);
+		case ACT_MAIN_SEARCH_TYPEAHEAD_LINK:
+		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT:
+		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT_BACK:
+			do_frame_action(ses, search_typeahead, action);
 			break;
 
 		case ACT_MAIN_SHOW_TERM_OPTIONS:

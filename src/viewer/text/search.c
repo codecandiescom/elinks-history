@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.196 2004/02/05 11:03:14 jonas Exp $ */
+/* $Id: search.c,v 1.197 2004/02/05 19:18:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1210,10 +1210,31 @@ link_typeahead_handler(struct input_line *line, int action)
 }
 
 void
-search_typeahead(struct session *ses, struct document_view *doc_view, int a)
+search_typeahead(struct session *ses, struct document_view *doc_view, int action)
 {
-	input_field_line(ses, "#", NULL, NULL, link_typeahead_handler);
-	if (!a) draw_formatted(ses, 0);
+	unsigned char *prompt;
+	unsigned char *data = NULL;
+	input_line_handler handler = text_typeahead_handler;
+
+	switch (action) {
+		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT:
+			prompt = data = "/";
+			break;
+
+		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT_BACK:
+			prompt = data = "?";
+			break;
+
+		case ACT_MAIN_SEARCH_TYPEAHEAD_LINK:
+			data = "#";
+			/* Falling forward .. good punk rock */
+		case ACT_MAIN_SEARCH_TYPEAHEAD:
+		default:
+			prompt = "#";
+			handler = link_typeahead_handler;
+	}
+
+	input_field_line(ses, prompt, data, NULL, handler);
 }
 
 

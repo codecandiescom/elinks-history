@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.199 2004/01/31 00:23:08 zas Exp $ */
+/* $Id: kbdbind.c,v 1.200 2004/02/05 19:18:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -530,6 +530,9 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "search", ACT_MAIN_SEARCH, DACT(N_("Search for a text pattern")) },
 	{ "search-back", ACT_MAIN_SEARCH_BACK, DACT(N_("Search backwards for a text pattern")) },
 	{ "search-typeahead", ACT_MAIN_SEARCH_TYPEAHEAD, DACT(N_("Search link text by typing ahead")) },
+	{ "search-typeahead-link", ACT_MAIN_SEARCH_TYPEAHEAD_LINK, DACT(N_("Search link text by typing ahead")) },
+	{ "search-typeahead-text", ACT_MAIN_SEARCH_TYPEAHEAD_TEXT, DACT(N_("Search document text by typing ahead")) },
+	{ "search-typeahead-text-back", ACT_MAIN_SEARCH_TYPEAHEAD_TEXT_BACK, DACT(N_("Search document text backwards by typing ahead")) },
 	{ "show-term-options", ACT_MAIN_SHOW_TERM_OPTIONS, DACT(N_("Show terminal options dialog")) },
 	{ "submit-form", ACT_MAIN_SUBMIT_FORM, DACT(N_("Submit form")) },
 	{ "submit-form-reload", ACT_MAIN_SUBMIT_FORM_RELOAD, DACT(N_("Submit form and reload")) },

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.50 2004/01/25 13:17:22 jonas Exp $ */
+/* $Id: menu.h,v 1.51 2004/04/17 11:39:38 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -142,6 +142,10 @@ struct menu {
 	int x, y;
 	int width, height;
 	int parent_x, parent_y;
+
+	int first_displayed;
+	int last_displayed;
+
 	int hotkeys;
 #ifdef ENABLE_NLS
 	int lang;

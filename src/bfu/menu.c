@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.202 2004/04/17 11:28:12 jonas Exp $ */
+/* $Id: menu.c,v 1.203 2004/04/17 11:39:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,12 +47,6 @@
 
 
 /* Types and structures */
-
-struct mainmenu {
-	MENU_HEAD;
-	int first_displayed;
-	int last_displayed;
-};
 
 /* Submenu indicator, displayed at right. */
 static unsigned char m_submenu[] = ">>";
@@ -755,7 +749,7 @@ void
 do_mainmenu(struct terminal *term, struct menu_item *items,
 	    void *data, int sel)
 {
-	struct mainmenu *menu = mem_calloc(1, sizeof(struct mainmenu));
+	struct menu *menu = mem_calloc(1, sizeof(struct menu));
 
 	if (!menu) return;
 
@@ -779,7 +773,7 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 }
 
 static void
-display_mainmenu(struct terminal *term, struct mainmenu *menu)
+display_mainmenu(struct terminal *term, struct menu *menu)
 {
 	struct color_pair *normal_color = get_bfu_color(term, "menu.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
@@ -867,7 +861,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 }
 
 static inline void
-select_mainmenu(struct terminal *term, struct mainmenu *menu)
+select_mainmenu(struct terminal *term, struct menu *menu)
 {
 	if (menu->selected < 0 || menu->selected >= menu->ni)
 		return;
@@ -878,7 +872,7 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 #ifdef CONFIG_MOUSE
 static void
-mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
+mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
 
@@ -946,7 +940,7 @@ mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
 #endif
 
 static void
-mainmenu_kbd_handler(struct mainmenu *menu, struct term_event *ev, int fwd)
+mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 {
 	struct window *win = menu->win;
 	enum menu_action action = kbd_action(KM_MENU, ev, NULL);
@@ -997,7 +991,7 @@ mainmenu_kbd_handler(struct mainmenu *menu, struct term_event *ev, int fwd)
 static void
 mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 {
-	struct mainmenu *menu = win->data;
+	struct menu *menu = win->data;
 
 	menu->win = win;
 

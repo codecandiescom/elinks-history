@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.44 2003/07/23 12:32:45 pasky Exp $ */
+/* $Id: string.h,v 1.45 2003/07/23 15:56:39 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -58,12 +58,12 @@ unsigned char *trim_chars(unsigned char *, unsigned char, int *);
  * effective (in the future ;-). */
 /* Returns an integer less than, equal to, or greater than zero if @s1 is
  * found, respectively, to be less than, to match, or be greater than @s2. */
-#define strlcmp elinks_strlcmp
+#define strlcmp errfile = __FILE__, errline = __LINE__, elinks_strlcmp
 int elinks_strlcmp(const unsigned char *s1, size_t n1,
 		   const unsigned char *s2, size_t n2);
 
 /* Acts identically to strlcmp(), except for being case insensitive. */
-#define strlcasecmp elinks_strlcasecmp
+#define strlcasecmp errfile = __FILE__, errline = __LINE__, elinks_strlcasecmp
 int elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 		       const unsigned char *s2, size_t n2);
 

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.67 2003/07/23 15:54:10 pasky Exp $ */
+/* $Id: string.c,v 1.68 2003/07/23 15:56:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,13 +33,13 @@
  * thus you can't simply reuse strings allocated by these in add_to_str()-style
  * functions. */
 
-#ifdef LEAK_DEBUG
-
 #define string_assertm(f, l, x, o, m) \
 	if ((assert_failed = !(x))) { \
 		errfile = f, errline = l, \
 		elinks_internal("[" o "] assertion " #x " failed!"); \
 	}
+
+#ifdef LEAK_DEBUG
 
 inline unsigned char *
 debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
@@ -237,7 +237,7 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	return s;
 }
 
-#define strlcmp_device(s1,n1,s2,n2,t1,t2) {\
+#define strlcmp_device(c,s1,n1,s2,n2,t1,t2) {\
 	size_t p, n; \
  \
 	/* XXX: The return value is inconsistent. Hrmpf. Making it consistent
@@ -245,7 +245,7 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	 * So noone should better rely on the return value actually meaning
 	 * anything quantitively. --pasky */ \
  \
-	assert(s1 && s2); \
+	string_assertm(errfile, errline, s1 && s2, c); \
  \
 	/* n1,n2 is unsigned, so don't assume -1 < 0 ! >:) */ \
  \
@@ -254,7 +254,7 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	if (n1 == -1) n1 = strlen(s1); \
 	if (n2 == -1) n2 = strlen(s2); \
  \
-	assert(n1 >= 0 && n2 >= 0); \
+	string_assertm(errfile, errline, n1 >= 0 && n2 >= 0, c); \
  \
 	if (n1 != n2) return n1 - n2; \
  \
@@ -269,14 +269,14 @@ int
 elinks_strlcmp(const unsigned char *s1, size_t n1,
 		const unsigned char *s2, size_t n2)
 {
-	strlcmp_device(s1, n1, s2, n2, s1[p], s2[p]);
+	strlcmp_device("strlcmp", s1, n1, s2, n2, s1[p], s2[p]);
 }
 
 int
 elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 		   const unsigned char *s2, size_t n2)
 {
-	strlcmp_device(s1, n1, s2, n2, upcase(s1[p]), upcase(s2[p]));
+	strlcmp_device("strlcasecmp", s1, n1, s2, n2, upcase(s1[p]), upcase(s2[p]));
 }
 
 

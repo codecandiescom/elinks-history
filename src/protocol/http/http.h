@@ -1,4 +1,4 @@
-/* $Id: http.h,v 1.8 2004/01/28 00:38:11 jonas Exp $ */
+/* $Id: http.h,v 1.9 2004/02/27 11:20:08 zas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_HTTP_H
 #define EL__PROTOCOL_HTTP_HTTP_H
@@ -12,6 +12,15 @@ struct http_version {
 	int major;
 	int minor;
 };
+
+#define HTTP_0_9(x)  ((x).major == 0 && (x).minor == 9)
+#define PRE_HTTP_1_0(x) ((x).major < 1)
+#define HTTP_1_0(x)  ((x).major == 1 && (x).minor == 0)
+#define POST_HTTP_1_0(x) ((x).major > 1 || ((x).major == 1 && (x).minor > 0))
+#define PRE_HTTP_1_1(x) (PRE_HTTP_1_0(x) || HTTP_1_0(x))
+#define HTTP_1_1(x)  ((x).major == 1 && (x).minor == 1)
+#define POST_HTTP_1_1(x) ((x).major > 2 || ((x).major == 1 && (x).minor > 1))
+
 
 struct http_connection_info {
 	enum blacklist_flags bl_flags;

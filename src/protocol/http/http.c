@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.238 2004/02/27 10:46:27 zas Exp $ */
+/* $Id: http.c,v 1.239 2004/02/27 11:20:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,8 +211,7 @@ check_http_server_bugs(struct uri *uri, struct http_connection_info *info,
 	};
 
 	if (!get_opt_int("protocol.http.bugs.allow_blacklist")
-	    || (info->sent_version.major == 1 &&
-		info->sent_version.minor == 0))
+	    || HTTP_1_0(info->sent_version))
 		return 0;
 
 	server = parse_http_header(head, "Server", NULL);
@@ -561,8 +560,8 @@ http_send_header(struct connection *conn)
 	}
 #endif
 
-	if (info->sent_version.major == 1 &&
-	    info->sent_version.minor == 1) {
+	/* FIXME: what about post http 1.1 ?? --Zas */
+	if (HTTP_1_1(info->sent_version)) {
 		if (!IS_PROXY_URI(conn->uri)) {
 			add_to_string(&header, "Connection: ");
 		} else {
@@ -1250,14 +1249,13 @@ again:
 	kill_buffer_data(rb, a);
 	info->close = 0;
 	info->length = -1;
-	info->recv_version = version;
+	info->recv_version = version;	/* FIXME: bug ? --Zas */
 
 	if ((d = parse_http_header(conn->cache->head, "Connection", NULL))
 	     || (d = parse_http_header(conn->cache->head, "Proxy-Connection", NULL))) {
 		if (!strcasecmp(d, "close")) info->close = 1;
 		mem_free(d);
-	} else if (version.major < 1
-		   || (version.major == 1 && version.minor == 0))
+	} else if (PRE_HTTP_1_1(version))
 		info->close = 1;
 
 	cf = conn->from;
@@ -1311,9 +1309,7 @@ again:
 		l = strtol(d, (char **)&ep, 10);
 
 		if (!errno && !*ep && l >= 0) {
-			if (!info->close ||
-			    (version.major > 1 ||
-			     (version.major == 1 && version.minor > 0)))
+			if (!info->close || POST_HTTP_1_0(version))
 				info->length = l;
 			conn->est_length = conn->from + l;
 		}
@@ -1362,6 +1358,7 @@ again:
 		if (d) conn->cache->last_modified = d;
 	}
 
+	/* FIXME: parse only if http 1.1 or later ? --Zas */
 	d = parse_http_header(conn->cache->head, "ETag", NULL);
 	if (d) {
 		if (conn->cache->etag)  {
@@ -1422,10 +1419,8 @@ again:
 		conn->cache->encoding_info = stracpy(get_encoding_name(conn->content_encoding));
 	}
 
-	if (info->length == -1 ||
-	    ((info->recv_version.major < 1 ||
-	      (info->recv_version.major == 1 && info->recv_version.minor == 0))
-	     && info->close))
+	if (info->length == -1
+	    || (PRE_HTTP_1_1(info->recv_version) < 1 && info->close))
 		rb->close = 1;
 
 	read_http_data(conn, rb);

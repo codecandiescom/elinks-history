@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.48 2002/09/22 15:33:21 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.49 2002/09/22 16:34:24 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -43,6 +43,17 @@ int bookmarks_dirty = 0;
 int
 delete_bookmark(struct bookmark *bm)
 {
+	if (!list_empty(bm->child)) {
+		struct bookmark *bm2 = bm->child.next;
+
+		while ((struct list_head *) bm2 != &bm->child) {
+			struct bookmark *nbm = bm2->next;
+
+			delete_bookmark(bm2);
+			bm2 = nbm;
+		}
+	}
+
 	del_from_list(bm);
 	bookmarks_dirty = 1;
 

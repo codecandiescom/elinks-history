@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.237 2003/12/27 13:35:45 jonas Exp $ */
+/* $Id: menu.c,v 1.238 2003/12/27 14:13:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,26 +69,6 @@ static void
 menu_close_tab(struct terminal *term, void *d, struct session *ses)
 {
 	close_tab(term, ses);
-}
-
-static void
-menu_close_other_tabs(struct terminal *term, void *d, struct session *ses)
-{
-	struct window *current = d;
-	struct window *tab;
-
-	assert(term && ses && current);
-	if_assert_failed return;
-
-	foreach_tab (tab, term->windows) {
-		if (tab == current) continue;
-		tab = tab->prev;
-		delete_window(tab->next);
-	}
-
-	/* Small hack to force a redrawing tab switching style */
-	term->current_tab = 0;
-	redraw_terminal(term);
 }
 
 /* Helper for url items in help menu. */
@@ -365,8 +345,8 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 		    (menu_func) menu_close_tab, NULL, 0);
 
 	if (tabs > 1) {
-		add_to_menu(&menu, N_("C~lose all but this"), "", ACT_NONE,
-			    (menu_func) menu_close_other_tabs, d, 0);
+		add_to_menu(&menu, N_("C~lose all tabs but the current"), "", ACT_TAB_CLOSE_ALL_BUT_CURRENT,
+			    (menu_func) close_all_tabs_but_current, d, 0);
 	}
 
 	/* Adjust the menu position taking the menu frame into account */

@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.30 2003/12/27 13:21:26 jonas Exp $ */
+/* $Id: tab.c,v 1.31 2003/12/27 14:13:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,6 +191,25 @@ close_tab(struct terminal *term, struct session *ses)
 		delete_window(get_current_tab(term));
 		switch_to_tab(term, term->current_tab - 1, num_tabs - 1);
 	}
+}
+
+void
+close_all_tabs_but_current(struct terminal *term, struct window *current, struct session *ses)
+{
+	struct window *tab;
+
+	assert(term && ses && current);
+	if_assert_failed return;
+
+	foreach_tab (tab, term->windows) {
+		if (tab == current) continue;
+		tab = tab->prev;
+		delete_window(tab->next);
+	}
+
+	/* Small hack to force a redrawing tab switching style */
+	term->current_tab = 0;
+	redraw_terminal(term);
 }
 
 

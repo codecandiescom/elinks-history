@@ -1,11 +1,11 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.11 2002/11/30 20:33:40 pasky Exp $ */
+/* $Id: dialogs.c,v 1.12 2002/12/07 20:05:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include <string.h>
 

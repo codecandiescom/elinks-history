@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.35 2002/12/03 19:31:45 zas Exp $ */
+/* $Id: os_dep.c,v 1.36 2002/12/07 20:05:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "intl/language.h"
 #include "lowlevel/kbd.h"

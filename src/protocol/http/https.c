@@ -1,11 +1,11 @@
 /* Internal "https" protocol implementation */
-/* $Id: https.c,v 1.7 2002/09/09 15:55:04 zas Exp $ */
+/* $Id: https.c,v 1.8 2002/12/07 20:05:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "lowlevel/sched.h"
 #include "protocol/http/http.h"

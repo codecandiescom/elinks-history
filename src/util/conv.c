@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.13 2002/12/03 19:31:46 zas Exp $ */
+/* $Id: conv.c,v 1.14 2002/12/07 20:05:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "links.h"
+#include "elinks.h"
 
 #include "util/conv.h"
 #include "util/string.h"

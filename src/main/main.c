@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.63 2002/12/07 15:28:35 pasky Exp $ */
+/* $Id: main.c,v 1.64 2002/12/07 20:05:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "main.h"
 #ifdef USE_LEDS

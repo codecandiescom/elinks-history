@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.13 2002/11/30 22:42:35 pasky Exp $ */
+/* $Id: button.c,v 1.14 2002/12/07 20:05:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,7 @@
 
 #include <string.h>
 
-#include "links.h"
+#include "elinks.h"
 
 #include "bfu/align.h"
 #include "bfu/dialog.h"

@@ -1,5 +1,5 @@
 /* Get system name */
-/* $Id: sysname.c,v 1.8 2002/11/27 10:51:35 zas Exp $ */
+/* $Id: sysname.c,v 1.9 2002/12/07 20:05:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,7 @@
 #include <sys/utsname.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "lowlevel/sysname.h"
 #include "util/memory.h"

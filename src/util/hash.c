@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.13 2002/12/07 12:59:50 zas Exp $ */
+/* $Id: hash.c,v 1.14 2002/12/07 20:05:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,7 @@
 
 #include <string.h>
 
-#include "links.h"
+#include "elinks.h"
 
 #include "util/hash.h"
 #include "util/memory.h"

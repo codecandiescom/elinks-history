@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.17 2002/12/03 19:31:44 zas Exp $ */
+/* $Id: inpfield.c,v 1.18 2002/12/07 20:05:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "links.h"
+#include "elinks.h"
 
 #include "bfu/align.h"
 #include "bfu/dialog.h"

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.44 2002/12/06 20:28:47 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.45 2002/12/07 20:05:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,7 @@
 
 #include <string.h>
 
-#include "links.h"
+#include "elinks.h"
 
 #include "config/conf.h"
 #include "config/kbdbind.h"

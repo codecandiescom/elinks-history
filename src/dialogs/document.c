@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.17 2002/11/15 17:20:30 zas Exp $ */
+/* $Id: document.c,v 1.18 2002/12/07 20:05:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,7 @@
 #include <time.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "bfu/msgbox.h"
 #include "document/cache.h"

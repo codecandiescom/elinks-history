@@ -1,10 +1,10 @@
-/* $Id: cache.h,v 1.9 2002/12/07 13:30:11 zas Exp $ */
+/* $Id: cache.h,v 1.10 2002/12/07 20:05:54 pasky Exp $ */
 
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
 
 #include "util/lists.h"
-#include "links.h" /* tcount */
+#include "elinks.h" /* tcount */
 
 enum cache_mode {
 	NC_ALWAYS_CACHE,

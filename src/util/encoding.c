@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.6 2002/11/21 11:15:04 zas Exp $ */
+/* $Id: encoding.c,v 1.7 2002/12/07 20:05:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
  * OpenSSL here, we try to draw it off the game this way. */
 #define HEADER_SSL_H
 
-#include "links.h"
+#include "elinks.h"
 
 #include "util/encoding.h"
 #include "util/memory.h"

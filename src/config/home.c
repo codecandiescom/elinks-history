@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.15 2002/12/05 13:34:01 zas Exp $ */
+/* $Id: home.c,v 1.16 2002/12/07 20:05:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "main.h"
 #include "lowlevel/home.h"

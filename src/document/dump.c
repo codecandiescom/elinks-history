@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.31 2002/12/07 15:28:37 pasky Exp $ */
+/* $Id: dump.c,v 1.32 2002/12/07 20:05:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "main.h"
 #include "config/options.h"

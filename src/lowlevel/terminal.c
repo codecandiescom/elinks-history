@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.37 2002/12/07 15:28:38 pasky Exp $ */
+/* $Id: terminal.c,v 1.38 2002/12/07 20:05:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "main.h"
 /* We don't require this ourselves, but view.h does, and directly including

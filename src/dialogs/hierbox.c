@@ -1,11 +1,11 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.9 2002/12/06 20:16:14 pasky Exp $ */
+/* $Id: hierbox.c,v 1.10 2002/12/07 20:05:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "bfu/align.h"
 #include "bfu/dialog.h"

@@ -1,5 +1,5 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.6 2002/08/06 00:07:07 pasky Exp $ */
+/* $Id: parser.c,v 1.7 2002/12/07 20:05:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 
-#include "links.h"
+#include "elinks.h"
 
 #include "cookies/parser.h"
 #include "util/string.h"

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.55 2002/12/07 15:28:37 pasky Exp $ */
+/* $Id: download.c,v 1.56 2002/12/07 20:05:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 #endif
 #include <utime.h>
 
-#include "links.h"
+#include "elinks.h"
 
 #include "bfu/dialog.h"
 #include "bfu/button.h"

@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.1 2002/12/01 19:02:09 pasky Exp $ */
+/* $Id: common.c,v 1.2 2002/12/07 20:05:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "links.h"
+#include "elinks.h"
 
 #include "bfu/listbox.h"
 #include "bookmarks/bookmarks.h"

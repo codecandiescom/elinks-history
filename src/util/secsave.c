@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.23 2002/12/07 15:28:38 pasky Exp $ */
+/* $Id: secsave.c,v 1.24 2002/12/07 20:05:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "config/options.h"
 #include "util/memory.h"

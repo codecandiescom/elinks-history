@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.52 2002/12/04 18:33:50 zas Exp $ */
+/* $Id: parser.c,v 1.53 2002/12/07 20:05:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 #include <unistd.h> /* XXX: only for debug_stack() */
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "bfu/align.h"
 #include "bfu/menu.h"

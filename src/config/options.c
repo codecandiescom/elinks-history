@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.135 2002/12/07 16:23:46 pasky Exp $ */
+/* $Id: options.c,v 1.136 2002/12/07 20:05:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #include <arpa/inet.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "bfu/listbox.h"
 #include "config/conf.h"

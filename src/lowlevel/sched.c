@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.62 2002/12/06 20:44:19 zas Exp $ */
+/* $Id: sched.c,v 1.63 2002/12/07 20:05:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,7 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "config/options.h"
 #include "document/cache.h"

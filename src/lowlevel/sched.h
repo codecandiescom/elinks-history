@@ -1,9 +1,9 @@
-/* $Id: sched.h,v 1.23 2002/12/05 22:35:08 pasky Exp $ */
+/* $Id: sched.h,v 1.24 2002/12/07 20:05:56 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
 
-#include "links.h" /* tcount */
+#include "elinks.h" /* tcount */
 #include "document/cache.h"
 #include "lowlevel/ttime.h"
 #include "ssl/ssl.h"

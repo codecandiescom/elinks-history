@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.22 2002/12/07 15:28:38 pasky Exp $ */
+/* $Id: interlink.c,v 1.23 2002/12/07 20:05:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #endif
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 
-#include "links.h"
+#include "elinks.h"
 
 #include "document/session.h"
 #include "lowlevel/af_unix.h"

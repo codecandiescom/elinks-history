@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.11 2002/09/09 15:53:08 zas Exp $ */
+/* $Id: date.c,v 1.12 2002/12/07 20:05:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@
 #endif
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "protocol/http/date.h"
 

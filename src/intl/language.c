@@ -1,5 +1,5 @@
 /* Support for multiple languages */
-/* $Id: language.c,v 1.13 2002/12/07 15:28:37 pasky Exp $ */
+/* $Id: language.c,v 1.14 2002/12/07 20:05:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 
-#include "links.h"
+#include "elinks.h"
 
 #include "lowlevel/terminal.h"
 #include "intl/charsets.h"

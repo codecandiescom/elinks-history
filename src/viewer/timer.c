@@ -1,11 +1,11 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.1 2002/08/11 13:49:45 pasky Exp $ */
+/* $Id: timer.c,v 1.2 2002/12/07 20:05:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "config/kbdbind.h"
 #include "config/options.h"

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.16 2002/11/30 01:08:26 pasky Exp $ */
+/* $Id: globhist.c,v 1.17 2002/12/07 20:05:55 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -9,7 +9,7 @@
 #include "config.h"
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include <stdio.h>
 #include <stdlib.h>

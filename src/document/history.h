@@ -1,9 +1,9 @@
-/* $Id: history.h,v 1.2 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: history.h,v 1.3 2002/12/07 20:05:54 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HISTORY_H
 #define EL__DOCUMENT_HISTORY_H
 
-#include "links.h" /* list stuff */
+#include "util/lists.h"
 #include "document/location.h"
 #include "document/session.h"
 

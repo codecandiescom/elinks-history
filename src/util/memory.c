@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.10 2002/12/03 22:00:55 zas Exp $ */
+/* $Id: memory.c,v 1.11 2002/12/07 20:05:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "links.h"
+#include "elinks.h"
 
 #include "util/error.h"
 #include "util/memory.h"

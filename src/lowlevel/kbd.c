@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.16 2002/12/02 14:48:13 zas Exp $ */
+/* $Id: kbd.c,v 1.17 2002/12/07 20:05:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #define HPUX_PIPE	1
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "config/options.h"
 #include "lowlevel/kbd.h"

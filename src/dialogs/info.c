@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.19 2002/12/07 09:34:06 zas Exp $ */
+/* $Id: info.c,v 1.20 2002/12/07 20:05:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,7 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include "elinks.h"
 
 #include "bfu/msgbox.h"
 #include "dialogs/info.h"

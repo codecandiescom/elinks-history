@@ -1,5 +1,5 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.14 2002/05/20 12:39:13 pasky Exp $ */
+/* $Id: conf.c,v 1.15 2002/05/20 14:50:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,6 +234,80 @@ next:
 	}
 }
 
+
+unsigned char *
+read_config_file(unsigned char *name)
+{
+#define FILE_BUF	1024
+	unsigned char cfg_buffer[FILE_BUF];
+	unsigned char *s;
+	int l = 0;
+	int fd, r;
+
+	fd = open(name, O_RDONLY | O_NOCTTY);
+	if (fd < 0) return NULL;
+	set_bin(fd);
+
+	s = init_str();
+
+	while ((r = read(fd, cfg_buffer, FILE_BUF)) > 0) {
+		int i;
+
+		/* Clear problems ;). */
+		for (i = 0; i < r; i++)
+			if (!cfg_buffer[i])
+				cfg_buffer[i] = ' ';
+
+		add_bytes_to_str(&s, &l, cfg_buffer, r);
+	}
+
+	if (r < 0) {
+		mem_free(s);
+		s = NULL;
+	}
+
+	close(fd);
+
+	return s;
+#undef FILE_BUF
+}
+
+void
+load_config_file(unsigned char *prefix, unsigned char *name)
+{
+	unsigned char *config_str, *config_file;
+
+	config_file = straconcat(prefix, name, NULL);
+	if (!config_file) return;
+
+	config_str = read_config_file(config_file);
+	if (!config_str) {
+		mem_free(config_file);
+		config_file = straconcat(prefix, ".", name, NULL);
+		if (!config_file) return;
+
+		config_str = read_config_file(config_file);
+		if (!config_str) {
+			mem_free(config_file);
+			return;
+		}
+	}
+
+	parse_config_file(config_file, config_str, root_options);
+
+	mem_free(config_str);
+	mem_free(config_file);
+}
+
+void
+load_config()
+{
+	load_config_file("/etc/elinks/", "elinks.cfg");
+	load_config_file(elinks_home, "elinks.cfg");
+	load_config_file(elinks_home, "user.cfg");
+}
+
+
 /* TODO: We want to get rid of user.cfg. Let's rewrite config file
  * non-destructively. */
 unsigned char *
@@ -261,70 +335,6 @@ create_config_string(struct hash *options)
 	add_to_str(&str, &len, NEWLINE);
 
 	return str;
-}
-
-/* TODO: No line context. Treat whole file as one long line, where # is comment
- * start and \n is comment end. */
-
-#define FILE_BUF	1024
-
-unsigned char cfg_buffer[FILE_BUF];
-
-unsigned char *
-read_config_file(unsigned char *name)
-{
-	int h, r;
-	int l = 0;
-	unsigned char *s;
-	if ((h = open(name, O_RDONLY | O_NOCTTY)) == -1) return NULL;
-	set_bin(h);
-	s = init_str();
-	while ((r = read(h, cfg_buffer, FILE_BUF)) > 0) {
-		int i;
-		for (i = 0; i < r; i++) if (!cfg_buffer[i]) cfg_buffer[i] = ' ';
-		add_bytes_to_str(&s, &l, cfg_buffer, r);
-	}
-	if (r == -1) mem_free(s), s = NULL;
-	close(h);
-	return s;
-}
-
-#undef FILE_BUF
-
-
-void
-load_config_file(unsigned char *prefix, unsigned char *name)
-{
-	unsigned char *c, *config_file;
-
-	config_file = straconcat(prefix, name, NULL);
-	if (!config_file) return;
-
-	c = read_config_file(config_file);
-	if (c) goto ok;
-	mem_free(config_file);
-
-	config_file = straconcat(prefix, ".", name, NULL);
-	if (!config_file) return;
-
-	c = read_config_file(config_file);
-	if (c) goto ok;
-
-	mem_free(config_file);
-	return;
-
-ok:
-	parse_config_file(config_file, c, root_options);
-	mem_free(c);
-	mem_free(config_file);
-}
-
-void
-load_config()
-{
-	load_config_file("/etc/elinks/", "elinks.cfg");
-	load_config_file(elinks_home, "elinks.cfg");
-	load_config_file(elinks_home, "user.cfg");
 }
 
 /* TODO: The error condition should be handled somewhere else. */

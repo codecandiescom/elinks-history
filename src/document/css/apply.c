@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: apply.c,v 1.13 2004/01/17 15:21:52 pasky Exp $ */
+/* $Id: apply.c,v 1.14 2004/01/17 15:25:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,14 +266,14 @@ ride_on:
 typedef void (*css_applier_t)(struct html_element *element,
 			      struct css_property *prop);
 
-void
+static void
 css_apply_color(struct html_element *element, struct css_property *prop)
 {
 	assert(prop->value_type == CSS_DV_COLOR);
 	element->attr.fg = prop->value.color;
 }
 
-void
+static void
 css_apply_background_color(struct html_element *element,
 			   struct css_property *prop)
 {
@@ -281,7 +281,7 @@ css_apply_background_color(struct html_element *element,
 	element->attr.bg = prop->value.color;
 }
 
-void
+static void
 css_apply_font_weight(struct html_element *element, struct css_property *prop)
 {
 	assert(prop->value_type == CSS_DV_FONT_ATTRIBUTE);

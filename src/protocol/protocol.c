@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.63 2004/08/18 17:24:17 jonas Exp $ */
+/* $Id: protocol.c,v 1.64 2004/08/20 04:05:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,12 +64,12 @@ static const struct protocol_backend protocol_backends[] = {
 	{ "proxy",	3128, proxy_protocol_handler,	1, 1, 0, 0 },
 
 	/* Keep these last! */
-	{ NULL,		   0, NULL,			0, 0 },
+	{ NULL,		   0, NULL,			0, 0, 0, 0 },
 
-	{ "user",	   0, NULL,			0, 0 },
+	{ "user",	   0, NULL,			0, 0, 1, 0 },
 	/* Internal protocol for mapping to protocol.user.* handlers. Placed
 	 * last because it's checked first and else should be ignored. */
-	{ "custom",	   0, NULL,			0, 0 },
+	{ "custom",	   0, NULL,			0, 0, 1, 0 },
 };
 
 

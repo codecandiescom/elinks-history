@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.75 2003/05/04 19:30:51 pasky Exp $ */
+/* $Id: renderer.c,v 1.76 2003/05/04 20:42:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1882,14 +1882,14 @@ html_interpret(struct session *ses)
 	o.xp = 0;
 	o.yp = 0;
 	if (show_title_bar) o.yp = 1;
-	o.xw = ses->term->x;
-	o.yw = ses->term->y;
+	o.xw = ses->tab->term->x;
+	o.yw = ses->tab->term->y;
 	if (show_title_bar) o.yw--;
 	if (show_status_bar || ses->visible_tab_bar) o.yw--;
 	if (show_status_bar && ses->visible_tab_bar) o.yw--;
 
-	o.col = get_opt_bool_tree(ses->term->spec, "colors");
-	o.cp = get_opt_int_tree(ses->term->spec, "charset");
+	o.col = get_opt_bool_tree(ses->tab->term->spec, "colors");
+	o.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
 
 	mk_document_options(&o);
 

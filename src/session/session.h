@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.11 2003/05/04 20:39:23 pasky Exp $ */
+/* $Id: session.h,v 1.12 2003/05/04 20:42:13 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -53,7 +53,6 @@ struct session {
 
 	struct list_head history;
 	struct list_head unhistory;
-	struct terminal *term;
 	struct window *tab;
 	int id;
 	struct f_data_c *screen;

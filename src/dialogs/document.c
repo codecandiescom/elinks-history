@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.32 2003/05/04 17:25:52 pasky Exp $ */
+/* $Id: document.c,v 1.33 2003/05/04 20:42:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,9 +211,9 @@ void
 state_msg(struct session *ses)
 {
 	if (!have_location(ses))
-		loc_msg(ses->term, NULL, NULL);
+		loc_msg(ses->tab->term, NULL, NULL);
 	else
-		loc_msg(ses->term, cur_loc(ses), current_frame(ses));
+		loc_msg(ses->tab->term, cur_loc(ses), current_frame(ses));
 }
 
 /* Headers info. message box. */
@@ -223,7 +223,7 @@ head_msg(struct session *ses)
 	struct cache_entry *ce;
 
 	if (!have_location(ses)) {
-		msg_box(ses->term, NULL,
+		msg_box(ses->tab->term, NULL,
 			N_("Header info"), AL_LEFT,
 			N_("You are nowhere!"),
 			NULL, 1,
@@ -270,7 +270,7 @@ head_msg(struct session *ses)
 
 			if (*headers)
 			/* Headers info message box. */
-				msg_box(ses->term, getml(headers, NULL),
+				msg_box(ses->tab->term, getml(headers, NULL),
 				N_("Header info"), AL_LEFT,
 				headers,
 				NULL, 1,
@@ -282,7 +282,7 @@ head_msg(struct session *ses)
 		mem_free(headers);
 	}
 
-	msg_box(ses->term, NULL,
+	msg_box(ses->tab->term, NULL,
 		N_("Header info"), AL_LEFT,
 		N_("No header info."),
 		NULL, 1,

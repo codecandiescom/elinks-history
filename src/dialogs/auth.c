@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.25 2003/05/04 17:25:52 pasky Exp $ */
+/* $Id: auth.c,v 1.26 2003/05/04 20:42:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,7 +116,7 @@ do_auth_dialog(struct session *ses)
 {
 	struct dialog *d;
 	struct dialog_data *dd;
-	struct terminal *term = ses->term;
+	struct terminal *term = ses->tab->term;
 	struct http_auth_basic *a = NULL;
 
 	if (!list_empty(http_auth_basic_list)

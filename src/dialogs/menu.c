@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.88 2003/05/04 17:25:53 pasky Exp $ */
+/* $Id: menu.c,v 1.89 2003/05/04 20:42:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,7 @@ menu_reload(struct terminal *term, void *d, struct session *ses)
 void
 really_exit_prog(struct session *ses)
 {
-	register_bottom_half((void (*)(void *))destroy_terminal, ses->term);
+	register_bottom_half((void (*)(void *))destroy_terminal, ses->tab->term);
 }
 
 static inline void
@@ -127,9 +127,9 @@ static void
 query_exit(struct session *ses)
 {
 	ses->exit_query = 1;
-	msg_box(ses->term, NULL,
+	msg_box(ses->tab->term, NULL,
 		N_("Exit ELinks"), AL_CENTER,
-		(ses->term->next == ses->term->prev && are_there_downloads())
+		(ses->tab->term->next == ses->tab->term->prev && are_there_downloads())
 		? N_("Do you really want to exit ELinks "
 		     "(and terminate all downloads)?")
 		: N_("Do you really want to exit ELinks?"),
@@ -630,7 +630,7 @@ static struct menu_item main_menu[] = {
 void
 activate_bfu_technology(struct session *ses, int item)
 {
-	do_mainmenu(ses->term, main_menu, ses, item);
+	do_mainmenu(ses->tab->term, main_menu, ses, item);
 }
 
 /* XXX: Used at foreign places. */
@@ -639,7 +639,7 @@ struct input_history goto_url_history = { 0, {D_LIST_HEAD(goto_url_history.items
 void
 dialog_goto_url(struct session *ses, char *url)
 {
-	input_field(ses->term, NULL, N_("Go to URL"), N_("Enter URL"),
+	input_field(ses->tab->term, NULL, N_("Go to URL"), N_("Enter URL"),
 		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
 		    MAX_STR_LEN, url, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) goto_url_with_hook,
@@ -649,7 +649,7 @@ dialog_goto_url(struct session *ses, char *url)
 static void
 dialog_save_url(struct session *ses)
 {
-	input_field(ses->term, NULL, N_("Save URL"), N_("Enter URL"),
+	input_field(ses->tab->term, NULL, N_("Save URL"), N_("Enter URL"),
 		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) save_url,
@@ -677,7 +677,7 @@ query_file(struct session *ses, unsigned char *url,
 	add_bytes_to_str(&def, &dfl, file, l);
 
 	if (interactive) {
-		input_field(ses->term, NULL,
+		input_field(ses->tab->term, NULL,
 			    N_("Download"), N_("Save to file"), N_("OK"),
 			    N_("Cancel"),
 			    ses, &file_history, MAX_STR_LEN, def,
@@ -696,7 +696,7 @@ static struct input_history search_history = { 0, {D_LIST_HEAD(search_history.it
 void
 search_back_dlg(struct session *ses, struct f_data_c *f, int a)
 {
-	input_field(ses->term, NULL, N_("Search backward"), N_("Search for text"),
+	input_field(ses->tab->term, NULL, N_("Search backward"), N_("Search for text"),
 		    N_("OK"), N_("Cancel"), ses, &search_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) search_for_back,
@@ -706,7 +706,7 @@ search_back_dlg(struct session *ses, struct f_data_c *f, int a)
 void
 search_dlg(struct session *ses, struct f_data_c *f, int a)
 {
-	input_field(ses->term, NULL, N_("Search"), N_("Search for text"),
+	input_field(ses->tab->term, NULL, N_("Search"), N_("Search for text"),
 		    N_("OK"), N_("Cancel"), ses, &search_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) search_for,

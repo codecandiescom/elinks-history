@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.51 2003/05/04 20:39:24 pasky Exp $ */
+/* $Id: view.c,v 1.52 2003/05/04 20:42:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1027,7 +1027,7 @@ draw_frames(struct session *ses)
 		more = 0;
 		foreach(f, ses->scrn_frames) {
 			if (f->depth == d)
-				draw_doc(ses->term, f, f == cf);
+				draw_doc(ses->tab->term, f, f == cf);
 			else if (f->depth > d)
 				more = 1;
 		}
@@ -1040,13 +1040,13 @@ draw_formatted(struct session *ses)
 {
 	if (!ses->screen || !ses->screen->f_data) {
 		/*internal("document not formatted");*/
-		fill_area(ses->term, 0, 1, ses->term->x, ses->term->y - 2, ' ');
+		fill_area(ses->tab->term, 0, 1, ses->tab->term->x, ses->tab->term->y - 2, ' ');
 		return;
 	}
 	if (!ses->screen->vs && have_location(ses))
 		ses->screen->vs = &cur_loc(ses)->vs;
 	ses->screen->xl = ses->screen->yl = -1;
-	draw_doc(ses->term, ses->screen, 1);
+	draw_doc(ses->tab->term, ses->screen, 1);
 	draw_frames(ses);
 	print_screen_status(ses);
 	redraw_from_window(ses->tab);
@@ -1641,7 +1641,7 @@ error:
 	m1 = stracpy(sv->value);
 	if (!m1) return;
 	m2 = stracpy((unsigned char *) strerror(errno));
-	msg_box(ses->term, getml(m1, m2, NULL),
+	msg_box(ses->tab->term, getml(m1, m2, NULL),
 		N_("Error while posting form"), AL_CENTER | AL_EXTD_TEXT,
 		N_("Could not get file"), " ", m1, ": ", m2, NULL,
 		ses, 1,
@@ -1678,7 +1678,7 @@ get_form_url(struct session *ses, struct f_data_c *f,
 	}
 	if (!frm->action) return NULL;
 	get_succesful_controls(f, frm, &submit);
-	cp_from = get_opt_int_tree(ses->term->spec, "charset");
+	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
 	cp_to = f->f_data->cp;
 	if (frm->method == FM_GET || frm->method == FM_POST)
 		encode_controls(&submit, &data, &len, cp_from, cp_to);
@@ -1860,10 +1860,10 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 			return 1;
 
 		fd->f_data->refcount++;
-		add_empty_window(ses->term,
+		add_empty_window(ses->tab->term,
 				 (void (*)(void *)) decrement_fc_refcount,
 				 fd->f_data);
-		do_select_submenu(ses->term, link->form->menu, ses);
+		do_select_submenu(ses->tab->term, link->form->menu, ses);
 
 	} else {
 		internal("bad link type %d", link->type);
@@ -1918,7 +1918,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 		fixup_select_state(frm, fs);
 	}
 
-	draw_doc(ses->term, f, 1);
+	draw_doc(ses->tab->term, f, 1);
 	print_screen_status(ses);
 	redraw_from_window(ses->tab);
 	/*if (!has_form_submit(f->f_data, l->form)) {
@@ -2215,7 +2215,7 @@ yyyy:
 				break;
 			case ACT_EDIT:
 				if (frm->type == FC_TEXTAREA && !frm->ro)
-				  	textarea_edit(0, ses->term, frm, fs, f, l);
+				  	textarea_edit(0, ses->tab->term, frm, fs, f, l);
 				break;
 			case ACT_COPY_CLIPBOARD:
 				set_clipboard_text(fs->value);
@@ -2298,7 +2298,7 @@ b:
 	} else x = 0;
 
 	if (x) {
-		draw_form_entry(ses->term, f, l);
+		draw_form_entry(ses->tab->term, f, l);
 		redraw_from_window(ses->tab);
 	}
 	return x;
@@ -2416,7 +2416,7 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 	}
 	if (!ses->search_word) {
 		if (!ses->last_search_word) {
-			msg_box(ses->term, NULL,
+			msg_box(ses->tab->term, NULL,
 				N_("Search"), AL_CENTER,
 				N_("No previous search"),
 				NULL, 1,
@@ -2441,7 +2441,7 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 			set_link(f);
 			find_next_link_in_search(f, ses->search_direction * 2);
 #if 0
-			draw_doc(ses->term, f, 1);
+			draw_doc(ses->tab->term, f, 1);
 			print_screen_status(ses);
 			redraw_from_window(ses->tab);
 #endif
@@ -2459,10 +2459,10 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 		}
 	} while ((c += f->yw) < f->f_data->y + f->yw);
 
-	/*draw_doc(ses->term, f, 1);
+	/*draw_doc(ses->tab->term, f, 1);
 	print_screen_status(ses);
 	redraw_from_window(ses->tab);*/
-	msg_box(ses->term, NULL,
+	msg_box(ses->tab->term, NULL,
 		N_("Search"), AL_CENTER,
 		N_("Search string not found"),
 		NULL, 1,
@@ -2682,9 +2682,9 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_FIND_NEXT: find_next(ses, fd, 0); break;
 			case ACT_FIND_NEXT_BACK: find_next_back(ses, fd, 0); break;
 			case ACT_ZOOM_FRAME: set_frame(ses, fd, 0), x = 2; break;
-			case ACT_VIEW_IMAGE: send_image(ses->term, NULL, ses); break;
-			case ACT_DOWNLOAD_IMAGE: send_download_image(ses->term, NULL, ses); break;
-			case ACT_LINK_MENU: link_menu(ses->term, NULL, ses); break;
+			case ACT_VIEW_IMAGE: send_image(ses->tab->term, NULL, ses); break;
+			case ACT_DOWNLOAD_IMAGE: send_download_image(ses->tab->term, NULL, ses); break;
+			case ACT_LINK_MENU: link_menu(ses->tab->term, NULL, ses); break;
 			case ACT_JUMP_TO_LINK: break;
 			default:
 				if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
@@ -2700,7 +2700,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					nl = f_data->nlinks, lnl = 1;
 					while (nl) nl /= 10, lnl++;
 					if (lnl > 1)
-						input_field(ses->term, NULL, N_("Go to link"),
+						input_field(ses->tab->term, NULL, N_("Go to link"),
 							    N_("Enter link number"), N_("OK"),
 							    N_("Cancel"), ses, NULL, lnl, d, 1,
 							    f_data->nlinks, check_number,
@@ -2712,8 +2712,8 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					static int n = -1;
 					int i;
 					fd->xl = -1234;
-					draw_doc(ses->term, fd, 1);
-					clear_link(ses->term, fd);
+					draw_doc(ses->tab->term, fd, 1);
+					clear_link(ses->tab->term, fd);
 					n++;
 					i = n;
 					foreachback(node, fd->f_data->nodes) {
@@ -2722,8 +2722,8 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 							for (y = 0; y < node->yw; y++) for (x = 0; x < node->xw && x < 1000; x++) {
 								int rx = x + node->x + fd->xp - fd->vs->view_posx;
 								int ry = y + node->y + fd->yp - fd->vs->view_pos;
-								if (rx >= 0 && ry >= 0 && rx < ses->term->x && ry < ses->term->y) {
-									set_color(ses->term, rx, ry, 0x3800);
+								if (rx >= 0 && ry >= 0 && rx < ses->tab->term->x && ry < ses->tab->term->y) {
+									set_color(ses->tab->term, rx, ry, 0x3800);
 								}
 							}
 							break;
@@ -2763,14 +2763,14 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			     link->type == L_CHECKBOX || link->type == L_SELECT)
 			    && (ev->b & BM_ACT) == B_UP) {
 
-				draw_doc(ses->term, fd, 1);
+				draw_doc(ses->tab->term, fd, 1);
 				print_screen_status(ses);
 				redraw_from_window(ses->tab);
 
 				if ((ev->b & BM_BUTT) < B_MIDDLE)
 					x = enter(ses, fd, 0);
 				else
-					link_menu(ses->term, NULL, ses);
+					link_menu(ses->tab->term, NULL, ses);
 			}
 		} else {
 			/* Clicking to the edge of screen (TODO: possibly only
@@ -2835,7 +2835,7 @@ send_to_frame(struct session *ses, struct event *ev)
 	}
 	r = frame_ev(ses, fd, ev);
 	if (r == 1) {
-		draw_doc(ses->term, fd, 1);
+		draw_doc(ses->tab->term, fd, 1);
 		print_screen_status(ses);
 		redraw_from_window(ses->tab);
 	}
@@ -2968,39 +2968,39 @@ quak:
 				goto x;
 			case ACT_SAVE_FORMATTED:
 				/* TODO: if (!anonymous) for non-HTTI ? --pasky */
-				menu_save_formatted(ses->term, (void *) 1, ses);
+				menu_save_formatted(ses->tab->term, (void *) 1, ses);
 				goto x;
 			case ACT_ADD_BOOKMARK:
 #ifdef BOOKMARKS
 				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-					launch_bm_add_doc_dialog(ses->term, NULL, ses);
+					launch_bm_add_doc_dialog(ses->tab->term, NULL, ses);
 #endif
 				goto x;
 			case ACT_ADD_BOOKMARK_LINK:
 #ifdef BOOKMARKS
 				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-					launch_bm_add_link_dialog(ses->term, NULL, ses);
+					launch_bm_add_link_dialog(ses->tab->term, NULL, ses);
 #endif
 				goto x;
 			case ACT_BOOKMARK_MANAGER:
 #ifdef BOOKMARKS
 				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-					menu_bookmark_manager(ses->term, NULL, ses);
+					menu_bookmark_manager(ses->tab->term, NULL, ses);
 #endif
 				goto x;
 			case ACT_HISTORY_MANAGER:
 #ifdef GLOBHIST
 				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-					menu_history_manager(ses->term, NULL, ses);
+					menu_history_manager(ses->tab->term, NULL, ses);
 #endif
 				goto x;
 			case ACT_OPTIONS_MANAGER:
 				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-					menu_options_manager(ses->term, NULL, ses);
+					menu_options_manager(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_KEYBINDING_MANAGER:
 				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-					menu_keybinding_manager(ses->term, NULL, ses);
+					menu_keybinding_manager(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_COOKIES_LOAD:
 #ifdef COOKIES
@@ -3010,7 +3010,7 @@ quak:
 #endif
 				goto x;
 			case ACT_REALLY_QUIT:
-				exit_prog(ses->term, (void *)1, ses);
+				exit_prog(ses->tab->term, (void *)1, ses);
 				goto x;
 			case ACT_LUA_CONSOLE:
 #ifdef HAVE_LUA
@@ -3025,7 +3025,7 @@ quak:
 			case ACT_QUIT:
 
 quit:
-				exit_prog(ses->term, (void *)(ev->x == KBD_CTRL_C), ses);
+				exit_prog(ses->tab->term, (void *)(ev->x == KBD_CTRL_C), ses);
 				goto x;
 			case ACT_DOCUMENT_INFO:
 				state_msg(ses);
@@ -3055,20 +3055,20 @@ quit:
 				draw_formatted(ses);
 				goto x;
 			case ACT_OPEN_NEW_WINDOW:
-				open_in_new_window(ses->term, send_open_new_xterm, ses);
+				open_in_new_window(ses->tab->term, send_open_new_xterm, ses);
 				goto x;
 			case ACT_OPEN_LINK_IN_NEW_WINDOW:
-				open_in_new_window(ses->term, send_open_in_new_xterm, ses);
+				open_in_new_window(ses->tab->term, send_open_in_new_xterm, ses);
 				goto x;
 
 			case ACT_TAB_CLOSE:
-				close_tab(ses->term);
+				close_tab(ses->tab->term);
 				goto x;
 			case ACT_TAB_NEXT:
-				switch_to_tab(ses->term, ses->term->current_tab + 1);
+				switch_to_tab(ses->tab->term, ses->tab->term->current_tab + 1);
 				goto x;
 			case ACT_TAB_PREV:
-				switch_to_tab(ses->term, ses->term->current_tab - 1);
+				switch_to_tab(ses->tab->term, ses->tab->term->current_tab - 1);
 				goto x;
 
 			default:
@@ -3078,9 +3078,9 @@ quit:
 
 					ev->y &= ~KBD_ALT;
 					activate_bfu_technology(ses, -1);
-					m = ses->term->windows.next;
+					m = ses->tab->term->windows.next;
 					m->handler(m, ev, 0);
-					if (ses->term->windows.next == m) {
+					if (ses->tab->term->windows.next == m) {
 						delete_window(m);
 
 					} else goto x;
@@ -3092,7 +3092,7 @@ quit:
 		    && current_frame(ses)
 		    && try_document_key(ses, current_frame(ses), ev)) {
 			/* The document ate the key! */
-			draw_doc(ses->term, current_frame(ses), 1);
+			draw_doc(ses->tab->term, current_frame(ses), 1);
 			print_screen_status(ses);
 			redraw_from_window(ses->tab);
 			return;
@@ -3105,21 +3105,21 @@ quit:
 			struct window *m;
 
 			activate_bfu_technology(ses, -1);
-			m = ses->term->windows.next;
+			m = ses->tab->term->windows.next;
 			m->handler(m, ev, 0);
 			goto x;
 		}
-		if (ev->y == ses->term->y-2 && (ev->b & BM_ACT) == B_DOWN
+		if (ev->y == ses->tab->term->y-2 && (ev->b & BM_ACT) == B_DOWN
 		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {
-			int nb_tabs = number_of_tabs(ses->term);
-			int tab_width = ses->term->x / nb_tabs;
+			int nb_tabs = number_of_tabs(ses->tab->term);
+			int tab_width = ses->tab->term->x / nb_tabs;
 			int tab = ev->x / tab_width;
 
 			if (tab < 0) tab = 0;
 			if (tab >= nb_tabs)
 				tab = nb_tabs - 1;
 
-			switch_to_tab(ses->term, tab);
+			switch_to_tab(ses->tab->term, tab);
 			goto x;
 		}
 		do_mouse_event(ses, ev);
@@ -3316,7 +3316,7 @@ save_url(struct session *ses, unsigned char *url)
 {
 	int l = 0;
 	struct f_data_c *fd = current_frame(ses);
-	unsigned char *u = translate_url(url, ses->term->cwd);
+	unsigned char *u = translate_url(url, ses->tab->term->cwd);
 
 	if (!u) {
 		struct status stat = { NULL_LIST_HEAD, NULL, NULL, S_BAD_URL,
@@ -3387,7 +3387,7 @@ save_formatted(struct session *ses, unsigned char *file)
 	struct f_data_c *f = current_frame(ses);
 
 	if (!f || !f->f_data) return;
-	create_download_file(ses->term, file, NULL, 0, 0,
+	create_download_file(ses->tab->term, file, NULL, 0, 0,
 			     save_formatted_finish, f->f_data);
 }
 
@@ -3672,7 +3672,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 unsigned char *
 print_current_link(struct session *ses)
 {
-	return print_current_link_do(current_frame(ses), ses->term);
+	return print_current_link_do(current_frame(ses), ses->tab->term);
 }
 
 
@@ -3736,5 +3736,5 @@ end:
 unsigned char *
 print_current_title(struct session *ses)
 {
-	return print_current_titlex(current_frame(ses), ses->term->x);
+	return print_current_titlex(current_frame(ses), ses->tab->term->x);
 }

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.23 2003/05/04 19:30:53 pasky Exp $ */
+/* $Id: download.c,v 1.24 2003/05/04 20:42:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -915,7 +915,7 @@ common_download(struct session *ses, unsigned char *file, int resume)
 
 	kill_downloads_to_file(file);
 
-	create_download_file(ses->term, file, &cmdw_hop->real_file, 0, resume,
+	create_download_file(ses->tab->term, file, &cmdw_hop->real_file, 0, resume,
 			common_download_do, cmdw_hop);
 }
 
@@ -949,7 +949,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	add_to_list(downloads, down);
 	load_url(url, cmdw_hop->ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE,
 		 (resume ? down->last_pos : 0));
-	display_download(cmdw_hop->ses->term, down, cmdw_hop->ses);
+	display_download(cmdw_hop->ses->tab->term, down, cmdw_hop->ses);
 
 	mem_free(cmdw_hop);
 	return;
@@ -1010,7 +1010,7 @@ continue_download(struct session *ses, unsigned char *file)
 
 	kill_downloads_to_file(file);
 
-	create_download_file(ses->term, file, &codw_hop->real_file,
+	create_download_file(ses->tab->term, file, &codw_hop->real_file,
 			!!ses->tq_prog, 0, continue_download_do, codw_hop);
 }
 
@@ -1048,7 +1048,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	add_to_list(downloads, down);
 	change_connection(&codw_hop->ses->tq, &down->stat, PRI_DOWNLOAD, 0);
 	tp_free(codw_hop->ses);
-	display_download(codw_hop->ses->term, down, codw_hop->ses);
+	display_download(codw_hop->ses->tab->term, down, codw_hop->ses);
 
 	mem_free(codw_hop);
 	return;
@@ -1167,7 +1167,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 
 	if (!assoc) {
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
-			msg_box(ses->term, getml(content_type, NULL),
+			msg_box(ses->tab->term, getml(content_type, NULL),
 				N_("Unknown type"), AL_CENTER | AL_EXTD_TEXT,
 				N_("Content type is"), " ", content_type, ".\n",
 				N_("Do you want to save or display this file?"), NULL,
@@ -1176,7 +1176,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->term, getml(content_type, NULL),
+			msg_box(ses->tab->term, getml(content_type, NULL),
 				N_("Unknown type"), AL_CENTER | AL_EXTD_TEXT,
 				N_("Content type is"), " ", content_type, ".\n",
 				N_("Do you want to display this file?"), NULL,
@@ -1208,7 +1208,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 		}
 
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
-			msg_box(ses->term, getml(content_type, name, NULL),
+			msg_box(ses->tab->term, getml(content_type, name, NULL),
 				N_("What to do?"), AL_CENTER | AL_EXTD_TEXT,
 				N_("Content type is"), " ", content_type, ".\n",
 				N_("Do you want to open file with"),
@@ -1219,7 +1219,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->term, getml(content_type, name, NULL),
+			msg_box(ses->tab->term, getml(content_type, name, NULL),
 				N_("What to do?"), AL_CENTER | AL_EXTD_TEXT,
 				N_("Content type is"), " ", content_type, ".\n",
 				N_("Do you want to open file with"),
@@ -1254,7 +1254,7 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 	r = 1;
 	if (!strcasecmp(ct, "text/plain")) goto free_ct;
 
-	assoc = get_mime_type_handler(ses->term, ct);
+	assoc = get_mime_type_handler(ses->tab->term, ct);
 
 #ifdef MAILCAP
 	if (!assoc) {

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.37 2003/05/04 17:25:54 pasky Exp $ */
+/* $Id: core.c,v 1.38 2003/05/04 20:42:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,7 @@ l_current_document_formatted(LS)
 
 	if (!lua_ses || !(f = current_frame(lua_ses))) goto error;
 	if (width > 0) {
-		old_width = lua_ses->term->x, lua_ses->term->x = width;
+		old_width = lua_ses->tab->term->x, lua_ses->tab->term->x = width;
 		html_interpret(lua_ses);
 	}
 	fd = f->f_data;
@@ -180,7 +180,7 @@ l_current_document_formatted(LS)
 	lua_pushlstring(S, buf, l);
 	mem_free(buf);
 	if (width > 0) {
-		lua_ses->term->x = old_width;
+		lua_ses->tab->term->x = old_width;
 		html_interpret(lua_ses);
 	}
 	return 1;
@@ -232,7 +232,7 @@ static int
 l_execute(LS)
 {
 	if (lua_isstring(S, 1)) {
-		exec_on_terminal(lua_ses->term, (uchar *)lua_tostring(S, 1), "", 0);
+		exec_on_terminal(lua_ses->tab->term, (uchar *)lua_tostring(S, 1), "", 0);
 		lua_pushnumber(S, 0);
 	} else {
 		lua_pushnil(L);
@@ -442,7 +442,7 @@ l_edit_bookmark_dialog(LS)
 	d->items[4].fn = cancel_dialog;
 	d->items[4].text = N_("Cancel");
 	d->items[5].type = D_END;
-	do_dialog(lua_ses->term, d, getml(d, NULL));
+	do_dialog(lua_ses->tab->term, d, getml(d, NULL));
 
 	lua_pushnumber(S, 1);
 	return 1;
@@ -587,7 +587,7 @@ l_xdialog(LS)
 	d->items[i].text = N_("Cancel");
 	i++;
 	d->items[i].type = D_END;
-	do_dialog(lua_ses->term, d, getml(d, NULL));
+	do_dialog(lua_ses->tab->term, d, getml(d, NULL));
 
 	lua_pushnumber(S, 1);
 	return 1;
@@ -658,7 +658,7 @@ int
 prepare_lua(struct session *ses)
 {
 	lua_ses = ses;
-	errterm = lua_ses ? lua_ses->term : NULL;
+	errterm = lua_ses ? lua_ses->tab->term : NULL;
 	/* XXX this uses the wrong term, I think */
 	install_signal_handler(SIGINT, (void (*)(void *))handle_sigint, NULL, 1);
 
@@ -741,7 +741,7 @@ handle_ret_run(struct session *ses)
 	if (!cmd)
 		alert_lua_error("bad argument for run");
 	else
-		exec_on_terminal(ses->term, cmd, "", 1);
+		exec_on_terminal(ses->tab->term, cmd, "", 1);
 }
 
 static void
@@ -806,7 +806,7 @@ lua_console(struct session *ses, unsigned char *expr)
 void
 dialog_lua_console(struct session *ses)
 {
-	input_field(ses->term, NULL,
+	input_field(ses->tab->term, NULL,
 		    N_("Lua Console"),
 		    N_("Enter expression"),
 		    N_("OK"),

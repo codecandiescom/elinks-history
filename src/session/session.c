@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.34 2003/05/04 20:39:23 pasky Exp $ */
+/* $Id: session.c,v 1.35 2003/05/04 20:42:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,7 +214,7 @@ get_stat_msg(struct status *stat, struct terminal *term)
 void
 print_screen_status(struct session *ses)
 {
-	struct terminal *term = ses->term;
+	struct terminal *term = ses->tab->term;
 	unsigned char *msg = NULL;
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
@@ -374,7 +374,7 @@ print_error_dialog(struct session *ses, struct status *stat,
 	unsigned char *t = get_err_msg(stat->state);
 
 	if (!t) return;
-	msg_box(ses->term, NULL,
+	msg_box(ses->tab->term, NULL,
 		title, AL_CENTER,
 		t,
 		ses, 1,
@@ -530,13 +530,13 @@ ses_imgmap(struct session *ses)
 	if (get_image_map(ce->head, fr->data, fr->data + fr->length,
 			  ses->goto_position, &menu, &ml,
 			  ses->imgmap_href_base, ses->imgmap_target_base,
-			  get_opt_int_tree(ses->term->spec, "charset"),
+			  get_opt_int_tree(ses->tab->term->spec, "charset"),
 			  get_opt_int("document.codepage.assume"),
 			  get_opt_int("document.codepage.force_assumed")))
 		return;
 
-	add_empty_window(ses->term, (void (*)(void *))freeml, ml);
-	do_menu(ses->term, menu, ses, 0);
+	add_empty_window(ses->tab->term, (void (*)(void *))freeml, ml);
+	do_menu(ses->tab->term, menu, ses, 0);
 }
 
 void
@@ -643,7 +643,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	}
 
 	m2 = memacpy(url, (unsigned char *) strchr(url, POST_CHAR) - url);
-	msg_box(ses->term, getml(m2, wtd_data, wtd_data->url, wtd_data->pos,
+	msg_box(ses->tab->term, getml(m2, wtd_data, wtd_data->url, wtd_data->pos,
 				 NULL),
 		N_("Warning"), AL_CENTER | AL_EXTD_TEXT,
 		m1, " ", m2, "?", NULL,
@@ -1121,7 +1121,6 @@ create_basic_session(struct window *win)
 	create_history(ses);
 	init_list(ses->scrn_frames);
 	init_list(ses->more_files);
-        ses->term = win->term;
 	ses->tab = win;
 	ses->id = session_id++;
 	ses->screen = NULL;
@@ -1468,7 +1467,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 
 	ses->reloadlevel = cache_mode;
 
-	u = translate_url(url, ses->term->cwd);
+	u = translate_url(url, ses->tab->term->cwd);
 	if (!u) {
 		struct status stat = { NULL_LIST_HEAD, NULL, NULL, S_BAD_URL,
 				       PRI_CANCEL, 0, NULL, NULL };

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.46 2002/07/02 22:38:05 pasky Exp $ */
+/* $Id: conf.c,v 1.47 2002/07/03 12:02:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -393,7 +393,7 @@ load_config_file(unsigned char *prefix, unsigned char *name,
 {
 	unsigned char *config_str, *config_file;
 
-	config_file = straconcat(prefix, name, NULL);
+	config_file = straconcat(prefix, "/" name, NULL);
 	if (!config_file) return 1;
 
 	config_str = read_config_file(config_file);

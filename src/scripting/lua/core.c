@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.7 2002/07/02 22:38:05 pasky Exp $ */
+/* $Id: core.c,v 1.8 2002/07/03 12:02:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,9 +548,8 @@ static void
 do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 {
 	int oldtop = lua_gettop(S);
-	unsigned char *file = stracpy(prefix);
+	unsigned char *file = straconcat(prefix, "/", filename, NULL);
 
-	add_to_strn(&file, filename);
 	lua_dofile(S, file);
 	mem_free(file);
 	lua_settop(S, oldtop);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.544 2004/07/26 22:34:33 zas Exp $ */
+/* $Id: session.c,v 1.545 2004/07/26 22:38:20 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1021,13 +1021,13 @@ reload(struct session *ses, enum cache_mode cache_mode)
 	}
 
 	if (have_location(ses)) {
-		struct location *l = cur_loc(ses);
+		struct location *loc  = cur_loc(ses);
 		struct file_to_load *ftl;
 		struct document_view *doc_view = current_frame(ses);
 
-		l->download.data = ses;
-		l->download.end = (void *) doc_end_load;
-		load_uri(l->vs.uri, ses->referrer, &l->download, PRI_MAIN, cache_mode, -1);
+		loc->download.data = ses;
+		loc->download.end = (void *) doc_end_load;
+		load_uri(loc->vs.uri, ses->referrer, &loc->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
 			if (file_to_load_is_active(ftl))
 				continue;

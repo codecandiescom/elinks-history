@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.159 2004/04/11 20:13:10 jonas Exp $ */
+/* $Id: dialogs.c,v 1.160 2004/04/11 20:41:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,18 +31,64 @@
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/object.h"
+#include "util/secsave.h"
 
 
 void
 write_config_error(struct terminal *term, unsigned char *config_file,
-		   unsigned char *strerr)
+		   int secsave_error, int stdio_error)
 {
+	unsigned char *errmsg = NULL;
+	unsigned char *strerr;
+
+	if (secsave_error == SS_ERR_NONE && !stdio_error) {
+		write_config_success(term, config_file);
+		return;
+	}
+
+	switch (secsave_error) {
+		case SS_ERR_OPEN_READ:
+			strerr = _("Cannot read the file", term);
+			break;
+		case SS_ERR_STAT:
+			strerr = _("Cannot stat the file", term);
+			break;
+		case SS_ERR_ACCESS:
+			strerr = _("Cannot access the file", term);
+			break;
+		case SS_ERR_MKSTEMP:
+			strerr = _("Cannot create temp file", term);
+			break;
+		case SS_ERR_RENAME:
+			strerr = _("Cannot rename the file", term);
+			break;
+		case SS_ERR_DISABLED:
+			strerr = _("File saving disabled by option", term);
+			break;
+		case SS_ERR_OUT_OF_MEM:
+			strerr = _("Out of memory", term);
+			break;
+		case SS_ERR_OPEN_WRITE:
+			strerr = _("Cannot write the file", term);
+			break;
+		case SS_ERR_NONE: /* Impossible. */
+		case SS_ERR_OTHER:
+		default:
+			strerr = _("Secure file error", term);
+			break;
+	}
+
+	if (stdio_error > 0)
+		errmsg = straconcat(strerr, " (", strerror(stdio_error), ")", NULL);
+
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Write config error"), AL_CENTER,
 		msg_text(term, N_("Unable to write to config file %s.\n%s"),
-			 config_file, strerr),
+			 config_file, errmsg ? errmsg : strerr),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
+
+	if (errmsg) mem_free(errmsg);
 }
 
 static void
@@ -56,8 +102,6 @@ void
 write_config_success(struct terminal *term, unsigned char *config_file)
 {
 	if (!get_opt_bool("ui.success_msgbox")) return;
-
-	if (!term) return;
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Write config success"), AL_CENTER,

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.134 2004/04/11 20:13:09 jonas Exp $ */
+/* $Id: conf.c,v 1.135 2004/04/11 20:41:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -772,50 +772,7 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 		ret = secure_close(ssi);
 	}
 
-	if (term && (secsave_errno != SS_ERR_NONE || ret)) {
-		unsigned char *errmsg = NULL;
-		unsigned char *strerr = _("Secure file error", term);
-
-		switch (secsave_errno) {
-			case SS_ERR_NONE: /* Impossible. */
-				break;
-			case SS_ERR_OPEN_READ:
-				strerr = _("Cannot read the file", term);
-	  			break;
-			case SS_ERR_STAT:
-				strerr = _("Cannot stat the file", term);
-	  			break;
-			case SS_ERR_ACCESS:
-				strerr = _("Cannot access the file", term);
-	  			break;
-			case SS_ERR_MKSTEMP:
-				strerr = _("Cannot create temp file", term);
-	  			break;
-			case SS_ERR_RENAME:
-				strerr = _("Cannot rename the file", term);
-	  			break;
-			case SS_ERR_DISABLED:
-				strerr = _("File saving disabled by option", term);
-				break;
-			case SS_ERR_OUT_OF_MEM:
-				strerr = _("Out of memory", term);
-				break;
-			case SS_ERR_OPEN_WRITE:
-				strerr = _("Cannot write the file", term);
-				break;
-			case SS_ERR_OTHER:
-				break;
-		}
-
-		if (ret > 0)
-			errmsg = straconcat(strerr, " (", strerror(ret), ")", NULL);
-
-		write_config_error(term, config_file, errmsg ? errmsg : strerr);
-		if (errmsg) mem_free(errmsg);
-		goto free_cfg_str;
-	}
-
-	write_config_success(term, config_file);
+	if (term) write_config_error(term, config_file, secsave_errno, ret);
 
 free_cfg_str:
 	if (config_file) mem_free(config_file);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.103 2003/06/08 13:04:05 zas Exp $ */
+/* $Id: parser.c,v 1.104 2003/06/08 13:30:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,52 +75,53 @@ parse_element(unsigned char *e, unsigned char *eof, unsigned char **name,
 	tmp = *eof;
 	*eof = '\0';
 
-	if (*e == '/') e++;
-	if (e >= eof || !isA(*e)) goto end_1;
+#define INCR(e) if (++e == eof) goto end_1
 
-	while (isA(*e)) e++;
-	if (e >= eof || (!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/' && *e != ':')) goto end_1;
+	if (*e == '/') INCR(e);
+	if (!isA(*e)) goto end_1;
+
+	while (isA(*e)) INCR(e);
+
+	if ((!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/' && *e != ':')) goto end_1;
 
 	if (name && namelen) *namelen = e - *name;
 
-	while (WHITECHAR(*e) || *e == '/' || *e == ':') e++;
-	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) goto end_1;
+	while (WHITECHAR(*e) || *e == '/' || *e == ':') INCR(e);
+
+	if ((!atchr(*e) && *e != '>' && *e != '<')) goto end_1;
 
 	if (attr) *attr = e;
 
 nextattr:
-	while (WHITECHAR(*e)) e++;
-	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) goto end_1;
+	while (WHITECHAR(*e)) INCR(e);
+
+	if ((!atchr(*e) && *e != '>' && *e != '<')) goto end_1;
 
 	if (*e == '>' || *e == '<') goto end;
 
-	while (atchr(*e)) e++;
-	while (WHITECHAR(*e)) e++;
-	if (e >= eof) goto end_1;
+	while (atchr(*e)) INCR(e);
+
+	while (WHITECHAR(*e)) INCR(e);
 
 	if (*e != '=') goto endattr;
-	e++;
+	INCR(e);
 
-	while (WHITECHAR(*e)) e++;
-	if (e >= eof) goto end_1;
+	while (WHITECHAR(*e)) INCR(e);
 
 	if (IS_QUOTE(*e)) {
 		unsigned char quote = *e;
 
 quoted_value:
-		e++;
-		while (*e != quote && *e) e++;
-		if (e >= eof || *e < ' ') goto end_1;
-		e++;
-		if (e >= eof) goto end_1;
+		INCR(e);
+		while (*e != quote && *e) INCR(e);
+		if (*e < ' ') goto end_1;
+		INCR(e);
 		if (*e == quote) goto quoted_value;
 	} else {
-		while (*e && !WHITECHAR(*e) && *e != '>' && *e != '<') e++;
-		if (e >= eof) goto end_1;
+		while (*e && !WHITECHAR(*e) && *e != '>' && *e != '<') INCR(e);
 	}
 
-	while (WHITECHAR(*e)) e++;
-	if (e >= eof) goto end_1;
+	while (WHITECHAR(*e)) INCR(e);
 
 endattr:
 	if (*e != '>' && *e != '<') goto nextattr;
@@ -132,6 +133,7 @@ end:
 end_1:
 	*eof = tmp;
 	return -1;
+#undef INCR
 }
 
 #define add_chr(s, l, c) \

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.53 2002/10/17 15:42:54 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.54 2002/10/17 16:18:53 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -265,8 +265,8 @@ read_bookmarks()
 		unsigned char *title = in_buffer;
 		unsigned char *url;
 		unsigned char *depth_str;
-		int depth;
-		unsigned char *flags;
+		int depth = 0;
+		unsigned char *flags = NULL;
 		unsigned char *line_end;
 
 		/* Load URL. */
@@ -284,7 +284,7 @@ read_bookmarks()
 		/* Load depth. */
 
 		depth_str = strchr(url, '\t');
-		if (!depth_str || (depth_str - url > MAX_STR_LEN - 1))
+		if (depth_str && depth_str - url > MAX_STR_LEN - 1)
 			continue;
 
 		if (depth_str) {
@@ -294,17 +294,16 @@ read_bookmarks()
 			if (depth < 0) depth = 0;
 			if (depth > last_depth + 1) depth = last_depth + 1;
 			if (!last_bm && depth > 0) depth = 0;
+
+			/* Load flags. */
+
+			flags = strchr(depth_str, '\t');
+			if (flags) {
+				*flags = '\0';
+				flags++;
+			}
 		} else {
 			depth_str = url;
-			depth = 0;
-		}
-
-		/* Load flags. */
-
-		flags = strchr(depth_str, '\t');
-		if (flags) {
-			*flags = '\0';
-			flags++;
 		}
 
 		/* Load EOLN. */

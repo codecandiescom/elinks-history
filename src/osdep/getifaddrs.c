@@ -1,5 +1,5 @@
 /* Provide stub function getifaddrs(). */
-/* $Id: getifaddrs.c,v 1.1 2004/02/03 19:20:02 zas Exp $ */
+/* $Id: getifaddrs.c,v 1.2 2004/02/04 14:12:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,11 +146,11 @@ getifaddrs2(struct ifaddrs **ifap,
 		salen = sizeof(struct sockaddr);
 #ifdef HAVE_STRUCT_SOCKADDR_SA_LEN
 		salen = sa->sa_len;
-		sz = max(sz, sizeof(ifr->ifr_name) + sa->sa_len);
+		sz = int_max(sz, sizeof(ifr->ifr_name) + sa->sa_len);
 #endif
 #ifdef SA_LEN
 		salen = SA_LEN(sa);
-		sz = max(sz, sizeof(ifr->ifr_name) + SA_LEN(sa));
+		sz = int_max(sz, sizeof(ifr->ifr_name) + SA_LEN(sa));
 #endif
 		memset(&ifreq, 0, sizeof(ifreq));
 		memcpy(ifreq.ifr_name, ifr->ifr_name, sizeof(ifr->ifr_name));

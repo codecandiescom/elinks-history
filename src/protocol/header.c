@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.13 2004/11/09 12:21:38 zas Exp $ */
+/* $Id: header.c,v 1.14 2005/04/01 23:11:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,6 +227,20 @@ parse_header_param(unsigned char *str, unsigned char *name)
 
 	/* Trim ending spaces */
 	while (plen > 0 && LWS(p[plen - 1])) plen--;
+
+	/* XXX: Drop enclosing single quotes if there's some.
+	 *
+	 * Some websites like newsnow.co.uk are using single quotes around url
+	 * in URL field in meta tag content attribute like this:
+	 * <meta http-equiv="Refresh" content="0; URL='http://www.site.com/path/xxx.htm'">
+	 *
+	 * This is an attempt to handle that, but it may break something else.
+	 * We drop all pair of enclosing quotes found (eg. '''url''' => url).
+	 * Please report any issue related to this. --Zas */
+	while (plen > 1 && *p == '\'' && p[plen - 1] == '\'') {
+		p++;
+		plen -= 2;
+	}
 
 	return memacpy(p, plen);
 }

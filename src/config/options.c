@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.362 2003/10/25 12:33:45 pasky Exp $ */
+/* $Id: options.c,v 1.363 2003/10/25 12:49:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ INIT_LIST_HEAD(config_option_box_items);
 INIT_LIST_HEAD(option_boxes);
 
 static void add_opt_rec(struct option *, unsigned char *, struct option *);
-static void free_options_tree(struct list_head *);
+static void free_options_tree(struct list_head *, int recursive);
 
 /**********************************************************************
  Options interface
@@ -377,9 +377,13 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
  * only option specs have short name. */
 
 void
-delete_option(struct option *option)
+delete_option_do(struct option *option, int recursive)
 {
 	if (option->next) del_from_list(option);
+
+	if (recursive == -1) {
+		error("Orphaned option %s", option->name);
+	}
 
 	switch (option->type) {
 		case OPT_STRING:
@@ -388,7 +392,18 @@ delete_option(struct option *option)
 			break;
 		case OPT_TREE:
 			if (option->value.tree) {
-				free_options_tree(option->value.tree);
+				if (!recursive
+				    && !list_empty(*option->value.tree)) {
+					if (option->flags & OPT_AUTOCREATE) {
+						recursive = 1;
+					} else {
+						error("Orphaned unregistered "
+							"option in subtree %s!",
+							option->name);
+						recursive = -1;
+					}
+				}
+				free_options_tree(option->value.tree, recursive);
 				mem_free(option->value.tree);
 			}
 			break;
@@ -405,6 +420,12 @@ delete_option(struct option *option)
 		if (option->name) mem_free(option->name);
 		mem_free(option);
 	}
+}
+
+void
+delete_option(struct option *option)
+{
+	delete_option_do(option, 1);
 }
 
 struct option *
@@ -523,17 +544,17 @@ init_options(void)
 }
 
 static void
-free_options_tree(struct list_head *tree)
+free_options_tree(struct list_head *tree, recursive)
 {
 	while (!list_empty(*tree))
-		delete_option(tree->next);
+		delete_option_do(tree->next, recursive);
 }
 
 void
 done_options(void)
 {
 	unregister_options();
-	free_options_tree(&options_root_tree);
+	free_options_tree(&options_root_tree, 0);
 }
 
 void
@@ -1123,7 +1144,7 @@ unregister_option_info(struct option_info info[], struct option *tree)
 	while (info[i].path) i++;
 
 	for (i--; i >= 0; i--)
-		delete_option(&info[i].option);
+		delete_option_do(&info[i].option, 0);
 }
 
 static void

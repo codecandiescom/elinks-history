@@ -4598,8 +4598,7 @@ struct table_entry table_viscii [] = {
 unsigned char *aliases_viscii [] = {
 	"VISCII",
 	"VISCII-1",
-	"VISCII
-	1.1",
+	"VISCII 1.1",
 	"VISCII-1.1",
 	"VISCII1.1-1",
 	"csVISCII",

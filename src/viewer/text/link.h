@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.20 2004/05/24 01:55:23 jonas Exp $ */
+/* $Id: link.h,v 1.21 2004/05/24 23:59:43 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -46,7 +46,6 @@ int enter(struct session *ses, struct document_view *doc_view, int a);
 int try_document_key(struct session *ses, struct document_view *doc_view, struct term_event *ev);
 int in_viewy(struct document_view *doc_view, struct link *l);
 
-unsigned char *get_link_url(struct session *ses, struct document_view *doc_view, struct link *l);
 struct uri *get_link_uri(struct session *ses, struct document_view *doc_view, struct link *link);
 
 #endif

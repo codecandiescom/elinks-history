@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.172 2004/05/24 01:55:23 jonas Exp $ */
+/* $Id: link.c,v 1.173 2004/05/24 23:59:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,7 +471,7 @@ nolink:
 }
 
 
-unsigned char *
+static unsigned char *
 get_link_url(struct session *ses, struct document_view *doc_view,
 	     struct link *link)
 {

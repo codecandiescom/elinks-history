@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.28 2005/03/26 14:14:04 pasky Exp $
+# $Id: hooks.pl,v 1.29 2005/03/26 14:20:50 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -11,25 +11,26 @@ use diagnostics;
 
 =head1 SAMPLE CONFIGURATION FILE
 
-# Save this as ~/.elinks/config.pl :
+Save this as ~/.elinks/config.pl :
 
-bork:       yep         (BORKify Google?)
-collapse:   okay        (collapse all XBEL bookmark folders on exit?)
-fortune:    elinks      (*fortune*, *elinks* tip, or *none* on quit?)
-googlebeta: hell no     (I miss DejaNews...)
-gotosearch: not yet     (Don't use this yet.  It's broken.)
-ipv6:       sure        (IPV4 or 6 address blocks with "ip" prefix?)
-language:   english     ("bf nl en" still works, but now "bf nl" does too)
-news:       msnbc       (agency to use for "news" and "n" prefixes)
-search:     elgoog      (engine for (search|find|www|web|s|f|go) prefixes)
-usenet:     google      (*google* or *standard* view for news:// URLs)
-weather:    cnn         (server for "weather" and "w" prefixes)
+	bork:       yep     # BORKify Google?
+	collapse:   okay    # Collapse all XBEL bookmark folders on exit?
+	fortune:    elinks  # *fortune*, *elinks* tip, or *none* on quit?
+	googlebeta: hell no # I miss DejaNews...
+	gotosearch: not yet # Don't use this yet.  It's broken.
+	ipv6:       sure    # IPV4 or 6 address blocks with "ip" prefix?
+	language:   english # "bf nl en" still works, but now "bf nl" does too
+	news:       msnbc   # Agency to use for "news" and "n" prefixes
+	search:     elgoog  # Engine for (search|find|www|web|s|f|go) prefixes
+	usenet:     google  # *google* or *standard* view for news:// URLs
+	weather:    cnn     # Server for "weather" and "w" prefixes
 
-# news:    bbc, msnbc, cnn, fox, google, yahoo, reuters, eff, wired, slashdot,
-#          newsforge, usnews, newsci, discover, sciam
-# search:  elgoog, google, yahoo, ask jeeves, a9, altavista, msn, dmoz, dogpile,
-#          mamma, webcrawler, netscape, lycos, hotbot, excite
-# weather: weather underground, google, yahoo, cnn, accuweather, ask jeeves
+	# news:    bbc, msnbc, cnn, fox, google, yahoo, reuters, eff, wired,
+	#          slashdot, newsforge, usnews, newsci, discover, sciam
+	# search:  elgoog, google, yahoo, ask jeeves, a9, altavista, msn, dmoz,
+	#          dogpile, mamma, webcrawler, netscape, lycos, hotbot, excite
+	# weather: weather underground, google, yahoo, cnn, accuweather,
+	#          ask jeeves
 
 =cut
 

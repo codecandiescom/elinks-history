@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.29 2003/05/13 22:37:30 pasky Exp $ */
+/* $Id: inpfield.c,v 1.30 2003/05/13 22:53:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,7 +291,7 @@ init_field(struct widget_data *widget, struct dialog_data *dialog,
 		struct input_history_item *item;
 
 		foreach (item, widget->item->history->items) {
-			int dsize = strlen(j->d) + 1;
+			int dsize = strlen(item->d) + 1;
 			struct input_history_item *hi;
 
 			hi = mem_alloc(sizeof(struct input_history_item)

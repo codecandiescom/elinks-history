@@ -1,3 +1,238 @@
+Mon Feb 28 20:15:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/: Makefile.am, elinks.fortune, perl/hooks.pl:
+
+	This update by Russ Rowan has 4 parts: 
+	
+	1) This part includes some cleanups.  The random URL generator now
+	   looks in more places for words, including ~/.elinks/elinks.words, if
+	it exists.  
+	
+	2) This part adds the new fortune quit hook.  It will now look in
+	   several locations for "elinks.lines" (/etc/elinks, ~/.elinks, the
+	   docs directory) in standard fortune format.  If found, it will
+	   output a random tip or bit of humor from #elinks.  If not, it will
+	fall back to the previous behavior.  
+	
+	3) This part adds a new smart prefix.  xyzzy.  Just try it a few
+	   times.  Ah, the Good Old Days.  
+	
+	4) This part adds a new follow_url_hook.  All Usenet links now
+	   become links to the Google Groups archive for that group.  The hook
+	   defaults to the "old style".  If you, for some reason, prefer Google
+	   Groups Beta, just touch a file called "beta" in ~/.elinks and it
+	will use that.  
+
+Mon Feb 28 20:11:37 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/elinks.fortune:
+
+	file elinks.fortune was initially added on branch REL_0_10.  
+
+Mon Feb 28 15:57:07 2005  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fix trailing spaces.  
+
+Mon Feb 28 15:55:13 2005  Laurent Monin <zas@norz.org>:
+
+	* doc/hacking.txt:
+
+	Please write sizeof(something) instead of sizeof something.  
+
+Mon Feb 28 15:52:24 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: intl/gettext/dcigettext.c, intl/gettext/localealias.c,
+	osdep/os2/os2.c, scripting/lua/core.c:
+
+	sizeof smt -> sizeof(smt).  
+
+Mon Feb 28 15:35:49 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: link.c, marks.c, search.c, vs.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 15:32:36 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hierbox.c, bfu/inpfield.c, bfu/listmenu.c,
+	config/opttypes.c, lowlevel/interlink.c, osdep/osdep.c,
+	sched/connection.c, sched/session.c, viewer/dump/dump.c,
+	viewer/text/form.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 15:02:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/file.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 14:57:19 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: event.c, kbd.c, screen.c, tab.c, terminal.c,
+	terminal.h, window.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 14:33:14 2005  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 14:29:39 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: connection.c, download.c, error.c, event.c,
+	location.c, session.c, task.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 14:19:24 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: nntp/codes.c, nntp/connection.c, smb/smb.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 14:16:17 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: uri.c, auth/auth.c, auth/digest.c, file/cgi.c,
+	ftp/ftp.c, ftp/ftpparse.c, gopher/gopher.c, http/blacklist.c,
+	http/codes.c, http/http.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 14:03:28 2005  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/: beos/beos.c, os2/os2.c, unix/unix.c, win32/win32.c,
+	getifaddrs.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 13:56:12 2005  Laurent Monin <zas@norz.org>:
+
+	* src/mime/: dialogs.c, backend/common.c, backend/mailcap.c,
+	backend/mimetypes.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 13:51:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: connect.c, dns.c, interlink.c, select.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 13:24:03 2005  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 13:13:04 2005  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/globhist.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 13:10:03 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: encoding/bzip2.c, encoding/encoding.c, formhist/formhist.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 13:06:33 2005  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/: ecmascript.c, spidermonkey.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 11:25:15 2005  Laurent Monin <zas@norz.org>:
+
+	* doc/hacking.txt:
+
+	Add a note about sizeof(*item) instead of sizeof(struct
+	item_struct_name)).  
+
+Mon Feb 28 11:18:16 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/: html/parser.c, html/renderer.c, html/tables.c,
+	html/parser/forms.c, html/parser/link.c, html/parser/parse.c,
+	html/parser/stack.c, html/parser/table.c, plain/renderer.c,
+	sgml/parser.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 11:14:57 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/: document.c, forms.c, options.c, refresh.c,
+	renderer.c, css/parser.c, css/stylesheet.c, dom/navigator.c,
+	dom/node.c, dom/renderer.c, html/frames.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 10:24:46 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: cookies/cookies.c, cookies/dialogs.c, cookies/parser.c,
+	dialogs/info.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 10:21:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/config/: dialogs.c, kbdbind.c, options.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 10:15:01 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/backend/xbel.c,
+	cache/cache.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 10:10:09 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: inpfield.c, inphist.c, listbox.c, menu.c, style.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 10:06:57 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: util/hash.c, util/scanner.c, util/scanner.h,
+	util/secsave.c, util/string.c, bfu/dialog.c, bfu/hierbox.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
+Mon Feb 28 09:48:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Use sizeof(*item) instead of sizeof(struct item_struct_name)
+	whenever possible.  
+
 Sun Feb 27 22:56:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/session.c:

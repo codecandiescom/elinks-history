@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.20 2002/05/17 17:41:29 pasky Exp $ */
+/* $Id: url.c,v 1.21 2002/06/08 09:57:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -518,50 +518,66 @@ void translate_directories(unsigned char *url)
 void
 translate_directories(unsigned char *url)
 {
-	unsigned char *dd = get_url_data(url);
-	unsigned char *s, *d;
+	unsigned char *url_data = get_url_data(url);
+	unsigned char *src, *dest;
 	int lo = !casecmp(url, "file://", 7);
 
-	if (!dd || dd == url/* || *--dd != '/'*/) return;
-	if (!dsep(*dd)) dd--;
-	s = dd;
-	d = dd;
+	if (!url_data || url_data == url/* || *--url_data != '/'*/) return;
+	if (!dsep(*url_data)) url_data--;
+	src = url_data;
+	dest = url_data;
 
-r:
-	if (end_of_dir(s[0])) {
-		memmove(d, s, strlen(s) + 1);
-		return;
-	}
-
-	if (dsep(s[0]) && s[1] == '.' && dsep(s[2])) {
-		/**d++ = s[0];*/
-		if (s == dd && !s[3]) goto p;
-		s += 2;
-		goto r;
-	}
-
-	if (dsep(s[0]) && s[1] == '.' && s[2] == '.' && dsep(s[3])) {
-		unsigned char *d1 = d;
-
-		while (d > dd) {
-			d--;
-			if (dsep(*d)) {
-				if (d + 3 == d1 && d[1] == '.' && d[2] == '.') {
-					d = d1;
-					goto p;
-				}
-				goto b;
-			}
+	do {
+		/* TODO: Rewrite this parser in sane way, gotos are ugly ;). */
+repeat:
+		if (end_of_dir(src[0])) {
+			/* URL data contains no more path. */
+			memmove(dest, src, strlen(src) + 1);
+			return;
 		}
-		/*d = d1;
-		goto p;*/
-b:
-		s += 3;
-		goto r;
-	}
 
-p:
-	if ((*d++ = *s++)) goto r;
+		/* If the following pieces are the LAST parts of URL, we remove
+		 * them as well. See RFC 1808 for details. */
+
+		if (dsep(src[0]) && src[1] == '.'
+		    && (!src[2] || dsep(src[2]))) {
+
+			/* /./ - strip that.. */
+
+			if (src == url_data && (!src[2] || !src[3])) {
+				/* ..if this is not the only URL (why?). */
+				goto proceed;
+			}
+
+			src += 2;
+			goto repeat;
+		}
+
+		if (dsep(src[0]) && src[1] == '.' && src[2] == '.'
+		    && (!src[3] || dsep(src[3]))) {
+			unsigned char *orig_dest = dest;
+
+			/* /../ - strip that and preceding element. */
+
+			while (dest > url_data) {
+				dest--;
+				if (dsep(*dest)) {
+					if (dest + 3 == orig_dest
+					    && dest[1] == '.'
+					    && dest[2] == '.') {
+						dest = orig_dest;
+						goto proceed;
+					}
+					break;
+				}
+			}
+
+			src += 3;
+			goto repeat;
+		}
+
+proceed:
+	} while ((*dest++ = *src++));
 }
 
 
@@ -626,6 +642,8 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 		return n;
 	}
+
+	/* TODO: Support for ';' ? (see the RFC) --pasky */
 
 	if (rel[0] == '/' && rel[1] == '/') {
 		unsigned char *n;

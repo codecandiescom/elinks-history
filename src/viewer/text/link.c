@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.32 2003/08/01 13:05:49 zas Exp $ */
+/* $Id: link.c,v 1.33 2003/08/03 03:44:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,9 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 
 		co = get_char(t, x, y);
 		scr->link_bg[i].c.data = co->data;
+		scr->link_bg[i].c.color = co->color;
 		scr->link_bg[i].c.attr = co->attr;
+		co->color = link->sel_color;
 
 		if (i == cursor_offset) {
 			int blockable;
@@ -202,8 +204,6 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			set_cursor(t, x, y, blockable);
 			set_window_ptr(get_current_tab(t), x, y);
 		}
-
-		set_color(t, x, y, /*((link->sel_color << 3) | (co >> 11 & 7)) << 8*/ link->sel_color);
 	}
 }
 
@@ -232,8 +232,11 @@ clear_link(struct terminal *t, struct document_view *scr)
 		for (i = scr->link_bg_n - 1; i >= 0; i--) {
 			struct link_bg *bgchar = &link_bg[i];
 
-			if (bgchar->x != -1 && bgchar->y != -1)
-				set_char(t, bgchar->x, bgchar->y, bgchar->c.data, bgchar->c.attr);
+			if (bgchar->x != -1 && bgchar->y != -1) {
+				draw_char(t, bgchar->x, bgchar->y,
+					  bgchar->c.data, bgchar->c.color,
+					  bgchar->c.attr);
+			}
 		}
 		free_link(scr);
 	}

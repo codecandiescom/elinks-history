@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.193 2003/08/01 20:55:54 zas Exp $ */
+/* $Id: renderer.c,v 1.194 2003/08/03 03:44:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,7 +157,8 @@ realloc_line(struct part *p, int y, int x)
 
 	for (i = line->l; i <= x; i++) {
 		line->d[i].data = ' ';
-		line->d[i].attr = (line->color << 3);
+		line->d[i].color = (line->color << 3);
+		line->d[i].attr = 0;
 	}
 
 	line->l = i;
@@ -252,7 +253,8 @@ set_hchar(struct part *part, int x, int y, unsigned char data, unsigned char att
 	if_assert_failed return;
 
 	POS(x, y).data = data;
-	POS(x, y).attr = attr;
+	POS(x, y).color = (attr & ~SCREEN_ATTR_FRAME);
+	POS(x, y).attr = (attr & ~SCREEN_ATTR_FRAME);
 }
 
 static inline void
@@ -270,8 +272,9 @@ set_hchars(struct part *part, int x, int y, int xl,
 	if_assert_failed return;
 
 	for (; xl; xl--, x++) {
-		POS(x, y).attr = attr;
 		POS(x, y).data = data;
+		POS(x, y).color = (attr & ~SCREEN_ATTR_FRAME);
+		POS(x, y).attr = (attr & ~SCREEN_ATTR_FRAME);
 	}
 }
 
@@ -307,7 +310,8 @@ set_hline(struct part *part, int x, int y,
 	for (; charslen > 0; charslen--, x++, chars++) {
 		part->spaces[x] = (*chars == ' ');
 		if (part->document && part->document->data) {
-			POS(x, y).attr = attr;
+			POS(x, y).color = (attr & ~SCREEN_ATTR_FRAME);
+			POS(x, y).attr = (attr & ~SCREEN_ATTR_FRAME);
 			POS(x, y).data = *chars;
 		}
 	}
@@ -382,6 +386,7 @@ copy_chars(struct part *part, int x, int y, int xl, struct screen_char *d)
 
 	for (; xl; xl--, x++, d++) {
 		POS(x, y).attr = d->attr;
+		POS(x, y).color = d->color;
 		POS(x, y).data = d->data;
 	}
 }

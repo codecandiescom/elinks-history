@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.88 2003/08/01 11:44:36 zas Exp $ */
+/* $Id: menu.c,v 1.89 2003/08/03 03:44:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,7 +285,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			set_border_char(term, menu->x, s,
 					BORDER_SRTEE, menu_frame_color);
 
-			fill_border_area(term, menu->x + 1, s, menu->xw - 2, 1,
+			draw_border_area(term, menu->x + 1, s, menu->xw - 2, 1,
 					 BORDER_SHLINE, menu_frame_color);
 
 			set_border_char(term, menu->x + menu->xw - 1, s,

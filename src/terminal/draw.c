@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.45 2003/08/01 14:59:10 jonas Exp $ */
+/* $Id: draw.c,v 1.46 2003/08/03 03:44:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,8 +22,8 @@
 	} while (0)
 
 void
-set_char(struct terminal *term, int x, int y,
-	 unsigned char data, unsigned char attr)
+draw_char(struct terminal *term, int x, int y,
+	 unsigned char data, unsigned char color, unsigned char attr)
 {
 	int position;
 
@@ -33,6 +33,7 @@ set_char(struct terminal *term, int x, int y,
 
 	position = x + term->x * y;
 	term->screen->image[position].data = data;
+	term->screen->image[position].color = color;
 	term->screen->image[position].attr = attr;
 	term->screen->dirty = 1;
 }
@@ -77,7 +78,8 @@ set_border_char(struct terminal *term, int x, int y,
 
 	position = x + term->x * y;
 	term->screen->image[position].data = (unsigned char) border;
-	term->screen->image[position].attr = (color | SCREEN_ATTR_FRAME);
+	term->screen->image[position].color = color;
+	term->screen->image[position].attr = SCREEN_ATTR_FRAME;
 	term->screen->dirty = 1;
 }
 
@@ -95,16 +97,11 @@ get_char(struct terminal *term, int x, int y)
 void
 set_color(struct terminal *term, int x, int y, unsigned char color)
 {
-	unsigned char attr = color & ~SCREEN_ATTR_FRAME;
-	int position;
-
 	assert(term && term->screen && term->screen->image);
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	position = x + term->x * y;
-	attr |= (term->screen->image[position].attr & SCREEN_ATTR_FRAME);
-	term->screen->image[position].attr = attr;
+	term->screen->image[x + term->x * y].color = color;
 	term->screen->dirty = 1;
 }
 
@@ -137,14 +134,15 @@ set_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 	position = x + term->x * y;
 	for (i = position, j = 0; i < end + position; i++, j++) {
 		term->screen->image[i].data = line[j].data;
+		term->screen->image[i].color = line[j].color;
 		term->screen->image[i].attr = line[j].attr;
 	}
 	term->screen->dirty = 1;
 }
 
 void
-fill_area(struct terminal *term, int x, int y, int xw, int yw,
-	  unsigned char data, unsigned char attr)
+draw_area(struct terminal *term, int x, int y, int xw, int yw,
+	  unsigned char data, unsigned char color, unsigned char attr)
 {
 	int position;
 	int endx, endy;
@@ -168,6 +166,7 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw,
 		 * optimalizations, consumes nearly same memory. --pasky */
 		for (i = offset; i < endx + offset; i++) {
 			term->screen->image[i].data = data;
+			term->screen->image[i].color = color;
 			term->screen->image[i].attr = attr;
 		}
 	}
@@ -207,15 +206,15 @@ draw_frame(struct terminal *term, int x, int y, int xw, int yw,
 	set_border_char(term, x, yt, p[2], color);
 	set_border_char(term, xt, yt, p[3], color);
 
-	fill_border_area(term, x, y1, 1, ywt, p[4], color);
-	fill_border_area(term, xt, y1, 1, ywt, p[4], color);
-	fill_border_area(term, x1, y, xwt, 1, p[5], color);
-	fill_border_area(term, x1, yt, xwt, 1, p[5], color);
+	draw_border_area(term, x, y1, 1, ywt, p[4], color);
+	draw_border_area(term, xt, y1, 1, ywt, p[4], color);
+	draw_border_area(term, x1, y, xwt, 1, p[5], color);
+	draw_border_area(term, x1, yt, xwt, 1, p[5], color);
 }
 
 void
-print_text(struct terminal *term, int x, int y, int l,
-	   unsigned char *text, unsigned char color)
+draw_text(struct terminal *term, int x, int y, int l,
+	  unsigned char *text, unsigned char color, unsigned char attr)
 {
 	int position, end;
 
@@ -228,7 +227,8 @@ print_text(struct terminal *term, int x, int y, int l,
 
 	for (end += position; position < end && *text; text++, position++) {
 		term->screen->image[position].data = *text;
-		term->screen->image[position].attr = color;
+		term->screen->image[position].color = color;
+		term->screen->image[position].attr = attr;
 	}
 	term->screen->dirty = 1;
 }

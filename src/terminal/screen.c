@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.44 2003/07/30 21:17:43 jonas Exp $ */
+/* $Id: screen.c,v 1.45 2003/08/03 03:44:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,8 +70,8 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 	   struct screen_char *ch, int *prev_mode, int *prev_attrib)
 {
 	unsigned char c = ch->data;
-	unsigned char attrib = ch->attr & ~SCREEN_ATTR_FRAME;
-	unsigned char mode = ch->attr & SCREEN_ATTR_FRAME;
+	unsigned char attrib = ch->color;
+	unsigned char mode = (ch->attr & SCREEN_ATTR_FRAME);
 
 	if (opt_cache->type == TERM_LINUX) {
 		if (opt_cache->m11_hack && !opt_cache->utf_8_io) {
@@ -286,11 +286,12 @@ redraw_screen(struct terminal *term)
  
 			/* No update for exact match. */
  			if (pos->data == current->data
+ 			    && pos->color == current->color
  			    && pos->attr == current->attr)
 				continue;
  
 			/* Else if the color match and the data is ``space''. */
- 			if ((pos->attr & 0x38) == (current->attr & 0x38)
+ 			if (pos->color == current->color
 			    && (pos->data <= 1 || pos->data == ' ')
 			    && (current->data <= 1 || current->data == ' '))
 				continue;

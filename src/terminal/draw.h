@@ -1,21 +1,28 @@
-/* $Id: draw.h,v 1.18 2003/08/01 22:19:33 jonas Exp $ */
+/* $Id: draw.h,v 1.19 2003/08/03 03:44:24 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
 
 #include "terminal/terminal.h"
 
-#define SCREEN_ATTR_FRAME	0x80
+enum screen_char_attr {
+	SCREEN_ATTR_ITALIC	= 0x10,
+	SCREEN_ATTR_UNDERLINE	= 0x20,
+	SCREEN_ATTR_BOLD	= 0x40,
+	SCREEN_ATTR_FRAME	= 0x80,
+};
 
 /* One position in the terminal screen's image. */
 struct screen_char {
 	/* Contains either character value or frame data. */
 	unsigned char data;
 
-	/* Attributes includes color and frame info. */
+	/* The encoded fore- and background color. */
+	unsigned char color;
+
+	/* Attributes are screen_char_attr bits. */
 	unsigned char attr;
 };
-
 
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */
@@ -53,19 +60,23 @@ enum frame_cross_direction {
 	FRAME_X_UP
 };
 
-void set_char(struct terminal *, int, int, unsigned char, unsigned char);
+void draw_char(struct terminal *, int, int, unsigned char, unsigned char, unsigned char);
 void set_border_char(struct terminal *term, int x, int y, enum border_char border, unsigned char color);
 void set_xchar(struct terminal *, int x, int y, enum frame_cross_direction);
 struct screen_char *get_char(struct terminal *, int, int);
 void set_color(struct terminal *, int, int, unsigned char);
 void set_only_char(struct terminal *, int, int, unsigned char);
 void set_line(struct terminal *, int, int, int, struct screen_char *);
-void fill_area(struct terminal *, int, int, int, int, unsigned char, unsigned char);
+void draw_area(struct terminal *, int, int, int, int, unsigned char, unsigned char, unsigned char color);
 void draw_frame(struct terminal *, int, int, int, int, unsigned char, int);
-void print_text(struct terminal *, int, int, int, unsigned char *, unsigned char);
+void draw_text(struct terminal *, int, int, int, unsigned char *, unsigned char, unsigned char color);
 
-#define fill_border_area(t, x, y, xw, yw, d, c) do { \
-		fill_area(t, x, y, xw, yw, d, c | SCREEN_ATTR_FRAME); \
+#define set_char(t, x, y, data, attr) draw_char(t, x, y, data, attr, attr)
+#define fill_area(t, x, y, xw, yw, d, c) draw_area(t, x, y, xw, yw, d, c, c)
+#define print_text(t, x, y, l, txt, c) draw_text(t, x, y, l, txt, c, c)
+
+#define draw_border_area(t, x, y, xw, yw, d, c) do { \
+		draw_area(t, x, y, xw, yw, d, c, SCREEN_ATTR_FRAME); \
 	} while (0)
 
 /* Updates the terminals cursor position. When @blockable is set the

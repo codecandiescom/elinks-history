@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.201 2004/04/17 02:39:52 jonas Exp $ */
+/* $Id: menu.c,v 1.202 2004/04/17 11:28:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,6 @@
 
 struct mainmenu {
 	MENU_HEAD;
-	int sp;
 	int first_displayed;
 	int last_displayed;
 };
@@ -829,7 +828,6 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		textlen = strlen(text) - !!l;
 
 		if (i == menu->selected) {
-			menu->sp = p;
 			color = selected_color;
 			draw_area(term, p, 0,
 				  L_MAINTEXT_SPACE + L_TEXT_SPACE

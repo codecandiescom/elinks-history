@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.109 2004/08/16 01:02:13 jonas Exp $ */
+/* $Id: renderer.c,v 1.110 2004/08/16 10:09:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,6 +171,7 @@ add_document_line(struct plain_renderer *renderer,
 	int expanded = 0;
 	int width = line_width;
 	int line_pos;
+	int backspaces = 0;
 
 	line = convert_string(renderer->convert_table, line, width, CSM_NONE, &width);
 	if (!line) return 0;
@@ -188,6 +189,15 @@ add_document_line(struct plain_renderer *renderer,
 
 				expanded += tab_width;
 				was_alpha_char = 0;
+
+			} else if (line_char == ASCII_BS) {
+				if (backspaces * 2 < line_pos) {
+					backspaces++;
+					expanded -= 2;
+					was_alpha_char = 0;
+				} else {
+					expanded--;
+				}
 
 			} else {
 				/* We only want to detect url if there is at least
@@ -220,6 +230,13 @@ add_document_line(struct plain_renderer *renderer,
 				int tab_width = 7 - ((line_pos + expanded) & 7);
 
 				expanded += tab_width;
+			} else if (line_char == ASCII_BS) {
+				if (backspaces * 2 < line_pos) {
+					backspaces++;
+					expanded -= 2;
+				} else {
+					expanded--;
+				}
 			}
 		}
 	}
@@ -230,7 +247,7 @@ add_document_line(struct plain_renderer *renderer,
 		return 0;
 	}
 
-	expanded = 0;
+	expanded = backspaces = 0;
 	for (line_pos = 0; line_pos < width; line_pos++) {
 		unsigned char line_char = line[line_pos];
 
@@ -244,6 +261,22 @@ add_document_line(struct plain_renderer *renderer,
 				copy_screen_chars(pos++, template, 1);
 			while (tab_width--);
 
+		} else if (line_char == ASCII_BS) {
+			if (backspaces * 2 >= line_pos) {
+				/* We've backspaced to the start
+				 * of the line */
+				expanded--; /* Don't count it */
+				continue;
+			}
+
+			pos--;  /* Backspace */
+
+			expanded -= 2; /* Don't count the backspace character 
+				        * or the deleted character
+				        * when returning the line's width
+				        * or when expanding tabs */
+
+			backspaces++;
 		} else {
 			if (!isscreensafe(line_char))
 				line_char = '.';

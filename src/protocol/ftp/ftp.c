@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.154 2004/07/12 10:59:24 zas Exp $ */
+/* $Id: ftp.c,v 1.155 2004/07/23 19:57:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1092,7 +1092,6 @@ got_something_from_data_connection(struct connection *conn)
 		} else {
 			newsock = accept(conn->data_socket, NULL, NULL);
 			if (newsock < 0) {
-conn_error:
 				retry_conn_with_state(conn, -errno);
 				return;
 			}
@@ -1181,7 +1180,10 @@ out_of_mem:
 
 	len = safe_read(conn->data_socket, c_i->ftp_buffer + c_i->buf_pos,
 		        FTP_BUF_SIZE - c_i->buf_pos);
-	if (len < 0) goto conn_error;
+	if (len < 0) {
+		retry_conn_with_state(conn, -errno);
+		return;
+	}
 
 	if (len > 0) {
 		if (!c_i->dir) {

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.25 2002/07/04 21:19:45 pasky Exp $ */
+/* $Id: options.c,v 1.26 2002/07/05 16:09:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -767,9 +767,6 @@ void
 html_refresh(struct session *ses)
 {
 	get_opt_int("document.browse.margin_width") = atoi(marg_str);
-	/* XXX: too lazy to change label */
-	get_opt_int("document.colors.allow_dark_on_black") =
-		!get_opt_int("document.colors.allow_dark_on_black");
 	html_interpret(ses);
 	draw_formatted(ses);
 	load_frames(ses, ses->screen);

@@ -1,3 +1,240 @@
+Fri Jul  2 22:09:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Trivial put_chars() tidyup.  
+
+Fri Jul  2 18:07:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/proxy.c:
+
+	proxy_probe_no_proxy(): Be more tolerant and skip leading whitespace
+	so '<host1>, <host2>, ...' will also work. Use strcasestr() to
+	compare. Fixes debian bug 218451: 'does probably not correctly grok
+	no_proxy'.  
+
+Fri Jul  2 17:09:35 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Fix french translation.  
+
+Fri Jul  2 17:05:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Fix delete bookmarks' folder text.  
+
+Fri Jul  2 17:03:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/dialogs.c:
+
+	Fix delete cookies folder text.  
+
+Fri Jul  2 16:55:27 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Jul  2 16:50:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/dialogs.c:
+
+	Fix cut'n'paste error.  
+
+Fri Jul  2 16:17:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/dialogs.c, cache/dialogs.c, cookies/dialogs.c,
+	dialogs/download.c, formhist/dialogs.c, globhist/dialogs.c,
+	protocol/auth/dialogs.c:
+
+	English fixes.  
+
+Fri Jul  2 16:00:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.h, checkbox.h, inpfield.h, listbox.h, text.h:
+
+	Cleanup, shorter lines in macros.  
+
+Fri Jul  2 15:51:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.h:
+
+	add_dlg_text(): use struct widget *.  
+
+Fri Jul  2 15:48:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.h:
+
+	add_dlg_radio(): cleanup.  
+
+Fri Jul  2 15:46:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.h:
+
+	add_dlg_listbox(): use struct widget *.  
+
+Fri Jul  2 15:43:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.h:
+
+	add_dlg_button_do(): use struct widget *.  
+
+Fri Jul  2 15:37:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Add [ Clear ] button to bookmarks manager.  
+
+Fri Jul  2 15:09:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hierbox.c, bfu/listbox.h, bookmarks/dialogs.c,
+	cache/dialogs.c, cookies/dialogs.c, dialogs/download.c,
+	formhist/dialogs.c, globhist/dialogs.c, protocol/auth/dialogs.c:
+
+	Set per-hierbox messages for all managers. Please check english and
+	improve.  
+
+Fri Jul  2 13:05:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inpfield.c:
+
+	English fix.  
+
+Fri Jul  2 12:23:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/file.c:
+
+	Removed IMHO non-needed description from file_is_dir().  
+
+Fri Jul  2 12:22:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/file.c:
+
+	Removed non-needed !! from file_is_dir().  
+
+Fri Jul  2 11:36:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/tables.html:
+
+	Add test of table tagsoup and troubleling rowspan attribute.  
+
+Fri Jul  2 11:22:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hierbox.c, bfu/listbox.h, bookmarks/dialogs.c:
+
+	Introduce struct listbox_ops_messages, it permits to use per-hierbox
+	messages, as an example it was done for bookmarks deletion. More
+	work needed.  
+
+Fri Jul  2 10:34:11 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hierbox.c:
+
+	Drop now useless bookmarks.h inclusion.  
+
+Fri Jul  2 09:51:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/bookmarks.c,
+	bookmarks/bookmarks.h, bookmarks/dialogs.c,
+	bookmarks/backend/common.c:
+
+	Manipulate bookmarks_dirty though bookmarks_(set|unset|are)_dirty()
+	functions, and keep it static. Add a callback function
+	expansion_callback() to struct hierbox and cleanup bfu/hierbox.c
+	from bookmarks_dirty stuff.  
+
+Fri Jul  2 07:36:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/file.c:
+
+	file_is_dir(): use stat(), compilation fix.  
+
+Fri Jul  2 04:16:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.c:
+
+	file_is_dir(): Use state() instead of fstat() and don't leak file
+	descriptors (?).  
+
+Fri Jul  2 03:28:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.c:
+
+	expand_tilde(): Decrease indentation.  
+
+Fri Jul  2 03:24:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/util/file.c:
+
+	expand_tilde(): Use getpwnam() to add support for '~<user>'
+	expanding.  
+
+Fri Jul  2 02:14:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Remove old expand_line() call.  
+
+Fri Jul  2 02:11:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Add newline.  
+
+Fri Jul  2 00:26:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/exmode.c:
+
+	Disallow using configuration file commands in exmode in anonymous
+	mode.  
+
+Fri Jul  2 00:24:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/exmode.c:
+
+	Revert r1.41 (not allowing exmode in the anonymous mode).  
+
+Fri Jul  2 00:24:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/action.c:
+
+	ACT_MAIN_(KEYBINDING|OPTIONS)_MANAGER is now not accessible in
+	anonymous mode.  
+
+Thu Jul  1 23:45:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tr33.  
+
+Thu Jul  1 23:26:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Revert idiotic cookies_context patch. Time to sleep...  
+
+Thu Jul  1 22:54:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Group cookies global variables in struct cookies_context and use
+	only one global for all.  
+
+Thu Jul  1 22:29:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.c:
+
+	Hopefully fix <Esc> not triggering menu when inside of an input item
+	(and not in the insert mode).  
+
+Thu Jul  1 22:26:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/user.c:
+
+	Cleanup a rather silly-looking get_user_program() assert().  
+
 Thu Jul  1 21:28:14 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/parser/forms.c:

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.82 2005/03/01 16:59:58 zas Exp $ */
+/* $Id: button.c,v 1.83 2005/03/02 13:22:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,7 +142,7 @@ display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	draw_text(term, x + len, pos->y, BUTTON_RIGHT, BUTTON_RIGHT_LEN, 0, color);
 
 	if (sel) {
-		set_cursor(term, x, pos->y, 0);
+		set_cursor(term, x, pos->y, 1);
 		set_window_ptr(dlg_data->win, pos->x, pos->y);
 	}
 	return EVENT_PROCESSED;

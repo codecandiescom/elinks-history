@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.93 2005/03/01 16:59:58 zas Exp $ */
+/* $Id: checkbox.c,v 1.94 2005/03/02 13:22:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ display_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	draw_text(term, pos->x, pos->y, text, CHECKBOX_LEN, 0, color);
 
 	if (selected) {
-		set_cursor(term, pos->x + 1, pos->y, 0);
+		set_cursor(term, pos->x + 1, pos->y, 1);
 		set_window_ptr(dlg_data->win, pos->x, pos->y);
 	}
 

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.187 2005/03/01 16:59:58 zas Exp $ */
+/* $Id: listbox.c,v 1.188 2005/03/02 13:22:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -436,7 +436,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		int x = data->widget_data->box.x;
 
 		/* For blind users: */
-		set_cursor(data->term, x, y, 0);
+		set_cursor(data->term, x, y, 1);
 		set_window_ptr(data->dlg_data->win, x, y);
 	}
 

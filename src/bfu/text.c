@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.117 2005/03/01 16:59:58 zas Exp $ */
+/* $Id: text.c,v 1.118 2005/03/02 13:22:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,7 +301,7 @@ display_text(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	/* Hope this is at least a bit reasonable. Set cursor
 	 * and window pointer to start of the first text line. */
-	set_cursor(win->term, widget_data->box.x, widget_data->box.y, 0);
+	set_cursor(win->term, widget_data->box.x, widget_data->box.y, 1);
 	set_window_ptr(win, widget_data->box.x, widget_data->box.y);
 
 	return EVENT_PROCESSED;

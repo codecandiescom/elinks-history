@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.78 2003/09/28 13:43:55 jonas Exp $ */
+/* $Id: options.c,v 1.79 2003/09/30 00:24:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
+#include "terminal/color.h"
 #include "terminal/terminal.h"
 #include "util/memory.h"
 #include "util/memlist.h"
@@ -124,10 +125,11 @@ static unsigned char *td_labels[] = {
 	N_("VT 100 frames"),
 	N_("Linux or OS/2 frames"),
 	N_("KOI8-R frames"),
+	N_("No colors (mono)"),
+	N_("16 colors"),
 	N_("Use ^[[11m"),
 	N_("Restrict frames in cp850/852"),
 	N_("Block the cursor"),
-	N_("Color"),
 	N_("Transparency"),
 	N_("Underline"),
 	N_("UTF-8 I/O"),
@@ -176,6 +178,10 @@ terminal_options_fn(struct dialog_data *dlg)
 			   AL_CENTER);
 }
 
+#define TERMOPT_WIDGETS 15
+
+#define TERMOPT_WIDGET_SIZE (TERMOPT_WIDGETS * sizeof(struct widget))
+
 #define set_term_opt_checkbox(dlg, pos, groupid, groupnum, dataz)	\
 	do {								\
 		(dlg)->items[(pos)].type = D_CHECKBOX;			\
@@ -205,7 +211,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	termopt_hop = mem_calloc(1, sizeof(struct termopt_hop));
 	if (!termopt_hop) return;
 
-	d = mem_calloc(1, sizeof(struct dialog) + 15 * sizeof(struct widget));
+	d = mem_calloc(1, sizeof(struct dialog) + TERMOPT_WIDGET_SIZE);
 	if (!d) {
 		mem_free(termopt_hop);
 		return;
@@ -232,10 +238,12 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	set_term_opt_checkbox(d, pos, 1, TERM_LINUX, termopt_hop->type);
 	set_term_opt_checkbox(d, pos, 1, TERM_KOI8, termopt_hop->type);
 
+	set_term_opt_checkbox(d, pos, 2, COLOR_MODE_MONO, termopt_hop->colors);
+	set_term_opt_checkbox(d, pos, 2, COLOR_MODE_16, termopt_hop->colors);
+
 	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->m11_hack);
 	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->restrict_852);
 	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->block_cursor);
-	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->colors);
 	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->trans);
 	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->underline);
 	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->utf_8_io);
@@ -244,6 +252,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	set_term_opt_button(d, pos, B_ENTER, terminal_options_save, _("Save", term));
 	set_term_opt_button(d, pos, B_ESC, cancel_dialog, _("Cancel", term));
 
+	assertm(pos == TERMOPT_WIDGETS);
 	d->items[pos].type = D_END;
 
 	do_dialog(term, d, getml(d, termopt_hop, NULL));

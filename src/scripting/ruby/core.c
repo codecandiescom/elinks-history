@@ -1,5 +1,5 @@
 /* Ruby interface (scripting engine) */
-/* $Id: core.c,v 1.6 2005/01/20 16:40:56 jonas Exp $ */
+/* $Id: core.c,v 1.7 2005/01/20 18:31:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,49 +143,20 @@ erb_module_message(VALUE self, VALUE str)
 		return Qnil;
 
 	str = rb_obj_as_string(str);
-	buff = ALLOCA_N(unsigned char, RSTRING(str)->len);
-	if (buff) {
-		strcpy(buff, RSTRING(str)->ptr);
+	buff = memacpy(RSTRING(str)->ptr, RSTRING(str)->len);
+	if (!buff) return Qnil;
 
-		p = strchr(buff, '\n');
-		if (p) *p = '\0';
+	p = strchr(buff, '\n');
+	if (p) *p = '\0';
 
-		msg_box(terminals.next, NULL, MSGBOX_NO_TEXT_INTL,
-			N_("Ruby Message"), ALIGN_LEFT,
-			p,
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
-	}
+	msg_box(terminals.next, NULL, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
+		N_("Ruby Message"), ALIGN_LEFT,
+		buff,
+		NULL, 1,
+		N_("OK"), NULL, B_ENTER | B_ESC);
 
 	return Qnil;
 }
-
-/* ELinks::method_missing() is a catch all method that will be called when a
- * hook is not defined. It might not be so elegant but it removes NoMethodErrors
- * from popping up. */
-/* FIXME: It might be useful for user to actually display them to debug scripts,
- * so maybe it should be optional. --jonas */
-static VALUE
-erb_module_method_missing(VALUE self, VALUE arg)
-{
-	return Qnil;
-}
-
-static void
-init_erb_module(void)
-{
-	unsigned char *home;
-
-	erb_module = rb_define_module("ELinks");
-	rb_define_const(erb_module, "VERSION", rb_str_new2(VERSION_STRING));
-
-	home = elinks_home ? elinks_home : (unsigned char *) CONFDIR;
-	rb_define_const(erb_module, "HOME", rb_str_new2(home));
-
-	rb_define_module_function(erb_module, "message", erb_module_message, 1);
-	rb_define_module_function(erb_module, "method_missing", erb_module_method_missing, -1);
-}
-
 
 /* The global Kernel::p method will for each object, directly write
  * object.inspect() followed by the current output record separator to the
@@ -241,6 +212,33 @@ erb_stdout_p(int argc, VALUE *argv, VALUE self)
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
 	return Qnil;
+}
+
+/* ELinks::method_missing() is a catch all method that will be called when a
+ * hook is not defined. It might not be so elegant but it removes NoMethodErrors
+ * from popping up. */
+/* FIXME: It might be useful for user to actually display them to debug scripts,
+ * so maybe it should be optional. --jonas */
+static VALUE
+erb_module_method_missing(VALUE self, VALUE arg)
+{
+	return Qnil;
+}
+
+static void
+init_erb_module(void)
+{
+	unsigned char *home;
+
+	erb_module = rb_define_module("ELinks");
+	rb_define_const(erb_module, "VERSION", rb_str_new2(VERSION_STRING));
+
+	home = elinks_home ? elinks_home : (unsigned char *) CONFDIR;
+	rb_define_const(erb_module, "HOME", rb_str_new2(home));
+
+	rb_define_module_function(erb_module, "message", erb_module_message, 1);
+	rb_define_module_function(erb_module, "method_missing", erb_module_method_missing, -1);
+	rb_define_module_function(erb_module, "p", erb_stdout_p, -1);
 }
 
 

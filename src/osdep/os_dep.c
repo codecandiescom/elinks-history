@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.77 2003/06/28 21:43:55 zas Exp $ */
+/* $Id: os_dep.c,v 1.78 2003/07/03 20:38:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,7 +429,7 @@ is_xterm(void)
 
 #endif
 
-tcount resize_count = 0;
+unsigned int resize_count = 0;
 
 #if defined(UNIX) || defined(WIN32) || defined(BEOS) || defined(RISCOS)
 
@@ -1310,7 +1310,7 @@ want_draw(void)
 #endif
 	if (mouse_h != -1) {
 		static int x = -1, y = -1;
-		static tcount c = -1;
+		static int c = -1;
 
 		if (x == -1 || y == -1 || (c != resize_count)) {
 			get_terminal_size(1, &x, &y);

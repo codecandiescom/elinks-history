@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.56 2003/06/20 12:51:22 jonas Exp $ */
+/* $Id: cookies.c,v 1.57 2003/07/03 20:38:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@
 
 static int cookies_nosave = 0;
 
-static tcount cookie_id = 0;
+static unsigned int cookie_id = 0;
 
 struct cookie {
 	LIST_HEAD(struct cookie);

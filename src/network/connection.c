@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.40 2003/07/03 20:14:48 jonas Exp $ */
+/* $Id: connection.c,v 1.41 2003/07/03 20:38:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ struct k_conn {
 };
 
 
-static tcount connection_count = 0;
+static unsigned int connection_count = 0;
 static int active_connections = 0;
 static int st_r = 0;
 static int keepalive_timeout = -1;
@@ -125,7 +125,7 @@ connect_info(int type)
 }
 
 static inline int
-connection_disappeared(struct connection *c, tcount count)
+connection_disappeared(struct connection *c, unsigned int count)
 {
 	struct connection *d;
 
@@ -196,7 +196,7 @@ set_connection_state(struct connection *c, int state)
 	c->state = state;
 	if (c->state == S_TRANS) {
 		if (prg->timer == -1) {
-			tcount count = c->count;
+			unsigned int count = c->count;
 
 			if (!prg->valid) {
 				int tmp = prg->start;
@@ -350,7 +350,7 @@ void
 send_connection_info(struct connection *c)
 {
 	int state = c->state;
-	tcount count = c->count;
+	unsigned int count = c->count;
 	struct status *stat = c->statuss.next;
 
 	while ((void *)stat != &c->statuss) {

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.19 2003/07/03 10:32:58 jonas Exp $ */
+/* $Id: connection.h,v 1.20 2003/07/03 20:38:09 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -70,7 +70,7 @@ struct connection {
 	ssl_t *ssl;
 	struct stream_encoded *stream;
 
-	tcount count;
+	unsigned int count;
 
 	int pf; /* 1 == PF_INET, 2 == PF_INET6 */
 	int state;

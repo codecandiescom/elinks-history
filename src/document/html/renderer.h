@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.24 2003/06/16 14:12:02 pasky Exp $ */
+/* $Id: renderer.h,v 1.25 2003/07/03 20:38:09 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -150,7 +150,7 @@ struct f_data {
 	struct search **slines2;
 
 	ttime time_to_get;
-	tcount use_tag;
+	unsigned int use_tag;
 
 	int refcount;
 	int cp, ass;

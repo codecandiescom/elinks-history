@@ -1,9 +1,7 @@
-/* $Id: cache.h,v 1.18 2003/07/02 00:44:53 jonas Exp $ */
+/* $Id: cache.h,v 1.19 2003/07/03 20:38:08 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CACHE_H
 #define EL__DOCUMENT_CACHE_H
-
-#include "elinks.h" /* tcount */
 
 #include "util/lists.h"
 #include "util/types.h"
@@ -31,7 +29,7 @@ struct cache_entry {
 	unsigned char *etag;
 	int data_size;
 	struct list_head frag; /* i don't know why yet, but do not move --Zas */
-	tcount count;
+	unsigned int count;
 	int refcount;
 	unsigned char *ssl_info;
 	unsigned char *encoding_info;

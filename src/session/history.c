@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.45 2003/10/24 20:51:41 pasky Exp $ */
+/* $Id: history.c,v 1.46 2003/10/24 20:52:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ ses_history_move(struct session *ses)
 
 /* go_(un)back() backend. */
 static inline void
-go_away(struct session *ses, struct location *loc)
+go_history(struct session *ses, struct location *loc)
 {
 	unsigned char *url;
 
@@ -137,11 +137,11 @@ go_away(struct session *ses, struct location *loc)
 void
 go_back(struct session *ses, struct location *loc)
 {
-	go_away(ses, loc);
+	go_history(ses, loc);
 }
 
 void
 go_unback(struct session *ses, struct location *loc)
 {
-	go_away(ses, loc);
+	go_history(ses, loc);
 }

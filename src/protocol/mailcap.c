@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.16 2003/06/08 10:49:28 zas Exp $ */
+/* $Id: mailcap.c,v 1.17 2003/06/15 22:11:39 jonas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -385,13 +385,13 @@ mailcap_init(void)
 	unsigned char *path;
 	unsigned int priority = 0;
 
-	if (!get_opt_bool("protocol.mailcap.enable"))
+	if (!get_opt_bool("mime.mailcap.enable"))
 		return; /* and leave mailcap_map = NULL */
 
 	mailcap_map = init_hash(8, &strhash);
 
 	/* Try to setup mailcap_path */
-	path = get_opt_str("protocol.mailcap.path");
+	path = get_opt_str("mime.mailcap.path");
 	if (!path || !*path) path = getenv("MAILCAP");
 	if (!path) path = DEFAULT_MAILCAP_PATH;
 
@@ -503,7 +503,7 @@ convert2option(struct mailcap_entry *entry, unsigned char *type)
 	if (!association) return NULL;
 
 	init_list(*association);
-	switch (get_opt_bool("protocol.mailcap.description")) {
+	switch (get_opt_bool("mime.mailcap.description")) {
 		case 1:
 			association->name = stracpy(entry->command);
 			break;
@@ -532,7 +532,7 @@ convert2option(struct mailcap_entry *entry, unsigned char *type)
 		return NULL;
 	}
 
-	ask	= get_opt_bool("protocol.mailcap.ask");
+	ask	= get_opt_bool("mime.mailcap.ask");
 	block	= entry->needsterminal;
 	if (entry->copiousoutput) block	= entry->copiousoutput;
 
@@ -609,7 +609,7 @@ mailcap_lookup(unsigned char *type, unsigned char *file)
 	/* Check list of entries */
 	if (item && item->value) entry = check_entries(item->value, file);
 
-	if (!entry || get_opt_bool("protocol.mailcap.prioritize")) {
+	if (!entry || get_opt_bool("mime.mailcap.prioritize")) {
 		/* The type lookup has either failed or we need to check
 		 * the priorities so get the wild card handler */
 		unsigned char *ptr;

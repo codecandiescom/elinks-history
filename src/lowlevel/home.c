@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.37 2003/10/03 17:06:59 kuser Exp $ */
+/* $Id: home.c,v 1.38 2003/10/03 17:10:38 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,11 @@ test_confdir(unsigned char *home, unsigned char *path,
 	     unsigned char *error_message)
 {
 	struct stat st;
-	unsigned char *confdir = straconcat(home, "/", path, NULL);
+	unsigned char *confdir;
 
+	if (!path || !*path) return NULL;
+
+	confdir = straconcat(home, "/", path, NULL);
 	if (!confdir) return NULL;
 
 	strip_trailing_dir_sep(confdir);
@@ -113,14 +116,10 @@ get_home(void)
 
 	strip_trailing_dir_sep(home);
 
-	if (envconfdir) {
-		home_elinks = test_confdir(home, envconfdir,
-					   gettext("ELINKS_CONFDIR set to %s, but "
-						   "could not create directory %s."));
-		if (home_elinks)
-			goto end;
-
-	}
+	home_elinks = test_confdir(home, envconfdir,
+				   gettext("ELINKS_CONFDIR set to %s, but "
+					   "could not create directory %s."));
+	if (home_elinks) goto end;
 
 	home_elinks = test_confdir(home, ".elinks", NULL);
 	if (home_elinks) goto end;

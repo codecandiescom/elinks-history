@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.2 2003/11/17 22:15:44 jonas Exp $ */
+/* $Id: dialogs.c,v 1.3 2003/11/17 22:22:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,8 +126,7 @@ done_info_button(void *vhop)
 }
 
 static int
-push_info_button(struct dialog_data *dlg_data,
-		 struct widget_data *some_useless_info_button)
+push_info_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
@@ -152,6 +151,12 @@ push_info_button(struct dialog_data *dlg_data,
 	return 0;
 }
 
+static int
+push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
+{
+	save_cookies();
+	return 0;
+}
 
 void
 menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
@@ -166,8 +171,9 @@ menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	dlg_data = hierbox_browser(term, N_("Cookie manager"),
 			0, cookie_dialog_box_build(), ses,
-			1,
-			N_("Info"), push_info_button, B_ENTER, ses);
+			2,
+			N_("Info"), push_info_button, B_ENTER, ses,
+			N_("Save"), push_save_button, B_ENTER, ses);
 
 	if (!dlg_data) return;
 	dlg_data->dlg->abort = cookie_dialog_abort_handler;

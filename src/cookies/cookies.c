@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.95 2003/11/17 22:10:58 jonas Exp $ */
+/* $Id: cookies.c,v 1.96 2003/11/17 22:22:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,6 @@ static struct option_info cookies_options[] = {
 #define get_cookies_resave()		get_opt_cookies(COOKIES_RESAVE).number
 
 static void accept_cookie(struct cookie *);
-static void save_cookies(void);
 
 
 static void
@@ -766,7 +765,7 @@ load_cookies(void) {
 	fclose(fp);
 }
 
-static void
+void
 save_cookies(void) {
 	struct cookie *c;
 	unsigned char *cookfile;

@@ -3829,7 +3829,7 @@ msgstr ""
 "Hodnota: %s\n"
 "Doména: %s\n"
 "Vypr¹í: %s\n"
-"Zabezpeèení %s\n"
+"Zabezpeèení %s"
 
 #: src/cookies/dialogs.c:150
 msgid "Cookie manager"

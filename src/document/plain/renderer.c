@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.118 2004/08/16 13:49:54 jonas Exp $ */
+/* $Id: renderer.c,v 1.119 2004/08/17 04:45:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,7 +166,7 @@ add_document_line(struct plain_renderer *renderer,
 {
 	struct document *document = renderer->document;
 	struct screen_char *template = &renderer->template;
-	enum screen_char_attr saved_renderer_templated_attr = template->attr;
+	struct screen_char saved_renderer_template = *template;
 	struct screen_char *pos;
 	int lineno = renderer->lineno;
 	int expanded = 0;
@@ -217,7 +217,7 @@ add_document_line(struct plain_renderer *renderer,
 				copy_screen_chars(pos++, template, 1);
 			while (tab_width--);
 
-			template->attr = saved_renderer_templated_attr;
+			*template = saved_renderer_template;
 
 			was_alpha_char = 0;
 		} else if (line_char == ASCII_BS) {
@@ -318,7 +318,7 @@ add_document_line(struct plain_renderer *renderer,
 			template->data = line_char;
 			copy_screen_chars(pos++, template, 1);
 
-			template->attr = saved_renderer_templated_attr;
+			*template = saved_renderer_template;
 		}
 
 		/* Detect copy of nul chars to screen, this should not occur.

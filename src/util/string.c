@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.97 2004/04/14 19:03:35 jonas Exp $ */
+/* $Id: string.c,v 1.98 2004/04/21 13:48:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,8 +183,9 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 	return dst;
 }
 
-#define strlcmp_device(c,s1,n1,s2,n2,t1,t2) {\
-	size_t p, n; \
+#define strlcmp_device(c,s1,n1,s2,n2,t1,t2) { \
+	size_t p; \
+	int d; \
  \
 	/* XXX: The return value is inconsistent. Hrmpf. Making it consistent
 	 * would make the @n1 != @n2 case significantly more expensive, though.
@@ -203,12 +204,13 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
  \
 	string_assert(errfile, errline, n1 >= 0 && n2 >= 0, c); \
  \
-	if (n1 != n2) return n1 - n2; \
+	d = n1 - n2; \
+	if (d) return d; \
  \
-	for (p = 0, n = n1; p < n && s1[p] && s2[p]; p++) \
-		if (t1 != t2) \
-			return t1 - t2; \
- \
+	for (p = 0; p < n1 && s1[p] && s2[p]; p++) { \
+		d = t1 - t2; \
+ 		if (d) return d; \
+	} \
 	return 0; \
 }
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.335 2004/06/30 23:19:27 jonas Exp $ */
+/* $Id: tables.c,v 1.336 2004/07/01 13:30:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1090,34 +1090,43 @@ cont2:
 /* This in fact renders stuff like the <caption>-tag, but also other tags that
  * confused the <table> parser. The formatting is done so that it has same
  * alignment and width as the main table. */
+
+static void
+draw_table_html(struct table *table, struct html_start_end *html, int x, int y)
+{
+	unsigned char *start = html->start;
+	unsigned char *end = html->end;
+	struct part *part;
+
+	while (start < end && isspace(*start))
+		start++;
+
+	while (start < end && isspace(end[-1]))
+		end--;
+
+	if (start >= end) return;
+
+	part = format_html_part(start, end, table->align,
+		0, table->real_width, table->part->document, x, y,
+		NULL, table->link_num);
+
+	if (part) {
+		table->part->cy += part->box.height;
+		table->part->cx = -1;
+		table->part->link_num = part->link_num;
+		mem_free(part);
+	}
+}
+
 static void
 draw_table_bad_html(struct table *table, int x, int y)
 {
 	int i;
 
 	for (i = 0; i < table->bad_html_size; i++) {
-		unsigned char *start = table->bad_html[i].start;
-		unsigned char *end = table->bad_html[i].end;
-		struct part *part;
+		struct html_start_end *html = &table->bad_html[i];
 
-		while (start < end && isspace(*start))
-			start++;
-
-		while (start < end && isspace(end[-1]))
-			end--;
-
-		if (start >= end) continue;
-
-		part = format_html_part(start, end, table->align,
-			0, table->real_width, table->part->document, x, y,
-			NULL, table->link_num);
-
-		if (part) {
-			table->part->cy += part->box.height;
-			table->part->cx = -1;
-			table->part->link_num = part->link_num;
-			mem_free(part);
-		}
+		draw_table_html(table, html, x, y);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.51 2002/10/11 19:24:20 zas Exp $ */
+/* $Id: ftp.c,v 1.52 2002/10/12 13:35:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -908,6 +908,89 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 }
 
 
+/* Display directory entry formatted in HTML. */
+static int
+display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
+		  int colorize_dir, unsigned char *dircolor,
+		  struct ftpparse *ftp_info)
+{
+	unsigned char tmp[128];
+	unsigned char *str;
+	int strl;
+
+	str = init_str();
+	if (!str) return -1;
+
+	strl = 0;
+
+	if (ftp_info->flagtrycwd) {
+		if (ftp_info->flagtryretr)
+			add_to_str(&str, &strl, "[LNK] ");
+		else {
+			if (colorize_dir) {
+				/* The <b> is here for the case when we've
+				 * use_document_colors off. */
+				add_to_str(&str, &strl, "<font color=\"");
+				add_to_str(&str, &strl, dircolor);
+				add_to_str(&str, &strl, "\"><b>");
+			}
+			add_to_str(&str, &strl, "[DIR] ");
+			if (colorize_dir) {
+				add_to_str(&str, &strl, "</b></font>");
+			}
+		}
+	} else {
+		add_to_str(&str, &strl, "[   ] ");
+	}
+
+	if (ftp_info->mtime) {
+		if (FTPPARSE_MTIME_LOCAL == ftp_info->mtimetype)
+			strftime(tmp, 128, "%d-%b-%Y %H:%M LOC ",
+					localtime(&ftp_info->mtime));
+		else
+			strftime(tmp, 128, "%d-%b-%Y %H:%M     ",
+					gmtime(&ftp_info->mtime));
+
+		add_to_str(&str, &strl, tmp);
+	}
+
+	if (!ftp_info->flagtrycwd) {
+		snprintf(tmp, 128, "%12lu ",ftp_info->size);
+		add_to_str(&str, &strl, tmp);
+	} else {
+		add_to_str(&str, &strl, "           - ");
+	}
+
+	if (ftp_info->flagtrycwd && !ftp_info->flagtryretr && colorize_dir) {
+		add_to_str(&str, &strl, "<font color=\"");
+		add_to_str(&str, &strl, dircolor);
+		add_to_str(&str, &strl, "\"><b>");
+	}
+
+	add_to_str(&str, &strl, "<a href=\"");
+	add_htmlesc_str(&str, &strl, ftp_info->name, ftp_info->namelen);
+	if (ftp_info->flagtrycwd && !ftp_info->flagtryretr)
+		add_chr_to_str(&str, &strl, '/');
+	add_to_str(&str, &strl, "\">");
+	add_htmlesc_str(&str, &strl, ftp_info->name, ftp_info->namelen);
+	add_to_str(&str, &strl, "</a>");
+	if (ftp_info->flagtrycwd && !ftp_info->flagtryretr && colorize_dir) {
+		add_to_str(&str, &strl, "</b></font>");
+	}
+	if (ftp_info->symlink) {
+		add_to_str(&str, &strl, " -&gt; ");
+		add_htmlesc_str(&str, &strl, ftp_info->symlink,
+				ftp_info->symlinklen);
+	}
+	add_chr_to_str(&str, &strl, '\n');
+
+	if (add_fragment(c_e, *pos, str, strl)) *tries = 0;
+	*pos += strl;
+
+	mem_free(str);
+	return 0;
+}
+
 /* List a directory in html format. */
 static int
 ftp_process_dirlist(struct cache_entry *c_e, int *pos,
@@ -917,13 +1000,11 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos,
 	int ret = 0;
 
 	while (1) {
-		unsigned char *str;
 		unsigned char *buf = buffer + ret;
 		int bufl = buflen - ret;
 		int bufp;
-		int strl;
 		int newline = 0;
-		struct ftpparse ftpInfo;
+		struct ftpparse ftp_info;
 
 		/* Newline quest. */
 
@@ -945,78 +1026,12 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos,
 
 		/* Process line whose end we've already found. */
 
-		if (ftpparse(&ftpInfo, buf, bufp) == 1) {
-			unsigned char tmp[128];
+		if (ftpparse(&ftp_info, buf, bufp) == 1) {
+			int ret;
 
-			str = init_str();
-			if (!str) return -1;
-
-			strl = 0;
-
-			if (ftpInfo.flagtrycwd) {
-				if (ftpInfo.flagtryretr)
-					add_to_str(&str, &strl, "[LNK] ");
-				else {
-					if (colorize_dir) {
-						/* The <b> is here for the case when we've
-						* use_document_colors off. */
-						add_to_str(&str, &strl, "<font color=\"");
-						add_to_str(&str, &strl, dircolor);
-						add_to_str(&str, &strl, "\"><b>");
-					}
-					add_to_str(&str, &strl, "[DIR] ");
-					if (colorize_dir) {
-						add_to_str(&str, &strl, "</b></font>");
-					}
-				}
-			} else {
-				add_to_str(&str, &strl, "[   ] ");
-			}
-
-			if (ftpInfo.mtime) {
-				if (FTPPARSE_MTIME_LOCAL == ftpInfo.mtimetype)
-					strftime(tmp, 128, "%d-%b-%Y %H:%M LOC ",
-						 localtime(&ftpInfo.mtime));
-				else
-					strftime(tmp, 128, "%d-%b-%Y %H:%M     ",
-						 gmtime(&ftpInfo.mtime));
-
-				add_to_str(&str, &strl, tmp);
-			}
-
-			if (!ftpInfo.flagtrycwd) {
-				snprintf(tmp, 128, "%12lu ",ftpInfo.size);
-				add_to_str(&str, &strl, tmp);
-			} else {
-				add_to_str(&str, &strl, "           - ");
-			}
-
-			if (ftpInfo.flagtrycwd && !ftpInfo.flagtryretr && colorize_dir) {
-				add_to_str(&str, &strl, "<font color=\"");
-				add_to_str(&str, &strl, dircolor);
-				add_to_str(&str, &strl, "\"><b>");
-			}
-
-			add_to_str(&str, &strl, "<a href=\"");
-			add_htmlesc_str(&str, &strl, ftpInfo.name, ftpInfo.namelen);
-			if (ftpInfo.flagtrycwd && !ftpInfo.flagtryretr)
-				add_chr_to_str(&str, &strl, '/');
-			add_to_str(&str, &strl, "\">");
-			add_htmlesc_str(&str, &strl, ftpInfo.name, ftpInfo.namelen);
-			add_to_str(&str, &strl, "</a>");
-			if (ftpInfo.flagtrycwd && !ftpInfo.flagtryretr && colorize_dir) {
-				add_to_str(&str, &strl, "</b></font>");
-			}
-			if (ftpInfo.symlink) {
-				add_to_str(&str, &strl, " -&gt; ");
-				add_htmlesc_str(&str, &strl, ftpInfo.symlink, ftpInfo.symlinklen);
-			}
-			add_chr_to_str(&str, &strl, '\n');
-
-			if (add_fragment(c_e, *pos, str, strl)) *tries = 0;
-			*pos += strl;
-
-			mem_free(str);
+			ret = display_dir_entry(c_e, pos, tries, colorize_dir,
+						dircolor, &ftp_info);
+			if (ret < 0) return ret;
 		}
 	}
 }
@@ -1068,6 +1083,15 @@ out_of_mem:
 		return;
 	}
 
+	if (c_i->dir) {
+		colorize_dir = get_opt_int("document.browse.links.color_dirs");
+
+		if (colorize_dir) {
+			color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
+					(unsigned char *) &dircolor);
+		}
+	}
+
 #define A(str) { \
 	int slen = strlen(str); \
 	add_fragment(conn->cache, conn->from, str, slen); \
@@ -1076,13 +1100,6 @@ out_of_mem:
 	if (c_i->dir && !conn->from) {
 		unsigned char *url_data;
 		unsigned char *postchar;
-
-		colorize_dir = get_opt_int("document.browse.links.color_dirs");
-
-		if (colorize_dir) {
-			color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
-					(unsigned char *) &dircolor);
-		}
 
 		url_data = stracpy(get_url_data(conn->url));
 		if (!url_data) goto out_of_mem;

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.189 2004/06/24 15:22:00 zas Exp $ */
+/* $Id: tables.c,v 1.190 2004/06/24 15:26:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1019,11 +1019,11 @@ get_column_widths(struct table *table)
 				for (k = 1; k < s; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
-				dst_width(table->min_c + i, s,
+				dst_width(&table->min_c[i], s,
 				  	  cell->min_width - p,
-					  table->max_c + i);
+					  &table->max_c[i]);
 
-				dst_width(table->max_c + i, s,
+				dst_width(&table->max_c[i], s,
 				  	  cell->max_width - p,
 					  NULL);
 

@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.9 2004/11/14 19:16:52 jonas Exp $ */
+/* $Id: digest.c,v 1.10 2004/11/14 19:57:39 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,11 @@
 #include "protocol/auth/auth.h"
 #include "protocol/auth/digest.h"
 #include "util/memory.h"
+
+/* GNU TLS doesn't define this */
+#ifndef MD5_DIGEST_LENGTH
+#define MD5_DIGEST_LENGTH 16
+#endif
 
 
 /* taken from RFC 2617 */

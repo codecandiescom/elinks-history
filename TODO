@@ -4,7 +4,7 @@ TODO list for links (sorted approximatelly by priority):
 	Resuming of downloads (URGENT)
 
 	Passive FTP mode support (needed since client-side firewalls may
-blocked FTP data connections from servers in active mode) 
+block FTP data connections from servers in active mode) 
 
 	Strip spaces from the end of the URL
 
@@ -79,4 +79,4 @@ existed first.
 	CSS (?)
 
 
-$Id: TODO,v 1.22 2002/04/23 08:46:11 zas Exp $
+$Id: TODO,v 1.23 2002/04/23 12:17:09 pasky Exp $

@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
+/* $Id: finger.c,v 1.3 2002/04/26 17:56:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,26 +18,36 @@ void finger_sent_request(struct connection *);
 void finger_get_response(struct connection *, struct read_buffer *);
 void finger_end_request(struct connection *);
 
-void finger_func(struct connection *c)
+void
+finger_func(struct connection *c)
 {
 	int p;
+
 	set_timeout(c);
-	if ((p = get_port(c->url)) == -1) {
+
+	p = get_port(c->url);
+	if (p == -1) {
 		setcstate(c, S_INTERNAL);
 		abort_connection(c);
 		return;
 	}
+
 	c->from = 0;
 	make_connection(c, p, &c->sock1, finger_send_request);
 }
 
-void finger_send_request(struct connection *c)
+
+void
+finger_send_request(struct connection *c)
 {
 	unsigned char *req = init_str();
 	int rl = 0;
-	unsigned char *user;
+	unsigned char *user = get_user_name(c->url);
+
+	if (!req) return;
 	/* add_to_str(&req, &rl, "/W"); */
-	if ((user = get_user_name(c->url))) {
+	
+	if (user) {
 		add_to_str(&req, &rl, " ");
 		add_to_str(&req, &rl, user);
 		mem_free(user);
@@ -48,41 +58,55 @@ void finger_send_request(struct connection *c)
 	setcstate(c, S_SENT);
 }
 
-void finger_sent_request(struct connection *c)
+
+void
+finger_sent_request(struct connection *c)
 {
 	struct read_buffer *rb;
+
 	set_timeout(c);
-	if (!(rb = alloc_read_buffer(c))) return;
+	rb = alloc_read_buffer(c);
+	if (!rb) return;
 	rb->close = 1;
 	read_from_socket(c, c->sock1, rb, finger_get_response);
 }
 
-void finger_get_response(struct connection *c, struct read_buffer *rb)
+
+void
+finger_get_response(struct connection *c, struct read_buffer *rb)
 {
 	struct cache_entry *e;
 	int l;
+
 	set_timeout(c);
+	
 	if (get_cache_entry(c->url, &e)) {
 		setcstate(c, S_OUT_OF_MEM);
 		abort_connection(c);
 		return;
 	}
 	c->cache = e;
+
 	if (rb->close == 2) {
 		setcstate(c, S_OK);
 		finger_end_request(c);
 		return;
 	}
+
 	l = rb->len;
 	c->received += l;
-	if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
+
+	if (add_fragment(c->cache, c->from, rb->data, l) == 1)
+		c->tries = 0;
+
 	c->from += l;
 	kill_buffer_data(rb, l);
 	read_from_socket(c, c->sock1, rb, finger_get_response);
 	setcstate(c, S_TRANS);
 }
 
-void finger_end_request(struct connection *c)
+void
+finger_end_request(struct connection *c)
 {
 	if (c->state == S_OK) {
 		if (c->cache) {

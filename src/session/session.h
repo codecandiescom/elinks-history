@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.118 2004/04/15 08:28:28 jonas Exp $ */
+/* $Id: session.h,v 1.119 2004/04/15 08:32:06 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -27,7 +27,7 @@ struct initial_session_info {
 	/* Whether to open URLs in the master using -remote */
 	enum remote_session_flags {
 		SES_REMOTE_NEW_TAB = 1,
-		SES_REMOTE_NEW_WINDOW = 3,
+		SES_REMOTE_NEW_WINDOW = 2,
 		SES_REMOTE_CURRENT_TAB = 4,
 		SES_REMOTE_PROMPT_URL = 8,
 	} remote;

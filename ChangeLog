@@ -1,3 +1,72 @@
+Wed Apr  6 21:31:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Ditto for the local variable int func_ref in send_kbd_event.  
+
+Wed Apr  6 21:23:35 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Rename the int func_ref parameters of add_keybinding, kbd_action, 
+	kbd_ev_lookup, and bind_scripting_func to event to reflect the
+	current usage.  
+
+Wed Apr  6 21:13:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	In really_really_add_keybinding, pass EVENT_NONE to add_keybinding
+	for the event argument instead of 0. This should have no practical
+	effect as the event is ignored unless the action is
+	ACT_MAIN_SCRIPTING_FUNC, which will not be the case from the 'Really
+	add keybinding?' box.  
+
+Wed Apr  6 17:29:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, protocol/protocol.c, sched/session.c,
+	sched/session.h, sched/task.c:
+
+	Improve error reporting via print_error_dialog() to also display the
+	URI when possible.  
+
+Wed Apr  6 17:02:00 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/perl.pod:
+
+	Ideas about some simple dialogs.  
+
+Wed Apr  6 15:50:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	File under 0.10.4 
+
+Wed Apr  6 15:08:14 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, lowlevel/timer.c:
+
+	Drop the func_ref parameter from kbd_nm_lookup since nothing uses it
+	or is likely to need it.  
+
+Wed Apr  6 13:45:41 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/perl.pod:
+
+	Fixed tiny mistake in the ELinks::conf_eval() description.  
+
+Wed Apr  6 13:41:55 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/: Makefile.am, index.txt, perl.pod:
+
+	First sketch of the Perl->ELinks scripting interface.  
+
+Wed Apr  6 09:59:18 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/core.c:
+
+	Scripting console TODO.  
+
 Tue Apr  5 21:02:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/ecmascript/spidermonkey.c:

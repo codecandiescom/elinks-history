@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.433 2004/06/10 14:10:25 jonas Exp $ */
+/* $Id: session.c,v 1.434 2004/06/10 14:12:05 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -858,13 +858,13 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		}
 	}
 
-	{
-		/* If it is a remote session we return non zero so that the
-		 * terminal of the remote session will be destroyed ASAP. */
-		if (info->remote) ses = NULL;
-		free_session_info(info);
-		return ses;
-	}
+	/* If it is a remote session we return non zero so that the
+	 * terminal of the remote session will be destroyed ASAP. */
+	if (info->remote) ses = NULL;
+
+	free_session_info(info);
+
+	return ses;
 }
 
 void

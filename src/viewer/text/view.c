@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.411 2004/05/14 10:12:01 zas Exp $ */
+/* $Id: view.c,v 1.412 2004/05/14 10:19:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -845,6 +845,7 @@ static void
 do_mouse_event(struct session *ses, struct term_event *ev,
 	       struct document_view *doc_view)
 {
+	struct term_event evv;
 	struct document_view *matched = NULL, *first = doc_view;
 
 	assert(ses && ev);
@@ -871,7 +872,11 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	if (!matched) return;
 
 	if (doc_view != first) draw_formatted(ses, 0);
-	send_to_frame(ses, ev);
+
+	memcpy(&evv, ev, sizeof(struct term_event));
+	evv.x -= doc_view->box.x;
+	evv.y -= doc_view->box.y;
+	send_to_frame(ses, &evv);
 }
 #endif /* CONFIG_MOUSE */
 

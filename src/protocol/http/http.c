@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.94 2003/01/16 14:35:13 zas Exp $ */
+/* $Id: http.c,v 1.95 2003/01/18 14:38:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -608,8 +608,9 @@ http_send_header(struct connection *c)
 
 #ifdef COOKIES
 	send_cookies(&hdr, &l, host);
-	add_to_str(&hdr, &l, "\r\n");
 #endif
+
+	add_to_str(&hdr, &l, "\r\n");
 
 	if (post) {
 		while (post[0] && post[1]) {

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.128 2004/06/11 23:48:06 jonas Exp $ */
+/* $Id: uri.h,v 1.129 2004/06/12 00:12:22 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -148,6 +148,9 @@ enum uri_component {
 
 	/* Used for comparing keepalive connection URIs */
 	URI_KEEPALIVE		= URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST | URI_PORT,
+
+	/* Used for the form action URI using the GET method */
+	URI_FORM_GET		= ~(URI_RARE | URI_DATA) | URI_PATH,
 };
 
 

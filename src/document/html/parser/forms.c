@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.17 2004/06/11 23:03:48 zas Exp $ */
+/* $Id: forms.c,v 1.18 2004/06/12 00:12:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "intl/charsets.h"
+#include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "util/conv.h"
 #include "util/error.h"
@@ -88,20 +89,24 @@ get_html_form(unsigned char *a, struct form *form)
 		form->action = join_urls(format.href_base, trim_chars(al, ' ', 0));
 		mem_free(al);
 	} else {
-		form->action = stracpy(struri(format.href_base));
-		if (form->action) {
-			int len = get_no_post_url_length(form->action);
+		enum uri_component components = URI_ORIGINAL;
 
-			form->action[len] = '\0';
+		/* We have to do following for GET method, because we would end
+		 * up with two '?' otherwise. */
+		if (form->method == FM_GET)
+			components = URI_FORM_GET;
 
-			/* We have to do following for GET method, because we would end
-			 * up with two '?' otherwise. */
-			if (form->method == FM_GET) {
-				unsigned char *ch = strchr(form->action, '?');
+		form->action = get_uri_string(format.href_base, components);
 
-				if (ch) *ch = '\0';
-			}
-		}
+		/* No action URI should contain post data */
+		assert(!form->action || !strchr(form->action, POST_CHAR));
+
+		/* GET method URIs should not have '?' unless it is a file://
+		 * URI where the '?' is part of the filename. */
+		assert(!form->action
+			|| form->method != FM_GET
+			|| format.href_base->protocol == PROTOCOL_FILE
+			|| !strchr(form->action, '?'));
 	}
 
 	al = get_target(a);

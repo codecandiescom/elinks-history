@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.20 2005/02/05 05:26:40 jonas Exp $ */
+/* $Id: win32.c,v 1.21 2005/02/05 06:27:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,18 @@ init_osdep(void)
 	if (WSAStartup(ver,&ws) != 0) {
 		printf("Failed to initialise Winsock ver %d.%d\n", ver >> 8, ver & 255);
 		exit(-1);
+	}
+#endif
+#ifdef CONFIG_IDN
+	{
+		char buf[60];
+		UINT cp = GetACP();
+
+		if (!getenv("CHARSET") && cp > 0)
+		{
+			snprintf (buf, sizeof(buf), "CHARSET=cp%u", cp);
+			putenv (buf);
+		}
 	}
 #endif
 }

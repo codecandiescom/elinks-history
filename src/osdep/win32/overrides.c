@@ -1,4 +1,4 @@
-/* $Id: overrides.c,v 1.1 2005/02/05 05:26:40 jonas Exp $ */
+/* $Id: overrides.c,v 1.2 2005/02/05 06:27:30 jonas Exp $ */
 
 /*
  * Elinks overrides for Win32 (MSVC + MingW)
@@ -33,8 +33,6 @@
 
 #define SOCK_SHIFT  1024
 
-FILE *debug_file  = NULL;
-int   debug_level = 0;
 
 enum fd_types {
 	FDT_FILE = 1,
@@ -42,6 +40,7 @@ enum fd_types {
 	FDT_TERMINAL,
 	FDT_PIPE
 };
+
 
 static BOOL console_nbio = FALSE;
 
@@ -62,46 +61,11 @@ static const char *keymap[] = {
 	"\E[3~"  /* VK_DELETE */
 };
 
-#if defined(__GNUC__)
-static void __attribute__ ((destructor)) deinit (void)
-{
-	if (debug_file && debug_file != stderr)
-		fclose (debug_file);
-	debug_file = NULL;
-}
-
-static void __attribute__ ((constructor)) init (void)
-{
-	const char *env = getenv ("ELINKS_DEBUG"); /* Format: "<dbglevel>[,dbgfile]" */
-	const char *p;
-
-	if (env)
-	{
-		debug_level = atoi (env);
-		if (debug_level > 0)
-		{
-			p = strchr (env,',');
-			if (p && p[1])
-				debug_file = fopen (p+1, "w+t");
-			else debug_file = stderr;
-		}
-	}
-
-#ifdef CONFIG_IDN
-	{
-		char buf[60];
-		UINT cp = GetACP();
-
-		if (!getenv("CHARSET") && cp > 0)
-		{
-			snprintf (buf, sizeof(buf), "CHARSET=cp%u", cp);
-			putenv (buf);
-		}
-	}
-#endif
-}
-#endif   /* __GNUC__ */
-
+#define TRACE(m...)					\
+	do {						\
+		if (get_cmd_opt_int("verbose") == 2)	\
+			DBG(m);				\
+	} while (0)
 
 static enum fd_types what_fd_type (int *fd)
 {
@@ -178,12 +142,12 @@ static int console_read (HANDLE hnd, void *buf, int max, INPUT_RECORD *irp)
 	switch (ir.EventType)
 	{
 		case KEY_EVENT:
-			DBG ("KEY_EVENT: ch '%c', %s", ker->uChar.AsciiChar, ker->bKeyDown ? "down" : "up");
+			TRACE ("KEY_EVENT: ch '%c', %s", ker->uChar.AsciiChar, ker->bKeyDown ? "down" : "up");
 			return console_key_read (ker, buf, max);
 
 #ifdef CONFIG_MOUSE
 		case MOUSE_EVENT:
-			DBG("MOUSE_EVENT: flg %d, button-state %d, x %lu, y %lu",
+			TRACE("MOUSE_EVENT: flg %d, button-state %d, x %lu, y %lu",
 					mer->dwEventFlags, mer->dwButtonState,
 					mer->dwMousePosition.X, mer->dwMousePosition.Y);
 			return console_mouse_read (mer, buf, max);
@@ -252,7 +216,7 @@ int win32_write (int fd, const void *buf, unsigned len)
 				errno = WSAGetLastError();
 			break;
 	}
-	DBG("fd %d, buf 0x%p, len %u -> rc %d; %s",
+	TRACE("fd %d, buf 0x%p, len %u -> rc %d; %s",
 			orig_fd, buf, len, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
@@ -276,7 +240,7 @@ int win32_read (int fd, void *buf, unsigned len)
 		case FDT_TERMINAL:
 			rc = console_read ((HANDLE)fd, buf, len, NULL);
 			if (rc == 0)
-				DBG("read 0 !!");
+				TRACE("read 0 !!");
 			break;
 		case FDT_SOCKET:
 			rc = recv (fd, buf, len, 0);
@@ -284,7 +248,7 @@ int win32_read (int fd, void *buf, unsigned len)
 				errno = WSAGetLastError();
 			break;
 	}
-	DBG("fd %d, buf 0x%p, len %u -> rc %d; %s",
+	TRACE("fd %d, buf 0x%p, len %u -> rc %d; %s",
 			orig_fd, buf, len, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
@@ -312,7 +276,7 @@ int win32_close (int fd)
 				errno = WSAGetLastError();
 			break;
 	}
-	DBG("fd %d -> rc %d; %s", orig_fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
+	TRACE("fd %d -> rc %d; %s", orig_fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
 
@@ -349,7 +313,7 @@ int win32_ioctl (int fd, long option, int *flag)
 		strcpy (cmd, "FIONBIO");
 	else snprintf (cmd, sizeof(cmd), "0x%08lX", option);
 
-	DBG("fd %d, cmd %s, flag %d -> flag %d, rc %d; %s",
+	TRACE("fd %d, cmd %s, flag %d -> flag %d, rc %d; %s",
 			orig_fd, cmd, flg, *flag, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
@@ -366,7 +330,7 @@ int win32_socket (int family, int type, int protocol)
 	}
 	else
 		rc = s + SOCK_SHIFT;
-	DBG("family %d, type %d, proto %d -> rc %u", family, type, protocol, rc);
+	TRACE("family %d, type %d, proto %d -> rc %u", family, type, protocol, rc);
 	return (rc);
 }
 
@@ -376,7 +340,7 @@ int win32_connect (int fd, struct sockaddr *addr, int addr_len)
 
 	if (rc < 0)
 		errno = WSAGetLastError();
-	DBG("fd %d -> rc %d; %s", fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
+	TRACE("fd %d -> rc %d; %s", fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
 
@@ -386,7 +350,7 @@ int win32_getpeername (int fd, struct sockaddr *addr, int *addr_len)
 
 	if (rc < 0)
 		errno = WSAGetLastError();
-	DBG("fd %d -> rc %d; %s", fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
+	TRACE("fd %d -> rc %d; %s", fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
 
@@ -396,7 +360,7 @@ int win32_getsockname (int fd, struct sockaddr *addr, int *addr_len)
 
 	if (rc < 0)
 		errno = WSAGetLastError();
-	DBG("fd %d -> rc %d; %s", fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
+	TRACE("fd %d -> rc %d; %s", fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
 
@@ -406,7 +370,7 @@ int win32_accept (int fd, struct sockaddr *addr, int *addr_len)
 
 	if (rc < 0)
 		errno = WSAGetLastError();
-	DBG("fd %d -> rc %d; %s", fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
+	TRACE("fd %d -> rc %d; %s", fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
 
@@ -416,7 +380,7 @@ int win32_listen (int fd, int backlog)
 
 	if (rc < 0)
 		errno = WSAGetLastError();
-	DBG("fd %d, backlog %d -> rc %d %s",
+	TRACE("fd %d, backlog %d -> rc %d %s",
 			fd, backlog, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
@@ -427,7 +391,7 @@ int win32_bind (int fd, struct sockaddr *addr, int addr_len)
 
 	if (rc < 0)
 		errno = WSAGetLastError();
-	DBG("fd %d -> rc %d; %s", fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
+	TRACE("fd %d -> rc %d; %s", fd, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
 
@@ -437,7 +401,7 @@ int win32_getsockopt (int fd, int level, int option, void *optval, int *optlen)
 
 	if (rc < 0)
 		errno = WSAGetLastError();
-	DBG("fd %d, level %d, option %d -> rc %d; %s",
+	TRACE("fd %d, level %d, option %d -> rc %d; %s",
 			fd, level, option, rc, rc < 0 ? win32_strerror(errno) : "okay");
 	return (rc);
 }
@@ -495,15 +459,12 @@ static void select_dump (int num_fds,
 {
 	char buf_rd[512], buf_wr[512], buf_ex[512];
 
-	if (!debug_file)
-		return;
-
-	fprintf (debug_file, "\tread-fds:   %s\n"
-			"\twrite-fds:  %s\n"
-			"\texcept-fds: %s\n",
-			rd ? fd_set_str(buf_rd,sizeof(buf_rd),rd,num_fds) : "<none>",
-			wr ? fd_set_str(buf_wr,sizeof(buf_wr),wr,num_fds) : "<none>",
-			ex ? fd_set_str(buf_ex,sizeof(buf_ex),ex,num_fds) : "<none>");
+	TRACE("\tread-fds:   %s\n"
+	    "\twrite-fds:  %s\n"
+	    "\texcept-fds: %s\n",
+	    rd ? fd_set_str(buf_rd,sizeof(buf_rd),rd,num_fds) : "<none>",
+	    wr ? fd_set_str(buf_wr,sizeof(buf_wr),wr,num_fds) : "<none>",
+	    ex ? fd_set_str(buf_ex,sizeof(buf_ex),ex,num_fds) : "<none>");
 }
 
 static int select_read (int fd, struct fd_set *rd)
@@ -611,10 +572,10 @@ int win32_select (int num_fds, struct fd_set *rd, struct fd_set *wr,
 	int    fd, rc;
 	BOOL   expired = FALSE;
 
-	DBG("in: num-fd %d, %s%s%s, tv %s", num_fds, rd ? "r" : "-", wr ? "w" : "-",
+	TRACE("in: num-fd %d, %s%s%s, tv %s", num_fds, rd ? "r" : "-", wr ? "w" : "-",
 			ex ? "x" : "-", tv ? timeval_str(tv) : "NULL");
 
-	if (debug_level >= 2)
+	if (get_cmd_opt_int("verbose") == 2)
 		select_dump (num_fds, rd, wr, ex);
 
 	FD_ZERO (&tmp_rd);
@@ -671,11 +632,11 @@ int win32_select (int num_fds, struct fd_set *rd, struct fd_set *wr,
 			FD_SET (fd, ex);
 	}
 
-	DBG("-> rc %d, err %d", rc, rc < 0 ? errno : 0);
-	if (debug_level >= 2)
+	TRACE("-> rc %d, err %d", rc, rc < 0 ? errno : 0);
+	if (get_cmd_opt_int("verbose") == 2)
 		select_dump (num_fds, rd, wr, ex);
 
-	if (debug_level > 0)
+	if (get_cmd_opt_int("verbose") == 2)
 		Sleep (400);
 	else Sleep (0);
 

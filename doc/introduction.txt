@@ -223,6 +223,44 @@ Position-Oriented Navigation:
 
 	No keys are by default configured for cursor routing.
 
+Forms:
+
+	The status bar will indicate the type and name of the field.
+
+	Input text/Password fields:
+	These will be displayed as "________".
+	Note that passwords will be obscured using "*" characters.
+	Status bar will display something like "Text field, name q",
+	or "Password field, name password" for password fields.
+
+	Textarea boxes:
+	These will be displayed as multiple lines consisting of "_".
+	Status bar will display something like "Text area, name comment"
+
+	Buttons:
+	These will be displayed as "[ Go ]".
+	Status bar will display something like "Submit form to ...",
+	"Post form to ..." for submit buttons.
+
+	Checkboxes:
+	These will be displayed as "[ ]" or "[X]".
+	Status bar will display something like "Checkbox, name c, value 1".
+	To set one just press ENTER on it.
+
+	Radio buttons:
+	These will be displayed as "( )" or "(X)".
+	Status bar will display something like "Radio button, name radio1".
+	To set one, you may use ENTER.
+
+	Select lists:
+	These will be displayed as "[first item____]".
+	Note that if multiple attribute is used, these are displayed as a
+	group of checkboxes instead.
+	Status bar will display something like "Select field, name list"
+	To select one entry, press ENTER, then navigate using UP/DOWN, then
+	press ENTER again.
+
+
 
 Note: This is still a work in progress and from here on an below everything is
 marked TODO!
@@ -248,8 +286,8 @@ Useful Document Display Options:
 
  - Toggling color modes, plain/html and image link rendering.
 
- - Link numbering. 
+ - Link numbering.
 
  - Insert mode in text-input form-fields
 
-$Id: introduction.txt,v 1.11 2005/01/03 08:12:57 miciah Exp $
+$Id: introduction.txt,v 1.12 2005/01/03 16:01:46 zas Exp $

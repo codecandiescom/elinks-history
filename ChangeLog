@@ -1,3 +1,40 @@
+Sat Jun 28 21:43:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/: os_dep.c, os_dep.h:
+
+	Cleanup.  
+
+Sat Jun 28 11:56:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/mime.c:
+
+	Cleanup.  
+
+Sat Jun 28 11:13:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/os_dep.c:
+
+	Tidyup.  
+
+Sat Jun 28 10:47:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/cache.h, lowlevel/af_unix.h, lowlevel/dns.h,
+	lowlevel/select.h, osdep/os_dep.h, protocol/ftpparse.h:
+
+	Rename header file guards.  
+
+Sat Jun 28 10:46:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.h:
+
+	Use bitwidth of one for boolean members.  
+
+Sat Jun 28 09:52:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Patches causing bugs 214 and 218 were reverted. It fixes bug 218.  
+
 Fri Jun 27 20:51:54 2003  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/checkbox.c:

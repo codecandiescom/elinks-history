@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.26 2004/01/28 05:30:56 jonas Exp $ */
+/* $Id: exmode.c,v 1.27 2004/01/28 05:40:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,7 +228,8 @@ exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 
 static void
 input_field_line(struct session *ses, unsigned char *prompt,
-		 struct input_history *history)
+		 struct input_history *history,
+		 int (*handle_event)(struct dialog_data *, struct term_event *))
 {
 	struct dialog *dlg;
 	unsigned char *buffer;
@@ -240,7 +241,7 @@ input_field_line(struct session *ses, unsigned char *prompt,
 
 	buffer = get_dialog_offset(dlg, INPUT_LINE_WIDGETS);
 
-	dlg->handle_event = exmode_handle_event;
+	dlg->handle_event = handle_event;
 	dlg->layouter = input_line_layouter;
 	dlg->layout.only_widgets = 1;
 	dlg->udata = buffer;
@@ -256,7 +257,7 @@ input_field_line(struct session *ses, unsigned char *prompt,
 void
 exmode_start(struct session *ses)
 {
-	input_field_line(ses, ":", &exmode_history);
+	input_field_line(ses, ":", &exmode_history, exmode_handle_event);
 }
 
 #endif /* CONFIG_EXMODE */

@@ -2124,17 +2124,13 @@ struct link *choose_mouse_link(struct f_data_c *f, struct event *ev)
 /* This is common backend for goto_link_number() and try_document_key(). */
 static void goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 {
-#if 0
 	struct link *link = &fd->f_data->links[n];
-#endif	
+	
 	fd->vs->current_link = n;
 	check_vs(fd);
-#if 0
-	/* I think I don't like this. Maybe make it a configurable option?
-	 * --pasky */
-	if (link->type != L_AREA && link->type != L_FIELD)
+	
+	if (accesskey_enter && link->type != L_AREA && link->type != L_FIELD)
 		enter(ses, fd, 0);
-#endif
 }
 
 static void goto_link_number(struct session *ses, unsigned char *num)

@@ -2118,6 +2118,7 @@ extern int show_title_bar;
 
 extern int form_submit_auto;
 extern int form_submit_confirm;
+extern int accesskey_enter;
 extern int accesskey_priority;
 
 extern int allow_special_files;

@@ -967,6 +967,7 @@ int show_title_bar = 1;
 
 int form_submit_auto = 1;
 int form_submit_confirm = 1;
+int accesskey_enter = 0;
 int accesskey_priority = 1;
 
 int allow_special_files = 0;
@@ -1004,6 +1005,12 @@ struct option links_options[] = {
 	 * <cmdread_cmdline>, <cmdread_file>, <cmdwrite_file>,
 	 * <minval>, <maxval>, <varname>
 	 * <description> */ 
+
+	{	"accesskey-enter", "accesskey_enter",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &accesskey_enter,
+		"Automatically follow link / submit form if appropriate accesskey\n"
+		"is pressed - this is standart behaviour, however dangerous." },
 
 	{	"accesskey-priority", "accesskey_priority",
 		gen_cmd, num_rd, num_wr,

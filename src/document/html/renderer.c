@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.513 2004/12/19 01:15:19 pasky Exp $ */
+/* $Id: renderer.c,v 1.514 2004/12/19 16:23:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1727,8 +1727,6 @@ render_html_document(struct cache_entry *cached, struct document *document,
 			        par_format.leftmargin,
 				document->options.box.width, document,
 			        0, 0, head.source, 1);
-	done_string(&head);
-	mem_free_if(part);
 
 	/* Drop empty allocated lines at end of document if any
 	 * and adjust document height. */
@@ -1757,6 +1755,11 @@ render_html_document(struct cache_entry *cached, struct document *document,
 	document->bgcolor = par_format.bgcolor;
 
 	done_html_parser();
+
+	/* @part was residing in html_context so it has to stay alive until
+	 * done_html_parser(). */
+	done_string(&head);
+	mem_free_if(part);
 
 #if 0 /* debug purpose */
 	{

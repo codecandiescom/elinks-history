@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.370 2004/12/18 16:17:55 jonas Exp $ */
+/* $Id: tables.c,v 1.371 2004/12/19 16:23:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -854,11 +854,11 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 
 		if (cell->fragment_id)
 			add_fragment_identifier(part, cell->fragment_id);
-
-		mem_free(part);
 	}
 
 	done_html_parser_state(state);
+
+	if (part) mem_free(part);
 }
 
 static void
@@ -1243,6 +1243,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 ret2:
 	part->link_num = table->link_num;
 	int_lower_bound(&part->box.height, part->cy);
+	html_context.part = part; /* Might've changed in draw_table_cells(). */
 	done_html_parser_state(state);
 
 	/* XXX: This tag soup handling needs to be done outside the create

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.28 2003/08/02 15:35:17 jonas Exp $ */
+/* $Id: form.c,v 1.29 2003/08/02 15:46:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -741,9 +741,8 @@ get_form_url(struct session *ses, struct document_view *f,
 
 	done_string(&data);
 
-	/* if (sb) we free that stuff in
-	 * formsmem/formsmem.c:free_form() instead (msg_box's handler
-	 * associated with "No") */
+	/* If (sb) we free that stuff in done_form_history_item() instead
+	 * (msg_box's handler associated with "No") */
 	if (!sb) free_succesful_controls(&submit);
 
 	return go.source;

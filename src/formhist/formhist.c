@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.4 2003/08/02 15:39:41 jonas Exp $ */
+/* $Id: formhist.c,v 1.5 2003/08/02 15:46:35 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -29,6 +29,23 @@
 INIT_LIST_HEAD(saved_forms);
 
 static int loaded = 0;
+
+static void
+done_form_history_item(struct form_history_item *form)
+{
+	if (form->url) mem_free(form->url);
+
+	while (!list_empty(form->submit)) {
+		struct submitted_value *sv = form->submit.next;
+
+		del_from_list(sv);
+		if (sv->name) mem_free(sv->name);
+		if (sv->value) mem_free(sv->value);
+		mem_free(sv);
+	}
+
+        mem_free(form);
+}
 
 static int
 load_saved_forms(void)
@@ -94,7 +111,7 @@ load_saved_forms(void)
 	return 1;
 
 fail:
-	free_form(form);
+	done_form_history_item(form);
 	return 0;
 }
 
@@ -236,11 +253,11 @@ remember_form(struct form_history_item *fmem_data)
 
 	secure_close(ssi);
 
-	free_form(fmem_data);
+	done_form_history_item(fmem_data);
 	return 1;
 
 fail:
-	free_form(form);
+	done_form_history_item(form);
 	return 0;
 }
 
@@ -289,7 +306,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 		   "If you are using a valuable password answer NO."),
 		fm_data, 2,
 		N_("Yes"), remember_form, B_ENTER,
-		N_("No"), free_form, NULL);
+		N_("No"), done_form_history_item, NULL);
 
 	return sb;
 }
@@ -300,24 +317,7 @@ free_formsmemory(void)
 	struct form_history_item *form;
 
 	foreach(form, saved_forms)
-		free_form(form);
-}
-
-void
-free_form(struct form_history_item *form)
-{
-	if (form->url) mem_free(form->url);
-
-	while (!list_empty(form->submit)) {
-		struct submitted_value *sv = form->submit.next;
-
-		del_from_list(sv);
-		if (sv->name) mem_free(sv->name);
-		if (sv->value) mem_free(sv->value);
-		mem_free(sv);
-	}
-
-        mem_free(form);
+		done_form_history_item(form);
 }
 
 #endif /* FORMS_MEMORY */

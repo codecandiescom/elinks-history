@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.32 2003/10/23 22:16:06 pasky Exp $ */
+/* $Id: history.c,v 1.33 2003/10/23 22:18:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ ses_back(struct session *ses)
 	if (!have_location(ses)) return;
 
 	/* This was the previous location (where we came back now). */
-	loc = ses->history.history.next;
+	loc = cur_loc(ses);
 
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 
@@ -187,7 +187,7 @@ go_back(struct session *ses)
 	if (go_away(ses, -1) < 1)
 		return;
 
-	loc = ((struct location *) ses->history.history.next)->next;
+	loc = cur_loc(ses)->next;
 	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 

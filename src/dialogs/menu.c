@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.153 2003/10/23 21:54:37 pasky Exp $ */
+/* $Id: menu.c,v 1.154 2003/10/23 22:18:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 	/* Move all intermediate items to unhistory. */
 
 	while (steps-- > 0) {
-		struct location *loc = ses->history.history.next;
+		struct location *loc = cur_loc(ses);
 
 		if (!have_location(ses)) return;
 

@@ -1,3 +1,135 @@
+Tue Dec 31 17:13:04 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/syntree/layouter.c:
+
+	snprintf() requires stdio.h. Thanks, Jonas.  
+
+Tue Dec 31 10:36:34 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Some return values checking and cleanup. Patch by zas and me.  
+
+Tue Dec 31 10:32:41 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Use standard add_attrib() instead of own attrib_add().  
+
+Tue Dec 31 01:50:55 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/.cvsignore:
+
+	Added tiny fairie.  
+
+Tue Dec 31 01:50:02 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/: Makefile.am, syntree/Makefile.am:
+
+	Build ELusive layouter.  
+
+Tue Dec 31 01:49:39 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am, src/elusive/Makefile.am,
+	src/elusive/renderer/Makefile.am,
+	src/elusive/renderer/text/Makefile.am:
+
+	Added ELusive renderer to the build system.  
+
+Tue Dec 31 01:48:40 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/renderer.c:
+
+	Compilation fix. I just keep forgetting doing this.  
+
+Tue Dec 31 01:44:04 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/: renderer.c, text/renderer.c,
+	text/renderer.h:
+
+	Dummy support for the text renderer - just some basements, nothing
+	real.  
+
+Tue Dec 31 01:37:00 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/: renderer.c, renderer.h:
+
+	Generic renderer interface.  
+
+Tue Dec 31 01:25:34 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/layouter.c:
+
+	Added callback structure for syntree layouter.  
+
+Tue Dec 31 01:16:47 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/TODO:
+
+	Independence on ELinks considerations.  
+
+Tue Dec 31 01:08:55 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/main.c:
+
+	Shit.  
+
+Tue Dec 31 01:07:28 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am, src/main.c,
+	src/elusive/Makefile.am:
+
+	Build ELusive layouter.  
+
+Tue Dec 31 01:07:11 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/TODO:
+
+	Updated record for syntree layouter.  
+
+Tue Dec 31 00:48:54 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/: layouter.h, rectangle.c,
+	syntree/layouter.c:
+
+	Bunch of misc compilation fixes.  
+
+Tue Dec 31 00:30:58 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/rectangle.h:
+
+	Oops. layout_rectangle.leafs is obviously struct list_head.  
+
+Tue Dec 31 00:30:12 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/attrib.c:
+
+	Typo fix.  
+
+Tue Dec 31 00:06:33 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/syntree/layouter.c:
+
+	The container rectangles have display:block.  
+
+Mon Dec 30 23:57:02 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: layouter/rectangle.c, parser/syntree.c:
+
+	Use memacpy() in get_*_attrib(). Idea by zas.  
+
+Mon Dec 30 23:55:18 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: attrib.c, attrib.h:
+
+	Introduced add_attrib().  
+
+Mon Dec 30 23:51:55 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/syntree/: layouter.c, layouter.h:
+
+	Basic syntree layouter.  
+
 Mon Dec 30 18:15:09 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/elusive/layouter/: layouter.c, layouter.h:

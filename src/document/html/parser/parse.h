@@ -1,4 +1,4 @@
-/* $Id: parse.h,v 1.7 2004/05/07 08:55:31 zas Exp $ */
+/* $Id: parse.h,v 1.8 2004/05/07 08:58:27 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
@@ -21,8 +21,8 @@ enum html_attr_flags {
 	HTML_ATTR_EAT_NL = 2,
 
 	/* If HTML_ATTR_NO_CONV is set, then convert_string() is not called
-	 * on value. */
-	HTML_ATTR_NO_CONV = 4,
+	 * on value. Unused for now. */
+	/* HTML_ATTR_NO_CONV = 4, */
 };
 
 /* Parses html element attributes.

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.29 2004/05/07 08:55:31 zas Exp $ */
+/* $Id: parse.c,v 1.30 2004/05/07 08:58:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,8 +190,8 @@ found_endattr:
 		add_chr(attr, attrlen, '\0');
 		attrlen--;
 
-		if (!(flags & HTML_ATTR_NO_CONV)
-		    && memchr(attr, '&', attrlen)) {
+		if (/* Unused: !(flags & HTML_ATTR_NO_CONV) && */
+		    memchr(attr, '&', attrlen)) {
 			unsigned char *saved_attr = attr;
 
 			attr = convert_string(NULL, saved_attr, attrlen, CSM_QUERY);

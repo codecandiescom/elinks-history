@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.36 2004/06/09 21:13:18 jonas Exp $ */
+/* $Id: refresh.c,v 1.37 2004/08/20 21:28:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@ init_document_refresh(unsigned char *url, unsigned long seconds)
 	refresh->timer = -1;
 
 	return refresh;
-};
+}
 
 void
 kill_document_refresh(struct document_refresh *refresh)
@@ -52,7 +52,7 @@ kill_document_refresh(struct document_refresh *refresh)
 		kill_timer(refresh->timer);
 		refresh->timer = -1;
 	}
-};
+}
 
 void
 done_document_refresh(struct document_refresh *refresh)

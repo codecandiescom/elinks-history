@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.213 2004/06/13 22:26:06 zas Exp $ */
+/* $Id: link.c,v 1.214 2004/06/13 22:31:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,6 +55,36 @@ set_link(struct document_view *doc_view)
 
 	if (!current_link_is_visible(doc_view))
 		find_link(doc_view, 1, 0);
+}
+
+
+static inline int
+get_link_cursor_offset(struct document_view *doc_view, struct link *link)
+{
+	struct form_state *fs;
+
+	switch (link->type) {
+		case LINK_CHECKBOX:
+			return 1;
+
+		case LINK_BUTTON:
+			return 2;
+
+		case LINK_FIELD:
+			fs = find_form_state(doc_view, link->form_control);
+			return fs ? fs->state - fs->vpos : 0;
+
+		case LINK_AREA:
+			fs = find_form_state(doc_view, link->form_control);
+			return fs ? area_cursor(link->form_control, fs) : 0;
+
+		case LINK_HYPERTEXT:
+		case LINK_MAP:
+		case LINK_SELECT:
+			return 0;
+	}
+
+	return 0;
 }
 
 static inline void
@@ -148,7 +178,7 @@ static void
 draw_link(struct terminal *term, struct document_view *doc_view, int number)
 {
 	struct link *link;
-	int cursor_offset = 0;
+	int cursor_offset;
 
 	assert(term && doc_view && doc_view->vs);
 	if_assert_failed return;
@@ -161,33 +191,7 @@ draw_link(struct terminal *term, struct document_view *doc_view, int number)
 	if_assert_failed return;
 
 	link = &doc_view->document->links[number];
-
-	switch (link->type) {
-		struct form_state *fs;
-
-		case LINK_HYPERTEXT:
-		case LINK_MAP:
-		case LINK_SELECT:
-			break;
-
-		case LINK_CHECKBOX:
-			cursor_offset = 1;
-			break;
-
-		case LINK_BUTTON:
-			cursor_offset = 2;
-			break;
-
-		case LINK_FIELD:
-			fs = find_form_state(doc_view, link->form_control);
-			if (fs) cursor_offset = fs->state - fs->vpos;
-			break;
-
-		case LINK_AREA:
-			fs = find_form_state(doc_view, link->form_control);
-			if (fs) cursor_offset = area_cursor(link->form_control, fs);
-			break;
-	}
+	cursor_offset = get_link_cursor_offset(doc_view, link);
 
 	draw_link_do(term, doc_view, link, cursor_offset);
 }

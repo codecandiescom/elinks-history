@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.107 2003/10/26 23:17:41 zas Exp $ */
+/* $Id: connection.c,v 1.108 2003/10/26 23:23:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -762,7 +762,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	unsigned char *u;
 
 	if (download) {
-		download->c = NULL;
+		download->conn = NULL;
 		download->ce = NULL;
 		download->pri = pri;
 		download->state = S_OUT_OF_MEM;
@@ -832,7 +832,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 
 		if (download) {
 			download->prg = &conn->prg;
-			download->c = conn;
+			download->conn = conn;
 			download->ce = conn->cache;
 			add_to_list(conn->downloads, download);
 			set_connection_state(conn, conn->state);
@@ -858,7 +858,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 
 	if (download) {
 		download->prg = &conn->prg;
-		download->c = conn;
+		download->conn = conn;
 		download->ce = NULL;
 		add_to_list(conn->downloads, download);
 	}
@@ -895,7 +895,7 @@ change_connection(struct download *old, struct download *new,
 
 	check_queue_bugs();
 
-	conn = old->c;
+	conn = old->conn;
 
 	conn->pri[old->pri]--;
 	assertm(conn->pri[old->pri] >= 0, "priority counter underflow");
@@ -911,7 +911,7 @@ change_connection(struct download *old, struct download *new,
 		new->state = conn->state;
 		new->prev_error = conn->prev_error;
 		new->pri = newpri;
-		new->c = conn;
+		new->conn = conn;
 		new->ce = conn->cache;
 
 	} else if (conn->detached || interrupt) {
@@ -929,7 +929,7 @@ change_connection(struct download *old, struct download *new,
 void
 detach_connection(struct download *download, int pos)
 {
-	struct connection *conn = download->c;
+	struct connection *conn = download->conn;
 
 	if (is_in_result_state(download->state)) return;
 

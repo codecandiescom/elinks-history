@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.40 2003/10/19 18:00:48 pasky Exp $ */
+/* $Id: connection.h,v 1.41 2003/10/26 23:23:24 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -174,7 +174,7 @@ struct download {
 	 * src/sched/session.c and src/viewer/text/view.c */
 	LIST_HEAD(struct download);
 
-	struct connection *c;
+	struct connection *conn;
 	struct cache_entry *ce;
 	void (*end)(struct download *, void *);
 	void *data;

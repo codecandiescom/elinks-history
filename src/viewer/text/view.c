@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.76 2003/05/17 00:09:05 pasky Exp $ */
+/* $Id: view.c,v 1.77 2003/05/20 19:35:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3103,6 +3103,7 @@ quit:
 
 			case ACT_TAB_CLOSE:
 				close_tab(ses->tab->term);
+				ses = NULL; /* Disappeared in EV_ABORT handler. */
 				goto x;
 			case ACT_TAB_NEXT:
 				switch_to_tab(ses->tab->term, ses->tab->term->current_tab + 1, -1);
@@ -3176,7 +3177,10 @@ quit:
 	return;
 
 x:
-	ses->kbdprefix.rep = 0;
+	/* ses may disappear ie. in close_tab() */
+	if (ses) {
+		ses->kbdprefix.rep = 0;
+	}
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.64 2002/12/08 20:14:31 pasky Exp $ */
+/* $Id: sched.c,v 1.65 2002/12/09 13:21:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -907,7 +907,7 @@ load_url(unsigned char *url, unsigned char *prev_url,
 
 	if (cache_mode <= NC_CACHE && find_in_cache(url, &e) && !e->incomplete) {
 		if (e->cache_mode == NC_PR_NO_CACHE)
-			delete_cache_entry(e);
+			delete_entry_content(e);
 		else {
 			if (stat) {
 				stat->ce = e;

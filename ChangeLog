@@ -1,3 +1,132 @@
+Tue Dec  2 20:53:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/status.c, dialogs/status.h, document/renderer.c,
+	viewer/text/view.c:
+
+	Blast off init_bars_status(). We now update the (status) bars when
+	needed and makes sure the document is also updated.  
+
+Tue Dec  2 20:18:46 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Fix in Italian translation.  
+
+Tue Dec  2 20:18:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Rerender the document when the tab bar visibility changes. Fixes bug
+	87.  
+
+Tue Dec  2 19:57:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/status.c, sched/session.c, terminal/window.c:
+
+	Update ses->visible_tabs_bar in update_status() and call it when
+	opening and closing tabs.  
+
+Tue Dec  2 19:16:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, dialogs/status.c, dialogs/status.h:
+
+	Move status updating to update_status() and call it from the ui
+	changehook.  
+
+Tue Dec  2 19:07:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/window.h:
+
+	Comment the window struct.  
+
+Tue Dec  2 18:38:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/info.c:
+
+	Make it possible to add actions for any key map and add a toggle
+	button to the keys dialog. Reveals some bugs in the text scrolling
+	widget.  
+
+Tue Dec  2 17:31:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Simple mouse support for text widget scrollbar.  
+
+Tue Dec  2 16:51:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Define BIG_READ as 65536 and use it instead of hardcoded number.  
+
+Tue Dec  2 16:26:39 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Dec  2 16:00:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	HTTP code 307 is now handled (as a 302, not perfect but should do
+	the job).  
+
+Tue Dec  2 14:58:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Fixed potential bug created in rev1.10 by Jonas, when cache_entry
+	could be freed and then used in init_document(), in particularily
+	pathological case.  
+
+Tue Dec  2 14:49:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/status.c:
+
+	Fixed capital letters in download window.  
+
+Tue Dec  2 14:42:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/status.c:
+
+	Use hardcoded comma, not separator, between elapsed and estimated
+	time, to keep it at one line and thus make the download window more
+	compact.  
+
+Tue Dec  2 14:36:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/status.c:
+
+	Use @separator instead of hardcoded string.  
+
+Tue Dec  2 14:22:58 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Hotkey fix.  
+
+Tue Dec  2 11:23:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Do not copy post data when copying old to new session. This patch
+	should fix bug 304.  
+
+Tue Dec  2 10:54:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Vertical scrollbar display was tuned a bit, not yet perfect, but
+	better. format_and_display_text() was introduced to shorten
+	kbd_text().  
+
+Mon Dec  1 23:44:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	m33p.  
+
 Mon Dec  1 21:50:05 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/dialogs/status.c:

@@ -2,6 +2,7 @@ See ChangeLog for recent changes, bugfixes and new features.
 
 ELinks-now:
 
+* cookies creation and edition
 * perl scripting extensions
 * tab moving
 * trivial CSS

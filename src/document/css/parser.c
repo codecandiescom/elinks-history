@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.126 2004/09/21 00:34:51 pasky Exp $ */
+/* $Id: parser.c,v 1.127 2004/09/21 08:34:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,6 +325,16 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 				/* This is still just specificitying offspring
 				 * of the previous pkg->selector. */
 				pkg->selector = selector;
+			}
+
+			if (last_fragment) {
+				/* This is the last fragment of the selector
+				 * chain, that means the last base fragment
+				 * wasn't marked so and thus wasn't bound to
+				 * the stylesheet. Let's do that now. */
+				assert(prev_element_selector);
+				add_to_list(css->selectors,
+				            prev_element_selector);
 			}
 
 			selector->relation = reltype;

@@ -1,7 +1,7 @@
-/* $Id: session.h,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
+/* $Id: session.h,v 1.3 2002/03/17 21:53:08 pasky Exp $ */
 
-#ifndef EL__SESSION_H
-#define EL__SESSION_H
+#ifndef EL__DOCUMENT_SESSION_H
+#define EL__DOCUMENT_SESSION_H
 
 /* We need to declare these first :/. Damn cross-dependencies. */
 struct location;
@@ -138,8 +138,6 @@ struct session {
 };
 
 /* extern struct list_head sessions; */
-
-time_t parse_http_date(const char *);
 
 unsigned char *encode_url(unsigned char *);
 /* unsigned char *decode_url(unsigned char *); */

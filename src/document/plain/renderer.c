@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.114 2004/08/16 11:03:10 miciah Exp $ */
+/* $Id: renderer.c,v 1.115 2004/08/16 11:05:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,11 +298,14 @@ add_document_line(struct plain_renderer *renderer,
 					if (line_pos > last_link_end) {
 					int pos = int_max(0, line_pos - 1);
 					unsigned char *start = &line[pos];
-					int len = get_uri_length(start, width - pos);
+					int len = get_uri_length(start,
+								 width - pos);
 					int x = pos + expanded;
 
-					if (len
-					    && check_link_word(document, start, len, x, lineno))
+					if (len && check_link_word(document,
+								   start,
+								   len, x,
+								   lineno))
 						last_link_end = line_pos + len;
 					}
 

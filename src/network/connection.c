@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.88 2003/07/08 12:18:41 jonas Exp $ */
+/* $Id: connection.c,v 1.89 2003/07/09 13:41:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -833,8 +833,6 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		return 0;
 	}
 
-	assert(!e);
-	/* XXX: Recovery path...? */
 	c = init_connection(u, ref_url, start, cache_mode, pri);
 	if (!c) {
 		if (download) {
@@ -845,6 +843,10 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		mem_free(u);
 		return -1;
 	}
+
+	if (cache_mode < NC_RELOAD && e && !list_empty(e->frag)
+	    && !((struct fragment *) e->frag.next)->offset)
+		c->from = ((struct fragment *) e->frag.next)->length;
 
 	if (download) {
 		download->prg = &c->prg;

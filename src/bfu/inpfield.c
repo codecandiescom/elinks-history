@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.110 2004/01/28 07:18:04 jonas Exp $ */
+/* $Id: inpfield.c,v 1.111 2004/01/28 07:28:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -506,6 +506,8 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 		case ACT_EDIT_BACKSPACE:
 		case ACT_EDIT_ENTER:
 			if (*buffer) break;
+			/* Falling */
+		case ACT_EDIT_CANCEL:
 			cancel_dialog(dlg_data, NULL);
 			return EVENT_PROCESSED;
 

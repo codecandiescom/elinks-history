@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.15 2003/06/07 14:43:07 pasky Exp $ */
+/* $Id: libintl.h,v 1.16 2003/06/07 14:51:26 pasky Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -37,8 +37,10 @@ _(unsigned char *msg, struct terminal *term)
 	int new_charset;
 
 	/* Prevent useless (and possibly dangerous) calls. */
-	if (!term || !msg || !*msg)
+	if (!msg || !*msg)
 		return msg;
+
+	if (!term) goto do_lookup;
 
 	/* Prevent useless switching. */
 	new_charset = get_opt_int_tree(term->spec, "charset");
@@ -48,6 +50,7 @@ _(unsigned char *msg, struct terminal *term)
 					get_cp_mime_name(current_charset));
 	}
 
+do_lookup:
 	return (unsigned char *) gettext(msg);
 }
 #else
@@ -74,11 +77,12 @@ __(unsigned char *file, unsigned int line, unsigned char *func,
 	unsigned char *result;
 
 	/* Prevent useless (and possibly dangerous) calls. */
-	if (!term) return msg;
 	if (!msg || !*msg) {
 		error("%s:%d %s msg parameter", file, line, msg ? "empty": "NULL");
 		return msg;
 	}
+
+	if (!term) goto do_lookup;
 
 	/* Prevent useless switching. */
 	new_charset = get_opt_int_tree(term->spec, "charset");
@@ -88,6 +92,7 @@ __(unsigned char *file, unsigned int line, unsigned char *func,
 					get_cp_mime_name(current_charset));
 	}
 
+do_lookup:
 	result = (unsigned char *) gettext(msg);
 
 	if (!strcmp(result, last_result)

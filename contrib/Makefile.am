@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.11 2005/01/30 21:11:53 jonas Exp $
+## $Id: Makefile.am,v 1.12 2005/02/28 20:15:02 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -9,6 +9,7 @@ EXTRA_DIST = \
  colws.diff \
  elinks.conf \
  elinks-vim.diff \
+ elinks.fortune \
  elinks.spec.in \
  elinks.vim \
  js-1.5-rc6a+elinks.patch \
@@ -32,4 +33,4 @@ EXTRA_DIST = \
  lua/md5check.lua \
  lua/remote.lua \
  perl/hooks.pl \
- ruby/hooks.pl
+ ruby/hooks.rb

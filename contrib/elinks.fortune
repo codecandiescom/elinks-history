@@ -1,0 +1,57 @@
+Neuromancer > it compiles...
+    fonseca > ... and that concludes the rc2 announcement.
+%
+Miciah+> Add a href and all is goo.
+Miciah+> s/goo/&d/
+Miciah+> Somebody make a joke...
+%
+fonseca+> [22:51:23]fonseca@ask:~ > mutt -Z
+fonseca+> sh: line 1: elinks: command not found
+fonseca+> Press any key to continue...
+fonseca+> :((
+fonseca+> Damn gentoo upgrade.
+%
+You can prefix an action with a number.  For example:
+3<Down> jumps down three links.
+%
+Use 'u' to move forward in the document history.
+%
+Use '*' to toggle the display of image tags with no ALT attribute.
+%
+Use '.' to toggle link numbering.
+%
+Set ESC->Setup->Option manager->Document->Browsing->Forms->Insert mode
+to '1' to prevent text fields from capturing key presses.  When enabled,
+one must explicitly 'enter' a selected text-field to edit it.
+%
+Pressing '|' will display server headers and '=', page information.
+%
+Use '\' to toggle display of the page source.
+%
+Use '%' to switch between using the default colors, using
+document specified colors except for the background, and
+using document specified colors including the background.
+%
+You can use the escape key to dismiss any dialog box.
+%
+To search in the current frame, hit '/', or '?' to search backwards.
+%
+Use 't' to open a new tab and 'T' to open the
+selected link in a new tab in the background.
+%
+If you are having trouble selecting text with the mouse
+for copy and paste, try holding down the shift key.
+%
+Use 'n' to show the next search result and 'N' to show the previous.
+%
+fonseca+> It is DIY season on planet ELinks. ;)
+%
+08:57:49 < Miciah> Cats are not progressive.
+%
+mffpasky > you're mad? :) exposing myself to a CVS version of ELinks?!
+%
+Click on the LEDs to get an information dialog describing their purpose.
+%
+To preload links for later reading, press 'T' on
+each one.  Then, use '>' and '<' to switch between
+tabs, and 'c' to close a tab when you are finished.

@@ -11,8 +11,8 @@ sub goto_url_hook
 	# "bugmenot" dumb prefix
 	if ($url =~ '^bugmenot$' && $current_url)
 	{
-		my (undef, $target_url) = $current_url =~ /^(.*):\/\/(.*)/;
-		$url = 'http://bugmenot.com/view.php?url=' . $target_url;
+		(undef, $current_url) = $current_url =~ /^(.*):\/\/(.*)/;
+		$url = 'http://bugmenot.com/view.php?url=' . $current_url;
 		return $url;
 	}
 
@@ -22,7 +22,11 @@ sub goto_url_hook
 		my $word; # you can say *that* again...
 		srand();
 		open FILE, '</usr/share/dict/words'
+			or open FILE, '</usr/share/dict/linux.words'
 			or open FILE, '</usr/dict/words'
+			or open FILE, '</usr/dict/linux.words'
+			or open FILE, '</usr/share/dict/yawl.list'
+			or open FILE, $ENV{"HOME"} . '/.elinks/elinks.words'
 			or return 'http://google.com/webhp?hl=xx-bork';
 		rand($.) < 1 && ($word = $_) while <FILE>;
 		close FILE;
@@ -139,8 +143,24 @@ sub goto_url_hook
 		$url =~ s/ russian/ ru/i;
 		$url =~ s/ spanish/ es/i;
 		my ($from_language, $to_language) = $url =~ /^[a-z]* (.*) (.*)$/;
-		my (undef, $target_url) = $current_url =~ /^(.*):\/\/(.*)/;
-		$url = 'http://babelfish.altavista.com/babelfish/urltrurl?url=' . $target_url . '&lp=' . $from_language . '_' . $to_language . '&tt=url';
+		(undef, $current_url) = $current_url =~ /^(.*):\/\/(.*)/;
+		$url = 'http://babelfish.altavista.com/babelfish/urltrurl?lp=' . $from_language . '_' . $to_language . '&url=' . $current_url;
+		return $url;
+	}
+
+	# XYZZY
+	if ($url =~ '^xyzzy$')
+	{
+		#$url = 'http://sundae.triumf.ca/pub2/cave/node001.html';
+		srand();
+		my $xyzzy = int(rand(6));
+		   if ($xyzzy == 0) {$xyzzy = 1;}   # Colossal Cave Adventure
+		elsif ($xyzzy == 1) {$xyzzy = 227;} # Zork Zero: The Revenge of Megaboz    (883 G.U.E.)
+		elsif ($xyzzy == 2) {$xyzzy = 3;}   # Zork I: The Great Underground Empire (948 G.U.E.)
+		elsif ($xyzzy == 3) {$xyzzy = 4;}   # Zork II: The Wizard of Frobozz       (948 G.U.E.)
+		elsif ($xyzzy == 4) {$xyzzy = 5;}   # Zork III: The Dungeon Master         (948 G.U.E.)
+		elsif ($xyzzy == 5) {$xyzzy = 6;}   # Zork: The Undiscovered Underground   (1066 G.U.E.)
+		$url = 'http://ifiction.org/games/play.php?cat=2&game=' . $xyzzy . '&mode=html';
 		return $url;
 	}
 
@@ -168,6 +188,24 @@ sub follow_url_hook
 		return $url;
 	}
 
+	# nntp?  try Google groups
+	if ($url =~ '^(nntp|news):')
+	{
+		my $beta;
+		if (! -f $ENV{"HOME"} . '/.elinks/beta')
+		{
+			$beta = "groups"; # You lika de beta?  I no lika de beta.
+		}
+		else
+		{
+			$beta = "groups-beta"; # I like ugly sphincterfaces.
+		}
+		$url =~ s/\///g;
+		my ($group) = $url =~ /[a-zA-Z]:(.*)/;
+		$url = 'http://' . $beta . '.google.com/groups?hl=xx-bork&group=' . $group;
+		return $url;
+	}
+
 	return $url;
 }
 
@@ -183,7 +221,7 @@ sub pre_format_html_hook
 	{
 #		$html =~ s/^<!-- Advertisement code. -->.*<!-- end ad code -->$//sm;
 #		$html =~ s/<iframe.*><\/iframe>//g;
-		$html =~ s/<B>Advertisement<\/B>//;
+#		$html =~ s/<B>Advertisement<\/B>//;
 		return $html;
 	}
 
@@ -226,5 +264,26 @@ sub proxy_for_hook
 sub quit_hook
 {
 	# words of wisdom from ELinks the Sage
-	system('echo ""; fortune -sa 2>/dev/null');
+	my $cookiejar = 'elinks.fortune';
+	my $ohwhynot = `ls /usr/share/doc/elinks*/$cookiejar 2>/dev/null`;
+	open COOKIES, $ENV{"HOME"} . '/.elinks/' . $cookiejar
+		or open COOKIES, '/etc/elinks/' . $cookiejar
+		or open COOKIES, '/usr/share/elinks/' . $cookiejar
+		or open COOKIES, $ohwhynot
+		or die system('echo ""; fortune -sa 2>/dev/null');
+	my (@line, $fortune);
+	$line[0] = 0;
+	while(<COOKIES>)
+	{
+		$line[$#line + 1] = tell if /^%$/;
+	}
+	srand();
+	seek(COOKIES, $line[int rand($#line + 1)], 0);
+	while(<COOKIES>)
+	{
+		last if /^%$/;
+		$fortune .= $_;
+	}
+	close COOKIES;
+	print("\n", $fortune);
 }

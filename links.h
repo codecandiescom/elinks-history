@@ -1,5 +1,5 @@
 /* Global include with common functions and definitions for elinks */
-/* $Id: links.h,v 1.56 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: links.h,v 1.57 2002/03/16 09:55:34 pasky Exp $ */
 
 #ifndef __EXTENSION__
 #define __EXTENSION__ /* Helper for SunOS */
@@ -1034,7 +1034,7 @@ void do_terminal_function(struct terminal *, unsigned char, unsigned char *);
 
 /* language.c */
 
-#include "language.h"
+#include "lang_defs.h"
 
 extern unsigned char dummyarray[];
 

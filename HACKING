@@ -17,7 +17,7 @@ Each UI output should use language files in order to be able to translate the
 messages to desired language. Those language files reside in intl/ subdir, and
 each time when you add/remove something from there, thou shall call ./synclang
 script, so that the change will propagate from english.lng to all other
-language files and language.h && language.inc files will be generated
+language files and lang_defs.h && language.inc files will be generated
 automagically. Thou shall NEVER modify those two files manually, or thou wilt
 be cursed for the rest of your life and all patches of thee will be trampled
 in.
@@ -190,4 +190,4 @@ applies.
 
 Happy hacking!
 
-$Id: HACKING,v 1.10 2002/03/12 18:18:03 pasky Exp $
+$Id: HACKING,v 1.11 2002/03/16 09:55:34 pasky Exp $

@@ -108,7 +108,6 @@ unambiguously figure out the bookmarks hierarchy:
 
 	Bookmarks structure:                                Depth:
 	 ,-- The Pasky's C Bestiary                         0
-	 |-- Slides from Witek's hack-patch show            0
 	[-]- Wonderful things                               0
 	 |    |-- Christmas Carol in l33tsp34k by L.M.      1
 	 |   [-]- Beautiful Potato Camera Shots             1
@@ -117,6 +116,7 @@ unambiguously figure out the bookmarks hierarchy:
 	 |        [-]- Urgh                                 2
 	 |         |    `-- Jonas consuming Tofu            3
 	 |         `-- Jonas with crashed ELinks            2
+	 |-- Slides from Witek's hack-patch show            0
 	 `-- Miciah's English Grammar Spellbook             0
 
 <flags> is a string of characters. Currently, two flags are supported:
@@ -205,4 +205,4 @@ simplified rather sooner than later.
 
 
 
-$Id: bookmarks.txt,v 1.6 2004/12/16 10:46:29 pasky Exp $
+$Id: bookmarks.txt,v 1.7 2004/12/16 10:49:32 pasky Exp $

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.300 2004/12/16 09:56:33 jonas Exp $ */
+/* $Id: uri.c,v 1.301 2004/12/16 10:29:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@
 
 
 static inline int
-end_of_dir(struct uri *uri, unsigned char c)
+end_of_dir(unsigned char c)
 {
 	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
 }
@@ -527,7 +527,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 
 		if (!uri->datalen) return string;
 
-		for (pos = filename; *pos && !end_of_dir(uri, *pos); pos++)
+		for (pos = filename; *pos && !end_of_dir(*pos); pos++)
 			if (wants(URI_FILENAME) && is_uri_dir_sep(uri, *pos))
 				filename = pos + 1;
 
@@ -651,7 +651,7 @@ normalize_uri(struct uri *uri, unsigned char *uristring)
 		/* If the following pieces are the LAST parts of URL, we remove
 		 * them as well. See RFC 1808 for details. */
 
-		if (end_of_dir(uri, src[0])) {
+		if (end_of_dir(src[0])) {
 			/* URL data contains no more path. */
 			memmove(dest, src, strlen(src) + 1);
 			break;
@@ -888,7 +888,7 @@ join_urls(struct uri *base, unsigned char *rel)
 		}
 
 		for (path_end = path; *path_end; path_end++) {
-			if (end_of_dir(base, *path_end)) break;
+			if (end_of_dir(*path_end)) break;
 			/* Modify the path pointer, so that it'll always point
 			 * above the last '/' in the URL; later, we'll copy the
 			 * URL only _TO_ this point, and anything after last
@@ -1226,7 +1226,7 @@ get_extension_from_uri(struct uri *uri)
 
 	assert(pos);
 
-	for (; *pos && !end_of_dir(uri, *pos); pos++) {
+	for (; *pos && !end_of_dir(*pos); pos++) {
 		if (!afterslash && !extension && *pos == '.') {
 			extension = pos;
 		} else if (is_uri_dir_sep(uri, *pos)) {

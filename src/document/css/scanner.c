@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.58 2004/01/21 00:11:43 jonas Exp $ */
+/* $Id: scanner.c,v 1.59 2004/01/21 00:27:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,6 +83,13 @@ get_number_identifier(unsigned char *ident, int length)
 	return CSS_TOKEN_DIMENSION;
 }
 
+
+/* This macro checks that if the scanners table is full the last token skipping
+ * or get_next_css_token() call made it possible to get the type of the next
+ * token. */
+#define check_css_scanner(scanner) \
+	(scanner->tokens < CSS_SCANNER_TOKENS \
+	 || scanner->current + 1 < scanner->table + scanner->tokens)
 
 /* Check whéther it is safe to skip the char @c when looking for @skipto */
 #define check_css_precedence(c, skipto)						\
@@ -281,6 +288,7 @@ scan_css_tokens(struct css_scanner *scanner)
 	if (!scanner->position) {
 		scanner->tokens = move_to_front ? move_to_front : -1;
 		scanner->current = table;
+		assert(check_css_scanner(scanner));
 		return move_to_front ? table : NULL;
 	}
 
@@ -305,24 +313,16 @@ scan_css_tokens(struct css_scanner *scanner)
 	if (scanner->position && !*scanner->position)
 		scanner->position = NULL;
 
+	assert(check_css_scanner(scanner));
 	return table;
 }
 
 
 /* Scanner table accessors and mutators */
 
-/* This macro checks that if the scanners table is full the last token skipping
- * or get_next_css_token() call made it possible to get the type of the next
- * token. */
-#define check_css_scanner(scanner) \
-	(scanner->tokens < CSS_SCANNER_TOKENS \
-	 || scanner->current + 1 < scanner->table + scanner->tokens)
-
 struct css_token *
 get_css_token_(struct css_scanner *scanner)
 {
-	assert(scanner && check_css_scanner(scanner));
-
 #ifdef CSS_SCANNER_DEBUG
 	if (css_scanner_has_tokens(scanner)) {
 		struct css_token *token = scanner->current;
@@ -372,8 +372,8 @@ skip_css_tokens_(struct css_scanner *scanner, enum css_token_type skipto)
 int
 check_next_css_token(struct css_scanner *scanner, enum css_token_type type)
 {
-	assert(scanner && check_css_scanner(scanner));
 	return css_scanner_has_tokens(scanner)
+	 	&& scanner->current + 1 < scanner->table + scanner->tokens
 		&& scanner->current[1].type == type;
 }
 

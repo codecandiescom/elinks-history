@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.48 2004/06/23 10:53:54 jonas Exp $ */
+/* $Id: css.c,v 1.49 2004/09/21 17:34:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,14 +72,15 @@ import_css(struct css_stylesheet *css, struct uri *uri)
 		unsigned char *end = fragment->data + fragment->length;
 
 		css->import_level++;
-		css_parse_stylesheet(css, fragment->data, end);
+		css_parse_stylesheet(css, uri, fragment->data, end);
 		css->import_level--;
 	}
 }
 
 
 static void
-import_css_file(struct css_stylesheet *css, unsigned char *url, int urllen)
+import_css_file(struct css_stylesheet *css, struct uri *base_uri,
+		unsigned char *url, int urllen)
 {
 	struct string string, filename;
 
@@ -98,7 +99,7 @@ import_css_file(struct css_stylesheet *css, unsigned char *url, int urllen)
 		unsigned char *end = string.source + string.length;
 
 		css->import_level++;
-		css_parse_stylesheet(css, string.source, end);
+		css_parse_stylesheet(css, base_uri, string.source, end);
 		done_string(&string);
 		css->import_level--;
 	}
@@ -118,7 +119,7 @@ import_default_css(void)
 
 	if (!*url) return;
 
-	import_css_file(&default_stylesheet, url, strlen(url));
+	import_css_file(&default_stylesheet, NULL, url, strlen(url));
 }
 
 static int

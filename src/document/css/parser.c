@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.135 2004/09/21 16:09:22 pasky Exp $ */
+/* $Id: parser.c,v 1.136 2004/09/21 17:34:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,7 +116,8 @@ ride_on:
  *	| '@font-face' '{' properties '}'
  */
 static void
-css_parse_atrule(struct css_stylesheet *css, struct scanner *scanner)
+css_parse_atrule(struct css_stylesheet *css, struct scanner *scanner,
+		 struct uri *base_uri)
 {
 	struct scanner_token *token = get_scanner_token(scanner);
 
@@ -129,7 +130,7 @@ css_parse_atrule(struct css_stylesheet *css, struct scanner *scanner)
 			if (token->type == CSS_TOKEN_STRING
 			    || token->type == CSS_TOKEN_URL) {
 				assert(css->import);
-				css->import(css, token->string, token->length);
+				css->import(css, base_uri, token->string, token->length);
 			}
 			skip_css_tokens(scanner, ';');
 			break;
@@ -493,8 +494,8 @@ css_parse_ruleset(struct css_stylesheet *css, struct scanner *scanner)
 
 
 void
-css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string,
-		     unsigned char *end)
+css_parse_stylesheet(struct css_stylesheet *css, struct uri *base_uri,
+		     unsigned char *string, unsigned char *end)
 {
 	struct scanner scanner;
 
@@ -512,7 +513,7 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string,
 		case CSS_TOKEN_AT_IMPORT:
 		case CSS_TOKEN_AT_MEDIA:
 		case CSS_TOKEN_AT_PAGE:
-			css_parse_atrule(css, &scanner);
+			css_parse_atrule(css, &scanner, base_uri);
 			break;
 
 		default:

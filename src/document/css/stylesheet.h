@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.38 2004/09/21 16:09:22 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.39 2004/09/21 17:34:02 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -64,7 +64,7 @@ struct css_selector {
 
 
 struct css_stylesheet;
-typedef void (*css_stylesheet_importer)(struct css_stylesheet *,
+typedef void (*css_stylesheet_importer)(struct css_stylesheet *, struct uri *,
 					unsigned char *url, int urllen);
 
 /* The {struct css_stylesheet} describes all the useful data that was extracted

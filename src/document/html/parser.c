@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.489 2004/09/21 15:03:01 pasky Exp $ */
+/* $Id: parser.c,v 1.490 2004/09/21 17:34:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,10 +228,13 @@ add_fragment_identifier(struct part *part, unsigned char *attr)
 
 #ifdef CONFIG_CSS
 void
-import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
+import_css_stylesheet(struct css_stylesheet *css, struct uri *base_uri,
+		      unsigned char *url, int len)
 {
 	unsigned char *import_url;
 	struct uri *uri;
+
+	assert(base_uri);
 
 	if (!global_doc_opts->css_enable
 	    || !global_doc_opts->css_import)
@@ -241,7 +244,7 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 	if (!url) return;
 
 	/* HTML <head> urls should already be fine but we can.t detect them. */
-	import_url = join_urls(html_context.base_href, url);
+	import_url = join_urls(base_uri, url);
 	mem_free(url);
 
 	if (!import_url) return;

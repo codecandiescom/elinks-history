@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.86 2004/09/21 15:03:01 pasky Exp $ */
+/* $Id: parse.c,v 1.87 2004/09/21 17:34:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -793,7 +793,8 @@ start_element(struct element_info *ei,
 	}
 #ifdef CONFIG_CSS
 	if (ei->func == html_style && global_doc_opts->css_enable) {
-		css_parse_stylesheet(&html_context.css_styles, html, eof);
+		css_parse_stylesheet(&html_context.css_styles,
+				     html_context.base_href, html, eof);
 	}
 #endif
 

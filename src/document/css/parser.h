@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.14 2004/01/30 15:25:01 jonas Exp $ */
+/* $Id: parser.h,v 1.15 2004/09/21 17:34:02 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PARSER_H
 #define EL__DOCUMENT_CSS_PARSER_H
@@ -6,6 +6,7 @@
 #include "util/lists.h"
 struct scanner;
 struct css_stylesheet;
+struct uri;
 
 /* This is interface for the value parser. It is intended to be used only
  * internally inside of the CSS engine. */
@@ -21,6 +22,7 @@ void css_parse_properties(struct list_head *props, struct scanner *scanner);
 /* Parses the @string and adds any recognized selectors + properties to the
  * given stylesheet @css. If the selector is already in the stylesheet it
  * properties are added to the that selector. */
-void css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string, unsigned char *end);
+void css_parse_stylesheet(struct css_stylesheet *css, struct uri *base_uri,
+			  unsigned char *string, unsigned char *end);
 
 #endif

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.37 2004/07/21 23:15:44 pasky Exp $ */
+/* $Id: internal.h,v 1.38 2004/09/21 17:34:02 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -123,6 +123,9 @@ extern struct html_context html_context;
 void html_focusable(unsigned char *a);
 void html_skip(unsigned char *a);
 unsigned char *get_target(unsigned char *a);
-void import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len);
+
+void
+import_css_stylesheet(struct css_stylesheet *css, struct uri *base_uri,
+		      unsigned char *url, int len);
 
 #endif

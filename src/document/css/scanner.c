@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.22 2004/01/19 16:17:42 jonas Exp $ */
+/* $Id: scanner.c,v 1.23 2004/01/19 18:53:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,10 +212,15 @@ skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type)
 {
 	struct css_token *token = get_css_token_(scanner);
 
-	/* TODO: Precedens handling. Stop if ';' is encountered while skipping
-	 * for ':' and if '{' or '}' while skipping for ';' */
-	while (token && token->type != type)
+	/* Skip tokens while handling some basic precedens of special chars
+	 * so we don't skip to long. */
+	while (token) {
+		if (token->type == type
+		    || (token->type == ';' && type == ':')
+		    || (token->type == '}' && (type == ';' || type == ':')))
+			break;
 		token = get_next_css_token_(scanner);
+	}
 
 	return (token && token->type == type)
 		? get_next_css_token_(scanner) : NULL;

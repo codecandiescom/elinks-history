@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.21 2004/07/15 16:12:21 jonas Exp $ */
+/* $Id: blacklist.c,v 1.22 2004/07/15 16:13:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ get_blacklist_flags(struct uri *uri)
 {
 	struct blacklist_entry *entry = get_blacklist_entry(uri);
 
-	return entry ? entry->flags : 0;
+	return entry ? entry->flags : SERVER_BLACKLIST_NONE;
 }
 
 void

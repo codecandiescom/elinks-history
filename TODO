@@ -164,6 +164,7 @@ Protocols / network:
 Scripting:
 
 - Rewrite Lua APIs
+
 - Add Lua APIs to manipulate bookmarks and other things
 
 
@@ -175,6 +176,7 @@ Generic code changes:
 
 - Create and use a structure to store URLs, instead of using a string (this
   should fix the bug that file-uploads are very slow and memory-consumptive)
+
 
 Build-time configuration / build:
 
@@ -193,4 +195,4 @@ Permanent goals:
 Key: - nothing done + work in progress * almost ready
      (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.50 2003/05/08 11:07:29 miciah Exp $
+$Id: TODO,v 1.51 2003/05/08 12:33:45 pasky Exp $

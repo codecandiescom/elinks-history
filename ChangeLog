@@ -1,3 +1,130 @@
+Fri Oct  8 21:54:45 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/plain/renderer.c:
+
+	Probably fix bug 515.  
+
+Fri Oct  8 17:19:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: finger.c, finger.h, protocol.c, gopher/gopher.c,
+	gopher/gopher.h:
+
+	Dummy modules entries were added for finger and gopher protocols, so
+	they appear in Info box.  
+
+Fri Oct  8 16:57:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: connection.c, connection.h:
+
+	|remaining_info| -> |progress|.  
+
+Fri Oct  8 16:54:57 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/download.c, dialogs/status.c, dialogs/status.h,
+	protocol/ftp/ftp.c, protocol/http/http.c, sched/connection.c,
+	sched/connection.h, sched/download.c:
+
+	|prg| -> |progress|.  
+
+Fri Oct  8 16:47:23 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Fri Oct  8 16:44:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	|stat| -> |download_p|.  
+
+Fri Oct  8 16:41:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	|stat| -> |download|.  
+
+Fri Oct  8 16:36:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	|stat| -> |download|.  
+
+Fri Oct  8 16:32:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: session.c, connection.c:
+
+	|stat| -> |download|.  
+
+Fri Oct  8 16:25:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/status.h:
+
+	|down| -> |download|.  
+
+Fri Oct  8 16:21:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/status.h:
+
+	@stat -> @download.  
+
+Fri Oct  8 16:20:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: download.c, status.c, status.h:
+
+	Use @download for struct download * instead of @stat, and rename
+	get_stat_msg() to get_download_msg().  
+
+Fri Oct  8 16:12:17 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Set *new_len to zero to prevent segfault.  
+
+Fri Oct  8 16:04:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/connect.c, protocol/ftp/ftp.c, sched/connection.c,
+	sched/connection.h:
+
+	Rename @pf to @protocol_family, and make it a bitfield (using 0 for
+	IPv4 and 1 for IPv6, instead 1 and 2).  
+
+Fri Oct  8 15:33:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: download.c, download.h:
+
+	Rename @prog,@prog_flags to @external_handler,
+	@external_handler_flags.  
+
+Fri Oct  8 13:11:07 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Oct  8 13:06:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.c, document/html/parser.c,
+	document/sgml/scanner.c, protocol/smb/smb.c, viewer/text/view.c:
+
+	Drop trailing spaces.  
+
+Fri Oct  8 13:01:41 2004  Laurent Monin <zas@norz.org>:
+
+	* test/target_blank.html:
+
+	A test file named target_blank.html was added to test/. (i forgot to
+	cvs add !).  
+
+Fri Oct  8 13:00:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.inc, sched/task.c:
+
+	Option document.browse.links.target_blank which let user choose to
+	open links with target=_blank in a new tab in foreground or
+	background. See bug 468. A test file named target_blank.html was
+	added to test/.  
+
 Thu Oct  7 16:44:32 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/plain/renderer.c:

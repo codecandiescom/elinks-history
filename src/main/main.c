@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.55 2002/09/14 14:13:03 pasky Exp $ */
+/* $Id: main.c,v 1.56 2002/09/17 17:11:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
 #include "config/urlhist.h"
 #include "cookies/cookies.h"
 #include "dialogs/menu.h"
-#include "dialogs/auth.h" 
+#include "dialogs/auth.h"
 #include "document/cache.h"
 #include "document/download.h"
 #include "document/dump.h"
@@ -383,27 +383,31 @@ terminate_all_subsystems()
 	free_all_itrms();
 	abort_all_connections();
 	done_ssl();
+
+	shrink_memory(1);
+
+	if (init_b) {
 #ifdef HAVE_SCRIPTING
-	if (init_b)
 		script_hook_quit();
 #endif
-	shrink_memory(1);
-	if (init_b) save_url_history();
+		save_url_history();
+#ifdef GLOBHIST
+		finalize_global_history();
+#endif
+#ifdef BOOKMARKS
+		finalize_bookmarks();
+#endif
+#ifdef COOKIES
+		cleanup_cookies();
+#endif
+	}
+
 	free_table_cache();
 	free_history_lists();
-#ifdef GLOBHIST
-	finalize_global_history();
-#endif
 	free_auth();
-#ifdef BOOKMARKS
-	if (init_b) finalize_bookmarks();
-#endif
 	free_keymaps();
 	free_conv_table();
 	free_blacklist();
-#ifdef COOKIES
-	if (init_b) cleanup_cookies();
-#endif
 	check_bottom_halves();
 	free_home();
 	free_strerror_buf();

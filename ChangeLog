@@ -1,3 +1,28 @@
+Fri Mar 11 15:13:30 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	add_file_cmd_to_str(): abort connection on ftp data sockets creation
+	failure.  
+
+Fri Mar 11 15:11:14 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	add_file_cmd_to_str(): simplify code.  
+
+Fri Mar 11 15:08:39 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	add_file_cmd_to_str(): re-arrange code a bit and 2 FIXMEs.  
+
+Fri Mar 11 15:05:25 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	add_file_cmd_to_str(): re-arrange code a bit.  
+
 Thu Mar 10 15:30:13 2005  Laurent Monin <zas@norz.org>:
 
 	* src/lowlevel/timers.h:

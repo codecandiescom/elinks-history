@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.90 2003/09/26 17:35:44 zas Exp $ */
+/* $Id: dialogs.c,v 1.91 2003/10/06 00:27:30 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -267,7 +267,7 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 				"Title: \"%s\""),
 				bookmark->title),
 			NULL, 1,
-			N_("Cancel"), NULL, B_ENTER | B_ESC);
+			N_("OK"), NULL, B_ENTER | B_ESC);
 		else
 		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("Delete bookmark"), AL_CENTER,
@@ -277,7 +277,7 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 				"URL: \"%s\""),
 				bookmark->title, bookmark->url),
 			NULL, 1,
-			N_("Cancel"), NULL, B_ENTER | B_ESC);
+			N_("OK"), NULL, B_ENTER | B_ESC);
 		return;
 	}
 

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.38 2003/09/25 20:52:31 zas Exp $ */
+/* $Id: dialogs.c,v 1.39 2003/10/06 00:27:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,7 +243,7 @@ do_delete_global_history_item(struct terminal *term,
 				"URL: \"%s\"\n"),
 				historyitem->title, historyitem->url),
  			NULL, 1,
- 			N_("Cancel"), NULL, B_ENTER | B_ESC);
+ 			N_("OK"), NULL, B_ENTER | B_ESC);
  		return;
  	}
 

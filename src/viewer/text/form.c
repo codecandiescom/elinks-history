@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.39 2003/09/25 19:50:40 zas Exp $ */
+/* $Id: form.c,v 1.40 2003/10/06 00:27:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -664,7 +664,7 @@ encode_error:
 		msg_text(ses->tab->term, N_("Could not get file %s: %s"),
 			 m1, m2),
 		ses, 1,
-		N_("Cancel"), NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 	}
 }
 

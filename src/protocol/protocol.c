@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.22 2003/07/25 16:57:24 jonas Exp $ */
+/* $Id: protocol.c,v 1.23 2003/10/06 00:27:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ dummyjs_func(struct session *ses, unsigned char *url)
 		N_("Error"), AL_CENTER,
 		N_("JavaScript is currently not supported."),
 		NULL, 1,
-		N_("Cancel"), NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
 static struct protocol_backend dummyjs_protocol_backend = {

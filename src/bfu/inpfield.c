@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.50 2003/10/05 15:09:02 pasky Exp $ */
+/* $Id: inpfield.c,v 1.51 2003/10/06 00:27:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@ check_number(struct dialog_data *dlg, struct widget_data *di)
 			N_("Bad number"), AL_CENTER,
 			N_("Number expected in field"),
 			NULL, 1,
-			N_("Cancel"),	NULL, B_ENTER | B_ESC);
+			N_("OK"), NULL, B_ENTER | B_ESC);
 		return 1;
 	}
 
@@ -52,7 +52,7 @@ check_number(struct dialog_data *dlg, struct widget_data *di)
 			N_("Bad number"), AL_CENTER,
 			N_("Number out of range"),
 			NULL, 1,
-			N_("Cancel"),	NULL, B_ENTER | B_ESC);
+			N_("OK"), NULL, B_ENTER | B_ESC);
 		return 1;
 	}
 
@@ -72,7 +72,7 @@ check_nonempty(struct dialog_data *dlg, struct widget_data *di)
 		N_("Bad string"), AL_CENTER,
 		N_("Empty string not allowed"),
 		NULL, 1,
-		N_("Cancel"),	NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 
 	return 1;
 }

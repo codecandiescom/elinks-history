@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.37 2003/10/05 21:33:33 kuser Exp $ */
+/* $Id: search.c,v 1.38 2003/10/06 00:27:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -787,7 +787,7 @@ find_next(struct session *ses, struct document_view *f, int a)
 				N_("Search"), AL_CENTER,
 				N_("No previous search"),
 				NULL, 1,
-				N_("Cancel"), NULL, B_ENTER | B_ESC);
+				N_("OK"), NULL, B_ENTER | B_ESC);
 			return;
 		}
 		ses->search_word = stracpy(ses->last_search_word);
@@ -826,7 +826,7 @@ find_next(struct session *ses, struct document_view *f, int a)
 		msg_text(ses->tab->term, N_("Search string '%s' not found"),
 			ses->search_word),
 		ses, 1,
-		N_("Cancel"), NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
 void

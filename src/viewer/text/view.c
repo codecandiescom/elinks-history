@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.214 2003/10/05 12:54:18 pasky Exp $ */
+/* $Id: view.c,v 1.215 2003/10/06 00:27:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1460,7 +1460,7 @@ save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 			N_("Save error"), AL_CENTER,
 			N_("Error writing to file"),
 			NULL, 1,
-			N_("Cancel"), NULL, B_ENTER | B_ESC);
+			N_("OK"), NULL, B_ENTER | B_ESC);
 	}
 	close(h);
 }

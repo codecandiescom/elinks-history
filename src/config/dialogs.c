@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.71 2003/09/12 10:48:40 zas Exp $ */
+/* $Id: dialogs.c,v 1.72 2003/10/06 00:27:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@ write_config_error(struct terminal *term, struct memory_list *ml,
 		msg_text(term, N_("Unable to write to config file %s: %s"),
 			config_file, strerr),
 		NULL, 1,
-		N_("Cancel"), NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
 
@@ -189,7 +189,7 @@ check_valid_option(struct dialog_data *dlg, struct widget_data *di)
 		N_("Error"), AL_LEFT,
 		N_("Bad option value."),
 		NULL, 1,
-		N_("Cancel"), NULL, B_ESC | B_ENTER);
+		N_("OK"), NULL, B_ESC | B_ENTER);
 	return 1;
 }
 
@@ -354,7 +354,7 @@ push_edit_button(struct dialog_data *dlg,
 			   "this is some special option like a folder - try "
 			   "to press a space in order to see its contents."),
 			NULL, 1,
-			N_("Cancel"), NULL, B_ESC | B_ENTER);
+			N_("OK"), NULL, B_ESC | B_ENTER);
 		return 0;
 	}
 
@@ -389,7 +389,7 @@ invalid_option:
 			N_("Add option"), AL_CENTER,
 			N_("Cannot add an option here."),
 			NULL, 1,
-			N_("Cancel"), NULL, B_ESC | B_ENTER);
+			N_("OK"), NULL, B_ESC | B_ENTER);
 		return 0;
 	}
 
@@ -456,7 +456,7 @@ invalid_option:
 			N_("Delete option"), AL_CENTER,
 			N_("Cannot delete this option."),
 			NULL, 1,
-			N_("Cancel"), NULL, B_ESC | B_ENTER);
+			N_("OK"), NULL, B_ESC | B_ENTER);
 		return 0;
 	}
 
@@ -606,7 +606,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 			N_("Add keybinding"), AL_CENTER,
 			N_("Invalid keystroke."),
 			NULL, 1,
-			N_("Cancel"), NULL, B_ESC | B_ENTER);
+			N_("OK"), NULL, B_ESC | B_ENTER);
 		return;
 	}
 
@@ -628,7 +628,7 @@ push_kbdbind_add_button(struct dialog_data *dlg,
 			N_("Add keybinding"), AL_CENTER,
 			N_("Need to select a keymap."),
 			NULL, 1,
-			N_("Cancel"), NULL, B_ESC | B_ENTER);
+			N_("OK"), NULL, B_ESC | B_ENTER);
 		return 0;
 	}
 
@@ -719,7 +719,7 @@ push_kbdbind_del_button(struct dialog_data *dlg,
 			N_("This item is not a keybinding. Try to press a space"
 			   " in order to get to the keybindings themselves."),
 			NULL, 1,
-			N_("Cancel"), NULL, B_ESC | B_ENTER);
+			N_("OK"), NULL, B_ESC | B_ENTER);
 		return 0;
 	}
 

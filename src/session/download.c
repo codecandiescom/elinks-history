@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.102 2003/09/26 15:49:51 pasky Exp $ */
+/* $Id: download.c,v 1.103 2003/10/06 00:27:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -510,7 +510,7 @@ write_error:
 				N_("Download error"), AL_CENTER,
 				msg_text(term, N_("Could not create file %s: %s"), msg, emsg),
 				NULL, 1,
-				N_("Cancel"), NULL, B_ENTER | B_ESC);
+				N_("OK"), NULL, B_ENTER | B_ESC);
 		} else {
 			if (msg) mem_free(msg);
 			if (emsg) mem_free(emsg);
@@ -592,7 +592,7 @@ end_store:
 						N_("Download error"), AL_CENTER,
 						msg_text(term, N_("Error downloading %s:\n\n%s"), tt, t),
 						get_download_ses(file_download), 1,
-						N_("Cancel"), NULL, B_ENTER | B_ESC /*,
+						N_("OK"), NULL, B_ENTER | B_ESC /*,
 						N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
 				}
 			}
@@ -839,7 +839,7 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 			msg_text(term, N_("Could not create file '%s':\n%s"),
 				file, strerror(saved_errno)),
 			NULL, 1,
-			N_("Cancel"), NULL, B_ENTER | B_ESC);
+			N_("OK"), NULL, B_ENTER | B_ESC);
 
 		mem_free(file);
 		goto finish;

@@ -1,5 +1,5 @@
 /* Get system name */
-/* $Id: sysname.c,v 1.15 2003/10/26 19:10:55 jonas Exp $ */
+/* $Id: sysname.c,v 1.16 2003/12/19 18:30:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,6 @@ get_system_name(void)
 	if (!uname(&name)) {
 		snprintf(system_name, sizeof(system_name),
 			 "%s %s %s", name.sysname, name.release, name.machine);
-
 		return;
 	}
 #endif

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.101 2003/11/10 00:51:29 jonas Exp $ */
+/* $Id: inpfield.c,v 1.102 2003/11/24 01:22:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,8 +171,8 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	dlg = calloc_dialog(INPUT_WIDGETS_COUNT, l);
 	if (!dlg) return;
 
-	field = (unsigned char *) dlg + sizeof_dialog(INPUT_WIDGETS_COUNT, 0);
-	/* *field = 0; */ /* calloc() job. --Zas */
+	/* @field is automatically cleared by calloc() */
+	field = get_dialog_offset(dlg, INPUT_WIDGETS_COUNT);
 
 	if (def) {
 		int defsize = strlen(def) + 1;

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.128 2003/11/19 18:15:50 zas Exp $ */
+/* $Id: search.c,v 1.129 2003/11/24 01:22:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1026,8 +1026,8 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 		return;
 	}
 
-	field = (unsigned char *) dlg + sizeof_dialog(SEARCH_WIDGETS_COUNT, 0);
-	*field = 0;
+	/* @field is automatically cleared by calloc() */
+	field = get_dialog_offset(dlg, SEARCH_WIDGETS_COUNT);
 
 	if (def) {
 		int defsize = strlen(def) + 1;

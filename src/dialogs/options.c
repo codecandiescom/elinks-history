@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.125 2003/11/16 14:34:32 zas Exp $ */
+/* $Id: options.c,v 1.126 2003/11/24 01:22:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,8 +152,8 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, sizeof(int) * TERM_OPTIONS);
 	if (!dlg) return;
 
-	i = sizeof_dialog(TERMOPT_WIDGETS_COUNT, 0);
-	values = (int *) ((unsigned char *) dlg + i);
+	values = (int *) get_dialog_offset(dlg, TERMOPT_WIDGETS_COUNT);
+
 	for (i = 0; i < TERM_OPTIONS; i++) {
 		unsigned char *name = termopt_info[i].name;
 		enum termopt id = termopt_info[i].id;

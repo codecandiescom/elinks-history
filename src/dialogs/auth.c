@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.85 2003/11/12 00:10:34 zas Exp $ */
+/* $Id: auth.c,v 1.86 2003/11/24 01:22:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ do_auth_dialog(struct session *ses)
 	dlg->title = _("HTTP Authentication", term);
 	dlg->layouter = generic_dialog_layouter;
 
-	text = (unsigned char *) dlg + sizeof_dialog(AUTH_WIDGETS_COUNT, 0);
+	text = get_dialog_offset(dlg, AUTH_WIDGETS_COUNT);
 	strcpy(text, sticker);
 
 	dlg->udata2 = a;

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.41 2003/12/26 12:55:10 zas Exp $ */
+/* $Id: menu.h,v 1.42 2003/12/26 13:15:44 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -73,7 +73,7 @@ enum hotkey_state {
  */
 struct menu_item {
 	unsigned char *text;
-	unsigned char *rtext; /* FIXME: Use real keybindings. */
+	unsigned char *rtext;
 	enum keyact action;
 	menu_func func;
 	void *data;

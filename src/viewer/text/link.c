@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.129 2003/12/26 12:55:12 zas Exp $ */
+/* $Id: link.c,v 1.130 2003/12/26 13:15:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -904,10 +904,10 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		else {
 			int c = can_open_in_new(term);
 
-			add_to_menu(&mi, N_("~Follow link"), "", ACT_NONE,
+			add_to_menu(&mi, N_("~Follow link"), NULL, ACT_NONE,
 				    (menu_func) send_enter, NULL, 0);
 
-			add_to_menu(&mi, N_("Follow link and r~eload"), "", ACT_NONE,
+			add_to_menu(&mi, N_("Follow link and r~eload"), NULL, ACT_NONE,
 				    (menu_func) send_enter_reload, NULL, 0);
 
 			add_separator_to_menu(&mi);
@@ -942,7 +942,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	if (link->form) {
 		if (link->form->type == FC_RESET) {
-			add_to_menu(&mi, N_("~Reset form"), "", ACT_NONE,
+			add_to_menu(&mi, N_("~Reset form"), NULL, ACT_NONE,
 				    (menu_func) send_enter, NULL, 0);
 		} else {
 			int c = can_open_in_new(term);
@@ -952,10 +952,10 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					    (menu_func) menu_textarea_edit, NULL, 0);
 			}
 
-			add_to_menu(&mi, N_("~Submit form"), "", ACT_NONE,
+			add_to_menu(&mi, N_("~Submit form"), NULL, ACT_NONE,
 				    (menu_func) submit_form, NULL, 0);
 
-			add_to_menu(&mi, N_("Submit form and rel~oad"), "", ACT_NONE,
+			add_to_menu(&mi, N_("Submit form and rel~oad"), NULL, ACT_NONE,
 				    (menu_func) submit_form_reload, NULL, 0);
 
 			if (c && link->form->method == FM_GET)
@@ -968,13 +968,13 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 				add_to_menu(&mi, N_("Submit form and ~download"), "d", ACT_NONE,
 					    (menu_func) send_download, NULL, 0);
 
-			add_to_menu(&mi, N_("~Reset form"), "", ACT_NONE,
+			add_to_menu(&mi, N_("~Reset form"), NULL, ACT_NONE,
 				    (menu_func) reset_form, NULL, 0);
 		}
 	}
 
 	if (link->where_img) {
-		add_to_menu(&mi, N_("V~iew image"), "", ACT_NONE,
+		add_to_menu(&mi, N_("V~iew image"), NULL, ACT_NONE,
 			    (menu_func) send_image, NULL, 0);
 		if (!get_opt_int_tree(cmdline_options, "anonymous"))
 			add_to_menu(&mi, N_("Download ima~ge"), "", ACT_DOWNLOAD_IMAGE,

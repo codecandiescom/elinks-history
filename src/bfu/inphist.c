@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.70 2003/12/26 12:55:10 zas Exp $ */
+/* $Id: inphist.c,v 1.71 2003/12/26 13:15:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 			return;
 		}
 
-		SET_MENU_ITEM(&items[n], entry->data, "", ACT_NONE, tab_compl,
+		SET_MENU_ITEM(&items[n], entry->data, NULL, ACT_NONE, tab_compl,
 			      entry->data, FREE_LIST | NO_INTL, HKS_SHOW, 0);
 		n++;
 	}

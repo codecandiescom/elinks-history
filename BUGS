@@ -52,15 +52,12 @@ when those links are selected.
 	Searches match links' prefixes
 (when document.browse.links.numbering = 1).
 
-	'Add link to bookmarks' is displayed in the Link menu even when
-the -anonymous command-line option was given.
-
 	<li>foo</li><li></li><li>bar</li> displays the bullets for
 the second two <li>s on the same line.
 
 	The newline displayed before a list is superfluous when that list
 is nested under another list.
 
-$Id: BUGS,v 1.38 2003/05/03 10:54:03 zas Exp $
+$Id: BUGS,v 1.39 2003/05/03 15:24:38 pasky Exp $
 
 vim: textwidth=80

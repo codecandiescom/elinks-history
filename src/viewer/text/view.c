@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.43 2003/05/03 02:58:12 pasky Exp $ */
+/* $Id: view.c,v 1.44 2003/05/03 15:24:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3446,15 +3446,16 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					     MENU_FUNC open_in_new_window,
 					     send_open_in_new_xterm, c - 1);
 
-			if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+			if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 				add_to_menu(&mi, N_("~Download link"), "d",
 					    MENU_FUNC send_download, NULL, 0);
 
 #ifdef BOOKMARKS
-			add_to_menu(&mi, N_("~Add link to bookmarks"), "A",
-				    MENU_FUNC launch_bm_add_link_dialog,
-				    NULL, 0);
+				add_to_menu(&mi, N_("~Add link to bookmarks"), "A",
+					    MENU_FUNC launch_bm_add_link_dialog,
+					    NULL, 0);
 #endif
+			}
 
 		}
 	}

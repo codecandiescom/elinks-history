@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.123 2003/12/26 12:18:37 zas Exp $ */
+/* $Id: kbdbind.c,v 1.124 2003/12/26 14:08:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -700,7 +700,6 @@ static struct default_kb default_main_keymap[] = {
 	{ 'A',		 KBD_CTRL,	ACT_HOME },
 	{ 'B',		 KBD_CTRL,	ACT_PAGE_UP },
 	{ 'C',		 0,		ACT_CACHE_MANAGER },
-	{ 'C',		 KBD_CTRL,	ACT_COPY_CLIPBOARD },
 	{ 'D',		 0,		ACT_DOWNLOAD_MANAGER },
 	{ 'E',		 0,		ACT_GOTO_URL_CURRENT_LINK },
 	{ 'E',		 KBD_CTRL,	ACT_END },
@@ -767,7 +766,6 @@ static struct default_kb default_main_keymap[] = {
 
 static struct default_kb default_edit_keymap[] = {
 	{ 'A',		 KBD_CTRL,	ACT_HOME },
-	{ 'C',		 KBD_CTRL,	ACT_COPY_CLIPBOARD },
 	{ 'D',		 KBD_CTRL,	ACT_DELETE },
 	{ 'E',		 KBD_CTRL,	ACT_END },
 	{ 'H',		 KBD_CTRL,	ACT_BACKSPACE },

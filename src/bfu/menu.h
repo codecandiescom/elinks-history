@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.10 2003/04/30 12:24:41 zas Exp $ */
+/* $Id: menu.h,v 1.11 2003/04/30 16:59:37 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -8,10 +8,9 @@
 #define MENU_FUNC_TYPE	void (*)(struct terminal *, void *, void *)
 #define MENU_FUNC	(MENU_FUNC_TYPE)
 
-extern unsigned char m_bar;
-#define M_BAR	(&m_bar)
+extern unsigned char submenu_indicator[];
+#define SUBMENU_INDICATOR ((unsigned char *)submenu_indicator)
 
-#define SUBMENU_INDICATOR ">"
 
 /* Which fields to free when zapping a list item - bitwise. */
 enum item_free {
@@ -21,6 +20,23 @@ enum item_free {
 	FREE_RTEXT = 4, /* only for menu_item */
 	FREE_DATA = 8, /* for menu_item, see menu.c for remarks */
 };
+
+/* menu item with no right part :
+ * text != NULL and text[0] and rtext == NULL
+ *
+ * menu item with right part:
+ * text != NULL and text[0] and rtext != NULL and rtext[0]
+ *
+ * unselectable menu item:
+ * text != NULL and text[0] and rtext != NULL and !rtext[0]
+ *
+ * horizontal bar
+ * text != NULL and !text[0]
+ *
+ * end of menu items list
+ * text == NULL
+ *
+ */
 
 struct menu_item {
 	unsigned char *text;

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.81 2003/04/30 12:24:41 zas Exp $ */
+/* $Id: menu.c,v 1.82 2003/04/30 16:59:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,7 +77,7 @@ menu_manual(struct terminal *term, void *d, struct session *ses)
 	}
 }
 
-static void
+static inline void
 menu_for_frame(struct terminal *term,
 	       void (*f)(struct session *, struct f_data_c *, int),
 	       struct session *ses)
@@ -85,7 +85,7 @@ menu_for_frame(struct terminal *term,
 	do_for_frame(ses, f, 0);
 }
 
-static void
+static inline void
 menu_goto_url(struct terminal *term, void *d, struct session *ses)
 {
 	dialog_goto_url(ses, "");
@@ -93,19 +93,19 @@ menu_goto_url(struct terminal *term, void *d, struct session *ses)
 
 static void dialog_save_url(struct session *ses);
 
-static void
+static inline void
 menu_save_url_as(struct terminal *term, void *d, struct session *ses)
 {
 	dialog_save_url(ses);
 }
 
-static void
+static inline void
 menu_go_back(struct terminal *term, void *d, struct session *ses)
 {
 	go_back(ses);
 }
 
-static void
+static inline void
 menu_reload(struct terminal *term, void *d, struct session *ses)
 {
 	reload(ses, -1);
@@ -117,7 +117,7 @@ really_exit_prog(struct session *ses)
 	register_bottom_half((void (*)(void *))destroy_terminal, ses->term);
 }
 
-static void
+static inline void
 dont_exit_prog(struct session *ses)
 {
 	ses->exit_query = 0;
@@ -154,7 +154,7 @@ exit_prog(struct terminal *term, void *d, struct session *ses)
 }
 
 
-static void
+static inline void
 flush_caches(struct terminal *term, void *d, void *e)
 {
 	shrink_memory(1);
@@ -236,7 +236,7 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 }
 
 static struct menu_item no_hist_menu[] = {
-	{N_("No history"), M_BAR, NULL, NULL, 0, 0},
+	{N_("No history"), "", NULL, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -265,7 +265,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 			pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
-			add_to_menu(&mi, url, "", MENU_FUNC go_backwards,
+			add_to_menu(&mi, url, NULL, MENU_FUNC go_backwards,
 			    	    (void *) n, 0);
 		}
 		n++;
@@ -297,7 +297,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 			pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
-			add_to_menu(&mi, url, "", MENU_FUNC go_unbackwards,
+			add_to_menu(&mi, url, NULL, MENU_FUNC go_unbackwards,
 			    	    (void *) n, 0);
 		}
 		n++;
@@ -311,7 +311,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 
 
 static struct menu_item no_downloads_menu[] = {
-	{N_("No downloads"), M_BAR, NULL, NULL, 0, 0},
+	{N_("No downloads"), "", NULL, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -335,7 +335,7 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 			pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
-			add_to_menu(&mi, url, "", MENU_FUNC display_download,
+			add_to_menu(&mi, url, NULL, MENU_FUNC display_download,
 			    	    d, 0);
 			n++;
 		}
@@ -348,19 +348,19 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 }
 
 
-static void
+static inline void
 menu_doc_info(struct terminal *term, void *ddd, struct session *ses)
 {
 	state_msg(ses);
 }
 
-static void
+static inline void
 menu_header_info(struct terminal *term, void *ddd, struct session *ses)
 {
 	head_msg(ses);
 }
 
-static void
+static inline void
 menu_toggle(struct terminal *term, void *ddd, struct session *ses)
 {
 	toggle(ses, ses->screen, 0);
@@ -375,7 +375,7 @@ menu_shell(struct terminal *term, void *xxx, void *yyy)
 	exec_on_terminal(term, sh, "", 1);
 }
 
-static void
+static inline void
 menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
 {
 	abort_background_connections();
@@ -399,30 +399,30 @@ static struct menu_item file_menu12[] = {
 };
 
 static struct menu_item file_menu21[] = {
-	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_("Sa~ve as"), "", MENU_FUNC save_as, (void *)0, 0, 0},
-	{N_("Save ~URL as"), "", MENU_FUNC menu_save_url_as, (void *)0, 0, 0},
-	{N_("Save formatted ~document"), "", MENU_FUNC menu_save_formatted, (void *)0, 0, 0},
+	{"", NULL, NULL, NULL, 0, 0},
+	{N_("Sa~ve as"), NULL, MENU_FUNC save_as, (void *)0, 0, 0},
+	{N_("Save ~URL as"), NULL, MENU_FUNC menu_save_url_as, (void *)0, 0, 0},
+	{N_("Save formatted ~document"), NULL, MENU_FUNC menu_save_formatted, (void *)0, 0, 0},
 };
 
 static struct menu_item file_menu22[] = {
-	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_("~Kill background connections"), "", MENU_FUNC menu_kill_background_connections, (void *)0, 0, 0},
-	{N_("~Flush all caches"), "", MENU_FUNC flush_caches, (void *)0, 0, 0},
-	{N_("Resource ~info"), "", MENU_FUNC res_inf, (void *)0, 0, 0},
+	{"", NULL, NULL, NULL, 0, 0},
+	{N_("~Kill background connections"), NULL, MENU_FUNC menu_kill_background_connections, (void *)0, 0, 0},
+	{N_("~Flush all caches"), NULL, MENU_FUNC flush_caches, (void *)0, 0, 0},
+	{N_("Resource ~info"), NULL, MENU_FUNC res_inf, (void *)0, 0, 0},
 #if 0
 	/* This ought to be rewritten first, now it's too messy - try it with
 	 * a bit full cache. */
-	{N_("~Cache info"), "", MENU_FUNC cache_inf, (void *)0, 0, 0},
+	{N_("~Cache info"), NULL, MENU_FUNC cache_inf, (void *)0, 0, 0},
 #endif
 #ifdef LEAK_DEBUG
-	{N_("~Memory info"), "", MENU_FUNC memory_inf, (void *)0, 0, 0},
+	{N_("~Memory info"), NULL, MENU_FUNC memory_inf, (void *)0, 0, 0},
 #endif
-	{"", M_BAR, NULL, NULL, 0, 0},
+	{"", NULL, NULL, NULL, 0, 0},
 };
 
 static struct menu_item file_menu3[] = {
-	{"", M_BAR, NULL, NULL, 0, 0},
+	{"", NULL, NULL, NULL, 0, 0},
 	{N_("E~xit"), "q", MENU_FUNC exit_prog, (void *)0, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
@@ -453,7 +453,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	o = can_open_in_new(term);
 	if (o) {
 		e->text = N_("~New window");
-		e->rtext = o - 1 ? SUBMENU_INDICATOR : "";
+		e->rtext = o - 1 ? SUBMENU_INDICATOR : NULL;
 		e->func = MENU_FUNC open_in_new_window;
 		e->data = send_open_new_xterm;
 		e->in_m = o - 1;
@@ -470,13 +470,13 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	memcpy(e, file_menu22, sizeof(file_menu22));
 	e += sizeof(file_menu22) / sizeof(struct menu_item);
-	/*"", M_BAR, NULL, NULL, 0, 0,
+	/*"", NULL, NULL, NULL, 0, 0,
 	N_("~OS shell"), "", MENU_FUNC menu_shell, NULL, 0, 0,*/
 
 	x = 1;
 	if (!anonymous && can_open_os_shell(term->environment)) {
 		e->text = N_("~OS shell");
-		e->rtext = "";
+		e->rtext = NULL;
 		e->func = MENU_FUNC menu_shell;
 		e->data = NULL;
 		e->in_m = 0;
@@ -489,7 +489,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	if (can_resize_window(term->environment)) {
 		e->text = N_("Resize ~terminal");
-		e->rtext = "";
+		e->rtext = NULL;
 		e->func = MENU_FUNC dlg_resize_terminal;
 		e->data = NULL;
 		e->in_m = 0;
@@ -513,7 +513,7 @@ static struct menu_item view_menu[] = {
 	{N_("Search ~backward"), "?", MENU_FUNC menu_for_frame, (void *)search_back_dlg, 0, 0},
 	{N_("Find ~next"), "n", MENU_FUNC menu_for_frame, (void *)find_next, 0, 0},
 	{N_("Find ~previous"), "N", MENU_FUNC menu_for_frame, (void *)find_next_back, 0, 0},
-	{"", M_BAR, NULL, NULL, 0, 0},
+	{"", NULL, NULL, NULL, 0, 0},
 	{N_("Toggle ~html/plain"), "\\", MENU_FUNC menu_toggle, NULL, 0, 0},
 	{N_("Document ~info"), "=", MENU_FUNC menu_doc_info, NULL, 0, 0},
 	{N_("H~eader info"), "|", MENU_FUNC menu_header_info, NULL, 0, 0},
@@ -526,7 +526,7 @@ static struct menu_item view_menu_anon[] = {
 	{N_("Search ~backward"), "?", MENU_FUNC menu_for_frame, (void *)search_back_dlg, 0, 0},
 	{N_("Find ~next"), "n", MENU_FUNC menu_for_frame, (void *)find_next, 0, 0},
 	{N_("Find ~previous"), "N", MENU_FUNC menu_for_frame, (void *)find_next_back, 0, 0},
-	{"", M_BAR, NULL, NULL, 0, 0},
+	{"", NULL, NULL, NULL, 0, 0},
 	{N_("Toggle ~html/plain"), "\\", MENU_FUNC menu_toggle, NULL, 0, 0},
 	{N_("Document ~info"), "=", MENU_FUNC menu_doc_info, NULL, 0, 0},
 	{N_("Frame at ~full-screen"), "f", MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
@@ -534,28 +534,28 @@ static struct menu_item view_menu_anon[] = {
 };
 
 static struct menu_item help_menu[] = {
-	{N_("~About"), "", MENU_FUNC menu_about, (void *)0, 0, 0},
-	{N_("~Keys"), "", MENU_FUNC menu_keys, (void *)0, 0, 0},
-	{N_("User's ~manual"), "", MENU_FUNC menu_manual, (void *)0, 0, 0},
+	{N_("~About"), NULL, MENU_FUNC menu_about, (void *)0, 0, 0},
+	{N_("~Keys"), NULL, MENU_FUNC menu_keys, (void *)0, 0, 0},
+	{N_("User's ~manual"), NULL, MENU_FUNC menu_manual, (void *)0, 0, 0},
 #ifdef HAVE_LUA
-	{N_("~Lua Reference manual"), "", MENU_FUNC menu_lua_manual, (void *)0, 0, 0},
+	{N_("~Lua Reference manual"), NULL, MENU_FUNC menu_lua_manual, (void *)0, 0, 0},
 #endif
-	{N_("~Copying"), "", MENU_FUNC menu_copying, (void *)0, 0, 0},
-	{N_("~ELinks homepage"), "", MENU_FUNC menu_elinks_home, (void *)0, 0, 0},
+	{N_("~Copying"), NULL, MENU_FUNC menu_copying, (void *)0, 0, 0},
+	{N_("~ELinks homepage"), NULL, MENU_FUNC menu_elinks_home, (void *)0, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
 #if 0
 static struct menu_item assoc_menu[] = {
-	{N_("~Add"), "", MENU_FUNC menu_add_ct, NULL, 0, 0},
-	{N_("~Modify"), ">", MENU_FUNC menu_list_assoc, menu_add_ct, 1, 0},
-	{N_("~Delete"), ">", MENU_FUNC menu_list_assoc, menu_del_ct, 1, 0},
+	{N_("~Add"), NULL, MENU_FUNC menu_add_ct, NULL, 0, 0},
+	{N_("~Modify"), SUBMENU_INDICATOR, MENU_FUNC menu_list_assoc, menu_add_ct, 1, 0},
+	{N_("~Delete"), SUBMENU_INDICATOR, MENU_FUNC menu_list_assoc, menu_del_ct, 1, 0},
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
 #endif
 
 static struct menu_item ext_menu[] = {
-	{N_("~Add"), "", MENU_FUNC menu_add_ext, NULL, 0, 0},
+	{N_("~Add"), NULL, MENU_FUNC menu_add_ext, NULL, 0, 0},
 	{N_("~Modify"), SUBMENU_INDICATOR, MENU_FUNC menu_list_ext, menu_add_ext, 1, 0},
 	{N_("~Delete"), SUBMENU_INDICATOR, MENU_FUNC menu_list_ext, menu_del_ext, 1, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
@@ -564,20 +564,20 @@ static struct menu_item ext_menu[] = {
 static struct menu_item setup_menu[] = {
 	{N_("~Language"), SUBMENU_INDICATOR, MENU_FUNC menu_language_list, NULL, 1, 0},
 	{N_("C~haracter set"), SUBMENU_INDICATOR, MENU_FUNC charset_list, (void *)1, 1, 0},
-	{N_("~Terminal options"), "", MENU_FUNC terminal_options, NULL, 0, 0},
+	{N_("~Terminal options"), NULL, MENU_FUNC terminal_options, NULL, 0, 0},
 /*	{N_("~Associations"), SUBMENU_INDICATOR, MENU_FUNC do_menu, assoc_menu, 1, 0}, */
 	{N_("File ~extensions"), SUBMENU_INDICATOR, MENU_FUNC do_menu, ext_menu, 1, 0},
-	{"", M_BAR, NULL, NULL, 0, 0},
+	{"", NULL, NULL, NULL, 0, 0},
 	{N_("~Options manager"), "o", MENU_FUNC menu_options_manager, NULL, 0, 0},
 	{N_("~Keybinding manager"), "k", MENU_FUNC menu_keybinding_manager, NULL, 0, 0},
-	{N_("~Save options"), "", MENU_FUNC write_config, NULL, 0, 0},
+	{N_("~Save options"), NULL, MENU_FUNC write_config, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
 static struct menu_item setup_menu_anon[] = {
 	{N_("~Language"), SUBMENU_INDICATOR, MENU_FUNC menu_language_list, NULL, 1, 0},
 	{N_("C~haracter set"), SUBMENU_INDICATOR, MENU_FUNC charset_list, (void *)1, 1, 0},
-	{N_("~Terminal options"), "", MENU_FUNC terminal_options, NULL, 0, 0},
+	{N_("~Terminal options"), NULL, MENU_FUNC terminal_options, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -599,19 +599,19 @@ do_setup_menu(struct terminal *term, void *xxx, struct session *ses)
 		do_menu(term, setup_menu_anon, ses, 1);
 }
 
-static void
+static inline void
 do_help_menu(struct terminal *term, void *xxx, struct session *ses)
 {
 	do_menu(term, help_menu, ses, 1);
 }
 
 static struct menu_item main_menu[] = {
-	{N_("~File"), "", MENU_FUNC do_file_menu, NULL, 1, 1},
-	{N_("~View"), "", MENU_FUNC do_view_menu, NULL, 1, 1},
-	{N_("~Link"), "", MENU_FUNC link_menu, NULL, 1, 1},
-	{N_("~Downloads"), "", MENU_FUNC downloads_menu, NULL, 1, 1},
-	{N_("~Setup"), "", MENU_FUNC do_setup_menu, NULL, 1, 1},
-	{N_("~Help"), "", MENU_FUNC do_help_menu, NULL, 1, 1},
+	{N_("~File"), NULL, MENU_FUNC do_file_menu, NULL, 1, 1},
+	{N_("~View"), NULL, MENU_FUNC do_view_menu, NULL, 1, 1},
+	{N_("~Link"), NULL, MENU_FUNC link_menu, NULL, 1, 1},
+	{N_("~Downloads"), NULL, MENU_FUNC downloads_menu, NULL, 1, 1},
+	{N_("~Setup"), NULL, MENU_FUNC do_setup_menu, NULL, 1, 1},
+	{N_("~Help"), NULL, MENU_FUNC do_help_menu, NULL, 1, 1},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -620,9 +620,7 @@ static struct menu_item main_menu[] = {
 void
 activate_bfu_technology(struct session *ses, int item)
 {
-	struct terminal *term = ses->term;
-
-	do_mainmenu(term, main_menu, ses, item);
+	do_mainmenu(ses->term, main_menu, ses, item);
 }
 
 /* XXX: Used at foreign places. */

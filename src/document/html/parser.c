@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.77 2003/04/30 12:24:41 zas Exp $ */
+/* $Id: parser.c,v 1.78 2003/04/30 16:59:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1744,10 +1744,17 @@ new_menu_item(unsigned char *name, int data, int fullname)
 			below[-1].data = top;
 		}
 		item->text = name;
-		item->rtext = (data == -1) ? SUBMENU_INDICATOR : "";
-		item->func = data == -1 ? MENU_FUNC do_select_submenu : MENU_FUNC selected_item;
-		item->data = data == -1 ? nmenu : (void *)data;
-		item->in_m = data == -1 ? 1 : 0;
+		if (data == -1) {
+			item->rtext = SUBMENU_INDICATOR;
+			item->func = MENU_FUNC do_select_submenu;
+			item->data = nmenu;
+			item->in_m = 1;
+		} else {
+			item->rtext = NULL;
+			item->func = MENU_FUNC selected_item;
+			item->data = (void *)data;
+			item->in_m = 0;
+		}
 		item->item_free = FREE_NOTHING | (fullname << 8); /* XXX: DIRTY! */
 		item++;
 		memset(item, 0, sizeof(struct menu_item));
@@ -3043,7 +3050,7 @@ look_for_tag:
 		*menu = nm;
 		memset(&nm[nmenu], 0, 2 * sizeof(struct menu_item));
 		nm[nmenu].text = label;
-		nm[nmenu].rtext = "";
+		nm[nmenu].rtext = NULL;
 		nm[nmenu].func = MENU_FUNC map_selected;
 		nm[nmenu].data = ld;
 		nm[++nmenu].text = NULL;

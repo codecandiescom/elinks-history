@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.18 2003/04/29 17:11:07 zas Exp $ */
+/* $Id: dialogs.c,v 1.19 2003/04/30 16:59:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,7 +288,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 
 static struct menu_item mi_no_ext[] = {
-	{N_("No extensions"), M_BAR, NULL, NULL, 0, 0},
+	{N_("No extensions"), "", NULL, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 

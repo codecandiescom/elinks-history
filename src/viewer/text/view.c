@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.27 2003/04/30 12:24:41 zas Exp $ */
+/* $Id: view.c,v 1.28 2003/04/30 16:59:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -729,7 +729,7 @@ find_form_state(struct f_data_c *f, struct form_control *frm)
 	fs->position = frm->position;
 	fs->type = frm->type;
 	init_ctrl(frm, fs);
-	
+
 	return fs;
 }
 
@@ -2340,7 +2340,7 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 	static char first_time = 1;
 
 	if (first_time) memset(hash, 0, HASH_SIZE), first_time = 0;
-	
+
 	for (i = 0; i < l1; i++) hash[HASH(p1[i])] = 1;
 
 	for (j = 0; j < l2; j++) if (hash[HASH(p2[j])]) {
@@ -2488,7 +2488,7 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 		if (f->f_data->lines2[i] && f->f_data->lines2[i] > l2)
 			l2 = f->f_data->lines2[i];
 	}
-	
+
 	for (l = l1; l <= l2; l++) {
 		for (i = 0; i < l->n; i++)
 			if (l->pos[i].x - f->vs->view_posx == ev->x
@@ -3395,14 +3395,14 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			int c = can_open_in_new(term);
 
 			add_to_menu(&mi, N_("~Follow link"),
-				    "", MENU_FUNC send_enter, NULL, 0);
+				    NULL, MENU_FUNC send_enter, NULL, 0);
 
-			add_to_menu(&mi, N_("Follow link and r~eload"), "",
+			add_to_menu(&mi, N_("Follow link and r~eload"), NULL,
 				    MENU_FUNC send_enter_reload, NULL, 0);
 
 			if (c)
 				add_to_menu(&mi, N_("Open in new ~window"),
-					     c - 1 ? SUBMENU_INDICATOR : "",
+					     c - 1 ? SUBMENU_INDICATOR : NULL,
 					     MENU_FUNC open_in_new_window,
 					     send_open_in_new_xterm, c - 1);
 
@@ -3422,20 +3422,20 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (lnk->form) {
 		l = 1;
 		if (lnk->form->type == FC_RESET) {
-			add_to_menu(&mi, N_("~Reset form"), "",
+			add_to_menu(&mi, N_("~Reset form"), NULL,
 				    MENU_FUNC send_enter, NULL, 0);
 		} else {
 			int c = can_open_in_new(term);
 
-			add_to_menu(&mi, N_("~Submit form"), "",
+			add_to_menu(&mi, N_("~Submit form"), NULL,
 				    MENU_FUNC submit_form, NULL, 0);
 
-			add_to_menu(&mi, N_("Submit form and rel~oad"), "",
+			add_to_menu(&mi, N_("Submit form and rel~oad"), NULL,
 				    MENU_FUNC submit_form_reload, NULL, 0);
 
 			if (c && lnk->form->method == FM_GET)
 				add_to_menu(&mi, N_("Submit form and open in new ~window"),
-					    c - 1 ? SUBMENU_INDICATOR : "",
+					    c - 1 ? SUBMENU_INDICATOR : NULL,
 					    MENU_FUNC open_in_new_window,
 					    send_open_in_new_xterm, c - 1);
 
@@ -3447,16 +3447,16 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	if (lnk->where_img) {
 		l = 1;
-		add_to_menu(&mi, N_("V~iew image"), "",
+		add_to_menu(&mi, N_("V~iew image"), NULL,
 			    MENU_FUNC send_image, NULL, 0);
 		if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-			add_to_menu(&mi, N_("Download ima~ge"), "",
+			add_to_menu(&mi, N_("Download ima~ge"), NULL,
 				    MENU_FUNC send_download_image, NULL, 0);
 	}
 
 end:
 	if (!l) {
-		add_to_menu(&mi, N_("No link selected"), M_BAR,
+		add_to_menu(&mi, N_("No link selected"), "",
 			    NULL, NULL, 0);
 	}
 	do_menu(term, mi, ses, 1);
@@ -3534,7 +3534,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 	}
 
 	if (!lnk->form) return NULL;
-	
+
 	if (lnk->type == L_BUTTON) {
 		unsigned char *url;
 		unsigned char *str;
@@ -3544,7 +3544,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			return stracpy(_("~Reset form", term));
 
 		if (!lnk->form->action) return NULL;
-		
+
 		str = init_str();
 		if (!str) return NULL;
 
@@ -3566,9 +3566,9 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 	    || lnk->type == L_FIELD || lnk->type == L_AREA) {
 		unsigned char * str = init_str();
 		int strl = 0;
-		
+
 		if (!str) return NULL;
-		
+
 		if (lnk->form->type == FC_RADIO)
 			add_to_str(&str, &strl, _("Radio button", term));
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.36 2003/04/30 10:26:15 zas Exp $ */
+/* $Id: menu.c,v 1.37 2003/04/30 16:59:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ struct mainmenu {
 };
 
 /* Global variables */
-unsigned char m_bar = 1;
+unsigned char submenu_indicator[] = ">";
 
 /* Prototypes */
 static void menu_func(struct window *, struct event *, int);
@@ -183,7 +183,8 @@ select_menu(struct terminal *term, struct menu *menu)
 
 	if (menu->selected < 0 ||
 	    menu->selected >= menu->ni ||
-	    it->rtext == M_BAR)
+	    (it->rtext && !it->rtext[0] /*unsel*/) ||
+	    (it->text && !it->text[0] /*bar*/))
 		return;
 
 	if (!it->in_m) {
@@ -280,8 +281,11 @@ scroll_menu(struct menu *menu, int d)
 		if (menu->selected < 0) menu->selected = menu->ni - 1;
 		if (menu->selected >= menu->ni) menu->selected = 0;
 #endif
-
-		if (menu->ni && menu->items[menu->selected].rtext != M_BAR)
+		if (menu->ni
+		    && menu->items[menu->selected].text
+		    && menu->items[menu->selected].text[0]
+		    && (!menu->items[menu->selected].rtext
+			|| menu->items[menu->selected].rtext[0]))
 			break;
 
 		menu->selected += d;
@@ -334,8 +338,8 @@ display_menu(struct terminal *term, struct menu *menu)
 			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, co);
 		}
 
-		if (menu->items[p].rtext != M_BAR
-		    || (_(menu->items[p].text, term) && _(menu->items[p].text, term)[0])) {
+		if (_(menu->items[p].text, term)
+		    && _(menu->items[p].text, term)[0]) {
 			unsigned char c;
 			int l = menu->items[p].hotkey_pos;
 			int x;
@@ -473,9 +477,9 @@ menu_func(struct window *win, struct event *ev, int fwd)
 				      ev->y >= menu->y + menu->yw-1)) {
 					int sel = ev->y - menu->y - 1 + menu->view;
 
-					if (sel >= 0 && sel < menu->ni &&
-					    menu->items[sel].rtext != M_BAR) {
-
+					if (sel >= 0 && sel < menu->ni
+					    && menu->items[sel].rtext
+					    && menu->items[sel].rtext[0]) {
 						menu->selected = sel;
 						scroll_menu(menu, 0);
 						display_menu(win->term, menu);
@@ -531,7 +535,8 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					int step = -1;
 
 					for (; i >= 0; i--) {
-						if (menu->items[i].rtext == M_BAR) {
+						if (menu->items[i].text
+						    && !menu->items[i].text[0]) {
 							found = 1;
 							break;
 						}
@@ -560,7 +565,8 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					int step = 1;
 
 					for (;i < menu->ni; i++) {
-						if (menu->items[i].rtext == M_BAR) {
+						if (menu->items[i].text
+						    && !menu->items[i].text[0]) {
 							found = 1;
 							break;
 						}
@@ -737,7 +743,8 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 	struct menu_item *it = &menu->items[menu->selected];
 
 	if (menu->selected < 0 || menu->selected >= menu->ni
-	    || it->rtext == M_BAR)
+	    || (it->text && !it->text[0])
+	    || (it->rtext && !it->rtext[0]))
 		return;
 
 	if (!it->in_m) {

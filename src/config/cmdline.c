@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.76 2004/04/24 01:13:29 jonas Exp $ */
+/* $Id: cmdline.c,v 1.77 2004/04/24 01:30:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 }
 
 #define skipback_whitespace(start, S) \
-	while ((start) < (S) && isspace(*(S))) (S)--;
+	while ((start) < (S) && isspace((S)[-1])) (S)--;
 
 static unsigned char *
 remote_cmd(struct option *o, unsigned char ***argv, int *argc)
@@ -240,14 +240,16 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 	switch (remote_methods[method].type) {
 	case REMOTE_METHOD_OPENURL:
 	{
-		unsigned char *comma = memchr(arg, ',', argend - arg);
-
 		if (arg == argend) {
 			/* Prompt for a URL with a dialog box */
 			remote_session_flags |= SES_REMOTE_PROMPT_URL;
+			break;
+		}
 
-		} else if (comma) {
-			unsigned char *where = comma + 1;
+		len = strcspn(arg, ",)");
+		if (arg[len] == ',') {
+			unsigned char *where = arg + len + 1;
+			unsigned char *comma = arg + len;
 
 			skipback_whitespace(arg, comma);
 

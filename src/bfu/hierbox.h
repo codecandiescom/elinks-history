@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.36 2003/11/24 00:33:55 jonas Exp $ */
+/* $Id: hierbox.h,v 1.37 2003/11/24 16:34:25 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -16,7 +16,7 @@ struct hierbox_browser_button {
 };
 
 #define HIERBOX_BROWSER_BUTTONS_SIZE(buttons) \
-	((sizeof(buttons) / sizeof(struct hierbox_browser_button)) - 1)
+	(sizeof(buttons) / sizeof(struct hierbox_browser_button))
 
 struct hierbox_browser {
 	unsigned char *title;

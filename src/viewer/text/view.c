@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.659 2004/11/14 11:10:51 zas Exp $ */
+/* $Id: view.c,v 1.660 2004/11/14 11:25:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,25 +82,29 @@ detach_formatted(struct document_view *doc_view)
 
 /* type == 0 -> PAGE_DOWN
  * type == 1 -> DOWN */
-static void
+static enum frame_event_status
 move_down(struct session *ses, struct document_view *doc_view, int type)
 {
 	int newpos;
 
 	assert(ses && doc_view && doc_view->vs);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
-	ses->navigate_mode = NAVIGATE_LINKWISE;
+	ses->navigate_mode = NAVIGATE_LINKWISE;	/* XXX: why here and not in move_up() ??? */
 
 	newpos = doc_view->vs->y + doc_view->box.height;
 	if (newpos < doc_view->document->height)
 		doc_view->vs->y = newpos;
 
-	if (current_link_is_visible(doc_view)) return;
+	if (current_link_is_visible(doc_view))
+		return FRAME_EVENT_REFRESH;
+
 	if (type)
 		find_link_down(doc_view);
 	else
 		find_link_page_down(doc_view);
+
+	return FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status
@@ -120,22 +124,26 @@ move_page_down(struct session *ses, struct document_view *doc_view)
 
 /* type == 0 -> PAGE_UP
  * type == 1 -> UP */
-static void
+static enum frame_event_status
 move_up(struct session *ses, struct document_view *doc_view, int type)
 {
 	assert(ses && doc_view && doc_view->vs);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
-	if (doc_view->vs->y == 0) return;
+	if (doc_view->vs->y == 0) return FRAME_EVENT_OK;
+
 	doc_view->vs->y -= doc_view->box.height;
 	int_lower_bound(&doc_view->vs->y, 0);
 
-	if (current_link_is_visible(doc_view)) return;
+	if (current_link_is_visible(doc_view))
+		return FRAME_EVENT_REFRESH;
 
 	if (type)
 		find_link_up(doc_view);
 	else
 		find_link_page_up(doc_view);
+
+	return FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status

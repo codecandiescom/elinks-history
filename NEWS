@@ -14,6 +14,7 @@ ELinks-now:
 * PERL scripting back-end (experimental)
 * build-time configurability and feature documentation through features.conf
 * Mozilla-compatible -remote option (http://www.mozilla.org/unix/remote.html)
+* support for specifying IP family as protocol postfix (i.e. http4 or ftp6)
 * support for internationalized domain names via libidn (RFC 3490)
 * support for the data URI scheme (RFC 2397)
 * gopher protocol support (RFC 1436)

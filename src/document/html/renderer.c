@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.313 2003/10/19 12:20:57 jonas Exp $ */
+/* $Id: renderer.c,v 1.314 2003/10/20 17:32:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,7 +384,7 @@ set_hline(struct part *part, unsigned char *chars, int charslen,
 		return;
 
 	if (part->document) {
-		if (realloc_line(part->document, Y(y), X(x) + charslen))
+		if (realloc_line(part->document, Y(y), X(x) + charslen - 1))
 			return;
 
 		for (; charslen > 0; charslen--, x++, chars++) {

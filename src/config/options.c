@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.79 2002/08/07 00:21:54 pasky Exp $ */
+/* $Id: options.c,v 1.80 2002/08/07 00:57:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,7 +175,7 @@ add_opt_rec(struct list_head *tree, unsigned char *path, struct option *option)
 	add_to_list(*cat, option);
 }
 
-void
+struct option *
 add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 	enum option_flags flags, enum option_type type,
 	int min, int max, void *ptr,
@@ -192,6 +192,7 @@ add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 	option->desc = desc;
 
 	add_opt_rec(tree, path, option);
+	return option;
 }
 
 /* The namespace may start to seem a bit chaotic here; it indeed is, maybe the
@@ -209,6 +210,7 @@ free_option(struct option *option)
 			option->type == OPT_LONG ||
 			option->type == OPT_STRING ||
 			option->type == OPT_CODEPAGE ||
+			option->type == OPT_COLOR ||
 			option->type == OPT_ALIAS) {
 		mem_free(option->ptr);
 
@@ -424,11 +426,6 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
  Options values
 **********************************************************************/
 
-struct rgb default_fg = { 191, 191, 191 };
-struct rgb default_bg = { 0, 0, 0 };
-struct rgb default_link = { 0, 0, 255 };
-struct rgb default_vlink = { 255, 255, 0 };
-
 void
 register_options()
 {
@@ -620,23 +617,23 @@ register_options()
 
 	add_opt_tree("document",
 		"colors", 0,
-		"Default color settings.");
+		"Default document color settings.");
 
-	add_opt_ptr("document.colors",
-		"text", 0, OPT_COLOR, &default_fg,
+	add_opt_color("document.colors",
+		"text", 0, "#bfbfbf",
 		"Default text color.");
 
 	/* FIXME - this produces ugly results now */
-	add_opt_ptr("document.colors",
-		"background", /* 0 */ 0, OPT_COLOR, &default_bg,
+	add_opt_color("document.colors",
+		"background", 0, "#000000",
 		"Default background color.");
 
-	add_opt_ptr("document.colors",
-		"link", 0, OPT_COLOR, &default_link,
+	add_opt_color("document.colors",
+		"link", 0, "#0000ff",
 		"Default link color.");
 
-	add_opt_ptr("document.colors",
-		"vlink", 0, OPT_COLOR, &default_vlink,
+	add_opt_color("document.colors",
+		"vlink", 0, "#ffff00",
 		"Default vlink color.");
 
 	add_opt_bool("document.colors",
@@ -963,6 +960,18 @@ register_options()
 	add_opt_tree("",
 		"ui", 0,
 		"User interface options.");
+
+
+#if 0
+	add_opt_tree("ui",
+		"colors", 0,
+		"Default user interface color settings.");
+
+	add_opt_color("ui.colors",
+		"text", 0, "#bfbfbf",
+		"Default text color.");
+#endif
+
 
 	add_opt_ptr("ui",
 		"language", 0, OPT_LANGUAGE, &current_language,

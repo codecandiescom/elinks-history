@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.36 2002/07/23 12:58:12 zas Exp $ */
+/* $Id: renderer.c,v 1.37 2002/08/07 00:57:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2054,10 +2054,10 @@ void html_interpret(struct session *ses)
 	if ((o.plain = l ? l->plain : 1) == -1) o.plain = 0;
 	if (l) l->plain = o.plain;
 
-	memcpy(&o.default_fg, &default_fg, sizeof(struct rgb));
-	memcpy(&o.default_bg, &default_bg, sizeof(struct rgb));
-	memcpy(&o.default_link, &default_link, sizeof(struct rgb));
-	memcpy(&o.default_vlink, &default_vlink, sizeof(struct rgb));
+	memcpy(&o.default_fg, get_opt_ptr("document.colors.text"), sizeof(struct rgb));
+	memcpy(&o.default_bg, get_opt_ptr("document.colors.background"), sizeof(struct rgb));
+	memcpy(&o.default_link, get_opt_ptr("document.colors.link"), sizeof(struct rgb));
+	memcpy(&o.default_vlink, get_opt_str("document.colors.vlink"), sizeof(struct rgb));
 
 	o.framename = "";
 

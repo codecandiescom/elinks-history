@@ -1,4 +1,4 @@
-/* $Id: beos.h,v 1.1 2003/10/27 02:37:53 pasky Exp $ */
+/* $Id: beos.h,v 1.2 2003/10/27 02:41:55 pasky Exp $ */
 
 #ifndef EL__OSDEP_BEOS_H
 #define EL__OSDEP_BEOS_H
@@ -18,6 +18,7 @@ static inline int dir_sep(char x) { return x == '/'; }
 #define GETSHELL getenv("SHELL")
 #define NO_FORK_ON_EXIT
 #define ASSOC_BLOCK
+#define THREAD_SAFE_LOOKUP
 
 #include <sys/time.h>
 #include <sys/types.h>

@@ -1,4 +1,4 @@
-/* $Id: os2.h,v 1.1 2003/10/27 02:37:53 pasky Exp $ */
+/* $Id: os2.h,v 1.2 2003/10/27 02:41:55 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS2_H
 #define EL__OSDEP_OS2_H
@@ -17,6 +17,9 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define NO_FILE_SECURITY
 #define NO_FORK_ON_EXIT
 #define ASSOC_CONS_XWIN
+#ifdef HAVE_BEGINTHREAD
+#define THREAD_SAFE_LOOKUP
+#endif
 
 #ifdef __EMX__
 #define strcasecmp stricmp

@@ -1,3 +1,20 @@
+Thu Feb  3 22:28:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Improve the type query dialog so that the program can now be edited.
+	Also the 'Show header' button will no longer close the type query
+	dialog but open the cache header dialog on top of the type query
+	dialog. Finally the 'Show header' button is only added when there is
+	a header to show (which is not the case for local files).  
+
+Thu Feb  3 12:40:40 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/perl/hooks.pl:
+
+	Shift the current URL argument so people know it is available.
+	s/NIL/''/.  
+
 Wed Feb  2 17:33:14 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: cache/cache.c, sched/connection.c, protocol/proxy.c,

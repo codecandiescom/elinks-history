@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.58 2004/06/08 23:22:22 jonas Exp $ */
+/* $Id: tab.c,v 1.59 2004/06/10 13:23:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,7 +237,6 @@ void
 open_uri_in_new_tab(struct session *ses, struct uri *uri, int in_background)
 {
 	struct window *tab;
-	struct initial_session_info *info;
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
 
 	assert(ses);
@@ -245,17 +244,12 @@ open_uri_in_new_tab(struct session *ses, struct uri *uri, int in_background)
 	tab = init_tab(ses->tab->term, in_background);
 	if (!tab) return;
 
-	info = mem_calloc(1, sizeof(struct initial_session_info));
-	if (!info) {
+	ev.b = (long) init_session_info(ses->id, 0, uri ? struri(uri) : NULL, -1);
+	if (!ev.b) {
 		mem_free(tab);
 		return;
 	}
 
-	info->base_session = ses->id;
-	init_list(info->url_list);
-	if (uri) add_to_string_list(&info->url_list, struri(uri), -1);
-
-	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);
 }
 

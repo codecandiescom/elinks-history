@@ -281,7 +281,7 @@ void http_send_header(struct connection *c)
 		{
 		  unsigned char *etk;
 		  add_to_str(&hdr, &l, "Referer: ");
-		  if (etk = strchr(c->prev_url, '\1')) /* braindead ;-) */
+		  if ((etk = strchr(c->prev_url, '\1'))) /* braindead ;-) */
 		    add_bytes_to_str(&hdr, &l, c->prev_url, etk - c->prev_url);
 		  else
 		    add_to_str(&hdr, &l, c->prev_url);

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.158 2004/04/24 00:18:55 pasky Exp $ */
+/* $Id: tables.c,v 1.159 2004/04/30 13:46:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,11 +44,11 @@
 #define TABLE_FRAME_VOID	0
 #define TABLE_FRAME_ABOVE	1
 #define TABLE_FRAME_BELOW	2
-#define TABLE_FRAME_HSIDES	3
+#define TABLE_FRAME_HSIDES	(TABLE_FRAME_ABOVE | TABLE_FRAME_BELOW)
 #define TABLE_FRAME_LHS		4
 #define TABLE_FRAME_RHS		8
-#define TABLE_FRAME_VSIDES	12
-#define TABLE_FRAME_BOX		15
+#define TABLE_FRAME_VSIDES	(TABLE_FRAME_LHS | TABLE_FRAME_RHS)
+#define TABLE_FRAME_BOX		(TABLE_FRAME_HSIDES | TABLE_FRAME_VSIDES)
 
 #define TABLE_RULE_NONE		0
 #define TABLE_RULE_ROWS		1

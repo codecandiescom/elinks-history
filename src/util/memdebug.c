@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.22 2003/06/08 22:22:29 pasky Exp $ */
+/* $Id: memdebug.c,v 1.23 2004/01/24 19:08:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -375,10 +375,12 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 	}
 
 #ifdef CHECK_AH_SANITY
-	if (bad_ah_sanity(ah, "free()", file, line)) force_dump();
+	if (bad_ah_sanity(ah, "free()", file, line))
+		force_dump();
 #endif
 #ifdef CHECK_XFLOWS
-	if (bad_xflow_magic(ah, "free()", file, line)) force_dump();
+	if (bad_xflow_magic(ah, "free()", file, line))
+		force_dump();
 #endif
 
 	dump_short_info(ah, file, line, "free");

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.207 2003/12/07 00:22:51 pasky Exp $ */
+/* $Id: menu.c,v 1.208 2003/12/07 00:26:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,19 +332,19 @@ menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
 
 static struct menu_item file_menu11[] = {
 	INIT_MENU_ITEM(N_("Open new ~tab"), "t", open_in_new_tab, (void *) 0, 0),
-	INIT_MENU_ITEM(N_("Open new t~ab in background"), "T", open_in_new_tab_in_background,
+	INIT_MENU_ITEM(N_("Open new tab in back~ground"), "T", open_in_new_tab_in_background,
 								(void *) 0, 0),
 	INIT_MENU_ITEM(N_("~Go to URL"), "g", menu_goto_url, NULL, 0),
 	INIT_MENU_ITEM(N_("Go ~back"), "<-", menu_go_back, NULL, 0),
 	INIT_MENU_ITEM(N_("~Reload"), "Ctrl-R", menu_reload, NULL, 0),
 	INIT_MENU_ITEM(N_("~History"), M_SUBMENU, history_menu, NULL, SUBMENU),
-	INIT_MENU_ITEM(N_("Unh~istory"), M_SUBMENU, unhistory_menu, NULL, SUBMENU),
+	INIT_MENU_ITEM(N_("~Unhistory"), M_SUBMENU, unhistory_menu, NULL, SUBMENU),
 };
 
 static struct menu_item file_menu21[] = {
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("Sa~ve as"), "", save_as, NULL, 0),
-	INIT_MENU_ITEM(N_("Save ~URL as"), "", menu_save_url_as, NULL, 0),
+	INIT_MENU_ITEM(N_("~Save as"), "", save_as, NULL, 0),
+	INIT_MENU_ITEM(N_("Save UR~L as"), "", menu_save_url_as, NULL, 0),
 	INIT_MENU_ITEM(N_("Save formatted ~document"), "", menu_save_formatted, NULL, 0),
 #ifdef BOOKMARKS
 	INIT_MENU_ITEM(N_("Boo~kmark document"), "a", launch_bm_add_doc_dialog, NULL, 0),
@@ -353,9 +353,9 @@ static struct menu_item file_menu21[] = {
 
 static struct menu_item file_menu22[] = {
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("Ki~ll background connections"), "", menu_kill_background_connections, NULL, 0),
-	INIT_MENU_ITEM(N_("~Flush all caches"), "", flush_caches, NULL, 0),
-	INIT_MENU_ITEM(N_("Resource i~nfo"), "", res_inf, NULL, 0),
+	INIT_MENU_ITEM(N_("~Kill background connections"), "", menu_kill_background_connections, NULL, 0),
+	INIT_MENU_ITEM(N_("Flush all ~caches"), "", flush_caches, NULL, 0),
+	INIT_MENU_ITEM(N_("Resource ~info"), "", res_inf, NULL, 0),
 #ifdef LEAK_DEBUG
 	INIT_MENU_ITEM(N_("~Memory info"), "", memory_inf, NULL, 0),
 #endif

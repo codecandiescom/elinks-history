@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.247 2003/09/09 17:39:45 jonas Exp $ */
+/* $Id: renderer.c,v 1.248 2003/09/09 19:07:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,8 +97,6 @@ void put_chars(struct part *, unsigned char *, int);
 #define ALIGN_LINE(x)	ALIGN(x, LINE_GRANULARITY)
 
 static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
-static int sub = 0; /* Activated/deactivated by AT_SUBSCRIPT */
-static int super = 0; /* Activated/deactivated by AT_SUPERSCRIPT */
 
 
 static int
@@ -790,6 +788,8 @@ put_chars_format_change(struct part *part, unsigned char *color,
 	/* FIXME:
 	 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */
 	if (d_opt->display_subs) {
+		static int sub = 0;
+
 		if (format.attr & AT_SUBSCRIPT) {
 			if (!sub) {
 				sub = 1;
@@ -804,6 +804,8 @@ put_chars_format_change(struct part *part, unsigned char *color,
 	}
 
 	if (d_opt->display_sups) {
+		static int super = 0;
+
 		if (format.attr & AT_SUPERSCRIPT) {
 			if (!super) {
 				super = 1;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.226 2003/06/15 02:00:06 jonas Exp $ */
+/* $Id: options.c,v 1.227 2003/06/15 14:19:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -721,9 +721,7 @@ print_full_help(struct option *tree, unsigned char *path)
 static void
 print_short_help()
 {
-
 #define ALIGN_WIDTH 20
-
 	struct option *option;
 	unsigned char saved[MAX_STR_LEN];
 	unsigned char *savedpos = saved;
@@ -2539,8 +2537,9 @@ register_options(void)
 
 	add_opt_bool("ui", N_("Set window title"),
 		"window_title", 0, 1,
-		N_("Whether ELinks window title should be touched when ELinks is\n"
-		"run in a windowing environment."));
+		N_("Set the window title when running in a windowing environment \n"
+		"in an xterm-like terminal. This way the document's title is \n"
+		"shown on the window titlebar."));
 
 
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.264 2004/01/07 03:02:35 jonas Exp $ */
+/* $Id: menu.c,v 1.265 2004/01/07 03:42:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,6 +206,9 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	struct window *tab = d;
 	int tabs = number_of_tabs(term);
 	int i = 0;
+#ifdef CONFIG_BOOKMARKS
+	int anonymous = get_opt_bool_tree(cmdline_options, "anonymous");
+#endif
 
 	assert(term && ses && tab);
 	if_assert_failed return;
@@ -219,8 +222,10 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	add_separator_to_menu(&menu);
 
 #ifdef CONFIG_BOOKMARKS
-	add_to_menu(&menu, N_("Bookm~ark document"), NULL, ACT_ADD_BOOKMARK,
-		    (menu_func) launch_bm_add_doc_dialog, NULL, 0);
+	if (!anonymous) {
+		add_to_menu(&menu, N_("Bookm~ark document"), NULL, ACT_ADD_BOOKMARK,
+			    (menu_func) launch_bm_add_doc_dialog, NULL, 0);
+	}
 #endif
 
 	add_menu_action(&menu, N_("~Reload"), ACT_RELOAD, NULL, 0);
@@ -243,8 +248,10 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 		add_menu_action(&menu, N_("C~lose all tabs but the current"),
 				ACT_TAB_CLOSE_ALL_BUT_CURRENT, NULL, 0);
 #ifdef CONFIG_BOOKMARKS
-		add_to_menu(&menu, N_("B~ookmark all tabs"), "", ACT_ADD_BOOKMARK_TABS,
-			    (menu_func) menu_bookmark_terminal_tabs, NULL, 0);
+		if (!anonymous) {
+			add_to_menu(&menu, N_("B~ookmark all tabs"), "", ACT_ADD_BOOKMARK_TABS,
+				    (menu_func) menu_bookmark_terminal_tabs, NULL, 0);
+		}
 #endif
 	}
 

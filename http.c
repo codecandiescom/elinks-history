@@ -9,6 +9,27 @@ struct http_connection_info {
 	int chunk_remaining;
 };
 
+/* This function encodes ' ' (space, ascii 32) into '+' code */
+
+static unsigned char *translate_url_spaces(char *orig_url)
+{
+	unsigned char *xlated_url;
+	unsigned char *tmp_src, *tmp_dst;
+
+	if (!(xlated_url = mem_alloc(strlen(orig_url) + 1))) return NULL;
+	memset((void *) xlated_url, 0, strlen(orig_url) + 1);
+	
+	tmp_src = orig_url; tmp_dst = xlated_url;
+
+	while (*tmp_src && (*tmp_src != POST_CHAR)) {
+		*tmp_dst = *tmp_src;
+		if (*tmp_src == ' ') *tmp_dst = '+';
+		tmp_src++, tmp_dst++;
+	}
+
+	return xlated_url;
+}
+
 unsigned char *parse_http_header(unsigned char *head, unsigned char *item, unsigned char **ptr)
 {
 	unsigned char *i, *f, *g, *h;
@@ -193,7 +214,9 @@ void http_send_header(struct connection *c)
 	unsigned char *h, *u;
 	int l = 0;
 	unsigned char *post;
+	unsigned char *xlated_url; /* URL with '+' instead of ' ' */
 	unsigned char *host = upcase(c->url[0]) != 'P' ? c->url : get_url_data(c->url);
+
 	set_timeout(c);
 	if (!(info = mem_alloc(sizeof(struct http_connection_info)))) {
 		setcstate(c, S_OUT_OF_MEM);
@@ -221,13 +244,17 @@ void http_send_header(struct connection *c)
 		c->unrestartable = 2;
 	}
 	if (upcase(c->url[0]) != 'P') add_to_str(&hdr, &l, "/");
-	if (!(u = get_url_data(c->url))) {
+	if (!(xlated_url = translate_url_spaces(c->url))) {
+		setcstate(c, S_OUT_OF_MEM);
+		http_end_request(c);
+		return;
+	}
+	if (!(u = get_url_data(xlated_url))) {
 		setcstate(c, S_BAD_URL);
 		http_end_request(c);
 		return;
 	}
-	if (!post) add_to_str(&hdr, &l, u);
-	else add_bytes_to_str(&hdr, &l, u, post - u - 1);
+	add_to_str(&hdr, &l, u);
 	if (!http10) add_to_str(&hdr, &l, " HTTP/1.1\r\n");
 	else add_to_str(&hdr, &l, " HTTP/1.0\r\n");
 	if ((h = get_host_name(host))) {
@@ -271,13 +298,17 @@ void http_send_header(struct connection *c)
 		case REFERER_TRUE:
 		if (c->prev_url && c->prev_url[0])
 		{
-		  unsigned char *etk;
+		  unsigned char *xlated_referer;
 		  add_to_str(&hdr, &l, "Referer: ");
-		  if (etk = strchr(c->prev_url, '\1')) /* braindead ;-) */
-		    add_bytes_to_str(&hdr, &l, c->prev_url, etk - c->prev_url);
-		  else
-		    add_to_str(&hdr, &l, c->prev_url);
+		  if (!(xlated_referer = translate_url_spaces(c->prev_url))) {
+			  mem_free(xlated_referer);
+			  setcstate(c, S_OUT_OF_MEM);
+			  abort_connection(c);
+			  return;
+		  }
+		  add_to_str(&hdr, &l, xlated_referer);
 		  add_to_str(&hdr, &l, "\r\n");
+		  mem_free(xlated_referer);
 	        }
 		break;
 		
@@ -293,11 +324,11 @@ void http_send_header(struct connection *c)
 			}
 		}
 		if (upcase(c->url[0]) != 'P') add_to_str(&hdr, &l, "/");
-		if (!post) add_to_str(&hdr, &l, u);
-		else add_bytes_to_str(&hdr, &l, u, post - u - 1);
+		add_to_str(&hdr, &l, u);
 		add_to_str(&hdr, &l, "\r\n");
 		break;
 	}
+	mem_free(xlated_url);
 
 	add_to_str(&hdr, &l, "Accept: */*\r\n");
 	if (!(accept_charset)) {

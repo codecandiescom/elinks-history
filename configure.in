@@ -861,11 +861,6 @@ AC_ARG_ENABLE(local-cgi,
               [  --enable-local-cgi      enable support for local CGIs],
 	      [if test "$enableval" = yes && test "$ac_cv_func_setenv" = yes; then AC_DEFINE(ELINKS_LOCAL_CGI) fi])
 
-AC_ARG_ENABLE(uri-rewrite,
-              [  --disable-uri-rewrite   disable support for configurable URI rewriting],
-	      [if test "$enableval" = yes; then AC_DEFINE(URI_REWRITE) fi],
-	      AC_DEFINE(URI_REWRITE))
-
 
 AC_ARG_ENABLE(weehoofooboomookerchoo,
               [

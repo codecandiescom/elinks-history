@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.8 2003/12/31 22:02:40 pasky Exp $ */
+/* $Id: feature.h,v 1.9 2004/01/01 00:47:12 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -123,6 +123,34 @@
  * Default: enabled */
 
 #define GLOBHIST
+
+
+
+/*** URI rewriting
+ *
+ * The goto dialog through which new URIs can be entered is an essential part
+ * of browsing in ELinks. This feature makes the dialog more powerful by making
+ * it possible to extend how entered text is handled through a set of rewrite
+ * rules.
+ *
+ * There are two types of rules: simple and smart ones.
+ *
+ * Simple rewriting rules are basicly URI abbreviations, making it possible to
+ * map a word to the full URI. They can also be used for hierachic navigation
+ * to ease moving from some nested directory to the parent directory or doing
+ * other stuff with the current URI.
+ *
+ * Smart rules can take arguments and thus enables more advanced rewriting. The
+ * arguments could be search words to google for or look up in a dictionary.
+ *
+ * This feature is also available in a more powerful form in the Lua and Guile
+ * extensions, so if you plan to or already use those you won't miss anything
+ * by disabling this feature, (besides easier and better integrated
+ * configuration).
+ *
+ * Default: enabled */
+
+#define URI_REWRITE
 
 
 

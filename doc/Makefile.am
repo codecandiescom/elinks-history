@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.8 2003/10/18 13:24:17 jonas Exp $
+## $Id: Makefile.am,v 1.9 2003/10/18 13:32:52 jonas Exp $
 
 SUBDIRS = man
 
@@ -19,7 +19,7 @@ update-manpages:
 	then							\
 		echo "Build elinks first.";			\
 	else							\
-		sh tools/help2doc --elinksconf			\
-				  --elinks=$(ELINKS)		\
+		sh tools/help2doc --elinks=$(ELINKS)		\
+				  --elinksconf			\
 				  > man/man5/elinks.conf.5;	\
 	fi

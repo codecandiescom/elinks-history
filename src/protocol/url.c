@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.6 2002/03/26 21:09:15 pasky Exp $ */
+/* $Id: url.c,v 1.7 2002/03/26 22:02:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,60 +303,75 @@ unsigned char *get_url_data(unsigned char *url)
 	return d;
 }
 
-/* This reconstructs URL with password stripped. In order not to duplicate URL
- * parsing code, we get all the needed info one-by-one.
- * FIXME: Not terribly effective.
- * XXX: We don't preserve post information; we're used only in BFU anyway.
- * XXX: In order to vastly simplify usage we return pointer to static buffer */
+/* This reconstructs URL with password stripped. */
 unsigned char *strip_url_password(unsigned char *url)
 {
-	static unsigned char u[MAX_STR_LEN];
-	unsigned char *str;
+	unsigned char *str = init_str();
+	int l = 0;
 
-	u[0] = '\0';
+	int prlen;
+	unsigned char *user;
+	int uslen;
+	unsigned char *pass;
+	int palen;
+	unsigned char *host;
+	int holen;
+	unsigned char *port;
+	int polen;
+	unsigned char *data;
+	int dalen;
+	int protocol = -1;
 
-	str = get_protocol_name(url);
-	if (str && *str) {
-		strcat(u, str);
-		strcat(u, "://");
-	}
-	if (str) mem_free(str);
+	if (!str) return NULL;
 
-	str = get_user_name(url);
-	if (str && *str) {
-		strcat(u, str);
-		strcat(u, "@");
-	}
-	if (str) mem_free(str);
+	if (parse_url(url, &prlen, &user, &uslen, &pass, &palen, &host, &holen,
+			   &port, &polen, &data, &dalen, NULL))
+		return str;
 
-	str = get_host_name(url);
-	if (str && *str) {
+	if (prlen) {
+		/* We've some protocol specified. */
+		add_bytes_to_str(&str, &l, url, prlen);
+		add_chr_to_str(&str, &l, ':');
+		
+		protocol = check_protocol(url, prlen);
+		if (protocol >= 0) {
+			if (protocols[protocol].need_slashes)
+				add_to_str(&str, &l, "//");
+			
+			if (!protocols[protocol].free_syntax) {
+				if (user) {
+					add_bytes_to_str(&str, &l, user, uslen);
+					add_chr_to_str(&str, &l, '@');
+				}
+				
+				if (host) {
 #ifdef IPV6
-		int brackets = !!strchr(str, ':');
+					int brackets = !!memchr(host, ':', holen);
 
-		if (brackets) strcat(u, "[");
+					if (brackets) add_chr_to_str(&str, &l, '[');
 #endif
-		strcat(u, str);
+					add_bytes_to_str(&str, &l, host, holen);
 #ifdef IPV6
-		if (brackets) strcat(u, "]");
+					if (brackets) add_chr_to_str(&str, &l, ']');
 #endif
-	}
-	if (str) mem_free(str);
+				}
 
-	str = get_port_str(url);
-	if (str && *str) {
-		strcat(u, ":");
-		strcat(u, str);
-	}
-	if (str) mem_free(str);
+				if (port) {
+					add_chr_to_str(&str, &l, ':');
+					add_bytes_to_str(&str, &l, port, polen);
+				}
 
-	str = get_url_data(url);
-	if (str && *str) {
-		strcat(u, "/");
-		strcat(u, str);
+				if (protocols[protocol].need_slash_after_host)
+					add_chr_to_str(&str, &l, '/');
+			}
+		}
 	}
 
-	return u;
+	if (dalen) {
+		add_bytes_to_str(&str, &l, data, dalen);
+	}
+
+	return str;
 }
 
 #if 0

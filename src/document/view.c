@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.11 2002/03/26 21:09:15 pasky Exp $ */
+/* $Id: view.c,v 1.12 2002/03/26 22:02:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2879,6 +2879,7 @@ unsigned char *print_current_link_do(struct f_data_c *fd,
 				     struct terminal *term)
 {
 	struct link *link;
+	unsigned char *url;
 	unsigned char *str;
 	int strl = 0;
 
@@ -2896,7 +2897,11 @@ unsigned char *print_current_link_do(struct f_data_c *fd,
 
 			add_to_str(&str, &strl, _(TEXT(T_IMAGE), term));
 			add_to_str(&str, &strl, " ");
-			add_to_str(&str, &strl, strip_url_password(link->where_img));
+			url = strip_url_password(link->where_img);
+			if (url) {
+				add_to_str(&str, &strl, url);
+				mem_free(url);
+			}
 			return str;
 		}
 
@@ -2907,11 +2912,15 @@ unsigned char *print_current_link_do(struct f_data_c *fd,
 
 			add_to_str(&str, &strl, _(TEXT(T_USEMAP), term));
 			add_to_str(&str, &strl, " ");
-			add_to_str(&str, &strl, strip_url_password(link->where + 4));
+			url = strip_url_password(link->where + 4);
+			if (url) {
+				add_to_str(&str, &strl, url);
+				mem_free(url);
+			}
 			return str;
 		}
 
-		str = stracpy(strip_url_password(link->where));
+		str = strip_url_password(link->where);
 		return str;
 	}
 
@@ -2937,7 +2946,12 @@ unsigned char *print_current_link_do(struct f_data_c *fd,
 		else
 			add_to_str(&str, &strl, _(TEXT(T_POST_FORM_TO), term));
 		add_to_str(&str, &strl, " ");
-		add_to_str(&str, &strl, strip_url_password(link->form->action));
+
+		url = strip_url_password(link->form->action);
+		if (url) {
+			add_to_str(&str, &strl, url);
+			mem_free(url);
+		}
 		return str;
 	}
 
@@ -3000,7 +3014,11 @@ unsigned char *print_current_link_do(struct f_data_c *fd,
 			else
 				add_to_str(&str, &strl, _(TEXT(T_POST_TO), term));
 			add_to_str(&str, &strl, " ");
-			add_to_str(&str, &strl, strip_url_password(link->form->action));
+			url = strip_url_password(link->form->action);
+			if (url) {
+				add_to_str(&str, &strl, url);
+				mem_free(url);
+			}
 		}
 
 		return str;
@@ -3025,6 +3043,7 @@ void loc_msg(struct terminal *term, struct location *location,
 {
 	struct cache_entry *ce;
 	unsigned char *a;
+	unsigned char *url;
 	unsigned char *str;
 	int strl;
 
@@ -3043,7 +3062,11 @@ void loc_msg(struct terminal *term, struct location *location,
 	add_to_str(&str, &strl, _(TEXT(T_URL), term));
 	add_to_str(&str, &strl, ": ");
 
-	add_to_str(&str, &strl, strip_url_password(location->vs.url));
+	url = strip_url_password(location->vs.url);
+	if (url) {
+		add_to_str(&str, &strl, url);
+		mem_free(url);
+	}
 
 #if 0
 	if (strchr(location->vs.url, POST_CHAR)) {

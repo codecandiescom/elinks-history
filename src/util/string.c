@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.74 2003/07/24 02:01:21 jonas Exp $ */
+/* $Id: string.c,v 1.75 2003/07/24 02:31:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,18 +117,21 @@ copy_string(unsigned char **dst, unsigned char *src)
 
 
 void
-add_to_strn(unsigned char **s, unsigned char *a)
+add_to_strn(unsigned char **dst, unsigned char *src)
 {
-	unsigned char *p;
+	unsigned char *newdst;
+	int dstlen;
+	int srclen;
 
-	assertm(*s && a, "[add_to_strn]");
+	assertm(*dst && src, "[add_to_strn]");
 	if_assert_failed return;
 
-	p = mem_realloc(*s, strlen(*s) + strlen(a) + 1);
-
-	if (p) {
-		strcat(p, a);
-		*s = p;
+	dstlen = strlen(*dst);
+	srclen = strlen(src) + 1; /* Include the NUL char! */
+	newdst = mem_realloc(*dst, dstlen + srclen);
+	if (newdst) {
+		memcpy(newdst + dstlen, src, srclen);
+		*dst = newdst;
 	}
 }
 

@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.5 2004/04/23 23:12:09 pasky Exp $ */
+/* $Id: stack.c,v 1.6 2004/04/23 23:14:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,9 @@ html_stack_dup(enum html_element_type type)
 
 	e = mem_alloc(sizeof(struct html_element));
 	if (!e) return;
+
 	memcpy(e, ep, sizeof(struct html_element));
+
 	if (ep->attr.link) e->attr.link = stracpy(ep->attr.link);
 	if (ep->attr.target) e->attr.target = stracpy(ep->attr.target);
 	if (ep->attr.image) e->attr.image = stracpy(ep->attr.image);
@@ -119,6 +121,7 @@ html_stack_dup(enum html_element_type type)
 	if (ep->attr.href_base) e->attr.href_base = stracpy(ep->attr.href_base);
 	if (ep->attr.target_base) e->attr.target_base = stracpy(ep->attr.target_base);
 	if (ep->attr.select) e->attr.select = stracpy(ep->attr.select);
+
 #if 0
 	if (e->name) {
 		if (e->attr.link) set_mem_comment(e->attr.link, e->name, e->namelen);
@@ -130,9 +133,11 @@ html_stack_dup(enum html_element_type type)
 		if (e->attr.select) set_mem_comment(e->attr.select, e->name, e->namelen);
 	}
 #endif
+
 	e->name = e->options = NULL;
 	e->namelen = 0;
 	e->type = type;
+
 	add_to_list(html_stack, e);
 }
 
@@ -144,7 +149,7 @@ kill_html_stack_until(int ls, ...)
 
 	if (ls) e = e->next;
 
-	while ((void *)e != &html_stack) {
+	while ((void *) e != &html_stack) {
 		int sk = 0;
 		va_list arg;
 
@@ -181,21 +186,29 @@ kill_html_stack_until(int ls, ...)
 		if (e->namelen == 2 && upcase(e->name[0]) == 'T') {
 			unsigned char c = upcase(e->name[1]);
 
-			if (c == 'D' || c == 'H' || c == 'R') break;
+			if (c == 'D' || c == 'H' || c == 'R')
+				break;
 		}
+
 		e = e->next;
 	}
+
 	return;
 
 killl:
 	e = e->prev;
+
 killll:
 	l = 0;
 	while ((void *)e != &html_stack) {
-		if (ls && e == html_stack.next) break;
-		if (e->linebreak > l) l = e->linebreak;
+		if (ls && e == html_stack.next)
+			break;
+
+		if (e->linebreak > l)
+			l = e->linebreak;
 		e = e->prev;
 		kill_html_stack_item(e->next);
 	}
+
 	ln_break(l, line_break_f, ff);
 }

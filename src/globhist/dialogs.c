@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.56 2003/11/06 20:11:20 jonas Exp $ */
+/* $Id: dialogs.c,v 1.57 2003/11/07 13:55:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -478,6 +478,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 
 	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
+	if (!dlg_data) return;
 
 	item = mem_alloc(sizeof(struct history_dialog_list_item));
 	if (item) {

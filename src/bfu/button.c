@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.31 2003/08/29 14:09:17 zas Exp $ */
+/* $Id: button.c,v 1.32 2003/09/01 12:52:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,10 +79,7 @@ dlg_format_buttons(struct terminal *term, struct terminal *t2,
 
 		mw = 0;
 		max_buttons_width(t2, butt1, i2 - i1, &mw);
-		if (rw) {
-			int_lower_bound(rw, mw);
-			int_upper_bound(rw, w);
-		}
+		if (rw) int_bounds(rw, mw, w);
 
 		if (term) {
 			int i;

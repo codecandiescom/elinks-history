@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.93 2003/08/29 15:41:26 zas Exp $ */
+/* $Id: menu.c,v 1.94 2003/09/01 12:52:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,10 +189,8 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	menu->x = menu->xp;
 	menu->y = menu->yp;
 
-	int_lower_bound(&menu->x, 0);
-	int_lower_bound(&menu->y, 0);
-	int_upper_bound(&menu->x, sx - mx);
-	int_upper_bound(&menu->y, sy - my);
+	int_bounds(&menu->x, 0, sx - mx);
+	int_bounds(&menu->y, 0, sy - my);
 }
 
 static void
@@ -229,10 +227,8 @@ scroll_menu(struct menu *menu, int d)
 		menu->selected += d;
 	}
 
-	int_upper_bound(&menu->view, menu->selected - scr_i);
-	int_lower_bound(&menu->view, menu->selected - w + scr_i + 1);
-	int_upper_bound(&menu->view, menu->ni - w);
-	int_lower_bound(&menu->view, 0);
+	int_bounds(&menu->view, menu->selected - w + scr_i + 1, menu->selected - scr_i);
+	int_bounds(&menu->view, 0, menu->ni - w);
 }
 
 static void

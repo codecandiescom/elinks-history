@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.46 2003/08/29 14:38:30 zas Exp $ */
+/* $Id: inpfield.c,v 1.47 2003/09/01 12:52:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,10 +86,7 @@ dlg_format_field(struct terminal *term, struct terminal *t2,
 	item->y = *y;
 	item->l = w;
 
-	if (rw) {
-		int_lower_bound(rw, item->l);
-		int_upper_bound(rw, w);
-	}
+	if (rw) int_bounds(rw, item->l, w);
 	(*y)++;
 }
 
@@ -246,8 +243,7 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 	struct terminal *term = dlg->win->term;
 	struct color_pair *color;
 
-	int_lower_bound(&di->vpos, di->cpos - di->l + 1);
-	int_upper_bound(&di->vpos, di->cpos);
+	int_bounds(&di->vpos, di->cpos - di->l + 1, di->cpos);
 	int_lower_bound(&di->vpos, 0);
 
 	color = get_bfu_color(term, "dialog.field");

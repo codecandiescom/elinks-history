@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.86 2003/09/01 12:35:10 zas Exp $ */
+/* $Id: listbox.c,v 1.87 2003/09/01 12:52:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,10 +32,7 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 	item->y = *y;
 	item->l = w;
 
-	if (rw) {
-	       int_lower_bound(rw, item->l);
-	       int_upper_bound(rw, w);
-	}
+	if (rw) int_bounds(rw, item->l, w);
 
 	/* Height bussiness follows: */
 

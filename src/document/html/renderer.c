@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.384 2003/11/18 22:18:13 pasky Exp $ */
+/* $Id: renderer.c,v 1.385 2003/11/18 22:23:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -570,9 +570,6 @@ split_line(struct part *part)
 
 	return 0;
 }
-
-#define realloc_points(link, size) \
-	mem_align_alloc(&(link)->pos, (link)->n, size, sizeof(struct point), 0)
 
 /* This function is very rare exemplary of clean and beautyful code here.
  * Please handle with care. --pasky */

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.59 2003/11/18 10:53:32 pasky Exp $ */
+/* $Id: inphist.c,v 1.60 2003/11/18 10:54:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,14 +100,14 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
 	struct widget_data *widget_data = selected_widget(dlg_data);
 	int base_len = strlen(widget_data->cdata);
-	int last_match_len = base_len;
 	int longest_match_len = 0;
-	unsigned char *last_match = widget_data->cdata;
+	int match_len = base_len;
+	unsigned char *match = widget_data->cdata;
 	struct input_history_entry *entry;
 
 	foreach (entry, *history) {
 		unsigned char *cur = entry->data;
-		unsigned char *last = last_match;
+		unsigned char *last = match;
 		int cur_len = 0;
 
 		for (; *cur && *cur == *last; ++cur, ++last) {
@@ -122,15 +122,15 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 
 		if (cur_len < base_len)
 			continue;
-		if (cur_len < last_match_len)
+		if (cur_len < match_len)
 			longest_match_len = cur_len;
-		last_match = entry->data;
-		last_match_len = !*last ? strlen(entry->data) : cur_len;
+		match = entry->data;
+		match_len = !*last ? strlen(entry->data) : cur_len;
 	}
 
-	if (last_match == widget_data->cdata) return;
+	if (match == widget_data->cdata) return;
 
-	tab_compl_n(term, last_match, last_match_len, win);
+	tab_compl_n(term, match, match_len, win);
 }
 
 

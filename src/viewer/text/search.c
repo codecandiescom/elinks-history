@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.90 2003/10/31 21:33:43 pasky Exp $ */
+/* $Id: search.c,v 1.91 2003/11/04 14:25:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -995,10 +995,8 @@ search_dlg_fn(struct dialog_data *dlg_data)
 
 	text_width(term, dlg_data->dlg->udata, &min, &max);
 	/* I'm leet! --pasky */
-	max_group_width(term, 1, dlg_data->widgets_data + 1, 3, &max);
-	min_group_width(term, 1, dlg_data->widgets_data + 1, 3, &min);
-	max_group_width(term, 1, dlg_data->widgets_data + 4, 2, &max);
-	min_group_width(term, 1, dlg_data->widgets_data + 4, 2, &min);
+	group_width(term, 1, dlg_data->widgets_data + 1, 3, &min, &max);
+	group_width(term, 1, dlg_data->widgets_data + 4, 2, &min, &max);
 	buttons_width(dlg_data->widgets_data + 6, 2, &min, &max);
 
 	int_lower_bound(&max, dlg_data->dlg->widgets->datalen);

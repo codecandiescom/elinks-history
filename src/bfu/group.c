@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.36 2003/10/30 15:50:53 zas Exp $ */
+/* $Id: group.c,v 1.37 2003/11/04 14:25:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,48 +31,78 @@ base_group_width(struct terminal *term, struct widget_data *widget_data)
 	return widget_data->widget->datalen + 1;
 }
 
-/* TODO: We should join these two functions in one. --Zas */
+#if 0 /* Unused for now. */
 inline void
 max_group_width(struct terminal *term, int intl,
-		struct widget_data *widget_data, int n, int *w)
+		struct widget_data *widget_data, int n, int *max_width)
 {
-	int ww = 0;
 	int base = base_group_width(term, widget_data);
+	int maxw = 0;
 
 	while (n--) {
-		int wx;
+		int wx_max;
 		unsigned char *text = widget_data->widget->text;
 
 		if (intl) text = _(text, term);
-		wx = base + strlen(text);
+		wx_max = base + strlen(text);
 
-		if (n) wx++;
-		ww += wx;
+		if (n) wx_max++;
+		maxw += wx_max;
 		widget_data++;
 	}
 
-	int_lower_bound(w, ww);
+	int_lower_bound(max_width, maxw);
 }
 
 inline void
 min_group_width(struct terminal *term, int intl,
-		struct widget_data *widget_data, int n, int *w)
+		struct widget_data *widget_data, int n, int *min_width)
 {
 	int base = base_group_width(term, widget_data);
-	int wt = 0;
+	int minw = 0;
 
 	while (n--) {
-		int wx;
+		int wx_min;
 		unsigned char *text = widget_data->widget->text;
 
 		if (intl) text = _(text, term);
-		wx = strlen(text);
+		wx_min = strlen(text);
 
-		int_lower_bound(&wt, wx);
+		int_lower_bound(&minw, wx_min);
 		widget_data++;
 	}
 
-	*w = wt + base;
+	*min_width = minw + base;
+}
+#endif
+
+inline void
+group_width(struct terminal *term, int intl,
+  	    struct widget_data *widget_data, int n,
+	    int *min_width, int *max_width)
+{
+	int base = base_group_width(term, widget_data);
+	int minw = 0;
+	int maxw = 0;
+
+	while (n--) {
+		int wx_min;
+		int wx_max;
+		unsigned char *text = widget_data->widget->text;
+
+		if (intl) text = _(text, term);
+		wx_min = strlen(text);
+		wx_max = base + wx_min;
+
+		int_lower_bound(&minw, wx_min);
+		if (n) wx_max++;
+		maxw += wx_max;
+
+		widget_data++;
+	}
+
+	*min_width = minw + base;
+	int_lower_bound(max_width, maxw);
 }
 
 void
@@ -133,8 +163,7 @@ group_fn(struct dialog_data *dlg_data)
 	int y = 0;
 	int n = dlg_data->n - 2;
 
-	max_group_width(term, 1, dlg_data->widgets_data, n, &max);
-	min_group_width(term, 1, dlg_data->widgets_data, n, &min);
+	group_width(term, 1, dlg_data->widgets_data, n, &min, &max);
 	buttons_width(dlg_data->widgets_data + n, 2, &min, &max);
 
 	w = term->width * 9 / 10 - 2 * DIALOG_LB;

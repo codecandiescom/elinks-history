@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.8 2003/01/03 02:05:07 pasky Exp $
+## $Id: Makefile.am,v 1.9 2003/01/03 02:15:21 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -17,7 +17,6 @@ libintl_a_SOURCES = \
  codepage.h \
  codepage.inc \
  entity.inc \
- language.h \
  uni_7b.inc
 
 DISTCLEANFILES = $(srcdir)/stamp-intl $(srcdir)/language.inc $(srcdir)/lang_defs.h $(wildcard $(srcdir)/lng_*.inc)

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.194 2004/06/25 08:15:53 zas Exp $ */
+/* $Id: tables.c,v 1.195 2004/06/25 08:18:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1230,7 +1230,7 @@ static void
 check_table_widths(struct table *table)
 {
 	register int i, j;
-	int colspan, new_colspan;
+	int colspan;
 	int width, new_width;
 	int max, max_index = 0; /* go away, warning! */
 	int *widths = mem_calloc(table->x, sizeof(int));
@@ -1256,7 +1256,8 @@ check_table_widths(struct table *table)
 
 	colspan = 1;
 	do {
-		new_colspan = MAXINT;
+		int new_colspan = MAXINT;
+		
 		for (i = 0; i < table->x; i++) for (j = 0; j < table->y; j++) {
 			struct table_cell *cell = CELL(table, i, j);
 

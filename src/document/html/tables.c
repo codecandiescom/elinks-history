@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.211 2004/06/25 14:32:40 zas Exp $ */
+/* $Id: tables.c,v 1.212 2004/06/26 10:17:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -430,10 +430,11 @@ static unsigned char *
 skip_table(unsigned char *html, unsigned char *eof)
 {
 	int level = 1;
-	unsigned char *name;
-	int namelen;
 
 	while (1) {
+		unsigned char *name;
+		int namelen;
+
 		while (html < eof
 		       && (*html != '<'
 		           || parse_element(html, eof, &name, &namelen, NULL,

@@ -1,9 +1,18 @@
+# Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
+# $Id: hooks.pl,v 1.18 2005/03/26 13:11:48 pasky Exp $
+#
+# This file is (c) Apu Nahasapeemapetilon and GPL'd.
+
+
 use strict;
 use warnings;
 use diagnostics;
 
-=sample configuration file
-# ~/.elinks/config.pl
+
+=head1 SAMPLE CONFIGURATION FILE
+
+# Save this as ~/.elinks/config.pl :
+
 bork:       yep         (BORKify Google?)
 collapse:   okay        (collapse all XBEL bookmark folders on exit?)
 fortune:    elinks      (*fortune*, *elinks* tip, or *none* on quit?)
@@ -15,80 +24,90 @@ news:       msnbc       (agency to use for "news" and "n" prefixes)
 search:     elgoog      (engine for (search|find|www|web|s|f|go) prefixes)
 usenet:     google      (*google* or *standard* view for news:// URLs)
 weather:    cnn         (server for "weather" and "w" prefixes)
+
 # news:    bbc, msnbc, cnn, fox, google, yahoo, reuters, eff, wired, slashdot,
 #          newsforge, usnews, newsci, discover, sciam
 # search:  elgoog, google, yahoo, ask jeeves, a9, altavista, msn, dmoz, dogpile,
 #          mamma, webcrawler, netscape, lycos, hotbot, excite
 # weather: weather underground, google, yahoo, cnn, accuweather, ask jeeves
+
 =cut
 
-# Don't call them "dumb".  They hate that.  Rather, "interactivity challenged".
-# prefixes: bugmenot, bored, random, bofh, xyzzy, jack or handey
-# smart prefixes:
-#      web search:
-#           default engine:  search, find, www, web, s, f, go
-#                            also, anything in quotes with no prefix
-#           other:
-#                google:     g or google
-#                yahoo:      y or yahoo
-#                ask jeeves: ask or jeeves
-#                amazon a9:  a9
-#                altavista:  av or altavista
-#                microsoft:  msn or microsoft
-#                dmoz:       dmoz, odp, mozilla
-#                dogpile:    dp or dogpile
-#                mamma:      ma or mamma
-#                webcrawler: wc or webcrawler
-#                netscape:   ns or netscape
-#                lycos:      ly or lycos
-#                hotbot:     hb or hotbot
-#                excite:     ex or excite
-#                elgoog:     eg, elgoog, hcraes, dnif, bew, og
-#      news:
-#           default agency:  n, news
-#           other:
-#                British Broadcasting Corporation: bbc
-#                MSNBC: msnbc
-#                Cable News Network: cnn
-#                FOXNews: fox
-#                Google News: gn
-#                Yahoo News: yn
-#                Reuters: rs or reuters
-#                Electronic Frontier Foundation: eff
-#                Wired: wd or wired
-#                Slashdot: /. or sd or slashdot
-#                NewsForge: nf or newsforge
-#                U.S.News & World Report: us or usnews
-#                New Scientist: newsci or nsci
-#                Discover Magazine: dm
-#                Scientific American: sa or sciam
-#      locators:
-#           Internet Movie Database: imdb, movie, or flick
-#           US zip code search: zip or usps (# or address)
-#           IP address locator / address space: ip
-#           WHOIS / TLD list: whois (current url or specified)
-#           Request for Comments: rfc (# or search)
-#           weather: w or weather
-#           Yahoo! Finance / NASD Regulation: stock, ticker, or quote
-#           Snopes: ul, urban, or legend
-#           torrent search / ISOHunt: bt, torrent, or bittorrent
-#           Wayback Machine: ia, ar, arc, or archive (current url or specified)
-#           software:
-#                Freshmeat: fm or freshmeat
-#                SourceForge: sf or sourceforge
-#                Savannah: sv or savannah
-#                Gna!: gna
-#           Netcraft Uptime Survey: whatis or uptime (current url or specified)
-#           Who's Alive and Who's Dead: alive or dead
-#           Google Library / Project Gutenberg: book or read
-#           Internet Public Library: ipl
-#      other:
-#           usenet: deja, gg, groups, gr, nntp, usenet, nn
-#           page translation: babelfish, babel, bf, translate, trans, or b
-#           MirrorDot: md or mirrordot
-#           Coral cache: cc, coral, or nyud (requires URL)
-#           page validators: vhtml or vcss (current url or specified)
-# elinks: el / elinks, bz / bug (# or search optional), doc(|s|umentation), faq
+=head1 PREFIXES
+
+Don't call the prefixes "dumb", they hate that!  Rather, "interactivity
+challenged". (Such politically correct names always appeared to me to be
+so much more insulting... --pasky ;-)
+
+prefixes: bugmenot, bored, random, bofh, xyzzy, jack or handey
+smart prefixes:
+     web search:
+          default engine:  search, find, www, web, s, f, go
+                           also, anything in quotes with no prefix
+          other:
+               google:     g or google
+               yahoo:      y or yahoo
+               ask jeeves: ask or jeeves
+               amazon a9:  a9
+               altavista:  av or altavista
+               microsoft:  msn or microsoft
+               dmoz:       dmoz, odp, mozilla
+               dogpile:    dp or dogpile
+               mamma:      ma or mamma
+               webcrawler: wc or webcrawler
+               netscape:   ns or netscape
+               lycos:      ly or lycos
+               hotbot:     hb or hotbot
+               excite:     ex or excite
+               elgoog:     eg, elgoog, hcraes, dnif, bew, og
+     news:
+          default agency:  n, news
+          other:
+               British Broadcasting Corporation: bbc
+               MSNBC: msnbc
+               Cable News Network: cnn
+               FOXNews: fox
+               Google News: gn
+               Yahoo News: yn
+               Reuters: rs or reuters
+               Electronic Frontier Foundation: eff
+               Wired: wd or wired
+               Slashdot: /. or sd or slashdot
+               NewsForge: nf or newsforge
+               U.S.News & World Report: us or usnews
+               New Scientist: newsci or nsci
+               Discover Magazine: dm
+               Scientific American: sa or sciam
+     locators:
+          Internet Movie Database: imdb, movie, or flick
+          US zip code search: zip or usps (# or address)
+          IP address locator / address space: ip
+          WHOIS / TLD list: whois (current url or specified)
+          Request for Comments: rfc (# or search)
+          weather: w or weather
+          Yahoo! Finance / NASD Regulation: stock, ticker, or quote
+          Snopes: ul, urban, or legend
+          torrent search / ISOHunt: bt, torrent, or bittorrent
+          Wayback Machine: ia, ar, arc, or archive (current url or specified)
+          software:
+               Freshmeat: fm or freshmeat
+               SourceForge: sf or sourceforge
+               Savannah: sv or savannah
+               Gna!: gna
+          Netcraft Uptime Survey: whatis or uptime (current url or specified)
+          Who's Alive and Who's Dead: alive or dead
+          Google Library / Project Gutenberg: book or read
+          Internet Public Library: ipl
+     other:
+          usenet: deja, gg, groups, gr, nntp, usenet, nn
+          page translation: babelfish, babel, bf, translate, trans, or b
+          MirrorDot: md or mirrordot
+          Coral cache: cc, coral, or nyud (requires URL)
+          page validators: vhtml or vcss (current url or specified)
+elinks: el / elinks, bz / bug (# or search optional), doc(|s|umentation), faq
+
+=cut
+
 
 ################################################################################
 ### goto_url_hook ##############################################################
@@ -105,11 +124,12 @@ sub goto_url_hook
 		return $url;
 	}
 
-	# random URL generator
+	# Random URL generator
 	if ($url =~ '^bored$' || $url =~ '^random$')
 	{
-		my $word; # you can say *that* again...
+		my $word; # You can say *that* again...
 		srand();
+
 		open FILE, '</usr/share/dict/words'
 			or open FILE, '</usr/share/dict/linux.words'
 			or open FILE, '</usr/dict/words'
@@ -119,12 +139,13 @@ sub goto_url_hook
 			or return 'http://google.com/webhp?hl=xx-bork';
 		rand($.) < 1 && ($word = $_) while <FILE>;
 		close FILE;
+
 		($word) = $word =~ /(.*)/;
 		$url = 'http://' . lc($word) . '.com';
 		return $url;
 	}
 
-	# search engines
+	# Search engines
 	if ($url =~ '^(search|find|www|web|s|f|go)(| .*)$'
 		or $url =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$'
 		or $url =~ '^(g|google)(| .*)$'
@@ -145,6 +166,7 @@ sub goto_url_hook
 	{
 		my $engine = $url;
 		my ($search) = $url =~ /^[a-z0-9]* (.*)/;
+
 		$url = search(loadrc("search"), $search);
 		$url = search("elgoog",         $search) if ($engine =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$');
 		$url = search("google",         $search) if ($engine =~ '^(g|google)(| .*)$');
@@ -200,7 +222,7 @@ sub goto_url_hook
 		return $url;
 	}
 
-	# the Bastard Operator from Hell
+	# The Bastard Operator from Hell
 	if ($url =~ '^bofh$')
 	{
 		$url = 'http://prime-mover.cc.waikato.ac.nz/Bastard.html';
@@ -249,7 +271,7 @@ sub goto_url_hook
 	# XYZZY
 	if ($url =~ '^xyzzy$')
 	{
-		#$url = 'http://sundae.triumf.ca/pub2/cave/node001.html';
+		# $url = 'http://sundae.triumf.ca/pub2/cave/node001.html';
 		srand();
 		my $yzzyx;
 		my $xyzzy = int(rand(6));
@@ -337,14 +359,14 @@ sub goto_url_hook
 		return $url;
 	}
 
-	# and now, Deep Thoughts.  by Jack Handey
+	# ...and now, Deep Thoughts.  by Jack Handey
 	if ($url =~ '^(jack|handey)$')
 	{
 		$url = 'http://glug.com/handey';
 		return $url;
 	}
 
-	# locators
+	# Locators
 	if (   $url =~ '^(imdb|movie|flick)(| .*)$'
 		or $url =~ '^(zip|usps)(| .*)$'
 		or $url =~ '^ip(| .*)$'
@@ -439,7 +461,7 @@ sub goto_url_hook
 		return $url;
 	}
 
-	# page validators [<URL>]
+	# Page validators [<URL>]
 	if ($url =~ '^vhtml(| .*)$' or $url =~ '^vcss(| .*)$')
 	{
 		my ($page) = $url =~ /^.* (.*)/;
@@ -449,7 +471,7 @@ sub goto_url_hook
 		return $url;
 	}
 
-	# there's no place like home
+	# There's no place like home
 	if ($url =~ '^(el(|inks)|b(ug(|s)|z)(| .*)|doc(|umentation|s)|faq)$')
 	{
 		my ($bug) = $url =~ /^.* (.*)/;
@@ -479,14 +501,14 @@ sub goto_url_hook
 		return $url;
 	}
 
-################################################################################
-### anything not otherwise useful is a search ##################################
+	# Anything not otherwise useful could be a search
 	if ($current_url and loadrc("gotosearch") eq "yes")
 	{
 		$url = search(loadrc("search"), $url);
 	}
 	return $url;
 }
+
 
 ################################################################################
 ### follow_url_hook ############################################################
@@ -512,7 +534,7 @@ sub follow_url_hook
 		return $url;
 	}
 
-	# nntp?  try Google Groups
+	# NNTP?  Try Google Groups
 	if ($url =~ '^(nntp|news):' and loadrc("usenet") ne "standard")
 	{
 		my $beta = "groups.google.co.uk";
@@ -527,6 +549,7 @@ sub follow_url_hook
 
 	return $url;
 }
+
 
 ################################################################################
 ### pre_format_html_hook #######################################################
@@ -543,7 +566,7 @@ sub pre_format_html_hook
 #		$html =~ s/<B>Advertisement<\/B>//;
 	}
 
-	# yes, I heard you the first time
+	# Yes, I heard you the first time
 	if ($url =~ 'google\.com')
 	{
 		$html =~ s/Teep: In must broosers yuoo cun joost heet zee retoorn key insteed ooff cleecking oon zee seerch boottun\. Bork bork bork!//;
@@ -557,7 +580,7 @@ sub pre_format_html_hook
 		$html =~ s/<b>&nbsp\;&nbsp\;&nbsp\;Site Sponsors<\/b>//g;
 	}
 
-	# Gmail has obviously never met ELinks
+	# GMail has obviously never met ELinks
 	if ($url =~ 'gmail\.google\.com')
 	{
 		$html =~ s/^<b>For a better Gmail experience, use a.+?Learn more<\/a><\/b>$//sm;
@@ -571,6 +594,7 @@ sub pre_format_html_hook
 
 	return $html;
 }
+
 
 ################################################################################
 ### proxy_for_hook #############################################################
@@ -586,6 +610,7 @@ sub proxy_for_hook
 
 	return;
 }
+
 
 ################################################################################
 ### quit_hook ##################################################################
@@ -632,7 +657,7 @@ sub quit_hook
 	while (!$fortune)
 	{
 		seek(COOKIES, $line[int rand($#line + 1)], 0);
-		while(<COOKIES>)
+		while (<COOKIES>)
 		{
 			last if /^%$/;
 			$fortune .= $_;
@@ -642,8 +667,9 @@ sub quit_hook
 	print("\n", $fortune);
 }
 
+
 ################################################################################
-### configuration ##############################################################
+### Configuration ##############################################################
 sub loadrc
 {
 	my ($preference) = @_;
@@ -652,7 +678,7 @@ sub loadrc
 	if (-f $configperl)
 	{
 		open RC, "<$configperl";
-		while(<RC>)
+		while (<RC>)
 		{
 			next if (m/^\#.*/);
 			next if (!m/(.*):\s*(.*)/);
@@ -679,8 +705,9 @@ sub loadrc
 	return $answer;
 }
 
+
 ################################################################################
-### search engines #############################################################
+### Search engines #############################################################
 sub search
 {
 	my ($engine, $search) = @_;

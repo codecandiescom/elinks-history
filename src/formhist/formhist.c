@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.28 2003/08/29 21:21:25 pasky Exp $ */
+/* $Id: formhist.c,v 1.29 2003/08/29 21:26:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,11 +114,8 @@ fail:
 	return 0;
 }
 
-/*
- * @url is the URL of the site
- * @name is the name of the form control
- * returns the saved value if present
- *	   or NULL */
+/* Look up @name form of @url document in the form history. Returns the saved
+ * value if present, NULL upon an error. */
 unsigned char *
 get_form_history_value(unsigned char *url, unsigned char *name)
 {
@@ -139,10 +136,8 @@ get_form_history_value(unsigned char *url, unsigned char *name)
 	return NULL;
 }
 
-/* @url is the URL of the site
- * @submit is the list of submitted_values
- * returns 1 if the form is already saved in
- *	   0 if not */
+/* Check whether the form (chain of @submit submitted_values at @url document)
+ * is already present in the form history. */
 int
 form_already_saved(unsigned char *url, struct list_head *submit)
 {
@@ -177,10 +172,8 @@ form_already_saved(unsigned char *url, struct list_head *submit)
 	return 0;
 }
 
-/* Appends form data to the password file
- * (form data is url+submitted_value(s))
- * returns 1 on success
- *         0 on failure */
+/* Appends form data @form1 (url and submitted_value(s)) to the password file.
+ * Returns 1 on success, 0 otherwise. */
 int
 remember_form(struct formhist_data *form1)
 {
@@ -208,8 +201,9 @@ remember_form(struct formhist_data *form1)
 	mem_free(file);
 	if (!ssi) goto fail;
 
-	/* We're going to save just <INPUT TYPE="text"> and
-	 * <INPUT TYPE="password"> */
+	/* We're going to save just <input type="text"> and
+	 * <input type="password">. */
+
 	foreach (sv, *form1->submit) {
 		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
 			struct submitted_value *sv2;
@@ -237,6 +231,7 @@ remember_form(struct formhist_data *form1)
 	add_to_list(saved_forms, form);
 
 	/* Write the list to password file */
+
 	foreach (tmpform, saved_forms) {
 		secure_fprintf(ssi, "%s\n", tmpform->url);
 
@@ -244,8 +239,9 @@ remember_form(struct formhist_data *form1)
 			unsigned char *encvalue = "";
 
 			/* Obfuscate the password. If we do
-			 * $ cat ~/.elinks/password we don't want
-			 * someone behind our back to read our password */
+			 * $ cat ~/.elinks/password
+			 * we don't want someone behind our back to read our
+			 * password (androids don't count). */
 			if (sv->value && *sv->value) {
 				encvalue = base64_encode(sv->value);
 				if (!encvalue) return 0;
@@ -332,7 +328,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 	init_list(*form->submit);
 
 	/* Set up a new list_head, as @submit will be destroyed as soon as
-	 * get_form_url() returns */
+	 * get_form_url() returns. */
 	sb = form->submit;
 	sb->next = submit->next;
 	sb->prev = submit->prev;

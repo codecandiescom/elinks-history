@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.170 2004/04/07 19:53:10 jonas Exp $ */
+/* $Id: uri.c,v 1.171 2004/04/07 19:58:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -647,6 +647,7 @@ find_uri_protocol(unsigned char *newurl)
 		/* It's IP? */
 		for (ipscan = ch; isdigit(*ipscan) || *ipscan == '.';
 			ipscan++);
+
 		if (!*ipscan || *ipscan == ':' || *ipscan == '/')
 			return PROTOCOL_HTTP;
 
@@ -656,18 +657,15 @@ find_uri_protocol(unsigned char *newurl)
 		 * modifications. :| --pasky */
 
 		/* It's two-letter TLD? */
-		if (host_end - domain == 2) {
+		if (host_end - domain == 2
+		    || end_with_known_tld(domain, host_end - domain) >= 0)
 			return PROTOCOL_HTTP;
-
-		} else {
-			/* See above the braindead FIXME :^). */
-			if (end_with_known_tld(domain, host_end - domain) >= 0)
-				return PROTOCOL_HTTP;
-		}
 	}
 
-	/* We default to file:// URI because that will give
-	 * a "No such file or directory" error. */
+	/* We default to file:// even though we already tested if the file
+	 * existed since it will give a "No such file or directory" error.
+	 * which might better hint the user that there was problem figuring out
+	 * the URI. */
 	return PROTOCOL_FILE;
 }
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.102 2003/12/27 17:31:36 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.103 2003/12/28 01:31:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,10 +366,24 @@ void
 bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
 {
 	unsigned char title[MAX_STR_LEN], url[MAX_STR_LEN];
-	struct bookmark *folder = add_bookmark(NULL, 1, foldername, NULL);
+	struct bookmark *folder = NULL;
+	struct bookmark *bookmark;
 	struct window *tab;
 
-	if (!folder) return;
+	foreach (bookmark, bookmarks) {
+		if (strcmp(bookmark->title, foldername))
+			continue;
+		folder = bookmark;
+		break;
+	}
+
+	if (!folder) {
+		folder = add_bookmark(NULL, 1, foldername, NULL);
+		if (!folder) return;
+	} else {
+		while (!list_empty(folder->child))
+			delete_bookmark(folder->child.next);
+	}
 
 	foreach_tab (tab, term->windows) {
 		if (!get_current_title(tab->data, title, MAX_STR_LEN))

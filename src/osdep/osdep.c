@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.158 2004/12/31 12:29:09 jonas Exp $ */
+/* $Id: osdep.c,v 1.159 2005/01/03 03:22:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -736,7 +736,7 @@ elinks_cfmakeraw(struct termios *t)
 }
 
 
-#if !defined(CONFIG_GPM) && !defined(OS2_MOUSE)
+#if !defined(CONFIG_MOUSE) || (!defined(CONFIG_GPM) && !defined(OS2_MOUSE))
 
 void *
 handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),

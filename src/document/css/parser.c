@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.55 2004/01/26 23:37:08 fabio Exp $ */
+/* $Id: parser.c,v 1.56 2004/01/26 23:56:17 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,11 +194,7 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 	 * scanning for id/class/pseudo. --pasky */
 	selector = get_css_selector(css, token->string, token->length);
 
-	if (!selector) {
-syntax_error:
-		skip_css_block(scanner);
-		return NULL;
-	}
+	if (!selector) goto syntax_error;
 
 	/* Let's see if we will get anything else of this. */
 
@@ -236,7 +232,13 @@ syntax_error:
 	}
 
 	if (token->type != '{') {
-		goto syntax_error;
+                if (selector->id) mem_free(selector->id);
+                if (selector->class) mem_free(selector->class);
+                if (selector->pseudo) mem_free(selector->pseudo);
+
+syntax_error:
+		skip_css_block(scanner);
+		return NULL;
 	}
 
 	return selector;

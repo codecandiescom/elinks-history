@@ -311,7 +311,7 @@ Nalin Dahyabhai <nalin@redhat.com>
 	Fixed occasional destroying of read buffer on Alpha
 
 Nuno Miguel Rodrigues <nmr@europa.net.dhis.org>
-	Unixware console fix
+	UnixWare console fix
 
 Oleg Belousov <strijar@urai.ru>
 	"Ignore charset info sent by server" is saved in config file
@@ -451,4 +451,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.140 2003/10/09 16:12:04 fabio Exp $
+$Id: AUTHORS,v 1.141 2003/10/16 13:14:36 zas Exp $

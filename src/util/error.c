@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.33 2002/11/26 22:47:01 pasky Exp $ */
+/* $Id: error.c,v 1.34 2002/11/26 22:48:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,9 @@ int_error(unsigned char *fmt, ...)
 	}
 
 	va_end(params);
+#ifdef DEBUG
 	force_dump();
+#endif
 }
 
 void

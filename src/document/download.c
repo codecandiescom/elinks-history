@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.39 2002/09/14 11:10:55 pasky Exp $ */
+/* $Id: download.c,v 1.40 2002/09/17 14:09:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -364,11 +364,8 @@ display_download(struct terminal *term, struct download *down,
 	return;
 
 found:
-#define DLG_ALLOC_SIZE sizeof(struct dialog) + 3 * sizeof(struct widget)
-	dlg = mem_alloc(DLG_ALLOC_SIZE);
+	dlg = mem_calloc(1, sizeof(struct dialog) + 3 * sizeof(struct widget));
 	if (!dlg) return;
-	memset(dlg, 0, DLG_ALLOC_SIZE);
-#undef 	DLG_ALLOC_SIZE
 
 	undisplay_download(down);
 	down->ses = ses;
@@ -733,9 +730,8 @@ start_download(struct session *ses, unsigned char *file)
 	h = create_download_file(ses->term, file, 0);
 	if (h == -1) return;
 
-	down = mem_alloc(sizeof(struct download));
+	down = mem_calloc(1, sizeof(struct download));
 	if (!down) return;
-	memset(down, 0, sizeof(struct download));
 
 	down->url = stracpy(url);
 	down->stat.end = (void (*)(struct status *, void *)) download_data;
@@ -783,13 +779,12 @@ continue_download(struct session *ses, unsigned char *file)
 		return;
 	}
 
-	down = mem_alloc(sizeof(struct download));
+	down = mem_calloc(1, sizeof(struct download));
 	if (!down) {
 		tp_cancel(ses);
 		if (ses->tq_prog) mem_free(file);
 		return;
 	}
-	memset(down, 0, sizeof(struct download));
 
 	down->url = stracpy(url);
 	down->stat.end = (void (*)(struct status *, void *)) download_data;

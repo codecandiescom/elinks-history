@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.29 2002/09/14 20:53:18 pasky Exp $ */
+/* $Id: listbox.c,v 1.30 2002/09/14 21:48:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,21 +265,54 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 	/* TODO: Use graphics chars for lines if available. --pasky */
 
 	for (d = 0; d < depth - 1; d++) {
+		struct listbox_item *root = item;
+		struct listbox_item *child = item;
+		int i;
+		unsigned char str[6] = " |   ";
+
+		for (i = depth - d; i; i--) {
+			child = root;
+			root = root->root;
+		}
+
+		if (root && root->child.prev == child)
+			strcpy(str, "     "); /* We were the last branch. */
+
 		/* TODO: Don't draw this if there's no further child of
 		 * parent in that depth! Links suffers with the same, it
 		 * looks sooo ugly ;-). --pasky */
 		print_text(data->term, data->listbox_item_data->x + d * 5,
 			   data->listbox_item_data->y + data->offset,
-			   5, " |   ", color);
+			   5, str, color);
 	}
 
 	if (depth) {
-	print_text(data->term, data->listbox_item_data->x + (depth - 1) * 5,
-		   data->listbox_item_data->y + data->offset,
-		   5, list_empty(item->child) ? " |-- "
-		   			      : item->expanded ? "[-]- "
-		 					       : "[+]- ",
-		   color);
+		unsigned char str[6] = " |-- ";
+
+		if (list_empty(item->child)) {
+			if (item->root) {
+				if (item == item->root->child.prev) {
+					str[1] = '`';
+				}
+			} else {
+				if (((struct listbox_data *) item->box->next)->items->next == item) {
+					str[1] = ',';
+				} else if (((struct listbox_data *) item->box->next)->items->prev == item) {
+					str[1] = '`';
+				}
+			}
+		} else {
+			if (item->expanded) {
+				strcpy(str, "[-]- ");
+			} else {
+				strcpy(str, "[+]- ");
+			}
+		}
+
+		print_text(data->term,
+			   data->listbox_item_data->x + (depth - 1) * 5,
+			   data->listbox_item_data->y + data->offset,
+			   5, str, color);
 	}
 
 	print_text(data->term, data->listbox_item_data->x + depth * 5,

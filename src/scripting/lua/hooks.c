@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.13 2003/07/24 01:48:37 pasky Exp $ */
+/* $Id: hooks.c,v 1.14 2003/07/24 03:11:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,19 +201,16 @@ script_hook_get_proxy(unsigned char *url)
 }
 
 
-/*
- * This function should allow the user to do whatever clean up is
- * required when Links quits.
- */
-
+/* This function should allow the user to do whatever clean up is
+ * required when ELinks quits. */
 void
 script_hook_quit(void)
 {
-	if (prepare_lua(NULL) == 0) {
-		lua_dostring(lua_state, "if quit_hook then quit_hook() end");
-		finish_lua();
-	}
-}
+	if (prepare_lua(NULL))
+		return;
 
+	lua_dostring(lua_state, "if quit_hook then quit_hook() end");
+	finish_lua();
+}
 
 #endif

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.681 2005/02/21 23:31:47 miciah Exp $ */
+/* $Id: view.c,v 1.682 2005/02/23 20:05:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -743,6 +743,9 @@ try_form_insert_mode(struct session *ses, struct document_view *doc_view,
 {
 	enum frame_event_status status = FRAME_EVENT_IGNORED;
 	enum edit_action action;
+
+	if (!link_is_textinput(link))
+		return FRAME_EVENT_IGNORED;
 
 	action = kbd_action(KEYMAP_EDIT, ev, NULL);
 

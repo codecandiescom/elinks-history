@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.35 2003/06/05 15:45:05 zas Exp $ */
+/* $Id: charsets.c,v 1.36 2003/06/13 17:54:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,10 +9,14 @@
 
 #include "elinks.h"
 
+#include "main.h"
 #include "document/options.h"
 #include "intl/charsets.h"
 #include "util/conv.h"
 #include "util/error.h"
+#ifdef USE_FASTFIND
+#include "util/fastfind.h"
+#endif
 #include "util/memory.h"
 #include "util/string.h"
 #include "util/types.h"
@@ -345,6 +349,7 @@ f:
 	return table;
 }
 
+#ifndef USE_FASTFIND
 static inline int
 xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 {
@@ -358,6 +363,40 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 
 	return !!*s1;
 }
+#else
+struct entity {
+	char *s;
+	unicode_val c;
+};
+
+static struct entity *internal_pointer;
+
+/* Reset internal list pointer */
+void
+entities_reset(void)
+{
+	internal_pointer =  (struct entity *) entities;
+}
+
+/* Returns a pointer to a struct that contains
+ * current key and data pointers and increment
+ * internal pointer.
+ * It returns NULL when key is NULL. */
+struct fastfind_key_value *
+entities_next(void)
+{
+	static struct fastfind_key_value kv;
+
+	if (!internal_pointer->s) return NULL;
+
+	kv.key = internal_pointer->s;
+	kv.data = internal_pointer;
+
+	internal_pointer++;
+
+	return &kv;
+}
+#endif /* USE_FASTFIND */
 
 /* To enable experimental entity cache, define it. */
 #if 1
@@ -504,7 +543,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 #ifdef DEBUG_ENTITY_CACHE
 		fprintf(stderr, "%lu %016x %s\n", (unsigned long) n , n, result);
 #endif
-
+#ifndef USE_FASTFIND
 	} else { /* Text entity. */
 		long start = 0;
 		long end = N_ENTITIES - 1; /* can be negative. */
@@ -527,6 +566,22 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 			}
 		}
 	}
+#else
+	} else { /* Text entity. */
+		static int do_index = 1;
+		struct entity *r;
+		
+		if (do_index) {
+			ff_info_entities = fastfind_index(&entities_reset, &entities_next, 1);
+			fastfind_index_compress(NULL, ff_info_entities);
+			do_index = 0;
+		}
+
+		r = (struct entity *) fastfind_search((unsigned char *) str, (int) strlen, ff_info_entities);
+		if (r) /* Found. */
+			result = u2cp(r->c, encoding);
+	}
+#endif
 
 end:
 #ifdef ENTITY_CACHE

@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.4 2003/09/19 15:33:09 jonas Exp $ */
+/* $Id: event.c,v 1.5 2003/09/19 15:37:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ static struct hash *event_hash = NULL;
 static inline int
 invalid_event_id(register int id)
 {
-	return (id < 0 || id >= eventssize);
+	return (id < 0 || id >= eventssize || id == EVENT_NONE);
 }
 
 int

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.67 2003/11/05 09:23:18 zas Exp $ */
+/* $Id: dialog.c,v 1.68 2003/11/06 16:45:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,21 +366,23 @@ center_dlg(struct dialog_data *dlg_data)
 void
 draw_dlg(struct dialog_data *dlg_data)
 {
-	draw_area(dlg_data->win->term, dlg_data->x, dlg_data->y,
+	struct terminal *term = dlg_data->win->term;
+
+	draw_area(term, dlg_data->x, dlg_data->y,
 		  dlg_data->width, dlg_data->height, ' ', 0,
-		  get_bfu_color(dlg_data->win->term, "dialog.generic"));
+		  get_bfu_color(term, "dialog.generic"));
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
 		/* Draw shadow */
-		struct color_pair *shadow_color = get_bfu_color(dlg_data->win->term,
+		struct color_pair *shadow_color = get_bfu_color(term,
 								"dialog.shadow");
 
 		/* (horizontal) */
-		draw_area(dlg_data->win->term, dlg_data->x + 2, dlg_data->y + dlg_data->height,
+		draw_area(term, dlg_data->x + 2, dlg_data->y + dlg_data->height,
 			  dlg_data->width - 2, 1, ' ', 0, shadow_color);
 
 		/* (vertical) */
-		draw_area(dlg_data->win->term, dlg_data->x + dlg_data->width, dlg_data->y + 1,
+		draw_area(term, dlg_data->x + dlg_data->width, dlg_data->y + 1,
 			  2, dlg_data->height, ' ', 0, shadow_color);
 	}
 }

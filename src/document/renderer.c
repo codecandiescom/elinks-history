@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.130 2004/11/10 21:22:54 jonas Exp $ */
+/* $Id: renderer.c,v 1.131 2004/11/10 21:30:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -309,14 +309,17 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 		render_encoded_document(cached, document);
 		sort_links(document);
 		if (!document->title) {
+			enum uri_component components;
+
 			if (document->uri->protocol == PROTOCOL_FILE) {
-				document->title = get_uri_string(document->uri,
-								 URI_PATH);
-				decode_uri(document->title);
+				components = URI_PATH;
 			} else {
-				document->title = get_uri_string(document->uri,
-								 URI_PUBLIC);
+				components = URI_PUBLIC;
 			}
+
+			document->title = get_uri_string(document->uri, components);
+			if (document->title)
+				decode_uri(document->title);
 		}
 
 #ifdef CONFIG_CSS

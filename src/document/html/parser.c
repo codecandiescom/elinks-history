@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.263 2003/11/14 15:03:48 jonas Exp $ */
+/* $Id: parser.c,v 1.264 2003/11/15 14:00:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1796,17 +1796,20 @@ x:
 static void
 clr_spaces(unsigned char *name)
 {
-	unsigned char *nm, *second;
+	unsigned char *nm;
+	unsigned char *second = name;
+
+	assert(name);
 
 	for (nm = name; *nm; nm++)
-		if (WHITECHAR(*nm) || *nm == 1) *nm = ' ';
-	for (second = nm = name; *nm; nm++) {
+		if (*nm && *nm < ' ') *nm = ' ';
+	for (nm = name; *nm; nm++) {
 		if (nm[0] == ' ' && (second == name || nm[1] == ' ' || !nm[1]))
 			continue;
 		*second++ = *nm;
 	}
-	/* FIXME: Shouldn't be *second = 0; enough? --pasky */
-	memset(second, 0, nm - second);
+
+	*second = '\0';
 }
 
 
@@ -1824,7 +1827,6 @@ new_menu_item(unsigned char *name, int data, int fullname)
 	if (name) {
 		clr_spaces(name);
 		if (!name[0]) mem_free(name), name = stracpy(" ");
-		if (name[0] == 1) name[0] = ' ';
 	}
 
 	if (name && data == -1) {

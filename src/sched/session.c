@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.542 2004/07/26 22:25:55 zas Exp $ */
+/* $Id: session.c,v 1.543 2004/07/26 22:31:52 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -961,10 +961,10 @@ void
 abort_loading(struct session *ses, int interrupt)
 {
 	if (have_location(ses)) {
-		struct location *l = cur_loc(ses);
+		struct location *loc = cur_loc(ses);
 
-		if (is_in_progress_state(l->download.state))
-			change_connection(&l->download, NULL, PRI_CANCEL, interrupt);
+		if (is_in_progress_state(loc->download.state))
+			change_connection(&loc->download, NULL, PRI_CANCEL, interrupt);
 		abort_files_load(ses, interrupt);
 	}
 	abort_preloading(ses, interrupt);

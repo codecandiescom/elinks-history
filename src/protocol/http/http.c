@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.160 2003/07/07 19:15:35 jonas Exp $ */
+/* $Id: http.c,v 1.161 2003/07/07 20:01:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -277,14 +277,12 @@ http_end_request(struct connection *conn, enum connection_state state)
 	set_connection_state(conn, state);
 	uncompress_shutdown(conn);
 
-	if (conn->state == S_OK) {
-		if (conn->cache) {
-			truncate_entry(conn->cache, conn->from, 1);
-			conn->cache->incomplete = 0;
+	if (conn->state == S_OK && conn->cache) {
+		truncate_entry(conn->cache, conn->from, 1);
+		conn->cache->incomplete = 0;
 #ifdef HAVE_SCRIPTING
-			conn->cache->done_pre_format_html_hook = 0;
+		conn->cache->done_pre_format_html_hook = 0;
 #endif
-		}
 	}
 
 	if (conn->info && !((struct http_connection_info *) conn->info)->close
@@ -952,9 +950,8 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 			unsigned char *data;
 			int data_len;
 			int len;
-			int zero = 0;
+			int zero = (info->chunk_remaining == CHUNK_ZERO_SIZE);
 
-			zero = (info->chunk_remaining == CHUNK_ZERO_SIZE);
 			if (zero) info->chunk_remaining = 0;
 			len = info->chunk_remaining;
 
@@ -1387,12 +1384,10 @@ out_of_mem:
 static void
 http_get_header(struct connection *conn)
 {
-	struct read_buffer *rb;
+	struct read_buffer *rb = alloc_read_buffer(conn);
 
-	set_connection_timeout(conn);
-
-	rb = alloc_read_buffer(conn);
 	if (!rb) return;
+	set_connection_timeout(conn);
 	rb->close = 1;
 	read_from_socket(conn, conn->sock1, rb, http_got_header);
 }

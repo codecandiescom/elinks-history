@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.240 2004/02/27 11:30:15 zas Exp $ */
+/* $Id: http.c,v 1.241 2004/03/03 12:00:06 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,6 +68,21 @@ subst_user_agent(unsigned char *fmt, unsigned char *version,
 		if (*fmt == '%') {
 			fmt++;
 			switch (*fmt) {
+				case 'b':
+					if (!list_empty(sessions)) {
+						unsigned char bs[4] = "";
+						int blen = 0;
+						struct session *ses = sessions.prev;
+						int bars = ses->status.show_status_bar + ses->status.show_tabs_bar
+							+ ses->status.show_title_bar;
+#if 0
+						int bars = ses->status.show_status_bar + ses->status.show_tabs_bar << 1
+							+ ses->status.show_title_bar << 2;
+#endif
+						ulongcat(bs, &blen, bars, 2, 0);
+						add_to_string(&agent, bs);
+					}
+					break;
 				case 'v':
 					add_to_string(&agent, version);
 					break;

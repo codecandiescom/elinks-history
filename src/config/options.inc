@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.101 2004/03/01 19:17:51 witekfl Exp $ */
+/* $Id: options.inc,v 1.102 2004/03/03 12:00:05 witekfl Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -691,7 +691,7 @@ struct option_info config_options_info[] = {
 
 	/* OSNews.com is supposed to be relying on the textmode token, at least. */
 	INIT_OPT_STRING("protocol.http", N_("User-agent identification"),
-		"user_agent", 0, "ELinks/%v (textmode; %s; %t)",
+		"user_agent", 0, "ELinks/%v (textmode; %s; %t-%b)",
 		N_("Change the User Agent ID. That means identification string, which\n"
 		"is sent to HTTP server when a document is requested. The 'textmode'\n"
 		"token in the first field is our silent attempt to establish this as\n"
@@ -701,6 +701,7 @@ struct option_info config_options_info[] = {
 		"%v in the string means ELinks version\n"
 		"%s in the string means system identification\n"
 		"%t in the string means size of the terminal\n"
+		"%b in the string means number of bars displayed by ELinks\n"
 		"Use \" \" if you don't want any User-Agent header to be sent at all.")),
 
 

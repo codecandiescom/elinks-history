@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.51 2003/06/08 22:24:34 pasky Exp $ */
+/* $Id: string.c,v 1.52 2003/06/08 22:26:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,9 +105,7 @@ inline unsigned char *
 stracpy(unsigned char *src)
 {
 	if (!src) {
-#ifdef DEBUG
 		warn("stracpy src=NULL");
-#endif
 		return NULL;
 	}
 
@@ -118,9 +116,7 @@ unsigned char *
 copy_string(unsigned char **dst, unsigned char *src)
 {
 	if (!src) {
-#ifdef DEBUG
 		warn("copy_string src=NULL");
-#endif
 		*dst = NULL;
 		return NULL;
 	}

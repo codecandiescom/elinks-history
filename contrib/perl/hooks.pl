@@ -61,6 +61,21 @@ sub goto_url_hook
 		return $url;
 	}
 
+	# MirrorDot dumb prefix
+	if ($url =~ '^(mirrordot|md)(| .*)$')
+	{
+		my ($slashdotted) = $url =~ /^[a-z]* (.*)/;
+		if ($slashdotted)
+		{
+			$url = 'http://mirrordot.com/find-mirror.html?' . $slashdotted;
+		}
+		else
+		{
+			$url = 'http://mirrordot.com';
+		}
+		return $url;
+	}
+
 	return $url;
 }
 
@@ -109,7 +124,7 @@ sub pre_format_html_hook
 ### proxy_for_hook #############################################################
 sub proxy_for_hook
 {
-	my $url = shift;
+	my $url = NIL;
 
 	return $url;
 }

@@ -1,121 +1,95 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
-@setfilename links-lua.info
-@settitle Links-Lua
+@setfilename elinks-lua.info
+@settitle ELinks - Lua
 @setchapternewpage none
 @c %**end of header
      
 @ifinfo
-This file documents Links-Lua, a developmental fork of the text
-web-browser Links.
+This file documents the Lua scripting interface of the ELinks web browser.
      
-Copyright 2001 Peter Wang.
+Copyright 2001, 2002  Peter Wang and others.
 @end ifinfo
      
 @titlepage
-@title Links-Lua
-@subtitle Links with Lua extensions
+@title ELinks Lua extensions
 @author Peter Wang
      
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 2001 Peter Wang.
+Copyright @copyright{} 2001, 2002  Peter Wang and others.
 @end titlepage
      
 @node Top, Introduction, (dir), (dir)
      
 @ifinfo
-This document describes Links-Lua, a developmental fork of the text
-web-browser Links.
+This file documents the Lua scripting interface of the ELinks web browser.
 @end ifinfo
      
 @menu
 * Introduction::                What is is, where to get it
-* Whats new::                   What's new in this version
-* Installing::                  Patching and compiling
-* Using Links-Lua::             The main bit
+* Installing::                  How to compile and install it
+* Using ELinks with Lua::       The main bit
 * Example recipes::             The fun stuff
 * Document history::            
 @end menu
 
 
 @c ----------------------------------------------------------------------
-@node Introduction, Whats new, Top, Top
+@node Introduction, Installing, Top, Top
 @chapter Introduction
 
 @section What is it
 
-Links-Lua is a fork of the Links web browser thats adds Lua scripting
-capabilities in order to make Links more flexible and customisable.
+Lua scripting capabilities permit users to customize the ELinks behaviour to
+unusual degree - they allow automatic rewriting of HTML code of the received
+documents, rewriting of the URLs entered by user etc. You can even write your
+own bookmarks system with Lua. See also contrib/lua/ for some examples of the
+possibilities of ELinks Lua support.
 
-It was written by Peter Wang and Cliff Cunnington.  There are some
-rough edges remaining, but is suitable for everyday use (I have been
-using it every day for a year).
+Please do not confuse Lua scripting with JavaScript, EcmaScript, VBScript and
+similiar. Those are embedded in page, allowing per-document scripting related
+to its presentation and providing some degree of interactivity etc. On the
+contrary, the current Lua support permits scripts to be embedded to the browser
+directly, changing the behaviour of the browser, not the document.
+
+The original Lua support (in the form of Links-Lua fork of original Links) was
+written by Peter Wang and Cliff Cunnington.  There are some rough edges
+remaining, but is suitable for everyday use (I have been using it every day for
+a year).
 
 @section Where to get it
 
-Please download and use ELinks (Experimental/Extended Links), which is
-available at @uref{http://pasky.ji.cz/elinks/}.  It incorporates
-Links-Lua, as well as many other features and bugfixes.
+The Lua scripting support comes with the stock ELinks distribution, no
+additional patches and tweaks should be needed.
 
-The Links-Lua web site is at
+The web site of the original Links-Lua is at
 @uref{http://links.sourceforge.net/links-lua/}.
 Some older patches against regular Links are available at
 @uref{http://www.sourceforge.net/projects/links/}, but they are not
 being maintained.
 
 @noindent
-Links can be found at @uref{http://links.browser.org}.
+ELinks can be found at @uref{http://elinks.or.cz/}.
 
 @noindent
-Lua can be found at @uref{http://www.lua.org}.
+Links can be found at @uref{http://links.browser.org/}.
+
+@noindent
+Lua can be found at @uref{http://www.lua.org/}.
 
 @section What it runs on
 
-Links-Lua has only been tested under Linux, although it @emph{should}
-work under other platforms that Links and Lua support (perhaps with some
-changes to source code).
+The Lua support has only been tested under Linux, although it @emph{should}
+work under other platforms that ELinks and Lua support (perhaps with some
+changes to source code?).
 
 Also, note that many of the scripts given here assume a Unix system.
 Your mileage will definitely vary on other platforms.
 
 
 @c ----------------------------------------------------------------------
-@node Whats new, Installing, Introduction, Top
-@chapter Whats new
-
-@c XXX proxy_for_hook
-@c XXX xdialog
-
-@section Patch 11
-
-@itemize @bullet
-@item New hook: @code{follow_url_hook}
-@item New function: @code{current_title}
-@item An undocumented function @code{edit_bookmark_dialog} for the Links-Lua bookmark system (to be generalised at a later date)
-@item Added a phony "user:" protocol to help with addons
-@end itemize
-
-@section Patch 10
-
-@itemize @bullet
-@item A system-wide configuration file @file{/etc/links-hooks.lua} 
-will be loaded before the per-user configuration file
-@file{~/.links/hooks.lua}
-
-@item The @code{execute} function has changed.
-
-@item It is now possible to bind Lua functions to a keystroke, using 
-the @code{bind_key} function.
-@end itemize
-
-@section Patch 9
-
-First public release.
-
-
-@c ----------------------------------------------------------------------
-@node Installing, Using Links-Lua, Whats new, Top
+@node Installing, Using Links-Lua, Introduction, Top
 @chapter Installing
 
 @menu
@@ -126,12 +100,12 @@ First public release.
 
 
 @c ----------------------------------------------------------------------
-@node Installing Lua, Installing Links-Lua, Installing, Installing
+@node Installing Lua, Installing ELinks, Installing, Installing
 @section Installing Lua
 
-Before you can compile Links-Lua, you must compile and install Lua.  The
-following instructions are for a Linux system.  People on other systems
-should try to enable @code{popen} support, but this is not necessary
+Before you can compile ELinks with Lua support, you must compile and install
+Lua.  The following instructions are for a Linux system.  People on other
+systems should try to enable @code{popen} support, but this is not necessary
 (you will lose a bit of functionality though).
 
 @enumerate
@@ -146,7 +120,7 @@ install} instead.
 
 
 @c ----------------------------------------------------------------------
-@node Installing Links-Lua, Running Links-Lua, Installing Lua, Installing
+@node Installing ELinks, Running ELinks, Installing Lua, Installing
 @section Installing ELinks
 
 Follow the instructions for building ELinks (it is the standard
@@ -155,25 +129,25 @@ step make sure that Lua has been detected on your system.
 
 
 @c ----------------------------------------------------------------------
-@node Running Links-Lua,  , Installing Links-Lua, Installing
-@section Running ELinks
+@node Running ELinks,  , Installing ELinks, Installing
+@section Running ELinks with Lua
 
-Simply start Links as you normally would.  To check you have Lua support
+Simply start ELinks as you normally would.  To check you have Lua support
 compiled in, open up the "Help | About" dialog box.  It should list
 "Lua" under "Features".  If not, make sure you do not have other copies
-of Links/ELinks running, or start Links again with the "-no-connect" option on
+of ELinks running, or start ELinks again with the "-no-connect" option on
 the command-line.
 
 
 @c ----------------------------------------------------------------------
-@node Using Links-Lua, Example recipes, Installing, Top
-@chapter Using Links-Lua
+@node Using ELinks, Example recipes, Installing, Top
+@chapter Using ELinks with Lua
 
-Out of the box, Links-Lua will do nothing different from regular Links.
+Out of the box, ELinks with Lua will do nothing different from regular ELinks.
 You need to write some scripts.
 
 @menu
-* Links-Lua additions::         
+* ELinks Lua additions::        
 * Config file::                 
 * Hooks::                       
 * Functions::                   
@@ -182,41 +156,43 @@ You need to write some scripts.
 
 
 @c ----------------------------------------------------------------------
-@node Links-Lua additions, Config file, Using Links-Lua, Using Links-Lua
-@section Links-Lua additions
+@node ELinks additions, Config file, Using ELinks with Lua, Using ELinks with Lua
+@section ELinks Lua additions
 
-Links-Lua is based on the idea of @dfn{hooks}.  A hook is a function
-that gets called at a particular point during the execution of Links.
-To make Links-Lua do what you want, you can add and edit such hooks.
+The Lua support is based on the idea of @dfn{hooks}.  A hook is a function that
+gets called at a particular point during the execution of ELinks.  To make
+ELinks do what you want, you can add and edit such hooks.
 
-Links-Lua also adds an extra dialog box, which you can open while in
-Links with the comma (@kbd{,}) key.  Here you can enter Lua expressions
-for evaluation, or override it to do something different.
+The Lua support also adds an extra dialog box, which you can open while in
+ELinks with the comma (@kbd{,}) key.  Here you can enter Lua expressions for
+evaluation, or override it to do something different.
 
 And finally, you can bind keystrokes to Lua functions.  These keystrokes
 won't let you do any more than is possible with the Lua Console, but
 they're more convenient.
 
-Note that this document assumes you have some knowledge of programming
-in Lua.  For that, you should refer to the Lua reference manual
-(@uref{http://www.lua.org/docs.html}).
+Note that this document assumes you have some knowledge of programming in Lua.
+For that, you should refer to the Lua reference manual
+(@uref{http://www.lua.org/docs.html}). In fact, the language is relatively
+trivial, though. You could already do wonders with simply refactoring the
+example scripts.
 
 
 @c ----------------------------------------------------------------------
-@node Config file, Hooks, Links-Lua additions, Using Links-Lua
+@node Config file, Hooks, ELinks Lua additions, Using ELinks with Lua
 @section Config file
 
-On startup, Links-Lua reads in two Lua scripts.  Firstly, a system-wide
-configuration file called @file{/etc/links-hooks.lua}, then a file in
-your home directory called @file{~/.links/hooks.lua}.  From these files,
+On startup, ELinks reads in two Lua scripts.  Firstly, a system-wide
+configuration file called @file{/etc/elinks/hooks.lua}, then a file in
+your home directory called @file{~/.elinks/hooks.lua}.  From these files,
 you can include other Lua files with @code{dofile}, if necessary.
 
-To see what kind of things you should put in here, download
-@uref{pwhooks.lua}.
+To see what kind of things you should put in here, look at
+@file{contrib/lua/hooks.lua}.
 
 
 @c ----------------------------------------------------------------------
-@node Hooks, Functions, Config file, Using Links-Lua
+@node Hooks, Functions, Config file, Using ELinks with Lua
 @section Hooks
 
 The following hooks are available.
@@ -273,11 +249,11 @@ things, such as temporary files you have created.
 
 
 @c ----------------------------------------------------------------------
-@node Functions, User protocol, Hooks, Using Links-Lua
+@node Functions, User protocol, Hooks, Using ELinks with Lua
 @section Functions
 
-As well as providing hooks, Links-Lua provides some functions in
-addition to the standard Lua functions.
+As well as providing hooks, ELinks provides some functions in addition to the
+standard Lua functions.
 
 @deffn Function enable_systems_functions ()
 Enable some potentially dangerous functions, as well as some other
@@ -290,11 +266,11 @@ The functions are: @code{openfile}, @code{closefile}, @code{readfrom},
 @code{getenv}, @code{setlocale}.
 
 Note: @code{setlocale} is a standard Lua function and will not affect
-the current Links locale.
+the current ELinks locale.
 @end deffn
 
 @deffn Function current_url ()
-Returns the URL of the current page being shown (in the Links session
+Returns the URL of the current page being shown (in the ELinks session
 that invoked the function).
 @end deffn
 
@@ -323,7 +299,7 @@ viewing documents online.
 @deffn Function pipe_read (command)
 Executes @var{command} and reads in all the data from stdout, until
 there is no more.  This is a hack, because for some reason the standard
-Lua function @code{read} seems to crash Links when used in pipe-reading
+Lua function @code{read} seems to crash ELinks when used in pipe-reading
 mode.
 @end deffn
 
@@ -335,14 +311,14 @@ standard Lua function of the same name, the return value is meaningless.
 
 @deffn Function bind_key (keymap, keystroke, function)
 Currently, @var{keymap} must be the string @samp{"main"}.  Keystroke is
-a keystroke as you would write it in the Links config file
+a keystroke as you would write it in the ELinks config file
 @file{~/.links/user.cfg}.  The function @var{function} should take no
 arguments, and should return the same values as @code{lua_console_hook}.
 @end deffn
 
 
 @c ----------------------------------------------------------------------
-@node User protocol,  , Functions, Using Links-Lua
+@node User protocol,  , Functions, Using ELinks with Lua
 @section User protocol
 
 There is one more little thing which Links-Lua adds, which will not be
@@ -354,21 +330,24 @@ For a concrete example, see the bookmark addon.
 
 
 @c ----------------------------------------------------------------------
-@node Example recipes, Document history, Using Links-Lua, Top
+@node Example recipes, Document history, Using ELinks with Lua, Top
 @chapter Example recipes
 
-This chapter contains some example scripts that you can use.  All of
-them come from @uref{pwhooks.lua}.  I really recommend you download it
-instead of copying code out of this document.  Also, not everything in
-there is covered here.
+This chapter contains some example scripts that you can use.  All of them come
+from @file{contrib/lua/hooks.lua}.  I really recommend you to see it directly
+instead of copying code out of this document.  Also, not everything in there is
+covered here.
 
 If you would like to contribute scripts, that would be great!  Please
 send them to me at @email{tjaden@@users.sourceforge.net}.  Cliff and I plan to
 start a script repository, provided we get some contributions.  As for
 script ideas, you'll just have to be a little creative :-)
 
-Also take a look at the @file{contrib/} directory in the ELinks
-distribution.
+Also take a look at the @file{contrib/lua/} directory in the ELinks
+distribution. Note that Peter and Cliff don't maintain the Lua support
+intensively anymore, thus it would be probably nice to Cc me
+(@email{pasky@@ucw.cz}) if you want to contribute some patch, so that I would
+be able to add it to the ELinks distribution.
 
 
 @menu
@@ -376,7 +355,7 @@ distribution.
 * Expanding ~::                 Expanding ~ to your home directory
 * Filtering crap::              Removing unwanted "content"
 * Reading gzipped files::       
-* Printing::                    Directly from Links
+* Printing::                    Directly from ELinks
 * Deferring to Netscape::       As a last resort
 * Alternative bookmark system::  
 * More ideas::                  
@@ -459,13 +438,16 @@ end
 
 @end example
 
+(Note that this was noticably enhanced and rewritten in the ELinks standart
+hooks.)
+
 
 @c ----------------------------------------------------------------------
 @node Expanding ~, Filtering crap, Go to URL on steroids, Example recipes
 @section Expanding ~
 
 By adding an extra snippet of code to the previous example, we can make
-Links expand pathnames such as @file{~/foo/bar} and @file{~user/zappo},
+ELinks expand pathnames such as @file{~/foo/bar} and @file{~user/zappo},
 like in the shell and other Unix programs.
 
 @example
@@ -498,18 +480,17 @@ function goto_url_hook (url, current_url)
 @node Filtering crap, Reading gzipped files, Expanding ~, Example recipes
 @section Filtering crap
 
-Many web pages nowadays have columns to the left and right of the text,
-which are utterly useless.  If you happen to be viewing the page in a
-80x25 screen, the text you want to read ends up crammed into a tiny
-space in the centre.  We use Links-Lua to manipulate the HTML before it
-reaches the parser.
+Many web pages nowadays have columns to the left and right of the text, which
+are utterly useless.  If you happen to be viewing the page in a 80x25 screen,
+the text you want to read ends up crammed into a tiny space in the centre.  We
+use ELinks Lua support to manipulate the HTML before it reaches the parser.
 
 
 @subsection linuxtoday.com
 
 Note: This recipe is out of date.
 
-Linux Today has two problems when viewed in Links: the useless columns
+Linux Today has two problems when viewed in ELinks: the useless columns
 on the left and the right and all the text appears in cyan.  Here is a
 quick recipe to fix that:
 
@@ -565,10 +546,10 @@ function pre_format_html_hook (url, html)
 @node Reading gzipped files, Printing, Filtering crap, Example recipes
 @section Reading gzipped files
 
-Note: Future versions of ELinks will support gzipped files natively.
+Note: ELinks already supports gzipped files natively.
 
 Sometimes documents come gzipped in order to save space, but then you
-need to uncompress them to read them with Links.  Here is a recipe to
+need to uncompress them to read them with ELinks.  Here is a recipe to
 handle gzipped files on a Unix system.
 
 @example
@@ -598,16 +579,16 @@ function pre_format_html_hook (url, html)
 @node Printing, Deferring to Netscape, Reading gzipped files, Example recipes
 @section Printing
 
-Printing a web page with Links usually involves quite a few steps: Save
-the current document onto disk.  Run it through Links on the
+Printing a web page with ELinks usually involves quite a few steps: Save
+the current document onto disk.  Run it through ELinks on the
 command-line (so it fits into 80 columns) to generate a plain text
 version.  Remove the 80th column from the text version, as it will make
 printers wrap down to the next line.  Finally, run the processed file
 through `lpr', then delete it.
 
 The following functions allow you to print web pages directly from
-Links, using `lpr' or `enscript'.  Type @kbd{lpr()} or @kbd{enscript()}
-in the Lua Console to run them.  (In the @file{pwhooks.lua}, I have also
+ELinks, using `lpr' or `enscript'.  Type @kbd{lpr()} or @kbd{enscript()}
+in the Lua Console to run them.  (In the @file{hooks.lua}, I have also
 made it so you can just type @kbd{lpr} or @kbd{enscript}.)
 
 @example
@@ -640,7 +621,7 @@ end
 @section Deferring to Netscape
 
 If you come across a brain-dead web page that is totally unreadable with
-Links, you'd probably want to open it with a graphical browser.  The
+ELinks, you'd probably want to open it with a graphical browser.  The
 following function opens the current document in Netscape.
 
 @example
@@ -665,10 +646,11 @@ end
 @node Alternative bookmark system, More ideas, Deferring to Netscape, Example recipes
 @section Alternative bookmark system
 
-Many people would like to have a bookmark system with categories, and
-also to be able to view them and search for them in an HTML page.  I
-have written an alternative bookmark system (for Links-Lua), which some
-people may like better than the standard bookmark system.  
+Many people would like to have a bookmark system with categories (note that
+ELinks already supports that, marketing name Hiearchical bookmarks), and also
+to be able to view them and search for them in an HTML page.  I have written an
+alternative bookmark system (for ELinks), which some people may like better
+than the standard bookmark system.  
 
 It is quite a big addon, so is described in a separate document, here:
 @uref{bookmark.html}
@@ -679,6 +661,11 @@ It is quite a big addon, so is described in a separate document, here:
 @section More ideas
 
 @itemize @bullet
+
+@item
+The Lua interface needs to be redesigned to provide more flexible, coherent
+and usable interface to the scripts.
+
 @item
 Cliff Cunnington had a neat idea of clipping text that you see in web
 pages (you enter a regexp that will match the start and end of the text
@@ -704,8 +691,8 @@ Send the current page to Babelfish for translation.
 Look for stupid JavaScript URLs and convert them to something usable.
 
 @item
-More things are possible, I'm sure.  If you have an idea that requires
-another hook or function, contact me and I'll see what I can do.
+More things are possible, I'm sure.  If you have an idea that requires another
+hook or function, contact me (Peter Wang) and I'll see what I can do.
 
 @end itemize
 
@@ -714,7 +701,22 @@ another hook or function, contact me and I'll see what I can do.
 @node Document history,  , Example recipes, Top
 @chapter Document history
 
+$Id: elinks-lua.texi,v 1.2 2002/11/29 13:08:27 pasky Exp $
+
+Current history:
+
+$Log: elinks-lua.texi,v $
+Revision 1.2  2002/11/29 13:08:27  pasky
+ELinksified.
+
+
+Original history:
+
 @itemize @bullet
+@item 2002-11-29
+ELinksified the document as I (pasky) included it in the ELinks distribution
+*finally* ;-).
+
 @item 2002-05-11
 Times change, stuff to update :-) The main thing is that ELinks came
 along.

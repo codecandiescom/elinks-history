@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.36 2002/09/10 13:13:09 zas Exp $ */
+/* $Id: download.c,v 1.37 2002/09/13 20:29:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@
 #include "protocol/mime.h"
 #include "protocol/url.h"
 #include "util/error.h"
+#include "util/file.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -591,19 +592,7 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe)
 	wd = get_cwd();
 	set_cwd(term->cwd);
 
-	if (file[0] == '~' && dir_sep(file[1])) {
-		unsigned char *h = getenv("HOME");
-
-		if (h) {
-			int fl = 0;
-
-			file = init_str();
-			if (file) {
-				add_to_str(&file, &fl, h);
-				add_to_str(&file, &fl, fi + 1);
-			}
-		}
-	}
+	file = expand_tilde(file);
 
 	h = open(file, O_CREAT | O_WRONLY | O_TRUNC | (sf ? O_EXCL : 0),
 		 sf ? 0600 : 0666);

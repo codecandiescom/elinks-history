@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.15 2003/07/24 11:09:20 miciah Exp $ */
+/* $Id: link.c,v 1.16 2003/07/27 15:49:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,8 +188,8 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 
 						if (link->type != L_FIELD && link->type != L_AREA) {
 							if (((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
-							       xx = xp + xw - 1;
-							       yy = yp + yw - 1;
+								xx = xp + xw - 1;
+								yy = yp + yw - 1;
 							}
 						}
 						set_cursor(t, x, y, xx, yy);
@@ -416,7 +416,8 @@ set_pos_y(struct document_view *f, struct link *l)
 
 void
 find_link(struct document_view *f, int p, int s)
-{ /* p=1 - top, p=-1 - bottom, s=0 - pgdn, s=1 - down */
+{
+	/* p=1 - top, p=-1 - bottom, s=0 - pgdn, s=1 - down */
 	struct link **line;
 	struct link *link;
 	int y, l;
@@ -466,8 +467,7 @@ nolink:
 
 
 unsigned char *
-get_link_url(struct session *ses, struct document_view *f,
-	     struct link *l)
+get_link_url(struct session *ses, struct document_view *f, struct link *l)
 {
 	assert(ses && f && l);
 	if_assert_failed return NULL;

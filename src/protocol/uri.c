@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.290 2004/10/21 17:36:15 jonas Exp $ */
+/* $Id: uri.c,v 1.291 2004/11/08 16:47:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,7 +220,13 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 	if (prefix_end + strcspn(prefix_end, "/") > host_end
 	    && *host_end) { /* we have auth info here */
-		unsigned char *user_end = strchr(prefix_end, ':');
+		unsigned char *user_end;
+
+		/* Allow '@' in the password component */
+		while (strcspn(host_end + 1, "@") < strcspn(host_end + 1, "/?"))
+			host_end = host_end + 1 + strcspn(host_end + 1, "@");
+
+		user_end = strchr(prefix_end, ':');
 
 		if (!user_end || user_end > host_end) {
 			uri->user = prefix_end;

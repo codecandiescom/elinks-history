@@ -1,3 +1,34 @@
+Sun Sep 22 16:34:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Fixed leak when folder was deleted.  
+
+Sun Sep 22 15:36:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/czech.lng, src/intl/language.inc:
+
+	Czech translation updates.  
+
+Sun Sep 22 15:33:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/bookmarks/bookmarks.c, src/bookmarks/bookmarks.h,
+	src/bookmarks/dialogs.c, src/dialogs/hierbox.c,
+	src/intl/lang_defs.h, src/intl/language.inc:
+
+	Add folder button. Disabled jumping around like mad monkey when
+	adding a bookmark.  
+
 Thu Sep 19 15:49:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/osdep/: os_dep.h, os_depx.h:

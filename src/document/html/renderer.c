@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.404 2004/01/16 16:18:22 jonas Exp $ */
+/* $Id: renderer.c,v 1.405 2004/01/16 16:29:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -975,6 +975,10 @@ get_link_state(void)
 	return state;
 }
 
+#define is_drawing_subs_or_sups() \
+	((format.attr & AT_SUBSCRIPT && global_doc_opts->display_subs) \
+	 || (format.attr & AT_SUPERSCRIPT && global_doc_opts->display_sups))
+
 void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
@@ -1017,6 +1021,14 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	set_hline(part, chars, charslen, link_state);
 
 	if (link_state != LINK_STATE_NONE) {
+		/* We need to update the current @link_state because <sub> and
+		 * <sup> tags will output to the canvas using an inner
+		 * put_chars() call which results in their process_link() call
+		 * will ``update'' the @link_state. */
+		if (link_state == LINK_STATE_NEW && is_drawing_subs_or_sups()) {
+			link_state = LINK_STATE_SAME;
+		}
+
 		process_link(part, link_state, chars, charslen);
 	}
 

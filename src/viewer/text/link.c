@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.248 2004/06/26 13:06:13 pasky Exp $ */
+/* $Id: link.c,v 1.249 2004/06/26 15:43:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,6 +379,31 @@ current_link_is_visible(struct document_view *doc_view)
 	return (link && in_view(doc_view, link));
 }
 
+/* Look for the first and the last link currently visible in our
+ * viewport. */
+void
+get_visible_links_range(struct document_view *doc_view, int *first, int *last)
+{
+	struct document *document = doc_view->document;
+	int height = doc_view->vs->y + doc_view->box.height;
+	int y;
+
+	*first = document->nlinks - 1;
+	*last = 0;
+
+	for (y = int_max(0, doc_view->vs->y);
+	     y < int_min(height, document->height);
+	     y++) {
+		if (document->lines1[y])
+			int_upper_bound(first, document->lines1[y]
+					       - document->links);
+
+		if (document->lines2[y])
+			int_lower_bound(last, document->lines2[y]
+					      - document->links);
+	}
+}
+
 int
 next_in_view(struct document_view *doc_view, int current, int direction,
 	     int (*fn)(struct document_view *, struct link *),
@@ -386,32 +411,17 @@ next_in_view(struct document_view *doc_view, int current, int direction,
 {
 	struct document *document;
 	struct view_state *vs;
-	int start, end = 0;
-	int y, height;
+	int start, end;
 
 	assert(doc_view && doc_view->document && doc_view->vs && fn);
 	if_assert_failed return 0;
 
 	document = doc_view->document;
-	start = document->nlinks - 1;
 	vs = doc_view->vs;
-	height = vs->y + doc_view->box.height;
 
-	/* Look for the first and the last link currently visible in our
-	 * viewport. */
-	for (y = int_max(0, vs->y);
-	     y < int_min(height, document->height);
-	     y++) {
-		if (document->lines1[y])
-			int_upper_bound(&start, document->lines1[y]
-					       - document->links);
+	get_visible_links_range(doc_view, &start, &end);
 
-		if (document->lines2[y])
-			int_lower_bound(&end, document->lines2[y]
-					     - document->links);
-	}
-
-	/* And now go from the @current link in @direction until either
+	/* Go from the @current link in @direction until either
 	 * fn() is happy or we would leave the current viewport. */
 	while (current >= start && current <= end) {
 		if (fn(doc_view, &document->links[current])) {

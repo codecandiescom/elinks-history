@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.134 2002/12/07 15:28:36 pasky Exp $ */
+/* $Id: options.c,v 1.135 2002/12/07 16:23:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -368,7 +368,9 @@ void
 done_options()
 {
 	free_options_tree(root_options.ptr);
+	mem_free(root_options.ptr);
 	free_options_tree(cmdline_options.ptr);
+	mem_free(cmdline_options.ptr);
 }
 
 void

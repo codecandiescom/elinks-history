@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.49 2004/06/18 16:02:55 zas Exp $ */
+/* $Id: smb.c,v 1.50 2004/06/18 16:38:35 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -188,8 +188,8 @@ end_smb_connection(struct connection *conn)
 		goto bye;
 	}
 
-	if (si->textlen && si->text[si->textlen - 1] != '\n')
-		si->text[si->textlen++] = '\n';
+	if (si->textlen && si->text[si->textlen - 1] != ASCII_LF)
+		si->text[si->textlen++] = ASCII_LF;
 	si->text[si->textlen] = '\0';
 
 	if (conn->uri->datalen
@@ -222,13 +222,13 @@ end_smb_connection(struct connection *conn)
 		add_to_string(&page, "</title></head><body><pre>");
 
 		line_start = si->text;
-		while (!stop && (line_end = strchr(line_start, '\n'))) {
+		while (!stop && (line_end = strchr(line_start, ASCII_LF))) {
 			unsigned char *line = line_start;
 			int line_len;
 			int start_offset = 0;
 
 			/* Handle \r\n case. Normally, do not occur on *nix. */
-			if (line_end > line_start && line_end[-1] == '\r')
+			if (line_end > line_start && line_end[-1] == ASCII_CR)
 				 line_end--, start_offset++;
 
 			line_len = line_end - line_start;
@@ -279,8 +279,8 @@ print_next:
 					if (!isspace(*ll))
 						break;
 
-				for (lll = ll; *lll/* && lll[1]*/; lll++)
-					if (isspace(*lll)/* && isspace(lll[1])*/)
+				for (lll = ll; *lll; lll++)
+					if (isspace(*lll))
 						break;
 
 				switch (type) {
@@ -372,8 +372,8 @@ print_next:
 
 					/* year */
 					while (p > url && *p >= '0' && *p <= '9') p--;
-					if (p == url || *p != ' ') goto print_as_is;
-					while (p > url && *p == ' ') p--;
+					if (p == url || !isspace(*p)) goto print_as_is;
+					while (p > url && isspace(*p)) p--;
 
 					/* seconds */
 					while (p > url && *p >= '0' && *p <= '9') p--;
@@ -387,28 +387,28 @@ print_next:
 
 					/* hours */
 					while (p > url && *p >= '0' && *p <= '9') p--;
-					if (p == url || *p != ' ') goto print_as_is;
+					if (p == url || !isspace(*p)) goto print_as_is;
 					p--;
 
 					/* day as number */
 					while (p > url && *p >= '0' && *p <= '9') p--;
-					while (p > url && *p == ' ') p--;
+					while (p > url && isspace(*p)) p--;
 					if (p == url) goto print_as_is;
 
 					/* month */
-					while (p > url && *p != ' ') p--;
-					if (p == url || *p != ' ') goto print_as_is;
+					while (p > url && !isspace(*p)) p--;
+					if (p == url || !isspace(*p)) goto print_as_is;
 					p--;
 
 					/* day name */
-					while (p > url && *p != ' ') p--;
-					if (p == url || *p != ' ') goto print_as_is;
-					while (p > url && *p == ' ') p--;
+					while (p > url && !isspace(*p)) p--;
+					if (p == url || !isspace(*p)) goto print_as_is;
+					while (p > url && isspace(*p)) p--;
 
 					/* file size */
 					if (p == url || *p < '0' || *p > '9') goto print_as_is;
 
-					if (*p == '0' && *(p - 1) == ' ') may_be_dir = 1;
+					if (*p == '0' && isspace(*(p - 1))) may_be_dir = 1;
 
 					while (p > url && *p >= '0' && *p <= '9') p--;
 					if (p == url) goto print_as_is;
@@ -419,7 +419,7 @@ print_next:
 					{
 						unsigned char *pp = p;
 
-						while (pp > url && *pp == ' ') pp--;
+						while (pp > url && isspace(*pp)) pp--;
 
 						if (p - pp <= 8) {
 							while (pp > url
@@ -434,7 +434,7 @@ print_next:
 								pp--;
 							}
 						}
-						while (pp > url && *pp == ' ') pp--;
+						while (pp > url && isspace(*pp)) pp--;
 						p = pp;
 					}
 
@@ -459,7 +459,7 @@ print_as_is:
 				add_bytes_to_string(&page, line_start, line_len);
 			}
 
-			add_char_to_string(&page, '\n');
+			add_char_to_string(&page, ASCII_LF);
 ignored:
 			line_start = line_end + start_offset + 1;
 		}

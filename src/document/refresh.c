@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.21 2004/04/01 01:47:26 jonas Exp $ */
+/* $Id: refresh.c,v 1.22 2004/04/02 15:03:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,14 +28,18 @@ struct document_refresh *
 init_document_refresh(unsigned char *url, unsigned long seconds)
 {
 	struct document_refresh *refresh;
-	int url_len = strlen(url) + 1;
 
-	refresh = mem_alloc(sizeof(struct document_refresh) + url_len);
-	if (refresh) {
-		memcpy(refresh->url, url, url_len);
-		refresh->seconds = seconds;
-		refresh->timer = -1;
+	refresh = mem_alloc(sizeof(struct document_refresh));
+	if (!refresh) return NULL;
+
+	refresh->uri = get_uri(url);
+	if (!refresh->uri) {
+		mem_free(refresh);
+		return NULL;
 	}
+
+	refresh->seconds = seconds;
+	refresh->timer = -1;
 
 	return refresh;
 };
@@ -53,6 +57,7 @@ void
 done_document_refresh(struct document_refresh *refresh)
 {
 	kill_document_refresh(refresh);
+	done_uri(refresh->uri);
 	mem_free(refresh);
 }
 
@@ -71,15 +76,15 @@ do_document_refresh(void *data)
 	 * sourceforge's download pages) make sure that we do not endlessly
 	 * trigger the download (bug 289). */
 	foreach (type_query, ses->tq)
-		if (!strcasecmp(refresh->url, struri(type_query->uri)))
+		if (refresh->uri == type_query->uri)
 			return;
 
-	if (!strcasecmp(refresh->url, struri(ses->doc_view->document->uri))) {
+	if (refresh->uri == ses->doc_view->document->uri) {
 		/* If the refreshing is for the current URI, force a reload. */
 		reload(ses, CACHE_MODE_FORCE_RELOAD);
 	} else {
 		/* This makes sure that we send referer. */
-		goto_url_frame(ses, refresh->url, NULL);
+		goto_url_frame(ses, struri(refresh->uri), NULL);
 	}
 }
 

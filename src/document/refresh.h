@@ -1,14 +1,15 @@
-/* $Id: refresh.h,v 1.2 2003/12/01 14:33:20 pasky Exp $ */
+/* $Id: refresh.h,v 1.3 2004/04/02 15:03:33 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_REFRESH_H
 #define EL__DOCUMENT_REFRESH_H
 
 struct session;
+struct uri;
 
 struct document_refresh {
 	int timer;
 	unsigned long seconds;
-	unsigned char url[1]; /* XXX: Keep last! */
+	struct uri *uri;
 };
 
 struct document_refresh *init_document_refresh(unsigned char *url, unsigned long seconds);

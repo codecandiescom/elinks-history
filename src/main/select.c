@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.21 2002/12/26 21:47:08 pasky Exp $ */
+/* $Id: select.c,v 1.22 2003/01/20 16:21:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -287,6 +287,10 @@ static struct signal_handler signal_handlers[NUM_SIGNALS];
 static int critical_section = 0;
 
 static void check_for_select_race();
+
+/* TODO: In order to gain better portabilty, we should use signal() instead.
+ * Highest care should be given to careful watching of which signals are
+ * blocked and which aren't then, though. --pasky */
 
 static void
 got_signal(int sig)

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.26 2003/07/23 15:20:49 pasky Exp $ */
+/* $Id: uri.h,v 1.27 2003/07/25 14:28:52 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -7,7 +7,16 @@
 
 #define POST_CHAR 1
 
-/* This is only some temporary look while doing the uri parsing cleanup. */
+/* The uri structure is used to store the start position and length of commonly
+ * used uri fields. It is initialized by parse_uri(). It is possible that the
+ * start of a field is set but that the length is zero so instead of testing
+ * *uri-><fieldname> always use uri-><fieldname>len.
+ *
+ * XXX Lots of places in the code assume that the string members point into the
+ * same string. That means if you need to use a NUL terminated uri field either
+ * temporary modify the string, allocated a copy or change the function used to
+ * take a length parameter. */
+/* TODO We should probably add path+query members instead of data. */
 struct uri {
 	unsigned char *protocol;
 	int protocollen;
@@ -33,9 +42,8 @@ struct uri {
 
 /* Initializes the members of the uri struct, as they are encountered. If
  * an uri component is recognized both it's length and starting point is
- * set. It is possible that the component start is set but that the length
- * is zero so instead of testing *uri-><component> do uri-><component>len */
-/* Returns the length of the parsed uri or 0 if some error was found. */
+ * set. */
+/* Returns 1 if parsing went well or 0 if some error was found. */
 int parse_uri(struct uri *uri, unsigned char *uristring);
 
 

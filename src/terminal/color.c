@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.26 2003/09/05 00:29:17 jonas Exp $ */
+/* $Id: color.c,v 1.27 2003/09/06 15:09:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,6 +201,10 @@ static unsigned char fg_color[16][8] = {
 	{ 15, 15, 15, 15, 15, 15, 15, 15 },
 };
 
+/* Defined in viewer/dump/dump.c and used to avoid calculating colors when
+ * dumping stuff. */
+extern int dump_pos;
+
 /* Terminal color encoding: */
 /* Below color pairs are encoded to terminal colors. Both the terminal fore-
  * and background color are a number between 0 and 7. They are stored in an
@@ -209,12 +213,17 @@ static unsigned char fg_color[16][8] = {
  *	0bbb+fff (0 = not used, + = bold, f = foreground, b = background)
  */
 
-static inline unsigned char
-encode_color(struct color_pair *pair, enum screen_char_attr attr,
-	     int bglevel, int fglevel)
+unsigned char
+get_term_color8(struct color_pair *pair, int bglevel, int fglevel,
+		enum screen_char_attr attr)
 {
-	register unsigned char fg = find_nearest_color(pair->foreground, fglevel);
-	register unsigned char bg = find_nearest_color(pair->background, bglevel);
+	register unsigned char fg;
+	register unsigned char bg;
+
+	if (dump_pos) return 0;
+
+	fg = find_nearest_color(pair->foreground, fglevel);
+	bg = find_nearest_color(pair->background, bglevel);
 
 	/* Adjusts the foreground color to be more visible. */
 	if (d_opt && !d_opt->allow_dark_on_black) {
@@ -236,21 +245,4 @@ encode_color(struct color_pair *pair, enum screen_char_attr attr,
 	}
 
 	return (bg << 4 | fg);
-}
-
-unsigned char
-mix_color_pair(struct color_pair *pair)
-{
-	return encode_color(pair, 0, 8, 16);
-}
-
-/* Defined in viewer/dump/dump.c and used to avoid calculating colors when
- * dumping stuff. */
-extern int dump_pos;
-
-unsigned char
-mix_attr_colors(struct color_pair *pair, enum screen_char_attr attr,
-		int bglevel, int fglevel)
-{
-	return (dump_pos) ? 0 : encode_color(pair, attr, bglevel, fglevel);
 }

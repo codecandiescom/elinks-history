@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.234 2003/09/05 13:40:32 jonas Exp $ */
+/* $Id: renderer.c,v 1.235 2003/09/06 15:09:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,7 +150,7 @@ realloc_line(struct document *document, int y, int x)
 		line->d = l;
 	}
 
-	schar.color = mix_color_pair(&colors);
+	schar.color = get_term_color8(&colors, 8, 16, 0);
 	schar.data = ' ';
 	schar.attr = 0;
 
@@ -255,7 +255,7 @@ set_hchars(struct part *part, int x, int y, int xl,
 		struct color_pair colors = INIT_COLOR_PAIR(*bgcolor, 0x0);
 		struct screen_char schar;
 
-		schar.color = mix_color_pair(&colors);
+		schar.color = get_term_color8(&colors, 8, 16, 0);
 		schar.data = data;
 		schar.attr = attr;
 
@@ -287,7 +287,7 @@ xset_hchar(struct part *part, int x, int y,
 	if_assert_failed return;
 
 	POS(x, y).data = data;
-	POS(x, y).color = mix_color_pair(&colors);
+	POS(x, y).color = get_term_color8(&colors, 8, 16, 0);
 	POS(x, y).attr = attr;
 }
 
@@ -314,7 +314,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	assert(part->document->data);
 	if_assert_failed return;
 
-	schar.color = mix_color_pair(&colors);
+	schar.color = get_term_color8(&colors, 8, 16, 0);
 	schar.data = data;
 	schar.attr = attr;
 
@@ -789,7 +789,7 @@ put_chars_format_change(struct part *part, unsigned char *color,
 	}
 
 	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-	color_cache = *color = mix_attr_colors(&colors, *attr, 8, 16);
+	color_cache = *color = get_term_color8(&colors, 8, 16, *attr);
 	attr_cache = *attr;
 
 	/* FIXME:

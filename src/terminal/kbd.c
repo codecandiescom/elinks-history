@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.28 2003/09/04 19:05:46 zas Exp $ */
+/* $Id: kbd.c,v 1.29 2003/09/06 15:09:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,7 +160,7 @@ kbd_ctrl_c(void)
 
 #define INIT_TERMINAL_SEQ	"\033)0\0337"	/* Special Character and Line Drawing Set, Save Cursor */
 #define INIT_TWIN_MOUSE_SEQ	"\033[?9h"	/* Send MIT Mouse Row & Column on Button Press */
-#define INIT_XWIN_MOUSE_SEQ	"\033[?1000h"	/* ??? */
+#define INIT_XWIN_MOUSE_SEQ	"\033[?1000h"	/* Send Mouse X & Y on button press and release */
 #define INIT_ALT_SCREEN_SEQ	"\033[?47h"	/* Use Alternate Screen Buffer */
 
 static void
@@ -180,7 +180,7 @@ send_init_sequence(int h, int flags)
 #define DONE_CLS_SEQ		"\033[2J"	/* Erase in Display, Clear All */
 #define DONE_TERMINAL_SEQ	"\0338\r \b"	/* Restore Cursor (DECRC) + ??? */
 #define DONE_TWIN_MOUSE_SEQ	"\033[?9l"	/* Don't Send MIT Mouse Row & Column on Button Press */
-#define DONE_XWIN_MOUSE_SEQ	"\033[?1000l"	/* ??? */
+#define DONE_XWIN_MOUSE_SEQ	"\033[?1000l"	/* Don't Send Mouse X & Y on button press and release */
 #define DONE_ALT_SCREEN_SEQ	"\033[?47l"	/* Use Normal Screen Buffer */
 
 static void

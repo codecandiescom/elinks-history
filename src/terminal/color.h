@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.8 2003/09/03 23:10:32 jonas Exp $ */
+/* $Id: color.h,v 1.9 2003/09/06 15:09:42 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -11,12 +11,9 @@
 #define TERM_COLOR_FOREGROUND(color) (color & TERM_COLOR_MASK)
 #define TERM_COLOR_BACKGROUND(color) ((color >> 4) & TERM_COLOR_MASK)
 
-/* Mixes the two colors to a terminal text color. */
+/* Mixes the color pair and attributes to a terminal text color. */
 /* If @allow_dark_on_black is non zero the foreground color will be adjusted. */
-unsigned char mix_color_pair(struct color_pair *colors);
-
-/* Mixes the two colors and adds attribute enhancements to the color. */
-unsigned char mix_attr_colors(struct color_pair *colors, enum screen_char_attr attr,
-		int bglevel, int fglevel);
+unsigned char get_term_color8(struct color_pair *pair, int bglevel, int fglevel,
+			      enum screen_char_attr attr);
 
 #endif

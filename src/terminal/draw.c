@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.58 2003/09/05 01:19:37 jonas Exp $ */
+/* $Id: draw.c,v 1.59 2003/09/06 15:09:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,7 @@ draw_border_cross(struct terminal *term, int x, int y,
 		screen_char->data = border_trans[d][3];
 	}
 
-	screen_char->color = mix_color_pair(color);
+	screen_char->color = get_term_color8(color, 8, 16, 0);
 }
 
 void
@@ -64,7 +64,7 @@ draw_border_char(struct terminal *term, int x, int y,
 
 	position = x + term->x * y;
 	term->screen->image[position].data = (unsigned char) border;
-	term->screen->image[position].color = mix_color_pair(color);
+	term->screen->image[position].color = get_term_color8(color, 8, 16, 0);
 	term->screen->image[position].attr = SCREEN_ATTR_FRAME;
 	term->screen->dirty = 1;
 }
@@ -87,7 +87,7 @@ draw_char_color(struct terminal *term, int x, int y, struct color_pair *color)
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	term->screen->image[x + term->x * y].color = mix_color_pair(color);
+	term->screen->image[x + term->x * y].color = get_term_color8(color, 8, 16, 0);
 	term->screen->dirty = 1;
 }
 
@@ -175,7 +175,7 @@ draw_char(struct terminal *term, int x, int y,
 
 	position = x + term->x * y;
 	term->screen->image[position].data = data;
-	term->screen->image[position].color = mix_color_pair(color);
+	term->screen->image[position].color = get_term_color8(color, 8, 16, 0);
 	term->screen->image[position].attr = attr;
 	term->screen->dirty = 1;
 }
@@ -204,7 +204,7 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	line = &term->screen->image[position];
 
 	/* Compose a screen position in the area so memcpy() can be used. */
-	area.color = color ? mix_color_pair(color) : 0;
+	area.color = color ? get_term_color8(color, 8, 16, 0) : 0;
 	area.data = data;
 	area.attr = attr;
 
@@ -237,7 +237,7 @@ draw_text(struct terminal *term, int x, int y,
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	enc_color = color ? mix_color_pair(color) : 0;
+	enc_color = color ? get_term_color8(color, 8, 16, 0) : 0;
 
 	end = int_min(length, term->x - x);
 	position = x + term->x * y;

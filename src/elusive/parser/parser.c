@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.3 2002/12/27 01:19:06 pasky Exp $ */
+/* $Id: parser.c,v 1.4 2002/12/29 13:22:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,11 +13,14 @@
 #include "elusive/parser/syntree.h"
 
 
+#include "elusive/parser/html/parser.h"
+
 struct parser_backend *parser_backends[] = {
 	NULL,
 	NULL,
-	NULL,
+	html_parser,
 };
+
 
 void
 elusive_parser(enum parser_backend_type parser, struct parser_state **state,

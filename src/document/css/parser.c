@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.89 2004/02/05 15:46:44 jonas Exp $ */
+/* $Id: parser.c,v 1.90 2004/03/30 00:10:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,7 +92,7 @@ ride_on:
 }
 
 
-/* TODO: We should handle suppoert for skipping blocks better like "{ { } }"
+/* TODO: We should handle support for skipping blocks better like "{ { } }"
  * will be handled correctly. --jonas */
 #define skip_css_block(scanner) \
 	if (skip_css_tokens(scanner, '{')) skip_css_tokens(scanner, '}');

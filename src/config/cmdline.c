@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.80 2004/04/24 01:39:49 jonas Exp $ */
+/* $Id: cmdline.c,v 1.81 2004/04/24 01:43:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,6 +254,11 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 			} else if (strstr(where, "new-tab")) {
 				remote_session_flags |= SES_REMOTE_NEW_TAB;
+
+			} else {
+				/* Bail out when getting unknown parameter */
+				/* TODO: new-screen */
+				break
 			}
 
 		} else {
@@ -261,7 +266,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		}
 
 		while (len > 0 && isspace(arg[len - 1])) len--;
-		remote_url = memacpy(arg, len);
+		if (len) remote_url = memacpy(arg, len);
 
 		break;
 

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.281 2004/04/24 12:21:01 jonas Exp $ */
+/* $Id: download.c,v 1.282 2004/04/24 15:39:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1058,7 +1058,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	int ret = 0;
 	int xwin, i;
 
-	if (!ctype)
+	if (!ctype || !*ctype)
 		goto plaintext_follow;
 
 	for (i = 0; known_types[i].type; i++) {

@@ -1,3 +1,11 @@
+Fri May 23 21:22:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, main.h, lowlevel/Makefile.am, lowlevel/select.c,
+	lowlevel/select.h, lowlevel/signals.c, lowlevel/signals.h,
+	lua/core.c, osdep/os_dep.c, terminal/terminal.c:
+
+	Signals related functions were moved to lowlevel/signals.{c,h}.  
+
 Thu May 22 14:35:38 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/encoding.c:

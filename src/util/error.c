@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.21 2002/06/16 17:10:37 pasky Exp $ */
+/* $Id: error.c,v 1.22 2002/06/16 17:12:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -400,25 +400,24 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 #endif
 }
 
-#undef FILL_ON_ALLOC
-#undef FILL_ON_ALLOC_VALUE
-
-#undef FILL_ON_REALLOC
-#undef FILL_ON_REALLOC_VALUE
-
-#undef FILL_ON_FREE
-#undef FILL_ON_FREE_VALUE
-
-#undef CHECK_REALLOC_NULL
-
-#undef CHECK_AH_SANITY
-#undef AH_SANITY_MAGIC
+#undef SIZE_BASE2AH
+#undef SIZE_AH2BASE
 
 #undef PTR_AH2BASE
 #undef PTR_BASE2AH
 
-#undef SIZE_BASE2AH
-#undef SIZE_AH2BASE
+#undef CHECK_AH_SANITY
+#undef AH_SANITY_MAGIC
+
+#undef CHECK_REALLOC_NULL
+
+#undef FILL_ON_FREE
+#undef FILL_ON_FREE_VALUE
+
+#undef FILL_ON_REALLOC
+#undef FILL_ON_REALLOC_VALUE
+
+#undef FILL_ON_ALLOC
+#undef FILL_ON_ALLOC_VALUE
 
 #endif /* LEAK_DEBUG */
-

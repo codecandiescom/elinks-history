@@ -1,3 +1,15 @@
+Thu Oct  3 11:38:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Fixed fatal typo in the last fix.  
+
+Thu Oct  3 11:36:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Fixed segfault if ^T is pressed in textarea in non-master terminal.  
+
 Wed Oct  2 15:29:55 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/ftp.c:

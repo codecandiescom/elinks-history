@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.188 2004/12/14 18:29:16 miciah Exp $ */
+/* $Id: dialogs.c,v 1.189 2004/12/14 18:32:26 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -331,6 +331,8 @@ update_depths(struct listbox_item *parent)
 	}
 }
 
+/* Traverse all expanded folders and move all marked items right
+ * after bm_dest. */
 static void
 do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		 struct list_head *desti, struct list_head *src,
@@ -419,8 +421,6 @@ push_move_button(struct dialog_data *dlg_data,
 		}
 	}
 
-	/* Traverse all expanded folders and move all marked items right
-	 * after bm_dest. */
 	do_move_bookmark(dest, destb, desti, &bookmarks, box);
 
 	bookmarks_set_dirty();

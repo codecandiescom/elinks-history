@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.172 2004/06/15 21:37:03 jonas Exp $ */
+/* $Id: form.c,v 1.173 2004/06/15 21:48:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1253,17 +1253,19 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	struct terminal *term = ses->tab->term;
 	struct link *link = get_current_link(doc_view);
 	struct form_control *fc;
-	unsigned char *label, *key;
+	unsigned char *label = NULL, *key;
 	struct string str;
 
 	assert(link);
 
 	fc = link->form_control;
 
-	if (link->type == LINK_BUTTON) {
-		if (fc->type == FC_RESET)
-			return stracpy(_("Reset form", term));
-
+	switch (fc->type) {
+	case FC_RESET:
+		return stracpy(_("Reset form", term));
+	case FC_SUBMIT:
+	case FC_IMAGE:
+	case FC_HIDDEN:
 		if (!fc->action) return NULL;
 
 		if (!init_string(&str)) return NULL;
@@ -1277,14 +1279,6 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		/* Add the uri with password and post info stripped */
 		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
 		return str.source;
-	}
-
-	if (link->type != LINK_CHECKBOX
-	    && link->type != LINK_SELECT
-	    && !link_is_textinput(link))
-		return NULL;
-
-	switch (fc->type) {
 	case FC_RADIO:
 		label = N_("Radio button"); break;
 	case FC_CHECKBOX:
@@ -1299,9 +1293,12 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		label = N_("File upload"); break;
 	case FC_PASSWORD:
 		label = N_("Password field"); break;
-	default:
-		return NULL;
 	}
+
+	if (link->type != LINK_CHECKBOX
+	    && link->type != LINK_SELECT
+	    && !link_is_textinput(link))
+		return NULL;
 
 	if (!init_string(&str)) return NULL;
 

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.85 2004/10/21 20:54:22 pasky Exp $ */
+/* $Id: document.c,v 1.86 2004/11/14 03:23:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,6 +305,12 @@ formatted_info(int type)
 		case INFO_LOCKED:
 			foreach (document, format_cache)
 				i += is_object_used(document);
+			return i;
+		case INFO_TIMERS:
+			foreach (document, format_cache)
+				if (document->refresh
+				    && document->refresh->timer != -1)
+					i++;
 			return i;
 	}
 

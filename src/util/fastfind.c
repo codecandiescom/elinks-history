@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.58 2004/10/25 20:31:16 zas Exp $ */
+/* $Id: fastfind.c,v 1.59 2004/10/26 20:52:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -516,6 +516,19 @@ fastfind_index_compress(struct fastfind_info *info)
 	}									\
 } while (0)
 
+#ifdef DEBUG_FASTFIND
+static void
+FF_DBG_search_stats(struct fastfind_info *info, int key_len)
+{
+	info->debug.searches++;
+	info->debug.total_key_len += key_len;
+	info->debug.teststmp = info->debug.tests;
+	info->debug.itertmp = info->debug.iterations;
+}
+#else
+#define FF_DBG_search_stats(info, key_len)
+#endif
+
 void *
 fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 {
@@ -524,12 +537,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	assert(info);
 	if_assert_failed return NULL;
 
-#ifdef DEBUG_FASTFIND
-	info->debug.searches++;
-	info->debug.total_key_len += key_len;
-	info->debug.teststmp = info->debug.tests;
-	info->debug.itertmp = info->debug.iterations;
-#endif
+	FF_DBG_search_stats(info, key_len);
 
 	FF_DBG_test(info); if (!key) return NULL;
 	FF_DBG_test(info); if (key_len > info->max_key_len) return NULL;

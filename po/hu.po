@@ -372,7 +372,7 @@ msgstr "Fejléc"
 
 #: src/cache/dialogs.c:151
 msgid "Cache manager"
-msgstr "Gyorsítótár menedzser"
+msgstr "Gyorsítótár kezelõ"
 
 #: src/config/cmdline.c:57
 #, c-format
@@ -487,7 +487,7 @@ msgstr "Nem irható ez a konfigurációs fájl: %s: %s"
 
 #: src/config/dialogs.c:89
 msgid "(expand by pressing space)"
-msgstr ""
+msgstr "(szóközzel kinyitható)"
 
 #: src/config/dialogs.c:92 src/config/dialogs.c:244
 msgid "N/A"
@@ -678,11 +678,11 @@ msgstr "Könyvjelzõk ablakának megnyitása"
 
 #: src/config/kbdbind.c:386
 msgid "Open cache manager"
-msgstr "A gyorsítótár menedzser megnyitása"
+msgstr "A gyorsítótár kezelõ megnyitása"
 
 #: src/config/kbdbind.c:387
 msgid "Open cookie manager"
-msgstr "A cookie menedzser megnyitása"
+msgstr "A cookie kezelõ megnyitása"
 
 #: src/config/kbdbind.c:388
 msgid "Reload cookies file"
@@ -812,11 +812,11 @@ msgstr "Lua konzol megnyitása (LETILTVA)"
 #. internal use only
 #: src/config/kbdbind.c:423
 msgid "Set a mark"
-msgstr ""
+msgstr "Jelölõ elhelyezése"
 
 #: src/config/kbdbind.c:424
 msgid "Go at a specified mark"
-msgstr ""
+msgstr "Ugrás egy megadott jelölõre"
 
 #: src/config/kbdbind.c:425
 msgid "Activate the menu"
@@ -2130,9 +2130,8 @@ msgid "Display URIs"
 msgstr "URI-k megjelenítése"
 
 #: src/config/options.inc:543
-#, fuzzy
 msgid "Display URIs in the document as links."
-msgstr "A képek linkjeinek megjelenítési stílusa"
+msgstr "Az URI-k megjelenítése a dokumentumban link-ként."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:549
@@ -3068,9 +3067,8 @@ msgid "Tab separator"
 msgstr ""
 
 #: src/config/options.inc:1263 src/config/options.inc:1673
-#, fuzzy
 msgid "Tab separator colors."
-msgstr "Fülek sorának színei."
+msgstr "Fülekek elválasztó részének színei."
 
 #: src/config/options.inc:1273 src/config/options.inc:1683
 msgid "Searched strings"
@@ -3267,14 +3265,12 @@ msgid ""
 msgstr "Ha az utolsó fülön tovább lapozunk, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:1765
-#, fuzzy
 msgid "Confirm tab closing"
-msgstr "A küldés megerõsítése"
+msgstr "Fül bezárásának megerõsítése"
 
 #: src/config/options.inc:1767
-#, fuzzy
 msgid "When closing a tab show confirmation dialog."
-msgstr "Kilépést megerõsítõ dialógusablak megnyitása"
+msgstr "Fül bezárását megerõsítõ dialógusablak megnyitása."
 
 #: src/config/options.inc:1771 src/config/opttypes.c:369
 msgid "Language"
@@ -3668,7 +3664,6 @@ msgid "Accept policy"
 msgstr "Elfogadási szabály"
 
 #: src/cookies/cookies.c:97
-#, fuzzy
 msgid ""
 "Cookies accepting policy:\n"
 "0 is accept no cookies\n"
@@ -3677,7 +3672,7 @@ msgid ""
 msgstr ""
 "A cookie-k elfogadásának szabálya:\n"
 "0 - egyetlen cookie-t sem fogadunk el\n"
-"1 - elfogadás elõtt megerõsítés a felhasználótól (NINCS IMPLEMENTÁLVA)\n"
+"1 - elfogadás elõtt megerõsítés a felhasználótól\n"
 "2 - az összes cookie elfogadása"
 
 #: src/cookies/cookies.c:102
@@ -3734,9 +3729,8 @@ msgstr ""
 "Hatástalan ha a cookies_save ki van kapcsolva."
 
 #: src/cookies/cookies.c:549
-#, fuzzy
 msgid "Accept cookie?"
-msgstr "Elfogadási szabály"
+msgstr "Elfogadjuk a cookie-t?"
 
 #: src/cookies/cookies.c:550
 #, c-format
@@ -3751,28 +3745,24 @@ msgid ""
 msgstr ""
 
 #: src/cookies/cookies.c:559
-#, fuzzy
 msgid "at quit time"
-msgstr "Utolsó látogatás ideje"
+msgstr "kilépéskor"
 
 #: src/cookies/cookies.c:560 src/cookies/dialogs.c:83
-#, fuzzy
 msgid "yes"
-msgstr "bájtok"
+msgstr "igen"
 
 #: src/cookies/cookies.c:560 src/cookies/dialogs.c:83
-#, fuzzy
 msgid "no"
-msgstr "Információ"
+msgstr "nem"
 
 #: src/cookies/cookies.c:562
-#, fuzzy
 msgid "Accept"
-msgstr "Elfogadási szabály"
+msgstr "Elfogadás"
 
 #: src/cookies/cookies.c:563
 msgid "Reject"
-msgstr ""
+msgstr "Visszautasítás"
 
 #: src/cookies/dialogs.c:74
 #, c-format
@@ -3784,11 +3774,16 @@ msgid ""
 "Expires: %s\n"
 "Secure: %s"
 msgstr ""
+"Szerver: %s\n"
+"Név: %s\n"
+"Érték: %s\n"
+"Domain: %s\n"
+"Lejárati idõ: %s\n"
+"Biztonság: %s"
 
 #: src/cookies/dialogs.c:82
-#, fuzzy
 msgid "unknown"
-msgstr "Ismeretlen"
+msgstr "ismeretlen"
 
 #: src/cookies/dialogs.c:133 src/dialogs/download.c:432 src/dialogs/edit.c:102
 #: src/formhist/dialogs.c:146 src/globhist/dialogs.c:189
@@ -3796,9 +3791,8 @@ msgid "Clear"
 msgstr "Törlés"
 
 #: src/cookies/dialogs.c:138
-#, fuzzy
 msgid "Cookie manager"
-msgstr "Könyvjelzõ kezelõ"
+msgstr "Cookie kezelõ"
 
 #: src/dialogs/auth.c:60
 #, c-format
@@ -3850,9 +3844,8 @@ msgid "Link title"
 msgstr "Link címe"
 
 #: src/dialogs/document.c:214
-#, fuzzy
 msgid "Link last visit time"
-msgstr "Utolsó látogatás ideje"
+msgstr "A link utolsó látogatás ideje"
 
 #: src/dialogs/document.c:220
 msgid "Link title (from history)"
@@ -3919,14 +3912,12 @@ msgid "Abort"
 msgstr "Megszakítás"
 
 #: src/dialogs/download.c:431
-#, fuzzy
 msgid "Stop"
-msgstr "~Beállítások"
+msgstr "Állj"
 
 #: src/dialogs/download.c:436
-#, fuzzy
 msgid "Download manager"
-msgstr "Kép letöltése"
+msgstr "Letöltéskezelõ"
 
 #: src/dialogs/info.c:46
 msgid "About"
@@ -3984,7 +3975,7 @@ msgid "Memory info"
 msgstr "Memória információ"
 
 #: src/dialogs/info.c:154
-#, fuzzy, c-format
+#, c-format
 msgid "%ld bytes of memory allocated."
 msgstr "%ld bájt memória lefoglalva."
 
@@ -4033,17 +4024,14 @@ msgid "Unh~istory"
 msgstr "~Visszalépések"
 
 #: src/dialogs/menu.c:294
-#, fuzzy
 msgid "Global ~history"
 msgstr "Látogatott oldalak teljes listája"
 
 #: src/dialogs/menu.c:297
-#, fuzzy
 msgid "~Bookmarks"
 msgstr "Könyvjelzõk"
 
 #: src/dialogs/menu.c:299
-#, fuzzy
 msgid "~Cache"
 msgstr "Gyorsítótár"
 
@@ -4052,12 +4040,10 @@ msgid "~Downloads"
 msgstr "L~etöltések"
 
 #: src/dialogs/menu.c:302
-#, fuzzy
 msgid "Coo~kies"
 msgstr "Cookie-k"
 
 #: src/dialogs/menu.c:305
-#, fuzzy
 msgid "~Form history"
 msgstr "Ûrlap lista"
 
@@ -4074,9 +4060,8 @@ msgid "Save formatted ~document"
 msgstr "Formázott ~dokumentum mentése"
 
 #: src/dialogs/menu.c:319
-#, fuzzy
 msgid "Ki~ll background connections"
-msgstr "~Háttérben futó letöltések megszakítása"
+msgstr "~Háttérben futó kapcsolatok megszakítása"
 
 #: src/dialogs/menu.c:320
 msgid "~Flush all caches"
@@ -4320,9 +4305,8 @@ msgid "KOI8-R frames"
 msgstr "KOI8-R keretek"
 
 #: src/dialogs/options.c:175
-#, fuzzy
 msgid "Color mode:"
-msgstr "Szín üzemmód"
+msgstr "Szín üzemmód:"
 
 #: src/dialogs/options.c:176
 msgid "No colors (mono)"
@@ -4365,14 +4349,12 @@ msgid "Forms are saved for this URL."
 msgstr ""
 
 #: src/formhist/dialogs.c:145
-#, fuzzy
 msgid "Toggle saving"
-msgstr "Képek váltása"
+msgstr ""
 
 #: src/formhist/dialogs.c:151
-#, fuzzy
 msgid "Form history manager"
-msgstr "A látogatott oldalak listájának megnyitása"
+msgstr ""
 
 #. TODO: Remember multiple login for the same form.
 #. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
@@ -4434,14 +4416,12 @@ msgid "Search history"
 msgstr "Keresési lista"
 
 #: src/globhist/dialogs.c:184
-#, fuzzy
 msgid "Bookmark"
-msgstr "Könyvjelzõk"
+msgstr "Könyvjelzõ"
 
 #: src/globhist/dialogs.c:197
-#, fuzzy
 msgid "Global history manager"
-msgstr "Látogatott oldalak teljes listája"
+msgstr "Látogatott oldalak kezelõje"
 
 #: src/globhist/globhist.c:70
 msgid "Global history"
@@ -5067,7 +5047,6 @@ msgid "SSL error"
 msgstr "SSL hiba"
 
 #: src/sched/error.c:71
-#, fuzzy
 msgid "This version of ELinks does not contain SSL/TLS support"
 msgstr "Az Elinks ezen verziója nem támogatja az SSL/TSL-t"
 
@@ -5177,9 +5156,8 @@ msgstr "Kifejezés"
 
 #. name:
 #: src/scripting/scripting.c:34
-#, fuzzy
 msgid "Scripting"
-msgstr "Leírás"
+msgstr ""
 
 #: src/ssl/ssl.c:73 src/ssl/ssl.c:158
 msgid "Verify certificates"
@@ -5195,14 +5173,12 @@ msgstr ""
 "kívánja meg."
 
 #: src/ssl/ssl.c:78
-#, fuzzy
 msgid "Client Certificates"
-msgstr "Biztonsági tanúsítványok ellenõrzése"
+msgstr ""
 
 #: src/ssl/ssl.c:80
-#, fuzzy
 msgid "X509 client certificate options."
-msgstr "A felhasználói felület beállításai."
+msgstr ""
 
 #: src/ssl/ssl.c:84
 msgid ""
@@ -5211,9 +5187,8 @@ msgid ""
 msgstr ""
 
 #: src/ssl/ssl.c:87
-#, fuzzy
 msgid "Certificate File"
-msgstr "Becsült hátralevõ idõ"
+msgstr "Tanúsítvány fájl"
 
 #: src/ssl/ssl.c:89
 msgid ""
@@ -5268,9 +5243,8 @@ msgid "Too many bytes read from the itrm!"
 msgstr "Az itrm-rõl túl sok byte lett beolvasva!"
 
 #: src/terminal/tab.c:193
-#, fuzzy
 msgid "Do you really want to close the current tab?"
-msgstr "Biztos, hogy kilépsz az ELinksbõl?"
+msgstr "Biztos, hogy bezárod az aktuális fület?"
 
 #: src/viewer/dump/dump.c:77
 #, c-format

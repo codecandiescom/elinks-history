@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.69 2003/09/12 12:56:28 zas Exp $ */
+/* $Id: tables.c,v 1.70 2003/09/12 15:15:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1451,15 +1451,8 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 			(signed char *) NULL : &fv[(yy) + 1 + (t->y + 2) * (xx)]))
 #endif
 
-static inline int
-check_char(register signed char lx)
-{
-	if (lx == -1) return 0;
-	return lx;
-};
-
-#define H_LINE(xx, yy) check_char(H_LINE_X((xx), (yy)))
-#define V_LINE(xx, yy) check_char(V_LINE_X((xx), (yy)))
+#define H_LINE(xx, yy) int_max(H_LINE_X((xx), (yy)), 0)
+#define V_LINE(xx, yy) int_max(V_LINE_X((xx), (yy)), 0)
 
 #define draw_frame_point(xx, yy, ii, jj)                                \
 {                                                                       \

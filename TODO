@@ -1,12 +1,7 @@
 TODO list for links (sorted approximatelly by priority):
 
 
-	Resuming of downloads (URGENT)
-
 	Show all downloads in one window, kind of "download manager"
-
-	Passive FTP mode support (needed since client-side firewalls may
-block FTP data connections from servers in active mode); IPv6 FTP support
 
 	Rewrite html parser
 
@@ -41,11 +36,6 @@ have to; good job for wannabe ELinks developer ;)
 	Passing url to external command (possibly make alt+[0-9] to pass
 current link to external command (?)).
 
-	A mechanism that does not overwrite files: If two files are to be
-saved in the same dir with the same name links should do someting like wget,
-which adds .1, .2 ... on the filename and does not overwrite the file that
-existed first.
-
 	Insert should toggle insert/overwrite mode.
 
 	Disk cache
@@ -69,4 +59,4 @@ optionally.
 	Write some more documentation
 
 
-$Id: TODO,v 1.29 2002/08/30 22:57:50 pasky Exp $
+$Id: TODO,v 1.30 2002/10/13 18:28:53 pasky Exp $

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.111 2004/05/30 17:21:45 jonas Exp $ */
+/* $Id: dialogs.c,v 1.112 2004/05/30 17:51:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "globhist/dialogs.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
+#include "protocol/uri.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/memory.h"
@@ -53,6 +54,14 @@ get_globhist_item_info(struct listbox_item *box_item, struct terminal *term,
 	struct string info;
 
 	switch (listbox_info) {
+	case LISTBOX_TEXT:
+		if (get_opt_int("document.history.global.display_type"))
+			return stracpy(item->title);
+
+		if (!init_string(&info)) return NULL;
+		add_string_uri_to_string(&info, item->url, URI_PUBLIC);
+		return info.source;
+
 	case LISTBOX_URI:
 		return stracpy(item->url);
 

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.48 2004/05/30 17:21:45 jonas Exp $ */
+/* $Id: dialogs.c,v 1.49 2004/05/30 17:51:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,6 +71,20 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 	struct string string;
 
 	switch (listbox_info) {
+	case LISTBOX_TEXT:
+		/* Are we dealing with a folder? */
+		if (!cookie) {
+			/* Shouldn't happen but still */
+			if (list_empty(item->child))
+				 return NULL;
+			item = item->child.next;
+			cookie = item->udata;
+
+			return cookie ? stracpy(cookie->server) : NULL;
+		}
+
+		return stracpy(cookie->name);
+
 	case LISTBOX_URI:
 		return NULL;
 

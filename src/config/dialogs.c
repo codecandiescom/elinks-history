@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.169 2004/05/30 17:21:45 jonas Exp $ */
+/* $Id: dialogs.c,v 1.170 2004/05/30 17:51:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,6 +156,10 @@ get_option_info(struct listbox_item *item, struct terminal *term,
 	struct string info;
 
 	switch (listbox_info) {
+	case LISTBOX_TEXT:
+		/* FIXME: Don't use item->text */
+		return stracpy(_(item->text, term));
+
 	case LISTBOX_URI:
 		return NULL;
 

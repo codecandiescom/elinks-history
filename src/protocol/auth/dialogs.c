@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.98 2004/05/30 17:21:45 jonas Exp $ */
+/* $Id: dialogs.c,v 1.99 2004/05/30 17:51:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,6 +123,11 @@ get_http_auth_basic_info(struct listbox_item *item, struct terminal *term,
 	struct string info;
 
 	switch (listbox_info) {
+	case LISTBOX_TEXT:
+		if (!init_string(&info)) return NULL;
+		add_string_uri_to_string(&info, http_auth_basic->url, URI_PUBLIC);
+		return info.source;
+
 	case LISTBOX_URI:
 		return stracpy(http_auth_basic->url);
 

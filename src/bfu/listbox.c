@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.149 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: listbox.c,v 1.150 2004/05/30 17:51:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,19 +317,12 @@ static int
 display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 {
 	struct listbox_context *data = data_;
-	unsigned char *text = item->text;
 	unsigned char *stylename;
 	int len; /* Length of the current text field. */
 	struct color_pair *color;
 	int depth = item->depth + 1;
 	int d;
 	int y;
-
-	if (item->translated)
-		text = _(text, data->term);
-
-	len = strlen(text);
-	int_upper_bound(&len, int_max(0, data->widget_data->box.width - depth * 5));
 
 	stylename = (item == data->box->sel) ? "menu.selected"
 		  : ((item->marked)	     ? "menu.marked"
@@ -398,8 +391,27 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 		data->box->ops->draw(item, data, x, y, width);
 	} else {
+		unsigned char *text = item->text, *free_text = NULL;
+		struct listbox_ops *ops = data->box->ops;
+
+		if (ops && ops->get_info) {
+			free_text = ops->get_info(item, data->term, LISTBOX_TEXT);
+			/* If no free_text was gotten we fall back to
+			 * item->text but in the future we should only rely on
+			 * item->text and then we have to bail out. */
+			if (free_text) text = free_text;
+		}
+
+		if (item->translated)
+			text = _(text, data->term);
+
+		len = strlen(text);
+		int_upper_bound(&len, int_max(0, data->widget_data->box.width - depth * 5));
+
 		draw_text(data->term, data->widget_data->box.x + depth * 5, y,
 			  text, len, 0, color);
+
+		mem_free_if(free_text);
 	}
 
 

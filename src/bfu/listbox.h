@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.59 2004/01/04 20:18:56 jonas Exp $ */
+/* $Id: listbox.h,v 1.60 2004/05/30 17:51:27 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -25,6 +25,7 @@ struct listbox_data;
 struct listbox_item;
 
 enum listbox_info {
+	LISTBOX_TEXT,
 	LISTBOX_URI,
 	LISTBOX_ALL,
 };

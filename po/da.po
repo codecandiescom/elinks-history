@@ -4,10 +4,10 @@
 # Vim: /msgstr ""\n$
 msgid ""
 msgstr ""
-"Project-Id-Version: ELinks 0.5pre0.CVS\n"
+"Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-07 22:51+0100\n"
-"PO-Revision-Date: 2005-01-07 22:52+0100\n"
+"POT-Creation-Date: 2005-01-09 02:54+0100\n"
+"PO-Revision-Date: 2005-01-09 03:24+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -58,8 +58,8 @@ msgstr "Tast mellemrum for at udfolde denne mappe."
 #: src/viewer/text/form.c:857 src/viewer/text/search.c:953
 #: src/viewer/text/search.c:1014 src/viewer/text/search.c:1459
 #: src/viewer/text/search.c:1570 src/viewer/text/textarea.c:366
-#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:732
-#: src/viewer/text/view.c:1285
+#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:730
+#: src/viewer/text/view.c:1283
 msgid "OK"
 msgstr "Ok"
 
@@ -176,7 +176,7 @@ msgstr "Navn"
 #: src/sched/download.c:1053 src/sched/download.c:1066
 #: src/scripting/lua/core.c:396 src/scripting/lua/core.c:477
 #: src/scripting/lua/core.c:717 src/viewer/text/search.c:1571
-#: src/viewer/text/view.c:732
+#: src/viewer/text/view.c:730
 msgid "Cancel"
 msgstr "Annuller"
 
@@ -647,11 +647,11 @@ msgstr "(alias for %s)"
 #: src/config/cmdline.c:398 src/config/cmdline.c:407
 #, c-format
 msgid "(default: %s)"
-msgstr "(standardværdi: %s)"
+msgstr "(standard: %s)"
 
 #: src/config/cmdline.c:541
 msgid "Configuration options"
-msgstr "Konfigurationsindstillinger"
+msgstr "Opsætningsindstillinger"
 
 #: src/config/cmdline.c:545
 msgid "Usage: elinks [OPTION]... [URL]"
@@ -730,9 +730,8 @@ msgid ""
 "options will be read from and written to. It should be\n"
 "relative to config-dir."
 msgstr ""
-"Navnet på konfigurationsfilen som alle konfigurationsindstillinger\n"
-"vil blive læst fra eller skrevet til. Den bør angives relativ til\n"
-"config-dir."
+"Navn på opsætningsfil som alle indstillinger skrives til. Den bør\n"
+"angives relativt i forhold til opsætningskataloget."
 
 #: src/config/cmdline.c:639
 msgid "Print help for configuration options"
@@ -793,7 +792,7 @@ msgstr "Bredde på uddata fra -dump."
 
 #: src/config/cmdline.c:665
 msgid "Evaluate configuration file directive"
-msgstr "Evaluer konfigurationsdirektiv"
+msgstr "Evaluér angiven opsætningsindstilling"
 
 #: src/config/cmdline.c:667
 msgid ""
@@ -1230,7 +1229,7 @@ msgstr "Indstillinger kan ikke tilføjes her."
 
 #: src/config/dialogs.c:529
 msgid "Option manager"
-msgstr "Indstillingshåndtering"
+msgstr "Opsætningshåndtering"
 
 #: src/config/dialogs.c:695 src/config/dialogs.c:900
 msgid "Keystroke"
@@ -1282,7 +1281,7 @@ msgstr ""
 
 #: src/config/dialogs.c:944 src/dialogs/info.c:136 src/globhist/dialogs.c:231
 msgid "Toggle display"
-msgstr "Skifte mellem visning"
+msgstr "Skift mellem visning"
 
 #: src/config/dialogs.c:951
 msgid "Keybinding manager"
@@ -5623,7 +5622,7 @@ msgstr "MIME-type for denne filendelse (\"*\" bruges i stedet for \".\")."
 #. name:
 #: src/mime/backend/default.c:221
 msgid "Option system"
-msgstr "Indstillingssystem"
+msgstr "Opsætningsssystem"
 
 #. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:669
@@ -5787,7 +5786,7 @@ msgstr "Fejlsøg"
 
 #: src/modules/version.c:98
 msgid "Fastmem"
-msgstr "Hurtighukommelse"
+msgstr "Hurtig hukommelse"
 
 #: src/modules/version.c:101
 msgid "Own Libc Routines"
@@ -6808,7 +6807,7 @@ msgstr "Fejl ved åbning af fil"
 
 #: src/sched/error.c:75
 msgid "CGI script not in CGI path"
-msgstr "CGI-script er ikke i CGI-stien"
+msgstr "CGI-script er ikke i CGI-sti"
 
 #: src/sched/error.c:78
 msgid "Bad FTP response"
@@ -6828,7 +6827,7 @@ msgstr "FTP PORT-kommando mislykkedes"
 
 #: src/sched/error.c:82
 msgid "File not found"
-msgstr "Filen findes ikke"
+msgstr "Fil ikke fundet"
 
 #: src/sched/error.c:83
 msgid "FTP file error"
@@ -7179,89 +7178,89 @@ msgstr "tast %s for at indsende til %s"
 #: src/viewer/text/form.c:1566
 #, c-format
 msgid "press %s to post to %s"
-msgstr "tast %s for at indsende formulardata til %s"
+msgstr "tast %s for at sende til %s"
 
-#: src/viewer/text/link.c:1127
+#: src/viewer/text/link.c:1140
 msgid "Display ~usemap"
 msgstr "Vis ~usemap"
 
-#: src/viewer/text/link.c:1130
+#: src/viewer/text/link.c:1143
 msgid "~Follow link"
 msgstr "F~ølg link"
 
-#: src/viewer/text/link.c:1132
+#: src/viewer/text/link.c:1145
 msgid "Follow link and r~eload"
 msgstr "Følg link og ~genindlæs"
 
-#: src/viewer/text/link.c:1136
+#: src/viewer/text/link.c:1149
 msgid "Open in new ~window"
 msgstr "Åbn i nyt ~vindue"
 
-#: src/viewer/text/link.c:1138
+#: src/viewer/text/link.c:1151
 msgid "Open in new ~tab"
 msgstr "Åbn i nyt ~faneblad"
 
-#: src/viewer/text/link.c:1140
+#: src/viewer/text/link.c:1153
 msgid "Open in new tab in ~background"
 msgstr "Åbn nyt faneblad i ~baggrunden"
 
-#: src/viewer/text/link.c:1145
+#: src/viewer/text/link.c:1158
 msgid "~Download link"
 msgstr "~Hent link"
 
-#: src/viewer/text/link.c:1148
+#: src/viewer/text/link.c:1161
 msgid "~Add link to bookmarks"
 msgstr "Tilføj ~link til bogmærker"
 
-#: src/viewer/text/link.c:1160 src/viewer/text/link.c:1195
+#: src/viewer/text/link.c:1173 src/viewer/text/link.c:1208
 msgid "~Reset form"
 msgstr "~Nulstil formular"
 
-#: src/viewer/text/link.c:1172
+#: src/viewer/text/link.c:1185
 msgid "Open in ~external editor"
 msgstr "Åbn i en ekstern tekstbehandler"
 
-#: src/viewer/text/link.c:1178
+#: src/viewer/text/link.c:1191
 msgid "~Submit form"
 msgstr "~Indsend formular"
 
-#: src/viewer/text/link.c:1179
+#: src/viewer/text/link.c:1192
 msgid "Submit form and rel~oad"
 msgstr "Indsend formular og ~genindlæs"
 
-#: src/viewer/text/link.c:1183
+#: src/viewer/text/link.c:1196
 msgid "Submit form and open in new ~window"
 msgstr "Indsend formular og åbn i nyt ~vindue"
 
-#: src/viewer/text/link.c:1185
+#: src/viewer/text/link.c:1198
 msgid "Submit form and open in new ~tab"
 msgstr "Indsend formular og åbn i ~nyt faneblad"
 
-#: src/viewer/text/link.c:1188
+#: src/viewer/text/link.c:1201
 msgid "Submit form and open in new tab in ~background"
 msgstr "Indsend formular og åben i nyt faneblad i ba~ggrunden"
 
-#: src/viewer/text/link.c:1193
+#: src/viewer/text/link.c:1206
 msgid "Submit form and ~download"
 msgstr "Indsend formular og ~overfør fil"
 
-#: src/viewer/text/link.c:1200
+#: src/viewer/text/link.c:1213
 msgid "V~iew image"
 msgstr "Vis ~billede"
 
-#: src/viewer/text/link.c:1202
+#: src/viewer/text/link.c:1215
 msgid "Download ima~ge"
 msgstr "Hent ~billede"
 
-#: src/viewer/text/link.c:1210
+#: src/viewer/text/link.c:1223
 msgid "No link selected"
 msgstr "Ingen links valgt"
 
-#: src/viewer/text/link.c:1262
+#: src/viewer/text/link.c:1275
 msgid "Image"
 msgstr "Billede"
 
-#: src/viewer/text/link.c:1267
+#: src/viewer/text/link.c:1280
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -7294,7 +7293,7 @@ msgstr "Kunne ikke finde et link med teksten \"%s\"."
 
 #: src/viewer/text/search.c:1046 src/viewer/text/search.c:1455
 msgid "Typeahead"
-msgstr "Inkrementel søgning"
+msgstr "Tast og find"
 
 #: src/viewer/text/search.c:1457
 msgid "No links in current document"
@@ -7336,18 +7335,18 @@ msgstr "Man kan ikke åbne en ekstern editor i tilstanden anonymous."
 msgid "You can do this only on the master terminal"
 msgstr "Dette er kun muligt i masterterminalen"
 
-#: src/viewer/text/view.c:731
+#: src/viewer/text/view.c:729
 msgid "Go to link"
 msgstr "Gå til link"
 
-#: src/viewer/text/view.c:731
+#: src/viewer/text/view.c:729
 msgid "Enter link number"
 msgstr "Skriv nummer på link"
 
-#: src/viewer/text/view.c:1282
+#: src/viewer/text/view.c:1280
 msgid "Save error"
 msgstr "Fejl ved skrivning"
 
-#: src/viewer/text/view.c:1283
+#: src/viewer/text/view.c:1281
 msgid "Error writing to file"
 msgstr "Fejl ved skrivning til fil"

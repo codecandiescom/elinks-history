@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.99 2005/02/28 13:11:51 zas Exp $ */
+/* $Id: formhist.c,v 1.100 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -454,9 +454,9 @@ memorize_form(struct session *ses, struct list_head *submit,
 		"obscured (but unencrypted) in a file on your disk.\n\n"
 		"If you are using a valuable password, answer NO."),
 		form, 3,
-		N_("Yes"), remember_form, B_ENTER,
-		N_("No"), free_form, B_ESC,
-		N_("Never for this site"), never_for_this_site, NULL);
+		N_("~Yes"), remember_form, B_ENTER,
+		N_("~No"), free_form, B_ESC,
+		N_("Ne~ver for this site"), never_for_this_site, NULL);
 
 	return;
 

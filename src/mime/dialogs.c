@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.106 2005/03/05 20:31:11 zas Exp $ */
+/* $Id: dialogs.c,v 1.107 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,8 +67,8 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 		msg_text(term, N_("Delete extension %s -> %s?"),
 			 extension, opt->value.string),
 		extension, 2,
-		N_("Yes"), really_del_ext, B_ENTER,
-		N_("No"), NULL, B_ESC);
+		N_("~Yes"), really_del_ext, B_ENTER,
+		N_("~No"), NULL, B_ESC);
 }
 
 
@@ -127,8 +127,8 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	add_dlg_field(dlg, _("Extension(s)", term), 0, 0, check_nonempty, MAX_STR_LEN, new->ext, NULL);
 	add_dlg_field(dlg, _("Content-Type", term), 0, 0, check_nonempty, MAX_STR_LEN, new->ct, NULL);
 
-	add_dlg_ok_button(dlg, _("OK", term), B_ENTER, add_mime_extension, new);
-	add_dlg_button(dlg, _("Cancel", term), B_ESC, cancel_dialog, NULL);
+	add_dlg_ok_button(dlg, _("~OK", term), B_ENTER, add_mime_extension, new);
+	add_dlg_button(dlg, _("~Cancel", term), B_ESC, cancel_dialog, NULL);
 
 	add_dlg_end(dlg, MIME_WIDGETS_COUNT);
 

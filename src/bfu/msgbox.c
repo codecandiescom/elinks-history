@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.100 2005/03/23 14:26:42 zas Exp $ */
+/* $Id: msgbox.c,v 1.101 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,7 +172,7 @@ refreshed_msg_box(struct terminal *term, enum msgbox_flags flags,
 			   title, align,
 			   info,
 			   data, 1,
-			   N_("OK"), NULL, B_ENTER | B_ESC);
+			   N_("~OK"), NULL, B_ENTER | B_ESC);
 
 	if (!dlg_data) return;
 

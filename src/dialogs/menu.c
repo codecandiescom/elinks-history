@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.391 2005/03/23 14:16:13 zas Exp $ */
+/* $Id: menu.c,v 1.392 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,8 +123,8 @@ query_exit(struct session *ses)
 		     "(and terminate all downloads)?")
 		: N_("Do you really want to exit ELinks?"),
 		ses, 2,
-		N_("Yes"), (void (*)(void *)) really_exit_prog, B_ENTER,
-		N_("No"), (void (*)(void *)) dont_exit_prog, B_ESC);
+		N_("~Yes"), (void (*)(void *)) really_exit_prog, B_ENTER,
+		N_("~No"), (void (*)(void *)) dont_exit_prog, B_ESC);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.126 2005/03/23 11:28:39 zas Exp $ */
+/* $Id: info.c,v 1.127 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,8 +130,8 @@ menu_keys(struct terminal *term, void *d_, void *xxx)
 		N_("Keys"), ALIGN_LEFT,
 		keys.source,
 		info, 2,
-		N_("OK"), NULL, B_ENTER | B_ESC,
-		N_("Toggle display"), push_toggle_keys_display_button, B_ENTER);
+		N_("~OK"), NULL, B_ENTER | B_ESC,
+		N_("~Toggle display"), push_toggle_keys_display_button, B_ENTER);
 }
 
 void

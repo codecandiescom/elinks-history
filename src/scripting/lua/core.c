@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.182 2005/03/23 14:16:13 zas Exp $ */
+/* $Id: core.c,v 1.183 2005/03/23 15:43:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -392,8 +392,8 @@ l_edit_bookmark_dialog(LS)
 	add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN, data->name, NULL);
 	add_dlg_field(dlg, _("URL", term), 0, 0, NULL, MAX_STR_LEN, data->url, NULL);
 
-	add_dlg_ok_button(dlg, _("OK", term), B_ENTER, dialog_run_lua, data);
-	add_dlg_button(dlg, _("Cancel", term), B_ESC, cancel_dialog, NULL);
+	add_dlg_ok_button(dlg, _("~OK", term), B_ENTER, dialog_run_lua, data);
+	add_dlg_button(dlg, _("~Cancel", term), B_ESC, cancel_dialog, NULL);
 
 	add_dlg_end(dlg, L_EDIT_BMK_WIDGETS_COUNT);
 
@@ -473,8 +473,8 @@ l_xdialog(LS)
 		add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN,
 			      data->fields[i], NULL);
 
-	add_dlg_ok_button(dlg, _("OK", term), B_ENTER, xdialog_run_lua, data);
-	add_dlg_button(dlg, _("Cancel", term), B_ESC, cancel_dialog, NULL);
+	add_dlg_ok_button(dlg, _("~OK", term), B_ENTER, xdialog_run_lua, data);
+	add_dlg_button(dlg, _("~Cancel", term), B_ESC, cancel_dialog, NULL);
 
 	add_dlg_end(dlg, nitems);
 

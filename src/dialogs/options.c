@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.175 2005/03/22 00:49:31 zas Exp $ */
+/* $Id: options.c,v 1.176 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,10 +206,10 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	add_dlg_checkbox(dlg, _("Underline", term), &values[TERM_OPT_UNDERLINE].number);
 	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), &values[TERM_OPT_UTF_8_IO].number);
 
-	add_dlg_button(dlg, _("OK", term), B_ENTER, push_ok_button, NULL);
+	add_dlg_button(dlg, _("~OK", term), B_ENTER, push_ok_button, NULL);
 	if (!anonymous)
-		add_dlg_button(dlg, _("Save", term), B_ENTER, push_save_button, NULL);
-	add_dlg_button(dlg, _("Cancel", term), B_ESC, cancel_dialog, NULL);
+		add_dlg_button(dlg, _("Sa~ve", term), B_ENTER, push_save_button, NULL);
+	add_dlg_button(dlg, _("~Cancel", term), B_ESC, cancel_dialog, NULL);
 
 	add_dlg_end(dlg, TERMOPT_WIDGETS_COUNT - anonymous);
 
@@ -286,8 +286,8 @@ resize_terminal_dialog(struct terminal *term)
 	add_dlg_field(dlg, _("Width=",term), 1, 999, check_number, 4, width_str, NULL);
 	add_dlg_field(dlg, _("Height=",term), 1, 999, check_number, 4, height_str, NULL);
 
-	add_dlg_ok_button(dlg, _("OK", term), B_ENTER, push_resize_button, term);
-	add_dlg_button(dlg, _("Cancel", term), B_ESC, cancel_dialog, NULL);
+	add_dlg_ok_button(dlg, _("~OK", term), B_ENTER, push_resize_button, term);
+	add_dlg_button(dlg, _("~Cancel", term), B_ESC, cancel_dialog, NULL);
 
 	add_dlg_end(dlg, RESIZE_WIDGETS_COUNT);
 

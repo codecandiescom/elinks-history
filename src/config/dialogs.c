@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.213 2005/03/23 14:16:13 zas Exp $ */
+/* $Id: dialogs.c,v 1.214 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -53,8 +53,8 @@ write_config_dialog(struct terminal *term, unsigned char *config_file,
 			msg_text(term, N_("Options were saved successfully to config file %s."),
 				 config_file),
 			NULL, 2,
-			N_("OK"), NULL, B_ENTER | B_ESC,
-			N_("Do not show anymore"), toggle_success_msgbox, 0);
+			N_("~OK"), NULL, B_ENTER | B_ESC,
+			N_("~Do not show anymore"), toggle_success_msgbox, 0);
 		return;
 	}
 
@@ -401,8 +401,8 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 
 	add_dlg_text(dlg, desc, ALIGN_LEFT, 0);
 
-	add_dlg_button(dlg, _("OK", term), B_ENTER, ok_dialog, NULL);
-	add_dlg_button(dlg, _("Cancel", term), B_ESC, cancel_dialog, NULL);
+	add_dlg_button(dlg, _("~OK", term), B_ENTER, ok_dialog, NULL);
+	add_dlg_button(dlg, _("~Cancel", term), B_ESC, cancel_dialog, NULL);
 
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 
@@ -505,12 +505,12 @@ push_save_button(struct dialog_data *dlg_data,
 
 
 static struct hierbox_browser_button option_buttons[] = {
-	{ N_("Info"),		push_hierbox_info_button,	1 },
-	{ N_("Edit"),		push_edit_button,		0 },
-	{ N_("Add"),		push_add_button,		0 },
-	{ N_("Delete"),		push_hierbox_delete_button,	0 },
-	{ N_("Search"),		push_hierbox_search_button,	1 },
-	{ N_("Save"),		push_save_button,		0 },
+	{ N_("~Info"),   push_hierbox_info_button,   1 },
+	{ N_("~Edit"),   push_edit_button,           0 },
+	{ N_("~Add"),    push_add_button,            0 },
+	{ N_("~Delete"), push_hierbox_delete_button, 0 },
+	{ N_("~Search"), push_hierbox_search_button, 1 },
+	{ N_("Sa~ve"),   push_save_button,           0 },
 };
 
 struct_hierbox_browser(
@@ -814,8 +814,8 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 			"Are you sure you want to replace it?"),
 			keystroke, write_action(hop->keymap, action)),
 			new_hop, 2,
-			N_("Yes"), really_really_add_keybinding, B_ENTER,
-			N_("No"), NULL, B_ESC);
+			N_("~Yes"), really_really_add_keybinding, B_ENTER,
+			N_("~No"), NULL, B_ESC);
 
 		return;
 	}
@@ -928,11 +928,11 @@ push_kbdbind_save_button(struct dialog_data *dlg_data,
 static INIT_LIST_HEAD(keybinding_dialog_list);
 
 static struct hierbox_browser_button keybinding_buttons[] = {
-	{ N_("Add"),		push_kbdbind_add_button,		0 },
-	{ N_("Delete"),		push_hierbox_delete_button,		0 },
-	{ N_("Toggle display"),	push_kbdbind_toggle_display_button,	1 },
-	{ N_("Search"),		push_hierbox_search_button,		1 },
-	{ N_("Save"),		push_kbdbind_save_button,		0 },
+	{ N_("~Add"),            push_kbdbind_add_button,            0 },
+	{ N_("~Delete"),         push_hierbox_delete_button,         0 },
+	{ N_("~Toggle display"), push_kbdbind_toggle_display_button, 1 },
+	{ N_("~Search"),         push_hierbox_search_button,         1 },
+	{ N_("Sa~ve"),           push_kbdbind_save_button,           0 },
 };
 
 struct_hierbox_browser(

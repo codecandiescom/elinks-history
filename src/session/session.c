@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.612 2005/03/23 13:40:34 zas Exp $ */
+/* $Id: session.c,v 1.613 2005/03/23 15:43:42 miciah Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -734,7 +734,7 @@ setup_first_session(struct session *ses, struct uri *uri)
 			"Press ESC for menu. Documentation is available in "
 			"Help menu."),
 			ses, 1,
-			N_("OK"), handler, B_ENTER | B_ESC);
+			N_("~OK"), handler, B_ENTER | B_ESC);
 
 		/* If there is no URI the goto dialog will pop up so there is
 		 * no need to call setup_session(). */

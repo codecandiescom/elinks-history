@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.209 2005/03/23 14:28:41 zas Exp $ */
+/* $Id: hierbox.c,v 1.210 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,7 +452,7 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 		N_("Info"), ALIGN_LEFT,
 		msg,
 		context, 1,
-		N_("OK"), done_listbox_context, B_ESC | B_ENTER);
+		N_("~OK"), done_listbox_context, B_ESC | B_ENTER);
 
 	return EVENT_PROCESSED;
 }
@@ -741,8 +741,8 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 			title, ALIGN_CENTER,
 			message,
 			context, 2,
-			N_("Yes"), push_ok_delete_button, B_ENTER,
-			N_("No"), done_listbox_context, B_ESC);
+			N_("~Yes"), push_ok_delete_button, B_ENTER,
+			N_("~No"), done_listbox_context, B_ESC);
 		return EVENT_PROCESSED;
 	}
 
@@ -777,8 +777,8 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 			title, ALIGN_CENTER,
 			msg_text(term, message, text),
 			context, 2,
-			N_("Yes"), push_ok_delete_button, B_ENTER,
-			N_("No"), done_listbox_context, B_ESC);
+			N_("~Yes"), push_ok_delete_button, B_ENTER,
+			N_("~No"), done_listbox_context, B_ESC);
 	} else {
 		unsigned char *title = N_("Delete item");
 		unsigned char *message = N_("Delete \"%s\"?\n\n%s");
@@ -798,8 +798,8 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 			title, ALIGN_LEFT,
 			msg_text(term, message, text, empty_string_or_(msg)),
 			context, 2,
-			N_("Yes"), push_ok_delete_button, B_ENTER,
-			N_("No"), done_listbox_context, B_ESC);
+			N_("~Yes"), push_ok_delete_button, B_ENTER,
+			N_("~No"), done_listbox_context, B_ESC);
 		mem_free_if(msg);
 	}
 	mem_free(text);
@@ -869,8 +869,8 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 		title, ALIGN_CENTER,
 		message,
 		context, 2,
-		N_("Yes"), do_clear_browser, B_ENTER,
-		N_("No"), NULL, B_ESC);
+		N_("~Yes"), do_clear_browser, B_ENTER,
+		N_("~No"), NULL, B_ESC);
 
 	return EVENT_PROCESSED;
 }

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.353 2005/03/23 11:41:00 zas Exp $ */
+/* $Id: download.c,v 1.354 2005/03/23 15:43:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -533,10 +533,10 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 			empty_string_or_(lun_hop->ofile),
 			empty_string_or_(file)),
 		lun_hop, 4,
-		N_("Save under the alternative name"), lun_alternate, B_ENTER,
-		N_("Overwrite the original file"), lun_overwrite, 0,
-		N_("Resume download of the original file"), lun_resume, 0,
-		N_("Cancel"), lun_cancel, B_ESC);
+		N_("Sa~ve under the alternative name"), lun_alternate, B_ENTER,
+		N_("~Overwrite the original file"), lun_overwrite, 0,
+		N_("~Resume download of the original file"), lun_resume, 0,
+		N_("~Cancel"), lun_cancel, B_ESC);
 }
 
 
@@ -1096,30 +1096,30 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	/* Add buttons if they are both usable and allowed. */
 
 	if (!get_cmd_opt_bool("anonymous") || handler) {
-		add_dlg_ok_button(dlg, _("Open", term), B_ENTER,
+		add_dlg_ok_button(dlg, _("~Open", term), B_ENTER,
 				  (done_handler_T *) tp_open, type_query);
 	} else {
 		widgets--;
 	}
 
 	if (!get_cmd_opt_bool("anonymous")) {
-		add_dlg_ok_button(dlg, _("Save", term), B_ENTER,
+		add_dlg_ok_button(dlg, _("Sa~ve", term), B_ENTER,
 				  (done_handler_T *) tp_save, type_query);
 	} else {
 		widgets--;
 	}
 
-	add_dlg_ok_button(dlg, _("Display", term), B_ENTER,
+	add_dlg_ok_button(dlg, _("~Display", term), B_ENTER,
 			  (done_handler_T *) tp_display, type_query);
 
 	if (type_query->cached && type_query->cached->head) {
-		add_dlg_button(dlg, _("Show header", term), B_ENTER,
+		add_dlg_button(dlg, _("Show ~header", term), B_ENTER,
 			       tp_show_header, type_query);
 	} else {
 		widgets--;
 	}
 
-	add_dlg_ok_button(dlg, _("Cancel", term), B_ESC,
+	add_dlg_ok_button(dlg, _("~Cancel", term), B_ESC,
 			  (done_handler_T *) tp_cancel, type_query);
 
 	add_dlg_end(dlg, widgets);

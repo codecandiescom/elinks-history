@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.93 2005/03/05 21:04:49 jonas Exp $ */
+/* $Id: protocol.c,v 1.94 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,7 +224,7 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 				   "%s protocol support"),
 				protocol_backends[uri->protocol].name),
 			ses, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+			N_("~OK"), NULL, B_ENTER | B_ESC);
 		return;
 	}
 

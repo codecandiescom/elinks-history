@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.79 2004/11/19 16:22:19 zas Exp $ */
+/* $Id: dialogs.c,v 1.80 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -216,10 +216,10 @@ static struct listbox_ops cache_entry_listbox_ops = {
 };
 
 static struct hierbox_browser_button cache_buttons[] = {
-	{ N_("Info"),		push_hierbox_info_button,	1 },
-	{ N_("Goto"),		push_hierbox_goto_button,	1 },
-	{ N_("Delete"),		push_hierbox_delete_button,	1 },
-	{ N_("Search"),		push_hierbox_search_button,	1 },
+	{ N_("~Info"),   push_hierbox_info_button,   1 },
+	{ N_("~Goto"),   push_hierbox_goto_button,   1 },
+	{ N_("~Delete"), push_hierbox_delete_button, 1 },
+	{ N_("~Search"), push_hierbox_search_button, 1 },
 };
 
 struct_hierbox_browser(

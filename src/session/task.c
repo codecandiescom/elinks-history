@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.168 2005/03/05 21:11:03 zas Exp $ */
+/* $Id: task.c,v 1.169 2005/03/23 15:43:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,8 +264,8 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		N_("Warning"), ALIGN_CENTER,
 		message,
 		task, 2,
-		N_("Yes"), post_yes, B_ENTER,
-		N_("No"), post_no, B_ESC);
+		N_("~Yes"), post_yes, B_ENTER,
+		N_("~No"), post_no, B_ESC);
 }
 
 

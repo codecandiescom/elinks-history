@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.70 2005/03/05 20:46:47 zas Exp $ */
+/* $Id: download.c,v 1.71 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,14 +254,14 @@ display_download(struct terminal *term, struct file_download *file_download,
 
 	object_lock(file_download);
 
-	add_dlg_button(dlg, _("Background", term), B_ENTER | B_ESC, dlg_undisplay_download, NULL);
-	add_dlg_button(dlg, _("Background with notify", term), B_ENTER | B_ESC, dlg_set_notify, NULL);
-	add_dlg_button(dlg, _("Abort", term), 0, dlg_abort_download, NULL);
+	add_dlg_button(dlg, _("~Background", term), B_ENTER | B_ESC, dlg_undisplay_download, NULL);
+	add_dlg_button(dlg, _("Background with ~notify", term), B_ENTER | B_ESC, dlg_set_notify, NULL);
+	add_dlg_button(dlg, _("~Abort", term), 0, dlg_abort_download, NULL);
 
 	/* Downloads scheduled to be opened by external handlers are always
 	 * deleted. */
 	if (!file_download->external_handler) {
-		add_dlg_button(dlg, _("Abort and delete file", term), 0, push_delete_button, NULL);
+		add_dlg_button(dlg, _("Abort and ~delete file", term), 0, push_delete_button, NULL);
 		add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT);
 	} else {
 		add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT - 1);
@@ -469,13 +469,13 @@ push_info_button(struct dialog_data *dlg_data, struct widget_data *button)
  * - Toggle notify button
  */
 static struct hierbox_browser_button download_buttons[] = {
-	{ N_("Info"),			push_info_button		},
-	{ N_("Abort"),			push_hierbox_delete_button	},
+	{ N_("~Info"),                  push_info_button           },
+	{ N_("~Abort"),                 push_hierbox_delete_button },
 #if 0
 	/* This requires more work to make locking work and query the user */
-	{ N_("Abort and delete file"),	push_delete_button		},
+	{ N_("Abort and delete file"),  push_delete_button         },
 #endif
-	{ N_("Clear"),			push_hierbox_clear_button	},
+	{ N_("C~lear"),                 push_hierbox_clear_button  },
 };
 
 struct_hierbox_browser(

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.127 2005/03/05 20:46:47 zas Exp $ */
+/* $Id: dialogs.c,v 1.128 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,15 +221,15 @@ push_bookmark_button(struct dialog_data *dlg_data,
 /* The global history manager: */
 
 static struct hierbox_browser_button globhist_buttons[] = {
-	{ N_("Goto"),		push_hierbox_goto_button,	1 },
-	{ N_("Info"),		push_hierbox_info_button,	1 },
+	{ N_("~Goto"),           push_hierbox_goto_button,   1 },
+	{ N_("~Info"),           push_hierbox_info_button,   1 },
 #ifdef CONFIG_BOOKMARKS
-	{ N_("Bookmark"),	push_bookmark_button,		0 },
+	{ N_("~Bookmark"),       push_bookmark_button,       0 },
 #endif
-	{ N_("Delete"),		push_hierbox_delete_button,	0 },
-	{ N_("Search"),		push_search_button,		1 },
-	{ N_("Toggle display"),	push_toggle_display_button,	1 },
-	{ N_("Clear"),		push_hierbox_clear_button,	0 },
+	{ N_("~Delete"),         push_hierbox_delete_button, 0 },
+	{ N_("~Search"),         push_search_button,         1 },
+	{ N_("~Toggle display"), push_toggle_display_button, 1 },
+	{ N_("C~lear"),          push_hierbox_clear_button,  0 },
 #if 0
 	/* TODO: Would this be useful? --jonas */
 	{ N_("Save"),		push_save_button		},

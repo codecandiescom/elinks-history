@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.80 2005/03/05 22:14:31 zas Exp $ */
+/* $Id: dialogs.c,v 1.81 2005/03/23 15:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,8 +78,8 @@ accept_cookie_dialog(struct session *ses, void *data)
 		N_("Accept cookie?"), ALIGN_LEFT,
 		string.source,
 		cookie, 2,
-		N_("Accept"), accept_cookie, B_ENTER,
-		N_("Reject"), free_cookie, B_ESC);
+		N_("~Accept"), accept_cookie, B_ENTER,
+		N_("~Reject"), free_cookie, B_ESC);
 }
 
 
@@ -353,8 +353,8 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 	add_dlg_field_float(dlg, _("Expires", term), 0, 0, set_cookie_expires, MAX_STR_LEN, expires, NULL);
 	add_dlg_field_float(dlg, _("Secure", term), 0, 0, set_cookie_secure, MAX_STR_LEN, secure, NULL);
 
-	add_dlg_button(dlg, _("OK", term), B_ENTER, ok_dialog, NULL);
-	add_dlg_button(dlg, _("Cancel", term), B_ESC, cancel_dialog, NULL);
+	add_dlg_button(dlg, _("~OK", term), B_ENTER, ok_dialog, NULL);
+	add_dlg_button(dlg, _("~Cancel", term), B_ESC, cancel_dialog, NULL);
 
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 
@@ -418,12 +418,12 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 }
 
 static struct hierbox_browser_button cookie_buttons[] = {
-	{ N_("Info"),		push_hierbox_info_button,	1 },
-	{ N_("Add"),		push_add_button,		1 },
-	{ N_("Edit"),		push_edit_button,		1 },
-	{ N_("Delete"),		push_hierbox_delete_button,	1 },
-	{ N_("Clear"),		push_hierbox_clear_button,	1 },
-	{ N_("Save"),		push_save_button,		0 },
+	{ N_("~Info"),		push_hierbox_info_button,	1 },
+	{ N_("~Add"),		push_add_button,		1 },
+	{ N_("~Edit"),		push_edit_button,		1 },
+	{ N_("~Delete"),		push_hierbox_delete_button,	1 },
+	{ N_("~Clear"),		push_hierbox_clear_button,	1 },
+	{ N_("Sa~ve"),		push_save_button,		0 },
 };
 
 struct_hierbox_browser(

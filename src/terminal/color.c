@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.39 2003/09/29 22:13:50 jonas Exp $ */
+/* $Id: color.c,v 1.40 2003/09/29 22:28:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,20 +165,9 @@ static struct color_level levels[] = {
 	/* COLOR_LINK */	{ 8,  8 },
 };
 
-void
-set_term_color(struct screen_char *schar, struct color_pair *pair,
-	       enum color_type type, enum color_mode mode)
+static inline void
+set_term_color16(struct screen_char *schar, unsigned char fg, unsigned char bg)
 {
-	register unsigned char fg;
-	register unsigned char bg;
-
-	assert(schar);
-
-	if (dump_pos) return;
-
-	fg = find_nearest_color(pair->foreground, levels[type].fglevel);
-	bg = find_nearest_color(pair->background, levels[type].bglevel);
-
 	/* Adjusts the foreground color to be more visible. */
 	if (d_opt && !d_opt->allow_dark_on_black) {
 		fg = fg_color[fg][bg];
@@ -207,4 +196,28 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	}
 
 	schar->color = (bg << 4 | fg);
+}
+
+void
+set_term_color(struct screen_char *schar, struct color_pair *pair,
+	       enum color_type type, enum color_mode mode)
+{
+	register unsigned char fg;
+	register unsigned char bg;
+
+	assert(schar);
+
+	if (dump_pos) return;
+
+	fg = find_nearest_color(pair->foreground, levels[type].fglevel);
+	bg = find_nearest_color(pair->background, levels[type].bglevel);
+
+	switch (mode) {
+	case COLOR_MODE_MONO:
+	case COLOR_MODE_16:
+		set_term_color16(schar, fg, bg);
+		break;
+	default:
+		internal("Invalid color mode");
+	}
 }

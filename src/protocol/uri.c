@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.222 2004/06/03 22:55:29 jonas Exp $ */
+/* $Id: uri.c,v 1.223 2004/06/03 23:01:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -746,6 +746,8 @@ find_uri_protocol(unsigned char *newurl)
 
 	/* First see if it is a file so filenames that look like hostnames
 	 * won't confuse us below. */
+	/* TODO: Try to strip first '#'-fragment and then '?'-query part
+	 * and improve handling of file:// URIs. */
 	if (file_exists(newurl)) return PROTOCOL_FILE;
 
 	/* Yes, it would be simpler to make test for IPv6 address first,

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.114 2004/06/01 00:42:46 jonas Exp $ */
+/* $Id: uri.h,v 1.115 2004/06/03 23:01:38 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -20,7 +20,6 @@ struct string;
  * string should not be done since you never know what kind of memory actually
  * contains the string --pasky). */
 /* TODO: We should probably add path+query members instead of data. */
-/* TODO: Use struct string fields for the {struct uri} members? --pasky */
 
 struct uri {
 	/* The start of the uri (and thus start of the protocol string). */

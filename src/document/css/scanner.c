@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.4 2004/01/18 17:09:57 jonas Exp $ */
+/* $Id: scanner.c,v 1.5 2004/01/18 17:13:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,9 @@
 #include "document/css/scanner.h"
 #include "util/error.h"
 
+
+/* Define if you want a talking scanner */
+/* #define CSS_SCANNER_DEBUG */
 
 #define	SCAN_TABLE_SIZE	256
 

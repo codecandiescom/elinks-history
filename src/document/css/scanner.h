@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.11 2004/01/18 17:12:54 jonas Exp $ */
+/* $Id: scanner.h,v 1.12 2004/01/18 17:13:43 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -75,9 +75,6 @@ void scan_css_tokens(struct css_scanner *scanner);
 
 #define css_scanner_has_tokens(scanner) \
 	((scanner)->tokens > 0 && (scanner)->current <= (scanner)->tokens)
-
-/* Define if you want a talking scanner */
-/* #define CSS_SCANNER_DEBUG */
 
 
 /* Scanner table accessors and mutators */

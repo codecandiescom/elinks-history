@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.434 2004/01/23 20:00:56 jonas Exp $ */
+/* $Id: options.c,v 1.435 2004/01/30 19:54:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -866,6 +866,45 @@ static struct change_hook_info change_hooks[] = {
 	{ NULL,				NULL },
 };
 
+int
+commit_option_values(struct option_resolver *resolvers,
+		     struct option *root, union option_value *values, int size)
+{
+	int touched = 0;
+	int i;
+
+	assert(resolvers && root && values && size);
+
+	for (i = 0; i < size; i++) {
+		unsigned char *name = resolvers[i].name;
+		struct option *option = get_opt_rec(root, name);
+		int id = resolvers[i].id;
+
+		if (memcmp(&option->value, &values[id], sizeof(union option_value))) {
+			option->value = values[id];
+			option->flags |= OPT_TOUCHED;
+			touched++;
+		}
+	}
+
+	return touched;
+}
+
+void
+checkout_option_values(struct option_resolver *resolvers,
+		       struct option *root,
+		       union option_value *values, int size)
+{
+	int i;
+
+	for (i = 0; i < size; i++) {
+		unsigned char *name = resolvers[i].name;
+		struct option *option = get_opt_rec(root, name);
+		int id = resolvers[i].id;
+
+		values[id] = option->value;
+	}
+}
 
 /**********************************************************************
  Options values

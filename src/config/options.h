@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.94 2004/01/08 23:26:17 jonas Exp $ */
+/* $Id: options.h,v 1.95 2004/01/30 19:54:58 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -153,6 +153,21 @@ extern void smart_config_string(struct string *, int, int, struct list_head *, u
 
 extern struct option *copy_option(struct option *);
 extern void delete_option(struct option *);
+
+
+/* Some minimal option cache */
+
+struct option_resolver {
+	int id;
+	unsigned char *name;
+};
+
+extern int commit_option_values(struct option_resolver *resolvers,
+				struct option *root,
+				union option_value *values, int size);
+extern void checkout_option_values(struct option_resolver *resolvers,
+				   struct option *root,
+				   union option_value *values, int size);
 
 /* Shitload of various incredible macro combinations and other unusable garbage
  * follows. Have fun. */

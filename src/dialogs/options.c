@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.140 2004/01/25 13:17:23 jonas Exp $ */
+/* $Id: options.c,v 1.141 2004/01/30 19:54:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,12 +80,7 @@ enum termopt {
 	TERM_OPTIONS,
 };
 
-struct termopt_info {
-	enum termopt id;
-	unsigned char *name;
-};
-
-static struct termopt_info termopt_info[] = {
+static struct option_resolver resolvers[] = {
 	{ TERM_OPT_TYPE,	 "type"		},
 	{ TERM_OPT_M11_HACK,	 "m11_hack"	},
 	{ TERM_OPT_RESTRICT_852, "restrict_852"	},
@@ -100,25 +95,13 @@ static int
 push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct terminal *term = dlg_data->win->term;
-	int *values = dlg_data->dlg->udata;
-	int touched = 0;
-	int i;
+	union option_value *values = dlg_data->dlg->udata;
 
 	update_dialog_data(dlg_data, button);
 
-	for (i = 0; i < TERM_OPTIONS; i++) {
-		unsigned char *name = termopt_info[i].name;
-		struct option *o = get_opt_rec(term->spec, name);
-		enum termopt id = termopt_info[i].id;
-
-		if (o->value.number != values[id]) {
-			o->value.number = values[id];
-			o->flags |= OPT_TOUCHED;
-			touched++;
-		}
-	}
-
-	if (touched) {
+	if (commit_option_values(resolvers, term->spec, values, TERM_OPTIONS)) {
+		/* TODO: The change hook thing should be handled by the
+		 * commit function. */
 		term->spec->change_hook(NULL, term->spec, NULL);
 		cls_redraw_all_terminals();
 	}
@@ -148,20 +131,14 @@ void
 terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct dialog *dlg;
-	int i, *values;
+	union option_value *values;
 	int anonymous = get_opt_int_tree(cmdline_options, "anonymous");
 
-	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, sizeof(int) * TERM_OPTIONS);
+	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, sizeof(union option_value) * TERM_OPTIONS);
 	if (!dlg) return;
 
-	values = (int *) get_dialog_offset(dlg, TERMOPT_WIDGETS_COUNT);
-
-	for (i = 0; i < TERM_OPTIONS; i++) {
-		unsigned char *name = termopt_info[i].name;
-		enum termopt id = termopt_info[i].id;
-
-		values[id] = get_opt_int_tree(term->spec, name);
-	}
+	values = (union option_value *) get_dialog_offset(dlg, TERMOPT_WIDGETS_COUNT);
+	checkout_option_values(resolvers, term->spec, values, TERM_OPTIONS);
 
 	dlg->title = _("Terminal options", term);
 	dlg->layouter = generic_dialog_layouter;

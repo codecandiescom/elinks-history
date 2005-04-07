@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.24 2005/02/05 05:26:40 jonas Exp $ */
+/* $Id: generic.h,v 1.25 2005/04/07 15:01:55 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -41,6 +41,14 @@
 
 #ifndef PIPE_BUF
 #define PIPE_BUF	512 /* POSIX says that. -- Mikulas */
+#endif
+
+/* These are not available on some IRIX systems. */
+#ifndef INET_ADDRSTRLEN
+#define INET_ADDRSTRLEN 16
+#endif
+#ifndef INET6_ADDRSTRLEN
+#define INET6_ADDRSTRLEN 46
 #endif
 
 /* Attempt to workaround the EINTR mess. */

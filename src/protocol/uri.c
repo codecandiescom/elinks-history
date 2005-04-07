@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.310 2005/04/07 12:01:09 jonas Exp $ */
+/* $Id: uri.c,v 1.311 2005/04/07 15:01:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,16 +53,6 @@ is_uri_dir_sep(struct uri *uri, unsigned char pos)
 	return (uri->protocol == PROTOCOL_FILE ? dir_sep(pos) : pos == '/');
 }
 
-
-/* These are not available on some IRIX systems. Not that they are even
- * that important we should maybe just use MAX_STR_LEN. */
-/* FIXME: If we ever get a network/ directory or header file move it. */
-#ifndef INET_ADDRSTRLEN
-#define INET_ADDRSTRLEN 16
-#endif
-#ifndef INET6_ADDRSTRLEN
-#define INET6_ADDRSTRLEN 46
-#endif
 
 #ifdef CONFIG_IPV6
 #define IP_ADDRESS_BUFFER_SIZE INET6_ADDRSTRLEN

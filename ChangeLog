@@ -1,3 +1,173 @@
+Thu Apr  7 20:47:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Change the wordings of print_error_dialog() to better suit the many
+	failure reasons.  
+
+Thu Apr  7 15:34:46 2005  Adam Golebiowski <adamg@pld-linux.org>:
+
+	* configure.in, src/scripting/lua/core.c:
+
+	No support for Lua 4 in 0.11 (patch by fonesca).  
+
+Thu Apr  7 15:01:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/generic.h, protocol/uri.c:
+
+	Move INET[6]_ADDRSTRLEN #defines to better place.  
+
+Thu Apr  7 14:09:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/refresh.html:
+
+	Small refresh test.  
+
+Thu Apr  7 13:53:45 2005  Adam Golebiowski <adamg@pld-linux.org>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Thu Apr  7 13:43:38 2005  Adam Golebiowski <adamg@pld-linux.org>:
+
+	* src/scripting/lua/core.c:
+
+	Use lua_pushboolean() only when we have LUA5 or better. This fixes
+	build with LUA 4 (foreported from REL_0_10 branch).  
+
+Thu Apr  7 13:42:07 2005  Adam Golebiowski <adamg@pld-linux.org>:
+
+	* configure.in:
+
+	Argh, wrong patch commited. This is a foreport from REL_0_10 branch.  
+
+Thu Apr  7 13:39:31 2005  Adam Golebiowski <adamg@pld-linux.org>:
+
+	* configure.in:
+
+	Check if we have LUA 5 or betterm so that we can use
+	lua_pushboolean() in src/scripting/lua/core.c::l_get_option().  
+
+Thu Apr  7 12:01:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Make find_uri_protocol() also check for '@' if it found ':' before
+	it assumes that it found user/passwd part of an FTP URI. Fixes error
+	reporting when entering garbage like 'ttp://.../' for recently added
+	handling of <host>:<port> kind of URIs.  
+
+Thu Apr  7 11:32:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, modules/module.c, viewer/text/search.c,
+	viewer/text/search.h:
+
+	Introducing search_history_module. And remove unneeded includes from
+	main.c 
+
+Thu Apr  7 11:26:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/urlhist.c:
+
+	... and do not (un)register any event hooks.  
+
+Thu Apr  7 11:25:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/urlhist.c:
+
+	Capitalize the H in history.  
+
+Thu Apr  7 11:23:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, config/urlhist.c, config/urlhist.h,
+	modules/module.c:
+
+	Introducing goto_url_history_module.  
+
+Thu Apr  7 11:16:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, lowlevel/timer.c, lowlevel/timer.h,
+	modules/module.c:
+
+	Introducing timer_module.  
+
+Thu Apr  7 11:06:54 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Move done_timer() to init_b block.  
+
+Thu Apr  7 10:48:47 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, main.h, dialogs/menu.c, intl/gettext/loadmsgcat.c,
+	lowlevel/home.c:
+
+	Rename |path_to_exe| struct program field to |path| as
+	|program.path| is sufficiently explicit.  
+
+Thu Apr  7 10:45:42 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, main.h, dialogs/menu.c, intl/gettext/loadmsgcat.c,
+	lowlevel/home.c, lowlevel/select.c, lowlevel/signals.c,
+	terminal/event.c, terminal/terminal.c, viewer/dump/dump.c:
+
+	Move globals @terminate, @retval and @path_to_exe to a struct named
+	@program. It makes more obvious that these are global, and let us
+	have eg. program.terminate = 1 ;).  
+
+Thu Apr  7 10:23:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.c:
+
+	char -> unsigned char 
+
+Thu Apr  7 10:00:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/leds.c:
+
+	draw_timer(): timerlen -> length.  
+
+Thu Apr  7 09:58:51 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/leds.c:
+
+	Keep term->leds_length outside draw_clock().  
+
+Thu Apr  7 09:50:38 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/leds.c:
+
+	Move code from draw_leds() to new draw_timer() and draw_clock().  
+
+Thu Apr  7 09:09:43 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/leds.c:
+
+	draw_leds(): set @s array size to 64, which more than enough for
+	timer and clock.  
+
+Thu Apr  7 09:08:33 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/leds.c:
+
+	draw_leds(): use sizeof() instead of hardcoded size of array.  
+
+Wed Apr  6 22:33:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/: Makefile.am, guile/guile.h, lua/lua.h,
+	perl/perl.h, ruby/ruby.h:
+
+	Fix scripting sub module linking: Use extern for header declarations
+	of struct module and link in the newly added
+	scripting/<backend>/<backend>.o files.  
+
+Wed Apr  6 22:30:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	struct keybinding: func_ref -> event.  
+
 Wed Apr  6 21:31:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/view.c:

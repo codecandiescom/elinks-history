@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.273 2005/03/23 13:40:34 zas Exp $ */
+/* $Id: form.c,v 1.274 2005/04/07 23:34:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1178,14 +1178,12 @@ field_op(struct session *ses, struct document_view *doc_view,
 	assertm(fc, "link has no form control");
 	if_assert_failed return FRAME_EVENT_OK;
 
-	if (fc->mode == FORM_MODE_DISABLED || ev->ev != EVENT_KBD)
+	if (ev->ev != FRAME_EVENT_IGNORED
+	    || fc->mode == FORM_MODE_DISABLED
+	    || ses->insert_mode == INSERT_MODE_OFF)
 		return FRAME_EVENT_IGNORED;
 
 	action = kbd_action(KEYMAP_EDIT, ev, NULL);
-	if (ses->insert_mode == INSERT_MODE_OFF) {
-
-		return FRAME_EVENT_IGNORED;
-	}
 
 	fs = find_form_state(doc_view, fc);
 	if (!fs || !fs->value) return FRAME_EVENT_OK;

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.73 2005/04/07 09:58:51 zas Exp $ */
+/* $Id: leds.c,v 1.74 2005/04/07 10:00:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,15 +136,15 @@ static int
 draw_timer(struct terminal *term, int xpos, int ypos, struct color_pair *color)
 {
 	char s[64];
-	int i, timerlen;
+	int i, length;
 
 	snprintf(s, sizeof(s), "[%d]", get_timer_duration());
-	timerlen = strlen(s);
+	length = strlen(s);
 
-	for (i = timerlen - 1; i >= 0; i--)
-		draw_char(term, xpos - (timerlen - i), ypos, s[i], 0, color);
+	for (i = length - 1; i >= 0; i--)
+		draw_char(term, xpos - (length - i), ypos, s[i], 0, color);
 
-	return timerlen;
+	return length;
 }
 
 #ifdef HAVE_STRFTIME

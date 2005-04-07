@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.31 2005/03/03 15:31:57 zas Exp $ */
+/* $Id: signals.c,v 1.32 2005/04/07 10:45:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,8 +37,8 @@ static void
 sig_terminate(struct terminal *term)
 {
 	unhandle_basic_signals(term);
-	terminate = 1;
-	retval = RET_SIGNAL;
+	program.terminate = 1;
+	program.retval = RET_SIGNAL;
 }
 
 #ifdef SIGHUP
@@ -48,7 +48,7 @@ sig_intr(struct terminal *term)
 	unhandle_basic_signals(term);
 
 	if (!term)
-		terminate = 1;
+		program.terminate = 1;
 	else
 		register_bottom_half(destroy_terminal, term);
 }

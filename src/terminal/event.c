@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.83 2005/03/27 18:14:27 miciah Exp $ */
+/* $Id: event.c,v 1.84 2005/04/07 10:45:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -222,9 +222,9 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 			destroy_terminal(term);
 			/* Make sure the user is notified if the initialization
 			 * of the first session fails. */
-			if (terminate) {
+			if (program.terminate) {
 				usrerror(_("Failed to create session.", term));
-				retval = RET_FATAL;
+				program.retval = RET_FATAL;
 			}
 			return 0;
 		}

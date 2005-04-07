@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.238 2005/03/21 09:14:40 jonas Exp $ */
+/* $Id: main.c,v 1.239 2005/04/07 10:45:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,9 +59,7 @@
 #include "viewer/text/marks.h"
 #include "viewer/text/search.h"
 
-int terminate = 0;
-enum retval retval = RET_OK;
-unsigned char *path_to_exe;
+struct program program;
 
 static int ac;
 static unsigned char **av;
@@ -140,16 +138,16 @@ init(void)
 	 * socket :-/. -- Mikulas */
 	if (check_terminal_pipes()) {
 		ERROR(gettext("Cannot create a pipe for internal communication."));
-		retval = RET_FATAL;
-		terminate = 1;
+		program.retval = RET_FATAL;
+		program.terminate = 1;
 		return;
 	}
 
 	/* Parsing command line options */
 	ret = parse_options(ac - 1, av + 1, &url_list);
 	if (ret) {
-		retval = RET_SYNTAX;
-		terminate = 1;
+		program.retval = RET_SYNTAX;
+		program.terminate = 1;
 		free_string_list(&url_list);
 		return;
 	}
@@ -200,23 +198,23 @@ init(void)
 					   ? "dump" : "source";
 
 			usrerror(gettext("URL expected after -%s"), arg);
-			retval = RET_SYNTAX;
-			terminate = 1;
+			program.retval = RET_SYNTAX;
+			program.terminate = 1;
 		}
 
 	} else if (remote_session_flags & SES_REMOTE_PING) {
 		/* If no instance was running return ping failure */
 		if (fd == -1) {
 			usrerror(gettext("No running ELinks found."));
-			retval = RET_PING;
+			program.retval = RET_PING;
 		}
-		terminate = 1;
+		program.terminate = 1;
 
 	} else if (remote_session_flags && fd == -1) {
 		/* The remote session(s) can not be created */
 		usrerror(gettext("No remote session to connect to."));
-		retval = RET_REMOTE;
-		terminate = 1;
+		program.retval = RET_REMOTE;
+		program.terminate = 1;
 
 	} else {
 		struct string info;
@@ -224,8 +222,8 @@ init(void)
 
 		if (!encode_session_info(&info, &url_list)) {
 			ERROR(gettext("Unable to encode session info."));
-			retval = RET_FATAL;
-			terminate = 1;
+			program.retval = RET_FATAL;
+			program.terminate = 1;
 
 		} else if (fd != -1) {
 			/* Attach to already running ELinks and act as a slave
@@ -241,18 +239,18 @@ init(void)
 					       get_ctl_handle(), info.source, info.length);
 			if (!term) {
 				ERROR(gettext("Unable to attach_terminal()."));
-				retval = RET_FATAL;
-				terminate = 1;
+				program.retval = RET_FATAL;
+				program.terminate = 1;
 			}
 		}
 
 		/* OK, this is race condition, but it must be so; GPM installs
 		 * it's own buggy TSTP handler. */
-		if (!terminate) handle_basic_signals(term);
+		if (!program.terminate) handle_basic_signals(term);
 		done_string(&info);
 	}
 
-	if (terminate) close_terminal_pipes();
+	if (program.terminate) close_terminal_pipes();
 	free_string_list(&url_list);
 }
 
@@ -343,7 +341,9 @@ main(int argc, char *argv[])
 {
 	check_if_root();
 
-	path_to_exe = argv[0];
+	program.terminate = 0;
+	program.retval = RET_OK;
+	program.path_to_exe = argv[0];
 	ac = argc;
 	av = (unsigned char **) argv;
 
@@ -353,5 +353,5 @@ main(int argc, char *argv[])
 #ifdef DEBUG_MEMLEAK
 	check_memory_leaks();
 #endif
-	return retval;
+	return program.retval;
 }

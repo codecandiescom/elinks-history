@@ -1,4 +1,4 @@
-/* $Id: main.h,v 1.19 2004/04/15 02:24:00 jonas Exp $ */
+/* $Id: main.h,v 1.20 2005/04/07 10:45:42 zas Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
@@ -13,9 +13,13 @@ enum retval {
 	RET_REMOTE,
 };
 
-extern enum retval retval;
-extern int terminate;
-extern unsigned char *path_to_exe;
+struct program {
+	int terminate;
+	enum retval retval;
+	unsigned char *path_to_exe;
+};
+
+extern struct program program;
 
 void shrink_memory(int);
 

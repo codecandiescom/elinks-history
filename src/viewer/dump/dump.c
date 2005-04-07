@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.155 2005/03/05 21:11:03 zas Exp $ */
+/* $Id: dump.c,v 1.156 2005/04/07 10:45:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ nextfrag:
 			else
 				ERROR(gettext("Can't write to stdout."));
 
-			retval = RET_ERROR;
+			program.retval = RET_ERROR;
 			return 1;
 		}
 
@@ -235,12 +235,12 @@ dump_loading_callback(struct download *status, void *p)
 
 	if (status->state != S_OK) {
 		usrerror(get_err_msg(status->state, NULL));
-		retval = RET_ERROR;
+		program.retval = RET_ERROR;
 		goto terminate;
 	}
 
 terminate:
-	terminate = 1;
+	program.terminate = 1;
 	dump_next(NULL);
 }
 
@@ -263,8 +263,8 @@ dump_start(unsigned char *url)
 	if (load_uri(uri, NULL, &dump_download, PRI_MAIN, 0, -1)) {
 terminate:
 		dump_next(NULL);
-		terminate = 1;
-		retval = RET_SYNTAX;
+		program.terminate = 1;
+		program.retval = RET_SYNTAX;
 	}
 
 	if (uri) done_uri(uri);
@@ -290,7 +290,7 @@ dump_next(struct list_head *url_list)
 	if (!list_empty(todo_list)) {
 		static int first = 1;
 
-		terminate = 0;
+		program.terminate = 0;
 
 		item = todo_list.next;
 		del_from_list(item);
@@ -311,7 +311,7 @@ dump_next(struct list_head *url_list)
 
 	} else {
 		free_string_list(&done_list);
-		terminate = 1;
+		program.terminate = 1;
 	}
 }
 

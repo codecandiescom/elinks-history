@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.80 2005/02/28 14:58:33 zas Exp $ */
+/* $Id: terminal.c,v 1.81 2005/04/07 10:45:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ destroy_all_terminals(void)
 static void
 check_if_no_terminal(void)
 {
-	terminate = list_empty(terminals);
+	program.terminate = list_empty(terminals);
 }
 
 void

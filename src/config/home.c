@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.53 2004/10/07 02:54:06 jonas Exp $ */
+/* $Id: home.c,v 1.54 2005/04/07 10:45:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ get_home(void)
 	unsigned char *home_elinks;
 	unsigned char *envhome = getenv("HOME");
 	unsigned char *home = envhome ? stracpy(envhome)
-				      : elinks_dirname(path_to_exe);
+				      : elinks_dirname(program.path_to_exe);
 
 	if (home)
 		strip_trailing_dir_sep(home);

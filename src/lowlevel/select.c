@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.68 2005/03/05 22:14:32 zas Exp $ */
+/* $Id: select.c,v 1.69 2005/04/07 10:45:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,7 +212,7 @@ select_loop(void (*init)(void))
 	init();
 	check_bottom_halves();
 
-	while (!terminate) {
+	while (!program.terminate) {
 		int n, i, has_timer;
 		struct timeval tv;
 
@@ -226,7 +226,7 @@ select_loop(void (*init)(void))
 		memcpy(&x_write, &w_write, sizeof(fd_set));
 		memcpy(&x_error, &w_error, sizeof(fd_set));
 
-		if (terminate) break;
+		if (program.terminate) break;
 		if (!w_max && !has_timer) break;
 		critical_section = 1;
 

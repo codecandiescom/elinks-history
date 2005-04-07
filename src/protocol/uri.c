@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.309 2005/03/20 11:05:41 jonas Exp $ */
+/* $Id: uri.c,v 1.310 2005/04/07 12:01:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -994,8 +994,9 @@ find_uri_protocol(unsigned char *newurl)
 	 */
 
 	ch = newurl + strcspn(newurl, ".:/@");
-	if (*ch == '@' || (*ch == ':' && *newurl != '[')
-		|| !strncasecmp(newurl, "ftp.", 4)) {
+	if (*ch == '@'
+	    || (*ch == ':' && *newurl != '[' && strchr(newurl, '@'))
+	    || !strncasecmp(newurl, "ftp.", 4)) {
 		/* Contains user/password/ftp-hostname */
 		return PROTOCOL_FTP;
 

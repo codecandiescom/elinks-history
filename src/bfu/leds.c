@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.70 2005/04/07 09:08:33 zas Exp $ */
+/* $Id: leds.c,v 1.71 2005/04/07 09:09:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,7 +147,7 @@ draw_leds(struct session *ses)
 	/* This should be done elsewhere, but this is very nice place where we
 	 * could do that easily. */
 	if (get_opt_int("ui.timer.enable") == 2) {
-		char s[256];
+		char s[64];
 
 		snprintf(s, sizeof(s), "[%d]", get_timer_duration());
 		timerlen = strlen(s);
@@ -168,7 +168,7 @@ draw_leds(struct session *ses)
 
 #ifdef HAVE_STRFTIME
 	if (get_leds_clock_enable()) {
-		char s[30];
+		char s[64];
 		time_t curtime = time(NULL);
 		struct tm *loctime = localtime(&curtime);
 		int i, length;

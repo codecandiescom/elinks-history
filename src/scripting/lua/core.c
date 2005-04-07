@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.190 2005/04/06 09:59:18 pasky Exp $ */
+/* $Id: core.c,v 1.191 2005/04/07 13:43:38 adamg Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,8 +554,10 @@ l_get_option(LS)
 	/* Convert to an appropriate Lua type */
 	switch (opt->type) {
 	case OPT_BOOL:
+#ifdef HAVE_LUA5
 		lua_pushboolean(S, opt->value.number);
 		break;
+#endif
 	case OPT_INT:
 	case OPT_LONG:
 		lua_pushnumber(S, opt->value.number);

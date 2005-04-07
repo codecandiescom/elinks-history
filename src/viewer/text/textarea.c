@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.145 2005/03/23 13:40:34 zas Exp $ */
+/* $Id: textarea.c,v 1.146 2005/04/07 23:14:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -453,11 +453,9 @@ menu_textarea_edit(struct terminal *term, void *xxx, void *ses_)
 	textarea_edit(0, term, fs, doc_view, link);
 }
 
-
-/* TODO: Unify the textarea field_op handlers to one trampoline function. */
-
-enum frame_event_status
-textarea_op_home(struct form_state *fs, struct form_control *fc)
+static enum frame_event_status
+textarea_op(struct form_state *fs, struct form_control *fc,
+	    int (*do_op)(struct form_state *, struct line_info *, int))
 {
 	struct line_info *line;
 	int current, state;
@@ -465,152 +463,77 @@ textarea_op_home(struct form_state *fs, struct form_control *fc)
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	state = fs->state;
 	line = format_text(fs->value, fc->cols, fc->wrap, 0);
 	if (!line) return FRAME_EVENT_OK;
 
 	current = get_textarea_line_number(line, fs->state);
-	if (current != -1) fs->state = line[current].start;
+	state = fs->state;
+	if (do_op(fs, line, current)) {
+		mem_free(line);
+		return FRAME_EVENT_IGNORED;
+	}
 
 	mem_free(line);
 
 	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
 }
 
-enum frame_event_status
-textarea_op_up(struct form_state *fs, struct form_control *fc)
+static int
+do_op_home(struct form_state *fs, struct line_info *line, int current)
 {
-	struct line_info *line;
-	int current, state;
+	if (current != -1) fs->state = line[current].start;
+	return 0;
+}
 
-	assert(fs && fs->value && fc);
-	if_assert_failed return FRAME_EVENT_OK;
+static int
+do_op_up(struct form_state *fs, struct line_info *line, int current)
+{
+	if (current == -1) return 0;
+	if (!current) return 1;
 
-	line = format_text(fs->value, fc->cols, fc->wrap, 0);
-	if (!line) return FRAME_EVENT_OK;
-
-
-	current = get_textarea_line_number(line, fs->state);
-	if (current == -1) {
-		mem_free(line);
-		return FRAME_EVENT_OK;
-	}
-
-	if (!current) {
-		mem_free(line);
-		return FRAME_EVENT_IGNORED;
-	}
-
-	state = fs->state;
 	fs->state -= line[current].start - line[current-1].start;
 	int_upper_bound(&fs->state, line[current-1].end);
-
-	mem_free(line);
-	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
+	return 0;
 }
 
-enum frame_event_status
-textarea_op_down(struct form_state *fs, struct form_control *fc)
+static int
+do_op_down(struct form_state *fs, struct line_info *line, int current)
 {
-	struct line_info *line;
-	int current, state;
+	if (current == -1) return 0;
+	if (line[current+1].start == -1) return 1;
 
-	assert(fs && fs->value && fc);
-	if_assert_failed return FRAME_EVENT_OK;
-
-	line = format_text(fs->value, fc->cols, fc->wrap, 0);
-	if (!line) return FRAME_EVENT_OK;
-
-	current = get_textarea_line_number(line, fs->state);
-	if (current == -1) {
-		mem_free(line);
-		return FRAME_EVENT_OK;
-	}
-
-	if (line[current+1].start == -1) {
-		mem_free(line);
-		return FRAME_EVENT_IGNORED;
-	}
-
-	state = fs->state;
 	fs->state += line[current+1].start - line[current].start;
 	int_upper_bound(&fs->state, line[current+1].end);
-
-	mem_free(line);
-	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
+	return 0;
 }
 
-enum frame_event_status
-textarea_op_end(struct form_state *fs, struct form_control *fc)
+static int
+do_op_end(struct form_state *fs, struct line_info *line, int current)
 {
-	struct line_info *line;
-	int current, state;
-
-	assert(fs && fs->value && fc);
-	if_assert_failed return FRAME_EVENT_OK;
-
-	state = fs->state;
-	line = format_text(fs->value, fc->cols, fc->wrap, 0);
-	if (!line) return FRAME_EVENT_OK;
-
-	current = get_textarea_line_number(line, fs->state);
 	if (current == -1) {
 		fs->state = strlen(fs->value);
-
 	} else {
 		int wrap = line[current + 1].start == line[current].end;
 
 		/* Don't jump to next line when wrapping. */
 		fs->state = int_max(0, line[current].end - wrap);
 	}
-
-	mem_free(line);
-	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
+	return 0;
 }
 
-/* Set the form state so the cursor is on the first line of the buffer.
- * Preserve the column if possible. */
-enum frame_event_status
-textarea_op_bob(struct form_state *fs, struct form_control *fc)
+static int
+do_op_bob(struct form_state *fs, struct line_info *line, int current)
 {
-	struct line_info *line;
-	int current, state;
+	if (current == -1) return 0;
 
-	assert(fs && fs->value && fc);
-	if_assert_failed return FRAME_EVENT_OK;
-
-	state = fs->state;
-	line = format_text(fs->value, fc->cols, fc->wrap, 0);
-	if (!line) return FRAME_EVENT_OK;
-
-	current = get_textarea_line_number(line, fs->state);
-	if (current != -1) {
-		fs->state -= line[current].start;
-		int_upper_bound(&fs->state, line[0].end);
-	}
-
-	mem_free(line);
-	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
+	fs->state -= line[current].start;
+	int_upper_bound(&fs->state, line[0].end);
+	return 0;
 }
 
-/* Set the form state so the cursor is on the last line of the buffer. Preserve
- * the column if possible. This is done by getting current and last line and
- * then shifting the state by the delta of both lines start position bounding
- * the whole thing to the end of the last line. */
-enum frame_event_status
-textarea_op_eob(struct form_state *fs, struct form_control *fc)
+static int
+do_op_eob(struct form_state *fs, struct line_info *line, int current)
 {
-	struct line_info *line;
-	int current, state;
-
-	assert(fs && fs->value && fc);
-	if_assert_failed return FRAME_EVENT_OK;
-
-	state = fs->state;
-	line = format_text(fs->value, fc->cols, fc->wrap, 0);
-	if (!line) return FRAME_EVENT_OK;
-
-	current = get_textarea_line_number(line, fs->state);
 	if (current == -1) {
 		fs->state = strlen(fs->value);
 
@@ -622,9 +545,49 @@ textarea_op_eob(struct form_state *fs, struct form_control *fc)
 		fs->state += line[last].start - line[current].start;
 		int_upper_bound(&fs->state, line[last].end);
 	}
+	return 0;
+}
 
-	mem_free(line);
-	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
+enum frame_event_status
+textarea_op_home(struct form_state *fs, struct form_control *fc)
+{
+	return textarea_op(fs, fc, do_op_home);
+}
+
+enum frame_event_status
+textarea_op_up(struct form_state *fs, struct form_control *fc)
+{
+	return textarea_op(fs, fc, do_op_up);
+}
+
+enum frame_event_status
+textarea_op_down(struct form_state *fs, struct form_control *fc)
+{
+	return textarea_op(fs, fc, do_op_down);
+}
+
+enum frame_event_status
+textarea_op_end(struct form_state *fs, struct form_control *fc)
+{
+	return textarea_op(fs, fc, do_op_end);
+}
+
+/* Set the form state so the cursor is on the first line of the buffer.
+ * Preserve the column if possible. */
+enum frame_event_status
+textarea_op_bob(struct form_state *fs, struct form_control *fc)
+{
+	return textarea_op(fs, fc, do_op_bob);
+}
+
+/* Set the form state so the cursor is on the last line of the buffer. Preserve
+ * the column if possible. This is done by getting current and last line and
+ * then shifting the state by the delta of both lines start position bounding
+ * the whole thing to the end of the last line. */
+enum frame_event_status
+textarea_op_eob(struct form_state *fs, struct form_control *fc)
+{
+	return textarea_op(fs, fc, do_op_eob);
 }
 
 enum frame_event_status

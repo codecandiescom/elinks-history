@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.146 2005/04/07 23:14:56 zas Exp $ */
+/* $Id: textarea.c,v 1.147 2005/04/07 23:25:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -512,6 +512,7 @@ do_op_end(struct form_state *fs, struct line_info *line, int current)
 {
 	if (current == -1) {
 		fs->state = strlen(fs->value);
+
 	} else {
 		int wrap = line[current + 1].start == line[current].end;
 

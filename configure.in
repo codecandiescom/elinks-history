@@ -9,12 +9,15 @@ AM_CONFIG_HEADER(config.h)
 
 AC_PROG_MAKE_SET
 
+builddir="`pwd`"
+
 dnl ===================================================================
 dnl Load feature configuration file and start logging features.
 dnl ===================================================================
 
-features="$srcdir/features.conf"
-AC_CHECK_FILE("$features", [ . $features ])
+features="features.conf"
+AC_CHECK_FILE("$srcdir/$features", [ . $srcdir/$features ])
+AC_CHECK_FILE("$builddir/$features", [ . $builddir/$features ])
 echo "Feature summary:" > features.log
 
 dnl ===================================================================

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.74 2005/04/07 10:00:54 zas Exp $ */
+/* $Id: leds.c,v 1.75 2005/04/07 10:23:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,7 +135,7 @@ init_led_panel(struct led_panel *leds)
 static int
 draw_timer(struct terminal *term, int xpos, int ypos, struct color_pair *color)
 {
-	char s[64];
+	unsigned char s[64];
 	int i, length;
 
 	snprintf(s, sizeof(s), "[%d]", get_timer_duration());
@@ -151,7 +151,7 @@ draw_timer(struct terminal *term, int xpos, int ypos, struct color_pair *color)
 static int
 draw_clock(struct terminal *term, int xpos, int ypos, struct color_pair *color)
 {
-	char s[64];
+	unsigned char s[64];
 	time_t curtime = time(NULL);
 	struct tm *loctime = localtime(&curtime);
 	int i, length;

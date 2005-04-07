@@ -529,6 +529,25 @@ else
 fi
 
 dnl ===================================================================
+dnl Check for Lua version, 
+dnl ===================================================================
+
+if test "$cf_result" = yes; then
+	AC_MSG_CHECKING([for LUA 5 or better])
+	AC_TRY_LINK([	#include <lua.h>
+		     	#include <lualib.h>],
+		    [	lua_State *L = lua_open(0);
+		     	lua_pushboolean(L, 1);
+			lua_close(L);]
+		    cf_result=yes, cf_result=no)
+	AC_MSG_RESULT($cf_result)
+	if test "$cf_result" = yes; then
+		AC_DEFINE(HAVE_LUA5)
+	fi
+fi
+	
+
+dnl ===================================================================
 dnl Check for Ruby, optional even if installed.
 dnl ===================================================================
 

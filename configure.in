@@ -501,6 +501,7 @@ if test -z "$disable_lua"; then
 				CFLAGS="$CFLAGS_X $LUA_CFLAGS"
 				CPPFLAGS="$CPPFLAGS_X $LUA_CFLAGS"
 
+				# Check that it is a compatible Lua version
 				AC_TRY_LINK([	#include <lua.h>
 						#include <lualib.h>],
 					    [	lua_State *L = lua_open();
@@ -508,6 +509,7 @@ if test -z "$disable_lua"; then
 						lua_mathlibopen(L);
 						lua_strlibopen(L);
 						lua_tablibopen(L);
+						lua_pushboolean(L, 1);
 						lua_close(L);],
 					    cf_result=yes, cf_result=no)
 			fi
@@ -528,16 +530,6 @@ else
 	AC_SUBST(LUA_CFLAGS)
 fi
 
-dnl ===================================================================
-dnl Check for Lua version
-dnl ===================================================================
-
-if test "$cf_result" = yes; then
-	AC_MSG_CHECKING([for LUA 5 or better])
-	AC_TRY_LINK([#include <lualib.h>], [lua_State *L = lua_open(0); lua_pushboolean(L, 1); lua_close(L); return 0;],
-		    [AC_DEFINE(HAVE_LUA5, 1, [We have LUA5])], )
-fi
-	
 
 dnl ===================================================================
 dnl Check for Ruby, optional even if installed.

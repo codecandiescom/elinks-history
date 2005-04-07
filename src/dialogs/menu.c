@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.394 2005/04/07 10:45:43 zas Exp $ */
+/* $Id: menu.c,v 1.395 2005/04/07 10:48:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -629,7 +629,7 @@ open_uri_in_new_window(struct session *ses, struct uri *uri,
 		add_cmdline_bool_option(&parameters, "no-connect");
 	}
 
-	open_new_window(ses->tab->term, program.path_to_exe, env, parameters.source);
+	open_new_window(ses->tab->term, program.path, env, parameters.source);
 	done_string(&parameters);
 }
 

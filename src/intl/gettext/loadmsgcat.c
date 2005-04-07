@@ -210,10 +210,10 @@ _nl_free_domain_conv(struct loaded_domain *domain)
 static struct string *
 add_filename_to_string(struct string *str, struct loaded_l10nfile *domain_file)
 {
-	unsigned char *slash = strrchr(program.path_to_exe, '/');
-	size_t dirnamelen = (slash ? slash - program.path_to_exe + 1 : 0);
+	unsigned char *slash = strrchr(program.path, '/');
+	size_t dirnamelen = (slash ? slash - program.path + 1 : 0);
 
-	if ((dirnamelen && !add_bytes_to_string(str, program.path_to_exe, dirnamelen))
+	if ((dirnamelen && !add_bytes_to_string(str, program.path, dirnamelen))
 	    || !add_to_string(str, "../po/")
 	    || !add_bytes_to_string(str,
 				    (unsigned char *) domain_file->langdirname,

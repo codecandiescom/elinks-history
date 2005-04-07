@@ -1,4 +1,4 @@
-/* $Id: main.h,v 1.20 2005/04/07 10:45:42 zas Exp $ */
+/* $Id: main.h,v 1.21 2005/04/07 10:48:47 zas Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
@@ -16,7 +16,7 @@ enum retval {
 struct program {
 	int terminate;
 	enum retval retval;
-	unsigned char *path_to_exe;
+	unsigned char *path;
 };
 
 extern struct program program;

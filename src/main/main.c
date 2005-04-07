@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.239 2005/04/07 10:45:42 zas Exp $ */
+/* $Id: main.c,v 1.240 2005/04/07 10:48:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,7 +343,7 @@ main(int argc, char *argv[])
 
 	program.terminate = 0;
 	program.retval = RET_OK;
-	program.path_to_exe = argv[0];
+	program.path = argv[0];
 	ac = argc;
 	av = (unsigned char **) argv;
 

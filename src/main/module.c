@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.38 2005/04/07 11:16:57 jonas Exp $ */
+/* $Id: module.c,v 1.39 2005/04/07 11:23:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 
 #include "bfu/dialog.h"
 #include "bookmarks/bookmarks.h"
+#include "config/urlhist.h"
 #include "cookies/cookies.h"
 #include "dialogs/exmode.h"
 #include "document/css/css.h"
@@ -69,6 +70,7 @@ struct module *builtin_modules[] = {
 #ifdef CONFIG_EXMODE
 	&exmode_module,
 #endif
+	&goto_url_history_module,
 	NULL
 };
 

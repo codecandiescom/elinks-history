@@ -1,13 +1,13 @@
-/* $Id: urlhist.h,v 1.8 2004/07/16 18:46:57 jonas Exp $ */
+/* $Id: urlhist.h,v 1.9 2005/04/07 11:23:18 jonas Exp $ */
 
 #ifndef EL__CONFIG_URLHIST_H
 #define EL__CONFIG_URLHIST_H
 
 #include "bfu/inphist.h"
 
-extern struct input_history goto_url_history;
+struct module;
 
-void init_url_history(void);
-void done_url_history(void);
+extern struct input_history goto_url_history;
+extern struct module goto_url_history_module;
 
 #endif

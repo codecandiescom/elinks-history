@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.21 2005/04/06 15:08:14 miciah Exp $ */
+/* $Id: timer.c,v 1.22 2005/04/07 11:16:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/timer.h"
 #include "lowlevel/timers.h"
+#include "modules/module.h"
 #include "sched/event.h"
 #include "terminal/event.h"
 #include "terminal/terminal.h"
@@ -102,8 +103,8 @@ periodic_save_change_hook(struct session *ses, struct option *current,
 	return 0;
 }
 
-void
-init_timer(void)
+static void
+init_timer(struct module *module)
 {
 	struct change_hook_info timer_change_hooks[] = {
 		{ "infofiles.save_interval", periodic_save_change_hook },
@@ -115,9 +116,19 @@ init_timer(void)
 	reset_timer();
 }
 
-void
-done_timer(void)
+static void
+done_timer(struct module *module)
 {
 	kill_timer(&periodic_save_timer);
 	kill_timer(&countdown);
 }
+
+struct module timer_module = struct_module(
+	/* name: */		"Timer",
+	/* options: */		NULL,
+	/* hooks: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		init_timer,
+	/* done: */		done_timer
+);

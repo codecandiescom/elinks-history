@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.39 2005/04/07 11:23:18 jonas Exp $ */
+/* $Id: module.c,v 1.40 2005/04/07 11:32:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@
 #include "protocol/protocol.h"
 #include "scripting/scripting.h"
 #include "ssl/ssl.h"
+#include "viewer/text/search.h"
 
 
 struct module *main_modules[] = {
@@ -71,6 +72,7 @@ struct module *builtin_modules[] = {
 	&exmode_module,
 #endif
 	&goto_url_history_module,
+	&search_history_module,
 	NULL
 };
 

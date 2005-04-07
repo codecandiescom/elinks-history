@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.243 2005/04/07 11:23:18 jonas Exp $ */
+/* $Id: main.c,v 1.244 2005/04/07 11:32:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,6 @@
 #include "config/conf.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
-#include "config/urlhist.h"
 #include "dialogs/menu.h"
 #include "document/document.h"
 #include "intl/charsets.h"
@@ -36,7 +35,6 @@
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "lowlevel/sysname.h"
-#include "lowlevel/timer.h"
 #include "main.h"
 #include "modules/module.h"
 #include "modules/version.h"
@@ -57,7 +55,6 @@
 #include "util/memory.h"
 #include "viewer/dump/dump.h"
 #include "viewer/text/marks.h"
-#include "viewer/text/search.h"
 
 struct program program;
 
@@ -177,7 +174,6 @@ init(void)
 
 		init_b = 1;
 		init_modules(builtin_modules);
-		init_search_history();
 	}
 
 	if (get_cmd_opt_bool("dump")
@@ -280,7 +276,6 @@ terminate_all_subsystems(void)
 #ifdef CONFIG_SCRIPTING
 		trigger_event_name("quit");
 #endif
-		done_search_history();
 #ifdef CONFIG_MARKS
 		free_marks();
 #endif

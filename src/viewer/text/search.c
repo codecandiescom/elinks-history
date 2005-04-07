@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.315 2005/03/23 15:43:42 miciah Exp $ */
+/* $Id: search.c,v 1.316 2005/04/07 11:32:25 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1600,23 +1600,31 @@ search_history_write_hook(va_list ap, void *data)
 	return EVENT_HOOK_STATUS_NEXT;
 }
 
-struct event_hook_info search_history_hooks[] = {
+static struct event_hook_info search_history_hooks[] = {
 	{ "periodic-saving", search_history_write_hook, NULL },
 
 	NULL_EVENT_HOOK_INFO,
 };
 
-void
-init_search_history(void)
+static void
+init_search_history(struct module *module)
 {
 	load_input_history(&search_history, SEARCH_HISTORY_FILENAME);
-	register_event_hooks(search_history_hooks);
 }
 
-void
-done_search_history(void)
+static void
+done_search_history(struct module *module)
 {
-	unregister_event_hooks(search_history_hooks);
 	save_input_history(&search_history, SEARCH_HISTORY_FILENAME);
 	free_list(search_history.entries);
 }
+
+struct module search_history_module = struct_module(
+	/* name: */		"Search History",
+	/* options: */		NULL,
+	/* hooks: */		search_history_hooks,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		init_search_history,
+	/* done: */		done_search_history
+);

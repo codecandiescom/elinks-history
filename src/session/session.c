@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.614 2005/04/06 17:29:05 jonas Exp $ */
+/* $Id: session.c,v 1.615 2005/04/07 20:47:35 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -237,8 +237,8 @@ print_error_dialog(struct session *ses, enum connection_state state,
 
 	if (uri) {
 		add_to_string(&msg,
-			_("Unable to complete the request for:", ses->tab->term));
-		add_to_string(&msg, "\n");
+			_("Unable to retrieve", ses->tab->term));
+		add_to_string(&msg, " ");
 		add_uri_to_string(&msg, uri, URI_PUBLIC);
 		add_to_string(&msg, "\n\n");
 	}

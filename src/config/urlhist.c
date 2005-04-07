@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.36 2005/04/07 11:23:18 jonas Exp $ */
+/* $Id: urlhist.c,v 1.37 2005/04/07 11:25:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ done_url_history(struct module *module)
 }
 
 struct module goto_url_history_module = struct_module(
-	/* name: */		"Goto URL history",
+	/* name: */		"Goto URL History",
 	/* options: */		NULL,
 	/* hooks: */		goto_url_history_hooks,
 	/* submodules: */	NULL,

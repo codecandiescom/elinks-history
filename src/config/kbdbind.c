@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.269 2005/04/06 22:30:24 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.270 2005/04/07 22:49:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -655,8 +655,8 @@ free_keymaps(void)
  */
 
 #ifdef CONFIG_SCRIPTING
-unsigned char *
-bind_scripting_func(unsigned char *ckmap, unsigned char *ckey, int event)
+static unsigned char *
+bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event)
 {
 	unsigned char *err = NULL;
 	long key, meta;
@@ -673,6 +673,12 @@ bind_scripting_func(unsigned char *ckmap, unsigned char *ckey, int event)
 		add_keybinding(kmap, action, key, meta, event);
 
 	return err;
+}
+
+unsigned char *
+bind_scripting_func(unsigned char *ckmap, unsigned char *ckey, int event)
+{
+	return bind_key_to_event(ckmap, ckey, event);
 }
 #endif
 

@@ -1,5 +1,5 @@
 /* Marks registry */
-/* $Id: marks.c,v 1.14 2005/02/28 15:36:08 zas Exp $ */
+/* $Id: marks.c,v 1.15 2005/04/07 22:17:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,6 +105,17 @@ goto_mark(unsigned char mark, struct view_state *vs)
 #endif
 }
 
+static void
+free_mark_by_index(int i)
+{
+	assert(is_valid_mark_index(i));
+
+	if (!marks[i]) return;
+
+	destroy_vs(marks[i], 1);
+	mem_free_set(&marks[i], NULL);
+}
+
 void
 set_mark(unsigned char mark, struct view_state *mark_vs)
 {
@@ -115,13 +126,7 @@ set_mark(unsigned char mark, struct view_state *mark_vs)
 		return;
 
 	i = index_from_char(mark);
-	assert(is_valid_mark_index(i));
-
-	if (marks[i]) {
-		destroy_vs(marks[i], 1);
-		mem_free(marks[i]);
-		marks[i] = NULL;
-	}
+	free_mark_by_index(i);
 
 	if (!mark_vs) return;
 
@@ -138,10 +143,6 @@ free_marks(void)
 	int i;
 
 	for (i = 0; i < MARKS_SIZE; i++) {
-		assert(is_valid_mark_index(i));
-		if (!marks[i]) continue;
-		destroy_vs(marks[i], 1);
-		mem_free(marks[i]);
-		marks[i] = NULL;
+		free_mark_by_index(i);
 	}
 }

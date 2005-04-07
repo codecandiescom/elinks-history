@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.37 2005/04/07 11:25:02 jonas Exp $ */
+/* $Id: urlhist.c,v 1.38 2005/04/07 11:26:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,13 +48,11 @@ static void
 init_url_history(struct module *module)
 {
 	load_url_history();
-	register_event_hooks(goto_url_history_hooks);
 }
 
 static void
 done_url_history(struct module *module)
 {
-	unregister_event_hooks(goto_url_history_hooks);
 	save_url_history();
 	free_list(goto_url_history.entries);
 }

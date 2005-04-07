@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.615 2005/04/07 20:47:35 jonas Exp $ */
+/* $Id: session.c,v 1.616 2005/04/07 23:23:13 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -229,18 +229,20 @@ print_error_dialog(struct session *ses, enum connection_state state,
 		   struct uri *uri, enum connection_priority priority)
 {
 	struct string msg;
+	unsigned char *uristring;
 
 	/* Don't show error dialogs for missing CSS stylesheets */
 	if (priority == PRI_CSS
 	    || !init_string(&msg))
 		return;
 
-	if (uri) {
-		add_to_string(&msg,
-			_("Unable to retrieve", ses->tab->term));
-		add_to_string(&msg, " ");
-		add_uri_to_string(&msg, uri, URI_PUBLIC);
-		add_to_string(&msg, "\n\n");
+	uristring = uri ? get_uri_string(uri, URI_PUBLIC) : NULL;
+	if (uristring) {
+		add_format_to_string(&msg,
+			_("Unable to retrieve %s", ses->tab->term),
+			uristring);
+		mem_free(uristring);
+		add_to_string(&msg, ":\n\n");
 	}
 
 	add_to_string(&msg, get_err_msg(state, ses->tab->term));

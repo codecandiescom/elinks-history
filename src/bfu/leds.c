@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.71 2005/04/07 09:09:43 zas Exp $ */
+/* $Id: leds.c,v 1.72 2005/04/07 09:50:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,6 +132,40 @@ init_led_panel(struct led_panel *leds)
 	}
 }
 
+static int
+draw_timer(struct terminal *term, int xpos, int ypos, struct color_pair *color)
+{
+	char s[64];
+	int i, timerlen;
+
+	snprintf(s, sizeof(s), "[%d]", get_timer_duration());
+	timerlen = strlen(s);
+
+	for (i = timerlen - 1; i >= 0; i--)
+		draw_char(term, xpos - (timerlen - i), ypos, s[i], 0, color);
+
+	return timerlen;
+}
+
+#ifdef HAVE_STRFTIME
+static int
+draw_clock(struct terminal *term, int xpos, int ypos, struct color_pair *color)
+{
+	char s[64];
+	time_t curtime = time(NULL);
+	struct tm *loctime = localtime(&curtime);
+	int i, length;
+	int basepos = xpos - term->leds_length;
+
+	length = strftime(s, sizeof(s), get_leds_clock_format(), loctime);
+	s[length] = '\0';
+	for (i = length - 1; i >= 0; i--)
+		draw_char(term, basepos - (length - i), ypos, s[i], 0, color);
+
+	return length;
+}
+#endif
+
 void
 draw_leds(struct session *ses)
 {
@@ -140,23 +174,16 @@ draw_leds(struct session *ses)
 	int i;
 	int xpos = term->width - LEDS_COUNT - 3;
 	int ypos = term->height - 1;
-	int timerlen = 0;
 
 	term->leds_length = 0;
 
 	/* This should be done elsewhere, but this is very nice place where we
 	 * could do that easily. */
 	if (get_opt_int("ui.timer.enable") == 2) {
-		char s[64];
-
-		snprintf(s, sizeof(s), "[%d]", get_timer_duration());
-		timerlen = strlen(s);
 		led_color = get_bfu_color(term, "status.status-text");
 		if (!led_color) goto end;
 
-		term->leds_length += timerlen;
-		for (i = timerlen - 1; i >= 0; i--)
-			draw_char(term, xpos - (timerlen - i), ypos, s[i], 0, led_color);
+		term->leds_length += draw_timer(term, xpos, ypos, led_color);
 	}
 
 	if (!get_leds_panel_enable()) return;
@@ -168,17 +195,7 @@ draw_leds(struct session *ses)
 
 #ifdef HAVE_STRFTIME
 	if (get_leds_clock_enable()) {
-		char s[64];
-		time_t curtime = time(NULL);
-		struct tm *loctime = localtime(&curtime);
-		int i, length;
-		int basepos = xpos - timerlen;
-
-		length = strftime(s, sizeof(s), get_leds_clock_format(), loctime);
-		s[length] = '\0';
-		term->leds_length += length;
-		for (i = length - 1; i >= 0; i--)
-			draw_char(term, basepos - (length - i), ypos, s[i], 0, led_color);
+		term->leds_length += draw_clock(term, xpos, ypos, led_color);
 	}
 #endif
 

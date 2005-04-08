@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.23 2005/04/08 06:37:46 jonas Exp $ */
+/* $Id: renderer.c,v 1.24 2005/04/08 06:40:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -631,8 +631,7 @@ render_dom_attribute_source(struct dom_navigator *navigator, struct dom_node *no
 			for (skips = 0; skips < valuelen; skips++) {
 				if ((quoted && skips == 0)
 				    || isspace(value[skips])
-				    || value[skips] < ' '
-				    || value[skips] == NBSP_CHAR)
+				    || value[skips] < ' ')
 					continue;
 
 				break;
@@ -649,8 +648,7 @@ render_dom_attribute_source(struct dom_navigator *navigator, struct dom_node *no
 			for (skips = 0; skips < valuelen; skips++) {
 				if ((quoted && skips == 0)
 				    || isspace(value[valuelen - skips - 1])
-				    || value[valuelen - skips - 1] < ' '
-				    || value[valuelen - skips - 1] == NBSP_CHAR)
+				    || value[valuelen - skips - 1] < ' ')
 					continue;
 
 				break;

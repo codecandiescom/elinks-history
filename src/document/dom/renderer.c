@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.22 2005/03/30 21:10:30 zas Exp $ */
+/* $Id: renderer.c,v 1.23 2005/04/08 06:37:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -623,20 +623,44 @@ render_dom_attribute_source(struct dom_navigator *navigator, struct dom_node *no
 
 		if (node->data.attribute.reference
 		    && valuelen - quoted * 2 > 0) {
-			/* Need to flush the first quoting delimiter so that
-			 * the renderers x position is at the start of the
-			 * value string. */
-			if (quoted) {
-				render_dom_text(renderer, template, value, 1);
-				value++;
-				valuelen--;
+			int skips;
+
+			/* Need to flush the first quoting delimiter and any
+			 * leading whitespace so that the renderers x position
+			 * is at the start of the value string. */
+			for (skips = 0; skips < valuelen; skips++) {
+				if ((quoted && skips == 0)
+				    || isspace(value[skips])
+				    || value[skips] < ' '
+				    || value[skips] == NBSP_CHAR)
+					continue;
+
+				break;
 			}
 
-			add_dom_link(renderer, value, valuelen - quoted);
+			if (skips > 0) {
+				render_dom_text(renderer, template, value, skips);
+				value    += skips;
+				valuelen -= skips;
+			}
 
-			if (quoted) {
-				value += valuelen - 1;
-				render_dom_text(renderer, template, value, 1);
+			/* Figure out what should be skipped after the actual
+			 * link text. */
+			for (skips = 0; skips < valuelen; skips++) {
+				if ((quoted && skips == 0)
+				    || isspace(value[valuelen - skips - 1])
+				    || value[valuelen - skips - 1] < ' '
+				    || value[valuelen - skips - 1] == NBSP_CHAR)
+					continue;
+
+				break;
+			}
+
+			add_dom_link(renderer, value, valuelen - skips);
+
+			if (skips > 0) {
+				value += valuelen - skips;
+				render_dom_text(renderer, template, value, skips);
 			}
 		} else {
 			render_dom_text(renderer, template, value, valuelen);

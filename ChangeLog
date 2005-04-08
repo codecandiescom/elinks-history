@@ -1,3 +1,128 @@
+Fri Apr  8 20:58:14 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Update document.colors.allow_dark_on_black to explain that it allows
+	light on white too.  
+
+Fri Apr  8 14:44:36 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	Only set a link's accesskey if the accesskey attribute's value is
+	not an empty string.  
+
+Fri Apr  8 13:13:35 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	Redo revision 1.274 without the copy-and-paste error.  
+
+Fri Apr  8 11:32:42 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Fixed the bugzilla prefix when used to search for bugs.  
+
+Fri Apr  8 09:15:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Revert 1.273 -> 1.274 patch, buggy.  
+
+Fri Apr  8 07:54:43 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Apr  8 06:40:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	Do not honour NBSP_CHAR when skipping. I cut'n'pasted from the wrong
+	code.  
+
+Fri Apr  8 06:37:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	Skip non-link chars from attribute values. Fixes HTML highlighting
+	of hrefs links with newlines etc in the value.  
+
+Fri Apr  8 05:59:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/document.c:
+
+	Also show link image info in the document dialog.  
+
+Fri Apr  8 05:45:03 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: viewer/text/link.c, dialogs/status.c:
+
+	Make sure get_current_link_title() only returns title string if it
+	is non-empty. It is already checked by the status message handling
+	but should also be checked for the document dialog which is
+	currently showing empty link titles.  
+
+Fri Apr  8 03:04:39 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: scripting/lua/core.c, config/kbdbind.c, config/kbdbind.h:
+
+	Move the code to register the event from l_bind_key to
+	bind_key_to_event.  
+
+Thu Apr  7 23:34:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op(): Minor cleanup of insert mode handling.  
+
+Thu Apr  7 23:25:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	Reintroduce blank line accidentally dropped in last patch. Sorry.  
+
+Thu Apr  7 23:23:13 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	print_error_dialog(): Try to improve i18n.  
+
+Thu Apr  7 23:14:56 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	Use a trampoline function named textarea_op() to reduce code
+	redundancy among textarea_op_*(). Specific code from these were
+	moved to do_op_*() new functions.  
+
+Thu Apr  7 22:49:44 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Rename bind_scripting_func to bind_key_to_event and introduce a
+	wrapper with the old name.  
+
+Thu Apr  7 22:47:32 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* configure.in:
+
+	Add the builddir variable, initialised to "`pwd`".  
+	
+	Source $builddir/features.conf after sourcing $srcdir/features.conf.  
+	
+	This allows one to have a specific features.conf file for each build
+	tree and to change compile-time settings without modifying a file
+	that is tracked by CVS.  
+
+Thu Apr  7 22:17:41 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/marks.c:
+
+	Introduce free_mark_by_index() to reduce code redundancy.  
+
 Thu Apr  7 20:47:35 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/session.c:

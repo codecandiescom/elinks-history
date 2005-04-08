@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.188 2005/03/22 05:25:54 miciah Exp $ */
+/* $Id: options.inc,v 1.189 2005/04/08 20:58:14 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -548,9 +548,14 @@ static struct option_info config_options_info[] = {
 		N_("Default directory color.\n"
 		"See document.browse.links.color_dirs option.")),
 
+	/* TODO: Rename this option to something sensible. */
 	INIT_OPT_BOOL("document.colors", N_("Allow dark colors on black background"),
 		"allow_dark_on_black", 0, 0,
-		N_("Allow dark colors on black background.")),
+		N_("Allow dark colors on black background, and vice versa. (!)\n"
+		"By default the colors have their contrast increased (that is\n"
+		"different from having it ensured through the ensure_contrast\n"
+		"option), so that the foreground and the background do not have\n"
+		"too similar colors. This option turns this off.")),
 
 	INIT_OPT_BOOL("document.colors", N_("Ensure contrast"),
 		"ensure_contrast", 0, 1,

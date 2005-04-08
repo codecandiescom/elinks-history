@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.140 2005/04/06 22:30:24 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.141 2005/04/08 03:04:40 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -7,6 +7,7 @@
 struct listbox_item;
 
 #include "config/options.h"
+#include "sched/event.h"
 #include "terminal/terminal.h"
 #include "util/object.h"
 #include "util/string.h"
@@ -251,7 +252,8 @@ unsigned char *bind_act(unsigned char *, unsigned char *);
 void bind_config_string(struct string *);
 
 #ifdef CONFIG_SCRIPTING
-unsigned char *bind_scripting_func(unsigned char *, unsigned char *, int);
+unsigned char *bind_scripting_func(unsigned char *, unsigned char *,
+				   unsigned char *, event_hook_T, void *);
 #endif
 
 void add_keystroke_to_string(struct string *string, int action, enum keymap map);

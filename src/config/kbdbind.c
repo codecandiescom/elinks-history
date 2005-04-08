@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.270 2005/04/07 22:49:44 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.271 2005/04/08 03:04:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -676,9 +676,18 @@ bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event)
 }
 
 unsigned char *
-bind_scripting_func(unsigned char *ckmap, unsigned char *ckey, int event)
+bind_scripting_func(unsigned char *ckmap, unsigned char *ckey,
+		    unsigned char *event_name, event_hook_T fn, void *data)
 {
-	return bind_key_to_event(ckmap, ckey, event);
+	int event_id;
+
+	event_id = register_event(event_name);
+	event_id = register_event_hook(event_id, fn, 0, data);
+
+	if (event_id == EVENT_NONE)
+		return gettext("Error registering event");
+
+	return bind_key_to_event(ckmap, ckey, event_id);
 }
 #endif
 

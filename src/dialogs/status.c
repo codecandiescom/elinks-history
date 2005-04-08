@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.97 2005/03/06 12:53:50 jonas Exp $ */
+/* $Id: status.c,v 1.98 2005/04/08 05:45:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,11 +212,9 @@ get_current_link_info_and_title(struct session *ses,
 
 	link_title = get_current_link_title(doc_view);
 	if (link_title) {
-		if (*link_title) {
-			ret = straconcat(link_info, " - ", link_title, NULL);
-			mem_free(link_info);
-		}
-
+		assert(*link_title);
+		ret = straconcat(link_info, " - ", link_title, NULL);
+		mem_free(link_info);
 		mem_free(link_title);
 	}
 

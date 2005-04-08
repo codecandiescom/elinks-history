@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.318 2005/03/31 09:54:14 zas Exp $ */
+/* $Id: link.c,v 1.319 2005/04/08 05:45:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1253,7 +1253,7 @@ get_current_link_title(struct document_view *doc_view)
 
 	link = get_current_link(doc_view);
 
-	return (link && link->title) ? stracpy(link->title) : NULL;
+	return (link && link->title && *link->title) ? stracpy(link->title) : NULL;
 }
 
 unsigned char *

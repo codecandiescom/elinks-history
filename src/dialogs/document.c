@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.117 2005/04/01 23:18:08 zas Exp $ */
+/* $Id: document.c,v 1.118 2005/04/08 05:59:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,6 +169,7 @@ document_info_dialog(struct session *ses)
 
 	if (doc_view) {
 		unsigned char *a = get_current_link_info(ses, doc_view);
+		struct link *link;
 
 		add_char_to_string(&msg, '\n');
 		if (a) {
@@ -184,16 +185,26 @@ document_info_dialog(struct session *ses)
 			mem_free(a);
 		}
 
+		link = get_current_link_in_view(doc_view);
+		if (link) {
+			struct string img;
 #ifdef CONFIG_GLOBHIST
-		{
-			struct global_history_item *historyitem = NULL;
-			struct link *link = get_current_link_in_view(doc_view);
+			struct global_history_item *historyitem;
+#endif
 
-			if (link) {
-				historyitem =
-					get_global_history_item(link->where);
+			if (link->where_img && init_string(&img)) {
+				add_string_uri_to_string(&img, link->where_img,
+							 URI_PUBLIC);
+				decode_uri_string_for_display(&img);
+
+				add_format_to_string(&msg, "\n%s: %s",
+						     _("Link image", term),
+						     img.source);
+				done_string(&img);
 			}
 
+#ifdef CONFIG_GLOBHIST
+			historyitem = get_global_history_item(link->where);
 			if (historyitem) {
 				unsigned char *last_visit;
 
@@ -212,8 +223,8 @@ document_info_dialog(struct session *ses)
 						  term),
 						historyitem->title);
 			}
-		}
 #endif
+		}
 	}
 
 	info_box(term, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,

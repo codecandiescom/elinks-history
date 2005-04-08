@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.80 2005/04/02 05:41:03 rrowan Exp $
+# $Id: hooks.pl,v 1.81 2005/04/08 11:32:42 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -811,14 +811,14 @@ sub goto_url_hook
 		if ($url =~ '^b')
 		{
 			my $bugzilla = 'http://bugzilla.elinks.or.cz';
-			if (loadrc("email"))
-			{
-				$bugzilla = $bugzilla .
-					'/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&email1='
-					. loadrc("email") . '&emailtype1=exact&emailassigned_to1=1&emailreporter1=1';
-			}
 			if (not $bug)
 			{
+				if (loadrc("email"))
+				{
+					$bugzilla = $bugzilla .
+						'/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&email1='
+						. loadrc("email") . '&emailtype1=exact&emailassigned_to1=1&emailreporter1=1';
+				}
 				return $bugzilla;
 			}
 			elsif ($bug =~ '^[0-9]*$')

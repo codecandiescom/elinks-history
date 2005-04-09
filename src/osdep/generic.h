@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.25 2005/04/07 15:01:55 jonas Exp $ */
+/* $Id: generic.h,v 1.26 2005/04/09 14:12:44 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -50,6 +50,13 @@
 #ifndef INET6_ADDRSTRLEN
 #define INET6_ADDRSTRLEN 46
 #endif
+
+#ifdef CONFIG_IPV6
+#define IP_ADDRESS_BUFFER_SIZE INET6_ADDRSTRLEN
+#else
+#define IP_ADDRESS_BUFFER_SIZE INET_ADDRSTRLEN
+#endif
+
 
 /* Attempt to workaround the EINTR mess. */
 #if defined(EINTR) && !defined(CONFIG_WIN32)

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.311 2005/04/07 15:01:55 jonas Exp $ */
+/* $Id: uri.c,v 1.312 2005/04/09 14:12:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,12 +53,6 @@ is_uri_dir_sep(struct uri *uri, unsigned char pos)
 	return (uri->protocol == PROTOCOL_FILE ? dir_sep(pos) : pos == '/');
 }
 
-
-#ifdef CONFIG_IPV6
-#define IP_ADDRESS_BUFFER_SIZE INET6_ADDRSTRLEN
-#else
-#define IP_ADDRESS_BUFFER_SIZE INET_ADDRSTRLEN
-#endif
 
 int
 is_ip_address(unsigned char *address, int addresslen)

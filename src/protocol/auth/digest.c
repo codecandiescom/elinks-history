@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.31 2005/04/09 14:28:09 jonas Exp $ */
+/* $Id: digest.c,v 1.32 2005/04/09 14:30:32 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -27,15 +27,6 @@
 #include "util/md5.h"
 #include "util/memory.h"
 
-/* GNU TLS doesn't define this */
-#ifndef MD5_DIGEST_LENGTH
-#define MD5_DIGEST_LENGTH 16
-#endif
-
-#define MD5_HEX_DIGEST_LENGTH (MD5_DIGEST_LENGTH * 2)
-
-typedef unsigned char md5_digest_bin_T[MD5_DIGEST_LENGTH];
-typedef unsigned char md5_digest_hex_T[MD5_HEX_DIGEST_LENGTH];
 
 /* Hexes a binary md5 digest. Taken from RFC 2617 */
 static void

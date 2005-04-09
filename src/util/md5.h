@@ -1,9 +1,19 @@
-/* $Id: md5.h,v 1.1 2004/11/27 17:53:35 jonas Exp $ */
+/* $Id: md5.h,v 1.2 2005/04/09 14:30:32 jonas Exp $ */
 
 #ifndef EL__UTIL_MD5_H
 #define EL__UTIL_MD5_H
 
 #include "util/types.h"
+
+/* GNU TLS doesn't define this */
+#ifndef MD5_DIGEST_LENGTH
+#define MD5_DIGEST_LENGTH 16
+#endif
+
+#define MD5_HEX_DIGEST_LENGTH (MD5_DIGEST_LENGTH * 2)
+
+typedef unsigned char md5_digest_bin_T[MD5_DIGEST_LENGTH];
+typedef unsigned char md5_digest_hex_T[MD5_HEX_DIGEST_LENGTH];
 
 struct md5_context {
 	uint32_t buf[4];

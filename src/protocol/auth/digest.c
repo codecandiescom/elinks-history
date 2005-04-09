@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.29 2005/02/28 14:16:53 zas Exp $ */
+/* $Id: digest.c,v 1.30 2005/04/09 14:26:40 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -34,8 +34,8 @@
 
 #define MD5_HEX_DIGEST_LENGTH (MD5_DIGEST_LENGTH * 2)
 
-typedef unsigned char md5_bin_digest[MD5_DIGEST_LENGTH + 1];
-typedef unsigned char md5_hex_digest[MD5_HEX_DIGEST_LENGTH + 1];
+typedef unsigned char md5_bin_digest[MD5_DIGEST_LENGTH];
+typedef unsigned char md5_hex_digest[MD5_HEX_DIGEST_LENGTH];
 
 /* Hexes a binary md5 digest. Taken from RFC 2617 */
 static void
@@ -43,14 +43,12 @@ convert_to_md5_hex_digest(md5_bin_digest bin, md5_hex_digest hex)
 {
 	int i;
 
-	for (i = 0; i < MD5_DIGEST_LENGTH; i++) {
+	for (i = 0; i < sizeof(bin); i++) {
 		int j = i * 2;
 
 		hex[j]   = hx(bin[i] >> 4 & 0xF);
 		hex[j+1] = hx(bin[i] & 0xF);
 	}
-
-	hex[MD5_HEX_DIGEST_LENGTH] = '\0';
 }
 
 /* Initializes a random cnonce that is also a hexed md5 digest. */
@@ -130,17 +128,17 @@ init_response_digest(md5_hex_digest response, struct auth_entry *entry,
 	init_uri_method_digest(Ha2_hex, uri);
 
 	MD5_Init(&MD5Ctx);
-	MD5_Update(&MD5Ctx, ha1, MD5_HEX_DIGEST_LENGTH);
+	MD5_Update(&MD5Ctx, ha1, sizeof(ha1));
 	MD5_Update(&MD5Ctx, ":", 1);
 	MD5_Update(&MD5Ctx, entry->nonce, strlen(entry->nonce));
 	MD5_Update(&MD5Ctx, ":", 1);
 	MD5_Update(&MD5Ctx, "00000001", 8);
 	MD5_Update(&MD5Ctx, ":", 1);
-	MD5_Update(&MD5Ctx, cnonce, MD5_HEX_DIGEST_LENGTH);
+	MD5_Update(&MD5Ctx, cnonce, sizeof(cnonce));
 	MD5_Update(&MD5Ctx, ":", 1);
 	MD5_Update(&MD5Ctx, "auth", 4);
 	MD5_Update(&MD5Ctx, ":", 1);
-	MD5_Update(&MD5Ctx, Ha2_hex, 32);
+	MD5_Update(&MD5Ctx, Ha2_hex, sizeof(Ha2_hex));
 	MD5_Final(Ha2, &MD5Ctx);
 
 	convert_to_md5_hex_digest(Ha2, response);
@@ -174,10 +172,10 @@ get_http_auth_digest_response(struct auth_entry *entry, struct uri *uri)
 	add_to_string(&string, "\", ");
 	add_to_string(&string, "qop=auth, nc=00000001, ");
 	add_to_string(&string, "cnonce=\"");
-	add_bytes_to_string(&string, cnonce, MD5_HEX_DIGEST_LENGTH);
+	add_bytes_to_string(&string, cnonce, sizeof(cnonce));
 	add_to_string(&string, "\", ");
 	add_to_string(&string, "response=\"");
-	add_bytes_to_string(&string, response, MD5_HEX_DIGEST_LENGTH);
+	add_bytes_to_string(&string, response, sizeof(response));
 	add_to_string(&string, "\"");
 
 	if (entry->opaque) {

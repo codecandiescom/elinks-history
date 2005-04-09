@@ -1,3 +1,37 @@
+Sat Apr  9 16:48:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/href_tests.html:
+
+	m33p.  
+
+Sat Apr  9 14:30:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/auth/digest.c, util/md5.h:
+
+	Move the MD5_DIGEST_LENGTH #define and the md5_digest_(bin|hex)_T
+	typedefs so they can be used by others.  
+
+Sat Apr  9 14:28:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	md5_(bin|hex)_digest -> md5_digest_(bin|hex)_T 
+
+Sat Apr  9 14:26:40 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	Change the md5_(bin|hex)_digest types to not have room for NUL char.
+	Makes it possible to use sizeof() when adding them to the response
+	strings.  
+
+Sat Apr  9 14:12:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/generic.h, protocol/uri.c:
+
+	Move to IP_ADDRESS_BUFFER_SIZE #define near the INET[6]_ADDRSTRLEN
+	stuff. 'Twill be needed by BitTorrent.  
+
 Fri Apr  8 20:58:14 2005  Petr Baudis <pasky@ucw.cz>:
 
 	* src/config/options.inc:

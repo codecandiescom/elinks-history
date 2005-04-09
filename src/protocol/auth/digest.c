@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.30 2005/04/09 14:26:40 jonas Exp $ */
+/* $Id: digest.c,v 1.31 2005/04/09 14:28:09 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -34,12 +34,12 @@
 
 #define MD5_HEX_DIGEST_LENGTH (MD5_DIGEST_LENGTH * 2)
 
-typedef unsigned char md5_bin_digest[MD5_DIGEST_LENGTH];
-typedef unsigned char md5_hex_digest[MD5_HEX_DIGEST_LENGTH];
+typedef unsigned char md5_digest_bin_T[MD5_DIGEST_LENGTH];
+typedef unsigned char md5_digest_hex_T[MD5_HEX_DIGEST_LENGTH];
 
 /* Hexes a binary md5 digest. Taken from RFC 2617 */
 static void
-convert_to_md5_hex_digest(md5_bin_digest bin, md5_hex_digest hex)
+convert_to_md5_digest_hex_T(md5_digest_bin_T bin, md5_digest_hex_T hex)
 {
 	int i;
 
@@ -53,9 +53,9 @@ convert_to_md5_hex_digest(md5_bin_digest bin, md5_hex_digest hex)
 
 /* Initializes a random cnonce that is also a hexed md5 digest. */
 static void
-init_cnonce_digest(md5_hex_digest cnonce)
+init_cnonce_digest(md5_digest_hex_T cnonce)
 {
-	md5_bin_digest md5;
+	md5_digest_bin_T md5;
 	int random;
 
 	srand(time(0));
@@ -63,7 +63,7 @@ init_cnonce_digest(md5_hex_digest cnonce)
 	random = rand();
 	MD5((const unsigned char *) &random, sizeof(random), md5);
 
-	convert_to_md5_hex_digest(md5, cnonce);
+	convert_to_md5_digest_hex_T(md5, cnonce);
 }
 
 /* Initializes what RFC 2617 refers to as H(A1) by digesting and hexing the
@@ -71,10 +71,10 @@ init_cnonce_digest(md5_hex_digest cnonce)
 /* FIXME: Support for further digesting: H(A1) ':' <nonce> ':' <cnonce> if
  * the server requests algorithm = "MD5-sess". */
 static void
-init_credential_digest(md5_hex_digest ha1, struct auth_entry *entry)
+init_credential_digest(md5_digest_hex_T ha1, struct auth_entry *entry)
 {
 	MD5_CTX MD5Ctx;
-	md5_bin_digest skey;
+	md5_digest_bin_T skey;
 
 	MD5_Init(&MD5Ctx);
 	MD5_Update(&MD5Ctx, entry->user, strlen(entry->user));
@@ -84,7 +84,7 @@ init_credential_digest(md5_hex_digest ha1, struct auth_entry *entry)
 	MD5_Update(&MD5Ctx, entry->password, strlen(entry->password));
 	MD5_Final(skey, &MD5Ctx);
 
-	convert_to_md5_hex_digest(skey, ha1);
+	convert_to_md5_digest_hex_T(skey, ha1);
 }
 
 /* Initializes what RFC 2617 refers to as H(A2) by digesting and hexing the
@@ -97,10 +97,10 @@ init_credential_digest(md5_hex_digest ha1, struct auth_entry *entry)
  * boundaries and embedded headers in each part of any multipart content-type.
  */
 static void
-init_uri_method_digest(md5_hex_digest uri_method, struct uri *uri)
+init_uri_method_digest(md5_digest_hex_T uri_method, struct uri *uri)
 {
 	MD5_CTX MD5Ctx;
-	md5_bin_digest ha2;
+	md5_digest_bin_T ha2;
 
 	MD5_Init(&MD5Ctx);
 	MD5_Update(&MD5Ctx, "GET", 3);
@@ -108,7 +108,7 @@ init_uri_method_digest(md5_hex_digest uri_method, struct uri *uri)
 	MD5_Update(&MD5Ctx, uri->data, uri->datalen);
 	MD5_Final(ha2, &MD5Ctx);
 
-	convert_to_md5_hex_digest(ha2, uri_method);
+	convert_to_md5_digest_hex_T(ha2, uri_method);
 }
 
 /* Calculates the value of the response parameter in the Digest header entry. */
@@ -116,13 +116,13 @@ init_uri_method_digest(md5_hex_digest uri_method, struct uri *uri)
  * before digesting the H(A2) value if the qop Digest header entry parameter is
  * non-empty. */
 static void
-init_response_digest(md5_hex_digest response, struct auth_entry *entry,
-		     struct uri *uri, md5_hex_digest cnonce)
+init_response_digest(md5_digest_hex_T response, struct auth_entry *entry,
+		     struct uri *uri, md5_digest_hex_T cnonce)
 {
 	MD5_CTX MD5Ctx;
-	md5_hex_digest ha1;
-	md5_bin_digest Ha2;
-	md5_hex_digest Ha2_hex;
+	md5_digest_hex_T ha1;
+	md5_digest_bin_T Ha2;
+	md5_digest_hex_T Ha2_hex;
 
 	init_credential_digest(ha1, entry);
 	init_uri_method_digest(Ha2_hex, uri);
@@ -141,7 +141,7 @@ init_response_digest(md5_hex_digest response, struct auth_entry *entry,
 	MD5_Update(&MD5Ctx, Ha2_hex, sizeof(Ha2_hex));
 	MD5_Final(Ha2, &MD5Ctx);
 
-	convert_to_md5_hex_digest(Ha2, response);
+	convert_to_md5_digest_hex_T(Ha2, response);
 }
 
 
@@ -149,8 +149,8 @@ unsigned char *
 get_http_auth_digest_response(struct auth_entry *entry, struct uri *uri)
 {
 	struct string string;
-	md5_hex_digest cnonce;
-	md5_hex_digest response;
+	md5_digest_hex_T cnonce;
+	md5_digest_hex_T response;
 
 	if (!init_string(&string))
 		return NULL;

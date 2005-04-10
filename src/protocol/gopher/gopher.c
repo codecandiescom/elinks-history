@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.34 2005/04/10 20:48:25 jonas Exp $ */
+/* $Id: gopher.c,v 1.35 2005/04/10 20:49:48 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -132,7 +132,7 @@ static struct gopher_entity_info gopher_entity_info[] = {
 
 	{ GOPHER_INFO,		"            ",	NULL			   },
 	{ GOPHER_ERROR,		NULL,		NULL			   },
-	/* XXX: Keep GOPHER_UNKNOWN last so it is easy to aceess. */
+	/* XXX: Keep GOPHER_UNKNOWN last so it is easy to access. */
 	{ GOPHER_UNKNOWN,	"            ",	"application/octet-stream" },
 };
 
@@ -718,8 +718,7 @@ read_gopher_response_data(struct connection *conn, struct read_buffer *rb)
 	struct gopher_connection_info *gopher = conn->info;
 	enum connection_state state = S_TRANS;
 
-	assert(gopher);
-	assert(gopher->entity);
+	assert(gopher && gopher->entity);
 
 	set_connection_timeout(conn);
 

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.33 2005/02/28 14:18:10 zas Exp $ */
+/* $Id: gopher.c,v 1.34 2005/04/10 20:48:25 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -56,6 +56,7 @@ struct module gopher_protocol_module = struct_module(
 
 /* Gopher entity types */
 enum gopher_entity {
+	GOPHER_UNKNOWN		=  0 , /* Special fall-back entity */
 	GOPHER_FILE		= '0',
 	GOPHER_DIRECTORY	= '1',
 	GOPHER_CSO		= '2',
@@ -131,6 +132,8 @@ static struct gopher_entity_info gopher_entity_info[] = {
 
 	{ GOPHER_INFO,		"            ",	NULL			   },
 	{ GOPHER_ERROR,		NULL,		NULL			   },
+	/* XXX: Keep GOPHER_UNKNOWN last so it is easy to aceess. */
+	{ GOPHER_UNKNOWN,	"            ",	"application/octet-stream" },
 };
 
 static struct gopher_entity_info *
@@ -138,11 +141,13 @@ get_gopher_entity_info(enum gopher_entity type)
 {
 	int entry;
 
-	for (entry = 0; entry < sizeof(gopher_entity_info); entry++)
+	for (entry = 0; entry < sizeof(gopher_entity_info) - 1; entry++)
 		if (gopher_entity_info[entry].type == type)
 			return &gopher_entity_info[entry];
 
-	return NULL;
+	assert(gopher_entity_info[entry].type == GOPHER_UNKNOWN);
+
+	return &gopher_entity_info[entry];
 }
 
 static unsigned char *
@@ -273,6 +278,7 @@ init_gopher_connection_info(struct connection *conn)
 	enum gopher_entity entity = DEFAULT_GOPHER_ENTITY;
 	unsigned char *selector = conn->uri->data;
 	int selectorlen = conn->uri->datalen;
+	struct gopher_entity_info *entity_info;
 	size_t size;
 
 	/* Get entity type, and selector string. */
@@ -280,6 +286,20 @@ init_gopher_connection_info(struct connection *conn)
 	if (selectorlen > 0) {
 		entity = *selector++;
 		selectorlen--;
+	}
+
+	/* This is probably a hack. It serves as a work around when no entity is
+	 * available in the Gopher URI. Instead of segfaulting later the content
+	 * will be served as application/octet-stream. However, it could
+	 * possible break handling Gopher URIs with entities which are really
+	 * unknown because parts of the real Gopher entity character is added to
+	 * the selector. A possible work around is to always expect a '/'
+	 * _after_ the Gopher entity. If the <entity-char> '/' combo is not
+	 * found assume that the whole URI data part is the selector. */
+	entity_info = get_gopher_entity_info(entity);
+	if (entity_info->type == GOPHER_UNKNOWN) {
+		selector--;
+		selectorlen++;
 	}
 
 	state = add_gopher_command(conn, &command, entity, selector, selectorlen);
@@ -297,7 +317,7 @@ init_gopher_connection_info(struct connection *conn)
 		return S_OUT_OF_MEM;
 	}
 
-	gopher->entity = get_gopher_entity_info(entity);
+	gopher->entity = entity_info;
 	gopher->commandlen = command.length;
 
 	memcpy(gopher->command, command.source, command.length);
@@ -698,7 +718,8 @@ read_gopher_response_data(struct connection *conn, struct read_buffer *rb)
 	struct gopher_connection_info *gopher = conn->info;
 	enum connection_state state = S_TRANS;
 
-	assert(gopher && gopher->entity);
+	assert(gopher);
+	assert(gopher->entity);
 
 	set_connection_timeout(conn);
 

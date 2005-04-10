@@ -1,3 +1,16 @@
+Sun Apr 10 20:49:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Cleanup mess from last patch.  
+
+Sun Apr 10 20:48:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Introduce a GOPHER_UNKNOWN entity type which works as a fall-back
+	when no entity is available in the Gopher URI. Reported by Rowan.  
+
 Sat Apr  9 16:48:19 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* test/href_tests.html:

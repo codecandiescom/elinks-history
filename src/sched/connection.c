@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.241 2005/04/11 21:58:51 jonas Exp $ */
+/* $Id: connection.c,v 1.242 2005/04/11 22:16:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,6 +240,7 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	conn->socket.fd = conn->data_socket.fd = -1;
 	conn->socket.conn = conn;
 	conn->socket.set_state = (connection_socket_handler_T) set_connection_state;
+	conn->socket.set_timeout = (void (*)(void *)) set_connection_timeout;
 	conn->socket.done = (connection_socket_handler_T) abort_conn_with_state;
 	conn->socket.retry = (connection_socket_handler_T) retry_conn_with_state;
 

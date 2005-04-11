@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.141 2005/04/11 21:58:51 jonas Exp $ */
+/* $Id: connect.c,v 1.142 2005/04/11 22:16:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -589,7 +589,7 @@ write_select(struct connection *conn)
 	 * can easily exceed the timeout. We don't need to do this for
 	 * read_select() because it calls user handler every time new data is
 	 * acquired and the user handler does this. */
-	set_connection_timeout(conn);
+	socket->set_timeout(socket->conn);
 
 #if 0
 	printf("ws: %d\n",wb->len-wb->pos);
@@ -666,7 +666,7 @@ read_select(struct connection *conn)
 		return;
 	}
 
-	/* XXX: Should we set_connection_timeout() as we do in write_select()?
+	/* XXX: Should we call socket->set_timeout() as we do in write_select()?
 	 * --pasky */
 
 	clear_handlers(rb->socket->fd);

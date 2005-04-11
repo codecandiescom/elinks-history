@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.134 2005/04/11 21:03:32 jonas Exp $ */
+/* $Id: connect.c,v 1.135 2005/04/11 21:04:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,7 +440,7 @@ dns_found(void *data, int state)
 		addr.sin_port = htons(conn_info->port);
 #endif
 
-		/* We can set conn->protocol_family here even if the connection
+		/* We can set conn_socket->protocol_family here even if the connection
 		 * will fail, as we will use it only when it will be successfully
 		 * established. At least I hope that noone else will want to do
 		 * something else ;-). --pasky */

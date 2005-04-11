@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.135 2005/04/11 21:04:43 jonas Exp $ */
+/* $Id: connect.c,v 1.136 2005/04/11 21:10:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,6 +115,7 @@ init_connection_info(struct uri *uri, struct connection_socket *socket,
 	conn_info->socket = socket;
 	conn_info->port = get_uri_port(uri);
 	conn_info->ip_family = uri->ip_family;
+	conn_info->need_ssl = get_protocol_need_ssl(uri->protocol);
 	conn_info->triedno = -1;
 	conn_info->addr = NULL;
 
@@ -504,7 +505,7 @@ dns_found(void *data, int state)
 
 #ifdef CONFIG_SSL
 	/* Check if the connection should run over an encrypted link */
-	if (get_protocol_need_ssl(conn->uri->protocol)
+	if (conn_info->need_ssl
 	    && ssl_connect(conn, conn_socket) < 0)
 		return;
 #endif
@@ -546,7 +547,7 @@ connected(void *data)
 
 #ifdef CONFIG_SSL
 	/* Check if the connection should run over an encrypted link */
-	if (get_protocol_need_ssl(conn->uri->protocol)
+	if (conn_info->need_ssl
 	    && ssl_connect(conn, socket) < 0)
 		return;
 #endif

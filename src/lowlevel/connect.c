@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.151 2005/04/11 23:04:48 jonas Exp $ */
+/* $Id: connect.c,v 1.152 2005/04/11 23:07:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -683,7 +683,7 @@ read_select(struct connection_socket *socket)
 
 #ifdef CONFIG_SSL
 	if (socket->ssl) {
-		rd = ssl_read(rb->socket, rb);
+		rd = ssl_read(socket, rb);
 		if (rd <= 0) return;
 	} else
 #endif

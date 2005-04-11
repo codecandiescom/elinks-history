@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.124 2005/04/11 18:23:21 jonas Exp $ */
+/* $Id: socket.c,v 1.125 2005/04/11 18:26:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -354,7 +354,7 @@ dns_found(void *data, int state)
 	int sock = -1;
 	struct connection *conn = (struct connection *) data;
 	struct conn_info *conn_info = conn->conn_info;
-	struct connection_socket *socket;
+	struct connection_socket *conn_socket;
 	int i;
 	int trno = conn_info->triedno;
 	int only_local = get_cmd_opt_bool("localhost");
@@ -372,13 +372,13 @@ dns_found(void *data, int state)
 		return;
 	}
 
-	socket = conn_info->socket;
-	assert(socket);
+	conn_socket = conn_info->socket;
+	assert(conn_socket);
 
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
-	if (socket->fd >= 0)
-		clear_handlers(socket->fd);
+	if (conn_socket->fd >= 0)
+		clear_handlers(conn_socket->fd);
 
 	for (i = conn_info->triedno + 1; i < conn_info->addrno; i++) {
 #ifdef CONFIG_IPV6
@@ -436,7 +436,7 @@ dns_found(void *data, int state)
 			close(sock);
 			continue;
 		}
-		socket->fd = sock;
+		conn_socket->fd = sock;
 
 #ifdef CONFIG_IPV6
 		addr.sin6_port = htons(conn_info->port);
@@ -503,7 +503,7 @@ dns_found(void *data, int state)
 #ifdef CONFIG_SSL
 	/* Check if the connection should run over an encrypted link */
 	if (get_protocol_need_ssl(conn->uri->protocol)
-	    && ssl_connect(conn, socket) < 0)
+	    && ssl_connect(conn, conn_socket) < 0)
 		return;
 #endif
 

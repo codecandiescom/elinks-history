@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.118 2005/02/28 13:51:10 zas Exp $ */
+/* $Id: connect.c,v 1.119 2005/04/11 16:13:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,14 +143,14 @@ make_connection(struct connection *conn, struct connection_socket *socket,
 	int async;
 
 	if (!host) {
-		retry_conn_with_state(conn, S_OUT_OF_MEM);
+		socket->retry(socket->conn, S_OUT_OF_MEM);
 		return;
 	}
 
 	conn_info = init_connection_info(conn->uri, socket, done);
 	if (!conn_info) {
 		mem_free(host);
-		retry_conn_with_state(conn, S_OUT_OF_MEM);
+		socket->retry(socket->conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -565,11 +565,12 @@ static void
 write_select(struct connection *conn)
 {
 	struct write_buffer *wb = conn->buffer;
+	struct connection_socket *socket = wb->socket;
 	int wr;
 
 	assertm(wb, "write socket has no buffer");
 	if_assert_failed {
-		abort_conn_with_state(conn, S_INTERNAL);
+		socket->done(socket->conn, S_INTERNAL);
 		return;
 	}
 
@@ -596,7 +597,7 @@ write_select(struct connection *conn)
 		assert(wb->len - wb->pos > 0);
 		wr = safe_write(wb->socket->fd, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) {
-			retry_conn_with_state(conn, wr ? -errno : S_CANT_WRITE);
+			socket->retry(socket->conn, wr ? -errno : S_CANT_WRITE);
 			return;
 		}
 	}
@@ -626,7 +627,7 @@ write_to_socket(struct connection *conn, struct connection_socket *socket,
 
 	wb = mem_alloc(sizeof(*wb) + len);
 	if (!wb) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		socket->done(socket->conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -647,11 +648,12 @@ static void
 read_select(struct connection *conn)
 {
 	struct read_buffer *rb = conn->buffer;
+	struct connection_socket *socket = rb->socket;
 	int rd;
 
 	assertm(rb, "read socket has no buffer");
 	if_assert_failed {
-		abort_conn_with_state(conn, S_INTERNAL);
+		socket->done(socket->conn, S_INTERNAL);
 		return;
 	}
 
@@ -665,7 +667,7 @@ read_select(struct connection *conn)
 
 		rb = mem_realloc(rb, size);
 		if (!rb) {
-			abort_conn_with_state(conn, S_OUT_OF_MEM);
+			socket->done(socket->conn, S_OUT_OF_MEM);
 			return;
 		}
 		rb->freespace = size - sizeof(*rb) - rb->len;
@@ -688,7 +690,7 @@ read_select(struct connection *conn)
 				return;
 			}
 
-			retry_conn_with_state(conn, rd ? -errno : S_CANT_READ);
+			socket->retry(socket->conn, rd ? -errno : S_CANT_READ);
 			return;
 		}
 	}

@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.31 2005/04/11 18:07:44 jonas Exp $ */
+/* $Id: connect.h,v 1.32 2005/04/11 20:28:25 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -57,7 +57,7 @@ struct conn_info *
 init_connection_info(struct uri *uri, struct connection_socket *socket,
 		     void (*done)(struct connection *));
 
-void done_connection_info(struct connection *conn);
+void done_connection_info(struct connection_socket *socket);
 
 
 void close_socket(struct connection *conn, struct connection_socket *socket);

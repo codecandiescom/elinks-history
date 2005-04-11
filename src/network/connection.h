@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.103 2005/04/11 18:31:49 jonas Exp $ */
+/* $Id: connection.h,v 1.104 2005/04/11 20:28:25 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -140,6 +140,9 @@ struct connection_socket {
 	 * associated. */
 	void *conn;
 
+	/* Information used during the connection establishing phase. */
+	struct conn_info *conn_info;
+
 	/* Callbacks to the connection management: */
 
 	/* Report change in the state of the socket. */
@@ -170,7 +173,6 @@ struct connection {
 	struct uri *proxied_uri;
 	struct uri *referrer;
 
-	struct conn_info *conn_info;
 	void *info;
 	void *buffer;
 	struct cache_entry *cached;

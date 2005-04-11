@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.237 2005/04/11 18:31:49 jonas Exp $ */
+/* $Id: connection.c,v 1.238 2005/04/11 20:28:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -376,10 +376,10 @@ free_connection_data(struct connection *conn)
 		close(conn->cgi_pipes[1]);
 	conn->cgi_pipes[0] = conn->cgi_pipes[1] = -1;
 
-	if (conn->conn_info) {
+	if (conn->socket.conn_info) {
 		/* No callbacks should be made */
-		conn->conn_info->done = NULL;
-		done_connection_info(conn);
+		conn->socket.conn_info->done = NULL;
+		done_connection_info(&conn->socket);
 	}
 
 	mem_free_set(&conn->buffer, NULL);
@@ -1048,15 +1048,19 @@ connection_timeout(struct connection *conn)
 {
 	conn->timer = TIMER_ID_UNDEF;
 	set_connection_state(conn, S_TIMEOUT);
-	if (conn->conn_info) {
+	if (conn->socket.conn_info) {
 		/* Is the DNS resolving still in progress? */
-		if (conn->conn_info->dnsquery) {
+		if (conn->socket.conn_info->dnsquery) {
 			abort_connection(conn);
 			return;
 		}
 
 		dns_found(conn, 0); /* jump to next addr */
-		if (conn->conn_info) set_connection_timeout(conn);
+
+		/* Reset the timeout if dns_found() started a new attempt to
+		 * connect. */
+		if (conn->socket.conn_info)
+			set_connection_timeout(conn);
 	} else {
 		retry_connection(conn);
 	}

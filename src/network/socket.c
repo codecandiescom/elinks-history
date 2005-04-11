@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.132 2005/04/11 20:22:36 jonas Exp $ */
+/* $Id: socket.c,v 1.133 2005/04/11 20:28:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,15 +121,15 @@ init_connection_info(struct uri *uri, struct connection_socket *socket,
 }
 
 void
-done_connection_info(struct connection *conn)
+done_connection_info(struct connection_socket *socket)
 {
-	struct conn_info *conn_info = conn->conn_info;
+	struct conn_info *conn_info = socket->conn_info;
 
 	if (conn_info->dnsquery) kill_dns_request(&conn_info->dnsquery);
-	if (conn_info->done) conn_info->done(conn);
+	if (conn_info->done) conn_info->done(socket->conn);
 
 	mem_free_if(conn_info->addr);
-	mem_free_set(&conn->conn_info, NULL);
+	mem_free_set(&socket->conn_info, NULL);
 }
 
 void
@@ -152,7 +152,7 @@ make_connection(struct connection *conn, struct connection_socket *socket,
 		return;
 	}
 
-	conn->conn_info = conn_info;
+	socket->conn_info = conn_info;
 
 	debug_transfer_log("\nCONNECTION: ", -1);
 	debug_transfer_log(host, -1);
@@ -351,8 +351,8 @@ dns_found(void *data, int state)
 {
 	int sock = -1;
 	struct connection *conn = (struct connection *) data;
-	struct conn_info *conn_info = conn->conn_info;
-	struct connection_socket *conn_socket;
+	struct connection_socket *conn_socket = /* XXX: Temporary hack. */ &conn->socket;
+	struct conn_info *conn_info = conn_socket->conn_info;
 	int i;
 	int trno = conn_info->triedno;
 	int only_local = get_cmd_opt_bool("localhost");
@@ -364,9 +364,6 @@ dns_found(void *data, int state)
 	 * about such a connection attempt.
 	 * XXX: Unify with @local_only handling? --pasky */
 	int silent_fail = 0;
-
-	conn_socket = conn_info->socket;
-	assert(conn_socket);
 
 	if (state < 0) {
 		conn_socket->done(conn_socket->conn, S_NO_DNS);
@@ -511,15 +508,15 @@ dns_found(void *data, int state)
 		return;
 #endif
 
-	done_connection_info(conn);
+	done_connection_info(conn_socket);
 }
 
 static void
 connected(void *data)
 {
 	struct connection *conn = (struct connection *) data;
-	struct conn_info *conn_info = conn->conn_info;
-	struct connection_socket *socket = conn_info->socket;
+	struct connection_socket *socket = /* XXX: Temporary hack. */&conn->socket;
+	struct conn_info *conn_info = socket->conn_info;
 	int err = 0;
 	int len = sizeof(err);
 
@@ -553,7 +550,7 @@ connected(void *data)
 		return;
 #endif
 
-	done_connection_info(conn);
+	done_connection_info(socket);
 }
 
 

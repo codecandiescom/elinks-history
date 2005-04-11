@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.87 2005/04/11 15:31:07 jonas Exp $ */
+/* $Id: socket.c,v 1.88 2005/04/11 15:39:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,20 +276,20 @@ ssl_write(struct connection *conn, struct connection_socket *socket,
 #elif defined(CONFIG_GNUTLS)
 		int err = wr;
 #endif
+		enum connection_state state;
 
 		if (err == SSL_ERROR_WANT_WRITE ||
 		    err == SSL_ERROR_WANT_WRITE2) {
 			return -1;
 		}
 
-		set_connection_state(conn, wr ? (err == SSL_ERROR_SYSCALL ? -errno
-							       : S_SSL_ERROR)
-				   : S_CANT_WRITE);
+		state = wr ? (err == SSL_ERROR_SYSCALL ? -errno : S_SSL_ERROR)
+			   : S_CANT_WRITE;
 
 		if (!wr || err == SSL_ERROR_SYSCALL)
-			retry_connection(conn);
+			retry_conn_with_state(conn, state);
 		else
-			abort_connection(conn);
+			abort_conn_with_state(conn, state);
 
 		return -1;
 	}
@@ -315,6 +315,7 @@ ssl_read(struct connection *conn, struct connection_socket *socket,
 		if (err == GNUTLS_E_REHANDSHAKE)
 			return -1;
 #endif
+		enum connection_state state;
 
 		if (err == SSL_ERROR_WANT_READ ||
 		    err == SSL_ERROR_WANT_READ2) {
@@ -328,16 +329,15 @@ ssl_read(struct connection *conn, struct connection_socket *socket,
 			return -1;
 		}
 
-		set_connection_state(conn, rd ? (err == SSL_ERROR_SYSCALL2 ? -errno
-								: S_SSL_ERROR)
-				   : S_CANT_READ);
+		state = rd ? (err == SSL_ERROR_SYSCALL2 ? -errno : S_SSL_ERROR)
+			   : S_CANT_READ;
 
 		/* mem_free(rb); */
 
 		if (!rd || err == SSL_ERROR_SYSCALL2)
-			retry_connection(conn);
+			retry_conn_with_state(conn, state);
 		else
-			abort_connection(conn);
+			abort_conn_with_state(conn, state);
 
 		return -1;
 	}

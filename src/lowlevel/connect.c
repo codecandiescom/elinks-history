@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.133 2005/04/11 20:28:25 jonas Exp $ */
+/* $Id: connect.c,v 1.134 2005/04/11 21:03:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,6 +114,7 @@ init_connection_info(struct uri *uri, struct connection_socket *socket,
 	conn_info->done = done;
 	conn_info->socket = socket;
 	conn_info->port = get_uri_port(uri);
+	conn_info->ip_family = uri->ip_family;
 	conn_info->triedno = -1;
 	conn_info->addr = NULL;
 
@@ -382,7 +383,7 @@ dns_found(void *data, int state)
 		struct sockaddr_in addr = *((struct sockaddr_in *) &conn_info->addr[i]);
 #endif
 		int family;
-		int force_family = conn->uri->ip_family;
+		int force_family = conn_info->ip_family;
 
 #ifdef CONFIG_IPV6
 		family = addr.sin6_family;

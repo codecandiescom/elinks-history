@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.32 2005/04/11 20:28:25 jonas Exp $ */
+/* $Id: connect.h,v 1.33 2005/04/11 21:03:32 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -24,6 +24,7 @@ struct conn_info {
 	int addrno; /* array len / sizeof(sockaddr_storage) */
 	int triedno; /* index of last tried address */
 	int port;
+	int ip_family; /* If non-zero, use the indicated IP version. */
 };
 
 enum read_buffer_close {

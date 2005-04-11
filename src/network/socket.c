@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.120 2005/04/11 16:21:17 jonas Exp $ */
+/* $Id: socket.c,v 1.121 2005/04/11 16:45:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,6 @@ debug_transfer_log(unsigned char *data, int len)
 #endif
 
 
-void dns_found(/* struct connection */ void *, int);
 static void connected(/* struct connection */ void *);
 
 void

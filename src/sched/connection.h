@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.99 2005/04/11 15:58:00 jonas Exp $ */
+/* $Id: connection.h,v 1.100 2005/04/11 16:15:35 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -143,7 +143,8 @@ struct connection_socket {
 	/* Callbacks to the connection management: */
 	/* Some system related error occured; advise to reconnect. */
 	connection_socket_handler_T retry;
-	/* A fatal error occured; advise to abort the connection. */
+	/* A fatal error occured, like a memory allocation failure; advise to
+	 * abort the connection. */
 	connection_socket_handler_T done;
 
 	/* For connections using SSL this is in fact (ssl_t *), but we don't

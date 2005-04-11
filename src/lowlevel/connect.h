@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.40 2005/04/11 22:59:43 jonas Exp $ */
+/* $Id: connect.h,v 1.41 2005/04/11 23:09:46 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -44,7 +44,6 @@ struct read_buffer {
 	 * usually many times, not only when all the data arrives. */
 	void (*done)(struct connection *, struct read_buffer *);
 
-	struct connection_socket *socket;
 	int len;
 	enum read_buffer_close close;
 	int freespace;

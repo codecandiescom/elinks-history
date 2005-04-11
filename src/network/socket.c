@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.152 2005/04/11 23:07:02 jonas Exp $ */
+/* $Id: socket.c,v 1.153 2005/04/11 23:09:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -563,7 +563,6 @@ struct write_buffer {
 	 * _different_ from read_buffer.done !). */
 	void (*done)(struct connection *);
 
-	struct connection_socket *socket;
 	int len;
 	int pos;
 
@@ -638,7 +637,6 @@ write_to_socket(struct connection_socket *socket,
 		return;
 	}
 
-	wb->socket = socket;
 	wb->len = len;
 	wb->pos = 0;
 	wb->done = done;
@@ -736,7 +734,6 @@ read_from_socket(struct connection_socket *socket,
 		 void (*done)(struct connection *, struct read_buffer *))
 {
 	buffer->done = done;
-	buffer->socket = socket;
 
 	if (socket->buffer && buffer != socket->buffer)
 		mem_free(socket->buffer);

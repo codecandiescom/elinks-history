@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.30 2004/11/04 21:10:10 jonas Exp $ */
+/* $Id: socket.h,v 1.31 2005/04/11 18:07:44 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -18,6 +18,8 @@ struct conn_info {
 	void (*done)(struct connection *);
 
 	struct connection_socket *socket;
+
+	void *dnsquery;
 
 	int addrno; /* array len / sizeof(sockaddr_storage) */
 	int triedno; /* index of last tried address */

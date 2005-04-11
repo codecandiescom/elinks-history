@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.101 2005/04/11 16:35:00 jonas Exp $ */
+/* $Id: connection.h,v 1.102 2005/04/11 18:07:44 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -168,7 +168,6 @@ struct connection {
 	struct uri *proxied_uri;
 	struct uri *referrer;
 
-	void *dnsquery;
 	struct conn_info *conn_info;
 	void *info;
 	void *buffer;

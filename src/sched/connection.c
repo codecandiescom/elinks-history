@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.235 2005/04/11 17:16:18 jonas Exp $ */
+/* $Id: connection.c,v 1.236 2005/04/11 18:07:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -376,9 +376,6 @@ free_connection_data(struct connection *conn)
 		close(conn->cgi_pipes[1]);
 	conn->cgi_pipes[0] = conn->cgi_pipes[1] = -1;
 
-	if (conn->dnsquery) {
-		kill_dns_request(&conn->dnsquery);
-	}
 	if (conn->conn_info) {
 		/* No callbacks should be made */
 		conn->conn_info->done = NULL;
@@ -1051,9 +1048,13 @@ connection_timeout(struct connection *conn)
 {
 	conn->timer = TIMER_ID_UNDEF;
 	set_connection_state(conn, S_TIMEOUT);
-	if (conn->dnsquery) {
-		abort_connection(conn);
-	} else if (conn->conn_info) {
+	if (conn->conn_info) {
+		/* Is the DNS resolving still in progress? */
+		if (conn->conn_info->dnsquery) {
+			abort_connection(conn);
+			return;
+		}
+
 		dns_found(conn, 0); /* jump to next addr */
 		if (conn->conn_info) set_connection_timeout(conn);
 	} else {

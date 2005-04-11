@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.102 2005/04/11 22:50:34 jonas Exp $ */
+/* $Id: socket.c,v 1.103 2005/04/11 22:55:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,14 +147,11 @@ ssl_set_no_tls(struct connection_socket *socket)
 }
 
 static void
-ssl_want_read(struct connection *conn)
+ssl_want_read(struct connection_socket *socket)
 {
-	struct conn_info *conn_info = conn->socket.conn_info;
-	struct connection_socket *socket;
+	struct conn_info *conn_info = socket->conn_info;
 
 	if (!conn_info) return;
-
-	socket = conn_info->socket;
 
 	if (socket->no_tls)
 		ssl_set_no_tls(socket);
@@ -236,7 +233,7 @@ ssl_connect(struct connection_socket *socket)
 		case SSL_ERROR_WANT_READ2:
 			socket->set_state(socket->conn, S_SSL_NEG);
 			set_handlers(socket->fd, (void (*)(void *)) ssl_want_read,
-				     NULL, dns_exception, socket->conn);
+				     NULL, dns_exception, socket);
 			return -1;
 
 		case SSL_ERROR_NONE:

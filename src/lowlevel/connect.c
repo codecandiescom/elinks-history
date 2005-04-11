@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.147 2005/04/11 22:50:34 jonas Exp $ */
+/* $Id: connect.c,v 1.148 2005/04/11 22:55:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ debug_transfer_log(unsigned char *data, int len)
 #endif
 
 
-static void connected(/* struct connection */ void *);
+static void connected(/* struct connection_socket */ void *);
 
 void
 close_socket(struct connection_socket *socket)
@@ -89,8 +89,7 @@ close_socket(struct connection_socket *socket)
 void
 dns_exception(void *data)
 {
-	struct connection *conn = data;
-	struct connection_socket *socket = /* XXX: Hack. Only FTP uses two sockets. */ &conn->socket;
+	struct connection_socket *socket = data;
 
 	socket->set_state(socket->conn, S_EXCEPT);
 	close_socket(socket);
@@ -100,8 +99,7 @@ dns_exception(void *data)
 static void
 exception(void *data)
 {
-	struct connection *conn = data;
-	struct connection_socket *socket = /* XXX: Hack. Only FTP uses two sockets. */ &conn->socket;
+	struct connection_socket *socket = data;
 
 	socket->retry(socket->conn, S_EXCEPT);
 }
@@ -473,7 +471,7 @@ dns_found(struct connection_socket *conn_socket, int state)
 #endif
 		    || errno == EINPROGRESS) {
 			/* It will take some more time... */
-			set_handlers(sock, NULL, connected, dns_exception, conn_socket->conn);
+			set_handlers(sock, NULL, connected, dns_exception, conn_socket);
 			conn_socket->set_state(conn_socket->conn, S_CONN);
 			return;
 		}
@@ -522,8 +520,7 @@ dns_found(struct connection_socket *conn_socket, int state)
 static void
 connected(void *data)
 {
-	struct connection *conn = (struct connection *) data;
-	struct connection_socket *socket = /* XXX: Temporary hack. */&conn->socket;
+	struct connection_socket *socket = data;
 	struct conn_info *conn_info = socket->conn_info;
 	int err = 0;
 	int len = sizeof(err);
@@ -575,9 +572,8 @@ struct write_buffer {
 };
 
 static void
-write_select(struct connection *conn)
+write_select(struct connection_socket *socket)
 {
-	struct connection_socket *socket = &conn->socket;
 	struct write_buffer *wb = socket->buffer;
 	int wr;
 
@@ -622,7 +618,7 @@ write_select(struct connection *conn)
 
 		clear_handlers(wb->socket->fd);
 		mem_free_set(&socket->buffer, NULL);
-		f(conn);
+		f(socket->conn);
 	}
 }
 
@@ -649,7 +645,7 @@ write_to_socket(struct connection_socket *socket,
 	wb->done = done;
 	memcpy(wb->data, data, len);
 	mem_free_set(&socket->buffer, wb);
-	set_handlers(socket->fd, NULL, (void *) write_select, (void *) exception, socket->conn);
+	set_handlers(socket->fd, NULL, (void *) write_select, exception, socket);
 }
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */
@@ -657,9 +653,8 @@ write_to_socket(struct connection_socket *socket,
 #define RD_SIZE(rb, len) ((RD_MEM(rb) + (len)) & ~(RD_ALLOC_GR - 1))
 
 static void
-read_select(struct connection *conn)
+read_select(struct connection_socket *socket)
 {
-	struct connection_socket *socket = &conn->socket;
 	struct read_buffer *rb = socket->buffer;
 	int rd;
 
@@ -698,7 +693,7 @@ read_select(struct connection *conn)
 		if (rd <= 0) {
 			if (rb->close != READ_BUFFER_RETRY_ONCLOSE && !rd) {
 				rb->close = READ_BUFFER_END;
-				rb->done(conn, rb);
+				rb->done(socket->conn, rb);
 				return;
 			}
 
@@ -713,7 +708,7 @@ read_select(struct connection *conn)
 	rb->freespace -= rd;
 	assert(rb->freespace >= 0);
 
-	rb->done(conn, rb);
+	rb->done(socket->conn, rb);
 }
 
 struct read_buffer *
@@ -748,7 +743,7 @@ read_from_socket(struct connection_socket *socket,
 		mem_free(socket->buffer);
 	socket->buffer = buffer;
 
-	set_handlers(socket->fd, (void *) read_select, NULL, (void *) exception, socket->conn);
+	set_handlers(socket->fd, (void *) read_select, NULL, exception, socket);
 }
 
 void

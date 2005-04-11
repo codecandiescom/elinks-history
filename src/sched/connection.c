@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.239 2005/04/11 21:20:49 jonas Exp $ */
+/* $Id: connection.c,v 1.240 2005/04/11 21:37:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,7 +359,7 @@ free_connection_data(struct connection *conn)
 		clear_handlers(conn->socket.fd);
 	if (conn->data_socket.fd != -1)
 		clear_handlers(conn->data_socket.fd);
-	close_socket(NULL, &conn->data_socket);
+	close_socket(&conn->data_socket);
 
 	/* XXX: See also protocol/http/http.c:decompress_shutdown(). */
 	if (conn->stream) {
@@ -641,7 +641,7 @@ sort_queue(void)
 static void
 interrupt_connection(struct connection *conn)
 {
-	close_socket(conn, &conn->socket);
+	close_socket(&conn->socket);
 	free_connection_data(conn);
 }
 

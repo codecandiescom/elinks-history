@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.153 2005/04/11 23:09:46 jonas Exp $ */
+/* $Id: socket.c,v 1.154 2005/04/11 23:32:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -612,11 +612,11 @@ write_select(struct connection_socket *socket)
 	/*printf("wr: %d\n", wr);*/
 	wb->pos += wr;
 	if (wb->pos == wb->len) {
-		void (*f)(struct connection *) = wb->done;
+		void (*done)(struct connection *) = wb->done;
 
 		clear_handlers(socket->fd);
 		mem_free_set(&socket->buffer, NULL);
-		f(socket->conn);
+		done(socket->conn);
 	}
 }
 

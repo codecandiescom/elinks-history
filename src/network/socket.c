@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.127 2005/04/11 19:17:00 jonas Exp $ */
+/* $Id: socket.c,v 1.128 2005/04/11 19:22:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,13 +367,13 @@ dns_found(void *data, int state)
 	 * XXX: Unify with @local_only handling? --pasky */
 	int silent_fail = 0;
 
-	if (state < 0) {
-		abort_conn_with_state(conn, S_NO_DNS);
-		return;
-	}
-
 	conn_socket = conn_info->socket;
 	assert(conn_socket);
+
+	if (state < 0) {
+		conn_socket->done(conn_socket->conn, S_NO_DNS);
+		return;
+	}
 
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
@@ -471,7 +471,7 @@ dns_found(void *data, int state)
 		    || errno == EINPROGRESS) {
 			/* It will take some more time... */
 			set_handlers(sock, NULL, connected, dns_exception, conn);
-			set_connection_state(conn, S_CONN);
+			conn_socket->set_state(conn_socket->conn, S_CONN);
 			return;
 		}
 
@@ -490,7 +490,7 @@ dns_found(void *data, int state)
 			 * process, but what matters is the last one because
 			 * we do not know the previous one's errno, and the
 			 * added complexity wouldn't really be worth it. */
-			abort_conn_with_state(conn, S_LOCAL_ONLY);
+			conn_socket->done(conn_socket->conn, S_LOCAL_ONLY);
 			return;
 		}
 
@@ -502,7 +502,7 @@ dns_found(void *data, int state)
 		else
 			state = S_DNS;
 
-		retry_conn_with_state(conn, state);
+		conn_socket->retry(conn_socket->conn, state);
 		return;
 	}
 

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.148 2005/04/11 22:55:46 jonas Exp $ */
+/* $Id: connect.c,v 1.149 2005/04/11 22:57:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -667,7 +667,7 @@ read_select(struct connection_socket *socket)
 	/* XXX: Should we call socket->set_timeout() as we do in write_select()?
 	 * --pasky */
 
-	clear_handlers(rb->socket->fd);
+	clear_handlers(socket->fd);
 
 	if (!rb->freespace) {
 		int size = RD_SIZE(rb, rb->len);
@@ -683,13 +683,13 @@ read_select(struct connection_socket *socket)
 	}
 
 #ifdef CONFIG_SSL
-	if (rb->socket->ssl) {
+	if (socket->ssl) {
 		rd = ssl_read(rb->socket, rb);
 		if (rd <= 0) return;
 	} else
 #endif
 	{
-		rd = safe_read(rb->socket->fd, rb->data + rb->len, rb->freespace);
+		rd = safe_read(socket->fd, rb->data + rb->len, rb->freespace);
 		if (rd <= 0) {
 			if (rb->close != READ_BUFFER_RETRY_ONCLOSE && !rd) {
 				rb->close = READ_BUFFER_END;

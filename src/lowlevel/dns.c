@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.61 2005/04/11 19:03:25 jonas Exp $ */
+/* $Id: dns.c,v 1.62 2005/04/11 20:51:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ struct dnsquery {
 #ifdef THREAD_SAFE_LOOKUP
 	struct dnsquery *next_in_queue;
 #endif
-	void (*fn)(void *, int);
+	dns_callback_T done;
 	void *data;
 	void (*xfn)(struct dnsquery *, int);
 	struct dnsquery **s;
@@ -325,7 +325,7 @@ static void
 end_dns_lookup(struct dnsquery *query, int res)
 {
 	struct dnsentry *dnsentry;
-	void (*fn)(void *, int);
+	void (*done)(void *, int);
 	void *data;
 	int namelen;
 
@@ -340,7 +340,7 @@ end_dns_lookup(struct dnsquery *query, int res)
 	}
 #endif
 
-	if (!query->fn || !query->addr) {
+	if (!query->done || !query->addr) {
 		if (query->addr) mem_free_set(&*query->addr, NULL);
 		mem_free(query);
 		return;
@@ -394,30 +394,30 @@ end_dns_lookup(struct dnsquery *query, int res)
 	}
 
 done:
-	fn = query->fn;
+	done = query->done;
 	data = query->data;
 
 	if (query->s) *query->s = NULL;
 	/* query->addr is freed later by dns_found() */
 	mem_free(query);
 
-	fn(data, res);
+	done(data, res);
 }
 
 int
 find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
-		   void **query_p, void (*fn)(void *, int), void *data)
+		   void **query_p, dns_callback_T done, void *data)
 {
 	struct dnsquery *query;
 	int namelen = strlen(name);
 
 	query = mem_calloc(1, sizeof(*query) + namelen);
 	if (!query) {
-		fn(data, -1);
+		done(data, -1);
 		return 0;
 	}
 
-	query->fn = fn;
+	query->done = done;
 	query->data = data;
 	query->s = (struct dnsquery **) query_p;
 	query->addr = addr;
@@ -432,7 +432,7 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 
 int
 find_host(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
-	  void **query_p, void (*fn)(void *, int), void *data)
+	  void **query_p, void (*done)(void *, int), void *data)
 {
 	struct dnsentry *dnsentry;
 
@@ -449,13 +449,13 @@ find_host(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
 			if (*addr) {
 				memcpy(*addr, dnsentry->addr, size);
 				*addrno = dnsentry->addrno;
-				fn(data, 0);
+				done(data, 0);
 			}
 			return 0;
 		}
 	}
 
-	return find_host_no_cache(name, addr, addrno, query_p, fn, data);
+	return find_host_no_cache(name, addr, addrno, query_p, done, data);
 }
 
 void
@@ -463,7 +463,7 @@ kill_dns_request(void **qp)
 {
 	struct dnsquery *query = *qp;
 
-	query->fn = NULL;
+	query->done = NULL;
 	failed_real_lookup(query);
 	*qp = NULL;
 }

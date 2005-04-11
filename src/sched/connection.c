@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.238 2005/04/11 20:28:25 jonas Exp $ */
+/* $Id: connection.c,v 1.239 2005/04/11 21:20:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1055,7 +1055,7 @@ connection_timeout(struct connection *conn)
 			return;
 		}
 
-		dns_found(conn, 0); /* jump to next addr */
+		dns_found(&conn->socket, 0); /* jump to next addr */
 
 		/* Reset the timeout if dns_found() started a new attempt to
 		 * connect. */

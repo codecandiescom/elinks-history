@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.137 2005/04/11 21:15:39 jonas Exp $ */
+/* $Id: connect.c,v 1.138 2005/04/11 21:20:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,7 +93,7 @@ dns_exception(void *data)
 
 	set_connection_state(conn, S_EXCEPT);
 	close_socket(NULL, /* XXX: Hack. Only FTP uses two sockets. */ &conn->socket);
-	dns_found(conn, 0);
+	dns_found(/* XXX: Hack. */ &conn->socket, 0);
 }
 
 static void
@@ -162,10 +162,14 @@ make_connection(struct connection *conn, struct connection_socket *socket,
 
 	if (conn->cache_mode >= CACHE_MODE_FORCE_RELOAD)
 		async = find_host_no_cache(host, &conn_info->addr, &conn_info->addrno,
-					   &conn_info->dnsquery, dns_found, conn);
+					   &conn_info->dnsquery,
+					   (dns_callback_T) dns_found,
+					   socket);
 	else
 		async = find_host(host, &conn_info->addr, &conn_info->addrno,
-				  &conn_info->dnsquery, dns_found, conn);
+				  &conn_info->dnsquery,
+				  (dns_callback_T) dns_found,
+				  socket);
 
 	mem_free(host);
 
@@ -349,11 +353,9 @@ check_if_local_address4(struct sockaddr_in *addr)
 
 
 void
-dns_found(void *data, int state)
+dns_found(struct connection_socket *conn_socket, int state)
 {
 	int sock = -1;
-	struct connection *conn = (struct connection *) data;
-	struct connection_socket *conn_socket = /* XXX: Temporary hack. */ &conn->socket;
 	struct conn_info *conn_info = conn_socket->conn_info;
 	int i;
 	int trno = conn_info->triedno;
@@ -467,7 +469,7 @@ dns_found(void *data, int state)
 #endif
 		    || errno == EINPROGRESS) {
 			/* It will take some more time... */
-			set_handlers(sock, NULL, connected, dns_exception, conn);
+			set_handlers(sock, NULL, connected, dns_exception, conn_socket->conn);
 			conn_socket->set_state(conn_socket->conn, S_CONN);
 			return;
 		}
@@ -541,7 +543,7 @@ connected(void *data)
 
 		/* There are maybe still some more candidates. */
 		close_socket(NULL, socket);
-		dns_found(conn, 0);
+		dns_found(socket, 0);
 		return;
 	}
 

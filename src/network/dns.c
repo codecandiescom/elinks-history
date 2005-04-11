@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.62 2005/04/11 20:51:04 jonas Exp $ */
+/* $Id: dns.c,v 1.63 2005/04/11 20:55:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,6 @@ struct dnsquery {
 #endif
 	dns_callback_T done;
 	void *data;
-	void (*xfn)(struct dnsquery *, int);
 	struct dnsquery **s;
 	/* addr and addrno lifespan exceeds life of this structure, the caller
 	 * holds memory being pointed upon be these functions. Thus, when
@@ -73,6 +72,8 @@ static struct dnsquery *dns_queue = NULL;
 #endif
 
 static INIT_LIST_HEAD(dns_cache);
+
+static void done_dns_lookup(struct dnsquery *query, int res);
 
 
 int
@@ -243,7 +244,7 @@ done:
 
 	clear_handlers(query->h);
 	close(query->h);
-	query->xfn(query, res);
+	done_dns_lookup(query, res);
 }
 
 static void
@@ -253,7 +254,7 @@ failed_real_lookup(void *data)
 
 	clear_handlers(query->h);
 	close(query->h);
-	query->xfn(query, -1);
+	done_dns_lookup(query, -1);
 }
 
 static int
@@ -279,7 +280,7 @@ do_lookup(struct dnsquery *query, int force_async)
 
 	/* sync lookup */
 	res = do_real_lookup(query->name, query->addr, query->addrno, 0);
-	query->xfn(query, res);
+	done_dns_lookup(query, res);
 
 	return 0;
 }
@@ -322,7 +323,7 @@ find_in_dns_cache(unsigned char *name)
 }
 
 static void
-end_dns_lookup(struct dnsquery *query, int res)
+done_dns_lookup(struct dnsquery *query, int res)
 {
 	struct dnsentry *dnsentry;
 	void (*done)(void *, int);
@@ -425,7 +426,6 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 	memcpy(query->name, name, namelen); /* calloc() sets nul char for us. */
 
 	if (query_p) *((struct dnsquery **) query_p) = query;
-	query->xfn = end_dns_lookup;
 
 	return do_queued_lookup(query);
 }

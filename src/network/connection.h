@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.100 2005/04/11 16:15:35 jonas Exp $ */
+/* $Id: connection.h,v 1.101 2005/04/11 16:35:00 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -141,6 +141,9 @@ struct connection_socket {
 	void *conn;
 
 	/* Callbacks to the connection management: */
+
+	/* Report change in the state of the socket. */
+	connection_socket_handler_T set_state;
 	/* Some system related error occured; advise to reconnect. */
 	connection_socket_handler_T retry;
 	/* A fatal error occured, like a memory allocation failure; advise to

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.144 2005/04/11 22:24:26 jonas Exp $ */
+/* $Id: socket.c,v 1.145 2005/04/11 22:34:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -737,7 +737,7 @@ alloc_read_buffer(struct connection *conn)
 #undef RD_SIZE
 
 void
-read_from_socket(struct connection *conn, struct connection_socket *socket,
+read_from_socket(struct connection_socket *socket,
 		 struct read_buffer *buffer,
 		 void (*done)(struct connection *, struct read_buffer *))
 {

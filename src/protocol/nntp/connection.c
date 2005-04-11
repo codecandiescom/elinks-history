@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.5 2005/02/28 14:19:43 zas Exp $ */
+/* $Id: connection.c,v 1.6 2005/04/11 22:34:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -256,7 +256,7 @@ read_nntp_data(struct connection *conn, struct read_buffer *rb)
 
 	case S_TRANS:
 	default:
-		read_from_socket(conn, &conn->socket, rb, read_nntp_data);
+		read_from_socket(&conn->socket, rb, read_nntp_data);
 		set_connection_state(conn, S_TRANS);
 	}
 }
@@ -278,7 +278,7 @@ nntp_got_response(struct connection *conn, struct read_buffer *rb)
 
 	switch (nntp->code) {
 	case NNTP_CODE_NONE:
-		read_from_socket(conn, &conn->socket, rb, nntp_got_response);
+		read_from_socket(&conn->socket, rb, nntp_got_response);
 		set_connection_state(conn, S_TRANS);
 		break;
 
@@ -333,7 +333,7 @@ nntp_get_response(struct connection *conn)
 	set_connection_timeout(conn);
 
 	rb->close = READ_BUFFER_END_ONCLOSE;
-	read_from_socket(conn, &conn->socket, rb, nntp_got_response);
+	read_from_socket(&conn->socket, rb, nntp_got_response);
 }
 
 

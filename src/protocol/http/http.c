@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.395 2005/04/11 21:15:39 jonas Exp $ */
+/* $Id: http.c,v 1.396 2005/04/11 22:34:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1035,7 +1035,7 @@ static void
 read_more_http_data(struct connection *conn, struct read_buffer *rb,
                     int already_got_anything)
 {
-	read_from_socket(conn, &conn->socket, rb, read_http_data);
+	read_from_socket(&conn->socket, rb, read_http_data);
 	if (already_got_anything)
 		set_connection_state(conn, S_TRANS);
 }
@@ -1376,7 +1376,7 @@ again:
 		return;
 	}
 	if (!a) {
-		read_from_socket(conn, &conn->socket, rb, http_got_header);
+		read_from_socket(&conn->socket, rb, http_got_header);
 		set_connection_state(conn, state);
 		return;
 	}
@@ -1756,5 +1756,5 @@ http_get_header(struct connection *conn)
 	if (!rb) return;
 	set_connection_timeout(conn);
 	rb->close = READ_BUFFER_END_ONCLOSE;
-	read_from_socket(conn, &conn->socket, rb, http_got_header);
+	read_from_socket(&conn->socket, rb, http_got_header);
 }

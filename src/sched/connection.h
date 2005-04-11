@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.95 2005/03/09 17:58:54 zas Exp $ */
+/* $Id: connection.h,v 1.96 2005/04/11 15:31:07 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -135,9 +135,11 @@ struct connection_socket {
 	int fd;
 
 	/* For connections using SSL this is in fact (ssl_t *), but we don't
-	 * want to know. Noone cares and ssl.h inclusion costs a lot of
-	 * compilation time. --pasky */
+	 * want to know. Noone cares and inclusion of SSL header files costs a
+	 * lot of compilation time. --pasky */
 	void *ssl;
+	unsigned int no_tls:1;
+
 };
 
 struct connection {
@@ -185,7 +187,6 @@ struct connection {
 	unsigned int running:1;
 	unsigned int unrestartable:1;
 	unsigned int detached:1;
-	unsigned int no_tls:1;
 
 	/* Each document is downloaded with some priority. When downloading a
 	 * document, the existing connections are checked to see if a

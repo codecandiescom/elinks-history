@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.86 2004/11/04 21:10:10 jonas Exp $ */
+/* $Id: connect.c,v 1.87 2005/04/11 15:31:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,7 +156,7 @@ ssl_want_read(struct connection *conn)
 
 	socket = conn_info->socket;
 
-	if (conn->no_tls)
+	if (socket->no_tls)
 		ssl_set_no_tls(socket);
 
 	switch (ssl_do_connect(socket)) {
@@ -176,7 +176,7 @@ ssl_want_read(struct connection *conn)
 			break;
 
 		default:
-			conn->no_tls = 1;
+			socket->no_tls = 1;
 			retry_conn_with_state(conn, S_SSL_ERROR);
 	}
 }
@@ -192,7 +192,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 		return -1;
 	}
 
-	if (conn->no_tls)
+	if (socket->no_tls)
 		ssl_set_no_tls(socket);
 
 #ifdef CONFIG_OPENSSL
@@ -251,7 +251,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 		default:
 			if (ret != SSL_ERROR_NONE) {
 				/* DBG("sslerr %s", gnutls_strerror(ret)); */
-				conn->no_tls = 1;
+				socket->no_tls = 1;
 			}
 
 			set_connection_state(conn, S_SSL_ERROR);

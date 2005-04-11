@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.156 2005/04/11 23:50:30 jonas Exp $ */
+/* $Id: socket.c,v 1.157 2005/04/11 23:56:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -572,7 +572,11 @@ struct write_buffer {
 static int
 generic_write(struct connection_socket *socket, unsigned char *data, int len)
 {
-	return safe_write(socket->fd, data, len);
+	int wr = safe_write(socket->fd, data, len);
+
+	if (!wr) return WRITE_BUFFER_CANT_WRITE;
+
+	return wr < 0 ? WRITE_BUFFER_SYSCALL_ERROR : wr;
 }
 
 static void
@@ -609,20 +613,36 @@ write_select(struct connection_socket *socket)
 	{
 		assert(wb->len - wb->pos > 0);
 		wr = generic_write(socket, wb->data + wb->pos, wb->len - wb->pos);
-		if (wr <= 0) {
-			socket->retry(socket->conn, wr ? -errno : S_CANT_WRITE);
-			return;
-		}
 	}
 
-	/*printf("wr: %d\n", wr);*/
-	wb->pos += wr;
-	if (wb->pos == wb->len) {
-		void (*done)(struct connection *) = wb->done;
+	switch (wr) {
+	case WRITE_BUFFER_CANT_WRITE:
+		socket->retry(socket->conn, S_CANT_WRITE);
+		break;
 
-		clear_handlers(socket->fd);
-		mem_free_set(&socket->buffer, NULL);
-		done(socket->conn);
+	case WRITE_BUFFER_SYSCALL_ERROR:
+		socket->retry(socket->conn, -errno);
+		break;
+
+	case WRITE_BUFFER_INTERNAL_ERROR:
+		/* The global errno variable is used for passing
+		 * internal connection_state error value. */
+		socket->done(socket->conn, -errno);
+		break;
+
+	default:
+		if (wr < 0) break;
+
+		/*printf("wr: %d\n", wr);*/
+		wb->pos += wr;
+
+		if (wb->pos == wb->len) {
+			void (*done)(struct connection *) = wb->done;
+
+			clear_handlers(socket->fd);
+			mem_free_set(&socket->buffer, NULL);
+			done(socket->conn);
+		}
 	}
 }
 

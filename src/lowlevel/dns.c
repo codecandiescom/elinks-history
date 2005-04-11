@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.59 2005/04/11 17:56:43 jonas Exp $ */
+/* $Id: dns.c,v 1.60 2005/04/11 18:09:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -310,12 +310,12 @@ do_queued_lookup(struct dnsquery *query)
 static struct dnsentry *
 find_in_dns_cache(unsigned char *name)
 {
-	struct dnsentry *e;
+	struct dnsentry *dnsentry;
 
-	foreach (e, dns_cache)
-		if (!strcasecmp(e->name, name)) {
-			move_to_top_of_list(dns_cache, e);
-			return e;
+	foreach (dnsentry, dns_cache)
+		if (!strcasecmp(dnsentry->name, name)) {
+			move_to_top_of_list(dns_cache, dnsentry);
+			return dnsentry;
 		}
 
 	return NULL;

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.119 2005/04/11 16:13:14 jonas Exp $ */
+/* $Id: connect.c,v 1.120 2005/04/11 16:21:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ close_socket(struct connection *conn, struct connection_socket *socket)
 {
 	if (socket->fd == -1) return;
 #ifdef CONFIG_SSL
-	if (conn && socket->ssl) ssl_close(conn, socket);
+	if (conn && socket->ssl) ssl_close(socket);
 #endif
 	close(socket->fd);
 	set_handlers(socket->fd, NULL, NULL, NULL, NULL);
@@ -589,7 +589,7 @@ write_select(struct connection *conn)
 
 #ifdef CONFIG_SSL
 	if (wb->socket->ssl) {
-		wr = ssl_write(conn, wb->socket, wb->data + wb->pos, wb->len - wb->pos);
+		wr = ssl_write(wb->socket, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) return;
 	} else
 #endif

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.93 2005/04/11 16:18:13 jonas Exp $ */
+/* $Id: connect.c,v 1.94 2005/04/11 16:21:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,8 +265,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 
 /* Return -1 on error, bytes written on success. */
 int
-ssl_write(struct connection *conn, struct connection_socket *socket,
-	  unsigned char *data, int len)
+ssl_write(struct connection_socket *socket, unsigned char *data, int len)
 {
 	int wr = ssl_do_write(socket, data, len);
 

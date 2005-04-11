@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.232 2005/04/04 12:33:30 jonas Exp $ */
+/* $Id: connection.c,v 1.233 2005/04/11 15:58:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,7 +236,12 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	conn->id = connection_id++;
 	conn->pri[priority] = 1;
 	conn->cache_mode = cache_mode;
+
 	conn->socket.fd = conn->data_socket.fd = -1;
+	conn->socket.conn = conn;
+	conn->socket.done = (connection_socket_handler_T) abort_conn_with_state;
+	conn->socket.retry = (connection_socket_handler_T) retry_conn_with_state;
+
 	conn->content_encoding = ENCODING_NONE;
 	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
 	conn->cgi_pipes[0] = conn->cgi_pipes[1] = -1;

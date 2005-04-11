@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.88 2005/04/11 15:39:18 jonas Exp $ */
+/* $Id: connect.c,v 1.89 2005/04/11 15:58:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,7 +164,7 @@ ssl_want_read(struct connection *conn)
 #ifdef CONFIG_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify")
 			    && gnutls_certificate_verify_peers(*((ssl_t *) socket->ssl))) {
-				retry_conn_with_state(conn, S_SSL_ERROR);
+				socket->retry(socket->conn, S_SSL_ERROR);
 				return;
 			}
 #endif
@@ -177,7 +177,7 @@ ssl_want_read(struct connection *conn)
 
 		default:
 			socket->no_tls = 1;
-			retry_conn_with_state(conn, S_SSL_ERROR);
+			socket->retry(socket->conn, S_SSL_ERROR);
 	}
 }
 
@@ -188,7 +188,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 	int ret;
 
 	if (init_ssl_connection(&conn->socket) == S_SSL_ERROR) {
-		abort_conn_with_state(conn, S_SSL_ERROR);
+		socket->done(socket->conn, S_SSL_ERROR);
 		return -1;
 	}
 
@@ -287,9 +287,9 @@ ssl_write(struct connection *conn, struct connection_socket *socket,
 			   : S_CANT_WRITE;
 
 		if (!wr || err == SSL_ERROR_SYSCALL)
-			retry_conn_with_state(conn, state);
+			socket->retry(socket->conn, state);
 		else
-			abort_conn_with_state(conn, state);
+			socket->done(socket->conn, state);
 
 		return -1;
 	}
@@ -335,9 +335,9 @@ ssl_read(struct connection *conn, struct connection_socket *socket,
 		/* mem_free(rb); */
 
 		if (!rd || err == SSL_ERROR_SYSCALL2)
-			retry_conn_with_state(conn, state);
+			socket->retry(socket->conn, state);
 		else
-			abort_conn_with_state(conn, state);
+			socket->done(socket->conn, state);
 
 		return -1;
 	}

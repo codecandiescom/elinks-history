@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.98 2005/04/11 15:40:18 jonas Exp $ */
+/* $Id: connection.h,v 1.99 2005/04/11 15:58:00 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -130,9 +130,21 @@ struct progress {
 	int data_in_secs[CURRENT_SPD_SEC];
 };
 
+typedef void (*connection_socket_handler_T)(void *, enum connection_state);
+
 struct connection_socket {
 	/* The socket descriptor */
 	int fd;
+
+	/* Information for resolving the connection with which the socket is
+	 * associated. */
+	void *conn;
+
+	/* Callbacks to the connection management: */
+	/* Some system related error occured; advise to reconnect. */
+	connection_socket_handler_T retry;
+	/* A fatal error occured; advise to abort the connection. */
+	connection_socket_handler_T done;
 
 	/* For connections using SSL this is in fact (ssl_t *), but we don't
 	 * want to know. Noone cares and inclusion of SSL header files costs a

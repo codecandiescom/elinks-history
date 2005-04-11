@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.89 2005/04/11 15:58:00 jonas Exp $ */
+/* $Id: socket.c,v 1.90 2005/04/11 16:04:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,20 +276,21 @@ ssl_write(struct connection *conn, struct connection_socket *socket,
 #elif defined(CONFIG_GNUTLS)
 		int err = wr;
 #endif
-		enum connection_state state;
-
 		if (err == SSL_ERROR_WANT_WRITE ||
 		    err == SSL_ERROR_WANT_WRITE2) {
 			return -1;
 		}
 
-		state = wr ? (err == SSL_ERROR_SYSCALL ? -errno : S_SSL_ERROR)
-			   : S_CANT_WRITE;
+		if (!wr) {
+			socket->retry(conn, S_CANT_WRITE);
+			return -1;
+		}
 
-		if (!wr || err == SSL_ERROR_SYSCALL)
-			socket->retry(socket->conn, state);
-		else
-			socket->done(socket->conn, state);
+		if (err == SSL_ERROR_SYSCALL) {
+			socket->retry(conn, -errno);
+		} else {
+			socket->done(conn, S_SSL_ERROR);
+		}
 
 		return -1;
 	}

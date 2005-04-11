@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.91 2005/04/11 16:05:02 zas Exp $ */
+/* $Id: connect.c,v 1.92 2005/04/11 16:14:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,14 +282,14 @@ ssl_write(struct connection *conn, struct connection_socket *socket,
 		}
 
 		if (!wr) {
-			socket->retry(conn, S_CANT_WRITE);
+			socket->retry(socket->conn, S_CANT_WRITE);
 			return -1;
 		}
 
 		if (err == SSL_ERROR_SYSCALL) {
-			socket->retry(conn, -errno);
+			socket->retry(socket->conn, -errno);
 		} else {
-			socket->done(conn, S_SSL_ERROR);
+			socket->done(socket->conn, S_SSL_ERROR);
 		}
 
 		return -1;

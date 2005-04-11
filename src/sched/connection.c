@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.234 2005/04/11 16:35:00 jonas Exp $ */
+/* $Id: connection.c,v 1.235 2005/04/11 17:16:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,9 +356,9 @@ free_connection_data(struct connection *conn)
 	if_assert_failed active_connections = 0;
 
 	if (conn->socket.fd != -1)
-		set_handlers(conn->socket.fd, NULL, NULL, NULL, NULL);
+		clear_handlers(conn->socket.fd);
 	if (conn->data_socket.fd != -1)
-		set_handlers(conn->data_socket.fd, NULL, NULL, NULL, NULL);
+		clear_handlers(conn->data_socket.fd);
 	close_socket(NULL, &conn->data_socket);
 
 	/* XXX: See also protocol/http/http.c:decompress_shutdown(). */

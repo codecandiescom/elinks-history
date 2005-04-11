@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.33 2005/03/27 21:58:11 miciah Exp $ */
+/* $Id: os2.c,v 1.34 2005/04/11 17:16:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,7 +109,7 @@ handle_terminal_resize(int fd, void (*fn)())
 void
 unhandle_terminal_resize(int fd)
 {
-	set_handlers(winch_pipe[0], NULL, NULL, NULL, NULL);
+	clear_handlers(winch_pipe[0]);
 }
 
 void
@@ -585,7 +585,7 @@ unhandle_mouse(void *om)
 
 	want_draw();
 	oms->terminate = 1;
-	set_handlers(oms->p[0], NULL, NULL, NULL, NULL);
+	clear_handlers(oms->p[0]);
 	close(oms->p[0]);
 	done_draw();
 }

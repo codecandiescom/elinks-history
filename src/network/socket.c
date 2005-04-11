@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.121 2005/04/11 16:45:56 jonas Exp $ */
+/* $Id: socket.c,v 1.122 2005/04/11 17:16:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ close_socket(struct connection *conn, struct connection_socket *socket)
 	if (conn && socket->ssl) ssl_close(socket);
 #endif
 	close(socket->fd);
-	set_handlers(socket->fd, NULL, NULL, NULL, NULL);
+	clear_handlers(socket->fd);
 	socket->fd = -1;
 }
 
@@ -373,7 +373,7 @@ dns_found(void *data, int state)
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
 	if (conn_info->socket && conn_info->socket->fd >= 0)
-		set_handlers(conn_info->socket->fd, NULL, NULL, NULL, conn);
+		clear_handlers(conn_info->socket->fd);
 
 	for (i = conn_info->triedno + 1; i < conn_info->addrno; i++) {
 #ifdef CONFIG_IPV6
@@ -607,7 +607,7 @@ write_select(struct connection *conn)
 		void (*f)(struct connection *) = wb->done;
 
 		conn->buffer = NULL;
-		set_handlers(wb->socket->fd, NULL, NULL, NULL, NULL);
+		clear_handlers(wb->socket->fd);
 		mem_free(wb);
 		f(conn);
 	}
@@ -659,7 +659,7 @@ read_select(struct connection *conn)
 	/* XXX: Should we set_connection_timeout() as we do in write_select()?
 	 * --pasky */
 
-	set_handlers(rb->socket->fd, NULL, NULL, NULL, NULL);
+	clear_handlers(rb->socket->fd);
 
 	if (!rb->freespace) {
 		int size = RD_SIZE(rb, rb->len);

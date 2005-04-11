@@ -1,4 +1,4 @@
-/* $Id: select.h,v 1.13 2005/03/04 10:21:12 zas Exp $ */
+/* $Id: select.h,v 1.14 2005/04/11 17:16:18 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_SELECT_H
 #define EL__LOWLEVEL_SELECT_H
@@ -21,6 +21,7 @@ void check_bottom_halves(void);
 
 void *get_handler(int, int);
 void set_handlers(int, void (*)(void *), void (*)(void *), void (*)(void *), void *);
+#define clear_handlers(fd) set_handlers(fd, NULL, NULL, NULL, NULL)
 
 int can_read(int fd);
 int can_write(int fd);

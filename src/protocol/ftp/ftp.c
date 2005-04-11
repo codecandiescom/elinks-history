@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.215 2005/04/05 12:01:50 jonas Exp $ */
+/* $Id: ftp.c,v 1.216 2005/04/11 17:16:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1227,7 +1227,7 @@ ftp_data_accept(struct connection *conn)
 
 	c_i->has_data = 1;
 
-	set_handlers(conn->data_socket.fd, NULL, NULL, NULL, NULL);
+	clear_handlers(conn->data_socket.fd);
 
 	if ((conn->protocol_family != 1 && c_i->use_pasv)
 #ifdef CONFIG_IPV6
@@ -1376,7 +1376,7 @@ out_of_mem:
 
 	if (c_i->dir) ADD_CONST("</pre>\n<hr>\n</body>\n</html>");
 
-	set_handlers(conn->data_socket.fd, NULL, NULL, NULL, NULL);
+	clear_handlers(conn->data_socket.fd);
 	close_socket(NULL, &conn->data_socket);
 
 	if (c_i->conn_state == 1) {

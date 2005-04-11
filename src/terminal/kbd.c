@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.124 2005/03/04 18:33:24 zas Exp $ */
+/* $Id: kbd.c,v 1.125 2005/04/11 17:16:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -392,10 +392,10 @@ free_trm(struct itrm *itrm)
 	send_done_sequence(itrm->std_out,itrm->altscreen);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 
-	set_handlers(itrm->std_in, NULL, NULL, NULL, NULL);
-	set_handlers(itrm->sock_in, NULL, NULL, NULL, NULL);
-	set_handlers(itrm->std_out, NULL, NULL, NULL, NULL);
-	set_handlers(itrm->sock_out, NULL, NULL, NULL, NULL);
+	clear_handlers(itrm->std_in);
+	clear_handlers(itrm->sock_in);
+	clear_handlers(itrm->std_out);
+	clear_handlers(itrm->sock_out);
 
 	kill_timer(&itrm->timer);
 

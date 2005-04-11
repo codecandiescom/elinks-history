@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.149 2005/04/11 22:57:18 jonas Exp $ */
+/* $Id: socket.c,v 1.150 2005/04/11 22:59:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,6 @@ init_connection_info(struct uri *uri, struct connection_socket *socket,
 	if (!conn_info) return NULL;
 
 	conn_info->done = done;
-	conn_info->socket = socket;
 	conn_info->port = get_uri_port(uri);
 	conn_info->ip_family = uri->ip_family;
 	conn_info->need_ssl = get_protocol_need_ssl(uri->protocol);

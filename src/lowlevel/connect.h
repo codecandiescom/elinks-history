@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.39 2005/04/11 22:55:46 jonas Exp $ */
+/* $Id: connect.h,v 1.40 2005/04/11 22:59:43 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -16,8 +16,6 @@ struct conn_info {
 	struct sockaddr_storage *addr; /* array of addresses */
 
 	void (*done)(struct connection *);
-
-	struct connection_socket *socket;
 
 	void *dnsquery;
 

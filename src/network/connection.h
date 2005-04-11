@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.97 2005/04/11 15:39:18 jonas Exp $ */
+/* $Id: connection.h,v 1.98 2005/04/11 15:40:18 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -133,10 +133,6 @@ struct progress {
 struct connection_socket {
 	/* The socket descriptor */
 	int fd;
-
-	void *data;
-	void (*retry)(void *, enum connection_state);
-	void (*done)(void *, enum connection_state);
 
 	/* For connections using SSL this is in fact (ssl_t *), but we don't
 	 * want to know. Noone cares and inclusion of SSL header files costs a

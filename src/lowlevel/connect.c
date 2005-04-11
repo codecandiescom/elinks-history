@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.142 2005/04/11 22:16:39 jonas Exp $ */
+/* $Id: connect.c,v 1.143 2005/04/11 22:23:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,7 +174,7 @@ make_connection(struct connection *conn, struct connection_socket *socket,
 
 	mem_free(host);
 
-	if (async) set_connection_state(conn, S_DNS);
+	if (async) socket->set_state(socket->conn, S_DNS);
 }
 
 
@@ -540,7 +540,7 @@ connected(void *data)
 	}
 
 	if (err > 0) {
-		set_connection_state(conn, -err);
+		socket->set_state(socket->conn, -err);
 
 		/* There are maybe still some more candidates. */
 		close_socket(socket);

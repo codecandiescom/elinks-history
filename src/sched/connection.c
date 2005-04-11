@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.236 2005/04/11 18:07:44 jonas Exp $ */
+/* $Id: connection.c,v 1.237 2005/04/11 18:31:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -487,7 +487,7 @@ init_keepalive_connection(struct connection *conn, time_T timeout,
 
 	keep_conn->uri = get_uri_reference(uri);
 	keep_conn->done = done;
-	keep_conn->protocol_family = conn->protocol_family;
+	keep_conn->protocol_family = conn->socket.protocol_family;
 	keep_conn->socket = conn->socket.fd;
 	keep_conn->timeout = timeout;
 	keep_conn->add_time = get_time();
@@ -517,7 +517,7 @@ has_keepalive_connection(struct connection *conn)
 	if (!keep_conn) return 0;
 
 	conn->socket.fd = keep_conn->socket;
-	conn->protocol_family = keep_conn->protocol_family;
+	conn->socket.protocol_family = keep_conn->protocol_family;
 
 	/* Mark that the socket should not be closed and the callback should be
 	 * ignored. */

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.216 2005/04/11 17:16:18 jonas Exp $ */
+/* $Id: ftp.c,v 1.217 2005/04/11 18:31:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -602,7 +602,7 @@ get_ftp_data_socket(struct connection *conn, struct string *command)
 #ifdef CONFIG_IPV6
 	c_i->use_epsv = get_opt_bool("protocol.ftp.use_epsv");
 
-	if (conn->protocol_family == 1) {
+	if (conn->socket.protocol_family == 1) {
 		if (c_i->use_epsv) {
 			add_to_string(command, "EPSV");
 
@@ -1229,9 +1229,9 @@ ftp_data_accept(struct connection *conn)
 
 	clear_handlers(conn->data_socket.fd);
 
-	if ((conn->protocol_family != 1 && c_i->use_pasv)
+	if ((conn->socket.protocol_family != 1 && c_i->use_pasv)
 #ifdef CONFIG_IPV6
-	    || (conn->protocol_family == 1 && c_i->use_epsv)
+	    || (conn->socket.protocol_family == 1 && c_i->use_epsv)
 #endif
 	   ) {
 		newsock = conn->data_socket.fd;

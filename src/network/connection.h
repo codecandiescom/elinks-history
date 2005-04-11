@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.102 2005/04/11 18:07:44 jonas Exp $ */
+/* $Id: connection.h,v 1.103 2005/04/11 18:31:49 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -154,6 +154,8 @@ struct connection_socket {
 	 * want to know. Noone cares and inclusion of SSL header files costs a
 	 * lot of compilation time. --pasky */
 	void *ssl;
+
+	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
 	unsigned int no_tls:1;
 
 };
@@ -198,7 +200,6 @@ struct connection {
 	int cgi_pipes[2];
 	int stream_pipes[2];
 
-	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
 	unsigned int running:1;
 	unsigned int unrestartable:1;
 	unsigned int detached:1;

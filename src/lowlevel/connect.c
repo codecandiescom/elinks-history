@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.125 2005/04/11 18:26:33 jonas Exp $ */
+/* $Id: connect.c,v 1.126 2005/04/11 18:31:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -451,14 +451,14 @@ dns_found(void *data, int state)
 
 #ifdef CONFIG_IPV6
 		if (addr.sin6_family == AF_INET6) {
-			conn->protocol_family = 1;
+			conn_socket->protocol_family = 1;
 			if (connect(sock, (struct sockaddr *) &addr,
 					sizeof(struct sockaddr_in6)) == 0)
 				break;
 		} else
 #endif
 		{
-			conn->protocol_family = 0;
+			conn_socket->protocol_family = 0;
 			if (connect(sock, (struct sockaddr *) &addr,
 					sizeof(struct sockaddr_in)) == 0)
 				break; /* success */

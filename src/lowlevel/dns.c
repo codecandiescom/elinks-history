@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.58 2005/04/11 17:16:18 jonas Exp $ */
+/* $Id: dns.c,v 1.59 2005/04/11 17:56:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,18 +307,18 @@ do_queued_lookup(struct dnsquery *query)
 #endif
 }
 
-static int
-find_in_dns_cache(unsigned char *name, struct dnsentry **dnsentry)
+static struct dnsentry *
+find_in_dns_cache(unsigned char *name)
 {
 	struct dnsentry *e;
 
 	foreach (e, dns_cache)
 		if (!strcasecmp(e->name, name)) {
 			move_to_top_of_list(dns_cache, e);
-			*dnsentry = e;
-			return 0;
+			return e;
 		}
-	return -1;
+
+	return NULL;
 }
 
 static void
@@ -346,9 +346,9 @@ end_dns_lookup(struct dnsquery *query, int res)
 		return;
 	}
 
-	if (find_in_dns_cache(query->name, &dnsentry) >= 0) {
-		assert(dnsentry);
-
+	
+	dnsentry = find_in_dns_cache(query->name);
+	if (dnsentry) {
 		if (res < 0) {
 			int size;
 			/* query->addr(no) is pointer to something already allocated */
@@ -438,7 +438,8 @@ find_host(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
 
 	if (query_p) *query_p = NULL;
 
-	if (find_in_dns_cache(name, &dnsentry) >= 0) {
+	dnsentry = find_in_dns_cache(name);
+	if (dnsentry) {
 		assert(dnsentry && dnsentry->addrno > 0);
 
 		if (dnsentry->get_time + DNS_TIMEOUT >= get_time()) {

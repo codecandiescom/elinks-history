@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.128 2005/04/11 19:22:31 jonas Exp $ */
+/* $Id: socket.c,v 1.129 2005/04/11 19:30:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,7 +92,7 @@ dns_exception(void *data)
 	struct connection *conn = data;
 
 	set_connection_state(conn, S_EXCEPT);
-	close_socket(NULL, conn->conn_info->socket);
+	close_socket(NULL, /* XXX: Hack. Only FTP uses two sockets. */ &conn->socket);
 	dns_found(conn, 0);
 }
 

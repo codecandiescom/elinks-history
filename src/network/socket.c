@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.154 2005/04/11 23:32:11 jonas Exp $ */
+/* $Id: socket.c,v 1.155 2005/04/11 23:32:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -569,6 +569,12 @@ struct write_buffer {
 	unsigned char data[1]; /* must be at end of struct */
 };
 
+int
+generic_write(struct connection_socket *socket, unsigned char *data, int len)
+{
+	return safe_write(socket->fd, wb->data + wb->pos, wb->len - wb->pos);
+}
+
 static void
 write_select(struct connection_socket *socket)
 {
@@ -602,7 +608,7 @@ write_select(struct connection_socket *socket)
 #endif
 	{
 		assert(wb->len - wb->pos > 0);
-		wr = safe_write(socket->fd, wb->data + wb->pos, wb->len - wb->pos);
+		wr = generic_write(socket->fd, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) {
 			socket->retry(socket->conn, wr ? -errno : S_CANT_WRITE);
 			return;

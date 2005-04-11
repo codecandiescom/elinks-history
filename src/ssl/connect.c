@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.92 2005/04/11 16:14:38 jonas Exp $ */
+/* $Id: connect.c,v 1.93 2005/04/11 16:18:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -347,7 +347,7 @@ ssl_read(struct connection *conn, struct connection_socket *socket,
 }
 
 int
-ssl_close(struct connection *conn, struct connection_socket *socket)
+ssl_close(struct connection_socket *socket)
 {
 	ssl_do_close(socket);
 	done_ssl_connection(socket);

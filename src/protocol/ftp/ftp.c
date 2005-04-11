@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.217 2005/04/11 18:31:49 jonas Exp $ */
+/* $Id: ftp.c,v 1.218 2005/04/11 21:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1377,7 +1377,7 @@ out_of_mem:
 	if (c_i->dir) ADD_CONST("</pre>\n<hr>\n</body>\n</html>");
 
 	clear_handlers(conn->data_socket.fd);
-	close_socket(NULL, &conn->data_socket);
+	close_socket(&conn->data_socket);
 
 	if (c_i->conn_state == 1) {
 		ftp_end_request(conn, S_OK);

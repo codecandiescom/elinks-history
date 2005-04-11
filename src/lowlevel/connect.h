@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.35 2005/04/11 21:20:49 jonas Exp $ */
+/* $Id: connect.h,v 1.36 2005/04/11 21:35:41 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -62,7 +62,7 @@ init_connection_info(struct uri *uri, struct connection_socket *socket,
 void done_connection_info(struct connection_socket *socket);
 
 
-void close_socket(struct connection *conn, struct connection_socket *socket);
+void close_socket(struct connection_socket *socket);
 
 /* Establish connection with the host in @conn->uri. Storing the socket
  * descriptor in @socket. When the connection has been established the @done

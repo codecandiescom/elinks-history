@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.138 2005/04/11 21:20:49 jonas Exp $ */
+/* $Id: connect.c,v 1.139 2005/04/11 21:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,11 +75,11 @@ debug_transfer_log(unsigned char *data, int len)
 static void connected(/* struct connection */ void *);
 
 void
-close_socket(struct connection *conn, struct connection_socket *socket)
+close_socket(struct connection_socket *socket)
 {
 	if (socket->fd == -1) return;
 #ifdef CONFIG_SSL
-	if (conn && socket->ssl) ssl_close(socket);
+	if (socket->ssl) ssl_close(socket);
 #endif
 	close(socket->fd);
 	clear_handlers(socket->fd);
@@ -92,7 +92,7 @@ dns_exception(void *data)
 	struct connection *conn = data;
 
 	set_connection_state(conn, S_EXCEPT);
-	close_socket(NULL, /* XXX: Hack. Only FTP uses two sockets. */ &conn->socket);
+	close_socket(/* XXX: Hack. Only FTP uses two sockets. */ &conn->socket);
 	dns_found(/* XXX: Hack. */ &conn->socket, 0);
 }
 
@@ -542,7 +542,7 @@ connected(void *data)
 		set_connection_state(conn, -err);
 
 		/* There are maybe still some more candidates. */
-		close_socket(NULL, socket);
+		close_socket(socket);
 		dns_found(socket, 0);
 		return;
 	}

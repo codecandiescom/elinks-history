@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.60 2005/04/11 18:09:35 jonas Exp $ */
+/* $Id: dns.c,v 1.61 2005/04/11 19:03:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ struct dnsquery {
 static struct dnsquery *dns_queue = NULL;
 #endif
 
-INIT_LIST_HEAD(dns_cache);
+static INIT_LIST_HEAD(dns_cache);
 
 
 int

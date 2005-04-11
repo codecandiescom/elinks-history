@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.131 2005/04/11 20:20:44 jonas Exp $ */
+/* $Id: connect.c,v 1.132 2005/04/11 20:22:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,13 +125,11 @@ done_connection_info(struct connection *conn)
 {
 	struct conn_info *conn_info = conn->conn_info;
 
-	conn->conn_info = NULL;
-
 	if (conn_info->dnsquery) kill_dns_request(&conn_info->dnsquery);
 	if (conn_info->done) conn_info->done(conn);
 
 	mem_free_if(conn_info->addr);
-	mem_free_set(&conn_info, NULL);
+	mem_free_set(&conn->conn_info, NULL);
 }
 
 void

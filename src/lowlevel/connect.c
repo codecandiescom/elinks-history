@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.140 2005/04/11 21:44:40 jonas Exp $ */
+/* $Id: connect.c,v 1.141 2005/04/11 21:58:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ void
 dns_exception(void *data)
 {
 	struct connection *conn = data;
-	struct connection_socket *socket = /* XXX: Hack. Only FTP uses two sockets. */ &conn->socket
+	struct connection_socket *socket = /* XXX: Hack. Only FTP uses two sockets. */ &conn->socket;
 
 	socket->set_state(socket->conn, S_EXCEPT);
 	close_socket(socket);
@@ -574,8 +574,8 @@ struct write_buffer {
 static void
 write_select(struct connection *conn)
 {
-	struct write_buffer *wb = conn->buffer;
-	struct connection_socket *socket = wb->socket;
+	struct connection_socket *socket = &conn->socket;
+	struct write_buffer *wb = socket->buffer;
 	int wr;
 
 	assertm(wb, "write socket has no buffer");
@@ -617,9 +617,8 @@ write_select(struct connection *conn)
 	if (wb->pos == wb->len) {
 		void (*f)(struct connection *) = wb->done;
 
-		conn->buffer = NULL;
 		clear_handlers(wb->socket->fd);
-		mem_free(wb);
+		mem_free_set(&socket->buffer, NULL);
 		f(conn);
 	}
 }
@@ -646,7 +645,7 @@ write_to_socket(struct connection *conn, struct connection_socket *socket,
 	wb->pos = 0;
 	wb->done = done;
 	memcpy(wb->data, data, len);
-	mem_free_set(&conn->buffer, wb);
+	mem_free_set(&socket->buffer, wb);
 	set_handlers(socket->fd, NULL, (void *) write_select, (void *) exception, conn);
 }
 
@@ -657,8 +656,8 @@ write_to_socket(struct connection *conn, struct connection_socket *socket,
 static void
 read_select(struct connection *conn)
 {
-	struct read_buffer *rb = conn->buffer;
-	struct connection_socket *socket = rb->socket;
+	struct connection_socket *socket = &conn->socket;
+	struct read_buffer *rb = socket->buffer;
 	int rd;
 
 	assertm(rb, "read socket has no buffer");
@@ -682,7 +681,7 @@ read_select(struct connection *conn)
 		}
 		rb->freespace = size - sizeof(*rb) - rb->len;
 		assert(rb->freespace > 0);
-		conn->buffer = rb;
+		socket->buffer = rb;
 	}
 
 #ifdef CONFIG_SSL
@@ -742,11 +741,11 @@ read_from_socket(struct connection *conn, struct connection_socket *socket,
 	buffer->done = done;
 	buffer->socket = socket;
 
-	if (conn->buffer && buffer != conn->buffer)
-		mem_free(conn->buffer);
-	conn->buffer = buffer;
+	if (socket->buffer && buffer != socket->buffer)
+		mem_free(socket->buffer);
+	socket->buffer = buffer;
 
-	set_handlers(socket->fd, (void *) read_select, NULL, (void *) exception, conn);
+	set_handlers(socket->fd, (void *) read_select, NULL, (void *) exception, socket->conn);
 }
 
 void

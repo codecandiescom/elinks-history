@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.145 2005/04/11 22:34:23 jonas Exp $ */
+/* $Id: connect.c,v 1.146 2005/04/11 22:39:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -627,7 +627,7 @@ write_select(struct connection *conn)
 }
 
 void
-write_to_socket(struct connection *conn, struct connection_socket *socket,
+write_to_socket(struct connection_socket *socket,
 		unsigned char *data, int len, void (*done)(struct connection *))
 {
 	struct write_buffer *wb;
@@ -649,7 +649,7 @@ write_to_socket(struct connection *conn, struct connection_socket *socket,
 	wb->done = done;
 	memcpy(wb->data, data, len);
 	mem_free_set(&socket->buffer, wb);
-	set_handlers(socket->fd, NULL, (void *) write_select, (void *) exception, conn);
+	set_handlers(socket->fd, NULL, (void *) write_select, (void *) exception, socket->conn);
 }
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */

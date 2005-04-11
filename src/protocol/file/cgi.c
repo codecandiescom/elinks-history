@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.89 2005/04/11 22:34:23 jonas Exp $ */
+/* $Id: cgi.c,v 1.90 2005/04/11 22:39:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ send_post_data(struct connection *conn)
 	 * close_pipe_and_read(). */
 	conn->data_socket.fd = conn->cgi_pipes[1];
 
-	write_to_socket(conn, &conn->data_socket, data.source, data.length, close_pipe_and_read);
+	write_to_socket(&conn->data_socket, data.source, data.length, close_pipe_and_read);
 
 	done_string(&data);
 	set_connection_state(conn, S_SENT);

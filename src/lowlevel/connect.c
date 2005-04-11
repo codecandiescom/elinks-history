@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.126 2005/04/11 18:31:49 jonas Exp $ */
+/* $Id: connect.c,v 1.127 2005/04/11 19:17:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,6 +481,8 @@ dns_found(void *data, int state)
 	}
 
 	if (i >= conn_info->addrno) {
+		enum connection_state state;
+
 		/* Tried everything, but it didn't help :(. */
 
 		if (only_local && !saved_errno && at_least_one_remote_ip) {
@@ -492,11 +494,15 @@ dns_found(void *data, int state)
 			return;
 		}
 
-		/* We set new state only if we already tried something new. */
+		/* Retry reporting the errno state only if we already tried
+		 * something new. Else use the S_DNS _progress_ state to make
+		 * sure that no download callbacks will report any errors. */
 		if (trno != conn_info->triedno && !silent_fail)
-			set_connection_state(conn, -errno);
+			state = -errno;
+		else
+			state = S_DNS;
 
-		retry_connection(conn);
+		retry_conn_with_state(conn, state);
 		return;
 	}
 

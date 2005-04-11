@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.41 2005/04/11 23:09:46 jonas Exp $ */
+/* $Id: connect.h,v 1.42 2005/04/11 23:12:02 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -23,7 +23,7 @@ struct conn_info {
 	int triedno; /* index of last tried address */
 	int port;
 	int ip_family; /* If non-zero, use the indicated IP version. */
-	unsigned int need_ssl;
+	unsigned int need_ssl:1;
 };
 
 enum read_buffer_close {

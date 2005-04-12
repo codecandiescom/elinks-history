@@ -1,3 +1,421 @@
+Tue Apr 12 22:09:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+
+	dns_exception(): Make it explicit that it takes socket parameter
+	because it is exported.  
+
+Tue Apr 12 21:54:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.h:
+
+	Rearrange type declarations.  
+
+Tue Apr 12 21:49:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
+	sched/connection.h, ssl/connect.c, ssl/connect.h, ssl/ssl.c,
+	ssl/ssl.h:
+
+	connection_socket -> socket 
+
+Tue Apr 12 21:24:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Oops, compile fix.  
+
+Tue Apr 12 21:18:45 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	read_http_data(): Move S_HTTP_ERROR failing to default label and
+	assert the @ret value.  
+
+Tue Apr 12 21:11:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+
+	SOCKET_WANT_READ -> SOCKET_SSL_WANT_READ.  
+
+Tue Apr 12 20:41:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/file/cgi.c,
+	protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	read_from_socket(): Reset the connection timout. Remove unneeded
+	calls to set_connection_timeout().  
+
+Tue Apr 12 20:32:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	http_send_header(): Use http_end_request() instead of
+	abort_conn_with_state().  
+
+Tue Apr 12 20:27:37 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	write_to_socket(): Take connection_state varible which will be set
+	if write is successfully started. This is much safer since
+	write_to_socket() on error could have removed the @conn variable
+	from under all callers.  
+
+Tue Apr 12 20:16:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/file/cgi.c,
+	protocol/ftp/ftp.c, protocol/nntp/connection.c:
+
+	Make write_to_connection() reset the connection timout. Remove
+	unneeded calls to set_connection_timeout().  
+
+Tue Apr 12 20:08:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/gopher/gopher.c:
+
+	gopher_protocol_handler(): Move code from default port label to be
+	rather the fallback code.  
+
+Tue Apr 12 20:05:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	Make make_connection() take care of resetting the connection timout.
+	Move a few set_connection_timeout() calls closer to the action.  
+
+Tue Apr 12 18:31:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/select.h:
+
+	m33p.  
+
+Tue Apr 12 18:29:54 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/select.c:
+
+	More select_handler_T usage.  
+
+Tue Apr 12 18:26:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/select.c, lowlevel/select.h, terminal/kbd.c:
+
+	enum select_handler_type: H_ -> SELECT_HANDLER_.  
+
+Tue Apr 12 18:21:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: select.c, select.h:
+
+	Move H_* types to enum select_handler_type.  
+
+Tue Apr 12 18:12:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: select.c, select.h:
+
+	get_handler(): Return select_handler_T.  
+
+Tue Apr 12 18:08:13 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/select.h:
+
+	Describe the select interface.  
+
+Tue Apr 12 17:50:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/select.h, osdep/os2/os2.c,
+	osdep/unix/unix.c, protocol/ftp/ftp.c, protocol/smb/smb.c,
+	ssl/connect.c, terminal/kbd.c, terminal/terminal.c:
+
+	Introduce select_handler_T so make casts more readable.  
+
+Tue Apr 12 17:37:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	SSL don't need DNS header.  
+
+Tue Apr 12 17:34:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c:
+
+	ssl_want_read(): Simplify but add assertion in
+	done_connection_info() to be save.  
+
+Tue Apr 12 17:13:38 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.h, sched/connection.h:
+
+	struct connection: Rearrange a few members. Use connection_state
+	also for prev_error member.  
+
+Tue Apr 12 16:58:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/http/http.c, ssl/ssl.c, ssl/ssl.h:
+
+	get_ssl_connection_cipher(): Take connection_socket.  
+
+Tue Apr 12 16:53:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.h, sched/connection.h, ssl/ssl.c:
+
+	Move connection_socket to lowlevel/connect.h. The split is not very
+	clean.  
+
+Tue Apr 12 16:47:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/file/cgi.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c, protocol/smb/smb.c, sched/connection.c,
+	sched/connection.h, ssl/ssl.c:
+
+	Make connection socket members allocated.  
+
+Tue Apr 12 16:01:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/ftp/ftp.c, sched/connection.h:
+
+	Move connection->read_func to connection_socket->read_done.  
+
+Tue Apr 12 15:48:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	get_resp(): Reset the connection timeout like all other similar
+	functions do. Make it explicit that we should retry on close. (it's
+	enum value is zero and alloc_read_buffer() uses calloc() but better
+	not depend on that).  
+
+Tue Apr 12 15:38:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.h:
+
+	Make socket_error descriptions more readable.  
+
+Tue Apr 12 15:35:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Minor simplification. The branch returns after the #endif.  
+
+Tue Apr 12 14:45:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	free_connection_data(): close_socket() clears handlers so simplify.  
+
+Tue Apr 12 14:43:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Initialize both conn->socket and conn->data_socket.  
+
+Tue Apr 12 14:25:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+
+	Merge {read,write}_buffer_state to socket_error enum.  
+
+Tue Apr 12 14:21:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.h:
+
+	A litl reformatting.  
+
+Tue Apr 12 14:07:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	read_buffer_close -> socket_state, s/READ_BUFFER/SOCKET/,
+	s/SOCKET_END/SOCKET_CLOSED/.  
+
+Tue Apr 12 13:51:28 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: file/cgi.c, http/http.h:
+
+	Make the HTTP header not include crazy stuff so the spidermonkey
+	code won't have to recompile so often.  
+
+Tue Apr 12 13:29:18 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	find_host_no_cache(): simplification.  
+
+Tue Apr 12 13:26:08 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	@s -> @query_p.  
+
+Tue Apr 12 13:13:24 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	qp, d, e -> query_p, dnsentry, dnsentry_p.  
+
+Tue Apr 12 12:09:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	alloc_read_buffer(): Take connection_socket instead of connection.  
+
+Tue Apr 12 08:11:05 2005  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS, src/viewer/text/search.c:
+
+	Fix build error by including modules/module.h. Patch by Alexander
+	Zschach.  
+
+Tue Apr 12 00:41:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.h:
+
+	Remove unneeded includes.  
+
+Tue Apr 12 00:40:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+
+	Change the socket reading interface and centralize the read_buffer
+	access.  
+
+Tue Apr 12 00:32:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Handle ssl_write()s using the new generic error handling.  
+
+Tue Apr 12 00:31:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+
+	Introduce read_buffer_state enum to make handling of read()s in
+	read_select() more centralized.  
+
+Tue Apr 12 00:09:45 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Introduce generic_read() taking same variables as ssl_read().  
+
+Mon Apr 11 23:56:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+
+	Introduce write_buffer_state enum to make handling of write()s in
+	write_select() more centralized.  
+
+Mon Apr 11 23:50:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Fix last patch.  
+
+Mon Apr 11 23:32:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Introduce generic_write() taking same variables as ssl_write().  
+
+Mon Apr 11 23:32:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	write_select(): f -> done.  
+
+Mon Apr 11 23:12:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.h:
+
+	struct conn_info: Oops, need_ssl is boplean.  
+
+Mon Apr 11 23:09:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: connect.c, connect.h:
+
+	struct read_buffer, write_buffer: Remove connection_socket member.
+	It is automatically available.  
+
+Mon Apr 11 23:07:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c:
+
+	More simplifications.  
+
+Mon Apr 11 23:04:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	write_select(): wb->socket -> socket.  
+
+Mon Apr 11 22:59:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: connect.c, connect.h:
+
+	struct conn_info: The connection_socket member is no longer needed.  
+
+Mon Apr 11 22:57:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	read_select(): rb->socket -> socket.  
+
+Mon Apr 11 22:55:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+
+	Change all select handlers to expect a connection_socket struct.  
+
+Mon Apr 11 22:50:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+
+	ssl_read(): No need to pass connection struct.  
+
+Mon Apr 11 22:39:37 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	write_to_socket(): No need to pass struct connection.  
+
+Mon Apr 11 22:34:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c, ssl/connect.c:
+
+	read_from_socket(): No need to pass struct connection.  
+
+Mon Apr 11 22:23:12 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: connect.c, connect.c:
+
+	More connection_socket handler usage.  
+
+Mon Apr 11 22:16:39 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, sched/connection.c, sched/connection.h:
+
+	struct connection_socket: Add set_timeout() handler. Use in
+	write_select().  
+
 Mon Apr 11 21:58:51 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: lowlevel/connect.c, sched/connection.c, sched/connection.h:

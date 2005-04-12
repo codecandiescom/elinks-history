@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.63 2005/04/11 20:55:34 jonas Exp $ */
+/* $Id: dns.c,v 1.64 2005/04/12 13:13:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -347,7 +347,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 		return;
 	}
 
-	
+
 	dnsentry = find_in_dns_cache(query->name);
 	if (dnsentry) {
 		if (res < 0) {
@@ -459,40 +459,40 @@ find_host(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
 }
 
 void
-kill_dns_request(void **qp)
+kill_dns_request(void **query_p)
 {
-	struct dnsquery *query = *qp;
+	struct dnsquery *query = *query_p;
 
 	query->done = NULL;
 	failed_real_lookup(query);
-	*qp = NULL;
+	*query_p = NULL;
 }
 
 static void
-del_dns_cache_entry(struct dnsentry **d)
+del_dns_cache_entry(struct dnsentry **dnsentry_p)
 {
-	struct dnsentry *e = *d;
+	struct dnsentry *dnsentry = *dnsentry_p;
 
-	*d = (*d)->prev;
-	del_from_list(e);
-	mem_free_if(e->addr);
-	mem_free(e);
+	*dnsentry_p = (*dnsentry_p)->prev;
+	del_from_list(dnsentry);
+	mem_free_if(dnsentry->addr);
+	mem_free(dnsentry);
 }
 
 void
 shrink_dns_cache(int whole)
 {
-	struct dnsentry *d;
+	struct dnsentry *dnsentry;
 
 	if (whole) {
-		foreach (d, dns_cache)
-			del_dns_cache_entry(&d);
+		foreach (dnsentry, dns_cache)
+			del_dns_cache_entry(&dnsentry);
 
 	} else {
 		time_T oldest = get_time() - DNS_TIMEOUT;
 
-		foreach (d, dns_cache)
-			if (d->get_time < oldest)
-				del_dns_cache_entry(&d);
+		foreach (dnsentry, dns_cache)
+			if (dnsentry->get_time < oldest)
+				del_dns_cache_entry(&dnsentry);
 	}
 }

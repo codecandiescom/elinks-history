@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.224 2005/04/12 16:47:04 jonas Exp $ */
+/* $Id: ftp.c,v 1.225 2005/04/12 17:50:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -972,7 +972,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 	}
 
 	set_handlers(conn->data_socket->fd,
-		     (void (*)(void *)) got_something_from_data_connection,
+		     (select_handler_T) got_something_from_data_connection,
 		     NULL, NULL, conn);
 
 	/* read_from_socket(conn->socket, rb, ftp_got_final_response); */
@@ -1251,7 +1251,7 @@ ftp_data_accept(struct connection *conn)
 	conn->data_socket->fd = newsock;
 
 	set_handlers(newsock,
-		     (void (*)(void *)) got_something_from_data_connection,
+		     (select_handler_T) got_something_from_data_connection,
 		     NULL, NULL, conn);
 	return 0;
 }

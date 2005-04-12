@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.71 2005/04/12 16:47:04 jonas Exp $ */
+/* $Id: smb.c,v 1.72 2005/04/12 17:50:02 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -737,7 +737,7 @@ smb_protocol_handler(struct connection *conn)
 	close(out_pipe[1]);
 	close(err_pipe[1]);
 
-	set_handlers(out_pipe[0], (void (*)(void *)) smb_got_data, NULL, NULL, conn);
-	set_handlers(err_pipe[0], (void (*)(void *)) smb_got_text, NULL, NULL, conn);
+	set_handlers(out_pipe[0], (select_handler_T) smb_got_data, NULL, NULL, conn);
+	set_handlers(err_pipe[0], (select_handler_T) smb_got_text, NULL, NULL, conn);
 	set_connection_state(conn, S_CONN);
 }

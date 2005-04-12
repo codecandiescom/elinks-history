@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.34 2005/04/11 17:16:18 jonas Exp $ */
+/* $Id: os2.c,v 1.35 2005/04/12 17:50:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -573,7 +573,7 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 		return NULL;
 	}
 	_beginthread(mouse_thread, NULL, 0x10000, (void *) oms);
-	set_handlers(oms->p[0], (void (*)(void *)) mouse_handle, NULL, NULL, oms);
+	set_handlers(oms->p[0], (select_handler_T) mouse_handle, NULL, NULL, oms);
 
 	return oms;
 }

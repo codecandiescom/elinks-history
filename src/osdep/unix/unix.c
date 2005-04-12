@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.23 2005/04/11 17:16:18 jonas Exp $ */
+/* $Id: unix.c,v 1.24 2005/04/12 17:50:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 	gms->cons = cons;
 	gms->fn = fn;
 	gms->data = data;
-	set_handlers(h, (void (*)(void *)) gpm_mouse_in, NULL, NULL, gms);
+	set_handlers(h, (select_handler_T) gpm_mouse_in, NULL, NULL, gms);
 
 	return gms;
 }
@@ -141,7 +141,7 @@ resume_mouse(void *h)
 	gms->h = init_mouse(gms->cons, 0);
 	if (gms->h < 0) return;
 
-	set_handlers(gms->h, (void (*)(void *)) gpm_mouse_in, NULL, NULL, gms);
+	set_handlers(gms->h, (select_handler_T) gpm_mouse_in, NULL, NULL, gms);
 }
 
 #endif

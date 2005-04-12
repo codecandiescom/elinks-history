@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.82 2005/04/11 17:16:18 jonas Exp $ */
+/* $Id: terminal.c,v 1.83 2005/04/12 17:50:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,8 +85,8 @@ init_term(int fdin, int fdout)
 
 	add_to_list(terminals, term);
 
-	set_handlers(fdin, (void (*)(void *)) in_term, NULL,
-		     (void (*)(void *)) destroy_terminal, term);
+	set_handlers(fdin, (select_handler_T) in_term, NULL,
+		     (select_handler_T) destroy_terminal, term);
 	return term;
 }
 
@@ -178,8 +178,8 @@ unblock_terminal(struct terminal *term)
 {
 	close_handle((void *) (long) term->blocked);
 	term->blocked = -1;
-	set_handlers(term->fdin, (void (*)(void *)) in_term, NULL,
-		     (void (*)(void *)) destroy_terminal, term);
+	set_handlers(term->fdin, (select_handler_T) in_term, NULL,
+		     (select_handler_T) destroy_terminal, term);
 	unblock_itrm(term->fdin);
 	redraw_terminal_cls(term);
 	if (textarea_editor)	/* XXX */
@@ -238,12 +238,12 @@ exec_on_terminal(struct terminal *term, unsigned char *path,
 			if (fg == 1) {
 				term->blocked = blockh;
 				set_handlers(blockh,
-					     (void (*)(void *)) unblock_terminal,
+					     (select_handler_T) unblock_terminal,
 					     NULL,
-					     (void (*)(void *)) unblock_terminal,
+					     (select_handler_T) unblock_terminal,
 					     term);
 				set_handlers(term->fdin, NULL, NULL,
-					     (void (*)(void *)) destroy_terminal,
+					     (select_handler_T) destroy_terminal,
 					     term);
 				/* block_itrm(term->fdin); */
 			} else {

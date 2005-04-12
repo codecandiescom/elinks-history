@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.245 2005/04/12 16:47:05 jonas Exp $ */
+/* $Id: connection.c,v 1.246 2005/04/12 21:49:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,20 +217,20 @@ check_queue_bugs(void)
 #define check_queue_bugs()
 #endif
 
-static struct connection_socket *
-init_connection_socket(void *conn)
+static struct socket *
+init_socket(void *conn)
 {
-	struct connection_socket *socket;
+	struct socket *socket;
 
 	socket = mem_calloc(1, sizeof(*socket));
 	if (!socket) return NULL;
 
 	socket->fd = -1;
 	socket->conn = conn;
-	socket->set_state = (connection_socket_handler_T) set_connection_state;
+	socket->set_state = (socket_handler_T) set_connection_state;
 	socket->set_timeout = (void (*)(void *)) set_connection_timeout;
-	socket->done = (connection_socket_handler_T) abort_conn_with_state;
-	socket->retry = (connection_socket_handler_T) retry_conn_with_state;
+	socket->done = (socket_handler_T) abort_conn_with_state;
+	socket->retry = (socket_handler_T) retry_conn_with_state;
 
 	return socket;
 }
@@ -246,13 +246,13 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 
 	assert(proxied_uri->protocol != PROTOCOL_PROXY);
 
-	conn->socket = init_connection_socket(conn);
+	conn->socket = init_socket(conn);
 	if (!conn->socket) {
 		mem_free(conn);
 		return NULL;
 	}
 
-	conn->data_socket = init_connection_socket(conn);
+	conn->data_socket = init_socket(conn);
 	if (!conn->data_socket) {
 		mem_free(conn->socket);
 		mem_free(conn);

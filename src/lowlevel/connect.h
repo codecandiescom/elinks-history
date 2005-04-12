@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.53 2005/04/12 21:11:56 jonas Exp $ */
+/* $Id: connect.h,v 1.54 2005/04/12 21:49:09 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -58,9 +58,9 @@ enum socket_error {
 	SOCKET_CANT_WRITE	= -5,	/* Retry with S_CANT_WRITE state. */
 };
 
-typedef void (*connection_socket_handler_T)(void *, int connection_state);
+typedef void (*socket_handler_T)(void *, int connection_state);
 
-struct connection_socket {
+struct socket {
 	/* The socket descriptor */
 	int fd;
 
@@ -77,14 +77,14 @@ struct connection_socket {
 	/* Callbacks to the connection management: */
 
 	/* Report change in the state of the socket. */
-	connection_socket_handler_T set_state;
+	socket_handler_T set_state;
 	/* Reset the timeout for the socket. */
 	void (*set_timeout)(void *);
 	/* Some system related error occured; advise to reconnect. */
-	connection_socket_handler_T retry;
+	socket_handler_T retry;
 	/* A fatal error occured, like a memory allocation failure; advise to
 	 * abort the connection. */
-	connection_socket_handler_T done;
+	socket_handler_T done;
 	/* Only used by ftp in send_cmd/get_resp. Put here
 	 * since having no connection->info is apparently valid. */
 	void (*read_done)(void *, struct read_buffer *);
@@ -100,20 +100,20 @@ struct connection_socket {
 };
 
 struct conn_info *
-init_connection_info(struct uri *uri, struct connection_socket *socket,
+init_connection_info(struct uri *uri, struct socket *socket,
 		     void (*done)(struct connection *));
 
-void done_connection_info(struct connection_socket *socket);
+void done_connection_info(struct socket *socket);
 
-void close_socket(struct connection_socket *socket);
+void close_socket(struct socket *socket);
 
 /* Establish connection with the host in @conn->uri. Storing the socket
  * descriptor in @socket. When the connection has been established the @done
  * callback will be run. */
-void make_connection(struct connection *conn, struct connection_socket *socket,
+void make_connection(struct connection *conn, struct socket *socket,
 		     void (*done)(struct connection *));
 
-void dns_found(struct connection_socket *, int);
+void dns_found(struct socket *, int);
 void dns_exception(void *);
 
 int get_pasv_socket(struct connection *, int, unsigned char *);
@@ -123,16 +123,16 @@ int get_pasv6_socket(struct connection *, int, struct sockaddr_storage *);
 
 /* Writes @datalen bytes from @data buffer to the passed @socket. When all data
  * is written the @done callback will be called. */
-void write_to_socket(struct connection_socket *socket,
+void write_to_socket(struct socket *socket,
 		     unsigned char *data, int datalen,
 		     int connection_state,
 		     void (*done)(struct connection *));
 
-struct read_buffer *alloc_read_buffer(struct connection_socket *socket);
+struct read_buffer *alloc_read_buffer(struct socket *socket);
 
 /* Reads data from @socket into @buffer using @done as struct read_buffers
  * @done routine (called each time new data comes in). */
-void read_from_socket(struct connection_socket *socket, 
+void read_from_socket(struct socket *socket, 
 		       struct read_buffer *buffer, void (*done)(struct connection *, struct read_buffer *));
 
 void kill_buffer_data(struct read_buffer *, int);

@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.55 2005/04/12 16:58:15 jonas Exp $ */
+/* $Id: ssl.c,v 1.56 2005/04/12 21:49:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,7 +203,7 @@ struct module ssl_module = struct_module(
 );
 
 int
-init_ssl_connection(struct connection_socket *socket)
+init_ssl_connection(struct socket *socket)
 {
 #ifdef CONFIG_OPENSSL
 	socket->ssl = SSL_new(context);
@@ -251,7 +251,7 @@ init_ssl_connection(struct connection_socket *socket)
 }
 
 void
-done_ssl_connection(struct connection_socket *socket)
+done_ssl_connection(struct socket *socket)
 {
 	ssl_t *ssl = socket->ssl;
 
@@ -266,7 +266,7 @@ done_ssl_connection(struct connection_socket *socket)
 }
 
 unsigned char *
-get_ssl_connection_cipher(struct connection_socket *socket)
+get_ssl_connection_cipher(struct socket *socket)
 {
 	ssl_t *ssl = socket->ssl;
 	struct string str;

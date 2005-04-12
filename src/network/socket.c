@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.171 2005/04/12 21:11:56 jonas Exp $ */
+/* $Id: socket.c,v 1.172 2005/04/12 21:49:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,10 +72,10 @@ debug_transfer_log(unsigned char *data, int len)
 #endif
 
 
-static void connected(/* struct connection_socket */ void *);
+static void connected(/* struct socket */ void *);
 
 void
-close_socket(struct connection_socket *socket)
+close_socket(struct socket *socket)
 {
 	if (socket->fd == -1) return;
 #ifdef CONFIG_SSL
@@ -89,7 +89,7 @@ close_socket(struct connection_socket *socket)
 void
 dns_exception(void *data)
 {
-	struct connection_socket *socket = data;
+	struct socket *socket = data;
 
 	socket->set_state(socket->conn, S_EXCEPT);
 	close_socket(socket);
@@ -99,14 +99,14 @@ dns_exception(void *data)
 static void
 exception(void *data)
 {
-	struct connection_socket *socket = data;
+	struct socket *socket = data;
 
 	socket->retry(socket->conn, S_EXCEPT);
 }
 
 
 struct conn_info *
-init_connection_info(struct uri *uri, struct connection_socket *socket,
+init_connection_info(struct uri *uri, struct socket *socket,
 		     void (*done)(struct connection *))
 {
 	struct conn_info *conn_info = mem_calloc(1, sizeof(*conn_info));
@@ -124,7 +124,7 @@ init_connection_info(struct uri *uri, struct connection_socket *socket,
 }
 
 void
-done_connection_info(struct connection_socket *socket)
+done_connection_info(struct socket *socket)
 {
 	struct conn_info *conn_info = socket->conn_info;
 
@@ -138,7 +138,7 @@ done_connection_info(struct connection_socket *socket)
 }
 
 void
-make_connection(struct connection *conn, struct connection_socket *socket,
+make_connection(struct connection *conn, struct socket *socket,
 		void (*done)(struct connection *))
 {
 	unsigned char *host = get_uri_string(conn->uri, URI_DNS_HOST);
@@ -358,7 +358,7 @@ check_if_local_address4(struct sockaddr_in *addr)
 
 
 void
-dns_found(struct connection_socket *conn_socket, int state)
+dns_found(struct socket *conn_socket, int state)
 {
 	int sock = -1;
 	struct conn_info *conn_info = conn_socket->conn_info;
@@ -523,7 +523,7 @@ dns_found(struct connection_socket *conn_socket, int state)
 static void
 connected(void *data)
 {
-	struct connection_socket *socket = data;
+	struct socket *socket = data;
 	struct conn_info *conn_info = socket->conn_info;
 	int err = 0;
 	int len = sizeof(err);
@@ -574,7 +574,7 @@ struct write_buffer {
 };
 
 static int
-generic_write(struct connection_socket *socket, unsigned char *data, int len)
+generic_write(struct socket *socket, unsigned char *data, int len)
 {
 	int wr = safe_write(socket->fd, data, len);
 
@@ -584,7 +584,7 @@ generic_write(struct connection_socket *socket, unsigned char *data, int len)
 }
 
 static void
-write_select(struct connection_socket *socket)
+write_select(struct socket *socket)
 {
 	struct write_buffer *wb = socket->buffer;
 	int wr;
@@ -650,7 +650,7 @@ write_select(struct connection_socket *socket)
 }
 
 void
-write_to_socket(struct connection_socket *socket, unsigned char *data, int len,
+write_to_socket(struct socket *socket, unsigned char *data, int len,
 		int connection_state, void (*done)(struct connection *))
 {
 	struct write_buffer *wb;
@@ -682,7 +682,7 @@ write_to_socket(struct connection_socket *socket, unsigned char *data, int len,
 #define RD_SIZE(rb, len) ((RD_MEM(rb) + (len)) & ~(RD_ALLOC_GR - 1))
 
 static int
-generic_read(struct connection_socket *socket, unsigned char *data, int len)
+generic_read(struct socket *socket, unsigned char *data, int len)
 {
 	int rd = safe_read(socket->fd, data, len);
 
@@ -692,7 +692,7 @@ generic_read(struct connection_socket *socket, unsigned char *data, int len)
 }
 
 static void
-read_select(struct connection_socket *socket)
+read_select(struct socket *socket)
 {
 	struct read_buffer *rb = socket->buffer;
 	int rd;
@@ -766,7 +766,7 @@ read_select(struct connection_socket *socket)
 }
 
 struct read_buffer *
-alloc_read_buffer(struct connection_socket *socket)
+alloc_read_buffer(struct socket *socket)
 {
 	struct read_buffer *rb;
 
@@ -786,7 +786,7 @@ alloc_read_buffer(struct connection_socket *socket)
 #undef RD_SIZE
 
 void
-read_from_socket(struct connection_socket *socket,
+read_from_socket(struct socket *socket,
 		 struct read_buffer *buffer,
 		 void (*done)(struct connection *, struct read_buffer *))
 {

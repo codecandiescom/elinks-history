@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.110 2005/04/12 17:13:38 jonas Exp $ */
+/* $Id: connection.h,v 1.111 2005/04/12 21:49:09 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -9,7 +9,7 @@
 #include "util/lists.h"
 #include "util/ttime.h"
 
-struct connection_socket;
+struct socket;
 struct uri;
 
 
@@ -156,11 +156,11 @@ struct connection {
 	enum connection_state prev_error;
 
 	/* The communication socket with the other side. */
-	struct connection_socket *socket;
+	struct socket *socket;
 	/* The data socket. It is used, when @socket is used for the control,
 	 * and the actual data is transmitted through a different channel. */
 	/* The only users now is FTP and SMB. */
-	struct connection_socket *data_socket;
+	struct socket *data_socket;
 
 	int tries;
 	int received;

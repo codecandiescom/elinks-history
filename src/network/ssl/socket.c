@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.112 2005/04/12 21:11:56 jonas Exp $ */
+/* $Id: socket.c,v 1.113 2005/04/12 21:49:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,7 +61,7 @@
 
 
 static void
-ssl_set_no_tls(struct connection_socket *socket)
+ssl_set_no_tls(struct socket *socket)
 {
 #ifdef CONFIG_OPENSSL
 	((ssl_t *) socket->ssl)->options |= SSL_OP_NO_TLSv1;
@@ -146,7 +146,7 @@ ssl_set_no_tls(struct connection_socket *socket)
 }
 
 static void
-ssl_want_read(struct connection_socket *socket)
+ssl_want_read(struct socket *socket)
 {
 	if (socket->no_tls)
 		ssl_set_no_tls(socket);
@@ -175,7 +175,7 @@ ssl_want_read(struct connection_socket *socket)
 
 /* Return -1 on error, 0 or success. */
 int
-ssl_connect(struct connection_socket *socket)
+ssl_connect(struct socket *socket)
 {
 	int ret;
 
@@ -257,7 +257,7 @@ ssl_connect(struct connection_socket *socket)
 
 /* Return -1 on error, bytes written on success. */
 int
-ssl_write(struct connection_socket *socket, unsigned char *data, int len)
+ssl_write(struct socket *socket, unsigned char *data, int len)
 {
 	int wr = ssl_do_write(socket, data, len);
 
@@ -287,7 +287,7 @@ ssl_write(struct connection_socket *socket, unsigned char *data, int len)
 
 /* Return -1 on error, rd or success. */
 int
-ssl_read(struct connection_socket *socket, unsigned char *data, int len)
+ssl_read(struct socket *socket, unsigned char *data, int len)
 {
 	int rd = ssl_do_read(socket, data, len);
 
@@ -322,7 +322,7 @@ ssl_read(struct connection_socket *socket, unsigned char *data, int len)
 }
 
 int
-ssl_close(struct connection_socket *socket)
+ssl_close(struct socket *socket)
 {
 	ssl_do_close(socket);
 	done_ssl_connection(socket);

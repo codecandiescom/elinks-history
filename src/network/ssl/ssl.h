@@ -1,4 +1,4 @@
-/* $Id: ssl.h,v 1.22 2005/04/12 16:58:15 jonas Exp $ */
+/* $Id: ssl.h,v 1.23 2005/04/12 21:49:10 jonas Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
@@ -7,18 +7,18 @@
 
 #include "modules/module.h"
 
-struct connection_socket;
+struct socket;
 
 extern struct module ssl_module;
 
 /* Initializes the SSL connection data. Returns S_OK on success and S_SSL_ERROR
  * on failure. */
-int init_ssl_connection(struct connection_socket *socket);
+int init_ssl_connection(struct socket *socket);
 
 /* Releases the SSL connection data */
-void done_ssl_connection(struct connection_socket *socket);
+void done_ssl_connection(struct socket *socket);
 
-unsigned char *get_ssl_connection_cipher(struct connection_socket *socket);
+unsigned char *get_ssl_connection_cipher(struct socket *socket);
 
 
 /* Internal type used in ssl module. */

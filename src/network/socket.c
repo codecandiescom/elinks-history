@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.166 2005/04/12 17:50:02 jonas Exp $ */
+/* $Id: socket.c,v 1.167 2005/04/12 20:05:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,6 +144,8 @@ make_connection(struct connection *conn, struct connection_socket *socket,
 	unsigned char *host = get_uri_string(conn->uri, URI_DNS_HOST);
 	struct conn_info *conn_info;
 	int async;
+
+	socket->set_timeout(socket->conn);
 
 	if (!host) {
 		socket->retry(socket->conn, S_OUT_OF_MEM);

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.40 2005/04/12 16:47:04 jonas Exp $ */
+/* $Id: gopher.c,v 1.41 2005/04/12 20:05:08 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -849,7 +849,6 @@ gopher_protocol_handler(struct connection *conn)
 		}
 
 		/* Set up a socket to the server for the data */
-		set_connection_timeout(conn);
 		conn->from = 0;
 		make_connection(conn, conn->socket, send_gopher_command);
 	}

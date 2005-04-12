@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.10 2005/04/12 16:47:04 jonas Exp $ */
+/* $Id: connection.c,v 1.11 2005/04/12 20:05:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -481,6 +481,8 @@ nntp_send_command(struct connection *conn)
 	struct nntp_connection_info *nntp = conn->info;
 	struct string req;
 
+	set_connection_timeout(conn);
+
 	nntp->command = get_nntp_command(nntp);
 
 	if (nntp->command == NNTP_COMMAND_NONE) {
@@ -509,8 +511,6 @@ nntp_protocol_handler(struct connection *conn)
 {
 	if (!init_nntp_connection_info(conn))
 		return;
-
-	set_connection_timeout(conn);
 
 	if (!has_keepalive_connection(conn)) {
 		make_connection(conn, conn->socket, nntp_get_response);

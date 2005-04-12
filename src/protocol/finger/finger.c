@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.10 2005/04/12 16:47:04 jonas Exp $ */
+/* $Id: finger.c,v 1.11 2005/04/12 20:05:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,6 @@ finger_send_request(struct connection *conn)
 void
 finger_protocol_handler(struct connection *conn)
 {
-	set_connection_timeout(conn);
 	conn->from = 0;
 	make_connection(conn, conn->socket, finger_send_request);
 }

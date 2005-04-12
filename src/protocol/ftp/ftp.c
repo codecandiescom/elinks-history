@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.225 2005/04/12 17:50:02 jonas Exp $ */
+/* $Id: ftp.c,v 1.226 2005/04/12 20:05:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,8 +271,6 @@ ok:
 void
 ftp_protocol_handler(struct connection *conn)
 {
-	set_connection_timeout(conn);
-
 	if (!has_keepalive_connection(conn)) {
 		make_connection(conn, conn->socket, ftp_login);
 
@@ -299,6 +297,8 @@ get_resp(struct connection *conn)
 static void
 send_cmd(struct connection *conn, struct string *cmd, void *callback, int state)
 {
+	set_connection_timeout(conn);
+
 	conn->socket->read_done = callback;
 	write_to_socket(conn->socket, cmd->source, cmd->length, get_resp);
 

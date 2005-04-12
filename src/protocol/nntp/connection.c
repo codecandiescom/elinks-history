@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.12 2005/04/12 20:16:01 jonas Exp $ */
+/* $Id: connection.c,v 1.13 2005/04/12 20:27:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -496,9 +496,9 @@ nntp_send_command(struct connection *conn)
 	/* FIXME: Check non empty and < NNTP_MAX_COMMAND_LENGTH */
 	add_nntp_command_to_string(&req, nntp);
 
-	write_to_socket(conn->socket, req.source, req.length, nntp_get_response);
+	write_to_socket(conn->socket, req.source, req.length,
+			S_SENT, nntp_get_response);
 	done_string(&req);
-	set_connection_state(conn, S_SENT);
 }
 
 

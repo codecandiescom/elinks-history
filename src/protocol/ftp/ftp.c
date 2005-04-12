@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.227 2005/04/12 20:16:01 jonas Exp $ */
+/* $Id: ftp.c,v 1.228 2005/04/12 20:27:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,10 +298,9 @@ static void
 send_cmd(struct connection *conn, struct string *cmd, void *callback, int state)
 {
 	conn->socket->read_done = callback;
-	write_to_socket(conn->socket, cmd->source, cmd->length, get_resp);
+	write_to_socket(conn->socket, cmd->source, cmd->length, state, get_resp);
 
 	done_string(cmd);
-	set_connection_state(conn, state);
 }
 
 /* Check if this auth token really belongs to this URI. */

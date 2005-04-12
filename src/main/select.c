@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.72 2005/04/12 18:26:21 jonas Exp $ */
+/* $Id: select.c,v 1.73 2005/04/12 18:29:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,9 +45,9 @@
 #endif
 
 struct thread {
-	void (*read_func)(void *);
-	void (*write_func)(void *);
-	void (*error_func)(void *);
+	select_handler_T read_func;
+	select_handler_T write_func;
+	select_handler_T error_func;
 	void *data;
 };
 
@@ -88,14 +88,14 @@ select_info(int type)
 struct bottom_half {
 	LIST_HEAD(struct bottom_half);
 
-	void (*fn)(void *);
+	select_handler_T fn;
 	void *data;
 };
 
 static INIT_LIST_HEAD(bottom_halves);
 
 int
-register_bottom_half_do(void (*fn)(void *), void *data)
+register_bottom_half_do(select_handler_T fn, void *data)
 {
 	struct bottom_half *bh;
 
@@ -117,7 +117,7 @@ check_bottom_halves(void)
 {
 	while (!list_empty(bottom_halves)) {
 		struct bottom_half *bh = bottom_halves.prev;
-		void (*fn)(void *) = bh->fn;
+		select_handler_T fn = bh->fn;
 		void *data = bh->data;
 
 		del_from_list(bh);
@@ -146,8 +146,8 @@ get_handler(int fd, enum select_handler_type tp)
 }
 
 void
-set_handlers(int fd, void (*read_func)(void *), void (*write_func)(void *),
-	     void (*error_func)(void *), void *data)
+set_handlers(int fd, select_handler_T read_func, select_handler_T write_func,
+	     select_handler_T error_func, void *data)
 {
 	assertm(fd >= 0 && fd < FD_SETSIZE,
 		"set_handlers: handle %d >= FD_SETSIZE %d",

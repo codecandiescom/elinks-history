@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.113 2005/04/12 21:49:09 jonas Exp $ */
+/* $Id: connect.c,v 1.114 2005/04/12 22:09:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,7 +228,7 @@ ssl_connect(struct socket *socket)
 		case SSL_ERROR_WANT_READ2:
 			socket->set_state(socket->conn, S_SSL_NEG);
 			set_handlers(socket->fd, (select_handler_T) ssl_want_read,
-				     NULL, dns_exception, socket);
+				     NULL, (select_handler_T) dns_exception, socket);
 			return -1;
 
 		case SSL_ERROR_NONE:

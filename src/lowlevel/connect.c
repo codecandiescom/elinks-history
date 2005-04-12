@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.172 2005/04/12 21:49:09 jonas Exp $ */
+/* $Id: connect.c,v 1.173 2005/04/12 22:09:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,10 +87,8 @@ close_socket(struct socket *socket)
 }
 
 void
-dns_exception(void *data)
+dns_exception(struct socket *socket)
 {
-	struct socket *socket = data;
-
 	socket->set_state(socket->conn, S_EXCEPT);
 	close_socket(socket);
 	dns_found(socket, 0);
@@ -474,7 +472,7 @@ dns_found(struct socket *conn_socket, int state)
 #endif
 		    || errno == EINPROGRESS) {
 			/* It will take some more time... */
-			set_handlers(sock, NULL, connected, dns_exception, conn_socket);
+			set_handlers(sock, NULL, connected, (select_handler_T) dns_exception, conn_socket);
 			conn_socket->set_state(conn_socket->conn, S_CONN);
 			return;
 		}

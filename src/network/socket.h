@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.54 2005/04/12 21:49:09 jonas Exp $ */
+/* $Id: socket.h,v 1.55 2005/04/12 21:54:33 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -11,18 +11,14 @@
 struct connection;
 struct uri;
 
-struct conn_info {
-	struct sockaddr_storage *addr; /* array of addresses */
 
-	void (*done)(struct connection *);
-
-	void *dnsquery;
-
-	int addrno; /* array len / sizeof(sockaddr_storage) */
-	int triedno; /* index of last tried address */
-	int port;
-	int ip_family; /* If non-zero, use the indicated IP version. */
-	unsigned int need_ssl:1;
+/* Use internally for error return values. */
+enum socket_error {
+	SOCKET_SYSCALL_ERROR	= -1,	/* Retry with -errno state. */
+	SOCKET_INTERNAL_ERROR	= -2,	/* Stop with -errno state. */
+	SOCKET_SSL_WANT_READ	= -3,	/* Try to read some more. */
+	SOCKET_CANT_READ	= -4,	/* Retry with S_CANT_READ state. */
+	SOCKET_CANT_WRITE	= -5,	/* Retry with S_CANT_WRITE state. */
 };
 
 enum socket_state {
@@ -50,12 +46,18 @@ struct read_buffer {
 	unsigned char data[1]; /* must be at end of struct */
 };
 
-enum socket_error {
-	SOCKET_SYSCALL_ERROR	= -1,	/* Retry with -errno state. */
-	SOCKET_INTERNAL_ERROR	= -2,	/* Stop with -errno state. */
-	SOCKET_SSL_WANT_READ	= -3,	/* Try to read some more. */
-	SOCKET_CANT_READ	= -4,	/* Retry with S_CANT_READ state. */
-	SOCKET_CANT_WRITE	= -5,	/* Retry with S_CANT_WRITE state. */
+struct conn_info {
+	struct sockaddr_storage *addr; /* array of addresses */
+
+	void (*done)(struct connection *);
+
+	void *dnsquery;
+
+	int addrno; /* array len / sizeof(sockaddr_storage) */
+	int triedno; /* index of last tried address */
+	int port;
+	int ip_family; /* If non-zero, use the indicated IP version. */
+	unsigned int need_ssl:1;
 };
 
 typedef void (*socket_handler_T)(void *, int connection_state);

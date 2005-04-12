@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.106 2005/04/11 22:16:39 jonas Exp $ */
+/* $Id: connection.h,v 1.107 2005/04/12 16:01:53 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -157,6 +157,9 @@ struct connection_socket {
 	/* A fatal error occured, like a memory allocation failure; advise to
 	 * abort the connection. */
 	connection_socket_handler_T done;
+	/* Only used by ftp in send_cmd/get_resp. Put here
+	 * since having no connection->info is apparently valid. */
+	void (*read_done)(void *, struct read_buffer *);
 
 	/* For connections using SSL this is in fact (ssl_t *), but we don't
 	 * want to know. Noone cares and inclusion of SSL header files costs a
@@ -181,10 +184,6 @@ struct connection {
 	void *info;
 	struct cache_entry *cached;
 	struct stream_encoded *stream;
-
-	/* Only used by ftp in send_cmd/get_resp. Put here
-	 * since having no connection->info is apparently valid. */
-	void (*read_func)(struct connection *, struct read_buffer *);
 
 	unsigned int id;
 

@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.44 2005/04/12 00:31:04 jonas Exp $ */
+/* $Id: connect.h,v 1.45 2005/04/12 12:09:43 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -99,7 +99,7 @@ int get_pasv6_socket(struct connection *, int, struct sockaddr_storage *);
 void write_to_socket(struct connection_socket *socket,
 		     unsigned char *data, int datalen, void (*done)(struct connection *));
 
-struct read_buffer *alloc_read_buffer(struct connection *c);
+struct read_buffer *alloc_read_buffer(struct connection_socket *socket);
 
 /* Reads data from @socket into @buffer using @done as struct read_buffers
  * @done routine (called each time new data comes in). */

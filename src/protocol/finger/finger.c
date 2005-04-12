@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.7 2005/04/11 22:39:37 jonas Exp $ */
+/* $Id: finger.c,v 1.8 2005/04/12 12:09:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ finger_sent_request(struct connection *conn)
 	struct read_buffer *rb;
 
 	set_connection_timeout(conn);
-	rb = alloc_read_buffer(conn);
+	rb = alloc_read_buffer(&conn->socket);
 	if (!rb) return;
 	rb->close = READ_BUFFER_END_ONCLOSE;
 	read_from_socket(&conn->socket, rb, finger_get_response);

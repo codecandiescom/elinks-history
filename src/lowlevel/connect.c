@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.161 2005/04/12 00:40:17 jonas Exp $ */
+/* $Id: connect.c,v 1.162 2005/04/12 12:09:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -758,13 +758,13 @@ read_select(struct connection_socket *socket)
 }
 
 struct read_buffer *
-alloc_read_buffer(struct connection *conn)
+alloc_read_buffer(struct connection_socket *socket)
 {
 	struct read_buffer *rb;
 
 	rb = mem_calloc(1, RD_SIZE(rb, 0));
 	if (!rb) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		socket->done(socket->conn, S_OUT_OF_MEM);
 		return NULL;
 	}
 

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.220 2005/04/11 22:39:37 jonas Exp $ */
+/* $Id: ftp.c,v 1.221 2005/04/12 12:09:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,7 +285,7 @@ ftp_protocol_handler(struct connection *conn)
 static void
 get_resp(struct connection *conn)
 {
-	struct read_buffer *rb = alloc_read_buffer(conn);
+	struct read_buffer *rb = alloc_read_buffer(&conn->socket);
 
 	if (!rb) return;
 	read_from_socket(&conn->socket, rb, conn->read_func);

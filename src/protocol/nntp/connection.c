@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.7 2005/04/11 22:39:37 jonas Exp $ */
+/* $Id: connection.c,v 1.8 2005/04/12 12:09:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -326,7 +326,7 @@ nntp_got_response(struct connection *conn, struct read_buffer *rb)
 static void
 nntp_get_response(struct connection *conn)
 {
-	struct read_buffer *rb = alloc_read_buffer(conn);
+	struct read_buffer *rb = alloc_read_buffer(&conn->socket);
 
 	if (!rb) return;
 

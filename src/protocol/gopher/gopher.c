@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.37 2005/04/11 22:39:37 jonas Exp $ */
+/* $Id: gopher.c,v 1.38 2005/04/12 12:09:43 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -785,7 +785,7 @@ read_gopher_response_data(struct connection *conn, struct read_buffer *rb)
 static void
 receive_gopher_response(struct connection *conn)
 {
-	struct read_buffer *rb = alloc_read_buffer(conn);
+	struct read_buffer *rb = alloc_read_buffer(&conn->socket);
 
 	if (!rb) return;
 

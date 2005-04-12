@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.90 2005/04/11 22:39:37 jonas Exp $ */
+/* $Id: cgi.c,v 1.91 2005/04/12 12:09:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@
 static void
 close_pipe_and_read(struct connection *conn)
 {
-	struct read_buffer *rb = alloc_read_buffer(conn);
+	struct read_buffer *rb = alloc_read_buffer(&conn->socket);
 
 	if (!rb) return;
 

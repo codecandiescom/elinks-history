@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.71 2005/04/12 18:21:42 jonas Exp $ */
+/* $Id: select.c,v 1.72 2005/04/12 18:26:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,10 +135,10 @@ get_handler(int fd, enum select_handler_type tp)
 	if_assert_failed return NULL;
 
 	switch (tp) {
-		case H_READ:	return threads[fd].read_func;
-		case H_WRITE:	return threads[fd].write_func;
-		case H_ERROR:	return threads[fd].error_func;
-		case H_DATA:	return threads[fd].data;
+		case SELECT_HANDLER_READ:	return threads[fd].read_func;
+		case SELECT_HANDLER_WRITE:	return threads[fd].write_func;
+		case SELECT_HANDLER_ERROR:	return threads[fd].error_func;
+		case SELECT_HANDLER_DATA:	return threads[fd].data;
 	}
 
 	INTERNAL("get_handler: bad type %d", tp);

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.126 2005/04/12 17:50:02 jonas Exp $ */
+/* $Id: kbd.c,v 1.127 2005/04/12 18:26:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,10 +108,10 @@ write_ev_queue(struct itrm *itrm)
 
 	if (itrm->eqlen == 0) {
 		set_handlers(itrm->sock_out,
-			     get_handler(itrm->sock_out, H_READ),
+			     get_handler(itrm->sock_out, SELECT_HANDLER_READ),
 			     NULL,
-			     get_handler(itrm->sock_out, H_ERROR),
-			     get_handler(itrm->sock_out, H_DATA));
+			     get_handler(itrm->sock_out, SELECT_HANDLER_ERROR),
+			     get_handler(itrm->sock_out, SELECT_HANDLER_DATA));
 	} else {
 		assert(itrm->eqlen > 0);
 		memmove(itrm->ev_queue, itrm->ev_queue + written, itrm->eqlen);
@@ -149,7 +149,7 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 		memcpy(itrm->ev_queue + itrm->eqlen, data + w, left);
 		itrm->eqlen += left;
 		set_handlers(itrm->sock_out,
-			     get_handler(itrm->sock_out, H_READ),
+			     get_handler(itrm->sock_out, SELECT_HANDLER_READ),
 			     (select_handler_T) write_ev_queue,
 			     (select_handler_T) free_trm, itrm);
 	}

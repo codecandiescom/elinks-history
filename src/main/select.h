@@ -1,4 +1,4 @@
-/* $Id: select.h,v 1.18 2005/04/12 18:21:42 jonas Exp $ */
+/* $Id: select.h,v 1.19 2005/04/12 18:26:21 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_SELECT_H
 #define EL__LOWLEVEL_SELECT_H
@@ -23,10 +23,10 @@ int register_bottom_half_do(select_handler_T, void *);
 void check_bottom_halves(void);
 
 enum select_handler_type {
-	H_READ,
-	H_WRITE,
-	H_ERROR,
-	H_DATA,
+	SELECT_HANDLER_READ,
+	SELECT_HANDLER_WRITE,
+	SELECT_HANDLER_ERROR,
+	SELECT_HANDLER_DATA,
 };
 
 /* Get a registered select handler. */

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.400 2005/04/12 15:35:19 jonas Exp $ */
+/* $Id: http.c,v 1.401 2005/04/12 16:47:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,7 +443,7 @@ http_end_request(struct connection *conn, enum connection_state state,
 	}
 
 	if (conn->info && !((struct http_connection_info *) conn->info)->close
-	    && (!conn->socket.ssl) /* We won't keep alive ssl connections */
+	    && (!conn->socket->ssl) /* We won't keep alive ssl connections */
 	    && (!get_opt_bool("protocol.http.bugs.post_no_keepalive")
 		|| !conn->uri->post)) {
 		add_keepalive_connection(conn, HTTP_KEEPALIVE_TIMEOUT, NULL);
@@ -461,7 +461,7 @@ http_protocol_handler(struct connection *conn)
 	set_connection_timeout(conn);
 
 	if (!has_keepalive_connection(conn)) {
-		make_connection(conn, &conn->socket, http_send_header);
+		make_connection(conn, conn->socket, http_send_header);
 	} else {
 		http_send_header(conn);
 	}
@@ -525,8 +525,8 @@ http_send_header(struct connection *conn)
 		return;
 	}
 
-	talking_to_proxy = IS_PROXY_URI(conn->uri) && !conn->socket.ssl;
-	use_connect = connection_is_https_proxy(conn) && !conn->socket.ssl;
+	talking_to_proxy = IS_PROXY_URI(conn->uri) && !conn->socket->ssl;
+	use_connect = connection_is_https_proxy(conn) && !conn->socket->ssl;
 
 	if (trace) {
 		add_to_string(&header, "TRACE ");
@@ -547,7 +547,7 @@ http_send_header(struct connection *conn)
 		/* Add port if it was specified or the default port */
 		add_uri_to_string(&header, uri, URI_HTTP_CONNECT);
 	} else {
-		if (connection_is_https_proxy(conn) && conn->socket.ssl) {
+		if (connection_is_https_proxy(conn) && conn->socket->ssl) {
 			add_url_to_http_string(&header, uri, URI_DATA);
 
 		} else if (talking_to_proxy) {
@@ -866,7 +866,7 @@ http_send_header(struct connection *conn)
 #undef POST_BUFFER_SIZE
 	}
 
-	write_to_socket(&conn->socket, header.source, header.length,
+	write_to_socket(conn->socket, header.source, header.length,
 			http_get_header);
 	done_string(&header);
 
@@ -1035,7 +1035,7 @@ static void
 read_more_http_data(struct connection *conn, struct read_buffer *rb,
                     int already_got_anything)
 {
-	read_from_socket(&conn->socket, rb, read_http_data);
+	read_from_socket(conn->socket, rb, read_http_data);
 	if (already_got_anything)
 		set_connection_state(conn, S_TRANS);
 }
@@ -1376,7 +1376,7 @@ again:
 		return;
 	}
 	if (!a) {
-		read_from_socket(&conn->socket, rb, http_got_header);
+		read_from_socket(conn->socket, rb, http_got_header);
 		set_connection_state(conn, state);
 		return;
 	}
@@ -1456,17 +1456,17 @@ again:
 		http_end_request(conn, S_HTTP_204, 0);
 		return;
 	}
-	if (h == 200 && connection_is_https_proxy(conn) && !conn->socket.ssl) {
+	if (h == 200 && connection_is_https_proxy(conn) && !conn->socket->ssl) {
 #ifdef CONFIG_SSL
 		mem_free(head);
-		conn->socket.conn_info = init_connection_info(uri, &conn->socket,
+		conn->socket->conn_info = init_connection_info(uri, conn->socket,
 							      http_send_header);
-		if (!conn->socket.conn_info) {
+		if (!conn->socket->conn_info) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
 		}
 
-		ssl_connect(&conn->socket);
+		ssl_connect(conn->socket);
 #else
 		abort_conn_with_state(conn, S_SSL_ERROR);
 #endif
@@ -1494,7 +1494,7 @@ again:
 #ifdef CONFIG_SSL
 	/* TODO: Move this to some more generic place like lowlevel/connect.c
 	 * or sched/connection.c when other protocols will need it. --jonas */
-	if (conn->socket.ssl)
+	if (conn->socket->ssl)
 		mem_free_set(&conn->cached->ssl_info, get_ssl_connection_cipher(conn));
 #endif
 
@@ -1751,10 +1751,10 @@ again:
 static void
 http_get_header(struct connection *conn)
 {
-	struct read_buffer *rb = alloc_read_buffer(&conn->socket);
+	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
 	if (!rb) return;
 	set_connection_timeout(conn);
 	rb->state = SOCKET_END_ONCLOSE;
-	read_from_socket(&conn->socket, rb, http_got_header);
+	read_from_socket(conn->socket, rb, http_got_header);
 }

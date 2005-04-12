@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.9 2005/04/12 14:07:56 jonas Exp $ */
+/* $Id: connection.c,v 1.10 2005/04/12 16:47:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -256,7 +256,7 @@ read_nntp_data(struct connection *conn, struct read_buffer *rb)
 
 	case S_TRANS:
 	default:
-		read_from_socket(&conn->socket, rb, read_nntp_data);
+		read_from_socket(conn->socket, rb, read_nntp_data);
 		set_connection_state(conn, S_TRANS);
 	}
 }
@@ -278,7 +278,7 @@ nntp_got_response(struct connection *conn, struct read_buffer *rb)
 
 	switch (nntp->code) {
 	case NNTP_CODE_NONE:
-		read_from_socket(&conn->socket, rb, nntp_got_response);
+		read_from_socket(conn->socket, rb, nntp_got_response);
 		set_connection_state(conn, S_TRANS);
 		break;
 
@@ -326,14 +326,14 @@ nntp_got_response(struct connection *conn, struct read_buffer *rb)
 static void
 nntp_get_response(struct connection *conn)
 {
-	struct read_buffer *rb = alloc_read_buffer(&conn->socket);
+	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
 	if (!rb) return;
 
 	set_connection_timeout(conn);
 
 	rb->state = SOCKET_END_ONCLOSE;
-	read_from_socket(&conn->socket, rb, nntp_got_response);
+	read_from_socket(conn->socket, rb, nntp_got_response);
 }
 
 
@@ -496,7 +496,7 @@ nntp_send_command(struct connection *conn)
 	/* FIXME: Check non empty and < NNTP_MAX_COMMAND_LENGTH */
 	add_nntp_command_to_string(&req, nntp);
 
-	write_to_socket(&conn->socket, req.source, req.length, nntp_get_response);
+	write_to_socket(conn->socket, req.source, req.length, nntp_get_response);
 	done_string(&req);
 	set_connection_state(conn, S_SENT);
 }
@@ -513,7 +513,7 @@ nntp_protocol_handler(struct connection *conn)
 	set_connection_timeout(conn);
 
 	if (!has_keepalive_connection(conn)) {
-		make_connection(conn, &conn->socket, nntp_get_response);
+		make_connection(conn, conn->socket, nntp_get_response);
 	} else {
 		nntp_send_command(conn);
 	}

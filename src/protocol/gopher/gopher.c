@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.39 2005/04/12 14:07:56 jonas Exp $ */
+/* $Id: gopher.c,v 1.40 2005/04/12 16:47:04 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -777,7 +777,7 @@ read_gopher_response_data(struct connection *conn, struct read_buffer *rb)
 		return;
 	}
 
-	read_from_socket(&conn->socket, rb, read_gopher_response_data);
+	read_from_socket(conn->socket, rb, read_gopher_response_data);
 	set_connection_state(conn, S_TRANS);
 }
 
@@ -785,14 +785,14 @@ read_gopher_response_data(struct connection *conn, struct read_buffer *rb)
 static void
 receive_gopher_response(struct connection *conn)
 {
-	struct read_buffer *rb = alloc_read_buffer(&conn->socket);
+	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
 	if (!rb) return;
 
 	set_connection_timeout(conn);
 
 	rb->state = SOCKET_END_ONCLOSE;
-	read_from_socket(&conn->socket, rb, read_gopher_response_data);
+	read_from_socket(conn->socket, rb, read_gopher_response_data);
 }
 
 static void
@@ -800,7 +800,7 @@ send_gopher_command(struct connection *conn)
 {
 	struct gopher_connection_info *gopher = conn->info;
 
-	write_to_socket(&conn->socket,
+	write_to_socket(conn->socket,
 			gopher->command, gopher->commandlen,
 			receive_gopher_response);
 
@@ -851,6 +851,6 @@ gopher_protocol_handler(struct connection *conn)
 		/* Set up a socket to the server for the data */
 		set_connection_timeout(conn);
 		conn->from = 0;
-		make_connection(conn, &conn->socket, send_gopher_command);
+		make_connection(conn, conn->socket, send_gopher_command);
 	}
 }

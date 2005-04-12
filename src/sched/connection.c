@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.244 2005/04/12 14:45:43 jonas Exp $ */
+/* $Id: connection.c,v 1.245 2005/04/12 16:47:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,15 +217,22 @@ check_queue_bugs(void)
 #define check_queue_bugs()
 #endif
 
-static void
-init_connection_socket(struct connection_socket *socket, void *conn)
+static struct connection_socket *
+init_connection_socket(void *conn)
 {
+	struct connection_socket *socket;
+
+	socket = mem_calloc(1, sizeof(*socket));
+	if (!socket) return NULL;
+
 	socket->fd = -1;
 	socket->conn = conn;
 	socket->set_state = (connection_socket_handler_T) set_connection_state;
 	socket->set_timeout = (void (*)(void *)) set_connection_timeout;
 	socket->done = (connection_socket_handler_T) abort_conn_with_state;
 	socket->retry = (connection_socket_handler_T) retry_conn_with_state;
+
+	return socket;
 }
 
 static struct connection *
@@ -239,6 +246,19 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 
 	assert(proxied_uri->protocol != PROTOCOL_PROXY);
 
+	conn->socket = init_connection_socket(conn);
+	if (!conn->socket) {
+		mem_free(conn);
+		return NULL;
+	}
+
+	conn->data_socket = init_connection_socket(conn);
+	if (!conn->data_socket) {
+		mem_free(conn->socket);
+		mem_free(conn);
+		return NULL;
+	}
+
 	/* load_uri() gets the URI from get_proxy() which grabs a reference for
 	 * us. */
 	conn->uri = uri;
@@ -246,9 +266,6 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	conn->id = connection_id++;
 	conn->pri[priority] = 1;
 	conn->cache_mode = cache_mode;
-
-	init_connection_socket(&conn->socket, conn);
-	init_connection_socket(&conn->data_socket, conn);
 
 	conn->content_encoding = ENCODING_NONE;
 	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
@@ -362,9 +379,9 @@ free_connection_data(struct connection *conn)
 	assertm(active_connections >= 0, "active connections underflow");
 	if_assert_failed active_connections = 0;
 
-	if (conn->socket.fd != -1)
-		clear_handlers(conn->socket.fd);
-	close_socket(&conn->data_socket);
+	if (conn->socket->fd != -1)
+		clear_handlers(conn->socket->fd);
+	close_socket(conn->data_socket);
 
 	/* XXX: See also protocol/http/http.c:decompress_shutdown(). */
 	if (conn->stream) {
@@ -381,13 +398,13 @@ free_connection_data(struct connection *conn)
 		close(conn->cgi_pipes[1]);
 	conn->cgi_pipes[0] = conn->cgi_pipes[1] = -1;
 
-	if (conn->socket.conn_info) {
+	if (conn->socket->conn_info) {
 		/* No callbacks should be made */
-		conn->socket.conn_info->done = NULL;
-		done_connection_info(&conn->socket);
+		conn->socket->conn_info->done = NULL;
+		done_connection_info(conn->socket);
 	}
 
-	mem_free_set(&conn->socket.buffer, NULL);
+	mem_free_set(&conn->socket->buffer, NULL);
 	mem_free_set(&conn->info, NULL);
 
 	kill_timer(&conn->timer);
@@ -419,6 +436,8 @@ done_connection(struct connection *conn)
 	if (conn->referrer) done_uri(conn->referrer);
 	done_uri(conn->uri);
 	done_uri(conn->proxied_uri);
+	mem_free(conn->socket);
+	mem_free(conn->data_socket);
 	mem_free(conn);
 	check_queue_bugs();
 }
@@ -492,8 +511,8 @@ init_keepalive_connection(struct connection *conn, time_T timeout,
 
 	keep_conn->uri = get_uri_reference(uri);
 	keep_conn->done = done;
-	keep_conn->protocol_family = conn->socket.protocol_family;
-	keep_conn->socket = conn->socket.fd;
+	keep_conn->protocol_family = conn->socket->protocol_family;
+	keep_conn->socket = conn->socket->fd;
 	keep_conn->timeout = timeout;
 	keep_conn->add_time = get_time();
 
@@ -521,8 +540,8 @@ has_keepalive_connection(struct connection *conn)
 
 	if (!keep_conn) return 0;
 
-	conn->socket.fd = keep_conn->socket;
-	conn->socket.protocol_family = keep_conn->protocol_family;
+	conn->socket->fd = keep_conn->socket;
+	conn->socket->protocol_family = keep_conn->protocol_family;
 
 	/* Mark that the socket should not be closed and the callback should be
 	 * ignored. */
@@ -539,7 +558,7 @@ add_keepalive_connection(struct connection *conn, time_T timeout,
 {
 	struct keepalive_connection *keep_conn;
 
-	assertm(conn->socket.fd != -1, "keepalive connection not connected");
+	assertm(conn->socket->fd != -1, "keepalive connection not connected");
 	if_assert_failed goto done;
 
 	keep_conn = init_keepalive_connection(conn, timeout, done);
@@ -552,7 +571,7 @@ add_keepalive_connection(struct connection *conn, time_T timeout,
 		return;
 
 	} else {
-		close(conn->socket.fd);
+		close(conn->socket->fd);
 	}
 
 done:
@@ -646,7 +665,7 @@ sort_queue(void)
 static void
 interrupt_connection(struct connection *conn)
 {
-	close_socket(&conn->socket);
+	close_socket(conn->socket);
 	free_connection_data(conn);
 }
 
@@ -1053,18 +1072,18 @@ connection_timeout(struct connection *conn)
 {
 	conn->timer = TIMER_ID_UNDEF;
 	set_connection_state(conn, S_TIMEOUT);
-	if (conn->socket.conn_info) {
+	if (conn->socket->conn_info) {
 		/* Is the DNS resolving still in progress? */
-		if (conn->socket.conn_info->dnsquery) {
+		if (conn->socket->conn_info->dnsquery) {
 			abort_connection(conn);
 			return;
 		}
 
-		dns_found(&conn->socket, 0); /* jump to next addr */
+		dns_found(conn->socket, 0); /* jump to next addr */
 
 		/* Reset the timeout if dns_found() started a new attempt to
 		 * connect. */
-		if (conn->socket.conn_info)
+		if (conn->socket->conn_info)
 			set_connection_timeout(conn);
 	} else {
 		retry_connection(conn);

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.107 2005/04/12 16:01:53 jonas Exp $ */
+/* $Id: connection.h,v 1.108 2005/04/12 16:47:05 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -192,11 +192,11 @@ struct connection {
 	int from;
 
 	/* The communication socket with the other side. */
-	struct connection_socket socket;
+	struct connection_socket *socket;
 	/* The data socket. It is used, when @socket is used for the control,
 	 * and the actual data is transmitted through a different channel. */
 	/* The only users now is FTP and SMB. */
-	struct connection_socket data_socket;
+	struct connection_socket *data_socket;
 
 	int tries;
 	int received;

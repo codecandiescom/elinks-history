@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.93 2005/04/12 14:07:56 jonas Exp $ */
+/* $Id: cgi.c,v 1.94 2005/04/12 16:47:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@
 static void
 close_pipe_and_read(struct connection *conn)
 {
-	struct read_buffer *rb = alloc_read_buffer(&conn->socket);
+	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
 	if (!rb) return;
 
@@ -47,10 +47,10 @@ close_pipe_and_read(struct connection *conn)
 	rb->state = SOCKET_END_ONCLOSE;
 	conn->unrestartable = 1;
 	close(conn->cgi_pipes[1]);
-	conn->data_socket.fd = conn->cgi_pipes[1] = -1;
+	conn->data_socket->fd = conn->cgi_pipes[1] = -1;
 	set_connection_state(conn, S_SENT);
 	set_connection_timeout(conn);
-	read_from_socket(&conn->socket, rb, http_got_header);
+	read_from_socket(conn->socket, rb, http_got_header);
 }
 
 static void
@@ -96,9 +96,9 @@ send_post_data(struct connection *conn)
 
 	/* Use data socket for passing the pipe. It will be cleaned up in
 	 * close_pipe_and_read(). */
-	conn->data_socket.fd = conn->cgi_pipes[1];
+	conn->data_socket->fd = conn->cgi_pipes[1];
 
-	write_to_socket(&conn->data_socket, data.source, data.length, close_pipe_and_read);
+	write_to_socket(conn->data_socket, data.source, data.length, close_pipe_and_read);
 
 	done_string(&data);
 	set_connection_state(conn, S_SENT);
@@ -372,7 +372,7 @@ execute_cgi(struct connection *conn)
 		close(pipe_read[1]); close(pipe_write[0]);
 		conn->cgi_pipes[0] = pipe_read[0];
 		conn->cgi_pipes[1] = pipe_write[1];
-		conn->socket.fd = conn->cgi_pipes[0];
+		conn->socket->fd = conn->cgi_pipes[0];
 
 		send_request(conn);
 		return 0;

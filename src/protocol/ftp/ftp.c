@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.223 2005/04/12 16:01:53 jonas Exp $ */
+/* $Id: ftp.c,v 1.224 2005/04/12 16:47:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ again:
 		}
 
 		memset(s, 0, sizeof(*s));
-		if (getpeername(conn->socket.fd, (struct sockaddr *) sa, &sal)) {
+		if (getpeername(conn->socket->fd, (struct sockaddr *) sa, &sal)) {
 			return -1;
 		}
 		s->sin6_family = AF_INET6;
@@ -274,7 +274,7 @@ ftp_protocol_handler(struct connection *conn)
 	set_connection_timeout(conn);
 
 	if (!has_keepalive_connection(conn)) {
-		make_connection(conn, &conn->socket, ftp_login);
+		make_connection(conn, conn->socket, ftp_login);
 
 	} else {
 		ftp_send_retr_req(conn, S_SENT);
@@ -285,22 +285,22 @@ ftp_protocol_handler(struct connection *conn)
 static void
 get_resp(struct connection *conn)
 {
-	struct read_buffer *rb = alloc_read_buffer(&conn->socket);
+	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
 	if (!rb) return;
 
 	set_connection_timeout(conn);
 
 	rb->state = SOCKET_RETRY_ONCLOSE;
-	read_from_socket(&conn->socket, rb, (void (*)(struct connection *, struct read_buffer *)) conn->socket.read_done);
+	read_from_socket(conn->socket, rb, (void (*)(struct connection *, struct read_buffer *)) conn->socket->read_done);
 }
 
 /* Send command, set connection state and free cmd string. */
 static void
 send_cmd(struct connection *conn, struct string *cmd, void *callback, int state)
 {
-	conn->socket.read_done = callback;
-	write_to_socket(&conn->socket, cmd->source, cmd->length, get_resp);
+	conn->socket->read_done = callback;
+	write_to_socket(conn->socket, cmd->source, cmd->length, get_resp);
 
 	done_string(cmd);
 	set_connection_state(conn, state);
@@ -383,7 +383,7 @@ ftp_got_info(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (!response) {
-		read_from_socket(&conn->socket, rb, ftp_got_info);
+		read_from_socket(conn->socket, rb, ftp_got_info);
 		return;
 	}
 
@@ -414,7 +414,7 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (!response) {
-		read_from_socket(&conn->socket, rb, ftp_got_user_info);
+		read_from_socket(conn->socket, rb, ftp_got_user_info);
 		return;
 	}
 
@@ -498,7 +498,7 @@ ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (!response) {
-		read_from_socket(&conn->socket, rb, ftp_pass_info);
+		read_from_socket(conn->socket, rb, ftp_pass_info);
 		set_connection_state(conn, S_LOGIN);
 		return;
 	}
@@ -606,7 +606,7 @@ get_ftp_data_socket(struct connection *conn, struct string *command)
 #ifdef CONFIG_IPV6
 	c_i->use_epsv = get_opt_bool("protocol.ftp.use_epsv");
 
-	if (conn->socket.protocol_family == 1) {
+	if (conn->socket->protocol_family == 1) {
 		if (c_i->use_epsv) {
 			add_to_string(command, "EPSV");
 
@@ -615,11 +615,11 @@ get_ftp_data_socket(struct connection *conn, struct string *command)
 			int data_sock;
 
 			memset(&data_addr, 0, sizeof(data_addr));
-			data_sock = get_pasv6_socket(conn, conn->socket.fd,
+			data_sock = get_pasv6_socket(conn, conn->socket->fd,
 			 	    (struct sockaddr_storage *) &data_addr);
 			if (data_sock < 0) return 0;
 
-			conn->data_socket.fd = data_sock;
+			conn->data_socket->fd = data_sock;
 			add_eprtcmd_to_string(command, &data_addr);
 		}
 
@@ -634,10 +634,10 @@ get_ftp_data_socket(struct connection *conn, struct string *command)
 			int data_sock;
 
 			memset(pc, 0, sizeof(pc));
-			data_sock = get_pasv_socket(conn, conn->socket.fd, pc);
+			data_sock = get_pasv_socket(conn, conn->socket->fd, pc);
 			if (data_sock < 0) return 0;
 
-			conn->data_socket.fd = data_sock;
+			conn->data_socket->fd = data_sock;
 			add_portcmd_to_string(command, pc);
 		}
 	}
@@ -858,7 +858,7 @@ ftp_data_connect(struct connection *conn, int family, struct sockaddr_storage *s
 
 	set_ip_tos_throughput(fd);
 
-	conn->data_socket.fd = fd;
+	conn->data_socket->fd = fd;
 	/* XXX: We ignore connect() errors here. */
 	connect(fd, (struct sockaddr *) sa, size_of_sockaddr);
 	return 0;
@@ -880,7 +880,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 		}
 
 		if (!response) {
-			read_from_socket(&conn->socket, rb, ftp_retr_file);
+			read_from_socket(conn->socket, rb, ftp_retr_file);
 			set_connection_state(conn, S_GETH);
 			return;
 		}
@@ -951,7 +951,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (!response) {
-		read_from_socket(&conn->socket, rb, ftp_retr_file);
+		read_from_socket(conn->socket, rb, ftp_retr_file);
 		set_connection_state(conn, S_GETH);
 		return;
 	}
@@ -971,11 +971,11 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 		}
 	}
 
-	set_handlers(conn->data_socket.fd,
+	set_handlers(conn->data_socket->fd,
 		     (void (*)(void *)) got_something_from_data_connection,
 		     NULL, NULL, conn);
 
-	/* read_from_socket(&conn->socket, rb, ftp_got_final_response); */
+	/* read_from_socket(conn->socket, rb, ftp_got_final_response); */
 	ftp_got_final_response(conn, rb);
 }
 
@@ -991,7 +991,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (!response) {
-		read_from_socket(&conn->socket, rb, ftp_got_final_response);
+		read_from_socket(conn->socket, rb, ftp_got_final_response);
 		if (conn->state != S_TRANS)
 			set_connection_state(conn, S_GETH);
 		return;
@@ -1231,24 +1231,24 @@ ftp_data_accept(struct connection *conn)
 
 	c_i->has_data = 1;
 
-	clear_handlers(conn->data_socket.fd);
+	clear_handlers(conn->data_socket->fd);
 
-	if ((conn->socket.protocol_family != 1 && c_i->use_pasv)
+	if ((conn->socket->protocol_family != 1 && c_i->use_pasv)
 #ifdef CONFIG_IPV6
-	    || (conn->socket.protocol_family == 1 && c_i->use_epsv)
+	    || (conn->socket->protocol_family == 1 && c_i->use_epsv)
 #endif
 	   ) {
-		newsock = conn->data_socket.fd;
+		newsock = conn->data_socket->fd;
 	} else {
-		newsock = accept(conn->data_socket.fd, NULL, NULL);
+		newsock = accept(conn->data_socket->fd, NULL, NULL);
 		if (newsock < 0) {
 			retry_conn_with_state(conn, -errno);
 			return -1;
 		}
-		close(conn->data_socket.fd);
+		close(conn->data_socket->fd);
 	}
 
-	conn->data_socket.fd = newsock;
+	conn->data_socket->fd = newsock;
 
 	set_handlers(newsock,
 		     (void (*)(void *)) got_something_from_data_connection,
@@ -1332,7 +1332,7 @@ out_of_mem:
 		mem_free_set(&conn->cached->content_type, stracpy("text/html"));
 	}
 
-	len = safe_read(conn->data_socket.fd, c_i->ftp_buffer + c_i->buf_pos,
+	len = safe_read(conn->data_socket->fd, c_i->ftp_buffer + c_i->buf_pos,
 		        FTP_BUF_SIZE - c_i->buf_pos);
 	if (len < 0) {
 		retry_conn_with_state(conn, -errno);
@@ -1380,8 +1380,8 @@ out_of_mem:
 
 	if (c_i->dir) ADD_CONST("</pre>\n<hr>\n</body>\n</html>");
 
-	clear_handlers(conn->data_socket.fd);
-	close_socket(&conn->data_socket);
+	clear_handlers(conn->data_socket->fd);
+	close_socket(conn->data_socket);
 
 	if (c_i->conn_state == 1) {
 		ftp_end_request(conn, S_OK);

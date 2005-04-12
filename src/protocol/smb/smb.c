@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.70 2005/04/11 21:37:44 jonas Exp $ */
+/* $Id: smb.c,v 1.71 2005/04/12 16:47:04 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -163,11 +163,11 @@ smb_got_data(struct connection *conn)
 	int r;
 
 	if (si->list_type != SMB_LIST_NONE) {
-		smb_read_text(conn, conn->data_socket.fd);
+		smb_read_text(conn, conn->data_socket->fd);
 		return;
 	}
 
-	r = smb_read_data(conn, conn->data_socket.fd, buffer);
+	r = smb_read_data(conn, conn->data_socket->fd, buffer);
 	if (r <= 0) return;
 
 	set_connection_state(conn, S_TRANS);
@@ -185,7 +185,7 @@ smb_got_data(struct connection *conn)
 static void
 smb_got_text(struct connection *conn)
 {
-	smb_read_text(conn, conn->socket.fd);
+	smb_read_text(conn, conn->socket->fd);
 }
 
  /* Search for @str1 followed by @str2 in @line.
@@ -516,12 +516,12 @@ end_smb_connection(struct connection *conn)
 		normalize_cache_entry(conn->cached, page.length);
 		done_string(&page);
 
-		mem_free_set(&conn->cached->content_type, stracpy("text/html"));
+		mem_free_set(conn->cached->content_type, stracpy("text/html"));
 	}
 
 bye:
-	close_socket(&conn->socket);
-	close_socket(&conn->data_socket);
+	close_socket(conn->socket);
+	close_socket(conn->data_socket);
 	abort_conn_with_state(conn, state);
 }
 
@@ -731,8 +731,8 @@ smb_protocol_handler(struct connection *conn)
 
 	mem_free(share);
 
-	conn->data_socket.fd = out_pipe[0];
-	conn->socket.fd = err_pipe[0];
+	conn->data_socket->fd = out_pipe[0];
+	conn->socket->fd = err_pipe[0];
 
 	close(out_pipe[1]);
 	close(err_pipe[1]);

@@ -1,4 +1,4 @@
-/* $Id: select.h,v 1.19 2005/04/12 18:26:21 jonas Exp $ */
+/* $Id: select.h,v 1.20 2005/04/12 18:31:06 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_SELECT_H
 #define EL__LOWLEVEL_SELECT_H
@@ -13,7 +13,7 @@ void select_loop(void (*init)(void));
 long select_info(int);
 
 /* Schedule work to be done when appropriate in the future. */
-int register_bottom_half_do(select_handler_T, void *);
+int register_bottom_half_do(select_handler_T work_handler, void *data);
 
 /* Wrapper to remove a lot of casts from users of bottom halves. */
 #define register_bottom_half(fn, data) \

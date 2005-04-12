@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.64 2005/04/12 13:13:24 zas Exp $ */
+/* $Id: dns.c,v 1.65 2005/04/12 13:26:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ struct dnsquery {
 #endif
 	dns_callback_T done;
 	void *data;
-	struct dnsquery **s;
+	struct dnsquery **query_p;
 	/* addr and addrno lifespan exceeds life of this structure, the caller
 	 * holds memory being pointed upon be these functions. Thus, when
 	 * free()ing, *always* set pointer to NULL ! */
@@ -398,7 +398,7 @@ done:
 	done = query->done;
 	data = query->data;
 
-	if (query->s) *query->s = NULL;
+	if (query->query_p) *query->query_p = NULL;
 	/* query->addr is freed later by dns_found() */
 	mem_free(query);
 
@@ -420,7 +420,7 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 
 	query->done = done;
 	query->data = data;
-	query->s = (struct dnsquery **) query_p;
+	query->query_p = (struct dnsquery **) query_p;
 	query->addr = addr;
 	query->addrno = addrno;
 	memcpy(query->name, name, namelen); /* calloc() sets nul char for us. */

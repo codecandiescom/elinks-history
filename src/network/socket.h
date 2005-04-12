@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.48 2005/04/12 14:25:44 jonas Exp $ */
+/* $Id: socket.h,v 1.49 2005/04/12 15:38:57 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -52,16 +52,11 @@ struct read_buffer {
 };
 
 enum socket_error {
-	/* Retry with -errno state. */
-	SOCKET_SYSCALL_ERROR	= -1,
-	/* Stop with -errno state. */
-	SOCKET_INTERNAL_ERROR	= -2,
-	/* Try to read some more. */
-	SOCKET_WANT_READ	= -3,
-	/* Retry with S_CANT_READ state. */
-	SOCKET_CANT_READ	= -4,
-	/* Retry with S_CANT_WRITE state. */
-	SOCKET_CANT_WRITE	= -5,
+	SOCKET_SYSCALL_ERROR	= -1,	/* Retry with -errno state. */
+	SOCKET_INTERNAL_ERROR	= -2,	/* Stop with -errno state. */
+	SOCKET_WANT_READ	= -3,	/* Try to read some more. */
+	SOCKET_CANT_READ	= -4,	/* Retry with S_CANT_READ state. */
+	SOCKET_CANT_WRITE	= -5,	/* Retry with S_CANT_WRITE state. */
 };
 
 struct conn_info *

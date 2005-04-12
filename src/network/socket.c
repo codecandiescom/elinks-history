@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.157 2005/04/11 23:56:36 jonas Exp $ */
+/* $Id: socket.c,v 1.158 2005/04/12 00:09:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -675,6 +675,12 @@ write_to_socket(struct connection_socket *socket,
 #define RD_MEM(rb) (sizeof(*(rb)) + 4 * RD_ALLOC_GR + RD_ALLOC_GR)
 #define RD_SIZE(rb, len) ((RD_MEM(rb) + (len)) & ~(RD_ALLOC_GR - 1))
 
+static int
+generic_read(struct connection_socket *socket, struct read_buffer *rb)
+{
+	return safe_read(socket->fd, rb->data + rb->len, rb->freespace);
+}
+
 static void
 read_select(struct connection_socket *socket)
 {
@@ -712,7 +718,7 @@ read_select(struct connection_socket *socket)
 	} else
 #endif
 	{
-		rd = safe_read(socket->fd, rb->data + rb->len, rb->freespace);
+		rd = generic_read(socket, rb);
 		if (rd <= 0) {
 			if (rb->close != READ_BUFFER_RETRY_ONCLOSE && !rd) {
 				rb->close = READ_BUFFER_END;

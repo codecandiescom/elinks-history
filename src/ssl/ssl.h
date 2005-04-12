@@ -1,4 +1,4 @@
-/* $Id: ssl.h,v 1.21 2004/08/03 00:50:50 jonas Exp $ */
+/* $Id: ssl.h,v 1.22 2005/04/12 16:58:15 jonas Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
@@ -6,7 +6,8 @@
 #ifdef CONFIG_SSL
 
 #include "modules/module.h"
-#include "sched/connection.h"
+
+struct connection_socket;
 
 extern struct module ssl_module;
 
@@ -17,7 +18,7 @@ int init_ssl_connection(struct connection_socket *socket);
 /* Releases the SSL connection data */
 void done_ssl_connection(struct connection_socket *socket);
 
-unsigned char *get_ssl_connection_cipher(struct connection *conn);
+unsigned char *get_ssl_connection_cipher(struct connection_socket *socket);
 
 
 /* Internal type used in ssl module. */

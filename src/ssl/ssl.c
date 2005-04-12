@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.54 2005/04/12 16:53:33 jonas Exp $ */
+/* $Id: ssl.c,v 1.55 2005/04/12 16:58:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,9 +266,9 @@ done_ssl_connection(struct connection_socket *socket)
 }
 
 unsigned char *
-get_ssl_connection_cipher(struct connection *conn)
+get_ssl_connection_cipher(struct connection_socket *socket)
 {
-	ssl_t *ssl = conn->socket->ssl; /* FIXME: Assuming ssl handle */
+	ssl_t *ssl = socket->ssl;
 	struct string str;
 
 	if (!init_string(&str)) return NULL;

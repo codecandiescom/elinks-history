@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.401 2005/04/12 16:47:04 jonas Exp $ */
+/* $Id: http.c,v 1.402 2005/04/12 16:58:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1495,7 +1495,7 @@ again:
 	/* TODO: Move this to some more generic place like lowlevel/connect.c
 	 * or sched/connection.c when other protocols will need it. --jonas */
 	if (conn->socket->ssl)
-		mem_free_set(&conn->cached->ssl_info, get_ssl_connection_cipher(conn));
+		mem_free_set(&conn->cached->ssl_info, get_ssl_connection_cipher(conn->socket));
 #endif
 
 	/* XXX: Is there some reason why NOT to follow the Location header

@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.247 2005/04/12 22:39:24 jonas Exp $ */
+/* $Id: connection.c,v 1.248 2005/04/12 22:53:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,6 +248,12 @@ done_connection_socket(void *conn, struct socket *socket, int connection_state)
 static struct socket *
 init_socket(void *conn)
 {
+	static struct socket_operations connection_socket_operations = {
+		set_connection_socket_state,
+		set_connection_socket_timeout,
+		retry_connection_socket,
+		done_connection_socket,
+	};
 	struct socket *socket;
 
 	socket = mem_calloc(1, sizeof(*socket));
@@ -255,10 +261,7 @@ init_socket(void *conn)
 
 	socket->fd = -1;
 	socket->conn = conn;
-	socket->set_state   = set_connection_socket_state;
-	socket->set_timeout = set_connection_socket_timeout;
-	socket->done        = done_connection_socket;
-	socket->retry       = retry_connection_socket;
+	socket->ops = &connection_socket_operations;
 
 	return socket;
 }

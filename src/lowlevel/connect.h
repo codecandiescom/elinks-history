@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.57 2005/04/12 22:39:24 jonas Exp $ */
+/* $Id: connect.h,v 1.58 2005/04/12 22:53:14 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -61,7 +61,19 @@ struct conn_info {
 	unsigned int need_ssl:1;
 };
 
-typedef void (*socket_handler_T)(void *, struct socket *, int connection_state);
+typedef void (*socket_operation_T)(void *, struct socket *, int connection_state);
+
+struct socket_operations {
+	/* Report change in the state of the socket. */
+	socket_operation_T set_state;
+	/* Reset the timeout for the socket. */
+	socket_operation_T set_timeout;
+	/* Some system related error occured; advise to reconnect. */
+	socket_operation_T retry;
+	/* A fatal error occured, like a memory allocation failure; advise to
+	 * abort the connection. */
+	socket_operation_T done;
+};
 
 struct socket {
 	/* The socket descriptor */
@@ -78,16 +90,8 @@ struct socket {
 	void *buffer;
 
 	/* Callbacks to the connection management: */
+	struct socket_operations *ops;
 
-	/* Report change in the state of the socket. */
-	socket_handler_T set_state;
-	/* Reset the timeout for the socket. */
-	socket_handler_T set_timeout;
-	/* Some system related error occured; advise to reconnect. */
-	socket_handler_T retry;
-	/* A fatal error occured, like a memory allocation failure; advise to
-	 * abort the connection. */
-	socket_handler_T done;
 	/* Only used by ftp in send_cmd/get_resp. Put here
 	 * since having no connection->info is apparently valid. */
 	void (*read_done)(void *, struct read_buffer *);

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.221 2005/04/12 12:09:43 jonas Exp $ */
+/* $Id: ftp.c,v 1.222 2005/04/12 15:48:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,6 +288,10 @@ get_resp(struct connection *conn)
 	struct read_buffer *rb = alloc_read_buffer(&conn->socket);
 
 	if (!rb) return;
+
+	set_connection_timeout(conn);
+
+	rb->state = SOCKET_RETRY_ONCLOSE;
 	read_from_socket(&conn->socket, rb, conn->read_func);
 }
 

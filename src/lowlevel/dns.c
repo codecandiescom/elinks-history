@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.65 2005/04/12 13:26:08 zas Exp $ */
+/* $Id: dns.c,v 1.66 2005/04/12 13:29:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -420,13 +420,15 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 
 	query->done = done;
 	query->data = data;
-	query->query_p = (struct dnsquery **) query_p;
 	query->addr = addr;
 	query->addrno = addrno;
 	memcpy(query->name, name, namelen); /* calloc() sets nul char for us. */
 
-	if (query_p) *((struct dnsquery **) query_p) = query;
-
+	if (query_p) {
+		query->query_p = (struct dnsquery **) query_p;
+		*(query->query_p) = query;
+	}
+	
 	return do_queued_lookup(query);
 }
 

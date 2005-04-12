@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.47 2005/04/12 14:21:50 jonas Exp $ */
+/* $Id: connect.h,v 1.48 2005/04/12 14:25:44 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -51,24 +51,17 @@ struct read_buffer {
 	unsigned char data[1]; /* must be at end of struct */
 };
 
-enum read_buffer_state {
-	/* Retry with S_CANT_WRITE state. */
-	READ_BUFFER_CANT_READ		=  0,
+enum socket_error {
 	/* Retry with -errno state. */
-	READ_BUFFER_SYSCALL_ERROR	= -1,
+	SOCKET_SYSCALL_ERROR	= -1,
 	/* Stop with -errno state. */
-	READ_BUFFER_INTERNAL_ERROR	= -2,
+	SOCKET_INTERNAL_ERROR	= -2,
 	/* Try to read some more. */
-	READ_BUFFER_WANT_READ		= -3,
-};
-
-enum write_buffer_state {
+	SOCKET_WANT_READ	= -3,
+	/* Retry with S_CANT_READ state. */
+	SOCKET_CANT_READ	= -4,
 	/* Retry with S_CANT_WRITE state. */
-	WRITE_BUFFER_CANT_WRITE		=  0,
-	/* Retry with -errno state. */
-	WRITE_BUFFER_SYSCALL_ERROR	= -1,
-	/* Stop with -errno state. */
-	WRITE_BUFFER_INTERNAL_ERROR	= -2,
+	SOCKET_CANT_WRITE	= -5,
 };
 
 struct conn_info *
@@ -103,8 +96,8 @@ struct read_buffer *alloc_read_buffer(struct connection_socket *socket);
 
 /* Reads data from @socket into @buffer using @done as struct read_buffers
  * @done routine (called each time new data comes in). */
-void read_from_socket(struct connection_socket *socket, struct read_buffer *buffer,
-		      void (*done)(struct connection *, struct read_buffer *));
+void read_from_socket(struct connection_socket *socket, 
+		       struct read_buffer *buffer, void (*done)(struct connection *, struct read_buffer *));
 
 void kill_buffer_data(struct read_buffer *, int);
 

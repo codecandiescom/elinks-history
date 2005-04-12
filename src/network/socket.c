@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.163 2005/04/12 14:07:56 jonas Exp $ */
+/* $Id: socket.c,v 1.164 2005/04/12 14:25:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -574,9 +574,9 @@ generic_write(struct connection_socket *socket, unsigned char *data, int len)
 {
 	int wr = safe_write(socket->fd, data, len);
 
-	if (!wr) return WRITE_BUFFER_CANT_WRITE;
+	if (!wr) return SOCKET_CANT_WRITE;
 
-	return wr < 0 ? WRITE_BUFFER_SYSCALL_ERROR : wr;
+	return wr < 0 ? SOCKET_SYSCALL_ERROR : wr;
 }
 
 static void
@@ -615,15 +615,15 @@ write_select(struct connection_socket *socket)
 	}
 
 	switch (wr) {
-	case WRITE_BUFFER_CANT_WRITE:
+	case SOCKET_CANT_WRITE:
 		socket->retry(socket->conn, S_CANT_WRITE);
 		break;
 
-	case WRITE_BUFFER_SYSCALL_ERROR:
+	case SOCKET_SYSCALL_ERROR:
 		socket->retry(socket->conn, -errno);
 		break;
 
-	case WRITE_BUFFER_INTERNAL_ERROR:
+	case SOCKET_INTERNAL_ERROR:
 		/* The global errno variable is used for passing
 		 * internal connection_state error value. */
 		socket->done(socket->conn, -errno);
@@ -679,9 +679,9 @@ generic_read(struct connection_socket *socket, unsigned char *data, int len)
 {
 	int rd = safe_read(socket->fd, data, len);
 
-	if (!rd) return READ_BUFFER_CANT_READ;
+	if (!rd) return SOCKET_CANT_READ;
 
-	return rd < 0 ? READ_BUFFER_SYSCALL_ERROR : rd;
+	return rd < 0 ? SOCKET_SYSCALL_ERROR : rd;
 }
 
 static void
@@ -724,11 +724,11 @@ read_select(struct connection_socket *socket)
 	}
 
 	switch (rd) {
-	case READ_BUFFER_WANT_READ:
+	case SOCKET_WANT_READ:
 		read_from_socket(socket, rb, rb->done);
 		break;
 
-	case READ_BUFFER_CANT_READ:
+	case SOCKET_CANT_READ:
 		if (rb->state != SOCKET_RETRY_ONCLOSE) {
 			rb->state = SOCKET_CLOSED;
 			rb->done(socket->conn, rb);
@@ -738,11 +738,11 @@ read_select(struct connection_socket *socket)
 		errno = -S_CANT_READ;
 		/* Fall-through */
 
-	case READ_BUFFER_SYSCALL_ERROR:
+	case SOCKET_SYSCALL_ERROR:
 		socket->retry(socket->conn, -errno);
 		break;
 
-	case READ_BUFFER_INTERNAL_ERROR:
+	case SOCKET_INTERNAL_ERROR:
 		socket->done(socket->conn, -errno);
 		break;
 

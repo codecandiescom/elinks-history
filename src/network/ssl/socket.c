@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.107 2005/04/12 00:40:17 jonas Exp $ */
+/* $Id: socket.c,v 1.108 2005/04/12 14:25:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -277,14 +277,14 @@ ssl_write(struct connection_socket *socket, unsigned char *data, int len)
 			return -1;
 		}
 
-		if (!wr) return WRITE_BUFFER_CANT_WRITE;
+		if (!wr) return SOCKET_CANT_WRITE;
 
 		if (err == SSL_ERROR_SYSCALL)
-			return WRITE_BUFFER_SYSCALL_ERROR;
+			return SOCKET_SYSCALL_ERROR;
 
 		errno = -S_SSL_ERROR;
 
-		return WRITE_BUFFER_INTERNAL_ERROR;
+		return SOCKET_INTERNAL_ERROR;
 	}
 
 	return wr;
@@ -310,17 +310,17 @@ ssl_read(struct connection_socket *socket, unsigned char *data, int len)
 
 		if (err == SSL_ERROR_WANT_READ ||
 		    err == SSL_ERROR_WANT_READ2) {
-			return READ_BUFFER_WANT_READ;
+			return SOCKET_WANT_READ;
 		}
 
-		if (!rd) return READ_BUFFER_CANT_READ;
+		if (!rd) return SOCKET_CANT_READ;
 
 		if (err == SSL_ERROR_SYSCALL2)
-			return READ_BUFFER_SYSCALL_ERROR;
+			return SOCKET_SYSCALL_ERROR;
 
 		errno = -S_SSL_ERROR;
 
-		return READ_BUFFER_INTERNAL_ERROR;
+		return SOCKET_INTERNAL_ERROR;
 	}
 
 	return rd;

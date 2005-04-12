@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.164 2005/04/12 14:25:44 jonas Exp $ */
+/* $Id: socket.c,v 1.165 2005/04/12 17:34:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,6 +127,8 @@ void
 done_connection_info(struct connection_socket *socket)
 {
 	struct conn_info *conn_info = socket->conn_info;
+
+	assert(socket->conn_info);
 
 	if (conn_info->dnsquery) kill_dns_request(&conn_info->dnsquery);
 	if (conn_info->done) conn_info->done(socket->conn);

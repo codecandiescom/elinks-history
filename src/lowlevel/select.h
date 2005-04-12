@@ -1,4 +1,4 @@
-/* $Id: select.h,v 1.16 2005/04/12 18:08:13 jonas Exp $ */
+/* $Id: select.h,v 1.17 2005/04/12 18:12:10 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_SELECT_H
 #define EL__LOWLEVEL_SELECT_H
@@ -28,7 +28,7 @@ void check_bottom_halves(void);
 #define H_DATA	3
 
 /* Get a registered select handler. */
-void *get_handler(int fd, int handler);
+select_handler_T get_handler(int fd, int handler);
 
 /* Set handlers and callback @data for the @fd descriptor. */
 void set_handlers(int fd,

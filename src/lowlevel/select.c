@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.69 2005/04/07 10:45:43 zas Exp $ */
+/* $Id: select.c,v 1.70 2005/04/12 18:12:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,7 @@ check_bottom_halves(void)
 	}
 }
 
-void *
+select_handler_T
 get_handler(int fd, int tp)
 {
 	assertm(fd >= 0 && fd < FD_SETSIZE,

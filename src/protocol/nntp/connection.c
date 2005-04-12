@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.11 2005/04/12 20:05:08 jonas Exp $ */
+/* $Id: connection.c,v 1.12 2005/04/12 20:16:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -480,8 +480,6 @@ nntp_send_command(struct connection *conn)
 {
 	struct nntp_connection_info *nntp = conn->info;
 	struct string req;
-
-	set_connection_timeout(conn);
 
 	nntp->command = get_nntp_command(nntp);
 

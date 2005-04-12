@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.226 2005/04/12 20:05:07 jonas Exp $ */
+/* $Id: ftp.c,v 1.227 2005/04/12 20:16:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -297,8 +297,6 @@ get_resp(struct connection *conn)
 static void
 send_cmd(struct connection *conn, struct string *cmd, void *callback, int state)
 {
-	set_connection_timeout(conn);
-
 	conn->socket->read_done = callback;
 	write_to_socket(conn->socket, cmd->source, cmd->length, get_resp);
 

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.94 2005/04/12 16:47:04 jonas Exp $ */
+/* $Id: cgi.c,v 1.95 2005/04/12 20:16:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,8 +91,6 @@ send_post_data(struct connection *conn)
 	}
 	if (n)
 		add_bytes_to_string(&data, buffer, n);
-
-	set_connection_timeout(conn);
 
 	/* Use data socket for passing the pipe. It will be cleaned up in
 	 * close_pipe_and_read(). */

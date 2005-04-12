@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.167 2005/04/12 20:05:07 jonas Exp $ */
+/* $Id: connect.c,v 1.168 2005/04/12 20:16:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -659,6 +659,8 @@ write_to_socket(struct connection_socket *socket,
 
 	assert(len > 0);
 	if_assert_failed return;
+
+	socket->set_timeout(socket->conn);
 
 	wb = mem_alloc(sizeof(*wb) + len);
 	if (!wb) {

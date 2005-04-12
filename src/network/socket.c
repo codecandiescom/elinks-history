@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.160 2005/04/12 00:32:02 jonas Exp $ */
+/* $Id: socket.c,v 1.161 2005/04/12 00:40:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -675,9 +675,9 @@ write_to_socket(struct connection_socket *socket,
 #define RD_SIZE(rb, len) ((RD_MEM(rb) + (len)) & ~(RD_ALLOC_GR - 1))
 
 static int
-generic_read(struct connection_socket *socket, struct read_buffer *rb)
+generic_read(struct connection_socket *socket, unsigned char *data, int len)
 {
-	int rd = safe_read(socket->fd, rb->data + rb->len, rb->freespace);
+	int rd = safe_read(socket->fd, data, len);
 
 	if (!rd) return READ_BUFFER_CANT_READ;
 
@@ -716,11 +716,11 @@ read_select(struct connection_socket *socket)
 
 #ifdef CONFIG_SSL
 	if (socket->ssl) {
-		rd = ssl_read(socket, rb);
+		rd = ssl_read(socket, rb->data + rb->len, rb->freespace);
 	} else
 #endif
 	{
-		rd = generic_read(socket, rb);
+		rd = generic_read(socket, rb->data + rb->len, rb->freespace);
 	}
 
 	switch (rd) {

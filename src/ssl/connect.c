@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.106 2005/04/12 00:31:04 jonas Exp $ */
+/* $Id: connect.c,v 1.107 2005/04/12 00:40:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,14 +47,14 @@
 
 #define ssl_do_connect(socket)		SSL_get_error(socket->ssl, SSL_connect(socket->ssl))
 #define ssl_do_write(socket, data, len)	SSL_write(socket->ssl, data, len)
-#define ssl_do_read(socket, rb)		SSL_read(socket->ssl, rb->data + rb->len, rb->freespace)
+#define ssl_do_read(socket, data, len)	SSL_read(socket->ssl, data, len)
 #define ssl_do_close(socket)		/* Hmh? No idea.. */
 
 #elif defined(CONFIG_GNUTLS)
 
 #define ssl_do_connect(conn)		gnutls_handshake(*((ssl_t *) socket->ssl))
 #define ssl_do_write(socket, data, len)	gnutls_record_send(*((ssl_t *) socket->ssl), data, len)
-#define ssl_do_read(socket, rb)		gnutls_record_recv(*((ssl_t *) socket->ssl), rb->data + rb->len, rb->freespace)
+#define ssl_do_read(socket, data, len)	gnutls_record_recv(*((ssl_t *) socket->ssl), data, len)
 /* We probably don't handle this entirely correctly.. */
 #define ssl_do_close(socket)		gnutls_bye(*((ssl_t *) socket->ssl), GNUTLS_SHUT_RDWR);
 
@@ -292,9 +292,9 @@ ssl_write(struct connection_socket *socket, unsigned char *data, int len)
 
 /* Return -1 on error, rd or success. */
 int
-ssl_read(struct connection_socket *socket, struct read_buffer *rb)
+ssl_read(struct connection_socket *socket, unsigned char *data, int len)
 {
-	int rd = ssl_do_read(socket, rb);
+	int rd = ssl_do_read(socket, data, len);
 
 	if (rd <= 0) {
 #ifdef CONFIG_OPENSSL

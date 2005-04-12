@@ -1,19 +1,25 @@
-/* $Id: select.h,v 1.15 2005/04/12 17:50:02 jonas Exp $ */
+/* $Id: select.h,v 1.16 2005/04/12 18:08:13 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_SELECT_H
 #define EL__LOWLEVEL_SELECT_H
 
-#include "util/ttime.h"
-
-long select_info(int);
-void select_loop(void (*)(void));
-
 typedef void (*select_handler_T)(void *);
 
+/* Start the select loop after calling the passed @init() function. */
+void select_loop(void (*init)(void));
+
+/* Get information about the number of descriptors being checked by the select
+ * loop. */
+long select_info(int);
+
+/* Schedule work to be done when appropriate in the future. */
 int register_bottom_half_do(select_handler_T, void *);
+
+/* Wrapper to remove a lot of casts from users of bottom halves. */
 #define register_bottom_half(fn, data) \
 	register_bottom_half_do((select_handler_T) (fn), (void *) (data))
 
+/* Check and run scheduled work. */
 void check_bottom_halves(void);
 
 #define H_READ	0
@@ -21,10 +27,22 @@ void check_bottom_halves(void);
 #define H_ERROR	2
 #define H_DATA	3
 
-void *get_handler(int, int);
-void set_handlers(int, select_handler_T, select_handler_T, select_handler_T, void *);
-#define clear_handlers(fd) set_handlers(fd, NULL, NULL, NULL, NULL)
+/* Get a registered select handler. */
+void *get_handler(int fd, int handler);
 
+/* Set handlers and callback @data for the @fd descriptor. */
+void set_handlers(int fd,
+		  select_handler_T read_handler,
+		  select_handler_T write_handler,
+		  select_handler_T error_handler,
+		  void *data);
+
+/* Clear handlers associated with @fd. */
+#define clear_handlers(fd) \
+	set_handlers(fd, NULL, NULL, NULL, NULL)
+
+/* Checks which can be used for querying the read/write state of the @fd
+ * descriptor without blocking. The interlink code are the only users. */
 int can_read(int fd);
 int can_write(int fd);
 

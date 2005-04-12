@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.43 2005/04/11 23:56:36 jonas Exp $ */
+/* $Id: socket.h,v 1.44 2005/04/12 00:31:04 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -49,6 +49,17 @@ struct read_buffer {
 	int freespace;
 
 	unsigned char data[1]; /* must be at end of struct */
+};
+
+enum read_buffer_state {
+	/* Retry with S_CANT_WRITE state. */
+	READ_BUFFER_CANT_READ		=  0,
+	/* Retry with -errno state. */
+	READ_BUFFER_SYSCALL_ERROR	= -1,
+	/* Stop with -errno state. */
+	READ_BUFFER_INTERNAL_ERROR	= -2,
+	/* Try to read some more. */
+	READ_BUFFER_WANT_READ		= -3,
 };
 
 enum write_buffer_state {

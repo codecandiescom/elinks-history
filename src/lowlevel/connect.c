@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.158 2005/04/12 00:09:45 jonas Exp $ */
+/* $Id: connect.c,v 1.159 2005/04/12 00:31:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -678,7 +678,11 @@ write_to_socket(struct connection_socket *socket,
 static int
 generic_read(struct connection_socket *socket, struct read_buffer *rb)
 {
-	return safe_read(socket->fd, rb->data + rb->len, rb->freespace);
+	int rd = safe_read(socket->fd, rb->data + rb->len, rb->freespace);
+
+	if (!rd) return READ_BUFFER_CANT_READ;
+
+	return rd < 0 ? READ_BUFFER_SYSCALL_ERROR : rd;
 }
 
 static void
@@ -714,30 +718,44 @@ read_select(struct connection_socket *socket)
 #ifdef CONFIG_SSL
 	if (socket->ssl) {
 		rd = ssl_read(socket, rb);
-		if (rd <= 0) return;
 	} else
 #endif
 	{
 		rd = generic_read(socket, rb);
-		if (rd <= 0) {
-			if (rb->close != READ_BUFFER_RETRY_ONCLOSE && !rd) {
-				rb->close = READ_BUFFER_END;
-				rb->done(socket->conn, rb);
-				return;
-			}
-
-			socket->retry(socket->conn, rd ? -errno : S_CANT_READ);
-			return;
-		}
 	}
 
-	debug_transfer_log(rb->data + rb->len, rd);
+	switch (rd) {
+	case READ_BUFFER_WANT_READ:
+		read_from_socket(socket, rb, rb->done);
+		break;
 
-	rb->len += rd;
-	rb->freespace -= rd;
-	assert(rb->freespace >= 0);
+	case READ_BUFFER_CANT_READ:
+		if (rb->close != READ_BUFFER_RETRY_ONCLOSE) {
+			rb->close = READ_BUFFER_END;
+			rb->done(socket->conn, rb);
+			break;
+		}
 
-	rb->done(socket->conn, rb);
+		errno = -S_CANT_READ;
+		/* Fall-through */
+
+	case READ_BUFFER_SYSCALL_ERROR:
+		socket->retry(socket->conn, -errno);
+		break;
+
+	case READ_BUFFER_INTERNAL_ERROR:
+		socket->done(socket->conn, -errno);
+		break;
+
+	default:
+		debug_transfer_log(rb->data + rb->len, rd);
+
+		rb->len += rd;
+		rb->freespace -= rd;
+		assert(rb->freespace >= 0);
+
+		rb->done(socket->conn, rb);
+	}
 }
 
 struct read_buffer *

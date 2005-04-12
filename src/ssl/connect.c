@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.105 2005/04/11 23:56:36 jonas Exp $ */
+/* $Id: connect.c,v 1.106 2005/04/12 00:31:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,31 +307,20 @@ ssl_read(struct connection_socket *socket, struct read_buffer *rb)
 		if (err == GNUTLS_E_REHANDSHAKE)
 			return -1;
 #endif
-		enum connection_state state;
 
 		if (err == SSL_ERROR_WANT_READ ||
 		    err == SSL_ERROR_WANT_READ2) {
-			read_from_socket(socket, rb, rb->done);
-			return -1;
+			return READ_BUFFER_WANT_READ;
 		}
 
-		if (rb->close != READ_BUFFER_RETRY_ONCLOSE && !rd) {
-			rb->close = READ_BUFFER_END;
-			rb->done(socket->conn, rb);
-			return -1;
-		}
+		if (!rd) return READ_BUFFER_CANT_READ;
 
-		state = rd ? (err == SSL_ERROR_SYSCALL2 ? -errno : S_SSL_ERROR)
-			   : S_CANT_READ;
+		if (err == SSL_ERROR_SYSCALL2)
+			return READ_BUFFER_SYSCALL_ERROR;
 
-		/* mem_free(rb); */
+		errno = -S_SSL_ERROR;
 
-		if (!rd || err == SSL_ERROR_SYSCALL2)
-			socket->retry(socket->conn, state);
-		else
-			socket->done(socket->conn, state);
-
-		return -1;
+		return READ_BUFFER_INTERNAL_ERROR;
 	}
 
 	return rd;

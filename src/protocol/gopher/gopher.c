@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.43 2005/04/12 20:27:37 jonas Exp $ */
+/* $Id: gopher.c,v 1.44 2005/04/12 20:41:22 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -720,8 +720,6 @@ read_gopher_response_data(struct connection *conn, struct read_buffer *rb)
 
 	assert(gopher && gopher->entity);
 
-	set_connection_timeout(conn);
-
 	if (!conn->cached && !init_gopher_cache_entry(conn)) {
 		end_gopher_connection(conn, S_OUT_OF_MEM);
 		return;
@@ -788,8 +786,6 @@ receive_gopher_response(struct connection *conn)
 	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
 	if (!rb) return;
-
-	set_connection_timeout(conn);
 
 	rb->state = SOCKET_END_ONCLOSE;
 	read_from_socket(conn->socket, rb, read_gopher_response_data);

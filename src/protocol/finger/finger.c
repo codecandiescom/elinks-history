@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.12 2005/04/12 20:27:37 jonas Exp $ */
+/* $Id: finger.c,v 1.13 2005/04/12 20:41:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,8 +47,6 @@ finger_get_response(struct connection *conn, struct read_buffer *rb)
 	struct cache_entry *cached = get_cache_entry(conn->uri);
 	int l;
 
-	set_connection_timeout(conn);
-
 	if (!cached) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
@@ -77,7 +75,6 @@ finger_sent_request(struct connection *conn)
 {
 	struct read_buffer *rb;
 
-	set_connection_timeout(conn);
 	rb = alloc_read_buffer(conn->socket);
 	if (!rb) return;
 	rb->state = SOCKET_END_ONCLOSE;

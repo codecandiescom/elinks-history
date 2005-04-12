@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.169 2005/04/12 20:27:37 jonas Exp $ */
+/* $Id: connect.c,v 1.170 2005/04/12 20:41:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -790,6 +790,8 @@ read_from_socket(struct connection_socket *socket,
 		 void (*done)(struct connection *, struct read_buffer *))
 {
 	buffer->done = done;
+
+	socket->set_timeout(socket->conn);
 
 	if (socket->buffer && buffer != socket->buffer)
 		mem_free(socket->buffer);

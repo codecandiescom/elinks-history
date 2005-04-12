@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.405 2005/04/12 20:32:06 jonas Exp $ */
+/* $Id: http.c,v 1.406 2005/04/12 20:41:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1751,7 +1751,6 @@ http_get_header(struct connection *conn)
 	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
 	if (!rb) return;
-	set_connection_timeout(conn);
 	rb->state = SOCKET_END_ONCLOSE;
 	read_from_socket(conn->socket, rb, http_got_header);
 }

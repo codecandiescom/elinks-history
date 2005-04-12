@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.242 2005/04/11 22:16:39 jonas Exp $ */
+/* $Id: connection.c,v 1.243 2005/04/12 14:43:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,6 +217,16 @@ check_queue_bugs(void)
 #define check_queue_bugs()
 #endif
 
+static void
+init_connection_socket(struct connection_socket *socket, void *conn)
+{
+	socket->fd = -1;
+	socket->conn = conn;
+	socket->set_state = (connection_socket_handler_T) set_connection_state;
+	socket->set_timeout = (void (*)(void *)) set_connection_timeout;
+	socket->done = (connection_socket_handler_T) abort_conn_with_state;
+	socket->retry = (connection_socket_handler_T) retry_conn_with_state;
+}
 
 static struct connection *
 init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
@@ -237,12 +247,8 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	conn->pri[priority] = 1;
 	conn->cache_mode = cache_mode;
 
-	conn->socket.fd = conn->data_socket.fd = -1;
-	conn->socket.conn = conn;
-	conn->socket.set_state = (connection_socket_handler_T) set_connection_state;
-	conn->socket.set_timeout = (void (*)(void *)) set_connection_timeout;
-	conn->socket.done = (connection_socket_handler_T) abort_conn_with_state;
-	conn->socket.retry = (connection_socket_handler_T) retry_conn_with_state;
+	init_connection_socket(&conn->socket, conn);
+	init_connection_socket(&conn->data_socket, conn);
 
 	conn->content_encoding = ENCODING_NONE;
 	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;

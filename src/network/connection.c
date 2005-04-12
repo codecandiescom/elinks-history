@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.246 2005/04/12 21:49:09 jonas Exp $ */
+/* $Id: connection.c,v 1.247 2005/04/12 22:39:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,6 +217,34 @@ check_queue_bugs(void)
 #define check_queue_bugs()
 #endif
 
+static void
+set_connection_socket_state(void *conn, struct socket *socket, int connection_state)
+{
+	assert(conn && socket);
+	set_connection_state(conn, connection_state);
+}
+
+static void
+set_connection_socket_timeout(void *conn, struct socket *socket, int connection_state)
+{
+	assert(conn && socket);
+	set_connection_timeout(conn);
+}
+
+static void
+retry_connection_socket(void *conn, struct socket *socket, int connection_state)
+{
+	assert(conn && socket);
+	retry_conn_with_state(conn, connection_state);
+}
+
+static void
+done_connection_socket(void *conn, struct socket *socket, int connection_state)
+{
+	assert(conn && socket);
+	abort_conn_with_state(conn, connection_state);
+}
+
 static struct socket *
 init_socket(void *conn)
 {
@@ -227,10 +255,10 @@ init_socket(void *conn)
 
 	socket->fd = -1;
 	socket->conn = conn;
-	socket->set_state = (socket_handler_T) set_connection_state;
-	socket->set_timeout = (void (*)(void *)) set_connection_timeout;
-	socket->done = (socket_handler_T) abort_conn_with_state;
-	socket->retry = (socket_handler_T) retry_conn_with_state;
+	socket->set_state   = set_connection_socket_state;
+	socket->set_timeout = set_connection_socket_timeout;
+	socket->done        = done_connection_socket;
+	socket->retry       = retry_connection_socket;
 
 	return socket;
 }

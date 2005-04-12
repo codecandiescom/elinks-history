@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.114 2005/04/12 22:09:01 jonas Exp $ */
+/* $Id: socket.c,v 1.115 2005/04/12 22:39:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,7 +156,7 @@ ssl_want_read(struct socket *socket)
 #ifdef CONFIG_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify")
 			    && gnutls_certificate_verify_peers(*((ssl_t *) socket->ssl))) {
-				socket->retry(socket->conn, S_SSL_ERROR);
+				socket->retry(socket->conn, socket, S_SSL_ERROR);
 				return;
 			}
 #endif
@@ -169,7 +169,7 @@ ssl_want_read(struct socket *socket)
 
 		default:
 			socket->no_tls = 1;
-			socket->retry(socket->conn, S_SSL_ERROR);
+			socket->retry(socket->conn, socket, S_SSL_ERROR);
 	}
 }
 
@@ -180,7 +180,7 @@ ssl_connect(struct socket *socket)
 	int ret;
 
 	if (init_ssl_connection(socket) == S_SSL_ERROR) {
-		socket->done(socket->conn, S_SSL_ERROR);
+		socket->done(socket->conn, socket, S_SSL_ERROR);
 		return -1;
 	}
 
@@ -226,7 +226,7 @@ ssl_connect(struct socket *socket)
 	switch (ret) {
 		case SSL_ERROR_WANT_READ:
 		case SSL_ERROR_WANT_READ2:
-			socket->set_state(socket->conn, S_SSL_NEG);
+			socket->set_state(socket->conn, socket, S_SSL_NEG);
 			set_handlers(socket->fd, (select_handler_T) ssl_want_read,
 				     NULL, (select_handler_T) dns_exception, socket);
 			return -1;
@@ -246,7 +246,7 @@ ssl_connect(struct socket *socket)
 				socket->no_tls = 1;
 			}
 
-			socket->set_state(socket->conn, S_SSL_ERROR);
+			socket->set_state(socket->conn, socket, S_SSL_ERROR);
 			close_socket(socket);
 			dns_found(socket, 0);
 			return -1;

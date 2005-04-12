@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.56 2005/04/12 22:09:01 jonas Exp $ */
+/* $Id: socket.h,v 1.57 2005/04/12 22:39:24 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -9,6 +9,7 @@
 #endif
 
 struct connection;
+struct socket;
 struct uri;
 
 
@@ -60,7 +61,7 @@ struct conn_info {
 	unsigned int need_ssl:1;
 };
 
-typedef void (*socket_handler_T)(void *, int connection_state);
+typedef void (*socket_handler_T)(void *, struct socket *, int connection_state);
 
 struct socket {
 	/* The socket descriptor */
@@ -81,7 +82,7 @@ struct socket {
 	/* Report change in the state of the socket. */
 	socket_handler_T set_state;
 	/* Reset the timeout for the socket. */
-	void (*set_timeout)(void *);
+	socket_handler_T set_timeout;
 	/* Some system related error occured; advise to reconnect. */
 	socket_handler_T retry;
 	/* A fatal error occured, like a memory allocation failure; advise to

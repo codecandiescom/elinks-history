@@ -31,6 +31,9 @@ Alexander Mai <st002279@hrzpub.tu-darmstadt.de>
 	Fix includes for AIX
 	Updated manpage
 
+Alexander Zschach <mailinglisten@zschach.net>
+	Build fixes
+
 Alexey Tourbin <at@turbinal.org>, <at@altlinux.org>
 	Proxy support fixes
 	Gettext plural.y fix
@@ -541,4 +544,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.189 2005/04/01 15:36:17 jonas Exp $
+$Id: AUTHORS,v 1.190 2005/04/12 08:11:05 zas Exp $

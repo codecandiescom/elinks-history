@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.316 2005/04/07 11:32:25 jonas Exp $ */
+/* $Id: search.c,v 1.317 2005/04/12 08:11:05 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -24,6 +24,7 @@
 #include "document/document.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
+#include "modules/module.h"
 #include "sched/event.h"
 #include "sched/session.h"
 #include "terminal/screen.h"

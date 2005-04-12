@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.109 2005/04/12 16:53:33 jonas Exp $ */
+/* $Id: connection.h,v 1.110 2005/04/12 17:13:38 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -135,19 +135,25 @@ struct connection {
 	struct list_head downloads;
 	struct progress progress;
 
+	/* If no proxy is used uri and proxied_uri are the same. */
 	struct uri *uri;
 	struct uri *proxied_uri;
 	struct uri *referrer;
 
-	void *info;
+	/* Cache information. */
+	enum cache_mode cache_mode;
 	struct cache_entry *cached;
+
+	/* Index to where in the cache entry new data should be inserted. */
+	int from;
+
+	enum stream_encoding content_encoding;
 	struct stream_encoded *stream;
 
 	unsigned int id;
 
 	enum connection_state state;
-	int prev_error;
-	int from;
+	enum connection_state prev_error;
 
 	/* The communication socket with the other side. */
 	struct connection_socket *socket;
@@ -177,8 +183,9 @@ struct connection {
 	 * @pri is also kinda refcount of the connection. */
 	int pri[PRIORITIES];
 
-	enum cache_mode cache_mode;
-	enum stream_encoding content_encoding;
+	/* Private protocol specific info. If non-NULL it is free()d when
+	 * stopping the connection. */
+	void *info;
 };
 
 struct download;
@@ -200,7 +207,7 @@ struct download {
 	struct progress *progress;
 
 	enum connection_state state;
-	int prev_error;
+	enum connection_state prev_error;
 	enum connection_priority pri;
 };
 

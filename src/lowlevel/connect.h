@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.45 2005/04/12 12:09:43 jonas Exp $ */
+/* $Id: connect.h,v 1.46 2005/04/12 14:07:56 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -26,17 +26,17 @@ struct conn_info {
 	unsigned int need_ssl:1;
 };
 
-enum read_buffer_close {
+enum socket_state {
 	/* If a zero-byte message is read prematurely the connection will be
 	 * retried with error state S_CANT_READ. */
-	READ_BUFFER_RETRY_ONCLOSE	= 0,
+	SOCKET_RETRY_ONCLOSE,
 	/* If a zero-byte message is read flush the remaining bytes in the
 	 * buffer and tell the protocol handler to end the reading by calling
 	 * read_buffer->done(). */
-	READ_BUFFER_END_ONCLOSE	= 1,
+	SOCKET_END_ONCLOSE,
 	/* Used for signaling to protocols - via the read_buffer->done()
 	 * callback - that a zero-byte message was read. */
-	READ_BUFFER_END		= 2,
+	SOCKET_CLOSED,
 };
 
 struct read_buffer {
@@ -45,7 +45,7 @@ struct read_buffer {
 	void (*done)(struct connection *, struct read_buffer *);
 
 	int len;
-	enum read_buffer_close close;
+	enum socket_state state;
 	int freespace;
 
 	unsigned char data[1]; /* must be at end of struct */
@@ -103,8 +103,8 @@ struct read_buffer *alloc_read_buffer(struct connection_socket *socket);
 
 /* Reads data from @socket into @buffer using @done as struct read_buffers
  * @done routine (called each time new data comes in). */
-void read_from_socket(struct connection_socket *socket,
-		      struct read_buffer *buffer, void (*done)(struct connection *, struct read_buffer *));
+void read_from_socket(struct connection_socket *socket, 
+		       struct read_buffer *buffer, void (*done)(struct connection *, struct read_buffer *));
 
 void kill_buffer_data(struct read_buffer *, int);
 

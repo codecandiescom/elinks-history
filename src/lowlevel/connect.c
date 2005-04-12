@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.162 2005/04/12 12:09:43 jonas Exp $ */
+/* $Id: connect.c,v 1.163 2005/04/12 14:07:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -729,8 +729,8 @@ read_select(struct connection_socket *socket)
 		break;
 
 	case READ_BUFFER_CANT_READ:
-		if (rb->close != READ_BUFFER_RETRY_ONCLOSE) {
-			rb->close = READ_BUFFER_END;
+		if (rb->state != SOCKET_RETRY_ONCLOSE) {
+			rb->state = SOCKET_CLOSED;
 			rb->done(socket->conn, rb);
 			break;
 		}

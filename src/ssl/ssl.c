@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.53 2005/04/12 16:47:05 jonas Exp $ */
+/* $Id: ssl.c,v 1.54 2005/04/12 16:53:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "elinks.h"
 
 #include "intl/gettext/libintl.h"
+#include "lowlevel/connect.h"
 #include "modules/module.h"
 #include "sched/connection.h"
 #include "ssl/ssl.h"

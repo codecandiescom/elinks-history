@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.49 2005/04/12 15:38:57 jonas Exp $ */
+/* $Id: socket.h,v 1.50 2005/04/12 16:53:33 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -9,7 +9,6 @@
 #endif
 
 struct connection;
-struct connection_socket;
 struct uri;
 
 struct conn_info {
@@ -57,6 +56,47 @@ enum socket_error {
 	SOCKET_WANT_READ	= -3,	/* Try to read some more. */
 	SOCKET_CANT_READ	= -4,	/* Retry with S_CANT_READ state. */
 	SOCKET_CANT_WRITE	= -5,	/* Retry with S_CANT_WRITE state. */
+};
+
+typedef void (*connection_socket_handler_T)(void *, int connection_state);
+
+struct connection_socket {
+	/* The socket descriptor */
+	int fd;
+
+	/* Information for resolving the connection with which the socket is
+	 * associated. */
+	void *conn;
+
+	/* Information used during the connection establishing phase. */
+	struct conn_info *conn_info;
+
+	/* Use for read and write buffers. */
+	void *buffer;
+
+	/* Callbacks to the connection management: */
+
+	/* Report change in the state of the socket. */
+	connection_socket_handler_T set_state;
+	/* Reset the timeout for the socket. */
+	void (*set_timeout)(void *);
+	/* Some system related error occured; advise to reconnect. */
+	connection_socket_handler_T retry;
+	/* A fatal error occured, like a memory allocation failure; advise to
+	 * abort the connection. */
+	connection_socket_handler_T done;
+	/* Only used by ftp in send_cmd/get_resp. Put here
+	 * since having no connection->info is apparently valid. */
+	void (*read_done)(void *, struct read_buffer *);
+
+	/* For connections using SSL this is in fact (ssl_t *), but we don't
+	 * want to know. Noone cares and inclusion of SSL header files costs a
+	 * lot of compilation time. --pasky */
+	void *ssl;
+
+	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
+	unsigned int no_tls:1;
+
 };
 
 struct conn_info *

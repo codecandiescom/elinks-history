@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.108 2005/04/12 16:47:05 jonas Exp $ */
+/* $Id: connection.h,v 1.109 2005/04/12 16:53:33 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -9,8 +9,7 @@
 #include "util/lists.h"
 #include "util/ttime.h"
 
-struct conn_info;
-struct read_buffer;
+struct connection_socket;
 struct uri;
 
 
@@ -128,47 +127,6 @@ struct progress {
 
 	timer_id_T timer;
 	int data_in_secs[CURRENT_SPD_SEC];
-};
-
-typedef void (*connection_socket_handler_T)(void *, enum connection_state);
-
-struct connection_socket {
-	/* The socket descriptor */
-	int fd;
-
-	/* Information for resolving the connection with which the socket is
-	 * associated. */
-	void *conn;
-
-	/* Information used during the connection establishing phase. */
-	struct conn_info *conn_info;
-
-	/* Use for read and write buffers. */
-	void *buffer;
-
-	/* Callbacks to the connection management: */
-
-	/* Report change in the state of the socket. */
-	connection_socket_handler_T set_state;
-	/* Reset the timeout for the socket. */
-	void (*set_timeout)(void *);
-	/* Some system related error occured; advise to reconnect. */
-	connection_socket_handler_T retry;
-	/* A fatal error occured, like a memory allocation failure; advise to
-	 * abort the connection. */
-	connection_socket_handler_T done;
-	/* Only used by ftp in send_cmd/get_resp. Put here
-	 * since having no connection->info is apparently valid. */
-	void (*read_done)(void *, struct read_buffer *);
-
-	/* For connections using SSL this is in fact (ssl_t *), but we don't
-	 * want to know. Noone cares and inclusion of SSL header files costs a
-	 * lot of compilation time. --pasky */
-	void *ssl;
-
-	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
-	unsigned int no_tls:1;
-
 };
 
 struct connection {

@@ -1,13 +1,14 @@
-/* $Id: http.h,v 1.16 2005/03/05 21:04:49 jonas Exp $ */
+/* $Id: http.h,v 1.17 2005/04/12 13:51:28 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_HTTP_H
 #define EL__PROTOCOL_HTTP_HTTP_H
 
-#include "lowlevel/connect.h"
 #include "modules/module.h"
 #include "protocol/http/blacklist.h"
 #include "protocol/protocol.h"
 #include "sched/connection.h"
+
+struct read_buffer;
 
 extern struct module http_protocol_module;
 

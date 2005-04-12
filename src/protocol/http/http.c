@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.406 2005/04/12 20:41:22 jonas Exp $ */
+/* $Id: http.c,v 1.407 2005/04/12 21:18:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1242,9 +1242,6 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 	}
 
 	switch (ret) {
-	case -1:
-		abort_conn_with_state(conn, S_HTTP_ERROR);
-		break;
 	case 0:
 		read_more_http_data(conn, rb, 0);
 		break;
@@ -1255,7 +1252,8 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 		read_http_data_done(conn);
 		break;
 	default:
-		INTERNAL("Unexpected return value: %d", ret);
+		assert(ret == -1, "Unexpected return value: %d", ret);
+		abort_conn_with_state(conn, S_HTTP_ERROR);
 	}
 }
 

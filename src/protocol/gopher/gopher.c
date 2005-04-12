@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.41 2005/04/12 20:05:08 jonas Exp $ */
+/* $Id: gopher.c,v 1.42 2005/04/12 20:08:24 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -838,18 +838,18 @@ gopher_protocol_handler(struct connection *conn)
 			/* FIXME: redirect_cache() */
 			end_gopher_connection(conn, S_OK);
 		}
-		break;
 #endif
-	default:
-		state = init_gopher_connection_info(conn);
-		if (state != S_CONN) {
-			/* FIXME: Handle bad selector ... */
-			end_gopher_connection(conn, state);
-			return;
-		}
-
-		/* Set up a socket to the server for the data */
-		conn->from = 0;
-		make_connection(conn, conn->socket, send_gopher_command);
+		break;
 	}
+
+	state = init_gopher_connection_info(conn);
+	if (state != S_CONN) {
+		/* FIXME: Handle bad selector ... */
+		end_gopher_connection(conn, state);
+		return;
+	}
+
+	/* Set up a socket to the server for the data */
+	conn->from = 0;
+	make_connection(conn, conn->socket, send_gopher_command);
 }

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.76 2005/04/13 12:33:14 jonas Exp $ */
+/* $Id: dns.c,v 1.77 2005/04/13 12:37:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -296,21 +296,18 @@ do_queued_lookup(struct dnsquery *query)
 #ifdef THREAD_SAFE_LOOKUP
 	query->next_in_queue = NULL;
 
-	if (!dns_queue) {
-		dns_queue = query;
-		/* DBG("direct lookup"); */
-		return do_lookup(query, 0);
-
-	} else {
+	if (dns_queue) {
 		/* DBG("queuing lookup for %s", q->name); */
 		assertm(!dns_queue->next_in_queue, "DNS queue corrupted");
 		dns_queue->next_in_queue = query;
 		dns_queue = query;
 		return -1;
 	}
-#else
-	return do_lookup(query, 0);
+
+	dns_queue = query;
 #endif
+	/* DBG("direct lookup"); */
+	return do_lookup(query, 0);
 }
 
 static struct dnsentry *

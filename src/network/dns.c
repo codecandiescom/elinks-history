@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.73 2005/04/13 12:10:32 jonas Exp $ */
+/* $Id: dns.c,v 1.74 2005/04/13 12:20:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,7 +61,9 @@ struct dnsquery {
 	 * free()ing, *always* set pointer to NULL ! */
 	struct sockaddr_storage **addr; /* addr of pointer to array of addresses */
 	int *addrno; /* array len / sizeof(sockaddr_storage) */
+#ifndef NO_ASYNC_LOOKUP
 	int h;
+#endif
 	unsigned char name[1]; /* Must be last */
 };
 
@@ -335,11 +337,13 @@ done_dns_lookup(struct dnsquery *query, int res)
 
 	/* DBG("end lookup %s (%d)", query->name, res); */
 
+#ifndef NO_ASYNC_LOOKUP
 	/* do_lookup() might start a new thread */
 	if (query->h != -1) {
 		clear_handlers(query->h);
 		close(query->h);
 	}
+#endif
 
 #ifdef THREAD_SAFE_LOOKUP
 	if (query->next_in_queue) {

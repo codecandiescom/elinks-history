@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.82 2005/04/13 14:40:22 jonas Exp $ */
+/* $Id: dns.c,v 1.83 2005/04/13 14:48:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -426,7 +426,7 @@ done:
 	mem_free(query);
 }
 
-int
+static int
 find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
 		   void **query_p, dns_callback_T done, void *data)
 {
@@ -455,11 +455,14 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 
 int
 find_host(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
-	  void **query_p, dns_callback_T done, void *data)
+	  void **query_p, dns_callback_T done, void *data, int no_cache)
 {
 	struct dnsentry *dnsentry;
 
 	if (query_p) *query_p = NULL;
+
+	if (no_cache)
+		return find_host_no_cache(name, addr, addrno, query_p, done, data);
 
 	dnsentry = find_in_dns_cache(name);
 	if (dnsentry) {

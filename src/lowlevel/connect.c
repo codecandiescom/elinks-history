@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.180 2005/04/13 04:28:11 jonas Exp $ */
+/* $Id: connect.c,v 1.181 2005/04/13 14:48:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,16 +163,9 @@ make_connection(struct connection *conn, struct socket *socket,
 	debug_transfer_log(host, -1);
 	debug_transfer_log("\n", -1);
 
-	if (conn->cache_mode >= CACHE_MODE_FORCE_RELOAD)
-		async = find_host_no_cache(host, &conn_info->addr, &conn_info->addrno,
-					   &conn_info->dnsquery,
-					   (dns_callback_T) dns_found,
-					   socket);
-	else
-		async = find_host(host, &conn_info->addr, &conn_info->addrno,
-				  &conn_info->dnsquery,
-				  (dns_callback_T) dns_found,
-				  socket);
+	async = find_host(host, &conn_info->addr, &conn_info->addrno,
+			  &conn_info->dnsquery, (dns_callback_T) dns_found,
+			  socket, conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 
 	mem_free(host);
 

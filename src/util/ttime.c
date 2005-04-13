@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: ttime.c,v 1.10 2005/04/13 16:08:11 zas Exp $ */
+/* $Id: ttime.c,v 1.11 2005/04/13 16:46:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,4 +64,10 @@ milliseconds_to_timeval(struct timeval *a, long int milliseconds)
 {
 	a->tv_sec = milliseconds / 1000;
 	a->tv_usec = (milliseconds % 1000) * 1000;
+}
+
+int
+timeval_is_positive(struct timeval *tv)
+{
+	return (tv->tv_sec > 0 || (tv->tv_sec == 0 && tv->tv_usec > 0));
 }

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.69 2005/04/13 11:44:41 jonas Exp $ */
+/* $Id: dns.c,v 1.70 2005/04/13 11:48:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,7 +248,7 @@ end_real_lookup(void *data)
 	res = 0;
 
 done:
-	if (res < 0 && query->addr) mem_free_set(&*query->addr, NULL);
+	if (res < 0 && query->addr) mem_free_set(query->addr, NULL);
 
 	clear_handlers(query->h);
 	close(query->h);

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.68 2005/04/13 11:42:33 jonas Exp $ */
+/* $Id: dns.c,v 1.69 2005/04/13 11:44:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,6 +75,14 @@ static INIT_LIST_HEAD(dns_cache);
 
 static void done_dns_lookup(struct dnsquery *query, int res);
 
+
+static void
+del_dns_cache_entry(struct dnsentry *dnsentry)
+{
+	del_from_list(dnsentry);
+	mem_free_if(dnsentry->addr);
+	mem_free(dnsentry);
+}
 
 int
 do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno,
@@ -367,9 +375,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 			goto done;
 		}
 
-		del_from_list(dnsentry);
-		mem_free(dnsentry->addr);
-		mem_free(dnsentry);
+		del_dns_cache_entry(dnsentry);
 	}
 
 	if (res < 0) goto done;
@@ -468,14 +474,6 @@ kill_dns_request(void **query_p)
 	query->done = NULL;
 	failed_real_lookup(query);
 	*query_p = NULL;
-}
-
-static void
-del_dns_cache_entry(struct dnsentry *dnsentry)
-{
-	del_from_list(dnsentry);
-	mem_free_if(dnsentry->addr);
-	mem_free(dnsentry);
 }
 
 void

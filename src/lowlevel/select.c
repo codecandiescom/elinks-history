@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.77 2005/04/13 16:28:29 zas Exp $ */
+/* $Id: select.c,v 1.78 2005/04/13 16:29:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,13 +221,13 @@ select_loop(void (*init)(void))
 		check_timers(&last_time);
 		redraw_all_terminals();
 
-		has_timer = get_next_timer_time(&tv);
-
 		memcpy(&x_read, &w_read, sizeof(fd_set));
 		memcpy(&x_write, &w_write, sizeof(fd_set));
 		memcpy(&x_error, &w_error, sizeof(fd_set));
 
 		if (program.terminate) break;
+
+		has_timer = get_next_timer_time(&tv);
 		if (!w_max && !has_timer) break;
 		critical_section = 1;
 

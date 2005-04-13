@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.416 2005/04/13 10:29:31 jonas Exp $ */
+/* $Id: http.c,v 1.417 2005/04/13 10:50:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,8 +380,9 @@ revstr2num(unsigned char *start, unsigned char *end, int *value)
  * It returns a negative value on error, 0 on success.
  */
 static int
-get_http_code(unsigned char *head, int *code, struct http_version *version)
+get_http_code(struct read_buffer *rb, int *code, struct http_version *version)
 {
+	unsigned char *head = rb->data;
 	unsigned char *start;
 
 	*code = 0;
@@ -1422,7 +1423,7 @@ again:
 		return;
 	}
 	if (a == -2) a = 0;
-	if ((a && get_http_code(rb->data, &h, &version))
+	if ((a && get_http_code(rb, &h, &version))
 	    || h == 101) {
 		abort_conn_with_state(conn, S_HTTP_ERROR);
 		return;

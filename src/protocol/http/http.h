@@ -1,4 +1,4 @@
-/* $Id: http.h,v 1.18 2005/04/13 00:42:22 jonas Exp $ */
+/* $Id: http.h,v 1.19 2005/04/13 03:44:14 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_HTTP_H
 #define EL__PROTOCOL_HTTP_HTTP_H
@@ -56,6 +56,7 @@ extern protocol_handler_T proxy_protocol_handler;
 #define https_protocol_handler NULL
 #endif
 
+struct http_connection_info *init_http_connection_info(struct connection *conn, int major, int minor, int close);
 void http_got_header(struct connection *, struct socket *, struct read_buffer *);
 
 unsigned char *subst_user_agent(unsigned char *fmt, unsigned char *version,

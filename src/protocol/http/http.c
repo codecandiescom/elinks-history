@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.412 2005/04/13 02:48:58 jonas Exp $ */
+/* $Id: http.c,v 1.413 2005/04/13 03:44:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -477,6 +477,35 @@ proxy_protocol_handler(struct connection *conn)
 #define connection_is_https_proxy(conn) \
 	(IS_PROXY_URI((conn)->uri) && (conn)->proxied_uri->protocol == PROTOCOL_HTTPS)
 
+struct http_connection_info *
+init_http_connection_info(struct connection *conn, int major, int minor, int close)
+{
+	struct http_connection_info *info;
+
+	info = mem_calloc(1, sizeof(*info));
+	if (!info) {
+		http_end_request(conn, S_OUT_OF_MEM, 0);
+		return NULL;
+	}
+
+	info->sent_version.major = major;
+	info->sent_version.minor = minor;
+	info->close = close;
+	info->bl_flags = get_blacklist_flags(conn->uri);
+
+	if (info->bl_flags & SERVER_BLACKLIST_HTTP10
+	    || get_opt_bool("protocol.http.bugs.http10")) {
+		info->sent_version.major = 1;
+		info->sent_version.minor = 0;
+	}
+
+	/* If called from HTTPS proxy connection the connection info might have
+	 * already been allocated. */
+	mem_free_set(&conn->info, info);
+
+	return info;
+}
+
 static void
 http_send_header(struct connection *conn, struct socket *socket)
 {
@@ -497,25 +526,8 @@ http_send_header(struct connection *conn, struct socket *socket)
 		return;
 	}
 
-	info = mem_calloc(1, sizeof(*info));
-	if (!info) {
-		http_end_request(conn, S_OUT_OF_MEM, 0);
-		return;
-	}
-
-	/* If called from HTTPS proxy connection the connection info might have
-	 * already been allocated. */
-	mem_free_set(&conn->info, info);
-
-	info->sent_version.major = 1;
-	info->sent_version.minor = 1;
-	info->bl_flags = get_blacklist_flags(uri);
-
-	if (info->bl_flags & SERVER_BLACKLIST_HTTP10
-	    || get_opt_bool("protocol.http.bugs.http10")) {
-		info->sent_version.major = 1;
-		info->sent_version.minor = 0;
-	}
+	info = init_http_connection_info(conn, 1, 1, 0);
+	if (!info) return;
 
 	if (!init_string(&header)) {
 		http_end_request(conn, S_OUT_OF_MEM, 0);

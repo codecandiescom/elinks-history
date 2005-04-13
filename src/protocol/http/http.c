@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.419 2005/04/13 11:17:45 jonas Exp $ */
+/* $Id: http.c,v 1.420 2005/04/13 11:24:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,7 +437,7 @@ get_http_code(struct read_buffer *rb, int *code, struct http_version *version)
 }
 
 static int
-check_http_server_bugs(struct uri *uri, struct http_connection_info *info,
+check_http_server_bugs(struct uri *uri, struct http_connection_info *http,
 		       unsigned char *head)
 {
 	unsigned char *server, **s;
@@ -449,7 +449,7 @@ check_http_server_bugs(struct uri *uri, struct http_connection_info *info,
 	};
 
 	if (!get_opt_bool("protocol.http.bugs.allow_blacklist")
-	    || HTTP_1_0(info->sent_version))
+	    || HTTP_1_0(http->sent_version))
 		return 0;
 
 	server = parse_header(head, "Server", NULL);
@@ -516,36 +516,36 @@ proxy_protocol_handler(struct connection *conn)
 struct http_connection_info *
 init_http_connection_info(struct connection *conn, int major, int minor, int close)
 {
-	struct http_connection_info *info;
+	struct http_connection_info *http;
 
-	info = mem_calloc(1, sizeof(*info));
-	if (!info) {
+	http = mem_calloc(1, sizeof(*http));
+	if (!http) {
 		http_end_request(conn, S_OUT_OF_MEM, 0);
 		return NULL;
 	}
 
-	info->sent_version.major = major;
-	info->sent_version.minor = minor;
-	info->close = close;
-	info->bl_flags = get_blacklist_flags(conn->uri);
+	http->sent_version.major = major;
+	http->sent_version.minor = minor;
+	http->close = close;
+	http->bl_flags = get_blacklist_flags(conn->uri);
 
-	if (info->bl_flags & SERVER_BLACKLIST_HTTP10
+	if (http->bl_flags & SERVER_BLACKLIST_HTTP10
 	    || get_opt_bool("protocol.http.bugs.http10")) {
-		info->sent_version.major = 1;
-		info->sent_version.minor = 0;
+		http->sent_version.major = 1;
+		http->sent_version.minor = 0;
 	}
 
 	/* If called from HTTPS proxy connection the connection info might have
 	 * already been allocated. */
-	mem_free_set(&conn->info, info);
+	mem_free_set(&conn->info, http);
 
-	return info;
+	return http;
 }
 
 static void
 http_send_header(struct connection *conn, struct socket *socket)
 {
-	struct http_connection_info *info;
+	struct http_connection_info *http;
 	int trace = get_opt_bool("protocol.http.trace");
 	struct string header;
 	unsigned char *post_data = NULL;
@@ -562,8 +562,8 @@ http_send_header(struct connection *conn, struct socket *socket)
 		return;
 	}
 
-	info = init_http_connection_info(conn, 1, 1, 0);
-	if (!info) return;
+	http = init_http_connection_info(conn, 1, 1, 0);
+	if (!http) return;
 
 	if (!init_string(&header)) {
 		http_end_request(conn, S_OUT_OF_MEM, 0);
@@ -604,9 +604,9 @@ http_send_header(struct connection *conn, struct socket *socket)
 	}
 
 	add_to_string(&header, " HTTP/");
-	add_long_to_string(&header, info->sent_version.major);
+	add_long_to_string(&header, http->sent_version.major);
 	add_char_to_string(&header, '.');
-	add_long_to_string(&header, info->sent_version.minor);
+	add_long_to_string(&header, http->sent_version.minor);
 	add_crlf_to_string(&header);
 
 	add_to_string(&header, "Host: ");
@@ -742,7 +742,7 @@ http_send_header(struct connection *conn, struct socket *socket)
 		init_accept_charset();
 	}
 
-	if (!(info->bl_flags & SERVER_BLACKLIST_NO_CHARSET)
+	if (!(http->bl_flags & SERVER_BLACKLIST_NO_CHARSET)
 	    && !get_opt_bool("protocol.http.bugs.accept_charset")
 	    && accept_charset) {
 		add_to_string(&header, accept_charset);
@@ -767,7 +767,7 @@ http_send_header(struct connection *conn, struct socket *socket)
 #endif
 
 	/* FIXME: What about post-HTTP/1.1?? --Zas */
-	if (HTTP_1_1(info->sent_version)) {
+	if (HTTP_1_1(http->sent_version)) {
 		if (!IS_PROXY_URI(conn->uri)) {
 			add_to_string(&header, "Connection: ");
 		} else {
@@ -922,7 +922,7 @@ http_send_header(struct connection *conn, struct socket *socket)
  * back to the world as the return value and its length is stored into
  * @new_len.
  *
- * In this function, value of either info->chunk_remaining or info->length is
+ * In this function, value of either http->chunk_remaining or http->length is
  * being changed (it depends on if chunked mode is used or not).
  *
  * Note that the function is still a little esotheric for me. Don't take it
@@ -935,7 +935,7 @@ static unsigned char *
 decompress_data(struct connection *conn, unsigned char *data, int len,
 		int *new_len)
 {
-	struct http_connection_info *info = conn->info;
+	struct http_connection_info *http = conn->info;
 	/* to_read is number of bytes to be read from the decoder. It is 65536
 	 * (then we are just emptying the decoder buffer as we finished the walk
 	 * through the incoming stream already) or PIPE_BUF / 2 (when we are
@@ -950,8 +950,8 @@ decompress_data(struct connection *conn, unsigned char *data, int len,
 	int *length_of_block;
 	unsigned char *output = NULL;
 
-	length_of_block = (info->length == LEN_CHUNKED ? &info->chunk_remaining
-						       : &info->length);
+	length_of_block = (http->length == LEN_CHUNKED ? &http->chunk_remaining
+						       : &http->length);
 
 #define BIG_READ 65536
 	if (!*length_of_block) {
@@ -988,12 +988,12 @@ decompress_data(struct connection *conn, unsigned char *data, int len,
 				data += written;
 				len -= written;
 
-				/* In non-keep-alive connections info->length == -1, so the test below */
+				/* In non-keep-alive connections http->length == -1, so the test below */
 				if (*length_of_block > 0)
 					*length_of_block -= written;
-				/* info->length is 0 at the end of block for all modes: keep-alive,
+				/* http->length is 0 at the end of block for all modes: keep-alive,
 				 * non-keep-alive and chunked */
-				if (!info->length) {
+				if (!http->length) {
 					/* That's all, folks - let's finish this. */
 					to_read = BIG_READ;
 				} else if (!len) {
@@ -1086,13 +1086,13 @@ read_more_http_data(struct connection *conn, struct read_buffer *rb,
 static void
 read_http_data_done(struct connection *conn)
 {
-	struct http_connection_info *info = conn->info;
+	struct http_connection_info *http = conn->info;
 
 	/* There's no content but an error so just print
 	 * that instead of nothing. */
 	if (!conn->from) {
-		if (info->http_code >= 400) {
-			http_error_document(conn, info->http_code);
+		if (http->http_code >= 400) {
+			http_error_document(conn, http->http_code);
 
 		} else {
 			/* This is not an error, thus fine. No need generate any
@@ -1114,7 +1114,7 @@ read_http_data_done(struct connection *conn)
 static int
 read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 {
-	struct http_connection_info *info = conn->info;
+	struct http_connection_info *http = conn->info;
 	int total_data_len = 0;
 
 	while (1) {
@@ -1124,7 +1124,7 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 		 * aklkjadslkfjalkfjlkajkljfdkljdsfkljdf*1234\r\n
 		 * 0\r\n
 		 * \r\n */
-		if (info->chunk_remaining == CHUNK_DATA_END) {
+		if (http->chunk_remaining == CHUNK_DATA_END) {
 			int l = is_line_in_buffer(rb);
 
 			if (l) {
@@ -1142,7 +1142,7 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 				continue;
 			}
 
-		} else if (info->chunk_remaining == CHUNK_SIZE) {
+		} else if (http->chunk_remaining == CHUNK_SIZE) {
 			int l = is_line_in_buffer(rb);
 
 			if (l) {
@@ -1163,9 +1163,9 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 
 				/* Remove everything to the EOLN. */
 				kill_buffer_data(rb, l);
-				info->chunk_remaining = n;
-				if (!info->chunk_remaining)
-					info->chunk_remaining = CHUNK_ZERO_SIZE;
+				http->chunk_remaining = n;
+				if (!http->chunk_remaining)
+					http->chunk_remaining = CHUNK_ZERO_SIZE;
 				continue;
 			}
 
@@ -1173,10 +1173,10 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 			unsigned char *data;
 			int data_len;
 			int len;
-			int zero = (info->chunk_remaining == CHUNK_ZERO_SIZE);
+			int zero = (http->chunk_remaining == CHUNK_ZERO_SIZE);
 
-			if (zero) info->chunk_remaining = 0;
-			len = info->chunk_remaining;
+			if (zero) http->chunk_remaining = 0;
+			len = http->chunk_remaining;
 
 			/* Maybe everything necessary didn't come yet.. */
 			int_upper_bound(&len, rb->len);
@@ -1200,11 +1200,11 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 				 * chunk, we finished decompression just now
 				 * and now we can happily finish reading this
 				 * stuff. */
-				info->chunk_remaining = CHUNK_DATA_END;
+				http->chunk_remaining = CHUNK_DATA_END;
 				continue;
 			}
 
-			if (!info->chunk_remaining && rb->len > 0) {
+			if (!http->chunk_remaining && rb->len > 0) {
 				/* Eat newline succeeding each chunk. */
 				if (rb->data[0] == ASCII_LF) {
 					kill_buffer_data(rb, 1);
@@ -1217,7 +1217,7 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 					if (rb->len < 2) break;
 					kill_buffer_data(rb, 2);
 				}
-				info->chunk_remaining = CHUNK_SIZE;
+				http->chunk_remaining = CHUNK_SIZE;
 				continue;
 			}
 		}
@@ -1232,14 +1232,14 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 static int
 read_normal_http_data(struct connection *conn, struct read_buffer *rb)
 {
-	struct http_connection_info *info = conn->info;
+	struct http_connection_info *http = conn->info;
 	unsigned char *data;
 	int data_len;
 	int len = rb->len;
 
-	if (info->length >= 0 && info->length < len) {
+	if (http->length >= 0 && http->length < len) {
 		/* We won't read more than we have to go. */
-		len = info->length;
+		len = http->length;
 	}
 
 	conn->received += len;
@@ -1255,7 +1255,7 @@ read_normal_http_data(struct connection *conn, struct read_buffer *rb)
 
 	kill_buffer_data(rb, len);
 
-	if (!info->length && conn->socket->state == SOCKET_RETRY_ONCLOSE) {
+	if (!http->length && conn->socket->state == SOCKET_RETRY_ONCLOSE) {
 		return 2;
 	}
 
@@ -1266,22 +1266,22 @@ static void
 read_http_data(struct connection *conn, struct socket *socket,
 	       struct read_buffer *rb)
 {
-	struct http_connection_info *info = conn->info;
+	struct http_connection_info *http = conn->info;
 	int ret;
 
 	set_connection_timeout(conn);
 
 	if (socket->state == SOCKET_CLOSED) {
-		if (conn->content_encoding && info->length == -1) {
+		if (conn->content_encoding && http->length == -1) {
 			/* Flush decompression first. */
-			info->length = 0;
+			http->length = 0;
 		} else {
 			read_http_data_done(conn);
 			return;
 		}
 	}
 
-	if (info->length != LEN_CHUNKED) {
+	if (http->length != LEN_CHUNKED) {
 		ret = read_normal_http_data(conn, rb);
 
 	} else {
@@ -1384,7 +1384,7 @@ void
 http_got_header(struct connection *conn, struct socket *socket,
 		struct read_buffer *rb)
 {
-	struct http_connection_info *info = conn->info;
+	struct http_connection_info *http = conn->info;
 	unsigned char *head;
 #ifdef CONFIG_COOKIES
 	unsigned char *cookie, *ch;
@@ -1400,7 +1400,7 @@ http_got_header(struct connection *conn, struct socket *socket,
 
 	if (socket->state == SOCKET_CLOSED) {
 		if (!conn->tries && uri->host) {
-			if (info->bl_flags & SERVER_BLACKLIST_NO_CHARSET) {
+			if (http->bl_flags & SERVER_BLACKLIST_NO_CHARSET) {
 				del_blacklist_entry(uri, SERVER_BLACKLIST_NO_CHARSET);
 			} else {
 				add_blacklist_entry(uri, SERVER_BLACKLIST_NO_CHARSET);
@@ -1442,7 +1442,7 @@ again:
 		return;
 	}
 
-	if (check_http_server_bugs(uri, info, head)) {
+	if (check_http_server_bugs(uri, http, head)) {
 		mem_free(head);
 		retry_conn_with_state(conn, S_RESTART);
 		return;
@@ -1477,7 +1477,7 @@ again:
 		mem_free(cookie);
 	}
 #endif
-	info->http_code = h;
+	http->http_code = h;
 
 	if (h == 100) {
 		mem_free(head);
@@ -1609,16 +1609,16 @@ again:
 	}
 
 	kill_buffer_data(rb, a);
-	info->close = 0;
-	info->length = -1;
-	info->recv_version = version;
+	http->close = 0;
+	http->length = -1;
+	http->recv_version = version;
 
 	if ((d = parse_header(conn->cached->head, "Connection", NULL))
 	     || (d = parse_header(conn->cached->head, "Proxy-Connection", NULL))) {
-		if (!strcasecmp(d, "close")) info->close = 1;
+		if (!strcasecmp(d, "close")) http->close = 1;
 		mem_free(d);
 	} else if (PRE_HTTP_1_1(version)) {
-		info->close = 1;
+		http->close = 1;
 	}
 
 	cf = conn->from;
@@ -1672,8 +1672,8 @@ again:
 		l = strtol(d, (char **) &ep, 10);
 
 		if (!errno && !*ep && l >= 0) {
-			if (!info->close || POST_HTTP_1_0(version))
-				info->length = l;
+			if (!http->close || POST_HTTP_1_0(version))
+				http->length = l;
 			conn->est_length = conn->from + l;
 		}
 		mem_free(d);
@@ -1695,12 +1695,12 @@ again:
 	d = parse_header(conn->cached->head, "Transfer-Encoding", NULL);
 	if (d) {
 		if (!strcasecmp(d, "chunked")) {
-			info->length = LEN_CHUNKED;
-			info->chunk_remaining = CHUNK_SIZE;
+			http->length = LEN_CHUNKED;
+			http->chunk_remaining = CHUNK_SIZE;
 		}
 		mem_free(d);
 	}
-	if (!info->close && info->length == -1) info->close = 1;
+	if (!http->close && http->length == -1) http->close = 1;
 
 	d = parse_header(conn->cached->head, "Last-Modified", NULL);
 	if (d) {
@@ -1784,8 +1784,8 @@ again:
 		conn->cached->encoding_info = stracpy(get_encoding_name(conn->content_encoding));
 	}
 
-	if (info->length == -1
-	    || (PRE_HTTP_1_1(info->recv_version) && info->close))
+	if (http->length == -1
+	    || (PRE_HTTP_1_1(http->recv_version) && http->close))
 		socket->state = SOCKET_END_ONCLOSE;
 
 	read_http_data(conn, socket, rb);

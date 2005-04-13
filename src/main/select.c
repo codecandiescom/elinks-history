@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.78 2005/04/13 16:29:49 zas Exp $ */
+/* $Id: select.c,v 1.79 2005/04/13 16:53:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,8 +253,7 @@ select_loop(void (*init)(void))
 #endif
 		if (has_timer) {
 			/* Be sure timeout is not negative. */
-			if (tv.tv_sec < 0) tv.tv_sec = 0;
-			if (tv.tv_usec < 0) tv.tv_usec = 0;
+			limit_timeval_to_zero(&tv);
 			timeout = &tv;
 		}
 				

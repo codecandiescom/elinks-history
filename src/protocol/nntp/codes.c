@@ -1,5 +1,5 @@
 /* NNTP response codes */
-/* $Id: codes.c,v 1.5 2005/03/23 11:41:00 zas Exp $ */
+/* $Id: codes.c,v 1.6 2005/04/13 00:58:02 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -31,7 +31,6 @@ struct nntp_code_info {
 	unsigned char *string;
 };
 
-/* Source: nntp://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html */
 static struct nntp_code_info nntp_code_info[] = {
 	/* Information: */
 	{ NNTP_CODE_100_HELP_TEXT,	  "Help text on way" },

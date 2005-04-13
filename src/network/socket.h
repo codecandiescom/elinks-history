@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.66 2005/04/13 20:13:51 jonas Exp $ */
+/* $Id: socket.h,v 1.67 2005/04/13 20:42:25 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -39,6 +39,19 @@ enum socket_state {
 typedef void (*socket_read_operation_T)(struct connection *, struct socket *, struct read_buffer *);
 typedef void (*socket_write_operation_T)(struct connection *, struct socket *);
 typedef void (*socket_connect_operation_T)(struct connection *, struct socket *);
+typedef void (*socket_operation_T)(void *, struct socket *, int connection_state);
+
+struct socket_operations {
+	/* Report change in the state of the socket. */
+	socket_operation_T set_state;
+	/* Reset the timeout for the socket. */
+	socket_operation_T set_timeout;
+	/* Some system related error occured; advise to reconnect. */
+	socket_operation_T retry;
+	/* A fatal error occured, like a memory allocation failure; advise to
+	 * abort the connection. */
+	socket_operation_T done;
+};
 
 struct read_buffer {
 	/* A routine called *each time new data comes in*, therefore
@@ -63,20 +76,6 @@ struct conn_info {
 	int port;
 	int ip_family; /* If non-zero, use the indicated IP version. */
 	unsigned int need_ssl:1;
-};
-
-typedef void (*socket_operation_T)(void *, struct socket *, int connection_state);
-
-struct socket_operations {
-	/* Report change in the state of the socket. */
-	socket_operation_T set_state;
-	/* Reset the timeout for the socket. */
-	socket_operation_T set_timeout;
-	/* Some system related error occured; advise to reconnect. */
-	socket_operation_T retry;
-	/* A fatal error occured, like a memory allocation failure; advise to
-	 * abort the connection. */
-	socket_operation_T done;
 };
 
 struct socket {
@@ -112,6 +111,7 @@ struct socket {
 	unsigned int no_tls:1;
 
 };
+
 
 struct conn_info *
 init_connection_info(struct uri *uri, struct socket *socket,

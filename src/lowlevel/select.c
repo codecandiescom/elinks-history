@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.76 2005/04/13 16:10:04 zas Exp $ */
+/* $Id: select.c,v 1.77 2005/04/13 16:28:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,6 +213,7 @@ select_loop(void (*init)(void))
 	check_bottom_halves();
 
 	while (!program.terminate) {
+		struct timeval *timeout = NULL;
 		int n, i, has_timer;
 		struct timeval tv;
 
@@ -250,7 +251,14 @@ select_loop(void (*init)(void))
 			fflush(stdout);
 		}
 #endif
-		n = select(w_max, &x_read, &x_write, &x_error, has_timer ? &tv : NULL);
+		if (has_timer) {
+			/* Be sure timeout is not negative. */
+			if (tv.tv_sec < 0) tv.tv_sec = 0;
+			if (tv.tv_usec < 0) tv.tv_usec = 0;
+			timeout = &tv;
+		}
+				
+		n = select(w_max, &x_read, &x_write, &x_error, timeout);
 		if (n < 0) {
 			critical_section = 0;
 			uninstall_alarm();

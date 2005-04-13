@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.72 2005/04/13 12:04:24 jonas Exp $ */
+/* $Id: dns.c,v 1.73 2005/04/13 12:10:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,7 @@
 #include "util/memory.h"
 #include "util/ttime.h"
 
+
 struct dnsentry {
 	LIST_HEAD(struct dnsentry);
 
@@ -47,7 +48,6 @@ struct dnsentry {
 	int addrno; /* array len / sizeof(sockaddr_storage) */
 	unsigned char name[1]; /* Must be last */
 };
-
 
 struct dnsquery {
 #ifdef THREAD_SAFE_LOOKUP

@@ -1,10 +1,9 @@
-/* $Id: history.h,v 1.26 2005/04/13 17:14:49 jonas Exp $ */
+/* $Id: history.h,v 1.27 2005/04/13 17:16:10 jonas Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
 
-#include "sched/location.h"
-
+struct location;
 struct session;
 
 struct ses_history {

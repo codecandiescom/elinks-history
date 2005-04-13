@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.169 2005/04/06 17:29:05 jonas Exp $ */
+/* $Id: session.h,v 1.170 2005/04/13 17:31:17 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -198,24 +198,6 @@ extern enum remote_session_flags remote_session_flags;
 static inline int
 have_location(struct session *ses) {
 	return !!cur_loc(ses);
-}
-
-/* See go_history() description regarding unpredictable effects on cur_loc()
- * by this function. */
-static inline void
-go_back(struct session *ses)
-{
-	if (!cur_loc(ses)) return;
-	go_history(ses, cur_loc(ses)->prev);
-}
-
-/* See go_history() description regarding unpredictable effects on cur_loc()
- * by this function. */
-static inline void
-go_unback(struct session *ses)
-{
-	if (!cur_loc(ses)) return;
-	go_history(ses, cur_loc(ses)->next);
 }
 
 /* Swaps the current session referrer with the new one passed as @referrer */

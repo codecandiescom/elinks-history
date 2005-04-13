@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.84 2005/04/13 17:14:49 jonas Exp $ */
+/* $Id: history.c,v 1.85 2005/04/13 17:31:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,4 +180,22 @@ go_history(struct session *ses, struct location *loc)
 
 	ses_goto(ses, loc->vs.uri, NULL, loc,
 		 CACHE_MODE_ALWAYS, TASK_HISTORY, 0);
+}
+
+/* See go_history() description regarding unpredictable effects on cur_loc()
+ * by this function. */
+void
+go_back(struct session *ses)
+{
+	if (!cur_loc(ses)) return;
+	go_history(ses, cur_loc(ses)->prev);
+}
+
+/* See go_history() description regarding unpredictable effects on cur_loc()
+ * by this function. */
+void
+go_unback(struct session *ses)
+{
+	if (!cur_loc(ses)) return;
+	go_history(ses, cur_loc(ses)->next);
 }

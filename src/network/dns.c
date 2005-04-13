@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.77 2005/04/13 12:37:35 jonas Exp $ */
+/* $Id: dns.c,v 1.78 2005/04/13 12:55:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,28 +43,33 @@
 struct dnsentry {
 	LIST_HEAD(struct dnsentry);
 
-	struct sockaddr_storage *addr;	/* Pointer to array of addresses */
-	int addrno;			/* Array len / sizeof(sockaddr_storage) */
-	time_T get_time;		/* Creation time; lets us do timeouts */
-	unsigned char name[1];		/* Associated name; XXX: Must be last */
+	struct sockaddr_storage *addr;	/* Pointer to array of addresses. */
+	int addrno;			/* Adress array length. */
+	time_T get_time;		/* Creation time; lets us do timeouts. */
+	unsigned char name[1];		/* Associated name; XXX: Must be last. */
 };
 
 struct dnsquery {
 #ifdef THREAD_SAFE_LOOKUP
-	struct dnsquery *next_in_queue;
+	struct dnsquery *next_in_queue;	/* Got queued? */
 #endif
-	dns_callback_T done;
-	void *data;
-	struct dnsquery **query_p;
-	/* addr and addrno lifespan exceeds life of this structure, the caller
-	 * holds memory being pointed upon be these functions. Thus, when
-	 * free()ing, *always* set pointer to NULL ! */
-	struct sockaddr_storage **addr; /* addr of pointer to array of addresses */
-	int *addrno; /* array len / sizeof(sockaddr_storage) */
+	dns_callback_T done;		/* Used for reporting back DNS result. */
+	void *data;			/* Private callback data. */
+
+	/* The lifespan of addr and addrno exceeds the life of this structure.
+	 * The caller holds memory being pointed upon be these functions. Thus,
+	 * when free()ing, *always* set pointer to NULL ! */
+	struct sockaddr_storage **addr; /* Reference to array of addresses. */
+	int *addrno;			/* Reference to array len. */
+
+	/* As with the two members above, when stopping a DNS query *always* set
+	 * this pointer to NULL. */
+	struct dnsquery **query_p;	/* Reference to callers DNS member. */
+
 #ifndef NO_ASYNC_LOOKUP
-	int h;
+	int h;				/* One end of the async thread pipe. */
 #endif
-	unsigned char name[1]; /* Must be last */
+	unsigned char name[1];		/* Associated name; XXX: Must be last. */
 };
 
 

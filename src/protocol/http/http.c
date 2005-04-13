@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.418 2005/04/13 11:16:03 jonas Exp $ */
+/* $Id: http.c,v 1.419 2005/04/13 11:17:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,11 +55,11 @@ struct http_version {
 };
 
 #define HTTP_0_9(x)	 ((x).major == 0 && (x).minor == 9)
-#define PRE_HTTP_1_0(x)  ((x).major < 1)
 #define HTTP_1_0(x)	 ((x).major == 1 && (x).minor == 0)
-#define POST_HTTP_1_0(x) ((x).major > 1 || ((x).major == 1 && (x).minor > 0))
-#define PRE_HTTP_1_1(x)  (PRE_HTTP_1_0(x) || HTTP_1_0(x))
 #define HTTP_1_1(x)	 ((x).major == 1 && (x).minor == 1)
+#define PRE_HTTP_1_0(x)  ((x).major < 1)
+#define PRE_HTTP_1_1(x)  (PRE_HTTP_1_0(x) || HTTP_1_0(x))
+#define POST_HTTP_1_0(x) ((x).major > 1 || ((x).major == 1 && (x).minor > 0))
 #define POST_HTTP_1_1(x) ((x).major > 1 || ((x).major == 1 && (x).minor > 1))
 
 

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.101 2005/04/13 04:28:11 jonas Exp $ */
+/* $Id: cgi.c,v 1.102 2005/04/13 14:19:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
 
 
 static void
-close_pipe_and_read(struct connection *conn, struct socket *socket)
+close_pipe_and_read(struct connection *conn, struct socket *data_socket)
 {
 	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
@@ -44,10 +44,12 @@ close_pipe_and_read(struct connection *conn, struct socket *socket)
 	memcpy(rb->data, "HTTP/1.0 200 OK\r\n", 17);
 	rb->len = 17;
 	rb->freespace -= 17;
-	socket->state = SOCKET_END_ONCLOSE;
+
 	conn->unrestartable = 1;
 	close(conn->cgi_pipes[1]);
-	conn->data_socket->fd = conn->cgi_pipes[1] = -1;
+	data_socket->fd = conn->cgi_pipes[1] = -1;
+
+	conn->socket->state = SOCKET_END_ONCLOSE;
 	read_from_socket(conn->socket, rb, S_SENT, http_got_header);
 }
 
@@ -105,7 +107,7 @@ static void
 send_request(struct connection *conn)
 {
 	if (conn->uri->post) send_post_data(conn);
-	else close_pipe_and_read(conn, conn->socket);
+	else close_pipe_and_read(conn, conn->data_socket);
 }
 
 /* This function sets CGI environment variables. */

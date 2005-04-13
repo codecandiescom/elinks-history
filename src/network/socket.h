@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.64 2005/04/13 04:28:11 jonas Exp $ */
+/* $Id: socket.h,v 1.65 2005/04/13 04:41:05 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -99,8 +99,8 @@ struct socket {
 	/* Callbacks to the connection management: */
 	struct socket_operations *ops;
 
-	/* Only used by ftp in send_cmd/get_resp. Put here
-	 * since having no connection->info is apparently valid. */
+	/* Used by the request/response interface for saving the read_done
+	 * operation. */
 	socket_read_operation_T read_done;
 
 	/* For connections using SSL this is in fact (ssl_t *), but we don't

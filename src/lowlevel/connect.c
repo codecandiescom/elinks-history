@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.185 2005/04/13 21:45:42 jonas Exp $ */
+/* $Id: connect.c,v 1.186 2005/04/13 23:44:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ debug_transfer_log(unsigned char *data, int len)
 #endif
 
 
-static void connected(/* struct socket */ void *);
+static void connected(struct socket *socket);
 
 void
 close_socket(struct socket *socket)
@@ -95,10 +95,8 @@ dns_exception(struct socket *socket)
 }
 
 static void
-exception(void *data)
+exception(struct socket *socket)
 {
-	struct socket *socket = data;
-
 	socket->ops->retry(socket->conn, socket, S_EXCEPT);
 }
 
@@ -476,7 +474,8 @@ connect_socket(struct socket *conn_socket)
 #endif
 		    || errno == EINPROGRESS) {
 			/* It will take some more time... */
-			set_handlers(sock, NULL, connected, (select_handler_T) dns_exception, conn_socket);
+			set_handlers(sock, NULL, (select_handler_T) connected,
+				     (select_handler_T) dns_exception, conn_socket);
 			conn_socket->ops->set_state(conn_socket->conn, conn_socket, S_CONN);
 			return;
 		}
@@ -523,9 +522,8 @@ connect_socket(struct socket *conn_socket)
 }
 
 static void
-connected(void *data)
+connected(struct socket *socket)
 {
-	struct socket *socket = data;
 	struct conn_info *conn_info = socket->conn_info;
 	int err = 0;
 	int len = sizeof(err);
@@ -675,7 +673,8 @@ write_to_socket(struct socket *socket, unsigned char *data, int len,
 	wb->done = write_done;
 	memcpy(wb->data, data, len);
 	mem_free_set(&socket->buffer, wb);
-	set_handlers(socket->fd, NULL, (select_handler_T) write_select, exception, socket);
+	set_handlers(socket->fd, NULL, (select_handler_T) write_select,
+		     (select_handler_T) exception, socket);
 	socket->ops->set_state(socket->conn, socket, connection_state);
 }
 
@@ -800,7 +799,8 @@ read_from_socket(struct socket *socket, struct read_buffer *buffer,
 		mem_free(socket->buffer);
 	socket->buffer = buffer;
 
-	set_handlers(socket->fd, (select_handler_T) read_select, NULL, exception, socket);
+	set_handlers(socket->fd, (select_handler_T) read_select, NULL,
+		     (select_handler_T) exception, socket);
 }
 
 static void

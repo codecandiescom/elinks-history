@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.78 2005/04/13 12:55:10 jonas Exp $ */
+/* $Id: dns.c,v 1.79 2005/04/13 14:16:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,6 +162,14 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	return 0;
 }
 
+static void
+failed_real_lookup(void *data)
+{
+	struct dnsquery *query = (struct dnsquery *) data;
+
+	done_dns_lookup(query, -1);
+}
+
 #ifndef NO_ASYNC_LOOKUP
 static void
 lookup_fn(void *data, int h)
@@ -257,15 +265,35 @@ done:
 
 	done_dns_lookup(query, res);
 }
-#endif
+
+static int
+init_async_dns_lookup(struct dnsquery *dnsquery, int force_async)
+{
+	if (force_async || get_opt_bool("connection.async_dns")) {
+		dnsquery->h = start_thread(lookup_fn, dnsquery->name,
+					   strlen(dnsquery->name) + 1);
+		if (dnsquery->h != -1) {
+			/* async lookup */
+			set_handlers(dnsquery->h, end_real_lookup, NULL,
+				     failed_real_lookup, dnsquery);
+		}
+	}
+
+	return (dnsquery->h != -1);
+}
 
 static void
-failed_real_lookup(void *data)
+done_async_dns_lookup(struct dnsquery *dnsquery)
 {
-	struct dnsquery *query = (struct dnsquery *) data;
-
-	done_dns_lookup(query, -1);
+	if (dnsquery->h != -1) {
+		clear_handlers(dnsquery->h);
+		close(dnsquery->h);
+	}
 }
+#else
+#define init_async_dns_lookup(dnsquery, force)	(0)
+#define done_async_dns_lookup(dnsquery)		/* Nada. */
+#endif /* NO_ASYNC_LOOKUP */
 
 static int
 do_lookup(struct dnsquery *query, int force_async)
@@ -274,19 +302,8 @@ do_lookup(struct dnsquery *query, int force_async)
 
 	/* DBG("starting lookup for %s", query->name); */
 
-#ifndef NO_ASYNC_LOOKUP
-	if (force_async || get_opt_bool("connection.async_dns")) {
-		query->h = start_thread(lookup_fn, query->name,
-					strlen(query->name) + 1);
-		if (query->h != -1) {
-			/* async lookup */
-			set_handlers(query->h, end_real_lookup, NULL,
-				     failed_real_lookup, query);
-
-			return 1;
-		}
-	}
-#endif
+	if (init_async_dns_lookup(query, force_async))
+		return 1;
 
 	/* sync lookup */
 	res = do_real_lookup(query->name, query->addr, query->addrno, 0);
@@ -339,13 +356,8 @@ done_dns_lookup(struct dnsquery *query, int res)
 
 	/* DBG("end lookup %s (%d)", query->name, res); */
 
-#ifndef NO_ASYNC_LOOKUP
-	/* do_lookup() might start a new thread */
-	if (query->h != -1) {
-		clear_handlers(query->h);
-		close(query->h);
-	}
-#endif
+	/* do_lookup() might start a new async thread */
+	done_async_dns_lookup(query);
 
 #ifdef THREAD_SAFE_LOOKUP
 	if (query->next_in_queue) {

@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.25 2004/01/04 01:42:29 miciah Exp $ */
+/* $Id: history.h,v 1.26 2005/04/13 17:14:49 jonas Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -22,40 +22,9 @@ struct ses_history {
 void create_history(struct ses_history *history);
 void destroy_history(struct ses_history *history);
 void clean_unhistory(struct ses_history *history);
-#ifdef BUG_309_FIX
-void compress_history(struct ses_history *history, struct location *loc);
-#endif
 
-static inline void
-add_to_history(struct ses_history *history, struct location *loc)
-{
-#ifdef BUG_309_FIX
-	if (history->current)
-		compress_history(history, loc);
-#endif
-
-	if (!history->current) {
-		add_to_list(history->history, loc);
-	} else {
-		add_at_pos(history->current, loc);
-	}
-
-	history->current = loc;
-}
-
-static inline void
-del_from_history(struct ses_history *history, struct location *loc)
-{
-	if (history->current == loc)
-		history->current = loc->prev;
-
-	if (history->current == (struct location *) &history->history)
-		history->current = loc->next;
-
-	if (history->current == (struct location *) &history->history)
-		history->current = NULL;
-	del_from_list(loc);
-}
+void add_to_history(struct ses_history *history, struct location *loc);
+void del_from_history(struct ses_history *history, struct location *loc);
 
 
 /* Note that this function is dangerous, and its results are sort of

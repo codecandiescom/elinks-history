@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.414 2005/04/13 03:47:06 jonas Exp $ */
+/* $Id: http.c,v 1.415 2005/04/13 04:28:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1077,9 +1077,9 @@ static void
 read_more_http_data(struct connection *conn, struct read_buffer *rb,
                     int already_got_anything)
 {
-	read_from_socket(conn->socket, rb, read_http_data);
-	if (already_got_anything)
-		set_connection_state(conn, S_TRANS);
+	enum connection_state state = already_got_anything ? S_TRANS : conn->state;
+
+	read_from_socket(conn->socket, rb, state, read_http_data);
 }
 
 static void
@@ -1418,8 +1418,7 @@ again:
 		return;
 	}
 	if (!a) {
-		read_from_socket(conn->socket, rb, http_got_header);
-		set_connection_state(conn, state);
+		read_from_socket(conn->socket, rb, state, http_got_header);
 		return;
 	}
 	if (a == -2) a = 0;

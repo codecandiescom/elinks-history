@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.234 2005/04/13 02:48:58 jonas Exp $ */
+/* $Id: ftp.c,v 1.235 2005/04/13 04:28:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,7 +367,7 @@ ftp_got_info(struct connection *conn, struct socket *socket,
 	}
 
 	if (!response) {
-		read_from_socket(conn->socket, rb, ftp_got_info);
+		read_from_socket(conn->socket, rb, conn->state, ftp_got_info);
 		return;
 	}
 
@@ -399,7 +399,7 @@ ftp_got_user_info(struct connection *conn, struct socket *socket,
 	}
 
 	if (!response) {
-		read_from_socket(conn->socket, rb, ftp_got_user_info);
+		read_from_socket(conn->socket, rb, conn->state, ftp_got_user_info);
 		return;
 	}
 
@@ -483,8 +483,7 @@ ftp_pass_info(struct connection *conn, struct socket *socket, struct read_buffer
 	}
 
 	if (!response) {
-		read_from_socket(conn->socket, rb, ftp_pass_info);
-		set_connection_state(conn, S_LOGIN);
+		read_from_socket(conn->socket, rb, S_LOGIN, ftp_pass_info);
 		return;
 	}
 
@@ -865,8 +864,7 @@ ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer
 		}
 
 		if (!response) {
-			read_from_socket(conn->socket, rb, ftp_retr_file);
-			set_connection_state(conn, S_GETH);
+			read_from_socket(conn->socket, rb, S_GETH, ftp_retr_file);
 			return;
 		}
 
@@ -936,8 +934,7 @@ ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer
 	}
 
 	if (!response) {
-		read_from_socket(conn->socket, rb, ftp_retr_file);
-		set_connection_state(conn, S_GETH);
+		read_from_socket(conn->socket, rb, S_GETH, ftp_retr_file);
 		return;
 	}
 
@@ -977,9 +974,10 @@ ftp_got_final_response(struct connection *conn, struct socket *socket,
 	}
 
 	if (!response) {
-		read_from_socket(conn->socket, rb, ftp_got_final_response);
-		if (conn->state != S_TRANS)
-			set_connection_state(conn, S_GETH);
+		enum connection_state state = conn->state != S_TRANS
+					    ? S_GETH : conn->state;
+
+		read_from_socket(conn->socket, rb, state, ftp_got_final_response);
 		return;
 	}
 

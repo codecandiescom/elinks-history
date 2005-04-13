@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.179 2005/04/13 02:48:58 jonas Exp $ */
+/* $Id: socket.c,v 1.180 2005/04/13 04:28:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -731,7 +731,7 @@ read_select(struct socket *socket)
 	switch (rd) {
 #ifdef CONFIG_SSL
 	case SOCKET_SSL_WANT_READ:
-		read_from_socket(socket, rb, rb->done);
+		read_from_socket(socket, rb, S_SSL_NEG, rb->done);
 		break;
 #endif
 	case SOCKET_CANT_READ:
@@ -785,11 +785,12 @@ alloc_read_buffer(struct socket *socket)
 
 void
 read_from_socket(struct socket *socket, struct read_buffer *buffer,
-		 socket_read_operation_T done)
+		 int connection_state, socket_read_operation_T done)
 {
 	buffer->done = done;
 
 	socket->ops->set_timeout(socket->conn, socket, 0);
+	socket->ops->set_state(socket->conn, socket, connection_state);
 
 	if (socket->buffer && buffer != socket->buffer)
 		mem_free(socket->buffer);
@@ -803,7 +804,7 @@ read_response_from_socket(struct connection *conn, struct socket *socket)
 {
 	struct read_buffer *rb = alloc_read_buffer(socket);
 
-	if (rb) read_from_socket(socket, rb, socket->read_done);
+	if (rb) read_from_socket(socket, rb, S_SENT, socket->read_done);
 }
 
 void

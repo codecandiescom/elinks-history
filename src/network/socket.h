@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.63 2005/04/13 02:48:58 jonas Exp $ */
+/* $Id: socket.h,v 1.64 2005/04/13 04:28:11 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -151,7 +151,7 @@ struct read_buffer *alloc_read_buffer(struct socket *socket);
 /* Reads data from @socket into @buffer using @done as struct read_buffers
  * @done routine (called each time new data comes in). */
 void read_from_socket(struct socket *socket, struct read_buffer *buffer,
-		      socket_read_operation_T done);
+		      int connection_state, socket_read_operation_T done);
 
 void kill_buffer_data(struct read_buffer *, int);
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.408 2005/04/12 21:24:23 jonas Exp $ */
+/* $Id: http.c,v 1.409 2005/04/13 00:42:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1026,7 +1026,7 @@ is_line_in_buffer(struct read_buffer *rb)
 	return 0;
 }
 
-static void read_http_data(struct connection *conn, struct read_buffer *rb);
+static void read_http_data(struct connection *conn, struct socket *socket, struct read_buffer *rb);
 
 static void
 read_more_http_data(struct connection *conn, struct read_buffer *rb,
@@ -1217,7 +1217,8 @@ read_normal_http_data(struct connection *conn, struct read_buffer *rb)
 }
 
 static void
-read_http_data(struct connection *conn, struct read_buffer *rb)
+read_http_data(struct connection *conn, struct socket *socket,
+	       struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
 	int ret;
@@ -1334,7 +1335,8 @@ check_http_authentication(struct uri *uri, unsigned char *header,
 
 
 void
-http_got_header(struct connection *conn, struct read_buffer *rb)
+http_got_header(struct connection *conn, struct socket *socket,
+		struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
 	unsigned char *head;
@@ -1740,7 +1742,7 @@ again:
 	    || (PRE_HTTP_1_1(info->recv_version) && info->close))
 		rb->state = SOCKET_END_ONCLOSE;
 
-	read_http_data(conn, rb);
+	read_http_data(conn, socket, rb);
 }
 
 static void

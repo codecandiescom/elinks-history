@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.14 2005/04/12 20:41:22 jonas Exp $ */
+/* $Id: connection.c,v 1.15 2005/04/13 00:42:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -236,7 +236,8 @@ nntp_end_request(struct connection *conn, enum connection_state state)
 /* Reponse receiving: */
 
 static void
-read_nntp_data(struct connection *conn, struct read_buffer *rb)
+read_nntp_data(struct connection *conn, struct socket *socket,
+	       struct read_buffer *rb)
 {
 	if (rb->state == SOCKET_CLOSED) {
 		nntp_end_request(conn, S_OK);
@@ -261,7 +262,8 @@ read_nntp_data(struct connection *conn, struct read_buffer *rb)
 
 
 static void
-nntp_got_response(struct connection *conn, struct read_buffer *rb)
+nntp_got_response(struct connection *conn, struct socket *socket,
+		  struct read_buffer *rb)
 {
 	struct nntp_connection_info *nntp = conn->info;
 
@@ -301,7 +303,7 @@ nntp_got_response(struct connection *conn, struct read_buffer *rb)
 	case NNTP_CODE_224_FOLLOW_XOVER:
 	case NNTP_CODE_230_FOLLOW_NEWNEWS:
 	case NNTP_CODE_231_FOLLOW_NEWGROUPS:
-		read_nntp_data(conn, rb);
+		read_nntp_data(conn, socket, rb);
 		break;
 
 	case NNTP_CODE_500_COMMAND_UNKNOWN:

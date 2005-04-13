@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.175 2005/04/12 22:53:14 jonas Exp $ */
+/* $Id: socket.c,v 1.176 2005/04/13 00:42:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -737,7 +737,7 @@ read_select(struct socket *socket)
 	case SOCKET_CANT_READ:
 		if (rb->state != SOCKET_RETRY_ONCLOSE) {
 			rb->state = SOCKET_CLOSED;
-			rb->done(socket->conn, rb);
+			rb->done(socket->conn, socket, rb);
 			break;
 		}
 
@@ -759,7 +759,7 @@ read_select(struct socket *socket)
 		rb->freespace -= rd;
 		assert(rb->freespace >= 0);
 
-		rb->done(socket->conn, rb);
+		rb->done(socket->conn, socket, rb);
 	}
 }
 
@@ -784,9 +784,8 @@ alloc_read_buffer(struct socket *socket)
 #undef RD_SIZE
 
 void
-read_from_socket(struct socket *socket,
-		 struct read_buffer *buffer,
-		 void (*done)(struct connection *, struct read_buffer *))
+read_from_socket(struct socket *socket, struct read_buffer *buffer,
+		 socket_read_operation_T done)
 {
 	buffer->done = done;
 

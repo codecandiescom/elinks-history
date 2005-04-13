@@ -1,4 +1,4 @@
-/* $Id: http.h,v 1.17 2005/04/12 13:51:28 jonas Exp $ */
+/* $Id: http.h,v 1.18 2005/04/13 00:42:22 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_HTTP_H
 #define EL__PROTOCOL_HTTP_HTTP_H
@@ -9,6 +9,7 @@
 #include "sched/connection.h"
 
 struct read_buffer;
+struct socket;
 
 extern struct module http_protocol_module;
 
@@ -55,7 +56,7 @@ extern protocol_handler_T proxy_protocol_handler;
 #define https_protocol_handler NULL
 #endif
 
-void http_got_header(struct connection *, struct read_buffer *);
+void http_got_header(struct connection *, struct socket *, struct read_buffer *);
 
 unsigned char *subst_user_agent(unsigned char *fmt, unsigned char *version,
 				unsigned char *sysname, unsigned char *termsize);

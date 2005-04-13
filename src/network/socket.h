@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.59 2005/04/13 00:08:25 jonas Exp $ */
+/* $Id: socket.h,v 1.60 2005/04/13 00:42:21 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -36,7 +36,7 @@ enum socket_state {
 	SOCKET_CLOSED,
 };
 
-typedef void (*socket_read_operation_T)(struct connection *, struct read_buffer *);
+typedef void (*socket_read_operation_T)(struct connection *, struct socket *, struct read_buffer *);
 
 struct read_buffer {
 	/* A routine called *each time new data comes in*, therefore

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.44 2005/04/12 20:41:22 jonas Exp $ */
+/* $Id: gopher.c,v 1.45 2005/04/13 00:42:21 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -713,7 +713,8 @@ init_gopher_index_cache_entry(struct connection *conn)
 
 
 static void
-read_gopher_response_data(struct connection *conn, struct read_buffer *rb)
+read_gopher_response_data(struct connection *conn, struct socket *socket,
+			  struct read_buffer *rb)
 {
 	struct gopher_connection_info *gopher = conn->info;
 	enum connection_state state = S_TRANS;

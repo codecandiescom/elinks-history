@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.58 2005/04/12 22:53:14 jonas Exp $ */
+/* $Id: socket.h,v 1.59 2005/04/13 00:08:25 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -9,6 +9,7 @@
 #endif
 
 struct connection;
+struct read_buffer;
 struct socket;
 struct uri;
 
@@ -35,10 +36,12 @@ enum socket_state {
 	SOCKET_CLOSED,
 };
 
+typedef void (*socket_read_operation_T)(struct connection *, struct read_buffer *);
+
 struct read_buffer {
 	/* A routine called *each time new data comes in*, therefore
 	 * usually many times, not only when all the data arrives. */
-	void (*done)(struct connection *, struct read_buffer *);
+	socket_read_operation_T done;
 
 	int len;
 	enum socket_state state;
@@ -94,7 +97,7 @@ struct socket {
 
 	/* Only used by ftp in send_cmd/get_resp. Put here
 	 * since having no connection->info is apparently valid. */
-	void (*read_done)(void *, struct read_buffer *);
+	socket_read_operation_T read_done;
 
 	/* For connections using SSL this is in fact (ssl_t *), but we don't
 	 * want to know. Noone cares and inclusion of SSL header files costs a
@@ -139,8 +142,8 @@ struct read_buffer *alloc_read_buffer(struct socket *socket);
 
 /* Reads data from @socket into @buffer using @done as struct read_buffers
  * @done routine (called each time new data comes in). */
-void read_from_socket(struct socket *socket, 
-		       struct read_buffer *buffer, void (*done)(struct connection *, struct read_buffer *));
+void read_from_socket(struct socket *socket, struct read_buffer *buffer,
+		      socket_read_operation_T done);
 
 void kill_buffer_data(struct read_buffer *, int);
 

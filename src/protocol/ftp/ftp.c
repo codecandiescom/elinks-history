@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.229 2005/04/12 20:41:22 jonas Exp $ */
+/* $Id: ftp.c,v 1.230 2005/04/13 00:08:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,7 +288,7 @@ get_resp(struct connection *conn)
 	if (!rb) return;
 
 	rb->state = SOCKET_RETRY_ONCLOSE;
-	read_from_socket(conn->socket, rb, (void (*)(struct connection *, struct read_buffer *)) conn->socket->read_done);
+	read_from_socket(conn->socket, rb, conn->socket->read_done);
 }
 
 /* Send command, set connection state and free cmd string. */

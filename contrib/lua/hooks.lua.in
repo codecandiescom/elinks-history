@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.65 2005/03/27 22:59:41 miciah Exp $
+-- $Id: hooks.lua.in,v 1.66 2005/04/13 17:27:20 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -203,7 +203,7 @@ function cvsweb (base, project, url)
 	if replacements == 0 then url = string.gsub(url, "^(.*):(.*)$", "%1 %2") end
 
 	-- split into words
-	string.gsub(url, "([^%s]+)", function (w) table.tinsert(t, w) end)
+	string.gsub(url, "([^%s]+)", function (w) table.insert(t, w) end)
 	file, old, new = t[1], t[2], t[3]
 
 	if t[4] then error('this smartprefix takes only two to three arguments') return nil end
@@ -499,7 +499,7 @@ end
 function mutt ()
     local tmp = tmpname ()
     writeto (tmp) write (current_document ()) writeto ()
-    table.tinsert (tmp_files, tmp)
+    table.insert (tmp_files, tmp)
     return "run", "mutt -a "..tmp
 end
 

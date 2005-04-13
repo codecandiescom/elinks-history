@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.206 2005/04/05 21:02:43 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.207 2005/04/13 17:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,7 @@
 #include "protocol/http/http.h"
 #include "protocol/uri.h"
 #include "sched/history.h"
+#include "sched/location.h"
 #include "sched/session.h"
 #include "sched/task.h"
 #include "terminal/tab.h"

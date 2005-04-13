@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.18 2005/04/01 09:11:38 zas Exp $ */
+/* $Id: hooks.c,v 1.19 2005/04/13 17:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "protocol/uri.h"
 #include "sched/event.h"
+#include "sched/location.h"
 #include "sched/session.h"
 #include "scripting/perl/core.h"
 #include "scripting/perl/hooks.h"

@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.22 2005/03/23 13:40:34 zas Exp $ */
+/* $Id: draw.c,v 1.23 2005/04/13 17:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/uri.h"
+#include "sched/location.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/tab.h"

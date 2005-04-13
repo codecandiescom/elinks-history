@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.56 2005/02/28 15:36:48 zas Exp $ */
+/* $Id: vs.c,v 1.57 2005/04/13 17:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "document/view.h"
 #include "ecmascript/ecmascript.h"
 #include "protocol/uri.h"
+#include "sched/location.h"
 #include "sched/session.h"
 #include "util/memory.h"
 #include "util/string.h"

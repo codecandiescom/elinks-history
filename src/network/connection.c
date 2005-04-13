@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.249 2005/04/13 20:13:51 jonas Exp $ */
+/* $Id: connection.c,v 1.250 2005/04/13 23:58:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -246,14 +246,8 @@ done_connection_socket(void *conn, struct socket *socket, int connection_state)
 }
 
 static struct socket *
-init_socket(void *conn)
+init_socket(void *conn, struct socket_operations *ops)
 {
-	static struct socket_operations connection_socket_operations = {
-		set_connection_socket_state,
-		set_connection_socket_timeout,
-		retry_connection_socket,
-		done_connection_socket,
-	};
 	struct socket *socket;
 
 	socket = mem_calloc(1, sizeof(*socket));
@@ -261,7 +255,7 @@ init_socket(void *conn)
 
 	socket->fd = -1;
 	socket->conn = conn;
-	socket->ops = &connection_socket_operations;
+	socket->ops = ops;
 
 	return socket;
 }
@@ -271,19 +265,25 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 		int start, enum cache_mode cache_mode,
 		enum connection_priority priority)
 {
+	static struct socket_operations connection_socket_operations = {
+		set_connection_socket_state,
+		set_connection_socket_timeout,
+		retry_connection_socket,
+		done_connection_socket,
+	};
 	struct connection *conn = mem_calloc(1, sizeof(*conn));
 
 	if (!conn) return NULL;
 
 	assert(proxied_uri->protocol != PROTOCOL_PROXY);
 
-	conn->socket = init_socket(conn);
+	conn->socket = init_socket(conn, &connection_socket_operations);
 	if (!conn->socket) {
 		mem_free(conn);
 		return NULL;
 	}
 
-	conn->data_socket = init_socket(conn);
+	conn->data_socket = init_socket(conn, &connection_socket_operations);
 	if (!conn->data_socket) {
 		mem_free(conn->socket);
 		mem_free(conn);

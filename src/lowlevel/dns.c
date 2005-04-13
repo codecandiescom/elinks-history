@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.66 2005/04/12 13:29:18 zas Exp $ */
+/* $Id: dns.c,v 1.67 2005/04/13 11:39:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,11 +471,8 @@ kill_dns_request(void **query_p)
 }
 
 static void
-del_dns_cache_entry(struct dnsentry **dnsentry_p)
+del_dns_cache_entry(struct dnsentry *dnsentry)
 {
-	struct dnsentry *dnsentry = *dnsentry_p;
-
-	*dnsentry_p = (*dnsentry_p)->prev;
 	del_from_list(dnsentry);
 	mem_free_if(dnsentry->addr);
 	mem_free(dnsentry);
@@ -484,17 +481,17 @@ del_dns_cache_entry(struct dnsentry **dnsentry_p)
 void
 shrink_dns_cache(int whole)
 {
-	struct dnsentry *dnsentry;
+	struct dnsentry *dnsentry, *next;
 
 	if (whole) {
-		foreach (dnsentry, dns_cache)
-			del_dns_cache_entry(&dnsentry);
+		foreachsafe (dnsentry, next, dns_cache)
+			del_dns_cache_entry(dnsentry);
 
 	} else {
 		time_T oldest = get_time() - DNS_TIMEOUT;
 
-		foreach (dnsentry, dns_cache)
+		foreachsafe (dnsentry, next, dns_cache)
 			if (dnsentry->get_time < oldest)
-				del_dns_cache_entry(&dnsentry);
+				del_dns_cache_entry(dnsentry);
 	}
 }

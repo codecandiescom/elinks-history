@@ -1,4 +1,4 @@
-/* $Id: dns.h,v 1.10 2005/04/13 21:13:18 jonas Exp $ */
+/* $Id: dns.h,v 1.11 2005/04/13 21:22:59 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_DNS_H
 #define EL__LOWLEVEL_DNS_H
@@ -8,7 +8,7 @@
 #include <sys/socket.h>
 #endif
 
-typedef void (*dns_callback_T)(void *, int);
+typedef void (*dns_callback_T)(void *, struct sockaddr_storage *, int);
 
 /* Look up the specified @host using synchronious querying. An array of found
  * addresses will be allocated in @addr with the array length stored in

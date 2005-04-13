@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.183 2005/04/13 20:40:57 jonas Exp $ */
+/* $Id: connect.c,v 1.184 2005/04/13 21:22:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,9 +137,9 @@ done_connection_info(struct socket *socket)
 
 /* DNS callback. */
 static void
-dns_found(struct socket *socket, int state)
+dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 {
-	if (state < 0) {
+	if (!addr) {
 		socket->ops->done(socket->conn, socket, S_NO_DNS);
 		return;
 	}

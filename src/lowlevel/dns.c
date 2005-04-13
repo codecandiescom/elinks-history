@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.83 2005/04/13 14:48:25 jonas Exp $ */
+/* $Id: dns.c,v 1.84 2005/04/13 21:22:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -420,7 +420,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 done:
 	if (query->query_p) *query->query_p = NULL;
 
-	query->done(query->data, res);
+	query->done(query->data, *query->addr, *query->addrno);
 
 	/* query->addr is freed later by dns_found() */
 	mem_free(query);
@@ -435,7 +435,7 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 
 	query = mem_calloc(1, sizeof(*query) + namelen);
 	if (!query) {
-		done(data, -1);
+		done(data, NULL, 0);
 		return 0;
 	}
 
@@ -475,7 +475,7 @@ find_host(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
 			if (*addr) {
 				memcpy(*addr, dnsentry->addr, size);
 				*addrno = dnsentry->addrno;
-				done(data, 0);
+				done(data, *addr, *addrno);
 			}
 			return 0;
 		}

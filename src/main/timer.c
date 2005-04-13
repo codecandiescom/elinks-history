@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timer.c,v 1.11 2005/04/13 16:20:17 zas Exp $ */
+/* $Id: timer.c,v 1.12 2005/04/13 16:35:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,22 +55,22 @@ check_timers(time_T *last_time)
 }
 
 void
-install_timer(timer_id_T *id, time_T time, void (*func)(void *), void *data)
+install_timer(timer_id_T *id, long int delay_in_milliseconds, void (*func)(void *), void *data)
 {
 	struct timer *new_timer, *timer;
 
-	assert(id);
+	assert(id && delay_in_milliseconds > 0);
 
 	new_timer = mem_alloc(sizeof(*new_timer));
 	*id = (timer_id_T) new_timer; /* TIMER_ID_UNDEF is NULL */
 	if (!new_timer) return;
 
-	new_timer->interval = time;
+	new_timer->interval = (time_T) delay_in_milliseconds;
 	new_timer->func = func;
 	new_timer->data = data;
 
 	foreach (timer, timers)
-		if (timer->interval >= time)
+		if (timer->interval >= delay_in_milliseconds)
 			break;
 	add_at_pos(timer->prev, new_timer);
 }

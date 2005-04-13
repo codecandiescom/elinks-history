@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.116 2005/04/12 22:53:14 jonas Exp $ */
+/* $Id: connect.c,v 1.117 2005/04/13 20:13:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,7 +248,7 @@ ssl_connect(struct socket *socket)
 
 			socket->ops->set_state(socket->conn, socket, S_SSL_ERROR);
 			close_socket(socket);
-			dns_found(socket, 0);
+			connect_socket(socket);
 			return -1;
 	}
 

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.181 2005/04/13 14:48:25 jonas Exp $ */
+/* $Id: socket.c,v 1.182 2005/04/13 20:13:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ dns_exception(struct socket *socket)
 {
 	socket->ops->set_state(socket->conn, socket, S_EXCEPT);
 	close_socket(socket);
-	dns_found(socket, 0);
+	connect_socket(socket);
 }
 
 static void
@@ -133,6 +133,18 @@ done_connection_info(struct socket *socket)
 
 	mem_free_if(conn_info->addr);
 	mem_free_set(&socket->conn_info, NULL);
+}
+
+/* DNS callback. */
+static void
+dns_found(struct socket *socket, int state)
+{
+	if (state < 0) {
+		socket->ops->done(socket->conn, socket, S_NO_DNS);
+		return;
+	}
+
+	connect_socket(socket);
 }
 
 void
@@ -349,7 +361,7 @@ check_if_local_address4(struct sockaddr_in *addr)
 
 
 void
-dns_found(struct socket *conn_socket, int state)
+connect_socket(struct socket *conn_socket)
 {
 	int sock = -1;
 	struct conn_info *conn_info = conn_socket->conn_info;
@@ -364,11 +376,6 @@ dns_found(struct socket *conn_socket, int state)
 	 * about such a connection attempt.
 	 * XXX: Unify with @local_only handling? --pasky */
 	int silent_fail = 0;
-
-	if (state < 0) {
-		conn_socket->ops->done(conn_socket->conn, conn_socket, S_NO_DNS);
-		return;
-	}
 
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */

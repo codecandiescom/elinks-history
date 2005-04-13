@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.420 2005/04/13 11:24:16 jonas Exp $ */
+/* $Id: http.c,v 1.421 2005/04/13 11:25:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ struct http_connection_info {
 #define CHUNK_SIZE	-1
 	int chunk_remaining;
 
-	int http_code;
+	int code;
 };
 
 
@@ -1091,8 +1091,8 @@ read_http_data_done(struct connection *conn)
 	/* There's no content but an error so just print
 	 * that instead of nothing. */
 	if (!conn->from) {
-		if (http->http_code >= 400) {
-			http_error_document(conn, http->http_code);
+		if (http->code >= 400) {
+			http_error_document(conn, http->code);
 
 		} else {
 			/* This is not an error, thus fine. No need generate any
@@ -1477,7 +1477,7 @@ again:
 		mem_free(cookie);
 	}
 #endif
-	http->http_code = h;
+	http->code = h;
 
 	if (h == 100) {
 		mem_free(head);

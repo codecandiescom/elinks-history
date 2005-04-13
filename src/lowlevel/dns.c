@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.70 2005/04/13 11:48:26 jonas Exp $ */
+/* $Id: dns.c,v 1.71 2005/04/13 12:01:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,8 +250,6 @@ end_real_lookup(void *data)
 done:
 	if (res < 0 && query->addr) mem_free_set(query->addr, NULL);
 
-	clear_handlers(query->h);
-	close(query->h);
 	done_dns_lookup(query, res);
 }
 
@@ -260,8 +258,6 @@ failed_real_lookup(void *data)
 {
 	struct dnsquery *query = (struct dnsquery *) data;
 
-	clear_handlers(query->h);
-	close(query->h);
 	done_dns_lookup(query, -1);
 }
 
@@ -339,6 +335,12 @@ done_dns_lookup(struct dnsquery *query, int res)
 	int namelen;
 
 	/* DBG("end lookup %s (%d)", query->name, res); */
+
+	/* do_lookup() might start a new thread */
+	if (query->h != -1) {
+		clear_handlers(query->h);
+		close(query->h);
+	}
 
 #ifdef THREAD_SAFE_LOOKUP
 	if (query->next_in_queue) {

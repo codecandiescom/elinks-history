@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.11 2005/04/13 16:46:14 zas Exp $ */
+/* $Id: time.c,v 1.12 2005/04/13 16:46:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,10 +60,10 @@ timeval_subtract(struct timeval *result, struct timeval *x, struct timeval *y)
 }
 
 void
-milliseconds_to_timeval(struct timeval *a, long int milliseconds)
+milliseconds_to_timeval(struct timeval *tv, long int milliseconds)
 {
-	a->tv_sec = milliseconds / 1000;
-	a->tv_usec = (milliseconds % 1000) * 1000;
+	tv->tv_sec = milliseconds / 1000;
+	tv->tv_usec = (milliseconds % 1000) * 1000;
 }
 
 int

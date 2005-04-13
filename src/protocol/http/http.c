@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.413 2005/04/13 03:44:14 jonas Exp $ */
+/* $Id: http.c,v 1.414 2005/04/13 03:47:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,6 +47,41 @@
 #include "util/conv.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+
+struct http_version {
+	int major;
+	int minor;
+};
+
+#define HTTP_0_9(x)	 ((x).major == 0 && (x).minor == 9)
+#define PRE_HTTP_1_0(x)  ((x).major < 1)
+#define HTTP_1_0(x)	 ((x).major == 1 && (x).minor == 0)
+#define POST_HTTP_1_0(x) ((x).major > 1 || ((x).major == 1 && (x).minor > 0))
+#define PRE_HTTP_1_1(x)  (PRE_HTTP_1_0(x) || HTTP_1_0(x))
+#define HTTP_1_1(x)	 ((x).major == 1 && (x).minor == 1)
+#define POST_HTTP_1_1(x) ((x).major > 2 || ((x).major == 1 && (x).minor > 1))
+
+
+struct http_connection_info {
+	enum blacklist_flags bl_flags;
+	struct http_version recv_version;
+	struct http_version sent_version;
+
+	int close;
+
+#define LEN_CHUNKED -2 /* == we get data in unknown number of chunks */
+#define LEN_FINISHED 0
+	int length;
+
+	/* Either bytes coming in this chunk yet or "parser state". */
+#define CHUNK_DATA_END	-3
+#define CHUNK_ZERO_SIZE	-2
+#define CHUNK_SIZE	-1
+	int chunk_remaining;
+
+	int http_code;
+};
 
 
 static struct auth_entry proxy_auth;

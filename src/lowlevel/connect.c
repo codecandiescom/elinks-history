@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.182 2005/04/13 20:13:50 jonas Exp $ */
+/* $Id: connect.c,v 1.183 2005/04/13 20:40:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -545,7 +545,7 @@ connected(void *data)
 
 		/* There are maybe still some more candidates. */
 		close_socket(socket);
-		dns_found(socket, 0);
+		connect_socket(socket);
 		return;
 	}
 

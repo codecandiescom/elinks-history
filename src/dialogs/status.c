@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.98 2005/04/08 05:45:04 jonas Exp $ */
+/* $Id: status.c,v 1.99 2005/04/13 15:34:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,6 +126,14 @@ get_download_msg(struct download *download, struct terminal *term,
 	}
 
 	return msg.source;
+}
+
+int
+download_is_progressing(struct download *download)
+{
+	return download
+	    && download->state == S_TRANS
+	    && download->progress->elapsed / 100;
 }
 
 

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.75 2005/04/13 12:28:06 jonas Exp $ */
+/* $Id: dns.c,v 1.76 2005/04/13 12:33:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -350,7 +350,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 		/* DBG("processing next in queue: %s", query->next_in_queue->name); */
 		do_lookup(query->next_in_queue, 1);
 	} else {
-	       	dns_queue = NULL;
+		dns_queue = NULL;
 	}
 #endif
 
@@ -439,7 +439,7 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 		query->query_p = (struct dnsquery **) query_p;
 		*(query->query_p) = query;
 	}
-	
+
 	return do_queued_lookup(query);
 }
 

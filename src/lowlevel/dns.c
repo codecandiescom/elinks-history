@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.71 2005/04/13 12:01:01 jonas Exp $ */
+/* $Id: dns.c,v 1.72 2005/04/13 12:04:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,6 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/ttime.h"
-
 
 struct dnsentry {
 	LIST_HEAD(struct dnsentry);
@@ -199,7 +198,6 @@ lookup_fn(void *data, int h)
 	/* We're in thread, thus we must do plain free(). */
 	free(addrs);
 }
-#endif
 
 static void
 end_real_lookup(void *data)
@@ -252,6 +250,7 @@ done:
 
 	done_dns_lookup(query, res);
 }
+#endif
 
 static void
 failed_real_lookup(void *data)

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.410 2005/04/13 02:17:24 jonas Exp $ */
+/* $Id: http.c,v 1.411 2005/04/13 02:28:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1209,7 +1209,7 @@ read_normal_http_data(struct connection *conn, struct read_buffer *rb)
 
 	kill_buffer_data(rb, len);
 
-	if (!info->length && rb->state == SOCKET_RETRY_ONCLOSE) {
+	if (!info->length && conn->socket->state == SOCKET_RETRY_ONCLOSE) {
 		return 2;
 	}
 
@@ -1225,7 +1225,7 @@ read_http_data(struct connection *conn, struct socket *socket,
 
 	set_connection_timeout(conn);
 
-	if (rb->state == SOCKET_CLOSED) {
+	if (socket->state == SOCKET_CLOSED) {
 		if (conn->content_encoding && info->length == -1) {
 			/* Flush decompression first. */
 			info->length = 0;
@@ -1352,7 +1352,7 @@ http_got_header(struct connection *conn, struct socket *socket,
 
 	set_connection_timeout(conn);
 
-	if (rb->state == SOCKET_CLOSED) {
+	if (socket->state == SOCKET_CLOSED) {
 		if (!conn->tries && uri->host) {
 			if (info->bl_flags & SERVER_BLACKLIST_NO_CHARSET) {
 				del_blacklist_entry(uri, SERVER_BLACKLIST_NO_CHARSET);
@@ -1364,7 +1364,7 @@ http_got_header(struct connection *conn, struct socket *socket,
 		retry_conn_with_state(conn, S_CANT_READ);
 		return;
 	}
-	rb->state = SOCKET_RETRY_ONCLOSE;
+	socket->state = SOCKET_RETRY_ONCLOSE;
 
 again:
 	a = get_header(rb);
@@ -1739,7 +1739,7 @@ again:
 
 	if (info->length == -1
 	    || (PRE_HTTP_1_1(info->recv_version) && info->close))
-		rb->state = SOCKET_END_ONCLOSE;
+		socket->state = SOCKET_END_ONCLOSE;
 
 	read_http_data(conn, socket, rb);
 }
@@ -1750,6 +1750,6 @@ http_get_header(struct connection *conn, struct socket *socket)
 	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
 	if (!rb) return;
-	rb->state = SOCKET_END_ONCLOSE;
+	socket->state = SOCKET_END_ONCLOSE;
 	read_from_socket(conn->socket, rb, http_got_header);
 }

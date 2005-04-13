@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.61 2005/04/13 02:17:24 jonas Exp $ */
+/* $Id: socket.h,v 1.62 2005/04/13 02:28:42 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -46,7 +46,6 @@ struct read_buffer {
 	socket_read_operation_T done;
 
 	int len;
-	enum socket_state state;
 	int freespace;
 
 	unsigned char data[1]; /* must be at end of struct */
@@ -83,6 +82,9 @@ struct socket_operations {
 struct socket {
 	/* The socket descriptor */
 	int fd;
+
+	/* Some what read-specific socket state management and signaling. */
+	enum socket_state state;
 
 	/* Information for resolving the connection with which the socket is
 	 * associated. */

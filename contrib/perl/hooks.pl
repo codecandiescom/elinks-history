@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.81 2005/04/08 11:32:42 rrowan Exp $
+# $Id: hooks.pl,v 1.82 2005/04/13 18:21:58 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -768,7 +768,7 @@ sub goto_url_hook
 			my ($from_language, $to_language) = $url =~ /^[a-z]* (.*) (.*)$/;
 			($current_url) = $current_url =~ /^.*:\/\/(.*)/;
 			$url = 'http://babelfish.altavista.com/babelfish/urltrurl?lp='
-				. $from_language . '_' . $to_language . '&url=' . $current_url;
+				. $from_language . '_' . $to_language . '&url=http%3A%2F%2F' . $current_url;
 		}
 		return $url;
 	}

@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.16 2005/04/13 02:28:42 jonas Exp $ */
+/* $Id: finger.c,v 1.17 2005/04/13 02:48:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,17 +72,6 @@ finger_get_response(struct connection *conn, struct socket *socket,
 }
 
 static void
-finger_sent_request(struct connection *conn, struct socket *socket)
-{
-	struct read_buffer *rb;
-
-	rb = alloc_read_buffer(conn->socket);
-	if (!rb) return;
-	socket->state = SOCKET_END_ONCLOSE;
-	read_from_socket(conn->socket, rb, finger_get_response);
-}
-
-static void
 finger_send_request(struct connection *conn, struct socket *socket)
 {
 	struct string req;
@@ -95,7 +84,8 @@ finger_send_request(struct connection *conn, struct socket *socket)
 		add_bytes_to_string(&req, conn->uri->user, conn->uri->userlen);
 	}
 	add_crlf_to_string(&req);
-	write_to_socket(socket, req.source, req.length, S_SENT, finger_sent_request);
+	request_from_socket(socket, req.source, req.length, S_SENT,
+			    SOCKET_END_ONCLOSE, finger_get_response);
 	done_string(&req);
 }
 

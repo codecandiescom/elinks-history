@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.233 2005/04/13 02:28:42 jonas Exp $ */
+/* $Id: ftp.c,v 1.234 2005/04/13 02:48:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,24 +279,12 @@ ftp_protocol_handler(struct connection *conn)
 	}
 }
 
-/* Get connection response. */
-static void
-get_resp(struct connection *conn, struct socket *socket)
-{
-	struct read_buffer *rb = alloc_read_buffer(conn->socket);
-
-	if (!rb) return;
-
-	socket->state = SOCKET_RETRY_ONCLOSE;
-	read_from_socket(conn->socket, rb, conn->socket->read_done);
-}
-
 /* Send command, set connection state and free cmd string. */
 static void
 send_cmd(struct connection *conn, struct string *cmd, void *callback, int state)
 {
-	conn->socket->read_done = callback;
-	write_to_socket(conn->socket, cmd->source, cmd->length, state, get_resp);
+	request_from_socket(conn->socket, cmd->source, cmd->length, state,
+			    SOCKET_RETRY_ONCLOSE, callback);
 
 	done_string(cmd);
 }

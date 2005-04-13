@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.411 2005/04/13 02:28:42 jonas Exp $ */
+/* $Id: http.c,v 1.412 2005/04/13 02:48:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -472,8 +472,6 @@ proxy_protocol_handler(struct connection *conn)
 	http_protocol_handler(conn);
 }
 
-static void http_get_header(struct connection *, struct socket *);
-
 #define IS_PROXY_URI(x) ((x)->protocol == PROTOCOL_PROXY)
 
 #define connection_is_https_proxy(conn) \
@@ -865,8 +863,8 @@ http_send_header(struct connection *conn, struct socket *socket)
 #undef POST_BUFFER_SIZE
 	}
 
-	write_to_socket(conn->socket, header.source, header.length,
-			S_SENT, http_get_header);
+	request_from_socket(socket, header.source, header.length, S_SENT,
+			    SOCKET_END_ONCLOSE, http_got_header);
 	done_string(&header);
 }
 
@@ -1742,14 +1740,4 @@ again:
 		socket->state = SOCKET_END_ONCLOSE;
 
 	read_http_data(conn, socket, rb);
-}
-
-static void
-http_get_header(struct connection *conn, struct socket *socket)
-{
-	struct read_buffer *rb = alloc_read_buffer(conn->socket);
-
-	if (!rb) return;
-	socket->state = SOCKET_END_ONCLOSE;
-	read_from_socket(conn->socket, rb, http_got_header);
 }

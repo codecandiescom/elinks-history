@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.62 2005/04/13 02:28:42 jonas Exp $ */
+/* $Id: socket.h,v 1.63 2005/04/13 02:48:58 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -140,6 +140,11 @@ int get_pasv6_socket(struct connection *, int, struct sockaddr_storage *);
 void write_to_socket(struct socket *socket,
 		     unsigned char *data, int datalen,
 		     int connection_state, socket_write_operation_T write_done);
+
+/* Send request and get response. */
+void request_from_socket(struct socket *socket, unsigned char *data, int datalen,
+			 int connection_state, enum socket_state state,
+			 socket_read_operation_T read_done);
 
 struct read_buffer *alloc_read_buffer(struct socket *socket);
 

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.178 2005/04/13 02:28:42 jonas Exp $ */
+/* $Id: connect.c,v 1.179 2005/04/13 02:48:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -796,6 +796,25 @@ read_from_socket(struct socket *socket, struct read_buffer *buffer,
 	socket->buffer = buffer;
 
 	set_handlers(socket->fd, (select_handler_T) read_select, NULL, exception, socket);
+}
+
+static void
+read_response_from_socket(struct connection *conn, struct socket *socket)
+{
+	struct read_buffer *rb = alloc_read_buffer(socket);
+
+	if (rb) read_from_socket(socket, rb, socket->read_done);
+}
+
+void
+request_from_socket(struct socket *socket, unsigned char *data, int datalen,
+		    int connection_state, enum socket_state state,
+		    socket_read_operation_T read_done)
+{
+	socket->read_done = read_done;
+	socket->state = state;
+	write_to_socket(socket, data, datalen, connection_state,
+			read_response_from_socket);
 }
 
 void

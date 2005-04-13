@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.85 2005/04/13 21:45:42 jonas Exp $ */
+/* $Id: dns.c,v 1.86 2005/04/13 22:12:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ struct dnsentry {
 	struct sockaddr_storage *addr;	/* Pointer to array of addresses. */
 	int addrno;			/* Adress array length. */
 	time_T get_time;		/* Creation time; lets us do timeouts. */
-	unsigned char name[1];		/* Associated name; XXX: Must be last. */
+	unsigned char name[1];		/* Associated host; XXX: Must be last. */
 };
 
 struct dnsquery {
@@ -56,9 +56,8 @@ struct dnsquery {
 	dns_callback_T done;		/* Used for reporting back DNS result. */
 	void *data;			/* Private callback data. */
 
-	/* The lifespan of addr and addrno exceeds the life of this structure.
-	 * The caller holds memory being pointed upon be these functions. Thus,
-	 * when free()ing, *always* set pointer to NULL ! */
+	/* The @done callback is called with these members. Thus, when
+	 * free()ing, *always* set pointer to NULL ! */
 	struct sockaddr_storage *addr;	/* Reference to array of addresses. */
 	int addrno;			/* Reference to array len. */
 
@@ -69,7 +68,7 @@ struct dnsquery {
 #ifndef NO_ASYNC_LOOKUP
 	int h;				/* One end of the async thread pipe. */
 #endif
-	unsigned char name[1];		/* Associated name; XXX: Must be last. */
+	unsigned char name[1];		/* Associated host; XXX: Must be last. */
 };
 
 
@@ -270,7 +269,6 @@ init_async_dns_lookup(struct dnsquery *dnsquery, int force_async)
 		dnsquery->h = start_thread(lookup_fn, dnsquery->name,
 					   strlen(dnsquery->name) + 1);
 		if (dnsquery->h != -1) {
-			/* async lookup */
 			set_handlers(dnsquery->h, end_real_lookup, NULL,
 				     failed_real_lookup, dnsquery);
 		}
@@ -299,10 +297,11 @@ do_lookup(struct dnsquery *query, int force_async)
 
 	/* DBG("starting lookup for %s", query->name); */
 
+	/* Async lookup */
 	if (init_async_dns_lookup(query, force_async))
 		return 1;
 
-	/* sync lookup */
+	/* Sync lookup */
 	res = do_real_lookup(query->name, &query->addr, &query->addrno, 0);
 	done_dns_lookup(query, res);
 
@@ -374,7 +373,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 	if (dnsentry) {
 		if (res < 0) {
 			int size;
-			/* query->addr(no) is pointer to something already allocated */
+			/* query->addr(no) point to allocated addresses. */
 
 			assert(dnsentry->addrno > 0);
 
@@ -399,7 +398,8 @@ done_dns_lookup(struct dnsquery *query, int res)
 	if (dnsentry) {
 		int size;
 
-		memcpy(dnsentry->name, query->name, namelen); /* calloc() sets nul char for us. */
+		/* calloc() sets NUL char for us. */
+		memcpy(dnsentry->name, query->name, namelen);
 
 		assert(query->addrno > 0);
 
@@ -419,7 +419,7 @@ done:
 
 	query->done(query->data, query->addr, query->addrno);
 
-	/* query->addr is freed later by dns_found() */
+	/* query->addr is freed by the callback handler - dns_found(). */
 	mem_free(query);
 }
 
@@ -438,7 +438,9 @@ find_host_no_cache(unsigned char *name, void **query_p,
 
 	query->done = done;
 	query->data = data;
-	memcpy(query->name, name, namelen); /* calloc() sets nul char for us. */
+
+	/* calloc() sets NUL char for us. */
+	memcpy(query->name, name, namelen);
 
 	if (query_p) {
 		query->query_p = (struct dnsquery **) query_p;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.415 2005/04/13 04:28:11 jonas Exp $ */
+/* $Id: http.c,v 1.416 2005/04/13 10:29:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1447,6 +1447,7 @@ again:
 		return;
 	}
 
+#ifdef CONFIG_CGI
 	if (uri->protocol == PROTOCOL_FILE) {
 		/* ``Status'' is not a standard HTTP header field although some
 		 * HTTP servers like www.php.net uses it for some reason. It should
@@ -1466,6 +1467,7 @@ again:
 			}
 		}
 	}
+#endif
 
 #ifdef CONFIG_COOKIES
 	ch = head;

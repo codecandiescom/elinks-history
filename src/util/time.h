@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.9 2005/03/05 22:14:32 zas Exp $ */
+/* $Id: time.h,v 1.10 2005/04/13 16:08:11 zas Exp $ */
 
 #ifndef EL__UTIL_TTIME_H
 #define EL__UTIL_TTIME_H
@@ -19,5 +19,8 @@ time_T get_time(void);
 /* Is using atol() in this way acceptable? It seems
  * non-portable to me; time_T might not be a long. -- Miciah */
 #define str_to_time_T(s) ((time_T) atol(s))
+
+int timeval_subtract(struct timeval *result, struct timeval *x, struct timeval *y);
+void milliseconds_to_timeval(struct timeval *a, long int milliseconds);
 
 #endif

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.317 2005/04/12 08:11:05 zas Exp $ */
+/* $Id: search.c,v 1.318 2005/04/13 18:34:22 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -200,7 +200,12 @@ get_search_data(struct document *document)
 	sort_srch(document);
 }
 
-/* Returns -1 on assertion failure, 1 if s1 and s2 are not found,
+/* Assign s1 and s2 the first search node and the last search node needed to
+ * form the region starting at line y and ending at the greater of y + height
+ * and the end of the document, with allowance at the start to allow for
+ * multi-line matches that would otherwise be partially outside of the region.
+ *
+ * Returns -1 on assertion failure, 1 if s1 and s2 are not found,
  * and 0 if they are found. */
 static int
 get_range(struct document *document, int y, int height, int l,
@@ -214,6 +219,10 @@ get_range(struct document *document, int y, int height, int l,
 	*s1 = *s2 = NULL;
 	int_lower_bound(&y, 0);
 
+	/* Starting with line y, find the search node referencing the earliest
+	 * point in the document text and the node referencing the last point,
+	 * respectively s1 and s2.
+	 */
 	for (i = y; i < y + height && i < document->height; i++) {
 		if (document->slines1[i] && (!*s1 || document->slines1[i] < *s1))
 			*s1 = document->slines1[i];
@@ -222,6 +231,9 @@ get_range(struct document *document, int y, int height, int l,
 	}
 	if (!*s1 || !*s2) return 1;
 
+	/* Skip back by l to facilitate multi-line matches where the match
+	 * begins before the start of the search region but is still partly
+	 * within. */
 	*s1 -= l;
 
 	if (*s1 < document->search)

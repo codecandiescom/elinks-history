@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.176 2005/04/13 00:42:21 jonas Exp $ */
+/* $Id: connect.c,v 1.177 2005/04/13 02:17:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,13 +105,13 @@ exception(void *data)
 
 struct conn_info *
 init_connection_info(struct uri *uri, struct socket *socket,
-		     void (*done)(struct connection *))
+		     socket_connect_operation_T connect_done)
 {
 	struct conn_info *conn_info = mem_calloc(1, sizeof(*conn_info));
 
 	if (!conn_info) return NULL;
 
-	conn_info->done = done;
+	conn_info->done = connect_done;
 	conn_info->port = get_uri_port(uri);
 	conn_info->ip_family = uri->ip_family;
 	conn_info->need_ssl = get_protocol_need_ssl(uri->protocol);
@@ -129,7 +129,7 @@ done_connection_info(struct socket *socket)
 	assert(socket->conn_info);
 
 	if (conn_info->dnsquery) kill_dns_request(&conn_info->dnsquery);
-	if (conn_info->done) conn_info->done(socket->conn);
+	if (conn_info->done) conn_info->done(socket->conn, socket);
 
 	mem_free_if(conn_info->addr);
 	mem_free_set(&socket->conn_info, NULL);
@@ -137,7 +137,7 @@ done_connection_info(struct socket *socket)
 
 void
 make_connection(struct connection *conn, struct socket *socket,
-		void (*done)(struct connection *))
+		socket_connect_operation_T connect_done)
 {
 	unsigned char *host = get_uri_string(conn->uri, URI_DNS_HOST);
 	struct conn_info *conn_info;
@@ -150,7 +150,7 @@ make_connection(struct connection *conn, struct socket *socket,
 		return;
 	}
 
-	conn_info = init_connection_info(conn->uri, socket, done);
+	conn_info = init_connection_info(conn->uri, socket, connect_done);
 	if (!conn_info) {
 		mem_free(host);
 		socket->ops->retry(socket->conn, socket, S_OUT_OF_MEM);
@@ -563,7 +563,7 @@ connected(void *data)
 struct write_buffer {
 	/* A routine called when all the data is sent (therefore this is
 	 * _different_ from read_buffer.done !). */
-	void (*done)(struct connection *);
+	socket_write_operation_T done;
 
 	int len;
 	int pos;
@@ -638,18 +638,18 @@ write_select(struct socket *socket)
 		wb->pos += wr;
 
 		if (wb->pos == wb->len) {
-			void (*done)(struct connection *) = wb->done;
+			socket_write_operation_T done = wb->done;
 
 			clear_handlers(socket->fd);
 			mem_free_set(&socket->buffer, NULL);
-			done(socket->conn);
+			done(socket->conn, socket);
 		}
 	}
 }
 
 void
 write_to_socket(struct socket *socket, unsigned char *data, int len,
-		int connection_state, void (*done)(struct connection *))
+		int connection_state, socket_write_operation_T write_done)
 {
 	struct write_buffer *wb;
 
@@ -668,7 +668,7 @@ write_to_socket(struct socket *socket, unsigned char *data, int len,
 
 	wb->len = len;
 	wb->pos = 0;
-	wb->done = done;
+	wb->done = write_done;
 	memcpy(wb->data, data, len);
 	mem_free_set(&socket->buffer, wb);
 	set_handlers(socket->fd, NULL, (select_handler_T) write_select, exception, socket);

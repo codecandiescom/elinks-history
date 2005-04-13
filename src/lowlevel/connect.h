@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.60 2005/04/13 00:42:21 jonas Exp $ */
+/* $Id: connect.h,v 1.61 2005/04/13 02:17:24 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -37,6 +37,8 @@ enum socket_state {
 };
 
 typedef void (*socket_read_operation_T)(struct connection *, struct socket *, struct read_buffer *);
+typedef void (*socket_write_operation_T)(struct connection *, struct socket *);
+typedef void (*socket_connect_operation_T)(struct connection *, struct socket *);
 
 struct read_buffer {
 	/* A routine called *each time new data comes in*, therefore
@@ -53,7 +55,7 @@ struct read_buffer {
 struct conn_info {
 	struct sockaddr_storage *addr; /* array of addresses */
 
-	void (*done)(struct connection *);
+	socket_connect_operation_T done;
 
 	void *dnsquery;
 
@@ -111,7 +113,7 @@ struct socket {
 
 struct conn_info *
 init_connection_info(struct uri *uri, struct socket *socket,
-		     void (*done)(struct connection *));
+		     socket_connect_operation_T connect_done);
 
 void done_connection_info(struct socket *socket);
 
@@ -121,7 +123,7 @@ void close_socket(struct socket *socket);
  * descriptor in @socket. When the connection has been established the @done
  * callback will be run. */
 void make_connection(struct connection *conn, struct socket *socket,
-		     void (*done)(struct connection *));
+		     socket_connect_operation_T connect_done);
 
 void dns_found(struct socket *, int);
 void dns_exception(struct socket *);
@@ -135,8 +137,7 @@ int get_pasv6_socket(struct connection *, int, struct sockaddr_storage *);
  * is written the @done callback will be called. */
 void write_to_socket(struct socket *socket,
 		     unsigned char *data, int datalen,
-		     int connection_state,
-		     void (*done)(struct connection *));
+		     int connection_state, socket_write_operation_T write_done);
 
 struct read_buffer *alloc_read_buffer(struct socket *socket);
 

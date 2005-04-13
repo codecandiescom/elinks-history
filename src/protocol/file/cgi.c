@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.97 2005/04/12 20:41:22 jonas Exp $ */
+/* $Id: cgi.c,v 1.98 2005/04/13 02:17:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
 
 
 static void
-close_pipe_and_read(struct connection *conn)
+close_pipe_and_read(struct connection *conn, struct socket *socket)
 {
 	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
@@ -106,7 +106,7 @@ static void
 send_request(struct connection *conn)
 {
 	if (conn->uri->post) send_post_data(conn);
-	else close_pipe_and_read(conn);
+	else close_pipe_and_read(conn, conn->socket);
 }
 
 /* This function sets CGI environment variables. */

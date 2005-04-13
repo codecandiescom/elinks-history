@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.231 2005/04/13 00:42:21 jonas Exp $ */
+/* $Id: ftp.c,v 1.232 2005/04/13 02:17:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,7 @@ struct ftp_connection_info {
 
 
 /* Prototypes */
-static void ftp_login(struct connection *);
+static void ftp_login(struct connection *, struct socket *);
 static void ftp_send_retr_req(struct connection *, int);
 static void ftp_got_info(struct connection *, struct socket *, struct read_buffer *);
 static void ftp_got_user_info(struct connection *, struct socket *, struct read_buffer *);
@@ -281,7 +281,7 @@ ftp_protocol_handler(struct connection *conn)
 
 /* Get connection response. */
 static void
-get_resp(struct connection *conn)
+get_resp(struct connection *conn, struct socket *socket)
 {
 	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
@@ -337,7 +337,7 @@ prompt_username_pw(struct connection *conn)
 
 /* Send USER command. */
 static void
-ftp_login(struct connection *conn)
+ftp_login(struct connection *conn, struct socket *socket)
 {
 	struct string cmd;
 	struct auth_entry* auth;

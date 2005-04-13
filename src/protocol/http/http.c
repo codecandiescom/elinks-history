@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.409 2005/04/13 00:42:21 jonas Exp $ */
+/* $Id: http.c,v 1.410 2005/04/13 02:17:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,7 +452,7 @@ http_end_request(struct connection *conn, enum connection_state state,
 	}
 }
 
-static void http_send_header(struct connection *);
+static void http_send_header(struct connection *, struct socket *);
 
 void
 http_protocol_handler(struct connection *conn)
@@ -462,7 +462,7 @@ http_protocol_handler(struct connection *conn)
 	if (!has_keepalive_connection(conn)) {
 		make_connection(conn, conn->socket, http_send_header);
 	} else {
-		http_send_header(conn);
+		http_send_header(conn, conn->socket);
 	}
 }
 
@@ -472,7 +472,7 @@ proxy_protocol_handler(struct connection *conn)
 	http_protocol_handler(conn);
 }
 
-static void http_get_header(struct connection *);
+static void http_get_header(struct connection *, struct socket *);
 
 #define IS_PROXY_URI(x) ((x)->protocol == PROTOCOL_PROXY)
 
@@ -480,7 +480,7 @@ static void http_get_header(struct connection *);
 	(IS_PROXY_URI((conn)->uri) && (conn)->proxied_uri->protocol == PROTOCOL_HTTPS)
 
 static void
-http_send_header(struct connection *conn)
+http_send_header(struct connection *conn, struct socket *socket)
 {
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
@@ -1456,14 +1456,13 @@ again:
 	if (h == 200 && connection_is_https_proxy(conn) && !conn->socket->ssl) {
 #ifdef CONFIG_SSL
 		mem_free(head);
-		conn->socket->conn_info = init_connection_info(uri, conn->socket,
-							      http_send_header);
-		if (!conn->socket->conn_info) {
+		socket->conn_info = init_connection_info(uri, socket, http_send_header);
+		if (!socket->conn_info) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
 		}
 
-		ssl_connect(conn->socket);
+		ssl_connect(socket);
 #else
 		abort_conn_with_state(conn, S_SSL_ERROR);
 #endif
@@ -1746,7 +1745,7 @@ again:
 }
 
 static void
-http_get_header(struct connection *conn)
+http_get_header(struct connection *conn, struct socket *socket)
 {
 	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 

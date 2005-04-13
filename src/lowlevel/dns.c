@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.84 2005/04/13 21:22:59 jonas Exp $ */
+/* $Id: dns.c,v 1.85 2005/04/13 21:45:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,8 +59,8 @@ struct dnsquery {
 	/* The lifespan of addr and addrno exceeds the life of this structure.
 	 * The caller holds memory being pointed upon be these functions. Thus,
 	 * when free()ing, *always* set pointer to NULL ! */
-	struct sockaddr_storage **addr; /* Reference to array of addresses. */
-	int *addrno;			/* Reference to array len. */
+	struct sockaddr_storage *addr;	/* Reference to array of addresses. */
+	int addrno;			/* Reference to array len. */
 
 	/* As with the two members above, when stopping a DNS query *always* set
 	 * this pointer to NULL. */
@@ -219,11 +219,7 @@ end_real_lookup(void *data)
 {
 	struct dnsquery *query = (struct dnsquery *) data;
 	int res = -1;
-	int i, done, todo;
-
-	if (!query->addr || !query->addrno) goto done;
-
-	*query->addr = NULL; /* XXX: is this correct ?? --Zas */
+	int i, done, todo, *addrno;
 
 	/* We will do blocking I/O here, however it's only local communication
 	 * and it's supposed to be just a flash talk, so it shouldn't matter.
@@ -231,21 +227,22 @@ end_real_lookup(void *data)
 	 * useless) to do this in non-blocking way. */
 	if (set_blocking_fd(query->h) < 0) goto done;
 
-	todo = sizeof(*query->addrno);
+	todo = sizeof(query->addrno);
 	done = 0;
+	addrno = &query->addrno;
 	do {
-		int r = safe_read(query->h, query->addrno + done, todo - done);
+		int r = safe_read(query->h, addrno + done, todo - done);
 
 		if (r <= 0) goto done;
 		done += r;
 	} while (done < todo);
 	assert(done == todo);
 
-	*query->addr = mem_calloc(*query->addrno, sizeof(**query->addr));
-	if (!*query->addr) goto done;
+	query->addr = mem_calloc(query->addrno, sizeof(*query->addr));
+	if (!query->addr) goto done;
 
-	for (i = 0; i < *query->addrno; i++) {
-		struct sockaddr_storage *addr = &(*query->addr)[i];
+	for (i = 0; i < query->addrno; i++) {
+		struct sockaddr_storage *addr = &query->addr[i];
 
 		todo = sizeof(*addr);
 		done = 0;
@@ -261,7 +258,7 @@ end_real_lookup(void *data)
 	res = 0;
 
 done:
-	if (res < 0 && query->addr) mem_free_set(query->addr, NULL);
+	if (res < 0 && query->addr) mem_free_set(&query->addr, NULL);
 
 	done_dns_lookup(query, res);
 }
@@ -306,7 +303,7 @@ do_lookup(struct dnsquery *query, int force_async)
 		return 1;
 
 	/* sync lookup */
-	res = do_real_lookup(query->name, query->addr, query->addrno, 0);
+	res = do_real_lookup(query->name, &query->addr, &query->addrno, 0);
 	done_dns_lookup(query, res);
 
 	return 0;
@@ -381,12 +378,12 @@ done_dns_lookup(struct dnsquery *query, int res)
 
 			assert(dnsentry->addrno > 0);
 
-			size = dnsentry->addrno * sizeof(**query->addr);
-			*query->addr = mem_alloc(size);
-			if (!*query->addr) goto done;
+			size = dnsentry->addrno * sizeof(*query->addr);
+			query->addr = mem_alloc(size);
+			if (!query->addr) goto done;
 
-			memcpy(*query->addr, dnsentry->addr, size);
-			*query->addrno = dnsentry->addrno;
+			memcpy(query->addr, dnsentry->addr, size);
+			query->addrno = dnsentry->addrno;
 
 			res = 0;
 			goto done;
@@ -404,14 +401,14 @@ done_dns_lookup(struct dnsquery *query, int res)
 
 		memcpy(dnsentry->name, query->name, namelen); /* calloc() sets nul char for us. */
 
-		assert(*query->addrno > 0);
+		assert(query->addrno > 0);
 
-		size = *query->addrno * sizeof(*dnsentry->addr);
+		size = query->addrno * sizeof(*dnsentry->addr);
 		dnsentry->addr = mem_alloc(size);
 		if (!dnsentry->addr) goto done;
 
-		memcpy(dnsentry->addr, *query->addr, size);;
-		dnsentry->addrno = *query->addrno;
+		memcpy(dnsentry->addr, query->addr, size);;
+		dnsentry->addrno = query->addrno;
 
 		dnsentry->get_time = get_time();
 		add_to_list(dns_cache, dnsentry);
@@ -420,15 +417,15 @@ done_dns_lookup(struct dnsquery *query, int res)
 done:
 	if (query->query_p) *query->query_p = NULL;
 
-	query->done(query->data, *query->addr, *query->addrno);
+	query->done(query->data, query->addr, query->addrno);
 
 	/* query->addr is freed later by dns_found() */
 	mem_free(query);
 }
 
 static int
-find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
-		   void **query_p, dns_callback_T done, void *data)
+find_host_no_cache(unsigned char *name, void **query_p,
+		   dns_callback_T done, void *data)
 {
 	struct dnsquery *query;
 	int namelen = strlen(name);
@@ -441,8 +438,6 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 
 	query->done = done;
 	query->data = data;
-	query->addr = addr;
-	query->addrno = addrno;
 	memcpy(query->name, name, namelen); /* calloc() sets nul char for us. */
 
 	if (query_p) {
@@ -454,34 +449,34 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 }
 
 int
-find_host(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
-	  void **query_p, dns_callback_T done, void *data, int no_cache)
+find_host(unsigned char *name, void **query_p,
+	  dns_callback_T done, void *data, int no_cache)
 {
 	struct dnsentry *dnsentry;
 
 	if (query_p) *query_p = NULL;
 
 	if (no_cache)
-		return find_host_no_cache(name, addr, addrno, query_p, done, data);
+		return find_host_no_cache(name, query_p, done, data);
 
 	dnsentry = find_in_dns_cache(name);
 	if (dnsentry) {
 		assert(dnsentry && dnsentry->addrno > 0);
 
 		if (dnsentry->get_time + DNS_TIMEOUT >= get_time()) {
-			int size = sizeof(**addr) * dnsentry->addrno;
+			struct sockaddr_storage *addr;
+			int size = sizeof(*addr) * dnsentry->addrno;
 
-			*addr = mem_alloc(size);
-			if (*addr) {
-				memcpy(*addr, dnsentry->addr, size);
-				*addrno = dnsentry->addrno;
-				done(data, *addr, *addrno);
+			addr = mem_alloc(size);
+			if (addr) {
+				memcpy(addr, dnsentry->addr, size);
+				done(data, addr, dnsentry->addrno);
 			}
 			return 0;
 		}
 	}
 
-	return find_host_no_cache(name, addr, addrno, query_p, done, data);
+	return find_host_no_cache(name, query_p, done, data);
 }
 
 void

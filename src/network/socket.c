@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.184 2005/04/13 21:22:59 jonas Exp $ */
+/* $Id: socket.c,v 1.185 2005/04/13 21:45:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,6 +144,11 @@ dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 		return;
 	}
 
+	assert(socket->conn_info);
+
+	socket->conn_info->addr	  = addr;
+	socket->conn_info->addrno = addrlen;
+
 	connect_socket(socket);
 }
 
@@ -175,8 +180,7 @@ make_connection(struct connection *conn, struct socket *socket,
 	debug_transfer_log(host, -1);
 	debug_transfer_log("\n", -1);
 
-	async = find_host(host, &conn_info->addr, &conn_info->addrno,
-			  &conn_info->dnsquery, (dns_callback_T) dns_found,
+	async = find_host(host, &conn_info->dnsquery, (dns_callback_T) dns_found,
 			  socket, conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 
 	mem_free(host);

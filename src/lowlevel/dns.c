@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.80 2005/04/13 14:19:56 jonas Exp $ */
+/* $Id: dns.c,v 1.81 2005/04/13 14:35:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -350,8 +350,6 @@ static void
 done_dns_lookup(struct dnsquery *query, int res)
 {
 	struct dnsentry *dnsentry;
-	void (*done)(void *, int);
-	void *data;
 	int namelen;
 
 	/* DBG("end lookup %s (%d)", query->name, res); */
@@ -420,14 +418,12 @@ done_dns_lookup(struct dnsquery *query, int res)
 	}
 
 done:
-	done = query->done;
-	data = query->data;
-
 	if (query->query_p) *query->query_p = NULL;
+
+	query->done(query->data, res);
+
 	/* query->addr is freed later by dns_found() */
 	mem_free(query);
-
-	done(data, res);
 }
 
 int

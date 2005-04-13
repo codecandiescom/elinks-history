@@ -1,3 +1,441 @@
+Wed Apr 13 21:45:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: connect.c, dns.c, dns.h:
+
+	find_host(): Do not take address and address length references but
+	pass the allocated variables via the dns_callback_T.  
+
+Wed Apr 13 21:22:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: connect.c, dns.c, dns.h:
+
+	dns_callback_T: Pass address array and array length via the
+	callback.  
+
+Wed Apr 13 21:13:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.h:
+
+	Describe the DNS interface.  
+
+Wed Apr 13 20:42:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.h:
+
+	Restructure the types.  
+
+Wed Apr 13 20:40:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	More connect_socket() usage.  
+
+Wed Apr 13 20:13:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
+	ssl/connect.c:
+
+	Create dns_found() wrapper named connect_socket(), which doesn't
+	take state variable.  
+
+Wed Apr 13 18:34:22 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Add some comments that (if we're lucky) describe the operation of
+	get_range.  
+
+Wed Apr 13 18:21:58 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Babelfish now requires the protocol portion of the URL to be
+	specified.  
+
+Wed Apr 13 17:32:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/renderer.c, ecmascript/spidermonkey.c,
+	protocol/auth/dialogs.c, sched/task.c, scripting/lua/core.c,
+	scripting/lua/hooks.c, scripting/perl/hooks.c,
+	scripting/ruby/hooks.c, viewer/text/draw.c, viewer/text/vs.c:
+
+	Add location header and fix compile errors.  
+
+Wed Apr 13 17:31:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: action.c, history.c, history.h, session.h:
+
+	Move go_back() and go_unback() wrappers to history header. Uninline
+	because they are only called two places.  
+
+Wed Apr 13 17:27:20 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Use table.insert, not table.tinsert. This typo-fix fixes the cvs
+	rewrite hook and makes sure that the temporary file for the Mutt
+	routine will be added to the tmp_files table for later deletion.  
+
+Wed Apr 13 17:16:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/history.h:
+
+	Declare struct location instead of including the evil location
+	header.  
+
+Wed Apr 13 17:14:49 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: history.c, history.h:
+
+	Uninline and move add_to_history() and del_from_history away from
+	the header. I hope it won't hurt performance too much but it really
+	is entangling the built dependencies.  
+
+Wed Apr 13 17:08:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/: cgi.c, cgi.h:
+
+	More include cleanups.  
+
+Wed Apr 13 16:53:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/select.c, util/ttime.c, util/ttime.h:
+
+	Introduce limit_timeval_to_zero() and use it in select_loop().  
+
+Wed Apr 13 16:46:49 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: ttime.c, ttime.h:
+
+	@a -> @tv.  
+
+Wed Apr 13 16:46:14 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: ttime.c, ttime.h:
+
+	Add timeval_is_positive() function.  
+
+Wed Apr 13 16:35:02 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: timers.c, timers.h:
+
+	install_timer(): time_T time -> long int delay_in_milliseconds.  
+
+Wed Apr 13 16:29:49 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	select_loop(): move get_next_timer_time() call after
+	program.terminate test.  
+
+Wed Apr 13 16:28:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	select_loop(): add a @timeout variable and check that we do not have
+	negative delay.  
+
+Wed Apr 13 16:20:17 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/timers.c:
+
+	get_next_timer_time(): drop that +1 that does not make sense to
+	anybody.  
+
+Wed Apr 13 16:10:04 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Drop useless static.  
+
+Wed Apr 13 16:08:11 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: ttime.c, ttime.h:
+
+	Introduce timeval_subtract() and milliseconds_to_timeval() to
+	manipulate struct timeval.  
+
+Wed Apr 13 15:34:54 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/: status.c, status.h:
+
+	download_is_progressing(): Make it a real function. Speed up
+	building by declaring used structs in the header.  
+
+Wed Apr 13 15:29:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/gzip.c:
+
+	No need to include sched/connection.h in the gzip code.  
+
+Wed Apr 13 14:48:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: connect.c, dns.c, dns.h:
+
+	find_host(): Take no_cache boolean and make _no_cache version
+	static.  
+
+Wed Apr 13 14:40:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Use dns_callback_T.  
+
+Wed Apr 13 14:35:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	done_dns_lookup(): Minor cleanup.  
+
+Wed Apr 13 14:19:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/dns.c, protocol/file/cgi.c:
+
+	close_pipe_read(): Takes data_socket because we might have used it
+	as a callback for writing post data.  
+
+Wed Apr 13 14:16:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Split out async DNS setup and teardown to
+	{init,done}_async_dns_lookup(). #define them so the compiler will
+	remove associated code when async lookup is disabled.  
+
+Wed Apr 13 13:22:22 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: select.c, timers.c, timers.h:
+
+	Revert last patch: too big.  
+
+Wed Apr 13 13:06:40 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: select.c, timers.c, timers.h:
+
+	Use struct timeval instead of time_T for timers. Some helper
+	functions were added to do timeval calculations.  
+
+Wed Apr 13 12:55:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	More DNS struct descriptions.  
+
+Wed Apr 13 12:37:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	do_queued_lookup(): Simplify.  
+
+Wed Apr 13 12:33:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Space tidyup.  
+
+Wed Apr 13 12:28:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	struct dnsentry: Tidyup.  
+
+Wed Apr 13 12:20:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	struct dnsquery: Only include @h thread descriptor member #ifndef
+	NO_ASYNC_LOOKUP.  
+
+Wed Apr 13 12:10:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Minor tidyup.  
+
+Wed Apr 13 12:04:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Move end_real_lookup() inside #ifdef NO_ASYNC_LOOKUP. Fixes compile
+	warning.  
+
+Wed Apr 13 12:01:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	done_dns_lookup(): Also take care of clearing query->h handlers and
+	closing the descriptor. It should be safer.  
+
+Wed Apr 13 11:48:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	|&*query->addr| -> |query->addr|.  
+
+Wed Apr 13 11:44:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	del_dns_cache_entry(): Move up and remove duplicate code.  
+
+Wed Apr 13 11:42:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	|&*query->addr| -> |query->addr|.  
+
+Wed Apr 13 11:39:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	shrink_dns_cache(): Use foreachsafe() and simplify
+	del_dns_cache_entry().  
+
+Wed Apr 13 11:25:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	struct http_connection_info: http_code -> code.  
+
+Wed Apr 13 11:24:16 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Rename struct http_connection_info variables from info to http.  
+
+Wed Apr 13 11:17:45 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Order macros by name.  
+
+Wed Apr 13 11:16:03 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Fix unused POST_HTTP_1_1() macro.  
+
+Wed Apr 13 10:50:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	get_http_code(): Take read_buffer arg.  
+
+Wed Apr 13 10:29:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Guard CGI related code with #ifdef CONFIG_CGI.  
+
+Wed Apr 13 04:41:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.h:
+
+	Update socket->read_done description.  
+
+Wed Apr 13 04:28:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	read_from_socket(): Take and set connection state. It simplifies
+	things a bit and should make the code a little more responsive
+	because connection callbacks will be run more often. It might be a
+	bit too much so lets give it a few days.  
+
+Wed Apr 13 03:48:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.h:
+
+	Fix includes.  
+
+Wed Apr 13 03:47:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: http.c, http.h:
+
+	Move private HTTP types away from the public HTTP header.  
+
+Wed Apr 13 03:44:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: file/cgi.c, http/http.c, http/http.h:
+
+	init_http_connection_info(): Introduced.  
+
+Wed Apr 13 02:48:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	request_from_socket(): Introduced to provide generic
+	request/response connections. Removes lots of duplicated code.  
+
+Wed Apr 13 02:28:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	Move read_buffer->state to socket->state.  
+
+Wed Apr 13 02:17:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	Introduce socket_{write,connect}_operation_T.  
+
+Wed Apr 13 01:27:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/nntp/codes.c:
+
+	Give the NTTP error code dialog the sound of the generic error
+	dialog.  
+
+Wed Apr 13 00:58:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/nntp/codes.c:
+
+	Remove obsolete comment.  
+
+Wed Apr 13 00:42:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/http/http.h, protocol/nntp/connection.c:
+
+	socket_read_operation_T: Also have socket parameter.  
+
+Wed Apr 13 00:08:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.h, protocol/ftp/ftp.c:
+
+	Introduce socket_read_operation_T and remove socket->read_done
+	stupidity.  
+
+Tue Apr 12 22:53:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
+	ssl/connect.c:
+
+	Introduce socket_operations. Reduces the size of struct socket a
+	bit.  
+
+Tue Apr 12 22:39:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
+	ssl/connect.c:
+
+	Use socket_handler_T for all socket handlers even though it leads to
+	passing a few unused parameters.  
+
 Tue Apr 12 22:09:01 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:

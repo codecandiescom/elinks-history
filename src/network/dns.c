@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.81 2005/04/13 14:35:23 jonas Exp $ */
+/* $Id: dns.c,v 1.82 2005/04/13 14:40:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -455,7 +455,7 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 
 int
 find_host(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
-	  void **query_p, void (*done)(void *, int), void *data)
+	  void **query_p, dns_callback_T done, void *data)
 {
 	struct dnsentry *dnsentry;
 

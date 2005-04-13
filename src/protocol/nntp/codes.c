@@ -1,5 +1,5 @@
 /* NNTP response codes */
-/* $Id: codes.c,v 1.6 2005/04/13 00:58:02 jonas Exp $ */
+/* $Id: codes.c,v 1.7 2005/04/13 01:27:20 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -122,10 +122,9 @@ nntp_error_code_dialog(struct terminal *term, struct uri *uri, enum nntp_code co
 	info_box(term, MSGBOX_FREE_TEXT,
 		 N_("NNTP error"), ALIGN_CENTER,
 		 msg_text(term,
-			 N_("An error occurred while fetching the document you\n"
-			 "requested from %s.\n"
+			 N_("Unable to retrieve %s.\n"
 			 "\n"
-			 "The error message is: %s"),
+			 "%s"),
 			 struri(uri), codestr));
 }
 

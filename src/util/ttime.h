@@ -1,4 +1,4 @@
-/* $Id: ttime.h,v 1.14 2005/04/14 10:30:02 zas Exp $ */
+/* $Id: ttime.h,v 1.15 2005/04/14 10:30:54 zas Exp $ */
 
 #ifndef EL__UTIL_TTIME_H
 #define EL__UTIL_TTIME_H
@@ -35,7 +35,6 @@ typedef struct { long int sec; long int usec; } timeval_T;
 	(tv)->tv_usec = (tT)->usec; \
 } while (0)
 
-int timeval_subtract(struct timeval *result, struct timeval *x, struct timeval *y);
 void milliseconds_to_timeval(struct timeval *tv, long int milliseconds);
 int timeval_is_positive(struct timeval *tv);
 void limit_timeval_to_zero(struct timeval *tv);

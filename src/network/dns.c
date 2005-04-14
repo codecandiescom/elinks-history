@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.86 2005/04/13 22:12:48 jonas Exp $ */
+/* $Id: dns.c,v 1.87 2005/04/14 11:07:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ struct dnsentry {
 
 	struct sockaddr_storage *addr;	/* Pointer to array of addresses. */
 	int addrno;			/* Adress array length. */
-	time_T get_time;		/* Creation time; lets us do timeouts. */
+	timeval_T get_time;		/* Creation time; lets us do timeouts. */
 	unsigned char name[1];		/* Associated host; XXX: Must be last. */
 };
 
@@ -410,7 +410,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 		memcpy(dnsentry->addr, query->addr, size);;
 		dnsentry->addrno = query->addrno;
 
-		dnsentry->get_time = get_time();
+		get_timeval(&dnsentry->get_time);
 		add_to_list(dns_cache, dnsentry);
 	}
 
@@ -463,9 +463,15 @@ find_host(unsigned char *name, void **query_p,
 
 	dnsentry = find_in_dns_cache(name);
 	if (dnsentry) {
+		double delta;
+		timeval_T now;
+		
 		assert(dnsentry && dnsentry->addrno > 0);
 
-		if (dnsentry->get_time + DNS_TIMEOUT >= get_time()) {
+		get_timeval(&now);
+		delta = timeval_diff(&dnsentry->get_time, &now);
+		
+		if (delta <= DNS_TIMEOUT) {
 			struct sockaddr_storage *addr;
 			int size = sizeof(*addr) * dnsentry->addrno;
 
@@ -501,10 +507,13 @@ shrink_dns_cache(int whole)
 			del_dns_cache_entry(dnsentry);
 
 	} else {
-		time_T oldest = get_time() - DNS_TIMEOUT;
+		timeval_T now;
 
-		foreachsafe (dnsentry, next, dns_cache)
-			if (dnsentry->get_time < oldest)
+		foreachsafe (dnsentry, next, dns_cache) {
+			double delta = timeval_diff(&dnsentry->get_time, &now);
+			
+			if (delta > DNS_TIMEOUT)
 				del_dns_cache_entry(dnsentry);
+		}
 	}
 }

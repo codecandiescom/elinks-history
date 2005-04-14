@@ -1,4 +1,4 @@
-/* $Id: core.h,v 1.18 2005/04/01 17:42:56 zas Exp $ */
+/* $Id: core.h,v 1.19 2005/04/14 22:40:42 miciah Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_CORE_H
 #define EL__SCRIPTING_LUA_CORE_H
@@ -8,7 +8,7 @@
 #include <lauxlib.h>	/* needed for lua_ref, lua_unref */
 #endif
 #ifndef LUA_ALERT
-#define LUA_ALERT      "alert"
+#define LUA_ALERT      "_ALERT"
 #endif
 
 struct module;

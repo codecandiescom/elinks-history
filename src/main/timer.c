@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timer.c,v 1.13 2005/04/14 10:46:12 zas Exp $ */
+/* $Id: timer.c,v 1.14 2005/04/14 10:48:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,12 +32,15 @@ count_timers(void)
 }
 
 void
-check_timers(time_T *last_time)
+check_timers(timeval_T *last_time)
 {
-	time_T now = get_time();
-	time_T interval = now - *last_time;
+	timeval_T now;
+	double interval;
 	struct timer *timer;
-
+	
+	get_timeval(&now);
+	interval = timeval_diff(last_time, &now);
+	
 	foreach (timer, timers) timer->interval -= interval;
 
 	while (!list_empty(timers)) {
@@ -51,7 +54,7 @@ check_timers(time_T *last_time)
 		check_bottom_halves();
 	}
 
-	*last_time = now;
+	copy_struct(last_time, &now);
 }
 
 void

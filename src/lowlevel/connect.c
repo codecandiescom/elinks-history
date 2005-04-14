@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.194 2005/04/14 10:13:29 jonas Exp $ */
+/* $Id: connect.c,v 1.195 2005/04/14 10:18:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,7 +397,7 @@ connect_socket(struct socket *csocket, int connection_state)
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
 	if (csocket->fd >= 0)
-		close_socket(socket);
+		close_socket(csocket);
 
 	for (i = conn_info->triedno + 1; i < conn_info->addrno; i++) {
 #ifdef CONFIG_IPV6

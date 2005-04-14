@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.79 2005/04/13 16:53:10 zas Exp $ */
+/* $Id: select.c,v 1.80 2005/04/14 10:43:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,7 @@ set_handlers(int fd, select_handler_T read_func, select_handler_T write_func,
 void
 select_loop(void (*init)(void))
 {
-	time_T last_time;
+	timeval_T last_time;
 	int select_errors = 0;
 
 	clear_signal_mask_and_handlers();
@@ -205,7 +205,7 @@ select_loop(void (*init)(void))
 	FD_ZERO(&w_write);
 	FD_ZERO(&w_error);
 	w_max = 0;
-	last_time = get_time();
+	get_timeval(&last_time);
 #ifdef SIGPIPE
 	signal(SIGPIPE, SIG_IGN);
 #endif

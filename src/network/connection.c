@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.262 2005/04/14 13:03:03 jonas Exp $ */
+/* $Id: connection.c,v 1.263 2005/04/14 13:07:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,8 +311,12 @@ static void
 update_progress(struct connection *conn)
 {
 	struct progress *progress = &conn->progress;
-	time_T a = get_time() - progress->last_time;
+	timeval_T now;
+	long a;	/* FIXME: milliseconds */
 
+	get_timeval(&now);
+	a = (long) (timeval_diff(&progress->last_time, &now) * 1000);
+	
 	progress->loaded = conn->received;
 	progress->size = conn->est_length;
 	progress->pos = conn->from;
@@ -331,7 +335,7 @@ update_progress(struct connection *conn)
 	progress->data_in_secs[CURRENT_SPD_SEC - 1] += progress->loaded - progress->last_loaded;
 	progress->cur_loaded += progress->loaded - progress->last_loaded;
 	progress->last_loaded = progress->loaded;
-	progress->last_time += a;
+	copy_struct(&progress->last_time, &now);
 	progress->elapsed += a;
 	install_timer(&progress->timer, SPD_DISP_TIME, (void (*)(void *)) stat_timer, conn);
 }
@@ -364,7 +368,7 @@ set_connection_state(struct connection *conn, enum connection_state state)
 				progress->seek = tmp2;
 				progress->valid = 1;
 			}
-			progress->last_time = get_time();
+			get_timeval(&progress->last_time);
 			progress->last_loaded = progress->loaded;
 			update_progress(conn);
 			if (connection_disappeared(conn))
@@ -521,7 +525,7 @@ init_keepalive_connection(struct connection *conn, time_T timeout,
 	keep_conn->done = done;
 	keep_conn->protocol_family = conn->socket->protocol_family;
 	keep_conn->socket = conn->socket->fd;
-	keep_conn->timeout = (double) timeout / 1000.0;
+	keep_conn->timeout = (double) timeout / 1000.0;	/* FIXME: milliseconds */
 	get_timeval(&keep_conn->add_time);
 
 	return keep_conn;

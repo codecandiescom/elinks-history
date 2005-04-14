@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.113 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: connection.h,v 1.114 2005/04/14 13:07:48 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -103,7 +103,7 @@ enum connection_state {
 
 struct progress {
 	time_T elapsed;
-	time_T last_time;
+	timeval_T last_time;
 	time_T dis_b;
 
 	unsigned int valid:1;

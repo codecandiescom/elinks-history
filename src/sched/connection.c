@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.250 2005/04/13 23:58:16 jonas Exp $ */
+/* $Id: connection.c,v 1.251 2005/04/14 00:11:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,21 +243,6 @@ done_connection_socket(void *conn, struct socket *socket, int connection_state)
 {
 	assert(conn && socket);
 	abort_conn_with_state(conn, connection_state);
-}
-
-static struct socket *
-init_socket(void *conn, struct socket_operations *ops)
-{
-	struct socket *socket;
-
-	socket = mem_calloc(1, sizeof(*socket));
-	if (!socket) return NULL;
-
-	socket->fd = -1;
-	socket->conn = conn;
-	socket->ops = ops;
-
-	return socket;
 }
 
 static struct connection *

@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.67 2005/04/13 20:42:25 jonas Exp $ */
+/* $Id: socket.h,v 1.68 2005/04/14 00:11:42 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -119,6 +119,7 @@ init_connection_info(struct uri *uri, struct socket *socket,
 
 void done_connection_info(struct socket *socket);
 
+struct socket *init_socket(void *conn, struct socket_operations *ops);
 void close_socket(struct socket *socket);
 
 /* Establish connection with the host in @conn->uri. Storing the socket

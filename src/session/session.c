@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.616 2005/04/07 23:23:13 jonas Exp $ */
+/* $Id: session.c,v 1.617 2005/04/14 12:41:35 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -408,11 +408,15 @@ load_frames(struct session *ses, struct document_view *doc_view)
 void
 display_timer(struct session *ses)
 {
-	time_T t = get_time();
-
+	timeval_T start, stop, duration;
+	long t;
+	
+	get_timeval(&start);
 	draw_formatted(ses, 3);
-
-	t = (get_time() - t) * DISPLAY_TIME;
+	get_timeval(&stop);
+	timeval_sub(&duration, &start, &stop);
+	
+	t = timeval_to_milliseconds(&duration) * DISPLAY_TIME;
 	if (t < DISPLAY_TIME_MIN) t = DISPLAY_TIME_MIN;
 	install_timer(&ses->display_timer, t, (void (*)(void *)) display_timer,
 			ses);

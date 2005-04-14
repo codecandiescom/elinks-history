@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.252 2005/04/14 00:28:10 jonas Exp $ */
+/* $Id: connection.c,v 1.253 2005/04/14 00:31:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1088,24 +1088,25 @@ connection_timeout(struct connection *conn)
 {
 	conn->timer = TIMER_ID_UNDEF;
 
-	if (conn->socket->conn_info) {
-		/* Is the DNS resolving still in progress? */
-		if (conn->socket->conn_info->dnsquery) {
-			abort_conn_with_state(conn, S_TIMEOUT);
-			return;
-		}
-
-		set_connection_state(conn, S_TIMEOUT);
-		/* Try the next address, */
-		connect_socket(conn->socket);
-
-		/* Reset the timeout if connect_socket() started a new attempt
-		 * to connect. */
-		if (conn->socket->conn_info)
-			set_connection_timeout(conn);
-	} else {
+	if (!conn->socket->conn_info) {
 		retry_conn_with_state(conn, S_TIMEOUT);
+		return;
 	}
+
+	/* Is the DNS resolving still in progress? */
+	if (conn->socket->conn_info->dnsquery) {
+		abort_conn_with_state(conn, S_TIMEOUT);
+		return;
+	}
+
+	set_connection_state(conn, S_TIMEOUT);
+	/* Try the next address, */
+	connect_socket(conn->socket);
+
+	/* Reset the timeout if connect_socket() started a new attempt
+	 * to connect. */
+	if (conn->socket->conn_info)
+		set_connection_timeout(conn);
 }
 
 /* Huh, using two timers? Is this to account for changes of c->unrestartable

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.92 2005/04/14 14:14:15 jonas Exp $ */
+/* $Id: dns.c,v 1.93 2005/04/14 14:50:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,6 +283,7 @@ done_async_dns_lookup(struct dnsquery *dnsquery)
 	if (dnsquery->h != -1) {
 		clear_handlers(dnsquery->h);
 		close(dnsquery->h);
+		dnsquery->h = -1;
 	}
 }
 #else
@@ -465,12 +466,12 @@ find_host(unsigned char *name, void **query_p,
 	if (dnsentry) {
 		double age;
 		timeval_T now;
-		
+
 		assert(dnsentry && dnsentry->addrno > 0);
 
 		get_timeval(&now);
 		age = timeval_diff(&dnsentry->creation_time, &now);
-		
+
 		if (age <= DNS_CACHE_TIMEOUT) {
 			struct sockaddr_storage *addr;
 			int size = sizeof(*addr) * dnsentry->addrno;
@@ -491,6 +492,8 @@ void
 kill_dns_request(void **query_p)
 {
 	struct dnsquery *query = *query_p;
+
+	assert(query);
 
 	query->done = NULL;
 	failed_real_lookup(query);

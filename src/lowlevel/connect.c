@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.193 2005/04/14 03:05:15 jonas Exp $ */
+/* $Id: connect.c,v 1.194 2005/04/14 10:13:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,6 @@ close_socket(struct socket *socket)
 void
 dns_exception(struct socket *socket)
 {
-	close_socket(socket);
 	connect_socket(socket, S_EXCEPT);
 }
 
@@ -398,7 +397,7 @@ connect_socket(struct socket *csocket, int connection_state)
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
 	if (csocket->fd >= 0)
-		clear_handlers(csocket->fd);
+		close_socket(socket);
 
 	for (i = conn_info->triedno + 1; i < conn_info->addrno; i++) {
 #ifdef CONFIG_IPV6
@@ -560,9 +559,7 @@ connected(struct socket *socket)
 
 	if (err > 0) {
 		/* There are maybe still some more candidates. */
-		close_socket(socket);
 		connect_socket(socket, -err);
-
 		return;
 	}
 

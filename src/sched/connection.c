@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.251 2005/04/14 00:11:42 jonas Exp $ */
+/* $Id: connection.c,v 1.252 2005/04/14 00:28:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1087,14 +1087,15 @@ static void
 connection_timeout(struct connection *conn)
 {
 	conn->timer = TIMER_ID_UNDEF;
-	set_connection_state(conn, S_TIMEOUT);
+
 	if (conn->socket->conn_info) {
 		/* Is the DNS resolving still in progress? */
 		if (conn->socket->conn_info->dnsquery) {
-			abort_connection(conn);
+			abort_conn_with_state(conn, S_TIMEOUT);
 			return;
 		}
 
+		set_connection_state(conn, S_TIMEOUT);
 		/* Try the next address, */
 		connect_socket(conn->socket);
 
@@ -1103,7 +1104,7 @@ connection_timeout(struct connection *conn)
 		if (conn->socket->conn_info)
 			set_connection_timeout(conn);
 	} else {
-		retry_connection(conn);
+		retry_conn_with_state(conn, S_TIMEOUT);
 	}
 }
 

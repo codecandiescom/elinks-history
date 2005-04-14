@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.19 2005/04/14 10:37:55 zas Exp $ */
+/* $Id: time.c,v 1.20 2005/04/14 10:40:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,6 +61,30 @@ timeval_diff(timeval_T *older, timeval_T *newer)
 	d.usec = newer->usec - older->usec;
  
 	return (double) d.sec + ((double) d.usec / 1000000.0);
+}
+
+void
+timeval_sub(timeval_T *res, timeval_T *older, timeval_T *newer)
+{
+	res->sec  = newer->sec - older->sec;
+	res->usec = newer->usec - older->usec;
+
+	while (res->usec < 0) {
+		res->usec += 1000000;
+		res->sec--;
+	}
+}
+ 
+void
+timeval_add(timeval_T *res, timeval_T *base, timeval_T *t)
+{
+	res->sec  = base->sec + t->sec;
+	res->usec = base->usec + t->usec;
+
+	while (res->usec >= 1000000) {
+		res->usec -= 1000000;
+		res->sec++;
+	}
 }
 
 void

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.100 2005/04/14 15:39:51 zas Exp $ */
+/* $Id: dns.c,v 1.101 2005/04/14 15:45:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -495,7 +495,7 @@ kill_dns_request(void **queryref)
 	assert(query);
 
 	query->done = NULL;
-	failed_real_lookup(query);
+	done_dns_lookup(query, -1);
 }
 
 void

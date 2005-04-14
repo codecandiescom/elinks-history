@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.89 2005/04/14 12:11:32 zas Exp $ */
+/* $Id: dns.c,v 1.90 2005/04/14 12:15:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -463,15 +463,15 @@ find_host(unsigned char *name, void **query_p,
 
 	dnsentry = find_in_dns_cache(name);
 	if (dnsentry) {
-		double delta;
+		double age;
 		timeval_T now;
 		
 		assert(dnsentry && dnsentry->addrno > 0);
 
 		get_timeval(&now);
-		delta = timeval_diff(&dnsentry->creation_time, &now);
+		age = timeval_diff(&dnsentry->creation_time, &now);
 		
-		if (delta <= DNS_CACHE_TIMEOUT) {
+		if (age <= DNS_CACHE_TIMEOUT) {
 			struct sockaddr_storage *addr;
 			int size = sizeof(*addr) * dnsentry->addrno;
 
@@ -510,9 +510,9 @@ shrink_dns_cache(int whole)
 		timeval_T now;
 
 		foreachsafe (dnsentry, next, dns_cache) {
-			double delta = timeval_diff(&dnsentry->creation_time, &now);
+			double age = timeval_diff(&dnsentry->creation_time, &now);
 			
-			if (delta > DNS_CACHE_TIMEOUT)
+			if (age > DNS_CACHE_TIMEOUT)
 				del_dns_cache_entry(dnsentry);
 		}
 	}

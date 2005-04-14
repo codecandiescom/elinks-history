@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.97 2005/04/14 15:32:32 jonas Exp $ */
+/* $Id: dns.c,v 1.98 2005/04/14 15:34:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ struct dnsquery {
 
 	/* As with the two members above, when stopping a DNS query *always* set
 	 * this pointer to NULL. */
-	struct dnsquery **query_p;	/* Reference to callers DNS member. */
+	struct dnsquery **queryref;	/* Reference to callers DNS member. */
 
 #ifndef NO_ASYNC_LOOKUP
 	int h;				/* One end of the async thread pipe. */
@@ -365,7 +365,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 
 	if (!query->done) {
 		mem_free_set(&query->addr, NULL);
-		*query->query_p = NULL;
+		*query->queryref = NULL;
 		mem_free(query);
 		return;
 	}
@@ -416,7 +416,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 	}
 
 done:
-	*query->query_p = NULL;
+	*query->queryref = NULL;
 
 	query->done(query->data, query->addr, query->addrno);
 
@@ -425,7 +425,7 @@ done:
 }
 
 static int
-find_host_no_cache(unsigned char *name, void **query_p,
+find_host_no_cache(unsigned char *name, void **queryref,
 		   dns_callback_T done, void *data)
 {
 	struct dnsquery *query;
@@ -443,23 +443,23 @@ find_host_no_cache(unsigned char *name, void **query_p,
 	/* calloc() sets NUL char for us. */
 	memcpy(query->name, name, namelen);
 
-	query->query_p = (struct dnsquery **) query_p;
-	*(query->query_p) = query;
+	query->queryref = (struct dnsquery **) queryref;
+	*(query->queryref) = query;
 
 	return do_queued_lookup(query);
 }
 
 int
-find_host(unsigned char *name, void **query_p,
+find_host(unsigned char *name, void **queryref,
 	  dns_callback_T done, void *data, int no_cache)
 {
 	struct dnsentry *dnsentry;
 
-	assert(query_p);
-	*query_p = NULL;
+	assert(queryref);
+	*queryref = NULL;
 
 	if (no_cache)
-		return find_host_no_cache(name, query_p, done, data);
+		return find_host_no_cache(name, queryref, done, data);
 
 	dnsentry = find_in_dns_cache(name);
 	if (dnsentry) {
@@ -484,19 +484,19 @@ find_host(unsigned char *name, void **query_p,
 		}
 	}
 
-	return find_host_no_cache(name, query_p, done, data);
+	return find_host_no_cache(name, queryref, done, data);
 }
 
 void
-kill_dns_request(void **query_p)
+kill_dns_request(void **queryref)
 {
-	struct dnsquery *query = *query_p;
+	struct dnsquery *query = *queryref;
 
 	assert(query);
 
 	query->done = NULL;
 	failed_real_lookup(query);
-	*query_p = NULL;
+	*queryref = NULL;
 }
 
 void

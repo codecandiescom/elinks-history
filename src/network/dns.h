@@ -1,4 +1,4 @@
-/* $Id: dns.h,v 1.12 2005/04/13 21:45:42 jonas Exp $ */
+/* $Id: dns.h,v 1.13 2005/04/14 15:34:37 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_DNS_H
 #define EL__LOWLEVEL_DNS_H
@@ -24,7 +24,7 @@ int do_real_lookup(unsigned char *host, struct sockaddr_storage **addr, int *add
  * and the address array length. If the boolean @no_cache is non-zero cached DNS
  * queries are ignored. */
 /* Returns whether the query is asynchronious. */
-int find_host(unsigned char *name, void **query_p,
+int find_host(unsigned char *name, void **queryref,
 	      dns_callback_T done, void *data, int no_cache);
 
 /* Stop the DNS request pointed to by the @queryref reference. */

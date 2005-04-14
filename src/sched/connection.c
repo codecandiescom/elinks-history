@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.254 2005/04/14 00:34:47 jonas Exp $ */
+/* $Id: connection.c,v 1.255 2005/04/14 00:40:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,14 +235,14 @@ static void
 retry_connection_socket(void *conn, struct socket *socket, int connection_state)
 {
 	assert(conn && socket);
-	retry_conn_with_state(conn, connection_state);
+	retry_connection(conn, connection_state);
 }
 
 static void
 done_connection_socket(void *conn, struct socket *socket, int connection_state)
 {
 	assert(conn && socket);
-	abort_conn_with_state(conn, connection_state);
+	abort_connection(conn, connection_state);
 }
 
 static struct connection *
@@ -716,7 +716,7 @@ run_connection(struct connection *conn)
 
 /* Set certain state on a connection and then abort the connection. */
 void
-abort_conn_with_state(struct connection *conn, enum connection_state state)
+abort_connection(struct connection *conn, enum connection_state state)
 {
 	set_connection_state(conn, state);
 
@@ -728,7 +728,7 @@ abort_conn_with_state(struct connection *conn, enum connection_state state)
 
 /* Set certain state on a connection and then retry the connection. */
 void
-retry_conn_with_state(struct connection *conn, enum connection_state state)
+retry_connection(struct connection *conn, enum connection_state state)
 {
 	int max_tries = get_opt_int("connection.retries");
 
@@ -1013,7 +1013,7 @@ change_connection(struct download *old, struct download *new,
 		new->cached = conn->cached;
 
 	} else if (conn->detached || interrupt) {
-		abort_conn_with_state(conn, S_INTERRUPTED);
+		abort_connection(conn, S_INTERRUPTED);
 	}
 
 	sort_queue();
@@ -1079,13 +1079,13 @@ connection_timeout(struct connection *conn)
 	conn->timer = TIMER_ID_UNDEF;
 
 	if (!conn->socket->conn_info) {
-		retry_conn_with_state(conn, S_TIMEOUT);
+		retry_connection(conn, S_TIMEOUT);
 		return;
 	}
 
 	/* Is the DNS resolving still in progress? */
 	if (conn->socket->conn_info->dnsquery) {
-		abort_conn_with_state(conn, S_TIMEOUT);
+		abort_connection(conn, S_TIMEOUT);
 		return;
 	}
 
@@ -1128,7 +1128,7 @@ void
 abort_all_connections(void)
 {
 	while (!list_empty(connection_queue)) {
-		abort_conn_with_state(connection_queue.next, S_INTERRUPTED);
+		abort_connection(connection_queue.next, S_INTERRUPTED);
 	}
 
 	abort_all_keepalive_connections();
@@ -1141,7 +1141,7 @@ abort_background_connections(void)
 
 	foreachsafe (conn, next, connection_queue) {
 		if (get_priority(conn) >= PRI_CANCEL)
-			abort_conn_with_state(conn, S_INTERRUPTED);
+			abort_connection(conn, S_INTERRUPTED);
 	}
 }
 

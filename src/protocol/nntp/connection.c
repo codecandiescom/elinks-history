@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.19 2005/04/13 04:28:12 jonas Exp $ */
+/* $Id: connection.c,v 1.20 2005/04/14 00:40:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -106,7 +106,7 @@ init_nntp_connection_info(struct connection *conn)
 
 	nntp = mem_calloc(1, sizeof(*nntp));
 	if (!nntp) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
 
@@ -144,7 +144,7 @@ init_nntp_connection_info(struct connection *conn)
 			break;
 
 		/* FIXME: Special S_NNTP_BAD_RANGE */
-		abort_conn_with_state(conn, S_BAD_URL);
+		abort_connection(conn, S_BAD_URL);
 		return NULL;
 
 	case NNTP_TARGET_ARTICLE_NUMBER:
@@ -165,13 +165,13 @@ init_nntp_connection_info(struct connection *conn)
 			    || !redirect_cache(conn->cached, "/", 0, 0))
 				state = S_OUT_OF_MEM;
 
-			abort_conn_with_state(conn, state);
+			abort_connection(conn, state);
 			return NULL;
 		}
 
 		/* Reject nntp://<server>/<group>/<group> */
 		if (nntp->group.source)	{
-			abort_conn_with_state(conn, S_BAD_URL);
+			abort_connection(conn, S_BAD_URL);
 			return NULL;
 		}
 
@@ -197,7 +197,7 @@ nntp_quit(struct connection *conn)
 
 	info = mem_calloc(1, sizeof(*info));
 	if (!info) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -214,7 +214,7 @@ nntp_end_request(struct connection *conn, enum connection_state state)
 	struct nntp_connection_info *nntp = conn->info;
 
 	if (nntp->target == NNTP_TARGET_QUIT) {
-		abort_conn_with_state(conn, state);
+		abort_connection(conn, state);
 		return;
 	}
 
@@ -535,13 +535,13 @@ news_protocol_handler(struct connection *conn)
 
 	if (!*server) server = getenv("NNTPSERVER");
 	if (!server || !*server) {
-		abort_conn_with_state(conn, S_NNTP_NEWS_SERVER);
+		abort_connection(conn, S_NNTP_NEWS_SERVER);
 		return;
 	}
 
 	conn->cached = get_cache_entry(conn->uri);
 	if (!conn->cached || !init_string(&location)) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -554,5 +554,5 @@ news_protocol_handler(struct connection *conn)
 
 	done_string(&location);
 
-	abort_conn_with_state(conn, S_OK);
+	abort_connection(conn, S_OK);
 }

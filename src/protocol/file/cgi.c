@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.103 2005/04/13 17:08:59 jonas Exp $ */
+/* $Id: cgi.c,v 1.104 2005/04/14 00:40:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ send_post_data(struct connection *conn)
 	int n = 0;
 
 	if (!init_string(&data)) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 	postend = strchr(post, '\n');
@@ -376,6 +376,6 @@ end0:
 end1:
 	mem_free(script);
 end2:
-	abort_conn_with_state(conn, state);
+	abort_connection(conn, state);
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Pseudo about: protocol implementation */
-/* $Id: about.c,v 1.9 2005/02/23 21:52:08 jonas Exp $ */
+/* $Id: about.c,v 1.10 2005/04/14 00:40:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,5 +28,5 @@ about_protocol_handler(struct connection *conn)
 	}
 
 	conn->cached = cached;
-	abort_conn_with_state(conn, S_OK);
+	abort_connection(conn, S_OK);
 }

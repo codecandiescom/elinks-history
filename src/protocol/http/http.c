@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.422 2005/04/14 00:24:06 jonas Exp $ */
+/* $Id: http.c,v 1.423 2005/04/14 00:40:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -484,7 +484,7 @@ http_end_request(struct connection *conn, enum connection_state state,
 		set_connection_state(conn, state);
 		add_keepalive_connection(conn, HTTP_KEEPALIVE_TIMEOUT, NULL);
 	} else {
-		abort_conn_with_state(conn, state);
+		abort_connection(conn, state);
 	}
 }
 
@@ -1300,7 +1300,7 @@ read_http_data(struct connection *conn, struct socket *socket,
 		break;
 	default:
 		assertm(ret == -1, "Unexpected return value: %d", ret);
-		abort_conn_with_state(conn, S_HTTP_ERROR);
+		abort_connection(conn, S_HTTP_ERROR);
 	}
 }
 
@@ -1407,7 +1407,7 @@ http_got_header(struct connection *conn, struct socket *socket,
 				conn->tries = -1;
 			}
 		}
-		retry_conn_with_state(conn, S_CANT_READ);
+		retry_connection(conn, S_CANT_READ);
 		return;
 	}
 	socket->state = SOCKET_RETRY_ONCLOSE;
@@ -1415,7 +1415,7 @@ http_got_header(struct connection *conn, struct socket *socket,
 again:
 	a = get_header(rb);
 	if (a == -1) {
-		abort_conn_with_state(conn, S_HTTP_ERROR);
+		abort_connection(conn, S_HTTP_ERROR);
 		return;
 	}
 	if (!a) {
@@ -1425,7 +1425,7 @@ again:
 	if (a == -2) a = 0;
 	if ((a && get_http_code(rb, &h, &version))
 	    || h == 101) {
-		abort_conn_with_state(conn, S_HTTP_ERROR);
+		abort_connection(conn, S_HTTP_ERROR);
 		return;
 	}
 
@@ -1438,13 +1438,13 @@ again:
 	head = (a ? memacpy(rb->data, a)
 		  : stracpy("\r\nContent-Type: text/html\r\n"));
 	if (!head) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 
 	if (check_http_server_bugs(uri, http, head)) {
 		mem_free(head);
-		retry_conn_with_state(conn, S_RESTART);
+		retry_connection(conn, S_RESTART);
 		return;
 	}
 
@@ -1463,7 +1463,7 @@ again:
 			if (h2 >= 100 && h2 < 600) h = h2;
 			if (h == 101) {
 				mem_free(head);
-				abort_conn_with_state(conn, S_HTTP_ERROR);
+				abort_connection(conn, S_HTTP_ERROR);
 				return;
 			}
 		}
@@ -1487,7 +1487,7 @@ again:
 	}
 	if (h < 200) {
 		mem_free(head);
-		abort_conn_with_state(conn, S_HTTP_ERROR);
+		abort_connection(conn, S_HTTP_ERROR);
 		return;
 	}
 	if (h == 304) {
@@ -1505,13 +1505,13 @@ again:
 		mem_free(head);
 		socket->conn_info = init_connection_info(uri, socket, http_send_header);
 		if (!socket->conn_info) {
-			abort_conn_with_state(conn, S_OUT_OF_MEM);
+			abort_connection(conn, S_OUT_OF_MEM);
 			return;
 		}
 
 		ssl_connect(socket);
 #else
-		abort_conn_with_state(conn, S_SSL_ERROR);
+		abort_connection(conn, S_SSL_ERROR);
 #endif
 		return;
 	}
@@ -1519,7 +1519,7 @@ again:
 	conn->cached = get_cache_entry(conn->uri);
 	if (!conn->cached) {
 		mem_free(head);
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 	mem_free_set(&conn->cached->head, head);
@@ -1642,7 +1642,7 @@ again:
 	if ((conn->progress.start <= 0 && conn->from > cf) || conn->from < 0) {
 		/* We don't want this if conn->progress.start because then conn->from will
 		 * be probably value of conn->progress.start, while cf is 0. */
-		abort_conn_with_state(conn, S_HTTP_ERROR);
+		abort_connection(conn, S_HTTP_ERROR);
 		return;
 	}
 
@@ -1709,7 +1709,7 @@ again:
 			if (conn->from) {
 				conn->from = 0;
 				mem_free(d);
-				retry_conn_with_state(conn, S_MODIFIED);
+				retry_connection(conn, S_MODIFIED);
 				return;
 			}
 		}
@@ -1741,7 +1741,7 @@ again:
 				if (conn->from) {
 					conn->from = 0;
 					mem_free(d);
-					retry_conn_with_state(conn, S_MODIFIED);
+					retry_connection(conn, S_MODIFIED);
 					return;
 				}
 			}

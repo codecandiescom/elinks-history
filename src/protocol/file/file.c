@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.191 2005/03/27 17:39:29 miciah Exp $ */
+/* $Id: file.c,v 1.192 2005/04/14 00:40:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,7 +228,7 @@ list_directory(unsigned char *dirpath, struct string *page)
 }
 
 
-/* To reduce redundant error handling code [calls to abort_conn_with_state()]
+/* To reduce redundant error handling code [calls to abort_connection()]
  * most of the function is build around conditions that will assign the error
  * code to @state if anything goes wrong. The rest of the function will then just
  * do the necessary cleanups. If all works out we end up with @state being S_OK
@@ -244,7 +244,7 @@ file_protocol_handler(struct connection *connection)
 
 	if (get_cmd_opt_bool("anonymous")) {
 		/* FIXME: Better connection_state ;-) */
-		abort_conn_with_state(connection, S_BAD_URL);
+		abort_connection(connection, S_BAD_URL);
 		return;
 	}
 
@@ -261,7 +261,7 @@ file_protocol_handler(struct connection *connection)
 	if (!init_string(&name)
 	    || !add_uri_to_string(&name, connection->uri, URI_PATH)) {
 		done_string(&name);
-		abort_conn_with_state(connection, S_OUT_OF_MEM);
+		abort_connection(connection, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -326,5 +326,5 @@ file_protocol_handler(struct connection *connection)
 		}
 	}
 
-	abort_conn_with_state(connection, state);
+	abort_connection(connection, state);
 }

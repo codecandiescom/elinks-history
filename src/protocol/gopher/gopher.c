@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.49 2005/04/13 04:28:11 jonas Exp $ */
+/* $Id: gopher.c,v 1.50 2005/04/14 00:40:55 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -349,7 +349,7 @@ end_gopher_connection(struct connection *conn, enum connection_state state)
 		normalize_cache_entry(conn->cached, conn->from);
 	}
 
-	abort_conn_with_state(conn, state);
+	abort_connection(conn, state);
 }
 
 

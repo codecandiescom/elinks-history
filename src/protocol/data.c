@@ -1,5 +1,5 @@
 /* The "data" URI protocol implementation (RFC 2397) */
-/* $Id: data.c,v 1.10 2005/02/23 21:52:08 jonas Exp $ */
+/* $Id: data.c,v 1.11 2005/04/14 00:40:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,7 @@ data_protocol_handler(struct connection *conn)
 	int base64 = 0;
 
 	if (!cached) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -128,7 +128,7 @@ data_protocol_handler(struct connection *conn)
 
 	data_start = parse_data_protocol_header(conn, &base64);
 	if (!data_start) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -136,7 +136,7 @@ data_protocol_handler(struct connection *conn)
 	 * it. */
 	data = memacpy(data_start, uri->datalen - (data_start - uri->data));
 	if (!data) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -144,7 +144,7 @@ data_protocol_handler(struct connection *conn)
 		unsigned char *decoded = base64_encode(data);
 
 		if (!decoded) {
-			abort_conn_with_state(conn, S_OUT_OF_MEM);
+			abort_connection(conn, S_OUT_OF_MEM);
 			return;
 		}
 
@@ -163,5 +163,5 @@ data_protocol_handler(struct connection *conn)
 
 	mem_free(data);
 
-	abort_conn_with_state(conn, S_OK);
+	abort_connection(conn, S_OK);
 }

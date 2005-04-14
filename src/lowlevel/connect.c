@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.187 2005/04/14 00:11:42 jonas Exp $ */
+/* $Id: connect.c,v 1.188 2005/04/14 00:40:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,7 +216,7 @@ get_pasv_socket(struct connection *conn, int ctrl_sock, unsigned char *port)
 	len = sizeof(sa);
 	if (getsockname(ctrl_sock, (struct sockaddr *) &sa, &len)) {
 sock_error:
-		retry_conn_with_state(conn, -errno);
+		retry_connection(conn, -errno);
 		return -1;
 	}
 
@@ -272,7 +272,7 @@ get_pasv6_socket(struct connection *conn, int ctrl_sock,
 
 	if (getsockname(ctrl_sock, (struct sockaddr *) s6, &len)) {
 sock_error:
-		retry_conn_with_state(conn, -errno);
+		retry_connection(conn, -errno);
 		return -1;
 	}
 

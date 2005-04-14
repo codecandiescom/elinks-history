@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.72 2005/04/12 17:50:02 jonas Exp $ */
+/* $Id: smb.c,v 1.73 2005/04/14 00:40:55 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -101,7 +101,7 @@ smb_get_cache(struct connection *conn)
 	conn->cached = get_cache_entry(conn->uri);
 	if (conn->cached) return 0;
 
-	abort_conn_with_state(conn, S_OUT_OF_MEM);
+	abort_connection(conn, S_OUT_OF_MEM);
 	return -1;
 }
 
@@ -116,7 +116,7 @@ smb_read_data(struct connection *conn, int sock, unsigned char *dst)
 
 	r = read(sock, dst, READ_SIZE);
 	if (r == -1) {
-		retry_conn_with_state(conn, -errno);
+		retry_connection(conn, -errno);
 		return -1;
 	}
 	if (r == 0) {
@@ -143,7 +143,7 @@ smb_read_text(struct connection *conn, int sock)
 	si = mem_realloc(si, sizeof(*si) + si->textlen
 			     + READ_SIZE + 2);
 	if (!si) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 	conn->info = si;
@@ -522,7 +522,7 @@ end_smb_connection(struct connection *conn)
 bye:
 	close_socket(conn->socket);
 	close_socket(conn->data_socket);
-	abort_conn_with_state(conn, state);
+	abort_connection(conn, state);
 }
 
 
@@ -556,7 +556,7 @@ smb_protocol_handler(struct connection *conn)
 
 	si = mem_calloc(1, sizeof(*si) + 2);
 	if (!si) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 	conn->info = si;
@@ -572,7 +572,7 @@ smb_protocol_handler(struct connection *conn)
 		if (smb_get_cache(conn)) return;
 
 		redirect_cache(conn->cached, "/", 1, 0);
-		abort_conn_with_state(conn, S_OK);
+		abort_connection(conn, S_OK);
 		return;
 
 	} else {
@@ -581,7 +581,7 @@ smb_protocol_handler(struct connection *conn)
 	}
 
 	if (!share) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		abort_connection(conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -599,7 +599,7 @@ smb_protocol_handler(struct connection *conn)
 		if (out_pipe[0] >= 0) close(out_pipe[0]);
 		if (out_pipe[1] >= 0) close(out_pipe[1]);
 		mem_free(share);
-		abort_conn_with_state(conn, -s_errno);
+		abort_connection(conn, -s_errno);
 		return;
 	}
 
@@ -614,7 +614,7 @@ smb_protocol_handler(struct connection *conn)
 		close(err_pipe[0]);
 		close(err_pipe[1]);
 		mem_free(share);
-		retry_conn_with_state(conn, -s_errno);
+		retry_connection(conn, -s_errno);
 		return;
 	}
 

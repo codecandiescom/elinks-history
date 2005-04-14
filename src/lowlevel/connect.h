@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.68 2005/04/14 00:11:42 jonas Exp $ */
+/* $Id: connect.h,v 1.69 2005/04/14 02:32:06 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -128,8 +128,9 @@ void close_socket(struct socket *socket);
 void make_connection(struct connection *conn, struct socket *socket,
 		     socket_connect_operation_T connect_done);
 
-/* Try to connect to the next address in the socket->conn_info struct. */
-void connect_socket(struct socket *socket);
+/* Try to connect to the next address in the socket->conn_info struct.
+ * Updates the connection state to @connection_state. */
+void connect_socket(struct socket *socket, int connection_state);
 
 /* Used by the SSL layer when negotiating. */
 void dns_exception(struct socket *socket);

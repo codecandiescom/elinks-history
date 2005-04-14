@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.255 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: connection.c,v 1.256 2005/04/14 02:32:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1089,9 +1089,8 @@ connection_timeout(struct connection *conn)
 		return;
 	}
 
-	set_connection_state(conn, S_TIMEOUT);
 	/* Try the next address, */
-	connect_socket(conn->socket);
+	connect_socket(conn->socket, S_TIMEOUT);
 
 	/* Reset the timeout if connect_socket() started a new attempt
 	 * to connect. */

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.190 2005/04/14 01:25:18 jonas Exp $ */
+/* $Id: socket.c,v 1.191 2005/04/14 02:32:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,9 +104,8 @@ close_socket(struct socket *socket)
 void
 dns_exception(struct socket *socket)
 {
-	socket->ops->set_state(socket->conn, socket, S_EXCEPT);
 	close_socket(socket);
-	connect_socket(socket);
+	connect_socket(socket, S_EXCEPT);
 }
 
 static void
@@ -162,7 +161,7 @@ dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 	socket->conn_info->addr	  = addr;
 	socket->conn_info->addrno = addrlen;
 
-	connect_socket(socket);
+	connect_socket(socket, S_CONN);
 }
 
 void
@@ -378,7 +377,7 @@ check_if_local_address4(struct sockaddr_in *addr)
 
 
 void
-connect_socket(struct socket *csocket)
+connect_socket(struct socket *csocket, int connection_state)
 {
 	int sock = -1;
 	struct conn_info *conn_info = csocket->conn_info;
@@ -393,6 +392,8 @@ connect_socket(struct socket *csocket)
 	 * about such a connection attempt.
 	 * XXX: Unify with @local_only handling? --pasky */
 	int silent_fail = 0;
+
+	csocket->ops->set_state(csocket->conn, csocket, connection_state);
 
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
@@ -558,11 +559,10 @@ connected(struct socket *socket)
 	}
 
 	if (err > 0) {
-		socket->ops->set_state(socket->conn, socket, -err);
-
 		/* There are maybe still some more candidates. */
 		close_socket(socket);
-		connect_socket(socket);
+		connect_socket(socket, -err);
+
 		return;
 	}
 

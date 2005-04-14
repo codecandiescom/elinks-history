@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.17 2005/04/14 10:34:43 zas Exp $ */
+/* $Id: time.c,v 1.18 2005/04/14 10:36:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,30 @@ get_time(void)
 	return (time_T) tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 
+/* Get the current time.
+ * It attempts to use available functions, granularity
+ * may be as worse as 1 second if time() is used. */
+void
+get_timeval(timeval_T *t)
+{
+#ifdef HAVE_GETTIMEOFDAY
+	struct timeval tv;
+
+	gettimeofday(&tv, NULL);
+	tv2tT(tv, t);
+#else
+#ifdef HAVE_CLOCK_GETTIME
+	struct timespec ts;
+
+	clock_gettime(CLOCK_REALTIME, &ts);
+	t->sec = ts.tv_sec;
+	t->usec = ts.tv_nsec / 1000;
+#else
+	t->sec = time(NULL);
+	t->usec = 0;
+#endif
+#endif
+}
 
 void
 milliseconds_to_timeval(timeval_T *t, long int milliseconds)

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.94 2005/04/14 14:57:22 jonas Exp $ */
+/* $Id: dns.c,v 1.95 2005/04/14 15:25:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -363,13 +363,11 @@ done_dns_lookup(struct dnsquery *query, int res)
 	}
 #endif
 
-	if (!query->done || !query->addr) {
+	if (!query->done) {
 		mem_free_set(&query->addr, NULL);
-		if (query->query_p) *query->query_p = NULL;
 		mem_free(query);
 		return;
 	}
-
 
 	dnsentry = find_in_dns_cache(query->name);
 	if (dnsentry) {

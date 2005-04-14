@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.16 2005/04/14 10:33:40 zas Exp $ */
+/* $Id: time.c,v 1.17 2005/04/14 10:34:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,8 @@ timeval_is_positive(timeval_T *t)
 
 /* Be sure timeval is not negative. */
 void
-limit_timeval_to_zero(struct timeval *tv)
+limit_timeval_to_zero(timeval_T *t)
 {
-	if (tv->tv_sec < 0) tv->tv_sec = 0;
-	if (tv->tv_usec < 0) tv->tv_usec = 0;
+	if (t->sec < 0) t->sec = 0;
+	if (t->usec < 0) t->usec = 0;
 }

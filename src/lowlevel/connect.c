@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.196 2005/04/14 10:25:19 jonas Exp $ */
+/* $Id: connect.c,v 1.197 2005/04/14 13:03:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,6 +159,30 @@ done_connection_info(struct socket *socket)
 	mem_free_if(conn_info->addr);
 	mem_free_set(&socket->conn_info, NULL);
 }
+	
+void
+timeout_socket(struct socket *socket)
+{
+	if (!socket->conn_info) {
+		socket->ops->retry(socket->conn, socket, S_TIMEOUT);
+		return;
+	}
+
+	/* Is the DNS resolving still in progress? */
+	if (socket->conn_info->dnsquery) {
+		socket->ops->done(socket->conn, socket, S_TIMEOUT);
+		return;
+	}
+
+	/* Try the next address, */
+	connect_socket(socket, S_TIMEOUT);
+
+	/* Reset the timeout if connect_socket() started a new attempt
+	 * to connect. */
+	if (socket->conn_info)
+		socket->ops->set_timeout(socket->conn, socket, 0);
+}
+
 
 /* DNS callback. */
 static void

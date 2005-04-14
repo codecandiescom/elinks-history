@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.256 2005/04/14 02:32:06 jonas Exp $ */
+/* $Id: connection.c,v 1.257 2005/04/14 02:53:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -395,8 +395,7 @@ free_connection_data(struct connection *conn)
 	assertm(active_connections >= 0, "active connections underflow");
 	if_assert_failed active_connections = 0;
 
-	if (conn->socket->fd != -1)
-		clear_handlers(conn->socket->fd);
+	close_socket(conn->socket);
 	close_socket(conn->data_socket);
 
 	/* XXX: See also protocol/http/http.c:decompress_shutdown(). */
@@ -579,15 +578,16 @@ add_keepalive_connection(struct connection *conn, time_T timeout,
 
 	keep_conn = init_keepalive_connection(conn, timeout, done);
 	if (keep_conn) {
+		/* Make sure that the socket descriptor will not periodically be
+		 * checked or closed by free_connection_data(). */
+		clear_handlers(conn->socket->fd);
+		conn->socket->fd = -1;
 		add_to_list(keepalive_connections, keep_conn);
 
 	} else if (done) {
 		/* It will take just a little more time */
 		done(conn);
 		return;
-
-	} else {
-		close(conn->socket->fd);
 	}
 
 done:
@@ -681,7 +681,6 @@ sort_queue(void)
 static void
 interrupt_connection(struct connection *conn)
 {
-	close_socket(conn->socket);
 	free_connection_data(conn);
 }
 

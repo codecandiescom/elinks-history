@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.195 2005/04/14 10:18:23 jonas Exp $ */
+/* $Id: socket.c,v 1.196 2005/04/14 10:25:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,6 +87,20 @@ init_socket(void *conn, struct socket_operations *ops)
 	socket->ops = ops;
 
 	return socket;
+}
+
+void
+done_socket(struct socket *socket)
+{
+	close_socket(socket);
+
+	if (socket->conn_info) {
+		/* No callbacks should be made */
+		socket->conn_info->done = NULL;
+		done_connection_info(socket);
+	}
+
+	mem_free_set(&socket->buffer, NULL);
 }
 
 void

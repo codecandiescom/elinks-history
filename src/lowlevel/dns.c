@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.101 2005/04/14 15:45:23 jonas Exp $ */
+/* $Id: dns.c,v 1.102 2005/04/14 22:14:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,10 +344,39 @@ find_in_dns_cache(unsigned char *name)
 }
 
 static void
+add_to_dns_cache(unsigned char *name, struct sockaddr_storage *addr, int addrno)
+{
+	int namelen = strlen(name);
+	struct dnsentry *dnsentry;
+	int size;
+
+	dnsentry = mem_calloc(1, sizeof(*dnsentry) + namelen);
+	if (!dnsentry) return;
+
+	/* calloc() sets NUL char for us. */
+	memcpy(dnsentry->name, name, namelen);
+
+	assert(addrno > 0);
+
+	size = addrno * sizeof(*dnsentry->addr);
+	dnsentry->addr = mem_alloc(size);
+	if (!dnsentry->addr) {
+		mem_free(dnsentry);
+		return;
+	}
+
+	memcpy(dnsentry->addr, addr, size);;
+	dnsentry->addrno = addrno;
+
+	get_timeval(&dnsentry->creation_time);
+	add_to_list(dns_cache, dnsentry);
+}
+
+
+static void
 done_dns_lookup(struct dnsquery *query, int res)
 {
 	struct dnsentry *dnsentry;
-	int namelen;
 
 	/* DBG("end lookup %s (%d)", query->name, res); */
 
@@ -392,28 +421,9 @@ done_dns_lookup(struct dnsquery *query, int res)
 		del_dns_cache_entry(dnsentry);
 	}
 
+	add_to_dns_cache(query->name, query->addr, query->addrno);
+
 	if (res < 0) goto done;
-
-	namelen = strlen(query->name);
-	dnsentry = mem_calloc(1, sizeof(*dnsentry) + namelen);
-	if (dnsentry) {
-		int size;
-
-		/* calloc() sets NUL char for us. */
-		memcpy(dnsentry->name, query->name, namelen);
-
-		assert(query->addrno > 0);
-
-		size = query->addrno * sizeof(*dnsentry->addr);
-		dnsentry->addr = mem_alloc(size);
-		if (!dnsentry->addr) goto done;
-
-		memcpy(dnsentry->addr, query->addr, size);;
-		dnsentry->addrno = query->addrno;
-
-		get_timeval(&dnsentry->creation_time);
-		add_to_list(dns_cache, dnsentry);
-	}
 
 done:
 	*query->queryref = NULL;

@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.18 2005/04/13 04:28:11 jonas Exp $ */
+/* $Id: finger.c,v 1.19 2005/04/14 00:17:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,14 +31,10 @@ struct module finger_protocol_module = struct_module(
 static void
 finger_end_request(struct connection *conn, enum connection_state state)
 {
-	set_connection_state(conn, state);
+	if (state == S_OK && conn->cached)
+		normalize_cache_entry(conn->cached, conn->from);
 
-	if (conn->state == S_OK) {
-		if (conn->cached) {
-			normalize_cache_entry(conn->cached, conn->from);
-		}
-	}
-	abort_connection(conn);
+	abort_conn_with_state(conn, state);
 }
 
 static void

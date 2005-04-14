@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.104 2005/04/14 22:29:23 jonas Exp $ */
+/* $Id: dns.c,v 1.105 2005/04/14 22:43:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,8 +443,8 @@ done:
 }
 
 static int
-find_host_no_cache(unsigned char *name, void **queryref,
-		   dns_callback_T done, void *data)
+init_dns_lookup(unsigned char *name, void **queryref,
+		dns_callback_T done, void *data)
 {
 	struct dnsquery *query;
 	int namelen = strlen(name);
@@ -467,6 +467,7 @@ find_host_no_cache(unsigned char *name, void **queryref,
 	return do_queued_lookup(query);
 }
 
+
 int
 find_host(unsigned char *name, void **queryref,
 	  dns_callback_T done, void *data, int no_cache)
@@ -477,7 +478,7 @@ find_host(unsigned char *name, void **queryref,
 	*queryref = NULL;
 
 	if (no_cache)
-		return find_host_no_cache(name, queryref, done, data);
+		return init_dns_lookup(name, queryref, done, data);
 
 	dnsentry = find_in_dns_cache(name);
 	if (dnsentry) {
@@ -502,7 +503,7 @@ find_host(unsigned char *name, void **queryref,
 		}
 	}
 
-	return find_host_no_cache(name, queryref, done, data);
+	return init_dns_lookup(name, queryref, done, data);
 }
 
 void

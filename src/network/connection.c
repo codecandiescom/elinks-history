@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.257 2005/04/14 02:53:08 jonas Exp $ */
+/* $Id: connection.c,v 1.258 2005/04/14 02:59:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -413,13 +413,6 @@ free_connection_data(struct connection *conn)
 		close(conn->cgi_pipes[1]);
 	conn->cgi_pipes[0] = conn->cgi_pipes[1] = -1;
 
-	if (conn->socket->conn_info) {
-		/* No callbacks should be made */
-		conn->socket->conn_info->done = NULL;
-		done_connection_info(conn->socket);
-	}
-
-	mem_free_set(&conn->socket->buffer, NULL);
 	mem_free_set(&conn->info, NULL);
 
 	kill_timer(&conn->timer);

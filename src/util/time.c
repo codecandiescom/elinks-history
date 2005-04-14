@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.15 2005/04/14 10:32:22 zas Exp $ */
+/* $Id: time.c,v 1.16 2005/04/14 10:33:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,9 +36,9 @@ milliseconds_to_timeval(timeval_T *t, long int milliseconds)
 }
 
 int
-timeval_is_positive(struct timeval *tv)
+timeval_is_positive(timeval_T *t)
 {
-	return (tv->tv_sec > 0 || (tv->tv_sec == 0 && tv->tv_usec > 0));
+	return (t->sec > 0 || (t->sec == 0 && t->usec > 0));
 }
 
 /* Be sure timeval is not negative. */

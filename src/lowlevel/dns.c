@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.96 2005/04/14 15:29:42 jonas Exp $ */
+/* $Id: dns.c,v 1.97 2005/04/14 15:32:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -365,7 +365,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 
 	if (!query->done) {
 		mem_free_set(&query->addr, NULL);
-		if (query->query_p) *query->query_p = NULL;
+		*query->query_p = NULL;
 		mem_free(query);
 		return;
 	}
@@ -416,7 +416,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 	}
 
 done:
-	if (query->query_p) *query->query_p = NULL;
+	*query->query_p = NULL;
 
 	query->done(query->data, query->addr, query->addrno);
 
@@ -443,10 +443,8 @@ find_host_no_cache(unsigned char *name, void **query_p,
 	/* calloc() sets NUL char for us. */
 	memcpy(query->name, name, namelen);
 
-	if (query_p) {
-		query->query_p = (struct dnsquery **) query_p;
-		*(query->query_p) = query;
-	}
+	query->query_p = (struct dnsquery **) query_p;
+	*(query->query_p) = query;
 
 	return do_queued_lookup(query);
 }
@@ -457,7 +455,8 @@ find_host(unsigned char *name, void **query_p,
 {
 	struct dnsentry *dnsentry;
 
-	if (query_p) *query_p = NULL;
+	assert(query_p);
+	*query_p = NULL;
 
 	if (no_cache)
 		return find_host_no_cache(name, query_p, done, data);

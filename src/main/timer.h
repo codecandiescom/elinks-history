@@ -1,4 +1,4 @@
-/* $Id: timer.h,v 1.14 2005/04/14 10:48:17 zas Exp $ */
+/* $Id: timer.h,v 1.15 2005/04/14 10:50:30 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_TIMERS_H
 #define EL__LOWLEVEL_TIMERS_H
@@ -23,6 +23,6 @@ int count_timers(void);
 void check_timers(timeval_T *last_time);
 void install_timer(timer_id_T *id, long int delay_in_milliseconds, void (*)(void *), void *);
 void kill_timer(timer_id_T *id);
-int get_next_timer_time(struct timeval *tv);
+int get_next_timer_time(timeval_T *t);
 
 #endif

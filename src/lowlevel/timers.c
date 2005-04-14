@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timers.c,v 1.14 2005/04/14 10:48:17 zas Exp $ */
+/* $Id: timers.c,v 1.15 2005/04/14 10:50:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,15 +95,10 @@ kill_timer(timer_id_T *id)
 }
 
 int
-get_next_timer_time(struct timeval *tv)
+get_next_timer_time(timeval_T *t)
 {
 	if (!list_empty(timers)) {
-		time_T tt = ((struct timer *) &timers)->next->interval;
-
-		if (tt < 0) tt = 0;
-		tv->tv_sec = tt / 1000;
-		tv->tv_usec = (tt % 1000) * 1000;
-
+		double_to_timeval(((struct timer *) &timers)->next->interval, t);
 		return 1;
 	}
 

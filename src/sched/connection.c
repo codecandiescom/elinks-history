@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.260 2005/04/14 10:25:19 jonas Exp $ */
+/* $Id: connection.c,v 1.261 2005/04/14 12:50:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,8 +47,8 @@ struct keepalive_connection {
 	/* Function called when the keepalive has timed out or is deleted */
 	void (*done)(struct connection *);
 
-	time_T timeout;
-	time_T add_time;
+	double timeout;	/* in seconds */
+	timeval_T add_time;
 
 	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
 	int socket;
@@ -521,8 +521,8 @@ init_keepalive_connection(struct connection *conn, time_T timeout,
 	keep_conn->done = done;
 	keep_conn->protocol_family = conn->socket->protocol_family;
 	keep_conn->socket = conn->socket->fd;
-	keep_conn->timeout = timeout;
-	keep_conn->add_time = get_time();
+	keep_conn->timeout = (double) timeout / 1000.0;
+	get_timeval(&keep_conn->add_time);
 
 	return keep_conn;
 }
@@ -600,14 +600,16 @@ void
 check_keepalive_connections(void)
 {
 	struct keepalive_connection *keep_conn, *next;
-	time_T ct = get_time();
+	timeval_T ct;
 	int p = 0;
 
+	get_timeval(&ct);
+	
 	kill_timer(&keepalive_timeout);
 
 	foreachsafe (keep_conn, next, keepalive_connections) {
 		if (can_read(keep_conn->socket)
-		    || ct - keep_conn->add_time > keep_conn->timeout) {
+		    || timeval_diff(&keep_conn->add_time, &ct) > keep_conn->timeout) {
 			done_keepalive_connection(keep_conn);
 		} else {
 			p++;

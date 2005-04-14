@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.424 2005/04/14 01:02:39 jonas Exp $ */
+/* $Id: http.c,v 1.425 2005/04/14 01:28:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -553,8 +553,6 @@ http_send_header(struct connection *conn, struct socket *socket)
 	struct uri *uri = conn->proxied_uri; /* Set to the real uri */
 	unsigned char *optstr;
 	int use_connect, talking_to_proxy;
-
-	set_connection_timeout(conn);
 
 	/* Sanity check for a host */
 	if (!uri || !uri->host || !*uri->host || !uri->hostlen) {

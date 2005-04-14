@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: ttime.c,v 1.22 2005/04/14 12:33:46 zas Exp $ */
+/* $Id: ttime.c,v 1.23 2005/04/14 13:11:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,15 +17,6 @@
 #include "osdep/win32/win32.h" /* For gettimeofday stub */
 #include "util/ttime.h"
 
-
-time_T
-get_time(void)
-{
-	struct timeval tv;
-
-	gettimeofday(&tv, NULL);
-	return (time_T) tv.tv_sec * 1000 + tv.tv_usec / 1000;
-}
 
 /* Get the current time.
  * It attempts to use available functions, granularity

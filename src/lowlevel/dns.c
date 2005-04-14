@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.105 2005/04/14 22:43:18 jonas Exp $ */
+/* $Id: dns.c,v 1.106 2005/04/14 23:52:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,13 +104,10 @@ add_to_dns_cache(unsigned char *name, struct sockaddr_storage *addr, int addrno)
 	struct dnsentry *dnsentry;
 	int size;
 
+	assert(addrno > 0);
+
 	dnsentry = mem_calloc(1, sizeof(*dnsentry) + namelen);
 	if (!dnsentry) return;
-
-	/* calloc() sets NUL char for us. */
-	memcpy(dnsentry->name, name, namelen);
-
-	assert(addrno > 0);
 
 	size = addrno * sizeof(*dnsentry->addr);
 	dnsentry->addr = mem_alloc(size);
@@ -119,7 +116,10 @@ add_to_dns_cache(unsigned char *name, struct sockaddr_storage *addr, int addrno)
 		return;
 	}
 
+	/* calloc() sets NUL char for us. */
+	memcpy(dnsentry->name, name, namelen);
 	memcpy(dnsentry->addr, addr, size);;
+
 	dnsentry->addrno = addrno;
 
 	get_timeval(&dnsentry->creation_time);

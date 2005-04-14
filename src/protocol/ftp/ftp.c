@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.236 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: ftp.c,v 1.237 2005/04/14 01:02:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,8 +191,6 @@ get_ftp_response(struct connection *conn, struct read_buffer *rb, int part,
 	unsigned char *num_end;
 	int response;
 	int pos;
-
-	set_connection_timeout(conn);
 
 again:
 	eol = memchr(rb->data, ASCII_LF, rb->len);

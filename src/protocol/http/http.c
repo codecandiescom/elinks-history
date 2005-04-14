@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.423 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: http.c,v 1.424 2005/04/14 01:02:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1269,8 +1269,6 @@ read_http_data(struct connection *conn, struct socket *socket,
 	struct http_connection_info *http = conn->info;
 	int ret;
 
-	set_connection_timeout(conn);
-
 	if (socket->state == SOCKET_CLOSED) {
 		if (conn->content_encoding && http->length == -1) {
 			/* Flush decompression first. */
@@ -1395,8 +1393,6 @@ http_got_header(struct connection *conn, struct socket *socket,
 	enum connection_state state = (conn->state != S_PROC ? S_GETH : S_PROC);
 	int a, h = 200;
 	int cf;
-
-	set_connection_timeout(conn);
 
 	if (socket->state == SOCKET_CLOSED) {
 		if (!conn->tries && uri->host) {

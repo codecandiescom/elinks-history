@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.188 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: connect.c,v 1.189 2005/04/14 01:02:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -611,10 +611,8 @@ write_select(struct socket *socket)
 	}
 
 	/* We are making some progress, therefore reset the timeout; ie.  when
-	 * uploading large files the time needed for all the data to be sent
-	 * can easily exceed the timeout. We don't need to do this for
-	 * read_select() because it calls user handler every time new data is
-	 * acquired and the user handler does this. */
+	 * uploading large files the time needed for all the data to be sent can
+	 * easily exceed the timeout. */
 	socket->ops->set_timeout(socket->conn, socket, 0);
 
 #if 0
@@ -719,8 +717,10 @@ read_select(struct socket *socket)
 		return;
 	}
 
-	/* XXX: Should we call socket->set_timeout() as we do in write_select()?
-	 * --pasky */
+	/* We are making some progress, therefore reset the timeout; we do this
+	 * for read_select() to avoid that the periodic calls to user handlers
+	 * has to do it. */
+	socket->ops->set_timeout(socket->conn, socket, 0);
 
 	clear_handlers(socket->fd);
 

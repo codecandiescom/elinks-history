@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: ttime.c,v 1.18 2005/04/14 10:36:24 zas Exp $ */
+/* $Id: ttime.c,v 1.19 2005/04/14 10:37:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,6 +50,17 @@ get_timeval(timeval_T *t)
 	t->usec = 0;
 #endif
 #endif
+}
+
+double
+timeval_diff(timeval_T *older, timeval_T *newer)
+{
+	timeval_T d;
+ 
+	d.sec = newer->sec - older->sec;
+	d.usec = newer->usec - older->usec;
+ 
+	return (double) d.sec + ((double) d.usec / 1000000.0);
 }
 
 void

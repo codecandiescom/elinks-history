@@ -1,4 +1,4 @@
-/* $Id: ttime.h,v 1.19 2005/04/14 10:36:24 zas Exp $ */
+/* $Id: ttime.h,v 1.20 2005/04/14 10:37:55 zas Exp $ */
 
 #ifndef EL__UTIL_TTIME_H
 #define EL__UTIL_TTIME_H
@@ -39,5 +39,6 @@ void milliseconds_to_timeval(timeval_T *t, long int milliseconds);
 int timeval_is_positive(timeval_T *t);
 void limit_timeval_to_zero(timeval_T *t);
 void get_timeval(timeval_T *t);
+double timeval_diff(timeval_T *older, timeval_T *newer);
 
 #endif

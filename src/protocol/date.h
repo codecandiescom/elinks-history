@@ -1,9 +1,9 @@
-/* $Id: date.h,v 1.10 2005/04/04 12:15:24 jonas Exp $ */
+/* $Id: date.h,v 1.11 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_DATE_H
 #define EL__PROTOCOL_DATE_H
 
-#include "util/ttime.h"
+#include "util/time.h"
 
 /* Parses YY and YYYY style years. Returns year value ready for tm.tm_year and
  * move @date pointer after the year if successful else returns -1. */

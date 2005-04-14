@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timer.c,v 1.15 2005/04/14 10:50:30 zas Exp $ */
+/* $Id: timer.c,v 1.16 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,7 @@
 #include "util/error.h"
 #include "util/lists.h"
 #include "util/memory.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 
 struct timer {

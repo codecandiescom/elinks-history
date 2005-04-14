@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.220 2005/04/01 15:17:43 jonas Exp $ */
+/* $Id: dialogs.c,v 1.221 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -25,7 +25,7 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/object.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 
 /* Whether to save bookmarks after each modification of their list

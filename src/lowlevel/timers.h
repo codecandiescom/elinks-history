@@ -1,9 +1,9 @@
-/* $Id: timers.h,v 1.15 2005/04/14 10:50:30 zas Exp $ */
+/* $Id: timers.h,v 1.16 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_TIMERS_H
 #define EL__LOWLEVEL_TIMERS_H
 
-#include "util/ttime.h"
+#include "util/time.h"
 
 /* Only available internally. */
 struct timer;

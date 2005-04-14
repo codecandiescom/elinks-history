@@ -1,10 +1,10 @@
-/* $Id: conv.h,v 1.42 2005/03/05 22:14:32 zas Exp $ */
+/* $Id: conv.h,v 1.43 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
 
 #include "util/string.h"
-#include "util/ttime.h" /* time_T type */
+#include "util/time.h" /* time_T type */
 
 static inline int
 is_safe_in_shell(unsigned char c)

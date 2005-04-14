@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.45 2005/03/05 22:14:32 zas Exp $ */
+/* $Id: download.h,v 1.46 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -6,7 +6,7 @@
 #include "sched/connection.h"
 #include "util/lists.h"
 #include "util/object.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 /* Silly BFU stuff */
 struct dialog_data;

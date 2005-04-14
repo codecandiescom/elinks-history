@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.355 2005/04/04 12:15:24 jonas Exp $ */
+/* $Id: download.c,v 1.356 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 
 /* TODO: tp_*() should be in separate file, I guess? --pasky */

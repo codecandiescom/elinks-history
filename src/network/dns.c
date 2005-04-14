@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.90 2005/04/14 12:15:00 zas Exp $ */
+/* $Id: dns.c,v 1.91 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@
 #include "osdep/osdep.h"
 #include "util/error.h"
 #include "util/memory.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 
 struct dnsentry {

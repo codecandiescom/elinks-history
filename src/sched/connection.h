@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.114 2005/04/14 13:07:48 zas Exp $ */
+/* $Id: connection.h,v 1.115 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -7,7 +7,7 @@
 #include "encoding/encoding.h"
 #include "lowlevel/timers.h" /* timer_id_T */
 #include "util/lists.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 struct socket;
 struct uri;

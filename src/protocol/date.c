@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.22 2005/04/05 11:52:51 jonas Exp $ */
+/* $Id: date.c,v 1.23 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 
 #include "protocol/date.h"
 #include "util/conv.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 /*
  * Sun, 06 Nov 1994 08:49:37 GMT  ; RFC 822, updated by RFC 1123

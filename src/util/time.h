@@ -1,7 +1,7 @@
-/* $Id: time.h,v 1.24 2005/04/14 13:11:58 zas Exp $ */
+/* $Id: time.h,v 1.25 2005/04/14 14:06:15 jonas Exp $ */
 
-#ifndef EL__UTIL_TTIME_H
-#define EL__UTIL_TTIME_H
+#ifndef EL__UTIL_TIME_H
+#define EL__UTIL_TIME_H
 
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>

@@ -1,4 +1,4 @@
-/* $Id: cookies.h,v 1.27 2005/03/05 22:14:31 zas Exp $ */
+/* $Id: cookies.h,v 1.28 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
@@ -7,7 +7,7 @@
 #include "protocol/uri.h"
 #include "util/object.h"
 #include "util/string.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 struct listbox_item;
 

@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.38 2005/04/05 15:41:12 zas Exp $ */
+/* $Id: parse.c,v 1.39 2005/04/14 14:06:15 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -29,7 +29,7 @@
 #include "protocol/ftp/parse.h"
 #include "util/conv.h"
 #include "util/string.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 
 #define skip_space_end(src, end) \

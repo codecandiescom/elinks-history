@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.101 2005/03/05 22:14:31 zas Exp $ */
+/* $Id: globhist.c,v 1.102 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -34,7 +34,7 @@
 #include "util/string.h"
 #include "util/lists.h"
 #include "util/object.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 #define GLOBAL_HISTORY_FILENAME		"globhist"
 

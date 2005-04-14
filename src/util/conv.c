@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.72 2005/03/27 21:51:29 miciah Exp $ */
+/* $Id: conv.c,v 1.73 2005/04/14 14:06:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/string.h"
-#include "util/ttime.h"
+#include "util/time.h"
 
 
 

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.192 2005/04/14 02:59:06 jonas Exp $ */
+/* $Id: socket.c,v 1.193 2005/04/14 03:05:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,14 +92,6 @@ init_socket(void *conn, struct socket_operations *ops)
 void
 close_socket(struct socket *socket)
 {
-	if (socket->conn_info) {
-		/* No callbacks should be made */
-		socket->conn_info->done = NULL;
-		done_connection_info(socket);
-	}
-
-	mem_free_set(&socket->buffer, NULL);
-
 	if (socket->fd == -1) return;
 #ifdef CONFIG_SSL
 	if (socket->ssl) ssl_close(socket);

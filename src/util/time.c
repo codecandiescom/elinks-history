@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.14 2005/04/14 10:30:54 zas Exp $ */
+/* $Id: time.c,v 1.15 2005/04/14 10:32:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,10 +29,10 @@ get_time(void)
 
 
 void
-milliseconds_to_timeval(struct timeval *tv, long int milliseconds)
+milliseconds_to_timeval(timeval_T *t, long int milliseconds)
 {
-	tv->tv_sec = milliseconds / 1000;
-	tv->tv_usec = (milliseconds % 1000) * 1000;
+	t->sec = milliseconds / 1000;
+	t->usec = (milliseconds % 1000) * 1000;
 }
 
 int

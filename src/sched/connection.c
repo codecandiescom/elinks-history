@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.253 2005/04/14 00:31:09 jonas Exp $ */
+/* $Id: connection.c,v 1.254 2005/04/14 00:34:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -714,10 +714,25 @@ run_connection(struct connection *conn)
 	func(conn);
 }
 
+/* Set certain state on a connection and then abort the connection. */
 void
-retry_connection(struct connection *conn)
+abort_conn_with_state(struct connection *conn, enum connection_state state)
+{
+	set_connection_state(conn, state);
+
+	if (conn->running) interrupt_connection(conn);
+	/* notify_connection_callbacks(conn); */
+	done_connection(conn);
+	register_check_queue();
+}
+
+/* Set certain state on a connection and then retry the connection. */
+void
+retry_conn_with_state(struct connection *conn, enum connection_state state)
 {
 	int max_tries = get_opt_int("connection.retries");
+
+	set_connection_state(conn, state);
 
 	interrupt_connection(conn);
 	if (conn->uri->post || !max_tries || ++conn->tries >= max_tries) {
@@ -728,31 +743,6 @@ retry_connection(struct connection *conn)
 		conn->prev_error = conn->state;
 		run_connection(conn);
 	}
-}
-
-void
-abort_connection(struct connection *conn)
-{
-	if (conn->running) interrupt_connection(conn);
-	/* notify_connection_callbacks(conn); */
-	done_connection(conn);
-	register_check_queue();
-}
-
-/* Set certain state on a connection and then abort the connection. */
-void
-abort_conn_with_state(struct connection *conn, enum connection_state state)
-{
-	set_connection_state(conn, state);
-	abort_connection(conn);
-}
-
-/* Set certain state on a connection and then retry the connection. */
-void
-retry_conn_with_state(struct connection *conn, enum connection_state state)
-{
-	set_connection_state(conn, state);
-	retry_connection(conn);
 }
 
 static int

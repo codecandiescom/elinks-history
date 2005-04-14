@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.99 2005/04/14 15:39:12 jonas Exp $ */
+/* $Id: dns.c,v 1.100 2005/04/14 15:39:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -509,6 +509,8 @@ shrink_dns_cache(int whole)
 
 	} else {
 		timeval_T now;
+
+		get_timeval(&now);
 
 		foreachsafe (dnsentry, next, dns_cache) {
 			double age = timeval_diff(&dnsentry->creation_time, &now);

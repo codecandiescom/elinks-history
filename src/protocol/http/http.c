@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.421 2005/04/13 11:25:58 jonas Exp $ */
+/* $Id: http.c,v 1.422 2005/04/14 00:24:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,10 +471,9 @@ static void
 http_end_request(struct connection *conn, enum connection_state state,
 		 int notrunc)
 {
-	set_connection_state(conn, state);
 	decompress_shutdown(conn);
 
-	if (conn->state == S_OK && conn->cached) {
+	if (state == S_OK && conn->cached) {
 		normalize_cache_entry(conn->cached, !notrunc ? conn->from : -1);
 	}
 
@@ -482,9 +481,10 @@ http_end_request(struct connection *conn, enum connection_state state,
 	    && (!conn->socket->ssl) /* We won't keep alive ssl connections */
 	    && (!get_opt_bool("protocol.http.bugs.post_no_keepalive")
 		|| !conn->uri->post)) {
+		set_connection_state(conn, state);
 		add_keepalive_connection(conn, HTTP_KEEPALIVE_TIMEOUT, NULL);
 	} else {
-		abort_connection(conn);
+		abort_conn_with_state(conn, state);
 	}
 }
 

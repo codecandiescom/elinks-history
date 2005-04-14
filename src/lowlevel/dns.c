@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.103 2005/04/14 22:27:56 jonas Exp $ */
+/* $Id: dns.c,v 1.104 2005/04/14 22:29:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -430,9 +430,8 @@ done_dns_lookup(struct dnsquery *query, int res)
 		del_dns_cache_entry(dnsentry);
 	}
 
-	add_to_dns_cache(query->name, query->addr, query->addrno);
-
-	if (res < 0) goto done;
+	if (res >= 0)
+		add_to_dns_cache(query->name, query->addr, query->addrno);
 
 done:
 	*query->queryref = NULL;

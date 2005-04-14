@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.189 2005/04/14 01:02:39 jonas Exp $ */
+/* $Id: socket.c,v 1.190 2005/04/14 01:25:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -378,10 +378,10 @@ check_if_local_address4(struct sockaddr_in *addr)
 
 
 void
-connect_socket(struct socket *conn_socket)
+connect_socket(struct socket *csocket)
 {
 	int sock = -1;
-	struct conn_info *conn_info = conn_socket->conn_info;
+	struct conn_info *conn_info = csocket->conn_info;
 	int i;
 	int trno = conn_info->triedno;
 	int only_local = get_cmd_opt_bool("localhost");
@@ -396,8 +396,8 @@ connect_socket(struct socket *conn_socket)
 
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
-	if (conn_socket->fd >= 0)
-		clear_handlers(conn_socket->fd);
+	if (csocket->fd >= 0)
+		clear_handlers(csocket->fd);
 
 	for (i = conn_info->triedno + 1; i < conn_info->addrno; i++) {
 #ifdef CONFIG_IPV6
@@ -455,7 +455,7 @@ connect_socket(struct socket *conn_socket)
 			close(sock);
 			continue;
 		}
-		conn_socket->fd = sock;
+		csocket->fd = sock;
 
 #ifdef CONFIG_IPV6
 		addr.sin6_port = htons(conn_info->port);
@@ -463,21 +463,21 @@ connect_socket(struct socket *conn_socket)
 		addr.sin_port = htons(conn_info->port);
 #endif
 
-		/* We can set conn_socket->protocol_family here even if the connection
+		/* We can set csocket->protocol_family here even if the connection
 		 * will fail, as we will use it only when it will be successfully
 		 * established. At least I hope that noone else will want to do
 		 * something else ;-). --pasky */
 
 #ifdef CONFIG_IPV6
 		if (addr.sin6_family == AF_INET6) {
-			conn_socket->protocol_family = 1;
+			csocket->protocol_family = 1;
 			if (connect(sock, (struct sockaddr *) &addr,
 					sizeof(struct sockaddr_in6)) == 0)
 				break;
 		} else
 #endif
 		{
-			conn_socket->protocol_family = 0;
+			csocket->protocol_family = 0;
 			if (connect(sock, (struct sockaddr *) &addr,
 					sizeof(struct sockaddr_in)) == 0)
 				break; /* success */
@@ -490,8 +490,8 @@ connect_socket(struct socket *conn_socket)
 		    || errno == EINPROGRESS) {
 			/* It will take some more time... */
 			set_handlers(sock, NULL, (select_handler_T) connected,
-				     (select_handler_T) dns_exception, conn_socket);
-			conn_socket->ops->set_state(conn_socket->conn, conn_socket, S_CONN);
+				     (select_handler_T) dns_exception, csocket);
+			csocket->ops->set_state(csocket->conn, csocket, S_CONN);
 			return;
 		}
 
@@ -510,7 +510,7 @@ connect_socket(struct socket *conn_socket)
 			 * process, but what matters is the last one because
 			 * we do not know the previous one's errno, and the
 			 * added complexity wouldn't really be worth it. */
-			conn_socket->ops->done(conn_socket->conn, conn_socket, S_LOCAL_ONLY);
+			csocket->ops->done(csocket->conn, csocket, S_LOCAL_ONLY);
 			return;
 		}
 
@@ -522,18 +522,18 @@ connect_socket(struct socket *conn_socket)
 		else
 			state = S_DNS;
 
-		conn_socket->ops->retry(conn_socket->conn, conn_socket, state);
+		csocket->ops->retry(csocket->conn, csocket, state);
 		return;
 	}
 
 #ifdef CONFIG_SSL
 	/* Check if the connection should run over an encrypted link */
 	if (conn_info->need_ssl
-	    && ssl_connect(conn_socket) < 0)
+	    && ssl_connect(csocket) < 0)
 		return;
 #endif
 
-	done_connection_info(conn_socket);
+	done_connection_info(csocket);
 }
 
 static void

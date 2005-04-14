@@ -1,3 +1,368 @@
+Thu Apr 14 15:45:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	kill_dns_request(): Call done_dns_lookup() directly.  
+
+Thu Apr 14 15:39:51 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	Initialize @now using get_timeval(). Thanks to Jonas for catching
+	this one.  
+
+Thu Apr 14 15:39:12 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	kill_dns_request(): No need to NULLify queryref. We do it elsewhere.  
+
+Thu Apr 14 15:34:37 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: dns.c, dns.h:
+
+	query_p -> queryref -- takes me back to SML.  
+
+Thu Apr 14 15:32:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Assert that we always have the query_p thingy.  
+
+Thu Apr 14 15:29:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Oops, still set query_p to NULL when failing.  
+
+Thu Apr 14 15:25:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	done_dns_lookup(): Fix bug from (1.84 -> 1.85) 'find_host(): Do not
+	take address and address length references ...' Since query->addr is
+	no longer a pointer reference do not check it. Fixes the error path
+	when lookup fails.  
+
+Thu Apr 14 14:57:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Always set query->qyery_p to NULL when freeing.  
+
+Thu Apr 14 14:50:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Fix space, add an assertion and set dnsquery->h to -1 after closing
+	it.  
+
+Thu Apr 14 14:14:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	done_dns_lookup(): Fix mem_free_set() bug reported by zas.
+	mem_free_set() checks if NULL so simplify logic.  
+
+Thu Apr 14 14:06:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/dialogs.c, cookies/cookies.c, cookies/cookies.h,
+	dialogs/download.c, document/html/frames.c,
+	document/html/renderer.c, ecmascript/ecmascript.h,
+	globhist/globhist.c, globhist/globhist.h, lowlevel/dns.c,
+	lowlevel/select.c, lowlevel/timers.c, lowlevel/timers.h,
+	protocol/date.c, protocol/date.h, protocol/ftp/parse.c,
+	sched/connection.c, sched/connection.h, sched/download.c,
+	sched/download.h, sched/session.c, util/Makefile.am, util/conv.c,
+	util/conv.h, util/time.c, util/time.h, util/ttime.c, util/ttime.h:
+
+	util/ttime.* -> util/time.* 
+
+Thu Apr 14 13:11:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
+
+	Drop get_time(), finally.  
+
+Thu Apr 14 13:07:48 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: connection.c, connection.h:
+
+	More timeval_T usage. Add some FIXME about milliseconds.  
+
+Thu Apr 14 13:03:03 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c:
+
+	connection_timeout(): Move code to new timeout_socket().  
+
+Thu Apr 14 12:50:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/connection.c:
+
+	Use timeval_T in struct keepalive_connection and make needed
+	changes.  
+
+Thu Apr 14 12:41:35 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Drop get_time()/time_T, use get_timeval(),timeval_T instead.  
+
+Thu Apr 14 12:33:46 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
+
+	Introduce timeval_to_milliseconds().  
+
+Thu Apr 14 12:15:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	delta -> age.  
+
+Thu Apr 14 12:11:32 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	get_time -> creation_time.  
+
+Thu Apr 14 12:09:55 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, lowlevel/dns.c:
+
+	DNS_TIMEOUT -> DNS_CACHE_TIMEOUT.  
+
+Thu Apr 14 11:07:01 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, lowlevel/dns.c:
+
+	Use timeval_T for dns cache timeouts, convert DNS_TIMEOUT from
+	milliseconds to seconds. Please check if changes are correct.  
+
+Thu Apr 14 10:52:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	select_loop(): @tv -> @t (timeval_T).  
+
+Thu Apr 14 10:50:30 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: timers.c, timers.h:
+
+	get_next_timer_time(): use timeval_T.  
+
+Thu Apr 14 10:48:17 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: timers.c, timers.h:
+
+	Make @interval a double and use timeval_T.  
+
+Thu Apr 14 10:46:12 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/timers.c:
+
+	Make @interval a double.  
+
+Thu Apr 14 10:43:57 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	select_loop(): @last_time is now a timeval_T. Use get_timeval()
+	instead of get_time().  
+
+Thu Apr 14 10:41:59 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
+
+	Introduce double_to_timeval().  
+
+Thu Apr 14 10:40:14 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
+
+	Introduce timeval_sub() and timeval_add().  
+
+Thu Apr 14 10:37:55 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
+
+	Introduce timeval_diff().  
+
+Thu Apr 14 10:36:24 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
+
+	Introduce get_timeval(), that retrieve current time.  
+
+Thu Apr 14 10:34:43 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
+
+	limit_timeval_to_zero() now uses timeval_T.  
+
+Thu Apr 14 10:33:40 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
+
+	timeval_is_positive() now uses timeval_T.  
+
+Thu Apr 14 10:32:22 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
+
+	milliseconds_to_timeval() now uses timeval_T.  
+
+Thu Apr 14 10:30:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
+
+	Drop timeval_subtract().  
+
+Thu Apr 14 10:30:02 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.h, ttime.h:
+
+	Introduce our own timeval_T and two conversion macros.  
+
+Thu Apr 14 10:25:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c:
+
+	Introduce done_socket() and move away code from
+	free_connection_data().  
+
+Thu Apr 14 10:18:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Compile fix ;) 
+
+Thu Apr 14 10:13:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c:
+
+	connect_socket(): It already clear_handlers() and most callers
+	already close_socket() and close_socket() clear_handlers() so
+	close_socket() before reconnecting.  
+
+Thu Apr 14 03:05:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, sched/connection.c:
+
+	Revert last patch. close_socket() is called between connect_socket()
+	calls and we need the conn_info.  
+
+Thu Apr 14 02:59:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, sched/connection.c:
+
+	Move socket->conn_info freeing code from free_connection_data() to
+	close_socket().  
+
+Thu Apr 14 02:53:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	add_keepalive_connection(): Explicitly clear handlers and set the
+	socket fd to -1 so it is safe to call close_socket() in
+	free_connection_data().  
+
+Thu Apr 14 02:32:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
+	ssl/connect.c:
+
+	connect_socket(): Take connection_state parameter.  
+
+Thu Apr 14 01:28:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	http_send_header(): Remove set_connection_timeout() because it will
+	eventually be set by by write_to_socket().  
+
+Thu Apr 14 01:25:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	connect_socket(): conn_socket -> csocket, to make lines shorter.  
+
+Thu Apr 14 01:02:39 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/ftp/ftp.c,
+	protocol/http/http.c:
+
+	read_select(): Set connection timeout and remove
+	set_connection_timeout() calls in the start of read handlers.  
+
+Thu Apr 14 00:40:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/about.c, protocol/data.c,
+	protocol/file/cgi.c, protocol/file/file.c,
+	protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c, protocol/smb/smb.c, sched/connection.c,
+	sched/connection.h:
+
+	{abort,retry}_conn_with_state() -> {abort,retry}_connection(). I
+	hope this is acceptable.  
+
+Thu Apr 14 00:34:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, connection.h:
+
+	Merge {abort,retry}_connection() with
+	{abort,retry}_conn_with_state().  
+
+Thu Apr 14 00:31:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	connection_timeout(): Reformat.  
+
+Thu Apr 14 00:28:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	connection_timeout(): Use ..._conn_with_state() functions.  
+
+Thu Apr 14 00:24:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	http_end_request(): Use abort_conn_with_state().  
+
+Thu Apr 14 00:17:49 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/finger/finger.c:
+
+	finger_end-request(): Use abort_conn_with_state() and reformat.  
+
+Thu Apr 14 00:11:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c:
+
+	init_socket(): Move to lowlevel/.  
+
+Wed Apr 13 23:58:16 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	init_socket(): Take pointer to operations.  
+
+Wed Apr 13 23:44:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Prefer casting select handlers so they have the expected type.  
+
+Wed Apr 13 22:12:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Update comments.  
+
 Wed Apr 13 21:45:42 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/lowlevel/: connect.c, dns.c, dns.h:
@@ -99,19 +464,20 @@ Wed Apr 13 17:08:59 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 13 16:53:10 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: lowlevel/select.c, util/ttime.c, util/ttime.h:
+	* src/: lowlevel/select.c, util/time.c, util/time.h, util/ttime.c,
+	util/ttime.h:
 
 	Introduce limit_timeval_to_zero() and use it in select_loop().  
 
 Wed Apr 13 16:46:49 2005  Laurent Monin <zas@norz.org>:
 
-	* src/util/: ttime.c, ttime.h:
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
 
 	@a -> @tv.  
 
 Wed Apr 13 16:46:14 2005  Laurent Monin <zas@norz.org>:
 
-	* src/util/: ttime.c, ttime.h:
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
 
 	Add timeval_is_positive() function.  
 
@@ -150,7 +516,7 @@ Wed Apr 13 16:10:04 2005  Laurent Monin <zas@norz.org>:
 
 Wed Apr 13 16:08:11 2005  Laurent Monin <zas@norz.org>:
 
-	* src/util/: ttime.c, ttime.h:
+	* src/util/: time.c, time.h, ttime.c, ttime.h:
 
 	Introduce timeval_subtract() and milliseconds_to_timeval() to
 	manipulate struct timeval.  
@@ -4021,7 +4387,7 @@ Sat Mar  5 22:14:31 2005  Laurent Monin <zas@norz.org>:
 	lowlevel/select.c, lowlevel/timers.c, lowlevel/timers.h,
 	protocol/date.c, protocol/date.h, sched/connection.c,
 	sched/connection.h, sched/download.h, sched/session.c, util/conv.c,
-	util/conv.h, util/ttime.c, util/ttime.h:
+	util/conv.h, util/time.c, util/time.h, util/ttime.c, util/ttime.h:
 
 	ttime -> time_T.  
 
@@ -5359,7 +5725,7 @@ Sun Feb  6 09:42:04 2005  Petr Baudis <pasky@ucw.cz>:
 Sat Feb  5 22:36:37 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: intl/gettext/dcigettext.c, lowlevel/interlink.c,
-	lowlevel/signals.c, osdep/osdep.c, util/ttime.c:
+	lowlevel/signals.c, osdep/osdep.c, util/time.c, util/ttime.c:
 
 	Some more compile fixes revealed on MingW. In get_address() port is
 	always > 65535.  
@@ -12543,7 +12909,8 @@ Fri Nov 12 10:06:15 2004  Laurent Monin <zas@norz.org>:
 
 Fri Nov 12 09:49:04 2004  Laurent Monin <zas@norz.org>:
 
-	* src/: cookies/cookies.c, globhist/globhist.c, util/ttime.h:
+	* src/: cookies/cookies.c, globhist/globhist.c, util/time.h,
+	util/ttime.h:
 
 	Introduce str_to_ttime() wrapper instead of using atol() directly,
 	since this one is surely non portable as Miciah told.  
@@ -16605,7 +16972,7 @@ Fri Sep 24 20:47:20 2004  Petr Baudis <pasky@ucw.cz>:
 
 Fri Sep 24 20:34:11 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/util/ttime.h:
+	* src/util/: time.h, ttime.h:
 
 	Simplify the #ifdef maze.  
 

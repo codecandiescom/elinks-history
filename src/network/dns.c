@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.102 2005/04/14 22:14:17 jonas Exp $ */
+/* $Id: dns.c,v 1.103 2005/04/14 22:27:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,6 +81,51 @@ static INIT_LIST_HEAD(dns_cache);
 static void done_dns_lookup(struct dnsquery *query, int res);
 
 
+/* DNS cache management: */
+
+static struct dnsentry *
+find_in_dns_cache(unsigned char *name)
+{
+	struct dnsentry *dnsentry;
+
+	foreach (dnsentry, dns_cache)
+		if (!strcasecmp(dnsentry->name, name)) {
+			move_to_top_of_list(dns_cache, dnsentry);
+			return dnsentry;
+		}
+
+	return NULL;
+}
+
+static void
+add_to_dns_cache(unsigned char *name, struct sockaddr_storage *addr, int addrno)
+{
+	int namelen = strlen(name);
+	struct dnsentry *dnsentry;
+	int size;
+
+	dnsentry = mem_calloc(1, sizeof(*dnsentry) + namelen);
+	if (!dnsentry) return;
+
+	/* calloc() sets NUL char for us. */
+	memcpy(dnsentry->name, name, namelen);
+
+	assert(addrno > 0);
+
+	size = addrno * sizeof(*dnsentry->addr);
+	dnsentry->addr = mem_alloc(size);
+	if (!dnsentry->addr) {
+		mem_free(dnsentry);
+		return;
+	}
+
+	memcpy(dnsentry->addr, addr, size);;
+	dnsentry->addrno = addrno;
+
+	get_timeval(&dnsentry->creation_time);
+	add_to_list(dns_cache, dnsentry);
+}
+
 static void
 del_dns_cache_entry(struct dnsentry *dnsentry)
 {
@@ -88,6 +133,9 @@ del_dns_cache_entry(struct dnsentry *dnsentry)
 	mem_free_if(dnsentry->addr);
 	mem_free(dnsentry);
 }
+
+
+/* Synchronous DNS lookup management: */
 
 int
 do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno,
@@ -161,13 +209,8 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	return 0;
 }
 
-static void
-failed_real_lookup(void *data)
-{
-	struct dnsquery *query = (struct dnsquery *) data;
 
-	done_dns_lookup(query, -1);
-}
+/* Asynchronous DNS lookup management: */
 
 #ifndef NO_ASYNC_LOOKUP
 static void
@@ -262,6 +305,14 @@ done:
 	done_dns_lookup(query, res);
 }
 
+static void
+failed_real_lookup(void *data)
+{
+	struct dnsquery *query = (struct dnsquery *) data;
+
+	done_dns_lookup(query, -1);
+}
+
 static int
 init_async_dns_lookup(struct dnsquery *dnsquery, int force_async)
 {
@@ -290,6 +341,7 @@ done_async_dns_lookup(struct dnsquery *dnsquery)
 #define init_async_dns_lookup(dnsquery, force)	(0)
 #define done_async_dns_lookup(dnsquery)		/* Nada. */
 #endif /* NO_ASYNC_LOOKUP */
+
 
 static int
 do_lookup(struct dnsquery *query, int force_async)
@@ -327,49 +379,6 @@ do_queued_lookup(struct dnsquery *query)
 #endif
 	/* DBG("direct lookup"); */
 	return do_lookup(query, 0);
-}
-
-static struct dnsentry *
-find_in_dns_cache(unsigned char *name)
-{
-	struct dnsentry *dnsentry;
-
-	foreach (dnsentry, dns_cache)
-		if (!strcasecmp(dnsentry->name, name)) {
-			move_to_top_of_list(dns_cache, dnsentry);
-			return dnsentry;
-		}
-
-	return NULL;
-}
-
-static void
-add_to_dns_cache(unsigned char *name, struct sockaddr_storage *addr, int addrno)
-{
-	int namelen = strlen(name);
-	struct dnsentry *dnsentry;
-	int size;
-
-	dnsentry = mem_calloc(1, sizeof(*dnsentry) + namelen);
-	if (!dnsentry) return;
-
-	/* calloc() sets NUL char for us. */
-	memcpy(dnsentry->name, name, namelen);
-
-	assert(addrno > 0);
-
-	size = addrno * sizeof(*dnsentry->addr);
-	dnsentry->addr = mem_alloc(size);
-	if (!dnsentry->addr) {
-		mem_free(dnsentry);
-		return;
-	}
-
-	memcpy(dnsentry->addr, addr, size);;
-	dnsentry->addrno = addrno;
-
-	get_timeval(&dnsentry->creation_time);
-	add_to_list(dns_cache, dnsentry);
 }
 
 
@@ -524,7 +533,7 @@ shrink_dns_cache(int whole)
 
 		foreachsafe (dnsentry, next, dns_cache) {
 			double age = timeval_diff(&dnsentry->creation_time, &now);
-			
+
 			if (age > DNS_CACHE_TIMEOUT)
 				del_dns_cache_entry(dnsentry);
 		}

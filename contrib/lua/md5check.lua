@@ -1,6 +1,6 @@
 -- Check MD5 sums of download files automagically (it expects them in
 -- downloadedfile.txt).
--- $Id: md5check.lua,v 1.4 2005/03/27 22:59:41 miciah Exp $
+-- $Id: md5check.lua,v 1.5 2005/04/15 15:03:48 miciah Exp $
 
 ----------------------------------------------------------------------
 -- Installation
@@ -20,15 +20,6 @@
 -- 3. Edit the second last line of this file to point to your
 -- download directory.  Sorry, but ELinks can't get this
 -- information automatically (yet?).
-
-function file_exists(filename)
-    local f = io.open(filename, "r")
-    if f then
-	io.close(f)
-	return 1
-    end
-    return nil
-end
 
 function md5sum_check(download_dir)
     local results = {}

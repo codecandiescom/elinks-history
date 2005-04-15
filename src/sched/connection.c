@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.268 2005/04/15 23:08:04 jonas Exp $ */
+/* $Id: connection.c,v 1.269 2005/04/15 23:09:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,7 +445,7 @@ done_connection(struct connection *conn)
 	/* When removing the connection callbacks should always be aware of it
 	 * so they can unregister themselves. We do this by enforcing that the
 	 * connection is in a result state. If it is not already it is an
-	 * internal bug. */
+	 * internal bug. This should never happen bug it does. ;) --jonas */
 	if (!is_in_result_state(conn->state))
 		set_connection_state(conn, S_INTERNAL);
 

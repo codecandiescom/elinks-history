@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.26 2005/04/15 14:18:04 zas Exp $ */
+/* $Id: time.c,v 1.27 2005/04/15 14:21:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,7 +79,7 @@ timeval_add(timeval_T *res, timeval_T *base, timeval_T *t)
 }
 
 void
-double_to_timeval(double x, timeval_T *t)
+double_to_timeval(timeval_T *t, double x)
 {
 	t->sec  = (long int) x;
 	t->usec = (long int) ((x - (double) t->sec) * 1000000);

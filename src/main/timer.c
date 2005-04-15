@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timer.c,v 1.16 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: timer.c,v 1.17 2005/04/15 14:21:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,7 @@ int
 get_next_timer_time(timeval_T *t)
 {
 	if (!list_empty(timers)) {
-		double_to_timeval(((struct timer *) &timers)->next->interval, t);
+		double_to_timeval(t, ((struct timer *) &timers)->next->interval);
 		return 1;
 	}
 

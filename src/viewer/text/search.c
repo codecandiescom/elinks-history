@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.334 2005/04/15 21:20:04 miciah Exp $ */
+/* $Id: search.c,v 1.335 2005/04/15 21:23:57 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -676,15 +676,15 @@ find_next:
 
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
 		regexec_flags = REG_NOTBOL;
-		textlen = regmatch.rm_eo - regmatch.rm_so;
-		if (!textlen) { doc[pos] = save_c; goto free_stuff; }
+		ctx.textlen = regmatch.rm_eo - regmatch.rm_so;
+		if (!ctx.textlen) { doc[pos] = save_c; goto free_stuff; }
 		ctx.s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
 		get_searched_regex_match(&ctx);
 
-		doctmp += int_max(textlen, 1);
-		ctx.s1 += int_max(textlen, 1);
+		doctmp += int_max(ctx.textlen, 1);
+		ctx.s1 += int_max(ctx.textlen, 1);
 	}
 
 	doc[pos] = save_c;

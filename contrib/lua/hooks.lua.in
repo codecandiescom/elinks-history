@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.68 2005/04/15 14:42:08 miciah Exp $
+-- $Id: hooks.lua.in,v 1.69 2005/04/15 14:45:19 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -58,6 +58,7 @@ function dofile(s) return do_(loadfile(s)) end
 
 dofile ("@sysconfdir@/config.lua")
 home_dir = (os.getenv ("HOME") or "/home/"..os.getenv("USER")) or "."
+hooks_file = elinks_home.."/hooks.lua" -- for reload()
 dofile (elinks_home.."/config.lua")
 
 ----------------------------------------------------------------------

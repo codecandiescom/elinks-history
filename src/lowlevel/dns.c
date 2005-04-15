@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.113 2005/04/15 01:20:30 jonas Exp $ */
+/* $Id: dns.c,v 1.114 2005/04/15 01:27:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,11 +260,28 @@ async_dns_writer(void *data, int h)
 	free(addrs);
 }
 
+static enum dns_result
+read_dns_data(int h, void *data, size_t datalen)
+{
+	int done = 0;
+
+	do {
+		int r = safe_read(h, data + done, datalen - done);
+
+		if (r <= 0) return DNS_ERROR;
+		done += r;
+	} while (done < datalen);
+
+	assert(done == datalen);
+
+	return DNS_SUCCESS;
+}
+
 static void
 async_dns_reader(struct dnsquery *query)
 {
 	enum dns_result result = DNS_ERROR;
-	int i, done, todo, *addrno;
+	int i;
 
 	/* We will do blocking I/O here, however it's only local communication
 	 * and it's supposed to be just a flash talk, so it shouldn't matter.
@@ -272,16 +289,8 @@ async_dns_reader(struct dnsquery *query)
 	 * useless) to do this in non-blocking way. */
 	if (set_blocking_fd(query->h) < 0) goto done;
 
-	todo = sizeof(query->addrno);
-	done = 0;
-	addrno = &query->addrno;
-	do {
-		int r = safe_read(query->h, addrno + done, todo - done);
-
-		if (r <= 0) goto done;
-		done += r;
-	} while (done < todo);
-	assert(done == todo);
+	if (read_dns_data(query->h, &query->addrno, sizeof(query->addrno)) == DNS_ERROR)
+		goto done;
 
 	query->addr = mem_calloc(query->addrno, sizeof(*query->addr));
 	if (!query->addr) goto done;
@@ -289,15 +298,8 @@ async_dns_reader(struct dnsquery *query)
 	for (i = 0; i < query->addrno; i++) {
 		struct sockaddr_storage *addr = &query->addr[i];
 
-		todo = sizeof(*addr);
-		done = 0;
-		do {
-			int r = safe_read(query->h, addr + done, todo - done);
-
-			if (r <= 0) goto done;
-			done += r;
-		} while (done < todo);
-		assert(done == todo);
+		if (read_dns_data(query->h, addr, sizeof(*addr)) == DNS_ERROR)
+			goto done;
 	}
 
 	result = DNS_SUCCESS;

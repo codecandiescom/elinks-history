@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.115 2005/04/15 02:09:05 jonas Exp $ */
+/* $Id: dns.c,v 1.116 2005/04/15 02:39:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -409,27 +409,20 @@ done_dns_lookup(struct dnsquery *query, enum dns_result result)
 	}
 #endif
 
-	if (!query->done) {
-		mem_free_set(&query->addr, NULL);
-		*query->queryref = NULL;
-		mem_free(query);
-		return;
-	}
+	/* Make sure the query is unregister _before_ calling any callbacks. */
+	*query->queryref = NULL;
+
+	/* If the callback was cleared skip to the freeing part. */
+	if (!query->done)
+		goto done;
 
 	dnsentry = find_in_dns_cache(query->name);
 	if (dnsentry) {
+		/* If the query failed, use the existing DNS cache entry even if
+		 * it is too old. */
 		if (result == DNS_ERROR) {
-			int size;
-			/* query->addr(no) point to allocated addresses. */
-
 			assert(dnsentry->addrno > 0);
-
-			size = dnsentry->addrno * sizeof(*query->addr);
-			query->addr = mem_alloc(size);
-			if (!query->addr) goto done;
-
-			memcpy(query->addr, dnsentry->addr, size);
-			query->addrno = dnsentry->addrno;
+			query->done(query->data, dnsentry->addr, dnsentry->addrno);
 			goto done;
 		}
 
@@ -439,12 +432,10 @@ done_dns_lookup(struct dnsquery *query, enum dns_result result)
 	if (result == DNS_SUCCESS)
 		add_to_dns_cache(query->name, query->addr, query->addrno);
 
-done:
-	*query->queryref = NULL;
-
 	query->done(query->data, query->addr, query->addrno);
 
-	/* query->addr is freed by the callback handler - dns_found(). */
+done:
+	mem_free_set(&query->addr, NULL);
 	mem_free(query);
 }
 
@@ -486,6 +477,9 @@ find_host(unsigned char *name, void **queryref,
 	if (no_cache)
 		return init_dns_lookup(name, queryref, done, data);
 
+	/* Check if the DNS name is in the cache. If the cache entry is too old
+	 * do a new lookup. However, old cache entries will be used as a
+	 * fallback if the new lookup fails. */
 	dnsentry = find_in_dns_cache(name);
 	if (dnsentry) {
 		double age;
@@ -497,15 +491,8 @@ find_host(unsigned char *name, void **queryref,
 		age = timeval_diff(&dnsentry->creation_time, &now);
 
 		if (age <= DNS_CACHE_TIMEOUT) {
-			struct sockaddr_storage *addr;
-			int size = sizeof(*addr) * dnsentry->addrno;
-
-			addr = mem_alloc(size);
-			if (addr) {
-				memcpy(addr, dnsentry->addr, size);
-				done(data, addr, dnsentry->addrno);
-			}
-			return 0;
+			done(data, dnsentry->addr, dnsentry->addrno);
+			return DNS_SUCCESS;
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.198 2005/04/15 01:00:18 jonas Exp $ */
+/* $Id: connect.c,v 1.199 2005/04/15 02:39:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,15 +188,26 @@ timeout_socket(struct socket *socket)
 static void
 dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 {
+	struct conn_info *conn_info = socket->conn_info;
+	int size;
+
 	if (!addr) {
 		socket->ops->done(socket->conn, socket, S_NO_DNS);
 		return;
 	}
 
-	assert(socket->conn_info);
+	assert(conn_info);
 
-	socket->conn_info->addr	  = addr;
-	socket->conn_info->addrno = addrlen;
+	size = sizeof(*addr) * addrlen;
+
+	conn_info->addr = mem_alloc(size);
+	if (!conn_info->addr) {
+		socket->ops->done(socket->conn, socket, S_OUT_OF_MEM);
+		return;
+	}
+
+	memcpy(conn_info->addr, addr, size);
+	conn_info->addrno = addrlen;
 
 	connect_socket(socket, S_CONN);
 }

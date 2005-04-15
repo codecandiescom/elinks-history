@@ -1,4 +1,4 @@
-/* $Id: dns.h,v 1.14 2005/04/15 01:00:18 jonas Exp $ */
+/* $Id: dns.h,v 1.15 2005/04/15 02:39:34 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_DNS_H
 #define EL__LOWLEVEL_DNS_H
@@ -27,9 +27,9 @@ do_real_lookup(unsigned char *host, struct sockaddr_storage **addr, int *addrlen
 
 /* Look up the specified @host storing private query information in struct
  * pointed to by @queryref. When the query is done the @done callback will be
- * called with @data, an array of found allocated addresses (or NULL on error)
- * and the address array length. If the boolean @no_cache is non-zero cached DNS
- * queries are ignored. */
+ * called with @data, an array of found addresses (or NULL on error) and the
+ * address array length. If the boolean @no_cache is non-zero cached DNS queries
+ * are ignored. */
 /* Returns whether the query is asynchronious. */
 enum dns_result find_host(unsigned char *name, void **queryref,
 			  dns_callback_T done, void *data, int no_cache);

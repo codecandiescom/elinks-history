@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.238 2005/04/15 02:50:27 jonas Exp $ */
+/* $Id: ftp.c,v 1.239 2005/04/15 03:06:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -581,15 +581,15 @@ add_eprtcmd_to_string(struct string *string, struct sockaddr_in6 *addr)
 static int
 get_ftp_data_socket(struct connection *conn, struct string *command)
 {
-	struct ftp_connection_info *c_i = conn->info;
+	struct ftp_connection_info *ftp = conn->info;
 
-	c_i->use_pasv = get_opt_bool("protocol.ftp.use_pasv");
+	ftp->use_pasv = get_opt_bool("protocol.ftp.use_pasv");
 
 #ifdef CONFIG_IPV6
-	c_i->use_epsv = get_opt_bool("protocol.ftp.use_epsv");
+	ftp->use_epsv = get_opt_bool("protocol.ftp.use_epsv");
 
 	if (conn->socket->protocol_family == 1) {
-		if (c_i->use_epsv) {
+		if (ftp->use_epsv) {
 			add_to_string(command, "EPSV");
 
 		} else {
@@ -608,7 +608,7 @@ get_ftp_data_socket(struct connection *conn, struct string *command)
 	} else
 #endif
 	{
-		if (c_i->use_pasv) {
+		if (ftp->use_pasv) {
 			add_to_string(command, "PASV");
 
 		} else {
@@ -636,7 +636,7 @@ get_ftp_data_socket(struct connection *conn, struct string *command)
 static struct ftp_connection_info *
 add_file_cmd_to_str(struct connection *conn)
 {
-	struct ftp_connection_info *c_i;
+	struct ftp_connection_info *ftp;
 	struct string command, ftp_data_command;
 
 	if (!conn->uri->data) {
@@ -645,13 +645,13 @@ add_file_cmd_to_str(struct connection *conn)
 		return NULL;
 	}
 
-	c_i = mem_calloc(1, sizeof(*c_i));
-	if (!c_i) {
+	ftp = mem_calloc(1, sizeof(*ftp));
+	if (!ftp) {
 		abort_connection(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
 
-	conn->info = c_i;	/* Freed when connection is destroyed. */
+	conn->info = ftp;	/* Freed when connection is destroyed. */
 
 	if (!init_string(&command)) {
 		abort_connection(conn, S_OUT_OF_MEM);
@@ -676,8 +676,8 @@ add_file_cmd_to_str(struct connection *conn)
 	    || conn->uri->data[conn->uri->datalen - 1] == '/') {
 		/* Commands to get directory listing. */
 
-		c_i->dir = 1;
-		c_i->pending_commands = 4;
+		ftp->dir = 1;
+		ftp->pending_commands = 4;
 
 		/* ASCII */
 		add_to_string(&command, "TYPE A");
@@ -697,8 +697,8 @@ add_file_cmd_to_str(struct connection *conn)
 	} else {
 		/* Commands to get a file. */
 
-		c_i->dir = 0;
-		c_i->pending_commands = 3;
+		ftp->dir = 0;
+		ftp->pending_commands = 3;
 
 		/* BINARY */
 		add_to_string(&command, "TYPE I");
@@ -713,8 +713,8 @@ add_file_cmd_to_str(struct connection *conn)
 							: conn->progress.start);
 			add_crlf_to_string(&command);
 
-			c_i->rest_sent = 1;
-			c_i->pending_commands++;
+			ftp->rest_sent = 1;
+			ftp->pending_commands++;
 		}
 
 		add_to_string(&command, "RETR ");
@@ -724,37 +724,37 @@ add_file_cmd_to_str(struct connection *conn)
 
 	done_string(&ftp_data_command);
 
-	c_i->opc = c_i->pending_commands;
+	ftp->opc = ftp->pending_commands;
 
 	/* 1 byte is already reserved for cmd_buffer in struct ftp_connection_info. */
-	c_i = mem_realloc(c_i, sizeof(*c_i) + command.length);
-	if (!c_i) {
+	ftp = mem_realloc(ftp, sizeof(*ftp) + command.length);
+	if (!ftp) {
 		done_string(&command);
 		abort_connection(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
 
-	memcpy(c_i->cmd_buffer, command.source, command.length + 1);
+	memcpy(ftp->cmd_buffer, command.source, command.length + 1);
 	done_string(&command);
-	conn->info = c_i;
+	conn->info = ftp;
 
-	return c_i;
+	return ftp;
 }
 
 static void
 send_it_line_by_line(struct connection *conn, struct string *cmd)
 {
-	struct ftp_connection_info *c_i = conn->info;
-	unsigned char *nl = strchr(c_i->cmd_buffer, '\n');
+	struct ftp_connection_info *ftp = conn->info;
+	unsigned char *nl = strchr(ftp->cmd_buffer, '\n');
 
 	if (!nl) {
-		add_to_string(cmd, c_i->cmd_buffer);
+		add_to_string(cmd, ftp->cmd_buffer);
 		return;
 	}
 
 	nl++;
-	add_bytes_to_string(cmd, c_i->cmd_buffer, nl - c_i->cmd_buffer);
-	memmove(c_i->cmd_buffer, nl, strlen(nl) + 1);
+	add_bytes_to_string(cmd, ftp->cmd_buffer, nl - ftp->cmd_buffer);
+	memmove(ftp->cmd_buffer, nl, strlen(nl) + 1);
 }
 
 /* Send commands to retrieve file or directory. */
@@ -849,11 +849,11 @@ ftp_data_connect(struct connection *conn, int family, struct sockaddr_storage *s
 static void
 ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer *rb)
 {
-	struct ftp_connection_info *c_i = conn->info;
+	struct ftp_connection_info *ftp = conn->info;
 	struct sockaddr_storage sa;
 	int response;
 
-	if (c_i->pending_commands > 1) {
+	if (ftp->pending_commands > 1) {
 		response = get_ftp_response(conn, rb, 0, &sa);
 
 		if (response == -1) {
@@ -878,10 +878,10 @@ ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer
 		}
 #endif
 
-		c_i->pending_commands--;
+		ftp->pending_commands--;
 
 		/* XXX: The case values are order numbers of commands. */
-		switch (c_i->opc - c_i->pending_commands) {
+		switch (ftp->opc - ftp->pending_commands) {
 			case 1:	/* TYPE */
 				break;
 
@@ -894,13 +894,13 @@ ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer
 
 			case 3:	/* REST / CWD */
 				if (response >= 400) {
-					if (c_i->dir) {
+					if (ftp->dir) {
 						abort_connection(conn,
 								S_FTP_NO_FILE);
 						return;
 					}
 					conn->from = 0;
-				} else if (c_i->rest_sent) {
+				} else if (ftp->rest_sent) {
 					/* Following code is related to resume
 					 * feature. */
 					if (response == 350)
@@ -939,7 +939,7 @@ ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer
 	if (response >= 100 && response < 200) {
 		/* We only need to parse response after RETR to
 		 * get filesize if needed. */
-		if (!c_i->dir && conn->est_length == -1) {
+		if (!ftp->dir && conn->est_length == -1) {
 			long int file_len =
 				get_filesize_from_RETR(rb->data, rb->len);
 
@@ -963,7 +963,7 @@ static void
 ftp_got_final_response(struct connection *conn, struct socket *socket,
 		       struct read_buffer *rb)
 {
-	struct ftp_connection_info *c_i = conn->info;
+	struct ftp_connection_info *ftp = conn->info;
 	int response = get_ftp_response(conn, rb, 0, NULL);
 
 	if (response == -1) {
@@ -1001,10 +1001,10 @@ ftp_got_final_response(struct connection *conn, struct socket *socket,
 		return;
 	}
 
-	if (c_i->conn_state == 2) {
+	if (ftp->conn_state == 2) {
 		ftp_end_request(conn, S_OK);
 	} else {
-		c_i->conn_state = 1;
+		ftp->conn_state = 1;
 		if (conn->state != S_TRANS)
 			set_connection_state(conn, S_GETH);
 	}
@@ -1206,18 +1206,18 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 static int
 ftp_data_accept(struct connection *conn)
 {
-	struct ftp_connection_info *c_i = conn->info;
+	struct ftp_connection_info *ftp = conn->info;
 	int newsock;
 
-	if (c_i->has_data) return 0;
+	if (ftp->has_data) return 0;
 
-	c_i->has_data = 1;
+	ftp->has_data = 1;
 
 	clear_handlers(conn->data_socket->fd);
 
-	if ((conn->socket->protocol_family != 1 && c_i->use_pasv)
+	if ((conn->socket->protocol_family != 1 && ftp->use_pasv)
 #ifdef CONFIG_IPV6
-	    || (conn->socket->protocol_family == 1 && c_i->use_epsv)
+	    || (conn->socket->protocol_family == 1 && ftp->use_epsv)
 #endif
 	   ) {
 		newsock = conn->data_socket->fd;
@@ -1241,7 +1241,7 @@ ftp_data_accept(struct connection *conn)
 static void
 got_something_from_data_connection(struct connection *conn)
 {
-	struct ftp_connection_info *c_i = conn->info;
+	struct ftp_connection_info *ftp = conn->info;
 	unsigned char dircolor[8];
 	int colorize_dir = 0;
 	int len;
@@ -1259,7 +1259,7 @@ out_of_mem:
 		return;
 	}
 
-	if (c_i->dir) {
+	if (ftp->dir) {
 		colorize_dir = get_opt_bool("document.browse.links.color_dirs");
 
 		if (colorize_dir) {
@@ -1268,7 +1268,7 @@ out_of_mem:
 		}
 	}
 
-	if (c_i->dir && !conn->from) {
+	if (ftp->dir && !conn->from) {
 		struct string string;
 		unsigned char *uristring;
 
@@ -1314,8 +1314,8 @@ out_of_mem:
 		mem_free_set(&conn->cached->content_type, stracpy("text/html"));
 	}
 
-	len = safe_read(conn->data_socket->fd, c_i->ftp_buffer + c_i->buf_pos,
-		        FTP_BUF_SIZE - c_i->buf_pos);
+	len = safe_read(conn->data_socket->fd, ftp->ftp_buffer + ftp->buf_pos,
+		        FTP_BUF_SIZE - ftp->buf_pos);
 	if (len < 0) {
 		retry_connection(conn, -errno);
 		return;
@@ -1324,9 +1324,9 @@ out_of_mem:
 	if (len > 0) {
 		conn->received += len;
 
-		if (!c_i->dir) {
+		if (!ftp->dir) {
 			if (add_fragment(conn->cached, conn->from,
-					 c_i->ftp_buffer, len) == 1)
+					 ftp->ftp_buffer, len) == 1)
 				conn->tries = 0;
 			conn->from += len;
 
@@ -1335,18 +1335,18 @@ out_of_mem:
 
 			proceeded = ftp_process_dirlist(conn->cached,
 							&conn->from,
-							c_i->ftp_buffer,
-							len + c_i->buf_pos,
+							ftp->ftp_buffer,
+							len + ftp->buf_pos,
 							0, &conn->tries,
 							colorize_dir,
 							(unsigned char *) dircolor);
 
 			if (proceeded == -1) goto out_of_mem;
 
-			c_i->buf_pos += len - proceeded;
+			ftp->buf_pos += len - proceeded;
 
-			memmove(c_i->ftp_buffer, c_i->ftp_buffer + proceeded,
-				c_i->buf_pos);
+			memmove(ftp->ftp_buffer, ftp->ftp_buffer + proceeded,
+				ftp->buf_pos);
 
 		}
 
@@ -1355,19 +1355,19 @@ out_of_mem:
 	}
 
 	if (ftp_process_dirlist(conn->cached, &conn->from,
-				c_i->ftp_buffer, c_i->buf_pos, 1,
+				ftp->ftp_buffer, ftp->buf_pos, 1,
 				&conn->tries, colorize_dir,
 				(unsigned char *) dircolor) == -1)
 		goto out_of_mem;
 
-	if (c_i->dir) ADD_CONST("</pre>\n<hr>\n</body>\n</html>");
+	if (ftp->dir) ADD_CONST("</pre>\n<hr>\n</body>\n</html>");
 
 	close_socket(conn->data_socket);
 
-	if (c_i->conn_state == 1) {
+	if (ftp->conn_state == 1) {
 		ftp_end_request(conn, S_OK);
 	} else {
-		c_i->conn_state = 2;
+		ftp->conn_state = 2;
 		set_connection_state(conn, S_TRANS);
 	}
 }

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.320 2005/04/15 19:35:54 miciah Exp $ */
+/* $Id: search.c,v 1.321 2005/04/15 19:40:16 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -252,13 +252,20 @@ get_range(struct document *document, int y, int height, int l,
  * from |s1| to |s1 + doclen - 1| with the space at the end of each line
  * converted to a new-line character (LF). */
 static unsigned char *
-get_search_region_from_search_nodes(struct search *s1, int *doclen)
+get_search_region_from_search_nodes(struct search *s1, struct search *s2,
+				    int pattern_len, int *doclen)
 {
 	unsigned char *doc;
 	int i;
 
+	*doclen = s2 - s1 + pattern_len;
+	if (!*doclen) return NULL;
+
 	doc = mem_alloc(*doclen + 1);
-	if (!doc) return NULL;
+	if (!doc) {
+		*doclen = -1;
+		return NULL;
+	}
 
 	for (i = 0; i < *doclen; i++) {
 		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
@@ -315,15 +322,10 @@ is_in_range_regex(struct document *document, int y, int height,
 
 	if (!init_regex(&regex, text)) return -2;
 
-	doclen = s2 - s1 + textlen;
-	if (!doclen) {
-		regfree(&regex);
-		return 0;
-	}
-	doc = get_search_region_from_search_nodes(s1, &doclen);
+	doc = get_search_region_from_search_nodes(s1, s2, textlen, &doclen);
 	if (!doc) {
 		regfree(&regex);
-		return -1;
+		return doclen;
 	}
 
 	doctmp = doc;
@@ -569,12 +571,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		goto ret;
 	}
 
-	doclen = s2 - s1 + l;
-	if (!doclen) {
-		regfree(&regex);
-		goto ret;
-	}
-	doc = get_search_region_from_search_nodes(s1, &doclen);
+	doc = get_search_region_from_search_nodes(s1, s2, l, &doclen);
 	if (!doc) {
 		regfree(&regex);
 		goto ret;

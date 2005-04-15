@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.335 2005/04/15 21:23:57 miciah Exp $ */
+/* $Id: search.c,v 1.336 2005/04/15 21:26:10 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -623,7 +623,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	int pos = 0;
 	struct search *search_start = s1;
 	unsigned char save_c;
-	int y1, y2;
+	int y1;
 	struct regex_match_context ctx;
 
 	ctx.textlen = textlen;
@@ -651,7 +651,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	ctx.xoffset = ctx.box->x - doc_view->vs->x;
 	ctx.yoffset = ctx.box->y - doc_view->vs->y;
 	y1 = doc_view->vs->y - 1;
-	y2 = doc_view->vs->y + ctx.box->height;
+	ctx.y2 = doc_view->vs->y + ctx.box->height;
 
 	doctmp = doc;
 
@@ -659,7 +659,7 @@ find_next:
 	while (pos < doclen) {
 		int y = search_start[pos].y;
 
-		if (y >= y1 && y <= y2) break;
+		if (y >= y1 && y <= ctx.y2) break;
 		pos++;
 	}
 	doctmp = &doc[pos];
@@ -668,7 +668,7 @@ find_next:
 	while (pos < doclen) {
 		int y = search_start[pos].y;
 
-		if (y < y1 || y > y2) break;
+		if (y < y1 || y > ctx.y2) break;
 		pos++;
 	}
 	save_c = doc[pos];

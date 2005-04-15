@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.25 2005/04/15 14:14:48 zas Exp $ */
+/* $Id: time.c,v 1.26 2005/04/15 14:18:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,6 +90,13 @@ milliseconds_to_timeval(timeval_T *t, long int milliseconds)
 {
 	t->sec = milliseconds / 1000;
 	t->usec = (milliseconds % 1000) * 1000;
+}
+
+void
+seconds_to_timeval(timeval_T *t, long int seconds)
+{
+	t->sec = seconds;
+	t->usec = 0;
 }
 
 long int

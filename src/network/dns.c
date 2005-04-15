@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.109 2005/04/15 00:09:51 jonas Exp $ */
+/* $Id: dns.c,v 1.110 2005/04/15 00:11:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,9 +257,8 @@ async_dns_writer(void *data, int h)
 }
 
 static void
-async_dns_reader(void *data)
+async_dns_reader(struct dnsquery *query)
 {
-	struct dnsquery *query = (struct dnsquery *) data;
 	int res = -1;
 	int i, done, todo, *addrno;
 
@@ -306,10 +305,8 @@ done:
 }
 
 static void
-async_dns_error(void *data)
+async_dns_error(struct dnsquery *query)
 {
-	struct dnsquery *query = (struct dnsquery *) data;
-
 	done_dns_lookup(query, -1);
 }
 

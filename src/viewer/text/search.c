@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.326 2005/04/15 19:52:32 miciah Exp $ */
+/* $Id: search.c,v 1.327 2005/04/15 19:53:41 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -552,7 +552,7 @@ srch_failed:
 #ifdef HAVE_REGEX_H
 static void
 get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
-		   int l, struct search *s1, struct search *s2)
+		   int textlen, struct search *s1, struct search *s2)
 {
 	unsigned char *doc;
 	unsigned char *doctmp;
@@ -581,7 +581,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		goto ret;
 	}
 
-	doc = get_search_region_from_search_nodes(s1, s2, l, &doclen);
+	doc = get_search_region_from_search_nodes(s1, s2, textlen, &doclen);
 	if (!doc) {
 		regfree(&regex);
 		goto ret;
@@ -616,12 +616,12 @@ find_next:
 
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
 		regexec_flags = REG_NOTBOL;
-		l = regmatch.rm_eo - regmatch.rm_so;
-		if (!l) { doc[pos] = save_c; goto free_stuff; }
+		textlen = regmatch.rm_eo - regmatch.rm_so;
+		if (!textlen) { doc[pos] = save_c; goto free_stuff; }
 		s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
-		for (i = 0; i < l; i++) {
+		for (i = 0; i < textlen; i++) {
 			int j;
 			int y = s1[i].y + yoffset;
 
@@ -643,8 +643,8 @@ find_next:
 			}
 		}
 
-		doctmp += int_max(l, 1);
-		s1 += int_max(l, 1);
+		doctmp += int_max(textlen, 1);
+		s1 += int_max(textlen, 1);
 	}
 
 	doc[pos] = save_c;

@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.82 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: select.c,v 1.83 2005/04/15 18:25:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,8 +78,6 @@ select_info(int type)
 					i++;
 			return i;
 		}
-		case INFO_TIMERS:
-			return count_timers();
 	}
 
 	return 0;

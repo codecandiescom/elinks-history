@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.127 2005/03/23 15:43:41 miciah Exp $ */
+/* $Id: info.c,v 1.128 2005/04/15 18:25:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
+#include "lowlevel/timers.h"
 #include "modules/version.h"
 #include "sched/connection.h"
 #include "sched/session.h"
@@ -173,7 +174,7 @@ get_resource_info(struct terminal *term, void *data)
 	val_add(n_("%d handle", "%d handles", val, term));
 	add_to_string(&info, ", ");
 
-	val = select_info(INFO_TIMERS);
+	val = timers_info(INFO_TIMERS);
 	val_add(n_("%d timer", "%d timers", val, term));
 	add_to_string(&info, ".\n");
 

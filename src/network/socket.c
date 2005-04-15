@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.208 2005/04/15 15:01:23 jonas Exp $ */
+/* $Id: socket.c,v 1.209 2005/04/15 22:41:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -577,7 +577,7 @@ connect_socket(struct socket *csocket, int connection_state)
 		if (trno != conn_info->triedno && !silent_fail)
 			state = -errno;
 		else
-			state = S_DNS;
+			state = connection_state;
 
 		csocket->ops->retry(csocket->conn, csocket, state);
 		return;

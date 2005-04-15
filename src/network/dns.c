@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.112 2005/04/15 01:00:18 jonas Exp $ */
+/* $Id: dns.c,v 1.113 2005/04/15 01:20:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,12 +213,29 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 /* Asynchronous DNS lookup management: */
 
 #ifndef NO_ASYNC_LOOKUP
+static enum dns_result
+write_dns_data(int h, void *data, size_t datalen)
+{
+	int done = 0;
+
+	do {
+		int w = safe_write(h, data + done, datalen - done);
+
+		if (w < 0) return DNS_ERROR;
+		done += w;
+	} while (done < datalen);
+
+	assert(done == datalen);
+
+	return DNS_SUCCESS;
+}
+
 static void
 async_dns_writer(void *data, int h)
 {
 	unsigned char *name = (unsigned char *) data;
 	struct sockaddr_storage *addrs;
-	int addrno, i, done, todo;
+	int addrno, i;
 
 	if (do_real_lookup(name, &addrs, &addrno, 1) == DNS_ERROR)
 		return;
@@ -229,28 +246,14 @@ async_dns_writer(void *data, int h)
 	 * useless) to do this in non-blocking way. */
 	if (set_blocking_fd(h) < 0) return;
 
-	todo = sizeof(addrno);
-	done = 0;
-	do {
-		int w = safe_write(h, &addrno + done, todo - done);
-
-		if (w < 0) return;
-		done += w;
-	} while (done < todo);
-	assert(done == todo);
+	if (write_dns_data(h, &addrno, sizeof(addrno)) == DNS_ERROR)
+		return;
 
 	for (i = 0; i < addrno; i++) {
 		struct sockaddr_storage *addr = &addrs[i];
 
-		todo = sizeof(*addr);
-		done = 0;
-		do {
-			int w = safe_write(h, addr + done, todo - done);
-
-			if (w < 0) return;
-			done += w;
-		} while (done < todo);
-		assert(done == todo);
+		if (write_dns_data(h, addr, sizeof(*addr)) == DNS_ERROR)
+			return;
 	}
 
 	/* We're in thread, thus we must do plain free(). */

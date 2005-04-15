@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.207 2005/04/15 13:32:00 jonas Exp $ */
+/* $Id: socket.c,v 1.208 2005/04/15 15:01:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,8 +71,6 @@ debug_transfer_log(unsigned char *data, int len)
 #define debug_transfer_log(data, len)
 #endif
 
-
-static void connected(struct socket *socket);
 
 struct socket *
 init_socket(void *conn, struct socket_operations *ops)
@@ -394,6 +392,46 @@ check_if_local_address4(struct sockaddr_in *addr)
 }
 
 
+/* Select handler which is set for the socket descriptor when connect() has
+ * indicated (via errno) that it is in progress. On completion this handler gets
+ * called. */
+static void
+connected(struct socket *socket)
+{
+	struct conn_info *conn_info = socket->conn_info;
+	int err = 0;
+	int len = sizeof(err);
+
+	assertm(conn_info, "Lost conn_info!");
+	if_assert_failed return;
+
+	if (getsockopt(socket->fd, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {
+		/* Why does EMX return so large values? */
+		if (err >= 10000) err -= 10000;
+	} else {
+		/* getsockopt() failed */
+		if (errno > 0)
+			err = errno;
+		else
+			err = -(S_STATE);
+	}
+
+	if (err > 0) {
+		/* There are maybe still some more candidates. */
+		connect_socket(socket, -err);
+		return;
+	}
+
+#ifdef CONFIG_SSL
+	/* Check if the connection should run over an encrypted link */
+	if (conn_info->need_ssl
+	    && ssl_connect(socket) < 0)
+		return;
+#endif
+
+	done_connection_info(socket);
+}
+
 void
 connect_socket(struct socket *csocket, int connection_state)
 {
@@ -553,43 +591,6 @@ connect_socket(struct socket *csocket, int connection_state)
 #endif
 
 	done_connection_info(csocket);
-}
-
-static void
-connected(struct socket *socket)
-{
-	struct conn_info *conn_info = socket->conn_info;
-	int err = 0;
-	int len = sizeof(err);
-
-	assertm(conn_info, "Lost conn_info!");
-	if_assert_failed return;
-
-	if (getsockopt(socket->fd, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {
-		/* Why does EMX return so large values? */
-		if (err >= 10000) err -= 10000;
-	} else {
-		/* getsockopt() failed */
-		if (errno > 0)
-			err = errno;
-		else
-			err = -(S_STATE);
-	}
-
-	if (err > 0) {
-		/* There are maybe still some more candidates. */
-		connect_socket(socket, -err);
-		return;
-	}
-
-#ifdef CONFIG_SSL
-	/* Check if the connection should run over an encrypted link */
-	if (conn_info->need_ssl
-	    && ssl_connect(socket) < 0)
-		return;
-#endif
-
-	done_connection_info(socket);
 }
 
 

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.114 2005/04/15 01:27:19 jonas Exp $ */
+/* $Id: dns.c,v 1.115 2005/04/15 02:09:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -430,8 +430,6 @@ done_dns_lookup(struct dnsquery *query, enum dns_result result)
 
 			memcpy(query->addr, dnsentry->addr, size);
 			query->addrno = dnsentry->addrno;
-
-			result = DNS_SUCCESS;
 			goto done;
 		}
 

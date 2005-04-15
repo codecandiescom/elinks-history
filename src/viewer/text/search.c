@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.328 2005/04/15 20:51:06 miciah Exp $ */
+/* $Id: search.c,v 1.329 2005/04/15 20:58:14 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -561,6 +561,34 @@ srch_failed:
 
 #ifdef HAVE_REGEX_H
 static void
+get_searched_regex_match(struct regex_match_context *ctx)
+{
+	int i;
+
+	for (i = 0; i < ctx->textlen; i++) {
+		int j;
+		int y = ctx->s1[i].y + ctx->yoffset;
+
+		if (!row_is_in_box(ctx->box, y))
+			continue;
+
+		for (j = 0; j < ctx->s1[i].n; j++) {
+			int sx = ctx->s1[i].x + j;
+			int x = sx + ctx->xoffset;
+
+			if (!col_is_in_box(ctx->box, x))
+				continue;
+
+			if (!realloc_points(&ctx->points, ctx->len))
+				continue;
+
+			ctx->points[ctx->len].x = sx;
+			ctx->points[ctx->len++].y = ctx->s1[i].y;
+		}
+	}
+}
+
+static void
 get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		   int textlen, struct search *s1, struct search *s2)
 {
@@ -568,7 +596,6 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	unsigned char *doctmp;
 	int doclen;
 	int regexec_flags = 0;
-	int i;
 	regex_t regex;
 	regmatch_t regmatch;
 	int pos = 0;
@@ -632,27 +659,7 @@ find_next:
 		ctx.s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
-		for (i = 0; i < textlen; i++) {
-			int j;
-			int y = ctx.s1[i].y + ctx.yoffset;
-
-			if (!row_is_in_box(ctx.box, y))
-				continue;
-
-			for (j = 0; j < ctx.s1[i].n; j++) {
-				int sx = ctx.s1[i].x + j;
-				int x = sx + ctx.xoffset;
-
-				if (!col_is_in_box(ctx.box, x))
-					continue;
-
-				if (!realloc_points(&ctx.points, ctx.len))
-					continue;
-
-				ctx.points[ctx.len].x = sx;
-				ctx.points[ctx.len++].y = ctx.s1[i].y;
-			}
-		}
+		get_searched_regex_match(&ctx);
 
 		doctmp += int_max(textlen, 1);
 		ctx.s1 += int_max(textlen, 1);

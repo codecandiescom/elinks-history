@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.240 2005/04/15 03:30:18 jonas Exp $ */
+/* $Id: ftp.c,v 1.241 2005/04/15 03:47:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,6 @@ struct ftp_connection_info {
 
 	unsigned int dir:1;          /* Directory listing in progress */
 	unsigned int rest_sent:1;    /* Sent RESTore command */
-	unsigned int has_data:1;     /* Do we have data socket? */
 	unsigned int use_pasv:1;     /* Use PASV (yes or no) */
 #ifdef CONFIG_IPV6
 	unsigned int use_epsv:1;     /* Use EPSV */
@@ -128,6 +127,7 @@ static void ftp_got_final_response(struct connection *, struct socket *, struct 
 static void got_something_from_data_connection(struct connection *);
 static void ftp_end_request(struct connection *, int);
 static struct ftp_connection_info *add_file_cmd_to_str(struct connection *);
+static void ftp_data_accept(struct connection *conn);
 
 /* Parse EPSV or PASV response for address and/or port.
  * int *n should point to a sizeof(int) * 6 space.
@@ -952,8 +952,7 @@ ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer
 		}
 	}
 
-	set_handlers(conn->data_socket->fd,
-		     (select_handler_T) got_something_from_data_connection,
+	set_handlers(conn->data_socket->fd, (select_handler_T) ftp_data_accept,
 		     NULL, NULL, conn);
 
 	/* read_from_socket(conn->socket, rb, ftp_got_final_response); */
@@ -1204,16 +1203,13 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 	}
 }
 
-static int
+static void
 ftp_data_accept(struct connection *conn)
 {
 	struct ftp_connection_info *ftp = conn->info;
 	int newsock;
 
-	if (ftp->has_data) return 0;
-
-	ftp->has_data = 1;
-
+	set_connection_timeout(conn);
 	clear_handlers(conn->data_socket->fd);
 
 	if ((conn->socket->protocol_family != 1 && ftp->use_pasv)
@@ -1226,7 +1222,7 @@ ftp_data_accept(struct connection *conn)
 		newsock = accept(conn->data_socket->fd, NULL, NULL);
 		if (newsock < 0) {
 			retry_connection(conn, -errno);
-			return -1;
+			return;
 		}
 		close(conn->data_socket->fd);
 	}
@@ -1236,7 +1232,6 @@ ftp_data_accept(struct connection *conn)
 	set_handlers(newsock,
 		     (select_handler_T) got_something_from_data_connection,
 		     NULL, NULL, conn);
-	return 0;
 }
 
 static void
@@ -1250,8 +1245,6 @@ got_something_from_data_connection(struct connection *conn)
 	/* XXX: This probably belongs rather to connect.c ? */
 
 	set_connection_timeout(conn);
-
-	if (ftp_data_accept(conn)) return;
 
 	if (!conn->cached) conn->cached = get_cache_entry(conn->uri);
 	if (!conn->cached) {

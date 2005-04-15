@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.39 2005/02/28 14:30:17 zas Exp $ */
+/* $Id: error.c,v 1.40 2005/04/15 23:25:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,6 +53,7 @@ struct s_msg_dsc {
 	{S_RESTART,		N_("Request must be restarted")},
 	{S_STATE,		N_("Can't get socket state")},
 	{S_LOCAL_ONLY,		N_("Only local connections are permitted")},
+	{S_NO_FORCED_DNS,	N_("No host in the specified IP family was found")},
 #if defined(CONFIG_GZIP) || defined(CONFIG_BZIP2)
 	{S_ENCODE_ERROR,	N_("Error while decoding file. This might be caused\n"
 				   "by the encoded file being corrupt.") },

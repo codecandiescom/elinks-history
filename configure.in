@@ -169,6 +169,7 @@ AC_CHECK_FUNCS(memmove bcopy stpcpy strdup index isdigit mempcpy memrchr)
 AC_CHECK_FUNCS(snprintf vsnprintf asprintf vasprintf)
 AC_CHECK_FUNCS(getifaddrs getpwnam inet_pton inet_ntop)
 AC_CHECK_FUNCS(fflush fsync sigaction)
+AC_CHECK_FUNCS(gettimeofday clock_gettime)
 
 AC_HAVE_FUNCS(cygwin_conv_to_full_win32_path)
 

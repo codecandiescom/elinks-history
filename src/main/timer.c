@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timer.c,v 1.19 2005/04/15 16:19:50 zas Exp $ */
+/* $Id: timer.c,v 1.20 2005/04/15 16:24:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 struct timer {
 	LIST_HEAD(struct timer);
 
-	double interval;
+	timeval_T interval;
 	void (*func)(void *);
 	void *data;
 };
@@ -35,18 +35,18 @@ void
 check_timers(timeval_T *last_time)
 {
 	timeval_T now;
-	double interval;
+	timeval_T interval;
 	struct timer *timer, *next;
 
 	get_timeval(&now);
-	interval = timeval_diff(last_time, &now);
+	timeval_sub(&interval, last_time, &now);
 
 	foreach (timer, timers) {
-		timer->interval -= interval;
+		timeval_sub_interval(&timer->interval, &interval);
 	}
 
 	foreachsafe (timer, next, timers) {
-		if (timer->interval > 0)
+		if (timeval_is_positive(&timer->interval))
 			break;
 
 		del_from_list(timer);
@@ -61,21 +61,20 @@ check_timers(timeval_T *last_time)
 void
 install_timer(timer_id_T *id, long int delay_in_milliseconds, void (*func)(void *), void *data)
 {
-	double delay_in_seconds = (double) delay_in_milliseconds / 1000.0;
 	struct timer *new_timer, *timer;
 
-	assert(id && delay_in_seconds > 0);
+	assert(id && delay_in_milliseconds > 0);
 
 	new_timer = mem_alloc(sizeof(*new_timer));
 	*id = (timer_id_T) new_timer; /* TIMER_ID_UNDEF is NULL */
 	if (!new_timer) return;
 
-	new_timer->interval = delay_in_seconds;
+	milliseconds_to_timeval(&new_timer->interval, delay_in_milliseconds);
 	new_timer->func = func;
 	new_timer->data = data;
 
 	foreach (timer, timers) {
-		if (timer->interval >= delay_in_seconds)
+		if (timeval_cmp(&timer->interval, &new_timer->interval) >= 0)
 			break;
 	}
 
@@ -101,7 +100,7 @@ int
 get_next_timer_time(timeval_T *t)
 {
 	if (!list_empty(timers)) {
-		double_to_timeval(t, ((struct timer *) &timers)->next->interval);
+		copy_struct(t, &((struct timer *) &timers)->next->interval);
 		return 1;
 	}
 

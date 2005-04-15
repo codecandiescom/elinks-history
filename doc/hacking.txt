@@ -194,7 +194,6 @@ hooks, but not much.  Instead of branching off to some C code when a key is
 pressed, we branch off to some Lua code.
 
 
-
 3, Coding style
 ~~~~~~~~~~~~~~~
 
@@ -222,17 +221,18 @@ but on separate lines near function headers in function definitions.
 Please _USE_ one tab instead of 8 spaces!  It makes things easier.
 
 Always place spaces around '=', after ',' and - if reasonable - around other
-operators as well.  You shouldn't make assignments in conditionals, so do:
+operators as well.  You shouldn't make assignments in conditionals:
 
-foo = mem_alloc(1234);
-if (!foo) panic("aaaaaaaaaaaaaaaaaaaarrrrrrggggggggg");
+	Use:
+		foo = mem_alloc(1234);
+		if (!foo) panic("out of memory");
 
-instead of
+	Instead of:
 
-if (!(foo = mem_alloc(1234))) panic("aaaaaaaaaaaaaaarrrrrrrggggggg");
+		if (!(foo = mem_alloc(1234))) panic("out of memory");
 
-(note that thou shalt ALWAYS test for success on everything - we are supposed
-to die with honor if we are to die)
+Note that thou shalt ALWAYS test for success on everything - we are supposed
+to die with honor if we are to die!
 
 One good point is regarding what language we actually code in. We use C89
 _exclusively_ (if we don't, we provide a fall-back way for survival in C89
@@ -242,8 +242,8 @@ remarkable implication of no C99 are no C++ (//) comments and declarations
 at the start of block only.
 
 
-Comments:
---------
+3.1, Comments
+~~~~~~~~~~~~~
 
 Use blank lines frequently to separate chunks of code.  And use magic "/*" and
 "*/" to give others an idea about what it does and about possible pitfalls.
@@ -258,17 +258,17 @@ Comments should be written in _ENGLISH_ only.
 
 All three following styles of comments are acceptable:
 
-/*
- * Bla bla bla.
- * blabla?
- */
+	/*
+	 * Bla bla bla.
+	 * blabla?
+	 */
 
-/* Bla bla bla.
- * blabla?
- */
+	/* Bla bla bla.
+	 * blabla?
+	 */
 
-/* Bla bla bla.
- * blabla? */
+	/* Bla bla bla.
+	 * blabla? */
 
 The best one usually depends on the actual context.
 
@@ -294,8 +294,9 @@ place it on the same line as the command, if it's
 /* We have to parse this crap now, as it is going to be freed in free_crap() */
 place it on the preceding line.
 
-More about style:
-----------------
+
+3.2, More about style
+~~~~~~~~~~~~~~~~~~~~~
 
 Note: We use short variables names and stupid examples here, do not take that
       as a guideline for _REAL_ coding.  Always use descriptive variables
@@ -423,12 +424,14 @@ func(int a, int b)
   comment about that).
 
 - Please declare functions without parameters as taking void parameter:
+
 	Use:
 		int
 		func(void)
 		{
 			some_code();
 		}
+
 	Instead of:
 		int
 		func()
@@ -451,7 +454,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.32 2005/03/06 17:20:05 zas Exp $ */
+	/* $Id: hacking.txt,v 1.33 2005/04/15 17:48:41 jonas Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -460,8 +463,8 @@ func(int a, int b)
   your exception and be prepared to defend your exception at anytime ;).
 
 
-Coding practices:
-----------------
+3.3, Coding practices
+~~~~~~~~~~~~~~~~~~~~~
 
 - If speed is not critical and especially if you are messing with some struct
   where size might matter, feel encouraged to use bitfields to store boolean
@@ -471,11 +474,11 @@ Coding practices:
   be either 0 or -1, which is probably not what you want.
 
 - Wrap hard initializations of structures with macros, if the structure's
-initializers are going to be spread widely (so that we can grep for them
-easily), there are massive typecasts needed in most of the initializers,
-you feel that order of the fields in structure is unstable yet and it is
-likely to change (and you don't want to change the initializers everytime
-you do so), or in similar cases.
+  initializers are going to be spread widely (so that we can grep for them
+  easily), there are massive typecasts needed in most of the initializers, you
+  feel that order of the fields in structure is unstable yet and it is likely
+  to change (and you don't want to change the initializers everytime you do
+  so), or in similar cases.
 
   You can do it like:
 
@@ -495,53 +498,53 @@ you do so), or in similar cases.
 
   struct example t = NULL_EXAMPLE;
 
-- Please try to keep order of fields from max. to min. of size of each type
-of fields, especially in structures:
+- Please try to keep order of fields from max. to min. of size of each type of
+  fields, especially in structures:
 
-Prefer:
-	long a;
-	int b;
-	char c;
+	Use:
+		long a;
+		int b;
+		char c;
 
-Instead of:
- 	char c;
- 	int b;
- 	long b;
+	Instead of:
+	 	char c;
+	 	int b;
+	 	long b;
 
-It will help to reduce memory padding on some architectures. Note that this
-applies only if this will not affect logical division of the structure. The
-logical composition always takes precedence over this optimization, modulo
-some very rare critical structures.
+  It will help to reduce memory padding on some architectures. Note that this
+  applies only if this will not affect logical division of the structure. The
+  logical composition always takes precedence over this optimization, modulo
+  some very rare critical structures.
 
 - Please do not use sizeof(struct item_struct_name) but instead sizeof(*item)
   when possible:
 
-struct example {
-	int *integers;
-	void **pointers;
-}
+  struct example {
+	  int *integers;
+	  void **pointers;
+  }
 
-struct example *item;
+  struct example *item;
 
-Prefer:
-item = mem_alloc(sizeof(*item));
-memset(item, 0, sizeof(*item));
-item->integers = mem_calloc(10, sizeof(*item->integers));
-item->pointers = mem_calloc(10, sizeof(*item->pointers));
+	Use:
+		item = mem_alloc(sizeof(*item));
+		memset(item, 0, sizeof(*item));
+		item->integers = mem_calloc(10, sizeof(*item->integers));
+		item->pointers = mem_calloc(10, sizeof(*item->pointers));
 
-Instead of:
-item = mem_alloc(sizeof(struct example));
-memset(item, 0, sizeof(struct example));
-item->integers = mem_calloc(10, sizeof(int));
-item->pointers = mem_calloc(10, sizeof(void *));
+	Instead of:
+		item = mem_alloc(sizeof(struct example));
+		memset(item, 0, sizeof(struct example));
+		item->integers = mem_calloc(10, sizeof(int));
+		item->pointers = mem_calloc(10, sizeof(void *));
 
-The preferred form eases futur changes in types, and maintain size vs type
-coherence.
+  The preferred form eases future changes in types, and maintain size vs type
+  coherence.
 
 - Please postfix defined types with _T:
 
-typedef int (some_func_T)(void *);
-typedef long long our_long_T;
+	typedef int (some_func_T)(void *);
+	typedef long long our_long_T;
 
 
 4, Patches
@@ -603,4 +606,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.32 2005/03/06 17:20:05 zas Exp $
+$Id: hacking.txt,v 1.33 2005/04/15 17:48:41 jonas Exp $

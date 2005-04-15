@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.116 2005/04/15 02:39:34 jonas Exp $ */
+/* $Id: dns.c,v 1.117 2005/04/15 02:49:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -421,7 +421,6 @@ done_dns_lookup(struct dnsquery *query, enum dns_result result)
 		/* If the query failed, use the existing DNS cache entry even if
 		 * it is too old. */
 		if (result == DNS_ERROR) {
-			assert(dnsentry->addrno > 0);
 			query->done(query->data, dnsentry->addr, dnsentry->addrno);
 			goto done;
 		}

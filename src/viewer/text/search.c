@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.333 2005/04/15 21:17:48 miciah Exp $ */
+/* $Id: search.c,v 1.334 2005/04/15 21:20:04 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -281,13 +281,18 @@ get_search_region_from_search_nodes(struct search *s1, struct search *s2,
 
 #ifdef HAVE_REGEX_H
 struct regex_match_context {
+	/* common */
+	struct search *s1;
 	int textlen;
+
+	/* get_searched_match */
 	int xoffset;
 	int yoffset;
 	struct box *box;
-	struct search *s1;
 	struct point *points;
 	int len;
+
+	/* is_in_range_regex_match */
 	int found;
 	int y;
 	int y2;

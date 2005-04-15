@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.204 2005/04/15 13:03:01 jonas Exp $ */
+/* $Id: connect.c,v 1.205 2005/04/15 13:14:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,13 +253,25 @@ make_connection(struct connection *conn, struct socket *socket,
 /* Returns negative if error, otherwise pasv socket's fd. */
 int
 get_pasv_socket(struct connection *conn, int ctrl_sock,
-		struct sockaddr_storage *addr)
+		int family, struct sockaddr_storage *addr)
 {
 	struct sockaddr_in bind_addr4;
-	struct sockaddr *bind_addr = (struct sockaddr *) &bind_addr4;
+	struct sockaddr *bind_addr;
 	struct sockaddr *pasv_addr = (struct sockaddr *) addr;
-	size_t addrlen = sizeof(bind_addr4);
+	size_t addrlen;
 	int sock, len;
+#ifdef CONFIG_IPV6
+	struct sockaddr_in6 bind_addr6;
+
+	if (family == AF_INET6) {
+		bind_addr = (struct sockaddr *) &bind_addr6;
+		addrlen   = sizeof(bind_addr6);
+	} else
+#endif
+	{
+		bind_addr = (struct sockaddr *) &bind_addr4;
+		addrlen   = sizeof(bind_addr4);
+	}
 
 	memset(pasv_addr, 0, sizeof(addrlen));
 	memset(bind_addr, 0, sizeof(addrlen));
@@ -286,7 +298,13 @@ sock_error:
 	/* Bind it to some port */
 
 	memcpy(bind_addr, pasv_addr, addrlen);
-	bind_addr4.sin_port = 0;
+#ifdef CONFIG_IPV6
+	if (family == AF_INET6)
+		bind_addr6.sin6_port = 0;
+	else
+#endif
+		bind_addr4.sin_port = 0;
+
 	if (bind(sock, bind_addr, addrlen))
 		goto sock_error;
 

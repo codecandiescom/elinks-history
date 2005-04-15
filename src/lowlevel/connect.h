@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.72 2005/04/15 04:11:50 jonas Exp $ */
+/* $Id: connect.h,v 1.73 2005/04/15 13:14:01 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -137,7 +137,9 @@ void connect_socket(struct socket *socket, int connection_state);
 /* Used by the SSL layer when negotiating. */
 void dns_exception(struct socket *socket);
 
-int get_pasv_socket(struct connection *, int, struct sockaddr_storage *);
+int get_pasv_socket(struct connection *conn, int ctrl_sock,
+		    int family, struct sockaddr_storage *addr);
+
 #ifdef CONFIG_IPV6
 int get_pasv6_socket(struct connection *, int, struct sockaddr_storage *);
 #endif

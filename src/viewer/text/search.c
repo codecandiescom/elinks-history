@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.332 2005/04/15 21:13:34 miciah Exp $ */
+/* $Id: search.c,v 1.333 2005/04/15 21:17:48 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -316,6 +316,24 @@ init_regex(regex_t *regex, unsigned char *pattern)
 	return 1;
 }
 
+static void
+is_in_range_regex_match(struct regex_match_context *ctx)
+{
+	int i;
+
+	if (ctx->s1[ctx->textlen].y < ctx->y || ctx->s1[ctx->textlen].y >= ctx->y2)
+		return;
+
+	ctx->found = 1;
+
+	for (i = 0; i < ctx->textlen; i++) {
+		if (!ctx->s1[i].n) continue;
+
+		int_upper_bound(ctx->min, ctx->s1[i].x);
+		int_lower_bound(ctx->max, ctx->s1[i].x + ctx->s1[i].n);
+	}
+}
+
 static int
 is_in_range_regex(struct document *document, int y, int height,
 		  unsigned char *text, int textlen,
@@ -327,7 +345,6 @@ is_in_range_regex(struct document *document, int y, int height,
 	unsigned char *doctmp;
 	int doclen;
 	int regexec_flags = 0;
-	int i;
 	regex_t regex;
 	regmatch_t regmatch;
 	int pos = 0;
@@ -378,19 +395,8 @@ find_next:
 		ctx.s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
-		if (ctx.s1[ctx.textlen].y < ctx.y || ctx.s1[ctx.textlen].y >= ctx.y2)
-			goto next;
+		is_in_range_regex_match(&ctx);
 
-		ctx.found = 1;
-
-		for (i = 0; i < ctx.textlen; i++) {
-			if (!ctx.s1[i].n) continue;
-
-			int_upper_bound(ctx.min, ctx.s1[i].x);
-			int_lower_bound(ctx.max, ctx.s1[i].x + ctx.s1[i].n);
-		}
-
-next:
 		doctmp += int_max(ctx.textlen, 1);
 		ctx.s1 += int_max(ctx.textlen, 1);
 	}

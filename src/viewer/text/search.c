@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.323 2005/04/15 19:47:08 miciah Exp $ */
+/* $Id: search.c,v 1.324 2005/04/15 19:48:31 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -332,8 +332,12 @@ is_in_range_regex(struct document *document, int y, int height,
 	doctmp = doc;
 
 find_next:
-	while (pos < doclen && (search_start[pos].y < y1
-				|| search_start[pos].y > y2)) pos++;
+	while (pos < doclen) {
+		int y = search_start[pos].y;
+
+		if (y >= y1 && y <= y2) break;
+		pos++;
+	}
 	doctmp = &doc[pos];
 	s1 = &search_start[pos];
 	while (pos < doclen && search_start[pos].y >= y1

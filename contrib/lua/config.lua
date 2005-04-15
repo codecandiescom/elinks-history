@@ -1,5 +1,5 @@
 -- Configuration for hooks.lua file, put in ~/.elinks/ as config.lua.
--- $Id: config.lua,v 1.10 2005/03/27 22:36:46 miciah Exp $
+-- $Id: config.lua,v 1.11 2005/04/15 18:15:24 miciah Exp $
 
 -- ** IMPORTANT **
 -- Individual functions may be disabled for security by assigning them
@@ -57,6 +57,12 @@
 -- in the Options Manager or in elinks.conf
 
 --  dofile (elinks_home.."/highlight.lua")
+
+-- Babelfish: This allows one to enter the the URL 'bb <from> <to>
+-- <url>|<text>' to translate the given url or text string between
+-- the given languages.
+
+--  dofile (elinks_home.."/babelfish.lua")
 
 --  dofile (elinks_home.."/md5checks.lua")
 --  dofile (elinks_home.."/remote.lua")

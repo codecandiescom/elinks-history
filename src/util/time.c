@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.27 2005/04/15 14:21:46 zas Exp $ */
+/* $Id: time.c,v 1.28 2005/04/15 14:45:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,8 +127,7 @@ timeval_cmp(timeval_T *t1, timeval_T *t2)
 {
 	if (t1->sec > t2->sec) return 1;
 	if (t1->sec < t2->sec) return -1;
-	if (t1->usec > t2->usec) return 1;
-	if (t1->usec < t2->usec) return -1;
-	return 0;
+
+	return t1->usec - t2->usec;
 }
 

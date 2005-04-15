@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.70 2005/04/15 15:03:48 miciah Exp $
+-- $Id: hooks.lua.in,v 1.71 2005/04/15 17:51:28 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -252,7 +252,8 @@ function bugzilla (base_url, arguments)
 		return base_url..'show_bug.cgi?id='..arguments
 	end
 
-	return base_url..'buglist.cgi?short_desc='..escape(arguments)
+	return base_url..'buglist.cgi?short_desc_type=allwordssubstr'
+               ..'&short_desc='..escape(arguments)
 end
 
 smartprefixes = {

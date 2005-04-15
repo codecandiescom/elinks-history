@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.107 2005/04/15 00:00:02 jonas Exp $ */
+/* $Id: dns.c,v 1.108 2005/04/15 00:08:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -316,16 +316,18 @@ async_dns_error(void *data)
 static int
 init_async_dns_lookup(struct dnsquery *dnsquery, int force_async)
 {
-	if (force_async || get_opt_bool("connection.async_dns")) {
-		dnsquery->h = start_thread(async_dns_writer, dnsquery->name,
-					   strlen(dnsquery->name) + 1);
-		if (dnsquery->h != -1) {
-			set_handlers(dnsquery->h, async_dns_reader, NULL,
-				     async_dns_error, dnsquery);
-		}
-	}
+	if (!force_async && !get_opt_bool("connection.async_dns"))
+		return 0;
 
-	return (dnsquery->h != -1);
+	dnsquery->h = start_thread(async_dns_writer, dnsquery->name,
+				   strlen(dnsquery->name) + 1);
+	if (dnsquery->h == -1)
+		return 0;
+
+	set_handlers(dnsquery->h, (select_handler_T) async_dns_reader, NULL,
+		     (select_handler_T) async_dns_error, dnsquery);
+
+	return 1;
 }
 
 static void

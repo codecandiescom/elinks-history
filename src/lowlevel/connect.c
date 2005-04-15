@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.210 2005/04/15 23:25:25 jonas Exp $ */
+/* $Id: connect.c,v 1.211 2005/04/15 23:31:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,10 +209,11 @@ dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 
 	/* XXX: Passing non-result state here is bad but a lack of alternatives
 	 * makes it so. Well adding get_state() socket operation could maybe fix
-	 * it but the returned state could still be a non-result one. It will
-	 * however only be a problem if connect_socket() fail without doing any
-	 * system calls which is only the case when forcing the IP family. So it
-	 * is better to handle it in connect_socket(). */
+	 * it but the returned state would most likely be a non-result one at
+	 * this point in the connection lifecycle. This will, however, only be a
+	 * problem if connect_socket() fails without doing any system calls
+	 * which is only the case when forcing the IP family. So it is better to
+	 * handle it in connect_socket(). */
 	connect_socket(socket, S_CONN);
 }
 

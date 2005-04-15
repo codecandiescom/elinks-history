@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.318 2005/04/13 18:34:22 miciah Exp $ */
+/* $Id: search.c,v 1.319 2005/04/15 19:27:37 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -274,6 +274,27 @@ get_search_region_from_search_nodes(struct search *s1, int doclen)
 
 #ifdef HAVE_REGEX_H
 static int
+init_regex(regex_t *regex, unsigned char *pattern)
+{
+	int regex_flags = REG_NEWLINE;
+	int reg_err;
+
+	if (get_opt_int("document.browse.search.regex") == 2)
+		regex_flags |= REG_EXTENDED;
+
+	if (!get_opt_bool("document.browse.search.case"))
+		regex_flags |= REG_ICASE;
+
+	reg_err = regcomp(regex, pattern, regex_flags);
+	if (reg_err) {
+		regfree(regex);
+		return 0;
+	}
+
+	return 1;
+}
+
+static int
 is_in_range_regex(struct document *document, int y, int height,
 		  unsigned char *text, int textlen,
 		  int *min, int *max,
@@ -284,27 +305,15 @@ is_in_range_regex(struct document *document, int y, int height,
 	unsigned char *doctmp;
 	int doclen;
 	int found = 0;
-	int regex_flags = REG_NEWLINE;
 	int regexec_flags = 0;
 	int i;
-	int reg_err;
 	regex_t regex;
 	regmatch_t regmatch;
 	int pos = 0;
 	struct search *search_start = s1;
 	unsigned char save_c;
 
-	if (get_opt_int("document.browse.search.regex") == 2)
-		regex_flags |= REG_EXTENDED;
-
-	if (!get_opt_bool("document.browse.search.case"))
-		regex_flags |= REG_ICASE;
-
-	reg_err = regcomp(&regex, text, regex_flags);
-	if (reg_err) {
-		regfree(&regex);
-		return -2;
-	}
+	if (!init_regex(&regex, text)) return -2;
 
 	doclen = s2 - s1 + textlen;
 	if (!doclen) {
@@ -539,9 +548,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	struct point *points = NULL;
 	int xoffset, yoffset;
 	int len = 0;
-	int regex_flags = REG_NEWLINE;
 	int regexec_flags = 0;
-	int reg_err;
 	int i;
 	regex_t regex;
 	regmatch_t regmatch;
@@ -551,22 +558,14 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	struct box *box;
 	int y1, y2;
 
-	if (get_opt_int("document.browse.search.regex") == 2)
-		regex_flags |= REG_EXTENDED;
-
-	if (!get_opt_bool("document.browse.search.case"))
-		regex_flags |= REG_ICASE;
-
 	/* TODO: show error message */
-	reg_err = regcomp(&regex, *doc_view->search_word, regex_flags);
-	if (reg_err) {
+	if (!init_regex(&regex, *doc_view->search_word)) {
 #if 0
 		/* Where and how should we display the error dialog ? */
 		unsigned char regerror_string[MAX_STR_LEN];
 
 		regerror(reg_err, &regex, regerror_string, sizeof(regerror_string));
 #endif
-		regfree(&regex);
 		goto ret;
 	}
 

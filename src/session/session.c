@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.618 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: session.c,v 1.619 2005/04/15 20:36:48 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -238,6 +238,7 @@ print_error_dialog(struct session *ses, enum connection_state state,
 
 	uristring = uri ? get_uri_string(uri, URI_PUBLIC) : NULL;
 	if (uristring) {
+		decode_uri_for_display(uristring);
 		add_format_to_string(&msg,
 			_("Unable to retrieve %s", ses->tab->term),
 			uristring);

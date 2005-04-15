@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.266 2005/04/15 22:34:21 jonas Exp $ */
+/* $Id: connection.c,v 1.267 2005/04/15 23:03:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,7 +723,6 @@ abort_connection(struct connection *conn, enum connection_state state)
 	set_connection_state(conn, state);
 
 	if (conn->running) interrupt_connection(conn);
-	/* notify_connection_callbacks(conn); */
 	done_connection(conn);
 	register_check_queue();
 }
@@ -743,7 +742,6 @@ retry_connection(struct connection *conn, enum connection_state state)
 
 	interrupt_connection(conn);
 	if (conn->uri->post || !max_tries || ++conn->tries >= max_tries) {
-		/* notify_connection_callbacks(conn); */
 		done_connection(conn);
 		register_check_queue();
 	} else {

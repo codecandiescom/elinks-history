@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.73 2005/04/15 13:14:01 jonas Exp $ */
+/* $Id: socket.h,v 1.74 2005/04/15 13:14:44 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -139,10 +139,6 @@ void dns_exception(struct socket *socket);
 
 int get_pasv_socket(struct connection *conn, int ctrl_sock,
 		    int family, struct sockaddr_storage *addr);
-
-#ifdef CONFIG_IPV6
-int get_pasv6_socket(struct connection *, int, struct sockaddr_storage *);
-#endif
 
 /* Writes @datalen bytes from @data buffer to the passed @socket. When all data
  * is written the @done callback will be called. */

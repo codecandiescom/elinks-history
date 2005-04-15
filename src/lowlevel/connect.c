@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.205 2005/04/15 13:14:01 jonas Exp $ */
+/* $Id: connect.c,v 1.206 2005/04/15 13:14:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,59 +325,6 @@ sock_error:
 }
 
 #ifdef CONFIG_IPV6
-int
-get_pasv6_socket(struct connection *conn, int ctrl_sock,
-		 struct sockaddr_storage *s6)
-{
-	int sock;
-	struct sockaddr_in6 s0;
-	int len = sizeof(s0);
-
-	memset(&s0, 0, sizeof(s0));
-	memset(s6, 0, sizeof(*s6));
-
-	/* Get our endpoint of the control socket */
-
-	if (getsockname(ctrl_sock, (struct sockaddr *) s6, &len)) {
-sock_error:
-		retry_connection(conn, -errno);
-		return -1;
-	}
-
-	/* Get a passive socket */
-
-	sock = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
-	if (sock < 0)
-		goto sock_error;
-
-	/* Set it non-blocking */
-
-	if (set_nonblocking_fd(sock) < 0)
-		goto sock_error;
-
-	/* Bind it to some port */
-
-	memcpy(&s0, s6, sizeof(s0));
-	s0.sin6_port = 0;
-	if (bind(sock, (struct sockaddr *) &s0, sizeof(s0)))
-		goto sock_error;
-
-	/* Get our endpoint of the passive socket and save it to port */
-
-	len = sizeof(s0);
-	if (getsockname(sock, (struct sockaddr *) s6, &len))
-		goto sock_error;
-
-	/* Go listen */
-
-	if (listen(sock, 1))
-		goto sock_error;
-
-	set_ip_tos_throughput(sock);
-
-	return sock;
-}
-
 static inline int
 check_if_local_address6(struct sockaddr_in6 *addr)
 {

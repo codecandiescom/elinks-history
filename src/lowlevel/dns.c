@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.110 2005/04/15 00:11:20 jonas Exp $ */
+/* $Id: dns.c,v 1.111 2005/04/15 00:13:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,11 +332,11 @@ init_async_dns_lookup(struct dnsquery *dnsquery, int force_async)
 static void
 done_async_dns_lookup(struct dnsquery *dnsquery)
 {
-	if (dnsquery->h != -1) {
-		clear_handlers(dnsquery->h);
-		close(dnsquery->h);
-		dnsquery->h = -1;
-	}
+	if (dnsquery->h == -1) return;
+
+	clear_handlers(dnsquery->h);
+	close(dnsquery->h);
+	dnsquery->h = -1;
 }
 #else
 #define init_async_dns_lookup(dnsquery, force)	(0)

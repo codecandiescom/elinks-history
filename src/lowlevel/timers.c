@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timers.c,v 1.17 2005/04/15 14:21:46 zas Exp $ */
+/* $Id: timers.c,v 1.18 2005/04/15 16:19:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,17 +36,16 @@ check_timers(timeval_T *last_time)
 {
 	timeval_T now;
 	double interval;
-	struct timer *timer;
+	struct timer *timer, *next;
 	
 	get_timeval(&now);
 	interval = timeval_diff(last_time, &now);
 	
 	foreach (timer, timers) timer->interval -= interval;
 
-	while (!list_empty(timers)) {
-		timer = timers.next;
-
-		if (timer->interval > 0) break;
+	foreachsafe (timer, next, timers) {
+		if (timer->interval > 0)
+			break;
 
 		del_from_list(timer);
 		timer->func(timer->data);

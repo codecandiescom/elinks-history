@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.111 2005/04/15 00:13:00 jonas Exp $ */
+/* $Id: dns.c,v 1.112 2005/04/15 01:00:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,7 +149,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	int i;
 
 	if (!name || !addrs || !addrno)
-		return -1;
+		return DNS_ERROR;
 
 #ifdef CONFIG_IPV6
 	/* I had a strong preference for the following, but the glibc is really
@@ -170,7 +170,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 #endif
 	{
 		hostent = gethostbyname(name);
-		if (!hostent) return -1;
+		if (!hostent) return DNS_ERROR;
 	}
 #endif
 
@@ -185,7 +185,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	 * -- Mikulas).  So we don't if in_thread != 0. */
 	*addrs = in_thread ? calloc(i, sizeof(**addrs))
 			   : mem_calloc(i, sizeof(**addrs));
-	if (!*addrs) return -1;
+	if (!*addrs) return DNS_ERROR;
 	*addrno = i;
 
 #ifdef CONFIG_IPV6
@@ -206,7 +206,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	}
 #endif
 
-	return 0;
+	return DNS_SUCCESS;
 }
 
 
@@ -220,7 +220,8 @@ async_dns_writer(void *data, int h)
 	struct sockaddr_storage *addrs;
 	int addrno, i, done, todo;
 
-	if (do_real_lookup(name, &addrs, &addrno, 1) < 0) return;
+	if (do_real_lookup(name, &addrs, &addrno, 1) == DNS_ERROR)
+		return;
 
 	/* We will do blocking I/O here, however it's only local communication
 	 * and it's supposed to be just a flash talk, so it shouldn't matter.
@@ -259,7 +260,7 @@ async_dns_writer(void *data, int h)
 static void
 async_dns_reader(struct dnsquery *query)
 {
-	int res = -1;
+	enum dns_result result = DNS_ERROR;
 	int i, done, todo, *addrno;
 
 	/* We will do blocking I/O here, however it's only local communication
@@ -296,18 +297,19 @@ async_dns_reader(struct dnsquery *query)
 		assert(done == todo);
 	}
 
-	res = 0;
+	result = DNS_SUCCESS;
 
 done:
-	if (res < 0) mem_free_set(&query->addr, NULL);
+	if (result == DNS_ERROR)
+		mem_free_set(&query->addr, NULL);
 
-	done_dns_lookup(query, res);
+	done_dns_lookup(query, result);
 }
 
 static void
 async_dns_error(struct dnsquery *query)
 {
-	done_dns_lookup(query, -1);
+	done_dns_lookup(query, DNS_ERROR);
 }
 
 static int
@@ -344,25 +346,25 @@ done_async_dns_lookup(struct dnsquery *dnsquery)
 #endif /* NO_ASYNC_LOOKUP */
 
 
-static int
+static enum dns_result
 do_lookup(struct dnsquery *query, int force_async)
 {
-	int res;
+	enum dns_result result;
 
 	/* DBG("starting lookup for %s", query->name); */
 
 	/* Async lookup */
 	if (init_async_dns_lookup(query, force_async))
-		return 1;
+		return DNS_ASYNC;
 
 	/* Sync lookup */
-	res = do_real_lookup(query->name, &query->addr, &query->addrno, 0);
-	done_dns_lookup(query, res);
+	result = do_real_lookup(query->name, &query->addr, &query->addrno, 0);
+	done_dns_lookup(query, result);
 
-	return 0;
+	return result;
 }
 
-static int
+static enum dns_result
 do_queued_lookup(struct dnsquery *query)
 {
 #ifdef THREAD_SAFE_LOOKUP
@@ -384,7 +386,7 @@ do_queued_lookup(struct dnsquery *query)
 
 
 static void
-done_dns_lookup(struct dnsquery *query, int res)
+done_dns_lookup(struct dnsquery *query, enum dns_result result)
 {
 	struct dnsentry *dnsentry;
 
@@ -411,7 +413,7 @@ done_dns_lookup(struct dnsquery *query, int res)
 
 	dnsentry = find_in_dns_cache(query->name);
 	if (dnsentry) {
-		if (res < 0) {
+		if (result == DNS_ERROR) {
 			int size;
 			/* query->addr(no) point to allocated addresses. */
 
@@ -424,14 +426,14 @@ done_dns_lookup(struct dnsquery *query, int res)
 			memcpy(query->addr, dnsentry->addr, size);
 			query->addrno = dnsentry->addrno;
 
-			res = 0;
+			result = DNS_SUCCESS;
 			goto done;
 		}
 
 		del_dns_cache_entry(dnsentry);
 	}
 
-	if (res >= 0)
+	if (result == DNS_SUCCESS)
 		add_to_dns_cache(query->name, query->addr, query->addrno);
 
 done:
@@ -443,7 +445,7 @@ done:
 	mem_free(query);
 }
 
-static int
+static enum dns_result
 init_dns_lookup(unsigned char *name, void **queryref,
 		dns_callback_T done, void *data)
 {
@@ -453,7 +455,7 @@ init_dns_lookup(unsigned char *name, void **queryref,
 	query = mem_calloc(1, sizeof(*query) + namelen);
 	if (!query) {
 		done(data, NULL, 0);
-		return 0;
+		return DNS_ERROR;
 	}
 
 	query->done = done;
@@ -469,7 +471,7 @@ init_dns_lookup(unsigned char *name, void **queryref,
 }
 
 
-int
+enum dns_result
 find_host(unsigned char *name, void **queryref,
 	  dns_callback_T done, void *data, int no_cache)
 {

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.117 2005/04/05 07:53:39 pasky Exp $ */
+/* $Id: cmdline.c,v 1.118 2005/04/15 01:00:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	if (*argc > 1) return gettext("Too many parameters");
 
 	(*argv)++; (*argc)--;
-	if (do_real_lookup(*(*argv - 1), &addrs, &addrno, 0)) {
+	if (do_real_lookup(*(*argv - 1), &addrs, &addrno, 0) == DNS_ERROR) {
 #ifdef HAVE_HERROR
 		herror(gettext("error"));
 #else

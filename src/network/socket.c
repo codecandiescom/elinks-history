@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.197 2005/04/14 13:03:03 jonas Exp $ */
+/* $Id: socket.c,v 1.198 2005/04/15 01:00:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -207,7 +207,7 @@ make_connection(struct connection *conn, struct socket *socket,
 {
 	unsigned char *host = get_uri_string(conn->uri, URI_DNS_HOST);
 	struct conn_info *conn_info;
-	int async;
+	enum dns_result result;
 
 	socket->ops->set_timeout(socket->conn, socket, 0);
 
@@ -229,12 +229,13 @@ make_connection(struct connection *conn, struct socket *socket,
 	debug_transfer_log(host, -1);
 	debug_transfer_log("\n", -1);
 
-	async = find_host(host, &conn_info->dnsquery, (dns_callback_T) dns_found,
-			  socket, conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
+	result = find_host(host, &conn_info->dnsquery, (dns_callback_T) dns_found,
+			   socket, conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 
 	mem_free(host);
 
-	if (async) socket->ops->set_state(socket->conn, socket, S_DNS);
+	if (result == DNS_ASYNC)
+		socket->ops->set_state(socket->conn, socket, S_DNS);
 }
 
 

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.337 2005/04/15 21:27:39 miciah Exp $ */
+/* $Id: search.c,v 1.338 2005/04/15 21:30:58 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -629,6 +629,11 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	ctx.textlen = textlen;
 	ctx.points = NULL;
 	ctx.len = 0;
+	ctx.box = &doc_view->box;
+	ctx.xoffset = ctx.box->x - doc_view->vs->x;
+	ctx.yoffset = ctx.box->y - doc_view->vs->y;
+	ctx.y1 = doc_view->vs->y - 1;
+	ctx.y2 = doc_view->vs->y + ctx.box->height;
 
 	/* TODO: show error message */
 	if (!init_regex(&regex, *doc_view->search_word)) {
@@ -646,12 +651,6 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		regfree(&regex);
 		goto ret;
 	}
-
-	ctx.box = &doc_view->box;
-	ctx.xoffset = ctx.box->x - doc_view->vs->x;
-	ctx.yoffset = ctx.box->y - doc_view->vs->y;
-	ctx.y1 = doc_view->vs->y - 1;
-	ctx.y2 = doc_view->vs->y + ctx.box->height;
 
 	doctmp = doc;
 

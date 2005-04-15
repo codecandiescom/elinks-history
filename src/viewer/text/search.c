@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.325 2005/04/15 19:51:38 miciah Exp $ */
+/* $Id: search.c,v 1.326 2005/04/15 19:52:32 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -341,8 +341,12 @@ find_next:
 	doctmp = &doc[pos];
 	s1 = &search_start[pos];
 
-	while (pos < doclen && search_start[pos].y >= y1
-			    && search_start[pos].y <= y2) pos++;
+	while (pos < doclen) {
+		int y = search_start[pos].y;
+
+		if (y < y1 || y > y2) break;
+		pos++;
+	}
 	save_c = doc[pos];
 	doc[pos] = 0;
 

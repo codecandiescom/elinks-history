@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.336 2005/04/15 21:26:10 miciah Exp $ */
+/* $Id: search.c,v 1.337 2005/04/15 21:27:39 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -284,6 +284,8 @@ struct regex_match_context {
 	/* common */
 	struct search *s1;
 	int textlen;
+	int y1;
+	int y2;
 
 	/* get_searched_match */
 	int xoffset;
@@ -295,7 +297,6 @@ struct regex_match_context {
 	/* is_in_range_regex_match */
 	int found;
 	int y;
-	int y2;
 	int *min;
 	int *max;
 };
@@ -345,7 +346,6 @@ is_in_range_regex(struct document *document, int y, int height,
 		  int *min, int *max,
 		  struct search *s1, struct search *s2)
 {
-	int y1 = y - 1;
 	unsigned char *doc;
 	unsigned char *doctmp;
 	int doclen;
@@ -360,6 +360,7 @@ is_in_range_regex(struct document *document, int y, int height,
 	ctx.found = 0;
 	ctx.textlen = textlen;
 	ctx.y = y;
+	ctx.y1 = y - 1;
 	ctx.y2 = y + height;
 	ctx.min = min;
 	ctx.max = max;
@@ -378,7 +379,7 @@ find_next:
 	while (pos < doclen) {
 		int y = search_start[pos].y;
 
-		if (y >= y1 && y <= ctx.y2) break;
+		if (y >= ctx.y1 && y <= ctx.y2) break;
 		pos++;
 	}
 	doctmp = &doc[pos];
@@ -387,7 +388,7 @@ find_next:
 	while (pos < doclen) {
 		int y = search_start[pos].y;
 
-		if (y < y1 || y > ctx.y2) break;
+		if (y < ctx.y1 || y > ctx.y2) break;
 		pos++;
 	}
 	save_c = doc[pos];
@@ -623,7 +624,6 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	int pos = 0;
 	struct search *search_start = s1;
 	unsigned char save_c;
-	int y1;
 	struct regex_match_context ctx;
 
 	ctx.textlen = textlen;
@@ -650,7 +650,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	ctx.box = &doc_view->box;
 	ctx.xoffset = ctx.box->x - doc_view->vs->x;
 	ctx.yoffset = ctx.box->y - doc_view->vs->y;
-	y1 = doc_view->vs->y - 1;
+	ctx.y1 = doc_view->vs->y - 1;
 	ctx.y2 = doc_view->vs->y + ctx.box->height;
 
 	doctmp = doc;
@@ -659,7 +659,7 @@ find_next:
 	while (pos < doclen) {
 		int y = search_start[pos].y;
 
-		if (y >= y1 && y <= ctx.y2) break;
+		if (y >= ctx.y1 && y <= ctx.y2) break;
 		pos++;
 	}
 	doctmp = &doc[pos];
@@ -668,7 +668,7 @@ find_next:
 	while (pos < doclen) {
 		int y = search_start[pos].y;
 
-		if (y < y1 || y > ctx.y2) break;
+		if (y < ctx.y1 || y > ctx.y2) break;
 		pos++;
 	}
 	save_c = doc[pos];

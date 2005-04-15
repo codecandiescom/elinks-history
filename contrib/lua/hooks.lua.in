@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.67 2005/04/15 14:40:47 miciah Exp $
+-- $Id: hooks.lua.in,v 1.68 2005/04/15 14:42:08 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -71,7 +71,7 @@ function pre_format_html_hook (url, html)
     table.foreachi(pre_format_html_hooks,
                    function (i, fn)
                        local new,stop = fn(url,html)
-                   
+
                        if new then html=new changed=1 end
                        return stop
                    end)
@@ -84,7 +84,7 @@ function goto_url_hook (url, current_url)
     table.foreachi(goto_url_hooks,
                    function (i, fn)
                        local new,stop = fn(url, current_url)
-                   
+
                        url = new
 
                        return stop
@@ -98,7 +98,7 @@ function follow_url_hook (url)
     table.foreachi(follow_url_hooks,
                    function (i, fn)
                        local new,stop = fn(url)
-                   
+
                        url = new
 
                        return stop
@@ -240,7 +240,7 @@ function bugzilla (base_url, arguments)
 
 	return base_url..'buglist.cgi?short_desc='..escape(arguments)
 end
-	
+
 smartprefixes = {
     arc = "http://web.archive.org/web/*/%s",
     bb = "http://babelfish.altavista.com/babelfish/tr?urltext=%s",
@@ -323,7 +323,7 @@ function expand_tilde (url, current_url)
 end
 table.insert(goto_url_hooks, expand_tilde)
 
-    
+
 -- Don't take localhost as directory name
 function expand_localhost (url)
     if not match("localhost", url) then return url,nil end

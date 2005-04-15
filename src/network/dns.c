@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.106 2005/04/14 23:52:33 jonas Exp $ */
+/* $Id: dns.c,v 1.107 2005/04/15 00:00:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,7 +214,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 
 #ifndef NO_ASYNC_LOOKUP
 static void
-lookup_fn(void *data, int h)
+async_dns_writer(void *data, int h)
 {
 	unsigned char *name = (unsigned char *) data;
 	struct sockaddr_storage *addrs;
@@ -257,7 +257,7 @@ lookup_fn(void *data, int h)
 }
 
 static void
-end_real_lookup(void *data)
+async_dns_reader(void *data)
 {
 	struct dnsquery *query = (struct dnsquery *) data;
 	int res = -1;
@@ -306,7 +306,7 @@ done:
 }
 
 static void
-failed_real_lookup(void *data)
+async_dns_error(void *data)
 {
 	struct dnsquery *query = (struct dnsquery *) data;
 
@@ -317,11 +317,11 @@ static int
 init_async_dns_lookup(struct dnsquery *dnsquery, int force_async)
 {
 	if (force_async || get_opt_bool("connection.async_dns")) {
-		dnsquery->h = start_thread(lookup_fn, dnsquery->name,
+		dnsquery->h = start_thread(async_dns_writer, dnsquery->name,
 					   strlen(dnsquery->name) + 1);
 		if (dnsquery->h != -1) {
-			set_handlers(dnsquery->h, end_real_lookup, NULL,
-				     failed_real_lookup, dnsquery);
+			set_handlers(dnsquery->h, async_dns_reader, NULL,
+				     async_dns_error, dnsquery);
 		}
 	}
 

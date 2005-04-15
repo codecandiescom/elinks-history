@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.199 2005/04/15 02:39:34 jonas Exp $ */
+/* $Id: connect.c,v 1.200 2005/04/15 04:11:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,9 +252,10 @@ make_connection(struct connection *conn, struct socket *socket,
 
 /* Returns negative if error, otherwise pasv socket's fd. */
 int
-get_pasv_socket(struct connection *conn, int ctrl_sock, unsigned char *port)
+get_pasv_socket(struct connection *conn, int ctrl_sock,
+		struct sockaddr_storage *sa)
 {
-	struct sockaddr_in sa, sb;
+	struct sockaddr_in sb;
 	int sock, len;
 
 	memset(&sa, 0, sizeof(sa));
@@ -262,7 +263,7 @@ get_pasv_socket(struct connection *conn, int ctrl_sock, unsigned char *port)
 
 	/* Get our endpoint of the control socket */
 	len = sizeof(sa);
-	if (getsockname(ctrl_sock, (struct sockaddr *) &sa, &len)) {
+	if (getsockname(ctrl_sock, (struct sockaddr *) sa, &len)) {
 sock_error:
 		retry_connection(conn, -errno);
 		return -1;
@@ -281,18 +282,16 @@ sock_error:
 
 	/* Bind it to some port */
 
-	copy_struct(&sb, &sa);
+	memcpy(&sb, sa, sizeof(sb));
 	sb.sin_port = 0;
 	if (bind(sock, (struct sockaddr *) &sb, sizeof(sb)))
 		goto sock_error;
 
 	/* Get our endpoint of the passive socket and save it to port */
 
-	len = sizeof(sa);
-	if (getsockname(sock, (struct sockaddr *) &sa, &len))
+	len = sizeof(sb);
+	if (getsockname(sock, (struct sockaddr *) sa, &len))
 		goto sock_error;
-	memcpy(port, &sa.sin_addr.s_addr, 4);
-	memcpy(port + 4, &sa.sin_port, 2);
 
 	/* Go listen */
 

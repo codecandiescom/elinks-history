@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.241 2005/04/15 03:47:27 jonas Exp $ */
+/* $Id: ftp.c,v 1.242 2005/04/15 04:11:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -612,13 +612,17 @@ get_ftp_data_socket(struct connection *conn, struct string *command)
 			add_to_string(command, "PASV");
 
 		} else {
+			struct sockaddr_in sa;
 			unsigned char pc[6];
 			int data_sock;
 
 			memset(pc, 0, sizeof(pc));
-			data_sock = get_pasv_socket(conn, conn->socket->fd, pc);
+			data_sock = get_pasv_socket(conn, conn->socket->fd,
+			 	    (struct sockaddr_storage *) &sa);
 			if (data_sock < 0) return 0;
 
+			memcpy(pc, &sa.sin_addr.s_addr, 4);
+			memcpy(pc + 4, &sa.sin_port, 2);
 			conn->data_socket->fd = data_sock;
 			add_portcmd_to_string(command, pc);
 		}

@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.267 2005/04/15 23:03:48 jonas Exp $ */
+/* $Id: connection.c,v 1.268 2005/04/15 23:08:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -442,6 +442,13 @@ notify_connection_callbacks(struct connection *conn)
 static void
 done_connection(struct connection *conn)
 {
+	/* When removing the connection callbacks should always be aware of it
+	 * so they can unregister themselves. We do this by enforcing that the
+	 * connection is in a result state. If it is not already it is an
+	 * internal bug. */
+	if (!is_in_result_state(conn->state))
+		set_connection_state(conn, S_INTERNAL);
+
 	del_from_list(conn);
 	notify_connection_callbacks(conn);
 	if (conn->referrer) done_uri(conn->referrer);

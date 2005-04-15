@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.43 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: conv.h,v 1.44 2005/04/15 08:09:29 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -49,6 +49,7 @@ unhx(register unsigned char a)
 struct string *add_long_to_string(struct string *string, long number);
 struct string *add_knum_to_string(struct string *string, long number);
 struct string *add_xnum_to_string(struct string *string, int number);
+struct string *add_duration_to_string(struct string *string, long int seconds);
 struct string *add_time_to_string(struct string *string, time_T time);
 
 #ifdef HAVE_STRFTIME

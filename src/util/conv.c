@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.73 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: conv.c,v 1.74 2005/04/15 08:09:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,40 +198,46 @@ add_xnum_to_string(struct string *string, int xnum)
 }
 
 struct string *
-add_time_to_string(struct string *string, time_T time)
+add_duration_to_string(struct string *string, long int seconds)
 {
 	unsigned char q[64];
 	int qlen = 0;
 
-	time /= 1000;
-	time &= 0xffffffff;
-
-	if (time < 0) time = 0;
+	if (seconds < 0) seconds = 0;
 
 	/* Days */
-	if (time >= (24 * 3600)) {
-		ulongcat(q, &qlen, (time / (24 * 3600)), 5, 0);
+	if (seconds >= (24 * 3600)) {
+		ulongcat(q, &qlen, (seconds / (24 * 3600)), 5, 0);
 		q[qlen++] = 'd';
 		q[qlen++] = ' ';
 	}
 
 	/* Hours and minutes */
-	if (time >= 3600) {
-		time %= (24 * 3600);
-		ulongcat(q, &qlen, (time / 3600), 4, 0);
+	if (seconds >= 3600) {
+		seconds %= (24 * 3600);
+		ulongcat(q, &qlen, (seconds / 3600), 4, 0);
 		q[qlen++] = ':';
-		ulongcat(q, &qlen, ((time / 60) % 60), 2, '0');
+		ulongcat(q, &qlen, ((seconds / 60) % 60), 2, '0');
 	} else {
 		/* Only minutes */
-		ulongcat(q, &qlen, (time / 60), 2, 0);
+		ulongcat(q, &qlen, (seconds / 60), 2, 0);
 	}
 
 	/* Seconds */
 	q[qlen++] = ':';
-	ulongcat(q, &qlen, (time % 60), 2, '0');
+	ulongcat(q, &qlen, (seconds % 60), 2, '0');
 
 	add_to_string(string, q);
 	return string;
+}
+
+struct string *
+add_time_to_string(struct string *string, time_T time)	/* FIXME: milliseconds */
+{
+	time /= 1000;
+	time &= 0xffffffff;
+
+	return add_duration_to_string(string, (long int) time);
 }
 
 #ifdef HAVE_STRFTIME

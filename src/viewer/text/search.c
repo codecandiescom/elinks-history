@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.327 2005/04/15 19:53:41 miciah Exp $ */
+/* $Id: search.c,v 1.328 2005/04/15 20:51:06 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -280,6 +280,16 @@ get_search_region_from_search_nodes(struct search *s1, struct search *s2,
 }
 
 #ifdef HAVE_REGEX_H
+struct regex_match_context {
+	int textlen;
+	int xoffset;
+	int yoffset;
+	struct box *box;
+	struct search *s1;
+	struct point *points;
+	int len;
+};
+
 static int
 init_regex(regex_t *regex, unsigned char *pattern)
 {
@@ -557,9 +567,6 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	unsigned char *doc;
 	unsigned char *doctmp;
 	int doclen;
-	struct point *points = NULL;
-	int xoffset, yoffset;
-	int len = 0;
 	int regexec_flags = 0;
 	int i;
 	regex_t regex;
@@ -567,8 +574,12 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	int pos = 0;
 	struct search *search_start = s1;
 	unsigned char save_c;
-	struct box *box;
 	int y1, y2;
+	struct regex_match_context ctx;
+
+	ctx.textlen = textlen;
+	ctx.points = NULL;
+	ctx.len = 0;
 
 	/* TODO: show error message */
 	if (!init_regex(&regex, *doc_view->search_word)) {
@@ -587,11 +598,11 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		goto ret;
 	}
 
-	box = &doc_view->box;
-	xoffset = box->x - doc_view->vs->x;
-	yoffset = box->y - doc_view->vs->y;
+	ctx.box = &doc_view->box;
+	ctx.xoffset = ctx.box->x - doc_view->vs->x;
+	ctx.yoffset = ctx.box->y - doc_view->vs->y;
 	y1 = doc_view->vs->y - 1;
-	y2 = doc_view->vs->y + box->height;
+	y2 = doc_view->vs->y + ctx.box->height;
 
 	doctmp = doc;
 
@@ -603,7 +614,7 @@ find_next:
 		pos++;
 	}
 	doctmp = &doc[pos];
-	s1 = &search_start[pos];
+	ctx.s1 = &search_start[pos];
 
 	while (pos < doclen) {
 		int y = search_start[pos].y;
@@ -618,33 +629,33 @@ find_next:
 		regexec_flags = REG_NOTBOL;
 		textlen = regmatch.rm_eo - regmatch.rm_so;
 		if (!textlen) { doc[pos] = save_c; goto free_stuff; }
-		s1 += regmatch.rm_so;
+		ctx.s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
 		for (i = 0; i < textlen; i++) {
 			int j;
-			int y = s1[i].y + yoffset;
+			int y = ctx.s1[i].y + ctx.yoffset;
 
-			if (!row_is_in_box(box, y))
+			if (!row_is_in_box(ctx.box, y))
 				continue;
 
-			for (j = 0; j < s1[i].n; j++) {
-				int sx = s1[i].x + j;
-				int x = sx + xoffset;
+			for (j = 0; j < ctx.s1[i].n; j++) {
+				int sx = ctx.s1[i].x + j;
+				int x = sx + ctx.xoffset;
 
-				if (!col_is_in_box(box, x))
+				if (!col_is_in_box(ctx.box, x))
 					continue;
 
-				if (!realloc_points(&points, len))
+				if (!realloc_points(&ctx.points, ctx.len))
 					continue;
 
-				points[len].x = sx;
-				points[len++].y = s1[i].y;
+				ctx.points[ctx.len].x = sx;
+				ctx.points[ctx.len++].y = ctx.s1[i].y;
 			}
 		}
 
 		doctmp += int_max(textlen, 1);
-		s1 += int_max(textlen, 1);
+		ctx.s1 += int_max(textlen, 1);
 	}
 
 	doc[pos] = save_c;
@@ -655,8 +666,8 @@ free_stuff:
 	regfree(&regex);
 	mem_free(doc);
 ret:
-	*pt = points;
-	*pl = len;
+	*pt = ctx.points;
+	*pl = ctx.len;
 }
 #endif /* HAVE_REGEX_H */
 

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.239 2005/04/15 03:06:02 jonas Exp $ */
+/* $Id: ftp.c,v 1.240 2005/04/15 03:30:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -850,10 +850,11 @@ static void
 ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer *rb)
 {
 	struct ftp_connection_info *ftp = conn->info;
-	struct sockaddr_storage sa;
 	int response;
 
 	if (ftp->pending_commands > 1) {
+		struct sockaddr_storage sa;
+
 		response = get_ftp_response(conn, rb, 0, &sa);
 
 		if (response == -1) {

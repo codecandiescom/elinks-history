@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.28 2005/04/15 14:45:17 jonas Exp $ */
+/* $Id: time.c,v 1.29 2005/04/15 14:55:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@ get_timeval(timeval_T *t)
 	struct timeval tv;
 
 	gettimeofday(&tv, NULL);
-	tv2tT(tv, t);
+	tv2tT(&tv, t);
 #else
 #ifdef HAVE_CLOCK_GETTIME
 	struct timespec ts;

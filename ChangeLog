@@ -1,3 +1,469 @@
+Fri Apr 15 21:30:58 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Move the ctx setup in get_searched_regex.  
+
+Fri Apr 15 21:27:39 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Put y1 in struct regex_match_context and use that instead of local 
+	variables in is_in_range_regex_match and get_searched_match.  
+
+Fri Apr 15 21:26:10 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Use ctx.y2 instead of y2 in is_in_range_regex.  
+
+Fri Apr 15 21:23:57 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Fix something that was somehow lost earlier: Use ctx.textlen, not
+	just textlen, in get_searched_match.  
+
+Fri Apr 15 21:20:04 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Group and comment the fields in regex_match_context to explain which
+	callback needs which. Later, I should split this into one common
+	context and two callback-specific contexts.  
+
+Fri Apr 15 21:17:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Factor code from that last loop in is_in_range_regex into the new 
+	is_in_range_regex_match.  
+
+Fri Apr 15 21:13:34 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Add y, y2, min, and max to struct regex_match_context for 
+	is_in_range_regex_match's sake.  
+
+Fri Apr 15 21:04:37 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Move local variable find from is_in_range_regex to struct
+	regex_match_context.  
+
+Fri Apr 15 21:01:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Use struct regex_match_context in is_in_range_regex.  
+
+Fri Apr 15 20:58:14 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Factor code out of that last loop in get_searched_regex into the new 
+	get_searched_regex_match, utilising struct regex_match_context.  
+
+Fri Apr 15 20:51:06 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Introduce struct regex_match_context and move some of 
+	get_searched_regex's local variables into it.  
+
+Fri Apr 15 20:36:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	print_error_dialog(): Decode the URI.  
+
+Fri Apr 15 19:53:41 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Rename parameter l to textlen in get_searched_regex.  
+
+Fri Apr 15 19:52:32 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Make another loop in is_in_range_regex more like the corresponding
+	loop in get_searched_regex.  
+
+Fri Apr 15 19:51:38 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Throw some more whitespace in there, eh? 
+
+Fri Apr 15 19:48:31 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Reform a loop in is_in_range_regex to better resemble the
+	corresponding loop in get_searched_regex.  
+
+Fri Apr 15 19:47:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Rename yy to y2.  
+
+Fri Apr 15 19:45:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Continue making is_in_range_regex more resemble get_searched_regex 
+	by adding the local variable y1 to is_in_range_regex.  
+
+Fri Apr 15 19:40:16 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Move doclen calculation to get_search_region_from_search_nodes.  
+
+Fri Apr 15 19:35:54 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Pass doclen to get_search_region_from_search_nodes by reference 
+	instead of by value.  
+
+Fri Apr 15 19:27:37 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Factor init_regex out of is_in_range_regex and get_search_regex.  
+
+Fri Apr 15 18:25:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/info.c, lowlevel/select.c, lowlevel/timers.c,
+	lowlevel/timers.h:
+
+	Introduce timers_info() which replaces count_timers().  
+
+Fri Apr 15 18:15:24 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/: babelfish.lua, config.lua, hooks.lua.in:
+
+	Drop the bb, bb_en_fr, and bb_fr_en smartprefixes. Replace it with a
+	new, more powerful URL-rewrite rule! 
+
+Fri Apr 15 17:51:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Add short_desc_type=allwordssubstr to the Bugzilla URL-rewrite rule.  
+	Without this, Bugzilla seems to ignore the search_desc argument, 
+	returning every stinking bug it has.  
+
+Fri Apr 15 17:48:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/hacking.txt:
+
+	Reformat a bit.  
+
+Fri Apr 15 16:24:43 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/timers.c:
+
+	@interval: double -> timeval_T.  
+
+Fri Apr 15 16:19:50 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/timers.c:
+
+	Tidy up.  
+
+Fri Apr 15 16:19:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/timers.c:
+
+	check_timers(): use foreachsafe().  
+
+Fri Apr 15 16:16:38 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	Introduce timeval_sub_interval().  
+
+Fri Apr 15 15:18:38 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Remove unneeded SSL header.  
+
+Fri Apr 15 15:03:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/: hooks.lua.in, md5check.lua:
+
+	Move file_exists from md5check.lua to hooks.lua. Use it for the new 
+	routine, dofile_if_fileexists. Use dofile_if_fileexists to load 
+	config.lua so as to avoid annoying error messages on start-up.  
+
+Fri Apr 15 15:01:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Move up connected() so no prototype is needed. Describe it.  
+
+Fri Apr 15 14:55:22 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/time.c:
+
+	Fix buggy get_timeval().  
+
+Fri Apr 15 14:48:54 2005  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	Detect some useful functions.  
+
+Fri Apr 15 14:45:19 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Define hooks_file in hooks.lua so that reload() will work even when
+	there is no config.lua.  
+
+Fri Apr 15 14:45:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/time.c:
+
+	timeval_cmp(): Minor simplification.  
+
+Fri Apr 15 14:42:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Drop whitespace from otherwise empty lines.  
+
+Fri Apr 15 14:40:47 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Use _ALERT instead of print in do_ so that one sees any errors when
+	from dofile or dostring.  
+
+Fri Apr 15 14:21:46 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/timers.c, util/time.c, util/time.h:
+
+	Invert double_to_timeval() parameters to be consistent with other
+	*_to_timeval() functions.  
+
+Fri Apr 15 14:18:04 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	Introduce seconds_to_timeval().  
+
+Fri Apr 15 14:14:48 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	Introduce timeval_cmp() to compare timeval_T values.  
+
+Fri Apr 15 13:32:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	get_pasv_socket(): Close the socket on error.  
+
+Fri Apr 15 13:14:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: connect.c, connect.h:
+
+	Remove get_pasv6_socket().  
+
+Fri Apr 15 13:14:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/ftp/ftp.c:
+
+	get_pasv_socket(): Support IPv6.  
+
+Fri Apr 15 13:03:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	get_pasv_socket(): Use local struct sockaddr variables and addrlen
+	size_t.  
+
+Fri Apr 15 12:57:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	get_pasv_socket(): sa -> addr, sb -> bind_addr4.  
+
+Fri Apr 15 08:09:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: conv.c, conv.h:
+
+	Split add_time_to_string() to new add_duration_to_string(). It makes
+	more obvious it displays duration and uses milliseconds.  
+
+Fri Apr 15 04:42:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Dammit, patch fix part 2.  
+
+Fri Apr 15 04:38:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Oops: A few sizeof() fixes for last patch.  
+
+Fri Apr 15 04:11:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/ftp/ftp.c:
+
+	get_pasv_socket(): Take sockaddr_storage pointer instead of hackish
+	addr/port string.  
+
+Fri Apr 15 03:47:27 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Use ftp_data_accept() as a select handler; requires less state info.  
+
+Fri Apr 15 03:30:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	ftp_retr_file(): Make sa local.  
+
+Fri Apr 15 03:06:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	c_i -> ftp 
+
+Fri Apr 15 02:50:27 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	close_socket() calls clear_handlers() so simplify.  
+
+Fri Apr 15 02:49:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Remove assertion.  
+
+Fri Apr 15 02:39:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: connect.c, dns.c, dns.h:
+
+	Change the DNS lookup memory management so that the DNS callback has
+	to allocate the passed address array. This simplifies things a lot
+	because the allocation is one place instead of currently two. Also
+	it allows for better error reporting. Finally the error path of
+	done_dns_lookup() is much simpler. The patch is quite big but I've
+	tried to make up for it by adding comments.  
+
+Fri Apr 15 02:09:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	done_dns_lookup(): Remove unneeded update of DNS result; the done
+	label ain't using it.  
+
+Fri Apr 15 01:27:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	async_dns_reader(): Move duplicate read loops to read_dns_data().  
+
+Fri Apr 15 01:20:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	async_dns_writer(): Move duplicate write loops to write_dns_data().  
+
+Fri Apr 15 01:00:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, lowlevel/connect.c, lowlevel/dns.c,
+	lowlevel/dns.h:
+
+	Introduce dns_result enum. Rename result variables to @result to get
+	a feeling of all users.  
+
+Fri Apr 15 00:13:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	done_async_dns_lookup(): Reduce indentation.  
+
+Fri Apr 15 00:11:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	async_dns_{reader,error}(): Take dnsquery arg.  
+
+Fri Apr 15 00:09:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	init_async_dns_lookup(): Ensure dnsquery->h is -1 if async DNS is
+	disabled so done_async_dns_lookup() won't do crazy things.  
+
+Fri Apr 15 00:08:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	init_async_dns_lookup(): Reduce indentation.  
+
+Fri Apr 15 00:00:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	lookup_fn() -> async_dns_writer(), end_real_lookup() ->
+	async_dns_reader(), failed_dns_lookup() -> async_dns_error().  
+
+Thu Apr 14 23:52:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	add_to_dns_cache(): Do all the allocation before filling the
+	dnsentry.  
+
+Thu Apr 14 22:43:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	find_host_no_cache() -> init_dns_lookup().  
+
+Thu Apr 14 22:40:42 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.h:
+
+	Change LUA_ALERT from "alert" to "_ALERT" so that l_alert will be 
+	correctly registered and errors will be reported. LUA_ALERT has been 
+	"alert" since revision 1.13, which is mystifying as AFAICT, "alert" 
+	has never been the correct value.  
+
+Thu Apr 14 22:29:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Fix (1.101 -> 1.102) and only add_to_dns_cache() when @res(ult) is
+	success.  
+
+Thu Apr 14 22:27:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Regroup functions. Add labels.  
+
+Thu Apr 14 22:14:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	done_dns_lookup(): Split out DNS caching to add_to_dns_cache().  
+
 Thu Apr 14 15:45:23 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/lowlevel/dns.c:

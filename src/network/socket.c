@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.214 2005/04/16 00:12:11 jonas Exp $ */
+/* $Id: socket.c,v 1.215 2005/04/16 00:14:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -578,30 +578,29 @@ connect_socket(struct socket *csocket, int connection_state)
 		close(sock);
 	}
 
-	if (i >= conn_info->addrno) {
-		/* Tried everything, but it didn't help :(. */
+	assert(i >= conn_info->addrno);
 
-		if (only_local && !saved_errno && at_least_one_remote_ip) {
-			/* Yes we might hit a local address and fail in the
-			 * process, but what matters is the last one because
-			 * we do not know the previous one's errno, and the
-			 * added complexity wouldn't really be worth it. */
-			csocket->ops->done(csocket->conn, csocket, S_LOCAL_ONLY);
-			return;
-		}
+	/* Tried everything, but it didn't help :(. */
 
-		/* Retry reporting the errno state only if we already tried
-		 * something new. Else use the S_DNS _progress_ state to make
-		 * sure that no download callbacks will report any errors. */
-		if (trno != conn_info->triedno && !silent_fail)
-			connection_state = -errno;
-		else if (trno == -1 && silent_fail)
-			/* All failed. */
-			connection_state = S_NO_FORCED_DNS;
-
-		csocket->ops->retry(csocket->conn, csocket, connection_state);
+	if (only_local && !saved_errno && at_least_one_remote_ip) {
+		/* Yes we might hit a local address and fail in the process, but
+		 * what matters is the last one because we do not know the
+		 * previous one's errno, and the added complexity wouldn't
+		 * really be worth it. */
+		csocket->ops->done(csocket->conn, csocket, S_LOCAL_ONLY);
 		return;
 	}
+
+	/* Retry reporting the errno state only if we already tried something
+	 * new. Else use the S_DNS _progress_ state to make sure that no
+	 * download callbacks will report any errors. */
+	if (trno != conn_info->triedno && !silent_fail)
+		connection_state = -errno;
+	else if (trno == -1 && silent_fail)
+		/* All failed. */
+		connection_state = S_NO_FORCED_DNS;
+
+	csocket->ops->retry(csocket->conn, csocket, connection_state);
 }
 
 

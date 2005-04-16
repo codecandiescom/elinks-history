@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.339 2005/04/16 04:21:36 miciah Exp $ */
+/* $Id: search.c,v 1.340 2005/04/16 04:31:20 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -281,24 +281,10 @@ get_search_region_from_search_nodes(struct search *s1, struct search *s2,
 
 #ifdef HAVE_REGEX_H
 struct regex_match_context {
-	/* common */
 	struct search *s1;
 	int textlen;
 	int y1;
 	int y2;
-
-	/* get_searched_match */
-	int xoffset;
-	int yoffset;
-	struct box *box;
-	struct point *points;
-	int len;
-
-	/* is_in_range_regex_match */
-	int found;
-	int y;
-	int *min;
-	int *max;
 };
 
 static int
@@ -322,21 +308,29 @@ init_regex(regex_t *regex, unsigned char *pattern)
 	return 1;
 }
 
+struct is_in_range_regex_context {
+	int found;
+	int y;
+	int *min;
+	int *max;
+};
+
 static void
-is_in_range_regex_match(struct regex_match_context *common_ctx)
+is_in_range_regex_match(struct regex_match_context *common_ctx, void *data)
 {
+	struct is_in_range_regex_context *ctx = data;
 	int i;
 
-	if (common_ctx->s1[common_ctx->textlen].y < common_ctx->y || common_ctx->s1[common_ctx->textlen].y >= common_ctx->y2)
+	if (common_ctx->s1[common_ctx->textlen].y < ctx->y || common_ctx->s1[common_ctx->textlen].y >= common_ctx->y2)
 		return;
 
-	common_ctx->found = 1;
+	ctx->found = 1;
 
 	for (i = 0; i < common_ctx->textlen; i++) {
 		if (!common_ctx->s1[i].n) continue;
 
-		int_upper_bound(common_ctx->min, common_ctx->s1[i].x);
-		int_lower_bound(common_ctx->max, common_ctx->s1[i].x + common_ctx->s1[i].n);
+		int_upper_bound(ctx->min, common_ctx->s1[i].x);
+		int_lower_bound(ctx->max, common_ctx->s1[i].x + common_ctx->s1[i].n);
 	}
 }
 
@@ -356,14 +350,15 @@ is_in_range_regex(struct document *document, int y, int height,
 	struct search *search_start = s1;
 	unsigned char save_c;
 	struct regex_match_context common_ctx;
+	struct is_in_range_regex_context ctx;
 
-	common_ctx.found = 0;
+	ctx.found = 0;
 	common_ctx.textlen = textlen;
-	common_ctx.y = y;
+	ctx.y = y;
 	common_ctx.y1 = y - 1;
 	common_ctx.y2 = y + height;
-	common_ctx.min = min;
-	common_ctx.max = max;
+	ctx.min = min;
+	ctx.max = max;
 
 	if (!init_regex(&regex, text)) return -2;
 
@@ -397,11 +392,11 @@ find_next:
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
 		regexec_flags = REG_NOTBOL;
 		common_ctx.textlen = regmatch.rm_eo - regmatch.rm_so;
-		if (!common_ctx.textlen) { doc[pos] = save_c; common_ctx.found = 1; goto free_stuff; }
+		if (!common_ctx.textlen) { doc[pos] = save_c; ctx.found = 1; goto free_stuff; }
 		common_ctx.s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
-		is_in_range_regex_match(&common_ctx);
+		is_in_range_regex_match(&common_ctx, &ctx);
 
 		doctmp += int_max(common_ctx.textlen, 1);
 		common_ctx.s1 += int_max(common_ctx.textlen, 1);
@@ -415,7 +410,7 @@ free_stuff:
 	regfree(&regex);
 	mem_free(doc);
 
-	return common_ctx.found;
+	return ctx.found;
 }
 #endif /* HAVE_REGEX_H */
 
@@ -583,30 +578,39 @@ srch_failed:
 }
 
 #ifdef HAVE_REGEX_H
+struct get_searched_regex_context {
+	int xoffset;
+	int yoffset;
+	struct box *box;
+	struct point *points;
+	int len;
+};
+
 static void
-get_searched_regex_match(struct regex_match_context *common_ctx)
+get_searched_regex_match(struct regex_match_context *common_ctx, void *data)
 {
+	struct get_searched_regex_context *ctx = data;
 	int i;
 
 	for (i = 0; i < common_ctx->textlen; i++) {
 		int j;
-		int y = common_ctx->s1[i].y + common_ctx->yoffset;
+		int y = common_ctx->s1[i].y + ctx->yoffset;
 
-		if (!row_is_in_box(common_ctx->box, y))
+		if (!row_is_in_box(ctx->box, y))
 			continue;
 
 		for (j = 0; j < common_ctx->s1[i].n; j++) {
 			int sx = common_ctx->s1[i].x + j;
-			int x = sx + common_ctx->xoffset;
+			int x = sx + ctx->xoffset;
 
-			if (!col_is_in_box(common_ctx->box, x))
+			if (!col_is_in_box(ctx->box, x))
 				continue;
 
-			if (!realloc_points(&common_ctx->points, common_ctx->len))
+			if (!realloc_points(&ctx->points, ctx->len))
 				continue;
 
-			common_ctx->points[common_ctx->len].x = sx;
-			common_ctx->points[common_ctx->len++].y = common_ctx->s1[i].y;
+			ctx->points[ctx->len].x = sx;
+			ctx->points[ctx->len++].y = common_ctx->s1[i].y;
 		}
 	}
 }
@@ -625,15 +629,16 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	struct search *search_start = s1;
 	unsigned char save_c;
 	struct regex_match_context common_ctx;
+	struct get_searched_regex_context ctx;
 
 	common_ctx.textlen = textlen;
-	common_ctx.points = NULL;
-	common_ctx.len = 0;
-	common_ctx.box = &doc_view->box;
-	common_ctx.xoffset = common_ctx.box->x - doc_view->vs->x;
-	common_ctx.yoffset = common_ctx.box->y - doc_view->vs->y;
+	ctx.points = NULL;
+	ctx.len = 0;
+	ctx.box = &doc_view->box;
+	ctx.xoffset = ctx.box->x - doc_view->vs->x;
+	ctx.yoffset = ctx.box->y - doc_view->vs->y;
 	common_ctx.y1 = doc_view->vs->y - 1;
-	common_ctx.y2 = doc_view->vs->y + common_ctx.box->height;
+	common_ctx.y2 = doc_view->vs->y + ctx.box->height;
 
 	/* TODO: show error message */
 	if (!init_regex(&regex, *doc_view->search_word)) {
@@ -680,7 +685,7 @@ find_next:
 		common_ctx.s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
-		get_searched_regex_match(&common_ctx);
+		get_searched_regex_match(&common_ctx, &ctx);
 
 		doctmp += int_max(common_ctx.textlen, 1);
 		common_ctx.s1 += int_max(common_ctx.textlen, 1);
@@ -694,8 +699,8 @@ free_stuff:
 	regfree(&regex);
 	mem_free(doc);
 ret:
-	*pt = common_ctx.points;
-	*pl = common_ctx.len;
+	*pt = ctx.points;
+	*pl = ctx.len;
 }
 #endif /* HAVE_REGEX_H */
 

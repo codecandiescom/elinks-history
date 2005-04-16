@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.342 2005/04/16 04:37:03 miciah Exp $ */
+/* $Id: search.c,v 1.343 2005/04/16 04:43:08 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -286,6 +286,7 @@ struct regex_match_context {
 	int y1;
 	int y2;
 	int found;
+	unsigned char *pattern;
 };
 
 static int
@@ -360,8 +361,9 @@ is_in_range_regex(struct document *document, int y, int height,
 	common_ctx.textlen = textlen;
 	common_ctx.y1 = y - 1;
 	common_ctx.y2 = y + height;
+	common_ctx.pattern = text;
 
-	if (!init_regex(&regex, text)) return -2;
+	if (!init_regex(&regex, common_ctx.pattern)) return -2;
 
 	doc = get_search_region_from_search_nodes(s1, s2, textlen, &doclen);
 	if (!doc) {
@@ -642,9 +644,10 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	common_ctx.textlen = textlen;
 	common_ctx.y1 = doc_view->vs->y - 1;
 	common_ctx.y2 = doc_view->vs->y + ctx.box->height;
+	common_ctx.pattern = *doc_view->search_word;
 
 	/* TODO: show error message */
-	if (!init_regex(&regex, *doc_view->search_word)) {
+	if (!init_regex(&regex, common_ctx.pattern)) {
 #if 0
 		/* Where and how should we display the error dialog ? */
 		unsigned char regerror_string[MAX_STR_LEN];

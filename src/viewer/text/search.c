@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.344 2005/04/16 04:46:28 miciah Exp $ */
+/* $Id: search.c,v 1.345 2005/04/16 04:47:38 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -282,6 +282,7 @@ get_search_region_from_search_nodes(struct search *s1, struct search *s2,
 #ifdef HAVE_REGEX_H
 struct regex_match_context {
 	struct search *s1;
+	struct search *s2;
 	int textlen;
 	int y1;
 	int y2;
@@ -363,10 +364,11 @@ is_in_range_regex(struct document *document, int y, int height,
 	common_ctx.y2 = y + height;
 	common_ctx.pattern = text;
 	common_ctx.s1 = s1;
+	common_ctx.s2 = s2;
 
 	if (!init_regex(&regex, common_ctx.pattern)) return -2;
 
-	doc = get_search_region_from_search_nodes(common_ctx.s1, s2, textlen, &doclen);
+	doc = get_search_region_from_search_nodes(common_ctx.s1, common_ctx.s2, textlen, &doclen);
 	if (!doc) {
 		regfree(&regex);
 		return doclen;
@@ -647,6 +649,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	common_ctx.y2 = doc_view->vs->y + ctx.box->height;
 	common_ctx.pattern = *doc_view->search_word;
 	common_ctx.s1 = s1;
+	common_ctx.s2 = s2;
 
 	/* TODO: show error message */
 	if (!init_regex(&regex, common_ctx.pattern)) {
@@ -659,7 +662,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		goto ret;
 	}
 
-	doc = get_search_region_from_search_nodes(common_ctx.s1, s2, textlen, &doclen);
+	doc = get_search_region_from_search_nodes(common_ctx.s1, common_ctx.s2, textlen, &doclen);
 	if (!doc) {
 		regfree(&regex);
 		goto ret;

@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.271 2005/04/16 14:41:01 zas Exp $ */
+/* $Id: connection.c,v 1.272 2005/04/16 14:46:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,7 @@ struct keepalive_connection {
 	void (*done)(struct connection *);
 
 	timeval_T timeout;
-	timeval_T add_time;
+	timeval_T creation_time;
 
 	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
 	int socket;
@@ -533,7 +533,7 @@ init_keepalive_connection(struct connection *conn, time_T timeout,
 	keep_conn->protocol_family = conn->socket->protocol_family;
 	keep_conn->socket = conn->socket->fd;
 	seconds_to_timeval(&keep_conn->timeout, timeout);
-	get_timeval(&keep_conn->add_time);
+	get_timeval(&keep_conn->creation_time);
 
 	return keep_conn;
 }
@@ -626,7 +626,7 @@ check_keepalive_connections(void)
 			continue;
 		}
 
-		timeval_sub(&age, &keep_conn->add_time, &now);
+		timeval_sub(&age, &keep_conn->creation_time, &now);
 		if (timeval_cmp(&age, &keep_conn->timeout) > 0) {
 			done_keepalive_connection(keep_conn);
 			continue;

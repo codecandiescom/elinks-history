@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.40 2005/01/03 17:58:33 jonas Exp $ */
+/* $Id: rewrite.c,v 1.41 2005/04/16 21:21:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,7 +219,7 @@ encode_uri_string_len(struct string *s, unsigned char *a, int alen)
 	unsigned char c = a[alen];
 
 	a[alen] = 0;
-	encode_uri_string(s, a, 1);
+	encode_uri_string(s, a, alen, 1);
 	a[alen] = c;
 }
 
@@ -271,7 +271,7 @@ rewrite_uri(unsigned char *url, struct uri *current_uri, unsigned char *arg)
 				add_uri_to_string(&n, current_uri, URI_ORIGINAL);
 				break;
 			case 's':
-				if (arg) encode_uri_string(&n, arg, 1);
+				if (arg) encode_uri_string(&n, arg, -1, 1);
 				break;
 			case '%':
 				add_char_to_string(&n, '%');

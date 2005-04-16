@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.312 2005/04/09 14:12:44 jonas Exp $ */
+/* $Id: uri.c,v 1.313 2005/04/16 21:21:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,7 +155,7 @@ encode_file_uri_string(struct string *string, unsigned char *uristring)
 		uristring[filenamelen] = 0;
 	}
 
-	encode_uri_string(string, uristring, 0);
+	encode_uri_string(string, uristring, filenamelen, 0);
 	if (filenamelen >= 0) {
 		uristring[filenamelen] = saved;
 		add_to_string(string, &uristring[filenamelen]);
@@ -793,7 +793,7 @@ transform_file_url(struct uri *uri, unsigned char *cwd)
 		if (!init_string(&dir))
 			return NULL;
 
-		encode_uri_string(&dir, cwd, 0);
+		encode_uri_string(&dir, cwd, -1, 0);
 
 		/* Either we will end up with '//' and translate_directories()
 		 * will shorten it or the '/' will mark the inserted cwd as a
@@ -1077,7 +1077,7 @@ parse_uri:
 				switch (protocol) {
 				case PROTOCOL_FTP:
 					add_to_string(&str, "ftp://");
-					encode_uri_string(&str, newurl, 0);
+					encode_uri_string(&str, newurl, -1, 0);
 					break;
 
 				case PROTOCOL_HTTP:
@@ -1195,7 +1195,7 @@ parse_uri:
 		switch (protocol) {
 			case PROTOCOL_FTP:
 				add_to_string(&str, "ftp://");
-				encode_uri_string(&str, newurl, 0);
+				encode_uri_string(&str, newurl, -1, 0);
 				break;
 
 			case PROTOCOL_HTTP:
@@ -1305,15 +1305,18 @@ safe_char(unsigned char c)
 }
 
 void
-encode_uri_string(struct string *string, unsigned char *name,
+encode_uri_string(struct string *string, unsigned char *name, int namelen,
 		  int convert_slashes)
 {
 	unsigned char n[4];
+	unsigned char *end;
 
 	n[0] = '%';
 	n[3] = '\0';
 
-	for (; *name; name++) {
+	if (namelen < 0) namelen = strlen(name);
+
+	for (end = name + namelen; name < end; name++) {
 #if 0
 		/* This is probably correct only for query part of URI..? */
 		if (*name == ' ') add_char_to_string(data, len, '+');

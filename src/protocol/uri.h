@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.155 2005/01/02 18:32:45 jonas Exp $ */
+/* $Id: uri.h,v 1.156 2005/04/16 21:21:08 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -269,7 +269,12 @@ int get_uri_port(struct uri *uri);
 	(LOWEST_PORT <= (port) && (port) <= HIGHEST_PORT)
 
 
-void encode_uri_string(struct string *string, unsigned char *src, int len);
+/* Encode and add @namelen bytes from @name to @string. If @namelen is -1 it is
+ * set to strlen(@name). If the boolean convert_slashes is zero '/'-chars will
+ * not be encoded. */
+void encode_uri_string(struct string *string, unsigned char *name, int namelen,
+		       int convert_slashes);
+
 void decode_uri_string(struct string *string);
 void decode_uri(unsigned char *uristring);
 

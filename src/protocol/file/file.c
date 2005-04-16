@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.192 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: file.c,v 1.193 2005/04/16 21:21:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ add_dir_entry(struct directory_entry *entry, struct string *page,
 		return;
 	}
 
-	encode_uri_string(&uri_encoded_name, entry->name + pathlen, 1);
+	encode_uri_string(&uri_encoded_name, entry->name + pathlen, -1, 1);
 	add_html_to_string(&html_encoded_name, entry->name + pathlen,
 			   strlen(entry->name) - pathlen);
 
@@ -205,7 +205,7 @@ list_directory(unsigned char *dirpath, struct string *page)
 	add_to_string(page, "<html>\n<head><title>");
 	add_html_to_string(page, dirpath, strlen(dirpath));
 	add_to_string(page, "</title>\n<base href=\"");
-	encode_uri_string(page, dirpath, 0);
+	encode_uri_string(page, dirpath, -1, 0);
 	add_to_string(page, "\" />\n</head>\n<body>\n<h2>Directory /");
 
 	/* Make the directory path with links to each subdir. */

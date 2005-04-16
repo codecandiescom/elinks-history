@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.50 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: gopher.c,v 1.51 2005/04/16 21:21:08 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -406,13 +406,13 @@ encode_selector_string(struct string *buffer, unsigned char *selector)
 	 * two successive ones. */
 	while ((slashes = strstr(selector, "//"))) {
 		*slashes = 0;
-		encode_uri_string(buffer, selector, 0);
-		encode_uri_string(buffer, "//", 1);
+		encode_uri_string(buffer, selector, -1, 0);
+		encode_uri_string(buffer, "//", 2, 1);
 		*slashes = '/';
 		selector = slashes + 2;
 	}
 
-	encode_uri_string(buffer, selector, 0);
+	encode_uri_string(buffer, selector, -1, 0);
 }
 
 static void

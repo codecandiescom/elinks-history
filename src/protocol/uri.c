@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.313 2005/04/16 21:21:08 jonas Exp $ */
+/* $Id: uri.c,v 1.314 2005/04/16 21:22:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,18 +148,8 @@ static void
 encode_file_uri_string(struct string *string, unsigned char *uristring)
 {
 	int filenamelen = check_uri_file(uristring);
-	unsigned char saved = 0;
-
-	if (filenamelen >= 0) {
-		saved = uristring[filenamelen];
-		uristring[filenamelen] = 0;
-	}
 
 	encode_uri_string(string, uristring, filenamelen, 0);
-	if (filenamelen >= 0) {
-		uristring[filenamelen] = saved;
-		add_to_string(string, &uristring[filenamelen]);
-	}
 }
 
 

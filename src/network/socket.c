@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.222 2005/04/16 01:20:03 jonas Exp $ */
+/* $Id: socket.c,v 1.223 2005/04/16 01:44:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,18 +50,15 @@
 #include "util/string.h"
 
 
-/* Holds information during the connect()-phase. */
+/* Holds information used during the connection establishing phase. */
 struct conn_info {
-	struct sockaddr_storage *addr; /* array of addresses */
-
-	socket_connect_operation_T done;
-
-	void *dnsquery;
-
-	int addrno; /* array len / sizeof(sockaddr_storage) */
-	int triedno; /* index of last tried address */
-	int port;
-	int ip_family; /* If non-zero, use the indicated IP version. */
+	struct sockaddr_storage *addr;	 /* Array of found addresses. */
+	int addrno;			 /* Number of found addresses. */
+	int triedno;			 /* Index of last tried address */
+	socket_connect_operation_T done; /* Callback signaled when connected. */
+	void *dnsquery;			 /* Pointer to DNS query info. */
+	int port;			 /* Which port to bind to. */
+	int ip_family;			 /* If non-zero, force to IP version. */
 };
 
 

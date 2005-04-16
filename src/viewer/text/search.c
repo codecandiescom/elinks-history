@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.341 2005/04/16 04:32:27 miciah Exp $ */
+/* $Id: search.c,v 1.342 2005/04/16 04:37:03 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -285,6 +285,7 @@ struct regex_match_context {
 	int textlen;
 	int y1;
 	int y2;
+	int found;
 };
 
 static int
@@ -309,7 +310,6 @@ init_regex(regex_t *regex, unsigned char *pattern)
 }
 
 struct is_in_range_regex_context {
-	int found;
 	int y;
 	int *min;
 	int *max;
@@ -324,7 +324,7 @@ is_in_range_regex_match(struct regex_match_context *common_ctx, void *data)
 	if (common_ctx->s1[common_ctx->textlen].y < ctx->y || common_ctx->s1[common_ctx->textlen].y >= common_ctx->y2)
 		return;
 
-	ctx->found = 1;
+	common_ctx->found = 1;
 
 	for (i = 0; i < common_ctx->textlen; i++) {
 		if (!common_ctx->s1[i].n) continue;
@@ -352,11 +352,11 @@ is_in_range_regex(struct document *document, int y, int height,
 	struct regex_match_context common_ctx;
 	struct is_in_range_regex_context ctx;
 
-	ctx.found = 0;
 	ctx.y = y;
 	ctx.min = min;
 	ctx.max = max;
 
+	common_ctx.found = 0;
 	common_ctx.textlen = textlen;
 	common_ctx.y1 = y - 1;
 	common_ctx.y2 = y + height;
@@ -393,7 +393,7 @@ find_next:
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
 		regexec_flags = REG_NOTBOL;
 		common_ctx.textlen = regmatch.rm_eo - regmatch.rm_so;
-		if (!common_ctx.textlen) { doc[pos] = save_c; ctx.found = 1; goto free_stuff; }
+		if (!common_ctx.textlen) { doc[pos] = save_c; common_ctx.found = 1; goto free_stuff; }
 		common_ctx.s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
@@ -411,7 +411,7 @@ free_stuff:
 	regfree(&regex);
 	mem_free(doc);
 
-	return ctx.found;
+	return common_ctx.found;
 }
 #endif /* HAVE_REGEX_H */
 
@@ -638,6 +638,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	ctx.xoffset = ctx.box->x - doc_view->vs->x;
 	ctx.yoffset = ctx.box->y - doc_view->vs->y;
 
+	common_ctx.found = 0;
 	common_ctx.textlen = textlen;
 	common_ctx.y1 = doc_view->vs->y - 1;
 	common_ctx.y2 = doc_view->vs->y + ctx.box->height;
@@ -683,7 +684,7 @@ find_next:
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
 		regexec_flags = REG_NOTBOL;
 		common_ctx.textlen = regmatch.rm_eo - regmatch.rm_so;
-		if (!common_ctx.textlen) { doc[pos] = save_c; goto free_stuff; }
+		if (!common_ctx.textlen) { doc[pos] = save_c; common_ctx.found = 1; goto free_stuff; }
 		common_ctx.s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 

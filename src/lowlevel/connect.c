@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.219 2005/04/16 00:34:50 jonas Exp $ */
+/* $Id: connect.c,v 1.220 2005/04/16 00:40:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,11 +93,8 @@ done_socket(struct socket *socket)
 {
 	close_socket(socket);
 
-	if (socket->conn_info) {
-		/* No callbacks should be made */
-		socket->conn_info->done = NULL;
+	if (socket->conn_info)
 		done_connection_info(socket);
-	}
 
 	mem_free_set(&socket->buffer, NULL);
 }
@@ -154,7 +151,6 @@ done_connection_info(struct socket *socket)
 	assert(socket->conn_info);
 
 	if (conn_info->dnsquery) kill_dns_request(&conn_info->dnsquery);
-	if (conn_info->done) conn_info->done(socket->conn, socket);
 
 	mem_free_if(conn_info->addr);
 	mem_free_set(&socket->conn_info, NULL);
@@ -404,6 +400,8 @@ check_if_local_address4(struct sockaddr_in *addr)
 void
 complete_connect_socket(struct socket *socket)
 {
+	struct conn_info *conn_info;
+
 #ifdef CONFIG_SSL
 	/* Check if the connection should run over an encrypted link */
 	if (socket->need_ssl
@@ -411,6 +409,10 @@ complete_connect_socket(struct socket *socket)
 	    && ssl_connect(socket) < 0)
 		return;
 #endif
+
+	conn_info = socket->conn_info;
+	if (conn_info->done)
+		conn_info->done(socket->conn, socket);
 
 	done_connection_info(socket);
 }

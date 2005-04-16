@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.30 2005/04/15 16:16:38 zas Exp $ */
+/* $Id: time.c,v 1.31 2005/04/16 14:41:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,17 +41,6 @@ get_timeval(timeval_T *t)
 	t->usec = 0;
 #endif
 #endif
-}
-
-double
-timeval_diff(timeval_T *older, timeval_T *newer)
-{
-	timeval_T d;
- 
-	d.sec = newer->sec - older->sec;
-	d.usec = newer->usec - older->usec;
- 
-	return (double) d.sec + ((double) d.usec / 1000000.0);
 }
 
 /* Subtract an interval to a timeval, it ensures that

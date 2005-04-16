@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.269 2005/04/15 23:09:54 jonas Exp $ */
+/* $Id: connection.c,v 1.270 2005/04/16 09:22:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -722,10 +722,8 @@ run_connection(struct connection *conn)
 void
 abort_connection(struct connection *conn, enum connection_state state)
 {
-#ifdef CONFIG_DEBUG
 	assertm(is_in_result_state(state),
 		"connection didn't end in result state (%d)", state);
-#endif
 
 	set_connection_state(conn, state);
 
@@ -740,10 +738,8 @@ retry_connection(struct connection *conn, enum connection_state state)
 {
 	int max_tries = get_opt_int("connection.retries");
 
-#ifdef CONFIG_DEBUG
 	assertm(is_in_result_state(state),
 		"connection didn't end in result state (%d)", state);
-#endif
 
 	set_connection_state(conn, state);
 

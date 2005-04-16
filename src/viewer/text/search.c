@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.347 2005/04/16 05:00:11 miciah Exp $ */
+/* $Id: search.c,v 1.348 2005/04/16 05:03:33 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -644,15 +644,6 @@ static void
 get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		   int textlen, struct search *s1, struct search *s2)
 {
-	unsigned char *doc;
-	unsigned char *doctmp;
-	int doclen;
-	int regexec_flags = 0;
-	regex_t regex;
-	regmatch_t regmatch;
-	int pos = 0;
-	struct search *search_start = s1;
-	unsigned char save_c;
 	struct regex_match_context common_ctx;
 	struct get_searched_regex_context ctx;
 
@@ -670,58 +661,8 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	common_ctx.s1 = s1;
 	common_ctx.s2 = s2;
 
-	if (!init_regex(&regex, common_ctx.pattern)) {
-		goto ret;
-	}
+	search_for_pattern(&common_ctx, &ctx, get_searched_regex_match);
 
-	doc = get_search_region_from_search_nodes(common_ctx.s1, common_ctx.s2, textlen, &doclen);
-	if (!doc) {
-		regfree(&regex);
-		goto ret;
-	}
-
-	doctmp = doc;
-
-find_next:
-	while (pos < doclen) {
-		int y = search_start[pos].y;
-
-		if (y >= common_ctx.y1 && y <= common_ctx.y2) break;
-		pos++;
-	}
-	doctmp = &doc[pos];
-	common_ctx.s1 = &search_start[pos];
-
-	while (pos < doclen) {
-		int y = search_start[pos].y;
-
-		if (y < common_ctx.y1 || y > common_ctx.y2) break;
-		pos++;
-	}
-	save_c = doc[pos];
-	doc[pos] = 0;
-
-	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
-		regexec_flags = REG_NOTBOL;
-		common_ctx.textlen = regmatch.rm_eo - regmatch.rm_so;
-		if (!common_ctx.textlen) { doc[pos] = save_c; common_ctx.found = 1; goto free_stuff; }
-		common_ctx.s1 += regmatch.rm_so;
-		doctmp += regmatch.rm_so;
-
-		get_searched_regex_match(&common_ctx, &ctx);
-
-		doctmp += int_max(common_ctx.textlen, 1);
-		common_ctx.s1 += int_max(common_ctx.textlen, 1);
-	}
-
-	doc[pos] = save_c;
-	if (pos < doclen)
-		goto find_next;
-
-free_stuff:
-	regfree(&regex);
-	mem_free(doc);
-ret:
 	*pt = ctx.points;
 	*pl = ctx.len;
 }

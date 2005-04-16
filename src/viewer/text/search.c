@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.338 2005/04/15 21:30:58 miciah Exp $ */
+/* $Id: search.c,v 1.339 2005/04/16 04:21:36 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -323,20 +323,20 @@ init_regex(regex_t *regex, unsigned char *pattern)
 }
 
 static void
-is_in_range_regex_match(struct regex_match_context *ctx)
+is_in_range_regex_match(struct regex_match_context *common_ctx)
 {
 	int i;
 
-	if (ctx->s1[ctx->textlen].y < ctx->y || ctx->s1[ctx->textlen].y >= ctx->y2)
+	if (common_ctx->s1[common_ctx->textlen].y < common_ctx->y || common_ctx->s1[common_ctx->textlen].y >= common_ctx->y2)
 		return;
 
-	ctx->found = 1;
+	common_ctx->found = 1;
 
-	for (i = 0; i < ctx->textlen; i++) {
-		if (!ctx->s1[i].n) continue;
+	for (i = 0; i < common_ctx->textlen; i++) {
+		if (!common_ctx->s1[i].n) continue;
 
-		int_upper_bound(ctx->min, ctx->s1[i].x);
-		int_lower_bound(ctx->max, ctx->s1[i].x + ctx->s1[i].n);
+		int_upper_bound(common_ctx->min, common_ctx->s1[i].x);
+		int_lower_bound(common_ctx->max, common_ctx->s1[i].x + common_ctx->s1[i].n);
 	}
 }
 
@@ -355,15 +355,15 @@ is_in_range_regex(struct document *document, int y, int height,
 	int pos = 0;
 	struct search *search_start = s1;
 	unsigned char save_c;
-	struct regex_match_context ctx;
+	struct regex_match_context common_ctx;
 
-	ctx.found = 0;
-	ctx.textlen = textlen;
-	ctx.y = y;
-	ctx.y1 = y - 1;
-	ctx.y2 = y + height;
-	ctx.min = min;
-	ctx.max = max;
+	common_ctx.found = 0;
+	common_ctx.textlen = textlen;
+	common_ctx.y = y;
+	common_ctx.y1 = y - 1;
+	common_ctx.y2 = y + height;
+	common_ctx.min = min;
+	common_ctx.max = max;
 
 	if (!init_regex(&regex, text)) return -2;
 
@@ -379,16 +379,16 @@ find_next:
 	while (pos < doclen) {
 		int y = search_start[pos].y;
 
-		if (y >= ctx.y1 && y <= ctx.y2) break;
+		if (y >= common_ctx.y1 && y <= common_ctx.y2) break;
 		pos++;
 	}
 	doctmp = &doc[pos];
-	ctx.s1 = &search_start[pos];
+	common_ctx.s1 = &search_start[pos];
 
 	while (pos < doclen) {
 		int y = search_start[pos].y;
 
-		if (y < ctx.y1 || y > ctx.y2) break;
+		if (y < common_ctx.y1 || y > common_ctx.y2) break;
 		pos++;
 	}
 	save_c = doc[pos];
@@ -396,15 +396,15 @@ find_next:
 
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
 		regexec_flags = REG_NOTBOL;
-		ctx.textlen = regmatch.rm_eo - regmatch.rm_so;
-		if (!ctx.textlen) { doc[pos] = save_c; ctx.found = 1; goto free_stuff; }
-		ctx.s1 += regmatch.rm_so;
+		common_ctx.textlen = regmatch.rm_eo - regmatch.rm_so;
+		if (!common_ctx.textlen) { doc[pos] = save_c; common_ctx.found = 1; goto free_stuff; }
+		common_ctx.s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
-		is_in_range_regex_match(&ctx);
+		is_in_range_regex_match(&common_ctx);
 
-		doctmp += int_max(ctx.textlen, 1);
-		ctx.s1 += int_max(ctx.textlen, 1);
+		doctmp += int_max(common_ctx.textlen, 1);
+		common_ctx.s1 += int_max(common_ctx.textlen, 1);
 	}
 
 	doc[pos] = save_c;
@@ -415,7 +415,7 @@ free_stuff:
 	regfree(&regex);
 	mem_free(doc);
 
-	return ctx.found;
+	return common_ctx.found;
 }
 #endif /* HAVE_REGEX_H */
 
@@ -584,29 +584,29 @@ srch_failed:
 
 #ifdef HAVE_REGEX_H
 static void
-get_searched_regex_match(struct regex_match_context *ctx)
+get_searched_regex_match(struct regex_match_context *common_ctx)
 {
 	int i;
 
-	for (i = 0; i < ctx->textlen; i++) {
+	for (i = 0; i < common_ctx->textlen; i++) {
 		int j;
-		int y = ctx->s1[i].y + ctx->yoffset;
+		int y = common_ctx->s1[i].y + common_ctx->yoffset;
 
-		if (!row_is_in_box(ctx->box, y))
+		if (!row_is_in_box(common_ctx->box, y))
 			continue;
 
-		for (j = 0; j < ctx->s1[i].n; j++) {
-			int sx = ctx->s1[i].x + j;
-			int x = sx + ctx->xoffset;
+		for (j = 0; j < common_ctx->s1[i].n; j++) {
+			int sx = common_ctx->s1[i].x + j;
+			int x = sx + common_ctx->xoffset;
 
-			if (!col_is_in_box(ctx->box, x))
+			if (!col_is_in_box(common_ctx->box, x))
 				continue;
 
-			if (!realloc_points(&ctx->points, ctx->len))
+			if (!realloc_points(&common_ctx->points, common_ctx->len))
 				continue;
 
-			ctx->points[ctx->len].x = sx;
-			ctx->points[ctx->len++].y = ctx->s1[i].y;
+			common_ctx->points[common_ctx->len].x = sx;
+			common_ctx->points[common_ctx->len++].y = common_ctx->s1[i].y;
 		}
 	}
 }
@@ -624,16 +624,16 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	int pos = 0;
 	struct search *search_start = s1;
 	unsigned char save_c;
-	struct regex_match_context ctx;
+	struct regex_match_context common_ctx;
 
-	ctx.textlen = textlen;
-	ctx.points = NULL;
-	ctx.len = 0;
-	ctx.box = &doc_view->box;
-	ctx.xoffset = ctx.box->x - doc_view->vs->x;
-	ctx.yoffset = ctx.box->y - doc_view->vs->y;
-	ctx.y1 = doc_view->vs->y - 1;
-	ctx.y2 = doc_view->vs->y + ctx.box->height;
+	common_ctx.textlen = textlen;
+	common_ctx.points = NULL;
+	common_ctx.len = 0;
+	common_ctx.box = &doc_view->box;
+	common_ctx.xoffset = common_ctx.box->x - doc_view->vs->x;
+	common_ctx.yoffset = common_ctx.box->y - doc_view->vs->y;
+	common_ctx.y1 = doc_view->vs->y - 1;
+	common_ctx.y2 = doc_view->vs->y + common_ctx.box->height;
 
 	/* TODO: show error message */
 	if (!init_regex(&regex, *doc_view->search_word)) {
@@ -658,16 +658,16 @@ find_next:
 	while (pos < doclen) {
 		int y = search_start[pos].y;
 
-		if (y >= ctx.y1 && y <= ctx.y2) break;
+		if (y >= common_ctx.y1 && y <= common_ctx.y2) break;
 		pos++;
 	}
 	doctmp = &doc[pos];
-	ctx.s1 = &search_start[pos];
+	common_ctx.s1 = &search_start[pos];
 
 	while (pos < doclen) {
 		int y = search_start[pos].y;
 
-		if (y < ctx.y1 || y > ctx.y2) break;
+		if (y < common_ctx.y1 || y > common_ctx.y2) break;
 		pos++;
 	}
 	save_c = doc[pos];
@@ -675,15 +675,15 @@ find_next:
 
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
 		regexec_flags = REG_NOTBOL;
-		ctx.textlen = regmatch.rm_eo - regmatch.rm_so;
-		if (!ctx.textlen) { doc[pos] = save_c; goto free_stuff; }
-		ctx.s1 += regmatch.rm_so;
+		common_ctx.textlen = regmatch.rm_eo - regmatch.rm_so;
+		if (!common_ctx.textlen) { doc[pos] = save_c; goto free_stuff; }
+		common_ctx.s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
-		get_searched_regex_match(&ctx);
+		get_searched_regex_match(&common_ctx);
 
-		doctmp += int_max(ctx.textlen, 1);
-		ctx.s1 += int_max(ctx.textlen, 1);
+		doctmp += int_max(common_ctx.textlen, 1);
+		common_ctx.s1 += int_max(common_ctx.textlen, 1);
 	}
 
 	doc[pos] = save_c;
@@ -694,8 +694,8 @@ free_stuff:
 	regfree(&regex);
 	mem_free(doc);
 ret:
-	*pt = ctx.points;
-	*pl = ctx.len;
+	*pt = common_ctx.points;
+	*pl = common_ctx.len;
 }
 #endif /* HAVE_REGEX_H */
 

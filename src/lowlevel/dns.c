@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.117 2005/04/15 02:49:08 jonas Exp $ */
+/* $Id: dns.c,v 1.118 2005/04/16 14:23:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,15 +481,15 @@ find_host(unsigned char *name, void **queryref,
 	 * fallback if the new lookup fails. */
 	dnsentry = find_in_dns_cache(name);
 	if (dnsentry) {
-		double age;
-		timeval_T now;
+		timeval_T age, now, max_age;
 
 		assert(dnsentry && dnsentry->addrno > 0);
 
+		seconds_to_timeval(&max_age, DNS_CACHE_TIMEOUT);
 		get_timeval(&now);
-		age = timeval_diff(&dnsentry->creation_time, &now);
+		timeval_sub(&age, &dnsentry->creation_time, &now);
 
-		if (age <= DNS_CACHE_TIMEOUT) {
+		if (timeval_cmp(&age, &max_age) <= 0) {
 			done(data, dnsentry->addr, dnsentry->addrno);
 			return DNS_SUCCESS;
 		}
@@ -519,14 +519,17 @@ shrink_dns_cache(int whole)
 			del_dns_cache_entry(dnsentry);
 
 	} else {
-		timeval_T now;
+		timeval_T now, max_age;
 
+		seconds_to_timeval(&max_age, DNS_CACHE_TIMEOUT);
 		get_timeval(&now);
 
 		foreachsafe (dnsentry, next, dns_cache) {
-			double age = timeval_diff(&dnsentry->creation_time, &now);
+			timeval_T age;
 
-			if (age > DNS_CACHE_TIMEOUT)
+			timeval_sub(&age, &dnsentry->creation_time, &now);
+
+			if (timeval_cmp(&age, &max_age) > 0)
 				del_dns_cache_entry(dnsentry);
 		}
 	}

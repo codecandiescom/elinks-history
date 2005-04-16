@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.212 2005/04/16 00:03:27 jonas Exp $ */
+/* $Id: connect.c,v 1.213 2005/04/16 00:10:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -544,15 +544,21 @@ connect_socket(struct socket *csocket, int connection_state)
 		if (addr.sin6_family == AF_INET6) {
 			csocket->protocol_family = 1;
 			if (connect(sock, (struct sockaddr *) &addr,
-					sizeof(struct sockaddr_in6)) == 0)
-				break;
+					sizeof(struct sockaddr_in6)) == 0) {
+				/* Success */
+				complete_connect_socket(csocket);
+				return;
+			}
 		} else
 #endif
 		{
 			csocket->protocol_family = 0;
 			if (connect(sock, (struct sockaddr *) &addr,
-					sizeof(struct sockaddr_in)) == 0)
-				break; /* success */
+					sizeof(struct sockaddr_in)) == 0) {
+				/* Success */
+				complete_connect_socket(csocket);
+				return;
+			}
 		}
 
 		if (errno == EALREADY
@@ -600,8 +606,6 @@ connect_socket(struct socket *csocket, int connection_state)
 		csocket->ops->retry(csocket->conn, csocket, state);
 		return;
 	}
-
-	complete_connect_socket(csocket);
 }
 
 

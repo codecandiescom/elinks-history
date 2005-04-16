@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.270 2005/04/16 09:22:21 jonas Exp $ */
+/* $Id: connection.c,v 1.271 2005/04/16 14:41:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ struct keepalive_connection {
 	/* Function called when the keepalive has timed out or is deleted */
 	void (*done)(struct connection *);
 
-	double timeout;	/* in seconds */
+	timeval_T timeout;
 	timeval_T add_time;
 
 	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
@@ -310,11 +310,12 @@ static void
 update_progress(struct connection *conn)
 {
 	struct progress *progress = &conn->progress;
-	timeval_T now;
+	timeval_T now, elapsed;
 	long a;	/* FIXME: milliseconds */
-
+	
 	get_timeval(&now);
-	a = (long) (timeval_diff(&progress->last_time, &now) * 1000);
+	timeval_sub(&elapsed, &progress->last_time, &now);
+	a = timeval_to_milliseconds(&elapsed);
 	
 	progress->loaded = conn->received;
 	progress->size = conn->est_length;
@@ -531,7 +532,7 @@ init_keepalive_connection(struct connection *conn, time_T timeout,
 	keep_conn->done = done;
 	keep_conn->protocol_family = conn->socket->protocol_family;
 	keep_conn->socket = conn->socket->fd;
-	keep_conn->timeout = (double) timeout / 1000.0;	/* FIXME: milliseconds */
+	seconds_to_timeval(&keep_conn->timeout, timeout);
 	get_timeval(&keep_conn->add_time);
 
 	return keep_conn;
@@ -610,20 +611,28 @@ void
 check_keepalive_connections(void)
 {
 	struct keepalive_connection *keep_conn, *next;
-	timeval_T ct;
+	timeval_T now;
 	int p = 0;
 
-	get_timeval(&ct);
+	get_timeval(&now);
 	
 	kill_timer(&keepalive_timeout);
 
 	foreachsafe (keep_conn, next, keepalive_connections) {
-		if (can_read(keep_conn->socket)
-		    || timeval_diff(&keep_conn->add_time, &ct) > keep_conn->timeout) {
+		timeval_T age;
+		
+		if (can_read(keep_conn->socket)) {
 			done_keepalive_connection(keep_conn);
-		} else {
-			p++;
+			continue;
 		}
+
+		timeval_sub(&age, &keep_conn->add_time, &now);
+		if (timeval_cmp(&age, &keep_conn->timeout) > 0) {
+			done_keepalive_connection(keep_conn);
+			continue;
+		}
+
+		p++;
 	}
 
 	for (; p > MAX_KEEPALIVE_CONNECTIONS; p--) {

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.211 2005/04/15 23:31:45 jonas Exp $ */
+/* $Id: socket.c,v 1.212 2005/04/16 00:03:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -399,6 +399,21 @@ check_if_local_address4(struct sockaddr_in *addr)
 }
 
 
+static void
+complete_connect_socket(struct socket *socket)
+{
+	struct conn_info *conn_info = socket->conn_info;
+
+#ifdef CONFIG_SSL
+	/* Check if the connection should run over an encrypted link */
+	if (conn_info->need_ssl
+	    && ssl_connect(socket) < 0)
+		return;
+#endif
+
+	done_connection_info(socket);
+}
+	
 /* Select handler which is set for the socket descriptor when connect() has
  * indicated (via errno) that it is in progress. On completion this handler gets
  * called. */
@@ -429,14 +444,7 @@ connected(struct socket *socket)
 		return;
 	}
 
-#ifdef CONFIG_SSL
-	/* Check if the connection should run over an encrypted link */
-	if (conn_info->need_ssl
-	    && ssl_connect(socket) < 0)
-		return;
-#endif
-
-	done_connection_info(socket);
+	complete_connect_socket(socket);
 }
 
 void
@@ -593,14 +601,7 @@ connect_socket(struct socket *csocket, int connection_state)
 		return;
 	}
 
-#ifdef CONFIG_SSL
-	/* Check if the connection should run over an encrypted link */
-	if (conn_info->need_ssl
-	    && ssl_connect(csocket) < 0)
-		return;
-#endif
-
-	done_connection_info(csocket);
+	complete_connect_socket(csocket);
 }
 
 

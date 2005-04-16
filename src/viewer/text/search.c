@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.340 2005/04/16 04:31:20 miciah Exp $ */
+/* $Id: search.c,v 1.341 2005/04/16 04:32:27 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -353,12 +353,13 @@ is_in_range_regex(struct document *document, int y, int height,
 	struct is_in_range_regex_context ctx;
 
 	ctx.found = 0;
-	common_ctx.textlen = textlen;
 	ctx.y = y;
-	common_ctx.y1 = y - 1;
-	common_ctx.y2 = y + height;
 	ctx.min = min;
 	ctx.max = max;
+
+	common_ctx.textlen = textlen;
+	common_ctx.y1 = y - 1;
+	common_ctx.y2 = y + height;
 
 	if (!init_regex(&regex, text)) return -2;
 
@@ -631,12 +632,13 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	struct regex_match_context common_ctx;
 	struct get_searched_regex_context ctx;
 
-	common_ctx.textlen = textlen;
 	ctx.points = NULL;
 	ctx.len = 0;
 	ctx.box = &doc_view->box;
 	ctx.xoffset = ctx.box->x - doc_view->vs->x;
 	ctx.yoffset = ctx.box->y - doc_view->vs->y;
+
+	common_ctx.textlen = textlen;
 	common_ctx.y1 = doc_view->vs->y - 1;
 	common_ctx.y2 = doc_view->vs->y + ctx.box->height;
 

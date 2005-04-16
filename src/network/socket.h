@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.75 2005/04/16 00:28:33 jonas Exp $ */
+/* $Id: socket.h,v 1.76 2005/04/16 00:31:49 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -75,7 +75,6 @@ struct conn_info {
 	int triedno; /* index of last tried address */
 	int port;
 	int ip_family; /* If non-zero, use the indicated IP version. */
-	unsigned int need_ssl:1;
 };
 
 struct socket {
@@ -108,6 +107,7 @@ struct socket {
 	void *ssl;
 
 	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
+	unsigned int need_ssl:1;	/* If the socket needs SSL support */
 	unsigned int no_tls:1;
 
 };

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.215 2005/04/16 00:14:12 jonas Exp $ */
+/* $Id: socket.c,v 1.216 2005/04/16 00:15:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -542,20 +542,20 @@ connect_socket(struct socket *csocket, int connection_state)
 
 #ifdef CONFIG_IPV6
 		if (addr.sin6_family == AF_INET6) {
-			csocket->protocol_family = 1;
 			if (connect(sock, (struct sockaddr *) &addr,
 					sizeof(struct sockaddr_in6)) == 0) {
 				/* Success */
+				csocket->protocol_family = 1;
 				complete_connect_socket(csocket);
 				return;
 			}
 		} else
 #endif
 		{
-			csocket->protocol_family = 0;
 			if (connect(sock, (struct sockaddr *) &addr,
 					sizeof(struct sockaddr_in)) == 0) {
 				/* Success */
+				csocket->protocol_family = 0;
 				complete_connect_socket(csocket);
 				return;
 			}

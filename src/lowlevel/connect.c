@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.223 2005/04/16 01:44:17 jonas Exp $ */
+/* $Id: connect.c,v 1.224 2005/04/16 01:46:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,8 +84,36 @@ debug_transfer_log(unsigned char *data, int len)
 #define debug_transfer_log(data, len)
 #endif
 
-static void done_connection_info(struct socket *socket);
 
+static struct conn_info *
+init_connection_info(struct uri *uri, struct socket *socket,
+		     socket_connect_operation_T connect_done)
+{
+	struct conn_info *conn_info = mem_calloc(1, sizeof(*conn_info));
+
+	if (!conn_info) return NULL;
+
+	conn_info->done = connect_done;
+	conn_info->port = get_uri_port(uri);
+	conn_info->ip_family = uri->ip_family;
+	conn_info->triedno = -1;
+	conn_info->addr = NULL;
+
+	return conn_info;
+}
+
+static void
+done_connection_info(struct socket *socket)
+{
+	struct conn_info *conn_info = socket->conn_info;
+
+	assert(socket->conn_info);
+
+	if (conn_info->dnsquery) kill_dns_request(&conn_info->dnsquery);
+
+	mem_free_if(conn_info->addr);
+	mem_free_set(&socket->conn_info, NULL);
+}
 
 struct socket *
 init_socket(void *conn, struct socket_operations *ops)
@@ -138,36 +166,6 @@ exception(struct socket *socket)
 }
 
 
-struct conn_info *
-init_connection_info(struct uri *uri, struct socket *socket,
-		     socket_connect_operation_T connect_done)
-{
-	struct conn_info *conn_info = mem_calloc(1, sizeof(*conn_info));
-
-	if (!conn_info) return NULL;
-
-	conn_info->done = connect_done;
-	conn_info->port = get_uri_port(uri);
-	conn_info->ip_family = uri->ip_family;
-	conn_info->triedno = -1;
-	conn_info->addr = NULL;
-
-	return conn_info;
-}
-
-static void
-done_connection_info(struct socket *socket)
-{
-	struct conn_info *conn_info = socket->conn_info;
-
-	assert(socket->conn_info);
-
-	if (conn_info->dnsquery) kill_dns_request(&conn_info->dnsquery);
-
-	mem_free_if(conn_info->addr);
-	mem_free_set(&socket->conn_info, NULL);
-}
-	
 void
 timeout_socket(struct socket *socket)
 {

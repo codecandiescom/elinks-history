@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.221 2005/04/16 01:13:56 jonas Exp $ */
+/* $Id: socket.c,v 1.222 2005/04/16 01:20:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,22 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+
+/* Holds information during the connect()-phase. */
+struct conn_info {
+	struct sockaddr_storage *addr; /* array of addresses */
+
+	socket_connect_operation_T done;
+
+	void *dnsquery;
+
+	int addrno; /* array len / sizeof(sockaddr_storage) */
+	int triedno; /* index of last tried address */
+	int port;
+	int ip_family; /* If non-zero, use the indicated IP version. */
+};
+
+
 /* To enable logging of tranfers, for debugging purposes. */
 #if 0
 
@@ -72,6 +88,7 @@ debug_transfer_log(unsigned char *data, int len)
 #endif
 
 static void done_connection_info(struct socket *socket);
+
 
 struct socket *
 init_socket(void *conn, struct socket_operations *ops)

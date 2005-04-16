@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.78 2005/04/16 01:13:56 jonas Exp $ */
+/* $Id: connect.h,v 1.79 2005/04/16 01:20:03 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -9,6 +9,7 @@
 #endif
 
 struct connection;
+struct conn_info;
 struct read_buffer;
 struct socket;
 struct uri;
@@ -64,19 +65,6 @@ struct read_buffer {
 	unsigned char data[1]; /* must be at end of struct */
 };
 
-struct conn_info {
-	struct sockaddr_storage *addr; /* array of addresses */
-
-	socket_connect_operation_T done;
-
-	void *dnsquery;
-
-	int addrno; /* array len / sizeof(sockaddr_storage) */
-	int triedno; /* index of last tried address */
-	int port;
-	int ip_family; /* If non-zero, use the indicated IP version. */
-};
-
 struct socket {
 	/* The socket descriptor */
 	int fd;
@@ -112,10 +100,6 @@ struct socket {
 
 };
 
-
-struct conn_info *
-init_connection_info(struct uri *uri, struct socket *socket,
-		     socket_connect_operation_T connect_done);
 
 struct socket *init_socket(void *conn, struct socket_operations *ops);
 void done_socket(struct socket *socket);

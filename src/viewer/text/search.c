@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.348 2005/04/16 05:03:33 miciah Exp $ */
+/* $Id: search.c,v 1.349 2005/04/16 05:04:40 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -326,6 +326,8 @@ search_for_pattern(struct regex_match_context *common_ctx, void *data,
 	unsigned char save_c;
 
 	/* TODO: show error message */
+	/* XXX: This will probably require that reg_err be passed thru
+	 * common_ctx to the caller. */
 	if (!init_regex(&regex, common_ctx->pattern)) {
 #if 0
 		/* Where and how should we display the error dialog ? */

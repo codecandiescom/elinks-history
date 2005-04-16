@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.213 2005/04/16 00:10:13 jonas Exp $ */
+/* $Id: socket.c,v 1.214 2005/04/16 00:12:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -579,8 +579,6 @@ connect_socket(struct socket *csocket, int connection_state)
 	}
 
 	if (i >= conn_info->addrno) {
-		enum connection_state state;
-
 		/* Tried everything, but it didn't help :(. */
 
 		if (only_local && !saved_errno && at_least_one_remote_ip) {
@@ -596,14 +594,12 @@ connect_socket(struct socket *csocket, int connection_state)
 		 * something new. Else use the S_DNS _progress_ state to make
 		 * sure that no download callbacks will report any errors. */
 		if (trno != conn_info->triedno && !silent_fail)
-			state = -errno;
+			connection_state = -errno;
 		else if (trno == -1 && silent_fail)
 			/* All failed. */
-			state = S_NO_FORCED_DNS;
-		else
-			state = connection_state;
+			connection_state = S_NO_FORCED_DNS;
 
-		csocket->ops->retry(csocket->conn, csocket, state);
+		csocket->ops->retry(csocket->conn, csocket, connection_state);
 		return;
 	}
 }

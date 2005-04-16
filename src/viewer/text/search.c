@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.345 2005/04/16 04:47:38 miciah Exp $ */
+/* $Id: search.c,v 1.346 2005/04/16 04:58:33 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -311,6 +311,75 @@ init_regex(regex_t *regex, unsigned char *pattern)
 	return 1;
 }
 
+static void
+search_for_pattern(struct regex_match_context *common_ctx, void *data,
+		   void (*match)(struct regex_match_context *, void *))
+{
+	unsigned char *doc;
+	unsigned char *doctmp;
+	int doclen;
+	int regexec_flags = 0;
+	regex_t regex;
+	regmatch_t regmatch;
+	int pos = 0;
+	struct search *search_start = common_ctx->s1;
+	unsigned char save_c;
+
+	if (!init_regex(&regex, common_ctx->pattern)) {
+		common_ctx->found = -2;
+		return;
+	}
+
+	doc = get_search_region_from_search_nodes(common_ctx->s1, common_ctx->s2, common_ctx->textlen, &doclen);
+	if (!doc) {
+		regfree(&regex);
+		common_ctx->found = doclen;
+		return;
+	}
+
+	doctmp = doc;
+
+find_next:
+	while (pos < doclen) {
+		int y = search_start[pos].y;
+
+		if (y >= common_ctx->y1 && y <= common_ctx->y2) break;
+		pos++;
+	}
+	doctmp = &doc[pos];
+	common_ctx->s1 = &search_start[pos];
+
+	while (pos < doclen) {
+		int y = search_start[pos].y;
+
+		if (y < common_ctx->y1 || y > common_ctx->y2) break;
+		pos++;
+	}
+	save_c = doc[pos];
+	doc[pos] = 0;
+
+	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
+		regexec_flags = REG_NOTBOL;
+		common_ctx->textlen = regmatch.rm_eo - regmatch.rm_so;
+		if (!common_ctx->textlen) { doc[pos] = save_c; common_ctx->found = 1; goto free_stuff; }
+		common_ctx->s1 += regmatch.rm_so;
+		doctmp += regmatch.rm_so;
+
+		match(common_ctx, data);
+
+		doctmp += int_max(common_ctx->textlen, 1);
+		common_ctx->s1 += int_max(common_ctx->textlen, 1);
+	}
+
+	doc[pos] = save_c;
+	if (pos < doclen)
+		goto find_next;
+
+free_stuff:
+	regfree(&regex);
+	mem_free(doc);
+}
+
 struct is_in_range_regex_context {
 	int y;
 	int *min;
@@ -342,15 +411,6 @@ is_in_range_regex(struct document *document, int y, int height,
 		  int *min, int *max,
 		  struct search *s1, struct search *s2)
 {
-	unsigned char *doc;
-	unsigned char *doctmp;
-	int doclen;
-	int regexec_flags = 0;
-	regex_t regex;
-	regmatch_t regmatch;
-	int pos = 0;
-	struct search *search_start = s1;
-	unsigned char save_c;
 	struct regex_match_context common_ctx;
 	struct is_in_range_regex_context ctx;
 
@@ -366,55 +426,7 @@ is_in_range_regex(struct document *document, int y, int height,
 	common_ctx.s1 = s1;
 	common_ctx.s2 = s2;
 
-	if (!init_regex(&regex, common_ctx.pattern)) return -2;
-
-	doc = get_search_region_from_search_nodes(common_ctx.s1, common_ctx.s2, textlen, &doclen);
-	if (!doc) {
-		regfree(&regex);
-		return doclen;
-	}
-
-	doctmp = doc;
-
-find_next:
-	while (pos < doclen) {
-		int y = search_start[pos].y;
-
-		if (y >= common_ctx.y1 && y <= common_ctx.y2) break;
-		pos++;
-	}
-	doctmp = &doc[pos];
-	common_ctx.s1 = &search_start[pos];
-
-	while (pos < doclen) {
-		int y = search_start[pos].y;
-
-		if (y < common_ctx.y1 || y > common_ctx.y2) break;
-		pos++;
-	}
-	save_c = doc[pos];
-	doc[pos] = 0;
-
-	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
-		regexec_flags = REG_NOTBOL;
-		common_ctx.textlen = regmatch.rm_eo - regmatch.rm_so;
-		if (!common_ctx.textlen) { doc[pos] = save_c; common_ctx.found = 1; goto free_stuff; }
-		common_ctx.s1 += regmatch.rm_so;
-		doctmp += regmatch.rm_so;
-
-		is_in_range_regex_match(&common_ctx, &ctx);
-
-		doctmp += int_max(common_ctx.textlen, 1);
-		common_ctx.s1 += int_max(common_ctx.textlen, 1);
-	}
-
-	doc[pos] = save_c;
-	if (pos < doclen)
-		goto find_next;
-
-free_stuff:
-	regfree(&regex);
-	mem_free(doc);
+	search_for_pattern(&common_ctx, &ctx, is_in_range_regex_match);
 
 	return common_ctx.found;
 }

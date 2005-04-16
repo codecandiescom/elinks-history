@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.216 2005/04/16 00:15:34 jonas Exp $ */
+/* $Id: socket.c,v 1.217 2005/04/16 00:28:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -399,7 +399,7 @@ check_if_local_address4(struct sockaddr_in *addr)
 }
 
 
-static void
+void
 complete_connect_socket(struct socket *socket)
 {
 	struct conn_info *conn_info = socket->conn_info;
@@ -407,6 +407,7 @@ complete_connect_socket(struct socket *socket)
 #ifdef CONFIG_SSL
 	/* Check if the connection should run over an encrypted link */
 	if (conn_info->need_ssl
+	    && !socket->ssl
 	    && ssl_connect(socket) < 0)
 		return;
 #endif

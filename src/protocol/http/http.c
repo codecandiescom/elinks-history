@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.425 2005/04/14 01:28:22 jonas Exp $ */
+/* $Id: http.c,v 1.426 2005/04/16 01:13:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1497,13 +1497,8 @@ again:
 	if (h == 200 && connection_is_https_proxy(conn) && !conn->socket->ssl) {
 #ifdef CONFIG_SSL
 		mem_free(head);
-		socket->conn_info = init_connection_info(uri, socket, http_send_header);
-		if (!socket->conn_info) {
-			abort_connection(conn, S_OUT_OF_MEM);
-			return;
-		}
-
-		ssl_connect(socket);
+		socket->need_ssl = 1;
+		complete_connect_socket(socket, uri, http_send_header);
 #else
 		abort_connection(conn, S_SSL_ERROR);
 #endif

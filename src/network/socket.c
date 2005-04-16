@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.220 2005/04/16 00:40:53 jonas Exp $ */
+/* $Id: socket.c,v 1.221 2005/04/16 01:13:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,8 +138,6 @@ init_connection_info(struct uri *uri, struct socket *socket,
 	conn_info->triedno = -1;
 	conn_info->addr = NULL;
 
-	socket->need_ssl = get_protocol_need_ssl(uri->protocol);
-
 	return conn_info;
 }
 
@@ -238,6 +236,9 @@ make_connection(struct connection *conn, struct socket *socket,
 	}
 
 	socket->conn_info = conn_info;
+	/* XXX: Keep here and not in init_connection_info() to make
+	 * complete_connect_socket() work from the HTTP implementation. */
+	socket->need_ssl = get_protocol_need_ssl(conn->uri->protocol);
 
 	debug_transfer_log("\nCONNECTION: ", -1);
 	debug_transfer_log(host, -1);
@@ -398,9 +399,23 @@ check_if_local_address4(struct sockaddr_in *addr)
 
 
 void
-complete_connect_socket(struct socket *socket)
+complete_connect_socket(struct socket *socket, struct uri *uri,
+			socket_connect_operation_T done)
 {
-	struct conn_info *conn_info;
+	struct conn_info *conn_info = socket->conn_info;
+
+	/* This is a special case used by the HTTP implementation to acquire an
+	 * SSL link for handling CONNECT requests. */
+	if (!conn_info) {
+		assert(uri && socket);
+		conn_info = init_connection_info(uri, socket, done);
+		if (!conn_info) {
+			socket->ops->done(socket->conn, socket, S_OUT_OF_MEM);
+			return;
+		}
+
+		socket->conn_info = conn_info;
+	}
 
 #ifdef CONFIG_SSL
 	/* Check if the connection should run over an encrypted link */
@@ -410,7 +425,6 @@ complete_connect_socket(struct socket *socket)
 		return;
 #endif
 
-	conn_info = socket->conn_info;
 	if (conn_info->done)
 		conn_info->done(socket->conn, socket);
 
@@ -447,7 +461,7 @@ connected(struct socket *socket)
 		return;
 	}
 
-	complete_connect_socket(socket);
+	complete_connect_socket(socket, NULL, NULL);
 }
 
 void
@@ -549,7 +563,7 @@ connect_socket(struct socket *csocket, int connection_state)
 					sizeof(struct sockaddr_in6)) == 0) {
 				/* Success */
 				csocket->protocol_family = 1;
-				complete_connect_socket(csocket);
+				complete_connect_socket(csocket, NULL, NULL);
 				return;
 			}
 		} else
@@ -559,7 +573,7 @@ connect_socket(struct socket *csocket, int connection_state)
 					sizeof(struct sockaddr_in)) == 0) {
 				/* Success */
 				csocket->protocol_family = 0;
-				complete_connect_socket(csocket);
+				complete_connect_socket(csocket, NULL, NULL);
 				return;
 			}
 		}

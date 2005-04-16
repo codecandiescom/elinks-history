@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.120 2005/04/16 00:28:33 jonas Exp $ */
+/* $Id: connect.c,v 1.121 2005/04/16 01:13:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,7 +162,7 @@ ssl_want_read(struct socket *socket)
 #endif
 
 			/* Report successful SSL connection setup. */
-			complete_connect_socket(socket);
+			complete_connect_socket(socket, NULL, NULL);
 			break;
 
 		case SSL_ERROR_WANT_READ:

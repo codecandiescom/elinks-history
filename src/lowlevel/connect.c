@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.218 2005/04/16 00:31:49 jonas Exp $ */
+/* $Id: connect.c,v 1.219 2005/04/16 00:34:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,6 +71,7 @@ debug_transfer_log(unsigned char *data, int len)
 #define debug_transfer_log(data, len)
 #endif
 
+static void done_connection_info(struct socket *socket);
 
 struct socket *
 init_socket(void *conn, struct socket_operations *ops)
@@ -145,7 +146,7 @@ init_connection_info(struct uri *uri, struct socket *socket,
 	return conn_info;
 }
 
-void
+static void
 done_connection_info(struct socket *socket)
 {
 	struct conn_info *conn_info = socket->conn_info;

@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.79 2005/04/16 01:20:03 jonas Exp $ */
+/* $Id: socket.h,v 1.80 2005/04/16 01:38:17 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -69,7 +69,7 @@ struct socket {
 	/* The socket descriptor */
 	int fd;
 
-	/* Some what read-specific socket state management and signaling. */
+	/* Somewhat read-specific socket state management and signaling. */
 	enum socket_state state;
 
 	/* Information for resolving the connection with which the socket is
@@ -96,25 +96,41 @@ struct socket {
 
 	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
 	unsigned int need_ssl:1;	/* If the socket needs SSL support */
-	unsigned int no_tls:1;
-
+	unsigned int no_tls:1;		/* Internal SSL flag. */
 };
 
 
+/* Socket management: */
+
+/* Allocate and setup a socket. */
 struct socket *init_socket(void *conn, struct socket_operations *ops);
+
+/* Reset a socket so it can be reused. XXX: Does not free() it! */
 void done_socket(struct socket *socket);
+
+/* Closes socket if open and clear any associated handlers. */
 void close_socket(struct socket *socket);
+
+/* Timeout handler. Will try to reconnect if possible. */
 void timeout_socket(struct socket *socket);
+
+
+/* Connection establishing: */
 
 /* End successful connect() attempt to socket. */
 void complete_connect_socket(struct socket *socket, struct uri *uri,
 			     socket_connect_operation_T done);
 
-/* Establish connection with the host in @conn->uri. Storing the socket
+/* Establish connection with the host and port in @conn->uri. Storing the socket
  * descriptor in @socket. When the connection has been established the @done
  * callback will be run. */
 void make_connection(struct connection *conn, struct socket *socket,
 		     socket_connect_operation_T connect_done);
+
+/* Creates and returns a listening socket in the given IP @family and storing
+ * socket info in @addr. @ctrl_sock is used for getting bind() information. */
+int get_pasv_socket(struct connection *conn, int ctrl_sock,
+		    int family, struct sockaddr_storage *addr);
 
 /* Try to connect to the next address in the socket->conn_info struct.
  * Updates the connection state to @connection_state. */
@@ -123,8 +139,13 @@ void connect_socket(struct socket *socket, int connection_state);
 /* Used by the SSL layer when negotiating. */
 void dns_exception(struct socket *socket);
 
-int get_pasv_socket(struct connection *conn, int ctrl_sock,
-		    int family, struct sockaddr_storage *addr);
+
+/* Reading and writing to sockets: */
+
+/* Reads data from @socket into @buffer. Calls @done each time new data is
+ * ready. */
+void read_from_socket(struct socket *socket, struct read_buffer *buffer,
+		      int connection_state, socket_read_operation_T done);
 
 /* Writes @datalen bytes from @data buffer to the passed @socket. When all data
  * is written the @done callback will be called. */
@@ -137,13 +158,10 @@ void request_from_socket(struct socket *socket, unsigned char *data, int datalen
 			 int connection_state, enum socket_state state,
 			 socket_read_operation_T read_done);
 
+/* Initialize a read buffer. */
 struct read_buffer *alloc_read_buffer(struct socket *socket);
 
-/* Reads data from @socket into @buffer using @done as struct read_buffers
- * @done routine (called each time new data comes in). */
-void read_from_socket(struct socket *socket, struct read_buffer *buffer,
-		      int connection_state, socket_read_operation_T done);
-
-void kill_buffer_data(struct read_buffer *, int);
+/* Remove @bytes number of bytes from @buffer. */
+void kill_buffer_data(struct read_buffer *buffer, int bytes);
 
 #endif

@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.41 2005/04/16 21:21:08 jonas Exp $ */
+/* $Id: rewrite.c,v 1.42 2005/04/16 21:25:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,16 +213,6 @@ get_prefix_tree(enum uri_rewrite_option tree)
 	return &get_opt_rewrite(tree);
 }
 
-static inline void
-encode_uri_string_len(struct string *s, unsigned char *a, int alen)
-{
-	unsigned char c = a[alen];
-
-	a[alen] = 0;
-	encode_uri_string(s, a, alen, 1);
-	a[alen] = c;
-}
-
 #define MAX_URI_ARGS 10
 
 static unsigned char *
@@ -287,9 +277,9 @@ rewrite_uri(unsigned char *url, struct uri *current_uri, unsigned char *arg)
 			case '8':
 			case '9':
 				value = *url - '0';
-				if (value < argc)
-					encode_uri_string_len(&n, args[value],
-						argslen[value]);
+				if (value > argc) break;
+				encode_uri_string(&n, args[value],
+						  argslen[value], 1);
 				break;
 			default:
 				add_bytes_to_string(&n, url - 1, 2);

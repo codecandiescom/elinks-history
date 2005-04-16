@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.15 2005/03/27 22:18:02 rrowan Exp $
+## $Id: Makefile.am,v 1.16 2005/04/16 15:36:55 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -25,6 +25,7 @@ EXTRA_DIST = \
  conv/w3m2links.awk \
  guile/internal-hooks.scm \
  guile/user-hooks.scm \
+ lua/babelfish.lua \
  lua/bm-to-elinks-bookmarks.lua \
  lua/bm.lua \
  lua/config.lua \

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.346 2005/04/16 04:58:33 miciah Exp $ */
+/* $Id: search.c,v 1.347 2005/04/16 05:00:11 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -325,7 +325,14 @@ search_for_pattern(struct regex_match_context *common_ctx, void *data,
 	struct search *search_start = common_ctx->s1;
 	unsigned char save_c;
 
+	/* TODO: show error message */
 	if (!init_regex(&regex, common_ctx->pattern)) {
+#if 0
+		/* Where and how should we display the error dialog ? */
+		unsigned char regerror_string[MAX_STR_LEN];
+
+		regerror(reg_err, &regex, regerror_string, sizeof(regerror_string));
+#endif
 		common_ctx->found = -2;
 		return;
 	}
@@ -663,14 +670,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	common_ctx.s1 = s1;
 	common_ctx.s2 = s2;
 
-	/* TODO: show error message */
 	if (!init_regex(&regex, common_ctx.pattern)) {
-#if 0
-		/* Where and how should we display the error dialog ? */
-		unsigned char regerror_string[MAX_STR_LEN];
-
-		regerror(reg_err, &regex, regerror_string, sizeof(regerror_string));
-#endif
 		goto ret;
 	}
 

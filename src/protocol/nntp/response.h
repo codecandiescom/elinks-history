@@ -1,11 +1,12 @@
-/* $Id: response.h,v 1.1 2004/08/14 07:53:15 jonas Exp $ */
+/* $Id: response.h,v 1.2 2005/04/17 23:03:14 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_NNTP_RESPONSE_H
 #define EL__PROTOCOL_NNTP_RESPONSE_H
 
-#include "lowlevel/connect.h"
 #include "protocol/nntp/connection.h"
-#include "sched/connection.h"
+
+struct connection;
+struct read_buffer;
 
 /* Reads multi-lined response data */
 /* Slightly abusive usage of connection state to signal what is going on

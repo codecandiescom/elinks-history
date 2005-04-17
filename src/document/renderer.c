@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.144 2005/04/13 17:32:18 jonas Exp $ */
+/* $Id: renderer.c,v 1.145 2005/04/17 23:03:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "document/renderer.h"
 #include "document/view.h"
 #include "ecmascript/ecmascript.h"
+#include "encoding/encoding.h"
 #include "intl/charsets.h"
 #include "main.h"
 #include "protocol/header.h"

@@ -82,3 +82,5 @@ hooks.pl: take THAT hooks.lua - *pimp slap*
 %
 Pressing Ctrl-W in most text-input fields will auto-complete the entered
 text from history or display a menu with possible completions.
+%
+To interrupt a connection, press 'z'.  The key bound to 'back' also works.

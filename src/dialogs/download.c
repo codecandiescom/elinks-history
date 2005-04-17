@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.76 2005/04/17 16:22:05 zas Exp $ */
+/* $Id: download.c,v 1.77 2005/04/17 16:30:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -459,4 +459,7 @@ void
 download_manager(struct session *ses)
 {
 	hierbox_browser(&download_browser, ses);
+
+	/* FIXME: It's workaround for bug 397. Real fix is needed. */
+	download_browser.do_not_save_state = 1;
 }

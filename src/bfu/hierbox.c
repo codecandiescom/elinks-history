@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.210 2005/03/23 15:43:41 miciah Exp $ */
+/* $Id: hierbox.c,v 1.211 2005/04/17 16:30:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,8 +259,7 @@ hierbox_ev_abort(struct dialog_data *dlg_data)
 	struct hierbox_dialog_list_item *item;
 
 	/* Save state and delete the box structure */
-	/* FIXME: It's workaround for bug 397. Real fix is needed. */
-	if (browser != &download_browser)
+	if (!browser->do_not_save_state)
 		copy_struct(&browser->box_data, box);
 	del_from_list(box);
 

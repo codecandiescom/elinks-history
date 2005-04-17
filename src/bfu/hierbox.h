@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.68 2005/03/05 20:50:34 zas Exp $ */
+/* $Id: hierbox.h,v 1.69 2005/04/17 16:30:38 zas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -32,6 +32,7 @@ struct hierbox_browser {
 	struct listbox_ops *ops;
 
 	/* For saving state */
+	unsigned int do_not_save_state:1;
 	struct listbox_data box_data;
 };
 

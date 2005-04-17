@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.227 2005/04/17 01:59:05 jonas Exp $ */
+/* $Id: socket.c,v 1.228 2005/04/17 18:08:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,8 @@ done_socket(struct socket *socket)
 	if (socket->conn_info)
 		done_connection_info(socket);
 
-	mem_free_set(&socket->buffer, NULL);
+	mem_free_set(&socket->read_buffer, NULL);
+	mem_free_set(&socket->write_buffer, NULL);
 }
 
 void
@@ -656,7 +657,7 @@ generic_write(struct socket *socket, unsigned char *data, int len)
 static void
 write_select(struct socket *socket)
 {
-	struct write_buffer *wb = socket->buffer;
+	struct write_buffer *wb = socket->write_buffer;
 	int wr;
 
 	assertm(wb, "write socket has no buffer");
@@ -711,7 +712,7 @@ write_select(struct socket *socket)
 			socket_write_T done = wb->done;
 
 			clear_handlers(socket->fd);
-			mem_free_set(&socket->buffer, NULL);
+			mem_free_set(&socket->write_buffer, NULL);
 			done(socket->conn, socket);
 		}
 	}
@@ -740,7 +741,7 @@ write_to_socket(struct socket *socket, unsigned char *data, int len,
 	wb->pos = 0;
 	wb->done = write_done;
 	memcpy(wb->data, data, len);
-	mem_free_set(&socket->buffer, wb);
+	mem_free_set(&socket->write_buffer, wb);
 	set_handlers(socket->fd, NULL, (select_handler_T) write_select,
 		     (select_handler_T) exception, socket);
 	socket->ops->set_state(socket->conn, socket, connection_state);
@@ -763,7 +764,7 @@ generic_read(struct socket *socket, unsigned char *data, int len)
 static void
 read_select(struct socket *socket)
 {
-	struct read_buffer *rb = socket->buffer;
+	struct read_buffer *rb = socket->read_buffer;
 	int rd;
 
 	assertm(rb, "read socket has no buffer");
@@ -789,7 +790,7 @@ read_select(struct socket *socket)
 		}
 		rb->freespace = size - sizeof(*rb) - rb->len;
 		assert(rb->freespace > 0);
-		socket->buffer = rb;
+		socket->read_buffer = rb;
 	}
 
 #ifdef CONFIG_SSL
@@ -865,9 +866,9 @@ read_from_socket(struct socket *socket, struct read_buffer *buffer,
 	socket->ops->set_timeout(socket->conn, socket, 0);
 	socket->ops->set_state(socket->conn, socket, connection_state);
 
-	if (socket->buffer && buffer != socket->buffer)
-		mem_free(socket->buffer);
-	socket->buffer = buffer;
+	if (socket->read_buffer && buffer != socket->read_buffer)
+		mem_free(socket->read_buffer);
+	socket->read_buffer = buffer;
 
 	set_handlers(socket->fd, (select_handler_T) read_select, NULL,
 		     (select_handler_T) exception, socket);

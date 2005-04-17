@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.83 2005/04/17 01:59:05 jonas Exp $ */
+/* $Id: socket.h,v 1.84 2005/04/17 18:08:26 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -79,7 +79,8 @@ struct socket {
 	struct conn_info *conn_info;
 
 	/* Use for read and write buffers. */
-	void *buffer;
+	struct read_buffer *read_buffer;
+	void *write_buffer;
 
 	/* Callbacks to the connection management: */
 	struct socket_operations *ops;

@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.273 2005/04/17 18:54:52 zas Exp $ */
+/* $Id: connection.c,v 1.274 2005/04/17 20:18:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,7 +274,7 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 		return NULL;
 	}
 
-	init_progress(&conn->progress, start);
+	conn->progress = init_progress(start);
 	if (!conn->progress) {
 		mem_free(conn->data_socket);
 		mem_free(conn->socket);
@@ -463,7 +463,7 @@ done_connection(struct connection *conn)
 	done_uri(conn->proxied_uri);
 	mem_free(conn->socket);
 	mem_free(conn->data_socket);
-	done_progress(&conn->progress);
+	done_progress(conn->progress);
 	mem_free(conn);
 	check_queue_bugs();
 }

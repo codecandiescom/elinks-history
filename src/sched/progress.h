@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.3 2005/04/17 18:46:04 zas Exp $ */
+/* $Id: progress.h,v 1.4 2005/04/17 20:18:57 zas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
@@ -34,7 +34,7 @@ struct progress {
 	int data_in_secs[CURRENT_SPD_SEC];
 };
 
-struct progress *init_progress(struct progress **progress_ref, int start);
-void done_progress(struct progress **progress_ref);
+struct progress *init_progress(int start);
+void done_progress(struct progress *progress);
 
 #endif

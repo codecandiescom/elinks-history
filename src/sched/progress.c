@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.2 2005/04/17 18:46:04 zas Exp $ */
+/* $Id: progress.c,v 1.3 2005/04/17 20:18:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,7 @@
 #include "util/memory.h"
 
 struct progress *
-init_progress(struct progress **progress_ref, int start)
+init_progress(int start)
 {
 	struct progress *progress = mem_calloc(1, sizeof(*progress));
 
@@ -21,18 +21,13 @@ init_progress(struct progress **progress_ref, int start)
 		progress->timer = TIMER_ID_UNDEF;
 	}
 
-	if (progress_ref)
-		*progress_ref = progress;
-
 	return progress;
 }
 
 void
-done_progress(struct progress **progress_ref)
+done_progress(struct progress *progress)
 {
-	assert(progress_ref);
-	
-	mem_free_set(progress_ref, NULL);
+	mem_free(progress);
 }
 
 

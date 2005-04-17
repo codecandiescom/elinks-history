@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.224 2005/04/16 01:46:59 jonas Exp $ */
+/* $Id: socket.c,v 1.225 2005/04/17 01:15:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,10 +226,10 @@ dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 }
 
 void
-make_connection(struct connection *conn, struct socket *socket,
-		socket_connect_operation_T connect_done)
+make_connection(struct socket *socket, struct uri *uri,
+		socket_connect_operation_T connect_done, int no_cache)
 {
-	unsigned char *host = get_uri_string(conn->uri, URI_DNS_HOST);
+	unsigned char *host = get_uri_string(uri, URI_DNS_HOST);
 	struct conn_info *conn_info;
 	enum dns_result result;
 
@@ -240,7 +240,7 @@ make_connection(struct connection *conn, struct socket *socket,
 		return;
 	}
 
-	conn_info = init_connection_info(conn->uri, socket, connect_done);
+	conn_info = init_connection_info(uri, socket, connect_done);
 	if (!conn_info) {
 		mem_free(host);
 		socket->ops->retry(socket->conn, socket, S_OUT_OF_MEM);
@@ -250,14 +250,14 @@ make_connection(struct connection *conn, struct socket *socket,
 	socket->conn_info = conn_info;
 	/* XXX: Keep here and not in init_connection_info() to make
 	 * complete_connect_socket() work from the HTTP implementation. */
-	socket->need_ssl = get_protocol_need_ssl(conn->uri->protocol);
+	socket->need_ssl = get_protocol_need_ssl(uri->protocol);
 
 	debug_transfer_log("\nCONNECTION: ", -1);
 	debug_transfer_log(host, -1);
 	debug_transfer_log("\n", -1);
 
 	result = find_host(host, &conn_info->dnsquery, (dns_callback_T) dns_found,
-			   socket, conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
+			   socket, no_cache);
 
 	mem_free(host);
 

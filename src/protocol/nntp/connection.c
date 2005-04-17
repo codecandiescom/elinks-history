@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.20 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: connection.c,v 1.21 2005/04/17 01:15:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -505,7 +505,8 @@ nntp_protocol_handler(struct connection *conn)
 		return;
 
 	if (!has_keepalive_connection(conn)) {
-		make_connection(conn, conn->socket, nntp_get_response);
+		make_connection(conn->socket, conn->uri, nntp_get_response,
+				conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 	} else {
 		nntp_send_command(conn);
 	}

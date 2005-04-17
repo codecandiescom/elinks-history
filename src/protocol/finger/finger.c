@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.20 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: finger.c,v 1.21 2005/04/17 01:15:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,6 +87,8 @@ finger_send_request(struct connection *conn, struct socket *socket)
 void
 finger_protocol_handler(struct connection *conn)
 {
+
 	conn->from = 0;
-	make_connection(conn, conn->socket, finger_send_request);
+	make_connection(conn->socket, conn->uri, finger_send_request,
+			conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 }

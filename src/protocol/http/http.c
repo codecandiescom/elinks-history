@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.426 2005/04/16 01:13:56 jonas Exp $ */
+/* $Id: http.c,v 1.427 2005/04/17 01:15:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -496,7 +496,8 @@ http_protocol_handler(struct connection *conn)
 	/* setcstate(conn, S_CONN); */
 
 	if (!has_keepalive_connection(conn)) {
-		make_connection(conn, conn->socket, http_send_header);
+		make_connection(conn->socket, conn->uri, http_send_header,
+				conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 	} else {
 		http_send_header(conn, conn->socket);
 	}

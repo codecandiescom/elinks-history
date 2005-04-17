@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.243 2005/04/15 13:14:01 jonas Exp $ */
+/* $Id: ftp.c,v 1.244 2005/04/17 01:15:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,7 +270,8 @@ void
 ftp_protocol_handler(struct connection *conn)
 {
 	if (!has_keepalive_connection(conn)) {
-		make_connection(conn, conn->socket, ftp_login);
+		make_connection(conn->socket, conn->uri, ftp_login,
+				conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 
 	} else {
 		ftp_send_retr_req(conn, S_SENT);

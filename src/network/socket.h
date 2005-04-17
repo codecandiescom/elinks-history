@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.80 2005/04/16 01:38:17 jonas Exp $ */
+/* $Id: socket.h,v 1.81 2005/04/17 01:15:21 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -121,11 +121,12 @@ void timeout_socket(struct socket *socket);
 void complete_connect_socket(struct socket *socket, struct uri *uri,
 			     socket_connect_operation_T done);
 
-/* Establish connection with the host and port in @conn->uri. Storing the socket
+/* Establish connection with the host and port in @uri. Storing the socket
  * descriptor in @socket. When the connection has been established the @done
- * callback will be run. */
-void make_connection(struct connection *conn, struct socket *socket,
-		     socket_connect_operation_T connect_done);
+ * callback will be run. @no_cache specifies whether the DNS cache should be
+ * ignored. */
+void make_connection(struct socket *socket, struct uri *uri,
+		     socket_connect_operation_T connect_done, int no_cache);
 
 /* Creates and returns a listening socket in the given IP @family and storing
  * socket info in @addr. @ctrl_sock is used for getting bind() information. */

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.52 2005/04/17 01:15:21 jonas Exp $ */
+/* $Id: gopher.c,v 1.53 2005/04/17 01:59:05 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -776,7 +776,8 @@ read_gopher_response_data(struct connection *conn, struct socket *socket,
 		return;
 	}
 
-	read_from_socket(conn->socket, rb, S_TRANS, read_gopher_response_data);
+	read_from_socket(conn->socket, rb, S_TRANS,
+			 (socket_read_T) read_gopher_response_data);
 }
 
 
@@ -786,7 +787,8 @@ send_gopher_command(struct connection *conn, struct socket *socket)
 	struct gopher_connection_info *gopher = conn->info;
 
 	request_from_socket(socket, gopher->command, gopher->commandlen,
-			    S_SENT, SOCKET_END_ONCLOSE, read_gopher_response_data);
+			    S_SENT, SOCKET_END_ONCLOSE,
+			    (socket_read_T) read_gopher_response_data);
 }
 
 
@@ -833,6 +835,7 @@ gopher_protocol_handler(struct connection *conn)
 
 	/* Set up a socket to the server for the data */
 	conn->from = 0;
-	make_connection(conn->socket, conn->uri, send_gopher_command,
+	make_connection(conn->socket, conn->uri,
+			(socket_connect_T) send_gopher_command,
 			conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 }

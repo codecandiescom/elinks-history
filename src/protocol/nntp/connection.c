@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.21 2005/04/17 01:15:21 jonas Exp $ */
+/* $Id: connection.c,v 1.22 2005/04/17 01:59:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -255,7 +255,8 @@ read_nntp_data(struct connection *conn, struct socket *socket,
 
 	case S_TRANS:
 	default:
-		read_from_socket(conn->socket, rb, S_TRANS, read_nntp_data);
+		read_from_socket(conn->socket, rb, S_TRANS,
+				 (socket_read_T) read_nntp_data);
 	}
 }
 
@@ -275,7 +276,8 @@ nntp_got_response(struct connection *conn, struct socket *socket,
 
 	switch (nntp->code) {
 	case NNTP_CODE_NONE:
-		read_from_socket(conn->socket, rb, S_TRANS, nntp_got_response);
+		read_from_socket(conn->socket, rb, S_TRANS,
+				 (socket_read_T) nntp_got_response);
 		break;
 
 	case NNTP_CODE_INVALID:
@@ -327,7 +329,8 @@ nntp_get_response(struct connection *conn, struct socket *socket)
 	if (!rb) return;
 
 	socket->state = SOCKET_END_ONCLOSE;
-	read_from_socket(conn->socket, rb, conn->state, nntp_got_response);
+	read_from_socket(conn->socket, rb, conn->state,
+			 (socket_read_T) nntp_got_response);
 }
 
 
@@ -491,7 +494,8 @@ nntp_send_command(struct connection *conn)
 	add_nntp_command_to_string(&req, nntp);
 
 	request_from_socket(conn->socket, req.source, req.length, S_SENT,
-			    SOCKET_END_ONCLOSE, nntp_got_response);
+			    SOCKET_END_ONCLOSE,
+			    (socket_read_T) nntp_got_response);
 	done_string(&req);
 }
 
@@ -505,7 +509,8 @@ nntp_protocol_handler(struct connection *conn)
 		return;
 
 	if (!has_keepalive_connection(conn)) {
-		make_connection(conn->socket, conn->uri, nntp_get_response,
+		make_connection(conn->socket, conn->uri,
+				(socket_connect_T) nntp_get_response,
 				conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 	} else {
 		nntp_send_command(conn);

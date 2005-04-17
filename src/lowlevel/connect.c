@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.226 2005/04/17 01:28:44 jonas Exp $ */
+/* $Id: connect.c,v 1.227 2005/04/17 01:59:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ struct conn_info {
 	struct sockaddr_storage *addr;	 /* Array of found addresses. */
 	int addrno;			 /* Number of found addresses. */
 	int triedno;			 /* Index of last tried address */
-	socket_connect_operation_T done; /* Callback signaled when connected. */
+	socket_connect_T done; /* Callback signaled when connected. */
 	void *dnsquery;			 /* Pointer to DNS query info. */
 	int port;			 /* Which port to bind to. */
 	int ip_family;			 /* If non-zero, force to IP version. */
@@ -87,7 +87,7 @@ debug_transfer_log(unsigned char *data, int len)
 
 static struct conn_info *
 init_connection_info(struct uri *uri, struct socket *socket,
-		     socket_connect_operation_T connect_done)
+		     socket_connect_T connect_done)
 {
 	struct conn_info *conn_info = mem_calloc(1, sizeof(*conn_info));
 
@@ -227,7 +227,7 @@ dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 
 void
 make_connection(struct socket *socket, struct uri *uri,
-		socket_connect_operation_T connect_done, int no_cache)
+		socket_connect_T connect_done, int no_cache)
 {
 	unsigned char *host = get_uri_string(uri, URI_DNS_HOST);
 	struct conn_info *conn_info;
@@ -411,7 +411,7 @@ check_if_local_address4(struct sockaddr_in *addr)
 
 void
 complete_connect_socket(struct socket *socket, struct uri *uri,
-			socket_connect_operation_T done)
+			socket_connect_T done)
 {
 	struct conn_info *conn_info = socket->conn_info;
 
@@ -635,7 +635,7 @@ connect_socket(struct socket *csocket, int connection_state)
 struct write_buffer {
 	/* A routine called when all the data is sent (therefore this is
 	 * _different_ from read_buffer.done !). */
-	socket_write_operation_T done;
+	socket_write_T done;
 
 	int len;
 	int pos;
@@ -708,7 +708,7 @@ write_select(struct socket *socket)
 		wb->pos += wr;
 
 		if (wb->pos == wb->len) {
-			socket_write_operation_T done = wb->done;
+			socket_write_T done = wb->done;
 
 			clear_handlers(socket->fd);
 			mem_free_set(&socket->buffer, NULL);
@@ -719,7 +719,7 @@ write_select(struct socket *socket)
 
 void
 write_to_socket(struct socket *socket, unsigned char *data, int len,
-		int connection_state, socket_write_operation_T write_done)
+		int connection_state, socket_write_T write_done)
 {
 	struct write_buffer *wb;
 
@@ -858,7 +858,7 @@ alloc_read_buffer(struct socket *socket)
 
 void
 read_from_socket(struct socket *socket, struct read_buffer *buffer,
-		 int connection_state, socket_read_operation_T done)
+		 int connection_state, socket_read_T done)
 {
 	buffer->done = done;
 
@@ -874,7 +874,7 @@ read_from_socket(struct socket *socket, struct read_buffer *buffer,
 }
 
 static void
-read_response_from_socket(struct connection *conn, struct socket *socket)
+read_response_from_socket(void *conn, struct socket *socket)
 {
 	struct read_buffer *rb = alloc_read_buffer(socket);
 
@@ -884,7 +884,7 @@ read_response_from_socket(struct connection *conn, struct socket *socket)
 void
 request_from_socket(struct socket *socket, unsigned char *data, int datalen,
 		    int connection_state, enum socket_state state,
-		    socket_read_operation_T read_done)
+		    socket_read_T read_done)
 {
 	socket->read_done = read_done;
 	socket->state = state;

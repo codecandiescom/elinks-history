@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.21 2005/04/17 01:15:21 jonas Exp $ */
+/* $Id: finger.c,v 1.22 2005/04/17 01:59:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,8 @@ finger_get_response(struct connection *conn, struct socket *socket,
 
 	conn->from += l;
 	kill_buffer_data(rb, l);
-	read_from_socket(conn->socket, rb, S_TRANS, finger_get_response);
+	read_from_socket(conn->socket, rb, S_TRANS,
+			 (socket_read_T) finger_get_response);
 }
 
 static void
@@ -80,7 +81,8 @@ finger_send_request(struct connection *conn, struct socket *socket)
 	}
 	add_crlf_to_string(&req);
 	request_from_socket(socket, req.source, req.length, S_SENT,
-			    SOCKET_END_ONCLOSE, finger_get_response);
+			    SOCKET_END_ONCLOSE,
+			    (socket_read_T) finger_get_response);
 	done_string(&req);
 }
 
@@ -89,6 +91,7 @@ finger_protocol_handler(struct connection *conn)
 {
 
 	conn->from = 0;
-	make_connection(conn->socket, conn->uri, finger_send_request,
+	make_connection(conn->socket, conn->uri,
+			(socket_connect_T) finger_send_request,
 			conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 }

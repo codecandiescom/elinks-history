@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.245 2005/04/17 01:28:44 jonas Exp $ */
+/* $Id: ftp.c,v 1.246 2005/04/17 01:59:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,7 +270,8 @@ void
 ftp_protocol_handler(struct connection *conn)
 {
 	if (!has_keepalive_connection(conn)) {
-		make_connection(conn->socket, conn->uri, ftp_login,
+		make_connection(conn->socket, conn->uri,
+				(socket_connect_T) ftp_login,
 				conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 
 	} else {
@@ -366,7 +367,8 @@ ftp_got_info(struct connection *conn, struct socket *socket,
 	}
 
 	if (!response) {
-		read_from_socket(conn->socket, rb, conn->state, ftp_got_info);
+		read_from_socket(conn->socket, rb, conn->state,
+				 (socket_read_T) ftp_got_info);
 		return;
 	}
 
@@ -398,7 +400,8 @@ ftp_got_user_info(struct connection *conn, struct socket *socket,
 	}
 
 	if (!response) {
-		read_from_socket(conn->socket, rb, conn->state, ftp_got_user_info);
+		read_from_socket(conn->socket, rb, conn->state,
+				 (socket_read_T) ftp_got_user_info);
 		return;
 	}
 
@@ -482,7 +485,8 @@ ftp_pass_info(struct connection *conn, struct socket *socket, struct read_buffer
 	}
 
 	if (!response) {
-		read_from_socket(conn->socket, rb, S_LOGIN, ftp_pass_info);
+		read_from_socket(conn->socket, rb, S_LOGIN,
+				 (socket_read_T) ftp_pass_info);
 		return;
 	}
 
@@ -868,7 +872,8 @@ ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer
 		}
 
 		if (!response) {
-			read_from_socket(conn->socket, rb, S_GETH, ftp_retr_file);
+			read_from_socket(conn->socket, rb, S_GETH,
+					 (socket_read_T) ftp_retr_file);
 			return;
 		}
 
@@ -938,7 +943,8 @@ ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer
 	}
 
 	if (!response) {
-		read_from_socket(conn->socket, rb, S_GETH, ftp_retr_file);
+		read_from_socket(conn->socket, rb, S_GETH,
+				 (socket_read_T) ftp_retr_file);
 		return;
 	}
 
@@ -980,7 +986,8 @@ ftp_got_final_response(struct connection *conn, struct socket *socket,
 		enum connection_state state = conn->state != S_TRANS
 					    ? S_GETH : conn->state;
 
-		read_from_socket(conn->socket, rb, state, ftp_got_final_response);
+		read_from_socket(conn->socket, rb, state,
+				 (socket_read_T) ftp_got_final_response);
 		return;
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.82 2005/04/17 01:28:44 jonas Exp $ */
+/* $Id: connect.h,v 1.83 2005/04/17 01:59:05 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -8,7 +8,6 @@
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 #endif
 
-struct connection;
 struct conn_info;
 struct read_buffer;
 struct socket;
@@ -37,9 +36,9 @@ enum socket_state {
 	SOCKET_CLOSED,
 };
 
-typedef void (*socket_read_operation_T)(struct connection *, struct socket *, struct read_buffer *);
-typedef void (*socket_write_operation_T)(struct connection *, struct socket *);
-typedef void (*socket_connect_operation_T)(struct connection *, struct socket *);
+typedef void (*socket_read_T)(void *, struct socket *, struct read_buffer *);
+typedef void (*socket_write_T)(void *, struct socket *);
+typedef void (*socket_connect_T)(void *, struct socket *);
 typedef void (*socket_operation_T)(void *, struct socket *, int connection_state);
 
 struct socket_operations {
@@ -57,7 +56,7 @@ struct socket_operations {
 struct read_buffer {
 	/* A routine called *each time new data comes in*, therefore
 	 * usually many times, not only when all the data arrives. */
-	socket_read_operation_T done;
+	socket_read_T done;
 
 	int len;
 	int freespace;
@@ -87,7 +86,7 @@ struct socket {
 
 	/* Used by the request/response interface for saving the read_done
 	 * operation. */
-	socket_read_operation_T read_done;
+	socket_read_T read_done;
 
 	/* For connections using SSL this is in fact (ssl_t *), but we don't
 	 * want to know. Noone cares and inclusion of SSL header files costs a
@@ -119,14 +118,14 @@ void timeout_socket(struct socket *socket);
 
 /* End successful connect() attempt to socket. */
 void complete_connect_socket(struct socket *socket, struct uri *uri,
-			     socket_connect_operation_T done);
+			     socket_connect_T done);
 
 /* Establish connection with the host and port in @uri. Storing the socket
  * descriptor in @socket. When the connection has been established the @done
  * callback will be run. @no_cache specifies whether the DNS cache should be
  * ignored. */
 void make_connection(struct socket *socket, struct uri *uri,
-		     socket_connect_operation_T connect_done, int no_cache);
+		     socket_connect_T connect_done, int no_cache);
 
 /* Creates and returns a listening socket in the same IP family as the passed
  * ctrl_socket and stores info about the created socket in @addr. @ctrl_socket
@@ -146,18 +145,18 @@ void dns_exception(struct socket *socket);
 /* Reads data from @socket into @buffer. Calls @done each time new data is
  * ready. */
 void read_from_socket(struct socket *socket, struct read_buffer *buffer,
-		      int connection_state, socket_read_operation_T done);
+		      int connection_state, socket_read_T done);
 
 /* Writes @datalen bytes from @data buffer to the passed @socket. When all data
  * is written the @done callback will be called. */
 void write_to_socket(struct socket *socket,
 		     unsigned char *data, int datalen,
-		     int connection_state, socket_write_operation_T write_done);
+		     int connection_state, socket_write_T write_done);
 
 /* Send request and get response. */
 void request_from_socket(struct socket *socket, unsigned char *data, int datalen,
 			 int connection_state, enum socket_state state,
-			 socket_read_operation_T read_done);
+			 socket_read_T read_done);
 
 /* Initialize a read buffer. */
 struct read_buffer *alloc_read_buffer(struct socket *socket);

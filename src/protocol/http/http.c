@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.427 2005/04/17 01:15:21 jonas Exp $ */
+/* $Id: http.c,v 1.428 2005/04/17 01:59:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -496,7 +496,8 @@ http_protocol_handler(struct connection *conn)
 	/* setcstate(conn, S_CONN); */
 
 	if (!has_keepalive_connection(conn)) {
-		make_connection(conn->socket, conn->uri, http_send_header,
+		make_connection(conn->socket, conn->uri,
+				(socket_connect_T) http_send_header,
 				conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 	} else {
 		http_send_header(conn, conn->socket);
@@ -911,7 +912,8 @@ http_send_header(struct connection *conn, struct socket *socket)
 	}
 
 	request_from_socket(socket, header.source, header.length, S_SENT,
-			    SOCKET_END_ONCLOSE, http_got_header);
+			    SOCKET_END_ONCLOSE,
+			    (socket_read_T) http_got_header);
 	done_string(&header);
 }
 
@@ -1079,7 +1081,7 @@ read_more_http_data(struct connection *conn, struct read_buffer *rb,
 {
 	enum connection_state state = already_got_anything ? S_TRANS : conn->state;
 
-	read_from_socket(conn->socket, rb, state, read_http_data);
+	read_from_socket(conn->socket, rb, state, (socket_read_T) read_http_data);
 }
 
 static void
@@ -1414,7 +1416,8 @@ again:
 		return;
 	}
 	if (!a) {
-		read_from_socket(conn->socket, rb, state, http_got_header);
+		read_from_socket(conn->socket, rb, state,
+				 (socket_read_T) http_got_header);
 		return;
 	}
 	if (a == -2) a = 0;
@@ -1499,7 +1502,8 @@ again:
 #ifdef CONFIG_SSL
 		mem_free(head);
 		socket->need_ssl = 1;
-		complete_connect_socket(socket, uri, http_send_header);
+		complete_connect_socket(socket, uri,
+					(socket_connect_T) http_send_header);
 #else
 		abort_connection(conn, S_SSL_ERROR);
 #endif

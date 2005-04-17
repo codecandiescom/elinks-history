@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.99 2005/04/13 15:34:54 jonas Exp $ */
+/* $Id: status.c,v 1.100 2005/04/17 15:59:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -601,4 +601,52 @@ print_screen_status(struct session *ses)
 	}
 
 	redraw_from_window(ses->tab);
+}
+
+void
+download_progress_bar(struct terminal *term, int x, int y, int width,
+		      unsigned char *text, struct color_pair *meter_color,
+		      longlong current, longlong total)
+{
+	/* Note : values > 100% are theorically possible and were seen. */
+	int progress = (int) ((longlong) 100 * current / total);
+	struct box barprogress;
+
+	/* Draw the progress meter part "[###    ]" */
+	if (!text && width > 2) {
+		width -= 2;
+		draw_text(term, x++, y, "[", 1, 0, NULL);
+		draw_text(term, x + width, y, "]", 1, 0, NULL);
+	}
+
+	if (!meter_color) meter_color = get_bfu_color(term, "dialog.meter");
+	set_box(&barprogress,
+		x, y, int_min(width * progress / 100, width), 1);
+	draw_box(term, &barprogress, ' ', 0, meter_color);
+
+	/* On error, will print '?' only, should not occur. */
+	if (text) {
+		width = int_min(width, strlen(text));
+
+	} else if (width > 1) {
+		static unsigned char percent[] = "????"; /* Reduce or enlarge at will. */
+		unsigned int percent_len = 0;
+		int max = int_min(sizeof(percent), width) - 1;
+
+		if (ulongcat(percent, &percent_len, progress, max, 0)) {
+			percent[0] = '?';
+			percent_len = 1;
+		}
+
+		percent[percent_len++] = '%';
+
+		/* Draw the percentage centered in the progress meter */
+		x += (1 + width - percent_len) / 2;
+
+		assert(percent_len <= width);
+		width = percent_len;
+		text = percent;
+	}
+
+	draw_text(term, x, y, text, width, 0, NULL);
 }

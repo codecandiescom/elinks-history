@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.101 2005/04/17 16:03:31 zas Exp $ */
+/* $Id: status.c,v 1.102 2005/04/17 16:36:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,6 @@
 #include "bfu/dialog.h"
 #include "cache/cache.h"
 #include "config/options.h"
-#include "dialogs/download.h"
 #include "dialogs/status.h"
 #include "document/document.h"
 #include "document/renderer.h"

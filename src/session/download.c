@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.357 2005/04/17 16:16:53 zas Exp $ */
+/* $Id: download.c,v 1.358 2005/04/17 20:32:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@
 #include "sched/error.h"
 #include "sched/history.h"
 #include "sched/location.h"
+#include "sched/progress.h"
 #include "sched/session.h"
 #include "sched/task.h"
 #include "terminal/draw.h"

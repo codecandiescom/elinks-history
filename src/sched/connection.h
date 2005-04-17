@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.118 2005/04/17 18:54:52 zas Exp $ */
+/* $Id: connection.h,v 1.119 2005/04/17 20:32:32 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -6,7 +6,6 @@
 #include "cache/cache.h"
 #include "encoding/encoding.h"
 #include "lowlevel/timers.h" /* timer_id_T */
-#include "sched/progress.h"
 #include "util/lists.h"
 #include "util/time.h"
 

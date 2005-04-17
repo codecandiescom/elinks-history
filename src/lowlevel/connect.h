@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.84 2005/04/17 18:08:26 jonas Exp $ */
+/* $Id: connect.h,v 1.85 2005/04/17 18:17:57 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -8,7 +8,7 @@
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 #endif
 
-struct conn_info;
+struct connect_info;
 struct read_buffer;
 struct socket;
 struct uri;
@@ -76,7 +76,7 @@ struct socket {
 	void *conn;
 
 	/* Information used during the connection establishing phase. */
-	struct conn_info *conn_info;
+	struct connect_info *connect_info;
 
 	/* Use for read and write buffers. */
 	struct read_buffer *read_buffer;
@@ -133,8 +133,9 @@ void make_connection(struct socket *socket, struct uri *uri,
  * is used for getting bind() information. */
 int get_pasv_socket(struct socket *ctrl_socket, struct sockaddr_storage *addr);
 
-/* Try to connect to the next address in the socket->conn_info struct.
- * Updates the connection state to @connection_state. */
+/* Try to connect to the next available address or force the connection to retry
+ * if all has already been tried. Updates the connection state to
+ * @connection_state. */
 void connect_socket(struct socket *socket, int connection_state);
 
 /* Used by the SSL layer when negotiating. */

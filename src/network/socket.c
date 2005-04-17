@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.228 2005/04/17 18:08:26 jonas Exp $ */
+/* $Id: socket.c,v 1.229 2005/04/17 18:17:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@
 
 
 /* Holds information used during the connection establishing phase. */
-struct conn_info {
+struct connect_info {
 	struct sockaddr_storage *addr;	 /* Array of found addresses. */
 	int addrno;			 /* Number of found addresses. */
 	int triedno;			 /* Index of last tried address */
@@ -85,34 +85,34 @@ debug_transfer_log(unsigned char *data, int len)
 #endif
 
 
-static struct conn_info *
+static struct connect_info *
 init_connection_info(struct uri *uri, struct socket *socket,
 		     socket_connect_T connect_done)
 {
-	struct conn_info *conn_info = mem_calloc(1, sizeof(*conn_info));
+	struct connect_info *connect_info = mem_calloc(1, sizeof(*connect_info));
 
-	if (!conn_info) return NULL;
+	if (!connect_info) return NULL;
 
-	conn_info->done = connect_done;
-	conn_info->port = get_uri_port(uri);
-	conn_info->ip_family = uri->ip_family;
-	conn_info->triedno = -1;
-	conn_info->addr = NULL;
+	connect_info->done = connect_done;
+	connect_info->port = get_uri_port(uri);
+	connect_info->ip_family = uri->ip_family;
+	connect_info->triedno = -1;
+	connect_info->addr = NULL;
 
-	return conn_info;
+	return connect_info;
 }
 
 static void
 done_connection_info(struct socket *socket)
 {
-	struct conn_info *conn_info = socket->conn_info;
+	struct connect_info *connect_info = socket->connect_info;
 
-	assert(socket->conn_info);
+	assert(socket->connect_info);
 
-	if (conn_info->dnsquery) kill_dns_request(&conn_info->dnsquery);
+	if (connect_info->dnsquery) kill_dns_request(&connect_info->dnsquery);
 
-	mem_free_if(conn_info->addr);
-	mem_free_set(&socket->conn_info, NULL);
+	mem_free_if(connect_info->addr);
+	mem_free_set(&socket->connect_info, NULL);
 }
 
 struct socket *
@@ -135,7 +135,7 @@ done_socket(struct socket *socket)
 {
 	close_socket(socket);
 
-	if (socket->conn_info)
+	if (socket->connect_info)
 		done_connection_info(socket);
 
 	mem_free_set(&socket->read_buffer, NULL);
@@ -170,13 +170,13 @@ exception(struct socket *socket)
 void
 timeout_socket(struct socket *socket)
 {
-	if (!socket->conn_info) {
+	if (!socket->connect_info) {
 		socket->ops->retry(socket->conn, socket, S_TIMEOUT);
 		return;
 	}
 
 	/* Is the DNS resolving still in progress? */
-	if (socket->conn_info->dnsquery) {
+	if (socket->connect_info->dnsquery) {
 		socket->ops->done(socket->conn, socket, S_TIMEOUT);
 		return;
 	}
@@ -186,7 +186,7 @@ timeout_socket(struct socket *socket)
 
 	/* Reset the timeout if connect_socket() started a new attempt
 	 * to connect. */
-	if (socket->conn_info)
+	if (socket->connect_info)
 		socket->ops->set_timeout(socket->conn, socket, 0);
 }
 
@@ -195,7 +195,7 @@ timeout_socket(struct socket *socket)
 static void
 dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 {
-	struct conn_info *conn_info = socket->conn_info;
+	struct connect_info *connect_info = socket->connect_info;
 	int size;
 
 	if (!addr) {
@@ -203,18 +203,18 @@ dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 		return;
 	}
 
-	assert(conn_info);
+	assert(connect_info);
 
 	size = sizeof(*addr) * addrlen;
 
-	conn_info->addr = mem_alloc(size);
-	if (!conn_info->addr) {
+	connect_info->addr = mem_alloc(size);
+	if (!connect_info->addr) {
 		socket->ops->done(socket->conn, socket, S_OUT_OF_MEM);
 		return;
 	}
 
-	memcpy(conn_info->addr, addr, size);
-	conn_info->addrno = addrlen;
+	memcpy(connect_info->addr, addr, size);
+	connect_info->addrno = addrlen;
 
 	/* XXX: Passing non-result state here is bad but a lack of alternatives
 	 * makes it so. Well adding get_state() socket operation could maybe fix
@@ -231,7 +231,7 @@ make_connection(struct socket *socket, struct uri *uri,
 		socket_connect_T connect_done, int no_cache)
 {
 	unsigned char *host = get_uri_string(uri, URI_DNS_HOST);
-	struct conn_info *conn_info;
+	struct connect_info *connect_info;
 	enum dns_result result;
 
 	socket->ops->set_timeout(socket->conn, socket, 0);
@@ -241,14 +241,14 @@ make_connection(struct socket *socket, struct uri *uri,
 		return;
 	}
 
-	conn_info = init_connection_info(uri, socket, connect_done);
-	if (!conn_info) {
+	connect_info = init_connection_info(uri, socket, connect_done);
+	if (!connect_info) {
 		mem_free(host);
 		socket->ops->retry(socket->conn, socket, S_OUT_OF_MEM);
 		return;
 	}
 
-	socket->conn_info = conn_info;
+	socket->connect_info = connect_info;
 	/* XXX: Keep here and not in init_connection_info() to make
 	 * complete_connect_socket() work from the HTTP implementation. */
 	socket->need_ssl = get_protocol_need_ssl(uri->protocol);
@@ -257,7 +257,7 @@ make_connection(struct socket *socket, struct uri *uri,
 	debug_transfer_log(host, -1);
 	debug_transfer_log("\n", -1);
 
-	result = find_host(host, &conn_info->dnsquery, (dns_callback_T) dns_found,
+	result = find_host(host, &connect_info->dnsquery, (dns_callback_T) dns_found,
 			   socket, no_cache);
 
 	mem_free(host);
@@ -414,19 +414,19 @@ void
 complete_connect_socket(struct socket *socket, struct uri *uri,
 			socket_connect_T done)
 {
-	struct conn_info *conn_info = socket->conn_info;
+	struct connect_info *connect_info = socket->connect_info;
 
 	/* This is a special case used by the HTTP implementation to acquire an
 	 * SSL link for handling CONNECT requests. */
-	if (!conn_info) {
+	if (!connect_info) {
 		assert(uri && socket);
-		conn_info = init_connection_info(uri, socket, done);
-		if (!conn_info) {
+		connect_info = init_connection_info(uri, socket, done);
+		if (!connect_info) {
 			socket->ops->done(socket->conn, socket, S_OUT_OF_MEM);
 			return;
 		}
 
-		socket->conn_info = conn_info;
+		socket->connect_info = connect_info;
 	}
 
 #ifdef CONFIG_SSL
@@ -437,8 +437,8 @@ complete_connect_socket(struct socket *socket, struct uri *uri,
 		return;
 #endif
 
-	if (conn_info->done)
-		conn_info->done(socket->conn, socket);
+	if (connect_info->done)
+		connect_info->done(socket->conn, socket);
 
 	done_connection_info(socket);
 }
@@ -449,11 +449,11 @@ complete_connect_socket(struct socket *socket, struct uri *uri,
 static void
 connected(struct socket *socket)
 {
-	struct conn_info *conn_info = socket->conn_info;
+	struct connect_info *connect_info = socket->connect_info;
 	int err = 0;
 	int len = sizeof(err);
 
-	assertm(conn_info, "Lost conn_info!");
+	assertm(connect_info, "Lost connect_info!");
 	if_assert_failed return;
 
 	if (getsockopt(socket->fd, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {
@@ -480,9 +480,9 @@ void
 connect_socket(struct socket *csocket, int connection_state)
 {
 	int sock = -1;
-	struct conn_info *conn_info = csocket->conn_info;
+	struct connect_info *connect_info = csocket->connect_info;
 	int i;
-	int trno = conn_info->triedno;
+	int trno = connect_info->triedno;
 	int only_local = get_cmd_opt_bool("localhost");
 	int saved_errno = 0;
 	int at_least_one_remote_ip = 0;
@@ -500,14 +500,14 @@ connect_socket(struct socket *csocket, int connection_state)
 	if (csocket->fd >= 0)
 		close_socket(csocket);
 
-	for (i = conn_info->triedno + 1; i < conn_info->addrno; i++) {
+	for (i = connect_info->triedno + 1; i < connect_info->addrno; i++) {
 #ifdef CONFIG_IPV6
-		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &conn_info->addr[i]);
+		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &connect_info->addr[i]);
 #else
-		struct sockaddr_in addr = *((struct sockaddr_in *) &conn_info->addr[i]);
+		struct sockaddr_in addr = *((struct sockaddr_in *) &connect_info->addr[i]);
 #endif
 		int family;
-		int force_family = conn_info->ip_family;
+		int force_family = connect_info->ip_family;
 
 #ifdef CONFIG_IPV6
 		family = addr.sin6_family;
@@ -515,7 +515,7 @@ connect_socket(struct socket *csocket, int connection_state)
 		family = addr.sin_family;
 #endif
 
-		conn_info->triedno++;
+		connect_info->triedno++;
 
 		if (only_local) {
 			int local = 0;
@@ -559,9 +559,9 @@ connect_socket(struct socket *csocket, int connection_state)
 		csocket->fd = sock;
 
 #ifdef CONFIG_IPV6
-		addr.sin6_port = htons(conn_info->port);
+		addr.sin6_port = htons(connect_info->port);
 #else
-		addr.sin_port = htons(conn_info->port);
+		addr.sin_port = htons(connect_info->port);
 #endif
 
 		/* We can set csocket->protocol_family here even if the connection
@@ -607,7 +607,7 @@ connect_socket(struct socket *csocket, int connection_state)
 		close(sock);
 	}
 
-	assert(i >= conn_info->addrno);
+	assert(i >= connect_info->addrno);
 
 	/* Tried everything, but it didn't help :(. */
 
@@ -623,7 +623,7 @@ connect_socket(struct socket *csocket, int connection_state)
 	/* Retry reporting the errno state only if we already tried something
 	 * new. Else use the S_DNS _progress_ state to make sure that no
 	 * download callbacks will report any errors. */
-	if (trno != conn_info->triedno && !silent_fail)
+	if (trno != connect_info->triedno && !silent_fail)
 		connection_state = -errno;
 	else if (trno == -1 && silent_fail)
 		/* All failed. */

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.82 2005/04/13 18:21:58 rrowan Exp $
+# $Id: hooks.pl,v 1.83 2005/04/17 14:10:34 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1134,7 +1134,7 @@ A few words of wisdom from ELinks the Sage.  (Prints a fortune. ;-)
 	srand();
 	while (not $fortune)
 	{
-		seek(COOKIES, $line[int rand($#line)], 0);
+		seek(COOKIES, $line[int rand($#line + 1)], 0);
 		while (<COOKIES>)
 		{
 			last if /^%$/;

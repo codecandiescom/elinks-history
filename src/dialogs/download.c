@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.74 2005/04/17 16:03:31 zas Exp $ */
+/* $Id: download.c,v 1.75 2005/04/17 16:16:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,22 @@
 #include "util/string.h"
 #include "util/time.h"
 
+
+void
+init_download_display(struct file_download *file_download)
+{
+	file_download->box_item = add_listbox_leaf(&download_browser, NULL,
+						   file_download);
+}
+
+void
+done_download_display(struct file_download *file_download)
+{
+	if (file_download->box_item) {
+		done_listbox_item(&download_browser, file_download->box_item);
+		file_download->box_item = NULL;
+	}
+}
 
 static void
 undisplay_download(struct file_download *file_download)

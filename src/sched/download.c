@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.356 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: download.c,v 1.357 2005/04/17 16:16:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,8 +95,7 @@ init_file_download(struct uri *uri, struct session *ses, unsigned char *file, in
 		return NULL;
 	}
 
-	file_download->box_item = add_listbox_leaf(&download_browser, NULL,
-						   file_download);
+	init_download_display(file_download);
 
 	file_download->file = file;
 	file_download->handle = fd;
@@ -126,8 +125,8 @@ abort_download(struct file_download *file_download)
 	assert(!is_object_used(file_download));
 #endif
 
-	if (file_download->box_item)
-		done_listbox_item(&download_browser, file_download->box_item);
+	done_download_display(file_download);
+
 	if (file_download->dlg_data)
 		cancel_dialog(file_download->dlg_data, NULL);
 	if (is_in_progress_state(file_download->download.state))
@@ -347,11 +346,8 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		 * has been drawn whereby it will be hidden. This should make
 		 * the download browser update before launcing any
 		 * notification. */
-		if (file_download->box_item) {
-			done_listbox_item(&download_browser, file_download->box_item);
-			file_download->box_item = NULL;
-		}
-
+		done_download_display(file_download);
+	
 		if (url) {
 			info_box(term, MSGBOX_FREE_TEXT,
 				 N_("Download"), ALIGN_CENTER,

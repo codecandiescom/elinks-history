@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.81 2005/04/17 01:15:21 jonas Exp $ */
+/* $Id: socket.h,v 1.82 2005/04/17 01:28:44 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -128,10 +128,10 @@ void complete_connect_socket(struct socket *socket, struct uri *uri,
 void make_connection(struct socket *socket, struct uri *uri,
 		     socket_connect_operation_T connect_done, int no_cache);
 
-/* Creates and returns a listening socket in the given IP @family and storing
- * socket info in @addr. @ctrl_sock is used for getting bind() information. */
-int get_pasv_socket(struct connection *conn, int ctrl_sock,
-		    int family, struct sockaddr_storage *addr);
+/* Creates and returns a listening socket in the same IP family as the passed
+ * ctrl_socket and stores info about the created socket in @addr. @ctrl_socket
+ * is used for getting bind() information. */
+int get_pasv_socket(struct socket *ctrl_socket, struct sockaddr_storage *addr);
 
 /* Try to connect to the next address in the socket->conn_info struct.
  * Updates the connection state to @connection_state. */

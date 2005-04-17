@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.225 2005/04/17 01:15:20 jonas Exp $ */
+/* $Id: connect.c,v 1.226 2005/04/17 01:28:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,8 +268,7 @@ make_connection(struct socket *socket, struct uri *uri,
 
 /* Returns negative if error, otherwise pasv socket's fd. */
 int
-get_pasv_socket(struct connection *conn, int ctrl_sock,
-		int family, struct sockaddr_storage *addr)
+get_pasv_socket(struct socket *ctrl_socket, struct sockaddr_storage *addr)
 {
 	struct sockaddr_in bind_addr4;
 	struct sockaddr *bind_addr;
@@ -280,7 +279,7 @@ get_pasv_socket(struct connection *conn, int ctrl_sock,
 #ifdef CONFIG_IPV6
 	struct sockaddr_in6 bind_addr6;
 
-	if (family == AF_INET6) {
+	if (ctrl_socket->protocol_family == 1) {
 		bind_addr = (struct sockaddr *) &bind_addr6;
 		addrlen   = sizeof(bind_addr6);
 	} else
@@ -295,10 +294,10 @@ get_pasv_socket(struct connection *conn, int ctrl_sock,
 
 	/* Get our endpoint of the control socket */
 	len = addrlen;
-	if (getsockname(ctrl_sock, pasv_addr, &len)) {
+	if (getsockname(ctrl_socket->fd, pasv_addr, &len)) {
 sock_error:
 		if (sock != -1) close(sock);
-		retry_connection(conn, -errno);
+		ctrl_socket->ops->retry(ctrl_socket->conn, ctrl_socket, -errno);
 		return -1;
 	}
 
@@ -317,7 +316,7 @@ sock_error:
 
 	memcpy(bind_addr, pasv_addr, addrlen);
 #ifdef CONFIG_IPV6
-	if (family == AF_INET6)
+	if (ctrl_socket->protocol_family == 1)
 		bind_addr6.sin6_port = 0;
 	else
 #endif

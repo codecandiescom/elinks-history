@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.196 2005/04/17 03:22:57 miciah Exp $ */
+/* $Id: core.c,v 1.197 2005/04/17 03:25:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -296,13 +296,19 @@ l_bind_key(LS)
 				       event_name.source, &err);
 	done_string(&event_name);
 
+	if (!err) {
+		event_id = register_event_hook(event_id, run_lua_func, 0,
+					       (void *) (long) ref);
+
+		if (event_id == EVENT_NONE)
+			err = gettext("Error registering event hook");
+	}
+
 	if (err) {
 		lua_unref(S, ref);
 		alert_lua_error2("error in bind_key: ", err);
 		goto lua_error;
 	}
-
-	event_id = register_event_hook(event_id, run_lua_func, 0, (void *) (long) ref);
 
 	lua_pushnumber(S, 1);
 	return 1;

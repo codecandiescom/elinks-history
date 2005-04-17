@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.100 2005/04/17 15:59:54 zas Exp $ */
+/* $Id: status.c,v 1.101 2005/04/17 16:03:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,9 +340,9 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		width = int_max(0, xend - msglen - tab_info_len - 1);
 		if (width < 6) return;
 		int_upper_bound(&width, 20);
-		download_progress_bar(term, xend - width, term->height - 1,
-				      width, NULL, NULL,
-				      download->progress->pos, download->progress->size);
+		draw_progress_bar(term, xend - width, term->height - 1,
+				  width, NULL, NULL,
+				  download->progress->pos, download->progress->size);
 	}
 }
 
@@ -418,9 +418,9 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 		draw_box(term, &box, ' ', 0, color);
 
 		if (download) {
-			download_progress_bar(term, box.x, box.y,
-					      actual_tab_width, msg, NULL,
-					      download->progress->pos, download->progress->size);
+			draw_progress_bar(term, box.x, box.y,
+					  actual_tab_width, msg, NULL,
+					  download->progress->pos, download->progress->size);
 		} else {
 			int msglen = int_min(strlen(msg), actual_tab_width);
 
@@ -604,9 +604,9 @@ print_screen_status(struct session *ses)
 }
 
 void
-download_progress_bar(struct terminal *term, int x, int y, int width,
-		      unsigned char *text, struct color_pair *meter_color,
-		      longlong current, longlong total)
+draw_progress_bar(struct terminal *term, int x, int y, int width,
+		  unsigned char *text, struct color_pair *meter_color,
+		  longlong current, longlong total)
 {
 	/* Note : values > 100% are theorically possible and were seen. */
 	int progress = (int) ((longlong) 100 * current / total);

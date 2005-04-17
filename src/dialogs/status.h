@@ -1,4 +1,4 @@
-/* $Id: status.h,v 1.10 2005/04/17 15:59:54 zas Exp $ */
+/* $Id: status.h,v 1.11 2005/04/17 16:03:31 zas Exp $ */
 
 #ifndef EL__DIALOGS_STATUS_H
 #define EL__DIALOGS_STATUS_H
@@ -20,8 +20,8 @@ get_download_msg(struct download *download, struct terminal *term,
 /* Draws a progress bar meter or progress coloured text depending on whether
  * @text is NULL. If @meter_color is NULL dialog.meter color is used. */
 void
-download_progress_bar(struct terminal *term, int x, int y, int width,
-		      unsigned char *text, struct color_pair *meter_color,
-		      longlong current, longlong total);
+draw_progress_bar(struct terminal *term, int x, int y, int width,
+		  unsigned char *text, struct color_pair *meter_color,
+		  longlong current, longlong total);
 
 #endif

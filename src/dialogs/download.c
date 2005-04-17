@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.73 2005/04/17 15:59:54 zas Exp $ */
+/* $Id: download.c,v 1.74 2005/04/17 16:03:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,9 +166,9 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	if (show_meter) {
 		y++;
-		download_progress_bar(term, x, y, w, NULL, NULL,
-				      download->progress->pos,
-				      download->progress->size);
+		draw_progress_bar(term, x, y, w, NULL, NULL,
+				  download->progress->pos,
+				  download->progress->size);
 		y++;
 	}
 
@@ -347,9 +347,9 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 
 	x += width - meter;
 
-	download_progress_bar(context->term, x, y, meter, NULL, NULL,
-			      download->progress->pos,
-			      download->progress->size);
+	draw_progress_bar(context->term, x, y, meter, NULL, NULL,
+			  download->progress->pos,
+			  download->progress->size);
 }
 
 static struct listbox_ops_messages download_messages = {

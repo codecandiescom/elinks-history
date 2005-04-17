@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.77 2005/04/17 16:30:38 zas Exp $ */
+/* $Id: download.c,v 1.78 2005/04/17 16:34:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,22 +32,6 @@
 #include "util/string.h"
 #include "util/time.h"
 
-
-void
-init_download_display(struct file_download *file_download)
-{
-	file_download->box_item = add_listbox_leaf(&download_browser, NULL,
-						   file_download);
-}
-
-void
-done_download_display(struct file_download *file_download)
-{
-	if (file_download->box_item) {
-		done_listbox_item(&download_browser, file_download->box_item);
-		file_download->box_item = NULL;
-	}
-}
 
 static void
 undisplay_download(struct file_download *file_download)
@@ -448,7 +432,7 @@ static struct hierbox_browser_button download_buttons[] = {
 	{ N_("C~lear"),                 push_hierbox_clear_button  },
 };
 
-struct_hierbox_browser(
+static struct_hierbox_browser(
 	download_browser,
 	N_("Download manager"),
 	download_buttons,
@@ -463,3 +447,20 @@ download_manager(struct session *ses)
 	/* FIXME: It's workaround for bug 397. Real fix is needed. */
 	download_browser.do_not_save_state = 1;
 }
+
+void
+init_download_display(struct file_download *file_download)
+{
+	file_download->box_item = add_listbox_leaf(&download_browser, NULL,
+						   file_download);
+}
+
+void
+done_download_display(struct file_download *file_download)
+{
+	if (file_download->box_item) {
+		done_listbox_item(&download_browser, file_download->box_item);
+		file_download->box_item = NULL;
+	}
+}
+

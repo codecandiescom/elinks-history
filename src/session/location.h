@@ -1,9 +1,10 @@
-/* $Id: location.h,v 1.14 2004/04/01 15:59:52 jonas Exp $ */
+/* $Id: location.h,v 1.15 2005/04/17 20:41:42 zas Exp $ */
 
 #ifndef EL__SCHED_LOCATION_H
 #define EL__SCHED_LOCATION_H
 
 #include "sched/connection.h"
+#include "sched/download.h"
 #include "util/lists.h"
 #include "viewer/text/vs.h"
 

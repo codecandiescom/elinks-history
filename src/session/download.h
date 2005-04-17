@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.46 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: download.h,v 1.47 2005/04/17 20:41:42 zas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -17,6 +17,28 @@ struct cache_entry;
 struct session;
 struct uri;
 
+struct download;
+
+typedef void (download_callback_T)(struct download *, void *);
+
+struct download {
+	/* XXX: order matters there, there's some hard initialization in
+	 * src/sched/session.c and src/viewer/text/view.c */
+	LIST_HEAD(struct download);
+
+	struct connection *conn;
+	struct cache_entry *cached;
+	/* The callback is called when connection gets into a progress state,
+	 * after it's over (in a result state), and also periodically after
+	 * the download starts receiving some data. */
+	download_callback_T *callback;
+	void *data;
+	struct progress *progress;
+
+	enum connection_state state;
+	enum connection_state prev_error;
+	enum connection_priority pri;
+};
 
 struct type_query {
 	LIST_HEAD(struct type_query);

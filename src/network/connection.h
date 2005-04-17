@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.119 2005/04/17 20:32:32 zas Exp $ */
+/* $Id: connection.h,v 1.120 2005/04/17 20:41:42 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -9,6 +9,7 @@
 #include "util/lists.h"
 #include "util/time.h"
 
+struct download;
 struct socket;
 struct uri;
 
@@ -161,30 +162,6 @@ struct connection {
 	 * stopping the connection. */
 	void *info;
 };
-
-struct download;
-
-typedef void (download_callback_T)(struct download *, void *);
-
-struct download {
-	/* XXX: order matters there, there's some hard initialization in
-	 * src/sched/session.c and src/viewer/text/view.c */
-	LIST_HEAD(struct download);
-
-	struct connection *conn;
-	struct cache_entry *cached;
-	/* The callback is called when connection gets into a progress state,
-	 * after it's over (in a result state), and also periodically after
-	 * the download starts receiving some data. */
-	download_callback_T *callback;
-	void *data;
-	struct progress *progress;
-
-	enum connection_state state;
-	enum connection_state prev_error;
-	enum connection_priority pri;
-};
-
 
 int register_check_queue(void);
 long connect_info(int);

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.230 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: connect.c,v 1.231 2005/04/17 23:10:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -477,7 +477,7 @@ connected(struct socket *socket)
 }
 
 void
-connect_socket(struct socket *csocket, int connection_state)
+connect_socket(struct socket *csocket, enum connection_state state)
 {
 	int sock = -1;
 	struct connect_info *connect_info = csocket->connect_info;
@@ -493,7 +493,7 @@ connect_socket(struct socket *csocket, int connection_state)
 	 * XXX: Unify with @local_only handling? --pasky */
 	int silent_fail = 0;
 
-	csocket->ops->set_state(csocket, connection_state);
+	csocket->ops->set_state(csocket, state);
 
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
@@ -624,12 +624,12 @@ connect_socket(struct socket *csocket, int connection_state)
 	 * new. Else use the S_DNS _progress_ state to make sure that no
 	 * download callbacks will report any errors. */
 	if (trno != connect_info->triedno && !silent_fail)
-		connection_state = -errno;
+		state = -errno;
 	else if (trno == -1 && silent_fail)
 		/* All failed. */
-		connection_state = S_NO_FORCED_DNS;
+		state = S_NO_FORCED_DNS;
 
-	csocket->ops->retry(csocket, connection_state);
+	csocket->ops->retry(csocket, state);
 }
 
 
@@ -720,7 +720,7 @@ write_select(struct socket *socket)
 
 void
 write_to_socket(struct socket *socket, unsigned char *data, int len,
-		int connection_state, socket_write_T write_done)
+		enum connection_state state, socket_write_T write_done)
 {
 	struct write_buffer *wb;
 
@@ -744,7 +744,7 @@ write_to_socket(struct socket *socket, unsigned char *data, int len,
 	mem_free_set(&socket->write_buffer, wb);
 	set_handlers(socket->fd, NULL, (select_handler_T) write_select,
 		     (select_handler_T) exception, socket);
-	socket->ops->set_state(socket, connection_state);
+	socket->ops->set_state(socket, state);
 }
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */
@@ -859,12 +859,12 @@ alloc_read_buffer(struct socket *socket)
 
 void
 read_from_socket(struct socket *socket, struct read_buffer *buffer,
-		 int connection_state, socket_read_T done)
+		 enum connection_state state, socket_read_T done)
 {
 	buffer->done = done;
 
 	socket->ops->set_timeout(socket, 0);
-	socket->ops->set_state(socket, connection_state);
+	socket->ops->set_state(socket, state);
 
 	if (socket->read_buffer && buffer != socket->read_buffer)
 		mem_free(socket->read_buffer);
@@ -884,12 +884,12 @@ read_response_from_socket(struct socket *socket)
 
 void
 request_from_socket(struct socket *socket, unsigned char *data, int datalen,
-		    int connection_state, enum socket_state state,
+		    enum connection_state state, enum socket_state sock_state,
 		    socket_read_T read_done)
 {
 	socket->read_done = read_done;
-	socket->state = state;
-	write_to_socket(socket, data, datalen, connection_state,
+	socket->state = sock_state;
+	write_to_socket(socket, data, datalen, state,
 			read_response_from_socket);
 }
 

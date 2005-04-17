@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.86 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: socket.h,v 1.87 2005/04/17 23:10:37 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -7,6 +7,8 @@
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 #endif
+
+#include "sched/state.h"
 
 struct connect_info;
 struct read_buffer;
@@ -39,7 +41,7 @@ enum socket_state {
 typedef void (*socket_read_T)(struct socket *, struct read_buffer *);
 typedef void (*socket_write_T)(struct socket *);
 typedef void (*socket_connect_T)(struct socket *);
-typedef void (*socket_operation_T)(struct socket *, int connection_state);
+typedef void (*socket_operation_T)(struct socket *, enum connection_state state);
 
 struct socket_operations {
 	/* Report change in the state of the socket. */
@@ -136,7 +138,7 @@ int get_pasv_socket(struct socket *ctrl_socket, struct sockaddr_storage *addr);
 /* Try to connect to the next available address or force the connection to retry
  * if all has already been tried. Updates the connection state to
  * @connection_state. */
-void connect_socket(struct socket *socket, int connection_state);
+void connect_socket(struct socket *socket, enum connection_state state);
 
 /* Used by the SSL layer when negotiating. */
 void dns_exception(struct socket *socket);
@@ -147,17 +149,17 @@ void dns_exception(struct socket *socket);
 /* Reads data from @socket into @buffer. Calls @done each time new data is
  * ready. */
 void read_from_socket(struct socket *socket, struct read_buffer *buffer,
-		      int connection_state, socket_read_T done);
+		      enum connection_state state, socket_read_T done);
 
 /* Writes @datalen bytes from @data buffer to the passed @socket. When all data
  * is written the @done callback will be called. */
 void write_to_socket(struct socket *socket,
 		     unsigned char *data, int datalen,
-		     int connection_state, socket_write_T write_done);
+		     enum connection_state state, socket_write_T write_done);
 
 /* Send request and get response. */
 void request_from_socket(struct socket *socket, unsigned char *data, int datalen,
-			 int connection_state, enum socket_state state,
+			 enum connection_state state, enum socket_state sock_state,
 			 socket_read_T read_done);
 
 /* Initialize a read buffer. */

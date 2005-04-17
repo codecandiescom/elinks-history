@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.428 2005/04/17 01:59:05 jonas Exp $ */
+/* $Id: http.c,v 1.429 2005/04/17 18:54:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -798,12 +798,12 @@ http_send_header(struct connection *conn, struct socket *socket)
 		add_crlf_to_string(&header);
 	}
 
-	if (conn->from || (conn->progress.start > 0)) {
+	if (conn->from || conn->progress->start > 0) {
 		/* conn->from takes precedence. conn->progress.start is set only the first
 		 * time, then conn->from gets updated and in case of any retries
 		 * etc we have everything interesting in conn->from already. */
 		add_to_string(&header, "Range: bytes=");
-		add_long_to_string(&header, conn->from ? conn->from : conn->progress.start);
+		add_long_to_string(&header, conn->from ? conn->from : conn->progress->start);
 		add_char_to_string(&header, '-');
 		add_crlf_to_string(&header);
 	}
@@ -1633,7 +1633,7 @@ again:
 		mem_free(d);
 	}
 	if (cf && !conn->from && !conn->unrestartable) conn->unrestartable = 1;
-	if ((conn->progress.start <= 0 && conn->from > cf) || conn->from < 0) {
+	if ((conn->progress->start <= 0 && conn->from > cf) || conn->from < 0) {
 		/* We don't want this if conn->progress.start because then conn->from will
 		 * be probably value of conn->progress.start, while cf is 0. */
 		abort_connection(conn, S_HTTP_ERROR);
@@ -1651,11 +1651,11 @@ again:
 	}
 #endif
 
-	if (conn->progress.start >= 0) {
+	if (conn->progress->start >= 0) {
 		/* Update to the real value which we've got from Content-Range. */
-		conn->progress.seek = conn->from;
+		conn->progress->seek = conn->from;
 	}
-	conn->progress.start = conn->from;
+	conn->progress->start = conn->from;
 
 	d = parse_header(conn->cached->head, "Content-Length", NULL);
 	if (d) {

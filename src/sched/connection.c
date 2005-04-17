@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.272 2005/04/16 14:46:18 zas Exp $ */
+/* $Id: connection.c,v 1.273 2005/04/17 18:54:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,6 +274,14 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 		return NULL;
 	}
 
+	init_progress(&conn->progress, start);
+	if (!conn->progress) {
+		mem_free(conn->data_socket);
+		mem_free(conn->socket);
+		mem_free(conn);
+		return NULL;
+	}
+
 	/* load_uri() gets the URI from get_proxy() which grabs a reference for
 	 * us. */
 	conn->uri = uri;
@@ -287,8 +295,6 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	conn->cgi_pipes[0] = conn->cgi_pipes[1] = -1;
 	init_list(conn->downloads);
 	conn->est_length = -1;
-	conn->progress.start = start;
-	conn->progress.timer = TIMER_ID_UNDEF;
 	conn->timer = TIMER_ID_UNDEF;
 
 	if (referrer) {
@@ -309,7 +315,7 @@ static void stat_timer(struct connection *conn);
 static void
 update_progress(struct connection *conn)
 {
-	struct progress *progress = &conn->progress;
+	struct progress *progress = conn->progress;
 	timeval_T now, elapsed;
 	long a;	/* FIXME: milliseconds */
 	
@@ -351,7 +357,7 @@ void
 set_connection_state(struct connection *conn, enum connection_state state)
 {
 	struct download *download;
-	struct progress *progress = &conn->progress;
+	struct progress *progress = conn->progress;
 
 	if (is_in_result_state(conn->state) && is_in_progress_state(state))
 		conn->prev_error = conn->state;
@@ -457,6 +463,7 @@ done_connection(struct connection *conn)
 	done_uri(conn->proxied_uri);
 	mem_free(conn->socket);
 	mem_free(conn->data_socket);
+	done_progress(&conn->progress);
 	mem_free(conn);
 	check_queue_bugs();
 }
@@ -944,7 +951,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		}
 
 		if (download) {
-			download->progress = &conn->progress;
+			download->progress = conn->progress;
 			download->conn = conn;
 			download->cached = conn->cached;
 			add_to_list(conn->downloads, download);
@@ -971,7 +978,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		conn->from = ((struct fragment *) cached->frag.next)->length;
 
 	if (download) {
-		download->progress = &conn->progress;
+		download->progress = conn->progress;
 		download->conn = conn;
 		download->cached = NULL;
 		add_to_list(conn->downloads, download);
@@ -1021,7 +1028,7 @@ change_connection(struct download *old, struct download *new,
 	old->state = S_INTERRUPTED;
 
 	if (new) {
-		new->progress = &conn->progress;
+		new->progress = conn->progress;
 		add_to_list(conn->downloads, new);
 		new->state = conn->state;
 		new->prev_error = conn->prev_error;

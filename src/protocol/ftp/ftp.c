@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.246 2005/04/17 01:59:05 jonas Exp $ */
+/* $Id: ftp.c,v 1.247 2005/04/17 18:54:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -715,11 +715,11 @@ add_file_cmd_to_str(struct connection *conn)
 
 		add_string_to_string(&command, &ftp_data_command);
 
-		if (conn->from || (conn->progress.start > 0)) {
+		if (conn->from || conn->progress->start > 0) {
 			add_to_string(&command, "REST ");
 			add_long_to_string(&command, conn->from
 							? conn->from
-							: conn->progress.start);
+							: conn->progress->start);
 			add_crlf_to_string(&command);
 
 			ftp->rest_sent = 1;
@@ -915,15 +915,15 @@ ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer
 					/* Following code is related to resume
 					 * feature. */
 					if (response == 350)
-						conn->from = conn->progress.start;
+						conn->from = conn->progress->start;
 					/* Come on, don't be nervous ;-). */
-					if (conn->progress.start >= 0) {
+					if (conn->progress->start >= 0) {
 						/* Update to the real value
 						 * which we've got from
 						 * Content-Range. */
-						conn->progress.seek = conn->from;
+						conn->progress->seek = conn->from;
 					}
-					conn->progress.start = conn->from;
+					conn->progress->start = conn->from;
 				}
 				break;
 
@@ -958,7 +958,7 @@ ftp_retr_file(struct connection *conn, struct socket *socket, struct read_buffer
 			if (file_len > 0) {
 				/* FIXME: ..when downloads resuming
 				 * implemented.. */
-				conn->est_length = file_len + conn->progress.start;
+				conn->est_length = file_len + conn->progress->start;
 			}
 		}
 	}

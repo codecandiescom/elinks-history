@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.117 2005/04/17 18:11:53 zas Exp $ */
+/* $Id: connection.h,v 1.118 2005/04/17 18:54:52 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -108,7 +108,7 @@ struct connection {
 	LIST_HEAD(struct connection);
 
 	struct list_head downloads;
-	struct progress progress;
+	struct progress *progress;
 
 	/* If no proxy is used uri and proxied_uri are the same. */
 	struct uri *uri;

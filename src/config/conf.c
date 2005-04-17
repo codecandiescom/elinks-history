@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.153 2005/01/11 19:33:38 jonas Exp $ */
+/* $Id: conf.c,v 1.154 2005/04/17 16:37:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,10 +433,22 @@ parse_config_file(struct option *options, unsigned char *name,
 		}
 	}
 
-	if (error_occured) {
-		fputc(7, stderr);
-		sleep(1);
-	}
+	if (!error_occured) return;
+
+	/* If an error occurred make sure that the user is notified and is able
+	 * to see it. First sound the bell. Then, if the text viewer is going to
+	 * be started, sleep for a while so the message will be visible before
+	 * ELinks starts drawing to on the screen and overwriting any error
+	 * messages. This should not be necessary for terminals supporting the
+	 * alternate screen mode but better to be safe. (debian bug 305017) */
+
+	fputc('\a', stderr);
+
+	if (get_cmd_opt_bool("dump")
+	    || get_cmd_opt_bool("source"))
+		return;
+
+	sleep(1);
 }
 
 

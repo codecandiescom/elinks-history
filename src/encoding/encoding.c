@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.42 2005/03/21 00:37:56 miciah Exp $ */
+/* $Id: encoding.c,v 1.43 2005/04/17 23:10:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 #include "config/options.h"
 #include "encoding/encoding.h"
 #include "osdep/osdep.h"
-#include "sched/connection.h"
+#include "sched/state.h"
 #include "util/memory.h"
 #include "util/string.h"
 

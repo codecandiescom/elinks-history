@@ -1,9 +1,9 @@
-/* $Id: download.h,v 1.47 2005/04/17 20:41:42 zas Exp $ */
+/* $Id: download.h,v 1.48 2005/04/17 23:10:15 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
 
-#include "sched/connection.h"
+#include "sched/state.h"
 #include "util/lists.h"
 #include "util/object.h"
 #include "util/time.h"
@@ -14,6 +14,7 @@ struct listbox_item;
 struct terminal;
 
 struct cache_entry;
+struct connection;
 struct session;
 struct uri;
 

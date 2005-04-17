@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.85 2005/04/17 18:17:57 jonas Exp $ */
+/* $Id: socket.h,v 1.86 2005/04/17 21:38:17 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -36,10 +36,10 @@ enum socket_state {
 	SOCKET_CLOSED,
 };
 
-typedef void (*socket_read_T)(void *, struct socket *, struct read_buffer *);
-typedef void (*socket_write_T)(void *, struct socket *);
-typedef void (*socket_connect_T)(void *, struct socket *);
-typedef void (*socket_operation_T)(void *, struct socket *, int connection_state);
+typedef void (*socket_read_T)(struct socket *, struct read_buffer *);
+typedef void (*socket_write_T)(struct socket *);
+typedef void (*socket_connect_T)(struct socket *);
+typedef void (*socket_operation_T)(struct socket *, int connection_state);
 
 struct socket_operations {
 	/* Report change in the state of the socket. */

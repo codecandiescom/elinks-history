@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.430 2005/04/17 20:32:32 zas Exp $ */
+/* $Id: http.c,v 1.431 2005/04/17 21:38:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -489,7 +489,7 @@ http_end_request(struct connection *conn, enum connection_state state,
 	}
 }
 
-static void http_send_header(struct connection *, struct socket *);
+static void http_send_header(struct socket *);
 
 void
 http_protocol_handler(struct connection *conn)
@@ -497,11 +497,10 @@ http_protocol_handler(struct connection *conn)
 	/* setcstate(conn, S_CONN); */
 
 	if (!has_keepalive_connection(conn)) {
-		make_connection(conn->socket, conn->uri,
-				(socket_connect_T) http_send_header,
+		make_connection(conn->socket, conn->uri, http_send_header,
 				conn->cache_mode >= CACHE_MODE_FORCE_RELOAD);
 	} else {
-		http_send_header(conn, conn->socket);
+		http_send_header(conn->socket);
 	}
 }
 
@@ -546,8 +545,9 @@ init_http_connection_info(struct connection *conn, int major, int minor, int clo
 }
 
 static void
-http_send_header(struct connection *conn, struct socket *socket)
+http_send_header(struct socket *socket)
 {
+	struct connection *conn = socket->conn;
 	struct http_connection_info *http;
 	int trace = get_opt_bool("protocol.http.trace");
 	struct string header;
@@ -913,8 +913,7 @@ http_send_header(struct connection *conn, struct socket *socket)
 	}
 
 	request_from_socket(socket, header.source, header.length, S_SENT,
-			    SOCKET_END_ONCLOSE,
-			    (socket_read_T) http_got_header);
+			    SOCKET_END_ONCLOSE, http_got_header);
 	done_string(&header);
 }
 
@@ -1074,7 +1073,7 @@ is_line_in_buffer(struct read_buffer *rb)
 	return 0;
 }
 
-static void read_http_data(struct connection *conn, struct socket *socket, struct read_buffer *rb);
+static void read_http_data(struct socket *socket, struct read_buffer *rb);
 
 static void
 read_more_http_data(struct connection *conn, struct read_buffer *rb,
@@ -1082,7 +1081,7 @@ read_more_http_data(struct connection *conn, struct read_buffer *rb,
 {
 	enum connection_state state = already_got_anything ? S_TRANS : conn->state;
 
-	read_from_socket(conn->socket, rb, state, (socket_read_T) read_http_data);
+	read_from_socket(conn->socket, rb, state, read_http_data);
 }
 
 static void
@@ -1265,9 +1264,9 @@ read_normal_http_data(struct connection *conn, struct read_buffer *rb)
 }
 
 static void
-read_http_data(struct connection *conn, struct socket *socket,
-	       struct read_buffer *rb)
+read_http_data(struct socket *socket, struct read_buffer *rb)
 {
+	struct connection *conn = socket->conn;
 	struct http_connection_info *http = conn->info;
 	int ret;
 
@@ -1381,9 +1380,9 @@ check_http_authentication(struct uri *uri, unsigned char *header,
 
 
 void
-http_got_header(struct connection *conn, struct socket *socket,
-		struct read_buffer *rb)
+http_got_header(struct socket *socket, struct read_buffer *rb)
 {
+	struct connection *conn = socket->conn; 
 	struct http_connection_info *http = conn->info;
 	unsigned char *head;
 #ifdef CONFIG_COOKIES
@@ -1417,8 +1416,7 @@ again:
 		return;
 	}
 	if (!a) {
-		read_from_socket(conn->socket, rb, state,
-				 (socket_read_T) http_got_header);
+		read_from_socket(conn->socket, rb, state, http_got_header);
 		return;
 	}
 	if (a == -2) a = 0;
@@ -1503,8 +1501,7 @@ again:
 #ifdef CONFIG_SSL
 		mem_free(head);
 		socket->need_ssl = 1;
-		complete_connect_socket(socket, uri,
-					(socket_connect_T) http_send_header);
+		complete_connect_socket(socket, uri, http_send_header);
 #else
 		abort_connection(conn, S_SSL_ERROR);
 #endif
@@ -1783,5 +1780,5 @@ again:
 	    || (PRE_HTTP_1_1(http->recv_version) && http->close))
 		socket->state = SOCKET_END_ONCLOSE;
 
-	read_http_data(conn, socket, rb);
+	read_http_data(socket, rb);
 }

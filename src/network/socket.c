@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.229 2005/04/17 18:17:57 jonas Exp $ */
+/* $Id: socket.c,v 1.230 2005/04/17 21:38:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,7 @@ dns_exception(struct socket *socket)
 static void
 exception(struct socket *socket)
 {
-	socket->ops->retry(socket->conn, socket, S_EXCEPT);
+	socket->ops->retry(socket, S_EXCEPT);
 }
 
 
@@ -171,13 +171,13 @@ void
 timeout_socket(struct socket *socket)
 {
 	if (!socket->connect_info) {
-		socket->ops->retry(socket->conn, socket, S_TIMEOUT);
+		socket->ops->retry(socket, S_TIMEOUT);
 		return;
 	}
 
 	/* Is the DNS resolving still in progress? */
 	if (socket->connect_info->dnsquery) {
-		socket->ops->done(socket->conn, socket, S_TIMEOUT);
+		socket->ops->done(socket, S_TIMEOUT);
 		return;
 	}
 
@@ -187,7 +187,7 @@ timeout_socket(struct socket *socket)
 	/* Reset the timeout if connect_socket() started a new attempt
 	 * to connect. */
 	if (socket->connect_info)
-		socket->ops->set_timeout(socket->conn, socket, 0);
+		socket->ops->set_timeout(socket, 0);
 }
 
 
@@ -199,7 +199,7 @@ dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 	int size;
 
 	if (!addr) {
-		socket->ops->done(socket->conn, socket, S_NO_DNS);
+		socket->ops->done(socket, S_NO_DNS);
 		return;
 	}
 
@@ -209,7 +209,7 @@ dns_found(struct socket *socket, struct sockaddr_storage *addr, int addrlen)
 
 	connect_info->addr = mem_alloc(size);
 	if (!connect_info->addr) {
-		socket->ops->done(socket->conn, socket, S_OUT_OF_MEM);
+		socket->ops->done(socket, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -234,17 +234,17 @@ make_connection(struct socket *socket, struct uri *uri,
 	struct connect_info *connect_info;
 	enum dns_result result;
 
-	socket->ops->set_timeout(socket->conn, socket, 0);
+	socket->ops->set_timeout(socket, 0);
 
 	if (!host) {
-		socket->ops->retry(socket->conn, socket, S_OUT_OF_MEM);
+		socket->ops->retry(socket, S_OUT_OF_MEM);
 		return;
 	}
 
 	connect_info = init_connection_info(uri, socket, connect_done);
 	if (!connect_info) {
 		mem_free(host);
-		socket->ops->retry(socket->conn, socket, S_OUT_OF_MEM);
+		socket->ops->retry(socket, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -263,7 +263,7 @@ make_connection(struct socket *socket, struct uri *uri,
 	mem_free(host);
 
 	if (result == DNS_ASYNC)
-		socket->ops->set_state(socket->conn, socket, S_DNS);
+		socket->ops->set_state(socket, S_DNS);
 }
 
 
@@ -298,7 +298,7 @@ get_pasv_socket(struct socket *ctrl_socket, struct sockaddr_storage *addr)
 	if (getsockname(ctrl_socket->fd, pasv_addr, &len)) {
 sock_error:
 		if (sock != -1) close(sock);
-		ctrl_socket->ops->retry(ctrl_socket->conn, ctrl_socket, -errno);
+		ctrl_socket->ops->retry(ctrl_socket, -errno);
 		return -1;
 	}
 
@@ -422,7 +422,7 @@ complete_connect_socket(struct socket *socket, struct uri *uri,
 		assert(uri && socket);
 		connect_info = init_connection_info(uri, socket, done);
 		if (!connect_info) {
-			socket->ops->done(socket->conn, socket, S_OUT_OF_MEM);
+			socket->ops->done(socket, S_OUT_OF_MEM);
 			return;
 		}
 
@@ -438,7 +438,7 @@ complete_connect_socket(struct socket *socket, struct uri *uri,
 #endif
 
 	if (connect_info->done)
-		connect_info->done(socket->conn, socket);
+		connect_info->done(socket);
 
 	done_connection_info(socket);
 }
@@ -493,7 +493,7 @@ connect_socket(struct socket *csocket, int connection_state)
 	 * XXX: Unify with @local_only handling? --pasky */
 	int silent_fail = 0;
 
-	csocket->ops->set_state(csocket->conn, csocket, connection_state);
+	csocket->ops->set_state(csocket, connection_state);
 
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
@@ -598,7 +598,7 @@ connect_socket(struct socket *csocket, int connection_state)
 			/* It will take some more time... */
 			set_handlers(sock, NULL, (select_handler_T) connected,
 				     (select_handler_T) dns_exception, csocket);
-			csocket->ops->set_state(csocket->conn, csocket, S_CONN);
+			csocket->ops->set_state(csocket, S_CONN);
 			return;
 		}
 
@@ -616,7 +616,7 @@ connect_socket(struct socket *csocket, int connection_state)
 		 * what matters is the last one because we do not know the
 		 * previous one's errno, and the added complexity wouldn't
 		 * really be worth it. */
-		csocket->ops->done(csocket->conn, csocket, S_LOCAL_ONLY);
+		csocket->ops->done(csocket, S_LOCAL_ONLY);
 		return;
 	}
 
@@ -629,7 +629,7 @@ connect_socket(struct socket *csocket, int connection_state)
 		/* All failed. */
 		connection_state = S_NO_FORCED_DNS;
 
-	csocket->ops->retry(csocket->conn, csocket, connection_state);
+	csocket->ops->retry(csocket, connection_state);
 }
 
 
@@ -662,14 +662,14 @@ write_select(struct socket *socket)
 
 	assertm(wb, "write socket has no buffer");
 	if_assert_failed {
-		socket->ops->done(socket->conn, socket, S_INTERNAL);
+		socket->ops->done(socket, S_INTERNAL);
 		return;
 	}
 
 	/* We are making some progress, therefore reset the timeout; ie.  when
 	 * uploading large files the time needed for all the data to be sent can
 	 * easily exceed the timeout. */
-	socket->ops->set_timeout(socket->conn, socket, 0);
+	socket->ops->set_timeout(socket, 0);
 
 #if 0
 	printf("ws: %d\n",wb->len-wb->pos);
@@ -689,17 +689,17 @@ write_select(struct socket *socket)
 
 	switch (wr) {
 	case SOCKET_CANT_WRITE:
-		socket->ops->retry(socket->conn, socket, S_CANT_WRITE);
+		socket->ops->retry(socket, S_CANT_WRITE);
 		break;
 
 	case SOCKET_SYSCALL_ERROR:
-		socket->ops->retry(socket->conn, socket, -errno);
+		socket->ops->retry(socket, -errno);
 		break;
 
 	case SOCKET_INTERNAL_ERROR:
 		/* The global errno variable is used for passing
 		 * internal connection_state error value. */
-		socket->ops->done(socket->conn, socket, -errno);
+		socket->ops->done(socket, -errno);
 		break;
 
 	default:
@@ -713,7 +713,7 @@ write_select(struct socket *socket)
 
 			clear_handlers(socket->fd);
 			mem_free_set(&socket->write_buffer, NULL);
-			done(socket->conn, socket);
+			done(socket);
 		}
 	}
 }
@@ -729,11 +729,11 @@ write_to_socket(struct socket *socket, unsigned char *data, int len,
 	assert(len > 0);
 	if_assert_failed return;
 
-	socket->ops->set_timeout(socket->conn, socket, 0);
+	socket->ops->set_timeout(socket, 0);
 
 	wb = mem_alloc(sizeof(*wb) + len);
 	if (!wb) {
-		socket->ops->done(socket->conn, socket, S_OUT_OF_MEM);
+		socket->ops->done(socket, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -744,7 +744,7 @@ write_to_socket(struct socket *socket, unsigned char *data, int len,
 	mem_free_set(&socket->write_buffer, wb);
 	set_handlers(socket->fd, NULL, (select_handler_T) write_select,
 		     (select_handler_T) exception, socket);
-	socket->ops->set_state(socket->conn, socket, connection_state);
+	socket->ops->set_state(socket, connection_state);
 }
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */
@@ -769,14 +769,14 @@ read_select(struct socket *socket)
 
 	assertm(rb, "read socket has no buffer");
 	if_assert_failed {
-		socket->ops->done(socket->conn, socket, S_INTERNAL);
+		socket->ops->done(socket, S_INTERNAL);
 		return;
 	}
 
 	/* We are making some progress, therefore reset the timeout; we do this
 	 * for read_select() to avoid that the periodic calls to user handlers
 	 * has to do it. */
-	socket->ops->set_timeout(socket->conn, socket, 0);
+	socket->ops->set_timeout(socket, 0);
 
 	clear_handlers(socket->fd);
 
@@ -785,7 +785,7 @@ read_select(struct socket *socket)
 
 		rb = mem_realloc(rb, size);
 		if (!rb) {
-			socket->ops->done(socket->conn, socket, S_OUT_OF_MEM);
+			socket->ops->done(socket, S_OUT_OF_MEM);
 			return;
 		}
 		rb->freespace = size - sizeof(*rb) - rb->len;
@@ -811,7 +811,7 @@ read_select(struct socket *socket)
 	case SOCKET_CANT_READ:
 		if (socket->state != SOCKET_RETRY_ONCLOSE) {
 			socket->state = SOCKET_CLOSED;
-			rb->done(socket->conn, socket, rb);
+			rb->done(socket, rb);
 			break;
 		}
 
@@ -819,11 +819,11 @@ read_select(struct socket *socket)
 		/* Fall-through */
 
 	case SOCKET_SYSCALL_ERROR:
-		socket->ops->retry(socket->conn, socket, -errno);
+		socket->ops->retry(socket, -errno);
 		break;
 
 	case SOCKET_INTERNAL_ERROR:
-		socket->ops->done(socket->conn, socket, -errno);
+		socket->ops->done(socket, -errno);
 		break;
 
 	default:
@@ -833,7 +833,7 @@ read_select(struct socket *socket)
 		rb->freespace -= rd;
 		assert(rb->freespace >= 0);
 
-		rb->done(socket->conn, socket, rb);
+		rb->done(socket, rb);
 	}
 }
 
@@ -844,7 +844,7 @@ alloc_read_buffer(struct socket *socket)
 
 	rb = mem_calloc(1, RD_SIZE(rb, 0));
 	if (!rb) {
-		socket->ops->done(socket->conn, socket, S_OUT_OF_MEM);
+		socket->ops->done(socket, S_OUT_OF_MEM);
 		return NULL;
 	}
 
@@ -863,8 +863,8 @@ read_from_socket(struct socket *socket, struct read_buffer *buffer,
 {
 	buffer->done = done;
 
-	socket->ops->set_timeout(socket->conn, socket, 0);
-	socket->ops->set_state(socket->conn, socket, connection_state);
+	socket->ops->set_timeout(socket, 0);
+	socket->ops->set_state(socket, connection_state);
 
 	if (socket->read_buffer && buffer != socket->read_buffer)
 		mem_free(socket->read_buffer);
@@ -875,7 +875,7 @@ read_from_socket(struct socket *socket, struct read_buffer *buffer,
 }
 
 static void
-read_response_from_socket(void *conn, struct socket *socket)
+read_response_from_socket(struct socket *socket)
 {
 	struct read_buffer *rb = alloc_read_buffer(socket);
 

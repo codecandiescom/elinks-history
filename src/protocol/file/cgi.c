@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.105 2005/04/17 01:59:05 jonas Exp $ */
+/* $Id: cgi.c,v 1.106 2005/04/17 21:38:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,8 +36,9 @@
 
 
 static void
-close_pipe_and_read(struct connection *conn, struct socket *data_socket)
+close_pipe_and_read(struct socket *data_socket)
 {
+	struct connection *conn = data_socket->conn;
 	struct read_buffer *rb = alloc_read_buffer(conn->socket);
 
 	if (!rb) return;
@@ -51,8 +52,7 @@ close_pipe_and_read(struct connection *conn, struct socket *data_socket)
 	data_socket->fd = conn->cgi_pipes[1] = -1;
 
 	conn->socket->state = SOCKET_END_ONCLOSE;
-	read_from_socket(conn->socket, rb, S_SENT,
-			 (socket_read_T) http_got_header);
+	read_from_socket(conn->socket, rb, S_SENT, http_got_header);
 }
 
 static void
@@ -99,7 +99,7 @@ send_post_data(struct connection *conn)
 	conn->data_socket->fd = conn->cgi_pipes[1];
 
 	write_to_socket(conn->data_socket, data.source, data.length,
-			S_SENT, (socket_write_T) close_pipe_and_read);
+			S_SENT, close_pipe_and_read);
 
 	done_string(&data);
 #undef POST_BUFFER_SIZE
@@ -109,7 +109,7 @@ static void
 send_request(struct connection *conn)
 {
 	if (conn->uri->post) send_post_data(conn);
-	else close_pipe_and_read(conn, conn->data_socket);
+	else close_pipe_and_read(conn->data_socket);
 }
 
 /* This function sets CGI environment variables. */

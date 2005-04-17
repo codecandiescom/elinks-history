@@ -1,3 +1,200 @@
+Sun Apr 17 21:38:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/http/http.h, protocol/nntp/connection.c,
+	sched/connection.c, ssl/connect.c:
+
+	Remove the void pointer parameter from all socket operations. This
+	means less casting, shorter lines and should hopefully be more safe.  
+
+Sun Apr 17 21:05:13 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: connection.c, progress.c, progress.h:
+
+	Move progress related code from connection.c to progress.c.  
+
+Sun Apr 17 20:41:42 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/connection.h, sched/download.h, sched/location.h,
+	sched/session.h, viewer/dump/dump.c:
+
+	Move struct download to sched/download.h.  
+
+Sun Apr 17 20:32:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/download.c, dialogs/status.c, protocol/ftp/ftp.c,
+	protocol/http/http.c, sched/connection.c, sched/connection.h,
+	sched/download.c:
+
+	Fix progress.h inclusions.  
+
+Sun Apr 17 20:18:57 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: connection.c, progress.c, progress.h:
+
+	Reduce abstraction level, suggested by Jonas.  
+
+Sun Apr 17 18:54:51 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/ftp/ftp.c, protocol/http/http.c,
+	sched/connection.c, sched/connection.h:
+
+	Make @progress a pointer to a struct progress in struct connection.  
+
+Sun Apr 17 18:46:04 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: progress.c, progress.h:
+
+	Introduce (init|done)_progress().  
+
+Sun Apr 17 18:17:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: connect.c, connect.h:
+
+	conn_info -> connect_info 
+
+Sun Apr 17 18:11:53 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: connection.h, progress.h:
+
+	Move struct progress to progress.h.  
+
+Sun Apr 17 18:08:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: connect.c, connect.h:
+
+	struct socket: Have separate members for read and write buffers.  
+
+Sun Apr 17 18:08:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: Makefile.am, progress.c, progress.h:
+
+	Add progress.{c,h}.  
+
+Sun Apr 17 16:38:33 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/status.c:
+
+	Typo fix.  
+
+Sun Apr 17 16:37:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/conf.c:
+
+	Only sleep after config errors when the text viewer is started. Use
+	'\a' instead of 7.  
+
+Sun Apr 17 16:36:30 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/status.c:
+
+	No need to include this header now.  
+
+Sun Apr 17 16:34:28 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hierbox.c, dialogs/download.c, dialogs/download.h:
+
+	Make download_browser static.  
+
+Sun Apr 17 16:30:38 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, dialogs/download.c:
+
+	Add a field do_not_save_state to struct hierbox_browser, and move
+	FIXME to download_manager().  
+
+Sun Apr 17 16:22:05 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: download.c, download.h:
+
+	Cleanup includes.  
+
+Sun Apr 17 16:16:53 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/download.c, dialogs/download.h, sched/download.c:
+
+	Introduce (init|done)_download_display().  
+
+Sun Apr 17 16:03:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: download.c, status.c, status.h:
+
+	download_progress_bar() -> draw_progress_bar().  
+
+Sun Apr 17 15:59:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: download.c, download.h, status.c, status.h:
+
+	Move download_progress_bar() from dialogs/download.{c,h} to
+	dialogs/status.{c,h}.  
+
+Sun Apr 17 14:10:34 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Fixed the fortune generator's prejudicial ignorance of the final
+	entry in the fortune file.  
+
+Sun Apr 17 13:31:29 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/elinks.fortune:
+
+	I had no idea that 'z' stopped a connection.  Sounds like a good tip
+	to me.  
+
+Sun Apr 17 03:25:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.c:
+
+	Check for failure to register the hook and report any such failure.  
+
+Sun Apr 17 03:22:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, scripting/lua/core.c:
+
+	Register the hook in l_bindkey instead of in bind_scripting_func.  
+
+Sun Apr 17 03:16:47 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, scripting/lua/core.c:
+
+	Return the error message from bind_scripting_func by reference and
+	actually return the event id.  
+
+Sun Apr 17 03:09:52 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	In bind_scripting_func, move the hook registration after the check 
+	whether the event was successfully registered.  
+
+Sun Apr 17 01:59:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	This yummi patch removes struct connection usage from the socket
+	interface. Cast away! 
+
+Sun Apr 17 01:28:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/ftp/ftp.c:
+
+	get_pasv_socket(): Take struct socket. Trims # of parameters.  
+
+Sun Apr 17 01:15:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c:
+
+	make_connection(): Don't take connection pointer. ;) 
+
 Sat Apr 16 21:25:22 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/rewrite/rewrite.c:

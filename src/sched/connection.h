@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.116 2005/04/15 23:25:25 jonas Exp $ */
+/* $Id: connection.h,v 1.117 2005/04/17 18:11:53 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -6,6 +6,7 @@
 #include "cache/cache.h"
 #include "encoding/encoding.h"
 #include "lowlevel/timers.h" /* timer_id_T */
+#include "sched/progress.h"
 #include "util/lists.h"
 #include "util/time.h"
 
@@ -102,33 +103,6 @@ enum connection_state {
 	S_PROXY_ERROR		= -100700,
 };
 
-struct progress {
-	time_T elapsed;
-	timeval_T last_time;
-	time_T dis_b;
-
-	unsigned int valid:1;
-	int size, loaded, last_loaded, cur_loaded;
-
-	/* This is offset where the download was resumed possibly */
-	/* progress->start == -1 means normal session, not download
-	 *            ==  0 means download
-	 *             >  0 means resume
-	 * --witekfl */
-	int start;
-	/* This is absolute position in the stream
-	 * (relative_position = pos - start) (maybe our fictional
-	 * relative_position is equiv to loaded, but I'd rather not rely on it
-	 * --pasky). */
-	int pos;
-	/* If this is non-zero, it indicates that we should seek in the
-	 * stream to the value inside before the next write (and zero this
-	 * counter then, obviously). */
-	int seek;
-
-	timer_id_T timer;
-	int data_in_secs[CURRENT_SPD_SEC];
-};
 
 struct connection {
 	LIST_HEAD(struct connection);

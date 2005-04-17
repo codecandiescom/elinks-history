@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.275 2005/04/17 20:32:32 zas Exp $ */
+/* $Id: connection.c,v 1.276 2005/04/17 21:05:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,43 +314,16 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 static void stat_timer(struct connection *conn);
 
 static void
-update_progress(struct connection *conn)
+update_connection_progress(struct connection *conn)
 {
-	struct progress *progress = conn->progress;
-	timeval_T now, elapsed;
-	long a;	/* FIXME: milliseconds */
-	
-	get_timeval(&now);
-	timeval_sub(&elapsed, &progress->last_time, &now);
-	a = timeval_to_milliseconds(&elapsed);
-	
-	progress->loaded = conn->received;
-	progress->size = conn->est_length;
-	progress->pos = conn->from;
-	if (progress->size < progress->pos && progress->size != -1)
-		progress->size = conn->from;
-
-	progress->dis_b += a;
-	while (progress->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
-		progress->cur_loaded -= progress->data_in_secs[0];
-		memmove(progress->data_in_secs, progress->data_in_secs + 1,
-			sizeof(*progress->data_in_secs) * (CURRENT_SPD_SEC - 1));
-		progress->data_in_secs[CURRENT_SPD_SEC - 1] = 0;
-		progress->dis_b -= SPD_DISP_TIME;
-	}
-
-	progress->data_in_secs[CURRENT_SPD_SEC - 1] += progress->loaded - progress->last_loaded;
-	progress->cur_loaded += progress->loaded - progress->last_loaded;
-	progress->last_loaded = progress->loaded;
-	copy_struct(&progress->last_time, &now);
-	progress->elapsed += a;
-	install_timer(&progress->timer, SPD_DISP_TIME, (void (*)(void *)) stat_timer, conn);
+	update_progress(conn->progress, conn->received, conn->est_length, conn->from);
+	install_timer(&conn->progress->timer, SPD_DISP_TIME, (void (*)(void *)) stat_timer, conn);
 }
 
 static void
 stat_timer(struct connection *conn)
 {
-	update_progress(conn);
+	update_connection_progress(conn);
 	notify_connection_callbacks(conn);
 }
 
@@ -366,18 +339,8 @@ set_connection_state(struct connection *conn, enum connection_state state)
 	conn->state = state;
 	if (conn->state == S_TRANS) {
 		if (progress->timer == TIMER_ID_UNDEF) {
-			if (!progress->valid) {
-				int tmp = progress->start;
-				int tmp2 = progress->seek;
-
-				memset(progress, 0, sizeof(*progress));
-				progress->start = tmp;
-				progress->seek = tmp2;
-				progress->valid = 1;
-			}
-			get_timeval(&progress->last_time);
-			progress->last_loaded = progress->loaded;
-			update_progress(conn);
+			start_update_progress(progress);
+			update_connection_progress(conn);
 			if (connection_disappeared(conn))
 				return;
 		}

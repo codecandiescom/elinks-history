@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.3 2005/04/17 20:18:57 zas Exp $ */
+/* $Id: progress.c,v 1.4 2005/04/17 21:05:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,5 +30,50 @@ done_progress(struct progress *progress)
 	mem_free(progress);
 }
 
+void
+update_progress(struct progress *progress, int loaded, int size, int pos)
+{
+	timeval_T now, elapsed;
+	long a;	/* FIXME: milliseconds */
+	
+	get_timeval(&now);
+	timeval_sub(&elapsed, &progress->last_time, &now);
+	a = timeval_to_milliseconds(&elapsed);
+	
+	progress->loaded = loaded;
+	progress->size = size;
+	progress->pos = pos;
+	if (progress->size != -1 && progress->size < progress->pos)
+		progress->size = progress->pos;
 
+	progress->dis_b += a;
+	while (progress->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
+		progress->cur_loaded -= progress->data_in_secs[0];
+		memmove(progress->data_in_secs, progress->data_in_secs + 1,
+			sizeof(*progress->data_in_secs) * (CURRENT_SPD_SEC - 1));
+		progress->data_in_secs[CURRENT_SPD_SEC - 1] = 0;
+		progress->dis_b -= SPD_DISP_TIME;
+	}
 
+	progress->data_in_secs[CURRENT_SPD_SEC - 1] += progress->loaded - progress->last_loaded;
+	progress->cur_loaded += progress->loaded - progress->last_loaded;
+	progress->last_loaded = progress->loaded;
+	copy_struct(&progress->last_time, &now);
+	progress->elapsed += a;
+}
+
+void
+start_update_progress(struct progress *progress)
+{
+	if (!progress->valid) {
+		int tmp = progress->start;
+		int tmp2 = progress->seek;
+
+		memset(progress, 0, sizeof(*progress));
+		progress->start = tmp;
+		progress->seek = tmp2;
+		progress->valid = 1;
+	}
+	get_timeval(&progress->last_time);
+	progress->last_loaded = progress->loaded;
+}

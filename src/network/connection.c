@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.277 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: connection.c,v 1.278 2005/04/17 23:23:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,31 +218,31 @@ check_queue_bugs(void)
 #endif
 
 static void
-set_connection_socket_state(struct socket *socket, int connection_state)
+set_connection_socket_state(struct socket *socket, enum connection_state state)
 {
 	assert(socket);
-	set_connection_state(socket->conn, connection_state);
+	set_connection_state(socket->conn, state);
 }
 
 static void
-set_connection_socket_timeout(struct socket *socket, int connection_state)
+set_connection_socket_timeout(struct socket *socket, enum connection_state state)
 {
 	assert(socket);
 	set_connection_timeout(socket->conn);
 }
 
 static void
-retry_connection_socket(struct socket *socket, int connection_state)
+retry_connection_socket(struct socket *socket, enum connection_state state)
 {
 	assert(socket);
-	retry_connection(socket->conn, connection_state);
+	retry_connection(socket->conn, state);
 }
 
 static void
-done_connection_socket(struct socket *socket, int connection_state)
+done_connection_socket(struct socket *socket, enum connection_state state)
 {
 	assert(socket);
-	abort_connection(socket->conn, connection_state);
+	abort_connection(socket->conn, state);
 }
 
 static struct connection *

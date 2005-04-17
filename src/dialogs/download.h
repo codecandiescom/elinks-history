@@ -1,12 +1,11 @@
-/* $Id: download.h,v 1.6 2005/04/17 16:16:53 zas Exp $ */
+/* $Id: download.h,v 1.7 2005/04/17 16:22:05 zas Exp $ */
 
 #ifndef EL__DIALOGS_DOWNLOAD_H
 #define EL__DIALOGS_DOWNLOAD_H
 
-#include "bfu/hierbox.h"
-#include "sched/download.h"
-#include "sched/session.h"
-#include "terminal/terminal.h"
+struct file_download;
+struct session;
+struct terminal;
 
 void init_download_display(struct file_download *file_download);
 void done_download_display(struct file_download *file_download);

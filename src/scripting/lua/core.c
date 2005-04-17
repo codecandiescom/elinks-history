@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.194 2005/04/13 17:32:18 jonas Exp $ */
+/* $Id: core.c,v 1.195 2005/04/17 03:16:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,7 +275,7 @@ static int
 l_bind_key(LS)
 {
 	int ref;
-	unsigned char *err;
+	unsigned char *err = NULL;
 	struct string event_name = NULL_STRING;
 
 	if (!lua_isstring(S, 1) || !lua_isstring(S, 2)
@@ -290,10 +290,10 @@ l_bind_key(LS)
 	ref = lua_ref(S, 1);
 	add_format_to_string(&event_name, "lua-run-func %i", ref);
 
-	err = bind_scripting_func((unsigned char *) lua_tostring(S, 1),
+	bind_scripting_func((unsigned char *) lua_tostring(S, 1),
 			    (unsigned char *) lua_tostring(S, 2),
 			    event_name.source, run_lua_func,
-			    (void *) (long) ref);
+			    (void *) (long) ref, &err);
 	done_string(&event_name);
 
 	if (err) {

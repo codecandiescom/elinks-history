@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.141 2005/04/08 03:04:40 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.142 2005/04/17 03:16:47 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -252,8 +252,9 @@ unsigned char *bind_act(unsigned char *, unsigned char *);
 void bind_config_string(struct string *);
 
 #ifdef CONFIG_SCRIPTING
-unsigned char *bind_scripting_func(unsigned char *, unsigned char *,
-				   unsigned char *, event_hook_T, void *);
+int bind_scripting_func(unsigned char *, unsigned char *,
+			unsigned char *, event_hook_T, void *,
+			unsigned char **);
 #endif
 
 void add_keystroke_to_string(struct string *string, int action, enum keymap map);

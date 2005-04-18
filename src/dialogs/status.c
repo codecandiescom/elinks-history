@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.106 2005/04/18 12:26:41 zas Exp $ */
+/* $Id: status.c,v 1.107 2005/04/18 12:28:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,17 +37,6 @@
 #include "viewer/text/link.h"
 #include "viewer/text/view.h"
 
-
-#define average_speed(progress) \
-	((longlong) (progress)->loaded * 10 / ((progress)->elapsed / 100))
-
-#define current_speed(progress) \
-	((progress)->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000))
-
-#define estimated_time(progress) \
-	(((progress)->size - (progress)->pos) \
-	 / ((longlong) (progress)->loaded * 10 / ((progress)->elapsed / 100)) \
-	 * 1000)
 
 unsigned char *
 get_download_msg(struct download *download, struct terminal *term,

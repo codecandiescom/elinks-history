@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.110 2005/04/18 16:23:18 zas Exp $ */
+/* $Id: status.c,v 1.111 2005/04/18 16:29:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,31 +69,23 @@ get_download_msg(struct download *download, struct terminal *term,
 	add_to_string(&msg, separator);
 
 	if (wide) {
+		/* Do the following only if there is room */
+
 		add_to_string(&msg,
 			      _(full ? (newlines ? N_("Average speed")
 					         : N_("average speed"))
 				     : N_("avg"),
 				term));
-	} else {
-		add_to_string(&msg, _(newlines ? N_("Speed") : N_("speed"),
-					term));
-	}
+		add_char_to_string(&msg, ' ');
+		add_xnum_to_string(&msg, average_speed(download->progress));
+		add_to_string(&msg, "/s");
 
-	add_char_to_string(&msg, ' ');
-	add_xnum_to_string(&msg, average_speed(download->progress));
-	add_to_string(&msg, "/s");
-
-	if (wide) {
 		add_to_string(&msg, ", ");
 		add_to_string(&msg,
 			      _(full ? N_("current speed") : N_("cur"), term));
 		add_char_to_string(&msg, ' '),
 		add_xnum_to_string(&msg, current_speed(download->progress));
 		add_to_string(&msg, "/s");
-	}
-
-	if (wide) {
-		/* Do the following only if there is room */
 
 		add_to_string(&msg, separator);
 
@@ -103,6 +95,14 @@ get_download_msg(struct download *download, struct terminal *term,
 				   term));
 		add_char_to_string(&msg, ' ');
 		add_time_to_string(&msg, download->progress->elapsed);
+
+	} else {
+		add_to_string(&msg, _(newlines ? N_("Speed") : N_("speed"),
+					term));
+
+		add_char_to_string(&msg, ' ');
+		add_xnum_to_string(&msg, average_speed(download->progress));
+		add_to_string(&msg, "/s");
 	}
 
 	if (download->progress->size >= 0 && download->progress->loaded > 0) {

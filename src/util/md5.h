@@ -1,7 +1,17 @@
-/* $Id: md5.h,v 1.3 2005/04/18 14:29:29 jonas Exp $ */
+/* $Id: md5.h,v 1.4 2005/04/18 14:32:04 jonas Exp $ */
 
 #ifndef EL__UTIL_MD5_H
 #define EL__UTIL_MD5_H
+
+/* Optionally MD5 support can depend on external implementation when linking
+ * against a SSL library that supports it. */
+#ifndef CONFIG_MD5
+#if defined(CONFIG_OPENSSL)
+#include <openssl/md5.h>
+#elif defined(CONFIG_GNUTLS_OPENSSL_COMPAT)
+#include <gnutls/openssl.h>
+#endif
+#endif
 
 #include "util/types.h"
 

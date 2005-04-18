@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.4 2005/04/18 17:27:37 zas Exp $ */
+/* $Id: progress.h,v 1.5 2005/04/18 17:41:09 jonas Exp $ */
 
 #ifndef EL__DIALOGS_PROGRESS_H
 #define EL__DIALOGS_PROGRESS_H
@@ -6,7 +6,9 @@
 struct progress;
 struct terminal;
 
-unsigned char *get_progress_msg(struct progress *progress, struct terminal *term, int wide, int full, unsigned char *separator);
+unsigned char *
+get_progress_msg(struct progress *progress, struct terminal *term,
+		 int wide, int full, unsigned char *separator);
 
 /* Draws a progress bar meter or progress coloured text depending on whether
  * @text is NULL. If @meter_color is NULL dialog.meter color is used. */

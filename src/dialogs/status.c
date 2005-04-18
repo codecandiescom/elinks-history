@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.115 2005/04/18 17:19:37 zas Exp $ */
+/* $Id: status.c,v 1.116 2005/04/18 17:27:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,9 +253,9 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		width = int_max(0, xend - msglen - tab_info_len - 1);
 		if (width < 6) return;
 		int_upper_bound(&width, 20);
-		draw_progress_bar(term, xend - width, term->height - 1,
-				  width, NULL, NULL,
-				  download->progress->pos, download->progress->size);
+		draw_progress_bar(download->progress, term,
+				  xend - width, term->height - 1, width,
+				  NULL, NULL);
 	}
 }
 
@@ -331,9 +331,9 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 		draw_box(term, &box, ' ', 0, color);
 
 		if (download) {
-			draw_progress_bar(term, box.x, box.y,
-					  actual_tab_width, msg, NULL,
-					  download->progress->pos, download->progress->size);
+			draw_progress_bar(download->progress, term,
+					  box.x, box.y, actual_tab_width,
+					  msg, NULL);
 		} else {
 			int msglen = int_min(strlen(msg), actual_tab_width);
 

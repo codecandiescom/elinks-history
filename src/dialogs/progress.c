@@ -1,5 +1,5 @@
 /* Display of downloads progression stuff. */
-/* $Id: progress.c,v 1.8 2005/04/18 22:00:27 zas Exp $ */
+/* $Id: progress.c,v 1.9 2005/04/18 22:07:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,14 +51,14 @@ get_progress_msg(struct progress *progress, struct terminal *term,
 				     : N_("avg"),
 				term));
 		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, average_speed(progress));
+		add_xnum_to_string(&msg, progress_average_speed(progress));
 		add_to_string(&msg, "/s");
 
 		add_to_string(&msg, ", ");
 		add_to_string(&msg,
 			      _(full ? N_("current speed") : N_("cur"), term));
 		add_char_to_string(&msg, ' '),
-		add_xnum_to_string(&msg, current_speed(progress));
+		add_xnum_to_string(&msg, progress_current_speed(progress));
 		add_to_string(&msg, "/s");
 
 		add_to_string(&msg, separator);
@@ -75,7 +75,7 @@ get_progress_msg(struct progress *progress, struct terminal *term,
 					term));
 
 		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, average_speed(progress));
+		add_xnum_to_string(&msg, progress_average_speed(progress));
 		add_to_string(&msg, "/s");
 	}
 
@@ -85,7 +85,7 @@ get_progress_msg(struct progress *progress, struct terminal *term,
 					   : N_("ETA"),
 				      term));
 		add_char_to_string(&msg, ' ');
-		add_time_to_string(&msg, estimated_time(progress));
+		add_time_to_string(&msg, progress_estimated_time(progress));
 	}
 
 	return msg.source;

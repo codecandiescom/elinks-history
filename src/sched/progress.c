@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.5 2005/04/18 12:46:35 zas Exp $ */
+/* $Id: progress.c,v 1.6 2005/04/18 22:13:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,31 @@
 #include "sched/progress.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/types.h"
+
+int
+has_progress(struct progress *progress)
+{
+	return (progress_elapsed_in_ms(progress) >= CURRENT_SPD_AFTER);
+}
+
+int
+progress_average_speed(struct progress *progress)
+{
+	return ((longlong) (progress)->loaded * 10 / (progress_elapsed_in_ms(progress) / 100));
+}
+
+int
+progress_current_speed(struct progress *progress)
+{
+	return ((progress)->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000));
+}
+
+int
+progress_estimated_time(struct progress *progress)
+{
+	return 	(((progress)->size - (progress)->pos) / ((longlong) (progress)->loaded * 10 / (progress_elapsed_in_ms(progress) / 100)) * 1000);
+}
 
 struct progress *
 init_progress(int start)
@@ -35,11 +60,11 @@ update_progress(struct progress *progress, int loaded, int size, int pos)
 {
 	timeval_T now, elapsed;
 	long a;	/* FIXME: milliseconds */
-	
+
 	get_timeval(&now);
 	timeval_sub(&elapsed, &progress->last_time, &now);
 	a = timeval_to_milliseconds(&elapsed);
-	
+
 	progress->loaded = loaded;
 	progress->size = size;
 	progress->pos = pos;

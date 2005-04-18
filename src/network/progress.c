@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.9 2005/04/18 22:45:10 zas Exp $ */
+/* $Id: progress.c,v 1.10 2005/04/18 22:53:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,13 +97,15 @@ start_update_progress(struct progress *progress, void (*timer_func)(void *),
 		      void *timer_func_data)
 {
 	if (!progress->valid) {
-		int tmp = progress->start;
-		int tmp2 = progress->seek;
+		struct progress tmp;
 
-		memset(progress, 0, sizeof(*progress));
-		progress->start = tmp;
-		progress->seek = tmp2;
-		progress->valid = 1;
+		/* Just copy useful fields from invalid progress. */
+		memset(&tmp, 0, sizeof(tmp));
+		tmp.start = progress->start;
+		tmp.seek  = progress->seek;
+		tmp.valid = 1;
+
+		memcpy(progress, &tmp, sizeof(*progress));
 	}
 	get_timeval(&progress->last_time);
 	progress->last_loaded = progress->loaded;

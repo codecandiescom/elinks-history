@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.112 2005/04/18 16:37:02 zas Exp $ */
+/* $Id: status.c,v 1.113 2005/04/18 17:01:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "bfu/dialog.h"
 #include "cache/cache.h"
 #include "config/options.h"
+#include "dialogs/progress.h"
 #include "dialogs/status.h"
 #include "document/document.h"
 #include "document/renderer.h"
@@ -42,74 +43,12 @@ unsigned char *
 get_download_msg(struct download *download, struct terminal *term,
 		 int wide, int full, unsigned char *separator)
 {
-	struct string msg;
-	int newlines = separator[strlen(separator) - 1] == '\n';
-
-	if (!init_string(&msg)) return NULL;
-
-	/* FIXME: The following is a PITA from the l10n standpoint. A *big*
-	 * one, _("of")-like pearls are a nightmare. Format strings need to
-	 * be introduced to this fuggy corner of code as well. --pasky */
-
-	add_to_string(&msg, _("Received", term));
-	add_char_to_string(&msg, ' ');
-	add_xnum_to_string(&msg, download->progress->pos);
-	if (download->progress->size >= 0) {
-		add_char_to_string(&msg, ' ');
-		add_to_string(&msg, _("of", term));
-		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, download->progress->size);
+	if (!download_is_progressing(download)) {
+		/* DBG("%d -> %s", download->state, _(get_err_msg(download->state), term)); */
+		return stracpy(get_err_msg(download->state, term));
 	}
 
-	add_to_string(&msg, separator);
-
-	if (wide) {
-		/* Do the following only if there is room */
-
-		add_to_string(&msg,
-			      _(full ? (newlines ? N_("Average speed")
-					         : N_("average speed"))
-				     : N_("avg"),
-				term));
-		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, average_speed(download->progress));
-		add_to_string(&msg, "/s");
-
-		add_to_string(&msg, ", ");
-		add_to_string(&msg,
-			      _(full ? N_("current speed") : N_("cur"), term));
-		add_char_to_string(&msg, ' '),
-		add_xnum_to_string(&msg, current_speed(download->progress));
-		add_to_string(&msg, "/s");
-
-		add_to_string(&msg, separator);
-
-		add_to_string(&msg, _(full ? (newlines ? N_("Elapsed time")
-						       : N_("elapsed time"))
-					   : N_("ETT"),
-				   term));
-		add_char_to_string(&msg, ' ');
-		add_time_to_string(&msg, download->progress->elapsed);
-
-	} else {
-		add_to_string(&msg, _(newlines ? N_("Speed") : N_("speed"),
-					term));
-
-		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, average_speed(download->progress));
-		add_to_string(&msg, "/s");
-	}
-
-	if (download->progress->size >= 0 && download->progress->loaded > 0) {
-		add_to_string(&msg, ", ");
-		add_to_string(&msg, _(full ? N_("estimated time")
-					   : N_("ETA"),
-				      term));
-		add_char_to_string(&msg, ' ');
-		add_time_to_string(&msg, estimated_time(download->progress));
-	}
-
-	return msg.source;
+	return get_progress_msg(download->progress, term, wide, full, separator);
 }
 
 int
@@ -276,16 +215,10 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		}
 
 		if (!msg) {
-			if (download_is_progressing(download)) {
-				/* FIXME: improve that, values should depend on
-				 * context (leds, digital clock, ...). --Zas */
-				int full = term->width > 130;
-				int wide = term->width > 80;
+			int full = term->width > 130;
+			int wide = term->width > 80;
 
-				msg = get_download_msg(download, term, wide, full, ", ");
-			} else {
-				msg = stracpy(get_err_msg(download->state, term));
-			}
+			msg = get_download_msg(download, term, wide, full, ", ");
 		}
 	}
 

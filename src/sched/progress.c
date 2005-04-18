@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.6 2005/04/18 22:13:12 zas Exp $ */
+/* $Id: progress.c,v 1.7 2005/04/18 22:15:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,10 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/types.h"
+
+#define SPD_DISP_TIME			100
+#define CURRENT_SPD_AFTER		100
+
 
 int
 has_progress(struct progress *progress)

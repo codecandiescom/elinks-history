@@ -1,10 +1,14 @@
-/* $Id: progress.h,v 1.8 2005/04/18 12:46:35 zas Exp $ */
+/* $Id: progress.h,v 1.9 2005/04/18 12:53:50 zas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
 
 #include "lowlevel/timers.h" /* timer_id_T */
 #include "util/time.h"
+
+#define SPD_DISP_TIME			100
+#define CURRENT_SPD_SEC			50
+#define CURRENT_SPD_AFTER		100
 
 struct progress {
 	time_T elapsed;

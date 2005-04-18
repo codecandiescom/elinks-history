@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.8 2005/04/18 22:18:00 zas Exp $ */
+/* $Id: progress.c,v 1.9 2005/04/18 22:45:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,8 +12,8 @@
 #include "util/memory.h"
 #include "util/types.h"
 
-#define SPD_DISP_TIME			100
-#define CURRENT_SPD_AFTER		100
+#define SPD_DISP_TIME			100	/* milliseconds */
+#define CURRENT_SPD_AFTER		100	/* milliseconds */
 
 
 int
@@ -23,21 +23,21 @@ has_progress(struct progress *progress)
 }
 
 int
-progress_average_speed(struct progress *progress)
+progress_average_speed(struct progress *progress) /* -> seconds */
 {
 	return (longlong) progress->loaded * 10 / (progress_elapsed_in_ms(progress) / 100);
 }
 
 int
-progress_current_speed(struct progress *progress)
+progress_current_speed(struct progress *progress) /* -> bytes/second */
 {
 	return progress->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000);
 }
 
 int
-progress_estimated_time(struct progress *progress)
+progress_estimated_time(struct progress *progress) /* -> milliseconds */
 {
-	return 	(progress->size - progress->pos) / ((longlong) progress->loaded * 10 / (progress_elapsed_in_ms(progress) / 100)) * 1000;
+	return 	(progress->size - progress->pos) / (progress_average_speed(progress) * 1000);
 }
 
 struct progress *

@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.15 2005/04/18 22:15:24 zas Exp $ */
+/* $Id: progress.h,v 1.16 2005/04/18 22:45:10 zas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
@@ -6,12 +6,12 @@
 #include "lowlevel/timers.h" /* timer_id_T */
 #include "util/time.h"
 
-#define CURRENT_SPD_SEC			50
+#define CURRENT_SPD_SEC 	50	/* number of seconds */
 
 struct progress {
-	time_T elapsed;
+	time_T elapsed;		/* milliseconds */
 	timeval_T last_time;
-	time_T dis_b;
+	time_T dis_b;		/* milliseconds */
 
 	unsigned int valid:1;
 	int size, loaded, last_loaded, cur_loaded;

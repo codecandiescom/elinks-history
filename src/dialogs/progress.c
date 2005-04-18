@@ -1,5 +1,5 @@
 /* Display of downloads progression stuff. */
-/* $Id: progress.c,v 1.7 2005/04/18 17:35:32 zas Exp $ */
+/* $Id: progress.c,v 1.8 2005/04/18 22:00:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ get_progress_msg(struct progress *progress, struct terminal *term,
 					   : N_("ETT"),
 				   term));
 		add_char_to_string(&msg, ' ');
-		add_time_to_string(&msg, progress->elapsed);
+		add_time_to_string(&msg, progress_elapsed_in_ms(progress));
 
 	} else {
 		add_to_string(&msg, _(newlines ? N_("Speed") : N_("speed"),

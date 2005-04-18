@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.109 2005/04/18 16:05:59 zas Exp $ */
+/* $Id: status.c,v 1.110 2005/04/18 16:23:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ get_download_msg(struct download *download, struct terminal *term,
 
 	add_to_string(&msg, separator);
 
-	if (wide && significant_progress(download->progress)) {
+	if (wide) {
 		add_to_string(&msg,
 			      _(full ? (newlines ? N_("Average speed")
 					         : N_("average speed"))
@@ -83,7 +83,7 @@ get_download_msg(struct download *download, struct terminal *term,
 	add_xnum_to_string(&msg, average_speed(download->progress));
 	add_to_string(&msg, "/s");
 
-	if (wide && significant_progress(download->progress)) {
+	if (wide) {
 		add_to_string(&msg, ", ");
 		add_to_string(&msg,
 			      _(full ? N_("current speed") : N_("cur"), term));

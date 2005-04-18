@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.4 2005/04/17 21:05:13 zas Exp $ */
+/* $Id: progress.c,v 1.5 2005/04/18 12:46:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,10 +60,12 @@ update_progress(struct progress *progress, int loaded, int size, int pos)
 	progress->last_loaded = progress->loaded;
 	copy_struct(&progress->last_time, &now);
 	progress->elapsed += a;
+	install_timer(&progress->timer, SPD_DISP_TIME, progress->timer_func, progress->timer_func_data);
 }
 
 void
-start_update_progress(struct progress *progress)
+start_update_progress(struct progress *progress, void (*timer_func)(void *),
+		      void *timer_func_data)
 {
 	if (!progress->valid) {
 		int tmp = progress->start;
@@ -76,4 +78,6 @@ start_update_progress(struct progress *progress)
 	}
 	get_timeval(&progress->last_time);
 	progress->last_loaded = progress->loaded;
+	progress->timer_func = timer_func;
+	progress->timer_func_data = timer_func_data;
 }

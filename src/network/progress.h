@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.7 2005/04/18 12:28:09 zas Exp $ */
+/* $Id: progress.h,v 1.8 2005/04/18 12:46:35 zas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
@@ -31,13 +31,16 @@ struct progress {
 	int seek;
 
 	timer_id_T timer;
+	void (*timer_func)(void *);
+	void *timer_func_data;
+
 	int data_in_secs[CURRENT_SPD_SEC];
 };
 
 struct progress *init_progress(int start);
 void done_progress(struct progress *progress);
 void update_progress(struct progress *progress, int loaded, int size, int pos);
-void start_update_progress(struct progress *progress);
+void start_update_progress(struct progress *progress, void (*timer_func)(void *), void *timer_func_data);
 
 #define significant_progress(progress) ((progress)->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
 

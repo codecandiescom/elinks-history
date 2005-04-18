@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.278 2005/04/17 23:23:56 jonas Exp $ */
+/* $Id: connection.c,v 1.279 2005/04/18 12:46:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,13 +311,10 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	return conn;
 }
 
-static void stat_timer(struct connection *conn);
-
 static void
 update_connection_progress(struct connection *conn)
 {
 	update_progress(conn->progress, conn->received, conn->est_length, conn->from);
-	install_timer(&conn->progress->timer, SPD_DISP_TIME, (void (*)(void *)) stat_timer, conn);
 }
 
 static void
@@ -339,7 +336,7 @@ set_connection_state(struct connection *conn, enum connection_state state)
 	conn->state = state;
 	if (conn->state == S_TRANS) {
 		if (progress->timer == TIMER_ID_UNDEF) {
-			start_update_progress(progress);
+			start_update_progress(progress, (void (*)(void *)) stat_timer, conn);
 			update_connection_progress(conn);
 			if (connection_disappeared(conn))
 				return;

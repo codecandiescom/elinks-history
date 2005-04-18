@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.83 2005/04/18 16:57:55 jonas Exp $ */
+/* $Id: download.c,v 1.84 2005/04/18 17:19:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "bfu/hierbox.h"
 #include "dialogs/download.h"
 #include "dialogs/menu.h"
+#include "dialogs/progress.h"
 #include "dialogs/status.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"

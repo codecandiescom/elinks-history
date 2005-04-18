@@ -1,4 +1,4 @@
-/* $Id: md5.h,v 1.2 2005/04/09 14:30:32 jonas Exp $ */
+/* $Id: md5.h,v 1.3 2005/04/18 14:29:29 jonas Exp $ */
 
 #ifndef EL__UTIL_MD5_H
 #define EL__UTIL_MD5_H
@@ -27,18 +27,17 @@ struct md5_context {
  * call done_md5(), which will fill a supplied 16-byte array with the digest. */
 void init_md5(struct md5_context *context);
 void update_md5(struct md5_context *context, const unsigned char *data, unsigned long length);
-void done_md5(struct md5_context *context, unsigned char digest[16]);
+void done_md5(struct md5_context *context, md5_digest_bin_T digest);
 
 /* Digest the passed @data with the given length and stores the MD5 digest in
  * the @digest parameter. */
 unsigned char *
-digest_md5(const unsigned char *data, unsigned long length, unsigned char digest[16]);
+digest_md5(const unsigned char *data, unsigned long length, md5_digest_bin_T digest);
 
 #ifdef CONFIG_MD5
 /* Provide compatibility with the OpenSSL interface: */
 
 typedef struct md5_context MD5_CTX;
-#define MD5_DIGEST_LENGTH 16
 #define MD5_Init(context)		init_md5(context)
 #define MD5_Update(context, data, len)	update_md5(context, data, len)
 #define MD5_Final(md5, context)		done_md5(context, md5)

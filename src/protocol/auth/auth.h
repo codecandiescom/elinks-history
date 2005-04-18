@@ -1,4 +1,4 @@
-/* $Id: auth.h,v 1.29 2004/11/20 04:30:06 jonas Exp $ */
+/* $Id: auth.h,v 1.30 2005/04/18 14:46:39 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
@@ -25,8 +25,8 @@ struct auth_entry {
 	struct listbox_item *box_item;
 	struct object object;
 
-	unsigned char user[HTTP_AUTH_USER_MAXLEN];
-	unsigned char password[HTTP_AUTH_PASSWORD_MAXLEN];
+	unsigned char user[AUTH_USER_MAXLEN];
+	unsigned char password[AUTH_PASSWORD_MAXLEN];
 
 	unsigned int blocked:1;	/* A dialog is asking user for validation */
 	unsigned int valid:1;	/* The entry has been validated by user */

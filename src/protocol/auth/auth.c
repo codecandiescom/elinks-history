@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.99 2005/02/28 14:16:36 zas Exp $ */
+/* $Id: auth.c,v 1.100 2005/04/18 14:46:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ find_auth_entry(struct uri *uri, unsigned char *realm)
 static void
 set_auth_user(struct auth_entry *entry, struct uri *uri)
 {
-	int userlen = int_min(uri->userlen, HTTP_AUTH_USER_MAXLEN - 1);
+	int userlen = int_min(uri->userlen, AUTH_USER_MAXLEN - 1);
 
 	if (userlen)
 		memcpy(entry->user, uri->user, userlen);
@@ -81,7 +81,7 @@ set_auth_user(struct auth_entry *entry, struct uri *uri)
 static void
 set_auth_password(struct auth_entry *entry, struct uri *uri)
 {
-	int passwordlen = int_min(uri->passwordlen, HTTP_AUTH_PASSWORD_MAXLEN - 1);
+	int passwordlen = int_min(uri->passwordlen, AUTH_PASSWORD_MAXLEN - 1);
 
 	if (passwordlen)
 		memcpy(entry->password, uri->password, passwordlen);

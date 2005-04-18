@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.431 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: http.c,v 1.432 2005/04/18 14:46:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -620,8 +620,8 @@ http_send_header(struct socket *socket)
 
 		if (proxy_auth.digest) {
 			unsigned char *response;
-			int userlen = int_min(strlen(user), HTTP_AUTH_USER_MAXLEN - 1);
-			int passwordlen = int_min(strlen(passwd), HTTP_AUTH_PASSWORD_MAXLEN - 1);
+			int userlen = int_min(strlen(user), AUTH_USER_MAXLEN - 1);
+			int passwordlen = int_min(strlen(passwd), AUTH_PASSWORD_MAXLEN - 1);
 
 			if (userlen)
 				memcpy(proxy_auth.user, user, userlen);

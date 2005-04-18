@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.10 2005/04/18 22:53:25 zas Exp $ */
+/* $Id: progress.c,v 1.11 2005/04/18 23:06:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@ has_progress(struct progress *progress)
 }
 
 int
-progress_average_speed(struct progress *progress) /* -> seconds */
+progress_average_speed(struct progress *progress) /* -> bytes/second */
 {
 	return (longlong) progress->loaded * 10 / (progress_elapsed_in_ms(progress) / 100);
 }

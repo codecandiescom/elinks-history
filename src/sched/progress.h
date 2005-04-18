@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.9 2005/04/18 12:53:50 zas Exp $ */
+/* $Id: progress.h,v 1.10 2005/04/18 16:05:59 zas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
@@ -47,6 +47,8 @@ void update_progress(struct progress *progress, int loaded, int size, int pos);
 void start_update_progress(struct progress *progress, void (*timer_func)(void *), void *timer_func_data);
 
 #define significant_progress(progress) ((progress)->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
+
+#define has_progress(progress) ((progress)->elapsed / 100)
 
 #define average_speed(progress) \
 	((longlong) (progress)->loaded * 10 / ((progress)->elapsed / 100))

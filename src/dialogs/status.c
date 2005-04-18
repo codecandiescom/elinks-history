@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.108 2005/04/18 12:28:47 zas Exp $ */
+/* $Id: status.c,v 1.109 2005/04/18 16:05:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,7 +122,7 @@ download_is_progressing(struct download *download)
 {
 	return download
 	    && download->state == S_TRANS
-	    && significant_progress(download->progress);
+	    && has_progress(download->progress);
 }
 
 

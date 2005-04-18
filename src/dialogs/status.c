@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.111 2005/04/18 16:29:13 zas Exp $ */
+/* $Id: status.c,v 1.112 2005/04/18 16:37:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,11 +44,6 @@ get_download_msg(struct download *download, struct terminal *term,
 {
 	struct string msg;
 	int newlines = separator[strlen(separator) - 1] == '\n';
-
-	if (!download_is_progressing(download)) {
-		/* DBG("%d -> %s", download->state, _(get_err_msg(download->state), term)); */
-		return stracpy(get_err_msg(download->state, term));
-	}
 
 	if (!init_string(&msg)) return NULL;
 
@@ -281,12 +276,16 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		}
 
 		if (!msg) {
-			/* FIXME: improve that, values should depend on
-			 * context (leds, digital clock, ...). --Zas */
-			int full = term->width > 130;
-			int wide = term->width > 80;
+			if (download_is_progressing(download)) {
+				/* FIXME: improve that, values should depend on
+				 * context (leds, digital clock, ...). --Zas */
+				int full = term->width > 130;
+				int wide = term->width > 80;
 
-			msg = get_download_msg(download, term, wide, full, ", ");
+				msg = get_download_msg(download, term, wide, full, ", ");
+			} else {
+				msg = stracpy(get_err_msg(download->state, term));
+			}
 		}
 	}
 

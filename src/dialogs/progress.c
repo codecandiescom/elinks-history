@@ -1,5 +1,5 @@
 /* Display of downloads progression stuff. */
-/* $Id: progress.c,v 1.3 2005/04/18 17:27:37 zas Exp $ */
+/* $Id: progress.c,v 1.4 2005/04/18 17:31:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ draw_progress_bar(struct progress *progress_, struct terminal *term,
 		  unsigned char *text, struct color_pair *meter_color)
 {
 	/* Note : values > 100% are theorically possible and were seen. */
-	int progress = (int) ((longlong) 100 * progress_->pos / progress_->size);
+	int current = (int) ((longlong) 100 * progress_->pos / progress_->size);
 	struct box barprogress;
 
 	/* Draw the progress meter part "[###    ]" */
@@ -109,7 +109,7 @@ draw_progress_bar(struct progress *progress_, struct terminal *term,
 
 	if (!meter_color) meter_color = get_bfu_color(term, "dialog.meter");
 	set_box(&barprogress,
-		x, y, int_min(width * progress / 100, width), 1);
+		x, y, int_min(width * current / 100, width), 1);
 	draw_box(term, &barprogress, ' ', 0, meter_color);
 
 	/* On error, will print '?' only, should not occur. */
@@ -121,7 +121,7 @@ draw_progress_bar(struct progress *progress_, struct terminal *term,
 		unsigned int percent_len = 0;
 		int max = int_min(sizeof(percent), width) - 1;
 
-		if (ulongcat(percent, &percent_len, progress, max, 0)) {
+		if (ulongcat(percent, &percent_len, current, max, 0)) {
 			percent[0] = '?';
 			percent_len = 1;
 		}

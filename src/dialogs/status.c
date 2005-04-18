@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.107 2005/04/18 12:28:09 zas Exp $ */
+/* $Id: status.c,v 1.108 2005/04/18 12:28:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@
 
 unsigned char *
 get_download_msg(struct download *download, struct terminal *term,
-	     int wide, int full, unsigned char *separator)
+		 int wide, int full, unsigned char *separator)
 {
 	struct string msg;
 	int newlines = separator[strlen(separator) - 1] == '\n';

@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.113 2005/04/18 17:01:46 zas Exp $ */
+/* $Id: status.c,v 1.114 2005/04/18 17:13:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "intl/gettext/libintl.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
+#include "sched/download.h"
 #include "sched/error.h"
 #include "sched/progress.h"
 #include "sched/session.h"
@@ -50,15 +51,6 @@ get_download_msg(struct download *download, struct terminal *term,
 
 	return get_progress_msg(download->progress, term, wide, full, separator);
 }
-
-int
-download_is_progressing(struct download *download)
-{
-	return download
-	    && download->state == S_TRANS
-	    && has_progress(download->progress);
-}
-
 
 #define show_tabs(option, tabs) (((option) > 0) && !((option) == 1 && (tabs) < 2))
 

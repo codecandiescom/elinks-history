@@ -1,4 +1,4 @@
-/* $Id: status.h,v 1.11 2005/04/17 16:03:31 zas Exp $ */
+/* $Id: status.h,v 1.12 2005/04/18 17:13:03 zas Exp $ */
 
 #ifndef EL__DIALOGS_STATUS_H
 #define EL__DIALOGS_STATUS_H
@@ -10,8 +10,6 @@ struct terminal;
 void print_screen_status(struct session *);
 
 void update_status(void);
-
-int download_is_progressing(struct download *download);
 
 unsigned char *
 get_download_msg(struct download *download, struct terminal *term,

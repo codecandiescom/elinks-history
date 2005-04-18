@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.358 2005/04/17 20:32:32 zas Exp $ */
+/* $Id: download.c,v 1.359 2005/04/18 17:13:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,6 +63,13 @@
 
 INIT_LIST_HEAD(downloads);
 
+int
+download_is_progressing(struct download *download)
+{
+	return download
+	    && download->state == S_TRANS
+	    && has_progress(download->progress);
+}
 
 int
 are_there_downloads(void)

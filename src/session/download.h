@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.48 2005/04/17 23:10:15 jonas Exp $ */
+/* $Id: download.h,v 1.49 2005/04/18 17:13:03 zas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -95,6 +95,7 @@ is_in_downloads_list(struct file_download *file_download)
 	return 0;
 }
 
+int download_is_progressing(struct download *download);
 
 int are_there_downloads(void);
 

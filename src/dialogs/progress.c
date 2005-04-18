@@ -1,5 +1,5 @@
 /* Display of downloads progression stuff. */
-/* $Id: progress.c,v 1.5 2005/04/18 17:31:56 zas Exp $ */
+/* $Id: progress.c,v 1.6 2005/04/18 17:34:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,23 +117,23 @@ draw_progress_bar(struct progress *progress, struct terminal *term,
 		width = int_min(width, strlen(text));
 
 	} else if (width > 1) {
-		static unsigned char percent[] = "????"; /* Reduce or enlarge at will. */
-		unsigned int percent_len = 0;
-		int max = int_min(sizeof(percent), width) - 1;
+		static unsigned char s[] = "????"; /* Reduce or enlarge at will. */
+		unsigned int slen = 0;
+		int max = int_min(sizeof(s), width) - 1;
 
-		if (ulongcat(percent, &percent_len, current, max, 0)) {
-			percent[0] = '?';
-			percent_len = 1;
+		if (ulongcat(s, &slen, current, max, 0)) {
+			s[0] = '?';
+			slen = 1;
 		}
 
-		percent[percent_len++] = '%';
+		s[slen++] = '%';
 
 		/* Draw the percentage centered in the progress meter */
-		x += (1 + width - percent_len) / 2;
+		x += (1 + width - slen) / 2;
 
-		assert(percent_len <= width);
-		width = percent_len;
-		text = percent;
+		assert(slen <= width);
+		width = slen;
+		text = s;
 	}
 
 	draw_text(term, x, y, text, width, 0, NULL);

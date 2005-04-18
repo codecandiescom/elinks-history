@@ -1,5 +1,5 @@
 /* Display of downloads progression stuff. */
-/* $Id: progress.c,v 1.4 2005/04/18 17:31:13 zas Exp $ */
+/* $Id: progress.c,v 1.5 2005/04/18 17:31:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,12 +92,12 @@ get_progress_msg(struct progress *progress, struct terminal *term,
 }
 
 void
-draw_progress_bar(struct progress *progress_, struct terminal *term,
+draw_progress_bar(struct progress *progress, struct terminal *term,
 		  int x, int y, int width,
 		  unsigned char *text, struct color_pair *meter_color)
 {
 	/* Note : values > 100% are theorically possible and were seen. */
-	int current = (int) ((longlong) 100 * progress_->pos / progress_->size);
+	int current = (int) ((longlong) 100 * progress->pos / progress->size);
 	struct box barprogress;
 
 	/* Draw the progress meter part "[###    ]" */

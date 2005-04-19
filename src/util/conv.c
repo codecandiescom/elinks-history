@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.74 2005/04/15 08:09:29 zas Exp $ */
+/* $Id: conv.c,v 1.75 2005/04/19 22:35:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,12 +232,9 @@ add_duration_to_string(struct string *string, long int seconds)
 }
 
 struct string *
-add_time_to_string(struct string *string, time_T time)	/* FIXME: milliseconds */
+add_timeval_to_string(struct string *string, timeval_T *timeval)
 {
-	time /= 1000;
-	time &= 0xffffffff;
-
-	return add_duration_to_string(string, (long int) time);
+	return add_duration_to_string(string, timeval_to_seconds(timeval));
 }
 
 #ifdef HAVE_STRFTIME

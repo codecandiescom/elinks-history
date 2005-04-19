@@ -1,5 +1,5 @@
 /* Parses and converts NNTP responses to enum values and cache entry HTML */
-/* $Id: response.c,v 1.3 2004/11/10 21:08:10 jonas Exp $ */
+/* $Id: response.c,v 1.4 2005/04/19 11:58:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -118,7 +118,7 @@ init_nntp_header(struct connection *conn, struct read_buffer *rb)
 	{
 		unsigned char *end;
 
-		end = get_nntp_message_header_end(rb->data, rb->len);
+		end = get_nntp_message_header_end(rb->data, rb->length);
 		if (!end) {
 			/* Redo the whole cache entry thing next time */
 			return S_TRANS;
@@ -352,7 +352,7 @@ read_nntp_response_data(struct connection *conn, struct read_buffer *rb)
 	if (conn->from == 0)
 		add_nntp_html_start(&html, conn);
 
-	while ((end = get_nntp_line_end(rb->data, rb->len))) {
+	while ((end = get_nntp_line_end(rb->data, rb->length))) {
 		unsigned char *line = check_nntp_line(rb->data, end);
 
 		if (!line) {
@@ -421,7 +421,7 @@ get_nntp_response_code(struct connection *conn, struct read_buffer *rb)
 {
 	struct nntp_connection_info *nntp = conn->info;
 	unsigned char *line = rb->data;
-	unsigned char *end = get_nntp_line_end(rb->data, rb->len);
+	unsigned char *end = get_nntp_line_end(rb->data, rb->length);
 	enum nntp_code code;
 	int linelen;
 

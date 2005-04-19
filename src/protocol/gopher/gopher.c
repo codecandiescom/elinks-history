@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.54 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: gopher.c,v 1.55 2005/04/19 11:58:09 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -620,7 +620,7 @@ read_gopher_directory_data(struct connection *conn, struct read_buffer *rb)
 		mem_free_if(where);
 	}
 
-	while ((end = get_gopher_line_end(rb->data, rb->len))) {
+	while ((end = get_gopher_line_end(rb->data, rb->length))) {
 		unsigned char *line = check_gopher_last_line(rb->data, end);
 
 		/* Break on line with a dot by itself */
@@ -758,12 +758,12 @@ read_gopher_response_data(struct socket *socket, struct read_buffer *rb)
 	default:
 		/* Add the received data as a new cache entry fragment and do
 		 * the connection data accounting. */
-		add_fragment(conn->cached, conn->from, rb->data, rb->len);
+		add_fragment(conn->cached, conn->from, rb->data, rb->length);
 
-		conn->received += rb->len;
-		conn->from     += rb->len;
+		conn->received += rb->length;
+		conn->from     += rb->length;
 
-		kill_buffer_data(rb, rb->len);
+		kill_buffer_data(rb, rb->length);
 	}
 
 	/* Has the transport layer forced a shut down? */

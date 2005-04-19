@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.231 2005/04/17 23:10:37 jonas Exp $ */
+/* $Id: connect.c,v 1.232 2005/04/19 11:58:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -638,7 +638,7 @@ struct write_buffer {
 	 * _different_ from read_buffer.done !). */
 	socket_write_T done;
 
-	int len;
+	int length;
 	int pos;
 
 	unsigned char data[1]; /* must be at end of struct */
@@ -672,19 +672,19 @@ write_select(struct socket *socket)
 	socket->ops->set_timeout(socket, 0);
 
 #if 0
-	printf("ws: %d\n",wb->len-wb->pos);
-	for (wr = wb->pos; wr < wb->len; wr++) printf("%c", wb->data[wr]);
+	printf("ws: %d\n",wb->length-wb->pos);
+	for (wr = wb->pos; wr < wb->length; wr++) printf("%c", wb->data[wr]);
 	printf("-\n");
 #endif
 
 #ifdef CONFIG_SSL
 	if (socket->ssl) {
-		wr = ssl_write(socket, wb->data + wb->pos, wb->len - wb->pos);
+		wr = ssl_write(socket, wb->data + wb->pos, wb->length - wb->pos);
 	} else
 #endif
 	{
-		assert(wb->len - wb->pos > 0);
-		wr = generic_write(socket, wb->data + wb->pos, wb->len - wb->pos);
+		assert(wb->length - wb->pos > 0);
+		wr = generic_write(socket, wb->data + wb->pos, wb->length - wb->pos);
 	}
 
 	switch (wr) {
@@ -708,7 +708,7 @@ write_select(struct socket *socket)
 		/*printf("wr: %d\n", wr);*/
 		wb->pos += wr;
 
-		if (wb->pos == wb->len) {
+		if (wb->pos == wb->length) {
 			socket_write_T done = wb->done;
 
 			clear_handlers(socket->fd);
@@ -737,7 +737,7 @@ write_to_socket(struct socket *socket, unsigned char *data, int len,
 		return;
 	}
 
-	wb->len = len;
+	wb->length = len;
 	wb->pos = 0;
 	wb->done = write_done;
 	memcpy(wb->data, data, len);
@@ -781,25 +781,25 @@ read_select(struct socket *socket)
 	clear_handlers(socket->fd);
 
 	if (!rb->freespace) {
-		int size = RD_SIZE(rb, rb->len);
+		int size = RD_SIZE(rb, rb->length);
 
 		rb = mem_realloc(rb, size);
 		if (!rb) {
 			socket->ops->done(socket, S_OUT_OF_MEM);
 			return;
 		}
-		rb->freespace = size - sizeof(*rb) - rb->len;
+		rb->freespace = size - sizeof(*rb) - rb->length;
 		assert(rb->freespace > 0);
 		socket->read_buffer = rb;
 	}
 
 #ifdef CONFIG_SSL
 	if (socket->ssl) {
-		rd = ssl_read(socket, rb->data + rb->len, rb->freespace);
+		rd = ssl_read(socket, rb->data + rb->length, rb->freespace);
 	} else
 #endif
 	{
-		rd = generic_read(socket, rb->data + rb->len, rb->freespace);
+		rd = generic_read(socket, rb->data + rb->length, rb->freespace);
 	}
 
 	switch (rd) {
@@ -827,9 +827,9 @@ read_select(struct socket *socket)
 		break;
 
 	default:
-		debug_transfer_log(rb->data + rb->len, rd);
+		debug_transfer_log(rb->data + rb->length, rd);
 
-		rb->len += rd;
+		rb->length += rd;
 		rb->freespace -= rd;
 		assert(rb->freespace >= 0);
 
@@ -896,11 +896,11 @@ request_from_socket(struct socket *socket, unsigned char *data, int datalen,
 void
 kill_buffer_data(struct read_buffer *rb, int n)
 {
-	assertm(n >= 0 && n <= rb->len, "bad number of bytes: %d", n);
-	if_assert_failed { rb->len = 0;  return; }
+	assertm(n >= 0 && n <= rb->length, "bad number of bytes: %d", n);
+	if_assert_failed { rb->length = 0;  return; }
 
 	if (!n) return; /* FIXME: We accept to kill 0 bytes... */
-	rb->len -= n;
-	memmove(rb->data, rb->data + n, rb->len);
+	rb->length -= n;
+	memmove(rb->data, rb->data + n, rb->length);
 	rb->freespace += n;
 }

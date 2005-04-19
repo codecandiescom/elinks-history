@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.23 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: finger.c,v 1.24 2005/04/19 11:58:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ finger_get_response(struct socket *socket, struct read_buffer *rb)
 		return;
 	}
 
-	l = rb->len;
+	l = rb->length;
 	conn->received += l;
 
 	if (add_fragment(conn->cached, conn->from, rb->data, l) == 1)

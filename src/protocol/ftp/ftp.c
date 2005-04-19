@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.249 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: ftp.c,v 1.250 2005/04/19 11:58:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,7 +194,7 @@ get_ftp_response(struct connection *conn, struct read_buffer *rb, int part,
 	int pos;
 
 again:
-	eol = memchr(rb->data, ASCII_LF, rb->len);
+	eol = memchr(rb->data, ASCII_LF, rb->length);
 	if (!eol) return 0;
 
 	pos = eol - rb->data;
@@ -241,11 +241,11 @@ again:
 	if (*num_end == '-') {
 		int i;
 
-		for (i = 0; i < rb->len - 5; i++)
+		for (i = 0; i < rb->length - 5; i++)
 			if (rb->data[i] == ASCII_LF
 			    && !memcmp(rb->data+i+1, rb->data, 3)
 			    && rb->data[i+4] == ' ') {
-				for (i++; i < rb->len; i++)
+				for (i++; i < rb->length; i++)
 					if (rb->data[i] == ASCII_LF)
 						goto ok;
 				return 0;
@@ -951,7 +951,7 @@ ftp_retr_file(struct socket *socket, struct read_buffer *rb)
 		 * get filesize if needed. */
 		if (!ftp->dir && conn->est_length == -1) {
 			long int file_len =
-				get_filesize_from_RETR(rb->data, rb->len);
+				get_filesize_from_RETR(rb->data, rb->length);
 
 			if (file_len > 0) {
 				/* FIXME: ..when downloads resuming

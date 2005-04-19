@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.106 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: cgi.c,v 1.107 2005/04/19 11:58:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ close_pipe_and_read(struct socket *data_socket)
 	if (!rb) return;
 
 	memcpy(rb->data, "HTTP/1.0 200 OK\r\n", 17);
-	rb->len = 17;
+	rb->length = 17;
 	rb->freespace -= 17;
 
 	conn->unrestartable = 1;

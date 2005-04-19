@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.432 2005/04/18 14:46:39 jonas Exp $ */
+/* $Id: http.c,v 1.433 2005/04/19 11:58:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1055,16 +1055,16 @@ is_line_in_buffer(struct read_buffer *rb)
 {
 	int l;
 
-	for (l = 0; l < rb->len; l++) {
+	for (l = 0; l < rb->length; l++) {
 		unsigned char a0 = rb->data[l];
 
 		if (a0 == ASCII_LF)
 			return l + 1;
 		if (a0 == ASCII_CR) {
 			if (rb->data[l + 1] == ASCII_LF
-			    && l < rb->len - 1)
+			    && l < rb->length - 1)
 				return l + 2;
-			if (l == rb->len - 1)
+			if (l == rb->length - 1)
 				return 0;
 		}
 		if (a0 < ' ')
@@ -1180,7 +1180,7 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 			len = http->chunk_remaining;
 
 			/* Maybe everything necessary didn't come yet.. */
-			int_upper_bound(&len, rb->len);
+			int_upper_bound(&len, rb->length);
 			conn->received += len;
 
 			data = decompress_data(conn, rb->data, len, &data_len);
@@ -1205,17 +1205,17 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 				continue;
 			}
 
-			if (!http->chunk_remaining && rb->len > 0) {
+			if (!http->chunk_remaining && rb->length > 0) {
 				/* Eat newline succeeding each chunk. */
 				if (rb->data[0] == ASCII_LF) {
 					kill_buffer_data(rb, 1);
 				} else {
 					if (rb->data[0] != ASCII_CR
-					    || (rb->len >= 2
+					    || (rb->length >= 2
 						&& rb->data[1] != ASCII_LF)) {
 						return -1;
 					}
-					if (rb->len < 2) break;
+					if (rb->length < 2) break;
 					kill_buffer_data(rb, 2);
 				}
 				http->chunk_remaining = CHUNK_SIZE;
@@ -1236,7 +1236,7 @@ read_normal_http_data(struct connection *conn, struct read_buffer *rb)
 	struct http_connection_info *http = conn->info;
 	unsigned char *data;
 	int data_len;
-	int len = rb->len;
+	int len = rb->length;
 
 	if (http->length >= 0 && http->length < len) {
 		/* We won't read more than we have to go. */
@@ -1314,10 +1314,10 @@ get_header(struct read_buffer *rb)
 	/* XXX: We will have to do some guess about whether an HTTP header is
 	 * coming or not, in order to support HTTP/0.9 reply correctly. This
 	 * means a little code duplication with get_http_code(). --pasky */
-	if (rb->len > 4 && strncasecmp(rb->data, "HTTP/", 5))
+	if (rb->length > 4 && strncasecmp(rb->data, "HTTP/", 5))
 		return -2;
 
-	for (i = 0; i < rb->len; i++) {
+	for (i = 0; i < rb->length; i++) {
 		unsigned char a0 = rb->data[i];
 		unsigned char a1 = rb->data[i + 1];
 
@@ -1326,9 +1326,9 @@ get_header(struct read_buffer *rb)
 			continue;
 		}
 		if (a0 == ASCII_LF && a1 == ASCII_LF
-		    && i < rb->len - 1)
+		    && i < rb->length - 1)
 			return i + 2;
-		if (a0 == ASCII_CR && i < rb->len - 3) {
+		if (a0 == ASCII_CR && i < rb->length - 3) {
 			if (a1 == ASCII_CR) continue;
 			if (a1 != ASCII_LF) return -1;
 			if (rb->data[i + 2] == ASCII_CR) {

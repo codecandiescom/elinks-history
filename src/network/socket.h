@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.87 2005/04/17 23:10:37 jonas Exp $ */
+/* $Id: socket.h,v 1.88 2005/04/19 11:58:09 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -60,7 +60,7 @@ struct read_buffer {
 	 * usually many times, not only when all the data arrives. */
 	socket_read_T done;
 
-	int len;
+	int length;
 	int freespace;
 
 	unsigned char data[1]; /* must be at end of struct */

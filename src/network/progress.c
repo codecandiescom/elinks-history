@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.11 2005/04/18 23:06:44 zas Exp $ */
+/* $Id: progress.c,v 1.12 2005/04/19 21:48:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,18 +62,25 @@ done_progress(struct progress *progress)
 void
 update_progress(struct progress *progress, int loaded, int size, int pos)
 {
+	int bytes_delta;
 	timeval_T now, elapsed;
 	long a;	/* FIXME: milliseconds */
 
 	get_timeval(&now);
 	timeval_sub(&elapsed, &progress->last_time, &now);
-	a = timeval_to_milliseconds(&elapsed);
+	copy_struct(&progress->last_time, &now);
 
 	progress->loaded = loaded;
+	bytes_delta = progress->loaded - progress->last_loaded;
+	progress->last_loaded = progress->loaded;
+
 	progress->size = size;
 	progress->pos = pos;
 	if (progress->size != -1 && progress->size < progress->pos)
 		progress->size = progress->pos;
+
+	a = timeval_to_milliseconds(&elapsed);
+	progress->elapsed += a;
 
 	progress->dis_b += a;
 	while (progress->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
@@ -83,12 +90,9 @@ update_progress(struct progress *progress, int loaded, int size, int pos)
 		progress->data_in_secs[CURRENT_SPD_SEC - 1] = 0;
 		progress->dis_b -= SPD_DISP_TIME;
 	}
+	progress->data_in_secs[CURRENT_SPD_SEC - 1] += bytes_delta;
+	progress->cur_loaded += bytes_delta;
 
-	progress->data_in_secs[CURRENT_SPD_SEC - 1] += progress->loaded - progress->last_loaded;
-	progress->cur_loaded += progress->loaded - progress->last_loaded;
-	progress->last_loaded = progress->loaded;
-	copy_struct(&progress->last_time, &now);
-	progress->elapsed += a;
 	install_timer(&progress->timer, SPD_DISP_TIME, progress->timer_func, progress->timer_func_data);
 }
 

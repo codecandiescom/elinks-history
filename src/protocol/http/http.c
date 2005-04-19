@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.433 2005/04/19 11:58:09 jonas Exp $ */
+/* $Id: http.c,v 1.434 2005/04/19 14:48:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -529,7 +529,7 @@ init_http_connection_info(struct connection *conn, int major, int minor, int clo
 	http->sent_version.major = major;
 	http->sent_version.minor = minor;
 	http->close = close;
-	http->bl_flags = get_blacklist_flags(conn->uri);
+	http->bl_flags = get_blacklist_flags(conn->proxied_uri);
 
 	if (http->bl_flags & SERVER_BLACKLIST_HTTP10
 	    || get_opt_bool("protocol.http.bugs.http10")) {

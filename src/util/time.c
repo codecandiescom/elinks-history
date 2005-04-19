@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.31 2005/04/16 14:41:50 zas Exp $ */
+/* $Id: time.c,v 1.32 2005/04/19 22:00:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ get_timeval(timeval_T *t)
 }
 
 /* Subtract an interval to a timeval, it ensures that
- * result is never negative. */ 
+ * result is never negative. */
 void
 timeval_sub_interval(timeval_T *t, timeval_T *interval)
 {
@@ -54,7 +54,7 @@ timeval_sub_interval(timeval_T *t, timeval_T *interval)
 		t->usec = 0;
 		return;
 	}
-	
+
 	t->usec -= interval->usec;
 
 	while (t->usec < 0) {
@@ -79,7 +79,7 @@ timeval_sub(timeval_T *res, timeval_T *older, timeval_T *newer)
 		res->sec--;
 	}
 }
- 
+
 void
 timeval_add(timeval_T *res, timeval_T *base, timeval_T *t)
 {
@@ -89,6 +89,18 @@ timeval_add(timeval_T *res, timeval_T *base, timeval_T *t)
 	while (res->usec >= 1000000) {
 		res->usec -= 1000000;
 		res->sec++;
+	}
+}
+
+void
+timeval_add_interval(timeval_T *t, timeval_T *interval)
+{
+	t->sec  += interval->sec;
+	t->usec += interval->usec;
+
+	while (t->usec >= 1000000) {
+		t->usec -= 1000000;
+		t->sec++;
 	}
 }
 

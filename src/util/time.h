@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.30 2005/04/16 14:41:50 zas Exp $ */
+/* $Id: time.h,v 1.31 2005/04/19 22:00:34 zas Exp $ */
 
 #ifndef EL__UTIL_TIME_H
 #define EL__UTIL_TIME_H
@@ -45,5 +45,6 @@ void timeval_sub(timeval_T *res, timeval_T *older, timeval_T *newer);
 void timeval_add(timeval_T *res, timeval_T *base, timeval_T *t);
 int timeval_cmp(timeval_T *t1, timeval_T *t2);
 void timeval_sub_interval(timeval_T *t, timeval_T *interval);
+void timeval_add_interval(timeval_T *t, timeval_T *interval);
 
 #endif

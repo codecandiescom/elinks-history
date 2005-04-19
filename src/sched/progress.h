@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.16 2005/04/18 22:45:10 zas Exp $ */
+/* $Id: progress.h,v 1.17 2005/04/19 22:08:05 zas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
@@ -11,7 +11,7 @@
 struct progress {
 	time_T elapsed;		/* milliseconds */
 	timeval_T last_time;
-	time_T dis_b;		/* milliseconds */
+	timeval_T dis_b;
 
 	unsigned int valid:1;
 	int size, loaded, last_loaded, cur_loaded;

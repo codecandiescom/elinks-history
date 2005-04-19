@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.12 2005/04/19 21:48:51 zas Exp $ */
+/* $Id: progress.c,v 1.13 2005/04/19 22:08:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ void
 update_progress(struct progress *progress, int loaded, int size, int pos)
 {
 	int bytes_delta;
-	timeval_T now, elapsed;
+	timeval_T now, elapsed, dis_b_max, dis_b_interval;
 	long a;	/* FIXME: milliseconds */
 
 	get_timeval(&now);
@@ -82,13 +82,16 @@ update_progress(struct progress *progress, int loaded, int size, int pos)
 	a = timeval_to_milliseconds(&elapsed);
 	progress->elapsed += a;
 
-	progress->dis_b += a;
-	while (progress->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
+	timeval_add_interval(&progress->dis_b, &elapsed);
+	milliseconds_to_timeval(&dis_b_max, SPD_DISP_TIME * CURRENT_SPD_SEC);
+	milliseconds_to_timeval(&dis_b_interval, SPD_DISP_TIME);
+
+	while (timeval_cmp(&progress->dis_b, &dis_b_max) >= 0) {
 		progress->cur_loaded -= progress->data_in_secs[0];
 		memmove(progress->data_in_secs, progress->data_in_secs + 1,
 			sizeof(*progress->data_in_secs) * (CURRENT_SPD_SEC - 1));
 		progress->data_in_secs[CURRENT_SPD_SEC - 1] = 0;
-		progress->dis_b -= SPD_DISP_TIME;
+		timeval_sub_interval(&progress->dis_b, &dis_b_interval);
 	}
 	progress->data_in_secs[CURRENT_SPD_SEC - 1] += bytes_delta;
 	progress->cur_loaded += bytes_delta;

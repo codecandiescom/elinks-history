@@ -1,3 +1,78 @@
+Tue Apr 19 22:08:05 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: progress.c, progress.h:
+
+	Convert struct progress dis_b field to timeval_T and modify
+	update_progress() to reflect that change.  
+
+Tue Apr 19 22:00:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	Introduce timeval_add_interval().  
+
+Tue Apr 19 21:48:51 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/progress.c:
+
+	update_progress(): regroup related lines, cleanup.  
+
+Tue Apr 19 14:48:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	init_http_connection_info(): Blacklisting uses proxied URIs so get
+	flags using conn->proxied_uri. Bug introduced in (1.412 -> 1.413)
+	made links2 site inaccessible over proxy. Reported by rrowan. (bug
+	658) 
+
+Tue Apr 19 11:58:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/response.c:
+
+	read_buffer->len -> read_buffer->length 
+
+Mon Apr 18 23:06:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/progress.c:
+
+	Oops, not seconds.  
+
+Mon Apr 18 22:53:25 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/progress.c:
+
+	start_update_progress(): make copy of old fields in a way where type
+	of fields not such important.  
+
+Mon Apr 18 22:45:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: progress.c, progress.h:
+
+	Clarify units used.  
+
+Mon Apr 18 22:18:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/progress.c:
+
+	Drop unneeded parenthesis.  
+
+Mon Apr 18 22:15:24 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: progress.c, progress.h:
+
+	Move SPD_DISP_TIME and CURRENT_SPD_AFTER in c file instead of
+	exporting them through header.  
+
+Mon Apr 18 22:13:12 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: progress.c, progress.h:
+
+	Convert progress_*() macros to functions.  
+
 Mon Apr 18 22:07:16 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: dialogs/progress.c, sched/progress.h:

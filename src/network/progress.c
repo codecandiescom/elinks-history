@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.16 2005/04/19 23:29:56 zas Exp $ */
+/* $Id: progress.c,v 1.17 2005/04/19 23:32:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #define SPD_DISP_TIME			100	/* milliseconds */
 #define CURRENT_SPD_AFTER		100	/* milliseconds */
 
+#define progress_elapsed_in_ms(progress) (timeval_to_milliseconds(&(progress)->elapsed))
 
 int
 has_progress(struct progress *progress)

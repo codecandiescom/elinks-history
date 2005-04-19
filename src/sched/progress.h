@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.18 2005/04/19 22:16:33 zas Exp $ */
+/* $Id: progress.h,v 1.19 2005/04/19 22:43:10 zas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
@@ -47,8 +47,11 @@ void start_update_progress(struct progress *progress, void (*timer_func)(void *)
 #define progress_elapsed_in_ms(progress) (timeval_to_milliseconds(&(progress)->elapsed))
 
 int has_progress(struct progress *progress);
+
+/* TODO: drop these, add pre-calculated values to struct progress new fields,
+ * do calculation in update_progress(). */
 int progress_average_speed(struct progress *progress);
 int progress_current_speed(struct progress *progress);
-int progress_estimated_time(struct progress *progress);
+timeval_T *progress_estimated_time(struct progress *progress);
 
 #endif

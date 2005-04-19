@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.14 2005/04/19 22:16:32 zas Exp $ */
+/* $Id: progress.c,v 1.15 2005/04/19 22:43:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,10 +34,16 @@ progress_current_speed(struct progress *progress) /* -> bytes/second */
 	return progress->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000);
 }
 
-int
-progress_estimated_time(struct progress *progress) /* -> milliseconds */
+timeval_T *
+progress_estimated_time(struct progress *progress)
 {
-	return 	(progress->size - progress->pos) / (progress_average_speed(progress) * 1000);
+	static timeval_T timeval;
+	int milliseconds;
+	
+	milliseconds = (progress->size - progress->pos)
+			/ (progress_average_speed(progress) * 1000);
+	milliseconds_to_timeval(&timeval, milliseconds);	
+	return &timeval; /* FIXME: non reentrant. */
 }
 
 struct progress *

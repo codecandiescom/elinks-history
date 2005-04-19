@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.32 2005/04/19 22:22:26 zas Exp $ */
+/* $Id: time.h,v 1.33 2005/04/19 23:49:41 zas Exp $ */
 
 #ifndef EL__UTIL_TIME_H
 #define EL__UTIL_TIME_H
@@ -10,8 +10,6 @@
 #include <time.h>
 #endif
 
-/* WARNING: may cause overflows since time_T holds values 1000 times
- * bigger than usual time_t */
 typedef time_t time_T;
 
 /* Is using atol() in this way acceptable? It seems

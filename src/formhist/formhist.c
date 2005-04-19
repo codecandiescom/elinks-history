@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.100 2005/03/23 15:43:41 miciah Exp $ */
+/* $Id: formhist.c,v 1.101 2005/04/19 23:06:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,7 @@ load_forms_from_file(void)
 	file = straconcat(elinks_home, FORMS_HISTORY_FILENAME, NULL);
 	if (!file) return 0;
 
-	f = fopen(file, "r");
+	f = fopen(file, "rb");
 	mem_free(file);
 	if (!f) return 0;
 

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.90 2005/02/28 13:56:47 zas Exp $ */
+/* $Id: mailcap.c,v 1.91 2005/04/19 23:06:47 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -316,7 +316,7 @@ parse_optional_fields(struct mailcap_entry *entry, unsigned char *line)
 static void
 parse_mailcap_file(unsigned char *filename, unsigned int priority)
 {
-	FILE *file = fopen(filename, "r");
+	FILE *file = fopen(filename, "rb");
 	unsigned char *line = NULL;
 	size_t linelen = MAX_STR_LEN;
 	int lineno = 1;

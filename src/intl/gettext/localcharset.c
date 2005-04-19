@@ -110,7 +110,7 @@ get_charset_aliases(void)
 			}
 		}
 
-		if (file_name == NULL || (fp = fopen(file_name, "r")) == NULL)
+		if (file_name == NULL || (fp = fopen(file_name, "rb")) == NULL)
 			/* Out of memory or file not found, treat it as empty.  */
 			cp = "";
 		else {

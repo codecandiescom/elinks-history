@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.50 2005/02/28 13:57:04 zas Exp $ */
+/* $Id: mimetypes.c,v 1.51 2005/04/19 23:06:47 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-2004 The ELinks Project */
@@ -135,7 +135,7 @@ parse_mimetypes_extensions(unsigned char *token, unsigned char *ctype)
 static void
 parse_mimetypes_file(unsigned char *filename)
 {
-	FILE *file = fopen(filename, "r");
+	FILE *file = fopen(filename, "rb");
 	unsigned char line[MAX_STR_LEN];
 
 	if (!file) return;

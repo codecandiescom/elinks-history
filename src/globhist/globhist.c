@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.102 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: globhist.c,v 1.103 2005/04/19 23:06:47 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -319,7 +319,7 @@ read_global_history(void)
 		file_name = straconcat(elinks_home, file_name, NULL);
 		if (!file_name) return;
 	}
-	f = fopen(file_name, "r");
+	f = fopen(file_name, "rb");
 	if (elinks_home) mem_free(file_name);
 	if (!f) return;
 

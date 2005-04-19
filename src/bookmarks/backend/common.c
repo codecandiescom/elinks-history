@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.21 2005/03/30 12:42:33 zas Exp $ */
+/* $Id: common.c,v 1.22 2005/04/19 23:06:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ bookmarks_read(void)
 		if (!file_name) return;
 	}
 
-	f = fopen(file_name, "r");
+	f = fopen(file_name, "rb");
 	if (elinks_home) mem_free(file_name);
 	if (!f) return;
 

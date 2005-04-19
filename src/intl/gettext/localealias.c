@@ -131,7 +131,7 @@ read_alias_file(const unsigned char *fname, int fname_len)
 	mempcpy(mempcpy(full_fname, fname, fname_len),
 		aliasfile, sizeof(aliasfile));
 
-	fp = fopen(full_fname, "r");
+	fp = fopen(full_fname, "rb");
 	fmem_free(full_fname);
 	if (fp == NULL)
 		return 0;

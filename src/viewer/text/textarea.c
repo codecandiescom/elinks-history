@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.147 2005/04/07 23:25:58 zas Exp $ */
+/* $Id: textarea.c,v 1.148 2005/04/19 23:06:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -315,7 +315,7 @@ static unsigned char *
 load_textarea_file(unsigned char *filename, int maxlength)
 {
 	unsigned char *value = NULL;
-	FILE *file = fopen(filename, "r+");
+	FILE *file = fopen(filename, "rb+");
 	int filelen = -1;
 
 	if (!file) return NULL;

@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.44 2005/03/22 05:25:54 miciah Exp $ */
+/* $Id: secsave.c,v 1.45 2005/04/19 23:06:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,7 +133,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 			/* We still have a race condition here between
 			 * [l]stat() and fopen() */
 
-			f1 = fopen(ssi->file_name, "r+");
+			f1 = fopen(ssi->file_name, "rb+");
 			if (f1) {
 				fclose(f1);
 			} else {
@@ -180,7 +180,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 		ssi->tmp_file_name = randname;
 	} else {
 		/* No need to create a temporary file here. */
-		ssi->fp = fopen(ssi->file_name, "w");
+		ssi->fp = fopen(ssi->file_name, "wb");
 		if (!ssi->fp) {
 			secsave_errno = SS_ERR_OPEN_WRITE;
 			ssi->err = errno;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.530 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: renderer.c,v 1.531 2005/04/19 23:06:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1840,7 +1840,7 @@ render_html_document(struct cache_entry *cached, struct document *document,
 
 #if 0 /* debug purpose */
 	{
-		FILE *f = fopen("forms", "a");
+		FILE *f = fopen("forms", "ab");
 		struct form_control *form;
 		unsigned char *qq;
 		fprintf(f,"FORM:\n");

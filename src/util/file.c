@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.43 2005/02/28 15:02:44 zas Exp $ */
+/* $Id: file.c,v 1.44 2005/04/19 23:06:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ file_can_read(const unsigned char *filename)
 #ifdef HAVE_ACCESS
 	return access(filename, R_OK) >= 0;
 #else
-	FILE *f = fopen(filename, "r");
+	FILE *f = fopen(filename, "rb");
 	int ok = !!f;
 
 	if (f) fclose(f);

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.198 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: cookies.c,v 1.199 2005/04/19 23:06:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -694,7 +694,7 @@ load_cookies(void) {
 	done_cookies(&cookies_module);
 	cookies_nosave = 0;
 
-	fp = fopen(cookfile, "r");
+	fp = fopen(cookfile, "rb");
 	if (elinks_home) mem_free(cookfile);
 	if (!fp) return;
 

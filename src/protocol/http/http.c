@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.435 2005/04/20 02:00:36 jonas Exp $ */
+/* $Id: http.c,v 1.436 2005/04/20 10:20:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1383,7 +1383,7 @@ check_http_authentication(struct uri *uri, unsigned char *header,
 void
 http_got_header(struct socket *socket, struct read_buffer *rb)
 {
-	struct connection *conn = socket->conn; 
+	struct connection *conn = socket->conn;
 	struct http_connection_info *http = conn->info;
 	unsigned char *head;
 #ifdef CONFIG_COOKIES
@@ -1561,11 +1561,12 @@ again:
 
 				if (pos) {
 					/* Grab the number of seconds. */
-					time_T max_age = str_to_time_T(pos + 8);
+					timeval_T max_age;
 
+					seconds_to_timeval(&max_age, atol(pos + 8));
 					get_timeval(&cached->max_age);
+					timeval_add_interval(&cached->max_age, &max_age);
 
-					cached->max_age.sec += max_age;
 					cached->expire = 1;
 				}
 			}

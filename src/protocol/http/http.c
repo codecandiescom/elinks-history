@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.436 2005/04/20 10:20:48 zas Exp $ */
+/* $Id: http.c,v 1.437 2005/04/20 22:17:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -530,7 +530,10 @@ init_http_connection_info(struct connection *conn, int major, int minor, int clo
 	http->sent_version.major = major;
 	http->sent_version.minor = minor;
 	http->close = close;
-	http->bl_flags = get_blacklist_flags(conn->proxied_uri);
+
+	/* The CGI code uses this too and blacklisting expects a host name. */
+	if (conn->proxied_uri->protocol != PROTOCOL_FILE)
+		http->bl_flags = get_blacklist_flags(conn->proxied_uri);
 
 	if (http->bl_flags & SERVER_BLACKLIST_HTTP10
 	    || get_opt_bool("protocol.http.bugs.http10")) {

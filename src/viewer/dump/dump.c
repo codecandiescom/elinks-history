@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.157 2005/04/17 20:41:42 zas Exp $ */
+/* $Id: dump.c,v 1.158 2005/04/20 14:35:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ static int dump_redir_count = 0;
  * all went fine and 1 if something isn't quite right and we should terminate
  * ourselves ASAP. */
 static int
-dump_source(int fd, struct download *status, struct cache_entry *cached)
+dump_source(int fd, struct download *download, struct cache_entry *cached)
 {
 	struct fragment *frag;
 
@@ -74,7 +74,7 @@ nextfrag:
 		w = hard_write(fd, frag->data + d, l);
 
 		if (w != l) {
-			detach_connection(status, dump_pos);
+			detach_connection(download, dump_pos);
 
 			if (w < 0)
 				ERROR(gettext("Can't write to stdout: %s"),
@@ -87,7 +87,7 @@ nextfrag:
 		}
 
 		dump_pos += w;
-		detach_connection(status, dump_pos);
+		detach_connection(download, dump_pos);
 		goto nextfrag;
 	}
 
@@ -96,7 +96,7 @@ nextfrag:
 
 /* This dumps the given @cached's formatted output onto @fd. */
 static void
-dump_formatted(int fd, struct download *status, struct cache_entry *cached)
+dump_formatted(int fd, struct download *download, struct cache_entry *cached)
 {
 	struct document_options o;
 	struct document_view formatted;
@@ -201,41 +201,41 @@ dump_print(unsigned char *option, struct string *url)
 }
 
 static void
-dump_loading_callback(struct download *status, void *p)
+dump_loading_callback(struct download *download, void *p)
 {
-	struct cache_entry *cached = status->cached;
+	struct cache_entry *cached = download->cached;
 	int fd = get_output_handle();
 
 	if (fd == -1) return;
 	if (cached && cached->redirect && dump_redir_count++ < MAX_REDIRECTS) {
 		struct uri *uri = cached->redirect;
 
-		if (is_in_progress_state(status->state))
-			change_connection(status, NULL, PRI_CANCEL, 0);
+		if (is_in_progress_state(download->state))
+			change_connection(download, NULL, PRI_CANCEL, 0);
 
-		load_uri(uri, cached->uri, status, PRI_MAIN, 0, -1);
+		load_uri(uri, cached->uri, download, PRI_MAIN, 0, -1);
 		return;
 	}
 
-	if (is_in_queued_state(status->state)) return;
+	if (is_in_queued_state(download->state)) return;
 
 	if (get_cmd_opt_bool("dump")) {
-		if (is_in_transfering_state(status->state))
+		if (is_in_transfering_state(download->state))
 			return;
 
-		dump_formatted(fd, status, cached);
+		dump_formatted(fd, download, cached);
 
 	} else {
-		if (dump_source(fd, status, cached) > 0)
+		if (dump_source(fd, download, cached) > 0)
 			goto terminate;
 
-		if (is_in_progress_state(status->state))
+		if (is_in_progress_state(download->state))
 			return;
 
 	}
 
-	if (status->state != S_OK) {
-		usrerror(get_err_msg(status->state, NULL));
+	if (download->state != S_OK) {
+		usrerror(get_err_msg(download->state, NULL));
 		program.retval = RET_ERROR;
 		goto terminate;
 	}

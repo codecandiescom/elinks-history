@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.34 2005/04/20 10:04:47 zas Exp $ */
+/* $Id: time.c,v 1.35 2005/04/20 10:12:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,14 +47,14 @@ get_timeval(timeval_T *t)
 
 /* Subtract an interval to a timeval, it ensures that
  * result is never negative. */
-void
+timeval_T *
 timeval_sub_interval(timeval_T *t, timeval_T *interval)
 {
 	t->sec  -= interval->sec;
 	if (t->sec < 0) {
 		t->sec = 0;
 		t->usec = 0;
-		return;
+		return t;
 	}
 
 	t->usec -= interval->usec;
@@ -68,9 +68,11 @@ timeval_sub_interval(timeval_T *t, timeval_T *interval)
 		t->sec = 0;
 		t->usec = 0;
 	}
+
+	return t;
 }
 
-void
+timeval_T *
 timeval_sub(timeval_T *res, timeval_T *older, timeval_T *newer)
 {
 	res->sec  = newer->sec - older->sec;
@@ -80,9 +82,11 @@ timeval_sub(timeval_T *res, timeval_T *older, timeval_T *newer)
 		res->usec += 1000000;
 		res->sec--;
 	}
+
+	return res;
 }
 
-void
+timeval_T *
 timeval_add(timeval_T *res, timeval_T *base, timeval_T *t)
 {
 	res->sec  = base->sec + t->sec;
@@ -92,9 +96,11 @@ timeval_add(timeval_T *res, timeval_T *base, timeval_T *t)
 		res->usec -= 1000000;
 		res->sec++;
 	}
+
+	return res;
 }
 
-void
+timeval_T *
 timeval_add_interval(timeval_T *t, timeval_T *interval)
 {
 	t->sec  += interval->sec;
@@ -104,27 +110,35 @@ timeval_add_interval(timeval_T *t, timeval_T *interval)
 		t->usec -= 1000000;
 		t->sec++;
 	}
+
+	return t;
 }
 
-void
+timeval_T *
 double_to_timeval(timeval_T *t, double x)
 {
 	t->sec  = (long int) x;
 	t->usec = (long int) ((x - (double) t->sec) * 1000000);
+
+	return t;
 }
 
-void
+timeval_T *
 milliseconds_to_timeval(timeval_T *t, long int milliseconds)
 {
 	t->sec = milliseconds / 1000;
 	t->usec = (milliseconds % 1000) * 1000;
+
+	return t;
 }
 
-void
+timeval_T *
 seconds_to_timeval(timeval_T *t, long int seconds)
 {
 	t->sec = seconds;
 	t->usec = 0;
+
+	return t;
 }
 
 long int

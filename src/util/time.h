@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.34 2005/04/20 10:04:47 zas Exp $ */
+/* $Id: time.h,v 1.35 2005/04/20 10:12:01 zas Exp $ */
 
 #ifndef EL__UTIL_TIME_H
 #define EL__UTIL_TIME_H
@@ -31,9 +31,9 @@ typedef struct { long int sec; long int usec; } timeval_T;
 	(tv)->tv_usec = (tT)->usec; \
 } while (0)
 
-void milliseconds_to_timeval(timeval_T *t, long int milliseconds);
-void seconds_to_timeval(timeval_T *t, long int seconds);
-void double_to_timeval(timeval_T *t, double x);
+timeval_T *milliseconds_to_timeval(timeval_T *t, long int milliseconds);
+timeval_T *seconds_to_timeval(timeval_T *t, long int seconds);
+timeval_T *double_to_timeval(timeval_T *t, double x);
 
 long int timeval_to_milliseconds(timeval_T *t);
 long int timeval_to_seconds(timeval_T *t);
@@ -41,10 +41,10 @@ long int timeval_to_seconds(timeval_T *t);
 int timeval_is_positive(timeval_T *t);
 void limit_timeval_to_zero(timeval_T *t);
 timeval_T *get_timeval(timeval_T *t);
-void timeval_sub(timeval_T *res, timeval_T *older, timeval_T *newer);
-void timeval_add(timeval_T *res, timeval_T *base, timeval_T *t);
+timeval_T *timeval_sub(timeval_T *res, timeval_T *older, timeval_T *newer);
+timeval_T *timeval_add(timeval_T *res, timeval_T *base, timeval_T *t);
 int timeval_cmp(timeval_T *t1, timeval_T *t2);
-void timeval_sub_interval(timeval_T *t, timeval_T *interval);
-void timeval_add_interval(timeval_T *t, timeval_T *interval);
+timeval_T *timeval_sub_interval(timeval_T *t, timeval_T *interval);
+timeval_T *timeval_add_interval(timeval_T *t, timeval_T *interval);
 
 #endif

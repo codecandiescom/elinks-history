@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.33 2005/04/19 22:22:26 zas Exp $ */
+/* $Id: time.c,v 1.34 2005/04/20 10:04:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 /* Get the current time.
  * It attempts to use available functions, granularity
  * may be as worse as 1 second if time() is used. */
-void
+timeval_T *
 get_timeval(timeval_T *t)
 {
 #ifdef HAVE_GETTIMEOFDAY
@@ -41,6 +41,8 @@ get_timeval(timeval_T *t)
 	t->usec = 0;
 #endif
 #endif
+
+	return t;
 }
 
 /* Subtract an interval to a timeval, it ensures that

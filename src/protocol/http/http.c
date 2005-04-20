@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.434 2005/04/19 14:48:09 jonas Exp $ */
+/* $Id: http.c,v 1.435 2005/04/20 02:00:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,7 @@
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
 #include "protocol/auth/digest.h"
+#include "protocol/date.h"
 #include "protocol/header.h"
 #include "protocol/http/blacklist.h"
 #include "protocol/http/codes.h"
@@ -1517,11 +1518,58 @@ again:
 	mem_free_set(&conn->cached->head, head);
 
 	if (!get_opt_bool("document.cache.ignore_cache_control")) {
-		if ((d = parse_header(conn->cached->head, "Cache-Control", NULL))
-		    || (d = parse_header(conn->cached->head, "Pragma", NULL)))
-		{
-			if (strstr(d, "no-cache"))
-				conn->cached->cache_mode = CACHE_MODE_NEVER;
+		struct cache_entry *cached = conn->cached;
+
+		/* I am not entirely sure in what order we should process these
+		 * headers and if we should still process Cache-Control max-age
+		 * if we already set max age to date mentioned in Expires.
+		 * --jonas */
+		/* Ensure that when ever cached->max_age is set, cached->expired
+		 * is also set, so the cache management knows max_age contains a
+		 * valid time. If on the other hand no caching is requested
+		 * cached->expire should be set to zero.  */
+		if ((d = parse_header(cached->head, "Expires", NULL))) {
+			/* Convert date to seconds. */
+			time_T expires = parse_date(&d, NULL, 0, 1);
+
+			mem_free(d);
+
+			if (expires && cached->cache_mode != CACHE_MODE_NEVER) {
+				seconds_to_timeval(&cached->max_age, expires);
+				cached->expire = 1;
+			}
+		}
+
+		if ((d = parse_header(cached->head, "Pragma", NULL))) {
+			if (strstr(d, "no-cache")) {
+				cached->cache_mode = CACHE_MODE_NEVER;
+				cached->expire = 0;
+			}
+			mem_free(d);
+		}
+
+		if (cached->cache_mode != CACHE_MODE_NEVER
+		    && (d = parse_header(cached->head, "Cache-Control", NULL))) {
+			if (strstr(d, "no-cache") || strstr(d, "must-revalidate")) {
+				cached->cache_mode = CACHE_MODE_NEVER;
+				cached->expire = 0;
+
+			} else  {
+				unsigned char *pos = strstr(d, "max-age=");
+
+				assert(cached->cache_mode != CACHE_MODE_NEVER);
+
+				if (pos) {
+					/* Grab the number of seconds. */
+					time_T max_age = str_to_time_T(pos + 8);
+
+					get_timeval(&cached->max_age);
+
+					cached->max_age.sec += max_age;
+					cached->expire = 1;
+				}
+			}
+
 			mem_free(d);
 		}
 	}

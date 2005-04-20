@@ -1,10 +1,11 @@
-/* $Id: cache.h,v 1.98 2005/02/23 21:52:08 jonas Exp $ */
+/* $Id: cache.h,v 1.99 2005/04/20 02:00:36 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
 
 #include "util/lists.h"
 #include "util/object.h"
+#include "util/time.h"
 
 struct listbox_item;
 struct uri;
@@ -51,6 +52,9 @@ struct cache_entry {
 	struct listbox_item *box_item;	/* Dialog data for cache manager */
 	struct object object;		/* Usage refcount object */
 
+	timeval_T max_age;		/* Expiration time */
+
+	unsigned int expire:1;		/* Whether to honour max_age */
 	unsigned int preformatted:1;	/* Has content been preformatted? */
 	unsigned int redirect_get:1;	/* Follow redirect using get method? */
 	unsigned int incomplete:1;	/* Has all data been downloaded? */

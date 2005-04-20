@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.202 2005/03/30 15:25:09 zas Exp $ */
+/* $Id: cache.c,v 1.203 2005/04/20 02:00:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,6 +145,16 @@ get_cache_entry(struct uri *uri)
 	return cached;
 }
 
+static int
+cache_entry_has_expired(struct cache_entry *cached)
+{
+	timeval_T now;
+
+	get_timeval(&now);
+
+	return timeval_cmp(&cached->max_age, &now) <= 0;
+}
+
 struct cache_entry *
 get_validated_cache_entry(struct uri *uri, enum cache_mode cache_mode)
 {
@@ -160,14 +170,26 @@ get_validated_cache_entry(struct uri *uri, enum cache_mode cache_mode)
 		return NULL;
 
 	/* Check if the entry can be deleted */
-	if (is_object_used(cached))
+	/* FIXME: This does not make sense to me. Why should the usage pattern
+	 * of the cache entry matter? Only reason I can think of is to avoid
+	 * reloading when spawning a new tab which could potentially be a big
+	 * penalty but shouldn't that be taken care of on a higher level?
+	 * --jonas */
+	if (is_object_used(cached)) {
+		/* Never use expired entries. */
+		if (cached->expire && cache_entry_has_expired(cached))
+			return NULL;
+
 		return cached;
+	}
 
 	/* A bit of a gray zone. Delete the entry if the it has the stricktest
 	 * cache mode and we don't want the most aggressive mode or we have to
-	 * remove the redirect. Please enlighten me. --jonas */
+	 * remove the redirect or the entry expired. Please enlighten me.
+	 * --jonas */
 	if ((cached->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
-	    || (cached->redirect && !get_opt_bool("document.cache.cache_redirects"))) {
+	    || (cached->redirect && !get_opt_bool("document.cache.cache_redirects"))
+	    || (cached->expire && cache_entry_has_expired(cached))) {
 		delete_cache_entry(cached);
 		return NULL;
 	}
@@ -769,6 +791,10 @@ garbage_collection(int whole)
 			cached->gc_target = 0;
 			continue;
 		}
+
+		/* FIXME: Optionally take cached->max_age into consideration,
+		 * but that will probably complicate things too much. We'd have
+		 * to sort entries so prioritize removing the oldest entries. */
 
 		/* Mark me for destruction, sir. */
 		cached->gc_target = 1;

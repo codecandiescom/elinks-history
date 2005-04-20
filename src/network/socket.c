@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.232 2005/04/19 11:58:09 jonas Exp $ */
+/* $Id: socket.c,v 1.233 2005/04/20 20:15:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -805,7 +805,7 @@ read_select(struct socket *socket)
 	switch (rd) {
 #ifdef CONFIG_SSL
 	case SOCKET_SSL_WANT_READ:
-		read_from_socket(socket, rb, S_SSL_NEG, rb->done);
+		read_from_socket(socket, rb, S_TRANS, rb->done);
 		break;
 #endif
 	case SOCKET_CANT_READ:

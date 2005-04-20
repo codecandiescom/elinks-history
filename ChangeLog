@@ -1,3 +1,130 @@
+Wed Apr 20 20:15:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	read_select(): Use S_TRANS instead of S_SSL_NEG. Fixes the download
+	progress bar for HTTPS transfers. This is one place where the
+	passing of connection states to socket functions is a little
+	constructed and doesn't fix well to the old code.  
+
+Wed Apr 20 14:35:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	status -> download 
+
+Wed Apr 20 10:31:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Make open-...-in-background descriptions more readable. Idea by
+	miernik.  
+
+Wed Apr 20 10:20:48 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Do not access directly to timeval_T fields. Rewrite code so it does
+	not use time_T, str_to_time_T(), nor timeval_T sec field.  
+
+Wed Apr 20 10:12:01 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	Returns timeval_T * when possible.  
+
+Wed Apr 20 10:04:47 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	Let get_timeval() returns a pointer to timeval_T.  
+
+Wed Apr 20 02:15:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	Show info about cache entry expiration.  
+
+Wed Apr 20 02:00:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, protocol/http/http.c:
+
+	Try to add support for less aggressive caching strategy. Disable
+	document.cache.ignore_cache_control to try it. On the flip side
+	maybe there are too many strange thing I don't understand about the
+	caching policy that this patch is just plain wrong. Let's give it a
+	try and either improve or disable if it turns out too wrong.  
+
+Tue Apr 19 23:49:41 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/time.h:
+
+	Finally, drop warning about possible time_T overflow.  
+
+Tue Apr 19 23:32:42 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: progress.c, progress.h:
+
+	Do not export macro progress_elapsed_in_ms() anymore.  
+
+Tue Apr 19 23:29:56 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/progress.c, sched/progress.c, sched/progress.h:
+
+	Calculate average_speed,current_speed,estimated_time in
+	update_progress(), saving the results in struct progress.  
+
+Tue Apr 19 23:06:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inphist.c, bookmarks/backend/common.c,
+	cookies/cookies.c, document/html/renderer.c, formhist/formhist.c,
+	globhist/globhist.c, intl/gettext/localcharset.c,
+	intl/gettext/localealias.c, mime/backend/mailcap.c,
+	mime/backend/mimetypes.c, util/file.c, util/secsave.c,
+	viewer/text/textarea.c:
+
+	Add 'b' to mode string in fopen()-calls. More portable on win32
+	platform and it is ignored on Unix-platforms.  
+
+Tue Apr 19 22:44:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/progress.c:
+
+	add_time_to_string() -> add_timeval_to_string().  
+
+Tue Apr 19 22:43:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: progress.c, progress.h:
+
+	progress_estimated_time() now returns a pointer to a timeval_T.
+	Temporary move.  
+
+Tue Apr 19 22:42:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Unicode/cp1250.cp, Unicode/cp1257.cp, src/intl/codepage.inc:
+
+	Use 0x0000 value for undefined codepage entries. More portable I
+	think. Idea from links2.1pre16.  
+
+Tue Apr 19 22:35:25 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: conv.c, conv.h:
+
+	Replace add_time_to_string() by add_timeval_to_string().  
+
+Tue Apr 19 22:22:26 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	Introduce timeval_to_seconds().  
+
+Tue Apr 19 22:16:32 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: progress.c, progress.h:
+
+	Convert struct progress elapsed field to timeval_T and modify
+	update_progress() to reflect that change.  
+
 Tue Apr 19 22:08:05 2005  Laurent Monin <zas@norz.org>:
 
 	* src/sched/: progress.c, progress.h:

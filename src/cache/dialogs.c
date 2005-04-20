@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.80 2005/03/23 15:43:41 miciah Exp $ */
+/* $Id: dialogs.c,v 1.81 2005/04/20 02:15:32 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -22,6 +22,7 @@
 #include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
+#include "util/conv.h"
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
@@ -117,6 +118,14 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term)
 		if (!cached->valid) add_to_string(&msg, _("invalid", term));
 	}
 
+#ifdef HAVE_STRFTIME
+	if (cached->expire) {
+		time_T expires = timeval_to_seconds(&cached->max_age);
+
+		add_format_to_string(&msg, "\n%s: ", _("Expires", term));
+		add_date_to_string(&msg, get_opt_str("ui.date_format"), &expires);
+	}
+#endif
 #ifdef CONFIG_DEBUG
 	add_format_to_string(&msg, "\n%s: %d", "Refcount", get_object_refcount(cached));
 	add_format_to_string(&msg, "\n%s: %d", _("ID", term), cached->id);

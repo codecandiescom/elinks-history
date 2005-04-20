@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.274 2005/04/17 03:22:56 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.275 2005/04/20 10:31:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,10 +493,10 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "move-page-down", ACT_MAIN_MOVE_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
 	{ "move-page-up", ACT_MAIN_MOVE_PAGE_UP, DACT(N_("Move upwards by a page")) },
 	{ "open-link-in-new-tab", ACT_MAIN_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },
-	{ "open-link-in-new-tab-in-background", ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open the current link a new tab in background")) },
+	{ "open-link-in-new-tab-in-background", ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open the current link in a new tab in the background")) },
 	{ "open-link-in-new-window", ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW, DACT(N_("Open the current link in a new window")) },
 	{ "open-new-tab", ACT_MAIN_OPEN_NEW_TAB, DACT(N_("Open a new tab")) },
-	{ "open-new-tab-in-background", ACT_MAIN_OPEN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open a new tab in background")) },
+	{ "open-new-tab-in-background", ACT_MAIN_OPEN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open a new tab in the background")) },
 	{ "open-new-window", ACT_MAIN_OPEN_NEW_WINDOW, DACT(N_("Open a new window")) },
 	{ "open-os-shell", ACT_MAIN_OPEN_OS_SHELL, DACT(N_("Open an OS shell")) },
 	{ "options-manager", ACT_MAIN_OPTIONS_MANAGER, DACT(N_("Open options manager")) },

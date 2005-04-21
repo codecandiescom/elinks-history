@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.118 2005/04/15 01:00:18 jonas Exp $ */
+/* $Id: cmdline.c,v 1.119 2005/04/21 11:50:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -594,6 +594,24 @@ redir_cmd(struct option *option, unsigned char ***argv, int *argc)
 	return NULL;
 }
 
+static unsigned char *
+printconfigdump_cmd(struct option *option, unsigned char ***argv, int *argc)
+{
+	unsigned char *config_string;
+
+	/* Print all. */
+	get_opt_int("config.saving_style") = 2;
+
+	config_string = create_config_string("", "", config_options);
+	if (config_string) {
+		printf("%s", config_string);
+		mem_free(config_string);
+	}
+
+	fflush(stdout);
+	return "";
+}
+
 
 /**********************************************************************
  Options values
@@ -627,6 +645,11 @@ struct option_info cmdline_options_info[] = {
 		"config and runtime state files to instead of ~/.elinks.\n"
 		"If the path does not begin with a '/' it is assumed to be\n"
 		"relative to your HOME directory.")),
+
+	INIT_OPT_COMMAND("", N_("Print default configuration file to stdout"),
+		"config-dump", 0, printconfigdump_cmd,
+		N_("Print a configuration file with options set to the built-in\n"
+		"defaults to stdout.")),
 
 	INIT_OPT_COMMAND("", NULL, "conffile", OPT_HIDDEN, redir_cmd, NULL),
 

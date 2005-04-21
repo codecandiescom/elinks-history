@@ -1,4 +1,4 @@
-/* $Id: conf.h,v 1.14 2004/02/04 23:13:56 pasky Exp $ */
+/* $Id: conf.h,v 1.15 2005/04/21 11:50:15 jonas Exp $ */
 
 #ifndef EL__CONFIG_CONF_H
 #define EL__CONFIG_CONF_H
@@ -22,5 +22,9 @@ enum parse_error parse_config_command(struct option *options,
 void parse_config_file(struct option *options, unsigned char *name,
 		       unsigned char *file, struct string *mirror);
 int write_config(struct terminal *);
+
+unsigned char *
+create_config_string(unsigned char *prefix, unsigned char *name,
+		     struct option *options);
 
 #endif

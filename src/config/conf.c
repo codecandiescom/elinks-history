@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.154 2005/04/17 16:37:42 jonas Exp $ */
+/* $Id: conf.c,v 1.155 2005/04/21 11:50:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -673,7 +673,7 @@ add_cfg_header_to_string(struct string *string, unsigned char *text)
 	add_to_string(string, "#\n\n");
 }
 
-static unsigned char *
+unsigned char *
 create_config_string(unsigned char *prefix, unsigned char *name,
 		     struct option *options)
 {

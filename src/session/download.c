@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.361 2005/04/21 01:00:58 jonas Exp $ */
+/* $Id: download.c,v 1.362 2005/04/21 15:16:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1012,6 +1012,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	struct terminal *term = type_query->ses->tab->term;
 	struct memory_list *ml;
 	struct dialog_data *dlg_data;
+	int selected_widget;
 
 	mem_free_set(&type_query->external_handler, NULL);
 
@@ -1081,6 +1082,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 		type_query->external_handler = field;
 
 		add_dlg_radio(dlg, _("Block the terminal", term), 0, 0, &type_query->block);
+		selected_widget = 3;
 
 	} else if (handler) {
 		unsigned char *field = text + MAX_STR_LEN;
@@ -1096,9 +1098,11 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 		}
 
 		widgets--;
+		selected_widget = 2;
 
 	} else {
 		widgets -= 2;
+		selected_widget = 1;
 	}
 
 	/* Add buttons if they are both usable and allowed. */
@@ -1145,7 +1149,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	 * to select a button by typing the first letter of its label
 	 * without having to first leave the text field. */
 	if (dlg_data) {
-		select_widget_by_id(dlg_data, 2);
+		select_widget_by_id(dlg_data, selected_widget);
 	}
 }
 

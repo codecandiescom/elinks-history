@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.360 2005/04/21 00:59:22 jonas Exp $ */
+/* $Id: download.c,v 1.361 2005/04/21 01:00:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1007,7 +1007,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	unsigned char *desc_sep;
 	unsigned char *format, *text, *title;
 	struct dialog *dlg;
-#define TYPE_QUERY_WIDGETS_COUNT 7
+#define TYPE_QUERY_WIDGETS_COUNT 8
 	int widgets = TYPE_QUERY_WIDGETS_COUNT;
 	struct terminal *term = type_query->ses->tab->term;
 	struct memory_list *ml;
@@ -1080,6 +1080,8 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 			0, 0, check_tp_nonempty, MAX_STR_LEN, field, NULL);
 		type_query->external_handler = field;
 
+		add_dlg_radio(dlg, _("Block the terminal", term), 0, 0, &type_query->block);
+
 	} else if (handler) {
 		unsigned char *field = text + MAX_STR_LEN;
 
@@ -1093,8 +1095,10 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 			return;
 		}
 
-	} else {
 		widgets--;
+
+	} else {
+		widgets -= 2;
 	}
 
 	/* Add buttons if they are both usable and allowed. */

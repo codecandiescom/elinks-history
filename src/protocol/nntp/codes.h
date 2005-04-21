@@ -1,9 +1,7 @@
-/* $Id: codes.h,v 1.1 2004/08/14 07:53:15 jonas Exp $ */
+/* $Id: codes.h,v 1.2 2005/04/21 02:36:41 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_NNTP_CODES_H
 #define	EL__PROTOCOL_NNTP_CODES_H
-
-struct connection;
 
 /* RFC 977 - Section 2.4.2.  Status Responses
  *
@@ -98,8 +96,5 @@ enum nntp_code {
 	NNTP_CODE_503_PROGRAM_FAULT	= 503, /* Program fault, command not performed */
 	NNTP_CODE_580_AUTH_FAILED	= 580, /* Authorization Failed */
 };
-
-/* NNTP response codes device */
-void nntp_error_dialog(struct connection *conn, enum nntp_code code);
 
 #endif

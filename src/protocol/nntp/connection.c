@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.23 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: connection.c,v 1.24 2005/04/21 01:56:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -280,7 +280,6 @@ nntp_got_response(struct socket *socket, struct read_buffer *rb)
 		break;
 
 	case NNTP_CODE_INVALID:
-		WDBG("invalid: %d", nntp->code);
 		nntp_end_request(conn, S_NNTP_ERROR);
 		break;
 
@@ -310,6 +309,7 @@ nntp_got_response(struct socket *socket, struct read_buffer *rb)
 		    && !nntp->xover_unsupported) {
 			nntp->xover_unsupported = 1;
 			nntp_send_command(conn);
+			break;
 		}
 
 	default:

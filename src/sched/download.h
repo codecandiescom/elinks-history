@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.49 2005/04/18 17:13:03 zas Exp $ */
+/* $Id: download.h,v 1.50 2005/04/21 00:59:22 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -49,7 +49,7 @@ struct type_query {
 	struct uri *uri;
 	unsigned char *target_frame;
 	unsigned char *external_handler;
-	int external_handler_flags;
+	int block;
 	int frame;
 };
 
@@ -66,7 +66,7 @@ struct file_download {
 	int handle;
 	int redirect_cnt;
 	int notify;
-	int external_handler_flags;
+	int block;
 	struct download download;
 
 	/* Should the file be deleted when destroying the structure */

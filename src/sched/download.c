@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.359 2005/04/18 17:13:03 zas Exp $ */
+/* $Id: download.c,v 1.360 2005/04/21 00:59:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,7 +340,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		file_download->handle = -1;
 		exec_on_terminal(term, file_download->external_handler,
 				 file_download->file,
-				 !!file_download->external_handler_flags);
+				 !!file_download->block);
 		file_download->delete = 0;
 		abort_download_and_beep(file_download, term);
 		return;
@@ -814,7 +814,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 		mem_free_set(&type_query->external_handler, NULL);
 	}
 
-	file_download->external_handler_flags = type_query->external_handler_flags;
+	file_download->block = type_query->block;
 
 	/* Done here and not in init_file_download() so that the external
 	 * handler can become initialized. */
@@ -1016,7 +1016,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	mem_free_set(&type_query->external_handler, NULL);
 
 	if (handler) {
-		type_query->external_handler_flags = handler->block;
+		type_query->block = handler->block;
 		if (!handler->ask) {
 			type_query->external_handler = stracpy(handler->program);
 			tp_open(type_query);

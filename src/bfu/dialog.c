@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.202 2005/04/01 15:22:15 jonas Exp $ */
+/* $Id: dialog.c,v 1.203 2005/04/21 15:16:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,8 +177,12 @@ select_widget(struct dialog_data *dlg_data, struct widget_data *widget_data)
 struct widget_data *
 select_widget_by_id(struct dialog_data *dlg_data, int i)
 {
-	struct widget_data *widget_data = &dlg_data->widgets_data[i];
+	struct widget_data *widget_data;
 
+	if (i >= dlg_data->number_of_widgets)
+		return NULL;
+
+	widget_data = &dlg_data->widgets_data[i];
 	select_widget(dlg_data, widget_data);
 
 	return widget_data;

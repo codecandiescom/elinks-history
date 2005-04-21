@@ -1,3 +1,82 @@
+Thu Apr 21 15:16:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	select_widget_by_id(): Be a little defensive and check the widget
+	ID.  
+
+Thu Apr 21 15:16:13 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Fix widget focusing in the type query dialog after the block
+	terminal radio button was added. Also fix to correctly focus in
+	anonymous mode.  
+
+Thu Apr 21 11:50:40 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/elinks.conf, doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Thu Apr 21 11:50:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: cmdline.c, conf.c, conf.h:
+
+	Add --config-dump which dump a configuration file with default
+	options to stdout. Helpfull for packagemaintainers when providing an
+	example config file and it costs nearly nothing.  
+
+Thu Apr 21 02:36:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/nntp/: Makefile.am, codes.c, codes.h:
+
+	Remove NNTP code device.  
+
+Thu Apr 21 02:35:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.h, bfu/menu.c:
+
+	Simplify header and fix compilation.  
+
+Thu Apr 21 02:31:12 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/nntp/connection.c, sched/error.c, sched/state.h:
+
+	Simplify the NNTP error reporting to just use the internal one.  
+
+Thu Apr 21 01:56:13 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/nntp/connection.c:
+
+	A few fixes.  
+
+Thu Apr 21 01:29:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.h, dialogs/menu.c, osdep/generic.h,
+	protocol/http/codes.c, protocol/nntp/codes.c:
+
+	Introduce sizeof_array() and use it where possible.  
+
+Thu Apr 21 01:00:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Make it possible to change the block flag so that apps will be
+	correctly run.  
+
+Thu Apr 21 00:59:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, download.h:
+
+	struct type_query, file_download: external_handler_flags -> block 
+
+Wed Apr 20 22:17:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: file/cgi.c, http/http.c:
+
+	Fix CGI's usage of init_http_connection_info().  
+
 Wed Apr 20 20:15:08 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/lowlevel/connect.c:

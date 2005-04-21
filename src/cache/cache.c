@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.203 2005/04/20 02:00:36 jonas Exp $ */
+/* $Id: cache.c,v 1.204 2005/04/21 22:45:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,10 +176,12 @@ get_validated_cache_entry(struct uri *uri, enum cache_mode cache_mode)
 	 * penalty but shouldn't that be taken care of on a higher level?
 	 * --jonas */
 	if (is_object_used(cached)) {
+#if 0
 		/* Never use expired entries. */
+		/* Disabled because it hurts usability too much. */
 		if (cached->expire && cache_entry_has_expired(cached))
 			return NULL;
-
+#endif
 		return cached;
 	}
 

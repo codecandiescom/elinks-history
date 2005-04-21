@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.26 2005/04/09 14:12:44 jonas Exp $ */
+/* $Id: generic.h,v 1.27 2005/04/21 01:29:08 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -115,5 +115,7 @@ safe_write(int fd, const void *buf, size_t count) {
  * of memcpy(). */
 #define copy_struct(destination, source) \
 	do { (*(destination) = *(source)); } while (0)
+
+#define sizeof_array(array) (sizeof(array)/sizeof(*(array)))
 
 #endif

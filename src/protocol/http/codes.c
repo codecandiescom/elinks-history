@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.39 2005/02/28 14:18:43 zas Exp $ */
+/* $Id: codes.c,v 1.40 2005/04/21 01:29:08 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -74,8 +74,6 @@ static struct http_code http_code[] = {
 	{ 505, "HTTP Version Not Supported" },
 };
 
-#define count(T) (sizeof(T)/sizeof(*(T)))
-
 static int
 compare_http_codes(const void *key, const void *element)
 {
@@ -89,7 +87,7 @@ static unsigned char *
 http_code_to_string(int code)
 {
 	struct http_code *element = bsearch((void *) (long) code, http_code,
-					    count(http_code),
+					    sizeof_array(http_code),
 					    sizeof(*element),
 					    compare_http_codes);
 

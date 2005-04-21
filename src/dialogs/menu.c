@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.395 2005/04/07 10:48:47 zas Exp $ */
+/* $Id: menu.c,v 1.396 2005/04/21 01:29:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,15 +359,15 @@ do_file_menu(struct terminal *term, void *xxx, void *ses_)
 	}
 
 	memcpy(e, file_menu11, sizeof(file_menu11));
-	e += sizeof(file_menu11) / sizeof(struct menu_item);
+	e += sizeof_array(file_menu11);
 
 	if (!anonymous) {
 		memcpy(e, file_menu21, sizeof(file_menu21));
-		e += sizeof(file_menu21) / sizeof(struct menu_item);
+		e += sizeof_array(file_menu21);
 	}
 
 	memcpy(e, file_menu22, sizeof(file_menu22));
-	e += sizeof(file_menu22) / sizeof(struct menu_item);
+	e += sizeof_array(file_menu22);
 
 	x = 1;
 	if (!anonymous && can_open_os_shell(term->environment)) {
@@ -385,7 +385,7 @@ do_file_menu(struct terminal *term, void *xxx, void *ses_)
 	}
 
 	memcpy(e, file_menu3 + x, sizeof(file_menu3) - x * sizeof(struct menu_item));
-	e += sizeof(file_menu3) / sizeof(struct menu_item);
+	e += sizeof_array(file_menu3);
 
 	for (f = file_menu; f < e; f++)
 		f->flags |= FREE_LIST;

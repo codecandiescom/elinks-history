@@ -1,5 +1,5 @@
 /* NNTP response codes */
-/* $Id: codes.c,v 1.7 2005/04/13 01:27:20 jonas Exp $ */
+/* $Id: codes.c,v 1.8 2005/04/21 01:29:09 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -86,13 +86,11 @@ static struct nntp_code_info nntp_code_info[] = {
 	{ NNTP_CODE_580_AUTH_FAILED,	  "Authorization Failed" },
 };
 
-#define count(T) (sizeof(T)/sizeof(*(T)))
-
 static unsigned char *
 get_nntp_code_string(enum nntp_code code)
 {
 	int start = 0;
-	int end = count(nntp_code_info) - 1; /* can be negative. */
+	int end = sizeof_array(nntp_code_info) - 1; /* can be negative. */
 
 	/* Dichotomic search is used there. */
 	while (start <= end) {

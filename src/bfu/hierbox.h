@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.69 2005/04/17 16:30:38 zas Exp $ */
+/* $Id: hierbox.h,v 1.70 2005/04/21 01:29:08 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -16,9 +16,6 @@ struct hierbox_browser_button {
 	/* Should the button be displayed in anonymous mode */
 	unsigned int anonymous:1;
 };
-
-#define HIERBOX_BROWSER_BUTTONS_SIZE(buttons) \
-	(sizeof(buttons) / sizeof(struct hierbox_browser_button))
 
 struct hierbox_browser {
 	unsigned char *title;
@@ -41,7 +38,7 @@ struct hierbox_browser {
 		title,							\
 		NULL,							\
 		buttons,						\
-		HIERBOX_BROWSER_BUTTONS_SIZE(buttons),			\
+		sizeof_array(buttons),					\
 		{ D_LIST_HEAD(name.boxes) },				\
 		{ D_LIST_HEAD(name.dialogs) },				\
 		{							\

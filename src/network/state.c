@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.40 2005/04/15 23:25:25 jonas Exp $ */
+/* $Id: state.c,v 1.41 2005/04/21 02:31:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,6 +97,12 @@ struct s_msg_dsc {
 	{S_NNTP_NEWS_SERVER,	N_("Unable to handle news: URI because no news server has been\n"
 				"been configured. Either set the option protocol.nntp.server\n"
 				"or set the NNTPSERVER environment variable.")},
+	{S_NNTP_SERVER_HANG_UP,	N_("Server hang up for some reason")},
+	{S_NNTP_GROUP_UNKNOWN,	N_("No such newsgroup")},
+	{S_NNTP_ARTICLE_UNKNOWN,N_("No such article")},
+	{S_NNTP_TRANSFER_ERROR,	N_("Transfer failed")},
+	{S_NNTP_AUTH_REQUIRED,	N_("Authorization required")},
+	{S_NNTP_ACCESS_DENIED,	N_("Access to server denied")},
 #endif
 
 #ifdef CONFIG_GOPHER

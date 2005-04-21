@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.24 2005/04/21 01:56:13 jonas Exp $ */
+/* $Id: connection.c,v 1.25 2005/04/21 02:31:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -260,6 +260,38 @@ read_nntp_data(struct socket *socket, struct read_buffer *rb)
 	}
 }
 
+/* Translate NNTP code to the internal connection state. */
+static enum connection_state
+get_nntp_connection_state(enum nntp_code code)
+{
+	switch (code) {
+	case NNTP_CODE_400_GOODBYE:		return S_NNTP_SERVER_HANG_UP;
+	case NNTP_CODE_411_GROUP_UNKNOWN:	return S_NNTP_GROUP_UNKNOWN;
+	case NNTP_CODE_423_ARTICLE_NONUMBER:	return S_NNTP_ARTICLE_UNKNOWN;
+	case NNTP_CODE_430_ARTICLE_NOID:	return S_NNTP_ARTICLE_UNKNOWN;
+	case NNTP_CODE_436_ARTICLE_TRANSFER:	return S_NNTP_TRANSFER_ERROR;
+	case NNTP_CODE_480_AUTH_REQUIRED:	return S_NNTP_AUTH_REQUIRED;
+	case NNTP_CODE_502_ACCESS_DENIED:	return S_NNTP_ACCESS_DENIED;
+	case NNTP_CODE_503_PROGRAM_FAULT:	return S_NNTP_SERVER_ERROR;
+
+	case NNTP_CODE_412_GROUP_UNSET:
+	case NNTP_CODE_420_ARTICLE_UNSET:
+	case NNTP_CODE_421_ARTICLE_NONEXT:
+	case NNTP_CODE_422_ARTICLE_NOPREV:
+	case NNTP_CODE_435_ARTICLE_NOSEND:
+	case NNTP_CODE_437_ARTICLE_REJECTED:
+	case NNTP_CODE_440_POSTING_DENIED:
+	case NNTP_CODE_441_POSTING_FAILED:
+	case NNTP_CODE_482_AUTH_REJECTED:
+	case NNTP_CODE_580_AUTH_FAILED:
+	case NNTP_CODE_500_COMMAND_UNKNOWN:
+	case NNTP_CODE_501_COMMAND_SYNTAX:
+	default:
+		/* Notice and error codes for stuff which is either not
+		 * supported or which is not supposed to happen. */
+		return S_NNTP_ERROR;
+	};
+}
 
 static void
 nntp_got_response(struct socket *socket, struct read_buffer *rb)
@@ -314,8 +346,7 @@ nntp_got_response(struct socket *socket, struct read_buffer *rb)
 
 	default:
 		/* FIXME: Handle (error) response codes */
-		nntp_error_dialog(conn, nntp->code);
-		nntp_end_request(conn, S_OK);
+		nntp_end_request(conn, get_nntp_connection_state(nntp->code));
 		break;
 	}
 }

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.291 2005/03/05 21:21:27 zas Exp $ */
+/* $Id: menu.c,v 1.292 2005/04/21 02:35:53 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -20,6 +20,7 @@
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "sched/action.h"
+#include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/event.h"
 #include "terminal/kbd.h"

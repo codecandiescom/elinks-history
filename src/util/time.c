@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.40 2005/04/22 01:20:23 zas Exp $ */
+/* $Id: time.c,v 1.41 2005/04/22 01:25:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,16 +28,17 @@ timeval_now(timeval_T *t)
 	struct timeval tv;
 
 	gettimeofday(&tv, NULL);
-	tv2tT(&tv, t);
+	t->sec  = tv.tv_sec;
+	t->usec = tv.tv_usec;
 #else
 #ifdef HAVE_CLOCK_GETTIME
 	struct timespec ts;
 
 	clock_gettime(CLOCK_REALTIME, &ts);
-	t->sec = ts.tv_sec;
+	t->sec  = ts.tv_sec;
 	t->usec = ts.tv_nsec / 1000;
 #else
-	t->sec = time(NULL);
+	t->sec  = time(NULL);
 	t->usec = 0;
 #endif
 #endif

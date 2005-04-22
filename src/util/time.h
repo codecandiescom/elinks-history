@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.41 2005/04/22 01:20:23 zas Exp $ */
+/* $Id: time.h,v 1.42 2005/04/22 01:25:15 zas Exp $ */
 
 #ifndef EL__UTIL_TIME_H
 #define EL__UTIL_TIME_H
@@ -20,16 +20,6 @@ typedef time_t time_T;
  * will be simplified on rare systems that define timeval with
  * unsigned fields. */
 typedef struct { long int sec; long int usec; } timeval_T;
-
-#define tv2tT(tv, tT) do { \
-	(tT)->sec = (long int) ((tv)->tv_sec); \
-	(tT)->usec = (long int) ((tv)->tv_usec); \
-} while (0)
-
-#define tT2tv(tT, tv) do { \
-	(tv)->tv_sec = (tT)->sec; \
-	(tv)->tv_usec = (tT)->usec; \
-} while (0)
 
 timeval_T *timeval_from_milliseconds(timeval_T *t, long int milliseconds);
 timeval_T *timeval_from_seconds(timeval_T *t, long int seconds);

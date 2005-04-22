@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.279 2005/04/18 12:46:35 zas Exp $ */
+/* $Id: connection.c,v 1.280 2005/04/22 01:07:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -500,7 +500,7 @@ init_keepalive_connection(struct connection *conn, time_T timeout,
 	keep_conn->done = done;
 	keep_conn->protocol_family = conn->socket->protocol_family;
 	keep_conn->socket = conn->socket->fd;
-	seconds_to_timeval(&keep_conn->timeout, timeout);
+	timeval_from_seconds(&keep_conn->timeout, timeout);
 	get_timeval(&keep_conn->creation_time);
 
 	return keep_conn;

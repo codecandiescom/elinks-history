@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.19 2005/04/22 01:03:03 zas Exp $ */
+/* $Id: progress.c,v 1.20 2005/04/22 01:07:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,7 +86,7 @@ update_progress(struct progress *progress, int loaded, int size, int pos)
 		progress->current_speed = progress->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000);
 
 		if (progress->average_speed)	/* Division by zero risk */
-			seconds_to_timeval(&progress->estimated_time,
+			timeval_from_seconds(&progress->estimated_time,
 					   (progress->size - progress->pos) / progress->average_speed);
 	}
 

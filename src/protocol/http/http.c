@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.437 2005/04/20 22:17:25 jonas Exp $ */
+/* $Id: http.c,v 1.438 2005/04/22 01:07:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1538,7 +1538,7 @@ again:
 			mem_free(d);
 
 			if (expires && cached->cache_mode != CACHE_MODE_NEVER) {
-				seconds_to_timeval(&cached->max_age, expires);
+				timeval_from_seconds(&cached->max_age, expires);
 				cached->expire = 1;
 			}
 		}
@@ -1566,7 +1566,7 @@ again:
 					/* Grab the number of seconds. */
 					timeval_T max_age;
 
-					seconds_to_timeval(&max_age, atol(pos + 8));
+					timeval_from_seconds(&max_age, atol(pos + 8));
 					get_timeval(&cached->max_age);
 					timeval_add_interval(&cached->max_age, &max_age);
 

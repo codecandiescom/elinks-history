@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.619 2005/04/15 20:36:48 jonas Exp $ */
+/* $Id: session.c,v 1.620 2005/04/22 01:15:10 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -412,9 +412,9 @@ display_timer(struct session *ses)
 	timeval_T start, stop, duration;
 	long t;
 	
-	get_timeval(&start);
+	timeval_now(&start);
 	draw_formatted(ses, 3);
-	get_timeval(&stop);
+	timeval_now(&stop);
 	timeval_sub(&duration, &start, &stop);
 	
 	t = timeval_to_milliseconds(&duration) * DISPLAY_TIME;

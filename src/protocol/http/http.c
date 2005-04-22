@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.438 2005/04/22 01:07:12 zas Exp $ */
+/* $Id: http.c,v 1.439 2005/04/22 01:15:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1567,7 +1567,7 @@ again:
 					timeval_T max_age;
 
 					timeval_from_seconds(&max_age, atol(pos + 8));
-					get_timeval(&cached->max_age);
+					timeval_now(&cached->max_age);
 					timeval_add_interval(&cached->max_age, &max_age);
 
 					cached->expire = 1;

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.204 2005/04/21 22:45:39 jonas Exp $ */
+/* $Id: cache.c,v 1.205 2005/04/22 01:15:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,7 +150,7 @@ cache_entry_has_expired(struct cache_entry *cached)
 {
 	timeval_T now;
 
-	get_timeval(&now);
+	timeval_now(&now);
 
 	return timeval_cmp(&cached->max_age, &now) <= 0;
 }

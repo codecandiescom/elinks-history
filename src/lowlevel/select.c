@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.83 2005/04/15 18:25:58 jonas Exp $ */
+/* $Id: select.c,v 1.84 2005/04/22 01:15:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,7 +203,7 @@ select_loop(void (*init)(void))
 	FD_ZERO(&w_write);
 	FD_ZERO(&w_error);
 	w_max = 0;
-	get_timeval(&last_time);
+	timeval_now(&last_time);
 #ifdef SIGPIPE
 	signal(SIGPIPE, SIG_IGN);
 #endif

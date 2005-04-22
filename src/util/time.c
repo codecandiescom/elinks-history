@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.38 2005/04/22 01:11:36 zas Exp $ */
+/* $Id: time.c,v 1.39 2005/04/22 01:15:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
  * It attempts to use available functions, granularity
  * may be as worse as 1 second if time() is used. */
 timeval_T *
-get_timeval(timeval_T *t)
+timeval_now(timeval_T *t)
 {
 #ifdef HAVE_GETTIMEOFDAY
 	struct timeval tv;

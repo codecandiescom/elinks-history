@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timers.c,v 1.21 2005/04/15 18:25:58 jonas Exp $ */
+/* $Id: timers.c,v 1.22 2005/04/22 00:55:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ check_timers(timeval_T *last_time)
 		check_bottom_halves();
 	}
 
-	copy_struct(last_time, &now);
+	timeval_copy(last_time, &now);
 }
 
 void
@@ -108,7 +108,7 @@ int
 get_next_timer_time(timeval_T *t)
 {
 	if (!list_empty(timers)) {
-		copy_struct(t, &((struct timer *) &timers)->next->interval);
+		timeval_copy(t, &((struct timer *) &timers)->next->interval);
 		return 1;
 	}
 

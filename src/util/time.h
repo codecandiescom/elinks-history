@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.40 2005/04/22 01:15:10 zas Exp $ */
+/* $Id: time.h,v 1.41 2005/04/22 01:20:23 zas Exp $ */
 
 #ifndef EL__UTIL_TIME_H
 #define EL__UTIL_TIME_H
@@ -39,7 +39,7 @@ long int timeval_to_milliseconds(timeval_T *t);
 long int timeval_to_seconds(timeval_T *t);
 
 int timeval_is_positive(timeval_T *t);
-void limit_timeval_to_zero(timeval_T *t);
+void timeval_limit_to_zero(timeval_T *t);
 timeval_T *timeval_now(timeval_T *t);
 timeval_T *timeval_sub(timeval_T *res, timeval_T *older, timeval_T *newer);
 timeval_T *timeval_add(timeval_T *res, timeval_T *base, timeval_T *t);

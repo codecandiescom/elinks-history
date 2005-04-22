@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timers.c,v 1.22 2005/04/22 00:55:52 zas Exp $ */
+/* $Id: timers.c,v 1.23 2005/04/22 01:03:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,7 +77,7 @@ install_timer(timer_id_T *id, long int delay_in_milliseconds, void (*func)(void 
 	*id = (timer_id_T) new_timer; /* TIMER_ID_UNDEF is NULL */
 	if (!new_timer) return;
 
-	milliseconds_to_timeval(&new_timer->interval, delay_in_milliseconds);
+	timeval_from_milliseconds(&new_timer->interval, delay_in_milliseconds);
 	new_timer->func = func;
 	new_timer->data = data;
 

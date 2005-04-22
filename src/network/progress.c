@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.18 2005/04/22 00:55:52 zas Exp $ */
+/* $Id: progress.c,v 1.19 2005/04/22 01:03:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,8 +64,8 @@ update_progress(struct progress *progress, int loaded, int size, int pos)
 	timeval_add_interval(&progress->elapsed, &elapsed);
 
 	timeval_add_interval(&progress->dis_b, &elapsed);
-	milliseconds_to_timeval(&dis_b_max, SPD_DISP_TIME * CURRENT_SPD_SEC);
-	milliseconds_to_timeval(&dis_b_interval, SPD_DISP_TIME);
+	timeval_from_milliseconds(&dis_b_max, SPD_DISP_TIME * CURRENT_SPD_SEC);
+	timeval_from_milliseconds(&dis_b_interval, SPD_DISP_TIME);
 
 	while (timeval_cmp(&progress->dis_b, &dis_b_max) >= 0) {
 		progress->cur_loaded -= progress->data_in_secs[0];

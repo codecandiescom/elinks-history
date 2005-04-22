@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.36 2005/04/22 00:55:52 zas Exp $ */
+/* $Id: time.h,v 1.37 2005/04/22 01:03:03 zas Exp $ */
 
 #ifndef EL__UTIL_TIME_H
 #define EL__UTIL_TIME_H
@@ -31,7 +31,7 @@ typedef struct { long int sec; long int usec; } timeval_T;
 	(tv)->tv_usec = (tT)->usec; \
 } while (0)
 
-timeval_T *milliseconds_to_timeval(timeval_T *t, long int milliseconds);
+timeval_T *timeval_from_milliseconds(timeval_T *t, long int milliseconds);
 timeval_T *seconds_to_timeval(timeval_T *t, long int seconds);
 timeval_T *double_to_timeval(timeval_T *t, double x);
 

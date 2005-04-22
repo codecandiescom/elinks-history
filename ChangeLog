@@ -1,3 +1,71 @@
+Fri Apr 22 15:54:59 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Apr 22 01:57:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Try to fix or rather work around bug 647. It looks like the table
+	parsing can pick up forms twice, remove the form when it is added
+	the second time and avoid the assertion failure.  
+
+Fri Apr 22 01:25:15 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	Drop useless macros and make timeval_now() cleaner.  
+
+Fri Apr 22 01:20:23 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/select.c, util/time.c, util/time.h:
+
+	limit_timeval_to_zero() -> timeval_limit_to_zero().  
+
+Fri Apr 22 01:15:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.c, lowlevel/dns.c, lowlevel/select.c,
+	lowlevel/timers.c, protocol/http/http.c, sched/connection.c,
+	sched/progress.c, sched/session.c, util/time.c, util/time.h:
+
+	get_timeval() -> timeval_now().  
+
+Fri Apr 22 01:11:36 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	double_to_timeval() -> timeval_from_double().  
+
+Fri Apr 22 01:07:11 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/dns.c, protocol/http/http.c, sched/connection.c,
+	sched/progress.c, util/time.c, util/time.h:
+
+	seconds_to_timeval() -> timeval_from_seconds().  
+
+Fri Apr 22 01:03:03 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/timers.c, sched/progress.c, util/time.c,
+	util/time.h:
+
+	milliseconds_to_timeval() -> timeval_from_milliseconds().  
+
+Fri Apr 22 00:55:52 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/timers.c, sched/progress.c, util/time.h:
+
+	Introduce timeval_copy() and use it instead of direct call to
+	copy_struct().  
+
+Thu Apr 21 22:45:39 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	Disable the overly non-aggressive caching. It is hurting usability
+	too much.  
+
 Thu Apr 21 15:16:42 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bfu/dialog.c:

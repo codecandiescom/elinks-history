@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.531 2005/04/19 23:06:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.532 2005/04/22 01:57:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1346,12 +1346,25 @@ html_special_form(struct part *part, struct form *form)
 			    || nform->form_end < form->form_num)
 				continue;
 
+			/* First check if the form has identical form numbers.
+			 * That should only be the case when the form being
+			 * added is in fact the same form in which case it
+			 * should be dropped. The fact that this can happen
+			 * suggests that the table renderering can be confused.
+			 * See bug 647 for a test case. */
+			if (nform->form_num == form->form_num
+			    && nform->form_end == form->form_end) {
+				done_form(form);
+				return;
+			}
+
 			/* The form start is inside an already added form, so
 			 * partition the space of the existing form and get
 			 * |old|new|. */
 			nform->form_end = form->form_num - 1;
 			assertm(nform->form_num <= nform->form_end,
-				"%d %d", nform->form_num, nform->form_end);
+				"[%d:%d] [%d:%d]", nform->form_num, nform->form_end,
+				form->form_num, form->form_end);
 			break;
 		}
 	} else {

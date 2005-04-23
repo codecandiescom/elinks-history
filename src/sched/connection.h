@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.121 2005/04/17 23:03:14 jonas Exp $ */
+/* $Id: connection.h,v 1.122 2005/04/23 15:43:00 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -8,7 +8,6 @@
 #include "lowlevel/timers.h" /* timer_id_T */
 #include "sched/state.h"
 #include "util/lists.h"
-#include "util/time.h"
 
 struct download;
 struct socket;
@@ -79,7 +78,7 @@ long connect_info(int);
 void set_connection_state(struct connection *, int);
 
 int has_keepalive_connection(struct connection *);
-void add_keepalive_connection(struct connection *, time_T,
+void add_keepalive_connection(struct connection *conn, long timeout_in_seconds,
 			      void (*done)(struct connection *));
 
 void abort_connection(struct connection *, int);

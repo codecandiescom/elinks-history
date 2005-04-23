@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.282 2005/04/23 13:32:32 zas Exp $ */
+/* $Id: connection.c,v 1.283 2005/04/23 15:43:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -484,7 +484,7 @@ done_keepalive_connection(struct keepalive_connection *keep_conn)
 }
 
 static struct keepalive_connection *
-init_keepalive_connection(struct connection *conn, time_T timeout,
+init_keepalive_connection(struct connection *conn, long timeout_in_seconds,
 			  void (*done)(struct connection *))
 {
 	struct keepalive_connection *keep_conn;
@@ -500,7 +500,7 @@ init_keepalive_connection(struct connection *conn, time_T timeout,
 	keep_conn->done = done;
 	keep_conn->protocol_family = conn->socket->protocol_family;
 	keep_conn->socket = conn->socket->fd;
-	timeval_from_seconds(&keep_conn->timeout, timeout);
+	timeval_from_seconds(&keep_conn->timeout, timeout_in_seconds);
 	timeval_now(&keep_conn->creation_time);
 
 	return keep_conn;
@@ -540,7 +540,7 @@ has_keepalive_connection(struct connection *conn)
 }
 
 void
-add_keepalive_connection(struct connection *conn, time_T timeout,
+add_keepalive_connection(struct connection *conn, long timeout_in_seconds,
 			 void (*done)(struct connection *))
 {
 	struct keepalive_connection *keep_conn;
@@ -548,7 +548,7 @@ add_keepalive_connection(struct connection *conn, time_T timeout,
 	assertm(conn->socket->fd != -1, "keepalive connection not connected");
 	if_assert_failed goto done;
 
-	keep_conn = init_keepalive_connection(conn, timeout, done);
+	keep_conn = init_keepalive_connection(conn, timeout_in_seconds, done);
 	if (keep_conn) {
 		/* Make sure that the socket descriptor will not periodically be
 		 * checked or closed by free_connection_data(). */

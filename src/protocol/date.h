@@ -1,4 +1,4 @@
-/* $Id: date.h,v 1.11 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: date.h,v 1.12 2005/04/23 15:58:54 zas Exp $ */
 
 #ifndef EL__PROTOCOL_DATE_H
 #define EL__PROTOCOL_DATE_H
@@ -26,7 +26,7 @@ int parse_time(const unsigned char **time, struct tm *tm, unsigned char *end);
  * Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, obsoleted by RFC 1036
  * Sun Nov  6 08:49:37 1994       ; ANSI C's asctime() format
  */
-time_T parse_date(unsigned char **date_pos, unsigned char *end,
+time_t parse_date(unsigned char **date_pos, unsigned char *end,
 		  int update_pos, int skip_week_day);
 
 #endif

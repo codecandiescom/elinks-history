@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.81 2005/04/20 02:15:32 jonas Exp $ */
+/* $Id: dialogs.c,v 1.82 2005/04/23 15:58:54 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -120,7 +120,7 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term)
 
 #ifdef HAVE_STRFTIME
 	if (cached->expire) {
-		time_T expires = timeval_to_seconds(&cached->max_age);
+		time_t expires = timeval_to_seconds(&cached->max_age);
 
 		add_format_to_string(&msg, "\n%s: ", _("Expires", term));
 		add_date_to_string(&msg, get_opt_str("ui.date_format"), &expires);

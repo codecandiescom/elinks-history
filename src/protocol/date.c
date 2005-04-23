@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.23 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: date.c,v 1.24 2005/04/23 15:58:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,7 +230,7 @@ my_timegm(struct tm *tm)
 }
 
 
-time_T
+time_t
 parse_date(unsigned char **date_pos, unsigned char *end,
 	   int update_pos, int skip_week_day)
 {
@@ -320,5 +320,5 @@ parse_date(unsigned char **date_pos, unsigned char *end,
 	if (update_pos)
 		*date_pos = (unsigned char *) date;
 
-	return (time_T) my_timegm(&tm);
+	return (time_t) my_timegm(&tm);
 }

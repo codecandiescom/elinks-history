@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.81 2005/03/23 15:43:41 miciah Exp $ */
+/* $Id: dialogs.c,v 1.82 2005/04/23 15:58:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,7 +286,7 @@ set_cookie_expires(struct dialog_data *dlg_data, struct widget_data *widget_data
 	number = strtol(value, (char **) &end, 10);
 	if (errno || *end || number < 0) return EVENT_NOT_PROCESSED;
 
-	cookie->expires = (time_T) number;
+	cookie->expires = (time_t) number;
 	return EVENT_PROCESSED;
 }
 

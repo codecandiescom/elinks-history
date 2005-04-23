@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.103 2005/04/19 23:06:47 jonas Exp $ */
+/* $Id: globhist.c,v 1.104 2005/04/23 15:58:54 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -142,7 +142,7 @@ get_global_history_item(unsigned char *url)
 /* Search global history for certain item. There must be full match with the
  * parameter or the parameter must be NULL/zero. */
 struct global_history_item *
-multiget_global_history_item(unsigned char *url, unsigned char *title, time_T time)
+multiget_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 {
 	struct global_history_item *history_item;
 
@@ -165,7 +165,7 @@ multiget_global_history_item(unsigned char *url, unsigned char *title, time_T ti
 #endif
 
 static struct global_history_item *
-init_global_history_item(unsigned char *url, unsigned char *title, time_T vtime)
+init_global_history_item(unsigned char *url, unsigned char *title, time_t vtime)
 {
 	struct global_history_item *history_item;
 
@@ -240,7 +240,7 @@ add_item_to_global_history(struct global_history_item *history_item,
 /* Add a new entry in history list, take care of duplicate, respect history
  * size limit, and update any open history dialogs. */
 void
-add_global_history_item(unsigned char *url, unsigned char *title, time_T vtime)
+add_global_history_item(unsigned char *url, unsigned char *title, time_t vtime)
 {
 	struct global_history_item *history_item;
 	int max_globhist_items;
@@ -341,7 +341,7 @@ read_global_history(void)
 		if (!eol) continue;
 		*eol = '\0'; /* Drop ending '\n'. */
 
-		add_global_history_item(url, title, str_to_time_T(last_visit));
+		add_global_history_item(url, title, str_to_time_t(last_visit));
 	}
 
 	global_history.nosave = 0;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.439 2005/04/22 01:15:10 zas Exp $ */
+/* $Id: http.c,v 1.440 2005/04/23 15:58:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1533,7 +1533,7 @@ again:
 		 * cached->expire should be set to zero.  */
 		if ((d = parse_header(cached->head, "Expires", NULL))) {
 			/* Convert date to seconds. */
-			time_T expires = parse_date(&d, NULL, 0, 1);
+			time_t expires = parse_date(&d, NULL, 0, 1);
 
 			mem_free(d);
 

@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.42 2005/04/22 01:25:15 zas Exp $ */
+/* $Id: time.h,v 1.43 2005/04/23 15:58:54 zas Exp $ */
 
 #ifndef EL__UTIL_TIME_H
 #define EL__UTIL_TIME_H
@@ -10,11 +10,9 @@
 #include <time.h>
 #endif
 
-typedef time_t time_T;
-
 /* Is using atol() in this way acceptable? It seems
- * non-portable to me; time_T might not be a long. -- Miciah */
-#define str_to_time_T(s) ((time_T) atol(s))
+ * non-portable to me; time_t might not be a long. -- Miciah */
+#define str_to_time_t(s) ((time_t) atol(s))
 
 /* Redefine a timeval that has all fields signed so calculations
  * will be simplified on rare systems that define timeval with

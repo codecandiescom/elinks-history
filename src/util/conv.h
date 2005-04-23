@@ -1,10 +1,10 @@
-/* $Id: conv.h,v 1.45 2005/04/19 22:35:25 zas Exp $ */
+/* $Id: conv.h,v 1.46 2005/04/23 15:58:54 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
 
 #include "util/string.h"
-#include "util/time.h" /* time_T, timeval_T types */
+#include "util/time.h" /* timeval_T types */
 
 static inline int
 is_safe_in_shell(unsigned char c)
@@ -55,7 +55,7 @@ struct string *add_timeval_to_string(struct string *string, timeval_T *timeval);
 #ifdef HAVE_STRFTIME
 /* Uses strftime() to add @fmt time format to @string. If @time is NULL
  * time(NULL) will be used. */
-struct string *add_date_to_string(struct string *string, unsigned char *format, time_T *time);
+struct string *add_date_to_string(struct string *string, unsigned char *format, time_t *time);
 #endif
 
 

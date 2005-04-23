@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.46 2005/03/27 14:59:24 jonas Exp $
+## $Id: Makefile.am,v 1.47 2005/04/23 16:51:40 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -34,7 +34,7 @@ httpobj = http/blacklist.o http/codes.o http/http.o
 
 if CONFIG_NNTP
 nntpdir = nntp
-nntpobj = $(nntpdir)/codes.o $(nntpdir)/connection.o $(nntpdir)/nntp.o $(nntpdir)/response.o
+nntpobj = $(nntpdir)/connection.o $(nntpdir)/nntp.o $(nntpdir)/response.o
 endif
 
 if CONFIG_SMB

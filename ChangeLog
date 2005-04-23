@@ -1,3 +1,62 @@
+Sat Apr 23 16:51:40 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/Makefile.am:
+
+	Oops, nntp/codes.o is no longer required.  
+
+Sat Apr 23 16:34:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/util/Makefile.am:
+
+	Fix conditional building of util/scanner.o. HTML highlighting also
+	uses it. Alphabetize conditionals.  
+
+Sat Apr 23 15:58:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/dialogs.c, cookies/cookies.c, cookies/cookies.h,
+	cookies/dialogs.c, globhist/globhist.c, globhist/globhist.h,
+	protocol/date.c, protocol/date.h, protocol/http/http.c,
+	sched/download.h, util/conv.c, util/conv.h, util/time.h:
+
+	Drop time_T and just use time_t.  
+
+Sat Apr 23 15:43:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: connection.c, connection.h:
+
+	add_keepalive_connection(), init_keepalive_connection(): time_T
+	timeout -> long timeout_in_seconds.  
+
+Sat Apr 23 13:32:32 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/leds.c, config/dialogs.c, config/kbdbind.c,
+	lowlevel/connect.c, lowlevel/select.c, protocol/finger/finger.c,
+	sched/connection.c, sched/download.c, sched/session.c,
+	viewer/text/search.c:
+
+	Whitespaces cleanup.  
+
+Sat Apr 23 11:38:41 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Apr 23 11:01:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Sat Apr 23 10:58:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Try to further improve allow_dark_on_black description: Make it
+	explicit that vice versa is bright on bright (should it be white?),
+	remove strange '(!)' token and move the inlined ensure_contrast
+	comment to self-hosted note.  
+
 Fri Apr 22 15:54:59 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

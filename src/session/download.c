@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.362 2005/04/21 15:16:13 jonas Exp $ */
+/* $Id: download.c,v 1.363 2005/04/23 13:32:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		 * the download browser update before launcing any
 		 * notification. */
 		done_download_display(file_download);
-	
+
 		if (url) {
 			info_box(term, MSGBOX_FREE_TEXT,
 				 N_("Download"), ALIGN_CENTER,

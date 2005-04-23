@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.349 2005/04/16 05:04:40 miciah Exp $ */
+/* $Id: search.c,v 1.350 2005/04/23 13:32:32 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1478,7 +1478,7 @@ search_typeahead(struct session *ses, struct document_view *doc_view,
 				 N_("Typeahead"), ALIGN_CENTER,
 				 msg_text(ses->tab->term,
 					  N_("No links in current document")));
-			
+
 			return FRAME_EVENT_OK;
 	}
 

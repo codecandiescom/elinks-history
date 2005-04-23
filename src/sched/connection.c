@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.281 2005/04/22 01:15:10 zas Exp $ */
+/* $Id: connection.c,v 1.282 2005/04/23 13:32:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -583,12 +583,12 @@ check_keepalive_connections(void)
 	int p = 0;
 
 	timeval_now(&now);
-	
+
 	kill_timer(&keepalive_timeout);
 
 	foreachsafe (keep_conn, next, keepalive_connections) {
 		timeval_T age;
-		
+
 		if (can_read(keep_conn->socket)) {
 			done_keepalive_connection(keep_conn);
 			continue;

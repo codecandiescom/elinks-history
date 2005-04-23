@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.233 2005/04/20 20:15:08 jonas Exp $ */
+/* $Id: connect.c,v 1.234 2005/04/23 13:32:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -442,7 +442,7 @@ complete_connect_socket(struct socket *socket, struct uri *uri,
 
 	done_connection_info(socket);
 }
-	
+
 /* Select handler which is set for the socket descriptor when connect() has
  * indicated (via errno) that it is in progress. On completion this handler gets
  * called. */

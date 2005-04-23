@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.620 2005/04/22 01:15:10 zas Exp $ */
+/* $Id: session.c,v 1.621 2005/04/23 13:32:32 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -411,12 +411,12 @@ display_timer(struct session *ses)
 {
 	timeval_T start, stop, duration;
 	long t;
-	
+
 	timeval_now(&start);
 	draw_formatted(ses, 3);
 	timeval_now(&stop);
 	timeval_sub(&duration, &start, &stop);
-	
+
 	t = timeval_to_milliseconds(&duration) * DISPLAY_TIME;
 	if (t < DISPLAY_TIME_MIN) t = DISPLAY_TIME_MIN;
 	install_timer(&ses->display_timer, t, (void (*)(void *)) display_timer,
@@ -1094,7 +1094,7 @@ destroy_session(struct session *ses)
 	set_session_referrer(ses, NULL);
 
 	if (ses->loading_uri) done_uri(ses->loading_uri);
-	
+
 	kill_timer(&ses->display_timer);
 
 	while (!list_empty(ses->type_queries))

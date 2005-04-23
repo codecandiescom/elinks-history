@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.275 2005/04/20 10:31:50 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.276 2005/04/23 13:32:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,7 +346,7 @@ make_keystroke(struct string *str, long key, long meta, int escape)
 	unsigned char *key_string;
 
 	if (key < 0) return;
-	
+
 	if (meta & KBD_SHIFT)
 		add_to_string(str, "Shift-");
 	if (meta & KBD_CTRL)

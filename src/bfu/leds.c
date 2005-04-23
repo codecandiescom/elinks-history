@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.75 2005/04/07 10:23:20 jonas Exp $ */
+/* $Id: leds.c,v 1.76 2005/04/23 13:32:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,7 +155,7 @@ draw_clock(struct terminal *term, int xpos, int ypos, struct color_pair *color)
 	time_t curtime = time(NULL);
 	struct tm *loctime = localtime(&curtime);
 	int i, length;
-	
+
 	length = strftime(s, sizeof(s), get_leds_clock_format(), loctime);
 	s[length] = '\0';
 	for (i = length - 1; i >= 0; i--)

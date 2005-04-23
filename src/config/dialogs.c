@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.215 2005/04/06 21:13:13 miciah Exp $ */
+/* $Id: dialogs.c,v 1.216 2005/04/23 13:32:32 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -488,7 +488,7 @@ invalid_option:
 		     option, NULL,
 		     MAX_STR_LEN, "", 0, 0, check_nonempty,
 		     add_option_to_tree, NULL);
-	
+
 	return EVENT_PROCESSED;
 }
 

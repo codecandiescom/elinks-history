@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.85 2005/04/22 01:20:23 zas Exp $ */
+/* $Id: select.c,v 1.86 2005/04/23 13:32:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,7 +254,7 @@ select_loop(void (*init)(void))
 			timeval_limit_to_zero(&t);
 			timeout = (struct timeval *) &t;
 		}
-				
+
 		n = select(w_max, &x_read, &x_write, &x_error, timeout);
 		if (n < 0) {
 			critical_section = 0;

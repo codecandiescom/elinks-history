@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.189 2005/04/08 20:58:14 pasky Exp $ */
+/* $Id: options.inc,v 1.190 2005/04/23 10:58:35 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -551,11 +551,12 @@ static struct option_info config_options_info[] = {
 	/* TODO: Rename this option to something sensible. */
 	INIT_OPT_BOOL("document.colors", N_("Allow dark colors on black background"),
 		"allow_dark_on_black", 0, 0,
-		N_("Allow dark colors on black background, and vice versa. (!)\n"
-		"By default the colors have their contrast increased (that is\n"
+		N_("Allow dark colors on black background, and bright colors\n"
+		"on bright background. By default the colors have their contrast\n"
+		"increased, so that the foreground and the background do not have\n"
+		"too similar colors. This option turns this off. Note, this is\n"
 		"different from having it ensured through the ensure_contrast\n"
-		"option), so that the foreground and the background do not have\n"
-		"too similar colors. This option turns this off.")),
+		"option.")),
 
 	INIT_OPT_BOOL("document.colors", N_("Ensure contrast"),
 		"ensure_contrast", 0, 1,

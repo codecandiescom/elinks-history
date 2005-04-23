@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.48 2005/04/14 14:06:15 jonas Exp $
+## $Id: Makefile.am,v 1.49 2005/04/23 16:34:36 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -7,17 +7,17 @@ if CONFIG_DEBUG
 debugobj = memdebug.o
 endif
 
-if CONFIG_SMALL
-else
-fastfindobj = fastfind.o
-endif
-
 if CONFIG_MD5
 md5obj = md5.o
 endif
 
-if CONFIG_CSS
+if CONFIG_SCANNER
 scannerobj = scanner.o
+endif
+
+if CONFIG_SMALL
+else
+fastfindobj = fastfind.o
 endif
 
 noinst_LIBRARIES = libutil.a

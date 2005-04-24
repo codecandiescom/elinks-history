@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.43 2005/04/23 15:58:54 zas Exp $ */
+/* $Id: time.h,v 1.44 2005/04/24 17:42:08 zas Exp $ */
 
 #ifndef EL__UTIL_TIME_H
 #define EL__UTIL_TIME_H
@@ -34,6 +34,7 @@ timeval_T *timeval_add(timeval_T *res, timeval_T *base, timeval_T *t);
 int timeval_cmp(timeval_T *t1, timeval_T *t2);
 timeval_T *timeval_sub_interval(timeval_T *t, timeval_T *interval);
 timeval_T *timeval_add_interval(timeval_T *t, timeval_T *interval);
+int timeval_div_int(int n, timeval_T *t);
 
 #define timeval_copy(dst, src) copy_struct(dst, src)
 

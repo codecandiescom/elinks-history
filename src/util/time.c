@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.41 2005/04/22 01:25:15 zas Exp $ */
+/* $Id: time.c,v 1.42 2005/04/24 17:42:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 
 #include "osdep/win32/win32.h" /* For gettimeofday stub */
 #include "util/time.h"
-
+#include "util/types.h"	/* longlong */
 
 /* Get the current time.
  * It attempts to use available functions, granularity
@@ -180,3 +180,15 @@ timeval_cmp(timeval_T *t1, timeval_T *t2)
 	return t1->usec - t2->usec;
 }
 
+int
+timeval_div_int(int n, timeval_T *t)
+{
+	longlong ln = 1000 * (longlong) n;
+	longlong lsec = 1000 * (longlong) t->sec;
+	int lusec = t->usec / 1000;
+
+	if (lsec + lusec)
+		return (ln / (lsec + lusec));
+	else
+		return INT_MAX;
+}

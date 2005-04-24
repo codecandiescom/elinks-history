@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.77 2005/04/24 22:05:59 zas Exp $ */
+/* $Id: leds.c,v 1.78 2005/04/24 22:18:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,6 +226,15 @@ sync_leds(struct session *ses)
 	int leds_size = LEDS_COUNT * sizeof(*ses->status.leds.leds);
 	int timer_duration;
 
+#ifdef HAVE_STRFTIME
+	/* Check if clock was enabled and update if needed. */
+	if (get_leds_clock_enable()) {
+		/* We _always_ update when clock is enabled
+		 * Not perfect. --Zas */
+		return 1;
+	}
+#endif
+
 	/* Compare leds and save them if needed. */
 	if (memcmp(ses->status.leds.leds_backup, ses->status.leds.leds, leds_size)) {
 		memcpy(ses->status.leds.leds_backup, ses->status.leds.leds, leds_size);
@@ -238,15 +247,6 @@ sync_leds(struct session *ses)
 		timer_duration_backup = timer_duration;
 		return 1;
 	}
-
-#ifdef HAVE_STRFTIME
-	/* Check if clock was enabled and update if needed. */
-	if (get_leds_clock_enable()) {
-		/* We _always_ update when clock is enabled
-		 * Not perfect. --Zas */
-		return 1;
-	}
-#endif
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.21 2005/04/22 01:15:10 zas Exp $ */
+/* $Id: progress.c,v 1.22 2005/04/24 17:08:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,11 @@
 int
 has_progress(struct progress *progress)
 {
-	return (progress_elapsed_in_ms(progress) >= CURRENT_SPD_AFTER);
+	timeval_T current_speed_after;
+
+	timeval_from_milliseconds(&current_speed_after, CURRENT_SPD_AFTER);
+
+	return (timeval_cmp(&progress->elapsed, &current_speed_after) >= 0);
 }
 
 struct progress *

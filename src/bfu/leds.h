@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.19 2005/04/24 22:40:53 zas Exp $ */
+/* $Id: leds.h,v 1.20 2005/04/24 22:51:45 zas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -24,11 +24,10 @@ struct terminal;
  * assignment scheme in order to prevent conflicts. */
 
 struct led {
-	int number;
-	unsigned char value;
-
-	/* Private data. */
-	int used__;
+	/* 32 bits */
+	unsigned int number:23;
+	unsigned int used__:1; /* Private data. */
+	unsigned int value:8;
 };
 
 /* Per-session led panel structure. */

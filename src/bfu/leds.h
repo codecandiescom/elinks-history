@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.18 2005/01/05 00:51:44 jonas Exp $ */
+/* $Id: leds.h,v 1.19 2005/04/24 22:40:53 zas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -34,7 +34,7 @@ struct led {
 /* Per-session led panel structure. */
 struct led_panel {
 	struct led leds[LEDS_COUNT];
-	unsigned char leds_backup[LEDS_COUNT];
+	struct led leds_backup[LEDS_COUNT];
 };
 
 

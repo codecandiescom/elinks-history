@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.76 2005/04/23 13:32:32 zas Exp $ */
+/* $Id: leds.c,v 1.77 2005/04/24 22:05:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,26 +223,32 @@ end:
 static int
 sync_leds(struct session *ses)
 {
-	int resync = 0;
-	int i;
-	int timer_duration = get_timer_duration();
+	int leds_size = LEDS_COUNT * sizeof(*ses->status.leds.leds);
+	int timer_duration;
 
+	/* Compare leds and save them if needed. */
+	if (memcmp(ses->status.leds.leds_backup, ses->status.leds.leds, leds_size)) {
+		memcpy(ses->status.leds.leds_backup, ses->status.leds.leds, leds_size);
+		return 1;
+	}
+
+	/* Check if timer was updated. */
+	timer_duration = get_timer_duration();
 	if (timer_duration_backup != timer_duration) {
 		timer_duration_backup = timer_duration;
-		resync++;
+		return 1;
 	}
 
-	for (i = 0; i < LEDS_COUNT; i++) {
-		struct led *led = &ses->status.leds.leds[i];
-		unsigned char *led_backup = &ses->status.leds.leds_backup[i];
-
-		if (led->value != *led_backup) {
-			*led_backup = led->value;
-			resync++;
-		}
+#ifdef HAVE_STRFTIME
+	/* Check if clock was enabled and update if needed. */
+	if (get_leds_clock_enable()) {
+		/* We _always_ update when clock is enabled
+		 * Not perfect. --Zas */
+		return 1;
 	}
+#endif
 
-	return resync;
+	return 0;
 }
 
 static void

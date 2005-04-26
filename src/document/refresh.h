@@ -1,4 +1,4 @@
-/* $Id: refresh.h,v 1.4 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: refresh.h,v 1.5 2005/04/26 19:20:46 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_REFRESH_H
 #define EL__DOCUMENT_REFRESH_H
@@ -12,6 +12,7 @@ struct document_refresh {
 	timer_id_T timer;
 	unsigned long seconds;
 	struct uri *uri;
+	unsigned int restart:1;
 };
 
 struct document_refresh *init_document_refresh(unsigned char *url, unsigned long seconds);

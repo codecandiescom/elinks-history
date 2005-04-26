@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.44 2005/03/04 18:33:24 zas Exp $ */
+/* $Id: refresh.c,v 1.45 2005/04/26 19:20:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@ init_document_refresh(unsigned char *url, unsigned long seconds)
 
 	refresh->seconds = seconds;
 	refresh->timer = TIMER_ID_UNDEF;
+	refresh->restart = 1;
 
 	return refresh;
 }
@@ -83,6 +84,9 @@ do_document_refresh(void *data)
 	} else {
 		/* This makes sure that we send referer. */
 		goto_uri_frame(ses, refresh->uri, NULL, CACHE_MODE_NORMAL);
+		/* XXX: A possible very wrong work-around for refreshing used when
+		 * downloading files. */
+		refresh->restart = 0;
 	}
 }
 
@@ -98,7 +102,8 @@ start_document_refresh(struct document_refresh *refresh, struct session *ses)
 	 * to the session? The multiple refresh timers is triggered by
 	 * http://ttforums.owenrudge.net/login.php when pressing 'Log in' and
 	 * waiting for it to refresh. --jonas */
-	if (refresh->timer != TIMER_ID_UNDEF)
+	if (!refresh->restart
+	    || refresh->timer != TIMER_ID_UNDEF)
 		return;
 
 	/* Like bug 289 another sourceforge download thingy this time with

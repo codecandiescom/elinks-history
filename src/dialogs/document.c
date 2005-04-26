@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.120 2005/04/26 15:19:29 zas Exp $ */
+/* $Id: document.c,v 1.121 2005/04/26 15:21:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,68 +51,67 @@ static void
 add_link_info_to_string(struct string *msg, struct session *ses)
 {
 	struct document_view *doc_view = ses->doc_view;
+	struct terminal *term = ses->tab->term;
+	unsigned char *a;
+	struct link *link;
 
-	if (doc_view) {
-		struct terminal *term = ses->tab->term;
-		unsigned char *a;
-		struct link *link;
+	if (!doc_view) return;
 
-		add_char_to_string(msg, '\n');
+	add_char_to_string(msg, '\n');
 
-		a = get_current_link_info(ses, doc_view);
-		if (a) {
-			add_format_to_string(msg, "\n%s: %s",
-					     _("Link", term), a);
-			mem_free(a);
-		}
+	a = get_current_link_info(ses, doc_view);
+	if (a) {
+		add_format_to_string(msg, "\n%s: %s",
+				     _("Link", term), a);
+		mem_free(a);
+	}
 
-		a = get_current_link_title(doc_view);
-		if (a) {
-			add_format_to_string(msg, "\n%s: %s",
-					     _("Link title", term), a);
-			mem_free(a);
-		}
+	a = get_current_link_title(doc_view);
+	if (a) {
+		add_format_to_string(msg, "\n%s: %s",
+				     _("Link title", term), a);
+		mem_free(a);
+	}
 
-		link = get_current_link_in_view(doc_view);
-		if (link) {
-			struct string img;
+	link = get_current_link_in_view(doc_view);
+	if (link) {
+		struct string img;
 #ifdef CONFIG_GLOBHIST
-			struct global_history_item *historyitem;
+		struct global_history_item *historyitem;
 #endif
 
-			if (link->where_img && init_string(&img)) {
-				add_string_uri_to_string(&img, link->where_img,
-							 URI_PUBLIC);
-				decode_uri_string_for_display(&img);
+		if (link->where_img && init_string(&img)) {
+			add_string_uri_to_string(&img, link->where_img,
+						 URI_PUBLIC);
+			decode_uri_string_for_display(&img);
 
+			add_format_to_string(msg, "\n%s: %s",
+					     _("Link image", term),
+					     img.source);
+			done_string(&img);
+		}
+
+#ifdef CONFIG_GLOBHIST
+		historyitem = get_global_history_item(link->where);
+		if (historyitem) {
+			unsigned char *last_visit;
+
+			last_visit = ctime(&historyitem->last_visit);
+
+			if (last_visit)
+				add_format_to_string(msg,
+					"\n%s: %.24s",
+					_("Link last visit time",
+					  term),
+					last_visit);
+
+			if (*historyitem->title)
 				add_format_to_string(msg, "\n%s: %s",
-						     _("Link image", term),
-						     img.source);
-				done_string(&img);
-			}
-
-#ifdef CONFIG_GLOBHIST
-			historyitem = get_global_history_item(link->where);
-			if (historyitem) {
-				unsigned char *last_visit;
-
-				last_visit = ctime(&historyitem->last_visit);
-
-				if (last_visit)
-					add_format_to_string(msg,
-						"\n%s: %.24s",
-						_("Link last visit time",
-						  term),
-						last_visit);
-
-				if (*historyitem->title)
-					add_format_to_string(msg, "\n%s: %s",
-						_("Link title (from history)",
-						  term),
-						historyitem->title);
-			}
-#endif
+					_("Link title (from history)",
+					  term),
+					historyitem->title);
 		}
+#endif
 	}
 }
 

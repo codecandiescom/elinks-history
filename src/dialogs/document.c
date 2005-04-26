@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.119 2005/04/26 15:11:36 zas Exp $ */
+/* $Id: document.c,v 1.120 2005/04/26 15:19:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,10 +54,12 @@ add_link_info_to_string(struct string *msg, struct session *ses)
 
 	if (doc_view) {
 		struct terminal *term = ses->tab->term;
-		unsigned char *a = get_current_link_info(ses, doc_view);
+		unsigned char *a;
 		struct link *link;
 
 		add_char_to_string(msg, '\n');
+
+		a = get_current_link_info(ses, doc_view);
 		if (a) {
 			add_format_to_string(msg, "\n%s: %s",
 					     _("Link", term), a);

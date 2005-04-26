@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.145 2005/04/17 23:03:14 jonas Exp $ */
+/* $Id: renderer.c,v 1.146 2005/04/26 09:56:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 
 #ifdef CONFIG_LEDS
 	if (list_empty(*queued_snippets) && interpreter->vs->doc_view->session)
-		interpreter->vs->doc_view->session->status.ecmascript_led->value = '-';
+		unset_led_value(interpreter->vs->doc_view->session->status.ecmascript_led);
 #endif
 
 	if (list_empty(*doc_snippets) || !get_opt_bool("ecmascript.enable"))

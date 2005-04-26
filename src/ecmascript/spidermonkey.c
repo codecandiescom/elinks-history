@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.207 2005/04/13 17:32:18 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.208 2005/04/26 09:56:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -403,7 +403,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 
 	if (get_opt_bool("ecmascript.block_window_opening")) {
 #ifdef CONFIG_LEDS
-		ses->status.popup_led->value = 'P';
+		set_led_value(ses->status.popup_led, 'P');
 #endif
 		return JS_TRUE;
 	}
@@ -1528,7 +1528,7 @@ document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rv
 	 *  nevertheless unsupported methods/properties." --pasky too */
 
 #ifdef CONFIG_LEDS
-	interpreter->vs->doc_view->session->status.ecmascript_led->value = 'J';
+	set_led_value(interpreter->vs->doc_view->session->status.ecmascript_led, 'J');
 #endif
 
 	boolean_to_jsval(ctx, rval, 0);
@@ -1955,7 +1955,7 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 	term = interpreter->vs->doc_view->session->tab->term;
 
 #ifdef CONFIG_LEDS
-	interpreter->vs->doc_view->session->status.ecmascript_led->value = 'J';
+	set_led_value(interpreter->vs->doc_view->session->status.ecmascript_led, 'J');
 #endif
 
 	if (!get_opt_bool("ecmascript.error_reporting")

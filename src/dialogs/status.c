@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.116 2005/04/18 17:27:37 zas Exp $ */
+/* $Id: status.c,v 1.117 2005/04/26 09:56:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,20 +462,23 @@ display_leds(struct session *ses, struct session_status *status)
 			find_in_cache(ses->doc_view->document->uri);
 
 		if (cached) {
-			status->ssl_led->value = (cached->ssl_info)
-					    ? 'S' : '-';
+			if (cached->ssl_info)
+				set_led_value(status->ssl_led, 'S');
+			else
+				unset_led_value(status->ssl_led);
 		} else {
 			/* FIXME: We should do this thing better. */
-			status->ssl_led->value = '?';
+			set_led_value(status->ssl_led, '?');
 		}
 	}
 
 	if (ses->insert_mode == INSERT_MODE_LESS) {
-		status->insert_mode_led->value = 'i';
+		set_led_value(status->insert_mode_led, 'i');
 	} else {
-		unsigned char value = ses->insert_mode == INSERT_MODE_ON
-				    ? 'I' : '-';
-		status->insert_mode_led->value = value;
+		if (ses->insert_mode == INSERT_MODE_ON)
+			set_led_value(status->insert_mode_led, 'I');
+		else
+			unset_led_value(status->insert_mode_led);
 	}
 
 	draw_leds(ses);

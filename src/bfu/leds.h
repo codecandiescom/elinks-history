@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.20 2005/04/24 22:51:45 zas Exp $ */
+/* $Id: leds.h,v 1.21 2005/04/26 09:56:28 zas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -24,16 +24,17 @@ struct terminal;
  * assignment scheme in order to prevent conflicts. */
 
 struct led {
+	/* Private data. */
 	/* 32 bits */
-	unsigned int number:23;
-	unsigned int used__:1; /* Private data. */
-	unsigned int value:8;
+	unsigned int number__:22;
+	unsigned int used__:1;
+	unsigned int value_changed__:1;
+	unsigned int value__:8;
 };
 
 /* Per-session led panel structure. */
 struct led_panel {
 	struct led leds[LEDS_COUNT];
-	struct led leds_backup[LEDS_COUNT];
 };
 
 
@@ -47,6 +48,8 @@ void menu_leds_info(struct terminal *term, void *xxx, void *xxxx);
 
 struct led *register_led(struct session *ses, int number);
 void unregister_led(struct led *);
+void set_led_value(struct led *led, unsigned char value);
+void unset_led_value(struct led *led);
 
 #endif
 #endif

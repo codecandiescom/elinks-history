@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.79 2005/04/24 22:40:53 zas Exp $ */
+/* $Id: leds.c,v 1.80 2005/04/26 09:56:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,18 +120,31 @@ done_leds(struct module *module)
 }
 
 void
+set_led_value(struct led *led, unsigned char value)
+{
+	if (value != led->value__) {
+		led->value__ = value;
+		led->value_changed__ = 1;
+	}
+}
+
+void
+unset_led_value(struct led *led)
+{
+	set_led_value(led, '-');
+}
+
+	
+void
 init_led_panel(struct led_panel *leds)
 {
 	int i;
 
 	for (i = 0; i < LEDS_COUNT; i++) {
-		leds->leds[i].number = i;
-		leds->leds[i].value = '-';
+		leds->leds[i].number__ = i;
 		leds->leds[i].used__ = 0;
+		unset_led_value(&leds->leds[i]);
 	}
-
-	/* assure first redraw */
-	memset(leds->leds_backup, 0, LEDS_COUNT * sizeof(*leds->leds_backup));
 }
 
 static int
@@ -208,7 +221,8 @@ draw_leds(struct session *ses)
 	for (i = 0; i < LEDS_COUNT; i++) {
 		struct led *led = &ses->status.leds.leds[i];
 
-		draw_char(term, xpos + i + 1, ypos, led->value, 0, led_color);
+		draw_char(term, xpos + i + 1, ypos, led->value__, 0, led_color);
+		led->value_changed__ = 0;
 	}
 
 	draw_char(term, xpos + LEDS_COUNT + 1, ypos, ']', 0, led_color);
@@ -225,7 +239,7 @@ end:
 static int
 sync_leds(struct session *ses)
 {
-	int leds_size = LEDS_COUNT * sizeof(*ses->status.leds.leds);
+	int i;
 	int timer_duration;
 
 #ifdef HAVE_STRFTIME
@@ -237,10 +251,11 @@ sync_leds(struct session *ses)
 	}
 #endif
 
-	/* Compare leds and save them if needed. */
-	if (memcmp(ses->status.leds.leds_backup, ses->status.leds.leds, leds_size)) {
-		memcpy(ses->status.leds.leds_backup, ses->status.leds.leds, leds_size);
-		return 1;
+	for (i = 0; i < LEDS_COUNT; i++) {
+		struct led *led = &ses->status.leds.leds[i];
+		
+		if (led->value_changed__)
+			return 1;
 	}
 
 	/* Check if timer was updated. */
@@ -319,7 +334,7 @@ unregister_led(struct led *led)
 {
 	assertm(led->used__, "Attempted to unregister unused led!");
 	led->used__ = 0;
-	led->value = '-';
+	unset_led_value(led);
 }
 
 struct module leds_module = struct_module(

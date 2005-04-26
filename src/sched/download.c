@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.363 2005/04/23 13:32:32 zas Exp $ */
+/* $Id: download.c,v 1.364 2005/04/26 19:40:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,13 +260,13 @@ write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file
 
 #ifdef USE_OPEN_PREALLOC
 		if (!file_download->last_pos
-		    && (!file_download->download.prg
+		    && (!file_download->download.progress
 			|| file_download->download.progress->size > 0)) {
 			close(*h);
 			*h = open_prealloc(file_download->file,
 					   O_CREAT|O_WRONLY|O_TRUNC,
 					   0666,
-					   file_download->download.prg
+					   file_download->download.progress
 					   ? file_download->download.progress->size
 					   : cached->length);
 			if (*h == -1) {

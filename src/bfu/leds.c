@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.81 2005/04/26 10:01:29 zas Exp $ */
+/* $Id: leds.c,v 1.82 2005/04/26 10:05:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,6 @@ init_led_panel(struct led_panel *leds)
 	int i;
 
 	for (i = 0; i < LEDS_COUNT; i++) {
-		leds->leds[i].number__ = i;
 		leds->leds[i].used__ = 0;
 		unset_led_value(&leds->leds[i]);
 	}

@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.21 2005/04/26 09:56:28 zas Exp $ */
+/* $Id: leds.h,v 1.22 2005/04/26 10:05:22 zas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -26,7 +26,6 @@ struct terminal;
 struct led {
 	/* Private data. */
 	/* 32 bits */
-	unsigned int number__:22;
 	unsigned int used__:1;
 	unsigned int value_changed__:1;
 	unsigned int value__:8;

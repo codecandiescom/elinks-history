@@ -1,3 +1,75 @@
+Tue Apr 26 19:40:09 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Fix forgotten OS/2 code, |prg| -> |progress|.  
+
+Tue Apr 26 19:20:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: refresh.c, refresh.h:
+
+	Introduce a workaround for document refreshing leading to
+	neverending file download. It adds a restart member to struct
+	document_refresh which is cleared when the refresh is not reloading
+	the current document. It should do the right thing in most cases and
+	the remaining ones users will just have to reload themselves to
+	restart the refreshing. Reported by Neuromancer, and there is even a
+	debian bug I wrongfully closed.  
+
+Tue Apr 26 18:51:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	draw_file_download(): Check if download->progress still exists.
+	Fixes crash with refreshing downloads and mailcap asking disabled.  
+
+Tue Apr 26 15:21:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	add_link_info_to_string(): reduce indentation level.  
+
+Tue Apr 26 15:19:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	add_link_info_to_string(): minor clarification.  
+
+Tue Apr 26 15:11:36 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	Move code from document_info_dialog() to new
+	add_link_info_to_string().  
+
+Tue Apr 26 14:50:18 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/progress.c:
+
+	Do not convert elapsed time to milliseconds anymore, use
+	timeval_div_int() and drop progress_elapsed_in_ms() macro.  
+
+Tue Apr 26 10:05:22 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: leds.c, leds.h:
+
+	Drop useless number__ field of struct led.  
+
+Tue Apr 26 10:01:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/leds.c:
+
+	register_led(): cleanup.  
+
+Tue Apr 26 09:56:28 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/leds.c, bfu/leds.h, dialogs/status.c,
+	document/renderer.c, ecmascript/spidermonkey.c:
+
+	Introduce (set|unset)_led_value() and a value_changed_flag to struct
+	led, it permits to drop leds_backup array. No direct access to
+	struct led fields are done outside leds.c.  
+
 Sun Apr 24 22:51:45 2005  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/leds.h:

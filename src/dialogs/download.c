@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.85 2005/04/18 17:27:37 zas Exp $ */
+/* $Id: download.c,v 1.86 2005/04/26 18:51:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -334,7 +334,8 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 		trimmedlen += 3;
 	}
 
-	if (download->progress->size < 0
+	if (!download->progress
+	    || download->progress->size < 0
 	    || download->state != S_TRANS
 	    || !has_progress(download->progress)) {
 		/* TODO: Show trimmed error message. */

@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.22 2005/04/24 17:08:28 zas Exp $ */
+/* $Id: progress.c,v 1.23 2005/04/26 14:50:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,6 @@
 #define SPD_DISP_TIME			100	/* milliseconds */
 #define CURRENT_SPD_AFTER		100	/* milliseconds */
 
-#define progress_elapsed_in_ms(progress) (timeval_to_milliseconds(&(progress)->elapsed))
 
 int
 has_progress(struct progress *progress)
@@ -82,11 +81,7 @@ update_progress(struct progress *progress, int loaded, int size, int pos)
 	progress->cur_loaded += bytes_delta;
 
 	{
-		int elapsed_in_ms = progress_elapsed_in_ms(progress);
-
-		if (elapsed_in_ms / 100)	/* Division by zero risk */
-			progress->average_speed = (longlong) progress->loaded * 10 / (elapsed_in_ms / 100);
-
+		progress->average_speed = timeval_div_int(progress->loaded, &progress->elapsed);
 		progress->current_speed = progress->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000);
 
 		if (progress->average_speed)	/* Division by zero risk */

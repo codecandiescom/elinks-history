@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.251 2005/04/27 15:15:00 jonas Exp $ */
+/* $Id: ftp.c,v 1.252 2005/04/27 22:24:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -790,10 +790,10 @@ ftp_send_retr_req(struct connection *conn, int state)
 }
 
 /* Parse RETR response and return file size or -1 on error. */
-static long int
+static off_t
 get_filesize_from_RETR(unsigned char *data, int data_len)
 {
-	long int file_len;
+	off_t file_len;
 	int pos;
 	int pos_file_len = 0;
 
@@ -829,7 +829,7 @@ next:
 		return -1;
 
 	errno = 0;
-	file_len = strtol(&data[pos_file_len], NULL, 10);
+	file_len = (off_t) strtol(&data[pos_file_len], NULL, 10);
 	if (errno) return -1;
 
 	return file_len;
@@ -950,9 +950,9 @@ ftp_retr_file(struct socket *socket, struct read_buffer *rb)
 		/* We only need to parse response after RETR to
 		 * get filesize if needed. */
 		if (!ftp->dir && conn->est_length == -1) {
-			long int file_len =
-				get_filesize_from_RETR(rb->data, rb->length);
+			off_t file_len;
 
+			file_len = get_filesize_from_RETR(rb->data, rb->length);
 			if (file_len > 0) {
 				/* FIXME: ..when downloads resuming
 				 * implemented.. */

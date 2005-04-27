@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.99 2005/04/20 02:00:36 jonas Exp $ */
+/* $Id: cache.h,v 1.100 2005/04/27 14:57:39 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -118,7 +118,6 @@ struct fragment *get_cache_fragment(struct cache_entry *cached);
  * importantly, it will updates cached->incomplete. */
 void normalize_cache_entry(struct cache_entry *cached, int length);
 
-void truncate_entry(struct cache_entry *cached, int offset, int final);
 void free_entry_to(struct cache_entry *cached, int offset);
 void delete_entry_content(struct cache_entry *cached);
 void delete_cache_entry(struct cache_entry *cached);

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.205 2005/04/22 01:15:10 zas Exp $ */
+/* $Id: cache.c,v 1.206 2005/04/27 14:57:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@ static INIT_LIST_HEAD(cache_entries);
 static long cache_size;
 static int id_counter = 1;
 
+static void truncate_entry(struct cache_entry *cached, int offset, int final);
 
 /* Change 0 to 1 to enable cache debugging features (redirect stderr to a file). */
 #if 0
@@ -538,7 +539,7 @@ delete_fragment(struct cache_entry *cached, struct fragment *f)
 	}
 }
 
-void
+static void
 truncate_entry(struct cache_entry *cached, int offset, int final)
 {
 	struct fragment *f;

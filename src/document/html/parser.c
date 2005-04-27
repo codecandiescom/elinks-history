@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.534 2005/04/27 17:55:06 jonas Exp $ */
+/* $Id: parser.c,v 1.535 2005/04/27 18:04:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1205,8 +1205,14 @@ process_head(unsigned char *head)
 		 * headers and if we should still process Cache-Control max-age
 		 * if we already set max age to date mentioned in Expires.
 		 * --jonas */
-		if ((d = parse_header(head, "Pragma", NULL))
-		    || (d = parse_header(head, "Cache-Control", NULL))) {
+		if ((d = parse_header(head, "Pragma", NULL))) {
+			if (strstr(d, "no-cache")) {
+				no_cache = 1;
+			}
+			mem_free(d);
+		}
+
+		if (!no_cache && (d = parse_header(head, "Cache-Control", NULL))) {
 			if (strstr(d, "no-cache") || strstr(d, "must-revalidate")) {
 				no_cache = 1;
 
@@ -1244,7 +1250,6 @@ process_head(unsigned char *head)
 
 			mem_free(d);
 		}
-
 
 		if (no_cache)
 			html_context.special_f(html_context.part, SP_CACHE_CONTROL);

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.172 2005/04/17 23:03:14 jonas Exp $ */
+/* $Id: task.c,v 1.173 2005/04/27 21:51:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,8 @@
 #include "sched/task.h"
 #include "viewer/text/view.h"
 
+
+static void loading_callback(struct download *, struct session *);
 
 static void
 free_task(struct session *ses)

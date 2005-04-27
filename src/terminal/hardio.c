@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.17 2005/04/27 18:24:55 jonas Exp $ */
+/* $Id: hardio.c,v 1.18 2005/04/27 18:26:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,11 +28,13 @@
 static void
 hw_debug_open(unsigned char *name, int fd, unsigned char *data, int datalen)
 {
-	fprintf(stderr, "[%s (fd=%d, data=%p, datalen=%d)]\n", name, fd, data, datalen);
+	fprintf(stderr, "[%s (fd=%d, data=%p, datalen=%d)]\n",
+		name, fd, data, datalen);
 }
 
 static void
-hw_debug_flush() {
+hw_debug_flush()
+{
 	fputs("\n\n", stderr);
 	fflush(stderr);
 }

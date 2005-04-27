@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.155 2005/04/21 11:50:15 jonas Exp $ */
+/* $Id: conf.c,v 1.156 2005/04/27 15:15:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -459,7 +459,8 @@ read_config_file(unsigned char *name)
 #define FILE_BUF	1024
 	unsigned char cfg_buffer[FILE_BUF];
 	struct string string;
-	int fd, r;
+	int fd;
+	ssize_t r;
 
 	fd = open(name, O_RDONLY | O_NOCTTY);
 	if (fd < 0) return NULL;

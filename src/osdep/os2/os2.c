@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.35 2005/04/12 17:50:02 jonas Exp $ */
+/* $Id: os2.c,v 1.36 2005/04/27 15:15:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -533,7 +533,7 @@ ret:
 void
 mouse_handle(struct os2_mouse_spec *oms)
 {
-	int r = safe_read(oms->p[0], oms->buffer + oms->bufptr,
+	ssize_t r = safe_read(oms->p[0], oms->buffer + oms->bufptr,
 		          sizeof(struct term_event) - oms->bufptr);
 
 	if (r <= 0) {

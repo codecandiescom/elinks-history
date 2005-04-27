@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.120 2005/04/22 01:15:10 zas Exp $ */
+/* $Id: dns.c,v 1.121 2005/04/27 15:15:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,7 +266,7 @@ read_dns_data(int h, void *data, size_t datalen)
 	int done = 0;
 
 	do {
-		int r = safe_read(h, data + done, datalen - done);
+		ssize_t r = safe_read(h, data + done, datalen - done);
 
 		if (r <= 0) return DNS_ERROR;
 		done += r;

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.122 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: socket.c,v 1.123 2005/04/27 15:15:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,10 +256,10 @@ ssl_connect(struct socket *socket)
 }
 
 /* Return -1 on error, bytes written on success. */
-int
+ssize_t
 ssl_write(struct socket *socket, unsigned char *data, int len)
 {
-	int wr = ssl_do_write(socket, data, len);
+	ssize_t wr = ssl_do_write(socket, data, len);
 
 	if (wr <= 0) {
 #ifdef CONFIG_OPENSSL
@@ -286,10 +286,10 @@ ssl_write(struct socket *socket, unsigned char *data, int len)
 }
 
 /* Return -1 on error, rd or success. */
-int
+ssize_t
 ssl_read(struct socket *socket, unsigned char *data, int len)
 {
-	int rd = ssl_do_read(socket, data, len);
+	ssize_t rd = ssl_do_read(socket, data, len);
 
 	if (rd <= 0) {
 #ifdef CONFIG_OPENSSL

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.84 2005/04/07 10:45:43 zas Exp $ */
+/* $Id: event.c,v 1.85 2005/04/27 15:15:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,7 +325,7 @@ void
 in_term(struct terminal *term)
 {
 	struct terminal_interlink *interlink = term->interlink;
-	int r;
+	ssize_t r;
 	unsigned char *iq;
 
 	if (!interlink

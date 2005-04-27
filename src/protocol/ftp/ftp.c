@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.250 2005/04/19 11:58:09 jonas Exp $ */
+/* $Id: ftp.c,v 1.251 2005/04/27 15:15:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1249,7 +1249,7 @@ got_something_from_data_connection(struct connection *conn)
 	struct ftp_connection_info *ftp = conn->info;
 	unsigned char dircolor[8];
 	int colorize_dir = 0;
-	int len;
+	ssize_t len;
 
 	/* XXX: This probably belongs rather to connect.c ? */
 

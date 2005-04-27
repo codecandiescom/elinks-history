@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.127 2005/04/12 18:26:21 jonas Exp $ */
+/* $Id: kbd.c,v 1.128 2005/04/27 15:15:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -468,7 +468,7 @@ in_sock(struct itrm *itrm)
 	struct string delete;
 	char ch;
 	int fg;
-	int bytes_read, i, p;
+	ssize_t bytes_read, i, p;
 	unsigned char buf[OUT_BUF_SIZE];
 
 	bytes_read = safe_read(itrm->sock_in, buf, OUT_BUF_SIZE);

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.234 2005/04/23 13:32:32 zas Exp $ */
+/* $Id: socket.c,v 1.235 2005/04/27 15:15:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -751,10 +751,10 @@ write_to_socket(struct socket *socket, unsigned char *data, int len,
 #define RD_MEM(rb) (sizeof(*(rb)) + 4 * RD_ALLOC_GR + RD_ALLOC_GR)
 #define RD_SIZE(rb, len) ((RD_MEM(rb) + (len)) & ~(RD_ALLOC_GR - 1))
 
-static int
+static ssize_t
 generic_read(struct socket *socket, unsigned char *data, int len)
 {
-	int rd = safe_read(socket->fd, data, len);
+	ssize_t rd = safe_read(socket->fd, data, len);
 
 	if (!rd) return SOCKET_CANT_READ;
 
@@ -765,7 +765,7 @@ static void
 read_select(struct socket *socket)
 {
 	struct read_buffer *rb = socket->read_buffer;
-	int rd;
+	ssize_t rd;
 
 	assertm(rb, "read socket has no buffer");
 	if_assert_failed {

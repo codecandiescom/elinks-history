@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.277 2005/04/16 21:21:08 jonas Exp $ */
+/* $Id: form.c,v 1.278 2005/04/27 15:15:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -749,7 +749,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 
 		if (sv->type == FC_FILE) {
 #define F_BUFLEN 1024
-			int fh, rd;
+			int fh;
 			unsigned char buffer[F_BUFLEN];
 			unsigned char *extension;
 
@@ -780,6 +780,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 
 			if (*sv->value) {
 				unsigned char *filename;
+				ssize_t rd;
 
 				if (get_cmd_opt_bool("anonymous")) {
 					errno = EPERM;

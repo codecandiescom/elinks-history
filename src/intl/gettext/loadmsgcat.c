@@ -307,7 +307,7 @@ source_success:
 		to_read = size;
 		read_ptr = (unsigned char *) data;
 		do {
-			long int nb = (long int) safe_read(fd, read_ptr, to_read);
+			ssize_t nb = safe_read(fd, read_ptr, to_read);
 
 			if (nb <= 0) {
 				close(fd);

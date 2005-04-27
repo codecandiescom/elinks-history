@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.364 2005/04/26 19:40:09 zas Exp $ */
+/* $Id: download.c,v 1.365 2005/04/27 15:15:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,7 +253,7 @@ write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file
 	foreach (frag, cached->frag) {
 		int remain = file_download->last_pos - frag->offset;
 		int *h = &file_download->handle;
-		int w;
+		ssize_t w;
 
 		if (remain < 0 || frag->length <= remain)
 			continue;

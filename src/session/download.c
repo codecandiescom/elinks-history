@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.365 2005/04/27 15:15:00 jonas Exp $ */
+/* $Id: download.c,v 1.366 2005/04/27 22:30:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,8 +143,7 @@ abort_download(struct file_download *file_download)
 	if (file_download->uri) done_uri(file_download->uri);
 
 	if (file_download->handle != -1) {
-		prealloc_truncate(file_download->handle,
-				  file_download->last_pos);
+		prealloc_truncate(file_download->handle, file_download->seek);
 		close(file_download->handle);
 	}
 
@@ -240,18 +239,18 @@ write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file
 	struct fragment *frag;
 
 	if (file_download->download.progress && file_download->download.progress->seek) {
-		file_download->last_pos = file_download->download.progress->seek;
+		file_download->seek = file_download->download.progress->seek;
 		file_download->download.progress->seek = 0;
 		/* This is exclusive with the prealloc, thus we can perform
 		 * this in front of that thing safely. */
-		if (lseek(file_download->handle, file_download->last_pos, SEEK_SET) < 0) {
+		if (lseek(file_download->handle, file_download->seek, SEEK_SET) < 0) {
 			download_error_dialog(file_download, errno);
 			return 0;
 		}
 	}
 
 	foreach (frag, cached->frag) {
-		int remain = file_download->last_pos - frag->offset;
+		int remain = file_download->seek - frag->offset;
 		int *h = &file_download->handle;
 		ssize_t w;
 
@@ -259,7 +258,7 @@ write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file
 			continue;
 
 #ifdef USE_OPEN_PREALLOC
-		if (!file_download->last_pos
+		if (!file_download->seek
 		    && (!file_download->download.progress
 			|| file_download->download.progress->size > 0)) {
 			close(*h);
@@ -283,7 +282,7 @@ write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file
 			return 0;
 		}
 
-		file_download->last_pos += w;
+		file_download->seek += w;
 	}
 
 	return 1;
@@ -334,8 +333,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	}
 
 	if (file_download->external_handler) {
-		prealloc_truncate(file_download->handle,
-				  file_download->last_pos);
+		prealloc_truncate(file_download->handle, file_download->seek);
 		close(file_download->handle);
 		file_download->handle = -1;
 		exec_on_terminal(term, file_download->external_handler,
@@ -411,12 +409,12 @@ download_data(struct download *download, struct file_download *file_download)
 	}
 
 	if (!write_cache_entry_to_file(cached, file_download)) {
-		detach_connection(download, file_download->last_pos);
+		detach_connection(download, file_download->seek);
 		abort_download(file_download);
 		return;
 	}
 
-	detach_connection(download, file_download->last_pos);
+	detach_connection(download, file_download->seek);
 	download_data_store(download, file_download);
 }
 
@@ -741,12 +739,12 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download = init_file_download(ses->download_uri, ses, file, fd);
 	if (!file_download) return;
 
-	file_download->last_pos = resume ? (int) buf.st_size : 0;
+	file_download->seek = resume ? buf.st_size : 0;
 
 	display_download(ses->tab->term, file_download, ses);
 
 	load_uri(file_download->uri, ses->referrer, &file_download->download,
-		 PRI_DOWNLOAD, CACHE_MODE_NORMAL, file_download->last_pos);
+		 PRI_DOWNLOAD, CACHE_MODE_NORMAL, file_download->seek);
 }
 
 static void

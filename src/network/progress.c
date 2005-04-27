@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.24 2005/04/27 22:12:06 jonas Exp $ */
+/* $Id: progress.c,v 1.25 2005/04/27 22:18:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ done_progress(struct progress *progress)
 }
 
 void
-update_progress(struct progress *progress, int loaded, int size, int pos)
+update_progress(struct progress *progress, int loaded, off_t size, int pos)
 {
 	int bytes_delta;
 	timeval_T now, elapsed, dis_b_max, dis_b_interval;

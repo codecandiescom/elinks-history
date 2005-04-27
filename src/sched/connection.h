@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.124 2005/04/27 22:12:06 jonas Exp $ */
+/* $Id: connection.h,v 1.125 2005/04/27 22:18:30 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -32,6 +32,8 @@ struct connection {
 	/* Index to where in the cache entry new data should be inserted. */
 	int from;
 
+	off_t est_length;	/* Estimated number of bytes to transfer. */
+
 	enum stream_encoding content_encoding;
 	struct stream_encoded *stream;
 
@@ -49,7 +51,6 @@ struct connection {
 
 	int tries;
 	int received;
-	int est_length;
 	timer_id_T timer;
 	int cgi_pipes[2];
 	int stream_pipes[2];

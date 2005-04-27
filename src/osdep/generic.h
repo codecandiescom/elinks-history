@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.28 2005/04/27 14:33:03 jonas Exp $ */
+/* $Id: generic.h,v 1.29 2005/04/27 14:53:28 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -73,7 +73,7 @@
 static inline ssize_t
 safe_read(int fd, void *buf, size_t count) {
 	do {
-		int r = read(fd, buf, count);
+		ssize_t r = read(fd, buf, count);
 
 		if (r == -1 && errno == EINTR) continue;
 		return r;
@@ -83,7 +83,7 @@ safe_read(int fd, void *buf, size_t count) {
 static inline ssize_t
 safe_write(int fd, const void *buf, size_t count) {
 	do {
-		int w = write(fd, buf, count);
+		ssize_t w = write(fd, buf, count);
 
 		if (w == -1 && errno == EINTR) continue;
 		return w;

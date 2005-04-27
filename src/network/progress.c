@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.23 2005/04/26 14:50:18 zas Exp $ */
+/* $Id: progress.c,v 1.24 2005/04/27 22:12:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@ has_progress(struct progress *progress)
 }
 
 struct progress *
-init_progress(int start)
+init_progress(off_t start)
 {
 	struct progress *progress = mem_calloc(1, sizeof(*progress));
 

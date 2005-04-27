@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.21 2005/04/19 23:32:42 zas Exp $ */
+/* $Id: progress.h,v 1.22 2005/04/27 22:12:06 jonas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
@@ -25,7 +25,7 @@ struct progress {
 	 *            ==  0 means download
 	 *             >  0 means resume
 	 * --witekfl */
-	int start;
+	off_t start;
 	/* This is absolute position in the stream
 	 * (relative_position = pos - start) (maybe our fictional
 	 * relative_position is equiv to loaded, but I'd rather not rely on it
@@ -43,7 +43,7 @@ struct progress {
 	int data_in_secs[CURRENT_SPD_SEC];
 };
 
-struct progress *init_progress(int start);
+struct progress *init_progress(off_t start);
 void done_progress(struct progress *progress);
 void update_progress(struct progress *progress, int loaded, int size, int pos);
 void start_update_progress(struct progress *progress, void (*timer_func)(void *), void *timer_func_data);

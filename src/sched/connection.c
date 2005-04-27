@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.284 2005/04/27 21:41:53 jonas Exp $ */
+/* $Id: connection.c,v 1.285 2005/04/27 22:12:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,7 +247,7 @@ done_connection_socket(struct socket *socket, enum connection_state state)
 
 static struct connection *
 init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
-		int start, enum cache_mode cache_mode,
+		off_t start, enum cache_mode cache_mode,
 		enum connection_priority priority)
 {
 	static struct socket_operations connection_socket_operations = {
@@ -820,7 +820,7 @@ register_check_queue(void)
 
 int
 load_uri(struct uri *uri, struct uri *referrer, struct download *download,
-	 enum connection_priority pri, enum cache_mode cache_mode, int start)
+	 enum connection_priority pri, enum cache_mode cache_mode, off_t start)
 {
 	struct cache_entry *cached;
 	struct connection *conn;

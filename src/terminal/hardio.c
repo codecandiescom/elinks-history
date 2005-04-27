@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.18 2005/04/27 18:26:11 jonas Exp $ */
+/* $Id: hardio.c,v 1.19 2005/04/27 18:31:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ hw_debug_write(unsigned char *data, int w)
 
 
 ssize_t
-hard_write(int fd, unsigned char *data, int datalen)
+hard_write(int fd, unsigned char *data, size_t datalen)
 {
 	ssize_t total = datalen;
 
@@ -120,7 +120,7 @@ hard_write(int fd, unsigned char *data, int datalen)
 }
 
 ssize_t
-hard_read(int fd, unsigned char *data, int datalen)
+hard_read(int fd, unsigned char *data, size_t datalen)
 {
 	ssize_t total = datalen;
 

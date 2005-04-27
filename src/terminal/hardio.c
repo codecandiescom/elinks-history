@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.19 2005/04/27 18:31:07 jonas Exp $ */
+/* $Id: hardio.c,v 1.20 2005/04/27 18:36:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,7 +137,7 @@ hard_read(int fd, unsigned char *data, size_t datalen)
 			break;
 		}
 
-		debug_write(data, bytes);
+		debug_write(data, read);
 
 		data	+= read;
 		datalen	-= read;

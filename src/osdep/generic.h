@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.27 2005/04/21 01:29:08 jonas Exp $ */
+/* $Id: generic.h,v 1.28 2005/04/27 14:33:03 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -98,6 +98,13 @@ safe_write(int fd, const void *buf, size_t count) {
 
 #endif /* EINTR && !CONFIG_WIN32 */
 
+#ifndef HAVE_FTELLO
+#define ftello(stream) ftell(stream)
+#endif
+
+#ifndef HAVE_FSEEKO
+#define fseeko(stream, offset, whence) ftell(stream, offset, whence)
+#endif
 
 /* Compiler area: */
 

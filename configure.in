@@ -92,6 +92,8 @@ dnl ===================================================================
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
+AC_HEADER_TIME
+
 AC_CHECK_HEADERS(fcntl.h limits.h time.h unistd.h)
 AC_CHECK_HEADERS(sigaction.h)
 AC_CHECK_HEADERS(arpa/inet.h)
@@ -116,13 +118,14 @@ dnl ===================================================================
 dnl Checks for typedefs, structures, and compiler characteristics.
 dnl ===================================================================
 
+AC_STRUCT_TM
 AC_C_CONST
 AC_C_INLINE
-AC_TYPE_SIZE_T
-AC_HEADER_TIME
-AC_STRUCT_TM
-
 EL_CHECK_CODE(typeof, HAVE_TYPEOF, [], [int a; typeof(a) b;])
+
+AC_TYPE_SIZE_T
+AC_TYPE_OFF_T
+AC_CHECK_TYPE(ssize_t, int)
 EL_CHECK_SYS_TYPE(long long, HAVE_LONG_LONG, [])
 EL_CHECK_INT_TYPE(int32_t, HAVE_INT32_T)
 EL_CHECK_INT_TYPE(uint32_t, HAVE_UINT32_T)
@@ -168,7 +171,7 @@ AC_CHECK_FUNCS(strcasecmp strncasecmp strcasestr strstr strchr strrchr)
 AC_CHECK_FUNCS(memmove bcopy stpcpy strdup index isdigit mempcpy memrchr)
 AC_CHECK_FUNCS(snprintf vsnprintf asprintf vasprintf)
 AC_CHECK_FUNCS(getifaddrs getpwnam inet_pton inet_ntop)
-AC_CHECK_FUNCS(fflush fsync sigaction)
+AC_CHECK_FUNCS(fflush fsync fseeko ftello sigaction)
 AC_CHECK_FUNCS(gettimeofday clock_gettime)
 
 AC_HAVE_FUNCS(cygwin_conv_to_full_win32_path)

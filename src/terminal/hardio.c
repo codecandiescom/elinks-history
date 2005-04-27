@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.15 2005/04/27 15:15:01 jonas Exp $ */
+/* $Id: hardio.c,v 1.16 2005/04/27 18:18:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,9 +26,9 @@
 
 #ifdef DEBUG_HARDIO
 static void
-hw_debug_open(unsigned char *name, int fd, unsigned char *p, int l)
+hw_debug_open(unsigned char *name, int fd, unsigned char *data, int datalen)
 {
-	fprintf(stderr, "[%s (fd=%d, p=%p, l=%d)]\n",name, fd, p, l);
+	fprintf(stderr, "[%s (fd=%d, data=%p, datalen=%d)]\n", name, fd, data, datalen);
 }
 
 static void
@@ -38,7 +38,7 @@ hw_debug_flush() {
 }
 
 static void
-hw_debug_write(unsigned char *p, int w)
+hw_debug_write(unsigned char *data, int w)
 {
 	int hex = 0;
 	int i = 0;
@@ -46,10 +46,10 @@ hw_debug_write(unsigned char *p, int w)
 	if (!w) return;
 
 	for (; i < w; i++) {
-		if (p[i] == ' ') {
+		if (data[i] == ' ') {
 			int c = i;
 
-			while (i < w && p[++i] == ' ');
+			while (i < w && data[++i] == ' ');
 
 			if (i - c - 1 > 1) {
 				fprintf(stderr, "[+ %d spaces]\n", i - c - 1);
@@ -61,87 +61,88 @@ hw_debug_write(unsigned char *p, int w)
 			i--;
 		}
 
-		if (p[i] >= ' ' && p[i] < 127 && p[i] != '|') {
+		if (data[i] >= ' ' && data[i] < 127 && data[i] != '|') {
 			if (hex) {
 				fputc('|', stderr);
 				hex = 0;
 			}
-			fputc(p[i], stderr);
+			fputc(data[i], stderr);
 		} else {
 			if (!hex) {
 				fputc('|', stderr);
 				hex = 1;
 			}
-			fprintf(stderr,"%02x", p[i]);
+			fprintf(stderr,"%02x", data[i]);
 		}
 	}
 }
-#define debug_open(n, fd, p, l) hw_debug_open(n, fd, p, l)
-#define debug_flush() hw_debug_flush()
-#define debug_write(p, l) hw_debug_write(p, l)
+
+#define debug_open(n, fd, data, datalen) hw_debug_open(n, fd, data, datalen)
+#define debug_flush()			 hw_debug_flush()
+#define debug_write(data, datalen)	 hw_debug_write(data, datalen)
 #else
-#define debug_open(n, fd, p, l)
+#define debug_open(n, fd, data, datalen)
 #define debug_flush()
-#define debug_write(p, l)
+#define debug_write(data, datalen)
 #endif
 
 
 ssize_t
-hard_write(int fd, unsigned char *p, int l)
+hard_write(int fd, unsigned char *data, int datalen)
 {
-	ssize_t t = l;
+	ssize_t t = datalen;
 
-	assert(p && l >= 0);
+	assert(data && datalen >= 0);
 	if_assert_failed return -1;
 
-	debug_open("hard_write", fd, p, l);
+	debug_open("hard_write", fd, data, datalen);
 
-	while (l > 0) {
-		ssize_t w = safe_write(fd, p, l);
+	while (datalen > 0) {
+		ssize_t w = safe_write(fd, data, datalen);
 
 		if (w <= 0) {
 			if (w) return -1;
 			break;
 		}
 
-		debug_write(p, w);
+		debug_write(data, w);
 
-		p += w;
-		l -= w;
+		data += w;
+		datalen -= w;
 	}
 
 	debug_flush();
 
 	/* Return number of bytes written. */
-	return (t - l);
+	return (t - datalen);
 }
 
 ssize_t
-hard_read(int fd, unsigned char *p, int l)
+hard_read(int fd, unsigned char *data, int datalen)
 {
-	ssize_t t = l;
+	ssize_t t = datalen;
 
-	assert(p && l >= 0);
+	assert(data && datalen >= 0);
 	if_assert_failed return -1;
 
-	debug_open("hard_read", fd, p, l);
+	debug_open("hard_read", fd, data, datalen);
 
-	while (l > 0) {
-		ssize_t r = safe_read(fd, p, l);
+	while (datalen > 0) {
+		ssize_t r = safe_read(fd, data, datalen);
 
 		if (r <= 0) {
 			if (r) return -1;
 			break;
 		}
 
-		debug_write(p, r);
+		debug_write(data, r);
 
-		p += r;
-		l -= r;
+		data += r;
+		datalen -= r;
 	}
 
 	debug_flush();
 
 	/* Return number of bytes read. */
-	return (t - l);
+	return (t - datalen);
 }

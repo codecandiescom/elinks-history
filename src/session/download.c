@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.367 2005/04/27 22:39:46 jonas Exp $ */
+/* $Id: download.c,v 1.368 2005/04/27 22:49:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -959,12 +959,12 @@ tp_display(struct type_query *type_query)
 
 	ses->loading_uri = type_query->uri;
 	ses->task.target.frame = type_query->target_frame;
-	vs = ses_forward(ses, type_query->frame);
+	vs = ses_forward(ses, /* type_query->frame */ 0);
 	if (vs) vs->plain = 1;
 	ses->loading_uri = loading_uri;
 	ses->task.target.frame = target_frame;
 
-	if (!type_query->frame) {
+	if (/* !type_query->frame */ 1) {
 		struct download *old = &type_query->download;
 		struct download *new = &cur_loc(ses)->download;
 

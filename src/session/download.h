@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.53 2005/04/27 22:39:46 jonas Exp $ */
+/* $Id: download.h,v 1.54 2005/04/27 22:49:46 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -50,7 +50,7 @@ struct type_query {
 	unsigned char *target_frame;
 	unsigned char *external_handler;
 	int block;
-	int frame;
+	/* int frame; */
 };
 
 struct file_download {

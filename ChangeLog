@@ -1,3 +1,124 @@
+Wed Apr 27 21:53:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Make loading_callback() static, really :P.  
+
+Wed Apr 27 21:51:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: task.c, task.h:
+
+	Make loading_callback() static.  
+
+Wed Apr 27 21:41:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, connection.h:
+
+	change_connection(): Make newpri arg a connection_priority enum.  
+
+Wed Apr 27 18:36:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/hardio.c:
+
+	Oops, fix (1.16 -> 1.17) 
+
+Wed Apr 27 18:31:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: hardio.c, hardio.h:
+
+	hard_read(), head_write(): Take datalen as size_t.  
+
+Wed Apr 27 18:26:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/hardio.c:
+
+	Tiny reformatting.  
+
+Wed Apr 27 18:24:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/hardio.c:
+
+	hard_read(), head_write(): t -> total, r -> read, w -> written 
+
+Wed Apr 27 18:18:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/hardio.c:
+
+	p -> data, l -> datalen 
+
+Wed Apr 27 18:12:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Use size_t for read and write counters.  
+
+Wed Apr 27 18:04:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Check both Pragma and Cache-Control.  
+
+Wed Apr 27 17:55:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Add support for parsing cache control info from http-equiv meta
+	headers in HTML documents.  
+
+Wed Apr 27 15:49:59 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	load_textarea_file(), textarea_edit(): use fseeko(),ftello(),off_t
+	and size_t.  
+
+Wed Apr 27 15:29:05 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/intl/gettext/libintl.h:
+
+	Back to good looking version.  
+
+Wed Apr 27 15:27:31 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* configure.in:
+
+	Do not show gcc-4.* warnings.  
+
+Wed Apr 27 15:15:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/conf.c, intl/gettext/loadmsgcat.c,
+	lowlevel/connect.c, lowlevel/dns.c, osdep/os2/os2.c,
+	protocol/ftp/ftp.c, sched/download.c, ssl/connect.c, ssl/connect.h,
+	terminal/event.c, terminal/hardio.c, terminal/hardio.h,
+	terminal/kbd.c, viewer/text/form.c:
+
+	Use ssize_t to hold value returned from safe_read() and
+	safe_write().  
+
+Wed Apr 27 15:08:20 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/intl/gettext/libintl.h:
+
+	Kill two gcc-4 warningns.  
+
+Wed Apr 27 14:57:39 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/: cache.c, cache.h:
+
+	Make truncate_entry() static.  
+
+Wed Apr 27 14:53:28 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/generic.h:
+
+	safe_write(), safe_read(): Use local ssize_t variable.  
+
+Wed Apr 27 14:33:03 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/osdep/generic.h:
+
+	Add checks for off_t, ssize_t, ftello() and fseeko().  
+
 Tue Apr 26 19:40:09 2005  Laurent Monin <zas@norz.org>:
 
 	* src/sched/download.c:

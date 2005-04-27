@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.533 2005/04/08 14:44:36 miciah Exp $ */
+/* $Id: parser.c,v 1.534 2005/04/27 17:55:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 #include "document/renderer.h"
 #include "intl/charsets.h"
 #include "osdep/ascii.h"
+#include "protocol/date.h"
 #include "protocol/header.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
@@ -1193,6 +1194,64 @@ process_head(unsigned char *head)
 	}
 
 	mem_free(refresh);
+
+	if (!get_opt_bool("document.cache.ignore_cache_control")) {
+		unsigned char *d;
+		int no_cache = 0;
+		time_t expires = 0;
+
+		/* XXX: Code duplication with HTTP protocol backend. */
+		/* I am not entirely sure in what order we should process these
+		 * headers and if we should still process Cache-Control max-age
+		 * if we already set max age to date mentioned in Expires.
+		 * --jonas */
+		if ((d = parse_header(head, "Pragma", NULL))
+		    || (d = parse_header(head, "Cache-Control", NULL))) {
+			if (strstr(d, "no-cache") || strstr(d, "must-revalidate")) {
+				no_cache = 1;
+
+			} else  {
+				unsigned char *pos = strstr(d, "max-age=");
+
+				assert(!no_cache);
+
+				if (pos) {
+					/* Grab the number of seconds. */
+					timeval_T max_age, seconds;
+					time_t expires;
+
+					timeval_from_seconds(&seconds, atol(pos + 8));
+					timeval_now(&max_age);
+					timeval_add_interval(&max_age, &seconds);
+
+					expires = timeval_to_seconds(&max_age);
+				}
+			}
+
+			mem_free(d);
+		}
+
+		if (!no_cache && (d = parse_header(head, "Expires", NULL))) {
+			/* Convert date to seconds. */
+			if (strstr(d, "now")) {
+				timeval_T now;
+
+				timeval_now(&now);
+				expires = timeval_to_seconds(&now);
+			} else {
+				expires = parse_date(&d, NULL, 0, 1);
+			}
+
+			mem_free(d);
+		}
+
+
+		if (no_cache)
+			html_context.special_f(html_context.part, SP_CACHE_CONTROL);
+		else if (expires)
+			html_context.special_f(html_context.part,
+					       SP_CACHE_EXPIRES, expires);
+	}
 }
 
 

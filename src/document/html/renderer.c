@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.532 2005/04/22 01:57:51 jonas Exp $ */
+/* $Id: renderer.c,v 1.533 2005/04/27 17:55:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,6 +113,9 @@ struct renderer_context {
 	int nowrap; /* Activated/deactivated by SP_NOWRAP. */
 
 	struct conv_table *convert_table;
+
+	/* Used for setting cache info from HTTP-EQUIV meta tags. */
+	struct cache_entry *cached;
 
 	int g_ctrl_num;
 	int empty_format;
@@ -1526,6 +1529,28 @@ html_special(struct part *part, enum html_special_type c, ...)
 		case SP_USED:
 			va_end(l);
 			return (void *) (long) !!document;
+		case SP_CACHE_CONTROL:
+		{
+			struct cache_entry *cached = renderer_context.cached;
+
+			cached->cache_mode = CACHE_MODE_NEVER;
+			cached->expire = 0;
+			va_end(l);
+			break;
+		}
+		case SP_CACHE_EXPIRES:
+		{
+			time_t expires = va_arg(l, time_t);
+			struct cache_entry *cached = renderer_context.cached;
+
+			va_end(l);
+			if (!expires || cached->cache_mode == CACHE_MODE_NEVER)
+				break;
+
+			timeval_from_seconds(&cached->max_age, expires);
+			cached->expire = 1;
+			break;
+		}
 		case SP_FRAMESET:
 		{
 			struct frameset_param *fsp = va_arg(l, struct frameset_param *);
@@ -1774,6 +1799,7 @@ render_html_document(struct cache_entry *cached, struct document *document,
 	if (!init_string(&head)) return;
 
 	renderer_context.g_ctrl_num = 0;
+	renderer_context.cached = cached;
 
 	start = buffer->source;
 	end = buffer->source + buffer->length;

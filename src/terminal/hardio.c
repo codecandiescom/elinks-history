@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.16 2005/04/27 18:18:24 jonas Exp $ */
+/* $Id: hardio.c,v 1.17 2005/04/27 18:24:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ hw_debug_write(unsigned char *data, int w)
 ssize_t
 hard_write(int fd, unsigned char *data, int datalen)
 {
-	ssize_t t = datalen;
+	ssize_t total = datalen;
 
 	assert(data && datalen >= 0);
 	if_assert_failed return -1;
@@ -98,29 +98,29 @@ hard_write(int fd, unsigned char *data, int datalen)
 	debug_open("hard_write", fd, data, datalen);
 
 	while (datalen > 0) {
-		ssize_t w = safe_write(fd, data, datalen);
+		ssize_t written = safe_write(fd, data, datalen);
 
-		if (w <= 0) {
-			if (w) return -1;
+		if (written <= 0) {
+			if (written) return -1;
 			break;
 		}
 
-		debug_write(data, w);
+		debug_write(data, written);
 
-		data += w;
-		datalen -= w;
+		data	+= written;
+		datalen	-= written;
 	}
 
 	debug_flush();
 
 	/* Return number of bytes written. */
-	return (t - datalen);
+	return (total - datalen);
 }
 
 ssize_t
 hard_read(int fd, unsigned char *data, int datalen)
 {
-	ssize_t t = datalen;
+	ssize_t total = datalen;
 
 	assert(data && datalen >= 0);
 	if_assert_failed return -1;
@@ -128,21 +128,21 @@ hard_read(int fd, unsigned char *data, int datalen)
 	debug_open("hard_read", fd, data, datalen);
 
 	while (datalen > 0) {
-		ssize_t r = safe_read(fd, data, datalen);
+		ssize_t read = safe_read(fd, data, datalen);
 
-		if (r <= 0) {
-			if (r) return -1;
+		if (read <= 0) {
+			if (read) return -1;
 			break;
 		}
 
-		debug_write(data, r);
+		debug_write(data, bytes);
 
-		data += r;
-		datalen -= r;
+		data	+= read;
+		datalen	-= read;
 	}
 
 	debug_flush();
 
 	/* Return number of bytes read. */
-	return (t - datalen);
+	return (total - datalen);
 }

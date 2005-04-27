@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.29 2005/03/03 00:09:44 zas Exp $ */
+/* $Id: libintl.h,v 1.30 2005/04/27 15:08:20 witekfl Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -55,11 +55,11 @@ extern int current_charset;
 static inline void
 intl_set_charset(struct terminal *term)
 {
-	int new_charset = get_opt_codepage_tree(term->spec, "charset");
+	int new_charset = get_opt_codepage_tree(term->spec, (unsigned char *)"charset");
 
 	/* Prevent useless switching. */
 	if (current_charset != new_charset) {
-		bind_textdomain_codeset( /* PACKAGE */ "elinks",
+		bind_textdomain_codeset( /* PACKAGE */ (unsigned char *)"elinks",
 					get_cp_mime_name(new_charset));
 		current_charset = new_charset;
 	}

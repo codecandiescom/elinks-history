@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.23 2005/04/27 22:18:30 jonas Exp $ */
+/* $Id: progress.h,v 1.24 2005/04/27 22:23:10 jonas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
@@ -30,11 +30,11 @@ struct progress {
 	 * (relative_position = pos - start) (maybe our fictional
 	 * relative_position is equiv to loaded, but I'd rather not rely on it
 	 * --pasky). */
-	int pos;
+	off_t pos;
 	/* If this is non-zero, it indicates that we should seek in the
 	 * stream to the value inside before the next write (and zero this
 	 * counter then, obviously). */
-	int seek;
+	off_t seek;
 
 	timer_id_T timer;
 	void (*timer_func)(void *);
@@ -45,7 +45,7 @@ struct progress {
 
 struct progress *init_progress(off_t start);
 void done_progress(struct progress *progress);
-void update_progress(struct progress *progress, int loaded, off_t size, int pos);
+void update_progress(struct progress *progress, int loaded, off_t size, off_t pos);
 void start_update_progress(struct progress *progress, void (*timer_func)(void *), void *timer_func_data);
 
 int has_progress(struct progress *progress);

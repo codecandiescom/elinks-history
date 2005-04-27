@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.121 2005/04/27 15:15:00 jonas Exp $ */
+/* $Id: dns.c,v 1.122 2005/04/27 18:12:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,7 +216,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 static enum dns_result
 write_dns_data(int h, void *data, size_t datalen)
 {
-	int done = 0;
+	size_t done = 0;
 
 	do {
 		int w = safe_write(h, data + done, datalen - done);
@@ -263,7 +263,7 @@ async_dns_writer(void *data, int h)
 static enum dns_result
 read_dns_data(int h, void *data, size_t datalen)
 {
-	int done = 0;
+	size_t done = 0;
 
 	do {
 		ssize_t r = safe_read(h, data + done, datalen - done);

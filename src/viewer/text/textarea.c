@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.148 2005/04/19 23:06:47 jonas Exp $ */
+/* $Id: textarea.c,v 1.149 2005/04/27 15:49:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -312,26 +312,26 @@ save_textarea_file(unsigned char *value)
 }
 
 static unsigned char *
-load_textarea_file(unsigned char *filename, int maxlength)
+load_textarea_file(unsigned char *filename, size_t maxlength)
 {
 	unsigned char *value = NULL;
 	FILE *file = fopen(filename, "rb+");
-	int filelen = -1;
+	off_t filelen = -1;
 
 	if (!file) return NULL;
 
-	if (!fseek(file, 0, SEEK_END)) {
-		filelen = ftell(file);
-		if (filelen != -1 && fseek(file, 0, SEEK_SET))
+	if (!fseeko(file, 0, SEEK_END)) {
+		filelen = ftello(file);
+		if (filelen != -1 && fseeko(file, 0, SEEK_SET))
 			filelen = -1;
 	}
 
 	if (filelen >= 0 && filelen <= maxlength) {
-		int bread;
-
-		value = mem_alloc(filelen + 1);
+		value = mem_alloc((size_t) (filelen + 1));
 		if (value) {
-			bread = fread(value, 1, filelen, file);
+			size_t bread;
+
+			bread = fread(value, 1, (size_t) filelen, file);
 			value[bread] = 0;
 		}
 	}
@@ -346,7 +346,7 @@ void
 textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
 	      struct document_view *doc_view_, struct link *link_)
 {
-	static int fc_maxlength;
+	static size_t fc_maxlength;
 	static struct form_state *fs;
 	static struct terminal *term;
 	static struct document_view *doc_view;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.366 2005/04/27 22:30:33 jonas Exp $ */
+/* $Id: download.c,v 1.367 2005/04/27 22:39:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -812,7 +812,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 		mem_free_set(&type_query->external_handler, NULL);
 	}
 
-	file_download->block = type_query->block;
+	file_download->block = !!type_query->block;
 
 	/* Done here and not in init_file_download() so that the external
 	 * handler can become initialized. */

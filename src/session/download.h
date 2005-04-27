@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.52 2005/04/27 22:30:33 jonas Exp $ */
+/* $Id: download.h,v 1.53 2005/04/27 22:39:46 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -66,7 +66,6 @@ struct file_download {
 	int handle;
 	int redirect_cnt;
 	int notify;
-	int block;
 	struct download download;
 
 	/* Should the file be deleted when destroying the structure */
@@ -74,6 +73,9 @@ struct file_download {
 
 	/* Should the download be stopped/interrupted when destroying the structure */
 	unsigned int stop:1;
+
+	/* Whether to block the terminal when running the external handler. */
+	unsigned int block:1;
 
 	/* The current dialog for this download. Can be NULL. */
 	struct dialog_data *dlg_data;

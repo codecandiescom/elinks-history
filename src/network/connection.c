@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.283 2005/04/23 15:43:00 zas Exp $ */
+/* $Id: connection.c,v 1.284 2005/04/27 21:41:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -958,7 +958,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 /* FIXME: one object in more connections */
 void
 change_connection(struct download *old, struct download *new,
-		  int newpri, int interrupt)
+		  enum connection_priority newpri, int interrupt)
 {
 	struct connection *conn;
 

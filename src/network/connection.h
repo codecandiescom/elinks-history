@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.122 2005/04/23 15:43:00 zas Exp $ */
+/* $Id: connection.h,v 1.123 2005/04/27 21:41:53 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -84,7 +84,8 @@ void add_keepalive_connection(struct connection *conn, long timeout_in_seconds,
 void abort_connection(struct connection *, int);
 void retry_connection(struct connection *, int);
 
-void change_connection(struct download *, struct download *, int, int);
+void change_connection(struct download *old, struct download *new,
+		       enum connection_priority newpri, int interrupt);
 void detach_connection(struct download *, int);
 void abort_all_connections(void);
 void abort_background_connections(void);

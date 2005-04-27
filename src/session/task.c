@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.173 2005/04/27 21:51:47 jonas Exp $ */
+/* $Id: task.c,v 1.174 2005/04/27 21:53:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -512,7 +512,7 @@ do_move(struct session *ses, struct download **download_p)
 	return DO_MOVE_DISPLAY;
 }
 
-void
+static void
 loading_callback(struct download *download, struct session *ses)
 {
 	enum do_move d;

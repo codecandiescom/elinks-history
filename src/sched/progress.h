@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.26 2005/04/28 08:19:30 zas Exp $ */
+/* $Id: progress.h,v 1.27 2005/04/28 08:21:20 zas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
@@ -47,7 +47,7 @@ struct progress {
 
 struct progress *init_progress(off_t start);
 void done_progress(struct progress *progress);
-void update_progress(struct progress *progress, int loaded, off_t size, off_t pos);
+void update_progress(struct progress *progress, off_t loaded, off_t size, off_t pos);
 void start_update_progress(struct progress *progress, void (*timer_func)(void *), void *timer_func_data);
 
 int has_progress(struct progress *progress);

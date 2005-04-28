@@ -1,3 +1,74 @@
+Thu Apr 28 12:53:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/generic.h:
+
+	Oops, fix #define for fseeko() to fseek() and not ftell(). Reported
+	by arcatan.  
+
+Thu Apr 28 08:19:30 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: progress.c, progress.h, progress.h:
+
+	int -> off_t.  
+
+Thu Apr 28 08:14:56 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: progress.h, connection.h:
+
+	int -> off_t.  
+
+Thu Apr 28 08:09:22 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	int -> ssize_t.  
+
+Wed Apr 27 22:49:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, download.h:
+
+	struct type_query: Comment out the frame member. Looks like it is
+	never assigned anything. Is this a bug? 
+
+Wed Apr 27 22:39:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, download.h:
+
+	struct file_download: Make block member boolean.  
+
+Wed Apr 27 22:30:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, download.h:
+
+	struct file_download: Rename last_pos to seek and store in off_t.  
+
+Wed Apr 27 22:24:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	get_filesize_from_RETR(): Return off_t.  
+
+Wed Apr 27 22:23:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: progress.c, progress.h:
+
+	struct progress: Store pos and seek members in off_t. Change the
+	callchain to reflect this.  
+
+Wed Apr 27 22:18:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.h, progress.c, progress.h:
+
+	struct connection: Store est_length member in off_t. Change the
+	callchain to reflect this.  
+
+Wed Apr 27 22:12:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, connection.h, progress.c, progress.h:
+
+	struct connection: Store start member in off_t. Change the callchain
+	to reflect this.  
+
 Wed Apr 27 21:53:14 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/task.c:

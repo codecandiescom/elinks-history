@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.125 2005/04/27 22:18:30 jonas Exp $ */
+/* $Id: connection.h,v 1.126 2005/04/28 08:17:44 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -50,7 +50,7 @@ struct connection {
 	struct socket *data_socket;
 
 	int tries;
-	int received;
+	off_t received;
 	timer_id_T timer;
 	int cgi_pipes[2];
 	int stream_pipes[2];

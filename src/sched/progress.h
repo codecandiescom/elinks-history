@@ -1,4 +1,4 @@
-/* $Id: progress.h,v 1.24 2005/04/27 22:23:10 jonas Exp $ */
+/* $Id: progress.h,v 1.25 2005/04/28 08:14:56 zas Exp $ */
 
 #ifndef EL__SCHED_PROGRESS_H
 #define EL__SCHED_PROGRESS_H
@@ -18,7 +18,9 @@ struct progress {
 	int current_speed;	/* bytes/second */
 
 	unsigned int valid:1;
-	int size, loaded, last_loaded, cur_loaded;
+	off_t size;
+	int loaded, last_loaded;
+	int cur_loaded;
 
 	/* This is offset where the download was resumed possibly */
 	/* progress->start == -1 means normal session, not download

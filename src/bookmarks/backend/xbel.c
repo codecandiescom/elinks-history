@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.52 2005/03/22 04:43:44 miciah Exp $ */
+/* $Id: xbel.c,v 1.53 2005/04/29 07:40:51 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -103,7 +103,7 @@ read_bookmarks_xbel(FILE *f)
 	XML_SetCharacterDataHandler(p, on_text);
 
 	while (!done && !err) {
-		int len = fread(in_buffer, 1, BUFSIZ, f);
+		size_t len = fread(in_buffer, 1, BUFSIZ, f);
 
 		if (ferror(f)) {
 			ERROR(gettext("read_bookmarks_xbel(): Error reading %s"),

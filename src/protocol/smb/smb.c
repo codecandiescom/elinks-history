@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.73 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: smb.c,v 1.74 2005/04/29 07:40:51 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -62,7 +62,7 @@ struct smb_connection_info {
 	 * should call end_smb_connection() when it goes off as well. */
 	int closing;
 
-	int textlen;
+	size_t textlen;
 	unsigned char text[1];
 };
 
@@ -108,10 +108,10 @@ smb_get_cache(struct connection *conn)
 
 #define READ_SIZE	4096
 
-static int
+static ssize_t
 smb_read_data(struct connection *conn, int sock, unsigned char *dst)
 {
-	int r;
+	ssize_t r;
 	struct smb_connection_info *si = conn->info;
 
 	r = read(sock, dst, READ_SIZE);
@@ -135,7 +135,7 @@ smb_read_data(struct connection *conn, int sock, unsigned char *dst)
 static void
 smb_read_text(struct connection *conn, int sock)
 {
-	int r;
+	ssize_t r;
 	struct smb_connection_info *si = conn->info;
 
 	/* We add 2 here to handle LF and NUL chars that are added in
@@ -160,7 +160,7 @@ smb_got_data(struct connection *conn)
 {
 	struct smb_connection_info *si = conn->info;
 	unsigned char buffer[READ_SIZE];
-	int r;
+	ssize_t r;
 
 	if (si->list_type != SMB_LIST_NONE) {
 		smb_read_text(conn, conn->data_socket->fd);
@@ -214,7 +214,7 @@ parse_smbclient_output(struct uri *uri, struct smb_connection_info *si,
 		SMB_TYPE_SERVER,
 		SMB_TYPE_WORKGROUP
 	} type = SMB_TYPE_NONE;
-	int pos = 0;
+	size_t pos = 0;
 	int stop;
 
 	assert(uri && si && page);
@@ -228,8 +228,8 @@ parse_smbclient_output(struct uri *uri, struct smb_connection_info *si,
 	stop = !si->textlen;	/* Nothing to parse. */
 	while (!stop && (line_end = strchr(line_start, ASCII_LF))) {
 		unsigned char *line = line_start;
-		int line_len;
-		int start_offset = 0;
+		size_t line_len;
+		size_t start_offset = 0;
 
 		/* Handle \r\n case. Normally, do not occur on *nix. */
 		if (line_end > line_start && line_end[-1] == ASCII_CR)

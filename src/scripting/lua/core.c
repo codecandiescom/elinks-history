@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.197 2005/04/17 03:25:51 miciah Exp $ */
+/* $Id: core.c,v 1.198 2005/04/29 07:40:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,7 +184,7 @@ l_pipe_read(LS)
 {
 	FILE *fp;
 	unsigned char *s = NULL;
-	int len = 0;
+	size_t len = 0;
 
 	if (!lua_isstring(S, 1)) goto lua_error;
 
@@ -193,7 +193,7 @@ l_pipe_read(LS)
 
 	while (!feof(fp)) {
 		unsigned char buf[1024];
-		int l = fread(buf, 1, sizeof(buf), fp);
+		size_t l = fread(buf, 1, sizeof(buf), fp);
 
 		if (l > 0) {
 			s = mem_realloc(s, len + l);

@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timers.c,v 1.24 2005/04/22 01:15:10 zas Exp $ */
+/* $Id: timers.c,v 1.25 2005/04/29 15:54:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ check_timers(timeval_T *last_time)
 }
 
 void
-install_timer(timer_id_T *id, long int delay_in_milliseconds, void (*func)(void *), void *data)
+install_timer(timer_id_T *id, long delay_in_milliseconds, void (*func)(void *), void *data)
 {
 	struct timer *new_timer, *timer;
 

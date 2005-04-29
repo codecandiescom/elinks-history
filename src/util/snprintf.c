@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.29 2004/11/18 22:25:48 miciah Exp $ */
+/* $Id: snprintf.c,v 1.30 2005/04/29 15:54:55 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -290,7 +290,7 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args_in)
 				if (cflags == DP_C_SHORT)
 					value = va_arg(args, int);
 				else if (cflags == DP_C_LONG)
-					value = va_arg(args, long int);
+					value = va_arg(args, long);
 				else if (cflags == DP_C_LLONG)
 					value = va_arg(args, LLONG);
 				else
@@ -302,7 +302,7 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args_in)
 				if (cflags == DP_C_SHORT)
 					value = va_arg(args, unsigned int);
 				else if (cflags == DP_C_LONG)
-					value = (long) va_arg(args, unsigned long int);
+					value = (long) va_arg(args, unsigned long);
 				else if (cflags == DP_C_LLONG)
 					value = (long) va_arg(args, unsigned LLONG);
 				else
@@ -314,7 +314,7 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args_in)
 				if (cflags == DP_C_SHORT)
 					value = va_arg(args, unsigned int);
 				else if (cflags == DP_C_LONG)
-					value = (long) va_arg(args, unsigned long int);
+					value = (long) va_arg(args, unsigned long);
 				else if (cflags == DP_C_LLONG)
 					value = (LLONG) va_arg(args, unsigned LLONG);
 				else
@@ -328,7 +328,7 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args_in)
 				if (cflags == DP_C_SHORT)
 					value = va_arg(args, unsigned int);
 				else if (cflags == DP_C_LONG)
-					value = (long) va_arg(args, unsigned long int);
+					value = (long) va_arg(args, unsigned long);
 				else if (cflags == DP_C_LLONG)
 					value = (LLONG) va_arg(args, unsigned LLONG);
 				else
@@ -379,15 +379,15 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args_in)
 				break;
 			case 'n':
 				if (cflags == DP_C_SHORT) {
-					short int *num;
+					short *num;
 
-					num = va_arg(args, short int *);
+					num = va_arg(args, short *);
 					*num = currlen;
 				} else if (cflags == DP_C_LONG) {
-					long int *num;
+					long *num;
 
-					num = va_arg(args, long int *);
-					*num = (long int) currlen;
+					num = va_arg(args, long *);
+					*num = (long) currlen;
 				} else if (cflags == DP_C_LLONG) {
 					LLONG *num;
 

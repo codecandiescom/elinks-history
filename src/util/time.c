@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.42 2005/04/24 17:42:08 zas Exp $ */
+/* $Id: time.c,v 1.43 2005/04/29 15:54:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,18 +28,18 @@ timeval_now(timeval_T *t)
 	struct timeval tv;
 
 	gettimeofday(&tv, NULL);
-	t->sec  = tv.tv_sec;
-	t->usec = tv.tv_usec;
+	t->sec  = (long) tv.tv_sec;
+	t->usec = (long) tv.tv_usec;
 #else
 #ifdef HAVE_CLOCK_GETTIME
 	struct timespec ts;
 
 	clock_gettime(CLOCK_REALTIME, &ts);
-	t->sec  = ts.tv_sec;
-	t->usec = ts.tv_nsec / 1000;
+	t->sec  = (long) ts.tv_sec;
+	t->usec = (long) ts.tv_nsec / 1000;
 #else
-	t->sec  = time(NULL);
-	t->usec = 0;
+	t->sec  = (long) time(NULL);
+	t->usec = (long) 0;
 #endif
 #endif
 
@@ -118,14 +118,14 @@ timeval_add_interval(timeval_T *t, timeval_T *interval)
 timeval_T *
 timeval_from_double(timeval_T *t, double x)
 {
-	t->sec  = (long int) x;
-	t->usec = (long int) ((x - (double) t->sec) * 1000000);
+	t->sec  = (long) x;
+	t->usec = (long) ((x - (double) t->sec) * 1000000);
 
 	return t;
 }
 
 timeval_T *
-timeval_from_milliseconds(timeval_T *t, long int milliseconds)
+timeval_from_milliseconds(timeval_T *t, long milliseconds)
 {
 	t->sec = milliseconds / 1000;
 	t->usec = (milliseconds % 1000) * 1000;
@@ -134,7 +134,7 @@ timeval_from_milliseconds(timeval_T *t, long int milliseconds)
 }
 
 timeval_T *
-timeval_from_seconds(timeval_T *t, long int seconds)
+timeval_from_seconds(timeval_T *t, long seconds)
 {
 	t->sec = seconds;
 	t->usec = 0;
@@ -142,13 +142,13 @@ timeval_from_seconds(timeval_T *t, long int seconds)
 	return t;
 }
 
-long int
+long
 timeval_to_milliseconds(timeval_T *t)
 {
 	return t->sec * 1000L + t->usec / 1000L;
 }
 
-long int
+long
 timeval_to_seconds(timeval_T *t)
 {
 	return t->sec + t->usec / 1000000L;

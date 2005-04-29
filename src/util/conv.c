@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.76 2005/04/23 15:58:54 zas Exp $ */
+/* $Id: conv.c,v 1.77 2005/04/29 15:54:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,7 +198,7 @@ add_xnum_to_string(struct string *string, int xnum)
 }
 
 struct string *
-add_duration_to_string(struct string *string, long int seconds)
+add_duration_to_string(struct string *string, long seconds)
 {
 	unsigned char q[64];
 	int qlen = 0;

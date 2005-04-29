@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.20 2005/04/27 18:36:04 jonas Exp $ */
+/* $Id: hardio.c,v 1.21 2005/04/29 18:13:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,17 +130,17 @@ hard_read(int fd, unsigned char *data, size_t datalen)
 	debug_open("hard_read", fd, data, datalen);
 
 	while (datalen > 0) {
-		ssize_t read = safe_read(fd, data, datalen);
+		ssize_t readlen = safe_read(fd, data, datalen);
 
-		if (read <= 0) {
-			if (read) return -1;
+		if (readlen <= 0) {
+			if (readlen) return -1;
 			break;
 		}
 
-		debug_write(data, read);
+		debug_write(data, readlen);
 
-		data	+= read;
-		datalen	-= read;
+		data	+= readlen;
+		datalen	-= readlen;
 	}
 
 	debug_flush();

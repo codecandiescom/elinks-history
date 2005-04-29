@@ -1,3 +1,29 @@
+Fri Apr 29 18:14:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/generic.h:
+
+	Add file permission bits not available on win32.  
+
+Fri Apr 29 18:13:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/hardio.c:
+
+	Compile fix for win32.  
+
+Fri Apr 29 15:54:55 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/timers.c, lowlevel/timers.h, util/conv.c,
+	util/conv.h, util/snprintf.c, util/time.c, util/time.h:
+
+	long|short int -> long|short.  
+
+Fri Apr 29 07:40:51 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/backend/xbel.c, protocol/smb/smb.c,
+	scripting/lua/core.c:
+
+	int -> size_t, ssize_t.  
+
 Thu Apr 28 12:53:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/osdep/generic.h:

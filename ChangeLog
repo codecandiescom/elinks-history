@@ -1,3 +1,66 @@
+Sun May  1 20:58:51 2005  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Hungarian translation updates, keyboard shortcut fixes.  
+
+Sun May  1 20:55:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, config/m4/features.m4:
+
+	Looks like sh on old solaris systems don't like ='s in the list to
+	for loops.  
+
+Sun May  1 18:57:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/Makefile.am:
+
+	Looks like .awk.in version doesn't end up in the tarball.  
+
+Sun May  1 14:34:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Fix formatting.  
+
+Sun May  1 14:28:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Fix comment.  
+
+Sun May  1 13:58:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.c:
+
+	Fix comment.  
+
+Sun May  1 13:27:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	up -> hope 
+
+Sun May  1 13:05:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix form positioning bug on www.bookshare.org. Reported by
+	Christopher Moore.  
+
+Sun May  1 13:04:03 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/forms.c:
+
+	Simplify assertion. I feel like I did this patch before and failed.
+	Hmm.  
+
+Sun May  1 12:47:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/node.h:
+
+	Cleanup macro.  
+
 Fri Apr 29 18:14:57 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/osdep/generic.h:

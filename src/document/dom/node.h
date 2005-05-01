@@ -1,4 +1,4 @@
-/* $Id: node.h,v 1.3 2004/09/26 01:41:36 jonas Exp $ */
+/* $Id: node.h,v 1.4 2005/05/01 12:47:42 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOM_NODE_H
 #define EL__DOCUMENT_DOM_NODE_H
@@ -305,7 +305,7 @@ unsigned char *get_dom_node_type_name(enum dom_node_type type);
 
 /* Returns a pointer to a node list containing attributes. */
 #define get_dom_node_attributes(node)					\
-	((node)->type == DOM_NODE_ELEMENT ? &node->data.element.map	\
+	((node)->type == DOM_NODE_ELEMENT ? &(node)->data.element.map	\
 					  : NULL)
 
 static inline struct dom_node_list **

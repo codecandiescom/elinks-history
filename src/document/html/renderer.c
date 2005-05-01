@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.534 2005/05/01 13:05:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.535 2005/05/01 13:27:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1376,7 +1376,7 @@ html_special_form(struct part *part, struct form *form)
 #if 0
 		/* Disabled because in tables the parse order may lead to a
 		 * later form being parsed before a preceeding one causing the
-		 * wrong order if we set it to zero. Let's up it doesn't break
+		 * wrong order if we set it to zero. Let's hope it doesn't break
 		 * anything else. */
 		form->form_num = 0;
 #endif

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.190 2005/04/23 10:58:35 jonas Exp $ */
+/* $Id: options.inc,v 1.191 2005/05/01 23:27:58 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -548,15 +548,18 @@ static struct option_info config_options_info[] = {
 		N_("Default directory color.\n"
 		"See document.browse.links.color_dirs option.")),
 
-	/* TODO: Rename this option to something sensible. */
+	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
+	INIT_OPT_ALIAS("document.colors", "increase_contrast",
+		"ui.colors.color.dialog.generic.background"),
+
+	/* TODO: Rename this option to increase_contrast. */
 	INIT_OPT_BOOL("document.colors", N_("Allow dark colors on black background"),
 		"allow_dark_on_black", 0, 0,
-		N_("Allow dark colors on black background, and bright colors\n"
-		"on bright background. By default the colors have their contrast\n"
-		"increased, so that the foreground and the background do not have\n"
-		"too similar colors. This option turns this off. Note, this is\n"
-		"different from having it ensured through the ensure_contrast\n"
-		"option.")),
+		N_("Setting this option to 0 will increase the contrast\n"
+		"between the foreground and background colors to ensure\n"
+		"readability. For example dissallow dark colors on a\n"
+		"black background. Note, this is different from ensuring\n"
+		"the contrast with the ensure_contrast option.")),
 
 	INIT_OPT_BOOL("document.colors", N_("Ensure contrast"),
 		"ensure_contrast", 0, 1,

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.235 2005/04/27 15:15:00 jonas Exp $ */
+/* $Id: connect.c,v 1.236 2005/05/01 14:34:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ struct connect_info {
 	struct sockaddr_storage *addr;	 /* Array of found addresses. */
 	int addrno;			 /* Number of found addresses. */
 	int triedno;			 /* Index of last tried address */
-	socket_connect_T done; /* Callback signaled when connected. */
+	socket_connect_T done;		 /* Callback signaled when connected. */
 	void *dnsquery;			 /* Pointer to DNS query info. */
 	int port;			 /* Which port to bind to. */
 	int ip_family;			 /* If non-zero, force to IP version. */

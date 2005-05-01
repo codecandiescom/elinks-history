@@ -94,10 +94,10 @@ AC_DEFUN([EL_ARG_DEPEND],
 	if test "x[$]$1" = xyes; then
 		# require all dependencies to be met
 		for dependency in $3; do
-			el_name=`echo "$dependency" | sed 's/=.*//'`;
-			el_arg=`echo "$dependency" | sed 's/.*=//'`;
+			el_name=`echo "$dependency" | sed 's/:.*//'`;
+			el_arg=`echo "$dependency" | sed 's/.*://'`;
 			# Hope this is portable?!? --jonas
-			eval el_value=$`echo $el_name`;
+			el_value=$`echo $el_name`;
 
 			if test "x$el_value" != "x$el_arg"; then
 				ENABLE_$1=no;

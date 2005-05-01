@@ -348,7 +348,7 @@ if test "x${enable_xbel}" != xno; then
 fi
 
 
-EL_ARG_DEPEND(CONFIG_XBEL_BOOKMARKS, xbel, [CONFIG_BOOKMARKS=yes HAVE_LIBEXPAT=yes],
+EL_ARG_DEPEND(CONFIG_XBEL_BOOKMARKS, xbel, [CONFIG_BOOKMARKS:yes HAVE_LIBEXPAT:yes],
 	      [XBEL bookmarks],
 	      [  --disable-xbel          disable XBEL bookmark support (requires expat)])
 
@@ -880,7 +880,7 @@ AM_CONDITIONAL(CONFIG_MIMETYPES, test "$CONFIG_MIMETYPES" = yes)
 
 
 EL_ARG_DEPEND(CONFIG_IPV6, ipv6,
-	      [HAVE_SA_STORAGE=yes HAVE_SA_IN6=yes HAVE_ADDRINFO=yes HAVE_GETADDRINFO=yes],
+	      [HAVE_SA_STORAGE:yes HAVE_SA_IN6:yes HAVE_ADDRINFO:yes HAVE_GETADDRINFO:yes],
 	      [IPv6],
 	      [  --disable-ipv6          disable IPv6 support])
 AM_CONDITIONAL(CONFIG_IPV6, test "$CONFIG_IPV6" = yes)
@@ -893,7 +893,7 @@ EL_ARG_ENABLE(CONFIG_URI_REWRITE, uri-rewrite, [URI rewriting],
 	      [  --disable-uri-rewrite   disable URI rewrite support])
 AM_CONDITIONAL(CONFIG_URI_REWRITE, test "$CONFIG_URI_REWRITE" = yes)
 
-EL_ARG_DEPEND(CONFIG_CGI, cgi, [HAVE_SETENV=yes], [Local CGI],
+EL_ARG_DEPEND(CONFIG_CGI, cgi, [HAVE_SETENV:yes], [Local CGI],
 	      [  --enable-cgi            enable local CGI support])
 AM_CONDITIONAL(CONFIG_CGI, test "$CONFIG_CGI" = yes)
 
@@ -913,7 +913,7 @@ EL_ARG_ENABLE(CONFIG_NNTP, nntp, [NNTP protocol],
 	      [  --enable-nntp           enable nntp protocol support])
 AM_CONDITIONAL(CONFIG_NNTP, test "$CONFIG_NNTP" = yes)
 
-EL_ARG_DEPEND(CONFIG_SMB, smb, [HAVE_SMBCLIENT=yes], [SMB protocol],
+EL_ARG_DEPEND(CONFIG_SMB, smb, [HAVE_SMBCLIENT:yes], [SMB protocol],
 	      [  --disable-smb           disable SMB protocol support (requires smbclient)])
 AM_CONDITIONAL(CONFIG_SMB, test "$CONFIG_SMB" = yes)
 
@@ -944,7 +944,7 @@ EL_ARG_ENABLE(CONFIG_CSS, css, [Cascading Style Sheets],
 	      [  --disable-css           disable Cascading Style Sheet support])
 AM_CONDITIONAL(CONFIG_CSS, test "$CONFIG_CSS" = yes)
 
-EL_ARG_DEPEND(CONFIG_HTML_HIGHLIGHT, html-highlight, [CONFIG_CSS=yes], [HTML highlighting],
+EL_ARG_DEPEND(CONFIG_HTML_HIGHLIGHT, html-highlight, [CONFIG_CSS:yes], [HTML highlighting],
 	      [  --enable-html-highlight HTML highlighting using DOM engine])
 AM_CONDITIONAL(CONFIG_HTML_HIGHLIGHT, test "$CONFIG_HTML_HIGHLIGHT" = yes)
 
@@ -953,11 +953,11 @@ dnl so resolve CONFIG_HTML_HIGHLIGHT to CONFIG_DOM
 EL_CONFIG_DEPENDS(CONFIG_DOM, [CONFIG_HTML_HIGHLIGHT], [DOM engine])
 AM_CONDITIONAL(CONFIG_DOM, test "$CONFIG_DOM" = yes)
 
-EL_ARG_DEPEND(CONFIG_BACKTRACE, backtrace, [HAVE_EXECINFO=yes], [Backtrace],
+EL_ARG_DEPEND(CONFIG_BACKTRACE, backtrace, [HAVE_EXECINFO:yes], [Backtrace],
 	      [  --disable-backtrace     disable backtrace support])
 AM_CONDITIONAL(CONFIG_BACKTRACE, test "$CONFIG_BACKTRACE" = yes)
 
-EL_ARG_DEPEND(CONFIG_NO_ROOT_EXEC, no-root, [HAVE_GETUID=yes HAVE_GETEUID=yes], [No root exec],
+EL_ARG_DEPEND(CONFIG_NO_ROOT_EXEC, no-root, [HAVE_GETUID:yes HAVE_GETEUID:yes], [No root exec],
 	      [  --enable-no-root        enable prevention of usage by root])
 AM_CONDITIONAL(CONFIG_NO_ROOT_EXEC, test "$CONFIG_NO_ROOT_EXEC" = yes)
 
@@ -966,7 +966,7 @@ EL_ARG_ENABLE(CONFIG_DEBUG, debug, [Debug mode],
 	      [  --enable-debug          enable leak debug and internal error checking])
 AM_CONDITIONAL(CONFIG_DEBUG, test "$CONFIG_DEBUG" = yes)
 
-EL_ARG_DEPEND(CONFIG_FASTMEM, fastmem, [CONFIG_DEBUG=no], [Fast mode],
+EL_ARG_DEPEND(CONFIG_FASTMEM, fastmem, [CONFIG_DEBUG:no], [Fast mode],
               [  --enable-fastmem        enable direct use of system allocation functions, not usable with --enable-debug])
 AM_CONDITIONAL(CONFIG_FASTMEM, test "$CONFIG_FASTMEM" = yes)
 

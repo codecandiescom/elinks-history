@@ -97,7 +97,7 @@ AC_DEFUN([EL_ARG_DEPEND],
 			el_name=`echo "$dependency" | sed 's/:.*//'`;
 			el_arg=`echo "$dependency" | sed 's/.*://'`;
 			# Hope this is portable?!? --jonas
-			el_value=$`echo $el_name`;
+			eval el_value=$`echo $el_name`;
 
 			if test "x$el_value" != "x$el_arg"; then
 				ENABLE_$1=no;

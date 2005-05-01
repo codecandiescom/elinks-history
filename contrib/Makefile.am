@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.16 2005/04/16 15:36:55 jonas Exp $
+## $Id: Makefile.am,v 1.17 2005/05/01 18:57:43 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -23,6 +23,7 @@ EXTRA_DIST = \
  conv/mailcap.pl \
  conv/old_to_new_bookmarks.sh \
  conv/w3m2links.awk \
+ conv/w3m2links.awk.in \
  guile/internal-hooks.scm \
  guile/user-hooks.scm \
  lua/babelfish.lua \

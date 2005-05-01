@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.535 2005/04/27 18:04:52 jonas Exp $ */
+/* $Id: parser.c,v 1.536 2005/05/01 22:38:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1224,7 +1224,6 @@ process_head(unsigned char *head)
 				if (pos) {
 					/* Grab the number of seconds. */
 					timeval_T max_age, seconds;
-					time_t expires;
 
 					timeval_from_seconds(&seconds, atol(pos + 8));
 					timeval_now(&max_age);

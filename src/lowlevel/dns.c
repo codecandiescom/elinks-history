@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.122 2005/04/27 18:12:01 jonas Exp $ */
+/* $Id: dns.c,v 1.123 2005/05/01 13:58:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ struct dnsentry {
 
 	struct sockaddr_storage *addr;	/* Pointer to array of addresses. */
 	int addrno;			/* Adress array length. */
-	timeval_T creation_time;	/* Creation time; lets us do timeouts. */
+	timeval_T creation_time;	/* Creation time; let us do timeouts. */
 	unsigned char name[1];		/* Associated host; XXX: Must be last. */
 };
 

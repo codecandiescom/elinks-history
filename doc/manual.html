@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en"><head><title>ELinks Manual ($Revision: 1.1 $): ELinks Manual for version 0.11</title>
-<meta http-equiv="Expires" content="Mon, 02 May 2005 11:35:49 +0000">
+<html lang="en"><head><title>ELinks Manual ($Revision: 1.2 $): ELinks Manual for version 0.11</title>
+<meta http-equiv="Expires" content="Mon, 02 May 2005 12:16:10 +0000">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="ELinks Manual for version 0.11">
 <meta name="generator" content="xml2rfc v1.25 (http://xml.resource.org/)">
@@ -108,7 +108,7 @@
 <body>
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
-<tr><td class="header">ELinks Manual ($Revision: 1.1 $)</td><td class="header">J. Fonseca</td></tr>
+<tr><td class="header">ELinks Manual ($Revision: 1.2 $)</td><td class="header">J. Fonseca</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Baudis</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">L. Monin</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">M. Masters</td></tr>
@@ -258,40 +258,60 @@ Character Set<br />
 <a href="#anchor49">6.2</a>&nbsp;
 Terminal Configurations<br />
 <a href="#anchor50">7.</a>&nbsp;
-Managing External Viewers with Mailcap<br />
+Introduction to MIME handling<br />
 <a href="#anchor51">7.1</a>&nbsp;
+Handling MIME types, the ELinks way<br />
+<a href="#anchor52">7.1.1</a>&nbsp;
+What are MIME types and why may you want to use them?<br />
+<a href="#anchor53">7.1.2</a>&nbsp;
+Associating files to MIME types<br />
+<a href="#anchor54">7.1.3</a>&nbsp;
+Managing a given MIME type<br />
+<a href="#anchor56">7.1.4</a>&nbsp;
+Specifying the details for a handler<br />
+<a href="#anchor60">7.2</a>&nbsp;
+Setting up elinks.conf<br />
+<a href="#anchor61">7.2.1</a>&nbsp;
+Associating a file extension to a MIME type<br />
+<a href="#anchor62">7.2.2</a>&nbsp;
+Defining a handler<br />
+<a href="#anchor63">7.2.3</a>&nbsp;
+Associating a MIME type to a handler<br />
+<a href="#anchor64">8.</a>&nbsp;
+Managing External Viewers with Mailcap<br />
+<a href="#anchor65">8.1</a>&nbsp;
 A Short Intro to Mailcap<br />
-<a href="#anchor52">7.2</a>&nbsp;
+<a href="#anchor66">8.2</a>&nbsp;
 Parameters to Mailcap Entries<br />
-<a href="#anchor53">7.3</a>&nbsp;
+<a href="#anchor67">8.3</a>&nbsp;
 Reading of Mailcap Files<br />
-<a href="#anchor54">7.4</a>&nbsp;
+<a href="#anchor68">8.4</a>&nbsp;
 Fields<br />
-<a href="#anchor55">7.5</a>&nbsp;
+<a href="#anchor69">8.5</a>&nbsp;
 Mailcap Configuration<br />
-<a href="#anchor56">7.6</a>&nbsp;
+<a href="#anchor70">8.6</a>&nbsp;
 Some Sample Mailcap Entries<br />
-<a href="#anchor57">8.</a>&nbsp;
+<a href="#anchor71">9.</a>&nbsp;
 The tale of ex-mode<br />
-<a href="#anchor58">8.1</a>&nbsp;
+<a href="#anchor72">9.1</a>&nbsp;
 What it is<br />
-<a href="#anchor59">8.2</a>&nbsp;
+<a href="#anchor73">9.2</a>&nbsp;
 Configuration directives in exmode<br />
-<a href="#anchor60">8.3</a>&nbsp;
+<a href="#anchor74">9.3</a>&nbsp;
 Actions in exmode - or exmode in action?<br />
-<a href="#anchor61">8.4</a>&nbsp;
+<a href="#anchor75">9.4</a>&nbsp;
 How to use it<br />
-<a href="#anchor62">8.5</a>&nbsp;
+<a href="#anchor76">9.5</a>&nbsp;
 The "but"s<br />
-<a href="#anchor63">9.</a>&nbsp;
+<a href="#anchor77">10.</a>&nbsp;
 Managing remote ELinks instances with -remote<br />
-<a href="#anchor64">9.1</a>&nbsp;
+<a href="#anchor78">10.1</a>&nbsp;
 Limitations and outstanding issues<br />
-<a href="#anchor65">9.2</a>&nbsp;
+<a href="#anchor79">10.2</a>&nbsp;
 Remote Actions<br />
-<a href="#anchor66">10.</a>&nbsp;
+<a href="#anchor80">11.</a>&nbsp;
 Acknowledgement<br />
-<a href="#rfc.references1">11.</a>&nbsp;
+<a href="#rfc.references1">12.</a>&nbsp;
 References<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Authors' Addresses<br />
@@ -2041,7 +2061,279 @@ everything is marked TODO!
 </p>
 <a name="anchor50"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7"></a><h3>7.&nbsp;Managing External Viewers with Mailcap</h3>
+<a name="rfc.section.7"></a><h3>7.&nbsp;Introduction to MIME handling</h3>
+
+<p>
+
+	At some time along the 0.4 prereleases, ELinks replaced the old
+	Links file configuration system with its own one. Now, the
+	configuration is stored in elinks.conf, much more complete and
+	featuring a new syntax. You can set most options from the UI (so
+	usually there is no need to deal with elinks.conf), and that
+	used to be true for setting MIME handlers and extensions as
+	well; but now the associations menu is gone temporarily, forcing
+	you to set the handlers from the configuration file.
+
+
+</p>
+<p>
+
+	The comments provided within elinks.conf for the MIME options
+	are not much helpful, and those options may seem a bit obscure
+	or confusing at first.  This document is a basic introduction to
+	setting of MIME associations for ELinks. If you want to know how
+	to automatically launch a program to view some kind of file
+	(like images), then read on. Some basic knowledge of MIME is
+	recommended.
+
+
+</p>
+<a name="rfc.section.7.1"></a><h4><a name="anchor51">7.1</a>&nbsp;Handling MIME types, the ELinks way</h4>
+
+<a name="rfc.section.7.1.1"></a><h4><a name="anchor52">7.1.1</a>&nbsp;What are MIME types and why may you want to use them?</h4>
+
+<p>
+
+	If, while browsing with ELinks, you need to display files that
+	it can't show (like images or PDF documents), then you will
+	likely want to pass them to other programs that are suitable for
+	this task. While you may do it manually (saving the file to
+	disk, running the auxiliar program to show it and then removing
+	the file when finished), ELinks provides a method to do this
+	automatically using MIME types.
+
+
+</p>
+<p>
+
+	ELinks usually knows what the MIME type is for any file (which
+	is a kind of description of its format), thus you only need to
+	specify how to manage the MIME types for the files you want to
+	open. If you don't tell ELinks how to manage a given MIME type
+	then it will show you on screen the contents of the file (as if
+	it was ASCII text) instead of calling an external program to
+	show them.
+
+
+</p>
+<a name="rfc.section.7.1.2"></a><h4><a name="anchor53">7.1.2</a>&nbsp;Associating files to MIME types</h4>
+
+<p>
+
+	If the file is fetched from a web server then this web server
+	should tell ELinks what its MIME type is, so you should have
+	generally no need to care about it. However, the web server
+	might send an incorrect type, or you may be retrieving it by FTP
+	or from your local filesystem, so sometimes ELinks needs to
+	guess it.
+
+
+</p>
+<p>
+
+	The easiest method to guess a MIME type for a file is to just
+	look at its name trusting it was given the right extension.
+	ELinks supports this, letting you to specify a type for any
+	given extension.
+
+
+</p>
+<a name="rfc.section.7.1.3"></a><h4><a name="anchor54">7.1.3</a>&nbsp;Managing a given MIME type</h4>
+
+<p>
+
+	This usually means specifying programs to open files of this
+	type and the conditions in which those programs may be used. For
+	instance, you may want to use zgv (a popular svgalib image
+	viewer) when you are using the text console, but xli (a image
+	viewer for X) when running the X window system.
+
+
+</p>
+<a name="rfc.section.7.1.3.1"></a><h4><a name="anchor55">7.1.3.1</a>&nbsp;Binding it to a handler</h4>
+
+<p>
+
+	Instead of directly attaching a program to a MIME type, ELinks
+	lets you associate an abstract handler to each type. Then you
+	can specify which programs implement the handler and how are
+	they used.
+
+
+</p>
+<p>
+
+	For instance, you may create an image_viewer handler and assign
+	it to MIME types image/jpeg, image/png and image/gif. Then you
+	would associate to image_viewer the programs you would like to
+	use for viewing images and the details on how to use them. This
+	is less cumbersome than repeating all these details for each
+	MIME type.
+
+
+</p>
+<a name="rfc.section.7.1.4"></a><h4><a name="anchor56">7.1.4</a>&nbsp;Specifying the details for a handler</h4>
+
+<p>
+
+	There are three issues to specify for a handler: the program
+	associated to it, whether you want confirmation before using it
+	and whether you want the terminal to be blocked while it is
+	being used.
+
+
+</p>
+<p>
+
+	When specifying any of these issues, you must tell ELinks the
+	situation in which it gets applied, which is typically either
+	the text console or the X window sytem. So you can specify that
+	you don't want confirmation before running the program when
+	running X, and that you want it otherwise.  Similarly, when you
+	are attaching a program (name it foo) to this handler you must
+	tell if it's for X or not (you can attach a second program for
+	the other choice if you want).
+
+
+</p>
+<a name="rfc.section.7.1.4.1"></a><h4><a name="anchor57">7.1.4.1</a>&nbsp;Attaching a program to it</h4>
+
+<p>
+
+	You must tell ELinks the exact command for running it (with any
+	options you wish). In place of the filename you must enter %.
+
+
+</p>
+<a name="rfc.section.7.1.4.2"></a><h4><a name="anchor58">7.1.4.2</a>&nbsp;Choosing whether you want confirmation before applying it</h4>
+
+<p>
+
+	This is rather simple. If you choose not to do so, then the
+	handler will be automatically called upon when you demand ELinks
+	to show something attached to this handler. Otherwise, if you
+	ask for confirmation, you will be prompted to open it with a
+	external program, with additional choices that include
+	cancelling the operation and viewing it with ELinks. E.g: you
+	may use this option for programs written in C so that you may
+	always choose if you want to read the source with ELinks, or if
+	you want to save it, or if you want to use indent to display it
+	with less.
+
+
+</p>
+<a name="rfc.section.7.1.4.3"></a><h4><a name="anchor59">7.1.4.3</a>&nbsp;Choosing whether to block the terminal</h4>
+
+<p>
+
+	If you don't want to allow going back to ELinks (or any other
+	program from the same terminal) before the external program
+	ends, then you should ask to block the terminal.
+
+
+</p>
+<a name="rfc.section.7.2"></a><h4><a name="anchor60">7.2</a>&nbsp;Setting up elinks.conf</h4>
+
+<p>
+
+	If you have old configuration files from old ELinks versions or
+	from Links, then you may use the conf-links2elinks.pl script
+	(which is placed at contrib/conv/ on the source distribution) to
+	convert them to the new format. If you don't use it you will
+	need to edit the configuration file, and here you will find how.
+
+
+</p>
+<a name="rfc.section.7.2.1"></a><h4><a name="anchor61">7.2.1</a>&nbsp;Associating a file extension to a MIME type</h4>
+
+<p>
+
+	You can still do this with the UI, from the the Setup-&gt;File
+	Extensions submenu.
+
+
+</p>
+<p>
+
+	If you want to do so from the configuration file, enter set
+	mime.extension.ext = "type", replacing ext with the appropiate
+	file extension, and type with its MIME type. E.g. you may want
+	to have set mime.extension.jpg = "image/jpeg".
+
+
+</p>
+<a name="rfc.section.7.2.2"></a><h4><a name="anchor62">7.2.2</a>&nbsp;Defining a handler</h4>
+
+<p>
+
+	For each handler you must define three items, specifying in what
+	context the value of the item should be applied. You must enter
+	set mime.handler.handler-name.item.context = value, replacing
+	handler-name with the name for the handler you are defining,
+	item with the item you are defining for this handler, context
+	with the context this item value is to be applied, and value
+	with the value you want to assign to the item. You must do so
+	for each of the available items: program, ask and block.
+
+
+</p>
+<p>
+
+	The value for program is a string with the exact command you
+	want to be issued to view the file, placing % were you would put
+	the file name. The values for ask and block are either 0 (no) or
+	1 (yes). Available contexts include unix and unix-xwin, which
+	mean UNIX text terminal and X respectively (others can be os2,
+	win32, beos, riscos, ...). The latter does not mean you are
+	running ELinks from X, just that the DISPLAY variable is set so
+	that ELinks may run an X program.
+
+
+</p>
+<p>
+
+	To illustrate it, here is an example. Suppose you want to define
+	the image_viewer handler which should be used to view images.
+	The configuration file may look like this:
+
+
+</p><pre>
+	set mime.handler.image_viewer.unix.ask = 1
+	set mime.handler.image_viewer.unix-xwin.ask = 0
+
+	set mime.handler.image_viewer.unix.block = 1
+	set mime.handler.image_viewer.unix-xwin.block = 0
+
+	set mime.handler.image_viewer.unix.program = "zgv %"
+	set mime.handler.image_viewer.unix-xwin.program = "xli %"
+</pre>
+
+<p>
+
+	In this example the image_viewer handler uses the svgalib image
+	viewer zgv when X is not available, and the X image viewer xli
+	when it is. The terminal would be blocked when X is not
+	available and it would not be when it's available. Finally,
+	ELinks would ask for confirmation before using the handler only
+	with X not available.
+
+
+</p>
+<a name="rfc.section.7.2.3"></a><h4><a name="anchor63">7.2.3</a>&nbsp;Associating a MIME type to a handler</h4>
+
+<p>
+
+	Just enter set mime.type.class.name = "handler", replacing class
+	with the class for the mime type, name with the specific name
+	within that class, and handler with the name for the handler you
+	want to assign to the MIME type. E.g. you may want to have set
+	mime.type.image.jpeg = "image_viewer".
+
+
+</p>
+<a name="anchor64"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8"></a><h3>8.&nbsp;Managing External Viewers with Mailcap</h3>
 
 <p>
 
@@ -2052,7 +2344,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.7.1"></a><h4><a name="anchor51">7.1</a>&nbsp;A Short Intro to Mailcap</h4>
+<a name="rfc.section.8.1"></a><h4><a name="anchor65">8.1</a>&nbsp;A Short Intro to Mailcap</h4>
 
 <p>
 
@@ -2079,7 +2371,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.7.2"></a><h4><a name="anchor52">7.2</a>&nbsp;Parameters to Mailcap Entries</h4>
+<a name="rfc.section.8.2"></a><h4><a name="anchor66">8.2</a>&nbsp;Parameters to Mailcap Entries</h4>
 
 <p>
 
@@ -2137,7 +2429,7 @@ everything is marked TODO!
 
 <p>
 </p>
-<a name="rfc.section.7.3"></a><h4><a name="anchor53">7.3</a>&nbsp;Reading of Mailcap Files</h4>
+<a name="rfc.section.8.3"></a><h4><a name="anchor67">8.3</a>&nbsp;Reading of Mailcap Files</h4>
 
 <p>
 
@@ -2174,7 +2466,7 @@ everything is marked TODO!
 
 </li>
 </ol>
-<a name="rfc.section.7.4"></a><h4><a name="anchor54">7.4</a>&nbsp;Fields</h4>
+<a name="rfc.section.8.4"></a><h4><a name="anchor68">8.4</a>&nbsp;Fields</h4>
 
 <p>
 
@@ -2207,7 +2499,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.7.5"></a><h4><a name="anchor55">7.5</a>&nbsp;Mailcap Configuration</h4>
+<a name="rfc.section.8.5"></a><h4><a name="anchor69">8.5</a>&nbsp;Mailcap Configuration</h4>
 
 <p>
 
@@ -2243,7 +2535,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.7.6"></a><h4><a name="anchor56">7.6</a>&nbsp;Some Sample Mailcap Entries</h4>
+<a name="rfc.section.8.6"></a><h4><a name="anchor70">8.6</a>&nbsp;Some Sample Mailcap Entries</h4>
 
 <p>
 
@@ -2265,9 +2557,9 @@ everything is marked TODO!
 	application/postscript; ps2ascii %s ; copiousoutput
 </pre>
 
-<a name="anchor57"></a><br /><hr />
+<a name="anchor71"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.8"></a><h3>8.&nbsp;The tale of ex-mode</h3>
+<a name="rfc.section.9"></a><h3>9.&nbsp;The tale of ex-mode</h3>
 
 <p>
 
@@ -2287,7 +2579,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.8.1"></a><h4><a name="anchor58">8.1</a>&nbsp;What it is</h4>
+<a name="rfc.section.9.1"></a><h4><a name="anchor72">9.1</a>&nbsp;What it is</h4>
 
 <p>
 
@@ -2314,7 +2606,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.8.2"></a><h4><a name="anchor59">8.2</a>&nbsp;Configuration directives in exmode</h4>
+<a name="rfc.section.9.2"></a><h4><a name="anchor73">9.2</a>&nbsp;Configuration directives in exmode</h4>
 
 <p>
 
@@ -2365,7 +2657,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.8.3"></a><h4><a name="anchor60">8.3</a>&nbsp;Actions in exmode - or exmode in action?</h4>
+<a name="rfc.section.9.3"></a><h4><a name="anchor74">9.3</a>&nbsp;Actions in exmode - or exmode in action?</h4>
 
 <p>
 
@@ -2404,7 +2696,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.8.4"></a><h4><a name="anchor61">8.4</a>&nbsp;How to use it</h4>
+<a name="rfc.section.9.4"></a><h4><a name="anchor75">9.4</a>&nbsp;How to use it</h4>
 
 <p>
 
@@ -2417,7 +2709,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.8.5"></a><h4><a name="anchor62">8.5</a>&nbsp;The "but"s</h4>
+<a name="rfc.section.9.5"></a><h4><a name="anchor76">9.5</a>&nbsp;The "but"s</h4>
 
 <p>
 
@@ -2440,9 +2732,9 @@ everything is marked TODO!
 
 
 </p>
-<a name="anchor63"></a><br /><hr />
+<a name="anchor77"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.9"></a><h3>9.&nbsp;Managing remote ELinks instances with -remote</h3>
+<a name="rfc.section.10"></a><h3>10.&nbsp;Managing remote ELinks instances with -remote</h3>
 
 <p>
 
@@ -2486,7 +2778,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.9.1"></a><h4><a name="anchor64">9.1</a>&nbsp;Limitations and outstanding issues</h4>
+<a name="rfc.section.10.1"></a><h4><a name="anchor78">10.1</a>&nbsp;Limitations and outstanding issues</h4>
 
 <p>
 
@@ -2520,7 +2812,7 @@ everything is marked TODO!
 
 
 </p>
-<a name="rfc.section.9.2"></a><h4><a name="anchor65">9.2</a>&nbsp;Remote Actions</h4>
+<a name="rfc.section.10.2"></a><h4><a name="anchor79">10.2</a>&nbsp;Remote Actions</h4>
 
 <p>
 
@@ -2617,13 +2909,13 @@ everything is marked TODO!
 
 
 </p>
-<a name="anchor66"></a><br /><hr />
+<a name="anchor80"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.10"></a><h3>10.&nbsp;Acknowledgement</h3>
+<a name="rfc.section.11"></a><h3>11.&nbsp;Acknowledgement</h3>
 
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>11&nbsp;References</h3>
+<h3>12&nbsp;References</h3>
 <table width="99%" border="0">
 </table>
 

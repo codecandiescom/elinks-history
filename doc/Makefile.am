@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.26 2005/05/02 11:58:33 jonas Exp $
+## $Id: Makefile.am,v 1.27 2005/05/02 12:04:09 jonas Exp $
 
 SUBDIRS = man
 
@@ -45,7 +45,7 @@ update-manual:
 		sh $(top_srcdir)/doc/tools/xml2rfc book/book.xml manual.txt;  \
 		echo "done";				                      \
 		echo -n "Updating manual.html... ";			      \
-		test "$?" && sh $(top_srcdir)/doc/tools/xml2rfc book/book.xml manual.html; \
+		sh $(top_srcdir)/doc/tools/xml2rfc book/book.xml manual.html; \
 		echo "done";				                      \
 	else                                                                  \
 		echo "You need tclsh (in you PATH) to update the manual.";    \

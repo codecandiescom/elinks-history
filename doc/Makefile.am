@@ -1,30 +1,24 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.27 2005/05/02 12:04:09 jonas Exp $
+## $Id: Makefile.am,v 1.28 2005/05/02 12:15:51 jonas Exp $
 
-SUBDIRS = man
+SUBDIRS = man book
 
 # TODO: perl.pod should be pod2ized during make install. --pasky
 
 EXTRA_DIST = \
  README \
- bookmarks.txt \
  color-model.txt \
  ecmascript.txt \
  elinks-lua.texi \
  events.txt \
- exmode.txt \
  faq.html \
  feedback.txt \
  hacking.txt \
  index.txt \
- introduction.txt \
- mailcap.txt \
- marks.txt \
- mime.html \
+ manual.txt \
+ manual.html \
  perl.pod \
- remote.txt \
- small.txt \
- tabs.txt
+ small.txt
 
 ELINKS=$(top_builddir)/src/elinks
 

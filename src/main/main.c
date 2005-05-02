@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.244 2005/04/07 11:32:24 jonas Exp $ */
+/* $Id: main.c,v 1.245 2005/05/02 20:29:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,8 @@ static void
 init(void)
 {
 	INIT_LIST_HEAD(url_list);
-	int ret, fd = -1;
+	int fd = -1;
+	enum retval ret;
 
 	init_osdep();
 	init_static_version();
@@ -142,8 +143,9 @@ init(void)
 
 	/* Parsing command line options */
 	ret = parse_options(ac - 1, av + 1, &url_list);
-	if (ret) {
-		program.retval = RET_SYNTAX;
+	if (ret != RET_OK) {
+		if (ret != RET_COMMAND)
+			program.retval = RET_SYNTAX;
 		program.terminate = 1;
 		free_string_list(&url_list);
 		return;

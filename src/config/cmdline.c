@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.120 2005/05/02 20:20:26 jonas Exp $ */
+/* $Id: cmdline.c,v 1.121 2005/05/02 20:29:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@
 /* Hack to handle URL extraction for -remote commands */
 static unsigned char *remote_url;
 
-static int
+static enum retval
 parse_options_(int argc, unsigned char *argv[], struct option *opt,
                struct list_head *url_list)
 {
@@ -91,12 +91,12 @@ parse_options_(int argc, unsigned char *argv[], struct option *opt,
 				if (err[0]) {
 					usrerror(gettext("Cannot parse option %s: %s"), argv[-1], err);
 
-					return 1;
+					return RET_ERROR;
 				}
 
 				/* XXX: Empty strings means all is well and have
 				 * a cup of shut the fsck up. */
-				return 0;
+				return RET_COMMAND;
 
 			} else if (remote_url) {
 				if (url_list) add_to_string_list(url_list, remote_url, -1);
@@ -109,14 +109,14 @@ parse_options_(int argc, unsigned char *argv[], struct option *opt,
 		}
 	}
 
-	return 0;
+	return RET_OK;
 
 unknown_option:
 	usrerror(gettext("Unknown option %s"), argv[-1]);
-	return 1;
+	return RET_ERROR;
 }
 
-int
+enum retval
 parse_options(int argc, unsigned char *argv[], struct list_head *url_list)
 {
 	return parse_options_(argc, argv, cmdline_options, url_list);

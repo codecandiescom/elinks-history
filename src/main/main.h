@@ -1,4 +1,4 @@
-/* $Id: main.h,v 1.21 2005/04/07 10:48:47 zas Exp $ */
+/* $Id: main.h,v 1.22 2005/05/02 20:29:06 jonas Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
@@ -11,6 +11,7 @@ enum retval {
 	RET_FATAL,
 	RET_PING,
 	RET_REMOTE,
+	RET_COMMAND,
 };
 
 struct program {

@@ -1100,6 +1100,8 @@ AC_OUTPUT([ \
  contrib/conv/w3m2links.awk \
  debian/Makefile \
  doc/Makefile \
+ doc/book/Makefile \
+ doc/book/manpages/Makefile \
  doc/man/Makefile \
  doc/man/man1/Makefile \
  doc/man/man1/elinks.1 \

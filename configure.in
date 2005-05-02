@@ -27,6 +27,7 @@ dnl ===================================================================
 AC_PROG_CC
 AC_PROG_AWK
 AC_PATH_PROGS(AWK, "$AWK")
+AC_PATH_PROGS(TCLSH, "tclsh")
 AC_PROG_RANLIB
 
 dnl gcc specific options (to be continued at the bottom of configure)

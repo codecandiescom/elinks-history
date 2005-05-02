@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.28 2005/05/02 12:15:51 jonas Exp $
+## $Id: Makefile.am,v 1.29 2005/05/02 12:58:25 jonas Exp $
 
 SUBDIRS = man book
 
@@ -33,7 +33,7 @@ update-manpages:
 	fi
 
 update-manual:
-	@if test "x`which tclsh`" != "x";                                     \
+	@if test "x$(TCLSH)" != "x";                                          \
 	then                                                                  \
 		echo -n "Updating manual.txt... ";			      \
 		sh $(top_srcdir)/doc/tools/xml2rfc book/book.xml manual.txt;  \

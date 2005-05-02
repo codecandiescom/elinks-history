@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.119 2005/04/21 11:50:15 jonas Exp $ */
+/* $Id: cmdline.c,v 1.120 2005/05/02 20:20:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,10 +88,15 @@ parse_options_(int argc, unsigned char *argv[], struct option *opt,
 			err = option_types[option->type].cmdline(option, &argv, &argc);
 
 			if (err) {
-				if (err[0])
+				if (err[0]) {
 					usrerror(gettext("Cannot parse option %s: %s"), argv[-1], err);
 
-				return 1;
+					return 1;
+				}
+
+				/* XXX: Empty strings means all is well and have
+				 * a cup of shut the fsck up. */
+				return 0;
 
 			} else if (remote_url) {
 				if (url_list) add_to_string_list(url_list, remote_url, -1);

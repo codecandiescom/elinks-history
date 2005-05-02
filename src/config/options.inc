@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.191 2005/05/01 23:27:58 jonas Exp $ */
+/* $Id: options.inc,v 1.192 2005/05/02 07:33:34 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -557,7 +557,7 @@ static struct option_info config_options_info[] = {
 		"allow_dark_on_black", 0, 0,
 		N_("Setting this option to 0 will increase the contrast\n"
 		"between the foreground and background colors to ensure\n"
-		"readability. For example dissallow dark colors on a\n"
+		"readability. For example it disallows dark colors on a\n"
 		"black background. Note, this is different from ensuring\n"
 		"the contrast with the ensure_contrast option.")),
 

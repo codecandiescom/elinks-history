@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.24 2005/04/06 13:41:55 pasky Exp $
+## $Id: Makefile.am,v 1.25 2005/05/02 11:36:30 jonas Exp $
 
 SUBDIRS = man
 
@@ -36,4 +36,17 @@ update-manpages:
 		sh $(top_srcdir)/doc/tools/help2doc --elinks=$(ELINKS)        \
 				  --elinksconf                                \
 				  > $(top_srcdir)/doc/man/man5/elinks.conf.5; \
+	fi
+
+update-manual:
+	@if test "x`which tclsh`" != "x";                                     \
+	then                                                                  \
+		echo -n "Updating manual.txt... ";			      \
+		sh $(top_srcdir)/doc/tools/xml2rfc book/book.xml manual.txt;  \
+		echo "done";				                      \
+		echo -n "Updating manual.html... ";			      \
+		sh $(top_srcdir)/doc/tools/xml2rfc book/book.xml manual.html; \
+		echo "done";				                      \
+	else                                                                  \
+		echo "You need tclsh (in you PATH) to update the manual.";    \
 	fi

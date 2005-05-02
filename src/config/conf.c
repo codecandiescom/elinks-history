@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.156 2005/04/27 15:15:00 jonas Exp $ */
+/* $Id: conf.c,v 1.157 2005/05/02 02:48:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,8 +298,10 @@ parse_include(struct option *opt_tree, unsigned char **file, int *line,
 
 	/* File name */
 	fname = option_types[OPT_STRING].read(NULL, file, line);
-	if (!fname)
+	if (!fname) {
+		done_string(&dumbstring);
 		return ERROR_VALUE;
+	}
 
 	/* Mirror what we already have */
 	if (mirror) add_bytes_to_string(mirror, orig_pos, *file - orig_pos);

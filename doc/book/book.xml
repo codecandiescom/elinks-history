@@ -10,7 +10,7 @@
 <!-- ?rfc continuos='yes'? -->
 <?rfc editing='no'?>
 <?rfc header='ELinks/0.11'?>
-<?rfc private='ELinks Manual ($Revision: 1.4 $)'?>
+<?rfc private='ELinks Manual ($Revision: 1.5 $)'?>
 <?rfc subcompact='no'?>
 <?rfc toc='yes'?>
 <?rfc tocindent='no'?>
@@ -91,6 +91,7 @@
 <?rfc include="marks.xml"?>
 <?rfc include="urlshortcuts.xml"?>
 <?rfc include="terminals.xml"?>
+<?rfc include="mime.xml"?>
 <?rfc include="mailcap.xml"?>
 <?rfc include="exmode.xml"?>
 <?rfc include="remote.xml"?>

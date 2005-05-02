@@ -1,6 +1,6 @@
 
 
-ELinks Manual ($Revision: 1.1 $)                              J. Fonseca
+ELinks Manual ($Revision: 1.2 $)                              J. Fonseca
                                                                P. Baudis
                                                                 L. Monin
                                                               M. Masters
@@ -116,35 +116,35 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    6.1.8 UTF-8 I/O  . . . . . . . . . . . . . . . . . . . . . . . . . 24
    6.1.9 Character Set  . . . . . . . . . . . . . . . . . . . . . . . 24
    6.2   Terminal Configurations  . . . . . . . . . . . . . . . . . . 24
-   7.    Managing External Viewers with Mailcap . . . . . . . . . . . 24
-   7.1   A Short Intro to Mailcap . . . . . . . . . . . . . . . . . . 24
-   7.2   Parameters to Mailcap Entries  . . . . . . . . . . . . . . . 25
-   7.3   Reading of Mailcap Files . . . . . . . . . . . . . . . . . . 25
-   7.4   Fields . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
-   7.5   Mailcap Configuration  . . . . . . . . . . . . . . . . . . . 26
-   7.6   Some Sample Mailcap Entries  . . . . . . . . . . . . . . . . 26
-   8.    The tale of ex-mode  . . . . . . . . . . . . . . . . . . . . 27
-   8.1   What it is . . . . . . . . . . . . . . . . . . . . . . . . . 27
-   8.2   Configuration directives in exmode . . . . . . . . . . . . . 27
-   8.3   Actions in exmode - or exmode in action? . . . . . . . . . . 28
-   8.4   How to use it  . . . . . . . . . . . . . . . . . . . . . . . 28
-   8.5   The "but"s . . . . . . . . . . . . . . . . . . . . . . . . . 29
-   9.    Managing remote ELinks instances with -remote  . . . . . . . 29
-   9.1   Limitations and outstanding issues . . . . . . . . . . . . . 29
-   9.2   Remote Actions . . . . . . . . . . . . . . . . . . . . . . . 30
-   10.   Acknowledgement  . . . . . . . . . . . . . . . . . . . . . . 31
-   11.   References . . . . . . . . . . . . . . . . . . . . . . . . . 31
-         Authors' Addresses . . . . . . . . . . . . . . . . . . . . . 31
-
-
-
-
-
-
-
-
-
-
+   7.    Introduction to MIME handling  . . . . . . . . . . . . . . . 24
+   7.1   Handling MIME types, the ELinks way  . . . . . . . . . . . . 25
+   7.1.1 What are MIME types and why may you want to use them?  . . . 25
+   7.1.2 Associating files to MIME types  . . . . . . . . . . . . . . 25
+   7.1.3 Managing a given MIME type . . . . . . . . . . . . . . . . . 25
+   7.1.4 Specifying the details for a handler . . . . . . . . . . . . 26
+   7.2   Setting up elinks.conf . . . . . . . . . . . . . . . . . . . 26
+   7.2.1 Associating a file extension to a MIME type  . . . . . . . . 27
+   7.2.2 Defining a handler . . . . . . . . . . . . . . . . . . . . . 27
+   7.2.3 Associating a MIME type to a handler . . . . . . . . . . . . 28
+   8.    Managing External Viewers with Mailcap . . . . . . . . . . . 28
+   8.1   A Short Intro to Mailcap . . . . . . . . . . . . . . . . . . 28
+   8.2   Parameters to Mailcap Entries  . . . . . . . . . . . . . . . 28
+   8.3   Reading of Mailcap Files . . . . . . . . . . . . . . . . . . 29
+   8.4   Fields . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+   8.5   Mailcap Configuration  . . . . . . . . . . . . . . . . . . . 30
+   8.6   Some Sample Mailcap Entries  . . . . . . . . . . . . . . . . 30
+   9.    The tale of ex-mode  . . . . . . . . . . . . . . . . . . . . 30
+   9.1   What it is . . . . . . . . . . . . . . . . . . . . . . . . . 31
+   9.2   Configuration directives in exmode . . . . . . . . . . . . . 31
+   9.3   Actions in exmode - or exmode in action? . . . . . . . . . . 32
+   9.4   How to use it  . . . . . . . . . . . . . . . . . . . . . . . 32
+   9.5   The "but"s . . . . . . . . . . . . . . . . . . . . . . . . . 32
+   10.   Managing remote ELinks instances with -remote  . . . . . . . 32
+   10.1  Limitations and outstanding issues . . . . . . . . . . . . . 33
+   10.2  Remote Actions . . . . . . . . . . . . . . . . . . . . . . . 33
+   11.   Acknowledgement  . . . . . . . . . . . . . . . . . . . . . . 34
+   12.   References . . . . . . . . . . . . . . . . . . . . . . . . . 34
+         Authors' Addresses . . . . . . . . . . . . . . . . . . . . . 34
 
 
 
@@ -1322,21 +1322,21 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    colors and you have compiled both Screen and ELinks to support it,
    choose '256 colors'.
 
-7.  Managing External Viewers with Mailcap
+7.  Introduction to MIME handling
 
-   This document describes the support for Mailcap (RFC 1524) in ELinks.
-   It does not describe the mailcap format.  There are plenty of
-   documents on the Web that does this.  Google and thou wilt find.  ;)
+   At some time along the 0.4 prereleases, ELinks replaced the old Links
+   file configuration system with its own one.  Now, the configuration
+   is stored in elinks.conf, much more complete and featuring a new
+   syntax.  You can set most options from the UI (so usually there is no
+   need to deal with elinks.conf), and that used to be true for setting
+   MIME handlers and extensions as well; but now the associations menu
+   is gone temporarily, forcing you to set the handlers from the
+   configuration file.
 
-7.1  A Short Intro to Mailcap
-
-   Mailcap is a file format defined in RFC 1524.  Its purpose is to
-   inform multiple mail reading user agent (MUA) programs about the
-   locally-installed facilities for handling mail in various formats.
-   It is designed to work with the Multipurpose Internet Mail
-   Extensions, known as MIME.
-
-   ELinks allows MIME handlers to be defined using its own configuration
+   The comments provided within elinks.conf for the MIME options are not
+   much helpful, and those options may seem a bit obscure or confusing
+   at first.  This document is a basic introduction to setting of MIME
+   associations for ELinks.  If you want to know how to automatically
 
 
 
@@ -1345,6 +1345,201 @@ Fonseca, et al.                                                [Page 24]
 ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
 
+   launch a program to view some kind of file (like images), then read
+   on.  Some basic knowledge of MIME is recommended.
+
+7.1  Handling MIME types, the ELinks way
+
+7.1.1  What are MIME types and why may you want to use them?
+
+   If, while browsing with ELinks, you need to display files that it
+   can't show (like images or PDF documents), then you will likely want
+   to pass them to other programs that are suitable for this task.
+   While you may do it manually (saving the file to disk, running the
+   auxiliar program to show it and then removing the file when
+   finished), ELinks provides a method to do this automatically using
+   MIME types.
+
+   ELinks usually knows what the MIME type is for any file (which is a
+   kind of description of its format), thus you only need to specify how
+   to manage the MIME types for the files you want to open.  If you
+   don't tell ELinks how to manage a given MIME type then it will show
+   you on screen the contents of the file (as if it was ASCII text)
+   instead of calling an external program to show them.
+
+7.1.2  Associating files to MIME types
+
+   If the file is fetched from a web server then this web server should
+   tell ELinks what its MIME type is, so you should have generally no
+   need to care about it.  However, the web server might send an
+   incorrect type, or you may be retrieving it by FTP or from your local
+   filesystem, so sometimes ELinks needs to guess it.
+
+   The easiest method to guess a MIME type for a file is to just look at
+   its name trusting it was given the right extension.  ELinks supports
+   this, letting you to specify a type for any given extension.
+
+7.1.3  Managing a given MIME type
+
+   This usually means specifying programs to open files of this type and
+   the conditions in which those programs may be used.  For instance,
+   you may want to use zgv (a popular svgalib image viewer) when you are
+   using the text console, but xli (a image viewer for X) when running
+   the X window system.
+
+7.1.3.1  Binding it to a handler
+
+   Instead of directly attaching a program to a MIME type, ELinks lets
+   you associate an abstract handler to each type.  Then you can specify
+   which programs implement the handler and how are they used.
+
+
+
+
+Fonseca, et al.                                                [Page 25]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
+   For instance, you may create an image_viewer handler and assign it to
+   MIME types image/jpeg, image/png and image/gif.  Then you would
+   associate to image_viewer the programs you would like to use for
+   viewing images and the details on how to use them.  This is less
+   cumbersome than repeating all these details for each MIME type.
+
+7.1.4  Specifying the details for a handler
+
+   There are three issues to specify for a handler: the program
+   associated to it, whether you want confirmation before using it and
+   whether you want the terminal to be blocked while it is being used.
+
+   When specifying any of these issues, you must tell ELinks the
+   situation in which it gets applied, which is typically either the
+   text console or the X window sytem.  So you can specify that you
+   don't want confirmation before running the program when running X,
+   and that you want it otherwise.  Similarly, when you are attaching a
+   program (name it foo) to this handler you must tell if it's for X or
+   not (you can attach a second program for the other choice if you
+   want).
+
+7.1.4.1  Attaching a program to it
+
+   You must tell ELinks the exact command for running it (with any
+   options you wish).  In place of the filename you must enter %.
+
+7.1.4.2  Choosing whether you want confirmation before applying it
+
+   This is rather simple.  If you choose not to do so, then the handler
+   will be automatically called upon when you demand ELinks to show
+   something attached to this handler.  Otherwise, if you ask for
+   confirmation, you will be prompted to open it with a external
+   program, with additional choices that include cancelling the
+   operation and viewing it with ELinks.  E.g: you may use this option
+   for programs written in C so that you may always choose if you want
+   to read the source with ELinks, or if you want to save it, or if you
+   want to use indent to display it with less.
+
+7.1.4.3  Choosing whether to block the terminal
+
+   If you don't want to allow going back to ELinks (or any other program
+   from the same terminal) before the external program ends, then you
+   should ask to block the terminal.
+
+7.2  Setting up elinks.conf
+
+   If you have old configuration files from old ELinks versions or from
+   Links, then you may use the conf-links2elinks.pl script (which is
+
+
+
+Fonseca, et al.                                                [Page 26]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
+   placed at contrib/conv/ on the source distribution) to convert them
+   to the new format.  If you don't use it you will need to edit the
+   configuration file, and here you will find how.
+
+7.2.1  Associating a file extension to a MIME type
+
+   You can still do this with the UI, from the the Setup->File
+   Extensions submenu.
+
+   If you want to do so from the configuration file, enter set
+   mime.extension.ext = "type", replacing ext with the appropiate file
+   extension, and type with its MIME type.  E.g.  you may want to have
+   set mime.extension.jpg = "image/jpeg".
+
+7.2.2  Defining a handler
+
+   For each handler you must define three items, specifying in what
+   context the value of the item should be applied.  You must enter set
+   mime.handler.handler-name.item.context = value, replacing
+   handler-name with the name for the handler you are defining, item
+   with the item you are defining for this handler, context with the
+   context this item value is to be applied, and value with the value
+   you want to assign to the item.  You must do so for each of the
+   available items: program, ask and block.
+
+   The value for program is a string with the exact command you want to
+   be issued to view the file, placing % were you would put the file
+   name.  The values for ask and block are either 0 (no) or 1 (yes).
+   Available contexts include unix and unix-xwin, which mean UNIX text
+   terminal and X respectively (others can be os2, win32, beos, riscos,
+   ...).  The latter does not mean you are running ELinks from X, just
+   that the DISPLAY variable is set so that ELinks may run an X program.
+
+   To illustrate it, here is an example.  Suppose you want to define the
+   image_viewer handler which should be used to view images.  The
+   configuration file may look like this:
+
+   	set mime.handler.image_viewer.unix.ask = 1
+   	set mime.handler.image_viewer.unix-xwin.ask = 0
+
+   	set mime.handler.image_viewer.unix.block = 1
+   	set mime.handler.image_viewer.unix-xwin.block = 0
+
+   	set mime.handler.image_viewer.unix.program = "zgv %"
+   	set mime.handler.image_viewer.unix-xwin.program = "xli %"
+
+   In this example the image_viewer handler uses the svgalib image
+   viewer zgv when X is not available, and the X image viewer xli when
+
+
+
+Fonseca, et al.                                                [Page 27]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
+   it is.  The terminal would be blocked when X is not available and it
+   would not be when it's available.  Finally, ELinks would ask for
+   confirmation before using the handler only with X not available.
+
+7.2.3  Associating a MIME type to a handler
+
+   Just enter set mime.type.class.name = "handler", replacing class with
+   the class for the mime type, name with the specific name within that
+   class, and handler with the name for the handler you want to assign
+   to the MIME type.  E.g.  you may want to have set
+   mime.type.image.jpeg = "image_viewer".
+
+8.  Managing External Viewers with Mailcap
+
+   This document describes the support for Mailcap (RFC 1524) in ELinks.
+   It does not describe the mailcap format.  There are plenty of
+   documents on the Web that does this.  Google and thou wilt find.  ;)
+
+8.1  A Short Intro to Mailcap
+
+   Mailcap is a file format defined in RFC 1524.  Its purpose is to
+   inform multiple mail reading user agent (MUA) programs about the
+   locally-installed facilities for handling mail in various formats.
+   It is designed to work with the Multipurpose Internet Mail
+   Extensions, known as MIME.
+
+   ELinks allows MIME handlers to be defined using its own configuration
    system, so why support mailcap? It can be seen as an alternative or
    simply as a supplement for setting up MIME handlers in ELinks.
    Mailcap files are present on most UNIX systems--usually in /etc/
@@ -1354,7 +1549,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    default.  If you don't need mailcap support, just configure ELinks
    with the flag: --disable-mailcap.
 
-7.2  Parameters to Mailcap Entries
+8.2  Parameters to Mailcap Entries
 
    The code has been ported from Mutt and thereby inherits some of its
    various features and limitation.
@@ -1366,6 +1561,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    +--------------+----------------------------------------------------+
    | %s           | The filename that contains the data.               |
    | %f           | The content type, like 'text/plain'.               |
+
+
+
+Fonseca, et al.                                                [Page 28]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    +--------------+----------------------------------------------------+
 
    The following parameters are not supported, since they do not really
@@ -1381,7 +1584,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    +--------------+----------------------------------------------------+
 
 
-7.3  Reading of Mailcap Files
+8.3  Reading of Mailcap Files
 
    Mailcap files will be read when starting ELinks.  The mailcap files
    to use will be found from the mailcap path, a colon separated list of
@@ -1393,21 +1596,13 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
    	set mime.mailcap.path = "~/.mailcap:/usr/local/etc/mailcap"
 
-
-
-
-Fonseca, et al.                                                [Page 25]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    2.  From MAILCAP environment variable.
 
    3.  If non of the above is defined, the mailcap path defaults to "~/
        .mailcap:/etc/mailcap".
 
 
-7.4  Fields
+8.4  Fields
 
    Since mailcap handling is primarily for displaying of resources, all
    fields like edit, print, compose etc.  are ignored.
@@ -1422,12 +1617,20 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    appending a pipe and a pager program to the command.  The pager
    program will be read from the PAGER environment variable.  If this
    fails, test are made for common pager programs (/usr/bin/pager, /usr/
+
+
+
+Fonseca, et al.                                                [Page 29]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    bin/less and /usr/bin/more in that order).  So if you define
    png2ascii as your handler for image/png and specify copiousoutput
    then the executed command will be "png2ascii |/usr/bin/less" if less
    is your pager or present on your system.
 
-7.5  Mailcap Configuration
+8.5  Mailcap Configuration
 
    Apart from the mime.mailcap.path option, you can configure if mailca
    support should be disabled.  The default being that it is enabled.
@@ -1444,19 +1647,11 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
    if you would like to be asked before opening a file.
 
-7.6  Some Sample Mailcap Entries
+8.6  Some Sample Mailcap Entries
 
    Below are examples of how to specify external viewers:
 
    	# Use xv if X is running
-
-
-
-Fonseca, et al.                                                [Page 26]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    	image/*;                xv %s ; test=test -n "$DISPLAY";
 
    	# Convert images to text using the netpbm tools
@@ -1470,7 +1665,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    	application/postscript; ps2ascii %s ; copiousoutput
 
 
-8.  The tale of ex-mode
+9.  The tale of ex-mode
 
    Are you a vim-controls nerd who wants to see them everywhere?
    Welcome.
@@ -1478,11 +1673,19 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Actually ELinks doesn't shine in this area yet very much.  Heck, the
    famous hjkl foursome is still occupied by some feeble managers in the
    default keymap (we have that in our monumental TODO lists).  Still,
+
+
+
+Fonseca, et al.                                                [Page 30]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    if you know what to touch during the compilation (--enable-exmode),
    you can get at least some familiar reply to the mighty ':' (colon)
    grip.
 
-8.1  What it is
+9.1  What it is
 
    Ex-mode gives you some (still very rough and only marginally
    complete) access to advanced ELinks commands, to be invoked anywhere
@@ -1497,7 +1700,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    ex-mode.  Second, you can invoke (almost) any action from the
    ex-mode.
 
-8.2  Configuration directives in exmode
+9.2  Configuration directives in exmode
 
    There aren't many of these, so we can skim through them fast.
 
@@ -1505,14 +1708,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    with the option manager visuals, you can just drop in to the ex-mode
    and type 'set the.option = 1234'.  See man elinks.conf (5) or the
    options manager for the list of options; you can also get a complete
-
-
-
-Fonseca, et al.                                                [Page 27]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    options tree saved to elinks.conf if you set config.saving_style = 2
    (but do NOT keep that setting unless you know what are you doing; if
    we change a default value of some option in future releases, we
@@ -1535,7 +1730,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Actually, ELinks would eat '#blahblah blah' too, if you see a point
    in feeding it that kind of stuff.
 
-8.3  Actions in exmode - or exmode in action?
+
+
+Fonseca, et al.                                                [Page 31]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
+9.3  Actions in exmode - or exmode in action?
 
    There is too many of these, so we should better skim through them
    fast.
@@ -1557,23 +1759,15 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    invoke the "quit" action from the exmode - if you type it there,
    "really-quit" is invoked instead.
 
-8.4  How to use it
+9.4  How to use it
 
    It's simple.  You press ':' (without the apostrophes, of course) and
    type in the command, then you press enter.  E.g., ':set
-
-
-
-Fonseca, et al.                                                [Page 28]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    config.saving_style = 3' (this is a good thing), ':quit' (and the
    game is over).  The standard line-editing facility is present (cursor
    keys and so), and the ex-mode input line has own history.
 
-8.5  The "but"s
+9.5  The "but"s
 
    The biggest usability hurdle so far is that there is no
    tab-completion.  This is why the ex-mode support is not enabled by
@@ -1586,11 +1780,19 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    make another ex-mode command handler, it's just that no one has done
    it yet ;-).  Also, more actions should be able to take arguments.
 
-9.  Managing remote ELinks instances with -remote
+10.  Managing remote ELinks instances with -remote
 
    Some programs provide the ability to pass URIs to external programs.
    When stumbling upon a reference to a page you want to see, it is
    sometimes a kludge to copy and paste it into ELinks.  This is where
+
+
+
+Fonseca, et al.                                                [Page 32]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    -remote can be a nifty solution.
 
    When invoking ELinks with the -remote argument, it does not start a
@@ -1611,20 +1813,12 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    All URLs passed to the openURL() commands can be URL prefixes, so the
    command above could have simply used ``openURL(fm, new-tab)''.
 
-9.1  Limitations and outstanding issues
+10.1  Limitations and outstanding issues
 
    Remote control is implemented using the intercommunication socket
    created in ~/.elinks/, so the command has to be run on the same
    machine as the instance you want to control; or put differently: the
    two ELinkses need to share a file system that supports socket files,
-
-
-
-Fonseca, et al.                                                [Page 29]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    which rules out usage of -remote over NFS.  This also implies that
    the ELinks instance you want to control should be started without
    passing -no-home nor -no-connect.
@@ -1639,7 +1833,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    mouse focus being redirected to new tabs or dialogs opened by the
    -remote action.
 
-9.2  Remote Actions
+10.2  Remote Actions
 
    The command syntax is case-insensitive.  For readability, we use the
    casing in the listing of supported commands.
@@ -1647,6 +1841,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Mozilla -remote compatible commands:
 
    ping(): Checks for existence of a remote instance.  Makes it possible
+
+
+
+Fonseca, et al.                                                [Page 33]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
       for scripts to query if remote controlling is possible.
 
    openURL(): Prompts for a URL in current tab by opening the Goto
@@ -1674,16 +1876,9 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    new tabs containing slashdot.org, freshmeat.net and a Google search
    of elinks will be opened.
 
+11.  Acknowledgement
 
-
-Fonseca, et al.                                                [Page 30]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
-10.  Acknowledgement
-
-11  References
+12  References
 
 
 Authors' Addresses
@@ -1701,6 +1896,13 @@ Authors' Addresses
    Laurent Monin
 
    EMail: zas@norz.org
+
+
+
+
+Fonseca, et al.                                                [Page 34]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
 
    Miciah Dashiel Butler Masters
@@ -1732,5 +1934,27 @@ Authors' Addresses
 
 
 
-Fonseca, et al.                                                [Page 31]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fonseca, et al.                                                [Page 35]
 

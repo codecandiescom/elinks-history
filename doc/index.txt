@@ -28,20 +28,12 @@ Table of contents
 Introduction and Table of Contents .......................... index.txt
 
 User's Guide
-	Beginner's Topics
-		Introduction to the World of ELinks .. introduction.txt
+	The ELinks Manual (txt) ............................ manual.txt
+	The ELinks Manual (html) .......................... manual.html
+	Other Topics
 		Frequently Asked Questions ................... faq.html
-		Bookmarks ............................... bookmarks.txt
-		The Wonders of Tabbed Browsing ............... tabs.txt
-		Document Marks .............................. marks.txt
-		URL shortcuts ......................... urlprefixes.txt
-		The Terminal Setup ....................... terminal.txt
-	Advanced Topics
 		Automatic MIME Type Resolution .............. mime.html
-		Managing External Viewers with Mailcap .... mailcap.txt
 		JavaScript/ECMAScript in ELinks ........ ecmascript.txt
-		The Ex-mode Secrets Pamphlet ............... exmode.txt
-		Managing Remote ELinks Instances ........... remote.txt
 
 Man pages (*)
 	elinks(1) ................................... man/man1/elinks.1
@@ -94,7 +86,7 @@ detailed notes regarding given modules/subsystems.
 
 
 
-$Id: index.txt,v 1.16 2005/04/06 13:41:55 pasky Exp $
+$Id: index.txt,v 1.17 2005/05/02 11:40:50 jonas Exp $
 
 (Note: Sometimes, I broke the lines manually earlier than gqap would,
 for greater aesthetical effect. --pasky)

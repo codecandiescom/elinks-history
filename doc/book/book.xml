@@ -1,0 +1,119 @@
+<?xml version='1.0'?>
+
+<!DOCTYPE rfc SYSTEM 'rfc2629.dtd' [
+
+]>
+
+<?rfc comments='yes'?>
+<?rfc inline='yes'?>
+<?rfc compact='no'?>
+<!-- ?rfc continuos='yes'? -->
+<?rfc editing='no'?>
+<?rfc header='ELinks/0.11'?>
+<?rfc private='ELinks Manual ($Revision: 1.4 $)'?>
+<?rfc subcompact='no'?>
+<?rfc toc='yes'?>
+<?rfc tocindent='no'?>
+
+<rfc>
+
+<front>
+
+<title>ELinks Manual for version 0.11</title>
+
+<author initials='J.F.' surname='Fonseca' fullname='Jonas Fonseca'>
+	<organization></organization>
+	<address><email>fonseca@diku.dk</email></address>
+</author>
+<author initials='P.B.' surname='Baudis' fullname='Petr Baudis'>
+	<organization></organization>
+	<address><email>pasky@ucw.cz</email></address>
+</author>
+<author initials='L.M.' surname='Monin' fullname='Laurent Monin'>
+	<organization></organization>
+	<address><email>zas@norz.org</email></address>
+</author>
+<author initials='M.D.B.M.' surname='Masters' fullname='Miciah Dashiel Butler Masters'>
+	<organization></organization>
+	<address><email>miciah@myrealbox.com</email></address>
+</author>
+<author initials='J.L.G.G.' surname='González' fullname='José Luis González González'>
+	<organization></organization>
+	<address><email>jlg80@mi.madritel.es</email></address>
+</author>
+
+<date month='May' year='2005' />
+
+<abstract>
+<t>
+
+	Welcome! This is the entry point for the current humble ELinks
+	manual.  It is by no way complete, it is not even very
+	homogeneous and it should be eventually superseded by a complete
+	ELinks Book, which you can find in the book/ subdirectory in a
+	very prenatal stage.
+
+</t>
+<t>
+
+	There was a complete (or from a large part complete) manual for
+	the Links 0.82 once, you can still find it at:
+
+	<eref target="http://links.sourceforge.net/docs/manual-0.82-en/index.html" />
+
+	While large parts of it do not apply anymore, you may still find
+	some relevant information there.
+
+</t>
+<t>
+
+	You may also refer to the manual page for a very quick
+	reference, however little effort is done to keep it always
+	up-to-date.  On the other hand, the built-in documentation is
+	_always_ up-to-date.  Check the --long-help and --config-help
+	ELinks command-line arguments.
+
+</t>
+<t>
+
+	Hold harmless the author, and any lawful use is allowed.
+
+</t>
+</abstract>
+
+</front>
+
+<middle>
+
+<?rfc include="introduction.xml"?>
+<?rfc include="bookmarks.xml"?>
+<?rfc include="tabs.xml"?>
+<?rfc include="marks.xml"?>
+<?rfc include="urlshortcuts.xml"?>
+<?rfc include="terminals.xml"?>
+<?rfc include="mailcap.xml"?>
+<?rfc include="exmode.xml"?>
+<?rfc include="remote.xml"?>
+
+<section title="Acknowledgement">
+<!--t>
+
+	Bram Cohen who devised the protocol and brought it to life.
+
+</t>
+<t>
+
+	The community which has supported BitTorrent from early on and
+	participated in sharing ideas for improving the protocol.
+
+</t-->
+</section>
+</middle>
+
+<back>
+
+<references>
+</references>
+
+</back>
+</rfc>

@@ -1,3 +1,152 @@
+Mon May  2 20:29:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, main.h, config/cmdline.c, config/cmdline.h:
+
+	Really fix the exit code issue from last patch by introducng
+	RET_COMMAND that will like the previous version exit if the command
+	line handler requested it.  
+
+Mon May  2 20:20:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Do not exit with RET_SYNTAX code when a command line handler returns
+	the empty string.  
+
+Mon May  2 13:23:49 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon May  2 12:58:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, doc/Makefile.am:
+
+	Make configure check if tclsh is present.  
+
+Mon May  2 12:32:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, doc/book/manpages/Makefile.am:
+
+	Readd the doc/book dirs + minor makefile fix.  
+
+Mon May  2 12:16:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: manual.html, manual.txt:
+
+	Update the manual.  
+
+Mon May  2 12:15:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, book/Makefile.am, book/manpages/Makefile.am:
+
+	Fixup automake files so the new stuff gets into EXTRA_DIST etc.  
+
+Mon May  2 12:11:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: manual.txt, mime.html, book/book.xml, book/mime.xml:
+
+	Convert Jose's MIME guide.  
+
+Mon May  2 12:10:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/xml2rfc:
+
+	Add license info from the tarball.  
+
+Mon May  2 12:04:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Revert last patch.  
+
+Mon May  2 11:58:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Fail if the .txt version cannot be made.  
+
+Mon May  2 11:41:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: bookmarks.txt, exmode.txt, introduction.txt, mailcap.txt,
+	marks.txt, remote.txt, tabs.txt, terminal.txt, urlprefixes.txt:
+
+	Remove files which are now maintain in RFC 2629 XML format.  
+
+Mon May  2 11:40:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/index.txt:
+
+	Point to the manual.  
+
+Mon May  2 11:36:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: manual.html, manual.txt:
+
+	Run make update-manual and add the result.  
+
+Mon May  2 11:36:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Add build rule.  
+
+Mon May  2 11:26:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/xml2rfc:
+
+	Add tclsh script for converting the manual. I didn't write it, just
+	working on some modifications to make it spit out txt files in
+	another format.  
+
+Mon May  2 11:23:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: book.xml, bookmarks.xml, exmode.xml, introduction.xml,
+	mailcap.xml, marks.xml, remote.xml, tabs.xml, terminals.xml,
+	urlshortcuts.xml:
+
+	Add new style manual XML. Use xml2rfc to convert it.  
+
+Mon May  2 11:21:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: Makefile.doc, TODO, book.xml, config.ent.in,
+	elinksbook.dtd:
+
+	Remove the DocBook stuff. May you rest in peace.  
+
+Mon May  2 07:33:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.inc:
+
+	dissallow -> disalow.  
+
+Mon May  2 02:48:17 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/conf.c:
+
+	Don't leak dumbstring on invalid include directives.  
+
+Sun May  1 23:27:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Change the allow_dark_on_black option yet again. Idea by miernik.
+	Text by rrowan.  
+
+Sun May  1 23:11:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* config/m4/features.m4:
+
+	Oops, readd eval removed in last patch.  
+
+Sun May  1 22:38:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Oops, max-age= cache control should set the top-level expires
+	varibale.  
+
 Sun May  1 20:58:51 2005  Varga Balázs <vinnui@ent.hu>:
 
 	* po/hu.po:
@@ -47727,8 +47876,7 @@ Sun Jan 18 15:10:29 2004  Petr Baudis <pasky@ucw.cz>:
 	src/terminal/graphics/.vimrc, src/terminal/text/.vimrc,
 	src/util/.vimrc, src/viewer/.vimrc, src/viewer/dump/.vimrc,
 	src/viewer/graphics/.vimrc, doc/.vimrc, src/viewer/text/.vimrc,
-	doc/book/.vimrc, doc/book/config/.vimrc, doc/book/info/.vimrc,
-	doc/book/intro/.vimrc, doc/book/manpages/.vimrc, doc/man/.vimrc,
+	doc/book/.vimrc, doc/book/manpages/.vimrc, doc/man/.vimrc,
 	doc/man/man1/.vimrc, doc/man/man5/.vimrc, doc/tools/.vimrc,
 	po/.vimrc:
 

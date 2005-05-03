@@ -3,7 +3,7 @@
 # ELinks debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 #
-# $Id: rules,v 1.15 2005/01/18 22:32:46 jonas Exp $
+# $Id: rules,v 1.16 2005/05/03 18:01:54 jonas Exp $
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -16,7 +16,7 @@ export DH_COMPAT=4
 # This adds the values the variable is set to to the -X options of all commands
 # that support the -X option
 # XXX: The last _has_ to be `Makefil', since find chokes on `Makefile'
-export DH_ALWAYS_EXCLUDE=CVS:.cvsignore:.vimrc:Makefil
+export DH_ALWAYS_EXCLUDE=CVS:.cvsignore:.vimrc:MT:.mt-attrs:Makefil
 
 
 ## Handling of DEB_BUILD_OPTIONS
@@ -50,7 +50,11 @@ CONFIGURE_OPTIONS = \
  --sysconfdir=/etc/elinks \
  --without-openssl \
  --without-x \
- --with-gnutls=/usr
+ --with-gnutls=/usr \
+ --with-perl --enable-nntp --enable-256-colors --enable-leds  \
+ --without-spidermonkey
+# spidermonkey: libsmjs-dev
+# perl libperl-dev
 
 
 # The .deb file packaging root directory

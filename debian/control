@@ -3,7 +3,7 @@ Section: web
 Priority: optional
 Maintainer: Peter Gervai <grin@tolna.net>
 Standards-Version: 3.6.1
-Build-Depends: debhelper (>= 4.0.0), m4, bison, libgnutls11-dev, libgpmg1-dev [alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 s390x sh3 sh3eb sh4 sh4eb sparc sparc64 amd64], liblua50-dev, liblualib50-dev, libbz2-dev, libexpat1-dev (>= 1.95.6), type-handling (>= 0.2.1)
+Build-Depends: debhelper (>= 4.0.0), m4, bison, libgnutls11-dev, libgpmg1-dev [alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 s390x sh3 sh3eb sh4 sh4eb sparc sparc64 amd64], liblua50-dev, liblualib50-dev, libbz2-dev, libexpat1-dev (>= 1.95.6), type-handling (>= 0.2.1), libperl-dev
 
 Package: elinks
 Architecture: any

@@ -2,6 +2,7 @@
 .deps
 Makefile
 Makefile.in
+build-stamp
 depcomp
 elinks
 elinks.postinst.debhelper

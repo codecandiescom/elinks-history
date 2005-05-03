@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.31 2005/05/03 23:15:59 jonas Exp $
+## $Id: Makefile.am,v 1.32 2005/05/03 23:27:55 jonas Exp $
 
 SUBDIRS = man book
 
@@ -23,13 +23,13 @@ EXTRA_DIST = \
 ELINKS=$(top_builddir)/src/elinks
 
 update-manpages:
-	@if test ! -x "$(ELINKS)";                                            \
-	then                                                                  \
-		echo "There is no '$(ELINKS)' to update from.";               \
-	else                                                                  \
-		sh $(top_srcdir)/doc/tools/help2doc --elinks=$(ELINKS)        \
-				  --elinksconf                                \
-				  > $(top_srcdir)/doc/man/man5/elinks.conf.5; \
+	@if test ! -x "$(ELINKS)";						\
+	then									\
+		echo "There is no '$(ELINKS)' to update from.";			\
+	else									\
+		sh $(top_srcdir)/doc/tools/help2doc --elinks=$(ELINKS)		\
+				  --elinksconf					\
+				  > $(top_srcdir)/doc/man/man5/elinks.conf.5;	\
 	fi
 
 BOOK	 = $(top_srcdir)/doc/book/book.xml

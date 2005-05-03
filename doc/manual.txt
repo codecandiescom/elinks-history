@@ -1,11 +1,11 @@
 
 
-ELinks Manual ($Revision: 1.3 $)                              J. Fonseca
+ELinks Manual ($Revision: 1.4 $)                              J. Fonseca
                                                                P. Baudis
                                                                 L. Monin
                                                               M. Masters
                                                              J. González
-                                                             May 2, 2005
+                                                             May 4, 2005
 
 
                      ELinks Manual for version 0.11

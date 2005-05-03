@@ -10,7 +10,7 @@
 <!-- ?rfc continuos='yes'? -->
 <?rfc editing='no'?>
 <?rfc header='ELinks/0.11'?>
-<?rfc private='ELinks Manual ($Revision: 1.5 $)'?>
+<?rfc private='ELinks Manual ($Revision: 1.6 $)'?>
 <?rfc subcompact='no'?>
 <?rfc toc='yes'?>
 <?rfc tocindent='no'?>
@@ -42,8 +42,8 @@
 	<address><email>jlg80@mi.madritel.es</email></address>
 </author>
 
-<date month='May' year='2005' />
-
+<date year="2005" />
+	
 <abstract>
 <t>
 

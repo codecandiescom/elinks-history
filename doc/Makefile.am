@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.30 2005/05/03 22:33:07 jonas Exp $
+## $Id: Makefile.am,v 1.31 2005/05/03 23:15:59 jonas Exp $
 
 SUBDIRS = man book
 
@@ -32,19 +32,27 @@ update-manpages:
 				  > $(top_srcdir)/doc/man/man5/elinks.conf.5; \
 	fi
 
+BOOK	 = $(top_srcdir)/doc/book/book.xml
+TMPBOOK	 = $(top_builddir)/doc/book/.book.xml
+TXTBOOK	 = $(top_srcdir)/doc/manual.txt
+HTMLBOOK = $(top_srcdir)/doc/manual.html
+MANBOOK	 = $(top_srcdir)/doc/man/man1/elinksmanual.1
+XML2RFC	 = $(top_srcdir)/doc/tools/xml2rfc
+
 update-manual:
-	@if test "x$(TCLSH)" != "x";                                          \
-	then                                                                  \
-		echo -n "Updating manual.txt... ";			      \
-		sh $(top_srcdir)/doc/tools/xml2rfc book/book.xml manual.txt;  \
-		echo "done";				                      \
-		echo -n "Updating manual.html... ";			      \
-		sh $(top_srcdir)/doc/tools/xml2rfc book/book.xml manual.html; \
-		echo "done";				                      \
-		echo -n "Updating man/man1/elinksmanual.1... ";		      \
-		sh $(top_srcdir)/doc/tools/xml2rfc book/book.xml manual.nr    \
-			&& mv manual.nr man/man1/elinksmanual.1; \
-		echo "done";				                      \
-	else                                                                  \
-		echo "You need tclsh (in you PATH) to update the manual.";    \
+	@if test "x$(TCLSH)" != "x";						\
+	then									\
+		cat $(BOOK) | sed 's/\$$\(Revision: .*\) \$$/\1/' > $(TMPBOOK); \
+		echo -n "Updating $(TXTBOOK)... ";				\
+		sh $(XML2RFC) $(TMPBOOK) $(TXTBOOK);				\
+		echo "done";							\
+		echo -n "Updating $(HTMLBOOK)... ";				\
+		sh $(XML2RFC) $(TMPBOOK) $(HTMLBOOK);				\
+		echo "done";							\
+		echo -n "Updating $(MANBOOK)... ";				\
+		sh $(XML2RFC) $(TMPBOOK) $(MANBOOK);				\
+		echo "done";							\
+		rm -f $(TMPBOOK);						\
+	else									\
+		echo "You need tclsh (in you PATH) to update the manual.";	\
 	fi

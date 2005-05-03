@@ -1,6 +1,6 @@
 
 
-ELinks Manual ($Revision: 1.4 $)                              J. Fonseca
+ELinks Manual (Revision: 1.6)                                 J. Fonseca
                                                                P. Baudis
                                                                 L. Monin
                                                               M. Masters

@@ -1,6 +1,29 @@
 elinks (0.11-0.0upstream) unstable; urgency=low
 
   * NMU
+  * Really fix endless refreshing of documents (#293298)
+
+ -- Jonas Fonseca <fonseca@diku.dk>  Tue,  3 May 2005 19:44:01 +0200
+
+elinks (0.10.4-3) unstable; urgency=low
+
+  * _Really_ add the missing build-dep (Closes: #304803, #306246)
+
+ -- Peter Gervai <grin@tolna.net>  Wed, 27 Apr 2005 02:38:31 +0200
+
+elinks (0.10.4-2) unstable; urgency=low
+
+  * Disabled check to refuse run when root on the request of
+    the upstream. (Closes: #305739, #304876)
+  * Added missing build-dep (Closes: #304803, #306246)
+  * Fixed default config (Closes: #305017, #305628, #305004)
+
+ -- Peter Gervai <grin@tolna.net>  Sun, 24 Apr 2005 19:14:16 +0200
+
+elinks (0.10.4-1) unstable; urgency=low
+
+  * New Upstream release
+  * Disable SpiderMonkey because it is not useful right now (closes: #302505)
   * Only read from /dev/stdin if no URL was given on the command line and
     automatically allow special files to be read (closes: #296976, #297510)
   * Fix repeatedly and endless refreshing of documents that triggers a
@@ -15,10 +38,21 @@ elinks (0.11-0.0upstream) unstable; urgency=low
     issues (closes: #300889)
   * Be more tolerant when handling values from the no_proxy environment
     variable (closes: #218451)
-  * explicitly define keyboard accelerators for buttons so that they
+  * Explicitly define keyboard accelerators for buttons so that they
     do not clash (closes: #270205)
 
- -- Jonas Fonseca <fonseca@diku.dk>  Tue,  5 Apr 2005 21:57:02 +0200
+ -- Peter Gervai <grin@tolna.net>  Tue, 12 Apr 2005 23:46:12 +0200
+
+elinks (0.10.2-3) unstable; urgency=low
+
+  * Enable ECMAScript/JS engine SpiderMonkey
+  * Enable experimental Perl scripting
+  * Enable experimental NNTP handling
+  * Enable 256 color terminal handling
+  * Enable status blinkenlights ("leds")
+  * Refuse to run under root uid
+
+ -- Peter Gervai <grin@tolna.net>  Fri, 25 Feb 2005 12:47:10 +0100
 
 elinks (0.10.2-2) unstable; urgency=low
 

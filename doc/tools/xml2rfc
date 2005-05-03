@@ -102,7 +102,7 @@ LC_ALL=C exec tclsh "$0" "$0" "$@"
 # liability for all claims, expenses, losses, damages and costs any user may
 # incur as a result of using, copying or modifying the Software.
 #
-# $Id: xml2rfc,v 1.2 2005/05/02 12:10:20 jonas Exp $
+# $Id: xml2rfc,v 1.3 2005/05/03 23:14:37 jonas Exp $
 
 package provide sgml 1.6
 
@@ -1777,7 +1777,7 @@ proc sgml::dbgputs {where text} {
 # liability for all claims, expenses, losses, damages and costs any user may
 # incur as a result of using, copying or modifying the Software.
 #
-# $Id: xml2rfc,v 1.2 2005/05/02 12:10:20 jonas Exp $
+# $Id: xml2rfc,v 1.3 2005/05/03 23:14:37 jonas Exp $
 
 package provide xml 1.8
 
@@ -2709,6 +2709,7 @@ proc xml2rfc {input {output ""} {remote ""}} {
         html -
         nr   -
         txt  {}
+        1 { set mode nr }
 
         xml {
             set stdout [open $output { WRONLY CREAT TRUNC }]

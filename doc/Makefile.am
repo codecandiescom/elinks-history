@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.32 2005/05/03 23:27:55 jonas Exp $
+## $Id: Makefile.am,v 1.33 2005/05/03 23:31:49 jonas Exp $
 
 SUBDIRS = man book
 
@@ -43,15 +43,12 @@ update-manual:
 	@if test "x$(TCLSH)" != "x";						\
 	then									\
 		cat $(BOOK) | sed 's/\$$\(Revision: .*\) \$$/\1/' > $(TMPBOOK); \
-		echo -n "Updating $(TXTBOOK)... ";				\
+		echo "Updating $(TXTBOOK)... ";					\
 		sh $(XML2RFC) $(TMPBOOK) $(TXTBOOK);				\
-		echo "done";							\
-		echo -n "Updating $(HTMLBOOK)... ";				\
+		echo "Updating $(HTMLBOOK)... ";				\
 		sh $(XML2RFC) $(TMPBOOK) $(HTMLBOOK);				\
-		echo "done";							\
-		echo -n "Updating $(MANBOOK)... ";				\
+		echo "Updating $(MANBOOK)... ";					\
 		sh $(XML2RFC) $(TMPBOOK) $(MANBOOK);				\
-		echo "done";							\
 		rm -f $(TMPBOOK);						\
 	else									\
 		echo "You need tclsh (in you PATH) to update the manual.";	\

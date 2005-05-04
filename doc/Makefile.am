@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.34 2005/05/04 13:08:46 jonas Exp $
+## $Id: Makefile.am,v 1.35 2005/05/04 13:16:04 jonas Exp $
 
 SUBDIRS = man book
 
@@ -41,6 +41,7 @@ HTMLBOOK = $(top_srcdir)/doc/manual.html
 MANBOOK	 = $(top_srcdir)/doc/man/man1/elinksmanual.1
 XML2RFC	 = $(top_srcdir)/doc/tools/xml2rfc
 
+dist: update-manual
 update-manual:
 	@if test "x$(TCLSH)" != "x";						\
 	then									\

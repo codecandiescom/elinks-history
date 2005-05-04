@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.33 2005/05/03 23:31:49 jonas Exp $
+## $Id: Makefile.am,v 1.34 2005/05/04 13:08:46 jonas Exp $
 
 SUBDIRS = man book
 
@@ -18,7 +18,9 @@ EXTRA_DIST = \
  manual.txt \
  manual.html \
  perl.pod \
- small.txt
+ small.txt \
+ tools/help2doc \
+ tools/xml2rfc
 
 ELINKS=$(top_builddir)/src/elinks
 

@@ -1,3 +1,84 @@
+Wed May  4 13:19:38 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Cleanup the update-manpages rule.  
+
+Wed May  4 13:16:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Add update-manual to the dist target and lets see what happens.  
+
+Wed May  4 13:08:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Distribute the doc/tools scripts. This will make it possible to now
+	maintain manual.txt and manual.html in cvs but still generate them
+	for the tarball.  
+
+Wed May  4 10:30:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: manual.html, manual.txt, book/.cvsignore, book/book.xml,
+	book/introduction.xml, book/mailcap.xml, book/terminals.xml,
+	book/urlshortcuts.xml, man/man1/elinksmanual.1:
+
+	Fix the artwork.  
+
+Tue May  3 23:49:37 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: man/man1/elinksmanual.1, man/man5/elinks.conf.5,
+	tools/help2doc, man/man5/elinkskeys.5:
+
+	Reference the new elinksmanual.1 man page.  
+
+Tue May  3 23:48:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: Makefile.am, config/.cvsignore, config/.vimrc,
+	config/elinks.conf.xml, config/examples.xml, config/syntax.xml:
+
+	Readd the config/ XML files. Forgot they are used by help2doc.  
+
+Tue May  3 23:31:49 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Remove the crufty messages.  
+
+Tue May  3 23:27:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Cleanup space.  
+
+Tue May  3 23:15:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, manual.html, manual.txt,
+	man/man1/elinksmanual.1:
+
+	Cleanup the makefile. Make the 'Revision' info be that of the
+	book.xml file.  
+
+Tue May  3 23:14:37 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/xml2rfc:
+
+	Make the script generate nroff output if the extension is .1.  
+
+Tue May  3 22:39:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/book.xml:
+
+	Do not specify the month. xml2rfc does that automatically.  
+
+Tue May  3 22:33:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, manual.html, manual.txt, man/man1/Makefile.am,
+	man/man1/elinksmanual.1:
+
+	Add the manual in man page format.  
+
 Tue May  3 21:05:32 2005  Adam Golebiowski <adamg@pld-linux.org>:
 
 	* po/pl.po:
@@ -137,6 +218,12 @@ Mon May  2 11:26:36 2005  Jonas Fonseca <fonseca@diku.dk>:
 	working on some modifications to make it spit out txt files in
 	another format.  
 
+Mon May  2 11:24:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/config/: .cvsignore, .vimrc:
+
+	Remove fairies.  
+
 Mon May  2 11:23:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/book/: book.xml, bookmarks.xml, exmode.xml, introduction.xml,
@@ -148,7 +235,9 @@ Mon May  2 11:23:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 Mon May  2 11:21:05 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/book/: Makefile.doc, TODO, book.xml, config.ent.in,
-	elinksbook.dtd:
+	elinksbook.dtd, config/elinks.conf.xml, config/envvars.xml,
+	config/examples.xml, config/files.xml, config/mime.xml,
+	config/syntax.xml:
 
 	Remove the DocBook stuff. May you rest in peace.  
 
@@ -47913,9 +48002,9 @@ Sun Jan 18 15:10:29 2004  Petr Baudis <pasky@ucw.cz>:
 	src/terminal/graphics/.vimrc, src/terminal/text/.vimrc,
 	src/util/.vimrc, src/viewer/.vimrc, src/viewer/dump/.vimrc,
 	src/viewer/graphics/.vimrc, doc/.vimrc, src/viewer/text/.vimrc,
-	doc/book/.vimrc, doc/book/manpages/.vimrc, doc/man/.vimrc,
-	doc/man/man1/.vimrc, doc/man/man5/.vimrc, doc/tools/.vimrc,
-	po/.vimrc:
+	doc/book/.vimrc, doc/book/config/.vimrc, doc/book/manpages/.vimrc,
+	doc/man/.vimrc, doc/man/man1/.vimrc, doc/man/man5/.vimrc,
+	doc/tools/.vimrc, po/.vimrc:
 
 	. is now appended to 'runtimepath' instead of setting 'runtimepath'
 	to .,$VIMRUNTIME, therefore evading ~/.vimrc etc.  

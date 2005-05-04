@@ -93,7 +93,7 @@
 
 <figure>
 <artwork>
-	set mime.mailcap.path = "~/.mailcap:/usr/local/etc/mailcap"
+	  set mime.mailcap.path = "~/.mailcap:/usr/local/etc/mailcap"
 </artwork>
 </figure>
 </t>
@@ -187,18 +187,18 @@
 
 </preamble>
 <artwork><![CDATA[
-	# Use xv if X is running
-	image/*;                xv %s ; test=test -n "$DISPLAY";
+  # Use xv if X is running
+  image/*;                xv %s ; test=test -n "$DISPLAY";
 
-	# Convert images to text using the netpbm tools
-	image/*;                (anytopnm %s | pnmscale -xysize 200 150 | \
-				 pnminvert | ppmtopgm | pgmtopbm | \
-				 pbmtoascii -1x2 ) 2>&1 ; copiousoutput
+  # Convert images to text using the netpbm tools
+  image/*;                (anytopnm %s | pnmscale -xysize 200 150 | \
+       	                   pnminvert | ppmtopgm | pgmtopbm | \
+       	                   pbmtoascii -1x2 ) 2>&1 ; copiousoutput
 
-	# Various multimedia files
-	audio/mpeg;             xmms '%s'; test=test -n "$DISPLAY";
-	application/pdf;        xpdf '%s'; test=test -n "$DISPLAY";
-	application/postscript; ps2ascii %s ; copiousoutput
+  # Various multimedia files
+  audio/mpeg;             xmms '%s'; test=test -n "$DISPLAY";
+  application/pdf;        xpdf '%s'; test=test -n "$DISPLAY";
+  application/postscript; ps2ascii %s ; copiousoutput
 ]]></artwork>
 </figure>
 </section>

@@ -10,7 +10,7 @@
 <!-- ?rfc continuos='yes'? -->
 <?rfc editing='no'?>
 <?rfc header='ELinks/0.11'?>
-<?rfc private='ELinks Manual ($Revision: 1.6 $)'?>
+<?rfc private='ELinks Manual ($Revision: 1.7 $)'?>
 <?rfc subcompact='no'?>
 <?rfc toc='yes'?>
 <?rfc tocindent='no'?>
@@ -59,7 +59,13 @@
 	There was a complete (or from a large part complete) manual for
 	the Links 0.82 once, you can still find it at:
 
+</t>
+<t>
+
 	<eref target="http://links.sourceforge.net/docs/manual-0.82-en/index.html" />
+
+</t>
+<t>
 
 	While large parts of it do not apply anymore, you may still find
 	some relevant information there.
@@ -76,7 +82,7 @@
 </t>
 <t>
 
-	Hold harmless the author, and any lawful use is allowed.
+	Hold harmless the authors, and any lawful use is allowed.
 
 </t>
 </abstract>

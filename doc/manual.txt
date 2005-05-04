@@ -21,8 +21,10 @@ Abstract
 
    There was a complete (or from a large part complete) manual for the
    Links 0.82 once, you can still find it at:
-   <http://links.sourceforge.net/docs/manual-0.82-en/index.html> While
-   large parts of it do not apply anymore, you may still find some
+
+   <http://links.sourceforge.net/docs/manual-0.82-en/index.html>
+
+   While large parts of it do not apply anymore, you may still find some
    relevant information there.
 
    You may also refer to the manual page for a very quick reference,
@@ -30,9 +32,7 @@ Abstract
    other hand, the built-in documentation is _always_ up-to-date.  Check
    the --long-help and --config-help ELinks command-line arguments.
 
-   Hold harmless the author, and any lawful use is allowed.
-
-
+   Hold harmless the authors, and any lawful use is allowed.
 
 
 
@@ -70,41 +70,41 @@ Table of Contents
    1.5.3 Position-Oriented Navigation . . . . . . . . . . . . . . . .  8
    1.5.4 Forms  . . . . . . . . . . . . . . . . . . . . . . . . . . .  9
    1.6   Searching  . . . . . . . . . . . . . . . . . . . . . . . . .  9
-   1.7   Hints and Odd Features . . . . . . . . . . . . . . . . . . . 10
-   2.    The Ultimate Bookmarks Guide . . . . . . . . . . . . . . . . 11
+   2.    The Ultimate Bookmarks Guide . . . . . . . . . . . . . . . . 10
    2.1   The Bookmark Manager . . . . . . . . . . . . . . . . . . . . 11
-   2.2   The Ancient Forests  . . . . . . . . . . . . . . . . . . . . 12
+   2.2   The Ancient Forests  . . . . . . . . . . . . . . . . . . . . 11
    2.3   Searching needle in the haycock  . . . . . . . . . . . . . . 12
    2.4   File formats . . . . . . . . . . . . . . . . . . . . . . . . 12
-   2.4.1 Native file format . . . . . . . . . . . . . . . . . . . . . 13
-   2.4.2 XBEL file format . . . . . . . . . . . . . . . . . . . . . . 14
+   2.4.1 Native file format . . . . . . . . . . . . . . . . . . . . . 12
+   2.4.2 XBEL file format . . . . . . . . . . . . . . . . . . . . . . 13
    2.4.3 Usage hints  . . . . . . . . . . . . . . . . . . . . . . . . 14
    3.    The Wonders of Tabbed Browsing . . . . . . . . . . . . . . . 15
-   3.1   Introduction to the basic actions involving tabs . . . . . . 16
-   3.1.1 The tab bar and the tab menu . . . . . . . . . . . . . . . . 16
+   3.1   Introduction to the basic actions involving tabs . . . . . . 15
+   3.1.1 The tab bar and the tab menu . . . . . . . . . . . . . . . . 15
    3.1.2 Creating new tabs  . . . . . . . . . . . . . . . . . . . . . 16
    3.1.3 Switching between tabs . . . . . . . . . . . . . . . . . . . 16
-   3.1.4 Closing tabs . . . . . . . . . . . . . . . . . . . . . . . . 17
-   3.2   Advanced topics involving tabs . . . . . . . . . . . . . . . 17
-   3.2.1 Moving tabs  . . . . . . . . . . . . . . . . . . . . . . . . 17
+   3.1.4 Closing tabs . . . . . . . . . . . . . . . . . . . . . . . . 16
+   3.2   Advanced topics involving tabs . . . . . . . . . . . . . . . 16
+   3.2.1 Moving tabs  . . . . . . . . . . . . . . . . . . . . . . . . 16
    3.2.2 Saving and restoring tabs  . . . . . . . . . . . . . . . . . 17
    4.    Marks (the lite edition) . . . . . . . . . . . . . . . . . . 17
-   4.1   What it is?  . . . . . . . . . . . . . . . . . . . . . . . . 18
+   4.1   What it is?  . . . . . . . . . . . . . . . . . . . . . . . . 17
    4.2   Restrictions . . . . . . . . . . . . . . . . . . . . . . . . 18
    4.3   Marks lifespan . . . . . . . . . . . . . . . . . . . . . . . 18
    5.    URL Shortcuts in ELinks  . . . . . . . . . . . . . . . . . . 19
    5.1   What it does . . . . . . . . . . . . . . . . . . . . . . . . 19
    5.2   How it works . . . . . . . . . . . . . . . . . . . . . . . . 20
-   5.3   Alternative URI rewriting mechanisms . . . . . . . . . . . . 21
+   5.3   Alternative URI rewriting mechanisms . . . . . . . . . . . . 20
    6.    The Terminal Setup . . . . . . . . . . . . . . . . . . . . . 21
-   6.1   Options  . . . . . . . . . . . . . . . . . . . . . . . . . . 22
-   6.1.1 Terminal type  . . . . . . . . . . . . . . . . . . . . . . . 22
+   6.1   Options  . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+   6.1.1 Terminal type  . . . . . . . . . . . . . . . . . . . . . . . 21
    6.1.2 Color mode . . . . . . . . . . . . . . . . . . . . . . . . . 22
-   6.1.3 Switch fonts for line drawing (aka 11m hack) . . . . . . . . 23
-   6.1.4 Restrict frames in cp850/852 . . . . . . . . . . . . . . . . 23
+   6.1.3 Switch fonts for line drawing (aka 11m hack) . . . . . . . . 22
+   6.1.4 Restrict frames in cp850/852 . . . . . . . . . . . . . . . . 22
    6.1.5 Block cursor . . . . . . . . . . . . . . . . . . . . . . . . 23
    6.1.6 Transparency . . . . . . . . . . . . . . . . . . . . . . . . 23
    6.1.7 Text underlining capability  . . . . . . . . . . . . . . . . 23
+   6.1.8 UTF-8 I/O  . . . . . . . . . . . . . . . . . . . . . . . . . 23
 
 
 
@@ -113,38 +113,38 @@ Fonseca, et al.                                                 [Page 2]
 ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
 
-   6.1.8 UTF-8 I/O  . . . . . . . . . . . . . . . . . . . . . . . . . 24
-   6.1.9 Character Set  . . . . . . . . . . . . . . . . . . . . . . . 24
+   6.1.9 Character Set  . . . . . . . . . . . . . . . . . . . . . . . 23
    6.2   Terminal Configurations  . . . . . . . . . . . . . . . . . . 24
    7.    Introduction to MIME handling  . . . . . . . . . . . . . . . 24
-   7.1   Handling MIME types, the ELinks way  . . . . . . . . . . . . 25
-   7.1.1 What are MIME types and why may you want to use them?  . . . 25
+   7.1   Handling MIME types, the ELinks way  . . . . . . . . . . . . 24
+   7.1.1 What are MIME types and why may you want to use them?  . . . 24
    7.1.2 Associating files to MIME types  . . . . . . . . . . . . . . 25
    7.1.3 Managing a given MIME type . . . . . . . . . . . . . . . . . 25
-   7.1.4 Specifying the details for a handler . . . . . . . . . . . . 26
+   7.1.4 Specifying the details for a handler . . . . . . . . . . . . 25
    7.2   Setting up elinks.conf . . . . . . . . . . . . . . . . . . . 26
-   7.2.1 Associating a file extension to a MIME type  . . . . . . . . 27
-   7.2.2 Defining a handler . . . . . . . . . . . . . . . . . . . . . 27
-   7.2.3 Associating a MIME type to a handler . . . . . . . . . . . . 28
-   8.    Managing External Viewers with Mailcap . . . . . . . . . . . 28
-   8.1   A Short Intro to Mailcap . . . . . . . . . . . . . . . . . . 28
+   7.2.1 Associating a file extension to a MIME type  . . . . . . . . 26
+   7.2.2 Defining a handler . . . . . . . . . . . . . . . . . . . . . 26
+   7.2.3 Associating a MIME type to a handler . . . . . . . . . . . . 27
+   8.    Managing External Viewers with Mailcap . . . . . . . . . . . 27
+   8.1   A Short Intro to Mailcap . . . . . . . . . . . . . . . . . . 27
    8.2   Parameters to Mailcap Entries  . . . . . . . . . . . . . . . 28
-   8.3   Reading of Mailcap Files . . . . . . . . . . . . . . . . . . 29
+   8.3   Reading of Mailcap Files . . . . . . . . . . . . . . . . . . 28
    8.4   Fields . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
-   8.5   Mailcap Configuration  . . . . . . . . . . . . . . . . . . . 30
+   8.5   Mailcap Configuration  . . . . . . . . . . . . . . . . . . . 29
    8.6   Some Sample Mailcap Entries  . . . . . . . . . . . . . . . . 30
    9.    The tale of ex-mode  . . . . . . . . . . . . . . . . . . . . 30
-   9.1   What it is . . . . . . . . . . . . . . . . . . . . . . . . . 31
-   9.2   Configuration directives in exmode . . . . . . . . . . . . . 31
-   9.3   Actions in exmode - or exmode in action? . . . . . . . . . . 32
+   9.1   What it is . . . . . . . . . . . . . . . . . . . . . . . . . 30
+   9.2   Configuration directives in exmode . . . . . . . . . . . . . 30
+   9.3   Actions in exmode - or exmode in action? . . . . . . . . . . 31
    9.4   How to use it  . . . . . . . . . . . . . . . . . . . . . . . 32
    9.5   The "but"s . . . . . . . . . . . . . . . . . . . . . . . . . 32
    10.   Managing remote ELinks instances with -remote  . . . . . . . 32
-   10.1  Limitations and outstanding issues . . . . . . . . . . . . . 33
+   10.1  Limitations and outstanding issues . . . . . . . . . . . . . 32
    10.2  Remote Actions . . . . . . . . . . . . . . . . . . . . . . . 33
    11.   Acknowledgement  . . . . . . . . . . . . . . . . . . . . . . 34
    12.   References . . . . . . . . . . . . . . . . . . . . . . . . . 34
          Authors' Addresses . . . . . . . . . . . . . . . . . . . . . 34
+
 
 
 
@@ -535,32 +535,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    +---------------------+---------------------------------------------+
 
 
-1.7  Hints and Odd Features
-
-   Note: This is still a work in progress and from here on an below
-   everything is marked TODO!
-
-   o  Numerical action prefixes.  Example: 3<Down> jumps down three
-      links.
-
-   o  How to move forward in the document history ('u').
-
-   o  Toggling color modes, plain/html and image link rendering.
-
-   o  Link numbering.
-
-   o  Insert mode in text-input form-fields.
-
-   o  Menu searching.
-
-
-
-
-Fonseca, et al.                                                [Page 10]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
 2.  The Ultimate Bookmarks Guide
 
    Glad to see you again, mortal.  Now, we are going to learn about
@@ -579,6 +553,13 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    all actions, options and so on related to bookmarks.  We won't tell
    you how to rebind the keys, though; another document will take on
    that.
+
+
+
+Fonseca, et al.                                                [Page 10]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
 
    Somewhat out-of-order, a very frequent FAQ: In order to move
    bookmarks around, you need to mark them first - press Insert or '*'
@@ -610,13 +591,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
 2.2  The Ancient Forests
 
-
-
-Fonseca, et al.                                                [Page 11]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    It's not very convenient to have all the bookmarks mixed up - soon,
    you will get lost in them.  Thus, in ELinks you can categorize them
    to various folders, subfolders, subsubfolders and so on, then you can
@@ -635,6 +609,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    the bookmarks around, obviously.  You need to first mark all the
    bookmarks (or even folders) you want to move using the Insert or '*'
    key--asterisk will appear near of all marked bookmarks--and then move
+
+
+
+Fonseca, et al.                                                [Page 11]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    to where you want to have the stuff moved to, and press the "Move"
    button.
 
@@ -665,14 +647,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    directly.  Importing Links-0.9x (or Links-1.x) bookmarks is easy - it
    is just matter of changing all the '|' (pipe) characters to tabs.
    There is a script for that in the contrib/conv/ directory.  Importing
-
-
-
-Fonseca, et al.                                                [Page 12]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    Links-2.xx bookmarks is not so easy; in fact, the scribe knows of no
    way of doing that at the time of writing this, so this is up to you
    to figure out (if you do, please tell us so that we can add it here).
@@ -691,6 +665,12 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    [Square brackets] denote optional parts.  The <name> and <url> fields
    should be obvious.  <depth> contains the depth level of the entry -
    by that, ELinks can unambiguously figure out the bookmarks hierarchy:
+
+
+
+Fonseca, et al.                                                [Page 12]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
 
    	Bookmarks structure:                                Depth:
@@ -721,14 +701,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Cons: It is unlikely that you could use the native format anywhere
    else than in ELinks.
 
-
-
-
-Fonseca, et al.                                                [Page 13]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    To use the native format, set bookmarks.file_format = 0.
 
 2.4.2  XBEL file format
@@ -749,6 +721,13 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    basically anything.
 
    Pros: XBEL is the gateway to the rest of the bookmarks world.
+
+
+
+Fonseca, et al.                                                [Page 13]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
 
    Cons: The support for XBEL is incomplete and there are known bugs.
    Especially, national character sets are basically not supported, so
@@ -777,14 +756,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    re-read the bookmarks file), but this is how it is done now.
 
    Actually, you may now ask "So how do I convert bookmarks between the
-
-
-
-Fonseca, et al.                                                [Page 14]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    two formats?".  It is quite easy.  ELinks simply follows the current
    value of bookmarks.file_format whenever loading/saving the bookmarks.
 
@@ -806,6 +777,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
    Agreed, this all strange dances are quite clumsy, likely some simple
    wizard-like interface for switching the bookmarks formats will be
+
+
+
+Fonseca, et al.                                                [Page 14]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    introduced in the future.  So far, we have had no reports from our
    users that anyone wants to switch their bookmarks format frequently,
    so this is not too high on our TODO list.  So be sure to tell us if
@@ -833,14 +812,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Tabs'' in the option manager.  In the configuration file the naming
    prefix is ``ui.tabs''.
 
-
-
-
-Fonseca, et al.                                                [Page 15]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    Tabbed browsing has been supported since version 0.9.0 and is fairly
    complete.  The documentation on tabs is therefore divided into two
    chapters: a general introduction and an introduction to advanced
@@ -862,6 +833,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    The tab menu gives access to tab specific actions along with some
    other useful document specific actions.  So even if you haven't
    configured keybindings for all actions, chances are you will find it
+
+
+
+Fonseca, et al.                                                [Page 15]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    in the tab menu.  It is by default opened by pressing 'e'.
 
 3.1.2  Creating new tabs
@@ -890,13 +869,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    between tabs will perform a wrap-around so that the rightmost tab
    will be selected.  The wrap-around behaviour is configurable.
 
-
-
-Fonseca, et al.                                                [Page 16]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
 3.1.4  Closing tabs
 
    Tabs can by default be closed by pressing 'c'.  It is possible to
@@ -917,6 +889,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    is possible to move the current tab either to the left or the right.
    The default keybindings have them bound to Alt-< and Alt->.  Note,
    however, that there are problems recognizing those kaybindings when
+
+
+
+Fonseca, et al.                                                [Page 16]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    using XTerm, so you might want to rebind them.
 
 3.2.2  Saving and restoring tabs
@@ -945,14 +925,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    cross-referencing itself, jumping around and getting a headache when
    looking for the place where you stopped reading the last time?
 
-
-
-
-Fonseca, et al.                                                [Page 17]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    Were you doing something similar in C code, but praising *vi* for
    document marks?
 
@@ -973,6 +945,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    You can go to a mark by the "'" (apostrophe) key followed by the mark
    character.  E.g., you can place a mark named "a" in the file by
    pressing "ma", then return to it anytime later by typing "'a".  You
+
+
+
+Fonseca, et al.                                                [Page 17]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    can of course change those shortcuts at any time to anything you wish
    in the keybindings manager.
 
@@ -1001,14 +981,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
 4.3  Marks lifespan
 
-
-
-
-Fonseca, et al.                                                [Page 18]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    I already hinted something about another restriction regarding
    aimless browsing.  The lifespan of document marks depends on rather
    ill-defined and (for an average mortal) mostly non-deterministic
@@ -1029,6 +1001,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    following some link or typing its address to the Goto URL dialog), or
    it might not.  It might be possible to achieve two instances of the
    document inside a single ELinks, each with its own set of marks.
+
+
+
+Fonseca, et al.                                                [Page 18]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    However, again, generally it will work as expected - this paragraph
    serves only as a disclaimer in cases it doesn't.  Don't rely on it.
 
@@ -1056,21 +1036,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    For example, if you type 'sd' to the Goto URL dialog, it will get
    rewritten to
 
-   		http://www.slashdot.org/
-
-
-
-Fonseca, et al.                                                [Page 19]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
+   	http://www.slashdot.org/
 
    first, then loaded --- /.'s front page will be displayed.
 
    More so, if you type 'g elinks' to the Goto URL dialog, it will be
    rewritten to
 
-   		http://www.google.com/search?q=elinks&btnG=Google+Search
+   	http://www.google.com/search?q=elinks&btnG=Google+Search
 
    and then loaded --- therefore, a Google search for the 'elinks'
    keyword will ensue.  Note that you can separate the 'g' by either a
@@ -1084,6 +1057,13 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    and how to define own shortcuts.
 
 5.2  How it works
+
+
+
+Fonseca, et al.                                                [Page 19]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
 
    All the URI rewriting can be controlled by options in the
    'protocol.rewrite' options tree.
@@ -1113,14 +1093,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    target URI.
 
    The difference is that the smart prefixes can take arguments and
-
-
-
-Fonseca, et al.                                                [Page 20]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    reference them in the target URI.  As with dumb prefixes, '%c' in the
    URI means the current address.  Additionally, '%s' will be
    substituted by the whole string following the prefix ('elinks' in the
@@ -1141,6 +1113,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
    In the past before this was implemented, Lua scripting did the job.
    And you still have complete control over the URI in the internal
+
+
+
+Fonseca, et al.                                                [Page 20]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    scripting goto-url hook.  The advantages are clear - you get complete
    control over the URI and you can do much more interesting things with
    it (e.g., there is some very advanced CVSweb and Debian packages
@@ -1169,14 +1149,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    TERM to xterm-color can lead to problems if you run ELinks under the
    Linux console.  This is because the Linux console does not support
    underlining and ELinks will not know that underlined characters will
-
-
-
-Fonseca, et al.                                                [Page 21]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    have to be color highlighted so they stand out.
 
    In short, ELinks does not use termcap or terminfo.  ELinks uses
@@ -1197,6 +1169,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    It maps roughly to the terminal type, such as Linux console, XTerm,
    VT100 etc.  It matters mostly when drawing frames and borders around
    dialog windows.  As already mentioned, it also turns on certain
+
+
+
+Fonseca, et al.                                                [Page 21]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    features which try to compensate for ``missing'' terminal
    capabilities when drawing.  Special highlighting of underlined text
    if underlining is not supported is one such thing.
@@ -1225,14 +1205,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    | Mono mode           | Only 2 colors are used                      |
    | 16 color mode       | Uses the common ANSI colors                 |
    | 256 color mode      | Uses XTerm RGB codes (if compiled in)       |
-
-
-
-Fonseca, et al.                                                [Page 22]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    +---------------------+---------------------------------------------+
 
    The default is to use mono mode.
@@ -1252,6 +1224,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    This is related to the drawing of frames and window borders
    controlled by the option above.  If enabled, it restricts the
    characters used when drawing lines.
+
+
+
+
+Fonseca, et al.                                                [Page 22]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
 
    This boolean option only makes sense with the Linux terminals using
    the cp850/852 character sets.  Off by default.
@@ -1281,14 +1261,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    This boolean option controls whether to underline text or enhance the
    color instead.
 
-
-
-
-Fonseca, et al.                                                [Page 23]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    Note: not all terminals support text underlining, so it is off by
    default.
 
@@ -1310,9 +1282,16 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
 6.2  Terminal Configurations
 
+
+
+Fonseca, et al.                                                [Page 23]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    Built-in configurations exists for the following terminals:
 
-   		linux, vt100, vt110, xterm, xterm-color and xterm-256color
+   	linux, vt100, vt110, xterm, xterm-color and xterm-256color
 
    The last configuration requires that support for 256 is compiled in.
 
@@ -1337,14 +1316,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    much helpful, and those options may seem a bit obscure or confusing
    at first.  This document is a basic introduction to setting of MIME
    associations for ELinks.  If you want to know how to automatically
-
-
-
-Fonseca, et al.                                                [Page 24]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    launch a program to view some kind of file (like images), then read
    on.  Some basic knowledge of MIME is recommended.
 
@@ -1366,6 +1337,13 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    don't tell ELinks how to manage a given MIME type then it will show
    you on screen the contents of the file (as if it was ASCII text)
    instead of calling an external program to show them.
+
+
+
+Fonseca, et al.                                                [Page 24]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
 
 7.1.2  Associating files to MIME types
 
@@ -1393,14 +1371,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    you associate an abstract handler to each type.  Then you can specify
    which programs implement the handler and how are they used.
 
-
-
-
-Fonseca, et al.                                                [Page 25]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    For instance, you may create an image_viewer handler and assign it to
    MIME types image/jpeg, image/png and image/gif.  Then you would
    associate to image_viewer the programs you would like to use for
@@ -1423,6 +1393,13 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    want).
 
 7.1.4.1  Attaching a program to it
+
+
+
+Fonseca, et al.                                                [Page 25]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
 
    You must tell ELinks the exact command for running it (with any
    options you wish).  In place of the filename you must enter %.
@@ -1449,14 +1426,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
    If you have old configuration files from old ELinks versions or from
    Links, then you may use the conf-links2elinks.pl script (which is
-
-
-
-Fonseca, et al.                                                [Page 26]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    placed at contrib/conv/ on the source distribution) to convert them
    to the new format.  If you don't use it you will need to edit the
    configuration file, and here you will find how.
@@ -1480,6 +1449,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    with the item you are defining for this handler, context with the
    context this item value is to be applied, and value with the value
    you want to assign to the item.  You must do so for each of the
+
+
+
+Fonseca, et al.                                                [Page 26]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    available items: program, ask and block.
 
    The value for program is a string with the exact command you want to
@@ -1505,14 +1482,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
    In this example the image_viewer handler uses the svgalib image
    viewer zgv when X is not available, and the X image viewer xli when
-
-
-
-Fonseca, et al.                                                [Page 27]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    it is.  The terminal would be blocked when X is not available and it
    would not be when it's available.  Finally, ELinks would ask for
    confirmation before using the handler only with X not available.
@@ -1536,6 +1505,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Mailcap is a file format defined in RFC 1524.  Its purpose is to
    inform multiple mail reading user agent (MUA) programs about the
    locally-installed facilities for handling mail in various formats.
+
+
+
+Fonseca, et al.                                                [Page 27]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    It is designed to work with the Multipurpose Internet Mail
    Extensions, known as MIME.
 
@@ -1561,14 +1538,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    +--------------+----------------------------------------------------+
    | %s           | The filename that contains the data.               |
    | %f           | The content type, like 'text/plain'.               |
-
-
-
-Fonseca, et al.                                                [Page 28]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    +--------------+----------------------------------------------------+
 
    The following parameters are not supported, since they do not really
@@ -1592,9 +1561,17 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    will be determined in the following way:
 
    1.  From the value of the mime.mailcap.path option in elinks.conf;
+
+
+
+Fonseca, et al.                                                [Page 28]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
        for example:
 
-   	set mime.mailcap.path = "~/.mailcap:/usr/local/etc/mailcap"
+   	  set mime.mailcap.path = "~/.mailcap:/usr/local/etc/mailcap"
 
    2.  From MAILCAP environment variable.
 
@@ -1617,14 +1594,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    appending a pipe and a pager program to the command.  The pager
    program will be read from the PAGER environment variable.  If this
    fails, test are made for common pager programs (/usr/bin/pager, /usr/
-
-
-
-Fonseca, et al.                                                [Page 29]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    bin/less and /usr/bin/more in that order).  So if you define
    png2ascii as your handler for image/png and specify copiousoutput
    then the executed command will be "png2ascii |/usr/bin/less" if less
@@ -1649,20 +1618,27 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
 8.6  Some Sample Mailcap Entries
 
+
+
+Fonseca, et al.                                                [Page 29]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    Below are examples of how to specify external viewers:
 
-   	# Use xv if X is running
-   	image/*;                xv %s ; test=test -n "$DISPLAY";
+     # Use xv if X is running
+     image/*;                xv %s ; test=test -n "$DISPLAY";
 
-   	# Convert images to text using the netpbm tools
-   	image/*;                (anytopnm %s | pnmscale -xysize 200 150 | \
-   				 pnminvert | ppmtopgm | pgmtopbm | \
-   				 pbmtoascii -1x2 ) 2>&1 ; copiousoutput
+     # Convert images to text using the netpbm tools
+     image/*;                (anytopnm %s | pnmscale -xysize 200 150 | \
+          	                   pnminvert | ppmtopgm | pgmtopbm | \
+          	                   pbmtoascii -1x2 ) 2>&1 ; copiousoutput
 
-   	# Various multimedia files
-   	audio/mpeg;             xmms '%s'; test=test -n "$DISPLAY";
-   	application/pdf;        xpdf '%s'; test=test -n "$DISPLAY";
-   	application/postscript; ps2ascii %s ; copiousoutput
+     # Various multimedia files
+     audio/mpeg;             xmms '%s'; test=test -n "$DISPLAY";
+     application/pdf;        xpdf '%s'; test=test -n "$DISPLAY";
+     application/postscript; ps2ascii %s ; copiousoutput
 
 
 9.  The tale of ex-mode
@@ -1673,14 +1649,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Actually ELinks doesn't shine in this area yet very much.  Heck, the
    famous hjkl foursome is still occupied by some feeble managers in the
    default keymap (we have that in our monumental TODO lists).  Still,
-
-
-
-Fonseca, et al.                                                [Page 30]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    if you know what to touch during the compilation (--enable-exmode),
    you can get at least some familiar reply to the mighty ':' (colon)
    grip.
@@ -1705,6 +1673,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    There aren't many of these, so we can skim through them fast.
 
    If you want to flip an option you know by name and refuse to engage
+
+
+
+Fonseca, et al.                                                [Page 30]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    with the option manager visuals, you can just drop in to the ex-mode
    and type 'set the.option = 1234'.  See man elinks.conf (5) or the
    options manager for the list of options; you can also get a complete
@@ -1730,13 +1706,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Actually, ELinks would eat '#blahblah blah' too, if you see a point
    in feeding it that kind of stuff.
 
-
-
-Fonseca, et al.                                                [Page 31]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
 9.3  Actions in exmode - or exmode in action?
 
    There is too many of these, so we should better skim through them
@@ -1760,6 +1729,13 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    "really-quit" is invoked instead.
 
 9.4  How to use it
+
+
+
+Fonseca, et al.                                                [Page 31]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
 
    It's simple.  You press ':' (without the apostrophes, of course) and
    type in the command, then you press enter.  E.g., ':set
@@ -1785,14 +1761,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Some programs provide the ability to pass URIs to external programs.
    When stumbling upon a reference to a page you want to see, it is
    sometimes a kludge to copy and paste it into ELinks.  This is where
-
-
-
-Fonseca, et al.                                                [Page 32]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
    -remote can be a nifty solution.
 
    When invoking ELinks with the -remote argument, it does not start a
@@ -1817,6 +1785,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
    Remote control is implemented using the intercommunication socket
    created in ~/.elinks/, so the command has to be run on the same
+
+
+
+Fonseca, et al.                                                [Page 32]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    machine as the instance you want to control; or put differently: the
    two ELinkses need to share a file system that supports socket files,
    which rules out usage of -remote over NFS.  This also implies that
@@ -1841,14 +1817,6 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Mozilla -remote compatible commands:
 
    ping(): Checks for existence of a remote instance.  Makes it possible
-
-
-
-Fonseca, et al.                                                [Page 33]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
-
-
       for scripts to query if remote controlling is possible.
 
    openURL(): Prompts for a URL in current tab by opening the Goto
@@ -1873,6 +1841,14 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
    $ elinks -remote slashdot.org fm g:elinks
 
+
+
+
+Fonseca, et al.                                                [Page 33]
+
+ELinks/0.11          ELinks Manual for version 0.11             May 2005
+
+
    new tabs containing slashdot.org, freshmeat.net and a Google search
    of elinks will be opened.
 
@@ -1896,13 +1872,6 @@ Authors' Addresses
    Laurent Monin
 
    EMail: zas@norz.org
-
-
-
-
-Fonseca, et al.                                                [Page 34]
-
-ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
 
    Miciah Dashiel Butler Masters
@@ -1931,30 +1900,5 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fonseca, et al.                                                [Page 35]
+Fonseca, et al.                                                [Page 34]
 

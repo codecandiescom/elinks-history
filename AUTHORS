@@ -392,6 +392,9 @@ Omar Khayam <omark@cyentec.com>
 <otte@duke.edu>
 	Fix stdin reading on Mac OS X
 
+Peder Stray <peder@ifi.uio.no>
+	Fix handling of key presses turning up as key prefixes
+
 Peter Gervai <grin@tolna.net>
 	Manpage updates
 	Mailcap to links.cfg convertor
@@ -544,4 +547,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.190 2005/04/12 08:11:05 zas Exp $
+$Id: AUTHORS,v 1.191 2005/05/05 23:37:02 jonas Exp $

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.687 2005/04/06 21:31:29 miciah Exp $ */
+/* $Id: view.c,v 1.688 2005/05/05 23:37:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -692,7 +692,7 @@ try_prefix_key(struct session *ses, struct document_view *doc_view,
 	struct document_options *doc_opts = &document->options;
 	int digit = get_kbd_key(ev) - '0';
 
-	if (!isdigit(get_kbd_key(ev)))
+	if (digit < 0 || digit > 9)
 		return FRAME_EVENT_IGNORED;
 
 	if (get_kbd_modifier(ev)

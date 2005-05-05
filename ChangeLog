@@ -1,3 +1,10 @@
+Thu May  5 15:47:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: introduction.xml, mailcap.xml, mime.xml, tabs.xml,
+	terminals.xml:
+
+	Fix spelling and typos. Patch by Alexey Tourbin.  
+
 Wed May  4 13:19:38 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/Makefile.am:

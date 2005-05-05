@@ -32,7 +32,7 @@
 	it can't show (like images or PDF documents), then you will
 	likely want to pass them to other programs that are suitable for
 	this task. While you may do it manually (saving the file to
-	disk, running the auxiliar program to show it and then removing
+	disk, running the auxiliary program to show it and then removing
 	the file when finished), ELinks provides a method to do this
 	automatically using MIME types.
 
@@ -117,7 +117,7 @@
 
 	When specifying any of these issues, you must tell ELinks the
 	situation in which it gets applied, which is typically either
-	the text console or the X window sytem. So you can specify that
+	the text console or the X window system. So you can specify that
 	you don't want confirmation before running the program when
 	running X, and that you want it otherwise.  Similarly, when you
 	are attaching a program (name it foo) to this handler you must
@@ -185,7 +185,7 @@
 <t>
 
 	If you want to do so from the configuration file, enter set
-	mime.extension.ext = "type", replacing ext with the appropiate
+	mime.extension.ext = "type", replacing ext with the appropriate
 	file extension, and type with its MIME type. E.g. you may want
 	to have set mime.extension.jpg = "image/jpeg".
 

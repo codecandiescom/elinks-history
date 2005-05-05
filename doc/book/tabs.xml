@@ -132,9 +132,10 @@
 
 	Newly created tabs are always positioned as the rightmost tab,
 	but it is possible to move the current tab either to the left or
-	the right. The default keybindings have them bound to Alt-< and
-	Alt->. Note, however, that there are problems recognizing those
-	kaybindings when using XTerm, so you might want to rebind them.
+	the right.  The default keybindings have them bound to Alt-&lt;
+	and Alt-&gt;. Note, however, that there are problems recognizing
+	those keybindings when using XTerm, so you might want to rebind
+	them.
 
 </t>
 </section>

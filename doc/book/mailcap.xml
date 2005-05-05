@@ -129,7 +129,7 @@
 <t>
 
 	Unfortunately, there are no 'native' support for the
-	copiousoutput field.  The field basicly mean 'needs pager'. So
+	copiousoutput field.  The field basically mean 'needs pager'. So
 	it is handled by appending a pipe and a pager program to the
 	command. The pager program will be read from the PAGER
 	environment variable. If this fails, test are made for common

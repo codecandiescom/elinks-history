@@ -11,7 +11,7 @@
 </t>
 <t>
 
-	Allthough ELinks is text-based, the user interface has many of
+	Although ELinks is text-based, the user interface has many of
 	interaction methods normally found in graphical environments.
 	There are menus, dialogs with buttons and hierarchic list boxes
 	with folders. Care has been taken to make the interaction
@@ -177,7 +177,7 @@
 	of items and perform an action on them, such as deleting all
 	marked items. If any item has been marked the currently selected
 	item is ignored when performing the action.  Marked items are
-	displayed with an asterics ('*') prefixing the name.
+	displayed with an asterisk ('*') prefixing the name.
 
 </t>
 <t>
@@ -324,23 +324,25 @@
 <section title="Position-Oriented Navigation">
 <t>
 
-	Positional navigation (sorry, bad word) uses the either the position
-	of the cursor or the mouse click to navigate the document. If you are
-	familiar with the w3m text-browser you will be familiar with cursor
-	routing. Basicly, you move the cursor around -- kind of like a mouse --
-	in the document area of the user interface. When the cursor is over a
-	link, the link is highlighted, and when the cursor moves outside the
-	current document view, it will cause the document view to scroll.
+	Positional navigation (sorry, bad word) uses the either the
+	position of the cursor or the mouse click to navigate the
+	document. If you are familiar with the w3m text-browser you will
+	be familiar with cursor routing. Basically, you move the cursor
+	around -- kind of like a mouse -- in the document area of the
+	user interface. When the cursor is over a link, the link is
+	highlighted, and when the cursor moves outside the current
+	document view, it will cause the document view to scroll.
 
 </t>
 <t>
 
-	The possibilities when using the mouse to navigate the document depend on
-	what terminal you are using. In some terminals, it is possible to
-	scroll by using the mouse wheel. Scrolling is however also possible by
-	clicking in the edge areas of the document view. Highlighting links
-	can be done by clicking on a link but waiting to release the mouse
-	button until the link is no longer under the mouse pointer.
+	The possibilities when using the mouse to navigate the document
+	depend on what terminal you are using. In some terminals, it is
+	possible to scroll by using the mouse wheel. Scrolling is
+	however also possible by clicking in the edge areas of the
+	document view. Highlighting links can be done by clicking on a
+	link but waiting to release the mouse button until the link is
+	no longer under the mouse pointer.
 
 </t>
 <t>

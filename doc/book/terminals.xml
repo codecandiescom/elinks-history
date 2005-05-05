@@ -113,8 +113,8 @@
 </t>
 <t>
 
-	This boolean option only makes sense with the Linux terminal.  Off
-	off by default.
+	This boolean option only makes sense with the Linux terminal.
+	Off by default.
 
 </t>
 </section>
@@ -196,7 +196,7 @@
 <t>
 
 	Note that currently, only the subset of UTF-8 according to the
-	terminal codepage is used. Offff by default.
+	terminal codepage is used. Off by default.
 
 </t>
 </section>

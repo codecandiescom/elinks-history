@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.74 2005/04/29 07:40:51 zas Exp $ */
+/* $Id: smb.c,v 1.75 2005/05/06 11:27:42 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -516,7 +516,7 @@ end_smb_connection(struct connection *conn)
 		normalize_cache_entry(conn->cached, page.length);
 		done_string(&page);
 
-		mem_free_set(conn->cached->content_type, stracpy("text/html"));
+		mem_free_set(&conn->cached->content_type, stracpy("text/html"));
 	}
 
 bye:

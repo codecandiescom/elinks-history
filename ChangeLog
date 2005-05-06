@@ -1,3 +1,23 @@
+Fri May  6 11:27:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/smb/smb.c:
+
+	Pass pointer ref to mem_free_set(). Fixes bug 670.  
+
+Fri May  6 09:34:49 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	Make struct screen_state matches struct screen_char, and improve
+	related macros.  
+
+Thu May  5 23:37:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/viewer/text/view.c:
+
+	Fix handling of key presses turning up as key prefixes. Debuged and
+	fix proposed by Peder Stray.  
+
 Thu May  5 15:47:46 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/book/: introduction.xml, mailcap.xml, mime.xml, tabs.xml,

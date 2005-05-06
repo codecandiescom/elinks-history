@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.161 2005/03/30 15:25:09 zas Exp $ */
+/* $Id: screen.c,v 1.162 2005/05/06 09:34:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,15 +344,22 @@ struct screen_state {
 	unsigned char underline;
 	unsigned char bold;
 	unsigned char attr;
+	/* Following should match struct screen_char color field. */
+#ifndef CONFIG_256_COLORS
+	unsigned char color[1];
+#else
 	unsigned char color[2];
+#endif
 };
 
 #ifdef CONFIG_256_COLORS
-#define compare_color(a, b)	(!memcmp((a), (b), 2))
-#define copy_color(a, b)	memcpy((a), (b), 2)
+#define compare_color(a, b)	((a)[0] == (b)[0] && (a)[1] == (b)[1])
+#define copy_color(a, b)	do { (a)[0] = (b)[0]; (a)[1] = (b)[1]; } while (0)
+#define INIT_SCREEN_STATE 	{ 0xFF, 0xFF, 0xFF, 0, { 0xFF, 0xFF } }
 #else
 #define compare_color(a, b)	((a)[0] == (b)[0])
-#define copy_color(a, b)	((a)[0] = (b)[0])
+#define copy_color(a, b)	do { (a)[0] = (b)[0]; } while (0)
+#define INIT_SCREEN_STATE 	{ 0xFF, 0xFF, 0xFF, 0, { 0xFF } }
 #endif
 
 #define compare_bg_color(a, b)	(TERM_COLOR_BACKGROUND(a) == TERM_COLOR_BACKGROUND(b))
@@ -623,7 +630,7 @@ redraw_screen(struct terminal *term)
 {
 	struct screen_driver *driver;
 	struct string image;
-	struct screen_state state = { 0xFF, 0xFF, 0xFF, 0, { 0xFF, 0xFF } };
+	struct screen_state state = INIT_SCREEN_STATE;
 	struct terminal_screen *screen = term->screen;
 
 	if (!screen || screen->dirty_from > screen->dirty_to) return;

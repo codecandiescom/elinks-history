@@ -1,17 +1,17 @@
-/* $Id: main.h,v 1.22 2005/05/02 20:29:06 jonas Exp $ */
+/* $Id: main.h,v 1.23 2005/05/07 11:12:18 jonas Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
 
 enum retval {
-	RET_OK,
-	RET_ERROR,
-	RET_SIGNAL,
-	RET_SYNTAX,
-	RET_FATAL,
-	RET_PING,
-	RET_REMOTE,
-	RET_COMMAND,
+	RET_OK,		/* All is well */
+	RET_ERROR,	/* Failed to fetch URL or write document when dumping */
+	RET_SIGNAL,	/* Catched SIGTERM which forced program to stop */
+	RET_SYNTAX,	/* Cmdline syntax error or bad or missing dump URL */
+	RET_FATAL,	/* Fatal error occurred during initialization */
+	RET_PING,	/* --remote "ping()" found no running ELinkses */
+	RET_REMOTE,	/* --remote failed to connect to a running ELinks */
+	RET_COMMAND,	/* Used internally for exiting from cmdline commands */
 };
 
 struct program {

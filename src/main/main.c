@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.245 2005/05/02 20:29:06 jonas Exp $ */
+/* $Id: main.c,v 1.246 2005/05/07 11:11:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,8 +144,10 @@ init(void)
 	/* Parsing command line options */
 	ret = parse_options(ac - 1, av + 1, &url_list);
 	if (ret != RET_OK) {
+		/* Command line handlers return RET_COMMAND to signal that they
+		 * completed successfully and that the program should stop. */
 		if (ret != RET_COMMAND)
-			program.retval = RET_SYNTAX;
+			program.retval = ret;
 		program.terminate = 1;
 		free_string_list(&url_list);
 		return;

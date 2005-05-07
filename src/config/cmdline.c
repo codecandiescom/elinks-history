@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.121 2005/05/02 20:29:06 jonas Exp $ */
+/* $Id: cmdline.c,v 1.122 2005/05/07 11:11:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ parse_options_(int argc, unsigned char *argv[], struct option *opt,
 				if (err[0]) {
 					usrerror(gettext("Cannot parse option %s: %s"), argv[-1], err);
 
-					return RET_ERROR;
+					return RET_SYNTAX;
 				}
 
 				/* XXX: Empty strings means all is well and have
@@ -113,7 +113,7 @@ parse_options_(int argc, unsigned char *argv[], struct option *opt,
 
 unknown_option:
 	usrerror(gettext("Unknown option %s"), argv[-1]);
-	return RET_ERROR;
+	return RET_SYNTAX;
 }
 
 enum retval

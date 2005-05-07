@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.192 2005/05/02 07:33:34 zas Exp $ */
+/* $Id: options.inc,v 1.193 2005/05/07 10:48:16 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -548,10 +548,11 @@ static struct option_info config_options_info[] = {
 		N_("Default directory color.\n"
 		"See document.browse.links.color_dirs option.")),
 
-	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
-	INIT_OPT_ALIAS("document.colors", "increase_contrast",
-		"ui.colors.color.dialog.generic.background"),
-
+#if 0
+	/* Compatibility alias: added by <someone> at yyyy-mm-dd, 0.11.CVS. */
+	INIT_OPT_ALIAS("document.colors", "allow_dark_on_black",
+		"document.colors.increase_contrast"),
+#endif
 	/* TODO: Rename this option to increase_contrast. */
 	INIT_OPT_BOOL("document.colors", N_("Allow dark colors on black background"),
 		"allow_dark_on_black", 0, 0,

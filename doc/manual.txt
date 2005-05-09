@@ -15,9 +15,7 @@ Abstract
 
    Welcome! This is the entry point for the current humble ELinks
    manual.  It is by no way complete, it is not even very homogeneous
-   and it should be eventually superseded by a complete ELinks Book,
-   which you can find in the book/ subdirectory in a very prenatal
-   stage.
+   and it should be eventually superseded by a complete ELinks Book.
 
    There was a complete (or from a large part complete) manual for the
    Links 0.82 once, you can still find it at:
@@ -27,12 +25,14 @@ Abstract
    While large parts of it do not apply anymore, you may still find some
    relevant information there.
 
-   You may also refer to the manual page for a very quick reference,
-   however little effort is done to keep it always up-to-date.  On the
-   other hand, the built-in documentation is _always_ up-to-date.  Check
-   the --long-help and --config-help ELinks command-line arguments.
-
    Hold harmless the authors, and any lawful use is allowed.
+
+
+
+
+
+
+
 
 
 

@@ -10,7 +10,7 @@
 <!-- ?rfc continuos='yes'? -->
 <?rfc editing='no'?>
 <?rfc header='ELinks/0.11'?>
-<?rfc private='ELinks Manual ($Revision: 1.7 $)'?>
+<?rfc private='ELinks Manual ($Revision: 1.8 $)'?>
 <?rfc subcompact='no'?>
 <?rfc toc='yes'?>
 <?rfc tocindent='no'?>
@@ -50,8 +50,7 @@
 	Welcome! This is the entry point for the current humble ELinks
 	manual.  It is by no way complete, it is not even very
 	homogeneous and it should be eventually superseded by a complete
-	ELinks Book, which you can find in the book/ subdirectory in a
-	very prenatal stage.
+	ELinks Book.
 
 </t>
 <t>
@@ -69,15 +68,6 @@
 
 	While large parts of it do not apply anymore, you may still find
 	some relevant information there.
-
-</t>
-<t>
-
-	You may also refer to the manual page for a very quick
-	reference, however little effort is done to keep it always
-	up-to-date.  On the other hand, the built-in documentation is
-	_always_ up-to-date.  Check the --long-help and --config-help
-	ELinks command-line arguments.
 
 </t>
 <t>

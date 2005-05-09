@@ -1,5 +1,5 @@
 /* Ruby scripting hooks */
-/* $Id: hooks.c,v 1.9 2005/05/09 21:41:33 miciah Exp $ */
+/* $Id: hooks.c,v 1.10 2005/05/09 21:47:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,8 +85,7 @@ script_hook_goto_url(va_list ap, void *data)
 
 		new_url = memacpy(RSTRING(result)->ptr, RSTRING(result)->len);
 		if (new_url) {
-			mem_free(*url);
-			*url = new_url;
+			mem_free_set(url, new_url);
 		}
 		break;
 	}
@@ -129,8 +128,7 @@ script_hook_follow_url(va_list ap, void *data)
 
 		new_url = memacpy(RSTRING(result)->ptr, RSTRING(result)->len);
 		if (new_url) {
-			mem_free(*url);
-			*url = new_url;
+			mem_free_set(url, new_url);
 		}
 		break;
 	}

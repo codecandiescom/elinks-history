@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.20 2005/05/09 21:41:33 miciah Exp $ */
+/* $Id: hooks.c,v 1.21 2005/05/09 21:47:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,8 +51,7 @@ do_script_hook_goto_url(struct session *ses, unsigned char **url)
 			unsigned char *n = memacpy(new_url, n_a);
 
 			if (n) {
-				mem_free(*url);
-				*url = n;
+				mem_free_set(url, n);
 			}
 		}
 	}
@@ -98,8 +97,7 @@ do_script_hook_follow_url(unsigned char **url)
 			unsigned char *n = memacpy(new_url, n_a);
 
 			if (n) {
-				mem_free(*url);
-				*url = n;
+				mem_free_set(url, n);
 			}
 		}
 	}

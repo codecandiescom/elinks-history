@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.36 2005/05/04 13:19:38 jonas Exp $
+## $Id: Makefile.am,v 1.37 2005/05/09 10:34:15 jonas Exp $
 
 SUBDIRS = man book
 
@@ -38,6 +38,7 @@ BOOK	 = $(top_srcdir)/doc/book/book.xml
 TMPBOOK	 = $(top_builddir)/doc/book/.book.xml
 TXTBOOK	 = $(top_srcdir)/doc/manual.txt
 HTMLBOOK = $(top_srcdir)/doc/manual.html
+TMPHTML  = $(top_srcdir)/doc/.manual.html
 MANBOOK	 = $(top_srcdir)/doc/man/man1/elinksmanual.1
 XML2RFC	 = $(top_srcdir)/doc/tools/xml2rfc
 
@@ -49,7 +50,9 @@ update-manual:
 		echo "Updating $(TXTBOOK)... ";					\
 		sh $(XML2RFC) $(TMPBOOK) $(TXTBOOK);				\
 		echo "Updating $(HTMLBOOK)... ";				\
-		sh $(XML2RFC) $(TMPBOOK) $(HTMLBOOK);				\
+		sh $(XML2RFC) $(TMPBOOK) $(TMPHTML);				\
+		cat $(TMPHTML) | sed -e 's/é/\&eacute;/g' -e 's/á/\&aacute;/g' > $(HTMLBOOK) \
+		&& rm -f $(TMPHTML);						\
 		echo "Updating $(MANBOOK)... ";					\
 		sh $(XML2RFC) $(TMPBOOK) $(MANBOOK);				\
 		rm -f $(TMPBOOK);						\

@@ -1,5 +1,5 @@
 /* Ruby scripting hooks */
-/* $Id: hooks.c,v 1.8 2005/04/13 17:32:18 jonas Exp $ */
+/* $Id: hooks.c,v 1.9 2005/05/09 21:41:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,7 +223,7 @@ script_hook_get_proxy(va_list ap, void *data)
 
 		proxy = memacpy(RSTRING(result)->ptr, RSTRING(result)->len);
 		if (proxy) {
-			*new_proxy_url = proxy;
+			mem_free_set(new_proxy_url, proxy);
 		}
 		break;
 	}

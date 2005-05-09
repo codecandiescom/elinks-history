@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.29 2004/07/15 15:44:05 jonas Exp $ */
+/* $Id: hooks.c,v 1.30 2005/05/09 21:41:32 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,9 +163,9 @@ script_hook_get_proxy(va_list ap, void *data)
 	evhook_use_params(retval && url);
 
 	if (SCM_STRINGP(x)) {
-		*retval = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
+		mem_free_set(retval, memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1));
 	} else if (SCM_NULLP(x)) {
-		*retval = NULL;
+		mem_free_set(retval, NULL);
 	}
 
 	return EVENT_HOOK_STATUS_NEXT;

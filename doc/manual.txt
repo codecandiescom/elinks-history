@@ -1,11 +1,11 @@
 
 
-ELinks Manual (Revision: 1.6)                                 J. Fonseca
+ELinks Manual (Revision: 1.7)                                 J. Fonseca
                                                                P. Baudis
                                                                 L. Monin
                                                               M. Masters
                                                              J. González
-                                                             May 4, 2005
+                                                             May 9, 2005
 
 
                      ELinks Manual for version 0.11
@@ -178,7 +178,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    how things work and make it possible for you to even figure out how
    to go further.
 
-   Allthough ELinks is text-based, the user interface has many of
+   Although ELinks is text-based, the user interface has many of
    interaction methods normally found in graphical environments.  There
    are menus, dialogs with buttons and hierarchic list boxes with
    folders.  Care has been taken to make the interaction between various
@@ -314,7 +314,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    items and perform an action on them, such as deleting all marked
    items.  If any item has been marked the currently selected item is
    ignored when performing the action.  Marked items are displayed with
-   an asterics ('*') prefixing the name.
+   an asterisk ('*') prefixing the name.
 
    The buttons make it possible to perform actions either on selected or
    marked items or on all items in the manager.  Buttons named "Clear"
@@ -430,8 +430,8 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Positional navigation (sorry, bad word) uses the either the position
    of the cursor or the mouse click to navigate the document.  If you
    are familiar with the w3m text-browser you will be familiar with
-   cursor routing.  Basicly, you move the cursor around -- kind of like
-   a mouse -- in the document area of the user interface.  When the
+   cursor routing.  Basically, you move the cursor around -- kind of
+   like a mouse -- in the document area of the user interface.  When the
    cursor is over a link, the link is highlighted, and when the cursor
    moves outside the current document view, it will cause the document
    view to scroll.
@@ -888,7 +888,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Newly created tabs are always positioned as the rightmost tab, but it
    is possible to move the current tab either to the left or the right.
    The default keybindings have them bound to Alt-< and Alt->.  Note,
-   however, that there are problems recognizing those kaybindings when
+   however, that there are problems recognizing those keybindings when
 
 
 
@@ -1216,8 +1216,8 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    when drawing lines, enabling both local characters and lines working
    at the same time.
 
-   This boolean option only makes sense with the Linux terminal.  Off
-   off by default.
+   This boolean option only makes sense with the Linux terminal.  Off by
+   default.
 
 6.1.4  Restrict frames in cp850/852
 
@@ -1270,7 +1270,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    terminals.
 
    Note that currently, only the subset of UTF-8 according to the
-   terminal codepage is used.  Offff by default.
+   terminal codepage is used.  Off by default.
 
 6.1.9  Character Set
 
@@ -1327,7 +1327,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    can't show (like images or PDF documents), then you will likely want
    to pass them to other programs that are suitable for this task.
    While you may do it manually (saving the file to disk, running the
-   auxiliar program to show it and then removing the file when
+   auxiliary program to show it and then removing the file when
    finished), ELinks provides a method to do this automatically using
    MIME types.
 
@@ -1385,7 +1385,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
 
    When specifying any of these issues, you must tell ELinks the
    situation in which it gets applied, which is typically either the
-   text console or the X window sytem.  So you can specify that you
+   text console or the X window system.  So you can specify that you
    don't want confirmation before running the program when running X,
    and that you want it otherwise.  Similarly, when you are attaching a
    program (name it foo) to this handler you must tell if it's for X or
@@ -1436,7 +1436,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    Extensions submenu.
 
    If you want to do so from the configuration file, enter set
-   mime.extension.ext = "type", replacing ext with the appropiate file
+   mime.extension.ext = "type", replacing ext with the appropriate file
    extension, and type with its MIME type.  E.g.  you may want to have
    set mime.extension.jpg = "image/jpeg".
 
@@ -1590,7 +1590,7 @@ ELinks/0.11          ELinks Manual for version 0.11             May 2005
    used.
 
    Unfortunately, there are no 'native' support for the copiousoutput
-   field.  The field basicly mean 'needs pager'.  So it is handled by
+   field.  The field basically mean 'needs pager'.  So it is handled by
    appending a pipe and a pager program to the command.  The pager
    program will be read from the PAGER environment variable.  If this
    fails, test are made for common pager programs (/usr/bin/pager, /usr/

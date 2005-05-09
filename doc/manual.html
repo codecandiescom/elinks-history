@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en"><head><title>ELinks Manual (Revision: 1.6): ELinks Manual for version 0.11</title>
-<meta http-equiv="Expires" content="Wed, 04 May 2005 10:28:29 +0000">
+<html lang="en"><head><title>ELinks Manual (Revision: 1.7): ELinks Manual for version 0.11</title>
+<meta http-equiv="Expires" content="Mon, 09 May 2005 10:10:06 +0000">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="ELinks Manual for version 0.11">
 <meta name="generator" content="xml2rfc v1.25 (http://xml.resource.org/)">
@@ -108,12 +108,12 @@
 <body>
 <table summary="layout" cellpadding="0" cellspacing="2" class="bug" align="right"><tr><td class="bug"><a href="#toc" class="link2">&nbsp;TOC&nbsp;</a></td></tr></table>
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
-<tr><td class="header">ELinks Manual (Revision: 1.6)</td><td class="header">J. Fonseca</td></tr>
+<tr><td class="header">ELinks Manual (Revision: 1.7)</td><td class="header">J. Fonseca</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Baudis</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">L. Monin</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">M. Masters</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">J. González</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">May 4, 2005</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">May 9, 2005</td></tr>
 </table></td></tr></table>
 <div align="right"><span class="title"><br />ELinks Manual for version 0.11</span></div>
 
@@ -337,7 +337,7 @@ Authors' Addresses<br />
 </p>
 <p>
 
-	Allthough ELinks is text-based, the user interface has many of
+	Although ELinks is text-based, the user interface has many of
 	interaction methods normally found in graphical environments.
 	There are menus, dialogs with buttons and hierarchic list boxes
 	with folders. Care has been taken to make the interaction
@@ -512,7 +512,7 @@ Authors' Addresses<br />
 	of items and perform an action on them, such as deleting all
 	marked items. If any item has been marked the currently selected
 	item is ignored when performing the action.  Marked items are
-	displayed with an asterics ('*') prefixing the name.
+	displayed with an asterisk ('*') prefixing the name.
 
 
 </p>
@@ -713,24 +713,26 @@ Authors' Addresses<br />
 
 <p>
 
-	Positional navigation (sorry, bad word) uses the either the position
-	of the cursor or the mouse click to navigate the document. If you are
-	familiar with the w3m text-browser you will be familiar with cursor
-	routing. Basicly, you move the cursor around -- kind of like a mouse --
-	in the document area of the user interface. When the cursor is over a
-	link, the link is highlighted, and when the cursor moves outside the
-	current document view, it will cause the document view to scroll.
+	Positional navigation (sorry, bad word) uses the either the
+	position of the cursor or the mouse click to navigate the
+	document. If you are familiar with the w3m text-browser you will
+	be familiar with cursor routing. Basically, you move the cursor
+	around -- kind of like a mouse -- in the document area of the
+	user interface. When the cursor is over a link, the link is
+	highlighted, and when the cursor moves outside the current
+	document view, it will cause the document view to scroll.
 
 
 </p>
 <p>
 
-	The possibilities when using the mouse to navigate the document depend on
-	what terminal you are using. In some terminals, it is possible to
-	scroll by using the mouse wheel. Scrolling is however also possible by
-	clicking in the edge areas of the document view. Highlighting links
-	can be done by clicking on a link but waiting to release the mouse
-	button until the link is no longer under the mouse pointer.
+	The possibilities when using the mouse to navigate the document
+	depend on what terminal you are using. In some terminals, it is
+	possible to scroll by using the mouse wheel. Scrolling is
+	however also possible by clicking in the edge areas of the
+	document view. Highlighting links can be done by clicking on a
+	link but waiting to release the mouse button until the link is
+	no longer under the mouse pointer.
 
 
 </p>
@@ -1402,9 +1404,10 @@ Authors' Addresses<br />
 
 	Newly created tabs are always positioned as the rightmost tab,
 	but it is possible to move the current tab either to the left or
-	the right. The default keybindings have them bound to Alt-< and
-	Alt->. Note, however, that there are problems recognizing those
-	kaybindings when using XTerm, so you might want to rebind them.
+	the right.  The default keybindings have them bound to Alt-&lt;
+	and Alt-&gt;. Note, however, that there are problems recognizing
+	those keybindings when using XTerm, so you might want to rebind
+	them.
 
 
 </p>
@@ -1902,8 +1905,8 @@ Authors' Addresses<br />
 </p>
 <p>
 
-	This boolean option only makes sense with the Linux terminal.  Off
-	off by default.
+	This boolean option only makes sense with the Linux terminal.
+	Off by default.
 
 
 </p>
@@ -1990,7 +1993,7 @@ Authors' Addresses<br />
 <p>
 
 	Note that currently, only the subset of UTF-8 according to the
-	terminal codepage is used. Offff by default.
+	terminal codepage is used. Off by default.
 
 
 </p>
@@ -2076,7 +2079,7 @@ Authors' Addresses<br />
 	it can't show (like images or PDF documents), then you will
 	likely want to pass them to other programs that are suitable for
 	this task. While you may do it manually (saving the file to
-	disk, running the auxiliar program to show it and then removing
+	disk, running the auxiliary program to show it and then removing
 	the file when finished), ELinks provides a method to do this
 	automatically using MIME types.
 
@@ -2165,7 +2168,7 @@ Authors' Addresses<br />
 
 	When specifying any of these issues, you must tell ELinks the
 	situation in which it gets applied, which is typically either
-	the text console or the X window sytem. So you can specify that
+	the text console or the X window system. So you can specify that
 	you don't want confirmation before running the program when
 	running X, and that you want it otherwise.  Similarly, when you
 	are attaching a program (name it foo) to this handler you must
@@ -2234,7 +2237,7 @@ Authors' Addresses<br />
 <p>
 
 	If you want to do so from the configuration file, enter set
-	mime.extension.ext = "type", replacing ext with the appropiate
+	mime.extension.ext = "type", replacing ext with the appropriate
 	file extension, and type with its MIME type. E.g. you may want
 	to have set mime.extension.jpg = "image/jpeg".
 
@@ -2465,7 +2468,7 @@ Authors' Addresses<br />
 <p>
 
 	Unfortunately, there are no 'native' support for the
-	copiousoutput field.  The field basicly mean 'needs pager'. So
+	copiousoutput field.  The field basically mean 'needs pager'. So
 	it is handled by appending a pipe and a pager program to the
 	command. The pager program will be read from the PAGER
 	environment variable. If this fails, test are made for common

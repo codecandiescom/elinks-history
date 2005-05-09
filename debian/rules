@@ -3,7 +3,7 @@
 # ELinks debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 #
-# $Id: rules,v 1.16 2005/05/03 18:01:54 jonas Exp $
+# $Id: rules,v 1.17 2005/05/09 11:17:08 jonas Exp $
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -48,6 +48,7 @@ CONFIGURE_OPTIONS = \
  --prefix=/usr \
  --mandir=\$${prefix}/share/man \
  --sysconfdir=/etc/elinks \
+ --with-xterm="x-terminal-emulator -e" \
  --without-openssl \
  --without-x \
  --with-gnutls=/usr \

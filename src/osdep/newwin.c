@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.21 2004/11/08 19:27:22 jonas Exp $ */
+/* $Id: newwin.c,v 1.22 2005/05/09 11:16:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,9 +17,14 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+#ifdef XTERM
+#define XTERM_CMD XTERM
+#else
+#define XTERM_CMD DEFUALT_XTERM_CMD
+#endif
 
 const struct open_in_new open_in_new[] = {
-	{ ENV_XWIN,	DEFAULT_XTERM_CMD,	    N_("~Xterm") },
+	{ ENV_XWIN,	XTERM_CMD,		    N_("~Xterm") },
 	{ ENV_TWIN,	DEFAULT_TWTERM_CMD,	    N_("T~wterm") },
 	{ ENV_SCREEN,	DEFAULT_SCREEN_CMD,	    N_("~Screen") },
 #ifdef CONFIG_OS2

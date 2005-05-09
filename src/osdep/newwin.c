@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.22 2005/05/09 11:16:14 jonas Exp $ */
+/* $Id: newwin.c,v 1.23 2005/05/09 11:52:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@
 #ifdef XTERM
 #define XTERM_CMD XTERM
 #else
-#define XTERM_CMD DEFUALT_XTERM_CMD
+#define XTERM_CMD DEFAULT_XTERM_CMD
 #endif
 
 const struct open_in_new open_in_new[] = {

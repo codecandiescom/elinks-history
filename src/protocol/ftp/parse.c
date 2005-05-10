@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.44 2005/05/10 13:14:43 zas Exp $ */
+/* $Id: parse.c,v 1.45 2005/05/10 13:28:29 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -33,10 +33,10 @@
 
 
 #define skip_space_end(src, end) \
-	do { while ((src) < (end) && isspace(*(src))) (src)++; } while (0)
+	do { while ((src) < (end) && *(src) == ' ') (src)++; } while (0)
 
 #define skip_nonspace_end(src, end) \
-	do { while ((src) < (end) && !isspace(*(src))) (src)++; } while (0)
+	do { while ((src) < (end) && *(src) != ' ') (src)++; } while (0)
 
 static long
 parse_ftp_number(unsigned char **src, unsigned char *end, long from, long to)

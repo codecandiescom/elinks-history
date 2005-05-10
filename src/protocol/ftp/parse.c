@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.39 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: parse.c,v 1.40 2005/05/10 09:30:51 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -130,6 +130,8 @@ parse_ftp_eplf_response(struct ftp_file_info *info, unsigned char *src, int len)
 /* Parser for UNIX-style listing: */
 #ifdef DEBUG_FTP_PARSER
 static unsigned char ftp_unix_responses[] =
+ /* ftp.freebsd.org response */
+ "drwxrwxr-x    3 0        0             512 Apr 17  2003 pub\r\n"
   /* UNIX-style listing, without inum and without blocks: */
  "-rw-r--r--   1 root     other        531 Jan 29 03:26 README\r\n"
  "dr-xr-xr-x   2 root     other        512 Apr  8  1994 etc\r\n"

@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.40 2005/05/10 09:30:51 zas Exp $ */
+/* $Id: parse.c,v 1.41 2005/05/10 13:07:28 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -135,7 +135,7 @@ static unsigned char ftp_unix_responses[] =
   /* UNIX-style listing, without inum and without blocks: */
  "-rw-r--r--   1 root     other        531 Jan 29 03:26 README\r\n"
  "dr-xr-xr-x   2 root     other        512 Apr  8  1994 etc\r\n"
- "dr-xr-xr-x   2 root     512 Apr  8  1994 et\r\nc"
+ "dr-xr-xr-x   2 root     512 Apr  8  1994 etc\r\n"
  "lrwxrwxrwx   1 root     other          7 Jan 25 00:17 bin -> usr/bin\r\n"
  /* Also produced by Microsoft's FTP servers for Windows: */
  "----------   1 owner    group         1803128 Jul 10 10:18 ls-lR.Z\r\n"

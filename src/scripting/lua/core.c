@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.208 2005/05/10 19:51:44 miciah Exp $ */
+/* $Id: core.c,v 1.209 2005/05/10 19:52:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -608,6 +608,10 @@ eval_function(LS, int num_args, int num_results)
 	int err;
 
 	err = lua_pcall(S, num_args, num_results, 0);
+	if (err) {
+		alert_lua_error((unsigned char *) lua_tostring(L, -1));
+		lua_pop(L, 1);
+	}
 
 	return err;
 }

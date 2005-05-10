@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.199 2005/05/06 23:34:41 miciah Exp $ */
+/* $Id: core.c,v 1.200 2005/05/10 17:20:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,7 +288,7 @@ l_bind_key(LS)
 	if (!init_string(&event_name)) goto lua_error;
 
 	lua_pushvalue(S, 3);
-	ref = lua_ref(S, 1);
+	ref = luaL_ref(S, LUA_REGISTRYINDEX);
 	add_format_to_string(&event_name, "lua-run-func %i", ref);
 
 	event_id = bind_scripting_func((unsigned char *) lua_tostring(S, 1),
@@ -374,7 +374,7 @@ l_edit_bookmark_dialog(LS)
 	safe_strncpy(data->url, (unsigned char *) lua_tostring(S, 3),
 		     MAX_STR_LEN-1);
 	lua_pushvalue(S, 4);
-	data->func_ref = lua_ref(S, 1);
+	data->func_ref = luaL_ref(S, LUA_REGISTRYINDEX);
 
 	dlg->title = _("Edit bookmark", term);
 	dlg->layouter = generic_dialog_layouter;
@@ -459,7 +459,7 @@ l_xdialog(LS)
 			     (unsigned char *) lua_tostring(S, i+1),
 			     MAX_STR_LEN-1);
 	lua_pushvalue(S, nargs);
-	data->func_ref = lua_ref(S, 1);
+	data->func_ref = luaL_ref(S, LUA_REGISTRYINDEX);
 
 	dlg->title = _("User dialog", term);
 	dlg->layouter = generic_dialog_layouter;

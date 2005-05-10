@@ -240,6 +240,9 @@ Jonas Fonseca <fonseca@diku.dk>
 	BFU and document management hacking
 	Random hacking
 
+Jon Shapcott <eden@xibalba.demon.co.uk>
+	Lua 5 retrofits
+
 John <martian202002@yahoo.com>
 	Tab browsing initial patch
 
@@ -547,4 +550,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.191 2005/05/05 23:37:02 jonas Exp $
+$Id: AUTHORS,v 1.192 2005/05/10 17:20:47 miciah Exp $

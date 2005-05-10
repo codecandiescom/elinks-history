@@ -1,4 +1,4 @@
-/* $Id: snprintf.h,v 1.14 2004/04/29 23:02:42 jonas Exp $ */
+/* $Id: snprintf.h,v 1.15 2005/05/10 03:30:25 jonas Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
@@ -74,10 +74,11 @@ int vasprintf(char **ptr, const char *fmt, va_list ap);
 
 static inline unsigned char *
 vasprintfa(const char *fmt, va_list ap) {
-	unsigned char *str1, *str2;
+	char *str1;
+	unsigned char *str2;
 	int size;
 
-	if (vasprintf((char **) &str1, fmt, ap) < 0)
+	if (vasprintf(&str1, fmt, ap) < 0)
 		return NULL;
 
 	size = strlen(str1) + 1;

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.206 2005/05/10 19:29:05 miciah Exp $ */
+/* $Id: core.c,v 1.207 2005/05/10 19:31:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,7 +302,7 @@ l_bind_key(LS)
 	}
 
 	if (err) {
-		lua_unref(S, ref);
+		luaL_unref(S, LUA_REGISTRYINDEX, ref);
 		alert_lua_error2("error in bind_key: ", err);
 		goto lua_error;
 	}

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.204 2005/05/10 17:43:45 miciah Exp $ */
+/* $Id: core.c,v 1.205 2005/05/10 19:27:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,6 +60,8 @@ static sigjmp_buf errjmp;
 #define LS	lua_State *S
 
 static void handle_standard_lua_returns(unsigned char *from);
+static void handle_ref(LS, struct session *ses, int func_ref,
+                       unsigned char *from, int num_args);
 
 
 /*
@@ -255,18 +257,13 @@ run_lua_func(va_list ap, void *data)
 {
 	struct session *ses = va_arg(ap, struct session *);
 	int func_ref = (long) data;
-	int err;
 
 	if (func_ref == LUA_NOREF) {
 		alert_lua_error("key bound to nothing (internal error)");
 		return EVENT_HOOK_STATUS_NEXT;
 	}
 
-	lua_getref(L, func_ref);
-	if (prepare_lua(ses)) return EVENT_HOOK_STATUS_NEXT;
-	err = lua_pcall(L, 0, 2, 0);
-	finish_lua();
-	if (!err) handle_standard_lua_returns("keyboard function");
+	handle_ref(L, ses, func_ref, "keyboard function", 2);
 
 	return EVENT_HOOK_STATUS_NEXT;
 }
@@ -335,17 +332,11 @@ dialog_run_lua(void *data_)
 {
 	struct lua_dlg_data *data = data_;
 	lua_State *s = data->state;
-	int err;
 
-	lua_getref(s, data->func_ref);
 	lua_pushstring(s, data->cat);
 	lua_pushstring(s, data->name);
 	lua_pushstring(s, data->url);
-	if (prepare_lua(lua_ses)) return;
-	err = lua_pcall(s, 3, 2, 0);
-	finish_lua();
-	lua_unref(s, data->func_ref);
-	handle_standard_lua_returns("post dialog function");
+	handle_ref(s, lua_ses, data->func_ref, "post dialog function", 3);
 }
 
 static int
@@ -415,16 +406,11 @@ xdialog_run_lua(void *data_)
 {
 	struct lua_xdialog_data *data = data_;
 	lua_State *s = data->state;
-	int err;
 	int i;
 
-	lua_getref(s, data->func_ref);
 	for (i = 0; i < data->nfields; i++) lua_pushstring(s, data->fields[i]);
-	if (prepare_lua(lua_ses)) return;
-	err = lua_pcall(s, data->nfields, 2, 0);
-	finish_lua();
-	lua_unref(s, data->func_ref);
-	handle_standard_lua_returns("post xdialog function");
+	handle_ref(s, lua_ses, data->func_ref, "post xdialog function",
+	           data->nfields);
 }
 
 static int
@@ -809,6 +795,32 @@ handle_standard_lua_returns(unsigned char *from)
 	lua_pop(L, 2);
 }
 
+static void
+handle_ref_on_stack(LS, struct session *ses, unsigned char *from, int num_args)
+{
+	int err;
+
+	if (prepare_lua(ses)) return;
+	err = lua_pcall(S, num_args, 2, 0);
+	finish_lua();
+
+	if (!err) handle_standard_lua_returns(from);
+}
+
+static void
+handle_ref(LS, struct session *ses, int func_ref, unsigned char *from,
+           int num_args)
+{
+	lua_getref(S, func_ref);
+
+	/* The function must be below the arguments on the stack. */
+	if (num_args != 0) lua_insert(S, -(num_args + 1));
+
+	handle_ref_on_stack(S, ses, from, num_args);
+
+	lua_unref(S, func_ref);
+}
+
 
 /* Console stuff. */
 
@@ -825,12 +837,7 @@ lua_console(struct session *ses, unsigned char *expr)
 	}
 
 	lua_pushstring(L, expr);
-	if (prepare_lua(ses) == 0) {
-		int err = lua_pcall(L, 1, 2, 0);
-
-		finish_lua();
-		if (!err) handle_standard_lua_returns("lua_console_hook");
-	}
+	handle_ref_on_stack(L, ses, "lua_console_hook", 1);
 }
 
 /* TODO: Make this a "Scripting console" instead, with a radiobutton below the

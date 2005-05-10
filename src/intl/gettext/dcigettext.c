@@ -689,7 +689,7 @@ found:
 			malloc_count = 0;
 			while (1) {
 				transmem_block_t *newmem;
-				const unsigned char *inptr = (const unsigned char *) inbuf;
+				ICONV_CONST char *inptr = (ICONV_CONST char *) inbuf;
 				size_t inleft = resultlen;
 				char *outptr = (unsigned char *) outbuf;
 				size_t outleft;
@@ -698,8 +698,7 @@ found:
 					goto resize_freemem;
 
 				outleft = freemem_size - sizeof(size_t);
-				if (iconv(domain->conv,
-					  (ICONV_CONST char **) &inptr, &inleft,
+				if (iconv(domain->conv, &inptr, &inleft,
 					  &outptr, &outleft)
 				    != (size_t) (-1)) {
 					outbuf = (unsigned char *) outptr;

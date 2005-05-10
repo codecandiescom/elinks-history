@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.209 2005/05/10 19:52:27 miciah Exp $ */
+/* $Id: core.c,v 1.210 2005/05/10 21:25:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -263,7 +263,7 @@ run_lua_func(va_list ap, void *data)
 		return EVENT_HOOK_STATUS_NEXT;
 	}
 
-	handle_ref(L, ses, func_ref, "keyboard function", 2);
+	handle_ref(L, ses, func_ref, "keyboard function", 0);
 
 	return EVENT_HOOK_STATUS_NEXT;
 }

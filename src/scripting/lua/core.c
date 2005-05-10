@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.205 2005/05/10 19:27:56 miciah Exp $ */
+/* $Id: core.c,v 1.206 2005/05/10 19:29:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -811,14 +811,14 @@ static void
 handle_ref(LS, struct session *ses, int func_ref, unsigned char *from,
            int num_args)
 {
-	lua_getref(S, func_ref);
+	lua_rawgeti(S, LUA_REGISTRYINDEX, func_ref);
 
 	/* The function must be below the arguments on the stack. */
 	if (num_args != 0) lua_insert(S, -(num_args + 1));
 
 	handle_ref_on_stack(S, ses, from, num_args);
 
-	lua_unref(S, func_ref);
+	luaL_unref(S, LUA_REGISTRYINDEX, func_ref);
 }
 
 

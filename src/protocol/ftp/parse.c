@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.42 2005/05/10 13:08:58 zas Exp $ */
+/* $Id: parse.c,v 1.43 2005/05/10 13:11:33 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -243,21 +243,24 @@ static struct ftp_file_info *
 parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 {
 	unsigned char *end = src + len;
-	enum ftp_file_type type = *src++;
 	unsigned char *pos;
 	struct tm mtime;
 	enum ftp_unix fact;
 
 	/* Decide the file type. */
-	switch (type) {
-	case FTP_FILE_PLAINFILE:
-	case FTP_FILE_DIRECTORY:
-	case FTP_FILE_SYMLINK:
-		info->type = type;
-		break;
+	{
+		enum ftp_file_type type = *src++;
+	
+		switch (type) {
+		case FTP_FILE_PLAINFILE:
+		case FTP_FILE_DIRECTORY:
+		case FTP_FILE_SYMLINK:
+			info->type = type;
+			break;
 
-	default:
-		info->type = FTP_FILE_UNKNOWN;
+		default:
+			info->type = FTP_FILE_UNKNOWN;
+		}
 	}
 
 	memset(&mtime, 0, sizeof(mtime));

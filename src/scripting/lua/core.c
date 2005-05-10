@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.207 2005/05/10 19:31:55 miciah Exp $ */
+/* $Id: core.c,v 1.208 2005/05/10 19:51:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -602,6 +602,16 @@ lua_error:
 
 /* End of set/get option */
 
+int
+eval_function(LS, int num_args, int num_results)
+{
+	int err;
+
+	err = lua_pcall(S, num_args, num_results, 0);
+
+	return err;
+}
+
 /* Initialisation */
 
 static void
@@ -801,7 +811,7 @@ handle_ref_on_stack(LS, struct session *ses, unsigned char *from, int num_args)
 	int err;
 
 	if (prepare_lua(ses)) return;
-	err = lua_pcall(S, num_args, 2, 0);
+	err = eval_function(S, num_args, 2);
 	finish_lua();
 
 	if (!err) handle_standard_lua_returns(from);

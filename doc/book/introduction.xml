@@ -229,6 +229,50 @@
 </t>
 </section>
 
+<section title="LED status indicators">
+<t>
+
+	As an optional feature it is possible to have tiny LED-like
+	status indicators shown at the bottom-right of the screen. They
+	are used for displaying an overview of the current browsing
+	state, ie.  whether you are currently talking through a
+	SSL-secured connection, what is the current input mode (normal
+	or insert), JavaScript errors etc. 
+
+</t>
+<texttable>
+<preamble>
+
+	An example display may look like: ``[SIJP--]''. Each position in
+	the LED display is associated with the following state:
+
+</preamble>
+<ttcol width='30%' align='left'>Character</ttcol>
+<ttcol width='70%' align='left'>State</ttcol>
+
+	<c>'S'</c>	<c>Whether an SSL connection was used.</c>
+	<c>'i'/'I'</c>	<c>The state of insert mode for text-input form-fields:
+			   'i' means modeless, 'I' means insert mode is on.</c>
+	<c>'J'</c>	<c>A JavaScript error has occured.</c>
+	<c>'P'</c>	<c>A JavaScript pop-up window was blocked.</c>
+	<c>-</c>	<c>Unused.</c>
+	<c>-</c>	<c>Unused.</c>
+
+<postamble>
+
+	'-' generally indicates that the LED is off.
+
+</postamble>
+</texttable>
+<t>
+
+	The above information is also available in the LED dialog
+	available by either clicking on the LED display or via the Help
+	menu.
+
+</t>
+</section>
+
 <section title="Navigation">
 <t>
 

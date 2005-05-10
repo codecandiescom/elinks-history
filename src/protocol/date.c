@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.24 2005/04/23 15:58:54 zas Exp $ */
+/* $Id: date.c,v 1.25 2005/05/10 12:56:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,15 +71,19 @@ int
 parse_month(const unsigned char **buf, unsigned char *end)
 {
 	const unsigned char *month = *buf;
+	int monthnum;
 
 	/* Check that the buffer has atleast 3 chars. */
 	if ((end && month + 2 > end)
 	    || !month[0] || !month[1] || !month[2])
 		return -1;
 
-	*buf += 3;
+	monthnum = month2num(month);
 
-	return month2num(month);
+	if (monthnum != -1)
+		*buf += 3;
+
+	return monthnum;
 }
 
 

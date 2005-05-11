@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.211 2005/05/11 03:25:25 miciah Exp $ */
+/* $Id: cache.c,v 1.212 2005/05/11 03:26:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -486,12 +486,11 @@ get_cache_fragment(struct cache_entry *cached)
 	 * fragments up to the first gap can be defragmented. */
 	for (adj_frag = first_frag->next; adj_frag != (void *) &cached->frag;
 	     adj_frag = adj_frag->next) {
-		long overlay = adj_frag->offset
-				- (adj_frag->prev->offset
-				   + adj_frag->prev->length);
+		long gap = adj_frag->offset
+			    - (adj_frag->prev->offset + adj_frag->prev->length);
 
-		if (overlay > 0) break;
-		if (overlay == 0) continue;
+		if (gap > 0) break;
+		if (gap == 0) continue;
 
 		INTERNAL("fragments overlap");
 		return NULL;

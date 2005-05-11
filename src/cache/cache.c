@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.213 2005/05/11 03:28:44 miciah Exp $ */
+/* $Id: cache.c,v 1.214 2005/05/11 07:37:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -495,6 +495,11 @@ get_cache_fragment(struct cache_entry *cached)
 		INTERNAL("fragments overlap");
 		return NULL;
 	}
+
+	/* There is a gap between the first two fragments, so we can't
+	 * defragment anything. */
+	if (adj_frag == first_frag->next)
+		return first_frag;
 
 	/* Calculate the length of the defragmented fragment. */
 	for (new_frag_len = 0, frag = first_frag;

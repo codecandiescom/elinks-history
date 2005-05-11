@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.210 2005/05/11 03:22:50 miciah Exp $ */
+/* $Id: cache.c,v 1.211 2005/05/11 03:25:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,7 +493,7 @@ get_cache_fragment(struct cache_entry *cached)
 		if (overlay > 0) break;
 		if (overlay == 0) continue;
 
-		INTERNAL("fragments overlay");
+		INTERNAL("fragments overlap");
 		return NULL;
 	}
 

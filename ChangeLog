@@ -1,3 +1,60 @@
+Wed May 11 07:37:16 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Put back the check removed in revision 1.207, which check also saves 
+	a little work when there is a gap between the first two fragments.  
+
+Wed May 11 03:51:17 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Do not call pre-format-html hooks if the cache entry cannot be
+	defragmented.  
+
+Wed May 11 03:28:44 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Small comment tweak.  
+
+Wed May 11 03:26:19 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Rename local variable overlay to gap.  
+
+Wed May 11 03:25:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Change the error message "fragments overlay" to "fragments overlap".  
+
+Wed May 11 03:22:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Fix the comment for the loop where we look for the first gap.  
+
+Wed May 11 03:21:20 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Explain get_cache_fragment.  
+
+Wed May 11 02:49:10 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Perform that check sooner.  
+
+Wed May 11 02:48:35 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Use list_is_singleton in get_cache_fragment to check whether the
+	cache entry is fragmented.  
+
 Tue May 10 21:46:39 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/session.c:

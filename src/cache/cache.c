@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.209 2005/05/11 03:21:20 miciah Exp $ */
+/* $Id: cache.c,v 1.210 2005/05/11 03:22:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -482,9 +482,8 @@ get_cache_fragment(struct cache_entry *cached)
 	if (list_is_singleton(cached->frag))
 		return first_frag;
 
-	/* Find the first pair of fragments that overlap. It will be used to
-	 * figure out what sequence of fragments to include in the
-	 * defragmentation. */
+	/* Find the first pair of fragments with a gap in between. Only
+	 * fragments up to the first gap can be defragmented. */
 	for (adj_frag = first_frag->next; adj_frag != (void *) &cached->frag;
 	     adj_frag = adj_frag->next) {
 		long overlay = adj_frag->offset

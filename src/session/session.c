@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.622 2005/05/10 21:46:39 jonas Exp $ */
+/* $Id: session.c,v 1.623 2005/05/11 03:51:17 miciah Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -477,6 +477,9 @@ maybe_pre_format_html(struct cache_entry *cached, struct session *ses)
 
 	fragment = get_cache_fragment(cached);
 	if (!fragment) return;
+
+	/* We cannot do anything if the data are fragmented. */
+	if (!list_is_singleton(cached->frag)) return;
 
 	src = fragment->data;
 	len = fragment->length;

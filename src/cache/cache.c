@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.208 2005/05/11 02:49:10 miciah Exp $ */
+/* $Id: cache.c,v 1.209 2005/05/11 03:21:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -454,6 +454,17 @@ add_fragment(struct cache_entry *cached, int offset,
 	return 1;
 }
 
+/* Try to defragment the cache entry. Defragmentation will not be possible
+ * if there is a gap in the fragments; if we have bytes 1-100 in one fragment
+ * and bytes 201-300 in the second, we must leave those two fragments separate
+ * so that the fragment for bytes 101-200 can later be inserted. However,
+ * if we have the fragments for bytes 1-100, 101-200, and 201-300, we will
+ * catenate them into one new fragment and replace the original fragments
+ * with that new fragment.
+ *
+ * If are no fragments, return NULL. If there is no fragment with byte 1,
+ * return NULL. Otherwise, return the first fragment, whether or not it was
+ * possible to fully defragment the entry. */
 struct fragment *
 get_cache_fragment(struct cache_entry *cached)
 {

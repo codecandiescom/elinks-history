@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.206 2005/04/27 14:57:39 jonas Exp $ */
+/* $Id: cache.c,v 1.207 2005/05/11 02:48:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -484,7 +484,7 @@ get_cache_fragment(struct cache_entry *cached)
 	}
 
 	/* Only one fragment so no defragmentation is needed */
-	if (adj_frag == first_frag->next)
+	if (list_is_singleton(cached->frag))
 		return first_frag;
 
 	/* Calculate the length of the defragmented fragment. */

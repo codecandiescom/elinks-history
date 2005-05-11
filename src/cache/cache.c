@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.212 2005/05/11 03:26:19 miciah Exp $ */
+/* $Id: cache.c,v 1.213 2005/05/11 03:28:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -502,9 +502,8 @@ get_cache_fragment(struct cache_entry *cached)
 	     frag = frag->next)
 		new_frag_len += frag->length;
 
-	/* XXX: Even tho' the defragmentation fails because of allocation
-	 * failure just fall back to return the first fragment and pretend all
-	 * is well. */
+	/* XXX: If the defragmentation fails because of allocation failure,
+	 * fall back to return the first fragment and pretend all is well. */
 	/* FIXME: Is this terribly brain-dead? It corresponds to the semantic of
 	 * the code this extended version of the old defrag_entry() is supposed
 	 * to replace. --jonas */

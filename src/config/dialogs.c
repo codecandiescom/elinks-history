@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.216 2005/04/23 13:32:32 zas Exp $ */
+/* $Id: dialogs.c,v 1.217 2005/05/12 23:38:31 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -440,15 +440,19 @@ push_edit_button(struct dialog_data *dlg_data,
 }
 
 
+struct add_option_to_tree_ctx {
+	struct option *option;
+};
+
 static void
 add_option_to_tree(void *data, unsigned char *name)
 {
-	struct option *option = data;
-	struct option *old = get_opt_rec_real(option, name);
+	struct add_option_to_tree_ctx *ctx = data;
+	struct option *old = get_opt_rec_real(ctx->option, name);
 
 	if (old && (old->flags & OPT_DELETED)) delete_option(old);
 	/* get_opt_rec() will do all the work for ourselves... ;-) */
-	get_opt_rec(option, name);
+	get_opt_rec(ctx->option, name);
 	/* TODO: If the return value is NULL, we should pop up a msgbox. */
 }
 
@@ -460,6 +464,7 @@ push_add_button(struct dialog_data *dlg_data,
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct listbox_item *item = box->sel;
 	struct option *option;
+	struct add_option_to_tree_ctx *ctx;
 
 	if (!item || !item->udata) {
 
@@ -484,8 +489,12 @@ invalid_option:
 			goto invalid_option;
 	}
 
-	input_dialog(term, NULL, N_("Add option"), N_("Name"),
-		     option, NULL,
+	ctx = mem_alloc(sizeof(*ctx));
+	if (!ctx) return EVENT_PROCESSED;
+	ctx->option = option;
+
+	input_dialog(term, getml(ctx, NULL), N_("Add option"), N_("Name"),
+		     ctx, NULL,
 		     MAX_STR_LEN, "", 0, 0, check_nonempty,
 		     add_option_to_tree, NULL);
 

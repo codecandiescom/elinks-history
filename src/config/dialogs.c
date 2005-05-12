@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.218 2005/05/12 23:40:15 miciah Exp $ */
+/* $Id: dialogs.c,v 1.219 2005/05/12 23:41:00 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -453,7 +453,7 @@ add_option_to_tree(void *data, unsigned char *name)
 	struct option *new;
 
 	if (old && (old->flags & OPT_DELETED)) delete_option(old);
-	/* get_opt_rec() will do all the work for ourselves... ;-) */
+	/* get_opt_rec() will create the option. */
 	new = get_opt_rec(ctx->option, name);
 	if (new) listbox_sel(ctx->widget_data, new->box_item);
 	/* TODO: If the return value is NULL, we should pop up a msgbox. */

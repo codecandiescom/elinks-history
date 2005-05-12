@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.197 2005/05/12 23:28:14 miciah Exp $ */
+/* $Id: listbox.c,v 1.198 2005/05/12 23:31:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,8 +360,11 @@ listbox_sel(struct widget_data *widget_data, struct listbox_item *item)
 {
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
 
-	listbox_sel_move(widget_data, -listbox_item_offset(widget_data,
-	                                                   item, box->sel));
+	listbox_sel_move(widget_data,
+	                 listbox_item_offset(widget_data, box->items->next,
+	                                     item)
+	                  - listbox_item_offset(widget_data, box->items->next,
+	                                        box->sel));
 }
 
 

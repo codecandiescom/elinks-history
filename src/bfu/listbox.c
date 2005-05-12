@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.191 2005/03/24 15:49:45 zas Exp $ */
+/* $Id: listbox.c,v 1.192 2005/05/12 22:19:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,6 +323,33 @@ listbox_sel_move(struct widget_data *widget_data, int dist)
 						       listbox_sel_move_do,
 						       &data);
 	}
+}
+
+static int
+test_search(struct listbox_item *item, void *data_, int *offset)
+{
+	struct listbox_context *listbox_context = data_;
+
+	listbox_context->offset--;
+
+	if (item == listbox_context->box->sel) *offset = 0;
+	return 0;
+}
+
+void
+listbox_sel(struct widget_data *widget_data, struct listbox_item *item)
+{
+	struct listbox_context ctx;
+	struct listbox_data *box = get_listbox_widget_data(widget_data);
+
+	memset(&ctx, 0, sizeof(ctx));
+	ctx.box = box;
+	ctx.offset = 1;
+
+	traverse_listbox_items_list(
+			item, box, 0, 1,
+			test_search, &ctx);
+	listbox_sel_move(widget_data, ctx.offset);
 }
 
 

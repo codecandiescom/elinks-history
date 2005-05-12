@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.213 2005/05/12 22:14:58 miciah Exp $ */
+/* $Id: hierbox.c,v 1.214 2005/05/12 22:19:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,17 +132,6 @@ recursively_set_expanded(struct listbox_item *box, int expanded)
 		recursively_set_expanded(child, expanded);
 }
 
-static int
-test_search(struct listbox_item *item, void *data_, int *offset)
-{
-	struct listbox_context *listbox_context = data_;
-
-	listbox_context->offset--;
-
-	if (item == listbox_context->box->sel) *offset = 0;
-	return 0;
-}
-
 static widget_handler_status_T
 hierbox_ev_kbd(struct dialog_data *dlg_data)
 {
@@ -183,16 +172,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 			struct listbox_item *root = box->ops->get_root(selected);
 
 			if (root) {
-				struct listbox_context ctx;
-
-				memset(&ctx, 0, sizeof(ctx));
-				ctx.box = box;
-				ctx.offset = 1;
-
-				traverse_listbox_items_list(
-						root, box, 0, 1,
-						test_search, &ctx);
-				listbox_sel_move(widget_data, ctx.offset);
+				listbox_sel(widget_data, root);
 			}
 
 		} else if (selected->type == BI_FOLDER) {

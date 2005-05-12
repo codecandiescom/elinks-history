@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.212 2005/04/17 16:34:28 zas Exp $ */
+/* $Id: hierbox.c,v 1.213 2005/05/12 22:14:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,8 +192,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 				traverse_listbox_items_list(
 						root, box, 0, 1,
 						test_search, &ctx);
-				listbox_sel_move(dlg_data->widgets_data,
-					         ctx.offset);
+				listbox_sel_move(widget_data, ctx.offset);
 			}
 
 		} else if (selected->type == BI_FOLDER) {
@@ -223,7 +222,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 	if (browser->expansion_callback)
 		browser->expansion_callback();
 
-	display_widget(dlg_data, dlg_data->widgets_data);
+	display_widget(dlg_data, widget_data);
 
 	return EVENT_PROCESSED;
 }

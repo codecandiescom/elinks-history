@@ -1,3 +1,12 @@
+Thu May 12 21:19:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	If the user has begun entering a prefix, assume that further digit
+	keys are to be added to that prefix, regardless of the value of 
+	document.browse.links.number_keys_select_link or whether alt is
+	pressed.  This one is for Miernik.  
+
 Wed May 11 07:37:16 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/cache/cache.c:

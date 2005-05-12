@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.217 2005/05/12 23:38:31 miciah Exp $ */
+/* $Id: dialogs.c,v 1.218 2005/05/12 23:40:15 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -442,6 +442,7 @@ push_edit_button(struct dialog_data *dlg_data,
 
 struct add_option_to_tree_ctx {
 	struct option *option;
+	struct widget_data *widget_data;
 };
 
 static void
@@ -449,10 +450,12 @@ add_option_to_tree(void *data, unsigned char *name)
 {
 	struct add_option_to_tree_ctx *ctx = data;
 	struct option *old = get_opt_rec_real(ctx->option, name);
+	struct option *new;
 
 	if (old && (old->flags & OPT_DELETED)) delete_option(old);
 	/* get_opt_rec() will do all the work for ourselves... ;-) */
-	get_opt_rec(ctx->option, name);
+	new = get_opt_rec(ctx->option, name);
+	if (new) listbox_sel(ctx->widget_data, new->box_item);
 	/* TODO: If the return value is NULL, we should pop up a msgbox. */
 }
 
@@ -492,6 +495,7 @@ invalid_option:
 	ctx = mem_alloc(sizeof(*ctx));
 	if (!ctx) return EVENT_PROCESSED;
 	ctx->option = option;
+	ctx->widget_data = dlg_data->widgets_data;
 
 	input_dialog(term, getml(ctx, NULL), N_("Add option"), N_("Name"),
 		     ctx, NULL,

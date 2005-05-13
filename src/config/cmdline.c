@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.122 2005/05/07 11:11:54 jonas Exp $ */
+/* $Id: cmdline.c,v 1.123 2005/05/13 20:04:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,6 +279,15 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		}
 
 		while (len > 0 && isspace(arg[len - 1])) len--;
+
+		if (len > 1) {
+			/* Skip possible string delimiters. Atleast urlview
+			 * seems to add them. */
+			if ((arg[0] == '\'' && arg[len - 1] == '\'')
+			    || (arg[0] == '"' && arg[len - 1] == '"'))
+				arg++, len -= 2;
+		}
+
 		if (len) remote_url = memacpy(arg, len);
 
 		break;

@@ -1,3 +1,138 @@
+Fri May 13 21:45:27 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* Makefile.am:
+
+	Fix useless use of cat.  Thanks Miciah.  
+
+Fri May 13 21:42:35 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* Makefile.am:
+
+	Remove the ancient warning on install.  
+
+Fri May 13 21:41:53 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* Makefile.am:
+
+	Add a check for Lua and warn the user that Lua 4 support is
+	deprecated.  
+
+Fri May 13 20:04:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Skip string delimiters from the URL argument to --remote
+	'openURL()'. It seems that urlview adds them and it should make
+	'openURL(%s, new-tab)' do the right thing.  
+
+Fri May 13 09:29:04 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/leds.c, protocol/ftp/parse.c:
+
+	Whitespaces fix.  
+
+Fri May 13 09:24:49 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: config/dialogs.c, config/kbdbind.c, config/kbdbind.h,
+	lowlevel/timer.c:
+
+	meta -> modifier.  
+
+Fri May 13 09:17:37 2005  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	0 -> KBD_MOD_NONE.  
+
+Fri May 13 09:06:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/inpfield.c, bfu/menu.c, config/kbdbind.c,
+	terminal/event.c, terminal/event.h, terminal/kbd.c, terminal/kbd.h,
+	terminal/key.inc, viewer/text/form.c, viewer/text/link.c,
+	viewer/text/view.c:
+
+	KBD_ALT,KBD_SHIFT,KBD_CTRL,0 ->
+	KBD_MOD_ALT,KBD_MOD_SHIFT,KBD_MOD_CTRL,KBD_MOD_NONE.  
+
+Thu May 12 23:41:00 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Clarify a comment.  
+
+Thu May 12 23:40:15 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Jump to the new listbox item when the user creates a new option.  
+
+Thu May 12 23:38:31 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Change push_add_button to use a ctx for the input_dialog callback.  
+
+Thu May 12 23:34:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Assume the first item to be the first item in the listbox in
+	listbox_item_offset.  
+
+Thu May 12 23:31:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Use the difference of the offsets between the first item and the
+	given item and the first item and the selected item instead of the
+	offset between the given item and the selected item.  
+
+Thu May 12 23:28:14 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Factor the code to get the item offset out of listbox_sel and into
+	the new listbox_item_offset.  
+
+Thu May 12 23:16:06 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Negate the offset.  
+
+Thu May 12 23:10:35 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Start with offset 0 instead of 1 and change test_search not to
+	decrement when terminating the traversal.  
+
+Thu May 12 23:01:17 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Change test_search, listbox_sel's helper, to get the item from the
+	ctx rather than assuming box->sel.  
+
+Thu May 12 22:21:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Unwrap a line.  
+
+Thu May 12 22:19:53 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/: hierbox.c, listbox.c, listbox.h:
+
+	Factor code out of hierbox_ev_kbd into the new listbox_sel.  
+
+Thu May 12 22:14:58 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	Use the already-defined widget_data instead of
+	dlg_data->widgets_data in hierbox_ev_kbd.  
+
 Thu May 12 21:19:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/view.c:

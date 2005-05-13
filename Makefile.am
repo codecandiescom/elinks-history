@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.47 2005/05/13 21:41:53 rrowan Exp $
+## $Id: Makefile.am,v 1.48 2005/05/13 21:42:35 rrowan Exp $
 
 SUBDIRS = Unicode config contrib debian doc intl po src test
 
@@ -13,11 +13,6 @@ EXTRA_DIST = \
  features.conf
 
 install-exec-hook:
-	@echo "**************************************************************"
-	@echo "If you are upgrading from Links or ELinks <= 0.4pre7, you may"
-	@echo "want to check out INSTALL for some hints; ie. you may want to"
-	@echo "make symlink 'links' pointing to 'elinks'."
-	@echo "**************************************************************"
 	@if cat features.log | grep 'Lua' > /dev/null; then \
 		echo "**************************************************************"; \
 		echo "Lua 4 support in ELinks is obsolete.  If you are upgrading"; \

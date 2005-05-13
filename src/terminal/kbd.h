@@ -1,4 +1,4 @@
-/* $Id: kbd.h,v 1.6 2004/06/14 01:27:22 jonas Exp $ */
+/* $Id: kbd.h,v 1.7 2005/05/13 09:06:58 zas Exp $ */
 
 #ifndef EL__TERMINAL_KBD_H
 #define EL__TERMINAL_KBD_H
@@ -33,9 +33,10 @@
 
 #define KBD_CTRL_C	0x200
 
-#define KBD_SHIFT	1
-#define KBD_CTRL	2
-#define KBD_ALT		4
+#define KBD_MOD_NONE	0
+#define KBD_MOD_SHIFT	1
+#define KBD_MOD_CTRL	2
+#define KBD_MOD_ALT	4
 
 void
 handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,

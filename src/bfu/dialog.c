@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.203 2005/04/21 15:16:42 jonas Exp $ */
+/* $Id: dialog.c,v 1.204 2005/05/13 09:06:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,8 +324,8 @@ dialog_ev_kbd(struct dialog_data *dlg_data)
 		}
 
 		if (widget_is_textfield(widget_data)
-		    || check_kbd_modifier(ev, KBD_CTRL)
-		    || check_kbd_modifier(ev, KBD_ALT)) {
+		    || check_kbd_modifier(ev, KBD_MOD_CTRL)
+		    || check_kbd_modifier(ev, KBD_MOD_ALT)) {
 			select_button_by_flag(dlg_data, B_ENTER);
 		}
 		break;

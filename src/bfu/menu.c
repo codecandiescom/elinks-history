@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.292 2005/04/21 02:35:53 jonas Exp $ */
+/* $Id: menu.c,v 1.293 2005/05/13 09:06:58 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -824,7 +824,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			int key = get_kbd_key(ev);
 
 			if ((key >= KBD_F1 && key <= KBD_F12)
-			    || check_kbd_modifier(ev, KBD_ALT)) {
+			    || check_kbd_modifier(ev, KBD_MOD_ALT)) {
 				delete_window_ev(win, ev);
 				return;
 			}

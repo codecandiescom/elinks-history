@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.128 2005/04/27 15:15:01 jonas Exp $ */
+/* $Id: kbd.c,v 1.129 2005/05/13 09:06:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -808,20 +808,20 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 
 		/* Give preference to F11 and F12 over shifted F1 and F2. */
 		/*
-		case 23: key = KBD_F1; modifier = KBD_SHIFT; break;
-		case 24: key = KBD_F2; modifier = KBD_SHIFT; break;
+		case 23: key = KBD_F1; modifier = KBD_MOD_SHIFT; break;
+		case 24: key = KBD_F2; modifier = KBD_MOD_SHIFT; break;
 		*/
 
-		case 25: key = KBD_F3; modifier = KBD_SHIFT; break;
-		case 26: key = KBD_F4; modifier = KBD_SHIFT; break;
+		case 25: key = KBD_F3; modifier = KBD_MOD_SHIFT; break;
+		case 26: key = KBD_F4; modifier = KBD_MOD_SHIFT; break;
 
-		case 28: key = KBD_F5; modifier = KBD_SHIFT; break;
-		case 29: key = KBD_F6; modifier = KBD_SHIFT; break;
+		case 28: key = KBD_F5; modifier = KBD_MOD_SHIFT; break;
+		case 29: key = KBD_F6; modifier = KBD_MOD_SHIFT; break;
 
-		case 31: key = KBD_F7; modifier = KBD_SHIFT; break;
-		case 32: key = KBD_F8; modifier = KBD_SHIFT; break;
-		case 33: key = KBD_F9; modifier = KBD_SHIFT; break;
-		case 34: key = KBD_F10; modifier = KBD_SHIFT; break;
+		case 31: key = KBD_F7; modifier = KBD_MOD_SHIFT; break;
+		case 32: key = KBD_F8; modifier = KBD_MOD_SHIFT; break;
+		case 33: key = KBD_F9; modifier = KBD_MOD_SHIFT; break;
+		case 34: key = KBD_F10; modifier = KBD_MOD_SHIFT; break;
 
 		} break;
 
@@ -863,7 +863,7 @@ set_kbd_event(struct term_event *ev, int key, int modifier)
 	default:
 		if (key < ' ') {
 			key += 'A' - 1;
-			modifier = KBD_CTRL;
+			modifier = KBD_MOD_CTRL;
 		}
 	}
 
@@ -919,7 +919,7 @@ process_queue(struct itrm *itrm)
 				set_kbd_event(&ev, KBD_ESC, 0);
 
 			} else {
-				set_kbd_event(&ev, itrm->kqueue[1], KBD_ALT);
+				set_kbd_event(&ev, itrm->kqueue[1], KBD_MOD_ALT);
 			}
 		}
 

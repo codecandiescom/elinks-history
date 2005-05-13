@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.319 2005/04/08 05:45:03 jonas Exp $ */
+/* $Id: link.c,v 1.320 2005/05/13 09:06:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1089,7 +1089,7 @@ try_document_key(struct session *ses, struct document_view *doc_view,
 	assert(ses && doc_view && doc_view->document && doc_view->vs && ev);
 	if_assert_failed return FRAME_EVENT_IGNORED;
 
-	if (isasciialpha(get_kbd_key(ev)) && !check_kbd_modifier(ev, KBD_ALT)) {
+	if (isasciialpha(get_kbd_key(ev)) && !check_kbd_modifier(ev, KBD_MOD_ALT)) {
 		/* We accept those only in alt-combo. */
 		return FRAME_EVENT_IGNORED;
 	}

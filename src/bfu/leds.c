@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.82 2005/04/26 10:05:22 zas Exp $ */
+/* $Id: leds.c,v 1.83 2005/05/13 09:29:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ unset_led_value(struct led *led)
 	set_led_value(led, '-');
 }
 
-	
+
 void
 init_led_panel(struct led_panel *leds)
 {
@@ -252,7 +252,7 @@ sync_leds(struct session *ses)
 
 	for (i = 0; i < LEDS_COUNT; i++) {
 		struct led *led = &ses->status.leds.leds[i];
-		
+
 		if (led->value_changed__)
 			return 1;
 	}
@@ -318,7 +318,7 @@ struct led *
 register_led(struct session *ses, int number)
 {
 	struct led *led;
-	
+
 	if (number >= LEDS_COUNT || number < 0)
 		return NULL;
 

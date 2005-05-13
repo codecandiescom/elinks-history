@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.45 2005/05/10 13:28:29 zas Exp $ */
+/* $Id: parse.c,v 1.46 2005/05/13 09:29:04 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -250,7 +250,7 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 	/* Decide the file type. */
 	{
 		enum ftp_file_type type = *src++;
-	
+
 		switch (type) {
 		case FTP_FILE_PLAINFILE:
 		case FTP_FILE_DIRECTORY:
@@ -269,7 +269,7 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 	/* Following is only needed to handle NetWare listings which are not
 	 * (yet) handled. So disabled for now. --Zas */
 	/* skip_space_end(src, end); */
-	
+
 	fact = FTP_UNIX_PERMISSIONS;
 
 	for (pos = src; src < end; src = pos) {

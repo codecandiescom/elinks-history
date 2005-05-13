@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.22 2005/04/07 11:16:57 jonas Exp $ */
+/* $Id: timer.c,v 1.23 2005/05/13 09:24:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,7 @@ count_down(void *xxx)
 	kb = kbd_nm_lookup(KEYMAP_MAIN, get_opt_str("ui.timer.action"));
 	if (kb) {
 		ev.info.keyboard.key = kb->key;
-		ev.info.keyboard.modifier = kb->meta;
+		ev.info.keyboard.modifier = kb->modifier;
 
 		foreach (terminal, terminals) {
 			term_send_event(terminal, &ev);

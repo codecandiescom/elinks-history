@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.279 2005/05/13 09:17:37 zas Exp $ */
+/* $Id: kbdbind.c,v 1.280 2005/05/13 09:24:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,14 +31,14 @@ static struct list_head keymaps[KEYMAP_MAX];
 static void add_default_keybindings(void);
 
 static int
-delete_keybinding(enum keymap km, long key, long meta)
+delete_keybinding(enum keymap km, long key, long modifier)
 {
 	struct keybinding *kb;
 
 	foreach (kb, keymaps[km]) {
 		int was_default = 0;
 
-		if (kb->key != key || kb->meta != meta)
+		if (kb->key != key || kb->modifier != modifier)
 			continue;
 
 		if (kb->flags & KBDB_DEFAULT) {
@@ -55,13 +55,13 @@ delete_keybinding(enum keymap km, long key, long meta)
 }
 
 struct keybinding *
-add_keybinding(enum keymap km, int action, long key, long meta, int event)
+add_keybinding(enum keymap km, int action, long key, long modifier, int event)
 {
 	struct keybinding *kb;
 	struct listbox_item *root;
 	int is_default;
 
-	is_default = delete_keybinding(km, key, meta) == 2;
+	is_default = delete_keybinding(km, key, modifier) == 2;
 
 	kb = mem_calloc(1, sizeof(*kb));
 	if (!kb) return NULL;
@@ -69,7 +69,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int event)
 	kb->keymap = km;
 	kb->action = action;
 	kb->key = key;
-	kb->meta = meta;
+	kb->modifier = modifier;
 	kb->event = event;
 	kb->flags = is_default * KBDB_DEFAULT;
 
@@ -117,12 +117,12 @@ free_keybinding(struct keybinding *kb)
 }
 
 int
-keybinding_exists(enum keymap km, long key, long meta, int *action)
+keybinding_exists(enum keymap km, long key, long modifier, int *action)
 {
 	struct keybinding *kb;
 
 	foreach (kb, keymaps[km]) {
-		if (kb->key != key || kb->meta != meta)
+		if (kb->key != key || kb->modifier != modifier)
 			continue;
 
 		if (action) *action = kb->action;
@@ -146,12 +146,12 @@ kbd_action(enum keymap kmap, struct term_event *ev, int *event)
 }
 
 struct keybinding *
-kbd_ev_lookup(enum keymap kmap, long key, long meta, int *event)
+kbd_ev_lookup(enum keymap kmap, long key, long modifier, int *event)
 {
 	struct keybinding *kb;
 
 	foreach (kb, keymaps[kmap]) {
-		if (key != kb->key || meta != kb->meta)
+		if (key != kb->key || modifier != kb->modifier)
 			continue;
 
 		if (kb->action == ACT_MAIN_SCRIPTING_FUNCTION && event)
@@ -308,18 +308,18 @@ read_key(unsigned char *key)
 }
 
 int
-parse_keystroke(unsigned char *s, long *key, long *meta)
+parse_keystroke(unsigned char *s, long *key, long *modifier)
 {
 	if (!strncasecmp(s, "Shift", 5) && (s[5] == '-' || s[5] == '+')) {
 		/* Shift+a == shiFt-a == Shift-a */
 		memcpy(s, "Shift-", 6);
-		*meta = KBD_MOD_SHIFT;
+		*modifier = KBD_MOD_SHIFT;
 		s += 6;
 
 	} else if (!strncasecmp(s, "Ctrl", 4) && (s[4] == '-' || s[4] == '+')) {
 		/* Ctrl+a == ctRl-a == Ctrl-a */
 		memcpy(s, "Ctrl-", 5);
-		*meta = KBD_MOD_CTRL;
+		*modifier = KBD_MOD_CTRL;
 		s += 5;
 		/* Ctrl-a == Ctrl-A */
 		if (s[0] && !s[1]) s[0] = toupper(s[0]);
@@ -327,12 +327,12 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 	} else if (!strncasecmp(s, "Alt", 3) && (s[3] == '-' || s[3] == '+')) {
 		/* Alt+a == aLt-a == Alt-a */
 		memcpy(s, "Alt-", 4);
-		*meta = KBD_MOD_ALT;
+		*modifier = KBD_MOD_ALT;
 		s += 4;
 
 	} else {
 		/* No modifier. */
-		*meta = KBD_MOD_NONE;
+		*modifier = KBD_MOD_NONE;
 	}
 
 	*key = read_key(s);
@@ -340,18 +340,18 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 }
 
 void
-make_keystroke(struct string *str, long key, long meta, int escape)
+make_keystroke(struct string *str, long key, long modifier, int escape)
 {
 	unsigned char key_buffer[3] = "\\x";
 	unsigned char *key_string;
 
 	if (key < 0) return;
 
-	if (meta & KBD_MOD_SHIFT)
+	if (modifier & KBD_MOD_SHIFT)
 		add_to_string(str, "Shift-");
-	if (meta & KBD_MOD_CTRL)
+	if (modifier & KBD_MOD_CTRL)
 		add_to_string(str, "Ctrl-");
-	if (meta & KBD_MOD_ALT)
+	if (modifier & KBD_MOD_ALT)
 		add_to_string(str, "Alt-");
 
 	key_string = numtostr(key_table, key);
@@ -372,7 +372,7 @@ add_keystroke_to_string(struct string *string, int action,
 	struct keybinding *kb = kbd_act_lookup(map, action);
 
 	if (kb)
-		make_keystroke(string, kb->key, kb->meta, 0);
+		make_keystroke(string, kb->key, kb->modifier, 0);
 }
 
 unsigned char *
@@ -408,7 +408,7 @@ add_actions_to_string(struct string *string, int *actions,
 		if (!kb) continue;
 
 		add_char_to_string(string, '\n');
-		make_keystroke(string, kb->key, kb->meta, 0);
+		make_keystroke(string, kb->key, kb->modifier, 0);
 		keystrokelen = string->length - keystrokelen;
 		add_xchar_to_string(string, ' ', int_max(15 - keystrokelen, 1));
 		add_to_string(string, _(desc, term));
@@ -659,18 +659,18 @@ static unsigned char *
 bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event)
 {
 	unsigned char *err = NULL;
-	long key, meta;
+	long key, modifier;
 	int action;
 	int kmap = read_keymap(ckmap);
 
 	if (kmap < 0)
 		err = gettext("Unrecognised keymap");
-	else if (parse_keystroke(ckey, &key, &meta) < 0)
+	else if (parse_keystroke(ckey, &key, &modifier) < 0)
 		err = gettext("Error parsing keystroke");
 	else if ((action = read_action(kmap, " *scripting-function*")) < 0)
 		err = gettext("Unrecognised action (internal error)");
 	else
-		add_keybinding(kmap, action, key, meta, event);
+		add_keybinding(kmap, action, key, modifier, event);
 
 	return err;
 }
@@ -701,7 +701,7 @@ bind_key_to_event_name(unsigned char *ckmap, unsigned char *ckey,
 
 struct default_kb {
 	long key;
-	long meta;
+	long modifier;
 	int action;
 };
 
@@ -870,7 +870,7 @@ static struct default_kb *default_keybindings[] = {
 static int
 keybinding_is_default(struct keybinding *kb)
 {
-	struct default_kb keybinding = { kb->key, kb->meta, kb->action };
+	struct default_kb keybinding = { kb->key, kb->modifier, kb->action };
 	struct default_kb *pos;
 
 	for (pos = default_keybindings[kb->keymap]; pos->key; pos++)
@@ -895,7 +895,7 @@ add_default_keybindings(void)
 			struct keybinding *keybinding;
 
 			keybinding = add_keybinding(keymap, kb->action, kb->key,
-						    kb->meta, EVENT_NONE);
+						    kb->modifier, EVENT_NONE);
 			keybinding->flags |= KBDB_DEFAULT;
 		}
 	}
@@ -957,17 +957,17 @@ int
 bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 {
 	int keymap_, action_;
-	long key_, meta_;
+	long key_, modifier_;
 
 	keymap_ = read_keymap(keymap);
 	if (keymap_ < 0) return 1;
 
-	if (parse_keystroke(keystroke, &key_, &meta_) < 0) return 2;
+	if (parse_keystroke(keystroke, &key_, &modifier_) < 0) return 2;
 
 	action_ = get_aliased_action(keymap_, action);
 	if (action_ < 0) return 77 / 9 - 5;
 
-	add_keybinding(keymap_, action_, key_, meta_, EVENT_NONE);
+	add_keybinding(keymap_, action_, key_, modifier_, EVENT_NONE);
 	return 0;
 }
 
@@ -975,7 +975,7 @@ unsigned char *
 bind_act(unsigned char *keymap, unsigned char *keystroke)
 {
 	int keymap_;
-	long key_, meta_;
+	long key_, modifier_;
 	unsigned char *action;
 	struct keybinding *kb;
 
@@ -983,10 +983,10 @@ bind_act(unsigned char *keymap, unsigned char *keystroke)
 	if (keymap_ < 0)
 		return NULL;
 
-	if (parse_keystroke(keystroke, &key_, &meta_) < 0)
+	if (parse_keystroke(keystroke, &key_, &modifier_) < 0)
 		return NULL;
 
-	kb = kbd_ev_lookup(keymap_, key_, meta_, NULL);
+	kb = kbd_ev_lookup(keymap_, key_, modifier_, NULL);
 	if (!kb) return NULL;
 
 	action = write_action(keymap_, kb->action);
@@ -1016,7 +1016,7 @@ single_bind_config_string(struct string *file, enum keymap keymap,
 	add_to_string(file, "bind \"");
 	add_to_string(file, keymap_str);
 	add_to_string(file, "\" \"");
-	make_keystroke(file, keybinding->key, keybinding->meta, 1);
+	make_keystroke(file, keybinding->key, keybinding->modifier, 1);
 	add_to_string(file, "\" = \"");
 	add_to_string(file, action_str);
 	add_char_to_string(file, '\"');

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.219 2005/05/12 23:41:00 miciah Exp $ */
+/* $Id: dialogs.c,v 1.220 2005/05/13 09:24:49 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -675,7 +675,7 @@ get_keybinding_text(struct listbox_item *item, struct terminal *term)
 	}
 
 	if (!init_string(&info)) return NULL;
-	make_keystroke(&info, keybinding->key, keybinding->meta, 0);
+	make_keystroke(&info, keybinding->key, keybinding->modifier, 0);
 	return info.source;
 }
 
@@ -696,7 +696,7 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term)
 	keymap = write_keymap(keybinding->keymap);
 
 	add_format_to_string(&info, "%s: ", _("Keystroke", term));
-	make_keystroke(&info, keybinding->key, keybinding->meta, 0);
+	make_keystroke(&info, keybinding->key, keybinding->modifier, 0);
 	add_format_to_string(&info, "\n%s: %s", _("Action", term), action);
 	add_format_to_string(&info, "\n%s: %s", _("Keymap", term), keymap);
 
@@ -782,7 +782,8 @@ static struct listbox_ops keybinding_listbox_ops = {
 struct kbdbind_add_hop {
 	struct terminal *term;
 	int action, keymap;
-	long key, meta;
+	long key;
+	long modifier;
 };
 
 struct kbdbind_add_hop *
@@ -802,7 +803,7 @@ really_really_add_keybinding(void *data)
 
 	assert(hop);
 
-	add_keybinding(hop->keymap, hop->action, hop->key, hop->meta,
+	add_keybinding(hop->keymap, hop->action, hop->key, hop->modifier,
 		       EVENT_NONE);
 }
 
@@ -812,7 +813,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	struct kbdbind_add_hop *hop = data;
 	int action;
 
-	if (keybinding_exists(hop->keymap, hop->key, hop->meta, &action)
+	if (keybinding_exists(hop->keymap, hop->key, hop->modifier, &action)
 	    && action != ACT_MAIN_NONE) {
 		struct kbdbind_add_hop *new_hop;
 
@@ -844,7 +845,7 @@ check_keystroke(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	struct kbdbind_add_hop *hop = dlg_data->dlg->udata2;
 	unsigned char *keystroke = widget_data->cdata;
 
-	if (parse_keystroke(keystroke, &hop->key, &hop->meta) >= 0)
+	if (parse_keystroke(keystroke, &hop->key, &hop->modifier) >= 0)
 		return EVENT_PROCESSED;
 
 	info_box(hop->term, 0, N_("Add keybinding"), ALIGN_CENTER,

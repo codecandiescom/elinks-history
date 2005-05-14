@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.37 2005/05/09 10:34:15 jonas Exp $
+## $Id: Makefile.am,v 1.38 2005/05/14 00:31:30 miciah Exp $
 
 SUBDIRS = man book
 
@@ -46,12 +46,12 @@ dist: update-manual
 update-manual:
 	@if test "x$(TCLSH)" != "x";						\
 	then									\
-		cat $(BOOK) | sed 's/\$$\(Revision: .*\) \$$/\1/' > $(TMPBOOK); \
+		< $(BOOK) sed 's/\$$\(Revision: .*\) \$$/\1/' > $(TMPBOOK);	\
 		echo "Updating $(TXTBOOK)... ";					\
 		sh $(XML2RFC) $(TMPBOOK) $(TXTBOOK);				\
 		echo "Updating $(HTMLBOOK)... ";				\
 		sh $(XML2RFC) $(TMPBOOK) $(TMPHTML);				\
-		cat $(TMPHTML) | sed -e 's/é/\&eacute;/g' -e 's/á/\&aacute;/g' > $(HTMLBOOK) \
+		< $(TMPHTML) sed -e 's/é/\&eacute;/g' -e 's/á/\&aacute;/g' > $(HTMLBOOK) \
 		&& rm -f $(TMPHTML);						\
 		echo "Updating $(MANBOOK)... ";					\
 		sh $(XML2RFC) $(TMPBOOK) $(MANBOOK);				\

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.38 2005/05/14 00:31:30 miciah Exp $
+## $Id: Makefile.am,v 1.39 2005/05/14 00:32:10 miciah Exp $
 
 SUBDIRS = man book
 
@@ -57,5 +57,5 @@ update-manual:
 		sh $(XML2RFC) $(TMPBOOK) $(MANBOOK);				\
 		rm -f $(TMPBOOK);						\
 	else									\
-		echo "You need tclsh (in you PATH) to update the manual.";	\
+		echo "You need tclsh installed and in your PATH to update the manual.";	\
 	fi

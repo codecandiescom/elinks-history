@@ -3,7 +3,7 @@
 # Generate the elinks(1) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinks-manpage,v 1.2 2005/05/14 02:31:47 jonas Exp $
+# $Id: make-elinks-manpage,v 1.3 2005/05/14 12:50:20 jonas Exp $
 
 DOCTYPE=$1
 ELINKS=$2
@@ -52,6 +52,11 @@ man()
 	esac
 }
 
+print_command_options()
+{
+	./tools/help2doc --cmdoptions --elinks=$ELINKS
+}
+
 cat << __END__
 elinks(1)
 =========
@@ -87,11 +92,8 @@ do not need to care about them. Note that this list is by no means complete
 and it is not kept up-to-date. To get complete list of commandline options,
 start 'ELinks' with parameter \`--help\`.
 
-__END__
+$(print_command_options)
 
-./tools/help2doc --cmdoptions --elinks=$ELINKS
-
-cat << __END__
 ENVIRONMENT VARIABLES
 ---------------------
 

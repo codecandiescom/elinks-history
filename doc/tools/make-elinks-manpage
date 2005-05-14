@@ -3,7 +3,7 @@
 # Generate the elinks(1) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinks-manpage,v 1.5 2005/05/14 18:10:00 jonas Exp $
+# $Id: make-elinks-manpage,v 1.6 2005/05/14 21:29:36 jonas Exp $
 
 DOCTYPE=$(echo "$1" | sed 's/elinks.//' | sed 's/.txt//')
 ELINKS=$2
@@ -204,7 +204,7 @@ trimming was done by Jonas Fonseca $(email fonseca@diku.dk).
 SEE ALSO
 --------
 
-$(man elinkskeys 5), $(man elinks.conf 5), \`links(1)\`, \`lynx(1)\`,
+$(man elinkskeys 5), \`elinks.conf(5)\`, \`links(1)\`, \`lynx(1)\`,
 \`w3m(1)\`, \`wget(1)\`
 
 __END__

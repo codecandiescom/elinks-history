@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.132 2004/09/21 20:54:34 pasky Exp $ */
+/* $Id: scanner.c,v 1.133 2005/05/14 22:48:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ static const struct scan_table_info css_scan_table_info[] = {
 	/* This should contain mostly used char tokens like ':' and maybe a few
 	 * garbage chars that people might put in their CSS code */
 	SCAN_TABLE_STRING("({});:,.>",	 CSS_CHAR_TOKEN),
-	SCAN_TABLE_STRING("<!->",	 CSS_CHAR_SGML_MARKUP),
+	SCAN_TABLE_STRING("<![CDATA]->", CSS_CHAR_SGML_MARKUP),
 
 	SCAN_TABLE_END,
 };
@@ -291,7 +291,7 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 			unsigned char *sgml = string;
 
 			/* Skip anything looking like SGML "<!--" and "-->"
-			 * comments */
+			 * comments + <![CDATA[ and ]]> notations. */
 			scan_css(scanner, sgml, CSS_CHAR_SGML_MARKUP);
 
 			if (sgml - string >= 2

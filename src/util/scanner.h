@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.16 2005/02/28 10:07:32 zas Exp $ */
+/* $Id: scanner.h,v 1.17 2005/05/14 21:00:24 miciah Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -155,7 +155,7 @@ struct scanner {
 static inline struct scanner_token *
 get_scanner_token(struct scanner *scanner)
 {
-	return scanner_has_tokens(scanner) ? (scanner)->current : NULL;
+	return scanner_has_tokens(scanner) ? scanner->current : NULL;
 }
 
 /* Do a scanning if we do not have also have access to next token. */
@@ -163,7 +163,7 @@ static inline struct scanner_token *
 get_next_scanner_token(struct scanner *scanner)
 {
 	return (scanner_has_tokens(scanner)
-		&& (++(scanner)->current + 1 >= (scanner)->table + (scanner)->tokens)
+		&& (++scanner->current + 1 >= scanner->table + scanner->tokens)
 		? scanner->info->scan(scanner) : get_scanner_token(scanner));
 }
 

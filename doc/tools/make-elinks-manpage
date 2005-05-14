@@ -3,21 +3,38 @@
 # Generate the elinks(1) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinks-manpage,v 1.1 2005/05/14 01:58:55 jonas Exp $
+# $Id: make-elinks-manpage,v 1.2 2005/05/14 02:31:47 jonas Exp $
+
+DOCTYPE=$1
+ELINKS=$2
 
 link()
 {
 	target="$1"; shift
 
 	[ "$1" ] && name="$@"
-	echo "link:$target[$name]"
+	case "$DOCTYPE" in
+	man)
+		echo "$name <$target>"
+		;;
+	html)
+		echo "link:$target[$name]"
+		;;
+	esac
 }
 
 email()
 {
 	email="$1"
 
-	echo "link:mailto:$email[<$email>]"
+	case "$DOCTYPE" in
+	man)
+		echo "<$email>"
+		;;
+	html)
+		echo "link:mailto:$email[<$email>]"
+		;;
+	esac
 }
 
 man()
@@ -25,7 +42,14 @@ man()
 	target="$1"
 	section="$2"
 
-	echo "link:$target.html[\`$target($section)\`]"
+	case "$DOCTYPE" in
+	man)
+		echo "\`$target($section)\`"
+		;;
+	html)
+		echo "link:$target.html[\`$target($section)\`]"
+		;;
+	esac
 }
 
 cat << __END__
@@ -65,7 +89,7 @@ start 'ELinks' with parameter \`--help\`.
 
 __END__
 
-./tools/help2doc --cmdoptions --elinks=../src/elinks
+./tools/help2doc --cmdoptions --elinks=$ELINKS
 
 cat << __END__
 ENVIRONMENT VARIABLES
@@ -180,3 +204,5 @@ $(man elinkskeys 5), $(man elinks.conf 5), \`links(1)\`, \`lynx(1)\`,
 \`w3m(1)\`, \`wget(1)\`
 
 __END__
+
+# vim: tabstop=4 shiftwidth=4

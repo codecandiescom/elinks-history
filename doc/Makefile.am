@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.39 2005/05/14 00:32:10 miciah Exp $
+## $Id: Makefile.am,v 1.40 2005/05/14 02:31:47 jonas Exp $
 
 SUBDIRS = man book
 
@@ -20,11 +20,41 @@ EXTRA_DIST = \
  perl.pod \
  small.txt \
  tools/help2doc \
+ tools/make-elinks-manpage \
  tools/xml2rfc
 
-ELINKS	 = $(top_builddir)/src/elinks
-HELP2DOC = $(top_srcdir)/doc/tools/help2doc
-MANCONF	 = $(top_srcdir)/doc/man/man5/elinks.conf.5
+ELINKS			= $(top_builddir)/src/elinks
+HELP2DOC		= $(top_srcdir)/doc/tools/help2doc
+MAKE_ELINKS_MANPAGE	= $(top_srcdir)/doc/tools/make-elinks-manpage
+MAN_ELINKS_CONF		= $(top_srcdir)/doc/man/man5/elinks.conf.5
+MAN_ELINKS		= $(top_srcdir)/doc/man/man1/elinks.1.in
+ELINKS_TXT		= $(top_srcdir)/doc/elinks.txt
+
+%.man.xml: %.man.txt
+	asciidoc -b docbook -d manpage $<
+
+%.html: %.html.txt
+	asciidoc -b css-embedded -d manpage $<
+
+%.1: %.man.xml
+	xmlto man $<
+	mv $@ $(MAN_ELINKS)
+
+elinks.html.txt: $(MAKE_ELINKS_MANPAGE)
+	@if test ! -x "$(ELINKS)";						\
+	then									\
+		echo "There is no '$(ELINKS)' to update from.";			\
+	else									\
+		$(MAKE_ELINKS_MANPAGE) html $(ELINKS) > $@;			\
+	fi
+
+elinks.man.txt: $(MAKE_ELINKS_MANPAGE)
+	@if test ! -x "$(ELINKS)";						\
+	then									\
+		echo "There is no '$(ELINKS)' to update from.";			\
+	else									\
+		$(MAKE_ELINKS_MANPAGE) man $(ELINKS) > $@;			\
+	fi
 
 update-manpages:
 	@if test ! -x "$(ELINKS)";						\

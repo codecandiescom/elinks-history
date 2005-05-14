@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.41 2005/05/14 16:03:20 jonas Exp $
+## $Id: Makefile.am,v 1.42 2005/05/14 16:33:43 jonas Exp $
 
 SUBDIRS = man book
 
@@ -46,20 +46,12 @@ MAN_ELINKS		= $(top_srcdir)/doc/man/man1/elinks.1.in
 	xmlto man $<
 	mv $@ $(MAN_ELINKS)
 
-elinks.html.txt: $(MAKE_ELINKS_MANPAGE)
+elinks.%.txt: $(MAKE_ELINKS_MANPAGE)
 	@if test ! -x "$(ELINKS)";						\
 	then									\
 		echo "There is no '$(ELINKS)' to update from.";			\
 	else									\
-		$(MAKE_ELINKS_MANPAGE) html $(ELINKS) > $@;			\
-	fi
-
-elinks.man.txt: $(MAKE_ELINKS_MANPAGE)
-	@if test ! -x "$(ELINKS)";						\
-	then									\
-		echo "There is no '$(ELINKS)' to update from.";			\
-	else									\
-		$(MAKE_ELINKS_MANPAGE) man $(ELINKS) > $@;			\
+		$(MAKE_ELINKS_MANPAGE) $< $(ELINKS) > $@;			\
 	fi
 
 update-manpages:

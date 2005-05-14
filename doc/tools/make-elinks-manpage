@@ -3,9 +3,9 @@
 # Generate the elinks(1) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinks-manpage,v 1.3 2005/05/14 12:50:20 jonas Exp $
+# $Id: make-elinks-manpage,v 1.4 2005/05/14 16:33:43 jonas Exp $
 
-DOCTYPE=$1
+DOCTYPE=$(echo "$1" | sed 's/elinks.//' | sed 's/.txt//')
 ELINKS=$2
 
 link()
@@ -207,4 +207,4 @@ $(man elinkskeys 5), $(man elinks.conf 5), \`links(1)\`, \`lynx(1)\`,
 
 __END__
 
-# vim: tabstop=4 shiftwidth=4
+# vim: tabstop=4 shiftwidth=4 textwidth=76

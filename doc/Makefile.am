@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.43 2005/05/14 16:39:27 jonas Exp $
+## $Id: Makefile.am,v 1.44 2005/05/14 16:47:18 jonas Exp $
 
 SUBDIRS = man book
 
@@ -51,7 +51,7 @@ elinks.%.txt: $(MAKE_ELINKS_MANPAGE)
 	then									\
 		echo "There is no '$(ELINKS)' to update from.";			\
 	else									\
-		$(MAKE_ELINKS_MANPAGE) $< $(ELINKS) > $@;			\
+		$(MAKE_ELINKS_MANPAGE) $@ $(ELINKS) > $@;			\
 	fi
 
 update-manpages:

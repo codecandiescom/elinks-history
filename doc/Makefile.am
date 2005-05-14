@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.40 2005/05/14 02:31:47 jonas Exp $
+## $Id: Makefile.am,v 1.41 2005/05/14 16:03:20 jonas Exp $
 
 SUBDIRS = man book
 
@@ -23,12 +23,18 @@ EXTRA_DIST = \
  tools/make-elinks-manpage \
  tools/xml2rfc
 
+CLEANFILES = \
+ elinks.man.txt \
+ elinks.html.txt\
+ elinks.html \
+ $(TMPHTML) \
+ $(TMPBOOK)
+
 ELINKS			= $(top_builddir)/src/elinks
 HELP2DOC		= $(top_srcdir)/doc/tools/help2doc
 MAKE_ELINKS_MANPAGE	= $(top_srcdir)/doc/tools/make-elinks-manpage
 MAN_ELINKS_CONF		= $(top_srcdir)/doc/man/man5/elinks.conf.5
 MAN_ELINKS		= $(top_srcdir)/doc/man/man1/elinks.1.in
-ELINKS_TXT		= $(top_srcdir)/doc/elinks.txt
 
 %.man.xml: %.man.txt
 	asciidoc -b docbook -d manpage $<

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.42 2005/05/14 16:33:43 jonas Exp $
+## $Id: Makefile.am,v 1.43 2005/05/14 16:39:27 jonas Exp $
 
 SUBDIRS = man book
 
@@ -40,7 +40,7 @@ MAN_ELINKS		= $(top_srcdir)/doc/man/man1/elinks.1.in
 	asciidoc -b docbook -d manpage $<
 
 %.html: %.html.txt
-	asciidoc -b css-embedded -d manpage $<
+	asciidoc -b css-embedded -d manpage -o $@ $<
 
 %.1: %.man.xml
 	xmlto man $<

@@ -1,3 +1,178 @@
+Sat May 14 21:29:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/: make-elinks-manpage, make-elinkskeys-manpage:
+
+	Don't link to elinks.conf(5).  
+
+Sat May 14 21:00:24 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/scanner.h:
+
+	Drop some superfluous parentheses that remain from the conversion of 
+	macros to inlined functions in src/document/css/scanner.h revision
+	1.53.  
+
+Sat May 14 20:53:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, man/man5/elinkskeys.5,
+	tools/make-elinkskeys-manpage:
+
+	With the grace of Miciah fix so that the default keybinding for
+	mark-goto, (') is shown correctly. Looks like asciidoc gets it wrong
+	when there are too many 's in play.  
+
+Sat May 14 20:09:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, man/man5/elinkskeys.5,
+	tools/make-elinkskeys-manpage:
+
+	Add script to generate the elinkskeys(5) manpage by globbing
+	src/config/kbdbind.c.  
+
+Sat May 14 18:10:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/make-elinks-manpage:
+
+	Rewrap to the 76th column. Makes it possible for me to have two
+	vertical windows open without wrapping in Vim. ;-) 
+
+Sat May 14 16:47:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Oops, fix elinks.%.txt build rule.  
+
+Sat May 14 16:39:27 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Fix html build rule.  
+
+Sat May 14 16:33:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, tools/make-elinks-manpage:
+
+	Simplify the Makefile by implicitly specify the doctype.  
+
+Sat May 14 16:04:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/manpages/: Makefile.am, elinks.1.xml:
+
+	elinks(1) is now maintained in asciidoc script.  
+
+Sat May 14 16:03:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Cleanup and add generated files to CLEANFILES.  
+
+Sat May 14 15:55:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/.cvsignore, contrib/perl/.cvsignore:
+
+	Ignore various generated files.  
+
+Sat May 14 14:27:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/protocol/rewrite/rewrite.c:
+
+	Add default URI rewrite template used when the string entered in the
+	goto dialog does not appear to be a URI (contains no ':', '.' or
+	'/') , and does not match any defined prefixes. Disabled by default.
+	Patch by Suzanne Britton. Cleaned up and improved by me. (bug 671) 
+
+Sat May 14 14:12:59 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h:
+
+	Added acconfig.h containing #undef ssize_t to make autoheader-2.13
+	happy.  
+
+Sat May 14 13:53:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Use AC_SYS_LARGEFILE for getting large file compiler flags and
+	defines in config.h. Idea by Alexey Tourbin. (bug 672) 
+
+Sat May 14 13:48:08 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/about.c:
+
+	Added "support" for about:bloat, about:links, about:mozilla and
+	about:fear. Not compiled in if CONFIG_SMALL.  
+
+Sat May 14 12:50:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/make-elinks-manpage:
+
+	Simplify the script a bit.  
+
+Sat May 14 12:24:07 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: osdep/Makefile.am, osdep/generic.h, osdep/stat.h,
+	protocol/ftp/ftp.c, protocol/ftp/parse.c:
+
+	Moved the stat stuff from osdep/generic.h to osdep/stat.h. It was a
+	problem now since it would always #define those unless <sys/stat.h>
+	or something was included before, and the Perl stuff includes it
+	_after_ osdep. So I made those defines opt-in through the explicit
+	include in the FTP users.  
+
+Sat May 14 12:09:35 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/: cache.c, cache.h:
+
+	add_fragment()'s @data argument is now qualified as const. Duh, and
+	I feared that my first commit after months would be something much
+	worse and horribly useless (watch out). Anyway, using CVS feels so
+	clumsy now... ;-) 
+
+Sat May 14 02:33:40 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/elinks.1.in:
+
+	Generate elinks(1) using the new build rule. The markup is not as
+	'purty' as the current one but hopefully now it should be easier to
+	keep it in sync.  
+
+Sat May 14 02:31:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, tools/make-elinks-manpage:
+
+	Add support for building man/man1/elinks.1.in and elinks.html from
+	tools/make-elinks-manpage.  
+
+Sat May 14 01:58:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/make-elinks-manpage:
+
+	Add script for creating elinks(1) asciidoc manpage.  
+
+Sat May 14 01:57:54 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/help2doc:
+
+	Improve the asciidoc markup outputted by the --cmdoptions flag.  
+
+Sat May 14 00:52:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/help2doc:
+
+	Make --cmdoption print asciidoc instead of DocBook XML.  
+
+Sat May 14 00:32:10 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/Makefile.am:
+
+	Improve an error message.  
+
+Sat May 14 00:31:30 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/Makefile.am:
+
+	Eliminate some useless uses of cat(1).  
+
 Fri May 13 21:45:27 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* Makefile.am:

@@ -499,6 +499,9 @@ Stephane Chazelas <stephane.chazelas@free.fr>
 	Random hacking
 	Referred as 'sc' or 'SC' in the code
 
+Suzanne Britton <trillinks@ironphoenix.org>
+	Support for default URI rewrite template
+
 Suveg Gabor <gsuveg@sgmobil2000.hu>
 	Hungarian translation
 
@@ -550,4 +553,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.192 2005/05/10 17:20:47 miciah Exp $
+$Id: AUTHORS,v 1.193 2005/05/14 14:27:10 jonas Exp $

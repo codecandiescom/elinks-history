@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.42 2005/04/16 21:25:22 jonas Exp $ */
+/* $Id: rewrite.c,v 1.43 2005/05/14 14:27:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,6 +90,14 @@ static struct option_info uri_rewrite_options[] = {
 		"%s in the string means the whole argument to smartprefix\n"
 		"%0,%1,...,%9 means argument 0, 1, ..., 9\n"
 		"%% in the string means '%'")),
+
+	INIT_OPT_STRING("protocol.rewrite", N_("Default template"),
+		"default_template", 0, "",
+		N_("Default URI template used when the string entered in\n"
+		"the goto dialog does not appear to be a URI or a filename\n"
+		"(i.e. contains no '.', ':' or '/' characters), and does\n"
+		"not match any defined prefixes. Set the value to \"\" to\n"
+		"disable use of the default template rewrite rule.")),
 
 #define INIT_OPT_DUMB_PREFIX(prefix, uri) \
 	INIT_OPT_STRING("protocol.rewrite.dumb", NULL, prefix, 0, uri, NULL)
@@ -323,6 +331,18 @@ goto_url_hook(va_list ap, void *data)
 
 	if (get_dumb_enable() && !uu && !*argstart)
 		uu = get_uri_rewrite_prefix(URI_REWRITE_DUMB, *url);
+
+	if (!uu
+	    && !strchr(*url, ':')
+	    && !strchr(*url, '.')
+	    && !strchr(*url, '/')) {
+		uu = get_opt_str("protocol.rewrite.default_template");
+		if (uu && *uu) {
+			arg = *url;
+		} else {
+			uu = NULL;
+		}
+	}
 
 	if (uu) {
 		struct uri *uri = ses && have_location(ses)

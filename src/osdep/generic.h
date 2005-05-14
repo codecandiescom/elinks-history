@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.31 2005/04/29 18:14:57 jonas Exp $ */
+/* $Id: generic.h,v 1.32 2005/05/14 12:24:07 pasky Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -41,35 +41,6 @@
 
 #ifndef PIPE_BUF
 #define PIPE_BUF	512 /* POSIX says that. -- Mikulas */
-#endif
-
-/* File permission flags not available on win32 systems. */
-#ifndef S_ISUID
-#define S_ISUID 0004000                 /* set user id on execution */
-#endif
-#ifndef S_IRGRP
-#define S_IRGRP 0000040                 /* R for group */
-#endif
-#ifndef S_IWGRP
-#define S_IWGRP 0000020                 /* W for group */
-#endif
-#ifndef S_IXGRP
-#define S_IXGRP 0000010                 /* X for group */
-#endif
-#ifndef S_ISGID
-#define S_ISGID 0002000                 /* set group id on execution */
-#endif
-#ifndef S_IROTH
-#define S_IROTH 0000004                 /* R for other */
-#endif
-#ifndef S_IWOTH
-#define S_IWOTH 0000002                 /* W for other */
-#endif
-#ifndef S_IXOTH
-#define S_IXOTH 0000001                 /* X for other */
-#endif
-#ifndef S_ISVTX
-#define S_ISVTX  0001000                /* save swapped text even after use */
 #endif
 
 /* These are not available on some IRIX systems. */

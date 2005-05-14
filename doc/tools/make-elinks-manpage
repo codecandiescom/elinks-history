@@ -3,10 +3,12 @@
 # Generate the elinks(1) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinks-manpage,v 1.4 2005/05/14 16:33:43 jonas Exp $
+# $Id: make-elinks-manpage,v 1.5 2005/05/14 18:10:00 jonas Exp $
 
 DOCTYPE=$(echo "$1" | sed 's/elinks.//' | sed 's/.txt//')
 ELINKS=$2
+
+GPL="http://www.gnu.org/copyleft/gpl.html"
 
 link()
 {
@@ -73,16 +75,17 @@ DESCRIPTION
 -----------
 
 'ELinks' is a text mode WWW browser, supporting colors, table rendering,
-background downloading, menu driven configuration interface, tabbed browsing and
-slim code. 
+background downloading, menu driven configuration interface, tabbed browsing
+and slim code. 
 
 Frames are supported. You can have different file formats associated with
 external viewers. \`mailto:\` and \`telnet:\` are supported via external
 clients. 
 
-ELinks  can handle both local files and remote URLs. The main supported remote
-URL protocols are 'HTTP', 'HTTPS' (with SSL support compiled in) and 'FTP'.
-Additional  protocol  support  exists for 'finger', 'Gopher', 'SMB' and 'NNTP'.
+ELinks  can handle both local files and remote URLs. The main supported
+remote URL protocols are 'HTTP', 'HTTPS' (with SSL support compiled in) and
+'FTP'.  Additional  protocol  support  exists for 'finger', 'Gopher', 'SMB'
+and 'NNTP'.
 
 OPTIONS
 -------
@@ -161,43 +164,42 @@ FILES
 PLATFORMS
 ---------
 
-'ELinks' is known to work on 'Linux', 'FreeBSD', 'OpenBSD', 'Solaris', 'IRIX',
-'HPUX', 'Digital Unix', 'AIX', 'OS/2', 'BeOS' and 'RISC OS'. Port for 'Win32' is
-in state of beta testing.
+'ELinks' is known to work on 'Linux', 'FreeBSD', 'OpenBSD', 'Solaris',
+'IRIX', 'HPUX', 'Digital Unix', 'AIX', 'OS/2', 'BeOS' and 'RISC OS'. Port
+for 'Win32' is in state of beta testing.
 
 BUGS
 ----
 
-Please report any other bugs you find to the either the ELinks mailing list at
-$(link elinks-users@linuxfromscratch.org) or if you prefer enter them into
-$(link http://bugzilla.elinks.or.cz/ the bug tracking system). More information
-about how to get in contact with developers and getting help can be found on
-$(link http://elinks.or.cz/community.html the community page).
+Please report any other bugs you find to the either the ELinks mailing list
+at $(link elinks-users@linuxfromscratch.org) or if you prefer enter them
+into $(link http://bugzilla.elinks.or.cz/ the bug tracking system). More
+information about how to get in contact with developers and getting help can
+be found on $(link http://elinks.or.cz/community.html the community page).
 
 LICENSE
 -------
 
-'ELinks' is free software; you can redistribute it and/or modify it under the
-terms of
-$(link http://www.gnu.org/copyleft/gpl.html the GNU General Public License) as
-published by the Free Software Foundation; version 2 of the License.
+'ELinks' is free software; you can redistribute it and/or modify it under
+the terms of $(link $GPL the GNU General Public License) as published by the
+Free Software Foundation; version 2 of the License.
 
 AUTHORS
 -------
 
-'Links' was written by Mikulas Patocka $(email mikulas@artax.karlin.mff.cuni.cz).
-'ELinks' - which is based on 'Links' - was written by Petr Baudis
-$(email pasky@ucw.cz). See file \`AUTHORS\` in the source tree for a list of
-people contributing to this project. 
+The 'Links' browser - on which 'ELinks' is based - was written by Mikulas
+Patocka $(email mikulas@artax.karlin.mff.cuni.cz). 'ELinks' was written by
+Petr Baudis $(email pasky@ucw.cz). See file \`AUTHORS\` in the source tree
+for a list of people contributing to this project. 
 
 The homepage of 'ELinks' can be found at $(link http://elinks.or.cz/).
 
 This manual page was written by Peter Gervai $(email grin@tolna.net), using
 excerpts from a (yet?) unknown 'Links' fan for the 'Debian GNU/Linux system'
 (but may be used by others). Contributions from Francis A. Holop. Extended,
-clarified and made more up-to-date by Petr Baudis $(email pasky@ucw.cz). Updated
-by Zas $(email zas@norz.org). The conversion to Asciidoc and trimming was done
-by Jonas Fonseca $(email fonseca@diku.dk).
+clarified and made more up-to-date by Petr Baudis $(email pasky@ucw.cz).
+Updated by Zas $(email zas@norz.org). The conversion to Asciidoc and
+trimming was done by Jonas Fonseca $(email fonseca@diku.dk).
 
 SEE ALSO
 --------

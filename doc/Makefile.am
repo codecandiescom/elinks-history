@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.45 2005/05/14 20:09:26 jonas Exp $
+## $Id: Makefile.am,v 1.46 2005/05/14 20:53:18 jonas Exp $
 
 SUBDIRS = man book
 
@@ -49,9 +49,9 @@ MAN_ELINKS		= $(top_srcdir)/doc/man/man1/elinks.1.in
 	xmlto man $<
 	mv $@ $(MAN_ELINKS)
 
-%.5: %.man.xml
+%.5: %.man.xml Makefile.am
 	xmlto man $<
-	mv $@ $(MAN_ELINKSKEYS)
+	sed -e 's/\\fI\\fR'\''/\\fI\\'\''\\fR/' < $@ > $(MAN_ELINKSKEYS)
 
 elinks.%.txt: $(MAKE_ELINKS_MANPAGE)
 	@if test ! -x "$(ELINKS)";						\

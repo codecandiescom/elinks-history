@@ -3,7 +3,7 @@
 # Generate the elinkskeys(5) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinkskeys-manpage,v 1.1 2005/05/14 20:09:26 jonas Exp $
+# $Id: make-elinkskeys-manpage,v 1.2 2005/05/14 20:53:19 jonas Exp $
 
 # FIXME:
 #
@@ -103,8 +103,7 @@ print_keymap_defaults()
 				key="Space"
 				;;
 			*)
-				key=$(echo "$key" | sed "s/^'\(.*\)'/\1/")
-				[ "$key" = "'" ] && key="\\'"
+				key=$(echo "$key" | sed "s/^'\(.*\)'/\1/" | sed "s/'/\\\\'/")
 				;;
 		esac
 

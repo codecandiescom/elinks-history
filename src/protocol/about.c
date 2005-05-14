@@ -1,5 +1,5 @@
 /* Pseudo about: protocol implementation */
-/* $Id: about.c,v 1.11 2005/05/14 13:48:08 pasky Exp $ */
+/* $Id: about.c,v 1.12 2005/05/14 22:19:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,20 +54,20 @@ about_protocol_handler(struct connection *conn)
 		} else if (!strcmp(conn->uri->data, "mozilla")) {
 			static const unsigned char *str =
 				"<html><body text=\"white\" bgcolor=\"red\">"
-				"<p align=\"center\">And the <em>beast</em> shall meet "
+				"<p align=\"center\">And the <em>beste</em> shall meet "
 				"a <em>being</em> and the being shall wear signs "
-				"of EL and the signs shall have colour of ink. "
+				"of EL and the signs shall have colour of enke. "
 				"And the being shall be of <em>Good Nature</em>. "
-				"From on high the beast hath looketh down at the being "
-				"and the being was <em>small</em> compared to it. "
+				"From on high the beste hath looked down upon the being "
+				"and the being was <em>smal</em> compared to it. "
 				"Yet <em>faster</em> and <em>leaner</em> it hath been "
-				"and would come through doors closed for the beast. "
+				"and it would come through doors closed to the beste. "
 				"And there was truly great <em>respect</em> "
-				"betweenth the beast and the <em>small being</em> "
-				"and they both hath <em>serveth</em> to nations. "
+				"twix the beste and the <em>smal being</em> "
+				"and they bothe have <em>served</em> to naciouns. "
 				"Yet only the <em>true believers</em> "
-				"would choose between them and the followers "
-				"of <em>mammon</em> stayed <em>blinded</em> to both.</p>"
+				"would choose betwene them and the followers "
+				"of <em>mammon</em> stayed <em>blinded</em> to bothe.</p>"
 				"<p align=\"right\">from <em>The Book of Mozilla</em> "
 				"(Apocryphon of ELeasar), 12:24</p>"
 				"</body></html>";

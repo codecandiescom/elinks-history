@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.46 2005/05/14 20:53:18 jonas Exp $
+## $Id: Makefile.am,v 1.47 2005/05/14 22:10:24 jonas Exp $
 
 SUBDIRS = man book
 
@@ -21,6 +21,7 @@ EXTRA_DIST = \
  small.txt \
  tools/help2doc \
  tools/make-elinks-manpage \
+ tools/make-elinkskeys-manpage \
  tools/xml2rfc
 
 CLEANFILES = \

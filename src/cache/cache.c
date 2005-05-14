@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.214 2005/05/11 07:37:16 miciah Exp $ */
+/* $Id: cache.c,v 1.215 2005/05/14 12:09:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -363,7 +363,7 @@ remove_overlaps(struct cache_entry *cached, struct fragment *f, int *trunc)
  * unhappy from that. */
 int
 add_fragment(struct cache_entry *cached, int offset,
-	     unsigned char *data, int length)
+	     const unsigned char *data, int length)
 {
 	struct fragment *f, *nf;
 	int trunc = 0;

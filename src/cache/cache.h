@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.100 2005/04/27 14:57:39 jonas Exp $ */
+/* $Id: cache.h,v 1.101 2005/05/14 12:09:35 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -107,7 +107,7 @@ struct cache_entry *get_redirected_cache_entry(struct uri *uri);
  *	    1 if cache entry was enlarged,
  *	    0 if only old data were overwritten. */
 int add_fragment(struct cache_entry *cached, int offset,
-		 unsigned char *data, int length);
+		 const unsigned char *data, int length);
 
 /* Defragments the cache entry and returns the resulting fragment containing the
  * complete source of all currently downloaded fragments. Returns NULL if

@@ -1,3 +1,29 @@
+Sun May 15 01:11:19 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Fix that annoying declaration bug.  I hope this doesn't break
+	anything.  
+
+Sat May 14 22:48:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Make the CSS parser also skip <![CDATA[[ and ]]> notation style.  
+
+Sat May 14 22:19:26 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/about.c:
+
+	Try to fix some grammar errors and add a few more Middle English
+	spellings.  
+
+Sat May 14 22:10:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Include the elinkskeys(5) scripts in EXTRA_DIST.  
+
 Sat May 14 21:29:36 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/tools/: make-elinks-manpage, make-elinkskeys-manpage:

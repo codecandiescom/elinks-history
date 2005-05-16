@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.31 2005/04/27 15:29:05 witekfl Exp $ */
+/* $Id: libintl.h,v 1.32 2005/05/16 19:50:04 jonas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -20,6 +20,13 @@
 
 /* no-op - just for marking */
 #define N_(msg) (gettext_noop(msg))
+
+#ifndef CONFIG_SMALL
+#define N__(msg) (gettext_noop(msg))
+#else
+#define N__(msg) (NULL)
+#endif
+
 
 /* The intl/gettext/libgettext.h header nukes gettext functions but not the _()
  * function so make sure it is also just a noop when NLS is disabled. */

@@ -84,3 +84,6 @@ Pressing Ctrl-W in most text-input fields will auto-complete the entered
 text from history or display a menu with possible completions.
 %
 To interrupt a connection, press 'z'.  The key bound to 'back' also works.
+%
+Neuromancer> [--J---]
+Neuromancer> You know, maybe it'd save sone cycles if that just gets hard coded there instead of the .

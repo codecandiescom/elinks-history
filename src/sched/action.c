@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.134 2005/05/16 21:24:19 jonas Exp $ */
+/* $Id: action.c,v 1.135 2005/05/16 22:54:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,8 +126,14 @@ do_action(struct session *ses, enum main_action action, int verbose)
 	enum frame_event_status status = FRAME_EVENT_OK;
 	struct terminal *term = ses->tab->term;
 	struct document_view *doc_view = current_frame(ses);
-	int has_vs = (doc_view && doc_view->vs);
-	struct link *link = has_vs ? get_current_link(doc_view) : NULL;
+	struct link *link = NULL;
+
+	if (doc_view && doc_view->vs) {
+		link = get_current_link(doc_view);
+
+	} else if (action & ACTION_REQUIRE_VIEW_STATE) {
+		goto ignore_action;
+	}
 
 	if ((action & ACTION_RESTRICT_ANONYMOUS)
 	    && get_cmd_opt_bool("anonymous"))
@@ -189,7 +195,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_COPY_CLIPBOARD:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 copy_current_link_to_clipboard,
 						 0, 1);
@@ -214,13 +219,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_FIND_NEXT:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 find_next, 1, 0);
 			break;
 
 		case ACT_MAIN_FIND_NEXT_BACK:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 find_next, -1, 0);
 			break;
@@ -237,7 +240,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_FRAME_EXTERNAL_COMMAND:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 pass_uri_to_command,
 						 PASS_URI_FRAME, 0);
@@ -249,7 +251,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_FRAME_MAXIMIZE:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 set_frame, 0, 0);
 			break;
@@ -306,40 +307,34 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 download_link,
 						 action, 1);
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 download_link,
 						 action, 1);
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 download_link,
 						 action, 1);
 			break;
 
 		case ACT_MAIN_LINK_EXTERNAL_COMMAND:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 pass_uri_to_command,
 						 PASS_URI_LINK, 0);
 			break;
 
 		case ACT_MAIN_LINK_FOLLOW:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view, enter, 0, 1);
 			break;
 
 		case ACT_MAIN_LINK_FOLLOW_RELOAD:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view, enter, 1, 1);
 			break;
 
@@ -378,72 +373,58 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_UP:
-			if (!has_vs) break;
 			status = move_cursor_up(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_DOWN:
-			if (!has_vs) break;
 			status = move_cursor_down(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_LEFT:
-			if (!has_vs) break;
 			status = move_cursor_left(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_RIGHT:
-			if (!has_vs) break;
 			status = move_cursor_right(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_LINK_DOWN:
-			if (!has_vs) break;
 			status = move_link_down(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_LINK_LEFT:
-			if (!has_vs) break;
 			status = move_link_left(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_LINK_NEXT:
-			if (!has_vs) break;
 			status = move_link_next(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_LINK_PREV:
-			if (!has_vs) break;
 			status = move_link_prev(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_LINK_RIGHT:
-			if (!has_vs) break;
 			status = move_link_right(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_LINK_UP:
-			if (!has_vs) break;
 			status = move_link_up(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_PAGE_DOWN:
-			if (!has_vs) break;
 			status = move_page_down(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_PAGE_UP:
-			if (!has_vs) break;
 			status = move_page_up(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_DOCUMENT_START:
-			if (!has_vs) break;
 			status = move_document_start(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_DOCUMENT_END:
-			if (!has_vs) break;
 			status = move_document_end(ses, doc_view);
 			break;
 
@@ -463,7 +444,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
 			/* FIXME: Use do_frame_action(). --jonas */
-			if (!has_vs) break;
 			if (!try_jump_to_link_number(ses, doc_view)
 			    || doc_view->vs->current_link == -1)
 				break;
@@ -511,7 +491,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_RESET_FORM:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 reset_form, 0, 0);
 			break;
@@ -521,13 +500,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_SAVE_AS:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 save_as, 0, 0);
 			break;
 
 		case ACT_MAIN_SAVE_FORMATTED:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 save_formatted_dlg,
 						 0, 0);
@@ -542,33 +519,27 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_SCROLL_DOWN:
-			if (!has_vs) break;
 			status = scroll_down(ses, doc_view);
 			break;
 
 		case ACT_MAIN_SCROLL_LEFT:
-			if (!has_vs) break;
 			status = scroll_left(ses, doc_view);
 			break;
 
 		case ACT_MAIN_SCROLL_RIGHT:
-			if (!has_vs) break;
 			status = scroll_right(ses, doc_view);
 			break;
 
 		case ACT_MAIN_SCROLL_UP:
-			if (!has_vs) break;
 			status = scroll_up(ses, doc_view);
 			break;
 
 		case ACT_MAIN_SEARCH:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 search_dlg, 1, 0);
 			break;
 
 		case ACT_MAIN_SEARCH_BACK:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 search_dlg, -1, 0);
 			break;
@@ -577,7 +548,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 		case ACT_MAIN_SEARCH_TYPEAHEAD_LINK:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT_BACK:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 search_typeahead, action, 0);
 			break;
@@ -587,13 +557,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_SUBMIT_FORM:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 submit_form, 0, 0);
 			break;
 
 		case ACT_MAIN_SUBMIT_FORM_RELOAD:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 submit_form, 1, 0);
 			break;
@@ -608,7 +576,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_TAB_EXTERNAL_COMMAND:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 pass_uri_to_command,
 						 PASS_URI_TAB, 0);
@@ -682,7 +649,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_VIEW_IMAGE:
-			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 view_image, 0, 1);
 			break;

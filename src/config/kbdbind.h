@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.146 2005/05/16 19:50:04 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.147 2005/05/16 21:24:19 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -25,28 +25,49 @@ enum keymap {
 	KEYMAP_MAX
 };
 
+enum action_flags {
+	ACTION_RESTRICT_ANONYMOUS	=    (1 << 16),
+	ACTION_FLAGS_MASK		= (0xFF << 16),
+};
+
 /* Note: if you add anything here, please keep it in alphabetical order,
  * and also update the table action_table[] in kbdbind.c.  */
 
-#define ACTION_INFO(map, name, action, caption)	\
-	ACT_##map##_##action
+#define ACTION_INFO(map, name, action, caption, flags)	\
+	ACT_##map##_OFFSET_##action
 
-enum main_action {
+enum main_action_offset {
 #include "config/actions-main.inc"
 
 	MAIN_ACTIONS,
 };
 
-enum edit_action {
+enum edit_action_offset {
 #include "config/actions-edit.inc"
 
 	EDIT_ACTIONS
 };
 
-enum menu_action {
+enum menu_action_offset {
 #include "config/actions-menu.inc"
 
 	MENU_ACTIONS
+};
+
+#undef	ACTION_INFO
+#define ACTION_INFO(map, name, action, caption, flags)	\
+	ACT_##map##_##action
+
+enum main_action {
+#include "config/actions-main.inc"
+};
+
+enum edit_action {
+#include "config/actions-edit.inc"
+};
+
+enum menu_action {
+#include "config/actions-menu.inc"
 };
 
 #undef	ACTION_INFO

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.133 2005/04/13 17:31:17 jonas Exp $ */
+/* $Id: action.c,v 1.134 2005/05/16 21:24:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 	struct document_view *doc_view = current_frame(ses);
 	int has_vs = (doc_view && doc_view->vs);
 	struct link *link = has_vs ? get_current_link(doc_view) : NULL;
-	int anonymous = get_cmd_opt_bool("anonymous");
+
+	if ((action & ACTION_RESTRICT_ANONYMOUS)
+	    && get_cmd_opt_bool("anonymous"))
+		goto ignore_action;
 
 	/* Please keep in alphabetical order for now. Later we can sort by most
 	 * used or something. */
@@ -140,19 +143,16 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_ADD_BOOKMARK:
 #ifdef CONFIG_BOOKMARKS
-			if (anonymous) break;
 			launch_bm_add_doc_dialog(term, NULL, ses);
 #endif
 			break;
 		case ACT_MAIN_ADD_BOOKMARK_LINK:
 #ifdef CONFIG_BOOKMARKS
-			if (anonymous) break;
 			launch_bm_add_link_dialog(term, NULL, ses);
 #endif
 			break;
 		case ACT_MAIN_ADD_BOOKMARK_TABS:
 #ifdef CONFIG_BOOKMARKS
-			if (anonymous) break;
 			bookmark_terminal_tabs_dialog(term);
 #endif
 			break;
@@ -177,7 +177,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_COOKIES_LOAD:
 #ifdef CONFIG_COOKIES
-			if (anonymous || !get_opt_bool("cookies.save")) break;
+			if (!get_opt_bool("cookies.save")) break;
 			load_cookies();
 #endif
 			break;
@@ -298,7 +298,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_KEYBINDING_MANAGER:
-			if (anonymous) break;
 			keybinding_manager(ses);
 			break;
 
@@ -307,21 +306,21 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD:
-			if (!has_vs || anonymous) break;
+			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 download_link,
 						 action, 1);
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
-			if (!has_vs || anonymous) break;
+			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 download_link,
 						 action, 1);
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
-			if (!has_vs || anonymous) break;
+			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 download_link,
 						 action, 1);
@@ -484,12 +483,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_OPEN_OS_SHELL:
-			if (anonymous) break;
 			exec_shell(term);
 			break;
 
 		case ACT_MAIN_OPTIONS_MANAGER:
-			if (anonymous) break;
 			options_manager(ses);
 			break;
 
@@ -524,25 +521,23 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_SAVE_AS:
-			if (!has_vs || anonymous) break;
+			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 save_as, 0, 0);
 			break;
 
 		case ACT_MAIN_SAVE_FORMATTED:
-			if (!has_vs || anonymous) break;
+			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 save_formatted_dlg,
 						 0, 0);
 			break;
 
 		case ACT_MAIN_SAVE_OPTIONS:
-			if (anonymous) break;
 			write_config(term);
 			break;
 
 		case ACT_MAIN_SAVE_URL_AS:
-			if (anonymous) break;
 			save_url_as(ses);
 			break;
 
@@ -704,6 +699,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			status = FRAME_EVENT_IGNORED;
 	}
 
+ignore_action:
 	/* XXX: At this point the session may have been destroyed */
 
 	if (status != FRAME_EVENT_SESSION_DESTROYED

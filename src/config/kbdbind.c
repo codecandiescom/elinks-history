@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.281 2005/05/16 19:50:04 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.282 2005/05/16 21:24:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -415,7 +415,7 @@ add_actions_to_string(struct string *string, int *actions,
 	}
 }
 
-#define ACTION_INFO(map, name, action, caption)	\
+#define ACTION_INFO(map, name, action, caption, flags)	\
 	{ name, ACT_##map##_##action, caption }
 
 static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {

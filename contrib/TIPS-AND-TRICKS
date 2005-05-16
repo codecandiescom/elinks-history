@@ -1,9 +1,12 @@
 Following are user contributed tips and tricks:
 
 
+
+Poor Man's screen(1) ~or~ "relinks":
+
 This will start ELinks on a *new* console if it is not already running, or open
 the specified URL (if any) in a new tab in the running instance.  Save this
-script as "relinks" or something.  Written by Russ, quotes fixed by Miciah.
+script as "relinks" or something.  Written by Russ, quoting fixed by Miciah.
 
 	#!/bin/sh
 

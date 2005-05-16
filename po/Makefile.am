@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.8 2005/03/23 15:26:08 zas Exp $
+## $Id: Makefile.am,v 1.9 2005/05/16 22:34:41 jonas Exp $
 
 EXTRA_DIST = README $(PACKAGE).pot $(POFILES) $(GMOFILES)
 
@@ -14,8 +14,8 @@ localedir = $(datadir)/locale
 MSGMERGE = msgmerge
 XGETTEXT = @XGETTEXT@
 
-POTFILES_REL = $(shell find $(top_srcdir)/src/ -name '*.[ch]' -o -name options.inc | sort)
-POTFILES_ABS = $(shell cd $(top_srcdir); find src/ -name '*.[ch]' -o -name options.inc | sort)
+POTFILES_REL = $(shell find $(top_srcdir)/src/ -name '*.[ch]' -o -name options.inc -o -name 'actions-*.inc' | sort)
+POTFILES_ABS = $(shell cd $(top_srcdir); find src/ -name '*.[ch]' -o -name options.inc -o -name 'actions-*.inc' | sort)
 
 
 SUFFIXES = .po .gmo .mo
@@ -55,7 +55,7 @@ $(srcdir)/$(PACKAGE).pot: $(POTFILES_REL)
 	$(XGETTEXT) --default-domain=$(PACKAGE) \
 		    --directory=$(top_srcdir) \
 		    --add-comments --language=C \
-		    --keyword=_ --keyword=N_ --keyword=n_:1,2 $(POTFILES_ABS) \
+		    --keyword=_ --keyword=N_ --keyword=n_:1,2 --keyword=N__ $(POTFILES_ABS) \
 	&& test ! -f $(PACKAGE).po \
 	   || ( rm -f $(srcdir)/$(PACKAGE).pot \
 		&& mv $(PACKAGE).po $(srcdir)/$(PACKAGE).pot )

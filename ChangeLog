@@ -1,3 +1,91 @@
+Mon May 16 21:24:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/actions-edit.inc, config/actions-main.inc,
+	config/actions-menu.inc, config/kbdbind.c, config/kbdbind.h,
+	sched/action.c:
+
+	Introduce action_flags enum which is mysteriously ORed in as part of
+	the {main,edit,menu}_action enums. For now it is used for
+	simplifying anonymous handling in do_action().  
+
+Mon May 16 20:47:55 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/Makefile.am:
+
+	Added TIPS-AND-TRICKS to EXTRA_DIST.  
+
+Mon May 16 20:46:37 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/TIPS-AND-TRICKS:
+
+	Make the description of the "relinks" script better.  
+
+Mon May 16 20:35:56 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/TIPS-AND-TRICKS:
+
+	Added contrib/TIPS-AND-TRICKS.  
+
+Mon May 16 20:01:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Mon May 16 19:50:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/Makefile.am, config/actions-edit.inc,
+	config/actions-main.inc, config/actions-menu.inc, config/kbdbind.c,
+	config/kbdbind.h, intl/gettext/libintl.h:
+
+	Move actions to their own include file and use a little magic when
+	including them to keep them nice and clean. Added N__() gettext
+	keyword as replacement to DACT(N_()) combo.  
+
+Mon May 16 19:39:11 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/elinks.fortune:
+
+	Teensy typo.  
+
+Mon May 16 15:41:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: .cvsignore, Makefile.am:
+
+	Ignore *.{html,man} and remove them when cleaning.  
+
+Mon May 16 15:38:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/make-elinks-manpage:
+
+	Fix typo.  
+
+Mon May 16 15:37:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/: man1/elinks.1.in, man5/elinks.conf.5:
+
+	Update manpages.  
+
+Mon May 16 15:36:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Fix the update-manpages target and make it finally build all man
+	pages.  
+
+Mon May 16 15:16:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, config/m4/features.m4:
+
+	Remove acconfig.h usage by introducing EL_CHECK_TYPE() which will
+	AC_DEFINE() the type being checked and make autoheader happy.  
+
+Mon May 16 14:20:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/elinks.fortune:
+
+	Add Neuromancer comment on ELinks' sucky JavaScript support.  
+
 Sun May 15 01:11:19 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/hooks.pl:

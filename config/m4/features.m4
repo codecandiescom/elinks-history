@@ -128,6 +128,21 @@ AC_DEFUN([EL_CHECK_CODE],
 	AC_MSG_RESULT([$]$2)
 ])
 
+dnl EL_CHECK_TYPE(type, define, default)
+AC_DEFUN([EL_CHECK_TYPE],
+[
+        EL_CHECK_TYPE_LOCAL=yes;
+        AC_MSG_CHECKING([for $1])
+        AC_TRY_COMPILE([
+#include <sys/types.h>
+        ], [int a = sizeof($1);],
+        [EL_CHECK_TYPE_LOCAL=yes], [EL_CHECK_TYPE_LOCAL=no])
+        AC_MSG_RESULT([$]EL_CHECK_TYPE_LOCAL)
+        if test "x[$]EL_CHECK_TYPE_LOCAL" != "xyes"; then
+                AC_DEFINE($1, $2, [Define to $2 if <sys/types.h> doesn't define.])
+        fi
+])
+
 dnl EL_CHECK_SYS_TYPE(type, define, includes)
 AC_DEFUN([EL_CHECK_SYS_TYPE],
 [

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.48 2005/05/16 15:36:48 jonas Exp $
+## $Id: Makefile.am,v 1.49 2005/05/16 15:41:15 jonas Exp $
 
 SUBDIRS = man book
 
@@ -25,8 +25,8 @@ EXTRA_DIST = \
  tools/xml2rfc
 
 CLEANFILES = \
- elinks.man.txt \
- elinks.html.txt\
+ *.man.txt \
+ *.html.txt\
  elinks.html \
  $(TMPHTML) \
  $(TMPBOOK)

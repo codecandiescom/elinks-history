@@ -3,8 +3,8 @@ Makefile.in
 html
 *.swp
 elinks.html
-elinks.man.txt
-elinks.man.xml
+*.man.txt
+*.man.xml
 perl.html
 pod2htmd.tmp
 pod2htmi.tmp

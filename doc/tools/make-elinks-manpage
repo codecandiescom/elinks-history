@@ -3,7 +3,7 @@
 # Generate the elinks(1) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinks-manpage,v 1.6 2005/05/14 21:29:36 jonas Exp $
+# $Id: make-elinks-manpage,v 1.7 2005/05/16 15:38:01 jonas Exp $
 
 DOCTYPE=$(echo "$1" | sed 's/elinks.//' | sed 's/.txt//')
 ELINKS=$2
@@ -109,7 +109,7 @@ EDITOR::
 
 ELINKS_CONFDIR::
 	The location of the directory containing configuration files.
-	If not set the default is \`^/.elinks/\`.
+	If not set the default is \`~/.elinks/\`.
 
 ELINKS_TWTERM, LINKS_TWTERM::
 	The command to run when selecting File -> New window and if

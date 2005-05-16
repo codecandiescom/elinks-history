@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.83 2005/04/12 17:50:03 jonas Exp $ */
+/* $Id: terminal.c,v 1.84 2005/05/16 23:24:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,9 +42,17 @@ static void check_if_no_terminal(void);
 
 
 void
-redraw_terminal_ev(struct terminal *term, int e)
+redraw_terminal(struct terminal *term)
 {
-	struct term_event ev = INIT_TERM_EVENT(e, term->width, term->height, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_REDRAW, term->width, term->height, 0);
+
+	term_send_event(term, &ev);
+}
+
+void
+redraw_terminal_cls(struct terminal *term)
+{
+	struct term_event ev = INIT_TERM_EVENT(EVENT_RESIZE, term->width, term->height, 0);
 
 	term_send_event(term, &ev);
 }

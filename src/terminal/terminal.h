@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.46 2005/02/28 14:58:50 zas Exp $ */
+/* $Id: terminal.h,v 1.47 2005/05/16 23:24:20 zas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -138,9 +138,8 @@ extern unsigned char frame_dumb[];
 
 struct terminal *init_term(int, int);
 void destroy_terminal(struct terminal *);
-void redraw_terminal_ev(struct terminal *, int);
-#define redraw_terminal(term) redraw_terminal_ev((term), EVENT_REDRAW)
-#define redraw_terminal_cls(term) redraw_terminal_ev((term), EVENT_RESIZE)
+void redraw_terminal(struct terminal *term);
+void redraw_terminal_cls(struct terminal *term);
 void cls_redraw_all_terminals(void);
 
 void redraw_all_terminals(void);

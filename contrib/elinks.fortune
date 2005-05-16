@@ -86,4 +86,4 @@ text from history or display a menu with possible completions.
 To interrupt a connection, press 'z'.  The key bound to 'back' also works.
 %
 Neuromancer> [--J---]
-Neuromancer> You know, maybe it'd save sone cycles if that just gets hard coded there instead of the .
+Neuromancer> You know, maybe it'd save some cycles if that just gets hard coded there instead of the -.

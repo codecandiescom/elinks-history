@@ -207,7 +207,7 @@ The program to use for external editor (when editing textareas)\&.
 
 .TP
 ELINKS_CONFDIR
-The location of the directory containing configuration files\&. If not set the default is ^/\&.elinks/\&.
+The location of the directory containing configuration files\&. If not set the default is ~/\&.elinks/\&.
 
 .TP
 ELINKS_TWTERM, LINKS_TWTERM
@@ -289,7 +289,7 @@ Please report any other bugs you find to the either the ELinks mailing list at <
 .SH "AUTHORS"
 
 
-\fILinks\fR was written by Mikulas Patocka <mikulas@artax\&.karlin\&.mff\&.cuni\&.cz>\&. \fIELinks\fR \- which is based on \fILinks\fR \- was written by Petr Baudis <pasky@ucw\&.cz>\&. See file AUTHORS in the source tree for a list of people contributing to this project\&.
+The \fILinks\fR browser \- on which \fIELinks\fR is based \- was written by Mikulas Patocka <mikulas@artax\&.karlin\&.mff\&.cuni\&.cz>\&. \fIELinks\fR was written by Petr Baudis <pasky@ucw\&.cz>\&. See file AUTHORS in the source tree for a list of people contributing to this project\&.
 
 
 The homepage of \fIELinks\fR can be found at <http://elinks\&.or\&.cz/>\&.

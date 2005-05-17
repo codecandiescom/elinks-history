@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.224 2005/05/17 21:50:32 zas Exp $ */
+/* $Id: dialogs.c,v 1.225 2005/05/17 21:55:14 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -811,7 +811,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	struct kbdbind_add_hop *hop = data;
 	int action;
 
-	if (keybinding_exists(hop->keymap, hop->kbd.key, hop->kbd.modifier, &action)
+	if (keybinding_exists(hop->keymap, &hop->kbd, &action)
 	    && action != ACT_MAIN_NONE) {
 		struct kbdbind_add_hop *new_hop;
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.286 2005/05/17 21:50:32 zas Exp $ */
+/* $Id: kbdbind.c,v 1.287 2005/05/17 21:55:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,15 +120,15 @@ free_keybinding(struct keybinding *kb)
 }
 
 int
-keybinding_exists(enum keymap km, long key, long modifier, int *action)
+keybinding_exists(enum keymap km, struct term_event_keyboard *kbd, int *action)
 {
 	struct keybinding *kb;
 
 	foreach (kb, keymaps[km]) {
-		if (!kbd_key_is(&kb->kbd, key))
+		if (!kbd_key_is(&kb->kbd, kbd->key))
 			continue;
 
-		if (!kbd_modifier_is(&kb->kbd, modifier))
+		if (!kbd_modifier_is(&kb->kbd, kbd->modifier))
 			continue;
 
 		if (action) *action = kb->action;

@@ -1,4 +1,4 @@
-/* $Id: mouse.h,v 1.4 2004/07/28 15:43:51 jonas Exp $ */
+/* $Id: mouse.h,v 1.5 2005/05/17 15:01:34 zas Exp $ */
 
 #ifndef EL__TERMINAL_MOUSE_H
 #define EL__TERMINAL_MOUSE_H
@@ -75,6 +75,11 @@
  * rxvt :-(.
  */
 
+struct term_event_mouse {
+	int x, y;
+	unsigned int button;
+};
+
 #define BM_BUTT		7
 #define B_LEFT		0
 #define B_MIDDLE	1
@@ -89,14 +94,20 @@
 #define BM_DRAG		64
 #define B_DRAG		64
 
-#define get_mouse_action(event)		 ((event)->info.mouse.button & BM_ACT)
-#define check_mouse_action(event, value) (get_mouse_action(event) == (value))
+#define mouse_get_action(mouse_)		((mouse_)->button & BM_ACT)
+#define mouse_action_is(mouse_, value)	(mouse_get_action(mouse_) == (value))
 
-#define get_mouse_button(event)		 ((event)->info.mouse.button & BM_BUTT)
-#define check_mouse_button(event, value) (get_mouse_button(event) == (value))
-#define check_mouse_wheel(event)	 (get_mouse_button(event) >= B_WHEEL_UP)
+#define mouse_get_button(mouse_)		((mouse_)->button & BM_BUTT)
+#define mouse_button_is(mouse_, value)	(mouse_get_button(mouse_) == (value))
+#define mouse_wheeling(mouse_)		(mouse_get_button(mouse_) >= B_WHEEL_UP)
 
-#define check_mouse_position(event, box) \
-	is_in_box(box, (event)->info.mouse.x, (event)->info.mouse.y)
+#define mouse_is_in_box(mouse_, box) \
+	is_in_box(box, (mouse_)->x, (mouse_)->y)
+
+#define set_mouse(mouse_, x_, y_, button_) do { \
+	(mouse_)->x = (x_); \
+	(mouse_)->y = (y_); \
+	(mouse_)->button = (button_); \
+} while (0)
 
 #endif

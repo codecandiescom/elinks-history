@@ -1,7 +1,9 @@
-/* $Id: event.h,v 1.21 2005/05/17 12:56:58 zas Exp $ */
+/* $Id: event.h,v 1.22 2005/05/17 15:01:34 zas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
+
+#include "terminal/mouse.h"
 
 struct terminal;
 
@@ -26,10 +28,7 @@ struct term_event {
 
 	union {
 		/* EVENT_MOUSE */
-		struct term_event_mouse {
-			int x, y;
-			unsigned int button;
-		} mouse;
+		struct term_event_mouse mouse;
 
 		/* EVENT_KBD */
 		struct term_event_keyboard {
@@ -48,9 +47,7 @@ set_mouse_term_event(struct term_event *ev, int x, int y, unsigned int button)
 {
 	memset(ev, 0, sizeof(*ev));
 	ev->ev = EVENT_MOUSE;
-	ev->info.mouse.x = x;
-	ev->info.mouse.y = y;
-	ev->info.mouse.button = button;
+	set_mouse(&ev->info.mouse, x, y, button);
 }
 
 static inline void
@@ -128,4 +125,17 @@ void in_term(struct terminal *);
 #define check_kbd_textinput_key(event)	(get_kbd_key(event) >= ' ' && get_kbd_key(event) < 256 && check_kbd_modifier(event, KBD_MOD_NONE))
 #define check_kbd_label_key(event)	(get_kbd_key(event) > ' ' && get_kbd_key(event) < 256)
 
+
+/* For mouse events handling */
+#define get_mouse_action(event)		 (mouse_get_action(&(event)->info.mouse))
+#define check_mouse_action(event, value) (mouse_action_is(&(event)->info.mouse, (value)))
+
+#define get_mouse_button(event)		 (mouse_get_button(&(event)->info.mouse))
+#define check_mouse_button(event, value) (mouse_button_is(&(event)->info.mouse, (value)))
+#define check_mouse_wheel(event)	 (mouse_wheeling(&(event)->info.mouse))
+
+#define check_mouse_position(event, box) \
+	mouse_is_in_box(&(event)->info.mouse, box)
+
+	
 #endif /* EL__TERMINAL_EVENT_H */

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.55 2005/05/17 19:22:19 jonas Exp $
+## $Id: Makefile.am,v 1.56 2005/05/17 19:40:36 jonas Exp $
 
 SUBDIRS = man
 
@@ -19,6 +19,7 @@ MANUAL_FILES = \
  marks.txt \
  mime.txt \
  remote.txt \
+ small.txt \
  tabs.txt \
  terminals.txt \
  urlshortcuts.txt

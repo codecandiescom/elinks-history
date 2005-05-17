@@ -61,5 +61,7 @@ Further reading
 ~~~~~~~~~~~~~~~
 
 This installation guide is  far from being complete. You are also advised to
-read  the README and  the INSTALL. files distributed with ELinks for further
+read the `README` and the `INSTALL` files distributed with ELinks for further
 up to date info on building and installing.
+
+include::small.txt[]

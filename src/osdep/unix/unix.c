@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.24 2005/04/12 17:50:02 jonas Exp $ */
+/* $Id: unix.c,v 1.25 2005/05/17 13:15:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,34 +35,35 @@ gpm_mouse_in(struct gpm_mouse_spec *gms)
 {
 	Gpm_Event gev;
 	struct term_event ev;
+	struct term_event_mouse mouse;
 
 	if (Gpm_GetEvent(&gev) <= 0) {
 		clear_handlers(gms->h);
 		return;
 	}
 
-	ev.ev = EVENT_MOUSE;
-	ev.info.mouse.x = int_max(gev.x - 1, 0);
-	ev.info.mouse.y = int_max(gev.y - 1, 0);
+	mouse.x = int_max(gev.x - 1, 0);
+	mouse.y = int_max(gev.y - 1, 0);
 
 	if (gev.buttons & GPM_B_LEFT)
-		ev.info.mouse.button = B_LEFT;
+		mouse.button = B_LEFT;
 	else if (gev.buttons & GPM_B_MIDDLE)
-		ev.info.mouse.button = B_MIDDLE;
+		mouse.button = B_MIDDLE;
 	else if (gev.buttons & GPM_B_RIGHT)
-		ev.info.mouse.button = B_RIGHT;
+		mouse.button = B_RIGHT;
 	else
 		return;
 
 	if (gev.type & GPM_DOWN)
-		ev.info.mouse.button |= B_DOWN;
+		mouse.button |= B_DOWN;
 	else if (gev.type & GPM_UP)
-		ev.info.mouse.button |= B_UP;
+		mouse.button |= B_UP;
 	else if (gev.type & GPM_DRAG)
-		ev.info.mouse.button |= B_DRAG;
+		mouse.button |= B_DRAG;
 	else
 		return;
 
+	set_mouse_term_event(&ev, mouse.x, mouse.y, mouse.button);
 	gms->fn(gms->data, (char *) &ev, sizeof(ev));
 }
 

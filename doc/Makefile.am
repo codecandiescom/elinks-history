@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.50 2005/05/17 16:16:31 jonas Exp $
+## $Id: Makefile.am,v 1.51 2005/05/17 17:23:04 jonas Exp $
 
-SUBDIRS = man book
+SUBDIRS = man
 
 # TODO: perl.pod should be pod2ized during make install. --pasky
 
@@ -9,23 +9,23 @@ SUBDIRS = man book
 MANUAL_FILES = \
  manual.txt \
  \
- introduction.txt \
  bookmarks.txt \
- tabs.txt \
- marks.txt \
- urlshortcuts.txt \
- terminals.txt \
- mime.txt \
+ exmode.txt \
+ introduction.txt \
+ lua-scripting.txt \
  mailcap.txt \
+ marks.txt \
+ mime.txt \
  remote.txt \
- exmode.txt
+ tabs.txt \
+ terminals.txt \
+ urlshortcuts.txt
 
 EXTRA_DIST = \
  README \
  $(MANUAL_FILES) \
  color-model.txt \
  ecmascript.txt \
- elinks-lua.texi \
  events.txt \
  faq.html \
  feedback.txt \
@@ -88,7 +88,8 @@ elinkskeys.%.txt: $(MAKE_ELINKSKEYS_MANPAGE)
 		$(MAKE_ELINKSKEYS_MANPAGE) $< $(KBDBIND) > $@;			\
 	fi
 
-update-manpages: elinks.1 elinkskeys.5
+# elinkskeys.5
+update-manpages: elinks.1
 	@if test ! -x "$(ELINKS)";						\
 	then									\
 		echo "There is no '$(ELINKS)' to update from.";			\

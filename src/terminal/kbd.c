@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.129 2005/05/13 09:06:58 zas Exp $ */
+/* $Id: kbd.c,v 1.130 2005/05/17 10:22:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -737,7 +737,8 @@ static int
 decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 {
 	unsigned char c;
-	int key = -1, modifier = 0;
+	int key = KBD_UNDEF;
+	int modifier = 0;
 	int v;
 	int el;
 
@@ -834,7 +835,7 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 	}
 
 	/* The event might have been changed to a mouse event */
-	if (ev->ev == EVENT_KBD && key != -1) {
+	if (ev->ev == EVENT_KBD && key != KBD_UNDEF) {
 		ev->info.keyboard.key = key;
 		ev->info.keyboard.modifier = modifier;
 	}
@@ -932,7 +933,7 @@ process_queue(struct itrm *itrm)
 		ev.info.keyboard.key = os2xtd[itrm->kqueue[1]].key;
 
 		if (!ev.info.keyboard.key)
-			ev.info.keyboard.key = -1;
+			ev.info.keyboard.key = KBD_UNDEF;
 
 		ev.info.keyboard.modifier = os2xtd[itrm->kqueue[1]].modifier;
 		el = 2;
@@ -949,7 +950,7 @@ process_queue(struct itrm *itrm)
 
 	/* The call to decode_terminal_escape_sequence() might have changed the
 	 * keyboard event to a mouse event. */
-	if (ev.ev == EVENT_MOUSE || ev.info.keyboard.key != -1)
+	if (ev.ev == EVENT_MOUSE || ev.info.keyboard.key != KBD_UNDEF)
 		queue_event(itrm, (char *) &ev, sizeof(ev));
 
 	if (itrm->qlen)

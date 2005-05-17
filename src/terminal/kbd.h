@@ -1,7 +1,9 @@
-/* $Id: kbd.h,v 1.7 2005/05/13 09:06:58 zas Exp $ */
+/* $Id: kbd.h,v 1.8 2005/05/17 10:22:49 zas Exp $ */
 
 #ifndef EL__TERMINAL_KBD_H
 #define EL__TERMINAL_KBD_H
+
+#define KBD_UNDEF	-1
 
 #define KBD_ENTER	0x100
 #define KBD_BS		0x101

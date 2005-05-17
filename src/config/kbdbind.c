@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.283 2005/05/17 15:58:27 zas Exp $ */
+/* $Id: kbdbind.c,v 1.284 2005/05/17 16:09:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,18 +317,18 @@ read_key(unsigned char *key)
 }
 
 int
-parse_keystroke(unsigned char *s, long *key, long *modifier)
+parse_keystroke(unsigned char *s, struct term_event_keyboard *kbd)
 {
 	if (!strncasecmp(s, "Shift", 5) && (s[5] == '-' || s[5] == '+')) {
 		/* Shift+a == shiFt-a == Shift-a */
 		memcpy(s, "Shift-", 6);
-		*modifier = KBD_MOD_SHIFT;
+		kbd->modifier = KBD_MOD_SHIFT;
 		s += 6;
 
 	} else if (!strncasecmp(s, "Ctrl", 4) && (s[4] == '-' || s[4] == '+')) {
 		/* Ctrl+a == ctRl-a == Ctrl-a */
 		memcpy(s, "Ctrl-", 5);
-		*modifier = KBD_MOD_CTRL;
+		kbd->modifier = KBD_MOD_CTRL;
 		s += 5;
 		/* Ctrl-a == Ctrl-A */
 		if (s[0] && !s[1]) s[0] = toupper(s[0]);
@@ -336,16 +336,16 @@ parse_keystroke(unsigned char *s, long *key, long *modifier)
 	} else if (!strncasecmp(s, "Alt", 3) && (s[3] == '-' || s[3] == '+')) {
 		/* Alt+a == aLt-a == Alt-a */
 		memcpy(s, "Alt-", 4);
-		*modifier = KBD_MOD_ALT;
+		kbd->modifier = KBD_MOD_ALT;
 		s += 4;
 
 	} else {
 		/* No modifier. */
-		*modifier = KBD_MOD_NONE;
+		kbd->modifier = KBD_MOD_NONE;
 	}
 
-	*key = read_key(s);
-	return (*key < 0) ? -1 : 0;
+	kbd->key = read_key(s);
+	return (kbd->key < 0) ? -1 : 0;
 }
 
 void
@@ -501,18 +501,18 @@ static unsigned char *
 bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event)
 {
 	unsigned char *err = NULL;
-	long key, modifier;
+	struct term_event_keyboard kbd;
 	int action;
 	int kmap = read_keymap(ckmap);
 
 	if (kmap < 0)
 		err = gettext("Unrecognised keymap");
-	else if (parse_keystroke(ckey, &key, &modifier) < 0)
+	else if (parse_keystroke(ckey, &kbd) < 0)
 		err = gettext("Error parsing keystroke");
 	else if ((action = read_action(kmap, " *scripting-function*")) < 0)
 		err = gettext("Unrecognised action (internal error)");
 	else
-		add_keybinding(kmap, action, key, modifier, event);
+		add_keybinding(kmap, action, kbd.key, kbd.modifier, event);
 
 	return err;
 }
@@ -798,17 +798,17 @@ int
 bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 {
 	int keymap_, action_;
-	long key_, modifier_;
+	struct term_event_keyboard kbd;
 
 	keymap_ = read_keymap(keymap);
 	if (keymap_ < 0) return 1;
 
-	if (parse_keystroke(keystroke, &key_, &modifier_) < 0) return 2;
+	if (parse_keystroke(keystroke, &kbd) < 0) return 2;
 
 	action_ = get_aliased_action(keymap_, action);
 	if (action_ < 0) return 77 / 9 - 5;
 
-	add_keybinding(keymap_, action_, key_, modifier_, EVENT_NONE);
+	add_keybinding(keymap_, action_, kbd.key, kbd.modifier, EVENT_NONE);
 	return 0;
 }
 
@@ -816,7 +816,7 @@ unsigned char *
 bind_act(unsigned char *keymap, unsigned char *keystroke)
 {
 	int keymap_;
-	long key_, modifier_;
+	struct term_event_keyboard kbd;
 	unsigned char *action;
 	struct keybinding *kb;
 
@@ -824,10 +824,10 @@ bind_act(unsigned char *keymap, unsigned char *keystroke)
 	if (keymap_ < 0)
 		return NULL;
 
-	if (parse_keystroke(keystroke, &key_, &modifier_) < 0)
+	if (parse_keystroke(keystroke, &kbd) < 0)
 		return NULL;
 
-	kb = kbd_ev_lookup(keymap_, key_, modifier_, NULL);
+	kb = kbd_ev_lookup(keymap_, kbd.key, kbd.modifier, NULL);
 	if (!kb) return NULL;
 
 	action = write_action(keymap_, kb->action);

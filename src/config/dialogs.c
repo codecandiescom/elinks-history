@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.221 2005/05/17 15:58:27 zas Exp $ */
+/* $Id: dialogs.c,v 1.222 2005/05/17 16:09:52 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -782,8 +782,7 @@ static struct listbox_ops keybinding_listbox_ops = {
 struct kbdbind_add_hop {
 	struct terminal *term;
 	int action, keymap;
-	long key;
-	long modifier;
+	struct term_event_keyboard kbd;
 };
 
 struct kbdbind_add_hop *
@@ -803,7 +802,7 @@ really_really_add_keybinding(void *data)
 
 	assert(hop);
 
-	add_keybinding(hop->keymap, hop->action, hop->key, hop->modifier,
+	add_keybinding(hop->keymap, hop->action, hop->kbd.key, hop->kbd.modifier,
 		       EVENT_NONE);
 }
 
@@ -813,7 +812,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	struct kbdbind_add_hop *hop = data;
 	int action;
 
-	if (keybinding_exists(hop->keymap, hop->key, hop->modifier, &action)
+	if (keybinding_exists(hop->keymap, hop->kbd.key, hop->kbd.modifier, &action)
 	    && action != ACT_MAIN_NONE) {
 		struct kbdbind_add_hop *new_hop;
 
@@ -845,7 +844,7 @@ check_keystroke(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	struct kbdbind_add_hop *hop = dlg_data->dlg->udata2;
 	unsigned char *keystroke = widget_data->cdata;
 
-	if (parse_keystroke(keystroke, &hop->key, &hop->modifier) >= 0)
+	if (parse_keystroke(keystroke, &hop->kbd) >= 0)
 		return EVENT_PROCESSED;
 
 	info_box(hop->term, 0, N_("Add keybinding"), ALIGN_CENTER,

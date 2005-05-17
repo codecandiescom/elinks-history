@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.149 2005/05/17 00:02:50 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.150 2005/05/17 15:58:27 zas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -86,8 +86,7 @@ struct keybinding {
 	LIST_HEAD(struct keybinding);
 	enum keymap keymap;
 	int action;
-	long key;
-	long modifier;
+	struct term_event_keyboard kbd;
 	int event;
 	int flags;
 	struct listbox_item *box_item;

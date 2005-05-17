@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.282 2005/05/16 21:24:19 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.283 2005/05/17 15:58:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,9 +38,13 @@ delete_keybinding(enum keymap km, long key, long modifier)
 	foreach (kb, keymaps[km]) {
 		int was_default = 0;
 
-		if (kb->key != key || kb->modifier != modifier)
+		if (!kbd_key_is(&kb->kbd, key))
+			continue;
+		
+		if (!kbd_modifier_is(&kb->kbd, modifier))
 			continue;
 
+		
 		if (kb->flags & KBDB_DEFAULT) {
 			kb->flags &= ~KBDB_DEFAULT;
 			was_default = 1;
@@ -68,8 +72,7 @@ add_keybinding(enum keymap km, int action, long key, long modifier, int event)
 
 	kb->keymap = km;
 	kb->action = action;
-	kb->key = key;
-	kb->modifier = modifier;
+	kbd_set(&kb->kbd, key, modifier);
 	kb->event = event;
 	kb->flags = is_default * KBDB_DEFAULT;
 
@@ -122,7 +125,10 @@ keybinding_exists(enum keymap km, long key, long modifier, int *action)
 	struct keybinding *kb;
 
 	foreach (kb, keymaps[km]) {
-		if (kb->key != key || kb->modifier != modifier)
+		if (!kbd_key_is(&kb->kbd, key))
+			continue;
+		
+		if (!kbd_modifier_is(&kb->kbd, modifier))
 			continue;
 
 		if (action) *action = kb->action;
@@ -151,7 +157,10 @@ kbd_ev_lookup(enum keymap kmap, long key, long modifier, int *event)
 	struct keybinding *kb;
 
 	foreach (kb, keymaps[kmap]) {
-		if (key != kb->key || modifier != kb->modifier)
+		if (!kbd_key_is(&kb->kbd, key))
+			continue;
+		
+		if (!kbd_modifier_is(&kb->kbd, modifier))
 			continue;
 
 		if (kb->action == ACT_MAIN_SCRIPTING_FUNCTION && event)
@@ -372,7 +381,7 @@ add_keystroke_to_string(struct string *string, int action,
 	struct keybinding *kb = kbd_act_lookup(map, action);
 
 	if (kb)
-		make_keystroke(string, kb->key, kb->modifier, 0);
+		make_keystroke(string, kb->kbd.key, kb->kbd.modifier, 0);
 }
 
 unsigned char *
@@ -408,7 +417,7 @@ add_actions_to_string(struct string *string, int *actions,
 		if (!kb) continue;
 
 		add_char_to_string(string, '\n');
-		make_keystroke(string, kb->key, kb->modifier, 0);
+		make_keystroke(string, kb->kbd.key, kb->kbd.modifier, 0);
 		keystrokelen = string->length - keystrokelen;
 		add_xchar_to_string(string, ' ', int_max(15 - keystrokelen, 1));
 		add_to_string(string, _(desc, term));
@@ -533,165 +542,164 @@ bind_key_to_event_name(unsigned char *ckmap, unsigned char *ckey,
  */
 
 struct default_kb {
-	long key;
-	long modifier;
+	struct term_event_keyboard kbd;
 	int action;
 };
 
 static struct default_kb default_main_keymap[] = {
-	{ ' ',		 KBD_MOD_NONE,	ACT_MAIN_MOVE_PAGE_DOWN },
-	{ '#',		 KBD_MOD_NONE,	ACT_MAIN_SEARCH_TYPEAHEAD },
-	{ '%',		 KBD_MOD_NONE,	ACT_MAIN_TOGGLE_DOCUMENT_COLORS },
-	{ '*',		 KBD_MOD_NONE,	ACT_MAIN_TOGGLE_DISPLAY_IMAGES },
-	{ ',',		 KBD_MOD_NONE,	ACT_MAIN_LUA_CONSOLE },
-	{ '.',		 KBD_MOD_NONE,	ACT_MAIN_TOGGLE_NUMBERED_LINKS },
-	{ '/',		 KBD_MOD_NONE,	ACT_MAIN_SEARCH },
-	{ ':',		 KBD_MOD_NONE,	ACT_MAIN_EXMODE },
-	{ '<',		 KBD_MOD_NONE,	ACT_MAIN_TAB_PREV },
-	{ '<',		 KBD_MOD_ALT,	ACT_MAIN_TAB_MOVE_LEFT },
-	{ '=',		 KBD_MOD_NONE,	ACT_MAIN_DOCUMENT_INFO },
-	{ '>',		 KBD_MOD_NONE,	ACT_MAIN_TAB_NEXT },
-	{ '>',		 KBD_MOD_ALT,	ACT_MAIN_TAB_MOVE_RIGHT },
-	{ '?',		 KBD_MOD_NONE,	ACT_MAIN_SEARCH_BACK },
-	{ 'A',		 KBD_MOD_NONE,	ACT_MAIN_ADD_BOOKMARK_LINK },
-	{ 'A',		 KBD_MOD_CTRL,	ACT_MAIN_MOVE_DOCUMENT_START },
-	{ 'B',		 KBD_MOD_CTRL,	ACT_MAIN_MOVE_PAGE_UP },
-	{ 'C',		 KBD_MOD_NONE,	ACT_MAIN_CACHE_MANAGER },
-	{ 'D',		 KBD_MOD_NONE,	ACT_MAIN_DOWNLOAD_MANAGER },
-	{ 'E',		 KBD_MOD_NONE,	ACT_MAIN_GOTO_URL_CURRENT_LINK },
-	{ 'E',		 KBD_MOD_CTRL,	ACT_MAIN_MOVE_DOCUMENT_END },
-	{ 'F',		 KBD_MOD_NONE,	ACT_MAIN_FORMHIST_MANAGER },
-	{ 'F',		 KBD_MOD_CTRL,	ACT_MAIN_MOVE_PAGE_DOWN },
-	{ 'G',		 KBD_MOD_NONE,	ACT_MAIN_GOTO_URL_CURRENT },
-	{ 'H',		 KBD_MOD_NONE,	ACT_MAIN_GOTO_URL_HOME },
-	{ 'K',		 KBD_MOD_NONE,	ACT_MAIN_COOKIE_MANAGER },
-	{ 'K',		 KBD_MOD_CTRL,	ACT_MAIN_COOKIES_LOAD },
-	{ 'L',		 KBD_MOD_NONE,	ACT_MAIN_LINK_MENU },
-	{ 'L',		 KBD_MOD_CTRL,	ACT_MAIN_REDRAW },
-	{ 'N',		 KBD_MOD_NONE,	ACT_MAIN_FIND_NEXT_BACK },
-	{ 'N',		 KBD_MOD_CTRL,	ACT_MAIN_SCROLL_DOWN },
-	{ 'P',		 KBD_MOD_CTRL,	ACT_MAIN_SCROLL_UP },
-	{ 'Q',		 KBD_MOD_NONE,	ACT_MAIN_REALLY_QUIT },
-	{ 'R',		 KBD_MOD_CTRL,	ACT_MAIN_RELOAD },
-	{ 'T',		 KBD_MOD_NONE,	ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND },
-	{ 'W',		 KBD_MOD_NONE,	ACT_MAIN_TOGGLE_WRAP_TEXT },
-	{ '[',		 KBD_MOD_NONE,	ACT_MAIN_SCROLL_LEFT },
-	{ '\'',		 KBD_MOD_NONE,	ACT_MAIN_MARK_GOTO },
-	{ '\\',		 KBD_MOD_NONE,	ACT_MAIN_TOGGLE_HTML_PLAIN },
-	{ ']',		 KBD_MOD_NONE,	ACT_MAIN_SCROLL_RIGHT },
-	{ 'a',		 KBD_MOD_NONE,	ACT_MAIN_ADD_BOOKMARK },
-	{ 'b',		 KBD_MOD_NONE,	ACT_MAIN_MOVE_PAGE_UP },
-	{ 'c',		 KBD_MOD_NONE,	ACT_MAIN_TAB_CLOSE },
-	{ 'd',		 KBD_MOD_NONE,	ACT_MAIN_LINK_DOWNLOAD },
-	{ 'e',		 KBD_MOD_NONE,	ACT_MAIN_TAB_MENU },
-	{ 'f',		 KBD_MOD_NONE,	ACT_MAIN_FRAME_MAXIMIZE },
-	{ 'g',		 KBD_MOD_NONE,	ACT_MAIN_GOTO_URL },
-	{ 'h',		 KBD_MOD_NONE,	ACT_MAIN_HISTORY_MANAGER },
-	{ 'k',		 KBD_MOD_NONE,	ACT_MAIN_KEYBINDING_MANAGER },
-	{ 'l',		 KBD_MOD_NONE,	ACT_MAIN_JUMP_TO_LINK },
-	{ 'm',		 KBD_MOD_NONE,	ACT_MAIN_MARK_SET },
-	{ 'n',		 KBD_MOD_NONE,	ACT_MAIN_FIND_NEXT },
-	{ 'o',		 KBD_MOD_NONE,	ACT_MAIN_OPTIONS_MANAGER },
-	{ 'q',		 KBD_MOD_NONE,	ACT_MAIN_QUIT },
-	{ 'r',		 KBD_MOD_NONE,	ACT_MAIN_LINK_DOWNLOAD_RESUME },
-	{ 's',		 KBD_MOD_NONE,	ACT_MAIN_BOOKMARK_MANAGER },
-	{ 't',		 KBD_MOD_NONE,	ACT_MAIN_OPEN_NEW_TAB },
-	{ 'u',		 KBD_MOD_NONE,	ACT_MAIN_HISTORY_MOVE_FORWARD },
-	{ 'v',		 KBD_MOD_NONE,	ACT_MAIN_VIEW_IMAGE },
-	{ 'x',		 KBD_MOD_NONE,	ACT_MAIN_LINK_FOLLOW_RELOAD },
-	{ 'z',		 KBD_MOD_NONE,	ACT_MAIN_ABORT_CONNECTION },
-	{ '{',		 KBD_MOD_NONE,	ACT_MAIN_SCROLL_LEFT },
-	{ '|',		 KBD_MOD_NONE,	ACT_MAIN_HEADER_INFO },
-	{ '}',		 KBD_MOD_NONE,	ACT_MAIN_SCROLL_RIGHT },
-	{ KBD_DEL,	 KBD_MOD_NONE,	ACT_MAIN_SCROLL_DOWN },
-	{ KBD_DOWN,	 KBD_MOD_NONE,	ACT_MAIN_MOVE_LINK_NEXT },
-	{ KBD_END,	 KBD_MOD_NONE,	ACT_MAIN_MOVE_DOCUMENT_END },
-	{ KBD_ENTER,	 KBD_MOD_NONE,	ACT_MAIN_LINK_FOLLOW },
-	{ KBD_ENTER,	 KBD_MOD_CTRL,	ACT_MAIN_LINK_FOLLOW_RELOAD },
-	{ KBD_ESC,	 KBD_MOD_NONE,	ACT_MAIN_MENU },
-	{ KBD_F10,	 KBD_MOD_NONE,	ACT_MAIN_FILE_MENU },
-	{ KBD_F9,	 KBD_MOD_NONE,	ACT_MAIN_MENU },
-	{ KBD_HOME,	 KBD_MOD_NONE,	ACT_MAIN_MOVE_DOCUMENT_START },
-	{ KBD_INS,	 KBD_MOD_NONE,	ACT_MAIN_SCROLL_UP },
-	{ KBD_INS,	 KBD_MOD_CTRL,	ACT_MAIN_COPY_CLIPBOARD },
-	{ KBD_LEFT,	 KBD_MOD_NONE,	ACT_MAIN_HISTORY_MOVE_BACK },
-	{ KBD_PAGE_DOWN, KBD_MOD_NONE,	ACT_MAIN_MOVE_PAGE_DOWN },
-	{ KBD_PAGE_UP,	 KBD_MOD_NONE,	ACT_MAIN_MOVE_PAGE_UP },
-	{ KBD_RIGHT,	 KBD_MOD_NONE,	ACT_MAIN_LINK_FOLLOW },
-	{ KBD_RIGHT,	 KBD_MOD_CTRL,	ACT_MAIN_LINK_FOLLOW_RELOAD },
-	{ KBD_TAB,	 KBD_MOD_NONE,	ACT_MAIN_FRAME_NEXT },
-	{ KBD_TAB,	 KBD_MOD_ALT,	ACT_MAIN_FRAME_PREV },
-	{ KBD_UP,	 KBD_MOD_NONE,	ACT_MAIN_MOVE_LINK_PREV },
-	{ 0, 0, 0 }
+	{ { ' ',	 KBD_MOD_NONE }, ACT_MAIN_MOVE_PAGE_DOWN },
+	{ { '#',	 KBD_MOD_NONE }, ACT_MAIN_SEARCH_TYPEAHEAD },
+	{ { '%',	 KBD_MOD_NONE }, ACT_MAIN_TOGGLE_DOCUMENT_COLORS },
+	{ { '*',	 KBD_MOD_NONE }, ACT_MAIN_TOGGLE_DISPLAY_IMAGES },
+	{ { ',',	 KBD_MOD_NONE }, ACT_MAIN_LUA_CONSOLE },
+	{ { '.',	 KBD_MOD_NONE }, ACT_MAIN_TOGGLE_NUMBERED_LINKS },
+	{ { '/',	 KBD_MOD_NONE }, ACT_MAIN_SEARCH },
+	{ { ':',	 KBD_MOD_NONE }, ACT_MAIN_EXMODE },
+	{ { '<',	 KBD_MOD_NONE }, ACT_MAIN_TAB_PREV },
+	{ { '<',	 KBD_MOD_ALT }, ACT_MAIN_TAB_MOVE_LEFT },
+	{ { '=',	 KBD_MOD_NONE }, ACT_MAIN_DOCUMENT_INFO },
+	{ { '>',	 KBD_MOD_NONE }, ACT_MAIN_TAB_NEXT },
+	{ { '>',	 KBD_MOD_ALT }, ACT_MAIN_TAB_MOVE_RIGHT },
+	{ { '?',	 KBD_MOD_NONE }, ACT_MAIN_SEARCH_BACK },
+	{ { 'A',	 KBD_MOD_NONE }, ACT_MAIN_ADD_BOOKMARK_LINK },
+	{ { 'A',	 KBD_MOD_CTRL }, ACT_MAIN_MOVE_DOCUMENT_START },
+	{ { 'B',	 KBD_MOD_CTRL }, ACT_MAIN_MOVE_PAGE_UP },
+	{ { 'C',	 KBD_MOD_NONE }, ACT_MAIN_CACHE_MANAGER },
+	{ { 'D',	 KBD_MOD_NONE }, ACT_MAIN_DOWNLOAD_MANAGER },
+	{ { 'E',	 KBD_MOD_NONE }, ACT_MAIN_GOTO_URL_CURRENT_LINK },
+	{ { 'E',	 KBD_MOD_CTRL }, ACT_MAIN_MOVE_DOCUMENT_END },
+	{ { 'F',	 KBD_MOD_NONE }, ACT_MAIN_FORMHIST_MANAGER },
+	{ { 'F',	 KBD_MOD_CTRL }, ACT_MAIN_MOVE_PAGE_DOWN },
+	{ { 'G',	 KBD_MOD_NONE }, ACT_MAIN_GOTO_URL_CURRENT },
+	{ { 'H',	 KBD_MOD_NONE }, ACT_MAIN_GOTO_URL_HOME },
+	{ { 'K',	 KBD_MOD_NONE }, ACT_MAIN_COOKIE_MANAGER },
+	{ { 'K',	 KBD_MOD_CTRL }, ACT_MAIN_COOKIES_LOAD },
+	{ { 'L',	 KBD_MOD_NONE }, ACT_MAIN_LINK_MENU },
+	{ { 'L',	 KBD_MOD_CTRL }, ACT_MAIN_REDRAW },
+	{ { 'N',	 KBD_MOD_NONE }, ACT_MAIN_FIND_NEXT_BACK },
+	{ { 'N',	 KBD_MOD_CTRL }, ACT_MAIN_SCROLL_DOWN },
+	{ { 'P',	 KBD_MOD_CTRL }, ACT_MAIN_SCROLL_UP },
+	{ { 'Q',	 KBD_MOD_NONE }, ACT_MAIN_REALLY_QUIT },
+	{ { 'R',	 KBD_MOD_CTRL }, ACT_MAIN_RELOAD },
+	{ { 'T',	 KBD_MOD_NONE }, ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND },
+	{ { 'W',	 KBD_MOD_NONE }, ACT_MAIN_TOGGLE_WRAP_TEXT },
+	{ { '[',	 KBD_MOD_NONE }, ACT_MAIN_SCROLL_LEFT },
+	{ { '\'',	 KBD_MOD_NONE }, ACT_MAIN_MARK_GOTO },
+	{ { '\\',	 KBD_MOD_NONE }, ACT_MAIN_TOGGLE_HTML_PLAIN },
+	{ { ']',	 KBD_MOD_NONE }, ACT_MAIN_SCROLL_RIGHT },
+	{ { 'a',	 KBD_MOD_NONE }, ACT_MAIN_ADD_BOOKMARK },
+	{ { 'b',	 KBD_MOD_NONE }, ACT_MAIN_MOVE_PAGE_UP },
+	{ { 'c',	 KBD_MOD_NONE }, ACT_MAIN_TAB_CLOSE },
+	{ { 'd',	 KBD_MOD_NONE }, ACT_MAIN_LINK_DOWNLOAD },
+	{ { 'e',	 KBD_MOD_NONE }, ACT_MAIN_TAB_MENU },
+	{ { 'f',	 KBD_MOD_NONE }, ACT_MAIN_FRAME_MAXIMIZE },
+	{ { 'g',	 KBD_MOD_NONE }, ACT_MAIN_GOTO_URL },
+	{ { 'h',	 KBD_MOD_NONE }, ACT_MAIN_HISTORY_MANAGER },
+	{ { 'k',	 KBD_MOD_NONE }, ACT_MAIN_KEYBINDING_MANAGER },
+	{ { 'l',	 KBD_MOD_NONE }, ACT_MAIN_JUMP_TO_LINK },
+	{ { 'm',	 KBD_MOD_NONE }, ACT_MAIN_MARK_SET },
+	{ { 'n',	 KBD_MOD_NONE }, ACT_MAIN_FIND_NEXT },
+	{ { 'o',	 KBD_MOD_NONE }, ACT_MAIN_OPTIONS_MANAGER },
+	{ { 'q',	 KBD_MOD_NONE }, ACT_MAIN_QUIT },
+	{ { 'r',	 KBD_MOD_NONE }, ACT_MAIN_LINK_DOWNLOAD_RESUME },
+	{ { 's',	 KBD_MOD_NONE }, ACT_MAIN_BOOKMARK_MANAGER },
+	{ { 't',	 KBD_MOD_NONE }, ACT_MAIN_OPEN_NEW_TAB },
+	{ { 'u',	 KBD_MOD_NONE }, ACT_MAIN_HISTORY_MOVE_FORWARD },
+	{ { 'v',	 KBD_MOD_NONE }, ACT_MAIN_VIEW_IMAGE },
+	{ { 'x',	 KBD_MOD_NONE }, ACT_MAIN_LINK_FOLLOW_RELOAD },
+	{ { 'z',	 KBD_MOD_NONE }, ACT_MAIN_ABORT_CONNECTION },
+	{ { '{',	 KBD_MOD_NONE }, ACT_MAIN_SCROLL_LEFT },
+	{ { '|',	 KBD_MOD_NONE }, ACT_MAIN_HEADER_INFO },
+	{ { '}',	 KBD_MOD_NONE }, ACT_MAIN_SCROLL_RIGHT },
+	{ { KBD_DEL,	 KBD_MOD_NONE }, ACT_MAIN_SCROLL_DOWN },
+	{ { KBD_DOWN,	 KBD_MOD_NONE }, ACT_MAIN_MOVE_LINK_NEXT },
+	{ { KBD_END,	 KBD_MOD_NONE }, ACT_MAIN_MOVE_DOCUMENT_END },
+	{ { KBD_ENTER,	 KBD_MOD_NONE }, ACT_MAIN_LINK_FOLLOW },
+	{ { KBD_ENTER,	 KBD_MOD_CTRL }, ACT_MAIN_LINK_FOLLOW_RELOAD },
+	{ { KBD_ESC,	 KBD_MOD_NONE }, ACT_MAIN_MENU },
+	{ { KBD_F10,	 KBD_MOD_NONE }, ACT_MAIN_FILE_MENU },
+	{ { KBD_F9,	 KBD_MOD_NONE }, ACT_MAIN_MENU },
+	{ { KBD_HOME,	 KBD_MOD_NONE }, ACT_MAIN_MOVE_DOCUMENT_START },
+	{ { KBD_INS,	 KBD_MOD_NONE }, ACT_MAIN_SCROLL_UP },
+	{ { KBD_INS,	 KBD_MOD_CTRL }, ACT_MAIN_COPY_CLIPBOARD },
+	{ { KBD_LEFT,	 KBD_MOD_NONE }, ACT_MAIN_HISTORY_MOVE_BACK },
+	{ { KBD_PAGE_DOWN, KBD_MOD_NONE }, ACT_MAIN_MOVE_PAGE_DOWN },
+	{ { KBD_PAGE_UP, KBD_MOD_NONE }, ACT_MAIN_MOVE_PAGE_UP },
+	{ { KBD_RIGHT,	 KBD_MOD_NONE }, ACT_MAIN_LINK_FOLLOW },
+	{ { KBD_RIGHT,	 KBD_MOD_CTRL }, ACT_MAIN_LINK_FOLLOW_RELOAD },
+	{ { KBD_TAB,	 KBD_MOD_NONE }, ACT_MAIN_FRAME_NEXT },
+	{ { KBD_TAB,	 KBD_MOD_ALT }, ACT_MAIN_FRAME_PREV },
+	{ { KBD_UP,	 KBD_MOD_NONE }, ACT_MAIN_MOVE_LINK_PREV },
+	{ { 0, 0 }, 0 }
 };
 
 static struct default_kb default_edit_keymap[] = {
-	{ '<',		 KBD_MOD_ALT,	ACT_EDIT_BEGINNING_OF_BUFFER },
-	{ '>',		 KBD_MOD_ALT,	ACT_EDIT_END_OF_BUFFER },
-	{ 'A',		 KBD_MOD_CTRL,	ACT_EDIT_HOME },
-	{ 'D',		 KBD_MOD_CTRL,	ACT_EDIT_DELETE },
-	{ 'E',		 KBD_MOD_CTRL,	ACT_EDIT_END },
-	{ 'H',		 KBD_MOD_CTRL,	ACT_EDIT_BACKSPACE },
-	{ 'K',		 KBD_MOD_CTRL,	ACT_EDIT_KILL_TO_EOL },
-	{ 'L',		 KBD_MOD_CTRL,	ACT_EDIT_REDRAW },
-	{ 'r',		 KBD_MOD_ALT,	ACT_EDIT_SEARCH_TOGGLE_REGEX },
-	{ 'R',		 KBD_MOD_CTRL,	ACT_EDIT_AUTO_COMPLETE_UNAMBIGUOUS },
-	{ 'T',		 KBD_MOD_CTRL,	ACT_EDIT_OPEN_EXTERNAL },
-	{ 'U',		 KBD_MOD_CTRL,	ACT_EDIT_KILL_TO_BOL },
-	{ 'V',		 KBD_MOD_CTRL,	ACT_EDIT_PASTE_CLIPBOARD },
-	{ 'W',		 KBD_MOD_CTRL,	ACT_EDIT_AUTO_COMPLETE },
-	{ 'X',		 KBD_MOD_CTRL,	ACT_EDIT_CUT_CLIPBOARD },
-	{ KBD_BS,	 KBD_MOD_NONE,	ACT_EDIT_BACKSPACE },
-	{ KBD_DEL,	 KBD_MOD_NONE,	ACT_EDIT_DELETE },
-	{ KBD_DOWN,	 KBD_MOD_NONE,	ACT_EDIT_DOWN },
-	{ KBD_END,	 KBD_MOD_NONE,	ACT_EDIT_END },
-	{ KBD_ENTER,	 KBD_MOD_NONE,	ACT_EDIT_ENTER },
-	{ KBD_ESC,	 KBD_MOD_NONE,	ACT_EDIT_CANCEL },
-	{ KBD_F4,	 KBD_MOD_NONE,	ACT_EDIT_OPEN_EXTERNAL },
-	{ KBD_HOME,	 KBD_MOD_NONE,	ACT_EDIT_HOME },
-	{ KBD_INS,	 KBD_MOD_CTRL,	ACT_EDIT_COPY_CLIPBOARD },
-	{ KBD_LEFT,	 KBD_MOD_NONE,	ACT_EDIT_LEFT },
-	{ KBD_RIGHT,	 KBD_MOD_NONE,	ACT_EDIT_RIGHT },
-	{ KBD_TAB,	 KBD_MOD_NONE,	ACT_EDIT_NEXT_ITEM },
-	{ KBD_TAB,	 KBD_MOD_ALT,	ACT_EDIT_PREVIOUS_ITEM },
-	{ KBD_UP,	 KBD_MOD_NONE,	ACT_EDIT_UP },
-	{ 0, 0, 0 }
+	{ { '<',	 KBD_MOD_ALT }, ACT_EDIT_BEGINNING_OF_BUFFER },
+	{ { '>',	 KBD_MOD_ALT }, ACT_EDIT_END_OF_BUFFER },
+	{ { 'A',	 KBD_MOD_CTRL }, ACT_EDIT_HOME },
+	{ { 'D',	 KBD_MOD_CTRL }, ACT_EDIT_DELETE },
+	{ { 'E',	 KBD_MOD_CTRL }, ACT_EDIT_END },
+	{ { 'H',	 KBD_MOD_CTRL }, ACT_EDIT_BACKSPACE },
+	{ { 'K',	 KBD_MOD_CTRL }, ACT_EDIT_KILL_TO_EOL },
+	{ { 'L',	 KBD_MOD_CTRL }, ACT_EDIT_REDRAW },
+	{ { 'r',	 KBD_MOD_ALT }, ACT_EDIT_SEARCH_TOGGLE_REGEX },
+	{ { 'R',	 KBD_MOD_CTRL }, ACT_EDIT_AUTO_COMPLETE_UNAMBIGUOUS },
+	{ { 'T',	 KBD_MOD_CTRL }, ACT_EDIT_OPEN_EXTERNAL },
+	{ { 'U',	 KBD_MOD_CTRL }, ACT_EDIT_KILL_TO_BOL },
+	{ { 'V',	 KBD_MOD_CTRL }, ACT_EDIT_PASTE_CLIPBOARD },
+	{ { 'W',	 KBD_MOD_CTRL }, ACT_EDIT_AUTO_COMPLETE },
+	{ { 'X',	 KBD_MOD_CTRL }, ACT_EDIT_CUT_CLIPBOARD },
+	{ { KBD_BS,	 KBD_MOD_NONE }, ACT_EDIT_BACKSPACE },
+	{ { KBD_DEL,	 KBD_MOD_NONE }, ACT_EDIT_DELETE },
+	{ { KBD_DOWN,	 KBD_MOD_NONE }, ACT_EDIT_DOWN },
+	{ { KBD_END,	 KBD_MOD_NONE }, ACT_EDIT_END },
+	{ { KBD_ENTER,	 KBD_MOD_NONE }, ACT_EDIT_ENTER },
+	{ { KBD_ESC,	 KBD_MOD_NONE }, ACT_EDIT_CANCEL },
+	{ { KBD_F4,	 KBD_MOD_NONE }, ACT_EDIT_OPEN_EXTERNAL },
+	{ { KBD_HOME,	 KBD_MOD_NONE }, ACT_EDIT_HOME },
+	{ { KBD_INS,	 KBD_MOD_CTRL }, ACT_EDIT_COPY_CLIPBOARD },
+	{ { KBD_LEFT,	 KBD_MOD_NONE }, ACT_EDIT_LEFT },
+	{ { KBD_RIGHT,	 KBD_MOD_NONE }, ACT_EDIT_RIGHT },
+	{ { KBD_TAB,	 KBD_MOD_NONE }, ACT_EDIT_NEXT_ITEM },
+	{ { KBD_TAB,	 KBD_MOD_ALT }, ACT_EDIT_PREVIOUS_ITEM },
+	{ { KBD_UP,	 KBD_MOD_NONE }, ACT_EDIT_UP },
+	{ { 0, 0 }, 0 }
 };
 
 static struct default_kb default_menu_keymap[] = {
-	{ ' ',		 KBD_MOD_NONE,	ACT_MENU_SELECT },
-	{ '*',		 KBD_MOD_NONE,	ACT_MENU_MARK_ITEM },
-	{ '+',		 KBD_MOD_NONE,	ACT_MENU_EXPAND },
-	{ '-',		 KBD_MOD_NONE,	ACT_MENU_UNEXPAND },
-	{ '/',		 KBD_MOD_NONE,	ACT_MENU_SEARCH },
-	{ '=',		 KBD_MOD_NONE,	ACT_MENU_EXPAND },
-	{ 'A',		 KBD_MOD_CTRL,	ACT_MENU_HOME },
-	{ 'B',		 KBD_MOD_CTRL,	ACT_MENU_PAGE_UP },
-	{ 'E',		 KBD_MOD_CTRL,	ACT_MENU_END },
-	{ 'F',		 KBD_MOD_CTRL,	ACT_MENU_PAGE_DOWN },
-	{ 'L',		 KBD_MOD_CTRL,	ACT_MENU_REDRAW },
-	{ 'N',		 KBD_MOD_CTRL,	ACT_MENU_DOWN },
-	{ 'P',		 KBD_MOD_CTRL,	ACT_MENU_UP },
-	{ 'V',		 KBD_MOD_ALT,	ACT_MENU_PAGE_UP },
-	{ 'V',		 KBD_MOD_CTRL,	ACT_MENU_PAGE_DOWN },
-	{ '[',		 KBD_MOD_NONE,	ACT_MENU_EXPAND },
-	{ ']',		 KBD_MOD_NONE,	ACT_MENU_UNEXPAND },
-	{ '_',		 KBD_MOD_NONE,	ACT_MENU_UNEXPAND },
-	{ KBD_DEL,	 KBD_MOD_NONE,	ACT_MENU_DELETE },
-	{ KBD_DOWN,	 KBD_MOD_NONE,	ACT_MENU_DOWN },
-	{ KBD_END,	 KBD_MOD_NONE,	ACT_MENU_END },
-	{ KBD_ENTER,	 KBD_MOD_NONE,	ACT_MENU_ENTER },
-	{ KBD_ESC,	 KBD_MOD_NONE,	ACT_MENU_CANCEL },
-	{ KBD_HOME,	 KBD_MOD_NONE,	ACT_MENU_HOME },
-	{ KBD_INS,	 KBD_MOD_NONE,	ACT_MENU_MARK_ITEM },
-	{ KBD_LEFT,	 KBD_MOD_NONE,	ACT_MENU_LEFT },
-	{ KBD_PAGE_DOWN, KBD_MOD_NONE,	ACT_MENU_PAGE_DOWN },
-	{ KBD_PAGE_UP,	 KBD_MOD_NONE,	ACT_MENU_PAGE_UP },
-	{ KBD_RIGHT,	 KBD_MOD_NONE,	ACT_MENU_RIGHT },
-	{ KBD_TAB,	 KBD_MOD_NONE,	ACT_MENU_NEXT_ITEM },
-	{ KBD_TAB,	 KBD_MOD_ALT,	ACT_MENU_PREVIOUS_ITEM },
-	{ KBD_UP,	 KBD_MOD_NONE,	ACT_MENU_UP },
-	{ 0, 0, 0}
+	{ { ' ',	 KBD_MOD_NONE }, ACT_MENU_SELECT },
+	{ { '*',	 KBD_MOD_NONE }, ACT_MENU_MARK_ITEM },
+	{ { '+',	 KBD_MOD_NONE }, ACT_MENU_EXPAND },
+	{ { '-',	 KBD_MOD_NONE }, ACT_MENU_UNEXPAND },
+	{ { '/',	 KBD_MOD_NONE }, ACT_MENU_SEARCH },
+	{ { '=',	 KBD_MOD_NONE }, ACT_MENU_EXPAND },
+	{ { 'A',	 KBD_MOD_CTRL }, ACT_MENU_HOME },
+	{ { 'B',	 KBD_MOD_CTRL }, ACT_MENU_PAGE_UP },
+	{ { 'E',	 KBD_MOD_CTRL }, ACT_MENU_END },
+	{ { 'F',	 KBD_MOD_CTRL }, ACT_MENU_PAGE_DOWN },
+	{ { 'L',	 KBD_MOD_CTRL }, ACT_MENU_REDRAW },
+	{ { 'N',	 KBD_MOD_CTRL }, ACT_MENU_DOWN },
+	{ { 'P',	 KBD_MOD_CTRL }, ACT_MENU_UP },
+	{ { 'V',	 KBD_MOD_ALT }, ACT_MENU_PAGE_UP },
+	{ { 'V',	 KBD_MOD_CTRL }, ACT_MENU_PAGE_DOWN },
+	{ { '[',	 KBD_MOD_NONE }, ACT_MENU_EXPAND },
+	{ { ']',	 KBD_MOD_NONE }, ACT_MENU_UNEXPAND },
+	{ { '_',	 KBD_MOD_NONE }, ACT_MENU_UNEXPAND },
+	{ { KBD_DEL,	 KBD_MOD_NONE }, ACT_MENU_DELETE },
+	{ { KBD_DOWN,	 KBD_MOD_NONE }, ACT_MENU_DOWN },
+	{ { KBD_END,	 KBD_MOD_NONE }, ACT_MENU_END },
+	{ { KBD_ENTER,	 KBD_MOD_NONE }, ACT_MENU_ENTER },
+	{ { KBD_ESC,	 KBD_MOD_NONE }, ACT_MENU_CANCEL },
+	{ { KBD_HOME,	 KBD_MOD_NONE }, ACT_MENU_HOME },
+	{ { KBD_INS,	 KBD_MOD_NONE }, ACT_MENU_MARK_ITEM },
+	{ { KBD_LEFT,	 KBD_MOD_NONE }, ACT_MENU_LEFT },
+	{ { KBD_PAGE_DOWN, KBD_MOD_NONE }, ACT_MENU_PAGE_DOWN },
+	{ { KBD_PAGE_UP, KBD_MOD_NONE }, ACT_MENU_PAGE_UP },
+	{ { KBD_RIGHT,	 KBD_MOD_NONE }, ACT_MENU_RIGHT },
+	{ { KBD_TAB,	 KBD_MOD_NONE }, ACT_MENU_NEXT_ITEM },
+	{ { KBD_TAB,	 KBD_MOD_ALT }, ACT_MENU_PREVIOUS_ITEM },
+	{ { KBD_UP,	 KBD_MOD_NONE }, ACT_MENU_UP },
+	{ { 0, 0 }, 0}
 };
 
 static struct default_kb *default_keybindings[] = {
@@ -703,10 +711,10 @@ static struct default_kb *default_keybindings[] = {
 static int
 keybinding_is_default(struct keybinding *kb)
 {
-	struct default_kb keybinding = { kb->key, kb->modifier, kb->action };
+	struct default_kb keybinding = { { kb->kbd.key, kb->kbd.modifier }, kb->action };
 	struct default_kb *pos;
 
-	for (pos = default_keybindings[kb->keymap]; pos->key; pos++)
+	for (pos = default_keybindings[kb->keymap]; pos->kbd.key; pos++)
 		if (!memcmp(&keybinding, pos, sizeof(keybinding)))
 			return 1;
 
@@ -724,11 +732,11 @@ add_default_keybindings(void)
 	for (keymap = 0; keymap < KEYMAP_MAX; keymap++) {
 		struct default_kb *kb;
 
-		for (kb = default_keybindings[keymap]; kb->key; kb++) {
+		for (kb = default_keybindings[keymap]; kb->kbd.key; kb++) {
 			struct keybinding *keybinding;
 
-			keybinding = add_keybinding(keymap, kb->action, kb->key,
-						    kb->modifier, EVENT_NONE);
+			keybinding = add_keybinding(keymap, kb->action, kb->kbd.key,
+						    kb->kbd.modifier, EVENT_NONE);
 			keybinding->flags |= KBDB_DEFAULT;
 		}
 	}
@@ -849,7 +857,7 @@ single_bind_config_string(struct string *file, enum keymap keymap,
 	add_to_string(file, "bind \"");
 	add_to_string(file, keymap_str);
 	add_to_string(file, "\" \"");
-	make_keystroke(file, keybinding->key, keybinding->modifier, 1);
+	make_keystroke(file, keybinding->kbd.key, keybinding->kbd.modifier, 1);
 	add_to_string(file, "\" = \"");
 	add_to_string(file, action_str);
 	add_char_to_string(file, '\"');

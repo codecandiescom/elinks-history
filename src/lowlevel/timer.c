@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.25 2005/05/17 12:56:58 zas Exp $ */
+/* $Id: timer.c,v 1.26 2005/05/17 15:58:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ count_down(void *xxx)
 		struct terminal *terminal;
 		struct term_event ev;
 
-		set_kbd_term_event(&ev, kb->key, kb->modifier);
+		set_kbd_term_event(&ev, kb->kbd.key, kb->kbd.modifier);
 
 		foreach (terminal, terminals) {
 			term_send_event(terminal, &ev);

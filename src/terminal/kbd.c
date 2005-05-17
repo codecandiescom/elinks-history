@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.132 2005/05/17 12:56:58 zas Exp $ */
+/* $Id: kbd.c,v 1.133 2005/05/17 13:37:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -668,6 +668,7 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 	if (v == 5) {
 		if (xterm_button == -1)
 			xterm_button = 0;
+
 		if (itrm->qlen - el < 5)
 			return -1;
 
@@ -675,15 +676,26 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		mouse->y = get_mouse_y_position(itrm, el);
 
 		switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
-		    case TW_BUTT_LEFT:   mouse->button = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
-		    case TW_BUTT_MIDDLE: mouse->button = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP : B_DOWN ); break;
-		    case TW_BUTT_RIGHT:  mouse->button = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
-		    case 0: mouse->button = B_DRAG;
-		    /* default : Twin protocol error */
+		case TW_BUTT_LEFT:
+			mouse->button = B_LEFT | ((xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN);
+			break;
+		case TW_BUTT_MIDDLE:
+			mouse->button = B_MIDDLE | ((xterm_button & TW_BUTT_MIDDLE) ? B_UP : B_DOWN);
+			break;
+		case TW_BUTT_RIGHT:
+			mouse->button = B_RIGHT | ((xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN);
+			break;
+		case 0:
+			mouse->button = B_DRAG;
+		/* default : Twin protocol error */
 		}
+
 		xterm_button = itrm->kqueue[el] - ' ';
 		el += 5;
+
 	} else {
+		xterm_button = -1;
+
 		/* See terminal/mouse.h about details of the mouse reporting
 		 * protocol and {struct term_event_mouse->button} bitmask
 		 * structure. */
@@ -706,18 +718,14 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 			mouse->button = (itrm->kqueue[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
 		}
 
-		xterm_button = -1;
 		/* XXX: Eterm/aterm uses rxvt-like reporting, but sends the
 		 * release sequence for wheel. rxvt itself sends only press
 		 * sequence. Since we can't reliably guess what we're talking
 		 * with from $TERM, we will rather support Eterm/aterm, as in
 		 * rxvt, at least each second wheel up move will work. */
-		if (check_mouse_action(ev, B_DOWN))
-#if 0
-			    && !(getenv("TERM") && strstr("rxvt", getenv("TERM"))
-				 && (ev->b & BM_BUTT) >= B_WHEEL_UP))
-#endif
-			xterm_button = get_mouse_button(ev);
+		if (mouse->button & BM_ACT == B_DOWN) {
+			xterm_button = mouse->button & BM_ACT;
+		}
 
 		el += 3;
 	}

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.223 2005/05/17 21:33:04 zas Exp $ */
+/* $Id: dialogs.c,v 1.224 2005/05/17 21:50:32 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -675,7 +675,7 @@ get_keybinding_text(struct listbox_item *item, struct terminal *term)
 	}
 
 	if (!init_string(&info)) return NULL;
-	make_keystroke(&info, keybinding->kbd.key, keybinding->kbd.modifier, 0);
+	make_keystroke(&info, &keybinding->kbd, 0);
 	return info.source;
 }
 
@@ -696,7 +696,7 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term)
 	keymap = write_keymap(keybinding->keymap);
 
 	add_format_to_string(&info, "%s: ", _("Keystroke", term));
-	make_keystroke(&info, keybinding->kbd.key, keybinding->kbd.modifier, 0);
+	make_keystroke(&info, &keybinding->kbd, 0);
 	add_format_to_string(&info, "\n%s: %s", _("Action", term), action);
 	add_format_to_string(&info, "\n%s: %s", _("Keymap", term), keymap);
 

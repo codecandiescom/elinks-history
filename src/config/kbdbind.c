@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.285 2005/05/17 21:33:04 zas Exp $ */
+/* $Id: kbdbind.c,v 1.286 2005/05/17 21:50:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -352,25 +352,25 @@ parse_keystroke(unsigned char *s, struct term_event_keyboard *kbd)
 }
 
 void
-make_keystroke(struct string *str, long key, long modifier, int escape)
+make_keystroke(struct string *str, struct term_event_keyboard *kbd, int escape)
 {
 	unsigned char key_buffer[3] = "\\x";
 	unsigned char *key_string;
 
-	if (key < 0) return;
+	if (kbd->key < 0) return;
 
-	if (modifier & KBD_MOD_SHIFT)
+	if (kbd->modifier & KBD_MOD_SHIFT)
 		add_to_string(str, "Shift-");
-	if (modifier & KBD_MOD_CTRL)
+	if (kbd->modifier & KBD_MOD_CTRL)
 		add_to_string(str, "Ctrl-");
-	if (modifier & KBD_MOD_ALT)
+	if (kbd->modifier & KBD_MOD_ALT)
 		add_to_string(str, "Alt-");
 
-	key_string = numtostr(key_table, key);
+	key_string = numtostr(key_table, kbd->key);
 	if (!key_string) {
 		key_string = key_buffer + 1;
-		*key_string = (unsigned char) key;
-		if (key == '\\' && escape)
+		*key_string = (unsigned char) kbd->key;
+		if (kbd->key == '\\' && escape)
 			key_string--;
 	}
 
@@ -384,7 +384,7 @@ add_keystroke_to_string(struct string *string, int action,
 	struct keybinding *kb = kbd_act_lookup(map, action);
 
 	if (kb)
-		make_keystroke(string, kb->kbd.key, kb->kbd.modifier, 0);
+		make_keystroke(string, &kb->kbd, 0);
 }
 
 unsigned char *
@@ -420,7 +420,7 @@ add_actions_to_string(struct string *string, int *actions,
 		if (!kb) continue;
 
 		add_char_to_string(string, '\n');
-		make_keystroke(string, kb->kbd.key, kb->kbd.modifier, 0);
+		make_keystroke(string, &kb->kbd, 0);
 		keystrokelen = string->length - keystrokelen;
 		add_xchar_to_string(string, ' ', int_max(15 - keystrokelen, 1));
 		add_to_string(string, _(desc, term));
@@ -859,7 +859,7 @@ single_bind_config_string(struct string *file, enum keymap keymap,
 	add_to_string(file, "bind \"");
 	add_to_string(file, keymap_str);
 	add_to_string(file, "\" \"");
-	make_keystroke(file, keybinding->kbd.key, keybinding->kbd.modifier, 1);
+	make_keystroke(file, &keybinding->kbd, 1);
 	add_to_string(file, "\" = \"");
 	add_to_string(file, action_str);
 	add_char_to_string(file, '\"');

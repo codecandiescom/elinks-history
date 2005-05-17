@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.320 2005/05/13 09:06:58 zas Exp $ */
+/* $Id: link.c,v 1.321 2005/05/17 21:50:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1298,7 +1298,7 @@ get_current_link_info(struct session *ses, struct document_view *doc_view)
 		if (link->accesskey > 0
 		    && get_opt_bool("document.browse.accesskey.display")) {
 			add_to_string(&str, " (");
-			make_keystroke(&str, link->accesskey, 0, 0);
+			make_keystroke_from_accesskey(&str, link->accesskey);
 			add_char_to_string(&str, ')');
 		}
 

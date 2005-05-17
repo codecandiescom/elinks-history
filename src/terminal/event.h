@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.22 2005/05/17 15:01:34 zas Exp $ */
+/* $Id: event.h,v 1.23 2005/05/17 15:02:30 zas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -22,7 +22,6 @@ enum term_event_type {
 	EVENT_ABORT,
 };
 
-/* XXX: do not change order of fields. --Zas */
 struct term_event {
 	enum term_event_type ev;
 

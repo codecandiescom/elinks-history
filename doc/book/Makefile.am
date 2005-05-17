@@ -1,7 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.15 2005/05/03 23:48:15 jonas Exp $
-
-SUBDIRS = manpages
+## $Id: Makefile.am,v 1.16 2005/05/17 16:14:42 jonas Exp $
 
 EXTRA_DIST = \
  README \

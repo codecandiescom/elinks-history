@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.56 2005/05/17 19:40:36 jonas Exp $
+## $Id: Makefile.am,v 1.57 2005/05/17 19:49:46 jonas Exp $
 
 SUBDIRS = man
 
@@ -10,6 +10,7 @@ MANUAL_FILES = \
  manual.txt \
  \
  bookmarks.txt \
+ ecmascript.txt \
  exmode.txt \
  faq.txt \
  installation.txt \
@@ -28,7 +29,6 @@ EXTRA_DIST = \
  README \
  $(MANUAL_FILES) \
  color-model.txt \
- ecmascript.txt \
  events.txt \
  feedback.txt \
  hacking.txt \
@@ -36,7 +36,6 @@ EXTRA_DIST = \
  manual.txt \
  manual.html \
  perl.pod \
- small.txt \
  tools/help2doc \
  tools/make-elinks-manpage \
  tools/make-elinkskeys-manpage

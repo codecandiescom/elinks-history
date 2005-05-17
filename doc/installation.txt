@@ -60,8 +60,10 @@ library itself; this package usually has -dev or similar appended to its name.
 Further reading
 ~~~~~~~~~~~~~~~
 
-This installation guide is  far from being complete. You are also advised to
+This installation guide is far from being complete. You are also advised to
 read the `README` and the `INSTALL` files distributed with ELinks for further
 up to date info on building and installing.
 
 include::small.txt[]
+
+include::ecmascript.txt[]

@@ -1,4 +1,5 @@
-		ECMAScript support?!
+ECMAScript support?!
+~~~~~~~~~~~~~~~~~~~~
 
 Yes, there is some ECMAScript support in ELinks. There isn't anything we
 could call complete, but some bits could help with the most common ECMAScript
@@ -16,7 +17,8 @@ comes from Mozilla ;), has ugly naming scheme but nice calling conventions,
 acceptable documentation, is actively developed and ought to work.
 
 
-		Ok, so how to get the ECMAScript support working?
+Ok, so how to get the ECMAScript support working?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Some systems come with either the SpiderMonkey installed or as an option. It
 would be good to test if you can take the easy path and let the system take
@@ -24,8 +26,8 @@ care of installation through a package system. Below are listed instructions
 on what package you need to install on various systems (please help improve
 the list). If all goes well you can proceed to rebuilding ELinks.
 
-   On Debian testing or unstable, install the packages libsmjs1 and libsmjs-dev
-   by running:
+On Debian testing or unstable, install the packages libsmjs1 and libsmjs-dev
+by running:
 
 	$ apt-get install libsmjs1 libsmjs-dev
 
@@ -92,8 +94,8 @@ Check for "Ecmascript .................... SpiderMonkey" in Feature summary.
 Enjoy.
 
 
-
-		The ECMAScript support is buggy! Shall I blame Mozilla people?
+The ECMAScript support is buggy! Shall I blame Mozilla people?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Likely not. The ECMAScript engine provides only the language compiler and some
 basic built-in objects, and it's more than likely that the problem is on our
@@ -103,7 +105,8 @@ it's not our fault we will tell you to go complain to Mozilla (better yet if
 it does not work in the Mozilla browsers neither ;-).
 
 
-		Now, I would still like NJS or a new JS engine from scratch...
+Now, I would still like NJS or a new JS engine from scratch...
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ...and you don't fear some coding? That's fine then! ELinks is in no way tied
 to SpiderMonkey, in fact the ECMAScript support was carefully implemented so
@@ -115,4 +118,4 @@ easy. We await your patches eagerly.
 
 
 
-$Id: ecmascript.txt,v 1.11 2005/01/03 08:12:57 miciah Exp $
+$Id: ecmascript.txt,v 1.12 2005/05/17 19:49:46 jonas Exp $

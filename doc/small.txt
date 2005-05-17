@@ -1,5 +1,5 @@
 Tips to obtain a very small static elinks binary
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Tips to obtain a very small static elinks binary suitable for mini
 distributions
@@ -88,4 +88,4 @@ Whow ! Around 200kb :)
   memory usage, and a bit the executable size.
 ==============================================================================
 
-$Id: small.txt,v 1.15 2005/05/17 19:40:36 jonas Exp $
+$Id: small.txt,v 1.16 2005/05/17 19:49:46 jonas Exp $

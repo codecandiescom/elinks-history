@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.136 2005/05/17 00:02:50 jonas Exp $ */
+/* $Id: action.c,v 1.137 2005/05/17 00:14:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,8 +127,9 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 	if (doc_view && doc_view->vs) {
 		if ((action & ACTION_JUMP_TO_LINK)
-		    && !try_jump_to_link_number(ses, doc_view))
-			return FRAME_EVENT_OK;
+		    && (!try_jump_to_link_number(ses, doc_view)
+		         || doc_view->vs->current_link == -1))
+			goto ignore_action;
 
 		link = get_current_link(doc_view);
 
@@ -296,7 +297,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_JUMP_TO_LINK:
-			try_jump_to_link_number(ses, doc_view);
 			break;
 
 		case ACT_MAIN_KEYBINDING_MANAGER:
@@ -340,9 +340,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_MENU:
-			if (!try_jump_to_link_number(ses, doc_view))
-				break;
-
 			link_menu(term, NULL, ses);
 			break;
 
@@ -430,24 +427,15 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
-			if (!try_jump_to_link_number(ses, doc_view))
-				break;
-
 			open_current_link_in_new_tab(ses, 0);
 			break;
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-			if (!try_jump_to_link_number(ses, doc_view))
-				break;
-
 			open_current_link_in_new_tab(ses, 1);
 			break;
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
 			/* FIXME: Use do_frame_action(). --jonas */
-			if (!try_jump_to_link_number(ses, doc_view)
-			    || doc_view->vs->current_link == -1)
-				break;
 			open_in_new_window(term, send_open_in_new_window, ses);
 			break;
 

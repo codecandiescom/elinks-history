@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.135 2005/05/17 14:15:30 zas Exp $ */
+/* $Id: kbd.c,v 1.136 2005/05/17 14:18:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -668,6 +668,7 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 	if (v == 5) {
 		if (xterm_button == -1)
 			xterm_button = 0;
+
 		if (itrm->qlen - el < 5)
 			return -1;
 
@@ -675,14 +676,23 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		mouse->y = get_mouse_y_position(itrm, el);
 
 		switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
-		    case TW_BUTT_LEFT:   mouse->button = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
-		    case TW_BUTT_MIDDLE: mouse->button = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP : B_DOWN ); break;
-		    case TW_BUTT_RIGHT:  mouse->button = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
-		    case 0: mouse->button = B_DRAG;
-		    /* default : Twin protocol error */
+		case TW_BUTT_LEFT:
+			mouse->button = B_LEFT | ((xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN);
+			break;
+		case TW_BUTT_MIDDLE:
+			mouse->button = B_MIDDLE | ((xterm_button & TW_BUTT_MIDDLE) ? B_UP : B_DOWN);
+			break;
+		case TW_BUTT_RIGHT:
+			mouse->button = B_RIGHT | ((xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN);
+			break;
+		case 0:
+			mouse->button = B_DRAG;
+		/* default : Twin protocol error */
 		}
+
 		xterm_button = itrm->kqueue[el] - ' ';
 		el += 5;
+
 	} else {
 		/* See terminal/mouse.h about details of the mouse reporting
 		 * protocol and {struct term_event_mouse->button} bitmask

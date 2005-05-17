@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.36 2005/04/27 15:15:00 jonas Exp $ */
+/* $Id: os2.c,v 1.37 2005/05/17 13:22:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,10 +471,8 @@ mouse_thread(void *p)
 	A_DECL(MOUEVENTINFO, ms);
 	A_DECL(USHORT, rd);
 	A_DECL(USHORT, mask);
-	struct term_event ev;
 
 	signal(SIGPIPE, SIG_IGN);
-	ev.ev = EVENT_MOUSE;
 	if (MouOpen(NULL, mh)) goto ret;
 	mouse_h = *mh;
 	*mask = MOUSE_MOTION_WITH_BN1_DOWN | MOUSE_BN1_DOWN |
@@ -486,6 +484,8 @@ mouse_thread(void *p)
 	status = -1;
 
 	while (1) {
+		struct term_event ev;
+		struct term_event_mouse mouse;
 		int w, ww;
 
 		if (MouReadEventQue(ms, rd, *mh)) break;
@@ -496,11 +496,11 @@ mouse_thread(void *p)
 #ifdef HAVE_SYS_FMUTEX_H
 		_fmutex_release(&mouse_mutex);
 #endif
-		ev.info.mouse.x = ms->col;
-		ev.info.mouse.y = ms->row;
+		mouse.x = ms->col;
+		mouse.y = ms->row;
 		/*DBG("status: %d %d %d", ms->col, ms->row, ms->fs);*/
 		if (ms->fs & (MOUSE_BN1_DOWN | MOUSE_BN2_DOWN | MOUSE_BN3_DOWN))
-			ev.info.mouse.button = status = B_DOWN | (ms->fs & MOUSE_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_BN2_DOWN ? B_MIDDLE : B_RIGHT);
+			mouse.button = status = B_DOWN | (ms->fs & MOUSE_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_BN2_DOWN ? B_MIDDLE : B_RIGHT);
 		else if (ms->fs & (MOUSE_MOTION_WITH_BN1_DOWN | MOUSE_MOTION_WITH_BN2_DOWN | MOUSE_MOTION_WITH_BN3_DOWN)) {
 			int b = ms->fs & MOUSE_MOTION_WITH_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_MOTION_WITH_BN2_DOWN ? B_MIDDLE : B_RIGHT;
 
@@ -508,12 +508,14 @@ mouse_thread(void *p)
 				b |= B_DOWN;
 			else
 				b |= B_DRAG;
-			ev.info.mouse.button = status = b;
+			mouse.button = status = b;
 		} else {
 			if (status == -1) continue;
-			ev.info.mouse.button = (status & BM_BUTT) | B_UP;
+			mouse.button = (status & BM_BUTT) | B_UP;
 			status = -1;
 		}
+
+		set_mouse_term_event(&ev, mouse.x, mouse.y, mouse.button);
 		if (hard_write(oms->p[1], (unsigned char *) &ev, sizeof(ev)) != sizeof(ev)) break;
 	}
 #ifdef HAVE_SYS_FMUTEX_H

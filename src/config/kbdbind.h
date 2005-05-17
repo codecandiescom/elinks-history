@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.151 2005/05/17 16:09:52 zas Exp $ */
+/* $Id: kbdbind.h,v 1.152 2005/05/17 21:33:04 zas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -97,7 +97,7 @@ struct keybinding {
 void init_keymaps(void);
 void free_keymaps(void);
 
-struct keybinding *add_keybinding(enum keymap km, int action, long key, long modifier, int event);
+struct keybinding *add_keybinding(enum keymap km, int action, struct term_event_keyboard *kbd, int event);
 int keybinding_exists(enum keymap km, long key, long modifier, int *action);
 void free_keybinding(struct keybinding *);
 
@@ -110,7 +110,7 @@ int parse_keystroke(unsigned char *, struct term_event_keyboard *);
 void make_keystroke(struct string *, long, long, int);
 
 int kbd_action(enum keymap, struct term_event *, int *);
-struct keybinding *kbd_ev_lookup(enum keymap, long, long, int *);
+struct keybinding *kbd_ev_lookup(enum keymap, struct term_event_keyboard *kbd, int *);
 struct keybinding *kbd_nm_lookup(enum keymap, unsigned char *);
 
 int bind_do(unsigned char *, unsigned char *, unsigned char *);

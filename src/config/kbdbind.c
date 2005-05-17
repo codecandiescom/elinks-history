@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.284 2005/05/17 16:09:52 zas Exp $ */
+/* $Id: kbdbind.c,v 1.285 2005/05/17 21:33:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,20 +31,20 @@ static struct list_head keymaps[KEYMAP_MAX];
 static void add_default_keybindings(void);
 
 static int
-delete_keybinding(enum keymap km, long key, long modifier)
+delete_keybinding(enum keymap km, struct term_event_keyboard *kbd)
 {
 	struct keybinding *kb;
 
 	foreach (kb, keymaps[km]) {
 		int was_default = 0;
 
-		if (!kbd_key_is(&kb->kbd, key))
-			continue;
-		
-		if (!kbd_modifier_is(&kb->kbd, modifier))
+		if (!kbd_key_is(&kb->kbd, kbd->key))
 			continue;
 
-		
+		if (!kbd_modifier_is(&kb->kbd, kbd->modifier))
+			continue;
+
+
 		if (kb->flags & KBDB_DEFAULT) {
 			kb->flags &= ~KBDB_DEFAULT;
 			was_default = 1;
@@ -59,20 +59,20 @@ delete_keybinding(enum keymap km, long key, long modifier)
 }
 
 struct keybinding *
-add_keybinding(enum keymap km, int action, long key, long modifier, int event)
+add_keybinding(enum keymap km, int action, struct term_event_keyboard *kbd, int event)
 {
 	struct keybinding *kb;
 	struct listbox_item *root;
 	int is_default;
 
-	is_default = delete_keybinding(km, key, modifier) == 2;
+	is_default = (delete_keybinding(km, kbd) == 2);
 
 	kb = mem_calloc(1, sizeof(*kb));
 	if (!kb) return NULL;
 
 	kb->keymap = km;
 	kb->action = action;
-	kbd_set(&kb->kbd, key, modifier);
+	copy_struct(&kb->kbd, kbd);
 	kb->event = event;
 	kb->flags = is_default * KBDB_DEFAULT;
 
@@ -127,7 +127,7 @@ keybinding_exists(enum keymap km, long key, long modifier, int *action)
 	foreach (kb, keymaps[km]) {
 		if (!kbd_key_is(&kb->kbd, key))
 			continue;
-		
+
 		if (!kbd_modifier_is(&kb->kbd, modifier))
 			continue;
 
@@ -143,24 +143,27 @@ keybinding_exists(enum keymap km, long key, long modifier, int *action)
 int
 kbd_action(enum keymap kmap, struct term_event *ev, int *event)
 {
+	struct term_event_keyboard kbd;
 	struct keybinding *kb;
 
 	if (ev->ev != EVENT_KBD) return -1;
 
-	kb = kbd_ev_lookup(kmap, get_kbd_key(ev), get_kbd_modifier(ev), event);
+	kbd.key = get_kbd_key(ev);
+	kbd.modifier = get_kbd_modifier(ev);
+	kb = kbd_ev_lookup(kmap, &kbd, event);
 	return kb ? kb->action : -1;
 }
 
 struct keybinding *
-kbd_ev_lookup(enum keymap kmap, long key, long modifier, int *event)
+kbd_ev_lookup(enum keymap kmap, struct term_event_keyboard *kbd, int *event)
 {
 	struct keybinding *kb;
 
 	foreach (kb, keymaps[kmap]) {
-		if (!kbd_key_is(&kb->kbd, key))
+		if (!kbd_key_is(&kb->kbd, kbd->key))
 			continue;
-		
-		if (!kbd_modifier_is(&kb->kbd, modifier))
+
+		if (!kbd_modifier_is(&kb->kbd, kbd->modifier))
 			continue;
 
 		if (kb->action == ACT_MAIN_SCRIPTING_FUNCTION && event)
@@ -735,8 +738,7 @@ add_default_keybindings(void)
 		for (kb = default_keybindings[keymap]; kb->kbd.key; kb++) {
 			struct keybinding *keybinding;
 
-			keybinding = add_keybinding(keymap, kb->action, kb->kbd.key,
-						    kb->kbd.modifier, EVENT_NONE);
+			keybinding = add_keybinding(keymap, kb->action, &kb->kbd, EVENT_NONE);
 			keybinding->flags |= KBDB_DEFAULT;
 		}
 	}
@@ -808,7 +810,7 @@ bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 	action_ = get_aliased_action(keymap_, action);
 	if (action_ < 0) return 77 / 9 - 5;
 
-	add_keybinding(keymap_, action_, kbd.key, kbd.modifier, EVENT_NONE);
+	add_keybinding(keymap_, action_, &kbd, EVENT_NONE);
 	return 0;
 }
 
@@ -827,7 +829,7 @@ bind_act(unsigned char *keymap, unsigned char *keystroke)
 	if (parse_keystroke(keystroke, &kbd) < 0)
 		return NULL;
 
-	kb = kbd_ev_lookup(keymap_, kbd.key, kbd.modifier, NULL);
+	kb = kbd_ev_lookup(keymap_, &kbd, NULL);
 	if (!kb) return NULL;
 
 	action = write_action(keymap_, kb->action);

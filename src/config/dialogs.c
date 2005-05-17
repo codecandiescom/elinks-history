@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.222 2005/05/17 16:09:52 zas Exp $ */
+/* $Id: dialogs.c,v 1.223 2005/05/17 21:33:04 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -802,8 +802,7 @@ really_really_add_keybinding(void *data)
 
 	assert(hop);
 
-	add_keybinding(hop->keymap, hop->action, hop->kbd.key, hop->kbd.modifier,
-		       EVENT_NONE);
+	add_keybinding(hop->keymap, hop->action, &hop->kbd, EVENT_NONE);
 }
 
 static void

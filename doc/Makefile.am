@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.51 2005/05/17 17:23:04 jonas Exp $
+## $Id: Makefile.am,v 1.52 2005/05/17 17:26:05 jonas Exp $
 
 SUBDIRS = man
 
@@ -89,7 +89,7 @@ elinkskeys.%.txt: $(MAKE_ELINKSKEYS_MANPAGE)
 	fi
 
 # elinkskeys.5
-update-manpages: elinks.1
+manpages: elinks.1
 	@if test ! -x "$(ELINKS)";						\
 	then									\
 		echo "There is no '$(ELINKS)' to update from.";			\
@@ -97,5 +97,5 @@ update-manpages: elinks.1
 		sh $(HELP2DOC) --elinks=$(ELINKS) --elinksconf > $(MAN_ELINKS_CONF);	\
 	fi
 
-update-manual: manual.xml
-	xmlto -o book html $<
+manual: manual.xml
+	xmlto -o manual html $<

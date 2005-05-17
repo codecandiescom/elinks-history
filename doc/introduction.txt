@@ -138,9 +138,9 @@ selected and the same folders opened or closed.
 
 The basic default controls for managers are the following:
 
-`--------------`---------------------------------------
+`--------------`--------------------------------------------------------------
 Keys		Action
--------------------------------------------------------
+------------------------------------------------------------------------------
 Up/Down		Select the item above/below.
 '*'		Toggle marking of a item.
 Space		Open and close folders.
@@ -148,7 +148,7 @@ Left/Right	Select the button to the left/right.
 Home/End	Select the first/last item.
 Enter		Press the currently selected button.
 Esc		Close the manager dialog.
--------------------------------------------------------
+------------------------------------------------------------------------------
 
 Some managers also supports searching, either by pressing the "[ Search ]"
 button or by pressing '/'. By searching the empty string, all hidden items
@@ -166,16 +166,17 @@ input mode (normal or insert), JavaScript errors etc.
 An example display may look like: ``[SIJP--]''. Each position in the LED
 display is associated with the following state:
 
-`--------------`---------------------------------------
+`--------------`--------------------------------------------------------------
 Symbol		Description
--------------------------------------------------------
+------------------------------------------------------------------------------
 'S'		Whether an SSL connection was used.
-'i'/'I'		The state of insert mode for text-input form-fields: 'i' means modeless, 'I' means insert mode is on.
+'i'/'I'		The state of insert mode for text-input form-fields: 'i'     \
+		means modeless, 'I' means insert mode is on.
 'J'		A JavaScript error has occured.
 'P'		A JavaScript pop-up window was blocked.
 -		Unused.
 -		Unused.
--------------------------------------------------------
+------------------------------------------------------------------------------
 
 '-' generally indicates that the LED is off.
 
@@ -203,14 +204,14 @@ documents can be scrolled to the start or the end.
 
 The basic default controls:
 
-`--------------`---------------------------------------
+`--------------`--------------------------------------------------------------
 Keys		Action
--------------------------------------------------------
+------------------------------------------------------------------------------
 Insert/Delete	Scroll up/down line-wise. (vertically)
 PageUp/PageDown	Scroll up/down page-wise.
 '['/']'		Scroll left/right column-wise. (horizontally)
 Home/End	Scroll to the start/end of the document.
--------------------------------------------------------
+------------------------------------------------------------------------------
 
 Link-Oriented Navigation
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -234,13 +235,13 @@ the documentation on searching.
 
 The basic default controls:
 
-`--------------`---------------------------------------
+`--------------`--------------------------------------------------------------
 Keys		Action
--------------------------------------------------------
+------------------------------------------------------------------------------
 Up/Down		Move to the previous/next link.
 '.'		Toggle link numbering.
 Enter/Right	Follow the current focused link.
--------------------------------------------------------
+------------------------------------------------------------------------------
 
 No keys are by default configured for directional link navigation.
 
@@ -328,17 +329,18 @@ search terms.
 
 The basic default controls for searching are the following:
 
-`--------------`---------------------------------------
+`--------------`--------------------------------------------------------------
 Keys		Action
--------------------------------------------------------
+------------------------------------------------------------------------------
 '/'		Open search dialog
 '?'		Open search dialog for backwards searching
 '#'		Start incremental link text search
 '#/'		Start incremental document search
 'n'/'N'		Show next/previous match
 Tab		Show next match (only for incremental searching)
-Up/Down		Insert previous/next search word from history (only when the input field is selected)
--------------------------------------------------------
+Up/Down		Insert previous/next search word from history (only when the \
+		input field is selected)
+------------------------------------------------------------------------------
 
 Hints and Odd Features
 ~~~~~~~~~~~~~~~~~~~~~~

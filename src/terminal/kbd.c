@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.130 2005/05/17 10:22:49 zas Exp $ */
+/* $Id: kbd.c,v 1.131 2005/05/17 11:36:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,7 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 void
 kbd_ctrl_c(void)
 {
-	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_CTRL_C, 0, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_CTRL_C, KBD_MOD_NONE, 0);
 
 	if (!ditrm) return;
 	queue_event(ditrm, (unsigned char *) &ev, sizeof(ev));
@@ -589,7 +589,7 @@ free_and_return:
 static void
 kbd_timeout(struct itrm *itrm)
 {
-	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_ESC, 0, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_ESC, KBD_MOD_NONE, 0);
 
 	itrm->timer = TIMER_ID_UNDEF;
 
@@ -877,7 +877,7 @@ set_kbd_event(struct term_event *ev, int key, int modifier)
 static int
 process_queue(struct itrm *itrm)
 {
-	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, -1, 0, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_UNDEF, KBD_MOD_NONE, 0);
 	int el = 0;
 
 	if (!itrm->qlen) goto end;

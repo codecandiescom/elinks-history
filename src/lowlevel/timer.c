@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.23 2005/05/13 09:24:49 zas Exp $ */
+/* $Id: timer.c,v 1.24 2005/05/17 11:36:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "modules/module.h"
 #include "sched/event.h"
 #include "terminal/event.h"
+#include "terminal/kbd.h"
 #include "terminal/terminal.h"
 
 
@@ -34,7 +35,7 @@ get_timer_duration(void)
 static void
 count_down(void *xxx)
 {
-	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, -1, 0, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_UNDEF, KBD_MOD_NONE, 0);
 	struct keybinding *kb;
 	struct terminal *terminal;
 

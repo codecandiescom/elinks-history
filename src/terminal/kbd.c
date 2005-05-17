@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.136 2005/05/17 14:18:44 zas Exp $ */
+/* $Id: kbd.c,v 1.137 2005/05/17 14:21:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,10 +723,6 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		 * with from $TERM, we will rather support Eterm/aterm, as in
 		 * rxvt, at least each second wheel up move will work. */
 		if (check_mouse_action(ev, B_DOWN))
-#if 0
-			    && !(getenv("TERM") && strstr("rxvt", getenv("TERM"))
-				 && (ev->b & BM_BUTT) >= B_WHEEL_UP))
-#endif
 			xterm_button = get_mouse_button(ev);
 
 		el += 3;

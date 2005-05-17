@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.53 2005/05/17 17:28:17 jonas Exp $
+## $Id: Makefile.am,v 1.54 2005/05/17 18:02:54 jonas Exp $
 
 SUBDIRS = man
 
@@ -11,6 +11,7 @@ MANUAL_FILES = \
  \
  bookmarks.txt \
  exmode.txt \
+ installation.txt \
  introduction.txt \
  lua-scripting.txt \
  mailcap.txt \
@@ -96,5 +97,5 @@ manpages: elinks.1
 		sh $(HELP2DOC) --elinks=$(ELINKS) --elinksconf > $(MAN_ELINKS_CONF);	\
 	fi
 
-manual: manual.xml
+manual: manual.xml Makefile.am
 	xmlto -o manual html $<

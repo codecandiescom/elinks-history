@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.148 2005/05/16 22:54:46 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.149 2005/05/17 00:02:50 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -28,6 +28,7 @@ enum keymap {
 enum action_flags {
 	ACTION_RESTRICT_ANONYMOUS	=    (1 << 16),
 	ACTION_REQUIRE_VIEW_STATE	=    (1 << 17),
+	ACTION_JUMP_TO_LINK		=    (1 << 18),
 	ACTION_FLAGS_MASK		= (0xFF << 16),
 };
 

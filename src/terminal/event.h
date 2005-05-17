@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.20 2005/05/13 09:06:58 zas Exp $ */
+/* $Id: event.h,v 1.21 2005/05/17 12:56:58 zas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -43,7 +43,45 @@ struct term_event {
 	} info;
 };
 
-#define INIT_TERM_EVENT(type, x, y, b) { (type), { { (x), (y), (b) } } }
+static inline void
+set_mouse_term_event(struct term_event *ev, int x, int y, unsigned int button)
+{
+	memset(ev, 0, sizeof(*ev));
+	ev->ev = EVENT_MOUSE;
+	ev->info.mouse.x = x;
+	ev->info.mouse.y = y;
+	ev->info.mouse.button = button;
+}
+
+static inline void
+set_kbd_term_event(struct term_event *ev, int key, int modifier)
+{
+	memset(ev, 0, sizeof(*ev));
+	ev->ev = EVENT_KBD;
+	ev->info.keyboard.key = key;
+	ev->info.keyboard.modifier = modifier;
+}
+
+static inline void
+set_abort_term_event(struct term_event *ev)
+{
+	memset(ev, 0, sizeof(*ev));
+	ev->ev = EVENT_ABORT;
+}
+
+static inline void
+set_wh_term_event(struct term_event *ev, enum term_event_type type, int width, int height)
+{
+	memset(ev, 0, sizeof(*ev));
+	ev->ev = type;
+	ev->info.size.width = width;
+	ev->info.size.height = height;
+}
+
+#define set_init_term_event(ev, w, h) set_wh_term_event(ev, EVENT_INIT, w, h)
+#define set_resize_term_event(ev, w, h) set_wh_term_event(ev, EVENT_RESIZE, w, h)
+#define set_redraw_term_event(ev, w, h) set_wh_term_event(ev, EVENT_REDRAW, w, h)
+
 
 /* This holds the information used when handling the initial connection between
  * a dumb and master terminal. */

@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.26 2005/03/05 21:21:27 zas Exp $ */
+/* $Id: window.c,v 1.27 2005/05/17 12:56:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,11 +19,12 @@ void
 redraw_from_window(struct window *win)
 {
 	struct terminal *term = win->term;
-	struct term_event ev = INIT_TERM_EVENT(EVENT_REDRAW, term->width, term->height, 0);
+	struct term_event ev;
 	struct window *end = (void *) &term->windows;
 
 	if (term->redrawing != 0) return;
 
+	set_redraw_term_event(&ev, term->width, term->height);
 	term->redrawing = 1;
 	for (win = win->prev; win != end; win = win->prev) {
 		if (!inactive_tab(win))
@@ -36,12 +37,13 @@ void
 redraw_below_window(struct window *win)
 {
 	struct terminal *term = win->term;
-	struct term_event ev = INIT_TERM_EVENT(EVENT_REDRAW, term->width, term->height, 0);
+	struct term_event ev;
 	struct window *end = win;
 	int tr = term->redrawing;
 
 	if (term->redrawing > 1) return;
 
+	set_redraw_term_event(&ev, term->width, term->height);
 	term->redrawing = 2;
 	for (win = term->windows.prev; win != end; win = win->prev) {
 		if (!inactive_tab(win))
@@ -54,8 +56,8 @@ static void
 add_window_at_pos(struct terminal *term, window_handler_T handler,
 		  void *data, struct window *at)
 {
+	struct term_event ev;
 	struct window *win = mem_calloc(1, sizeof(*win));
-	struct term_event ev = INIT_TERM_EVENT(EVENT_INIT, term->width, term->height, 0);
 
 	if (!win) {
 		mem_free_if(data);
@@ -67,6 +69,7 @@ add_window_at_pos(struct terminal *term, window_handler_T handler,
 	win->term = term;
 	win->type = WINDOW_NORMAL;
 	add_at_pos(at, win);
+	set_init_term_event(&ev, term->width, term->height);
 	win->handler(win, &ev);
 }
 
@@ -79,11 +82,12 @@ add_window(struct terminal *term, window_handler_T handler, void *data)
 void
 delete_window(struct window *win)
 {
-	struct term_event ev = INIT_TERM_EVENT(EVENT_ABORT, 0, 0, 0);
+	struct term_event ev;
 
 	/* Updating the status when destroying tabs needs this before the win
 	 * handler call. */
 	del_from_list(win);
+	set_abort_term_event(&ev);
 	win->handler(win, &ev);
 	mem_free_if(win->data);
 	redraw_terminal(win->term);

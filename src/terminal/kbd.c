@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.131 2005/05/17 11:36:37 zas Exp $ */
+/* $Id: kbd.c,v 1.132 2005/05/17 12:56:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,9 +159,10 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 void
 kbd_ctrl_c(void)
 {
-	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_CTRL_C, KBD_MOD_NONE, 0);
+	struct term_event ev;
 
 	if (!ditrm) return;
+	set_kbd_term_event(&ev, KBD_CTRL_C, KBD_MOD_NONE);
 	queue_event(ditrm, (unsigned char *) &ev, sizeof(ev));
 }
 
@@ -220,14 +221,11 @@ send_done_sequence(int h, int altscreen)
 void
 resize_terminal(void)
 {
-	struct term_event ev = INIT_TERM_EVENT(EVENT_RESIZE, 0, 0, 0);
+	struct term_event ev;
 	int width, height;
 
 	get_terminal_size(ditrm->std_out, &width, &height);
-
-	ev.info.size.width = width;
-	ev.info.size.height = height;
-
+	set_resize_term_event(&ev, width, height);
 	queue_event(ditrm, (char *) &ev, sizeof(ev));
 }
 
@@ -589,7 +587,7 @@ free_and_return:
 static void
 kbd_timeout(struct itrm *itrm)
 {
-	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_ESC, KBD_MOD_NONE, 0);
+	struct term_event ev;
 
 	itrm->timer = TIMER_ID_UNDEF;
 
@@ -601,6 +599,7 @@ kbd_timeout(struct itrm *itrm)
 	assertm(itrm->qlen, "timeout on empty queue");
 	if_assert_failed return;
 
+	set_kbd_term_event(&ev, KBD_ESC, KBD_MOD_NONE);
 	queue_event(itrm, (char *) &ev, sizeof(ev));
 
 	if (--itrm->qlen)
@@ -877,10 +876,12 @@ set_kbd_event(struct term_event *ev, int key, int modifier)
 static int
 process_queue(struct itrm *itrm)
 {
-	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_UNDEF, KBD_MOD_NONE, 0);
+	struct term_event ev;
 	int el = 0;
 
 	if (!itrm->qlen) goto end;
+
+	set_kbd_term_event(&ev, KBD_UNDEF, KBD_MOD_NONE);
 
 #ifdef DEBUG_ITRM_QUEUE
 	{

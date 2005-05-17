@@ -1,0 +1,92 @@
+URL Shortcuts in ELinks
+-----------------------
+
+One extremely useful and convenient feature on ELinks which is presumably not
+very well known is so-called URL rewriting. If you give ELinks a URL (by
+passing it on the command line, through the -remote magic device or most
+frequently by typing it to the Goto URL dialog), it can mangle it in certain
+ways before processing it.  This mangling is called URI rewriting.
+
+
+What it does
+~~~~~~~~~~~~
+
+The URI rewriting can expand certain URL shortcuts to complete URLs. For
+example, if you type 'sd' to the Goto URL dialog, it will get rewritten to
+
+	http://www.slashdot.org/
+
+first, then loaded --- /.'s front page will be displayed.
+
+More so, if you type 'g elinks' to the Goto URL dialog, it will be rewritten
+to
+
+	http://www.google.com/search?q=elinks&amp;btnG=Google+Search
+
+and then loaded --- therefore, a Google search for the 'elinks' keyword will
+ensue. Note that you can separate the 'g' by either a space or a colon, so
+'g:elinks' will do the exact same thing.
+
+A large number of those shortcuts is already predefined. You can browse the
+Protocols :: URI Rewriting :: Dumb/Smart prefixes in the Options Manager for
+complete listing of already defined shortcuts (press the [Info] button on a
+shortcut to see what it gets rewritten to). See below for details on how to
+enable/disable this rewriting and how to define own shortcuts.
+
+
+How it works
+~~~~~~~~~~~~
+
+All the URI rewriting can be controlled by options in the 'protocol.rewrite'
+options tree.
+
+In the 'sd' case, URI rewriting mechanism called 'dumb prefix' is used.  If
+protocol.rewrite.enable-dumb is true, ELinks looks at the contents of
+protocol.rewrite.dumb tree, and if it finds option protocol.rewrite.dumb.sd,
+it will use its value as the target URI.
+
+Therefore, in the general way, if ELinks looks at
+protocol.rewrite.dumb.&lt;typed_string&gt; and if it exists, it replaces the
+URI with it. These dumb prefixes can be used as kind of alternative bookmarks
+- if you want to have a fast access to a certain site and you don't want to
+spend lengthy seconds navigating in the bookmarks manager, you can just fire
+up the Goto URL dialog, type the shortcut and there you go.
+
+A dumb prefix can contain '%c', which will be replaced by the URI of the
+current document. This is used, for example, in the 'arc' dumb-prefix, which
+provides a shortcut to the Wayback machine at archive.org.
+
+In the 'g' case, a slightly different URI rewriting mechanism called 'smart
+prefixes' is used. If protocol.rewrite.enable-smart is true, ELinks looks at
+the contents of protocol.rewrite.smart tree and if it finds option
+protocol.rewrite.smart.g, it will use its value as the target URI.
+
+The difference is that the smart prefixes can take arguments and reference
+them in the target URI. As with dumb prefixes, '%c' in the URI means the
+current address. Additionally, '%s' will be substituted by the whole string
+following the prefix ('elinks' in the 'g' example above; '%s' is by far the
+most frequently used expansion), while you can reference individual
+space-separated arguments with the codes '%0' thru '%9'.  Finally, if you want
+a plain % to the resulting URI, use '%%'.
+
+Note that the prefix searched in the protocol.rewrite.smart tree is everything
+in the typed address up to the first space or colon (so 'bug:123' and 'bug
+123' make no difference). These prefixes are generally useful for searching
+anything very fast - be it Google ('g:foo', 'gi:foo', 'gr:foo', ...), ELinks
+Bugzilla bugs ('bug:1234'), RFC database ('cr:foo'), or Czech-English
+dictionary ('czen:foo'). But only your imagination is the limit.
+
+
+Alternative URI rewriting mechanisms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the past before this was implemented, Lua scripting did the job. And you
+still have complete control over the URI in the internal scripting goto-url
+hook. The advantages are clear - you get complete control over the URI and you
+can do much more interesting things with it (e.g., there is some very advanced
+CVSweb and Debian packages database URIs prefixes support in the sample Lua
+hooks file). One disadvantage is clear too - you must have Lua scripting
+enabled in order to make use of this, and many users don't have Lua installed.
+Another hidden disadvantage is that the goto-url hook is not triggered all the
+times when the built-in URI rewriting has its say on the URL.  Specifically,
+the goto-url hook isn't triggered when the URL is passed on the command line.

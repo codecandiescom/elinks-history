@@ -1,12 +1,28 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.49 2005/05/16 15:41:15 jonas Exp $
+## $Id: Makefile.am,v 1.50 2005/05/17 16:16:31 jonas Exp $
 
 SUBDIRS = man book
 
 # TODO: perl.pod should be pod2ized during make install. --pasky
 
+# XXX: manual.txt is the master document and must be first.
+MANUAL_FILES = \
+ manual.txt \
+ \
+ introduction.txt \
+ bookmarks.txt \
+ tabs.txt \
+ marks.txt \
+ urlshortcuts.txt \
+ terminals.txt \
+ mime.txt \
+ mailcap.txt \
+ remote.txt \
+ exmode.txt
+
 EXTRA_DIST = \
  README \
+ $(MANUAL_FILES) \
  color-model.txt \
  ecmascript.txt \
  elinks-lua.texi \
@@ -28,8 +44,7 @@ CLEANFILES = \
  *.man.txt \
  *.html.txt\
  elinks.html \
- $(TMPHTML) \
- $(TMPBOOK)
+ manual.xml
 
 ELINKS			= $(top_builddir)/src/elinks
 KBDBIND			= $(top_srcdir)/src/config/kbdbind.c
@@ -45,6 +60,9 @@ MAN_ELINKS		= $(top_srcdir)/doc/man/man1/elinks.1.in
 
 %.html: %.html.txt
 	asciidoc -b css-embedded -d manpage -o $@ $<
+
+manual.xml: $(MANUAL_FILES)
+	asciidoc -b docbook -d book -o $@ $<
 
 %.1: %.man.xml
 	xmlto man $<
@@ -78,28 +96,5 @@ update-manpages: elinks.1 elinkskeys.5
 		sh $(HELP2DOC) --elinks=$(ELINKS) --elinksconf > $(MAN_ELINKS_CONF);	\
 	fi
 
-BOOK	 = $(top_srcdir)/doc/book/book.xml
-TMPBOOK	 = $(top_builddir)/doc/book/.book.xml
-TXTBOOK	 = $(top_srcdir)/doc/manual.txt
-HTMLBOOK = $(top_srcdir)/doc/manual.html
-TMPHTML  = $(top_srcdir)/doc/.manual.html
-MANBOOK	 = $(top_srcdir)/doc/man/man1/elinksmanual.1
-XML2RFC	 = $(top_srcdir)/doc/tools/xml2rfc
-
-dist: update-manual
-update-manual:
-	@if test "x$(TCLSH)" != "x";						\
-	then									\
-		< $(BOOK) sed 's/\$$\(Revision: .*\) \$$/\1/' > $(TMPBOOK);	\
-		echo "Updating $(TXTBOOK)... ";					\
-		sh $(XML2RFC) $(TMPBOOK) $(TXTBOOK);				\
-		echo "Updating $(HTMLBOOK)... ";				\
-		sh $(XML2RFC) $(TMPBOOK) $(TMPHTML);				\
-		< $(TMPHTML) sed -e 's/é/\&eacute;/g' -e 's/á/\&aacute;/g' > $(HTMLBOOK) \
-		&& rm -f $(TMPHTML);						\
-		echo "Updating $(MANBOOK)... ";					\
-		sh $(XML2RFC) $(TMPBOOK) $(MANBOOK);				\
-		rm -f $(TMPBOOK);						\
-	else									\
-		echo "You need tclsh installed and in your PATH to update the manual.";	\
-	fi
+update-manual: manual.xml
+	xmlto -o book html $<

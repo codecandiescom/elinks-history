@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.690 2005/05/13 09:06:58 zas Exp $ */
+/* $Id: view.c,v 1.691 2005/05/17 13:47:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1015,9 +1015,11 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 
 	if (doc_view != first) draw_formatted(ses, 0);
 
-	copy_struct(&evv, ev);
-	evv.info.mouse.x -= doc_view->box.x;
-	evv.info.mouse.y -= doc_view->box.y;
+	set_mouse_term_event(&evv,
+			     ev->info.mouse.x - doc_view->box.x,
+			     ev->info.mouse.y - doc_view->box.y,
+			     ev->info.mouse.button);
+
 	return send_to_frame(ses, doc_view, &evv);
 }
 

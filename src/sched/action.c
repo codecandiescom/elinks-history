@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.137 2005/05/17 00:14:50 jonas Exp $ */
+/* $Id: action.c,v 1.138 2005/05/17 00:16:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,17 +308,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD:
-			status = do_frame_action(ses, doc_view,
-						 download_link,
-						 action);
-			break;
-
 		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
-			status = do_frame_action(ses, doc_view,
-						 download_link,
-						 action);
-			break;
-
 		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
 			status = do_frame_action(ses, doc_view,
 						 download_link,

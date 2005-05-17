@@ -1,3 +1,282 @@
+Tue May 17 21:55:14 2005  Laurent Monin <zas@norz.org>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	Pass struct term_event_keyboard * to keybinding_exists().  
+
+Tue May 17 21:50:32 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: config/dialogs.c, config/kbdbind.c, config/kbdbind.h,
+	ecmascript/spidermonkey.c, viewer/text/form.c, viewer/text/link.c:
+
+	Pass struct term_event_keyboard * to make_keystroke() and introduce
+	a wrapper named make_keystroke_from_accesskey().  
+
+Tue May 17 21:33:04 2005  Laurent Monin <zas@norz.org>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	Pass struct term_event_keyboard * to delete_keybinding(),
+	add_keybinding() and kbd_ev_lookup().  
+
+Tue May 17 19:49:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, ecmascript.txt, installation.txt, small.txt:
+
+	Include the ecmascript.txt as a installation subsection in the
+	manual. Change small.txt to also be a subsection. Fix the
+	Makefile.am.  
+
+Tue May 17 19:40:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, installation.txt, small.txt:
+
+	Include the small.txt in the manual.  
+
+Tue May 17 19:22:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, faq.html, faq.txt, manual.txt:
+
+	Convert the FAQ to asciidoc and include in the manual.  
+
+Tue May 17 18:07:13 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: bookmarks.txt, introduction.txt:
+
+	Normalize table formatting.  
+
+Tue May 17 18:02:54 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, installation.txt, lua-scripting.txt,
+	manual.txt:
+
+	Add the installation page from web module.  
+
+Tue May 17 17:27:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: tools/xml2rfc, Makefile.am:
+
+	Remove xml2rfc tool.  
+
+Tue May 17 17:27:28 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/.cvsignore:
+
+	Ignore some more generated files.  
+
+Tue May 17 17:26:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Output manual files to manual/ instead of book/ so cvs doesn't
+	complain. Rename update-rules to be shorter.  
+
+Tue May 17 17:23:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, elinks-lua.texi, lua-scripting.txt,
+	manual.txt:
+
+	Convert elinks-lua.texi to asciidoc and include it in the manual.  
+
+Tue May 17 16:42:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: .cvsignore, manual.xml:
+
+	Ehm, remove manual.xml which should never have been part of cvs in
+	the firs place.  
+
+Tue May 17 16:37:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	doc/book was nuked.  
+
+Tue May 17 16:36:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/README:
+
+	Move bits from doc/book/README to the doc/README about required
+	tools for building documentation and on how to contribute. Nuke all
+	doc/book files.  
+
+Tue May 17 16:30:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: man/man5/elinks.conf.5, tools/help2doc:
+
+	Don't import stuff from docbook documents. What was I smoking that
+	day? ;) 
+
+Tue May 17 16:16:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, bookmarks.txt, exmode.txt, introduction.txt,
+	mailcap.txt, manual.txt, manual.xml, marks.txt, mime.txt,
+	remote.txt, tabs.txt, terminals.txt, urlshortcuts.txt:
+
+	Move the manual (once again) to asciidoc. Well you might say it is
+	just moved back to its original form. ;) 
+
+Tue May 17 16:09:52 2005  Laurent Monin <zas@norz.org>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	Pass struct term_event_keyboard to parse_keystroke().  
+
+Tue May 17 15:58:27 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: config/dialogs.c, config/kbdbind.c, config/kbdbind.h,
+	lowlevel/timer.c:
+
+	Use struct term_event_keyboard in struct default_kb and struct
+	keybinding.  
+
+Tue May 17 15:21:47 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: event.h, kbd.h:
+
+	Move struct term_event_keyboard to terminal/kbd.h and add a bunch of
+	macros to interact with it.  
+
+Tue May 17 15:02:30 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/event.h:
+
+	Order of fields does not matter anymore.  
+
+Tue May 17 15:01:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: event.h, kbd.c, mouse.h:
+
+	Move struct term_event_mouse to terminal/mouse.h and add a bunch of
+	macros to interact with it.  
+
+Tue May 17 14:26:53 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_mouse_escape_sequence(): use set_mouse_term_event().  
+
+Tue May 17 14:21:02 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_mouse_escape_sequence(): drop commented out code.  
+
+Tue May 17 14:18:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_mouse_escape_sequence(): tidy up.  
+
+Tue May 17 14:15:30 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Revert 1.132->1.134 patches, buggy.  
+
+Tue May 17 13:47:50 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	do_mouse_event(): use set_mouse_term_event().  
+
+Tue May 17 13:42:26 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_mouse_escape_sequence(): use set_mouse_term_event().  
+
+Tue May 17 13:37:53 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_mouse_escape_sequence(): cleanup.  
+
+Tue May 17 13:25:02 2005  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/win32/overrides.c:
+
+	console_mouse_read(): use set_mouse_term_event().  
+
+Tue May 17 13:22:25 2005  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os2/os2.c:
+
+	mouse_thread(): use struct term_event_mouse and
+	set_mouse_term_event().  
+
+Tue May 17 13:15:22 2005  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/unix/unix.c:
+
+	gpm_mouse_in(): use struct term_event_mouse and
+	set_mouse_term_event().  
+
+Tue May 17 12:56:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/timer.c, terminal/event.h, terminal/kbd.c,
+	terminal/terminal.c, terminal/window.c:
+
+	Drop INIT_TERM_EVENT() static initializer for dynamic initialization
+	functions. It is saner to handle struct term_event union.  
+
+Tue May 17 11:36:37 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/timer.c, terminal/kbd.c:
+
+	Use KBD_UNDEF and KBD_MOD_NONE.  
+
+Tue May 17 10:22:49 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: kbd.c, kbd.h:
+
+	Introduce KBD_UNDEF.  
+
+Tue May 17 00:16:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Simplify link-download handling.  
+
+Tue May 17 00:14:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Hmm, try to fix last patch. The idea is to combine the jump to link
+	handling.  
+
+Tue May 17 00:02:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/actions-main.inc, config/kbdbind.h, sched/action.c:
+
+	Introduce ACTION_JUMP_TO_LINK action flag. Simplify things in
+	do_action().  
+
+Mon May 16 23:24:20 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: terminal.c, terminal.h:
+
+	Drop redraw_terminal_ev() and transform redraw_terminal() and
+	redraw_terminal_cls() macros to functions.  
+
+Mon May 16 22:54:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/actions-main.inc, config/kbdbind.h, sched/action.c:
+
+	Introduce ACTION_REQUIRE_VIEW_STATE action flag. Simplify things in
+	do_action().  
+
+Mon May 16 22:45:59 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon May 16 22:34:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.am:
+
+	Add action-*.inc files and --keyword=N__ to xgettext.  
+
 Mon May 16 21:24:19 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: config/actions-edit.inc, config/actions-main.inc,
@@ -167,12 +446,6 @@ Sat May 14 16:33:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 	* doc/: Makefile.am, tools/make-elinks-manpage:
 
 	Simplify the Makefile by implicitly specify the doctype.  
-
-Sat May 14 16:04:32 2005  Jonas Fonseca <fonseca@diku.dk>:
-
-	* doc/book/manpages/: Makefile.am, elinks.1.xml:
-
-	elinks(1) is now maintained in asciidoc script.  
 
 Sat May 14 16:03:20 2005  Jonas Fonseca <fonseca@diku.dk>:
 
@@ -664,8 +937,7 @@ Tue May 10 01:58:03 2005  Russ Rowan <rrowan@dandy.net>:
 
 Tue May 10 00:02:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/: manual.html, manual.txt, book/introduction.xml,
-	man/man1/elinksmanual.1:
+	* doc/: manual.html, manual.txt, man/man1/elinksmanual.1:
 
 	Add information about the LED status indicators.  
 
@@ -717,8 +989,7 @@ Mon May  9 10:42:01 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon May  9 10:40:10 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/: manual.html, manual.txt, book/book.xml,
-	man/man1/elinksmanual.1:
+	* doc/: manual.html, manual.txt, man/man1/elinksmanual.1:
 
 	Remove stuff which is mostly related to the doc/ directory.  
 
@@ -783,13 +1054,6 @@ Thu May  5 23:37:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 	Fix handling of key presses turning up as key prefixes. Debuged and
 	fix proposed by Peder Stray.  
 
-Thu May  5 15:47:46 2005  Jonas Fonseca <fonseca@diku.dk>:
-
-	* doc/book/: introduction.xml, mailcap.xml, mime.xml, tabs.xml,
-	terminals.xml:
-
-	Fix spelling and typos. Patch by Alexey Tourbin.  
-
 Wed May  4 13:19:38 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/Makefile.am:
@@ -812,9 +1076,7 @@ Wed May  4 13:08:46 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed May  4 10:30:42 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/: manual.html, manual.txt, book/.cvsignore, book/book.xml,
-	book/introduction.xml, book/mailcap.xml, book/terminals.xml,
-	book/urlshortcuts.xml, man/man1/elinksmanual.1:
+	* doc/: manual.html, manual.txt, man/man1/elinksmanual.1:
 
 	Fix the artwork.  
 
@@ -824,13 +1086,6 @@ Tue May  3 23:49:37 2005  Jonas Fonseca <fonseca@diku.dk>:
 	tools/help2doc, man/man5/elinkskeys.5:
 
 	Reference the new elinksmanual.1 man page.  
-
-Tue May  3 23:48:15 2005  Jonas Fonseca <fonseca@diku.dk>:
-
-	* doc/book/: Makefile.am, config/.cvsignore, config/.vimrc,
-	config/elinks.conf.xml, config/examples.xml, config/syntax.xml:
-
-	Readd the config/ XML files. Forgot they are used by help2doc.  
 
 Tue May  3 23:31:49 2005  Jonas Fonseca <fonseca@diku.dk>:
 
@@ -857,12 +1112,6 @@ Tue May  3 23:14:37 2005  Jonas Fonseca <fonseca@diku.dk>:
 	* doc/tools/xml2rfc:
 
 	Make the script generate nroff output if the extension is .1.  
-
-Tue May  3 22:39:01 2005  Jonas Fonseca <fonseca@diku.dk>:
-
-	* doc/book/book.xml:
-
-	Do not specify the month. xml2rfc does that automatically.  
 
 Tue May  3 22:33:07 2005  Jonas Fonseca <fonseca@diku.dk>:
 
@@ -937,7 +1186,7 @@ Mon May  2 12:58:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon May  2 12:32:44 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* configure.in, doc/book/manpages/Makefile.am:
+	* configure.in:
 
 	Readd the doc/book dirs + minor makefile fix.  
 
@@ -949,13 +1198,13 @@ Mon May  2 12:16:52 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon May  2 12:15:51 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/: Makefile.am, book/Makefile.am, book/manpages/Makefile.am:
+	* doc/Makefile.am:
 
 	Fixup automake files so the new stuff gets into EXTRA_DIST etc.  
 
 Mon May  2 12:11:07 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/: manual.txt, mime.html, book/book.xml, book/mime.xml:
+	* doc/: manual.txt, mime.html:
 
 	Convert Jose's MIME guide.  
 
@@ -1009,29 +1258,6 @@ Mon May  2 11:26:36 2005  Jonas Fonseca <fonseca@diku.dk>:
 	Add tclsh script for converting the manual. I didn't write it, just
 	working on some modifications to make it spit out txt files in
 	another format.  
-
-Mon May  2 11:24:06 2005  Jonas Fonseca <fonseca@diku.dk>:
-
-	* doc/book/config/: .cvsignore, .vimrc:
-
-	Remove fairies.  
-
-Mon May  2 11:23:00 2005  Jonas Fonseca <fonseca@diku.dk>:
-
-	* doc/book/: book.xml, bookmarks.xml, exmode.xml, introduction.xml,
-	mailcap.xml, marks.xml, remote.xml, tabs.xml, terminals.xml,
-	urlshortcuts.xml:
-
-	Add new style manual XML. Use xml2rfc to convert it.  
-
-Mon May  2 11:21:05 2005  Jonas Fonseca <fonseca@diku.dk>:
-
-	* doc/book/: Makefile.doc, TODO, book.xml, config.ent.in,
-	elinksbook.dtd, config/elinks.conf.xml, config/envvars.xml,
-	config/examples.xml, config/files.xml, config/mime.xml,
-	config/syntax.xml:
-
-	Remove the DocBook stuff. May you rest in peace.  
 
 Mon May  2 07:33:34 2005  Laurent Monin <zas@norz.org>:
 
@@ -23453,8 +23679,7 @@ Sun Aug 15 06:49:08 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Sun Aug 15 05:51:12 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* Unicode/Makefile.am, contrib/Makefile.am, doc/book/Makefile.am,
-	test/Makefile.am:
+	* Unicode/Makefile.am, contrib/Makefile.am, test/Makefile.am:
 
 	Use explicit file lists or more specific globs than just '*' when
 	setting EXTRA_DIST. This should eliminate the erroneous distribution
@@ -48794,7 +49019,6 @@ Sun Jan 18 15:10:29 2004  Petr Baudis <pasky@ucw.cz>:
 	src/terminal/graphics/.vimrc, src/terminal/text/.vimrc,
 	src/util/.vimrc, src/viewer/.vimrc, src/viewer/dump/.vimrc,
 	src/viewer/graphics/.vimrc, doc/.vimrc, src/viewer/text/.vimrc,
-	doc/book/.vimrc, doc/book/config/.vimrc, doc/book/manpages/.vimrc,
 	doc/man/.vimrc, doc/man/man1/.vimrc, doc/man/man5/.vimrc,
 	doc/tools/.vimrc, po/.vimrc:
 

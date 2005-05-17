@@ -1,4 +1,4 @@
-/* $Id: overrides.c,v 1.3 2005/02/05 18:14:29 jonas Exp $ */
+/* $Id: overrides.c,v 1.4 2005/05/17 13:25:02 zas Exp $ */
 
 /* Elinks overrides for Win32 (MSVC + MingW)
  * Loosely based on osdep/beos/overrides.c by Mikulas Patocka.
@@ -119,10 +119,10 @@ console_mouse_read(const MOUSE_EVENT_RECORD *mer, char *buf, int max)
 	if (mer->dwEventFlags || !mer->dwButtonState)  /* not mouse down, or shifts */
 		return 0;
 
-	ev.ev = EVENT_MOUSE;
-	ev.info.mouse.x = 1 + mer->dwMousePosition.X;
-	ev.info.mouse.y = 1 + mer->dwMousePosition.Y;
-	ev.info.mouse.button = B_DOWN;
+	set_mouse_term_event(&ev,
+			     1 + mer->dwMousePosition.X,
+			     1 + mer->dwMousePosition.Y,
+			     B_DOWN);
 
 	len = int_min(max, sizeof(ev));
 	memcpy(buf, &ev, len);

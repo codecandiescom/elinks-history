@@ -5,6 +5,7 @@ html
 elinks.html
 *.man.txt
 *.man.xml
+manual.xml
 perl.html
 pod2htmd.tmp
 pod2htmi.tmp

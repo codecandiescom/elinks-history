@@ -1,7 +1,12 @@
-/* $Id: kbd.h,v 1.8 2005/05/17 10:22:49 zas Exp $ */
+/* $Id: kbd.h,v 1.9 2005/05/17 15:21:47 zas Exp $ */
 
 #ifndef EL__TERMINAL_KBD_H
 #define EL__TERMINAL_KBD_H
+
+struct term_event_keyboard {
+	int key;
+	int modifier;
+};
 
 #define KBD_UNDEF	-1
 
@@ -51,5 +56,17 @@ void resize_terminal(void);
 void dispatch_special(unsigned char *);
 void kbd_ctrl_c(void);
 int is_blocked(void);
+
+#define kbd_get_key(kbd_)	((kbd_)->key)
+#define kbd_key_is(kbd_, key)	(kbd_get_key(kbd_) == (key))
+
+#define kbd_get_modifier(kbd_)	((kbd_)->modifier)
+#define kbd_modifier_is(kbd_, mod)	(kbd_get_modifier(kbd_) == (mod))
+
+#define kbd_set(kbd_, key_, modifier_) do { \
+	(kbd_)->key = (key_);	\
+	(kbd_)->modifier = (modifier_);	\
+} while (0)
+
 
 #endif

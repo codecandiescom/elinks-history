@@ -1,8 +1,9 @@
-/* $Id: event.h,v 1.23 2005/05/17 15:02:30 zas Exp $ */
+/* $Id: event.h,v 1.24 2005/05/17 15:21:47 zas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
 
+#include "terminal/kbd.h"
 #include "terminal/mouse.h"
 
 struct terminal;
@@ -30,9 +31,7 @@ struct term_event {
 		struct term_event_mouse mouse;
 
 		/* EVENT_KBD */
-		struct term_event_keyboard {
-			int key, modifier;
-		} keyboard;
+		struct term_event_keyboard keyboard;
 
 		/* EVENT_INIT, EVENT_RESIZE, EVENT_REDRAW */
 		struct term_event_size {
@@ -54,8 +53,7 @@ set_kbd_term_event(struct term_event *ev, int key, int modifier)
 {
 	memset(ev, 0, sizeof(*ev));
 	ev->ev = EVENT_KBD;
-	ev->info.keyboard.key = key;
-	ev->info.keyboard.modifier = modifier;
+	kbd_set(&ev->info.keyboard, key, modifier);
 }
 
 static inline void
@@ -115,11 +113,12 @@ struct terminal_info {
 void term_send_event(struct terminal *, struct term_event *);
 void in_term(struct terminal *);
 
-#define get_kbd_key(event)		((event)->info.keyboard.key)
-#define check_kbd_key(event, key)	(get_kbd_key(event) == (key))
+/* For keyboard events handling */
+#define get_kbd_key(event)		(kbd_get_key(&(event)->info.keyboard))
+#define check_kbd_key(event, key)	(kbd_key_is(&(event)->info.keyboard, (key)))
 
-#define get_kbd_modifier(event)		((event)->info.keyboard.modifier)
-#define check_kbd_modifier(event, mod)	(get_kbd_modifier(event) == (mod))
+#define get_kbd_modifier(event)		(kbd_get_modifier(&(event)->info.keyboard))
+#define check_kbd_modifier(event, mod)	(kbd_modifier_is(&(event)->info.keyboard, (mod)))
 
 #define check_kbd_textinput_key(event)	(get_kbd_key(event) >= ' ' && get_kbd_key(event) < 256 && check_kbd_modifier(event, KBD_MOD_NONE))
 #define check_kbd_label_key(event)	(get_kbd_key(event) > ' ' && get_kbd_key(event) < 256)
@@ -136,5 +135,5 @@ void in_term(struct terminal *);
 #define check_mouse_position(event, box) \
 	mouse_is_in_box(&(event)->info.mouse, box)
 
-	
+
 #endif /* EL__TERMINAL_EVENT_H */

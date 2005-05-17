@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.54 2005/05/17 18:02:54 jonas Exp $
+## $Id: Makefile.am,v 1.55 2005/05/17 19:22:19 jonas Exp $
 
 SUBDIRS = man
 
@@ -11,6 +11,7 @@ MANUAL_FILES = \
  \
  bookmarks.txt \
  exmode.txt \
+ faq.txt \
  installation.txt \
  introduction.txt \
  lua-scripting.txt \
@@ -28,7 +29,6 @@ EXTRA_DIST = \
  color-model.txt \
  ecmascript.txt \
  events.txt \
- faq.html \
  feedback.txt \
  hacking.txt \
  index.txt \

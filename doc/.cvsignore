@@ -1,8 +1,10 @@
 Makefile
 Makefile.in
-html
+manual
 *.swp
 elinks.html
+elinks.`
+elinkskeys.5
 *.man.txt
 *.man.xml
 manual.xml

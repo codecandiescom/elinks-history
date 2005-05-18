@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.321 2005/05/17 21:50:32 zas Exp $ */
+/* $Id: link.c,v 1.322 2005/05/18 20:15:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1089,14 +1089,14 @@ try_document_key(struct session *ses, struct document_view *doc_view,
 	assert(ses && doc_view && doc_view->document && doc_view->vs && ev);
 	if_assert_failed return FRAME_EVENT_IGNORED;
 
-	if (isasciialpha(get_kbd_key(ev)) && !check_kbd_modifier(ev, KBD_MOD_ALT)) {
+	if (!check_kbd_modifier(ev, KBD_MOD_ALT)) {
 		/* We accept those only in alt-combo. */
 		return FRAME_EVENT_IGNORED;
 	}
 
 	/* Run through all the links and see if one of them is bound to the
 	 * key we test.. */
-	key = toupper(get_kbd_key(ev));
+	key = get_kbd_key(ev);
 
 	for (i = 0; i < doc_view->document->nlinks; i++) {
 		struct link *link = &doc_view->document->links[i];

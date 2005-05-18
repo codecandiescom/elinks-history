@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.536 2005/05/01 22:38:52 jonas Exp $ */
+/* $Id: parser.c,v 1.537 2005/05/18 20:15:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,9 +325,10 @@ html_focusable(unsigned char *a)
 
 	accesskey = get_attr_val(a, "accesskey");
 	if (accesskey) {
-		if (*accesskey) {
-			accesskey[0] = toupper(accesskey[0]);
-			format.accesskey = read_key(accesskey);
+		/* FIXME: support for entities and all Unicode characters.
+		 * For now, we only support simple printable character. */
+		if (accesskey[0] && !accesskey[1] && isprint(accesskey[0])) {
+			format.accesskey = accesskey[0];
 		}
 		mem_free(accesskey);
 	}

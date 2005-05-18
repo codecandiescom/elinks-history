@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.287 2005/05/17 21:55:14 zas Exp $ */
+/* $Id: kbdbind.c,v 1.288 2005/05/18 02:49:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -515,7 +515,7 @@ bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event)
 	else if ((action = read_action(kmap, " *scripting-function*")) < 0)
 		err = gettext("Unrecognised action (internal error)");
 	else
-		add_keybinding(kmap, action, kbd.key, kbd.modifier, event);
+		add_keybinding(kmap, action, &kbd, event);
 
 	return err;
 }

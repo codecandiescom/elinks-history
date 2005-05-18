@@ -1,3 +1,4 @@
+[[ecmascript]]
 ECMAScript support?!
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -122,4 +123,4 @@ easy. We await your patches eagerly.
 
 
 
-$Id: ecmascript.txt,v 1.13 2005/05/18 03:18:39 jonas Exp $
+$Id: ecmascript.txt,v 1.14 2005/05/18 11:01:00 jonas Exp $

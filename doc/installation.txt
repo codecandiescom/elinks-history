@@ -1,9 +1,8 @@
 Getting ELinks up and running
 -----------------------------
 
-Installing ELinks  should be  pretty easy  on most  systems. Below  is
-described  the whole  process of  configuring the  compilation, compiling  and
-installing.
+Installing ELinks should be pretty easy on most systems. Below is described
+the whole process of configuring the compilation, compiling and installing.
 
 Building and Installing ELinks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -13,15 +12,15 @@ ELinks source directory:
 
 	$ ./configure && make && make install
 
-However you might consider to  tweek a few compile  time options before
-building  ELinks. You might also  want to take a  look at what libraries  and
-programs are required or recommended that you install.
+However you might consider to tweek a few compile time options before building
+ELinks. You might also want to take a look at what libraries and programs are
+required or recommended that you install.
 
 Requirements
 ~~~~~~~~~~~~
 
-To succesfully install ELinks all that is required is  GNU make and a C
-compiler. If you want  to install directly from CVS it is also required  that
+To succesfully install ELinks all that is required is GNU make and a C
+compiler. If you want to install directly from CVS it is also required that
 automake and autoconf is installed on your system.
 
 Recommended Libraries and Programs
@@ -50,12 +49,13 @@ xterm with 256 colors	Program atleast patch level  179 or rxvt program    \
 libidn			For internationalized domain names.
 SpiderMonkey		Mozilla's JavaScript engine for getting	
 			JavaScript/ECMAScript support in ELinks.	    \
-			See also doc/ecmascript.txt.
+			See also <<ecmascript,notes on ECMAScript support>>.
 -----------------------------------------------------------------------------
 
-When compiling, you also need the header files for the libraries. Most  OS
-distributors put a given library's headers in a package separate from  the
-library itself; this package usually has -dev or similar appended to its name.
+When compiling, you also need the header files for the libraries. Most OS
+distributors put a given library's headers in a package separate from the
+library itself; this package usually has `-dev` or similar appended to its
+name.
 
 Further reading
 ~~~~~~~~~~~~~~~
@@ -70,4 +70,4 @@ include::ecmascript.txt[]
 
 include::import-features.conf.txt[]
 
-$Id: installation.txt,v 1.5 2005/05/18 03:18:39 jonas Exp $
+$Id: installation.txt,v 1.6 2005/05/18 11:01:00 jonas Exp $

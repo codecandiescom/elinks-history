@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.59 2005/05/18 01:00:39 jonas Exp $
+## $Id: Makefile.am,v 1.60 2005/05/18 01:08:05 jonas Exp $
 
 SUBDIRS = man
 
@@ -106,3 +106,6 @@ manpages: elinks.1
 
 manual: manual.xml Makefile.am
 	xmlto -o manual html $<
+
+manual.html: $(MANUAL_FILES) import-features.conf.txt Makefile.am
+	asciidoc -b css-embedded -d book -n manual.txt

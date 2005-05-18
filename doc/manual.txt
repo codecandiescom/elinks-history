@@ -1,9 +1,6 @@
 The ELinks Manual
 =================
 
-Dedication
-----------
-
 Authors:
 
 - Jonas Fonseca <fonseca@diku.dk>
@@ -29,7 +26,7 @@ relevant information there.
 
 Hold harmless the authors, and any lawful use is allowed.
 
-$Revision: 1.13 $ $Date: 2005/05/17 19:22:19 $
+$Revision: 1.14 $ $Date: 2005/05/18 01:54:20 $
 
 include::installation.txt[]
 

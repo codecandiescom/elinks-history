@@ -69,3 +69,5 @@ include::small.txt[]
 include::ecmascript.txt[]
 
 include::import-features.conf.txt[]
+
+$Id: installation.txt,v 1.5 2005/05/18 03:18:39 jonas Exp $

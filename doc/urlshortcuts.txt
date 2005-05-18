@@ -90,3 +90,5 @@ enabled in order to make use of this, and many users don't have Lua installed.
 Another hidden disadvantage is that the goto-url hook is not triggered all the
 times when the built-in URI rewriting has its say on the URL.  Specifically,
 the goto-url hook isn't triggered when the URL is passed on the command line.
+
+$Id: urlshortcuts.txt,v 1.2 2005/05/18 03:18:39 jonas Exp $

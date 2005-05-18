@@ -82,3 +82,5 @@ example, by running:
 
 new tabs containing `slashdot.org`, `freshmeat.net` and a Google search of elinks
 will be opened.
+
+$Id: remote.txt,v 1.11 2005/05/18 03:18:39 jonas Exp $

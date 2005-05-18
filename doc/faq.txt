@@ -58,8 +58,8 @@ keybinding configuration) use Space to open and close the folders.
 Why are there so many Links flavors?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Please refer to the link:history.html[history page] to read about the
-various flavors and the differences between them.
+Please refer to the link:http://elinks.or.cz/history.html[history page] to
+read about the various flavors and the differences between them.
 
 
 [[which-one]]
@@ -72,9 +72,9 @@ drawbacks include: No HTTP-auth support and no persistent cookies (i.e.  they
 die when all instances of Links are closed).
 
 If you want additional features, including HTTP-auth, persistent cookies, and
-on-the-fly compression, try link:download.html[ELinks].  (Note: links-0.9x and
-ELinks versions > 0.3 do not share executable name or configuration files
-so you can safely run these on the same machine.)
+on-the-fly compression, try ELinks.  (Note: links-0.9x and ELinks versions >
+0.3 do not share executable name or configuration files so you can safely run
+these on the same machine.)
 
 If you want the option of graphics mode, use
 link:http://links.twibright.com[Links2] or
@@ -150,4 +150,4 @@ fields can be added inside the parenthesis in the next versions.  Note that
 users can change their User-Agent through the options system.
 
 
-$Id: faq.txt,v 1.2 2005/05/18 03:18:39 jonas Exp $
+$Id: faq.txt,v 1.3 2005/05/18 22:24:46 jonas Exp $

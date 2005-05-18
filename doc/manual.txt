@@ -1,5 +1,7 @@
 The ELinks Manual
 =================
+:Revision:	$Revision: 1.16 $
+:Date:		$Date: 2005/05/18 03:51:33 $
 
 Authors:
 
@@ -25,8 +27,6 @@ While large parts of it do not apply anymore, you may still find some
 relevant information there.
 
 Hold harmless the authors, and any lawful use is allowed.
-
-$Id: manual.txt,v 1.15 2005/05/18 03:18:39 jonas Exp $
 
 include::installation.txt[]
 

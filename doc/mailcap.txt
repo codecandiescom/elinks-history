@@ -47,7 +47,7 @@ Parameter	Description
 ------------------------------------------------------------------------------
 %n		The integer number of sub-parts in the multipart
 %F		The "content-type filename" repeated for each sub-part
-%{parameter}	The "parameter" value from the content-type field
+%{ parameter}	The "parameter" value from the content-type field
 ------------------------------------------------------------------------------
 
 
@@ -66,7 +66,7 @@ following way:
  - From MAILCAP environment variable.
 
  - If non of the above is defined, the mailcap path defaults to
-   "~/.mailcap:/etc/mailcap".
+   `~/.mailcap:/etc/mailcap`.
 
 
 Fields
@@ -81,11 +81,11 @@ be considered failed and the handler will not be used.
 
 Unfortunately, there are no 'native' support for the copiousoutput field.  The
 field basically mean 'needs pager'. So it is handled by appending a pipe and a
-pager program to the command. The pager program will be read from the PAGER
+pager program to the command. The pager program will be read from the `PAGER`
 environment variable. If this fails, test are made for common pager programs
-(/usr/bin/pager, /usr/bin/less and /usr/bin/more in that order). So if you
+(`/usr/bin/pager`, `/usr/bin/less` and `/usr/bin/more` in that order). So if you
 define png2ascii as your handler for image/png and specify copiousoutput then
-the executed command will be "png2ascii |/usr/bin/less" if less is your pager
+the executed command will be "`png2ascii |/usr/bin/less`" if less is your pager
 or present on your system.
 
 

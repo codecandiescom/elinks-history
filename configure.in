@@ -27,8 +27,36 @@ dnl ===================================================================
 AC_PROG_CC
 AC_PROG_AWK
 AC_PATH_PROGS(AWK, "$AWK")
-AC_PATH_PROGS(TCLSH, "tclsh")
 AC_PROG_RANLIB
+
+EL_ARG_ENABLE(CONFIG_DOC, documentation, [Documentation],
+	      [  --disable-documentation disable documentation building])
+AM_CONDITIONAL(CONFIG_DOC, test "$CONFIG_DOC" = yes)
+
+# Check whether --enable-xbel or --disable-xbel was given.
+if test "x${enable_documentationl}" != xno; then
+	CONFIG_ASCIIDOC="no"
+	CONFIG_XMLTO="no"
+
+	AC_PATH_PROGS(ASCIIDOC, "asciidoc")
+      	if test "x$ASCIIDOC" != "x"; then
+		CONFIG_ASCIIDOC="yes"
+	fi
+
+	AC_PATH_PROGS(XMLTO, "xmlto")
+      	if test "x$XMLTO" != "x"; then
+		CONFIG_XMLTO="yes"
+	fi
+
+	AC_PATH_PROGS(JW, "jw")
+      	if test "x$JW" != "x"; then
+		CONFIG_JW="yes"
+	fi
+
+	AC_SUBST(CONFIG_ASCIIDOC)
+      	AC_SUBST(CONFIG_XMLTO)
+      	AC_SUBST(CONFIG_JW)
+fi
 
 dnl gcc specific options (to be continued at the bottom of configure)
 if test "x$ac_cv_prog_gcc" = "xyes"; then

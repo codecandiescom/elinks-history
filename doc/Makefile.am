@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.61 2005/05/18 17:10:52 jonas Exp $
+## $Id: Makefile.am,v 1.62 2005/05/18 17:49:33 jonas Exp $
 
 SUBDIRS = man
 
@@ -12,7 +12,7 @@ XML_DIR	 = $(DESTDIR)xml
 # and files they are included in.
 TXT_DIR	 = $(top_srcdir)/doc/txt
 
-DOCDIRS	 = \
+DOC_DIRS = \
  $(HTML_DIR) \
  $(MAN_DIR)/man1 \
  $(MAN_DIR)/man5 \
@@ -76,7 +76,7 @@ MAN_DOCS = \
  $(MAN_DIR)/man5/elinkskeys.5
 
 # FIXME: $(HTML_DIR)/elinkskeys.5.html
-HTMLDOCS = \
+HTML_DOCS = \
  $(HTML_DIR)/elinks.1.html \
  $(HTML_DIR)/manual.html-chunked \
  $(HTML_DIR)/manual.html
@@ -84,6 +84,7 @@ HTMLDOCS = \
 PDF_DOCS = \
  $(PDF_DIR)/manual.pdf
 
+install-data-local: install-data-local-@CONFIG_DOC@
 man-docs: doc-dirs $(MAN_DOCS)
 html-docs: doc-dirs $(HTML_DOCS)
 pdf-docs: doc-dirs $(PDF_DOCS)
@@ -93,7 +94,7 @@ all-docs: man-docs html-docs pdf-docs
 #
 
 doc-dirs:
-	$(INSTALL) -d $(DOCDIRS)
+	$(INSTALL) -d $(DOC_DIRS)
 
 # $(MAN_DIR) intentionally left out
 clean-local:
@@ -115,14 +116,14 @@ $(TXT_DIR)/elinkskeys.5.%.txt: $(MAKE_ELINKSKEYS_MANPAGE) doc-dirs $(KBDBIND)
 # Man Pages
 
 $(XML_DIR)/%.man.xml: $(TXT_DIR)/%.man.txt doc-dirs
-	asciidoc -b docbook -d manpage -o $@ $<
+	$(ASCIIDOC) -b docbook -d manpage -o $@ $<
 
 $(MAN_DIR)/man/man1/elinks.1.in: $(XML_DIR)/elinks.1.man.xml doc-dirs
-	xmlto -o $(MAN_DIR)/man1 man $<
+	$(XMLTO) -o $(MAN_DIR)/man1 man $<
 	mv $(MAN_DIR)/man1/elinks.1 $@
 
 $(MAN_DIR)/man/man1/elinkskeys.5: $(XML_DIR)/elinkskeys.5.man.xml doc-dirs
-	xmlto man $<
+	$(XMLTO) man $<
 	sed -e 's/\\fI\\fR'\''/\\fI\\'\''\\fR/' < $@ > $(MAN_ELINKSKEYS)
 
 $(MAN_DIR)/man/man5/elinks.conf.5: doc-dirs $(ELINKS)
@@ -131,18 +132,18 @@ $(MAN_DIR)/man/man5/elinks.conf.5: doc-dirs $(ELINKS)
 # XHTML/CSS Man Pages
 
 $(HTML_DIR)/%.html: $(TXT_DIR)/%.html.txt doc-dirs
-	asciidoc -b css-embedded -d manpage -o $@ $<
+	$(ASCIIDOC) -b css-embedded -d manpage -o $@ $<
 
 # The Manual
 
 $(HTML_DIR)/manual.html: $(MANUAL_FILES) doc-dirs $(TXT_DIR)/import-features.conf.txt
-	asciidoc -b css-embedded -d book -o $@ -n $<
+	$(ASCIIDOC) -b css-embedded -d book -o $@ -n $<
 
 $(XML_DIR)/manual.xml: $(MANUAL_FILES) doc-dirs $(TXT_DIR)/import-features.conf.txt
-	asciidoc -b docbook -d book -o $@ $<
+	$(ASCIIDOC) -b docbook -d book -o $@ $<
 
 $(HTML_DIR)/manual.html-chunked: $(XML_DIR)/manual.xml doc-dirs
-	xmlto -o $@ html $<
+	$(XMLTO) -o $@ html $<
 
 $(PDF_DIR)/manual.pdf: $(XML_DIR)/manual.xml doc-dirs
-	jw -o $(PDF_DIR) -b pdf $<
+	$(JW) -o $(PDF_DIR) -b pdf $<

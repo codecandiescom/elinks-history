@@ -50,38 +50,35 @@ Remote Actions
 The command syntax is case-insensitive. For readability, we use the casing in
 the listing of supported commands.
 
-Mozilla -remote compatible commands:
+.Mozilla `-remote` compatible commands.
+`-------------------------------`----------------------------------------------
+Command				Description
+-------------------------------------------------------------------------------
+ping()				Checks for existence of a remote instance.    \
+				Makes it possible for scripts to query if     \
+				remote controlling is possible.
+openURL()			Prompts for a URL in current tab by opening   \
+				the Goto dialog.
+openURL(URL)			Open the passed URL in current tab.
+openURL(URL, new-tab)		Opens the passed URL in new tab.
+openURL(URL, new-window)	Opens the passed URL in new window.
+xfeDoCommand(openBrowser)	Opens an ELinks instance in a new window.     \
+				This ELinks instance will connect to the      \
+				already running one.
+-------------------------------------------------------------------------------
 
-ping()::
-	Checks for existence of a remote instance. Makes it possible for
-	scripts to query if remote controlling is possible.
+.ELinks extensions.
+`-------------------------------`----------------------------------------------
+Command				Description
+-------------------------------------------------------------------------------
+addBookmark(URL)		Bookmarks the passed URL.
+-------------------------------------------------------------------------------
 
-openURL()::
-	Prompts for a URL in current tab by opening the Goto dialog.
-
-openURL(URL)::
-	Open the passed URL in current tab.
-
-openURL(URL, new-tab)::
-	Opens the passed URL in new tab.
-
-openURL(URL, new-window)::
-	Opens the passed URL in new window.
-
-xfeDoCommand(openBrowser)::
-	Opens an ELinks instance in a new window. This ELinks instance
-	will connect to the already running one.
-
-ELinks extensions:
-
-addBookmark(URL)::
-	Bookmarks the passed URL.
-
--remote can also take a list of URLs without an explicit action, in which case
+`-remote` can also take a list of URLs without an explicit action, in which case
 the URL arguments will be opened in new tabs in the remote instance. For
 example, by running:
 
 	$ elinks -remote slashdot.org fm g:elinks
 
-new tabs containing slashdot.org, freshmeat.net and a Google search of elinks
+new tabs containing `slashdot.org`, `freshmeat.net` and a Google search of elinks
 will be opened.

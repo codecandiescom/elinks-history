@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.45 2005/05/18 04:21:29 miciah Exp $ */
+/* $Id: rewrite.c,v 1.46 2005/05/18 04:54:23 rrowan Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,7 +359,7 @@ goto_url_hook(va_list ap, void *data)
 }
 
 struct event_hook_info uri_rewrite_hooks[] = {
-	{ "goto-url", 1, goto_url_hook },
+	{ "goto-url", -1, goto_url_hook },
 
 	NULL_EVENT_HOOK_INFO
 };

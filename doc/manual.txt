@@ -1,15 +1,7 @@
 The ELinks Manual
 =================
-:Revision:	$Revision: 1.16 $
-:Date:		$Date: 2005/05/18 03:51:33 $
-
-Authors:
-
-- Jonas Fonseca <fonseca@diku.dk>
-- Jose Luis Gonzalez Gonzalez <jlg80@mi.madritel.es>
-- Laurent Monin <zas@norz.org>
-- Miciah Dashiel Butler Masters <miciah@myrealbox.com>
-- Petr Baudis <pasky@ucw.cz>
+:Revision:	$Revision: 1.17 $
+:Date:		$Date: 2005/05/18 10:56:47 $
 
 Preface
 -------
@@ -25,6 +17,17 @@ There was a complete (or from a large part complete) manual for the Links
 
 While large parts of it do not apply anymore, you may still find some
 relevant information there.
+
+Authors:
+
+- Jonas Fonseca <fonseca@diku.dk>
+- Jose Luis Gonzalez Gonzalez <jlg80@mi.madritel.es>
+- Laurent Monin <zas@norz.org>
+- Miciah Dashiel Butler Masters <miciah@myrealbox.com>
+- Petr Baudis <pasky@ucw.cz>
+- Peter Wang
+
+and others.
 
 Hold harmless the authors, and any lawful use is allowed.
 

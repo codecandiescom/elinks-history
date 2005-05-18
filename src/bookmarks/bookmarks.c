@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.165 2005/03/30 10:28:13 zas Exp $ */
+/* $Id: bookmarks.c,v 1.166 2005/05/18 04:20:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,10 +85,10 @@ static enum evhook_status bookmark_change_hook(va_list ap, void *data);
 static enum evhook_status bookmark_write_hook(va_list ap, void *data);
 
 struct event_hook_info bookmark_hooks[] = {
-	{ "bookmark-delete", bookmark_change_hook, NULL },
-	{ "bookmark-move",   bookmark_change_hook, NULL },
-	{ "bookmark-update", bookmark_change_hook, NULL },
-	{ "periodic-saving", bookmark_write_hook,  NULL },
+	{ "bookmark-delete", 0, bookmark_change_hook, NULL },
+	{ "bookmark-move",   0, bookmark_change_hook, NULL },
+	{ "bookmark-update", 0, bookmark_change_hook, NULL },
+	{ "periodic-saving", 0, bookmark_write_hook,  NULL },
 
 	NULL_EVENT_HOOK_INFO,
 };

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.63 2005/05/09 21:47:21 miciah Exp $ */
+/* $Id: hooks.c,v 1.64 2005/05/18 04:20:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,12 +206,12 @@ script_hook_quit(va_list ap, void *data)
 }
 
 struct event_hook_info lua_scripting_hooks[] = {
-	{ "goto-url", script_hook_goto_url, NULL },
-	{ "follow-url", script_hook_follow_url, NULL },
-	{ "pre-format-html", script_hook_pre_format_html, NULL },
-	{ "get-proxy", script_hook_get_proxy, NULL },
-	{ "quit", script_hook_quit, NULL },
-	{ "dialog-lua-console", dialog_lua_console, NULL },
-	{ "free-history", free_lua_console_history, NULL },
+	{ "goto-url", 0, script_hook_goto_url, NULL },
+	{ "follow-url", 0, script_hook_follow_url, NULL },
+	{ "pre-format-html", 0, script_hook_pre_format_html, NULL },
+	{ "get-proxy", 0, script_hook_get_proxy, NULL },
+	{ "quit", 0, script_hook_quit, NULL },
+	{ "dialog-lua-console", 0, dialog_lua_console, NULL },
+	{ "free-history", 0, free_lua_console_history, NULL },
 	NULL_EVENT_HOOK_INFO,
 };

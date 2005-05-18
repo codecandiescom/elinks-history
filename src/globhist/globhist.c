@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.104 2005/04/23 15:58:54 zas Exp $ */
+/* $Id: globhist.c,v 1.105 2005/05/18 04:20:17 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -398,7 +398,7 @@ global_history_write_hook(va_list ap, void *data)
 }
 
 struct event_hook_info global_history_hooks[] = {
-	{ "periodic-saving", global_history_write_hook, NULL },
+	{ "periodic-saving", 0, global_history_write_hook, NULL },
 
 	NULL_EVENT_HOOK_INFO,
 };

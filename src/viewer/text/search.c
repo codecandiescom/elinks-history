@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.350 2005/04/23 13:32:32 zas Exp $ */
+/* $Id: search.c,v 1.351 2005/05/18 04:20:18 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1630,7 +1630,7 @@ search_history_write_hook(va_list ap, void *data)
 }
 
 static struct event_hook_info search_history_hooks[] = {
-	{ "periodic-saving", search_history_write_hook, NULL },
+	{ "periodic-saving", 0, search_history_write_hook, NULL },
 
 	NULL_EVENT_HOOK_INFO,
 };

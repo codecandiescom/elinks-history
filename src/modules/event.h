@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.13 2005/03/05 21:28:52 zas Exp $ */
+/* $Id: event.h,v 1.14 2005/05/18 04:20:17 miciah Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -74,11 +74,12 @@ void unregister_event_hook(int id, event_hook_T callback);
 
 struct event_hook_info {
 	unsigned char *name;
+	int priority;
 	event_hook_T callback;
 	void *data;
 };
 
-#define NULL_EVENT_HOOK_INFO { NULL, NULL, NULL }
+#define NULL_EVENT_HOOK_INFO { NULL, 0, NULL, NULL }
 
 void register_event_hooks(struct event_hook_info *hooks);
 void unregister_event_hooks(struct event_hook_info *hooks);

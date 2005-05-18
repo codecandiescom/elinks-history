@@ -1,3 +1,218 @@
+Wed May 18 20:35:48 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: document/document.h, document/html/parser.c,
+	document/html/parser.h, ecmascript/spidermonkey.c,
+	viewer/text/link.c:
+
+	Store accesskey in an unicode_val_T instead of a long, and introduce
+	a macro named accesskey_string_to_unicode() to convert the attribute
+	value.  
+
+Wed May 18 20:24:29 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	The manual has moved.  Updating the URL.  
+
+Wed May 18 20:15:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, viewer/text/link.c:
+
+	Let accesskey be case-sensitive and not only a-z, but any character
+	including digits and punctuations. A note about missing support for
+	entities and Unicode was added. Incorrect use of read_key() was
+	dropped.  
+
+Wed May 18 19:59:07 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* doc/tabs.txt:
+
+	Minor grammatical and readability corrections.  
+
+Wed May 18 19:48:01 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* doc/terminals.txt:
+
+	Minor grammatical and readability corrections.  
+
+Wed May 18 19:46:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, doc/Makefile.am:
+
+	Fix the doc build rules and configuration.  
+
+Wed May 18 19:22:26 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* doc/urlshortcuts.txt:
+
+	Several grammatical improvements, minor rewrites, subtractions, and
+	additions.  
+
+Wed May 18 18:55:14 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* doc/manual.txt:
+
+	A few minor grammatical and readability improvements.  
+
+Wed May 18 17:49:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, doc/Makefile.am:
+
+	Check for doc tools: asciidoc, xmlto, ja.  
+
+Wed May 18 17:48:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Shorten a line.  
+
+Wed May 18 17:10:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: .cvsignore, Makefile.am, installation.txt:
+
+	Rewrite the Makefile: 
+	 - It now puts output files in separate directories depending on its 
+	   the document type.  
+	 - Use all-docs, pdf-docs, html-docs, man-docs to build all
+	   documentation available in the desired document type.  
+	 - Update .cvsignore and includers of generated .txt files.  
+
+Wed May 18 11:09:49 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: ecmascript.txt, installation.txt, introduction.txt,
+	small.txt:
+
+	Various asciidoc markup improvements.  
+
+Wed May 18 11:01:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: ecmascript.txt, installation.txt:
+
+	s/  / / (from the HTML2txt conversion. Reference the ecmascript file
+	using an anchor.  
+
+Wed May 18 10:56:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: lua-scripting.txt, manual.txt:
+
+	Move Peter Wang up as author.  
+
+Wed May 18 04:54:23 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Priority 1 to -1.  
+
+Wed May 18 04:21:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Change the priority of the event hook for the built-in URI-rewriting 
+	to give scripts a go at it first.  
+
+Wed May 18 04:20:17 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bookmarks/bookmarks.c, config/urlhist.c,
+	globhist/globhist.c, protocol/rewrite/rewrite.c, sched/event.c,
+	sched/event.h, scripting/guile/hooks.c, scripting/lua/hooks.c,
+	scripting/perl/hooks.c, scripting/ruby/hooks.c,
+	viewer/text/search.c:
+
+	Add hook priority to struct event_hook_info.  
+
+Wed May 18 03:56:09 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added two new prefixes.  help, which displays the faq, and manual,
+	which will display the ELinks manual.  
+
+Wed May 18 03:51:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/manual.txt:
+
+	Set the Revision and Date document attributes.  
+
+Wed May 18 03:18:39 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: bookmarks.txt, ecmascript.txt, exmode.txt, faq.txt,
+	installation.txt, introduction.txt, lua-scripting.txt, mailcap.txt,
+	manual.txt, marks.txt, mime.txt, remote.txt, tabs.txt,
+	terminals.txt, urlshortcuts.txt:
+
+	Add cvs Id tags. Fix some asciidoc markups.  
+
+Wed May 18 02:49:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Compile fix in bind_key_to_event().  
+
+Wed May 18 02:47:52 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/elinks.fortune:
+
+	Mmmmm.  PDF docs.  *drool* 
+
+Wed May 18 02:40:54 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/: Makefile.am, elinksmanual.1:
+
+	Remove the manual manpage.  
+
+Wed May 18 01:54:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/manual.txt:
+
+	Drop the fake Dedication section.  
+
+Wed May 18 01:08:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Add manual.html build rule. It only uses asciidoc and looks quite
+	good.  
+
+Wed May 18 01:01:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/manual.html:
+
+	Remove manual.html. The generated ones should just be in the web
+	module maybe with binary flag. *cough* 
+
+Wed May 18 01:00:39 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: .cvsignore, Makefile.am:
+
+	Remove manual.html. The generated ones should just be in the web
+	module maybe with binary flag. Fix order of .cvsignore.  
+
+Wed May 18 00:55:27 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/remote.txt:
+
+	Put -remote commands into tables. Gives a denser rendering.  
+
+Wed May 18 00:45:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: terminals.txt, tools/import-features.conf:
+
+	Fix config labels to make pdf building work
+	(s/CONFIG_FOO/CONFIG-FOO/).  
+
+Wed May 18 00:44:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/mailcap.txt:
+
+	Various markup fixes.  
+
+Wed May 18 00:00:03 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: .cvsignore, Makefile.am, installation.txt,
+	tools/import-features.conf:
+
+	Include feature information from ../features.conf 
+
 Tue May 17 21:55:14 2005  Laurent Monin <zas@norz.org>:
 
 	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:

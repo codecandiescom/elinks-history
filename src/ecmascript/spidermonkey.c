@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.209 2005/05/17 21:50:32 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.210 2005/05/18 20:35:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -671,7 +671,7 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_INPUT_ACCESSKEY:
 		if (link)
-			link->accesskey = read_key(jsval_to_string(ctx, vp));
+			link->accesskey = accesskey_string_to_unicode(jsval_to_string(ctx, vp));
 		break;
 	case JSP_INPUT_ALT:
 		mem_free_set(&fc->alt, stracpy(jsval_to_string(ctx, vp)));

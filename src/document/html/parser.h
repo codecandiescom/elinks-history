@@ -1,9 +1,9 @@
-/* $Id: parser.h,v 1.79 2005/04/27 17:55:06 jonas Exp $ */
+/* $Id: parser.h,v 1.80 2005/05/18 20:35:48 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
 
-
+#include "intl/charsets.h" /* unicode_val_T */
 #include "util/align.h"
 #include "util/color.h"
 #include "util/lists.h"
@@ -59,7 +59,7 @@ struct text_attrib {
 	unsigned char *select;
 	int select_disabled;
 	unsigned int tabindex;
-	long accesskey;
+	unicode_val_T accesskey;
 
 	unsigned char *onclick;
 	unsigned char *ondblclick;

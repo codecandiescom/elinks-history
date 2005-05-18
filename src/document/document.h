@@ -1,9 +1,10 @@
-/* $Id: document.h,v 1.84 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: document.h,v 1.85 2005/05/18 20:35:48 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
 
 #include "document/options.h"
+#include "intl/charsets.h" /* unicode_val_T */
 #include "protocol/uri.h"
 #include "util/color.h"
 #include "util/lists.h"
@@ -74,7 +75,7 @@ struct script_event_hook {
 };
 
 struct link {
-	long accesskey;
+	unicode_val_T accesskey;
 
 	enum link_type type;
 
@@ -216,5 +217,9 @@ long formatted_info(int);
 void shrink_format_cache(int);
 
 extern struct module document_module;
+
+/* FIXME: support for entities and all Unicode characters.
+ * For now, we only support simple printable character. */
+#define accesskey_string_to_unicode(s) (((s)[0] && !(s)[1] && isprint((s)[0])) ? (s)[0] : 0)
 
 #endif

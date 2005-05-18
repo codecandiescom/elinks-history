@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.87 2005/05/15 01:11:19 rrowan Exp $
+# $Id: hooks.pl,v 1.88 2005/05/18 03:56:09 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -805,7 +805,7 @@ sub goto_url_hook
 	}
 
 	# There's no place like home
-	if ($url =~ '^(el(|inks)|b(ug(|s)|z)(| .*)|doc(|umentation|s)|faq)$')
+	if ($url =~ '^(el(|inks)|b(ug(|s)|z)(| .*)|doc(|umentation|s)|faq|help|manual)$')
 	{
 		my ($bug) = $url =~ /^.* (.*)/;
 		if ($url =~ '^b')
@@ -834,7 +834,8 @@ sub goto_url_hook
 		{
 			my $doc = '';
 			$doc = '/documentation' if $url =~ '^doc';
-			$doc = '/faq.html' if $url =~ '^faq$';
+			$doc = '/faq.html' if $url =~ '^(faq|help)$';
+			$doc = '/documentation/manual.html' if $url =~ '^manual$';
 			return 'http://elinks.or.cz' . $doc;
 		}
 	}

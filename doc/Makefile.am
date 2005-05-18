@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.58 2005/05/18 00:00:03 jonas Exp $
+## $Id: Makefile.am,v 1.59 2005/05/18 01:00:39 jonas Exp $
 
 SUBDIRS = man
 
@@ -33,8 +33,6 @@ EXTRA_DIST = \
  feedback.txt \
  hacking.txt \
  index.txt \
- manual.txt \
- manual.html \
  perl.pod \
  tools/help2doc \
  tools/make-elinks-manpage \

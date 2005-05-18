@@ -1,14 +1,9 @@
-*.man.txt
-*.man.xml
 *.swp
 Makefile
 Makefile.in
-elinks.html
-elinkskeys.5
-elinkskeys.html
-import-features.conf.txt
-manual
-manual.*
+html
 perl.html
 pod2htmd.tmp
 pod2htmi.tmp
+txt
+xml

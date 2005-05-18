@@ -41,7 +41,7 @@ already mentioned, it also turns on certain features which try to compensate
 for ``missing'' terminal capabilities when drawing. Special highlighting of
 underlined text if underlining is not supported is one such thing.
 
-`-----------------------------------------------------------------------------
+`-----------------------`-----------------------------------------------------
 Type			Notes
 ------------------------------------------------------------------------------
 No frames		Dumb terminal type / ASCII art
@@ -60,7 +60,7 @@ Color mode
 The color mode controls what colors are used and how they are output to the
 terminal. The available color modes are:
 
-`-----------------------------------------------------------------------------
+`-----------------------`-----------------------------------------------------
 Mode			Color codes
 ------------------------------------------------------------------------------
 Mono mode		Only 2 colors are used

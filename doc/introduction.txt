@@ -3,12 +3,12 @@ Introduction to the World of ELinks
 
 The goal of this introduction is to explain the basic concepts in ELinks,
 give an overview of how to get started and serve as an entry point to many
-of the (undocumented) features of ELinks.  It won't tell you all the
+of the (undocumented) features of ELinks. It won't tell you all the
 details, but should hopefully give you an idea of how things work and make
 it possible for you to even figure out how to go further.
 
 Although ELinks is text-based, the user interface has many of interaction
-methods normally found in graphical environments.  There are menus, dialogs
+methods normally found in graphical environments. There are menus, dialogs
 with buttons and hierarchic list boxes with folders. Care has been taken to
 make the interaction between various dialogs consistent, so the controls
 will quickly become familiar to new users.
@@ -42,8 +42,8 @@ for you. The basic browsing possibilities are presented below.
 
 ELinks is highly configurable, so if there is something that you would like
 to change, it is most likely possible. The best overview of the many options
-are given in the elinks.conf(5) man page.  Keybindings are discussed in the
-elinkskeys(5) man page.  It is not always up-to-date, so you should also
+are given in the `elinks.conf(5)` man page.  Keybindings are discussed in the
+`elinkskeys(5)` man page.  It is not always up-to-date, so you should also
 check the keybinding manager and the overview of all the configured
 keybindings given in the Help -> Keys dialog. The Keys dialogs serves as a
 good introduction to the most common keybindings.
@@ -56,17 +56,17 @@ Documents bigger than can be displayed with the current screen size are
 divided into subpages. In this case the current document position is
 indicated in the far right of the title bar as a suffix to the actual
 document title.  The syntax is: ( current-subpage / total-subpages ), an
-example is "(4/9)" that indicates the 4th subpage of 9 subpages.
+example is `(4/9)` that indicates the 4th subpage of 9 subpages.
 
 The tab bar by default is only visible when 2 or more tabs are open. It is
 divided into slots containing the trimmed title of the tabs' loaded
-document.  Between each tab is a separator. The current tab is highlighted
+document. Between each tab is a separator. The current tab is highlighted
 and all tabs that has not been viewed after being loaded are highlighted as
-fresh.  Tabs are explained in details in the tabs.txt file.
+fresh. Tabs are explained in details in the tabs.txt file.
 
 The status bar has multiple purposes. Most of the time it will contain the
 URI (and title) of the currently selected link. If a link is followed,
-connection information is shown in the status bar.  When using cursor
+connection information is shown in the status bar. When using cursor
 routing, the status bar will show the coordinates of the cursor when a link
 is not followed.
 
@@ -112,8 +112,8 @@ and buttons at the bottom. Below, a view of the cookie manager is shown.
 	|   [ Info ]  [ Add ]  [ Edit ]  [ Delete ]  [ Save ]  [ Close ]   |
 	+------------------------------------------------------------------+
 
-Each item is either a folder or a leaf. A folder is displayed with a "[-]"
-or "[+]" before the name telling whether the folder is currently open or
+Each item is either a folder or a leaf. A folder is displayed with a `[-]`
+or `[+]` before the name telling whether the folder is currently open or
 closed. Nested items are displayed indented compared to the folder they are
 nested in. In the cookie manager example above "bjork.com" is a folder and
 "PREF" is a leaf.
@@ -125,9 +125,9 @@ the action.  Marked items are displayed with an asterisk ('*') prefixing the
 name.
 
 The buttons make it possible to perform actions either on selected or marked
-items or on all items in the manager. Buttons named "Clear" and "Save" are
-performed on all items; "Clear" will delete all items and "Save" will update
-the runtime state file associated with the manager in the ~/.elinks/
+items or on all items in the manager. Buttons named 'Clear' and 'Save' are
+performed on all items; 'Clear' will delete all items and 'Save' will update
+the runtime state file associated with the manager in the `~/.elinks/`
 directory.  Most buttons presses will query you before completing the
 action.
 
@@ -150,7 +150,7 @@ Enter		Press the currently selected button.
 Esc		Close the manager dialog.
 ------------------------------------------------------------------------------
 
-Some managers also supports searching, either by pressing the "[ Search ]"
+Some managers also supports searching, either by pressing the 'Search'
 button or by pressing '/'. By searching the empty string, all hidden items
 from the previous search will be shown again.
 
@@ -163,7 +163,7 @@ displaying an overview of the current browsing state, ie.  whether you are
 currently talking through a SSL-secured connection, what is the current
 input mode (normal or insert), JavaScript errors etc. 
 
-An example display may look like: ``[SIJP--]''. Each position in the LED
+An example display may look like: `[SIJP--]`. Each position in the LED
 display is associated with the following state:
 
 `--------------`--------------------------------------------------------------
@@ -178,7 +178,7 @@ Symbol		Description
 -		Unused.
 ------------------------------------------------------------------------------
 
-'-' generally indicates that the LED is off.
+`-` generally indicates that the LED is off.
 
 The above information is also available in the LED dialog available by
 either clicking on the LED display or via the Help menu.
@@ -198,7 +198,7 @@ Page-Oriented Navigation
 This involves scrolling documents horizontally and vertically.  Documents
 can be scrolled page-wise, where the next or previous subpage will be
 displayed. It is also possible to scroll documents in steps, either
-line-wise (vertically) or column-wise (horizontally).  The step size can be
+line-wise (vertically) or column-wise (horizontally). The step size can be
 configured and by default is 2 lines and 8 columns. Alternatively, whole
 documents can be scrolled to the start or the end.
 
@@ -225,7 +225,7 @@ left/right/up/down.
 
 In order to navigate using link numbers, you have to first toggle link
 numbering on; this will prefix all links with a number using the notation
-[number]. "[23]" indicates link number 23. When link numbering is enabled,
+[number]. `[23]` indicates link number 23. When link numbering is enabled,
 pressing any number key will pop up a "Go to link"-dialog where the complete
 link number can be entered. By pressing Enter the entered link number will
 be focused, but only if it is a valid link number.
@@ -271,32 +271,32 @@ Forms
 The status bar will indicate the type and name of the field.
 
 Input text/Password fields::
-	These will be displayed as "________".
-	Note that passwords will be obscured using "*" characters.
+	These will be displayed as `________`.
+	Note that passwords will be obscured using `*` characters.
 	Status bar will display something like "Text field, name q",
 	or "Password field, name password" for password fields.
 
 Textarea boxes::
-	These will be displayed as multiple lines consisting of "_".
+	These will be displayed as multiple lines consisting of `_`.
 	Status bar will display something like "Text area, name comment"
 
 Buttons::
-	These will be displayed as "[ Go ]".
+	These will be displayed as `[ Go ]`.
 	Status bar will display something like "Submit form to ...",
 	"Post form to ..." for submit buttons.
 
 Checkboxes::
-	These will be displayed as "[ ]" or "[X]".
+	These will be displayed as `[ ]` or `[X]`.
 	Status bar will display something like "Checkbox, name c, value 1".
 	To set one just press ENTER on it.
 
 Radio buttons::
-	These will be displayed as "( )" or "(X)".
+	These will be displayed as `( )` or `(X)`.
 	Status bar will display something like "Radio button, name radio1".
 	To set one, you may use ENTER.
 
 Select lists::
-	These will be displayed as "[first item____]".
+	These will be displayed as `[first item____]`.
 	Note that if multiple attribute is used, these are displayed as a
 	group of checkboxes instead.
 	Status bar will display something like "Select field, name list"
@@ -361,4 +361,4 @@ everything is marked TODO!
 - Menu searching.
 
 
-$Id: introduction.txt,v 1.22 2005/05/18 03:18:39 jonas Exp $
+$Id: introduction.txt,v 1.23 2005/05/18 11:09:49 jonas Exp $

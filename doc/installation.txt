@@ -39,7 +39,7 @@ Lua or Guile		Makes it possible to write scripting plugins.	    \
 GNU zip			For handling compressed documents both locally and  \
 			sent from server.
 bzip2			For handling local compressed documents.
-OpenSSL or GNU TLS	For handling secure http browsing.
+OpenSSL or GNU TLS	For handling secure HTTP browsing.
 GPM			'General Purpose Mouse' for mouse support.
 expat			'XML Parser Toolkit' needed for XBEL support.
 smbclient		Program needed for smb:// protocol support.
@@ -70,4 +70,4 @@ include::ecmascript.txt[]
 
 include::import-features.conf.txt[]
 
-$Id: installation.txt,v 1.6 2005/05/18 11:01:00 jonas Exp $
+$Id: installation.txt,v 1.7 2005/05/18 11:09:49 jonas Exp $

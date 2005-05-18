@@ -16,15 +16,15 @@ Use compilers flags to optimize for size:
 
 	$ export CFLAGS='-s -fno-inline -nostdinc -fomit-frame-pointer'
 
-Note that if you don't use dietlibc, you definitively want to add -Os or -O2
-to CFLAGS; GCC 2.95 does not know -Os, and some say -O2 gives smaller
-executables even for GCC 3.x.
+Note that if you don't use dietlibc, you definitively want to add `-Os` or
+`-O2` to `CFLAGS`; GCC 2.95 does not know `-Os`, and some say `-O2` gives
+smaller executables even for GCC 3.x.
 
 [NOTE]
 .Warning
 ===============================================================================
-If you use these CFLAGS on Cygwin and you get unresolved symbols (htons and
-suite in particular), try removing -fno-inline parameter.
+If you use these `CFLAGS` on Cygwin and you get unresolved symbols (`htons` and
+suite in particular), try removing `-fno-inline` parameter.
 ===============================================================================
 
 Disable some compile-time options:
@@ -41,7 +41,7 @@ You can disable bookmarks, globhist and more, too, if you want to.
 ===============================================================================
  - --disable-backtrace disables internal backtrace code.
  - --disable-nls disables i18n support.
- - --enable-fastmem disables internal malloc() debugging and use alloca()
+ - --enable-fastmem disables internal `malloc()` debugging and use `alloca()`
    wherever possible.
  - --enable-small forces to remove some text descriptions in options and
    keybind stuff (regain 30Kb).
@@ -66,7 +66,8 @@ Option			Description
 It seems GCC 2.95.x do not generate as small binaries as GCC 3.2.x with same
 flags.
 
-You can use an executable compressor like UPX link:http://upx.sourceforge.net/[].
+You can use an executable compressor like UPX
+link:http://upx.sourceforge.net/[].
 
 Here are some results using gcc 2.95.3, dietlibc-0.23, and previous flags:
 
@@ -79,7 +80,7 @@ Here are some results using gcc 2.95.3, dietlibc-0.23, and previous flags:
 Whow ! Around 200kb :)
 
 [NOTE]
-.Details about the --enable-small configure option effects:
+.Details about the `--enable-small` configure option effects:
 ==============================================================================
 - it disables long descriptions of options;
 - it disables textual descriptions of keybinding options;
@@ -88,4 +89,4 @@ Whow ! Around 200kb :)
   memory usage, and a bit the executable size.
 ==============================================================================
 
-$Id: small.txt,v 1.16 2005/05/17 19:49:46 jonas Exp $
+$Id: small.txt,v 1.17 2005/05/18 11:09:49 jonas Exp $

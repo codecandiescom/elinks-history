@@ -1,22 +1,22 @@
 The ELinks Manual
 =================
-:Revision:	$Revision: 1.17 $
-:Date:		$Date: 2005/05/18 10:56:47 $
+:Revision:	$Revision: 1.18 $
+:Date:		$Date: 2005/05/18 18:55:14 $
 
 Preface
 -------
 
-Welcome! This is the entry point for the current humble ELinks manual.  It
-is by no way complete, it is not even very homogeneous and it should be
-eventually superseded by a complete ELinks Book.
+Welcome!  This is the entry point for the humble ELinks manual.  It is by no
+means complete, it is not even very homogeneous and it should eventually be
+superseded by a complete ELinks Book.
 
-There was a complete (or from a large part complete) manual for the Links
-0.82 once, you can still find it at:
+There was a complete (or, for the most part complete) manual for Links 0.82 at
+one time, and you can still find it at:
 
 	http://links.sourceforge.net/docs/manual-0.82-en/index.html
 
-While large parts of it do not apply anymore, you may still find some
-relevant information there.
+While large parts of it do not apply anymore, you may still find some relevant
+information there.
 
 Authors:
 
@@ -29,7 +29,7 @@ Authors:
 
 and others.
 
-Hold harmless the authors, and any lawful use is allowed.
+Hold blameless the authors.  Any lawful use is allowed.
 
 include::installation.txt[]
 

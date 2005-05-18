@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.62 2005/05/18 17:49:33 jonas Exp $
+## $Id: Makefile.am,v 1.63 2005/05/18 19:46:15 jonas Exp $
 
 SUBDIRS = man
 
@@ -69,25 +69,57 @@ IMPORT_FEATURES_CONF	= $(top_srcdir)/doc/tools/import-features.conf
 MAKE_ELINKS_MANPAGE	= $(top_srcdir)/doc/tools/make-elinks-manpage
 MAKE_ELINKSKEYS_MANPAGE	= $(top_srcdir)/doc/tools/make-elinkskeys-manpage
 
-# FIXME: $(MAN_ELINKSKEYS)
-MAN_DOCS = \
+if CONFIG_ASCIIDOC
+# FIXME: $(HTML_DIR)/elinkskeys.5.html
+HTML_DOCS_WITH_ASCIIDOC = \
+ $(HTML_DIR)/elinks.1.html \
+ $(HTML_DIR)/manual.html
+endif
+
+
+# Only jw is used for generating PDF.
+if CONFIG_XMLTO
+HTML_DOCS_WITH_XMLTO = \
+ $(HTML_DIR)/manual.html-chunked
+
+MAN_DOCS_WITH_XMLTO = \
  $(MAN_DIR)/man1/elinks.1.in \
- $(MAN_DIR)/man5/elinks.conf.5 \
  $(MAN_DIR)/man5/elinkskeys.5
 
-# FIXME: $(HTML_DIR)/elinkskeys.5.html
+endif
+# Only jw is used for generating PDF.
+if CONFIG_JW
+PDF_DOCS_WITH_JW = \
+ $(PDF_DIR)/manual.pdf
+endif
+
+MAN_DOCS = \
+ $(MAN_DIR)/man5/elinks.conf.5 \
+ $(MAN_DOCS_WITH_ASCIIDOC)
+
 HTML_DOCS = \
- $(HTML_DIR)/elinks.1.html \
- $(HTML_DIR)/manual.html-chunked \
- $(HTML_DIR)/manual.html
+ $(HTML_DOCS_WITH_ASCIIDOC) \
+ $(HTML_DOCS_WITH_JW)
 
 PDF_DOCS = \
- $(PDF_DIR)/manual.pdf
+ $(PDF_DOCS_WITH_JW)
 
-install-data-local: install-data-local-@CONFIG_DOC@
-man-docs: doc-dirs $(MAN_DOCS)
-html-docs: doc-dirs $(HTML_DOCS)
-pdf-docs: doc-dirs $(PDF_DOCS)
+html-asciidoc-yes: $(HTML_DOCS_WITH_ASCIIDOC)
+html-asciidoc-no:
+
+html-xmlto-yes: $(HTML_DOCS_WITH_XMLTO)
+html-xmlto-no:
+
+man-xmlto-yes: $(MAN_DOCS_WITH_XMLTO)
+man-xmlto-no:
+
+pdf-jw-yes: $(PDF_DOCS_WITH_JW)
+pdf-jw-no:
+
+man-docs: doc-dirs man-xmlto-@CONFIG_XMLTO@
+html-docs: doc-dirs html-asciidoc-@CONFIG_ASCIIDOC@ html-xmlto-@CONFIG_XMLTO@
+pdf-docs: doc-dirs pdf-jw-@CONFIG_JW@
+
 all-docs: man-docs html-docs pdf-docs
 
 ### Build Rules

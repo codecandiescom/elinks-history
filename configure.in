@@ -37,6 +37,7 @@ AM_CONDITIONAL(CONFIG_DOC, test "$CONFIG_DOC" = yes)
 if test "x${enable_documentationl}" != xno; then
 	CONFIG_ASCIIDOC="no"
 	CONFIG_XMLTO="no"
+	CONFIG_JW="no"
 
 	AC_PATH_PROGS(ASCIIDOC, "asciidoc")
       	if test "x$ASCIIDOC" != "x"; then
@@ -53,9 +54,13 @@ if test "x${enable_documentationl}" != xno; then
 		CONFIG_JW="yes"
 	fi
 
+	AM_CONDITIONAL(CONFIG_ASCIIDOC, test "$CONFIG_ASCIIDOC" = yes)
+	AM_CONDITIONAL(CONFIG_XMLTO, test "$CONFIG_XMLTO" = yes)
+	AM_CONDITIONAL(CONFIG_JW, test "$CONFIG_JW" = yes)
+
 	AC_SUBST(CONFIG_ASCIIDOC)
-      	AC_SUBST(CONFIG_XMLTO)
-      	AC_SUBST(CONFIG_JW)
+	AC_SUBST(CONFIG_XMLTO)
+	AC_SUBST(CONFIG_JW)
 fi
 
 dnl gcc specific options (to be continued at the bottom of configure)

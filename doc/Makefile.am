@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.57 2005/05/17 19:49:46 jonas Exp $
+## $Id: Makefile.am,v 1.58 2005/05/18 00:00:03 jonas Exp $
 
 SUBDIRS = man
 
@@ -44,13 +44,19 @@ CLEANFILES = \
  *.man.txt \
  *.html.txt\
  elinks.html \
+ elinkskeys.html \
+ import-features.conf.* \
  manual.xml
 
 ELINKS			= $(top_builddir)/src/elinks
 KBDBIND			= $(top_srcdir)/src/config/kbdbind.c
+FEATURES_CONF		= $(top_srcdir)/features.conf
+
 HELP2DOC		= $(top_srcdir)/doc/tools/help2doc
+IMPORT_FEATURES_CONF	= $(top_srcdir)/doc/tools/import-features.conf
 MAKE_ELINKS_MANPAGE	= $(top_srcdir)/doc/tools/make-elinks-manpage
 MAKE_ELINKSKEYS_MANPAGE	= $(top_srcdir)/doc/tools/make-elinkskeys-manpage
+
 MAN_ELINKS_CONF		= $(top_srcdir)/doc/man/man5/elinks.conf.5
 MAN_ELINKSKEYS		= $(top_srcdir)/doc/man/man5/elinkskeys.5
 MAN_ELINKS		= $(top_srcdir)/doc/man/man1/elinks.1.in
@@ -61,8 +67,11 @@ MAN_ELINKS		= $(top_srcdir)/doc/man/man1/elinks.1.in
 %.html: %.html.txt
 	asciidoc -b css-embedded -d manpage -o $@ $<
 
-manual.xml: $(MANUAL_FILES)
+manual.xml: $(MANUAL_FILES) import-features.conf.txt
 	asciidoc -b docbook -d book -o $@ $<
+
+import-features.conf.txt: $(FEATURES_CONF) $(IMPORT_FEATURES_CONF)
+	$(IMPORT_FEATURES_CONF) > $@
 
 %.1: %.man.xml
 	xmlto man $<

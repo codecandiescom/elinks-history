@@ -3,8 +3,9 @@ Makefile.in
 manual
 *.swp
 elinks.html
-elinks.`
+elinkskeys.html
 elinkskeys.5
+import-features.conf.txt
 *.man.txt
 *.man.xml
 manual.xml

@@ -67,3 +67,5 @@ up to date info on building and installing.
 include::small.txt[]
 
 include::ecmascript.txt[]
+
+include::import-features.conf.txt[]

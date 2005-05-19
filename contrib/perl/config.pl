@@ -1,12 +1,11 @@
 # Configuration file for hooks.pl - salt to taste and place in ~/.elinks
-# $Id: config.pl,v 1.3 2005/03/30 20:25:11 rrowan Exp $
+# $Id: config.pl,v 1.4 2005/05/19 01:16:57 rrowan Exp $
 
 bork:       nah                   # BORKify Google?
 collapse:   nope                  # Collapse all XBEL bookmark folders on exit?
 email:                            # Set to show one's own bugs with the "bug" prefix.
 fortune:    elinks                # *fortune*, *elinks* tip, or *none* on quit?
 googlebeta: hell no               # I miss DejaNews...
-gotosearch: not yet               # Don't use this yet.  It's broken.
 ipv6:       no                    # IPV4 or 6 address blocks with "ip" prefix?
 language:   english               # "bf nl en" still works, but now "bf nl" does too
 news:       bbc                   # Agency to use for "news" and "n" prefixes

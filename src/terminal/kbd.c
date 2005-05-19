@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.140 2005/05/19 09:17:31 zas Exp $ */
+/* $Id: kbd.c,v 1.141 2005/05/19 09:30:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -872,8 +872,7 @@ set_kbd_event(struct term_event *ev, int key, int modifier)
 		}
 	}
 
-	ev->info.keyboard.key = key;
-	ev->info.keyboard.modifier = modifier;
+	set_kbd_term_event(ev, key, modifier);
 }
 
 /* I feeeeeel the neeeed ... to rewrite this ... --pasky */
@@ -923,7 +922,7 @@ process_queue(struct itrm *itrm)
 					el = 1;
 				}
 
-				set_kbd_event(&ev, KBD_ESC, 0);
+				set_kbd_event(&ev, KBD_ESC, KBD_MOD_NONE);
 
 			} else {
 				set_kbd_event(&ev, itrm->kqueue[1], KBD_MOD_ALT);
@@ -931,17 +930,12 @@ process_queue(struct itrm *itrm)
 		}
 
 	} else if (itrm->kqueue[0] == 0) {
-		static const struct { int key, modifier; } os2xtd[256] = {
+		static const struct term_event_keyboard os2xtd[256] = {
 #include "terminal/key.inc"
 		};
 
 		if (itrm->qlen < 2) goto ret;
-		ev.info.keyboard.key = os2xtd[itrm->kqueue[1]].key;
-
-		if (!ev.info.keyboard.key)
-			ev.info.keyboard.key = KBD_UNDEF;
-
-		ev.info.keyboard.modifier = os2xtd[itrm->kqueue[1]].modifier;
+		copy_struct(&ev.info.keyboard, &os2xtd[itrm->kqueue[1]]);
 		el = 2;
 
 	} else {

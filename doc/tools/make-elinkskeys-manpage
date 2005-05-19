@@ -3,7 +3,7 @@
 # Generate the elinkskeys(5) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinkskeys-manpage,v 1.3 2005/05/14 21:29:36 jonas Exp $
+# $Id: make-elinkskeys-manpage,v 1.4 2005/05/19 00:55:18 jonas Exp $
 
 # FIXME:
 #
@@ -14,12 +14,9 @@
 #
 # - The following keys can be used while editing a line/jumping to a URL
 
-DOCTYPE=$(echo "$1" | sed 's/elinks.//' | sed 's/.txt//')
+DOCTYPE=$(echo "$1" | sed 's/.*.\(man\|html\)..*//' | sed 's/.txt//')
 KBDBIND=$2
-
-ACTINFO="$(grep ACT_ $KBDBIND | grep '^[[:space:]]{')"
-DEFAULTS="$(echo $ACTINFO | grep -v DACT | grep -v '{ \"')"
-ACTIONS="$(echo $ACTINFO | grep DAC)"
+CONFIGDIR=$(dirname "$2")
 
 link()
 {
@@ -55,13 +52,14 @@ print_keymap_actions()
 {
 	keymap=$1
 
-	grep ACT_ $KBDBIND | grep '^[[:space:]]{' | grep -v DISABLED | grep DACT | grep -i ACT_$keymap \
-	| while read entry
+	grep ACTION_ "$CONFIGDIR/actions-$keymap.inc" \
+	| while read entry;
 	do
-		action=$(echo "$entry" | sed 's/.*{ "\([^"]*\)".*/\1/')
-		caption=$(echo "$entry" | sed 's/.*N_("\(.*\)").*/\1/')
+		action=$(echo "$entry" | sed 's/ACTION_([^,]*, "\([^"]*\)".*/\1/')
+		caption=$(echo "$entry" | sed 's/.*N__("\(.*\)").*/\1/')
 
 		[ "$action" = "none" ] && continue
+		[ "$action" = " *scripting-function*" ] && continue
 
 		echo
 		echo "$action::"
@@ -71,15 +69,16 @@ print_keymap_actions()
 
 print_keymap_defaults()
 {
-	keymap=$1
+	keymap="$1"
+	KEYMAP=$(echo $1 | tr '[a-z]' '[A-Z]')
 
-	grep ACT_ $KBDBIND | grep '^[[:space:]]{' | grep -v DACT | grep -v '{ "' | grep -i ACT_$keymap \
+	grep ACT_ $KBDBIND | grep '^[[:space:]]{' | grep -v '{ "' | grep ACT_$KEYMAP \
 	| while read entry
 	do
-		entry=$(echo "$entry" | sed 's/.*{ //' | sed 's/ }.*//')
+		entry=$(echo "$entry" | sed 's/.*{ { //' | sed 's/ }//')
 		key=$(echo "$entry" | sed "s/\(KBD_[^,]*\|'.*'\),.*/\1/")
 		modifier=$(echo "$entry" | sed "s/.*,.*KBD_MOD_\([A-Z_]*\),.*/\1/")
-		action=$(echo "$entry" | sed "s/.*,.*\(ACT_[A-Z_]*\).*/\1/")
+		action=$(echo "$entry" | sed "s/.*,.*\(ACT_$KEYMAP\)_\([A-Z_]*\).*/\2/")
 
 		case "$key" in
 			KBD_*)
@@ -99,7 +98,7 @@ print_keymap_defaults()
 			*)		modifier=""			;;
 		esac
 
-		action=$(grep "$action," $KBDBIND | grep -v DISABLED | grep DACT | sed "s/.*\"\([^\"]*\)\".*N_(\"\(.*\)\").*/\2 ('\1')/")
+		action=$(grep " $action," "$CONFIGDIR/actions-$keymap.inc" | sed "s/.*\"\([^\"]*\)\".*N__(\"\(.*\)\").*/\2 ('\1')/")
 		echo
 		echo "'$modifier$key'::"
 		echo "	$action"

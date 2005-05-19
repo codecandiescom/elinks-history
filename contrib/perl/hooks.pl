@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.89 2005/05/18 20:24:29 rrowan Exp $
+# $Id: hooks.pl,v 1.90 2005/05/19 01:15:16 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -49,7 +49,7 @@ and does not contain the default values:
 	email:                # Set to show one's own bugs with the "bug" prefix.
 	fortune:    elinks    # *fortune*, *elinks* tip, or *none* on quit?
 	googlebeta: hell no   # I miss DejaNews...
-	gotosearch: not yet   # Don't use this yet.  It's broken.
+	gotosearch: not yet   # Don't use this yet.  It's broken.  Don't use it at all, actually.
 	ipv6:       sure      # IPV4 or 6 address blocks with "ip" prefix?
 	language:   english   # "bf nl en" still works, but now "bf nl" does too
 	news:       msnbc     # Agency to use for "news" and "n" prefixes
@@ -172,7 +172,9 @@ my %search_prefixes;
 =item Default engine
 
 B<search>, B<find>, B<www>, B<web>, B<s>, B<f>, B<go>,
-and anything in quotes with no prefix.
+and anything in quotes with no prefix.  That's not completely true.
+Setting protocol.rewrite.default_template to "search", will allow
+anything entered into the goto box that matches nothing else to be a web search.
 
 =item Google
 
@@ -625,10 +627,10 @@ sub goto_url_hook
 	{
 		return search(loadrc('search'), $search);
 	}
-	if ($url =~ s/^("|\'|')(.+)$/$2/)
-	{
-		return search(loadrc('search'), $url);
-	}
+#	if ($url =~ s/^("|\'|')(.+)$/$2/)
+#	{
+#		return search(loadrc('search'), $url);
+#	}
 	foreach my $prefix (keys %search_prefixes)
 	{
 		next unless $url =~ /$prefix/;
@@ -858,10 +860,10 @@ sub goto_url_hook
 
 
 	# Anything not otherwise useful could be a search
-	if ($current_url and loadrc("gotosearch") eq "yes")
-	{
-		return search(loadrc("search"), $url);
-	}
+#	if ($current_url and loadrc("gotosearch") eq "yes")
+#	{
+#		return search(loadrc("search"), $url);
+#	}
 
 	return $url;
 }

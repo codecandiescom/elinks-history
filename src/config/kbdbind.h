@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.154 2005/05/17 21:55:14 zas Exp $ */
+/* $Id: kbdbind.h,v 1.155 2005/05/19 00:29:40 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -35,7 +35,7 @@ enum action_flags {
 /* Note: if you add anything here, please keep it in alphabetical order,
  * and also update the table action_table[] in kbdbind.c.  */
 
-#define ACTION_INFO(map, name, action, caption, flags)	\
+#define ACTION_(map, name, action, caption, flags)	\
 	ACT_##map##_OFFSET_##action
 
 enum main_action_offset {
@@ -56,8 +56,8 @@ enum menu_action_offset {
 	MENU_ACTIONS
 };
 
-#undef	ACTION_INFO
-#define ACTION_INFO(map, name, action, caption, flags)	\
+#undef	ACTION_
+#define ACTION_(map, name, action, caption, flags)	\
 	ACT_##map##_##action
 
 enum main_action {
@@ -72,7 +72,7 @@ enum menu_action {
 #include "config/actions-menu.inc"
 };
 
-#undef	ACTION_INFO
+#undef	ACTION_
 
 enum kbdbind_flags {
 	KBDB_WATERMARK = 1,

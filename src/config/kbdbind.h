@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.155 2005/05/19 00:29:40 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.156 2005/05/19 08:58:17 zas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -111,7 +111,7 @@ void make_keystroke(struct string *str, struct term_event_keyboard *kbd, int esc
 
 #define make_keystroke_from_accesskey(str, accesskey) do { 	\
 	struct term_event_keyboard kbd; 			\
-	kbd.key = accesskey; /* FIXME: long to int */ 		\
+	kbd.key = accesskey; /* FIXME: unicode_val_T to int */	\
 	kbd.modifier = 0; 					\
 	make_keystroke(str, &kbd, 0); 				\
 } while (0)

@@ -3,7 +3,7 @@
 # Generate the elinkskeys(5) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinkskeys-manpage,v 1.4 2005/05/19 00:55:18 jonas Exp $
+# $Id: make-elinkskeys-manpage,v 1.5 2005/05/19 02:54:35 jonas Exp $
 
 # FIXME:
 #
@@ -72,33 +72,37 @@ print_keymap_defaults()
 	keymap="$1"
 	KEYMAP=$(echo $1 | tr '[a-z]' '[A-Z]')
 
-	grep ACT_ $KBDBIND | grep '^[[:space:]]{' | grep -v '{ "' | grep ACT_$KEYMAP \
+	grep ACT_$KEYMAP $KBDBIND | grep '^[[:space:]]{' | grep -v '{ "' \
 	| while read entry
 	do
 		entry=$(echo "$entry" | sed 's/.*{ { //' | sed 's/ }//')
 		key=$(echo "$entry" | sed "s/\(KBD_[^,]*\|'.*'\),.*/\1/")
 		modifier=$(echo "$entry" | sed "s/.*,.*KBD_MOD_\([A-Z_]*\),.*/\1/")
 		action=$(echo "$entry" | sed "s/.*,.*\(ACT_$KEYMAP\)_\([A-Z_]*\).*/\2/")
+		action=$(grep " $action," "$CONFIGDIR/actions-$keymap.inc" \
+			| sed "s/.*\"\([^\"]*\)\".*N__(\"\(.*\)\").*/\2 ('\1')/")
 
 		case "$key" in
-			KBD_*)
-				key=$(grep $key $KBDBIND | grep '^[[:space:]]{' | grep '{ "' | sed 's/.*"\([^"]*\)".*/\1/')
-				;;
-			"' '")
-				key="Space"
-				;;
-			*)
-				key=$(echo "$key" | sed "s/^'\(.*\)'/\1/" | sed "s/'/\\\\'/")
-				;;
+		KBD_*)
+			key=$(grep $key $KBDBIND \
+			    | grep '^[[:space:]]{ "' \
+			    | sed 's/.*"\([^"]*\)".*/\1/')
+			;;
+		"' '")
+			key="Space"
+			;;
+		*)
+			key=$(echo "$key" | sed "s/^'\(.*\)'/\1/" \
+					  | sed "s/'/\\\\'/")
+			;;
 		esac
 
 		case "$modifier" in
-			ALT) 	modifier="Alt-"		;;
-			CTRL)	modifier="Ctrl-"	;;
-			*)		modifier=""			;;
+		ALT) 	modifier="Alt-"	 ;;
+		CTRL)	modifier="Ctrl-" ;;
+		*)	modifier=""	 ;;
 		esac
 
-		action=$(grep " $action," "$CONFIGDIR/actions-$keymap.inc" | sed "s/.*\"\([^\"]*\)\".*N__(\"\(.*\)\").*/\2 ('\1')/")
 		echo
 		echo "'$modifier$key'::"
 		echo "	$action"
@@ -240,5 +244,3 @@ SEE ALSO
 $(man elinks 1), \`elinks.conf(5)\`
 
 __END__
-
-# vim: tabstop=4 shiftwidth=4 textwidth=76

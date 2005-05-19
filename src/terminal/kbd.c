@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.139 2005/05/17 15:01:34 zas Exp $ */
+/* $Id: kbd.c,v 1.140 2005/05/19 09:17:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -741,9 +741,8 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 static int
 decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 {
+	struct term_event_keyboard kbd = { KBD_UNDEF, KBD_MOD_NONE };
 	unsigned char c;
-	int key = KBD_UNDEF;
-	int modifier = 0;
 	int v;
 	int el;
 
@@ -753,7 +752,8 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 		if (itrm->qlen >= 4
 		    && itrm->kqueue[3] >= 'A'
 		    && itrm->kqueue[3] <= 'L') {
-			ev->info.keyboard.key = KBD_F1 + itrm->kqueue[3] - 'A';
+			kbd.key = KBD_F1 + itrm->kqueue[3] - 'A';
+			copy_struct(&ev->info.keyboard, &kbd);
 			return 4;
 		}
 
@@ -768,66 +768,66 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 
 	switch (c) {
 	case 0: return -1;
-	case 'A': key = KBD_UP; break;
-	case 'B': key = KBD_DOWN; break;
-	case 'C': key = KBD_RIGHT; break;
-	case 'D': key = KBD_LEFT; break;
+	case 'A': kbd.key = KBD_UP; break;
+	case 'B': kbd.key = KBD_DOWN; break;
+	case 'C': kbd.key = KBD_RIGHT; break;
+	case 'D': kbd.key = KBD_LEFT; break;
 	case 'F':
-	case 'e': key = KBD_END; break;
-	case 'H': key = KBD_HOME; break;
-	case 'I': key = KBD_PAGE_UP; break;
-	case 'G': key = KBD_PAGE_DOWN; break;
+	case 'e': kbd.key = KBD_END; break;
+	case 'H': kbd.key = KBD_HOME; break;
+	case 'I': kbd.key = KBD_PAGE_UP; break;
+	case 'G': kbd.key = KBD_PAGE_DOWN; break;
 
 	case 'z': switch (v) {
-		case 247: key = KBD_INS; break;
-		case 214: key = KBD_HOME; break;
-		case 220: key = KBD_END; break;
-		case 216: key = KBD_PAGE_UP; break;
-		case 222: key = KBD_PAGE_DOWN; break;
-		case 249: key = KBD_DEL; break;
+		case 247: kbd.key = KBD_INS; break;
+		case 214: kbd.key = KBD_HOME; break;
+		case 220: kbd.key = KBD_END; break;
+		case 216: kbd.key = KBD_PAGE_UP; break;
+		case 222: kbd.key = KBD_PAGE_DOWN; break;
+		case 249: kbd.key = KBD_DEL; break;
 		} break;
 
 	case '~': switch (v) {
-		case 1: key = KBD_HOME; break;
-		case 2: key = KBD_INS; break;
-		case 3: key = KBD_DEL; break;
-		case 4: key = KBD_END; break;
-		case 5: key = KBD_PAGE_UP; break;
-		case 6: key = KBD_PAGE_DOWN; break;
-		case 7: key = KBD_HOME; break;
-		case 8: key = KBD_END; break;
+		case 1: kbd.key = KBD_HOME; break;
+		case 2: kbd.key = KBD_INS; break;
+		case 3: kbd.key = KBD_DEL; break;
+		case 4: kbd.key = KBD_END; break;
+		case 5: kbd.key = KBD_PAGE_UP; break;
+		case 6: kbd.key = KBD_PAGE_DOWN; break;
+		case 7: kbd.key = KBD_HOME; break;
+		case 8: kbd.key = KBD_END; break;
 
-		case 11: key = KBD_F1; break;
-		case 12: key = KBD_F2; break;
-		case 13: key = KBD_F3; break;
-		case 14: key = KBD_F4; break;
-		case 15: key = KBD_F5; break;
+		case 11: kbd.key = KBD_F1; break;
+		case 12: kbd.key = KBD_F2; break;
+		case 13: kbd.key = KBD_F3; break;
+		case 14: kbd.key = KBD_F4; break;
+		case 15: kbd.key = KBD_F5; break;
 
-		case 17: key = KBD_F6; break;
-		case 18: key = KBD_F7; break;
-		case 19: key = KBD_F8; break;
-		case 20: key = KBD_F9; break;
-		case 21: key = KBD_F10; break;
+		case 17: kbd.key = KBD_F6; break;
+		case 18: kbd.key = KBD_F7; break;
+		case 19: kbd.key = KBD_F8; break;
+		case 20: kbd.key = KBD_F9; break;
+		case 21: kbd.key = KBD_F10; break;
 
-		case 23: key = KBD_F11; break;
-		case 24: key = KBD_F12; break;
+		case 23: kbd.key = KBD_F11; break;
+		case 24: kbd.key = KBD_F12; break;
 
 		/* Give preference to F11 and F12 over shifted F1 and F2. */
 		/*
-		case 23: key = KBD_F1; modifier = KBD_MOD_SHIFT; break;
-		case 24: key = KBD_F2; modifier = KBD_MOD_SHIFT; break;
+		case 23: kbd.key = KBD_F1; kbd.modifier = KBD_MOD_SHIFT; break;
+		case 24: kbd.key = KBD_F2; kbd.modifier = KBD_MOD_SHIFT; break;
 		*/
 
-		case 25: key = KBD_F3; modifier = KBD_MOD_SHIFT; break;
-		case 26: key = KBD_F4; modifier = KBD_MOD_SHIFT; break;
+		case 25: kbd.key = KBD_F3; kbd.modifier = KBD_MOD_SHIFT; break;
+		case 26: kbd.key = KBD_F4; kbd.modifier = KBD_MOD_SHIFT; break;
 
-		case 28: key = KBD_F5; modifier = KBD_MOD_SHIFT; break;
-		case 29: key = KBD_F6; modifier = KBD_MOD_SHIFT; break;
+		case 28: kbd.key = KBD_F5; kbd.modifier = KBD_MOD_SHIFT; break;
+		case 29: kbd.key = KBD_F6; kbd.modifier = KBD_MOD_SHIFT; break;
 
-		case 31: key = KBD_F7; modifier = KBD_MOD_SHIFT; break;
-		case 32: key = KBD_F8; modifier = KBD_MOD_SHIFT; break;
-		case 33: key = KBD_F9; modifier = KBD_MOD_SHIFT; break;
-		case 34: key = KBD_F10; modifier = KBD_MOD_SHIFT; break;
+		case 31: kbd.key = KBD_F7; kbd.modifier = KBD_MOD_SHIFT; break;
+		case 32: kbd.key = KBD_F8; kbd.modifier = KBD_MOD_SHIFT; break;
+		case 33: kbd.key = KBD_F9; kbd.modifier = KBD_MOD_SHIFT; break;
+		case 34: kbd.key = KBD_F10; kbd.modifier = KBD_MOD_SHIFT; break;
 
 		} break;
 
@@ -840,9 +840,8 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 	}
 
 	/* The event might have been changed to a mouse event */
-	if (ev->ev == EVENT_KBD && key != KBD_UNDEF) {
-		ev->info.keyboard.key = key;
-		ev->info.keyboard.modifier = modifier;
+	if (ev->ev == EVENT_KBD && kbd.key != KBD_UNDEF) {
+		copy_struct(&ev->info.keyboard, &kbd);
 	}
 
 	return el;

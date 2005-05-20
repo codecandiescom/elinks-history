@@ -1,3 +1,24 @@
+Fri May 20 10:29:42 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Ah Ha!  I managed to track down the &#039 (') problem.  Seems some
+	forget the ;.  Now, only make the switch if the semi-colon is
+	missing.  
+
+Fri May 20 05:18:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	If there is no current URL, replace the empty string for %c in
+	dumbprefixes rather than just leaving the %c untouched.  
+
+Thu May 19 23:36:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/about.c:
+
+	Make sense of the bloat.  
+
 Thu May 19 09:31:23 2005  Laurent Monin <zas@norz.org>:
 
 	* src/terminal/key.inc:

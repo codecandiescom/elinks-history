@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.72 2005/04/15 18:15:24 miciah Exp $
+-- $Id: hooks.lua.in,v 1.73 2005/05/20 05:18:13 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -347,11 +347,7 @@ table.insert(goto_url_hooks, expand_localhost)
 
 function complete_uri_prefix (url, current_url)
     if dumbprefixes[url] then
-	if current_url then
-	    return string.gsub(dumbprefixes[url], "%%c", current_url),true
-	else
-            return dumbprefixes[url],true
-	end
+	return string.gsub(dumbprefixes[url], "%%c", current_url or ""),true
     end
 
     if string.find(url,'%s') or string.find(url, ':') then

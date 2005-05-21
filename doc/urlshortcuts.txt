@@ -45,7 +45,7 @@ protocol.rewrite.dumb.* tree, and if it finds option protocol.rewrite.dumb.sd,
 it will use its value as the target URI.
 
 Therefore, more generally speaking, if ELinks looks at
-protocol.rewrite.dumb.&lt;typed_string&gt;, and if it exists, will replace the
+protocol.rewrite.dumb.<typed_string>, and if it exists, will replace the
 entered URI with it.  These dumb prefixes can be used as a kind of alternative
 bookmark systen - if you want to have fast access to a certain site and you
 don't want to spend a while navigating the bookmarks manager, you can just fire
@@ -88,4 +88,4 @@ sample Lua hooks file.  The one disadvantage to this is that you must have Lua
 scripting enabled in order to make use of it, and many users don't have Lua
 installed.
 
-$Id: urlshortcuts.txt,v 1.3 2005/05/18 19:22:26 rrowan Exp $
+$Id: urlshortcuts.txt,v 1.4 2005/05/21 20:41:31 rrowan Exp $

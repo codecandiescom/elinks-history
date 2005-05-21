@@ -6,8 +6,8 @@ Are you a vim-controls nerd who wants to see them everywhere?  Welcome.
 Actually ELinks doesn't shine in this area yet very much. Heck, the famous
 hjkl foursome is still occupied by some feeble managers in the default keymap
 (we have that in our monumental TODO lists). Still, if you know what to touch
-during the compilation (--enable-exmode), you can get at least some familiar
-reply to the mighty ':' (colon) grip.
+during the compilation (`--enable-exmode`), you can get at least some familiar
+reply to the mighty ``:'' (colon) grip.
 
 
 What it is
@@ -35,11 +35,11 @@ If you want to flip an option you know by name and refuse to engage with the
 option manager visuals, you can just drop in to the ex-mode and type 'set
 the.option = 1234'. See man elinks.conf (5) or the options manager for the
 list of options; you can also get a complete options tree saved to elinks.conf
-if you set config.saving_style = 2 (but do NOT keep that setting unless you
-know what are you doing; if we change a default value of some option in future
-releases, we (generally) know what are we doing - this change won't propagate
-to you during an upgrade if you already have the original default value saved
-in your configuration file, though).
+if you set 'config.saving_style' = 2 (but do *NOT* keep that setting unless
+you know what are you doing; if we change a default value of some option in
+future releases, we (generally) know what are we doing - this change won't
+propagate to you during an upgrade if you already have the original default
+value saved in your configuration file, though).
 
 It's the same story with keybindings. You can use 'bind "main" "h" =
 "move-cursor-left"'. It's not the same story with keybindings documentation.
@@ -100,4 +100,4 @@ code is extremely flexible and it is very trivial to make another ex-mode
 command handler, it's just that no one has done it yet ;-). Also, more actions
 should be able to take arguments.
 
-$Id: exmode.txt,v 1.9 2005/05/18 03:18:39 jonas Exp $
+$Id: exmode.txt,v 1.10 2005/05/21 20:46:43 jonas Exp $

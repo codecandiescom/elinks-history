@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.63 2005/05/18 19:46:15 jonas Exp $
+## $Id: Makefile.am,v 1.64 2005/05/21 20:45:00 jonas Exp $
 
 SUBDIRS = man
 
@@ -70,9 +70,9 @@ MAKE_ELINKS_MANPAGE	= $(top_srcdir)/doc/tools/make-elinks-manpage
 MAKE_ELINKSKEYS_MANPAGE	= $(top_srcdir)/doc/tools/make-elinkskeys-manpage
 
 if CONFIG_ASCIIDOC
-# FIXME: $(HTML_DIR)/elinkskeys.5.html
 HTML_DOCS_WITH_ASCIIDOC = \
  $(HTML_DIR)/elinks.1.html \
+ $(HTML_DIR)/elinkskeys.5.html \
  $(HTML_DIR)/manual.html
 endif
 
@@ -168,10 +168,15 @@ $(HTML_DIR)/%.html: $(TXT_DIR)/%.html.txt doc-dirs
 
 # The Manual
 
-$(HTML_DIR)/manual.html: $(MANUAL_FILES) doc-dirs $(TXT_DIR)/import-features.conf.txt
+MANUAL_EXTRA_FILES = \
+ $(TXT_DIR)/import-features.conf.txt \
+ $(TXT_DIR)/elinks.1.html.txt \
+ $(TXT_DIR)/elinkskeys.5.html.txt
+
+$(HTML_DIR)/manual.html: $(MANUAL_FILES) doc-dirs $(MANUAL_EXTRA_FILES)
 	$(ASCIIDOC) -b css-embedded -d book -o $@ -n $<
 
-$(XML_DIR)/manual.xml: $(MANUAL_FILES) doc-dirs $(TXT_DIR)/import-features.conf.txt
+$(XML_DIR)/manual.xml: $(MANUAL_FILES) doc-dirs $(MANUAL_EXTRA_FILES)
 	$(ASCIIDOC) -b docbook -d book -o $@ $<
 
 $(HTML_DIR)/manual.html-chunked: $(XML_DIR)/manual.xml doc-dirs

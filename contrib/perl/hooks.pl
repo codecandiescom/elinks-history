@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.91 2005/05/20 10:29:42 rrowan Exp $
+# $Id: hooks.pl,v 1.92 2005/05/21 03:36:57 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1018,7 +1018,7 @@ Rewrites some evil characters to entities and vice versa.
 	# TODO: Line wrapping? --pasky
 	$html =~ s/Ñ/\&mdash;/g;
 	$html =~ s/\&#252/ü/g;
-	$html =~ s/\&#039[^;]/'/g;
+	$html =~ s/\&#039(?!;)/'/g;
 	$html =~ s/]\n>$//gsm;
 
 	return $html;

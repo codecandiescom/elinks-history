@@ -1,3 +1,46 @@
+Sat May 21 20:47:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/hacking.txt:
+
+	Convert hacking.txt to asciidoc.  
+
+Sat May 21 20:46:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/exmode.txt:
+
+	Improve the asciidoc markup.  
+
+Sat May 21 20:46:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/faq.txt:
+
+	Add :Description: attribute to the FAQ.  
+
+Sat May 21 20:45:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Cleanup handling of generated manual content.  
+
+Sat May 21 20:41:31 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* doc/urlshortcuts.txt:
+
+	Change &gt; and &lt; to > and <.  
+
+Sat May 21 19:27:04 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Let init_global_history_item free the new item and return NULL if it
+	cannot allocate the listbox item.  
+
+Sat May 21 03:36:57 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Hopefully this will be the last fix for a stupid problem.  
+
 Fri May 20 10:29:42 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/hooks.pl:

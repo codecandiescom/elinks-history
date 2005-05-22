@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.477 2005/05/22 04:32:21 miciah Exp $ */
+/* $Id: options.c,v 1.478 2005/05/22 04:36:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -516,6 +516,34 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	return option;
 }
 
+static void
+done_option(struct option *option)
+{
+	switch (option->type) {
+		case OPT_STRING:
+			mem_free_if(option->value.string);
+			break;
+		case OPT_TREE:
+			mem_free_if(option->value.tree);
+			break;
+		default:
+			break;
+	}
+
+	if (option->box_item)
+		done_listbox_item(&option_browser, option->box_item);
+
+	if (option->flags & OPT_ALLOC) {
+		mem_free_if(option->name);
+		mem_free(option);
+	} else if (!option->capt) {
+		/* We are probably dealing with a built-in autocreated option
+		 * that will be attempted to be deleted when shutting down. */
+		/* Clear it so nothing will be done later. */
+		memset(option, 0, sizeof(*option));
+	}
+}
+
 /* The namespace may start to seem a bit chaotic here; it indeed is, maybe the
  * function names above should be renamed and only macros should keep their old
  * short names. */
@@ -546,29 +574,7 @@ delete_option_do(struct option *option, int recursive)
 		free_options_tree(option->value.tree, recursive);
 	}
 
-	switch (option->type) {
-		case OPT_STRING:
-			mem_free_if(option->value.string);
-			break;
-		case OPT_TREE:
-			mem_free_if(option->value.tree);
-			break;
-		default:
-			break;
-	}
-
-	if (option->box_item)
-		done_listbox_item(&option_browser, option->box_item);
-
-	if (option->flags & OPT_ALLOC) {
-		mem_free_if(option->name);
-		mem_free(option);
-	} else if (!option->capt) {
-		/* We are probably dealing with a built-in autocreated option
-		 * that will be attempted to be deleted when shutting down. */
-		/* Clear it so nothing will be done later. */
-		memset(option, 0, sizeof(*option));
-	}
+	done_option(option);
 }
 
 void

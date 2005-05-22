@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.64 2005/05/21 20:45:00 jonas Exp $
+## $Id: Makefile.am,v 1.65 2005/05/22 02:13:07 jonas Exp $
 
 SUBDIRS = man
 
@@ -93,12 +93,20 @@ PDF_DOCS_WITH_JW = \
  $(PDF_DIR)/manual.pdf
 endif
 
+if CONFIG_POD2HTML
+HTML_DOCS_WITH_POD2HTML = \
+ $(HTML_DIR)/perl.html \
+ $(HTML_DIR)/perl-hooks.html
+endif
+
+
 MAN_DOCS = \
  $(MAN_DIR)/man5/elinks.conf.5 \
  $(MAN_DOCS_WITH_ASCIIDOC)
 
 HTML_DOCS = \
  $(HTML_DOCS_WITH_ASCIIDOC) \
+ $(HTML_DOCS_WITH_POD2HTML) \
  $(HTML_DOCS_WITH_JW)
 
 PDF_DOCS = \
@@ -106,6 +114,9 @@ PDF_DOCS = \
 
 html-asciidoc-yes: $(HTML_DOCS_WITH_ASCIIDOC)
 html-asciidoc-no:
+
+html-pod2html-yes: $(HTML_DOCS_WITH_POD2HTML)
+html-pod2html-no:
 
 html-xmlto-yes: $(HTML_DOCS_WITH_XMLTO)
 html-xmlto-no:
@@ -117,7 +128,7 @@ pdf-jw-yes: $(PDF_DOCS_WITH_JW)
 pdf-jw-no:
 
 man-docs: doc-dirs man-xmlto-@CONFIG_XMLTO@
-html-docs: doc-dirs html-asciidoc-@CONFIG_ASCIIDOC@ html-xmlto-@CONFIG_XMLTO@
+html-docs: doc-dirs html-asciidoc-@CONFIG_ASCIIDOC@ html-xmlto-@CONFIG_XMLTO@ html-pod2html-@CONFIG_POD2HTML@
 pdf-docs: doc-dirs pdf-jw-@CONFIG_JW@
 
 all-docs: man-docs html-docs pdf-docs
@@ -184,3 +195,9 @@ $(HTML_DIR)/manual.html-chunked: $(XML_DIR)/manual.xml doc-dirs
 
 $(PDF_DIR)/manual.pdf: $(XML_DIR)/manual.xml doc-dirs
 	$(JW) -o $(PDF_DIR) -b pdf $<
+
+$(HTML_DIR)/perl.html: perl.pod doc-dirs
+	$(POD2HTML) --outfile=$@ < $<
+
+$(HTML_DIR)/perl-hooks.html: $(top_srcdir)/contrib/perl/hooks.pl doc-dirs
+	$(POD2HTML) --outfile=$@ < $<

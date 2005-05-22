@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.103 2005/05/22 03:42:23 miciah Exp $ */
+/* $Id: auth.c,v 1.104 2005/05/22 04:57:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,6 +88,8 @@ set_auth_password(struct auth_entry *entry, struct uri *uri)
 
 	entry->password[passwordlen] = '\0';
 }
+
+static void done_auth_entry(struct auth_entry *entry);
 
 static struct auth_entry *
 init_auth_entry(struct uri *uri, unsigned char *realm)

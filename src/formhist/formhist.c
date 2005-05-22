@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.103 2005/05/22 02:21:03 miciah Exp $ */
+/* $Id: formhist.c,v 1.104 2005/05/22 02:25:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -312,16 +312,14 @@ form_exists(struct formhist_data *form1)
 static int
 forget_forms_with_url(unsigned char *url)
 {
-	struct formhist_data *form, *tmpform;
+	struct formhist_data *form, *next;
 	int count = 0;
 
-	foreach (form, saved_forms) {
+	foreachsafe (form, next, saved_forms) {
 		if (strcmp(form->url, url)) continue;
 
-		tmpform = form;
-		form = form->prev;
-		del_from_list(tmpform);
-		free_form(tmpform);
+		del_from_list(form);
+		free_form(form);
 		count++;
 	}
 

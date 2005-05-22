@@ -1,3 +1,225 @@
+Sun May 22 21:58:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, tools/make-elinks-manpage,
+	tools/make-elinkskeys-manpage:
+
+	More build fixes.  
+
+Sun May 22 17:23:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/hacking.txt:
+
+	Remove section numbers.  
+
+Sun May 22 16:01:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/installation.txt:
+
+	Check for installation-webpage instead of website so the manual on
+	the website gets the whole manual.  
+
+Sun May 22 15:22:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/installation.txt:
+
+	Wrap include in ifndef::website[].  
+
+Sun May 22 04:57:24 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/auth/auth.c:
+
+	Prototype done_auth_entry to fix compilation.  
+
+Sun May 22 04:46:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	In delete_option_do, set option->prev = option->next = NULL after
+	deleting it from the list because it just seems right as we check
+	option->next before deleting the item from the list and as this also
+	makes it nicely idempotent.  
+
+Sun May 22 04:39:21 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Don't call free_options_tree if the tree has no children.  
+
+Sun May 22 04:36:38 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Factor the code that frees memory out from delete_option_do into the
+	new done_option.  
+
+Sun May 22 04:32:21 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Split some code out from the switch in delete_option_do.  
+
+Sun May 22 03:42:23 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/auth/auth.c:
+
+	Free the entry and return NULL from init_auth_entry if the listbox
+	item cannot be allocated.  
+
+Sun May 22 03:38:42 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/auth/auth.c:
+
+	Factor the code to free memory out from del_auth_entry into the new
+	done_auth_entry.  
+
+Sun May 22 03:37:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/auth/auth.c:
+
+	Delete the auth entry from the list before freeing memory.  
+
+Sun May 22 03:10:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cookies/cookies.c:
+
+	Delete del_from_cookie_list and use delete_cookie instead.  
+
+Sun May 22 03:09:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cookies/: cookies.c, cookies.h, dialogs.c:
+
+	Introduce and use delete_cookie, which deletes the cookie from the
+	list and calls done_cookie on it.  
+
+Sun May 22 03:08:17 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cookies/dialogs.c:
+
+	Rename delete_cookie to delete_cookie_item.  
+
+Sun May 22 03:03:57 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cookies/: cookies.c, cookies.h, dialogs.c:
+
+	Rename free_cookie to done_cookie.  
+
+Sun May 22 02:55:01 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Assume in done_formhist_item that the listbox item has been
+	allocated.  
+
+Sun May 22 02:51:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/: dialogs.c, formhist.c, formhist.h:
+
+	Introduce and use delete_formhist_item which deletes the formhist
+	item from the list and calls done_formhist_item on it.  
+
+Sun May 22 02:48:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/: dialogs.c, formhist.c, formhist.h:
+
+	Rename free_formhist_item to done_formhist_item.  
+
+Sun May 22 02:44:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Revert.  
+
+Sun May 22 02:42:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Factor the memory freeing out from free_formhist_item into the new
+	done_formhist_item.  
+
+Sun May 22 02:41:05 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Delete the listbox item first in free_formhist_item.  
+
+Sun May 22 02:36:35 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/: dialogs.c, formhist.c, formhist.h:
+
+	Rename load_forms_from_file to load_formhist_from_file and
+	save_forms_to_file to save_formhist_to_file.  
+
+Sun May 22 02:34:06 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/: dialogs.c, formhist.c, formhist.h:
+
+	Rename free_form to free_formhist_item.  
+
+Sun May 22 02:31:39 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Rename new_form to new_formhist_item.  
+
+Sun May 22 02:25:36 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Simplify forget_forms_with_url thru foreachsafe.  
+
+Sun May 22 02:21:03 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: document/forms.c, document/forms.h, formhist/dialogs.c,
+	formhist/formhist.c, formhist/formhist.h:
+
+	Move str2form_type and form_type2str from formhist/formhist to
+	document/forms.  
+
+Sun May 22 02:13:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, doc/Makefile.am:
+
+	Check for pod2html and build perl and perl-hooks HTML pages.  
+
+Sun May 22 02:05:07 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Free everything and return NULL if we cannot create the listbox item
+	in new_form.  
+
+Sun May 22 01:55:41 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Factor the code to free memory out of delete_cache_entry into the
+	new done_cache_entry.  
+
+Sun May 22 01:53:04 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Delete the cache entry from the list before deleting its content.  
+
+Sun May 22 01:43:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/lists.h:
+
+	Share INIT_LIST_HEAD().  
+
+Sun May 22 01:38:38 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Add the cache entry to the list only after creating its box item.  
+
+Sun May 22 01:12:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Factor freeing of memory out from delete_bookmark into new
+	done_bookmark.  
+
 Sat May 21 20:47:19 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/hacking.txt:

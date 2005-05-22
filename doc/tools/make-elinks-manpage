@@ -3,9 +3,9 @@
 # Generate the elinks(1) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinks-manpage,v 1.7 2005/05/16 15:38:01 jonas Exp $
+# $Id: make-elinks-manpage,v 1.8 2005/05/22 21:58:19 jonas Exp $
 
-DOCTYPE=$(echo "$1" | sed 's/elinks.//' | sed 's/.txt//')
+DOCTYPE=$(echo "$1" | sed 's/.*elinks.1.//' | sed 's/.txt.*//')
 ELINKS=$2
 
 GPL="http://www.gnu.org/copyleft/gpl.html"

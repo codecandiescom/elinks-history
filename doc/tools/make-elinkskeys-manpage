@@ -3,7 +3,7 @@
 # Generate the elinkskeys(5) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinkskeys-manpage,v 1.5 2005/05/19 02:54:35 jonas Exp $
+# $Id: make-elinkskeys-manpage,v 1.6 2005/05/22 21:58:19 jonas Exp $
 
 # FIXME:
 #
@@ -14,7 +14,7 @@
 #
 # - The following keys can be used while editing a line/jumping to a URL
 
-DOCTYPE=$(echo "$1" | sed 's/.*.\(man\|html\)..*//' | sed 's/.txt//')
+DOCTYPE=$(echo "$1" | sed 's/.*elinkskeys.5.//' | sed 's/.txt.*//')
 KBDBIND=$2
 CONFIGDIR=$(dirname "$2")
 

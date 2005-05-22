@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.65 2005/05/22 02:13:07 jonas Exp $
+## $Id: Makefile.am,v 1.66 2005/05/22 21:58:19 jonas Exp $
 
 SUBDIRS = man
 
@@ -153,7 +153,7 @@ $(TXT_DIR)/elinks.1.%.txt: $(MAKE_ELINKS_MANPAGE) doc-dirs $(ELINKS)
 	$(MAKE_ELINKS_MANPAGE) $@ $(ELINKS) > $@
 
 $(TXT_DIR)/elinkskeys.5.%.txt: $(MAKE_ELINKSKEYS_MANPAGE) doc-dirs $(KBDBIND)
-	$(MAKE_ELINKSKEYS_MANPAGE) $< $(KBDBIND) > $@
+	$(MAKE_ELINKSKEYS_MANPAGE) $@ $(KBDBIND) > $@
 
 
 # Man Pages
@@ -161,16 +161,17 @@ $(TXT_DIR)/elinkskeys.5.%.txt: $(MAKE_ELINKSKEYS_MANPAGE) doc-dirs $(KBDBIND)
 $(XML_DIR)/%.man.xml: $(TXT_DIR)/%.man.txt doc-dirs
 	$(ASCIIDOC) -b docbook -d manpage -o $@ $<
 
-$(MAN_DIR)/man/man1/elinks.1.in: $(XML_DIR)/elinks.1.man.xml doc-dirs
+$(MAN_DIR)/man1/elinks.1.in: $(XML_DIR)/elinks.1.man.xml doc-dirs
 	$(XMLTO) -o $(MAN_DIR)/man1 man $<
 	mv $(MAN_DIR)/man1/elinks.1 $@
 
-$(MAN_DIR)/man/man1/elinkskeys.5: $(XML_DIR)/elinkskeys.5.man.xml doc-dirs
-	$(XMLTO) man $<
-	sed -e 's/\\fI\\fR'\''/\\fI\\'\''\\fR/' < $@ > $(MAN_ELINKSKEYS)
+$(MAN_DIR)/man5/elinkskeys.5: $(XML_DIR)/elinkskeys.5.man.xml doc-dirs
+	$(XMLTO) -o $(MAN_DIR)/man5 man $<
+	sed -e 's/\\fI\\fR'\''/\\fI\\'\''\\fR/' < $@ > $@.tmp
+	mv $@.tmp $@
 
-$(MAN_DIR)/man/man5/elinks.conf.5: doc-dirs $(ELINKS)
-	$(HELP2DOC) --elinks=$(ELINKS) --elinksconf > $(MAN_ELINKS_CONF)
+$(MAN_DIR)/man5/elinks.conf.5: doc-dirs $(ELINKS)
+	$(HELP2DOC) --elinks=$(ELINKS) --elinksconf > $@
 
 # XHTML/CSS Man Pages
 

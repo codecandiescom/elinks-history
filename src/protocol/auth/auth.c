@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.100 2005/04/18 14:46:39 jonas Exp $ */
+/* $Id: auth.c,v 1.101 2005/05/22 03:37:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,14 +269,14 @@ del_auth_entry(struct auth_entry *entry)
 	      entry->url, entry->realm, entry->user);
 #endif
 
+	del_from_list(entry);
+
 	if (entry->box_item)
 		done_listbox_item(&auth_browser, entry->box_item);
 	done_uri(entry->uri);
 	mem_free_if(entry->realm);
 	mem_free_if(entry->nonce);
 	mem_free_if(entry->opaque);
-
-	del_from_list(entry);
 	mem_free(entry);
 }
 

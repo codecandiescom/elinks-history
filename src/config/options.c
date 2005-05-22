@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.479 2005/05/22 04:39:21 miciah Exp $ */
+/* $Id: options.c,v 1.480 2005/05/22 04:46:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,7 +554,10 @@ done_option(struct option *option)
 static void
 delete_option_do(struct option *option, int recursive)
 {
-	if (option->next) del_from_list(option);
+	if (option->next) {
+		del_from_list(option);
+		option->prev = option->next = NULL;
+	}
 
 	if (recursive == -1) {
 		ERROR("Orphaned option %s", option->name);

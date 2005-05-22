@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.101 2005/05/22 03:37:25 miciah Exp $ */
+/* $Id: auth.c,v 1.102 2005/05/22 03:38:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,6 +260,18 @@ find_auth(struct uri *uri)
 	return entry;
 }
 
+static void
+done_auth_entry(struct auth_entry *entry)
+{
+	if (entry->box_item)
+		done_listbox_item(&auth_browser, entry->box_item);
+	done_uri(entry->uri);
+	mem_free_if(entry->realm);
+	mem_free_if(entry->nonce);
+	mem_free_if(entry->opaque);
+	mem_free(entry);
+}
+
 /* Delete an entry from auth list. */
 void
 del_auth_entry(struct auth_entry *entry)
@@ -271,13 +283,7 @@ del_auth_entry(struct auth_entry *entry)
 
 	del_from_list(entry);
 
-	if (entry->box_item)
-		done_listbox_item(&auth_browser, entry->box_item);
-	done_uri(entry->uri);
-	mem_free_if(entry->realm);
-	mem_free_if(entry->nonce);
-	mem_free_if(entry->opaque);
-	mem_free(entry);
+	done_auth_entry(entry);
 }
 
 /* Free all entries in auth list and questions in queue. */

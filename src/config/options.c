@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.476 2005/04/17 23:07:47 jonas Exp $ */
+/* $Id: options.c,v 1.477 2005/05/22 04:32:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -532,24 +532,26 @@ delete_option_do(struct option *option, int recursive)
 		ERROR("Orphaned option %s", option->name);
 	}
 
+	if (option->type == OPT_TREE && option->value.tree) {
+		if (!recursive && !list_empty(*option->value.tree)) {
+			if (option->flags & OPT_AUTOCREATE) {
+				recursive = 1;
+			} else {
+				ERROR("Orphaned unregistered "
+					"option in subtree %s!",
+					option->name);
+				recursive = -1;
+			}
+		}
+		free_options_tree(option->value.tree, recursive);
+	}
+
 	switch (option->type) {
 		case OPT_STRING:
 			mem_free_if(option->value.string);
 			break;
 		case OPT_TREE:
-			if (!option->value.tree) break;
-			if (!recursive && !list_empty(*option->value.tree)) {
-				if (option->flags & OPT_AUTOCREATE) {
-					recursive = 1;
-				} else {
-					ERROR("Orphaned unregistered "
-						"option in subtree %s!",
-						option->name);
-					recursive = -1;
-				}
-			}
-			free_options_tree(option->value.tree, recursive);
-			mem_free(option->value.tree);
+			mem_free_if(option->value.tree);
 			break;
 		default:
 			break;

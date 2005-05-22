@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.216 2005/05/22 01:38:38 miciah Exp $ */
+/* $Id: cache.c,v 1.217 2005/05/22 01:53:04 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -645,8 +645,8 @@ delete_cache_entry(struct cache_entry *cached)
 	assertm(!is_object_used(cached), "deleting locked cache entry");
 	assertm(!is_entry_used(cached), "deleting loading cache entry");
 
-	delete_entry_content(cached);
 	del_from_list(cached);
+	delete_entry_content(cached);
 
 	if (cached->box_item) done_listbox_item(&cache_browser, cached->box_item);
 

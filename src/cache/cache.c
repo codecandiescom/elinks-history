@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.215 2005/05/14 12:09:35 pasky Exp $ */
+/* $Id: cache.c,v 1.216 2005/05/22 01:38:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,9 +139,9 @@ get_cache_entry(struct uri *uri)
 	cached->id = id_counter++;
 	object_nolock(cached, "cache_entry"); /* Debugging purpose. */
 
-	add_to_list(cache_entries, cached);
-
 	cached->box_item = add_listbox_leaf(&cache_browser, NULL, cached);
+
+	add_to_list(cache_entries, cached);
 
 	return cached;
 }

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.82 2005/04/23 15:58:54 zas Exp $ */
+/* $Id: dialogs.c,v 1.83 2005/05/22 03:03:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,7 +79,7 @@ accept_cookie_dialog(struct session *ses, void *data)
 		string.source,
 		cookie, 2,
 		N_("~Accept"), accept_cookie, B_ENTER,
-		N_("~Reject"), free_cookie, B_ESC);
+		N_("~Reject"), done_cookie, B_ESC);
 }
 
 
@@ -188,7 +188,7 @@ delete_cookie(struct listbox_item *item, int last)
 		assert(!is_object_used(cookie));
 
 		del_from_list(cookie);
-		free_cookie(cookie);
+		done_cookie(cookie);
 	}
 
 	if (last

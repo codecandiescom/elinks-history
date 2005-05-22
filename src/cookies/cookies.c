@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.200 2005/04/23 15:58:54 zas Exp $ */
+/* $Id: cookies.c,v 1.201 2005/05/22 03:03:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,7 +190,7 @@ done_cookie_server(struct cookie_server *cs)
 }
 
 void
-free_cookie(struct cookie *c)
+done_cookie(struct cookie *c)
 {
 	if (c->box_item) done_listbox_item(&cookie_browser, c->box_item);
 	if (c->server) done_cookie_server(c->server);
@@ -309,7 +309,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	    || !cookie->name
 	    || !cookie->value
 	    || !cookie->server) {
-		free_cookie(cookie);
+		done_cookie(cookie);
 		return;
 	}
 
@@ -321,7 +321,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 #ifdef DEBUG_COOKIES
 		DBG("Dropped.");
 #endif
-		free_cookie(cookie);
+		done_cookie(cookie);
 		return;
 	}
 #endif
@@ -367,7 +367,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 		path = get_uri_string(uri, URI_PATH);
 		if (!path) {
-			free_cookie(cookie);
+			done_cookie(cookie);
 			return;
 		}
 
@@ -435,7 +435,7 @@ static void
 del_from_cookie_list(struct cookie *cookie)
 {
 	del_from_list(cookie);
-	free_cookie(cookie);
+	done_cookie(cookie);
 }
 
 void
@@ -507,7 +507,7 @@ delete_cookie(struct cookie *c)
 
 end:
 	del_from_list(c);
-	free_cookie(c);
+	done_cookie(c);
 
 	if (get_cookies_save() && get_cookies_resave())
 		save_cookies();
@@ -747,7 +747,7 @@ load_cookies(void) {
 		/* Check whether all fields were correctly allocated. */
 		if (!cookie->server || !cookie->name || !cookie->value
 		    || !cookie->path || !cookie->domain) {
-			free_cookie(cookie);
+			done_cookie(cookie);
 			continue;
 		}
 
@@ -806,7 +806,7 @@ free_cookies_list(struct list_head *list)
 		struct cookie *cookie = list->next;
 
 		del_from_list(cookie);
-		free_cookie(cookie);
+		done_cookie(cookie);
 	}
 }
 

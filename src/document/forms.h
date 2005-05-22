@@ -1,4 +1,4 @@
-/* $Id: forms.h,v 1.7 2005/01/12 02:35:20 jonas Exp $ */
+/* $Id: forms.h,v 1.8 2005/05/22 02:21:03 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_FORMS_H
 #define EL__DOCUMENT_FORMS_H
@@ -97,6 +97,10 @@ struct form_control {
 	unsigned char **labels;
 	struct menu_item *menu;
 };
+
+/* Numerical form type <-> form type name */
+int str2form_type(unsigned char *s);
+unsigned char *form_type2str(enum form_type num);
 
 struct form *init_form(void);
 void done_form(struct form *form);

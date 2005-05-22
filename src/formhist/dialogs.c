@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.42 2005/03/23 15:43:41 miciah Exp $ */
+/* $Id: dialogs.c,v 1.43 2005/05/22 02:21:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "formhist/dialogs.h"
 #include "formhist/formhist.h"
 #include "dialogs/edit.h"
+#include "document/forms.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/uri.h"
 #include "sched/session.h"

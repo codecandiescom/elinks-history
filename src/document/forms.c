@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: forms.c,v 1.12 2005/05/01 13:04:03 jonas Exp $ */
+/* $Id: forms.c,v 1.13 2005/05/22 02:21:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,53 @@
 #include "util/error.h"
 #include "util/lists.h"
 #include "util/memory.h"
+
+
+struct form_type_name {
+	enum form_type num;
+	unsigned char *name;
+};
+
+static struct form_type_name form_type2name[] = {
+	{ FC_TEXT,	"text"		},
+	{ FC_PASSWORD,	"password"	},
+	{ FC_FILE,	"file"		},
+	{ FC_TEXTAREA,	"textarea"	},
+	{ FC_CHECKBOX,	"checkbox"	},
+	{ FC_RADIO,	"radio"		},
+	{ FC_SELECT,	"select"	},
+	{ FC_SUBMIT,	"submit"	},
+	{ FC_IMAGE,	"image"		},
+	{ FC_HIDDEN,	"hidden"	},
+};
+
+#define FORM_TYPE_COUNT (sizeof(form_type2name)/sizeof(struct form_type_name))
+
+int
+str2form_type(unsigned char *s)
+{
+	int n;
+
+	for (n = 0; n < FORM_TYPE_COUNT; n++)
+		if (!strcmp(form_type2name[n].name, s))
+			return form_type2name[n].num;
+
+	return -1;
+}
+
+unsigned char *
+form_type2str(enum form_type num)
+{
+	int n;
+
+	for (n = 0; n < FORM_TYPE_COUNT; n++)
+		if (form_type2name[n].num == num)
+			return form_type2name[n].name;
+
+	return NULL;
+}
+
+#undef FORM_TYPE_COUNT
 
 
 struct form *

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.107 2005/05/22 02:36:35 miciah Exp $ */
+/* $Id: formhist.c,v 1.108 2005/05/22 02:41:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,10 +73,10 @@ new_formhist_item(unsigned char *url)
 void
 free_formhist_item(struct formhist_data *form)
 {
-	done_submitted_value_list(form->submit);
-	mem_free(form->submit);
 	if (form->box_item)
 		done_listbox_item(&formhist_browser, form->box_item);
+	done_submitted_value_list(form->submit);
+	mem_free(form->submit);
 	mem_free(form);
 }
 

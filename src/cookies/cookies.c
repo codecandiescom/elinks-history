@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.202 2005/05/22 03:09:50 miciah Exp $ */
+/* $Id: cookies.c,v 1.203 2005/05/22 03:10:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,13 +438,6 @@ set_cookie(struct uri *uri, unsigned char *str)
 	accept_cookie(cookie);
 }
 
-static void
-del_from_cookie_list(struct cookie *cookie)
-{
-	del_from_list(cookie);
-	done_cookie(cookie);
-}
-
 void
 accept_cookie(struct cookie *cookie)
 {
@@ -467,7 +460,7 @@ accept_cookie(struct cookie *cookie)
 			    || strcasecmp(c->domain, cookie->domain))
 				continue;
 
-			del_from_cookie_list(c);
+			delete_cookie(c);
 		}
 	}
 
@@ -644,7 +637,7 @@ send_cookies(struct uri *uri)
 			DBG("Cookie %s=%s (exp %d) expired.",
 			    c->name, c->value, c->expires);
 #endif
-			del_from_cookie_list(c);
+			delete_cookie(c);
 
 			cookies_dirty = 1;
 			continue;

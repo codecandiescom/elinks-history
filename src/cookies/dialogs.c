@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.83 2005/05/22 03:03:57 miciah Exp $ */
+/* $Id: dialogs.c,v 1.84 2005/05/22 03:08:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,7 @@ can_delete_cookie(struct listbox_item *item)
 }
 
 static void
-delete_cookie(struct listbox_item *item, int last)
+delete_cookie_item(struct listbox_item *item, int last)
 {
 	struct cookie *cookie = item->udata;
 
@@ -183,7 +183,7 @@ delete_cookie(struct listbox_item *item, int last)
 		/* Releasing refcounts on the cookie_server will automagically
 		 * delete it. */
 		foreachsafe (item, next, root->child)
-			delete_cookie(item, 0);
+			delete_cookie_item(item, 0);
 	} else {
 		assert(!is_object_used(cookie));
 
@@ -234,7 +234,7 @@ static struct listbox_ops cookies_listbox_ops = {
 	get_cookie_root,
 	NULL,
 	can_delete_cookie,
-	delete_cookie,
+	delete_cookie_item,
 	NULL,
 	&cookies_messages,
 };

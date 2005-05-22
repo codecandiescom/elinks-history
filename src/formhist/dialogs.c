@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.44 2005/05/22 02:34:06 miciah Exp $ */
+/* $Id: dialogs.c,v 1.45 2005/05/22 02:36:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,7 +202,7 @@ push_toggle_dontsave_button(struct dialog_data *dlg_data,
 static widget_handler_status_T
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
-	save_forms_to_file();
+	save_formhist_to_file();
 	return EVENT_PROCESSED;
 }
 
@@ -225,6 +225,6 @@ struct_hierbox_browser(
 void
 formhist_manager(struct session *ses)
 {
-	load_forms_from_file();
+	load_formhist_from_file();
 	hierbox_browser(&formhist_browser, ses);
 }

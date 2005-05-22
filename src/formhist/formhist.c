@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.106 2005/05/22 02:34:06 miciah Exp $ */
+/* $Id: formhist.c,v 1.107 2005/05/22 02:36:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,7 @@ free_formhist_item(struct formhist_data *form)
 static int loaded = 0;
 
 int
-load_forms_from_file(void)
+load_formhist_from_file(void)
 {
 	struct formhist_data *form;
 	unsigned char tmp[MAX_STR_LEN];
@@ -207,7 +207,7 @@ fail:
 }
 
 int
-save_forms_to_file(void)
+save_formhist_to_file(void)
 {
 	struct secure_save_info *ssi;
 	unsigned char *file;
@@ -273,7 +273,7 @@ form_exists(struct formhist_data *form1)
 {
 	struct formhist_data *form;
 
-	if (!load_forms_from_file()) return 0;
+	if (!load_formhist_from_file()) return 0;
 
 	foreach (form, saved_forms) {
 		int count = 0;
@@ -334,7 +334,7 @@ remember_form(struct formhist_data *form)
 	forget_forms_with_url(form->url);
 	add_to_list(saved_forms, form);
 
-	return save_forms_to_file();
+	return save_formhist_to_file();
 }
 
 static int
@@ -351,7 +351,7 @@ get_form_history_value(unsigned char *url, unsigned char *name)
 
 	if (!url || !*url || !name || !*name) return NULL;
 
-	if (!load_forms_from_file()) return NULL;
+	if (!load_formhist_from_file()) return NULL;
 
 	foreach (form, saved_forms) {
 		if (form->dontsave) continue;

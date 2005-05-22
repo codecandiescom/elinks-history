@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.201 2005/05/22 03:03:57 miciah Exp $ */
+/* $Id: cookies.c,v 1.202 2005/05/22 03:09:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,6 +199,13 @@ done_cookie(struct cookie *c)
 	mem_free_if(c->path);
 	mem_free_if(c->domain);
 	mem_free(c);
+}
+
+void
+delete_cookie(struct cookie *c)
+{
+	del_from_list(c);
+	done_cookie(c);
 }
 
 
@@ -805,8 +812,7 @@ free_cookies_list(struct list_head *list)
 	while (!list_empty(*list)) {
 		struct cookie *cookie = list->next;
 
-		del_from_list(cookie);
-		done_cookie(cookie);
+		delete_cookie(cookie);
 	}
 }
 

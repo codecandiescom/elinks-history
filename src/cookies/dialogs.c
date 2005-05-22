@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.84 2005/05/22 03:08:17 miciah Exp $ */
+/* $Id: dialogs.c,v 1.85 2005/05/22 03:09:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,8 +187,7 @@ delete_cookie_item(struct listbox_item *item, int last)
 	} else {
 		assert(!is_object_used(cookie));
 
-		del_from_list(cookie);
-		done_cookie(cookie);
+		delete_cookie(cookie);
 	}
 
 	if (last

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.166 2005/05/18 04:20:17 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.167 2005/05/22 01:12:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,6 +238,16 @@ bookmarks_are_dirty(void)
 
 #define check_bookmark_cache(url) (bookmark_cache && (url) && *(url))
 
+static void
+done_bookmark(struct bookmark *bm)
+{
+	done_listbox_item(&bookmark_browser, bm->box_item);
+
+	mem_free(bm->title);
+	mem_free(bm->url);
+	mem_free(bm);
+}
+
 /* Deletes a bookmark. Returns 0 on failure (no such bm), 1 on success. */
 void
 delete_bookmark(struct bookmark *bm)
@@ -261,12 +271,7 @@ delete_bookmark(struct bookmark *bm)
 	del_from_list(bm);
 	bookmarks_set_dirty();
 
-	/* Now wipe the bookmark */
-	done_listbox_item(&bookmark_browser, bm->box_item);
-
-	mem_free(bm->title);
-	mem_free(bm->url);
-	mem_free(bm);
+	done_bookmark(bm);
 }
 
 /* Deletes any bookmarks with no URLs (i.e., folders) and of which

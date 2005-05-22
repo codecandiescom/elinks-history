@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.478 2005/05/22 04:36:38 miciah Exp $ */
+/* $Id: options.c,v 1.479 2005/05/22 04:39:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -560,8 +560,9 @@ delete_option_do(struct option *option, int recursive)
 		ERROR("Orphaned option %s", option->name);
 	}
 
-	if (option->type == OPT_TREE && option->value.tree) {
-		if (!recursive && !list_empty(*option->value.tree)) {
+	if (option->type == OPT_TREE && option->value.tree
+	    && !list_empty(*option->value.tree)) {
+		if (!recursive) {
 			if (option->flags & OPT_AUTOCREATE) {
 				recursive = 1;
 			} else {

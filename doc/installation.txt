@@ -64,7 +64,7 @@ This installation guide is far from being complete. You are also advised to
 read the `README` and the `INSTALL` files distributed with ELinks for further
 up to date info on building and installing.
 
-ifndef::website[]
+ifndef::installation-webpage[]
 
 include::small.txt[]
 
@@ -72,6 +72,6 @@ include::ecmascript.txt[]
 
 include::txt/import-features.conf.txt[]
 
-endif::website[]
+endif::installation-webpage[]
 
-$Id: installation.txt,v 1.9 2005/05/22 15:22:56 jonas Exp $
+$Id: installation.txt,v 1.10 2005/05/22 16:01:21 jonas Exp $

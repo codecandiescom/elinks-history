@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.45 2005/05/22 02:36:35 miciah Exp $ */
+/* $Id: dialogs.c,v 1.46 2005/05/22 02:48:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,7 @@ delete_formhist_data(struct listbox_item *item, int last)
 	assert(!is_object_used(formhist_data));
 
 	del_from_list(formhist_data);
-	free_formhist_item(formhist_data);
+	done_formhist_item(formhist_data);
 }
 
 static struct listbox_ops_messages formhist_messages = {

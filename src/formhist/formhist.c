@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.105 2005/05/22 02:31:39 miciah Exp $ */
+/* $Id: formhist.c,v 1.106 2005/05/22 02:34:06 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ new_formhist_item(unsigned char *url)
 }
 
 void
-free_form(struct formhist_data *form)
+free_formhist_item(struct formhist_data *form)
 {
 	done_submitted_value_list(form->submit);
 	mem_free(form->submit);
@@ -202,7 +202,7 @@ cont:
 	return 1;
 
 fail:
-	free_form(form);
+	free_formhist_item(form);
 	return 0;
 }
 
@@ -319,7 +319,7 @@ forget_forms_with_url(unsigned char *url)
 		if (strcmp(form->url, url)) continue;
 
 		del_from_list(form);
-		free_form(form);
+		free_formhist_item(form);
 		count++;
 	}
 
@@ -412,13 +412,13 @@ memorize_form(struct session *ses, struct list_head *submit,
 		"If you are using a valuable password, answer NO."),
 		form, 3,
 		N_("~Yes"), remember_form, B_ENTER,
-		N_("~No"), free_form, B_ESC,
+		N_("~No"), free_formhist_item, B_ESC,
 		N_("Ne~ver for this site"), never_for_this_site, NULL);
 
 	return;
 
 fail:
-	free_form(form);
+	free_formhist_item(form);
 }
 
 static void

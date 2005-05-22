@@ -13,8 +13,8 @@ Motto: I didn't expect someone to look at the source, so it's unreadable.
        --Mikulas
 
 
-1, Language files
-~~~~~~~~~~~~~~~~~
+Language files
+~~~~~~~~~~~~~~
 
 Each UI output should use language files in order to be able to translate the
 messages to a desired language.  Those language files reside in the po/ subdir. If
@@ -23,8 +23,8 @@ you want to update a .po file, please read the gettext manual available at
 your own system, you have to have the gettext tools installed.
 
 
-2, ELinks philosophy
-~~~~~~~~~~~~~~~~~~~~
+ELinks philosophy
+~~~~~~~~~~~~~~~~~
 
 ELinks is based on the philosophy of asynchronism.  That means, you pass a
 callback to each function, and when the requested task finishes sometime in the
@@ -56,8 +56,8 @@ Various parts are described either below or in README* file(s) of appropriate
 directory.
 
 
-2.1, HTML parser
-~~~~~~~~~~~~~~~~
+HTML parser
+~~~~~~~~~~~
 
 The following was found in the mailing list archive - Mikulas wrote it:
 
@@ -87,8 +87,8 @@ that holds the actual formatted data.  If the pointer is NULL, rendering
 functions only calculate size.
 
 
-2.2, Documents management
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Documents management
+~~~~~~~~~~~~~~~~~~~~
 
 Just a few words regarding the document structures. To understand the code, it
 is important to note the difference between rendered documents and document
@@ -115,8 +115,8 @@ Unlike document_view, though, its lifespan is much longer. When you chain
 those view_states up, you get a session history.
 
 
-2.3, Lua support
-~~~~~~~~~~~~~~~~
+Lua support
+~~~~~~~~~~~
 
 Peter Wang wrote this on the mailing list:
 
@@ -129,8 +129,7 @@ code to run some Lua code, run it, then translate the return values to
 something meaningful to the C code.  They are really simple, but I had to put
 in some cruft.
 
-For example, the code implementing the Go To URL dialog box hook :
-
+.The code implementing the Go To URL dialog box hook :
 ------------------------------------------------------------------------------
 void goto_url_with_hook(struct session *ses, unsigned char *url)
 {
@@ -198,8 +197,8 @@ hooks, but not much.  Instead of branching off to some C code when a key is
 pressed, we branch off to some Lua code.
 
 
-3, Coding style
-~~~~~~~~~~~~~~~
+Coding style
+~~~~~~~~~~~~
 
 Mikulas once said that 'it was hard to code, so it should be hard to read' -
 and he drove by this when he was writing links.  However, we do NOT drive by
@@ -249,8 +248,8 @@ remarkable implication of no C99 are no C++ (//) comments and declarations
 at the start of block only.
 
 
-3.1, Comments
-~~~~~~~~~~~~~
+Comments
+~~~~~~~~
 
 Use blank lines frequently to separate chunks of code.  And use magic `/\*` and
 `*/` to give others an idea about what it does and about possible pitfalls.
@@ -505,7 +504,7 @@ All the .c files MUST start by a short one-line description and a CVS Id tag
 on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.34 2005/05/21 20:47:19 jonas Exp $ */
+	/* $Id: hacking.txt,v 1.35 2005/05/22 17:23:50 jonas Exp $ */
 
 All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
 The macro is
@@ -516,8 +515,8 @@ There are obviously exceptions to these rules, but don't make a rule from your
 exception and be prepared to defend your exception at anytime ;).
 
 
-3.3, Coding practices
-~~~~~~~~~~~~~~~~~~~~~
+Coding practices
+~~~~~~~~~~~~~~~~
 
 Use bitfields to store boolean values
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -624,8 +623,8 @@ typedef long long our_long_T;
 -------------------------------------------------------------------------------
 
 
-4, Patches
-~~~~~~~~~~
+Patches
+~~~~~~~
 
 Please send unified patches only.
 
@@ -661,8 +660,8 @@ breaking it to the "thinnest" possible level where the change is still
 sufficiently self-contained.
 
 
-5, Advantages of `--enable-debug` configure option
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Advantages of `--enable-debug` configure option
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Since ELinks 0.4pre11, a memory debugger can be enabled using the
 `--enable-debug` configure script option.  It may help to find memleaks and more
@@ -685,4 +684,4 @@ to compile or execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.34 2005/05/21 20:47:19 jonas Exp $
+$Id: hacking.txt,v 1.35 2005/05/22 17:23:50 jonas Exp $

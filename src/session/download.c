@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.369 2005/04/28 08:09:22 zas Exp $ */
+/* $Id: download.c,v 1.370 2005/05/23 13:13:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -925,14 +925,6 @@ tp_save(struct type_query *type_query)
 	query_file(type_query->ses, type_query->uri, type_query, continue_download, tp_cancel, 1);
 }
 
-
-static void
-tp_open(struct type_query *type_query)
-{
-	continue_download(type_query, "");
-}
-
-
 /* This button handler uses the add_dlg_button() interface so that pressing
  * 'Show header' will not close the type query dialog. */
 widget_handler_status_T
@@ -981,21 +973,17 @@ tp_display(struct type_query *type_query)
 	done_type_query(type_query);
 }
 
-/* Wraps the standard check_nonempty() handler which only gets called
- * if the user pressed the button to open the queried URI with an external
- * handler. */
-widget_handler_status_T
-check_tp_nonempty(struct dialog_data *dlg_data, struct widget_data *widget_data)
+static void
+tp_open(struct type_query *type_query)
 {
-	struct widget_data *selected_widget_data = selected_widget(dlg_data);
-	struct widget *selected_widget = selected_widget_data->widget;
+	if (!type_query->external_handler || !*type_query->external_handler) {
+		tp_display(type_query);
+		return;
+	}
 
-	if (selected_widget->type != WIDGET_BUTTON
-	    || selected_widget->info.button.done != (done_handler_T *) tp_open)
-		return EVENT_PROCESSED;
-
-	return check_nonempty(dlg_data, widget_data);
+	continue_download(type_query, "");
 }
+
 
 static void
 do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_handler *handler)
@@ -1076,7 +1064,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 
 		/* xgettext:no-c-format */
 		add_dlg_field(dlg, _("Program ('%' will be replaced by the filename)", term),
-			0, 0, check_tp_nonempty, MAX_STR_LEN, field, NULL);
+			0, 0, NULL, MAX_STR_LEN, field, NULL);
 		type_query->external_handler = field;
 
 		add_dlg_radio(dlg, _("Block the terminal", term), 0, 0, &type_query->block);

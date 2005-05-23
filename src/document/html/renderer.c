@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.535 2005/05/01 13:27:19 jonas Exp $ */
+/* $Id: renderer.c,v 1.536 2005/05/23 12:42:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1233,7 +1233,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		/* For pure spaces reset the link state */
 		if (x_offset == charslen)
 			link_state = LINK_STATE_NONE;
-		else if (global_doc_opts->num_links_display)
+		else if (global_doc_opts->links_numbering)
 			put_link_number(part);
 	}
 

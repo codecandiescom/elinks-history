@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.55 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: options.h,v 1.56 2005/05/23 12:42:49 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -56,7 +56,7 @@ struct document_options {
 	unsigned int plain_compress_empty_lines:1;
 
 	/* Link navigation */
-	unsigned int num_links_display:1;
+	unsigned int links_numbering:1;
 	unsigned int use_tabindex:1;
 
 	unsigned int plain:1;

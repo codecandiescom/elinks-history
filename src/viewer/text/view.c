@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.691 2005/05/17 13:47:50 zas Exp $ */
+/* $Id: view.c,v 1.692 2005/05/23 12:42:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -699,7 +699,7 @@ try_prefix_key(struct session *ses, struct document_view *doc_view,
 	    || ses->kbdprefix.repeat_count /* The user has already begun
 	                                    * entering a prefix. */
 	    || !doc_opts->num_links_key
-	    || (doc_opts->num_links_key == 1 && !doc_opts->num_links_display)) {
+	    || (doc_opts->num_links_key == 1 && !doc_opts->links_numbering)) {
 		/* Repeat count.
 		 * ses->kbdprefix.repeat_count is initialized to zero
 		 * the first time by init_session() calloc() call.

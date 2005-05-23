@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.59 2005/02/28 11:15:31 zas Exp $ */
+/* $Id: options.c,v 1.60 2005/05/23 12:42:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ init_document_options(struct document_options *doo)
 	doo->underline_links = get_opt_bool("document.html.underline_links");
 	doo->wrap_nbsp = get_opt_bool("document.html.wrap_nbsp");
 	doo->use_tabindex = get_opt_bool("document.browse.links.use_tabindex");
-	doo->num_links_display = get_opt_bool("document.browse.links.numbering");
+	doo->links_numbering = get_opt_bool("document.browse.links.numbering");
 
 	doo->color_active_link = get_opt_bool("document.browse.links.active_link.enable_color");
 	doo->invert_active_link = get_opt_bool("document.browse.links.active_link.invert");

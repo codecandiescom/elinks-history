@@ -3,7 +3,7 @@
 # Generate the elinkskeys(5) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinkskeys-manpage,v 1.6 2005/05/22 21:58:19 jonas Exp $
+# $Id: make-elinkskeys-manpage,v 1.7 2005/05/23 01:42:06 jonas Exp $
 
 # FIXME:
 #
@@ -43,7 +43,7 @@ man()
 		echo "\`$target($section)\`"
 		;;
 	html)
-		echo "link:$target.html[\`$target($section)\`]"
+		echo "link:$target.$section.html[\`$target($section)\`]"
 		;;
 	esac
 }

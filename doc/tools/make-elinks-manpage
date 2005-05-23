@@ -3,7 +3,7 @@
 # Generate the elinks(1) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinks-manpage,v 1.8 2005/05/22 21:58:19 jonas Exp $
+# $Id: make-elinks-manpage,v 1.9 2005/05/23 01:42:06 jonas Exp $
 
 DOCTYPE=$(echo "$1" | sed 's/.*elinks.1.//' | sed 's/.txt.*//')
 ELINKS=$2
@@ -34,7 +34,7 @@ email()
 		echo "<$email>"
 		;;
 	html)
-		echo "link:mailto:$email[<$email>]"
+		echo "mailto:$email[<$email>]"
 		;;
 	esac
 }
@@ -49,7 +49,7 @@ man()
 		echo "\`$target($section)\`"
 		;;
 	html)
-		echo "link:$target.html[\`$target($section)\`]"
+		echo "link:$target.$section.html[\`$target($section)\`]"
 		;;
 	esac
 }

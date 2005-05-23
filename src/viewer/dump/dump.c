@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.158 2005/04/20 14:35:19 jonas Exp $ */
+/* $Id: dump.c,v 1.159 2005/05/23 12:38:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,9 +108,6 @@ dump_formatted(int fd, struct download *download, struct cache_entry *cached)
 	memset(&vs, 0, sizeof(vs));
 	memset(&formatted, 0, sizeof(formatted));
 
-	get_opt_bool("document.browse.links.numbering") =
-		!get_cmd_opt_bool("no-numbering");
-
 	init_document_options(&o);
 	width = get_opt_int("document.dump.width");
 	set_box(&o.box, 0, 1, width, DEFAULT_TERMINAL_HEIGHT);
@@ -119,6 +116,7 @@ dump_formatted(int fd, struct download *download, struct cache_entry *cached)
 	o.color_mode = COLOR_MODE_DUMP;
 	o.plain = 0;
 	o.frames = 0;
+	o.num_links_display = !get_cmd_opt_bool("no-numbering");
 
 	init_vs(&vs, cached->uri, -1);
 
@@ -443,7 +441,7 @@ fail:
 
 			if (!where) continue;
 
-			if (get_opt_bool("document.browse.links.numbering")) {
+			if (document->options.num_links_display) {
 				if (link->title && *link->title)
 					snprintf(buf, D_BUF, "%4d. %s\n\t%s\n",
 						 x + 1, link->title, where);

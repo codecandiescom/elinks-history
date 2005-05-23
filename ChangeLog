@@ -1,3 +1,44 @@
+Mon May 23 13:13:16 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	When no handler is specified (empty string) in what to do with file
+	dialog makes Open acts as Display instead of displaying an error (so
+	check_tp_nonempty() was dropped).  
+
+Mon May 23 12:42:49 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: document/options.c, document/options.h,
+	document/html/renderer.c, viewer/dump/dump.c, viewer/text/view.c:
+
+	document->options.num_links_display was renamed
+	document->options.links_numbering.  
+
+Mon May 23 12:38:57 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/dump/dump.c:
+
+	Use document->options.num_links_display instead of modifying
+	document.browse.links.numbering option.  
+
+Mon May 23 01:42:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/: make-elinks-manpage, make-elinkskeys-manpage:
+
+	Fix the linking.  
+
+Mon May 23 00:23:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, asciidoc.conf:
+
+	Add asciidoc.conf file and use it for css-embedded files.  
+
+Mon May 23 00:18:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/get-cvs-docs:
+
+	Add script to grab generated documentation from cvs.  
+
 Sun May 22 21:58:19 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/: Makefile.am, tools/make-elinks-manpage,

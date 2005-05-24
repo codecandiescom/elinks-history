@@ -504,7 +504,7 @@ All the .c files MUST start by a short one-line description and a CVS Id tag
 on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.35 2005/05/22 17:23:50 jonas Exp $ */
+	/* $Id: hacking.txt,v 1.36 2005/05/24 18:21:45 jonas Exp $ */
 
 All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
 The macro is
@@ -684,4 +684,6 @@ to compile or execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.35 2005/05/22 17:23:50 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: hacking.txt,v 1.36 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

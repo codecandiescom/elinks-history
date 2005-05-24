@@ -93,11 +93,12 @@ They are binary units defined by
 link:http://physics.nist.gov/cuu/Units/binary.html[the International System of Units].
 Examples:
 
-One kibibit::
-	1 Kibit = 2<sup>10</sup> bit = 1024 bit
-
-One mebibyte::
-	1 MiB = 2<sup>20</sup> B = 1 048 576 B
+`---------------`--------------------------------------------------------------
+Unit		Definition
+-------------------------------------------------------------------------------
+One kibibit	1 Kibit = 2^10 bit = 1024 bit
+One mebibyte	1 MiB = 2^20 B = 1 048 576 B
+-------------------------------------------------------------------------------
 
 
 [[christmas]]
@@ -151,4 +152,6 @@ fields can be added inside the parenthesis in the next versions.  Note that
 users can change their User-Agent through the options system.
 
 
-$Id: faq.txt,v 1.4 2005/05/21 20:46:23 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: faq.txt,v 1.5 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

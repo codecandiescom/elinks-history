@@ -88,4 +88,6 @@ sample Lua hooks file.  The one disadvantage to this is that you must have Lua
 scripting enabled in order to make use of it, and many users don't have Lua
 installed.
 
-$Id: urlshortcuts.txt,v 1.4 2005/05/21 20:41:31 rrowan Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: urlshortcuts.txt,v 1.5 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

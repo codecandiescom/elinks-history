@@ -273,63 +273,65 @@ dialog box, and it will convert them to the URL I actually want to visit.  As
 a bonus, it allows me perform some searches on sites like Google without
 loading up the front page first.
 
-	function match (prefix, url)
-	    return strsub (url, 1, strlen (prefix)) == prefix
-	end
+-------------------------------------------------------------------------------
+function match (prefix, url)
+    return strsub (url, 1, strlen (prefix)) == prefix
+end
 
-	function strip (str)
-	    return gsub (str, "^%s*(.-)%s*$", "%1")
-	end
+function strip (str)
+    return gsub (str, "^%s*(.-)%s*$", "%1")
+end
 
-	function plusify (str)
-	    return gsub (str, "%s", "+")
-	end
+function plusify (str)
+    return gsub (str, "%s", "+")
+end
 
-	function goto_url_hook (url, current_url)
-	    -- Google search (e.g. ,gg unix browsers).
-	    if match (",gg", url) then
-		url = plusify (strip (strsub (url, 4)))
-		return "http://www.google.com/search?q="..url.."&btnG=Google+Search"
-	 
-	    -- Freshmeat search.
-	    elseif match (",fm", url) then
-		url = plusify (strip (strsub (url, 4)))
-		return "http://www.freshmeat.net/search/?q="..url
+function goto_url_hook (url, current_url)
+    -- Google search (e.g. ,gg unix browsers).
+    if match (",gg", url) then
+	url = plusify (strip (strsub (url, 4)))
+	return "http://www.google.com/search?q="..url.."&btnG=Google+Search"
+ 
+    -- Freshmeat search.
+    elseif match (",fm", url) then
+	url = plusify (strip (strsub (url, 4)))
+	return "http://www.freshmeat.net/search/?q="..url
 
-	    -- Appwatch search (e.g. ,aw lynx).
-	    elseif match (",aw", url) then
-		url = plusify (strip (strsub (url, 4)))
-		return "http://www.appwatch.com/Linux/Users/find?q="..url
-	    
-	    -- Dictionary.com search (e.g. ,dict congenial).
-	    elseif match (",dict", url) then
-		url = plusify (strip (strsub (url, 6)))
-		return "http://www.dictionary.com/cgi-bin/dict.pl?db=%2A&term="..url
+    -- Appwatch search (e.g. ,aw lynx).
+    elseif match (",aw", url) then
+	url = plusify (strip (strsub (url, 4)))
+	return "http://www.appwatch.com/Linux/Users/find?q="..url
+    
+    -- Dictionary.com search (e.g. ,dict congenial).
+    elseif match (",dict", url) then
+	url = plusify (strip (strsub (url, 6)))
+	return "http://www.dictionary.com/cgi-bin/dict.pl?db=%2A&term="..url
 
-	    -- RPM search (e.g. ,rpm links).
-	    elseif match (",rpm", url) then
-		url = plusify (strip (strsub (url, 5)))
-		return "http://www.rpmfind.net/linux/rpm2html/search.php?query="
-			..url.."&submit=Search+..."
-		
-	    -- Netcraft.com search (e.g. ,whatis www.google.com).
-	    elseif match (",whatis", url) then
-		url = plusify (strip (strsub (url, 8)))
-		return "http://uptime.netcraft.com/up/graph/?host="..url
+    -- RPM search (e.g. ,rpm links).
+    elseif match (",rpm", url) then
+	url = plusify (strip (strsub (url, 5)))
+	return "http://www.rpmfind.net/linux/rpm2html/search.php?query="
+		..url.."&submit=Search+..."
+	
+    -- Netcraft.com search (e.g. ,whatis www.google.com).
+    elseif match (",whatis", url) then
+	url = plusify (strip (strsub (url, 8)))
+	return "http://uptime.netcraft.com/up/graph/?host="..url
 
-	    -- LinuxToday home page.
-	    elseif match (",lt", url) then
-		return "http://linuxtoday.com/"
+    -- LinuxToday home page.
+    elseif match (",lt", url) then
+	return "http://linuxtoday.com/"
 
-	    -- Weather forecast for Melbourne, Australia.
-	    elseif match (",forecast", url) then
-		return "http://www.bom.gov.au/cgi-bin/wrap_fwo.pl?IDF02V00.txt"
+    -- Weather forecast for Melbourne, Australia.
+    elseif match (",forecast", url) then
+	return "http://www.bom.gov.au/cgi-bin/wrap_fwo.pl?IDF02V00.txt"
 
-	    -- Unmatched
-	    else
-		return url
-	    end
-	end
+    -- Unmatched
+    else
+	return url
+    end
+end
+-------------------------------------------------------------------------------
 
 (Note that this was noticably enhanced and rewritten in the ELinks standart
 hooks.)
@@ -343,25 +345,27 @@ expand pathnames such as `~/foo/bar`
 and `~user/zappo`, like in the shell
 and other Unix programs.
 
-	-- Home directory: If you do not enable system functions, you will need
-	-- to set the following to your home directory.
+-------------------------------------------------------------------------------
+-- Home directory: If you do not enable system functions, you will need
+-- to set the following to your home directory.
 
-	home_dir = (getenv and getenv ("HOME")) or "/home/MYSELF"
+home_dir = (getenv and getenv ("HOME")) or "/home/MYSELF"
 
-	function goto_url_hook (url, current_url)
-			.
-			.
+function goto_url_hook (url, current_url)
+		.
+		.
 
-	    -- Expand ~ to home directories.
-	    elseif match ("~", url) then
-		if strsub(url, 2, 2) == "/" then    -- ~/foo
-		    return home_dir..strsub(url, 2)
-		else                                -- ~foo/bar
-		    return "/home/"..strsub(url, 2)
-		end
+    -- Expand ~ to home directories.
+    elseif match ("~", url) then
+	if strsub(url, 2, 2) == "/" then    -- ~/foo
+	    return home_dir..strsub(url, 2)
+	else                                -- ~foo/bar
+	    return "/home/"..strsub(url, 2)
+	end
 
-			.
-			.
+		.
+		.
+-------------------------------------------------------------------------------
 
 
 Filtering crap
@@ -382,44 +386,48 @@ Linux Today has two problems when viewed in ELinks: the useless columns on the
 left and the right and all the text appears in cyan.  Here is a quick recipe
 to fix that:
 
-	-- Plain strfind (no metacharacters)
-	function sstrfind (s, pattern)
-	    return strfind (s, pattern, 1, 1)
-	end
+-------------------------------------------------------------------------------
+-- Plain strfind (no metacharacters)
+function sstrfind (s, pattern)
+    return strfind (s, pattern, 1, 1)
+end
 
-	function pre_format_html_hook (url, html)
-	    -- Strip the left and right columns from Linux Today pages
-	    -- and change the font colour to white.
-	    if sstrfind (url, "linuxtoday.com") then
-		if sstrfind (url, "news_story") then
-		    html = gsub (html, '<TABLE CELLSPACING="0".-</TABLE>', '', 1)
-		    html = gsub (html, '<TR BGCOLOR="#FFF.-</TR></TABLE>', '', 1)
-		else
-		    html = gsub (html, 'WIDTH="120">\n<TR.+</TABLE></TD>', '>', 1)
-		end
-		html = gsub (html, '<A HREF="http://www.internet.com.-</A>', '')
-		html = gsub (html, "<IFRAME.-</IFRAME>", "")
-		-- emphasis in text is lost
-		return gsub (html, 'text="#002244"', 'text="#001133"', 1)
-	    end
-
-	    return nil
+function pre_format_html_hook (url, html)
+    -- Strip the left and right columns from Linux Today pages
+    -- and change the font colour to white.
+    if sstrfind (url, "linuxtoday.com") then
+	if sstrfind (url, "news_story") then
+	    html = gsub (html, '<TABLE CELLSPACING="0".-</TABLE>', '', 1)
+	    html = gsub (html, '<TR BGCOLOR="#FFF.-</TR></TABLE>', '', 1)
+	else
+	    html = gsub (html, 'WIDTH="120">\n<TR.+</TABLE></TD>', '>', 1)
 	end
+	html = gsub (html, '<A HREF="http://www.internet.com.-</A>', '')
+	html = gsub (html, "<IFRAME.-</IFRAME>", "")
+	-- emphasis in text is lost
+	return gsub (html, 'text="#002244"', 'text="#001133"', 1)
+    end
+
+    return nil
+end
+-------------------------------------------------------------------------------
 
 linuxgames.com
 ++++++++++++++
 
 Here is a simpler example, for link:http://www.linuxgames.com/[].
 
-	function pre_format_html_hook (url, html)
-			.
-			.
+-------------------------------------------------------------------------------
+function pre_format_html_hook (url, html)
+		.
+		.
 
-	    elseif strfind (url, "linuxgames.com", 1, 1) then
-		return gsub (html, "<CENTER>.-</center>", "", 1)
+    elseif strfind (url, "linuxgames.com", 1, 1) then
+	return gsub (html, "<CENTER>.-</center>", "", 1)
 
-			.
-			.
+		.
+		.
+-------------------------------------------------------------------------------
 
 
 Reading gzipped files
@@ -431,23 +439,25 @@ Sometimes documents come gzipped in order to save space, but then you need to
 uncompress them to read them with ELinks.  Here is a recipe to handle gzipped
 files on a Unix system.
 
-	-- This script requires system functions.
+-------------------------------------------------------------------------------
+-- This script requires system functions.
 
-	function pre_format_html_hook (url, html)
-			.
-			.
+function pre_format_html_hook (url, html)
+		.
+		.
 
-	    -- Handle gzip'd files within reasonable size.
-	    if strfind (url, "%.gz$") and strlen (html) < 65536 then
-		local tmp = tmpname ()
-		writeto (tmp) write (html) writeto ()
-		html = pipe_read ("(gzip -dc "..tmp.." || cat "..tmp..") 2>/dev/null")
-		remove (tmp)
-		return html
-	    end
+    -- Handle gzip'd files within reasonable size.
+    if strfind (url, "%.gz$") and strlen (html) < 65536 then
+	local tmp = tmpname ()
+	writeto (tmp) write (html) writeto ()
+	html = pipe_read ("(gzip -dc "..tmp.." || cat "..tmp..") 2>/dev/null")
+	remove (tmp)
+	return html
+    end
 
-			.
-			.
+		.
+		.
+-------------------------------------------------------------------------------
 
 
 Printing
@@ -464,25 +474,27 @@ using `lpr' or `enscript'.  Type `lpr()` or `enscript()` in the Lua Console to
 run them.  (In the `hooks.lua`, I have also made it so you can just type `lpr`
 or `enscript`.)
 
-	-- This script requires system functions.
+-------------------------------------------------------------------------------
+-- This script requires system functions.
 
-	function catto (output)
-	    writeto (output)
-	    write (current_document_formatted (79))
-	    writeto ()
-	end
+function catto (output)
+    writeto (output)
+    write (current_document_formatted (79))
+    writeto ()
+end
 
-	-- Send the current document to `lpr'.
-	function lpr ()
-	    -- You must compile Lua with `popen' support for pipes to work.
-	    -- See `config' in the Lua distribution.
-	    catto ("|lpr")
-	end
+-- Send the current document to `lpr'.
+function lpr ()
+    -- You must compile Lua with `popen' support for pipes to work.
+    -- See `config' in the Lua distribution.
+    catto ("|lpr")
+end
 
-	-- Send the current document to `enscript'.
-	function enscript ()
-	    catto ("|enscript -fCourier8")
-	end
+-- Send the current document to `enscript'.
+function enscript ()
+    catto ("|enscript -fCourier8")
+end
+-------------------------------------------------------------------------------
 
 
 Deferring to Netscape
@@ -492,18 +504,20 @@ If you come across a brain-dead web page that is totally unreadable with
 ELinks, you'd probably want to open it with a graphical browser.  The
 following function opens the current document in Netscape.
 
-	-- This function requires `execute', a system function.
+-------------------------------------------------------------------------------
+-- This function requires `execute', a system function.
 
-	-- When starting Netscape: Set to `nil' if you do not want
-	-- to open a new window for each document.
-	netscape_new_window = 1
+-- When starting Netscape: Set to `nil' if you do not want
+-- to open a new window for each document.
+netscape_new_window = 1
 
-	-- Open current document in Netscape.
-	function netscape ()
-	    local new = netscape_new_window and ",new_window" or ""
-	    execute ("( netscape -remote 'openURL("..current_url ()..new..")'"
-		     .." || netscape '"..current_url ().."' ) 2>/dev/null &")
-	end
+-- Open current document in Netscape.
+function netscape ()
+    local new = netscape_new_window and ",new_window" or ""
+    execute ("( netscape -remote 'openURL("..current_url ()..new..")'"
+	     .." || netscape '"..current_url ().."' ) 2>/dev/null &")
+end
+-------------------------------------------------------------------------------
 
 
 Alternative bookmark system
@@ -546,4 +560,6 @@ More ideas
    another hook or function, contact me (Peter Wang) and I'll see what I can
    do.
 
-$Id: lua-scripting.txt,v 1.4 2005/05/18 10:56:47 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: lua-scripting.txt,v 1.5 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,5 @@
-Managing remote ELinks instances with -remote
----------------------------------------------
+Managing remote ELinks instances
+--------------------------------
 
 Some programs provide the ability to pass URIs to external programs.  When
 stumbling upon a reference to a page you want to see, it is sometimes a kludge
@@ -83,4 +83,6 @@ example, by running:
 new tabs containing `slashdot.org`, `freshmeat.net` and a Google search of elinks
 will be opened.
 
-$Id: remote.txt,v 1.11 2005/05/18 03:18:39 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: remote.txt,v 1.12 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

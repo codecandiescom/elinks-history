@@ -162,4 +162,6 @@ supports colors just fine, so select '16 colors', or, if you are running Screen
 within a terminal emulator that supports 256 colors and you have compiled both
 Screen and ELinks to support it, choose '256 colors'.
 
-$Id: terminals.txt,v 1.4 2005/05/18 19:48:01 rrowan Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: terminals.txt,v 1.5 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

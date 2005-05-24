@@ -111,4 +111,6 @@ bookmark therein the currently displayed document of each tab:
   later possible to reconstruct opened tabs.  In case of a clean shutdown
   periodically saved tabs will be removed.
 
-$Id: tabs.txt,v 1.8 2005/05/18 19:59:07 rrowan Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: tabs.txt,v 1.9 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

@@ -113,14 +113,18 @@ Some Sample Mailcap Entries
 
 Below are examples of how to specify external viewers:
 
-	# Use xv if X is running
-	image/*;                xv %s ; test=test -n "$DISPLAY";
+-------------------------------------------------------------------------------
+# Use xv if X is running
+image/*;                xv %s ; test=test -n "$DISPLAY";
 
-	text/x-csrc;		view %s; needsterminal
+text/x-csrc;		view %s; needsterminal
 
-	# Various multimedia files
-	audio/mpeg;             xmms '%s'; test=test -n "$DISPLAY";
-	application/pdf;        xpdf '%s'; test=test -n "$DISPLAY";
-	application/postscript; ps2ascii %s ; copiousoutput
+# Various multimedia files
+audio/mpeg;             xmms '%s'; test=test -n "$DISPLAY";
+application/pdf;        xpdf '%s'; test=test -n "$DISPLAY";
+application/postscript; ps2ascii %s ; copiousoutput
+-------------------------------------------------------------------------------
 
-$Id: mailcap.txt,v 1.9 2005/05/18 03:18:39 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: mailcap.txt,v 1.10 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

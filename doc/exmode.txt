@@ -100,4 +100,6 @@ code is extremely flexible and it is very trivial to make another ex-mode
 command handler, it's just that no one has done it yet ;-). Also, more actions
 should be able to take arguments.
 
-$Id: exmode.txt,v 1.10 2005/05/21 20:46:43 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: exmode.txt,v 1.11 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

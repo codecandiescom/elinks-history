@@ -221,4 +221,6 @@ to switch their bookmarks format frequently, so this is not too high on our
 TODO list. So be sure to tell us if you would like this process to be
 simplified rather sooner than later.
 
-$Id: bookmarks.txt,v 1.19 2005/05/18 23:01:09 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: bookmarks.txt,v 1.20 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

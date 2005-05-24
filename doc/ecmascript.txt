@@ -121,6 +121,6 @@ ECMAScript backend, go ahead - you will just need to write an autoconf
 detection for it and tie it to `src/ecmascript/ecmascript.c`, which should be
 easy. We await your patches eagerly.
 
-
-
-$Id: ecmascript.txt,v 1.15 2005/05/18 11:09:49 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////
+$Id: ecmascript.txt,v 1.16 2005/05/24 18:21:45 jonas Exp $
+///////////////////////////////////////////////////////////////////////////////

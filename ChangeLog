@@ -1,3 +1,15 @@
+Thu May 26 09:23:26 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_html(): optimize &#13; and &#x0a; detection loop a bit.  
+
+Thu May 26 02:00:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, tools/make-elinks-manpage:
+
+	Fix out of tree doc building.  
+
 Wed May 25 22:05:28 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/asciidoc.conf:

@@ -3,10 +3,11 @@
 # Generate the elinks(1) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinks-manpage,v 1.9 2005/05/23 01:42:06 jonas Exp $
+# $Id: make-elinks-manpage,v 1.10 2005/05/26 02:00:33 jonas Exp $
 
 DOCTYPE=$(echo "$1" | sed 's/.*elinks.1.//' | sed 's/.txt.*//')
 ELINKS=$2
+HELP2DOC=$3
 
 GPL="http://www.gnu.org/copyleft/gpl.html"
 
@@ -56,7 +57,7 @@ man()
 
 print_command_options()
 {
-	./tools/help2doc --cmdoptions --elinks=$ELINKS
+	$HELP2DOC --cmdoptions --elinks=$ELINKS
 }
 
 cat << __END__

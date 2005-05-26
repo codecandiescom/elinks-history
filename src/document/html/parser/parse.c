@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.110 2005/05/24 18:20:27 jonas Exp $ */
+/* $Id: parse.c,v 1.111 2005/05/26 09:23:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -691,8 +691,9 @@ next_break:
 				int length = html - base_pos;
 				int newlines = 0;
 
-				while ((html + 5 < eof && !memcmp(html, "&#13;", 5))
-				       || (html + 6 < eof && !strncasecmp(html, "&#x0a;", 6))) {
+				while ((html + 5 < eof && html[0] == '&' && html[1] == '#') 
+				       && (!memcmp(html + 2, "13;", 3)
+					   || (html + 6 < eof && !strncasecmp(html + 2, "x0a;", 4)))) {
 					newlines++;
 					html += 5 + (html[4] != ';');
 				}

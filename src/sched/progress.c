@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.27 2005/04/28 08:19:30 zas Exp $ */
+/* $Id: progress.c,v 1.28 2005/05/27 19:56:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,11 +59,6 @@ update_progress(struct progress *progress, off_t loaded, off_t size, off_t pos)
 	bytes_delta = progress->loaded - progress->last_loaded;
 	progress->last_loaded = progress->loaded;
 
-	progress->size = size;
-	progress->pos = pos;
-	if (progress->size != -1 && progress->size < progress->pos)
-		progress->size = progress->pos;
-
 	timeval_add_interval(&progress->elapsed, &elapsed);
 
 	timeval_add_interval(&progress->dis_b, &elapsed);
@@ -83,6 +78,11 @@ update_progress(struct progress *progress, off_t loaded, off_t size, off_t pos)
 	{
 		progress->average_speed = timeval_div_int(progress->loaded, &progress->elapsed);	/* FIXME: off_t */
 		progress->current_speed = progress->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000);
+
+		progress->size = size;
+		progress->pos = pos;
+		if (progress->size != -1 && progress->size < progress->pos)
+			progress->size = progress->pos;
 
 		if (progress->average_speed)	/* Division by zero risk */
 			timeval_from_seconds(&progress->estimated_time,

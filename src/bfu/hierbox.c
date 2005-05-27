@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.215 2005/05/27 03:16:29 miciah Exp $ */
+/* $Id: hierbox.c,v 1.216 2005/05/27 03:20:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,19 +99,21 @@ done_listbox_item(struct hierbox_browser *browser, struct listbox_item *box_item
 
 	assert(box_item && list_empty(box_item->child));
 
-	/* If we are removing the top or the selected box we have to figure out
-	 * a replacement. */
-
-	foreach (box_data, browser->boxes) {
-		if (box_data->sel == box_item)
-			box_data->sel = replace_listbox_item(box_item, box_data);
-
-		if (box_data->top == box_item)
-			box_data->top = replace_listbox_item(box_item, box_data);
-	}
-
 	/* The option dialog needs this test */
 	if (box_item->next) {
+		/* If we are removing the top or the selected box
+		 * we have to figure out a replacement. */
+
+		foreach (box_data, browser->boxes) {
+			if (box_data->sel == box_item)
+				box_data->sel = replace_listbox_item(box_item,
+				                                     box_data);
+
+			if (box_data->top == box_item)
+				box_data->top = replace_listbox_item(box_item,
+				                                     box_data);
+		}
+
 		del_from_list(box_item);
 		box_item->prev = box_item->next = NULL;
 	}

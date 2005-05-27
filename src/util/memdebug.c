@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.30 2004/10/19 14:38:00 zas Exp $ */
+/* $Id: memdebug.c,v 1.31 2005/05/27 00:38:20 miciah Exp $ */
 
 /* Wrappers for libc memory managment providing protection against common
  * pointers manipulation mistakes - bad realloc()/free() pointers, double
@@ -203,7 +203,7 @@ dump_info(struct alloc_header *ah, unsigned char *info,
 	 * there're lions in ah, pointing us to evil places in memory, leading
 	 * to segfaults and stuff like that. --pasky */
 	/* if (file && (strcmp(file, ah->file) || line != ah->line)) */
-		fprintf(stderr, "%s:%d, ", file, line), fflush(stderr);
+	if (file) fprintf(stderr, "%s:%d, ", file, line), fflush(stderr);
 
 	fprintf(stderr, "alloc'd at %s:%d", ah->file, ah->line);
 

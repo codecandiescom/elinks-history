@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.623 2005/05/11 03:51:17 miciah Exp $ */
+/* $Id: session.c,v 1.624 2005/05/27 04:37:28 miciah Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -308,7 +308,7 @@ request_frame(struct session *ses, unsigned char *name,
 		if (strcasecmp(frame->name, name))
 			continue;
 
-		foreach(doc_view, ses->scrn_frames) {
+		foreach (doc_view, ses->scrn_frames) {
 			if (doc_view->vs == &frame->vs && doc_view->document->frame_desc) {
 				request_frameset(ses, doc_view->document->frame_desc, depth);
 				return;

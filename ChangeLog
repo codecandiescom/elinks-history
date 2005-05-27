@@ -1,3 +1,58 @@
+Fri May 27 19:56:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/progress.c:
+
+	update_progress(): Move progress size and pos member initialization
+	closer to the code actually using them.  
+
+Fri May 27 17:19:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Remove illicit chars from the link title so it does not corrupt the
+	screen when displayed in the status bar. Reported by arcasin.  
+
+Fri May 27 04:42:14 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Use delete_formhist_item in done_form_history.  
+
+Fri May 27 04:37:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: formhist/formhist.c, sched/session.c:
+
+	s/foreach(/foreach (/ 
+
+Fri May 27 03:39:02 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	In done_listbox_item, only update hierbox browsers if the item was
+	in the list.  
+
+Fri May 27 03:20:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	In done_listbox_item, don't bother checking whether the item is the
+	selected item or the top item when it is not an item in the list.  
+
+Fri May 27 03:16:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	Assign box_item->prev = box_item->next = NULL after deleting the
+	item from the list in done_listbox_item.  
+
+Fri May 27 00:38:20 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/memdebug.c:
+
+	Check the file pointer in dump_info so that we don't segfault when
+	bad_ah_sanity or bad_xflow_magic calls it with a NULL value from
+	check_memory_leaks.  
+
 Thu May 26 09:23:26 2005  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser/parse.c:

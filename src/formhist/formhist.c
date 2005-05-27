@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.114 2005/05/27 04:37:28 miciah Exp $ */
+/* $Id: formhist.c,v 1.115 2005/05/27 04:42:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,17 +429,11 @@ fail:
 static void
 done_form_history(struct module *module)
 {
-	struct formhist_data *form;
+	struct formhist_data *form, *next;
 
-	foreach (form, saved_forms) {
-		done_submitted_value_list(form->submit);
-		mem_free(form->submit);
-		if (form->box_item)
-			done_listbox_item(&formhist_browser, form->box_item);
-
+	foreachsafe (form, next, saved_forms) {
+		delete_formhist_item(form);
 	}
-
-	free_list(saved_forms);
 }
 
 struct module forms_history_module = struct_module(

@@ -1,3 +1,35 @@
+Sat May 28 10:09:26 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/elinks.fortune:
+
+	Okay, so maybe elibot's comment isn't quite as funny taken out of
+	context.  
+
+Sat May 28 10:08:00 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added a VIM tips search prefix.  
+
+Sat May 28 09:41:43 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/elinks.fortune:
+
+	Cleaned up the elibot quote.  
+
+Sat May 28 09:40:01 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/elinks.fortune:
+
+	Added some Miciah/Fonseca banter.  
+
+Sat May 28 09:37:48 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/elinks.fortune:
+
+	Well, why is this channel's bot listed as CIA-4 on the website?
+	-Toksyuryel 
+
 Fri May 27 19:56:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/progress.c:

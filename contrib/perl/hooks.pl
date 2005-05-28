@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.92 2005/05/21 03:36:57 rrowan Exp $
+# $Id: hooks.pl,v 1.93 2005/05/28 10:08:00 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -659,40 +659,46 @@ sub goto_url_hook
 		or $url =~ '^whois(| .*)$'
 		or $url =~ '^rfc(| .*)$'
 		or $url =~ '^(weather|w)(| .*)$'
-		or $url =~ '^(whatis|uptime)(| .*)$') {
+		or $url =~ '^(whatis|uptime)(| .*)$'
+		or $url =~ '^vt(| .*)$')
+	{
 		my ($thingy) = $url =~ /^[a-z]* (.*)/;
 		my ($domain) = $current_url =~ /([a-z0-9-]+\.(com|net|org|edu|gov|mil))/;
 
-		my $locator_zip            = 'http://usps.com';
-		my $ipv                    = "ipv4-address-space"; $ipv = "ipv6-address-space" if loadrc("ipv6") eq "yes";
-			my $locator_ip         = 'http://www.iana.org/assignments/' . $ipv;
-		my $whois                  = 'http://reports.internic.net/cgi/whois?type=domain&whois_nic=';
-			my $locator_whois      = 'http://www.iana.org/cctld/cctld-whois.htm';
-			$locator_whois         = $whois . $domain if $domain;
-		my $locator_rfc            = 'http://ietf.org';
-		my $locator_weather        = 'http://weather.noaa.gov';
-		my $locator_whatis         = 'http://uptime.netcraft.com';
-			$locator_whatis        = 'http://uptime.netcraft.com/up/graph/?host=' . $domain if $domain;
+		my $locator_zip				= 'http://usps.com';
+		my $ipv						= "ipv4-address-space"; $ipv = "ipv6-address-space" if loadrc("ipv6") eq "yes";
+			my $locator_ip			= 'http://www.iana.org/assignments/' . $ipv;
+		my $whois					= 'http://reports.internic.net/cgi/whois?type=domain&whois_nic=';
+			my $locator_whois		= 'http://www.iana.org/cctld/cctld-whois.htm';
+			$locator_whois			= $whois . $domain if $domain;
+		my $locator_rfc				= 'http://ietf.org';
+		my $locator_weather			= 'http://weather.noaa.gov';
+		my $locator_whatis			= 'http://uptime.netcraft.com';
+			$locator_whatis			= 'http://uptime.netcraft.com/up/graph/?host=' . $domain if $domain;
+		my $locator_vim				= 'http://www.vim.org/tips';
 		if ($thingy)
 		{
-			$locator_zip           = 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;
-				$locator_zip       = 'http://zipinfo.com/cgi-local/zipsrch.exe?zip=' . $thingy if $thingy !~ '^[0-9]*$';
-			$locator_ip            = 'http://melissadata.com/lookups/iplocation.asp?ipaddress=' . $thingy;
-			$locator_whois         = $whois . $thingy;
-			$locator_rfc           = 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?num=37&searchwords=' . $thingy;
-				$locator_rfc       = 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless $thingy !~ '^[0-9]*$';
-			my $weather            = loadrc("weather");
-				$locator_weather   = $weather_locators{$weather};
-				$locator_weather ||= $weather_locators{'weather underground'};
-				$locator_weather   =~ s/!query!/$thingy/;
-			$locator_whatis        = 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
+			$locator_zip			= 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;
+				$locator_zip		= 'http://zipinfo.com/cgi-local/zipsrch.exe?zip=' . $thingy if $thingy !~ '^[0-9]*$';
+			$locator_ip				= 'http://melissadata.com/lookups/iplocation.asp?ipaddress=' . $thingy;
+			$locator_whois			= $whois . $thingy;
+			$locator_rfc			= 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?num=37&searchwords=' . $thingy;
+				$locator_rfc		= 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless $thingy !~ '^[0-9]*$';
+			my $weather				= loadrc("weather");
+				$locator_weather	= $weather_locators{$weather};
+				$locator_weather	||= $weather_locators{'weather underground'};
+				$locator_weather	=~ s/!query!/$thingy/;
+			$locator_whatis			= 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
+			$locator_vim			= 'http://www.vim.org/tips/tip_search_results.php?order_by=rating&keywords=' . $thingy;
+				$locator_vim		= 'http://www.vim.org/tips/tip.php?tip_id=' . $thingy unless $thingy !~ '^[0-9]*$';
 		}
-		return $locator_zip         if ($url =~ '^(zip|usps)(| .*)$');
-		return $locator_ip          if ($url =~ '^ip(| .*)$');
-		return $locator_whois       if ($url =~ '^whois(| .*)$');
-		return $locator_rfc         if ($url =~ '^rfc(| .*)$');
-		return $locator_weather     if ($url =~ '^(weather|w)(| .*)$');
-		return $locator_whatis      if ($url =~ '^(whatis|uptime)(| .*)$');
+		return $locator_zip			if ($url =~ '^(zip|usps)(| .*)$');
+		return $locator_ip			if ($url =~ '^ip(| .*)$');
+		return $locator_whois		if ($url =~ '^whois(| .*)$');
+		return $locator_rfc			if ($url =~ '^rfc(| .*)$');
+		return $locator_weather		if ($url =~ '^(weather|w)(| .*)$');
+		return $locator_whatis		if ($url =~ '^(whatis|uptime)(| .*)$');
+		return $locator_vim			if ($url =~ '^vt(| .*)$');
 	}
 
 	# Google Groups (DejaNews)

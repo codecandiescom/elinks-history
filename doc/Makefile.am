@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.68 2005/05/26 02:00:33 jonas Exp $
+## $Id: Makefile.am,v 1.69 2005/05/29 11:18:55 jonas Exp $
 
 SUBDIRS = man
 
@@ -75,6 +75,7 @@ if CONFIG_ASCIIDOC
 HTML_DOCS_WITH_ASCIIDOC = \
  $(HTML_DIR)/elinks.1.html \
  $(HTML_DIR)/elinkskeys.5.html \
+ $(HTML_DIR)/hacking.html \
  $(HTML_DIR)/manual.html
 endif
 
@@ -188,6 +189,9 @@ MANUAL_EXTRA_FILES = \
  $(TXT_DIR)/elinkskeys.5.html.txt
 
 $(HTML_DIR)/manual.html: $(MANUAL_FILES) doc-dirs $(MANUAL_EXTRA_FILES)
+	$(ASCIIDOC) -b css-embedded -d book -o $@ -n -f $(top_srcdir)/doc/asciidoc.conf $<
+
+$(HTML_DIR)/hacking.html: $(top_srcdir)/doc/hacking.txt doc-dirs
 	$(ASCIIDOC) -b css-embedded -d book -o $@ -n -f $(top_srcdir)/doc/asciidoc.conf $<
 
 $(XML_DIR)/manual.xml: $(MANUAL_FILES) doc-dirs $(MANUAL_EXTRA_FILES)

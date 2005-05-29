@@ -770,6 +770,7 @@ dnl it looks ugly then.
 
 if test "$cf_result" = yes; then
 	cf_result="not used"
+
 else
 	EL_SAVE_FLAGS
 	cf_result="no"
@@ -778,57 +779,50 @@ else
 		# Sure, we maybe _could_ use their macro, but how to ensure
 		# that the ./configure script won't fail if the macro won't be
 		# found..? :( --pasky
-		for ssldir in "$gnutls_withval" "" /usr/local/gnutls /opt /opt/gnutls; do
-			if test "$cf_result" = no; then
-
-				if test -d "$ssldir"; then
-					libgnutls_config_args="'--prefix=$ssldir'"
-					GNUTLS_PATH="$ssldir:$PATH"
-				else
-					GNUTLS_PATH="$PATH"
-				fi
-
-				AC_PATH_PROG(LIBGNUTLS_CONFIG, libgnutls-config, no, "$GNUTLS_PATH")
-
-				if test "$LIBGNUTLS_CONFIG" = "no" ; then
-					cf_result=no
-				else
-					GNUTLS_CFLAGS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --cflags`
-					GNUTLS_LIBS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --libs`
-
-					LIBS="$GNUTLS_LIBS $LIBS_X"
-					CFLAGS="$CFLAGS_X $GNUTLS_CFLAGS"
-					CPPFLAGS="$CPPFLAGS_X $GNUTLS_CFLAGS"
-
-					# Verify if it's really usable
-					AC_TRY_LINK([#include <gnutls/gnutls.h>],
-						    [gnutls_check_version(NULL)],
-						    cf_result=yes, cf_result=no)
-				fi
-
-				# Verify if the MD5 compatibility layer is
-				# usable.
-				if test "$cf_result" = yes; then
-					CONFIG_GNUTLS_OPENSSL_COMPAT=yes
-					EL_CHECK_OPTIONAL_LIBRARY(CONFIG_GNUTLS_OPENSSL_COMPAT,
-								  [GNU TLS OpenSSL compatibility],
-								  gnutls/openssl.h, gnutls-openssl,
-								  MD5_Init)
-				fi
-			fi
-		done
-
-		if test "$cf_result" != yes; then
-			if test -n "$gnutls_withval"; then
-				AC_MSG_CHECKING([for GNU TLS])
-				AC_MSG_ERROR([GNUTLS not found])
-			fi
-			EL_RESTORE_FLAGS
+		if test -d "$ssldir"; then
+			libgnutls_config_args="'--prefix=$ssldir'"
+			GNUTLS_PATH="$ssldir:$PATH"
 		else
+			GNUTLS_PATH=""
+		fi
+
+		GNUTLS_PATH="$GNU_TLS_PATH:$PATH:/usr/local/gnutls:/opt:/opt/gnutls"
+
+		AC_PATH_PROG(LIBGNUTLS_CONFIG, libgnutls-config, no, "$GNUTLS_PATH")
+
+		if test "$LIBGNUTLS_CONFIG" = "no" ; then
+			cf_result=no
+		else
+			GNUTLS_CFLAGS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --cflags`
+			GNUTLS_LIBS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --libs`
+
+			LIBS="$GNUTLS_LIBS $LIBS_X"
+			CFLAGS="$CFLAGS_X $GNUTLS_CFLAGS"
+			CPPFLAGS="$CPPFLAGS_X $GNUTLS_CFLAGS"
+
+			# Verify if it's really usable
+			AC_TRY_LINK([#include <gnutls/gnutls.h>],
+				    [gnutls_check_version(NULL)],
+				    cf_result=yes, cf_result=no)
+		fi
+
+		if test "$cf_result" = yes; then
 			EL_CONFIG(CONFIG_GNUTLS, [GNUTLS])
 
 			CFLAGS="$CFLAGS_X"
 			AC_SUBST(GNUTLS_CFLAGS)
+
+			# Verify if the MD5 compatibility layer is usable.
+			CONFIG_GNUTLS_OPENSSL_COMPAT=yes
+			EL_CHECK_OPTIONAL_LIBRARY(CONFIG_GNUTLS_OPENSSL_COMPAT,
+						  [GNU TLS OpenSSL compatibility],
+						  gnutls/openssl.h, gnutls-openssl,
+						  MD5_Init)
+		else
+			if test -n "$gnutls_withval"; then
+				AC_MSG_ERROR([GNUTLS not found])
+			fi
+			EL_RESTORE_FLAGS
 		fi
 	fi
 fi

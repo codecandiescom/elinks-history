@@ -779,22 +779,20 @@ else
 		# Sure, we maybe _could_ use their macro, but how to ensure
 		# that the ./configure script won't fail if the macro won't be
 		# found..? :( --pasky
-		if test -d "$ssldir"; then
-			libgnutls_config_args="'--prefix=$ssldir'"
-			GNUTLS_PATH="$ssldir:$PATH"
-		else
-			GNUTLS_PATH=""
-		fi
 
-		GNUTLS_PATH="$GNU_TLS_PATH:$PATH:/usr/local/gnutls:/opt:/opt/gnutls"
+		GNUTLS_PATH="$PATH:/usr/local/gnutls:/opt:/opt/gnutls"
+
+		if test -d "$gnutls_withval"; then
+			GNUTLS_PATH="$gnutls_withval:$GNUTLS_PATH"
+		fi
 
 		AC_PATH_PROG(LIBGNUTLS_CONFIG, libgnutls-config, no, "$GNUTLS_PATH")
 
 		if test "$LIBGNUTLS_CONFIG" = "no" ; then
 			cf_result=no
 		else
-			GNUTLS_CFLAGS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --cflags`
-			GNUTLS_LIBS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --libs`
+			GNUTLS_CFLAGS=`$LIBGNUTLS_CONFIG --cflags`
+			GNUTLS_LIBS=`$LIBGNUTLS_CONFIG --libs`
 
 			LIBS="$GNUTLS_LIBS $LIBS_X"
 			CFLAGS="$CFLAGS_X $GNUTLS_CFLAGS"

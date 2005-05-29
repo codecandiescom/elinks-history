@@ -1,3 +1,68 @@
+Sun May 29 18:16:29 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun May 29 17:49:37 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Rewrap and make a minor change to the insert_mode option so it won't
+	get funky wrapping in elinks.conf.  
+
+Sun May 29 16:44:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix and cleanup the GNUTLS configuration rewrite; drop the --prefix
+	arg to libgnutls-config since we want the built-in prefix.  
+
+Sun May 29 16:33:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Rewrite the GNUTLS configuration code to put extra dirs in the
+	GNUTLS_PATH instead of looping which was wrong because the config
+	caching would keep second checks from every getting performed.  
+
+Sun May 29 16:17:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Add note about broken -rdynamic check.  
+
+Sun May 29 16:12:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, config/m4/ruby.m4:
+
+	Try to improve handlling of withval so it consistently check for
+	whether the directory exists instead of if the string contains
+	'yes'. Bail out with errors if --with-FEATURE fails and fix that
+	logic for GNUTLS and OpenSSL.  
+
+Sun May 29 11:18:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Make a stand-alone hacking.html useful for distributing with the
+	source.  
+
+Sun May 29 10:46:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/make-elinks-manpage:
+
+	Fix missing mailto for elinks-users@linuxfromscratch.org link.
+	Reported by pasky.  
+
+Sun May 29 01:55:03 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/asciidoc.conf:
+
+	Overwrite the default rule which replaces '--' with '&#8212;'.
+	ELinks shows the entity as '--' but graphical browsers obviously do
+	not.  
+
 Sat May 28 10:09:26 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/elinks.fortune:

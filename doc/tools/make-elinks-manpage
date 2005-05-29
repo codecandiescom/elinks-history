@@ -3,7 +3,7 @@
 # Generate the elinks(1) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinks-manpage,v 1.10 2005/05/26 02:00:33 jonas Exp $
+# $Id: make-elinks-manpage,v 1.11 2005/05/29 10:46:18 jonas Exp $
 
 DOCTYPE=$(echo "$1" | sed 's/.*elinks.1.//' | sed 's/.txt.*//')
 ELINKS=$2
@@ -173,7 +173,7 @@ BUGS
 ----
 
 Please report any other bugs you find to the either the ELinks mailing list
-at $(link elinks-users@linuxfromscratch.org) or if you prefer enter them
+at $(email elinks-users@linuxfromscratch.org) or if you prefer enter them
 into $(link http://bugzilla.elinks.or.cz/ the bug tracking system). More
 information about how to get in contact with developers and getting help can
 be found on $(link http://elinks.or.cz/community.html the community page).

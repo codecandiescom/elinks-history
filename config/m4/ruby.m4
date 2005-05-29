@@ -17,8 +17,13 @@ AC_ARG_WITH(ruby,
 AC_MSG_RESULT($CONFIG_RUBY)
 
 if test "$CONFIG_RUBY" = "yes"; then
+	if test -d "$withval"; then
+		RUBY_PATH="$withval:$PATH"
+	else
+		RUBY_PATH="$PATH"
+	fi
 
-	AC_PATH_PROG(CONFIG_RUBY, ruby, no, $withval:$PATH)
+	AC_PATH_PROG(CONFIG_RUBY, ruby, no, $RUBY_PATH)
 	if test "$CONFIG_RUBY" != "no"; then
 
 		AC_MSG_CHECKING(Ruby version)
@@ -72,7 +77,7 @@ if test "$CONFIG_RUBY" = "yes"; then
 					    [ruby_init();],
 					    CONFIG_RUBY=yes, CONFIG_RUBY=no)
 			else
-				AC_MSG_RESULT(not found, disabling Ruby)
+				AC_MSG_RESULT([Ruby header files not found])
 			fi
 		else
 			AC_MSG_RESULT(too old; need Ruby version 1.6.0 or later)
@@ -81,6 +86,9 @@ if test "$CONFIG_RUBY" = "yes"; then
 fi
 
 if test "$CONFIG_RUBY" != "yes"; then
+	if test -n "$withval"; then
+		AC_MSG_ERROR([Ruby not found])
+	fi
 	EL_RESTORE_FLAGS
 else
 	EL_CONFIG(CONFIG_RUBY, [Ruby])

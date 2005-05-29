@@ -315,7 +315,7 @@ dnl Checks for packaging specific options.
 dnl ===================================================================
 
 AC_ARG_WITH(xterm, [  --with-xterm            how to invoke the X terminal emulator],
-            [ if test "$withval" != no; then
+            [ if test "$withval" != no && test "$withval" != yes; then
 		AC_DEFINE_UNQUOTED(XTERM, "$withval", [How to invoke XTerm])
 	      fi ])
 
@@ -346,6 +346,9 @@ AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 			EL_CONFIG([$1], [$2])
 			LIBS="$LIBS -l$4"
 		else
+			if test -n "$withval"; then
+				AC_MSG_ERROR([$2 not found])
+			fi
 			EL_RESTORE_FLAGS
 		fi
 	else
@@ -358,7 +361,7 @@ AC_DEFUN([EL_CONFIG_OPTIONAL_LIBRARY],
 [
 	$1=yes
 	AC_ARG_WITH([$2], [$6],
-	[ if test "$withval" = no; then $1=no; fi])
+	[ if test "x$withval" = xno; then $1=no; fi])
 
 	EL_CHECK_OPTIONAL_LIBRARY([$1], [$2], [$3], [$4], [$5])
 
@@ -429,7 +432,7 @@ dnl ===================================================================
 enable_guile="no";
 
 AC_ARG_WITH(guile, [  --with-guile            enable Guile support],
-            [ if test "$withval" != no; then enable_guile=yes; fi ])
+            [ if test "x$withval" != xno; then enable_guile=yes; fi ])
 
 # The following is probably bad, ugly and so on. Stolen from Guile's (1.4)
 # GUILE_FLAGS but I really don't want to require people to have Guile in order
@@ -442,7 +445,13 @@ if test "$enable_guile" = "yes"; then
 	AC_MSG_RESULT(yes);
 	## Based on the GUILE_FLAGS macro.
 
-	AC_PATH_PROG(GUILE_CONFIG, guile-config, no, $withval:$PATH)
+	if test -d "$withval"; then
+		GUILE_PATH="$withval:$PATH"
+	else
+		GUILE_PATH="$PATH"
+	fi
+
+	AC_PATH_PROG(GUILE_CONFIG, guile-config, no, $GUILE_PATH)
 
 	## First, let's just see if we can find Guile at all.
 	if test "$GUILE_CONFIG" != no; then
@@ -464,7 +473,11 @@ src/scripting/guile/README for further details and hints.
 ***********************************************************************
 EOF
 	else
-		AC_MSG_WARN([Guile support disabled])
+		if test -n "$withval"; then
+			AC_MSG_ERROR([Guile not found])
+		else
+			AC_MSG_WARN([Guile support disabled])
+		fi
 	fi
 else
 	AC_MSG_RESULT(no);
@@ -478,6 +491,8 @@ enable_perl="no";
 AC_ARG_WITH(perl, [  --with-perl             enable Perl support],
             [
 if test "$withval" = yes; then
+	# FIXME: If withval is a valid directory append it to PATH
+	# so that you can specify one of several perl installations.
 	withval="";
 	enable_perl=yes;
 	cat <<EOF
@@ -534,10 +549,8 @@ dnl Do this the long way, as FreeBSD reportedly needs -L<dir> for
 dnl anything other than /usr/lib, and Lua is very often in /usr/local/lib.
 
 AC_ARG_WITH(lua, [  --without-lua           disable Lua support],
-            [if test "$withval" = no; then withval=""; disable_lua=yes; fi])
+            [if test "$withval" = no; then disable_lua=yes; fi])
 AC_MSG_CHECKING([for Lua])
-
-if test "$withval" = yes; then withval=""; fi
 
 EL_SAVE_FLAGS
 cf_result=no
@@ -613,10 +626,8 @@ dnl Check for SpiderMonkey, optional even if installed.
 dnl ===================================================================
 
 AC_ARG_WITH(spidermonkey, [  --without-spidermonkey  disable SpiderMonkey Mozilla JavaScript engine support],
-            [if test "$withval" = no; then withval=""; disable_spidermonkey=yes; fi])
+            [if test "$withval" = no; then disable_spidermonkey=yes; fi])
 AC_MSG_CHECKING([for SpiderMonkey])
-
-if test "$withval" = yes; then withval=""; fi
 
 EL_SAVE_FLAGS
 cf_result=no
@@ -712,7 +723,7 @@ else
 			 /usr/local/www /usr/lib/ssl /usr/local \
 			 /usr/pkg /opt /opt/openssl; do
 		if test "$cf_result" = no; then
-			if test -n "$ssldir"; then
+			if test -d "$ssldir"; then
 				OPENSSL_CFLAGS="-I$ssldir/include"
 				LIBS="-L$ssldir/lib -lssl -lcrypto $LIBS_X"
 				CFLAGS="$CFLAGS_X $OPENSSL_CFLAGS"
@@ -737,8 +748,8 @@ else
 	done
 
 	if test "$cf_result" != yes; then
-		if test "$withval" = yes; then
-			AC_MSG_ERROR("OpenSSL not found")
+		if test -n "$openssl_withval"; then
+			AC_MSG_ERROR([OpenSSL not found])
 		fi
 		EL_RESTORE_FLAGS
 	else
@@ -762,25 +773,20 @@ else
 	cf_result="no"
 
 	if test -z "$disable_gnutls"; then
-		# Rule number 6.5: do _not_ put gnutls headers in yes dir ;-)
-		if test "$gnutls_withval" = "yes"; then
-			gnutls_withval=""
-		fi
-
 		# Sure, we maybe _could_ use their macro, but how to ensure
 		# that the ./configure script won't fail if the macro won't be
 		# found..? :( --pasky
 		for ssldir in "$gnutls_withval" "" /usr/local/gnutls /opt /opt/gnutls; do
 			if test "$cf_result" = no; then
 
-				if test "x$ssldir" != "x"; then
-				   libgnutls_config_args="$libgnutls_config_args --prefix=$ssldir"
-				   if test x${LIBGNUTLS_CONFIG+set} != xset ; then
-				      LIBGNUTLS_CONFIG=$ssldir/bin/libgnutls-config
-				   fi
+				if test -d "$ssldir"; then
+					libgnutls_config_args="'--prefix=$ssldir'"
+					GNUTLS_PATH="$ssldir:$PATH"
+				else
+					GNUTLS_PATH="$PATH"
 				fi
 
-				AC_PATH_PROG(LIBGNUTLS_CONFIG, libgnutls-config, no, "$PATH:$ssldir")
+				AC_PATH_PROG(LIBGNUTLS_CONFIG, libgnutls-config, no, "$GNUTLS_PATH")
 
 				if test "$LIBGNUTLS_CONFIG" = "no" ; then
 					cf_result=no
@@ -811,9 +817,9 @@ else
 		done
 
 		if test "$cf_result" != yes; then
-			if test "$withval" = yes; then
+			if test -n "$gnutls_withval"; then
 				AC_MSG_CHECKING([for GNU TLS])
-				AC_MSG_ERROR("GNUTLS not found")
+				AC_MSG_ERROR([GNUTLS not found])
 			fi
 			EL_RESTORE_FLAGS
 		else

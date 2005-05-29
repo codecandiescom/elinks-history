@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.193 2005/05/07 10:48:16 jonas Exp $ */
+/* $Id: options.inc,v 1.194 2005/05/29 17:49:37 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -187,9 +187,9 @@ static struct option_info config_options_info[] = {
 		N_("The setting for this option affects how key presses are handled\n"
 		"when one selects a text-input form-field. When enabled, one must\n"
 		"explicitly 'enter' a selected text-field to edit it; this prevents\n"
-		"a text field from capturing key presses, such as presses of a scroll key,\n"
-		"when it is inadvertently selected. When disabled, key presses are always\n"
-		"inserted into a selected text field.")),
+		"text fields from capturing key presses, such as presses of a scroll\n"
+		"key, when it is inadvertently selected. When disabled, key presses\n"
+		"are always inserted into a selected text field.")),
 
 
 	INIT_OPT_TREE("document.browse", N_("Images"),

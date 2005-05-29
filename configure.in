@@ -187,6 +187,8 @@ EL_CHECK_CODE([variadic macros], HAVE_VARIADIC_MACROS,
                 [a("foo");a("%s","bar");a("%s%s","baz","quux");])
 
 dnl Check for -rdynamic
+dnl FIXME: This check doesn't work. Something to do with the compiler
+dnl happily ignoring it and stderr not being checked for error messages.
 AC_MSG_CHECKING([for -rdynamic])
 LDFLAGS_X="$LDFLAGS"
 LDFLAGS="$LDFLAGS -rdynamic"

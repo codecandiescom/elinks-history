@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.212 2005/05/13 09:06:58 zas Exp $ */
+/* $Id: inpfield.c,v 1.213 2005/05/30 22:30:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,7 +342,8 @@ init_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 static int
 field_prev_history(struct widget_data *widget_data)
 {
-	if ((void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
+	if (widget_has_history(widget_data)
+	    && (void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
 		widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
 		dlg_set_history(widget_data);
 		return 1;
@@ -353,7 +354,8 @@ field_prev_history(struct widget_data *widget_data)
 static int
 field_next_history(struct widget_data *widget_data)
 {
-	if ((void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
+	if (widget_has_history(widget_data)
+	    && (void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
 		widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
 		dlg_set_history(widget_data);
 		return 1;
@@ -366,28 +368,31 @@ mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct term_event *ev = dlg_data->term_event;
 
-	if (!widget_has_history(widget_data))
-		return EVENT_NOT_PROCESSED;
-
 	if (!check_mouse_position(ev, &widget_data->box))
 		return EVENT_NOT_PROCESSED;
 
+	/* Handle navigation through history (if any) using up/down mouse wheel */
 	switch (get_mouse_button(ev)) {
-		case B_WHEEL_UP:
-			if (check_mouse_action(ev, B_DOWN)
-			    && field_prev_history(widget_data)) {
+	case B_WHEEL_UP:
+		if (check_mouse_action(ev, B_DOWN)) {
+			if (field_prev_history(widget_data)) {
 				select_widget(dlg_data, widget_data);
+				return EVENT_PROCESSED;
 			}
-			return EVENT_PROCESSED;
+		}
+		return EVENT_NOT_PROCESSED;
 
-		case B_WHEEL_DOWN:
-			if (check_mouse_action(ev, B_DOWN)
-			    && field_next_history(widget_data)) {
-			  	select_widget(dlg_data, widget_data);
+	case B_WHEEL_DOWN:
+		if (check_mouse_action(ev, B_DOWN)) {
+			if (field_next_history(widget_data)) {
+				select_widget(dlg_data, widget_data);
+				return EVENT_PROCESSED;
 			}
-			return EVENT_PROCESSED;
+		}
+		return EVENT_NOT_PROCESSED;
 	}
 
+	/* Place text cursor at mouse position and focus the widget. */
 	widget_data->info.field.cpos = widget_data->info.field.vpos
 				     + ev->info.mouse.x - widget_data->box.x;
 	int_upper_bound(&widget_data->info.field.cpos, strlen(widget_data->cdata));

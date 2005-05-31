@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.195 2005/05/31 13:48:39 jonas Exp $ */
+/* $Id: options.inc,v 1.196 2005/05/31 14:08:10 witekfl Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -622,13 +622,13 @@ static struct option_info config_options_info[] = {
 		N_("Codepage used in dump output. 'System' stands for\n"
 		"a codepage determined by a selected locale.")),
 
-	INIT_OPT_STRING("document.dump", N_("Header"),
-		"header", 0, "",
-		N_("Header string used in dumps. %u is substituted by URL.")),
-
 	INIT_OPT_STRING("document.dump", N_("Footer"),
 		"footer", 0, "",
 		N_("Footer string used in dumps. %u is substituted by URL.")),
+
+	INIT_OPT_STRING("document.dump", N_("Header"),
+		"header", 0, "",
+		N_("Header string used in dumps. %u is substituted by URL.")),
 
 	INIT_OPT_BOOL("document.dump", N_("Numbering"),
 		"numbering", 0, 1,

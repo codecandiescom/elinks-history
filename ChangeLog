@@ -1,3 +1,73 @@
+Tue May 31 20:33:41 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue May 31 18:46:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Tue May 31 18:36:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Tue May 31 18:32:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, config/opttypes.c, document/options.c,
+	terminal/color.c:
+
+	Use the OPT_ALIAS_NEGATE hack to finally rename the
+	document.colors.allow_dark_on_black option to increase_constrast as
+	has been discussed on #elinks for some time.  
+
+Tue May 31 18:19:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.h:
+
+	set_term_color(): Fix comment about ancient allow_dark_on_black
+	argument which is now COLOR_INCREASE_CONTRAST flag.  
+
+Tue May 31 15:33:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/leds.c, config/options.h, config/options.inc,
+	globhist/globhist.c:
+
+	Make it possible to pass option flags to INIT_OPT_ALIAS(). BTW, 9
+	aliases ATM.  
+
+Tue May 31 14:15:02 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue May 31 14:08:10 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/config/options.inc:
+
+	- fixed order 
+
+Tue May 31 13:48:39 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, config/options.h, config/options.inc,
+	config/opttypes.c, viewer/dump/dump.c:
+
+	Introduce document.dump.{references,numbering} options and alias
+	--no-references and --no-numbering command line options to them
+	using a clever option flag to negate the option value. Patch by
+	witekfl and me.  
+
+Mon May 30 22:30:03 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Fix focusing of input field using mouse when widget has no history.  
+
 Sun May 29 18:16:29 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

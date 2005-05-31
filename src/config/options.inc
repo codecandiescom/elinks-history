@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.196 2005/05/31 14:08:10 witekfl Exp $ */
+/* $Id: options.inc,v 1.197 2005/05/31 15:33:41 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -213,7 +213,7 @@ static struct option_info config_options_info[] = {
 
 	/* Compatibility aliases. Added: 2004-12-15, 0.10pre3.CVS. It was
 	 * replaced by display_style and filename_maxlen options combination. */
-	INIT_OPT_ALIAS("document.browse.images", "file_tags",
+	INIT_OPT_ALIAS("document.browse.images", "file_tags", 0,
 		"document.browse.images.filename_maxlen"),
 
 	INIT_OPT_INT("document.browse.images", N_("Image links tagging"),
@@ -306,10 +306,10 @@ static struct option_info config_options_info[] = {
 		"2 means open link in new tab in background")),
 
 	/* Compatibility aliases. Added: 2004-01-07, 0.9.0.CVS. */
-	INIT_OPT_ALIAS("document.browse.links", "typeahead_wraparound",
+	INIT_OPT_ALIAS("document.browse.links", "typeahead_wraparound", 0,
 		"document.browse.search.wraparound"),
 
-	INIT_OPT_ALIAS("document.browse.links", "typeahead_error",
+	INIT_OPT_ALIAS("document.browse.links", "typeahead_error", 0,
 		"document.browse.search.show_not_found"),
 
 	INIT_OPT_BOOL("document.browse.links", N_("Use tabindex"),
@@ -550,7 +550,7 @@ static struct option_info config_options_info[] = {
 
 #if 0
 	/* Compatibility alias: added by <someone> at yyyy-mm-dd, 0.11.CVS. */
-	INIT_OPT_ALIAS("document.colors", "allow_dark_on_black",
+	INIT_OPT_ALIAS("document.colors", "allow_dark_on_black", 0,
 		"document.colors.increase_contrast"),
 #endif
 	/* TODO: Rename this option to increase_contrast. */
@@ -935,11 +935,11 @@ static struct option_info config_options_info[] = {
 		N_("Dialog colors.")),
 
 	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
-	INIT_OPT_ALIAS("ui.colors.color.dialog", "background",
+	INIT_OPT_ALIAS("ui.colors.color.dialog", "background", 0,
 		"ui.colors.color.dialog.generic.background"),
 
 	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
-	INIT_OPT_ALIAS("ui.colors.mono.dialog", "background",
+	INIT_OPT_ALIAS("ui.colors.mono.dialog", "background", 0,
 		"ui.colors.mono.dialog.generic.background"),
 
 	INIT_OPT_COLORS(".dialog", N_("Generic"),
@@ -1220,7 +1220,7 @@ static struct option_info config_options_info[] = {
 
 
 	/* Compatibility alias: added by pasky at 2004-07-22, 0.9.CVS. */
-	INIT_OPT_ALIAS("", "secure_file_saving", "infofiles.secure_save"),
+	INIT_OPT_ALIAS("", "secure_file_saving", 0, "infofiles.secure_save"),
 
 	NULL_OPTION_INFO,
 };

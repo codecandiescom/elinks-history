@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.106 2005/05/21 19:27:04 miciah Exp $ */
+/* $Id: globhist.c,v 1.107 2005/05/31 15:33:42 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -76,7 +76,8 @@ static struct option_info global_history_options[] = {
 		"1 is page titles")),
 
 	/* Compatibility alias: added by jonas at 2004-07-16, 0.9.CVS. */
-	INIT_OPT_ALIAS("document.history.global", "write_interval", "infofiles.save_interval"),
+	INIT_OPT_ALIAS("document.history.global", "write_interval", 0,
+		"infofiles.save_interval"),
 
 	NULL_OPTION_INFO,
 };

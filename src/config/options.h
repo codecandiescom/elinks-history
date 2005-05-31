@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.111 2005/05/31 13:48:39 jonas Exp $ */
+/* $Id: options.h,v 1.112 2005/05/31 15:33:41 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -312,8 +312,8 @@ extern void unregister_options(struct option_info info[], struct option *tree);
 #define INIT_OPT_CMDALIAS(path, capt, name, flags, def, desc) \
 	{ INIT_OPTION(name, flags, OPT_ALIAS, 0, sizeof(def) - 1, def, DESC(desc), capt), path }
 
-#define INIT_OPT_ALIAS(path, name, def) \
-	{ INIT_OPTION(name, 0, OPT_ALIAS, 0, sizeof(def) - 1, def, NULL, NULL), path }
+#define INIT_OPT_ALIAS(path, name, flags, def) \
+	{ INIT_OPTION(name, flags, OPT_ALIAS, 0, sizeof(def) - 1, def, NULL, NULL), path }
 
 #define INIT_OPT_TREE(path, capt, name, flags, desc) \
 	{ INIT_OPTION(name, flags, OPT_TREE, 0, 0, NULL, DESC(desc), capt), path }

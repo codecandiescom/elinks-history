@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.83 2005/05/13 09:29:04 zas Exp $ */
+/* $Id: leds.c,v 1.84 2005/05/31 15:33:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,7 @@ static struct option_info led_options[] = {
 		"manpage for details.")),
 
 	/* Compatibility alias. Added: 2004-04-22, 0.9.CVS. */
-	INIT_OPT_ALIAS("ui.timer", "clock", "ui.clock"),
+	INIT_OPT_ALIAS("ui.timer", "clock", 0, "ui.clock"),
 
 
 	INIT_OPT_TREE("ui", N_("LEDs"),

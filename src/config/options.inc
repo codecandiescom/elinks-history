@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.194 2005/05/29 17:49:37 jonas Exp $ */
+/* $Id: options.inc,v 1.195 2005/05/31 13:48:39 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -629,6 +629,15 @@ static struct option_info config_options_info[] = {
 	INIT_OPT_STRING("document.dump", N_("Footer"),
 		"footer", 0, "",
 		N_("Footer string used in dumps. %u is substituted by URL.")),
+
+	INIT_OPT_BOOL("document.dump", N_("Numbering"),
+		"numbering", 0, 1,
+		N_("Whether to print link numbers in dump output.")),
+
+	INIT_OPT_BOOL("document.dump", N_("References"),
+		"references", 0, 1,
+		N_("Whether to print references (URIs) of document links\n"
+		"in dump output.")),
 
 	INIT_OPT_STRING("document.dump", N_("Separator"),
 		"separator", 0, "\n\n",

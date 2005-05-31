@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.160 2005/05/23 12:42:49 zas Exp $ */
+/* $Id: dump.c,v 1.161 2005/05/31 13:48:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,7 +116,7 @@ dump_formatted(int fd, struct download *download, struct cache_entry *cached)
 	o.color_mode = COLOR_MODE_DUMP;
 	o.plain = 0;
 	o.frames = 0;
-	o.links_numbering = !get_cmd_opt_bool("no-numbering");
+	o.links_numbering = get_opt_bool("document.dump.numbering");
 
 	init_vs(&vs, cached->uri, -1);
 
@@ -427,7 +427,7 @@ fail:
 		return -1;
 	}
 
-	if (document->nlinks && !get_cmd_opt_bool("no-references")) {
+	if (document->nlinks && get_opt_bool("document.dump.references")) {
 		int x;
 		unsigned char *header = "\nReferences\n\n   Visible links\n";
 		int headlen = strlen(header);

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.92 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: opttypes.c,v 1.93 2005/05/31 13:48:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,22 @@ exec_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 static unsigned char *
 redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
-	wrap_or_(cmdline, cmdline(real, argv, argc), NULL);
+{
+	struct option *real = get_opt_rec(config_options, opt->value.string);
+	unsigned char * ret = NULL;
+
+	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->value.string);
+	if_assert_failed { return ret; }
+
+	if (option_types[real->type].cmdline) {
+		ret = option_types[real->type].cmdline(real, argv, argc);
+		if ((opt->flags & OPT_ALIAS_NEGATE) && real->type == OPT_BOOL) {
+			real->value.number = !real->value.number;
+		}
+	}
+
+	return ret;
+}
 
 static unsigned char *
 redir_rd(struct option *opt, unsigned char **file, int *line)

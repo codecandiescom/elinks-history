@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.123 2005/05/13 20:04:30 jonas Exp $ */
+/* $Id: cmdline.c,v 1.124 2005/05/31 13:48:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -750,13 +750,13 @@ struct option_info cmdline_options_info[] = {
 		"configuration directory (~/.elinks). It forces default configuration\n"
 		"values to be used and disables saving of runtime state files.")),
 
-	INIT_OPT_BOOL("", N_("Disable link numbering in dump output"),
-		"no-numbering", 0, 0,
+	INIT_OPT_CMDALIAS("", N_("Disable link numbering in dump output"),
+		"no-numbering", OPT_ALIAS_NEGATE, "document.dump.numbering",
 		N_("Prevents printing of link number in dump output.\n"
 		"Note that this really affects only -dump, nothing else.")),
 
-	INIT_OPT_BOOL("", N_("Disable printing of link references in dump output"),
-		"no-references", 0, 0,
+	INIT_OPT_CMDALIAS("", N_("Disable printing of link references in dump output"),
+		"no-references", OPT_ALIAS_NEGATE, "document.dump.references",
 		N_("Prevents printing of references (URIs) of document links\n"
 		"in dump output.\n"
 		"Note that this really affects only -dump, nothing else.")),

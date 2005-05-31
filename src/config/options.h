@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.110 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: options.h,v 1.111 2005/05/31 13:48:39 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -56,7 +56,9 @@ enum option_flags {
 	 * the template trees. */
 	OPT_SORT = 64,
 	/* This is used to mark option as deleted */
-	OPT_DELETED = 128
+	OPT_DELETED = 128,
+	/* Specifies that values of boolean aliases should be inverted. */
+	OPT_ALIAS_NEGATE = 256
 };
 
 enum option_type {

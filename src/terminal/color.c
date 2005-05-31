@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.80 2005/03/14 22:46:27 pasky Exp $ */
+/* $Id: color.c,v 1.81 2005/05/31 18:32:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,8 +307,8 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		 * ANSI color to make sure the color is visible. Pasky
 		 * mentioned maybe calculating a distance and choosing some
 		 * intermediate color. --jonas */
-		/* TODO: Maybe also do something to honour the
-		 * allow_dark_on_black option. --jonas */
+		/* TODO: Maybe also do something to honour the increase_contrast
+		 * option. --jonas */
 		if (bg == fg && (flags & COLOR_ENSURE_CONTRAST)) {
 			if (flags & COLOR_ENSURE_INVERTED_CONTRAST) {
 				bg = (fg == 0) ? 15 : 0;

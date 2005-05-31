@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.60 2005/05/23 12:42:49 zas Exp $ */
+/* $Id: options.c,v 1.61 2005/05/31 18:32:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ init_document_options(struct document_options *doo)
 	doo->active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
 	doo->active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");
 
-	if (!get_opt_bool("document.colors.allow_dark_on_black"))
+	if (!get_opt_bool("document.colors.increase_contrast"))
 		doo->color_flags |= COLOR_INCREASE_CONTRAST;
 
 	if (get_opt_bool("document.colors.ensure_contrast"))

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.93 2005/05/31 13:48:39 jonas Exp $ */
+/* $Id: opttypes.c,v 1.94 2005/05/31 18:32:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,23 @@ redir_wr(struct option *opt, struct string *string)
 
 static int
 redir_set(struct option *opt, unsigned char *str)
-	wrap_or_(set, set(real, str), 0);
+{
+	struct option *real = get_opt_rec(config_options, opt->value.string);
+	int ret = 0;
+
+	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->value.string);
+	if_assert_failed { return ret; }
+
+	if (option_types[real->type].set) {
+		ret = option_types[real->type].set(real, str);
+		if ((opt->flags & OPT_ALIAS_NEGATE) && real->type == OPT_BOOL) {
+			real->value.number = !real->value.number;
+		}
+	}
+
+	return ret;
+}
+
 
 static int
 redir_add(struct option *opt, unsigned char *str)

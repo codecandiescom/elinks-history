@@ -1133,21 +1133,7 @@ fi
 # CFLAGS doesn't contain all compile flags. Some will be added only when
 # needed in the respective source directory. To get all compile flags
 # easily just add CPPFLAGS.
-ALL_CFLAGS=
-for flag in $CFLAGS $CPPFLAGS; do
-	case "$flag" in
-	-L*|-l*)
-		match="`echo $ALL_FLAGS | grep $flag`"
-		if test -z "$match"; then
-			ALL_CFLAGS="$ALL_CFLAGS$flag "
-		fi
-		;;
-
-	*)
-		ALL_CFLAGS="$ALL_CFLAGS$flag "
-		;;
-	esac
-done
+ALL_CFLAGS="$CFLAGS $CPPFLAGS"
 
 EL_LOG_CONFIG(ALL_CFLAGS, [Compiler options (CFLAGS)], [])
 EL_LOG_CONFIG(LIBS, [Linker options (LIBS)], [])

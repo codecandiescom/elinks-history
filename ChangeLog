@@ -1,3 +1,16 @@
+Wed Jun  1 09:42:13 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Revert part of last patch which should not have been committed.  
+
+Wed Jun  1 09:37:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/config/options.inc, src/document/options.c:
+
+	Forgot to negate the value and usage of increase_contrast in the
+	allow_dark_on_black -> increase_constrast rename. Reported by zas.  
+
 Tue May 31 20:33:41 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

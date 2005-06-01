@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.198 2005/05/31 18:32:05 jonas Exp $ */
+/* $Id: options.inc,v 1.199 2005/06/01 09:37:34 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -553,7 +553,7 @@ static struct option_info config_options_info[] = {
 		"document.colors.increase_contrast"),
 
 	INIT_OPT_BOOL("document.colors", N_("Increase contrast"),
-		"increase_contrast", 0, 0,
+		"increase_contrast", 0, 1,
 		N_("Setting this option to 0 will increase the contrast\n"
 		"between the foreground and background colors to ensure\n"
 		"readability. For example it disallows dark colors on a\n"

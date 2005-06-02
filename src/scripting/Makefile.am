@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.11 2005/04/06 22:33:41 jonas Exp $
+## $Id: Makefile.am,v 1.12 2005/06/02 18:01:34 witekfl Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -18,12 +18,17 @@ perldir = perl
 perlobj = $(perldir)/core.o $(perldir)/hooks.o $(perldir)/perl.o
 endif
 
+if CONFIG_PYTHON
+pythondir = python
+pythonobj = $(pythondir)/core.o $(pythondir)/hooks.o $(pythondir)/python.o
+endif
+
 if CONFIG_RUBY
 rubydir = ruby
 rubyobj = $(rubydir)/core.o $(rubydir)/hooks.o $(rubydir)/ruby.o
 endif
 
-SUBDIRS = $(guiledir) $(luadir) $(perldir) $(rubydir)
+SUBDIRS = $(guiledir) $(luadir) $(perldir) $(pythondir) $(rubydir)
 
 EXTRA_DIST = TODO
 
@@ -33,6 +38,7 @@ libscripting_a_LIBADD = \
  $(guileobj) \
  $(luaobj) \
  $(perlobj) \
+ $(pythonobj) \
  $(rubyobj)
 
 libscripting_a_SOURCES = \

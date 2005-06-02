@@ -1,5 +1,5 @@
 /* Python scripting hooks */
-/* $Id: hooks.c,v 1.2 2005/06/02 18:30:26 witekfl Exp $ */
+/* $Id: hooks.c,v 1.3 2005/06/02 18:36:35 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,7 @@ do_script_hook_goto_url(struct session *ses, unsigned char **url)
 		PyArg_ParseTuple(pValue, "s", &str);
 		
 		if (str) {
-			unsigned char *new_url = stracpy(str);
+			unsigned char *new_url = stracpy((unsigned char *)str);
 
 			if (new_url) mem_free_set(url, new_url);
 		}
@@ -79,7 +79,7 @@ do_script_hook_follow_url(unsigned char **url)
 		PyArg_ParseTuple(pValue, "s", &str);
 		
 		if (str) {
-			unsigned char *new_url = stracpy(str);
+			unsigned char *new_url = stracpy((unsigned char *)str);
 
 			if (new_url) mem_free_set(url, new_url);
 		}
@@ -119,7 +119,7 @@ do_script_hook_pre_format_html(unsigned char *url, unsigned char **html,
 		
 		if (str) {
 			*html_len = strlen(str);
-			*html = memacpy(str, *html_len);
+			*html = memacpy((unsigned char *)str, *html_len);
 			if (!html) *html_len = 0;
 		}
 		Py_DECREF(pValue);
@@ -150,18 +150,18 @@ do_script_hook_get_proxy(unsigned char **new_proxy_url, unsigned char *url)
 		PyObject *pValue;
 		const unsigned char *str;
 
-		pValue = PyString_FromString(*url);
+		pValue = PyString_FromString(url);
 		PyTuple_SetItem(pArg, 0, pValue);
 		pValue = PyObject_CallObject(pFunc, pArg);
 		Py_DECREF(pArg);
 		PyArg_ParseTuple(pValue, "s", &str);
 		
 		if (str) {
-			unsigned char *new_url = stracpy(str);
+			unsigned char *new_url = stracpy((unsigned char *)str);
 
-			if (new_url) mem_free_set(*new_proxy_url, new_url);
+			if (new_url) mem_free_set(new_proxy_url, new_url);
 		} else {
-			mem_free_set(*new_proxy_url, NULL);
+			mem_free_set(new_proxy_url, NULL);
 		}
 		Py_DECREF(pValue);
 	}

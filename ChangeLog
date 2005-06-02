@@ -1,3 +1,44 @@
+Thu Jun  2 18:36:35 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/scripting/python/hooks.c:
+
+	Killed some warnings and bugs.  
+
+Thu Jun  2 18:30:26 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/scripting/python/hooks.c:
+
+	Killed one warning.  
+
+Thu Jun  2 18:28:42 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/scripting/python/core.c:
+
+	Kill warning.  
+
+Thu Jun  2 18:08:57 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/scripting/perl/core.c:
+
+	Bigger buffer.  
+
+Thu Jun  2 18:02:36 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* configure.in:
+
+	Python added.  
+
+Thu Jun  2 18:01:34 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/python/hooks.py, src/scripting/Makefile.am,
+	src/scripting/python/.cvsignore, src/scripting/python/.vimrc,
+	src/scripting/python/Makefile.am, src/scripting/python/core.c,
+	src/scripting/python/core.h, src/scripting/python/hooks.c,
+	src/scripting/python/hooks.h, src/scripting/python/python.c,
+	src/scripting/python/python.h:
+
+	Python scripting engine. Not tested at all. Many warnings.  
+
 Wed Jun  1 09:42:13 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:

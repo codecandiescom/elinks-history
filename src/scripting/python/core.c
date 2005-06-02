@@ -1,5 +1,5 @@
 /* Python scripting engine */
-/* $Id: core.c,v 1.1 2005/06/02 18:01:34 witekfl Exp $ */
+/* $Id: core.c,v 1.2 2005/06/02 18:28:42 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,9 @@ void
 cleanup_python(struct module *module)
 {
 	if (python_hook) {
-		if (pModule) Py_DECREF(pModule);
+		if (pModule) {
+			Py_DECREF(pModule);
+		}
 		Py_Finalize();
 	}
 	python_hook = NULL;

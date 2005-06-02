@@ -508,8 +508,6 @@ EOF
 fi
 	    ])
 
-
-
 AC_MSG_CHECKING([for Perl])
 
 cf_result=no
@@ -542,6 +540,60 @@ else
 fi
 
 if test "$cf_result"; then AC_MSG_RESULT($cf_result); fi
+dnl ===================================================================
+dnl Check for Python
+dnl ===================================================================
+enable_python="no";
+
+AC_ARG_WITH(python, [  --with-python           enable Python support],
+            [
+if test "$withval" = yes; then
+	# FIXME: If withval is a valid directory append it to PATH
+	# so that you can specify one of several Python installations.
+	withval="";
+	enable_python=yes;
+	cat <<EOF
+***********************************************************************
+The Python support is incomplete and not so well integrated to ELinks
+yet. That means, ie., that you have no Python console and there might
+not be all the necessary hooks. Also, the Python interface is not too
+well tested (success stories heartily welcomed!).
+***********************************************************************
+EOF
+fi
+	    ])
+
+AC_MSG_CHECKING([for Python])
+
+cf_result=no
+
+EL_SAVE_FLAGS
+
+if test "$enable_python" = "yes"; then
+	PYTHON_LIBS="-lpython"
+	PYTHON_CFLAGS="-I`python -c 'from distutils import sysconfig; print sysconfig.get_python_inc()' 2> /dev/null`"
+	LIBS="$PYTHON_LIBS $LIBS"
+	CFLAGS="$PYTHON_CFLAGS $CFLAGS"
+	CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
+	AC_TRY_LINK([
+#include <Python.h>
+],
+		    [Py_Initialize();],
+		    cf_result=yes, cf_result=no)
+fi
+
+if test "$cf_result" != "yes"; then
+	EL_RESTORE_FLAGS
+else
+	EL_CONFIG(CONFIG_PYTHON, [Python])
+
+	CFLAGS="$CFLAGS_X"
+	AC_SUBST(PYTHON_LIBS)
+	AC_SUBST(PYTHON_CFLAGS)
+fi
+
+if test "$cf_result"; then AC_MSG_RESULT($cf_result); fi
+
 
 dnl ===================================================================
 dnl Check for Lua, optional even if installed.
@@ -615,10 +667,11 @@ dnl ===================================================================
 dnl Setup global scripting
 dnl ===================================================================
 
-EL_CONFIG_DEPENDS(CONFIG_SCRIPTING, [CONFIG_GUILE CONFIG_LUA CONFIG_PERL CONFIG_RUBY], [Scripting])
+EL_CONFIG_DEPENDS(CONFIG_SCRIPTING, [CONFIG_GUILE CONFIG_LUA CONFIG_PERL CONFIG_PYTHON CONFIG_RUBY], [Scripting])
 AM_CONDITIONAL(CONFIG_GUILE, test "$CONFIG_GUILE" = yes)
 AM_CONDITIONAL(CONFIG_LUA, test "$CONFIG_LUA" = yes)
 AM_CONDITIONAL(CONFIG_PERL, test "$CONFIG_PERL" = yes)
+AM_CONDITIONAL(CONFIG_PYTHON, test "$CONFIG_PYTHON" = yes)
 AM_CONDITIONAL(CONFIG_RUBY, test "$CONFIG_RUBY" = yes)
 AM_CONDITIONAL(CONFIG_SCRIPTING, test "$CONFIG_SCRIPTING" = yes)
 
@@ -1207,6 +1260,7 @@ AC_OUTPUT([ \
  src/scripting/guile/Makefile \
  src/scripting/lua/Makefile \
  src/scripting/perl/Makefile \
+ src/scripting/python/Makefile \
  src/scripting/ruby/Makefile \
  src/ssl/Makefile \
  src/terminal/Makefile \

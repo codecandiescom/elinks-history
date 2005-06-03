@@ -1,3 +1,15 @@
+Fri Jun  3 16:18:22 2005  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Use a safer (?) test for maximum unicode value.  
+
+Fri Jun  3 02:18:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/Makefile.am:
+
+	Distribute python/hooks.py.  
+
 Thu Jun  2 18:36:35 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/scripting/python/hooks.c:

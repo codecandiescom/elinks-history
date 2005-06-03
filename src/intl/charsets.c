@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.110 2005/03/05 21:41:41 zas Exp $ */
+/* $Id: charsets.c,v 1.111 2005/06/03 16:18:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -522,7 +522,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 				else
 					goto end; /* Bad char. */
 				/* Limit to 0xFFFFFFFF. */
-				if (n == (unicode_val_T) 0xFFFFFFFF)
+				if (n >= (unicode_val_T) 0xFFFFFFFFu)
 					goto end;
 			} while (--l);
 		}

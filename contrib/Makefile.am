@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.18 2005/05/16 20:47:55 rrowan Exp $
+## $Id: Makefile.am,v 1.19 2005/06/03 02:18:43 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -38,4 +38,5 @@ EXTRA_DIST = \
  lua/remote.lua \
  perl/hooks.pl \
  perl/config.pl \
+ python/hooks.py \
  ruby/hooks.rb

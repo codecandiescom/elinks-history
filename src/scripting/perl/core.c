@@ -1,5 +1,5 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.13 2005/06/02 18:08:57 witekfl Exp $ */
+/* $Id: core.c,v 1.14 2005/06/05 14:41:18 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@ get_local_hook_file(void)
 	static char buf[1024];	/* TODO: MAX_PATH ??? --Zas */
 
 	if (!elinks_home) return NULL;
-	snprintf(buf, sizeof(buf), "%s/%s", elinks_home, PERL_HOOKS_FILENAME);
+	snprintf(buf, sizeof(buf), "%s%s", elinks_home, PERL_HOOKS_FILENAME);
 	if (file_exists(buf)) return buf;
 	return NULL;
 }

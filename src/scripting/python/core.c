@@ -1,5 +1,5 @@
 /* Python scripting engine */
-/* $Id: core.c,v 1.2 2005/06/02 18:28:42 witekfl Exp $ */
+/* $Id: core.c,v 1.3 2005/06/05 14:41:18 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ get_local_hook_file(void)
 	static char buf[1024];
 
 	if (!elinks_home) return NULL;
-	snprintf(buf, sizeof(buf), "%s/%s", elinks_home, PYTHON_HOOKS_FILENAME);
+	snprintf(buf, sizeof(buf), "%s%s", elinks_home, PYTHON_HOOKS_FILENAME);
 	if (file_exists(buf)) return buf;
 	return NULL;
 }

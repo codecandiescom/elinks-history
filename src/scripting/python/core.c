@@ -1,5 +1,5 @@
 /* Python scripting engine */
-/* $Id: core.c,v 1.3 2005/06/05 14:41:18 witekfl Exp $ */
+/* $Id: core.c,v 1.4 2005/06/05 16:01:30 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,59 +16,34 @@
 #include "lowlevel/home.h"
 #include "modules/module.h"
 #include "util/file.h"
+#include "util/string.h"
 
-#define PYTHON_HOOKS_FILENAME	"hooks.py"
-
-char *python_hook;
 PyObject *pDict, *pModule;
-
-static char *
-get_global_hook_file(void)
-{
-	static char buf[] = CONFDIR "/" PYTHON_HOOKS_FILENAME;
-
-	if (file_exists(buf)) return buf;
-	return NULL;
-}
-
-static char *
-get_local_hook_file(void)
-{
-	static char buf[1024];
-
-	if (!elinks_home) return NULL;
-	snprintf(buf, sizeof(buf), "%s%s", elinks_home, PYTHON_HOOKS_FILENAME);
-	if (file_exists(buf)) return buf;
-	return NULL;
-}
 
 void
 cleanup_python(struct module *module)
 {
-	if (python_hook) {
+	if (Py_IsInitialized()) {
 		if (pModule) {
 			Py_DECREF(pModule);
 		}
 		Py_Finalize();
 	}
-	python_hook = NULL;
 }
 
 void
 init_python(struct module *module)
 {
-	PyObject *filename;
-	char *hook_global = get_global_hook_file();
-	char *hook_local = get_local_hook_file();
+	unsigned char *python_path = straconcat(elinks_home, ":", CONFDIR, NULL);
 
-	python_hook = (hook_local ? hook_local : hook_global);
-	if (!python_hook) return;
+	setenv("PYTHONPATH", new_python_path,1);
+	mem_free(python_path);
 	Py_Initialize();
-	filename = PyString_FromString(python_hook);
-	pModule = PyImport_Import(filename);
-	Py_DECREF(filename);
+	pModule = PyImport_ImportModule("hooks");
 
 	if (pModule) {
 		pDict = PyModule_GetDict(pModule);
+	} else {
+		PyErr_Clear();
 	}
 }

@@ -1,5 +1,5 @@
 /* Python scripting hooks */
-/* $Id: hooks.c,v 1.4 2005/06/05 14:12:18 witekfl Exp $ */
+/* $Id: hooks.c,v 1.5 2005/06/05 19:03:25 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,28 +25,32 @@ do_script_hook_goto_url(struct session *ses, unsigned char **url)
 	PyObject *pFunc = PyDict_GetItemString(pDict, "goto_url_hook");
 
 	if (pFunc && PyCallable_Check(pFunc)) {
-		PyObject *pArg = PyTuple_New(1);
 		PyObject *pValue;
-		const unsigned char *str;
+		unsigned char *str;
 
 		if (!ses || !have_location(ses)) {
-			pValue = Py_None;
+			str = NULL;
 		} else {
-			unsigned char *uri = struri(cur_loc(ses)->vs.uri);
-
-			pValue = PyString_FromString(uri);
+			str = struri(cur_loc(ses)->vs.uri);
 		}
-		PyTuple_SetItem(pArg, 0, pValue);
-		pValue = PyObject_CallObject(pFunc, pArg);
-		Py_DECREF(pArg);
-		PyArg_ParseTuple(pValue, "s", &str);
-		
-		if (str) {
-			unsigned char *new_url = stracpy((unsigned char *)str);
+		pValue = PyObject_CallFunction(pFunc, "s", str);
+		if (pValue) {
+			const unsigned char *res = PyString_AsString(pValue);
 
-			if (new_url) mem_free_set(url, new_url);
+			if (res) {
+				unsigned char *new_url = stracpy((unsigned char *)res);
+
+				if (new_url) mem_free_set(url, new_url);
+			}
+			if (pValue != Py_None) {
+				Py_DECREF(pValue);
+			}
+		} else {
+			if (PyErr_Occurred()) {
+				PyErr_Print();
+				PyErr_Clear();
+			}
 		}
-		Py_DECREF(pValue);
 	}
 }
 
@@ -68,23 +72,24 @@ do_script_hook_follow_url(unsigned char **url)
 	PyObject *pFunc = PyDict_GetItemString(pDict, "follow_url_hook");
 
 	if (pFunc && PyCallable_Check(pFunc)) {
-		PyObject *pArg = PyTuple_New(1);
-		PyObject *pValue;
-		const unsigned char *str;
+		PyObject *pValue = PyObject_CallFunction(pFunc, "s", *url);
+		if (pValue) {
+			const unsigned char *str = PyString_AsString(pValue);
+			unsigned char *new_url;
 
-		pValue = PyString_FromString(*url);
-		PyTuple_SetItem(pArg, 0, pValue);
-		/* Is memleak here? --witekfl */
-		pValue = PyObject_CallObject(pFunc, pArg);
-		Py_DECREF(pArg);
-		PyArg_ParseTuple(pValue, "s", &str);
-		
-		if (str) {
-			unsigned char *new_url = stracpy((unsigned char *)str);
-
-			if (new_url) mem_free_set(url, new_url);
+			if (str) {
+				new_url = stracpy((unsigned char *)str);
+				if (new_url) mem_free_set(url, new_url);
+			}
+			if (pValue != Py_None) {
+				Py_DECREF(pValue);
+			}
+		} else {
+			if (PyErr_Occurred()) {
+				PyErr_Print();
+				PyErr_Clear();
+			}
 		}
-		Py_DECREF(pValue);
 	}
 }
 
@@ -106,24 +111,26 @@ do_script_hook_pre_format_html(unsigned char *url, unsigned char **html,
 	PyObject *pFunc = PyDict_GetItemString(pDict, "pre_format_html_hook");
 
 	if (pFunc && PyCallable_Check(pFunc)) {
-		PyObject *pArgs = PyTuple_New(2);
-		PyObject *pValue;
-		const unsigned char *str;
+		PyObject *pValue = PyObject_CallFunction(pFunc, "ss", url, *html);
 
-		pValue = PyString_FromString(url);
-		PyTuple_SetItem(pArgs, 0, pValue);
-		pValue = PyString_FromString(*html);
-		PyTuple_SetItem(pArgs, 1, pValue);
-		pValue = PyObject_CallObject(pFunc, pArgs);
-		Py_DECREF(pArgs);
-		PyArg_ParseTuple(pValue, "s", &str);
-		
-		if (str) {
-			*html_len = strlen(str);
-			*html = memacpy((unsigned char *)str, *html_len);
-			if (!html) *html_len = 0;
+		if (pValue) {
+			const unsigned char *str = PyString_AsString(pValue);
+
+			if (str) {
+				*html_len = strlen(str);
+				*html = memacpy((unsigned char *)str, *html_len);
+				/* Isn't a memleak here? --witekfl */
+				if (!*html) *html_len = 0;
+			}
+			if (pValue != Py_None) {
+				Py_DECREF(pValue);
+			}
+		} else {
+			if (PyErr_Occurred()) {
+				PyErr_Print();
+				PyErr_Clear();
+			}
 		}
-		Py_DECREF(pValue);
 	}
 }
 
@@ -147,24 +154,25 @@ do_script_hook_get_proxy(unsigned char **new_proxy_url, unsigned char *url)
 	PyObject *pFunc = PyDict_GetItemString(pDict, "proxy_for_hook");
 
 	if (pFunc && PyCallable_Check(pFunc)) {
-		PyObject *pArg = PyTuple_New(1);
-		PyObject *pValue;
-		const unsigned char *str;
+		PyObject *pValue = PyObject_CallFunction(pFunc, "s", url);
 
-		pValue = PyString_FromString(url);
-		PyTuple_SetItem(pArg, 0, pValue);
-		pValue = PyObject_CallObject(pFunc, pArg);
-		Py_DECREF(pArg);
-		PyArg_ParseTuple(pValue, "s", &str);
-		
-		if (str) {
-			unsigned char *new_url = stracpy((unsigned char *)str);
+		if (pValue) {
+			const unsigned char *str = PyString_AsString(pValue);
 
-			if (new_url) mem_free_set(new_proxy_url, new_url);
+			if (str) {
+				unsigned char *new_url = stracpy((unsigned char *)str);
+
+				if (new_url) mem_free_set(new_proxy_url, new_url);
+			}
+			if (pValue != Py_None) {
+				Py_DECREF(pValue);
+			}
 		} else {
-			mem_free_set(new_proxy_url, NULL);
+			if (PyErr_Occurred()) {
+				PyErr_Print();
+				PyErr_Clear();
+			}
 		}
-		Py_DECREF(pValue);
 	}
 }
 
@@ -186,7 +194,18 @@ do_script_hook_quit(void)
 	PyObject *pFunc = PyDict_GetItemString(pDict, "quit_hook");
 
 	if (pFunc && PyCallable_Check(pFunc)) {
-		PyObject_CallObject(pFunc, Py_None);
+		PyObject *pValue = PyObject_CallFunction(pFunc, NULL);
+
+		if (pValue) {
+			if (pValue != Py_None) {
+				Py_DECREF(pValue);
+			}
+		} else {
+			if (PyErr_Occurred()) {
+				PyErr_Print();
+				PyErr_Clear();
+			}
+		}
 	}
 }
 

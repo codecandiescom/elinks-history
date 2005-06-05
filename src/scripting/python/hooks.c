@@ -1,5 +1,5 @@
 /* Python scripting hooks */
-/* $Id: hooks.c,v 1.5 2005/06/05 19:03:25 witekfl Exp $ */
+/* $Id: hooks.c,v 1.6 2005/06/05 20:07:41 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ do_script_hook_goto_url(struct session *ses, unsigned char **url)
 			str = struri(cur_loc(ses)->vs.uri);
 		}
 		pValue = PyObject_CallFunction(pFunc, "s", str);
-		if (pValue) {
+		if (pValue && (pValue != Py_None)) {
 			const unsigned char *res = PyString_AsString(pValue);
 
 			if (res) {
@@ -42,9 +42,7 @@ do_script_hook_goto_url(struct session *ses, unsigned char **url)
 
 				if (new_url) mem_free_set(url, new_url);
 			}
-			if (pValue != Py_None) {
-				Py_DECREF(pValue);
-			}
+			Py_DECREF(pValue);
 		} else {
 			if (PyErr_Occurred()) {
 				PyErr_Print();
@@ -73,7 +71,7 @@ do_script_hook_follow_url(unsigned char **url)
 
 	if (pFunc && PyCallable_Check(pFunc)) {
 		PyObject *pValue = PyObject_CallFunction(pFunc, "s", *url);
-		if (pValue) {
+		if (pValue && (pValue != Py_None)) {
 			const unsigned char *str = PyString_AsString(pValue);
 			unsigned char *new_url;
 
@@ -81,9 +79,7 @@ do_script_hook_follow_url(unsigned char **url)
 				new_url = stracpy((unsigned char *)str);
 				if (new_url) mem_free_set(url, new_url);
 			}
-			if (pValue != Py_None) {
-				Py_DECREF(pValue);
-			}
+			Py_DECREF(pValue);
 		} else {
 			if (PyErr_Occurred()) {
 				PyErr_Print();
@@ -113,7 +109,7 @@ do_script_hook_pre_format_html(unsigned char *url, unsigned char **html,
 	if (pFunc && PyCallable_Check(pFunc)) {
 		PyObject *pValue = PyObject_CallFunction(pFunc, "ss", url, *html);
 
-		if (pValue) {
+		if (pValue && (pValue != Py_None)) {
 			const unsigned char *str = PyString_AsString(pValue);
 
 			if (str) {
@@ -122,9 +118,7 @@ do_script_hook_pre_format_html(unsigned char *url, unsigned char **html,
 				/* Isn't a memleak here? --witekfl */
 				if (!*html) *html_len = 0;
 			}
-			if (pValue != Py_None) {
-				Py_DECREF(pValue);
-			}
+			Py_DECREF(pValue);
 		} else {
 			if (PyErr_Occurred()) {
 				PyErr_Print();
@@ -156,7 +150,7 @@ do_script_hook_get_proxy(unsigned char **new_proxy_url, unsigned char *url)
 	if (pFunc && PyCallable_Check(pFunc)) {
 		PyObject *pValue = PyObject_CallFunction(pFunc, "s", url);
 
-		if (pValue) {
+		if (pValue && (pValue != Py_None)) {
 			const unsigned char *str = PyString_AsString(pValue);
 
 			if (str) {
@@ -164,9 +158,7 @@ do_script_hook_get_proxy(unsigned char **new_proxy_url, unsigned char *url)
 
 				if (new_url) mem_free_set(new_proxy_url, new_url);
 			}
-			if (pValue != Py_None) {
-				Py_DECREF(pValue);
-			}
+			Py_DECREF(pValue);
 		} else {
 			if (PyErr_Occurred()) {
 				PyErr_Print();

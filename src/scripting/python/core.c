@@ -1,5 +1,5 @@
 /* Python scripting engine */
-/* $Id: core.c,v 1.7 2005/06/05 18:39:46 witekfl Exp $ */
+/* $Id: core.c,v 1.8 2005/06/05 19:04:19 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,10 @@ cleanup_python(struct module *module)
 	if (Py_IsInitialized()) {
 		if (pModule) {
 			Py_DECREF(pModule);
+		}
+		if (PyErr_Occurred()) {
+			PyErr_Print();
+			PyErr_Clear();
 		}
 		Py_Finalize();
 	}

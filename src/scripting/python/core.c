@@ -1,5 +1,5 @@
 /* Python scripting engine */
-/* $Id: core.c,v 1.4 2005/06/05 16:01:30 witekfl Exp $ */
+/* $Id: core.c,v 1.5 2005/06/05 16:08:02 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@ init_python(struct module *module)
 {
 	unsigned char *python_path = straconcat(elinks_home, ":", CONFDIR, NULL);
 
-	setenv("PYTHONPATH", new_python_path,1);
+	setenv("PYTHONPATH", python_path,1);
 	mem_free(python_path);
 	Py_Initialize();
 	pModule = PyImport_ImportModule("hooks");

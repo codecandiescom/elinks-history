@@ -1,5 +1,5 @@
 /* Python scripting engine */
-/* $Id: core.c,v 1.6 2005/06/05 16:16:12 witekfl Exp $ */
+/* $Id: core.c,v 1.7 2005/06/05 18:39:46 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,6 +45,9 @@ init_python(struct module *module)
 	if (pModule) {
 		pDict = PyModule_GetDict(pModule);
 	} else {
-		PyErr_Clear();
+		if (PyErr_Occurred()) {
+			PyErr_Print();
+			PyErr_Clear();
+		}
 	}
 }

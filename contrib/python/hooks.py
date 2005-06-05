@@ -10,5 +10,5 @@ def pre_format_html_hook(url, html):
 def proxy_for_hook(url):
 	return None
 
-def quit_hook:
+def quit_hook():
 	return None

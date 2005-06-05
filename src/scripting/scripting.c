@@ -1,5 +1,5 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.19 2005/06/05 14:26:06 witekfl Exp $ */
+/* $Id: scripting.c,v 1.20 2005/06/05 14:32:12 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "scripting/guile/guile.h"
 #include "scripting/lua/lua.h"
 #include "scripting/perl/perl.h"
+#include "scripting/python/python.h"
 #include "scripting/ruby/ruby.h"
 
 

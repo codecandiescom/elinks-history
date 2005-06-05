@@ -1,5 +1,5 @@
 /* Python scripting hooks */
-/* $Id: hooks.c,v 1.3 2005/06/02 18:36:35 witekfl Exp $ */
+/* $Id: hooks.c,v 1.4 2005/06/05 14:12:18 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ script_hook_goto_url(va_list ap, void *data)
 	unsigned char **url = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
 
-	if (*url)
+	if (pDict && *url)
 		do_script_hook_goto_url(ses, url);
 
 	return EVENT_HOOK_STATUS_NEXT;
@@ -74,6 +74,7 @@ do_script_hook_follow_url(unsigned char **url)
 
 		pValue = PyString_FromString(*url);
 		PyTuple_SetItem(pArg, 0, pValue);
+		/* Is memleak here? --witekfl */
 		pValue = PyObject_CallObject(pFunc, pArg);
 		Py_DECREF(pArg);
 		PyArg_ParseTuple(pValue, "s", &str);
@@ -92,7 +93,7 @@ script_hook_follow_url(va_list ap, void *data)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
 
-	if (*url)
+	if (pDict && *url)
 		do_script_hook_follow_url(url);
 
 	return EVENT_HOOK_STATUS_NEXT;
@@ -134,7 +135,7 @@ script_hook_pre_format_html(va_list ap, void *data)
 	struct session *ses = va_arg(ap, struct session *);
 	unsigned char *url = va_arg(ap, unsigned char *);
 
-	if (ses && url && *html && *html_len)
+	if (pDict && ses && url && *html && *html_len)
 		do_script_hook_pre_format_html(url, html, html_len);
 
 	return EVENT_HOOK_STATUS_NEXT;
@@ -173,7 +174,7 @@ script_hook_get_proxy(va_list ap, void *data)
 	unsigned char **new_proxy_url = va_arg(ap, unsigned char **);
 	unsigned char *url = va_arg(ap, unsigned char *);
 
-	if (new_proxy_url && url)
+	if (pDict && new_proxy_url && url)
 		do_script_hook_get_proxy(new_proxy_url, url);
 
 	return EVENT_HOOK_STATUS_NEXT;
@@ -192,7 +193,7 @@ do_script_hook_quit(void)
 static enum evhook_status
 script_hook_quit(va_list ap, void *data)
 {
-	do_script_hook_quit();
+	if (pDict) do_script_hook_quit();
 	return EVENT_HOOK_STATUS_NEXT;
 }
 

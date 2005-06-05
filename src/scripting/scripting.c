@@ -1,5 +1,5 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.18 2005/04/01 17:50:52 zas Exp $ */
+/* $Id: scripting.c,v 1.19 2005/06/05 14:26:06 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,9 @@ static struct module *scripting_modules[] = {
 #endif
 #ifdef CONFIG_PERL
 	&perl_scripting_module,
+#endif
+#ifdef CONFIG_PYTHON
+	&python_scripting_module,
 #endif
 #ifdef CONFIG_RUBY
 	&ruby_scripting_module,

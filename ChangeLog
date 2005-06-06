@@ -1,3 +1,28 @@
+Mon Jun  6 16:55:29 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/terminal/kbd.c:
+
+	Missing break. Spotted by Jonas.  
+
+Mon Jun  6 14:51:11 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser.c:
+
+	Comment for shutting up warning.  
+
+Mon Jun  6 14:50:07 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/terminal/kbd.c:
+
+	Shut up warning.  
+
+Mon Jun  6 14:44:44 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser.c:
+
+	Shut up warning: 'label' may be used uninitialized in this function 
+	(look_for_link).  
+
 Sun Jun  5 20:07:41 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/scripting/python/hooks.c:

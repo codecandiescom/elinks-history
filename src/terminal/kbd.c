@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.141 2005/05/19 09:30:18 zas Exp $ */
+/* $Id: kbd.c,v 1.142 2005/06/06 14:50:07 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -687,6 +687,8 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 			break;
 		case 0:
 			mouse.button = B_DRAG;
+		default:
+			mouse.button = 0; /* shut up warning */
 		/* default : Twin protocol error */
 		}
 

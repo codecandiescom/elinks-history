@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.538 2005/05/18 20:35:48 zas Exp $ */
+/* $Id: parser.c,v 1.539 2005/06/06 14:44:44 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1351,7 +1351,8 @@ look_for_link(unsigned char **pos, unsigned char *eof, struct menu_item **menu,
 	      struct memory_list **ml, struct uri *href_base,
 	      unsigned char *target_base, struct conv_table *ct)
 {
-	unsigned char *attr, *label, *href, *name, *target;
+	unsigned char *attr, *href, *name, *target;
+	unsigned char *label = NULL;
 	struct link_def *ld;
 	struct menu_item *nm;
 	int nmenu;

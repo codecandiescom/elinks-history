@@ -1,3 +1,9 @@
+Tue Jun  7 17:33:57 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* NEWS:
+
+	Added info about Python scripting engine.  
+
 Mon Jun  6 16:55:29 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/terminal/kbd.c:

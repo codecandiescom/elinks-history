@@ -3,6 +3,7 @@ See ChangeLog for recent changes, bugfixes and new features.
 ELinks now:
 
 * support for Lua 4.x was dropped, we only support Lua 5.x now.
+* Python scripting back-end (experimental)
 
 ELinks 0.10.4:
 

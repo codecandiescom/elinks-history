@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.149 2005/06/08 15:02:31 witekfl Exp $ */
+/* $Id: renderer.c,v 1.150 2005/06/08 19:56:08 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -556,7 +556,7 @@ get_convert_table(unsigned char *head, int to_cp,
 		 * scan_http_equiv() appends the meta stuff to the protocol header before
 		 * this function is called. Last Content-Type header field is used. */
 
-		while (meta = parse_header(part, "Content-Type", &part)) {
+		while ((meta = parse_header(part, "Content-Type", &part))) {
 			mem_free_set(&a, meta);
 		}
 

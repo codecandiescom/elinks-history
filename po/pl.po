@@ -1678,7 +1678,7 @@ msgstr "Przeszukuj dokument wpisuj±c pojedyncze znaki"
 
 #: src/config/kbdbind.c:523
 msgid "Search document text backwards by typing ahead"
-msgstr "Przeszukuj dokument wstec wpisuj±c pojedyncze znaki"
+msgstr "Przeszukuj dokument wstecz wpisuj±c pojedyncze znaki"
 
 #: src/config/kbdbind.c:524
 msgid "Show terminal options dialog"

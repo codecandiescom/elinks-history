@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.147 2005/06/08 14:09:56 witekfl Exp $ */
+/* $Id: renderer.c,v 1.148 2005/06/08 14:40:59 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -552,7 +552,11 @@ get_convert_table(unsigned char *head, int to_cp,
 		unsigned char *a = parse_header(part, "Content-Type", &part);
 
 		if (!a) break;
-		/* Content type info from document meta header */
+		/* Content type info from document meta header.
+		 * scan_http_equiv() appends the meta stuff to the protocol header before
+		 * this function is called. If the protocol header contains two Content-Type
+		 * entries this won't work as it should, but it is unlikely. */
+
 		meta = parse_header(part, "Content-Type", &part);
 		if (meta) mem_free_set(&a, meta);
 

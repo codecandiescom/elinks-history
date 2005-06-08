@@ -83,12 +83,13 @@ if test "$CONFIG_RUBY" = "yes"; then
 			AC_MSG_RESULT(too old; need Ruby version 1.6.0 or later)
 		fi
 	fi
+
+	if test -n "$withval" && test "$CONFIG_RUBY" != "yes"; then
+		AC_MSG_ERROR([Ruby not found])
+	fi
 fi
 
 if test "$CONFIG_RUBY" != "yes"; then
-	if test -n "$withval"; then
-		AC_MSG_ERROR([Ruby not found])
-	fi
 	EL_RESTORE_FLAGS
 else
 	EL_CONFIG(CONFIG_RUBY, [Ruby])

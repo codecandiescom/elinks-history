@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.146 2005/04/26 09:56:28 zas Exp $ */
+/* $Id: renderer.c,v 1.147 2005/06/08 14:09:56 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,9 +548,13 @@ get_convert_table(unsigned char *head, int to_cp,
 
 	while (cp_index == -1) {
 		unsigned char *ct_charset;
+		unsigned char *meta;
 		unsigned char *a = parse_header(part, "Content-Type", &part);
 
 		if (!a) break;
+		/* Content type info from document meta header */
+		meta = parse_header(part, "Content-Type", &part);
+		if (meta) mem_free_set(&a, meta);
 
 		ct_charset = parse_header_param(a, "charset");
 		if (ct_charset) {

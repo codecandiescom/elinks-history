@@ -1,5 +1,5 @@
 /* Pseudo about: protocol implementation */
-/* $Id: about.c,v 1.13 2005/05/19 23:36:47 jonas Exp $ */
+/* $Id: about.c,v 1.14 2005/06/09 08:32:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,7 @@ about_protocol_handler(struct connection *conn)
 			}
 		}
 #endif
-		
+
 		normalize_cache_entry(cached, len);
 
 		/* Set content to known type */

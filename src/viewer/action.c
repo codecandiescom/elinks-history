@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.138 2005/05/17 00:16:32 jonas Exp $ */
+/* $Id: action.c,v 1.139 2005/06/09 03:33:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,6 +124,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 	struct terminal *term = ses->tab->term;
 	struct document_view *doc_view = current_frame(ses);
 	struct link *link = NULL;
+
+	if (action == -1) goto unknown_action;
 
 	if (doc_view && doc_view->vs) {
 		if ((action & ACTION_JUMP_TO_LINK)
@@ -634,6 +636,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 		case ACT_MAIN_NONE:
 		case MAIN_ACTIONS:
 		default:
+unknown_action:
 			if (verbose) {
 				INTERNAL("No action handling defined for '%s'.",
 					 write_action(KEYMAP_MAIN, action));

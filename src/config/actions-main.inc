@@ -36,7 +36,7 @@ ACTION_(MAIN, "header-info", HEADER_INFO, N__("Show information about the curren
 ACTION_(MAIN, "history-manager", HISTORY_MANAGER, N__("Open history manager"), 0),
 ACTION_(MAIN, "history-move-back", HISTORY_MOVE_BACK, N__("Return to the previous document in history"), 0),
 ACTION_(MAIN, "history-move-forward", HISTORY_MOVE_FORWARD, N__("Go forward in history"), 0),
-ACTION_(MAIN, "jump-to-link", JUMP_TO_LINK, N__("Jump to link"), ACTION_REQUIRE_VIEW_STATE),
+ACTION_(MAIN, "jump-to-link", JUMP_TO_LINK, N__("Jump to link"), ACTION_REQUIRE_VIEW_STATE | ACTION_JUMP_TO_LINK),
 ACTION_(MAIN, "keybinding-manager", KEYBINDING_MANAGER, N__("Open keybinding manager"), ACTION_RESTRICT_ANONYMOUS),
 ACTION_(MAIN, "kill-backgrounded-connections", KILL_BACKGROUNDED_CONNECTIONS, N__("Kill all backgrounded connections"), 0),
 ACTION_(MAIN, "link-download", LINK_DOWNLOAD, N__("Download the current link"), ACTION_RESTRICT_ANONYMOUS | ACTION_REQUIRE_VIEW_STATE | ACTION_JUMP_TO_LINK),

@@ -1,3 +1,38 @@
+Thu Jun  9 08:43:02 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jun  9 08:32:04 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser/parse.c, protocol/about.c:
+
+	Trim ending whitespaces.  
+
+Thu Jun  9 08:28:27 2005  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Simplify code even more, spotted by Miciah.  
+
+Thu Jun  9 03:33:34 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/action.c:
+
+	If action is -1, do not check flags (which will all be set when
+	action is -1) before going to the unknown-action code.  
+	
+	This fixes the bug introduced with revisions 1.134 thru 1.137 
+	whereby alt-<accelerator> would not open the menu if there was no
+	document loaded.  
+
+Thu Jun  9 03:14:46 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/actions-main.inc:
+
+	Give jump-to-link the ACTION_JUMP_TO_LINK flag.  
+
 Wed Jun  8 20:11:41 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:

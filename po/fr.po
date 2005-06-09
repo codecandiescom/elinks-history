@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-31 22:31+0200\n"
-"PO-Revision-Date: 2005-05-31 22:32+0200\n"
+"POT-Creation-Date: 2005-06-09 10:32+0200\n"
+"PO-Revision-Date: 2005-06-09 10:34+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
 #: src/bfu/hierbox.c:331
@@ -1856,31 +1856,31 @@ msgstr "Co~mmuter affich."
 msgid "Keybinding manager"
 msgstr "Gestionnaire d'assoc. de touches"
 
-#: src/config/kbdbind.c:266
+#: src/config/kbdbind.c:263
 msgid "Main mapping"
 msgstr "Principal"
 
-#: src/config/kbdbind.c:267
+#: src/config/kbdbind.c:264
 msgid "Edit mapping"
 msgstr "Edition"
 
-#: src/config/kbdbind.c:268
+#: src/config/kbdbind.c:265
 msgid "Menu mapping"
 msgstr "Menu"
 
-#: src/config/kbdbind.c:512
+#: src/config/kbdbind.c:509
 msgid "Unrecognised keymap"
 msgstr "Table d'associations de touches non reconnue"
 
-#: src/config/kbdbind.c:514
+#: src/config/kbdbind.c:511
 msgid "Error parsing keystroke"
 msgstr "Erreur d'interprétation de touche"
 
-#: src/config/kbdbind.c:516
+#: src/config/kbdbind.c:513
 msgid "Unrecognised action (internal error)"
 msgstr "Action non reconnue (erreur interne)"
 
-#: src/config/kbdbind.c:532
+#: src/config/kbdbind.c:529
 msgid "Error registering event"
 msgstr "Erreur d'enregistrement d'événement"
 
@@ -5065,8 +5065,8 @@ msgstr ""
 "\n"
 "ELinks maintient des groupes séparés de valeurs pour ces\n"
 "options et choisit le groupe approprié en fonction de la\n"
-"valeur de TERM. Cela vous permet de configurer chacun des\n"
-"terminaux où vous utilisez ELinks."
+"valeur de TERM. Cela vous permet de configurer indépendemment\n"
+"chacun des terminaux où vous utilisez ELinks."
 
 #: src/dialogs/options.c:179
 msgid "Terminal options"
@@ -5407,6 +5407,8 @@ msgstr "~Effacer"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show form history dialog"
 msgstr "Montrer le dialogue de mémorisation de formulaires"
@@ -7278,7 +7280,7 @@ msgid "Ruby Message"
 msgstr "Message Ruby"
 
 #. name:
-#: src/scripting/scripting.c:41
+#: src/scripting/scripting.c:45
 msgid "Scripting"
 msgstr "Scripting"
 
@@ -7366,7 +7368,7 @@ msgstr "Mauvais évènement %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évènement: %d (%s)"
 
-#: src/terminal/kbd.c:998
+#: src/terminal/kbd.c:1001
 msgid "Too many bytes read from the itrm!"
 msgstr "Trop d'octets lus en provenance de itrm!"
 
@@ -7648,24 +7650,3 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1298
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid "Allow dark colors on black background"
-#~ msgstr "Autoriser les couleurs sombres sur fond noir"
-
-#~ msgid "Open a Lua console (DISABLED)"
-#~ msgstr "Ouvrir la console Lua (DÉSACTIVÉ)"
-
-#~ msgid ""
-#~ "Allow dark colors on black background, and bright colors\n"
-#~ "on bright background. By default the colors have their contrast\n"
-#~ "increased, so that the foreground and the background do not have\n"
-#~ "too similar colors. This option turns this off. Note, this is\n"
-#~ "different from having it ensured through the ensure_contrast\n"
-#~ "option."
-#~ msgstr ""
-#~ "Autoriser les couleurs sombres sur fond sombre, et les couleurs\n"
-#~ "claires sur fond clair.\n"
-#~ "Par défaut, les couleurs ont leur contraste augmenté de manière à\n"
-#~ "ce que l'avant et l'arrière plan n'aient pas des couleurs trop\n"
-#~ "similaires. Cette option désactive ceci. Notez que ceci diffère\n"
-#~ "de l'action de l'option ensure_contrast."

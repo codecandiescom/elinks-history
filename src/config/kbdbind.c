@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.311 2005/06/10 06:32:02 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.312 2005/06/10 06:35:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,30 +230,33 @@ get_action_from_string(enum keymap_id keymap_id, unsigned char *str)
 	return -1;
 }
 
-static unsigned char *
-get_action_name(enum keymap_id keymap_id, long num)
+static struct action *
+get_action(enum keymap_id keymap_id, long num)
 {
 	struct action_list *action_list = &action_table[keymap_id];
 
 	if (num >= 0 && num < action_list->num_actions)
-		return action_list->actions[num].str;
+		return &action_list->actions[num];
 
 	return NULL;
+}
+
+static unsigned char *
+get_action_name(enum keymap_id keymap_id, long num)
+{
+	struct action *action = get_action(keymap_id, num);
+
+	return action ? action->str : NULL;
 }
 
 
 static unsigned char *
 get_action_desc(enum keymap_id keymap_id, long num)
 {
-	struct action_list *action_list = &action_table[keymap_id];
+	struct action *action = get_action(keymap_id, num);
 
-	if (num >= 0 && num < action_list->num_actions) {
-		struct action *action = &action_list->actions[num];
-
-		return action->desc ? action->desc : action->str;
-	}
-
-	return NULL;
+	return action ? (action->desc ? action->desc : action->str)
+	              : NULL;
 }
 
 

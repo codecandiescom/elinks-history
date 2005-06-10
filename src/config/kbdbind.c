@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.302 2005/06/10 05:45:08 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.303 2005/06/10 06:04:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -222,7 +222,7 @@ strtonum(struct action *table, unsigned char *str)
 }
 
 static unsigned char *
-numtostr(struct action *table, long num)
+get_action_name(struct action *table, long num)
 {
 	struct action *rec;
 
@@ -485,7 +485,7 @@ unsigned char *
 write_action(enum keymap_id keymap_id, int action_id)
 {
 	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
-	return numtostr(action_table[keymap_id].actions, action_id);
+	return get_action_name(action_table[keymap_id].actions, action_id);
 }
 
 

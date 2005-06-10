@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.300 2005/06/10 05:11:10 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.301 2005/06/10 05:18:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,7 +275,12 @@ write_keymap(enum keymap_id keymap_id)
 }
 
 
-static struct action key_table[] = {
+struct key {
+	unsigned char *str;
+	int num;
+};
+
+static struct key key_table[] = {
 	{ "Enter", KBD_ENTER },
 	{ "Space", ' ' },
 	{ "Backspace", KBD_BS },
@@ -307,9 +312,9 @@ static struct action key_table[] = {
 };
 
 static long
-strcasetonum(struct action *table, unsigned char *str)
+strcasetonum(struct key *table, unsigned char *str)
 {
-	struct action *rec;
+	struct key *rec;
 
 	for (rec = table; rec->str; rec++)
 		if (!strcasecmp(rec->str, str))
@@ -360,7 +365,8 @@ void
 make_keystroke(struct string *str, struct term_event_keyboard *kbd, int escape)
 {
 	unsigned char key_buffer[3] = "\\x";
-	unsigned char *key_string;
+	unsigned char *key_string = NULL;
+	struct key *rec;
 
 	if (kbd->key < 0) return;
 
@@ -371,7 +377,14 @@ make_keystroke(struct string *str, struct term_event_keyboard *kbd, int escape)
 	if (kbd->modifier & KBD_MOD_ALT)
 		add_to_string(str, "Alt-");
 
-	key_string = numtostr(key_table, kbd->key);
+
+	for (rec = key_table; rec->str; rec++) {
+		if (kbd->key == rec->num) {
+			key_string = rec->str;
+			break;
+		}
+	}
+
 	if (!key_string) {
 		key_string = key_buffer + 1;
 		*key_string = (unsigned char) kbd->key;

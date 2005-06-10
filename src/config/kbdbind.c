@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.325 2005/06/10 13:23:34 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.326 2005/06/10 16:21:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -510,21 +510,23 @@ free_keymaps(void)
 static unsigned char *
 bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event)
 {
-	unsigned char *err = NULL;
 	struct term_event_keyboard kbd;
 	int action_id;
 	enum keymap_id keymap_id = get_keymap_id(ckmap);
 
 	if (keymap_id < 0)
-		err = gettext("Unrecognised keymap");
-	else if (parse_keystroke(ckey, &kbd) < 0)
-		err = gettext("Error parsing keystroke");
-	else if ((action_id = get_action_from_string(keymap_id, " *scripting-function*")) < 0)
-		err = gettext("Unrecognised action (internal error)");
-	else
-		add_keybinding(keymap_id, action_id, &kbd, event);
+		return gettext("Unrecognised keymap");
 
-	return err;
+	if (parse_keystroke(ckey, &kbd) < 0)
+		return gettext("Error parsing keystroke");
+
+	action_id = get_action_from_string(keymap_id, " *scripting-function*");
+	if (action_id < 0)
+		return gettext("Unrecognised action (internal error)");
+
+	add_keybinding(keymap_id, action_id, &kbd, event);
+
+	return NULL;
 }
 
 int

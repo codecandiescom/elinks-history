@@ -1,14 +1,14 @@
-/* $Id: view.h,v 1.73 2005/06/10 20:58:06 jonas Exp $ */
+/* $Id: view.h,v 1.74 2005/06/10 21:14:53 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
+
+#include "config/kbdbind.h"
 
 struct document_view;
 struct session;
 struct term_event;
 struct terminal;
-
-#include "config/kbdbind.h"
 
 enum frame_event_status {
 	/* The event was not handled */

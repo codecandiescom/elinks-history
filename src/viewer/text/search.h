@@ -1,10 +1,10 @@
-/* $Id: search.h,v 1.23 2005/06/10 20:58:06 jonas Exp $ */
+/* $Id: search.h,v 1.24 2005/06/10 21:14:53 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_SEARCH_H
 #define EL__VIEWER_TEXT_SEARCH_H
 
-#include "document/view.h"
 #include "config/kbdbind.h"
+#include "document/view.h"
 
 struct module;
 struct session;

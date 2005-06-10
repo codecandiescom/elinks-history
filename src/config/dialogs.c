@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.227 2005/06/10 01:31:40 miciah Exp $ */
+/* $Id: dialogs.c,v 1.228 2005/06/10 03:41:49 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -663,15 +663,13 @@ static unsigned char *
 get_keybinding_text(struct listbox_item *item, struct terminal *term)
 {
 	struct keybinding *keybinding = item->udata;
-	unsigned char *keymap;
 	struct string info;
 
 	if (item->depth < 2) {
 		struct action *action = item->udata;
 
-		keymap = keybinding_text_toggle
-			? action->str : _(action->desc, term);
-		return stracpy(keymap);
+		return stracpy(keybinding_text_toggle ? action->str
+		                                      : _(action->desc, term));
 	}
 
 	if (!init_string(&info)) return NULL;

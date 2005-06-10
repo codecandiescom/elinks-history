@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.236 2005/06/10 12:16:13 jonas Exp $ */
+/* $Id: dialogs.c,v 1.237 2005/06/10 13:00:24 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -589,7 +589,7 @@ init_keybinding_listboxes(struct keymap keymap_table[], struct action_list actio
 		keymap_box = add_listbox_item(NULL, root, BI_FOLDER, keymap, -1);
 		if (!keymap_box) continue;
 
-		for (act = actions[keymap->num].actions; act->str; act++) {
+		for (act = actions[keymap->keymap_id].actions; act->str; act++) {
 			struct listbox_item *item;
 
 			assert(act->num < ACTION_BOX_SIZE);
@@ -608,12 +608,12 @@ init_keybinding_listboxes(struct keymap keymap_table[], struct action_list actio
 
 			item->expanded = 1;
 
-			action_box_items[keymap->num][act->num] = item;
+			action_box_items[keymap->keymap_id][act->num] = item;
 		}
 
-		box_info = &keymap_box_item_info[keymap->num];
+		box_info = &keymap_box_item_info[keymap->keymap_id];
 		box_info->box_item = keymap_box;
-		box_info->first	   = actions[keymap->num].actions;
+		box_info->first	   = actions[keymap->keymap_id].actions;
 		box_info->last	   = act;
 	}
 }

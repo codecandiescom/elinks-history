@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.166 2005/06/10 06:51:18 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.167 2005/06/10 13:00:25 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -24,17 +24,17 @@ struct action_list {
 	int num_actions;
 };
 
-struct keymap {
-	unsigned char *str;
-	int num;
-	unsigned char *desc;
-};
-
 enum keymap_id {
 	KEYMAP_MAIN,
 	KEYMAP_EDIT,
 	KEYMAP_MENU,
 	KEYMAP_MAX
+};
+
+struct keymap {
+	unsigned char *str;
+	enum keymap_id keymap_id;
+	unsigned char *desc;
 };
 
 enum action_flags {

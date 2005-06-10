@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.165 2005/06/10 06:28:09 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.166 2005/06/10 06:51:18 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -112,6 +112,32 @@ void free_keymaps(void);
 struct keybinding *add_keybinding(enum keymap_id keymap_id, int action_id, struct term_event_keyboard *kbd, int event);
 int keybinding_exists(enum keymap_id keymap_id, struct term_event_keyboard *kbd, int *action_id);
 void free_keybinding(struct keybinding *);
+
+struct action *get_action(enum keymap_id keymap_id, long action_id);
+
+static inline unsigned int
+is_action_allowed_in_anonymous(enum keymap_id keymap_id, long action_id)
+{
+	struct action *action = get_action(keymap_id, action_id);
+
+	return action && !(action->flags & ACTION_RESTRICT_ANONYMOUS);
+}
+
+static inline unsigned int
+does_action_require_view_state(enum keymap_id keymap_id, long action_id)
+{
+	struct action *action = get_action(keymap_id, action_id);
+
+	return action && (action->flags & ACTION_REQUIRE_VIEW_STATE);
+}
+
+static inline unsigned int
+does_action_jump_to_link(enum keymap_id keymap_id, long action_id)
+{
+	struct action *action = get_action(keymap_id, action_id);
+
+	return action && (action->flags & ACTION_JUMP_TO_LINK);
+}
 
 long read_key(unsigned char *);
 int read_action(enum keymap_id keymap_id, unsigned char *action);

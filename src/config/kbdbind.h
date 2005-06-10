@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.164 2005/06/10 05:45:08 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.165 2005/06/10 06:28:09 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -21,6 +21,7 @@ struct action {
 
 struct action_list {
 	struct action *actions;
+	int num_actions;
 };
 
 struct keymap {

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.309 2005/06/10 06:19:48 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.310 2005/06/10 06:28:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,9 +236,8 @@ get_action_name(enum keymap_id keymap_id, long num)
 	struct action_list *action_list = &action_table[keymap_id];
 	struct action *rec;
 
-	for (rec = action_list->actions; rec->str; rec++)
-		if (num == rec->num)
-			return rec->str;
+	if (num >= 0 && num < action_list->num_actions)
+		return action_list->actions[num].str;
 
 	return NULL;
 }
@@ -250,9 +249,11 @@ get_action_desc(enum keymap_id keymap_id, long num)
 	struct action_list *action_list = &action_table[keymap_id];
 	struct action *rec;
 
-	for (rec = action_list->actions; rec->str; rec++)
-		if (num == rec->num)
-			return (rec->desc) ? rec->desc : rec->str;
+	if (num >= 0 && num < action_list->num_actions) {
+		struct action *action = &action_list->actions[num];
+
+		return action->desc ? action->desc : action->str;
+	}
 
 	return NULL;
 }
@@ -471,9 +472,12 @@ static struct action menu_action_table[MENU_ACTIONS + 1] = {
 };
 
 static struct action_list action_table[KEYMAP_MAX] = {
-	{ main_action_table },
-	{ edit_action_table },
-	{ menu_action_table },
+	{ main_action_table,
+	  sizeof(main_action_table) / sizeof(struct action) },
+	{ edit_action_table,
+	  sizeof(edit_action_table) / sizeof(struct action) },
+	{ menu_action_table,
+	  sizeof(menu_action_table) / sizeof(struct action) },
 };
 
 #undef ACTION_

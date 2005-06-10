@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.294 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: menu.c,v 1.295 2005/06/10 19:34:34 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -202,7 +202,7 @@ get_menuitem_rtext_width(struct terminal *term, struct menu_item *mi)
 		struct string keystroke;
 
 		if (init_string(&keystroke)) {
-			add_keystroke_to_string(&keystroke, mi->action_id, KEYMAP_MAIN);
+			add_keystroke_action_to_string(&keystroke, mi->action_id, KEYMAP_MAIN);
 			rtext_width = L_RTEXT_SPACE + keystroke.length + R_RTEXT_SPACE;
 			done_string(&keystroke);
 		}
@@ -522,9 +522,9 @@ display_menu(struct terminal *term, struct menu *menu)
 #endif /* CONFIG_DEBUG */
 
 			if (init_string(&keystroke)) {
-				add_keystroke_to_string(&keystroke,
-							mi->action_id,
-							KEYMAP_MAIN);
+				add_keystroke_action_to_string(&keystroke,
+							       mi->action_id,
+							       KEYMAP_MAIN);
 				draw_menu_right_text(term, keystroke.source,
 						     keystroke.length,
 						     menu->box.x, box.y,

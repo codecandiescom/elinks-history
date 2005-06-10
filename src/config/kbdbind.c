@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.333 2005/06/10 19:06:00 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.334 2005/06/10 19:34:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -392,8 +392,8 @@ add_keystroke_to_string(struct string *str, struct term_event_keyboard *kbd,
 }
 
 void
-add_keystroke_to_string(struct string *string, int action_id,
-			enum keymap_id keymap_id)
+add_keystroke_action_to_string(struct string *string, int action_id,
+                               enum keymap_id keymap_id)
 {
 	struct keybinding *kb = kbd_act_lookup(keymap_id, action_id);
 
@@ -408,7 +408,7 @@ get_keystroke(int action_id, enum keymap_id keymap_id)
 
 	if (!init_string(&keystroke)) return NULL;
 
-	add_keystroke_to_string(&keystroke, action_id, keymap_id);
+	add_keystroke_action_to_string(&keystroke, action_id, keymap_id);
 
 	/* Never return empty string */
 	if (!keystroke.length) done_string(&keystroke);

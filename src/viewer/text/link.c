@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.324 2005/06/10 19:12:19 miciah Exp $ */
+/* $Id: link.c,v 1.325 2005/06/10 19:34:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1190,9 +1190,10 @@ link_menu(struct terminal *term, void *xxx, void *ses_)
 				struct string keystroke;
 
 				if (init_string(&keystroke))
-					add_keystroke_to_string(&keystroke,
-								ACT_EDIT_OPEN_EXTERNAL,
-								KEYMAP_EDIT);
+					add_keystroke_action_to_string(
+					                 &keystroke,
+					                 ACT_EDIT_OPEN_EXTERNAL,
+							 KEYMAP_EDIT);
 
 				add_to_menu(&mi, N_("Open in ~external editor"),
 					    keystroke.source, ACT_MAIN_NONE,

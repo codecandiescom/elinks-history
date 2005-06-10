@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.320 2005/06/10 12:46:27 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.321 2005/06/10 12:51:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -808,19 +808,19 @@ static struct action_alias *action_aliases[KEYMAP_MAX] = {
 };
 
 static int
-get_aliased_action(enum keymap_id keymap_id, unsigned char *action)
+get_aliased_action(enum keymap_id keymap_id, unsigned char *action_str)
 {
 	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
 
 	if (action_aliases[keymap_id]) {
-		struct action_alias *rec;
+		struct action_alias *alias;
 
-		for (rec = action_aliases[keymap_id]; rec->str; rec++)
-			if (!strcmp(rec->str, action))
-				return rec->num;
+		for (alias = action_aliases[keymap_id]; alias->str; alias++)
+			if (!strcmp(alias->str, action_str))
+				return alias->num;
 	}
 
-	return read_action(keymap_id, action);
+	return read_action(keymap_id, action_str);
 }
 
 /* Return 0 when ok, something strange otherwise. */

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.319 2005/06/10 12:41:40 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.320 2005/06/10 12:46:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -469,12 +469,9 @@ static struct action menu_action_table[MENU_ACTIONS + 1] = {
 };
 
 static struct action_list action_table[KEYMAP_MAX] = {
-	{ main_action_table,
-	  sizeof(main_action_table) / sizeof(struct action) },
-	{ edit_action_table,
-	  sizeof(edit_action_table) / sizeof(struct action) },
-	{ menu_action_table,
-	  sizeof(menu_action_table) / sizeof(struct action) },
+	{ main_action_table, sizeof_array(main_action_table) },
+	{ edit_action_table, sizeof_array(edit_action_table) },
+	{ menu_action_table, sizeof_array(menu_action_table) },
 };
 
 #undef ACTION_

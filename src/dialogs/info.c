@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.129 2005/06/10 03:57:52 miciah Exp $ */
+/* $Id: info.c,v 1.130 2005/06/10 04:14:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,15 +101,15 @@ menu_keys(struct terminal *term, void *d_, void *xxx)
 
 	if (info->toggle) {
 		int action;
-		enum keymap_id map;
+		enum keymap_id keymap_id;
 
 		for (action = 0; action < MAIN_ACTIONS - 1; action++) {
 			actions[action] = action + 1;
 		}
 
-		for (map = 0; map < KEYMAP_MAX; map++) {
-			add_actions_to_string(&keys, actions, map, term);
-			if (map + 1 < KEYMAP_MAX)
+		for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++) {
+			add_actions_to_string(&keys, actions, keymap_id, term);
+			if (keymap_id + 1 < KEYMAP_MAX)
 				add_to_string(&keys, "\n\n");
 
 			/* Just a little reminder that the following code takes
@@ -117,9 +117,9 @@ menu_keys(struct terminal *term, void *d_, void *xxx)
 			assert(MAIN_ACTIONS > EDIT_ACTIONS);
 			assert(EDIT_ACTIONS > MENU_ACTIONS);
 
-			if (map == KEYMAP_MAIN) {
+			if (keymap_id == KEYMAP_MAIN) {
 				actions[EDIT_ACTIONS] = ACT_EDIT_NONE;
-			} else if (map == KEYMAP_EDIT) {
+			} else if (keymap_id == KEYMAP_EDIT) {
 				actions[MENU_ACTIONS] = ACT_MENU_NONE;
 			}
 		}

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.295 2005/06/10 03:57:52 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.296 2005/06/10 04:10:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ add_keybinding(enum keymap_id km, int action, struct term_event_keyboard *kbd, i
 	kb = mem_calloc(1, sizeof(*kb));
 	if (!kb) return NULL;
 
-	kb->keymap = km;
+	kb->keymap_id = km;
 	kb->action = action;
 	copy_struct(&kb->kbd, kbd);
 	kb->event = event;
@@ -714,7 +714,7 @@ keybinding_is_default(struct keybinding *kb)
 	struct default_kb keybinding = { { kb->kbd.key, kb->kbd.modifier }, kb->action };
 	struct default_kb *pos;
 
-	for (pos = default_keybindings[kb->keymap]; pos->kbd.key; pos++)
+	for (pos = default_keybindings[kb->keymap_id]; pos->kbd.key; pos++)
 		if (!memcmp(&keybinding, pos, sizeof(keybinding)))
 			return 1;
 
@@ -727,15 +727,15 @@ add_default_keybindings(void)
 	/* Maybe we shouldn't delete old keybindings. But on the other side, we
 	 * can't trust clueless users what they'll push into sources modifying
 	 * defaults, can we? ;)) */
-	enum keymap_id keymap;
+	enum keymap_id keymap_id;
 
-	for (keymap = 0; keymap < KEYMAP_MAX; keymap++) {
+	for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++) {
 		struct default_kb *kb;
 
-		for (kb = default_keybindings[keymap]; kb->kbd.key; kb++) {
+		for (kb = default_keybindings[keymap_id]; kb->kbd.key; kb++) {
 			struct keybinding *keybinding;
 
-			keybinding = add_keybinding(keymap, kb->action, &kb->kbd, EVENT_NONE);
+			keybinding = add_keybinding(keymap_id, kb->action, &kb->kbd, EVENT_NONE);
 			keybinding->flags |= KBDB_DEFAULT;
 		}
 	}
@@ -874,12 +874,12 @@ single_bind_config_string(struct string *file, enum keymap_id keymap,
 void
 bind_config_string(struct string *file)
 {
-	enum keymap_id keymap;
+	enum keymap_id keymap_id;
 
-	for (keymap = 0; keymap < KEYMAP_MAX; keymap++) {
+	for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++) {
 		struct keybinding *keybinding;
 
-		foreach (keybinding, keymaps[keymap]) {
+		foreach (keybinding, keymaps[keymap_id]) {
 			/* Don't save default keybindings that has not been
 			 * deleted (rebound to none action) (Bug 337). */
 			/* We cannot simply check the KBDB_DEFAULT flag and
@@ -888,7 +888,7 @@ bind_config_string(struct string *file)
 			if (keybinding_is_default(keybinding))
 				continue;
 
-			single_bind_config_string(file, keymap, keybinding);
+			single_bind_config_string(file, keymap_id, keybinding);
 		}
 	}
 }

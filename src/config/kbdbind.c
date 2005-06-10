@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.296 2005/06/10 04:10:50 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.297 2005/06/10 04:22:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,11 +31,11 @@ static struct list_head keymaps[KEYMAP_MAX];
 static void add_default_keybindings(void);
 
 static int
-delete_keybinding(enum keymap_id km, struct term_event_keyboard *kbd)
+delete_keybinding(enum keymap_id keymap_id, struct term_event_keyboard *kbd)
 {
 	struct keybinding *kb;
 
-	foreach (kb, keymaps[km]) {
+	foreach (kb, keymaps[keymap_id]) {
 		int was_default = 0;
 
 		if (!kbd_key_is(&kb->kbd, kbd->key))
@@ -59,32 +59,32 @@ delete_keybinding(enum keymap_id km, struct term_event_keyboard *kbd)
 }
 
 struct keybinding *
-add_keybinding(enum keymap_id km, int action, struct term_event_keyboard *kbd, int event)
+add_keybinding(enum keymap_id keymap_id, int action, struct term_event_keyboard *kbd, int event)
 {
 	struct keybinding *kb;
 	struct listbox_item *root;
 	int is_default;
 
-	is_default = (delete_keybinding(km, kbd) == 2);
+	is_default = (delete_keybinding(keymap_id, kbd) == 2);
 
 	kb = mem_calloc(1, sizeof(*kb));
 	if (!kb) return NULL;
 
-	kb->keymap_id = km;
+	kb->keymap_id = keymap_id;
 	kb->action = action;
 	copy_struct(&kb->kbd, kbd);
 	kb->event = event;
 	kb->flags = is_default * KBDB_DEFAULT;
 
 	object_nolock(kb, "keybinding");
-	add_to_list(keymaps[km], kb);
+	add_to_list(keymaps[keymap_id], kb);
 
 	if (action == ACT_MAIN_NONE) {
 		/* We don't want such a listbox_item, do we? */
 		return NULL; /* Or goto. */
 	}
 
-	root = get_keybinding_action_box_item(km, action);
+	root = get_keybinding_action_box_item(keymap_id, action);
 	if (!root) {
 		return NULL; /* Or goto ;-). */
 	}
@@ -120,11 +120,11 @@ free_keybinding(struct keybinding *kb)
 }
 
 int
-keybinding_exists(enum keymap_id km, struct term_event_keyboard *kbd, int *action)
+keybinding_exists(enum keymap_id keymap_id, struct term_event_keyboard *kbd, int *action)
 {
 	struct keybinding *kb;
 
-	foreach (kb, keymaps[km]) {
+	foreach (kb, keymaps[keymap_id]) {
 		if (!kbd_key_is(&kb->kbd, kbd->key))
 			continue;
 
@@ -141,22 +141,22 @@ keybinding_exists(enum keymap_id km, struct term_event_keyboard *kbd, int *actio
 
 
 int
-kbd_action(enum keymap_id kmap, struct term_event *ev, int *event)
+kbd_action(enum keymap_id keymap_id, struct term_event *ev, int *event)
 {
 	struct keybinding *kb;
 
 	if (ev->ev != EVENT_KBD) return -1;
 
-	kb = kbd_ev_lookup(kmap, &ev->info.keyboard, event);
+	kb = kbd_ev_lookup(keymap_id, &ev->info.keyboard, event);
 	return kb ? kb->action : -1;
 }
 
 struct keybinding *
-kbd_ev_lookup(enum keymap_id kmap, struct term_event_keyboard *kbd, int *event)
+kbd_ev_lookup(enum keymap_id keymap_id, struct term_event_keyboard *kbd, int *event)
 {
 	struct keybinding *kb;
 
-	foreach (kb, keymaps[kmap]) {
+	foreach (kb, keymaps[keymap_id]) {
 		if (!kbd_key_is(&kb->kbd, kbd->key))
 			continue;
 
@@ -173,14 +173,14 @@ kbd_ev_lookup(enum keymap_id kmap, struct term_event_keyboard *kbd, int *event)
 }
 
 struct keybinding *
-kbd_nm_lookup(enum keymap_id kmap, unsigned char *name)
+kbd_nm_lookup(enum keymap_id keymap_id, unsigned char *name)
 {
 	struct keybinding *kb;
-	int act = read_action(kmap, name);
+	int act = read_action(keymap_id, name);
 
 	if (act < 0) return NULL;
 
-	foreach (kb, keymaps[kmap]) {
+	foreach (kb, keymaps[keymap_id]) {
 		if (act != kb->action)
 			continue;
 
@@ -191,11 +191,11 @@ kbd_nm_lookup(enum keymap_id kmap, unsigned char *name)
 }
 
 struct keybinding *
-kbd_act_lookup(enum keymap_id map, int action)
+kbd_act_lookup(enum keymap_id keymap_id, int action)
 {
 	struct keybinding *kb;
 
-	foreach (kb, keymaps[map]) {
+	foreach (kb, keymaps[keymap_id]) {
 		if (action != kb->action)
 			continue;
 
@@ -273,9 +273,9 @@ read_keymap(unsigned char *keymap)
 }
 
 unsigned char *
-write_keymap(enum keymap_id keymap)
+write_keymap(enum keymap_id keymap_id)
 {
-	return numtostr(keymap_table, keymap);
+	return numtostr(keymap_table, keymap_id);
 }
 
 
@@ -376,22 +376,22 @@ make_keystroke(struct string *str, struct term_event_keyboard *kbd, int escape)
 
 void
 add_keystroke_to_string(struct string *string, int action,
-			enum keymap_id map)
+			enum keymap_id keymap_id)
 {
-	struct keybinding *kb = kbd_act_lookup(map, action);
+	struct keybinding *kb = kbd_act_lookup(keymap_id, action);
 
 	if (kb)
 		make_keystroke(string, &kb->kbd, 0);
 }
 
 unsigned char *
-get_keystroke(int action, enum keymap_id map)
+get_keystroke(int action, enum keymap_id keymap_id)
 {
 	struct string keystroke;
 
 	if (!init_string(&keystroke)) return NULL;
 
-	add_keystroke_to_string(&keystroke, action, map);
+	add_keystroke_to_string(&keystroke, action, keymap_id);
 
 	/* Never return empty string */
 	if (!keystroke.length) done_string(&keystroke);
@@ -401,18 +401,18 @@ get_keystroke(int action, enum keymap_id map)
 
 void
 add_actions_to_string(struct string *string, int *actions,
-		      enum keymap_id map, struct terminal *term)
+		      enum keymap_id keymap_id, struct terminal *term)
 {
 	int i;
 
-	assert(map >= 0 && map < KEYMAP_MAX);
+	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
 
-	add_format_to_string(string, "%s:\n", _(numtodesc(keymap_table, map), term));
+	add_format_to_string(string, "%s:\n", _(numtodesc(keymap_table, keymap_id), term));
 
 	for (i = 0; actions[i] != ACT_MAIN_NONE; i++) {
-		struct keybinding *kb = kbd_act_lookup(map, actions[i]);
+		struct keybinding *kb = kbd_act_lookup(keymap_id, actions[i]);
 		int keystrokelen = string->length;
-		unsigned char *desc = numtodesc(action_table[map], actions[i]);
+		unsigned char *desc = numtodesc(action_table[keymap_id], actions[i]);
 
 		if (!kb) continue;
 
@@ -454,27 +454,27 @@ static struct action *action_table[KEYMAP_MAX] = {
 #undef ACTION_
 
 int
-read_action(enum keymap_id keymap, unsigned char *action)
+read_action(enum keymap_id keymap_id, unsigned char *action)
 {
-	assert(keymap >= 0 && keymap < KEYMAP_MAX);
-	return strtonum(action_table[keymap], action);
+	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
+	return strtonum(action_table[keymap_id], action);
 }
 
 unsigned char *
-write_action(enum keymap_id keymap, int action)
+write_action(enum keymap_id keymap_id, int action)
 {
-	assert(keymap >= 0 && keymap < KEYMAP_MAX);
-	return numtostr(action_table[keymap], action);
+	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
+	return numtostr(action_table[keymap_id], action);
 }
 
 
 void
 init_keymaps(void)
 {
-	enum keymap_id i;
+	enum keymap_id keymap_id;
 
-	for (i = 0; i < KEYMAP_MAX; i++)
-		init_list(keymaps[i]);
+	for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++)
+		init_list(keymaps[keymap_id]);
 
 	init_keybinding_listboxes(keymap_table, action_table);
 	add_default_keybindings();
@@ -483,12 +483,12 @@ init_keymaps(void)
 void
 free_keymaps(void)
 {
-	enum keymap_id i;
+	enum keymap_id keymap_id;
 
 	done_keybinding_listboxes();
 
-	for (i = 0; i < KEYMAP_MAX; i++)
-		free_list(keymaps[i]);
+	for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++)
+		free_list(keymaps[keymap_id]);
 }
 
 
@@ -785,19 +785,19 @@ static struct action_alias *action_aliases[KEYMAP_MAX] = {
 };
 
 static int
-get_aliased_action(enum keymap_id keymap, unsigned char *action)
+get_aliased_action(enum keymap_id keymap_id, unsigned char *action)
 {
-	assert(keymap >= 0 && keymap < KEYMAP_MAX);
+	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
 
-	if (action_aliases[keymap]) {
+	if (action_aliases[keymap_id]) {
 		struct action_alias *rec;
 
-		for (rec = action_aliases[keymap]; rec->str; rec++)
+		for (rec = action_aliases[keymap_id]; rec->str; rec++)
 			if (!strcmp(rec->str, action))
 				return rec->num;
 	}
 
-	return read_action(keymap, action);
+	return read_action(keymap_id, action);
 }
 
 /* Return 0 when ok, something strange otherwise. */
@@ -846,11 +846,11 @@ bind_act(unsigned char *keymap, unsigned char *keystroke)
 }
 
 static void
-single_bind_config_string(struct string *file, enum keymap_id keymap,
+single_bind_config_string(struct string *file, enum keymap_id keymap_id,
 			  struct keybinding *keybinding)
 {
-	unsigned char *keymap_str = write_keymap(keymap);
-	unsigned char *action_str = write_action(keymap, keybinding->action);
+	unsigned char *keymap_str = write_keymap(keymap_id);
+	unsigned char *action_str = write_action(keymap_id, keybinding->action);
 
 	if (!keymap_str || !action_str || action_str[0] == ' ')
 		return;

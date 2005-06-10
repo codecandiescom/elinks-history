@@ -355,6 +355,9 @@ Miciah Dashiel Butler Masters <miciah@myrealbox.com>
 	Truly random hacking
 	The official native English speaker of our team
 
+Mikael Magnusson <mikma@users.sourceforge.net>
+	Fixed crash for IPv6 FTP when EPSV was disabled
+
 Mike Swieton <pyromage@pyromage.net>
 	Fixed bug: Form is not posted when jumping to field by number
 
@@ -553,4 +556,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.193 2005/05/14 14:27:10 jonas Exp $
+$Id: AUTHORS,v 1.194 2005/06/10 14:10:08 jonas Exp $

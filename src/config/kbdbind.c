@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.305 2005/06/10 06:06:10 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.306 2005/06/10 06:11:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,6 +205,14 @@ kbd_act_lookup(enum keymap_id keymap_id, int action_id)
 	return NULL;
 }
 
+static struct keymap keymap_table[] = {
+	{ "main", KEYMAP_MAIN, N_("Main mapping") },
+	{ "edit", KEYMAP_EDIT, N_("Edit mapping") },
+	{ "menu", KEYMAP_MENU, N_("Menu mapping") },
+	{ NULL, 0, NULL }
+};
+
+
 /*
  * Config file helpers.
  */
@@ -246,13 +254,6 @@ get_action_desc(struct action *table, long num)
 	return NULL;
 }
 
-
-static struct keymap keymap_table[] = {
-	{ "main", KEYMAP_MAIN, N_("Main mapping") },
-	{ "edit", KEYMAP_EDIT, N_("Edit mapping") },
-	{ "menu", KEYMAP_MENU, N_("Menu mapping") },
-	{ NULL, 0, NULL }
-};
 
 static int
 read_keymap(unsigned char *keymap)

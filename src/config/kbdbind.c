@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.301 2005/06/10 05:18:27 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.302 2005/06/10 05:45:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 /* Fix namespace clash on MacOS. */
 #define table table_elinks
 
-static struct action *action_table[KEYMAP_MAX];
+static struct action_list action_table[KEYMAP_MAX];
 static struct list_head keymaps[KEYMAP_MAX];
 
 static void add_default_keybindings(void);
@@ -433,7 +433,7 @@ add_actions_to_string(struct string *string, int *actions,
 	for (i = 0; actions[i] != ACT_MAIN_NONE; i++) {
 		struct keybinding *kb = kbd_act_lookup(keymap_id, actions[i]);
 		int keystrokelen = string->length;
-		unsigned char *desc = numtodesc(action_table[keymap_id], actions[i]);
+		unsigned char *desc = numtodesc(action_table[keymap_id].actions, actions[i]);
 
 		if (!kb) continue;
 
@@ -466,10 +466,10 @@ static struct action menu_action_table[MENU_ACTIONS + 1] = {
 	{ NULL, 0, NULL }
 };
 
-static struct action *action_table[KEYMAP_MAX] = {
-	main_action_table,
-	edit_action_table,
-	menu_action_table,
+static struct action_list action_table[KEYMAP_MAX] = {
+	{ main_action_table },
+	{ edit_action_table },
+	{ menu_action_table },
 };
 
 #undef ACTION_
@@ -478,14 +478,14 @@ int
 read_action(enum keymap_id keymap_id, unsigned char *action)
 {
 	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
-	return strtonum(action_table[keymap_id], action);
+	return strtonum(action_table[keymap_id].actions, action);
 }
 
 unsigned char *
 write_action(enum keymap_id keymap_id, int action_id)
 {
 	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
-	return numtostr(action_table[keymap_id], action_id);
+	return numtostr(action_table[keymap_id].actions, action_id);
 }
 
 

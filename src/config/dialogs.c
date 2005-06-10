@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.233 2005/06/10 05:06:04 miciah Exp $ */
+/* $Id: dialogs.c,v 1.234 2005/06/10 05:45:08 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -574,7 +574,7 @@ struct keymap_box_item_info {
 struct keymap_box_item_info keymap_box_item_info[KEYMAP_MAX];
 
 void
-init_keybinding_listboxes(struct keymap *keymaps, struct action *actions[])
+init_keybinding_listboxes(struct keymap *keymaps, struct action_list actions[])
 {
 	struct listbox_item *root = &keybinding_browser.root;
 	struct action *act;
@@ -590,7 +590,7 @@ init_keybinding_listboxes(struct keymap *keymaps, struct action *actions[])
 
 		keymap_box_item_info[map->num].box_item = keymap;
 
-		for (act = actions[map->num]; act->str; act++) {
+		for (act = actions[map->num].actions; act->str; act++) {
 			struct listbox_item *item;
 
 			assert(act->num < ACTION_BOX_SIZE);
@@ -612,7 +612,7 @@ init_keybinding_listboxes(struct keymap *keymaps, struct action *actions[])
 			action_box_items[map->num][act->num] = item;
 		}
 
-		keymap_box_item_info[map->num].first = actions[map->num];
+		keymap_box_item_info[map->num].first = actions[map->num].actions;
 		keymap_box_item_info[map->num].last = act;
 	}
 }

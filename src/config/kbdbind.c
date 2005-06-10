@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.308 2005/06/10 06:17:49 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.309 2005/06/10 06:19:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,10 +220,10 @@ static struct keymap keymap_table[] = {
 static long
 get_action_from_string(enum keymap_id keymap_id, unsigned char *str)
 {
-	struct action *actions = action_table[keymap_id].actions;
+	struct action_list *action_list = &action_table[keymap_id];
 	struct action *rec;
 
-	for (rec = actions; rec->str; rec++)
+	for (rec = action_list->actions; rec->str; rec++)
 		if (!strcmp(rec->str, str))
 			return rec->num;
 
@@ -233,10 +233,10 @@ get_action_from_string(enum keymap_id keymap_id, unsigned char *str)
 static unsigned char *
 get_action_name(enum keymap_id keymap_id, long num)
 {
-	struct action *actions = action_table[keymap_id].actions;
+	struct action_list *action_list = &action_table[keymap_id];
 	struct action *rec;
 
-	for (rec = actions; rec->str; rec++)
+	for (rec = action_list->actions; rec->str; rec++)
 		if (num == rec->num)
 			return rec->str;
 
@@ -247,10 +247,10 @@ get_action_name(enum keymap_id keymap_id, long num)
 static unsigned char *
 get_action_desc(enum keymap_id keymap_id, long num)
 {
-	struct action *actions = action_table[keymap_id].actions;
+	struct action_list *action_list = &action_table[keymap_id];
 	struct action *rec;
 
-	for (rec = actions; rec->str; rec++)
+	for (rec = action_list->actions; rec->str; rec++)
 		if (num == rec->num)
 			return (rec->desc) ? rec->desc : rec->str;
 

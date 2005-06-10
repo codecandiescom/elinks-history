@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.306 2005/06/10 06:11:54 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.307 2005/06/10 06:14:23 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,11 +218,11 @@ static struct keymap keymap_table[] = {
  */
 
 static long
-get_action_from_string(struct action *table, unsigned char *str)
+get_action_from_string(enum keymap_id keymap_id, unsigned char *str)
 {
 	struct action *rec;
 
-	for (rec = table; rec->str; rec++)
+	for (rec = action_table[keymap_id].actions; rec->str; rec++)
 		if (!strcmp(rec->str, str))
 			return rec->num;
 
@@ -230,11 +230,11 @@ get_action_from_string(struct action *table, unsigned char *str)
 }
 
 static unsigned char *
-get_action_name(struct action *table, long num)
+get_action_name(enum keymap_id keymap_id, long num)
 {
 	struct action *rec;
 
-	for (rec = table; rec->str; rec++)
+	for (rec = action_table[keymap_id].actions; rec->str; rec++)
 		if (num == rec->num)
 			return rec->str;
 
@@ -243,11 +243,11 @@ get_action_name(struct action *table, long num)
 
 
 static unsigned char *
-get_action_desc(struct action *table, long num)
+get_action_desc(enum keymap_id keymap_id, long num)
 {
 	struct action *rec;
 
-	for (rec = table; rec->str; rec++)
+	for (rec = action_table[keymap_id].actions; rec->str; rec++)
 		if (num == rec->num)
 			return (rec->desc) ? rec->desc : rec->str;
 
@@ -434,7 +434,7 @@ add_actions_to_string(struct string *string, int *actions,
 	for (i = 0; actions[i] != ACT_MAIN_NONE; i++) {
 		struct keybinding *kb = kbd_act_lookup(keymap_id, actions[i]);
 		int keystrokelen = string->length;
-		unsigned char *desc = get_action_desc(action_table[keymap_id].actions, actions[i]);
+		unsigned char *desc = get_action_desc(keymap_id, actions[i]);
 
 		if (!kb) continue;
 
@@ -479,14 +479,14 @@ int
 read_action(enum keymap_id keymap_id, unsigned char *action)
 {
 	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
-	return get_action_from_string(action_table[keymap_id].actions, action);
+	return get_action_from_string(keymap_id, action);
 }
 
 unsigned char *
 write_action(enum keymap_id keymap_id, int action_id)
 {
 	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
-	return get_action_name(action_table[keymap_id].actions, action_id);
+	return get_action_name(keymap_id, action_id);
 }
 
 

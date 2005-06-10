@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.228 2005/06/10 03:41:49 miciah Exp $ */
+/* $Id: dialogs.c,v 1.229 2005/06/10 03:57:52 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -558,7 +558,7 @@ static int keybinding_text_toggle;
 static struct listbox_item *action_box_items[KEYMAP_MAX][ACTION_BOX_SIZE];
 
 struct listbox_item *
-get_keybinding_action_box_item(enum keymap km, int action)
+get_keybinding_action_box_item(enum keymap_id km, int action)
 {
 	assert(action < ACTION_BOX_SIZE);
 	if_assert_failed return NULL;

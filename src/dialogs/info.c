@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.128 2005/04/15 18:25:58 jonas Exp $ */
+/* $Id: info.c,v 1.129 2005/06/10 03:57:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ menu_keys(struct terminal *term, void *d_, void *xxx)
 
 	if (info->toggle) {
 		int action;
-		enum keymap map;
+		enum keymap_id map;
 
 		for (action = 0; action < MAIN_ACTIONS - 1; action++) {
 			actions[action] = action + 1;

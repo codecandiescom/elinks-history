@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.294 2005/06/10 03:27:28 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.295 2005/06/10 03:57:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ static struct list_head keymaps[KEYMAP_MAX];
 static void add_default_keybindings(void);
 
 static int
-delete_keybinding(enum keymap km, struct term_event_keyboard *kbd)
+delete_keybinding(enum keymap_id km, struct term_event_keyboard *kbd)
 {
 	struct keybinding *kb;
 
@@ -59,7 +59,7 @@ delete_keybinding(enum keymap km, struct term_event_keyboard *kbd)
 }
 
 struct keybinding *
-add_keybinding(enum keymap km, int action, struct term_event_keyboard *kbd, int event)
+add_keybinding(enum keymap_id km, int action, struct term_event_keyboard *kbd, int event)
 {
 	struct keybinding *kb;
 	struct listbox_item *root;
@@ -120,7 +120,7 @@ free_keybinding(struct keybinding *kb)
 }
 
 int
-keybinding_exists(enum keymap km, struct term_event_keyboard *kbd, int *action)
+keybinding_exists(enum keymap_id km, struct term_event_keyboard *kbd, int *action)
 {
 	struct keybinding *kb;
 
@@ -141,7 +141,7 @@ keybinding_exists(enum keymap km, struct term_event_keyboard *kbd, int *action)
 
 
 int
-kbd_action(enum keymap kmap, struct term_event *ev, int *event)
+kbd_action(enum keymap_id kmap, struct term_event *ev, int *event)
 {
 	struct keybinding *kb;
 
@@ -152,7 +152,7 @@ kbd_action(enum keymap kmap, struct term_event *ev, int *event)
 }
 
 struct keybinding *
-kbd_ev_lookup(enum keymap kmap, struct term_event_keyboard *kbd, int *event)
+kbd_ev_lookup(enum keymap_id kmap, struct term_event_keyboard *kbd, int *event)
 {
 	struct keybinding *kb;
 
@@ -173,7 +173,7 @@ kbd_ev_lookup(enum keymap kmap, struct term_event_keyboard *kbd, int *event)
 }
 
 struct keybinding *
-kbd_nm_lookup(enum keymap kmap, unsigned char *name)
+kbd_nm_lookup(enum keymap_id kmap, unsigned char *name)
 {
 	struct keybinding *kb;
 	int act = read_action(kmap, name);
@@ -191,7 +191,7 @@ kbd_nm_lookup(enum keymap kmap, unsigned char *name)
 }
 
 struct keybinding *
-kbd_act_lookup(enum keymap map, int action)
+kbd_act_lookup(enum keymap_id map, int action)
 {
 	struct keybinding *kb;
 
@@ -273,7 +273,7 @@ read_keymap(unsigned char *keymap)
 }
 
 unsigned char *
-write_keymap(enum keymap keymap)
+write_keymap(enum keymap_id keymap)
 {
 	return numtostr(keymap_table, keymap);
 }
@@ -376,7 +376,7 @@ make_keystroke(struct string *str, struct term_event_keyboard *kbd, int escape)
 
 void
 add_keystroke_to_string(struct string *string, int action,
-			enum keymap map)
+			enum keymap_id map)
 {
 	struct keybinding *kb = kbd_act_lookup(map, action);
 
@@ -385,7 +385,7 @@ add_keystroke_to_string(struct string *string, int action,
 }
 
 unsigned char *
-get_keystroke(int action, enum keymap map)
+get_keystroke(int action, enum keymap_id map)
 {
 	struct string keystroke;
 
@@ -401,7 +401,7 @@ get_keystroke(int action, enum keymap map)
 
 void
 add_actions_to_string(struct string *string, int *actions,
-		      enum keymap map, struct terminal *term)
+		      enum keymap_id map, struct terminal *term)
 {
 	int i;
 
@@ -454,14 +454,14 @@ static struct action *action_table[KEYMAP_MAX] = {
 #undef ACTION_
 
 int
-read_action(enum keymap keymap, unsigned char *action)
+read_action(enum keymap_id keymap, unsigned char *action)
 {
 	assert(keymap >= 0 && keymap < KEYMAP_MAX);
 	return strtonum(action_table[keymap], action);
 }
 
 unsigned char *
-write_action(enum keymap keymap, int action)
+write_action(enum keymap_id keymap, int action)
 {
 	assert(keymap >= 0 && keymap < KEYMAP_MAX);
 	return numtostr(action_table[keymap], action);
@@ -471,7 +471,7 @@ write_action(enum keymap keymap, int action)
 void
 init_keymaps(void)
 {
-	enum keymap i;
+	enum keymap_id i;
 
 	for (i = 0; i < KEYMAP_MAX; i++)
 		init_list(keymaps[i]);
@@ -483,7 +483,7 @@ init_keymaps(void)
 void
 free_keymaps(void)
 {
-	enum keymap i;
+	enum keymap_id i;
 
 	done_keybinding_listboxes();
 
@@ -727,7 +727,7 @@ add_default_keybindings(void)
 	/* Maybe we shouldn't delete old keybindings. But on the other side, we
 	 * can't trust clueless users what they'll push into sources modifying
 	 * defaults, can we? ;)) */
-	enum keymap keymap;
+	enum keymap_id keymap;
 
 	for (keymap = 0; keymap < KEYMAP_MAX; keymap++) {
 		struct default_kb *kb;
@@ -785,7 +785,7 @@ static struct action_alias *action_aliases[KEYMAP_MAX] = {
 };
 
 static int
-get_aliased_action(enum keymap keymap, unsigned char *action)
+get_aliased_action(enum keymap_id keymap, unsigned char *action)
 {
 	assert(keymap >= 0 && keymap < KEYMAP_MAX);
 
@@ -846,7 +846,7 @@ bind_act(unsigned char *keymap, unsigned char *keystroke)
 }
 
 static void
-single_bind_config_string(struct string *file, enum keymap keymap,
+single_bind_config_string(struct string *file, enum keymap_id keymap,
 			  struct keybinding *keybinding)
 {
 	unsigned char *keymap_str = write_keymap(keymap);
@@ -874,7 +874,7 @@ single_bind_config_string(struct string *file, enum keymap keymap,
 void
 bind_config_string(struct string *file)
 {
-	enum keymap keymap;
+	enum keymap_id keymap;
 
 	for (keymap = 0; keymap < KEYMAP_MAX; keymap++) {
 		struct keybinding *keybinding;

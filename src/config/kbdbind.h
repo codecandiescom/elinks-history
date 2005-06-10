@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.158 2005/06/10 01:42:00 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.159 2005/06/10 03:57:52 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -19,7 +19,7 @@ struct action {
 	unsigned int flags;
 };
 
-enum keymap {
+enum keymap_id {
 	KEYMAP_MAIN,
 	KEYMAP_EDIT,
 	KEYMAP_MENU,
@@ -85,7 +85,7 @@ enum kbdbind_flags {
 
 struct keybinding {
 	LIST_HEAD(struct keybinding);
-	enum keymap keymap;
+	enum keymap_id keymap;
 	int action;
 	struct term_event_keyboard kbd;
 	int event;
@@ -98,14 +98,14 @@ struct keybinding {
 void init_keymaps(void);
 void free_keymaps(void);
 
-struct keybinding *add_keybinding(enum keymap km, int action, struct term_event_keyboard *kbd, int event);
-int keybinding_exists(enum keymap km, struct term_event_keyboard *kbd, int *action);
+struct keybinding *add_keybinding(enum keymap_id km, int action, struct term_event_keyboard *kbd, int event);
+int keybinding_exists(enum keymap_id km, struct term_event_keyboard *kbd, int *action);
 void free_keybinding(struct keybinding *);
 
 long read_key(unsigned char *);
-int read_action(enum keymap keymap, unsigned char *action);
-unsigned char *write_action(enum keymap, int);
-unsigned char *write_keymap(enum keymap);
+int read_action(enum keymap_id keymap, unsigned char *action);
+unsigned char *write_action(enum keymap_id, int);
+unsigned char *write_keymap(enum keymap_id);
 
 int parse_keystroke(unsigned char *, struct term_event_keyboard *);
 void make_keystroke(struct string *str, struct term_event_keyboard *kbd, int escape);
@@ -117,9 +117,9 @@ void make_keystroke(struct string *str, struct term_event_keyboard *kbd, int esc
 	make_keystroke(str, &kbd, 0); 				\
 } while (0)
 
-int kbd_action(enum keymap, struct term_event *, int *);
-struct keybinding *kbd_ev_lookup(enum keymap, struct term_event_keyboard *kbd, int *);
-struct keybinding *kbd_nm_lookup(enum keymap, unsigned char *);
+int kbd_action(enum keymap_id, struct term_event *, int *);
+struct keybinding *kbd_ev_lookup(enum keymap_id, struct term_event_keyboard *kbd, int *);
+struct keybinding *kbd_nm_lookup(enum keymap_id, unsigned char *);
 
 int bind_do(unsigned char *, unsigned char *, unsigned char *);
 unsigned char *bind_act(unsigned char *, unsigned char *);
@@ -130,10 +130,10 @@ int bind_key_to_event_name(unsigned char *, unsigned char *, unsigned char *,
 			   unsigned char **);
 #endif
 
-void add_keystroke_to_string(struct string *string, int action, enum keymap map);
-unsigned char *get_keystroke(int action, enum keymap map);
+void add_keystroke_to_string(struct string *string, int action, enum keymap_id map);
+unsigned char *get_keystroke(int action, enum keymap_id map);
 
 void add_actions_to_string(struct string *string, int *actions,
-			   enum keymap map, struct terminal *term);
+			   enum keymap_id map, struct terminal *term);
 
 #endif

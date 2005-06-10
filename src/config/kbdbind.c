@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.336 2005/06/10 21:25:35 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.337 2005/06/10 21:37:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,33 +282,33 @@ struct key {
 };
 
 static struct key key_table[] = {
-	{ "Enter", KBD_ENTER },
-	{ "Space", ' ' },
-	{ "Backspace", KBD_BS },
-	{ "Tab", KBD_TAB },
-	{ "Escape", KBD_ESC },
-	{ "Left", KBD_LEFT },
-	{ "Right", KBD_RIGHT },
-	{ "Up", KBD_UP },
-	{ "Down", KBD_DOWN },
-	{ "Insert", KBD_INS },
-	{ "Delete", KBD_DEL },
-	{ "Home", KBD_HOME },
-	{ "End", KBD_END },
-	{ "PageUp", KBD_PAGE_UP },
-	{ "PageDown", KBD_PAGE_DOWN },
-	{ "F1", KBD_F1 },
-	{ "F2", KBD_F2 },
-	{ "F3", KBD_F3 },
-	{ "F4", KBD_F4 },
-	{ "F5", KBD_F5 },
-	{ "F6", KBD_F6 },
-	{ "F7", KBD_F7 },
-	{ "F8", KBD_F8 },
-	{ "F9", KBD_F9 },
-	{ "F10", KBD_F10 },
-	{ "F11", KBD_F11 },
-	{ "F12", KBD_F12 },
+	{ "Enter",	KBD_ENTER },
+	{ "Space",	' ' },
+	{ "Backspace",	KBD_BS },
+	{ "Tab",	KBD_TAB },
+	{ "Escape",	KBD_ESC },
+	{ "Left",	KBD_LEFT },
+	{ "Right",	KBD_RIGHT },
+	{ "Up",		KBD_UP },
+	{ "Down",	KBD_DOWN },
+	{ "Insert",	KBD_INS },
+	{ "Delete",	KBD_DEL },
+	{ "Home",	KBD_HOME },
+	{ "End",	KBD_END },
+	{ "PageUp",	KBD_PAGE_UP },
+	{ "PageDown",	KBD_PAGE_DOWN },
+	{ "F1",		KBD_F1 },
+	{ "F2",		KBD_F2 },
+	{ "F3",		KBD_F3 },
+	{ "F4",		KBD_F4 },
+	{ "F5",		KBD_F5 },
+	{ "F6",		KBD_F6 },
+	{ "F7",		KBD_F7 },
+	{ "F8",		KBD_F8 },
+	{ "F9",		KBD_F9 },
+	{ "F10",	KBD_F10 },
+	{ "F11",	KBD_F11 },
+	{ "F12",	KBD_F12 },
 	{ NULL, 0 }
 };
 
@@ -563,10 +563,10 @@ static struct default_kb default_main_keymap[] = {
 	{ { '/',	 KBD_MOD_NONE }, ACT_MAIN_SEARCH },
 	{ { ':',	 KBD_MOD_NONE }, ACT_MAIN_EXMODE },
 	{ { '<',	 KBD_MOD_NONE }, ACT_MAIN_TAB_PREV },
-	{ { '<',	 KBD_MOD_ALT }, ACT_MAIN_TAB_MOVE_LEFT },
+	{ { '<',	 KBD_MOD_ALT  }, ACT_MAIN_TAB_MOVE_LEFT },
 	{ { '=',	 KBD_MOD_NONE }, ACT_MAIN_DOCUMENT_INFO },
 	{ { '>',	 KBD_MOD_NONE }, ACT_MAIN_TAB_NEXT },
-	{ { '>',	 KBD_MOD_ALT }, ACT_MAIN_TAB_MOVE_RIGHT },
+	{ { '>',	 KBD_MOD_ALT  }, ACT_MAIN_TAB_MOVE_RIGHT },
 	{ { '?',	 KBD_MOD_NONE }, ACT_MAIN_SEARCH_BACK },
 	{ { 'A',	 KBD_MOD_NONE }, ACT_MAIN_ADD_BOOKMARK_LINK },
 	{ { 'A',	 KBD_MOD_CTRL }, ACT_MAIN_MOVE_DOCUMENT_START },
@@ -635,21 +635,21 @@ static struct default_kb default_main_keymap[] = {
 	{ { KBD_RIGHT,	 KBD_MOD_NONE }, ACT_MAIN_LINK_FOLLOW },
 	{ { KBD_RIGHT,	 KBD_MOD_CTRL }, ACT_MAIN_LINK_FOLLOW_RELOAD },
 	{ { KBD_TAB,	 KBD_MOD_NONE }, ACT_MAIN_FRAME_NEXT },
-	{ { KBD_TAB,	 KBD_MOD_ALT }, ACT_MAIN_FRAME_PREV },
+	{ { KBD_TAB,	 KBD_MOD_ALT  }, ACT_MAIN_FRAME_PREV },
 	{ { KBD_UP,	 KBD_MOD_NONE }, ACT_MAIN_MOVE_LINK_PREV },
 	{ { 0, 0 }, 0 }
 };
 
 static struct default_kb default_edit_keymap[] = {
-	{ { '<',	 KBD_MOD_ALT }, ACT_EDIT_BEGINNING_OF_BUFFER },
-	{ { '>',	 KBD_MOD_ALT }, ACT_EDIT_END_OF_BUFFER },
+	{ { '<',	 KBD_MOD_ALT  }, ACT_EDIT_BEGINNING_OF_BUFFER },
+	{ { '>',	 KBD_MOD_ALT  }, ACT_EDIT_END_OF_BUFFER },
 	{ { 'A',	 KBD_MOD_CTRL }, ACT_EDIT_HOME },
 	{ { 'D',	 KBD_MOD_CTRL }, ACT_EDIT_DELETE },
 	{ { 'E',	 KBD_MOD_CTRL }, ACT_EDIT_END },
 	{ { 'H',	 KBD_MOD_CTRL }, ACT_EDIT_BACKSPACE },
 	{ { 'K',	 KBD_MOD_CTRL }, ACT_EDIT_KILL_TO_EOL },
 	{ { 'L',	 KBD_MOD_CTRL }, ACT_EDIT_REDRAW },
-	{ { 'r',	 KBD_MOD_ALT }, ACT_EDIT_SEARCH_TOGGLE_REGEX },
+	{ { 'r',	 KBD_MOD_ALT  }, ACT_EDIT_SEARCH_TOGGLE_REGEX },
 	{ { 'R',	 KBD_MOD_CTRL }, ACT_EDIT_AUTO_COMPLETE_UNAMBIGUOUS },
 	{ { 'T',	 KBD_MOD_CTRL }, ACT_EDIT_OPEN_EXTERNAL },
 	{ { 'U',	 KBD_MOD_CTRL }, ACT_EDIT_KILL_TO_BOL },
@@ -668,7 +668,7 @@ static struct default_kb default_edit_keymap[] = {
 	{ { KBD_LEFT,	 KBD_MOD_NONE }, ACT_EDIT_LEFT },
 	{ { KBD_RIGHT,	 KBD_MOD_NONE }, ACT_EDIT_RIGHT },
 	{ { KBD_TAB,	 KBD_MOD_NONE }, ACT_EDIT_NEXT_ITEM },
-	{ { KBD_TAB,	 KBD_MOD_ALT }, ACT_EDIT_PREVIOUS_ITEM },
+	{ { KBD_TAB,	 KBD_MOD_ALT  }, ACT_EDIT_PREVIOUS_ITEM },
 	{ { KBD_UP,	 KBD_MOD_NONE }, ACT_EDIT_UP },
 	{ { 0, 0 }, 0 }
 };
@@ -687,7 +687,7 @@ static struct default_kb default_menu_keymap[] = {
 	{ { 'L',	 KBD_MOD_CTRL }, ACT_MENU_REDRAW },
 	{ { 'N',	 KBD_MOD_CTRL }, ACT_MENU_DOWN },
 	{ { 'P',	 KBD_MOD_CTRL }, ACT_MENU_UP },
-	{ { 'V',	 KBD_MOD_ALT }, ACT_MENU_PAGE_UP },
+	{ { 'V',	 KBD_MOD_ALT  }, ACT_MENU_PAGE_UP },
 	{ { 'V',	 KBD_MOD_CTRL }, ACT_MENU_PAGE_DOWN },
 	{ { '[',	 KBD_MOD_NONE }, ACT_MENU_EXPAND },
 	{ { ']',	 KBD_MOD_NONE }, ACT_MENU_UNEXPAND },
@@ -704,7 +704,7 @@ static struct default_kb default_menu_keymap[] = {
 	{ { KBD_PAGE_UP, KBD_MOD_NONE }, ACT_MENU_PAGE_UP },
 	{ { KBD_RIGHT,	 KBD_MOD_NONE }, ACT_MENU_RIGHT },
 	{ { KBD_TAB,	 KBD_MOD_NONE }, ACT_MENU_NEXT_ITEM },
-	{ { KBD_TAB,	 KBD_MOD_ALT }, ACT_MENU_PREVIOUS_ITEM },
+	{ { KBD_TAB,	 KBD_MOD_ALT  }, ACT_MENU_PREVIOUS_ITEM },
 	{ { KBD_UP,	 KBD_MOD_NONE }, ACT_MENU_UP },
 	{ { 0, 0 }, 0}
 };
@@ -765,28 +765,28 @@ struct action_alias {
 };
 
 static struct action_alias main_action_aliases[] = {
-	{ "back", ACT_MAIN_HISTORY_MOVE_BACK },
-	{ "down", ACT_MAIN_MOVE_LINK_NEXT },
-	{ "download", ACT_MAIN_LINK_DOWNLOAD },
-	{ "download-image", ACT_MAIN_LINK_DOWNLOAD_IMAGE },
-	{ "end", ACT_MAIN_MOVE_DOCUMENT_END },
-	{ "enter", ACT_MAIN_LINK_FOLLOW },
-	{ "enter-reload", ACT_MAIN_LINK_FOLLOW_RELOAD },
-	{ "home", ACT_MAIN_MOVE_DOCUMENT_START },
-	{ "next-frame", ACT_MAIN_FRAME_NEXT },
-	{ "page-down", ACT_MAIN_MOVE_PAGE_DOWN },
-	{ "page-up", ACT_MAIN_MOVE_PAGE_UP },
-	{ "previous-frame", ACT_MAIN_FRAME_PREV },
-	{ "resume-download", ACT_MAIN_LINK_DOWNLOAD_RESUME },
-	{ "unback", ACT_MAIN_HISTORY_MOVE_FORWARD },
-	{ "up",	ACT_MAIN_MOVE_LINK_PREV },
-	{ "zoom-frame", ACT_MAIN_FRAME_MAXIMIZE },
+	{ "back",		ACT_MAIN_HISTORY_MOVE_BACK },
+	{ "down",		ACT_MAIN_MOVE_LINK_NEXT },
+	{ "download",		ACT_MAIN_LINK_DOWNLOAD },
+	{ "download-image",	ACT_MAIN_LINK_DOWNLOAD_IMAGE },
+	{ "end",		ACT_MAIN_MOVE_DOCUMENT_END },
+	{ "enter",		ACT_MAIN_LINK_FOLLOW },
+	{ "enter-reload",	ACT_MAIN_LINK_FOLLOW_RELOAD },
+	{ "home",		ACT_MAIN_MOVE_DOCUMENT_START },
+	{ "next-frame",		ACT_MAIN_FRAME_NEXT },
+	{ "page-down",		ACT_MAIN_MOVE_PAGE_DOWN },
+	{ "page-up",		ACT_MAIN_MOVE_PAGE_UP },
+	{ "previous-frame",	ACT_MAIN_FRAME_PREV },
+	{ "resume-download",	ACT_MAIN_LINK_DOWNLOAD_RESUME },
+	{ "unback",		ACT_MAIN_HISTORY_MOVE_FORWARD },
+	{ "up",			ACT_MAIN_MOVE_LINK_PREV },
+	{ "zoom-frame",		ACT_MAIN_FRAME_MAXIMIZE },
 
 	{ NULL, 0 }
 };
 
 static struct action_alias edit_action_aliases[] = {
-	{ "edit", ACT_EDIT_OPEN_EXTERNAL },
+	{ "edit",		ACT_EDIT_OPEN_EXTERNAL },
 
 	{ NULL, 0 }
 };

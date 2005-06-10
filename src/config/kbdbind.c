@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.330 2005/06/10 18:45:44 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.331 2005/06/10 18:47:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,7 +190,6 @@ kbd_act_lookup(enum keymap_id keymap_id, int action_id)
 struct keybinding *
 kbd_nm_lookup(enum keymap_id keymap_id, unsigned char *name)
 {
-	struct keybinding *kb;
 	int action_id = get_action_from_string(keymap_id, name);
 
 	if (action_id < 0) return NULL;

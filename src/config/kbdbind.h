@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.168 2005/06/10 13:23:34 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.169 2005/06/10 17:30:25 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -118,7 +118,7 @@ unsigned char *get_action_name(enum keymap_id keymap_id, long action_id);
 long get_action_from_string(enum keymap_id keymap_id, unsigned char *str);
 
 static inline unsigned int
-is_action_allowed_in_anonymous(enum keymap_id keymap_id, long action_id)
+action_is_anonymous_safe(enum keymap_id keymap_id, long action_id)
 {
 	struct action *action = get_action(keymap_id, action_id);
 
@@ -126,7 +126,7 @@ is_action_allowed_in_anonymous(enum keymap_id keymap_id, long action_id)
 }
 
 static inline unsigned int
-does_action_require_view_state(enum keymap_id keymap_id, long action_id)
+action_requires_view_state(enum keymap_id keymap_id, long action_id)
 {
 	struct action *action = get_action(keymap_id, action_id);
 
@@ -134,7 +134,7 @@ does_action_require_view_state(enum keymap_id keymap_id, long action_id)
 }
 
 static inline unsigned int
-does_action_jump_to_link(enum keymap_id keymap_id, long action_id)
+action_prefix_is_link_number(enum keymap_id keymap_id, long action_id)
 {
 	struct action *action = get_action(keymap_id, action_id);
 

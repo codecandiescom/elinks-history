@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.143 2005/06/10 14:52:42 jonas Exp $ */
+/* $Id: action.c,v 1.144 2005/06/10 17:30:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,18 +128,18 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 	if (action_id == -1) goto unknown_action;
 
 	if (doc_view && doc_view->vs) {
-		if (does_action_jump_to_link(KEYMAP_MAIN, action_id)
+		if (action_prefix_is_link_number(KEYMAP_MAIN, action_id)
 		    && (!try_jump_to_link_number(ses, doc_view)
 		         || doc_view->vs->current_link == -1))
 			goto ignore_action;
 
 		link = get_current_link(doc_view);
 
-	} else if (does_action_require_view_state(KEYMAP_MAIN, action_id)) {
+	} else if (action_requires_view_state(KEYMAP_MAIN, action_id)) {
 		goto ignore_action;
 	}
 
-	if (!is_action_allowed_in_anonymous(KEYMAP_MAIN, action_id)
+	if (!action_is_anonymous_safe(KEYMAP_MAIN, action_id)
 	    && get_cmd_opt_bool("anonymous"))
 		goto ignore_action;
 

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.156 2005/05/19 08:58:17 zas Exp $ */
+/* $Id: kbdbind.h,v 1.157 2005/06/10 01:28:31 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -12,7 +12,7 @@ struct listbox_item;
 #include "util/object.h"
 #include "util/string.h"
 
-struct strtonum {
+struct action {
 	unsigned char *str;
 	long num;
 	unsigned char *desc;

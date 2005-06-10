@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.225 2005/05/17 21:55:14 zas Exp $ */
+/* $Id: dialogs.c,v 1.226 2005/06/10 01:28:31 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -568,16 +568,16 @@ get_keybinding_action_box_item(enum keymap km, int action)
 
 struct keymap_box_item_info {
 	struct listbox_item *box_item;
-	struct strtonum *first, *last;
+	struct action *first, *last;
 };
 
 struct keymap_box_item_info keymap_box_item_info[KEYMAP_MAX];
 
 void
-init_keybinding_listboxes(struct strtonum *keymaps, struct strtonum *actions[])
+init_keybinding_listboxes(struct action *keymaps, struct action *actions[])
 {
 	struct listbox_item *root = &keybinding_browser.root;
-	struct strtonum *act, *map;
+	struct action *act, *map;
 
 	/* Do it backwards because add_listbox_item() add to front
 	 * of list. */
@@ -667,7 +667,7 @@ get_keybinding_text(struct listbox_item *item, struct terminal *term)
 	struct string info;
 
 	if (item->depth < 2) {
-		struct strtonum *strtonum = item->udata;
+		struct action *strtonum = item->udata;
 
 		keymap = keybinding_text_toggle
 			? strtonum->str : _(strtonum->desc, term);
@@ -710,7 +710,7 @@ get_keybinding_root(struct listbox_item *item)
 	if (item->depth == 0) return NULL;
 
 	if (item->depth == 1) {
-		struct strtonum *action = item->udata;
+		struct action *action = item->udata;
 		int keymap;
 
 		for (keymap = 0; keymap < KEYMAP_MAX; keymap++) {
@@ -731,7 +731,7 @@ static enum listbox_match
 match_keybinding(struct listbox_item *item, struct terminal *term,
 		 unsigned char *text)
 {
-	struct strtonum *strtonum = item->udata;
+	struct action *strtonum = item->udata;
 	unsigned char *desc;
 
 	if (item->depth != 1)
@@ -878,7 +878,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		hop->action = keybinding->action;
 		hop->keymap = keybinding->keymap;
 	} else {
-		struct strtonum *strtonum = item->udata;
+		struct action *strtonum = item->udata;
 
 		hop->action = strtonum->num;
 

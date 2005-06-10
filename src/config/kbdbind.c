@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.290 2005/06/09 08:28:27 zas Exp $ */
+/* $Id: kbdbind.c,v 1.291 2005/06/10 01:28:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 /* Fix namespace clash on MacOS. */
 #define table table_elinks
 
-static struct strtonum *action_table[KEYMAP_MAX];
+static struct action *action_table[KEYMAP_MAX];
 static struct list_head keymaps[KEYMAP_MAX];
 
 static void add_default_keybindings(void);
@@ -210,9 +210,9 @@ kbd_act_lookup(enum keymap map, int action)
  */
 
 static long
-strtonum(struct strtonum *table, unsigned char *str)
+strtonum(struct action *table, unsigned char *str)
 {
-	struct strtonum *rec;
+	struct action *rec;
 
 	for (rec = table; rec->str; rec++)
 		if (!strcmp(rec->str, str))
@@ -222,9 +222,9 @@ strtonum(struct strtonum *table, unsigned char *str)
 }
 
 static long
-strcasetonum(struct strtonum *table, unsigned char *str)
+strcasetonum(struct action *table, unsigned char *str)
 {
-	struct strtonum *rec;
+	struct action *rec;
 
 	for (rec = table; rec->str; rec++)
 		if (!strcasecmp(rec->str, str))
@@ -234,9 +234,9 @@ strcasetonum(struct strtonum *table, unsigned char *str)
 }
 
 static unsigned char *
-numtostr(struct strtonum *table, long num)
+numtostr(struct action *table, long num)
 {
-	struct strtonum *rec;
+	struct action *rec;
 
 	for (rec = table; rec->str; rec++)
 		if (num == rec->num)
@@ -247,9 +247,9 @@ numtostr(struct strtonum *table, long num)
 
 
 static unsigned char *
-numtodesc(struct strtonum *table, long num)
+numtodesc(struct action *table, long num)
 {
-	struct strtonum *rec;
+	struct action *rec;
 
 	for (rec = table; rec->str; rec++)
 		if (num == rec->num)
@@ -259,7 +259,7 @@ numtodesc(struct strtonum *table, long num)
 }
 
 
-static struct strtonum keymap_table[] = {
+static struct action keymap_table[] = {
 	{ "main", KEYMAP_MAIN, N_("Main mapping") },
 	{ "edit", KEYMAP_EDIT, N_("Edit mapping") },
 	{ "menu", KEYMAP_MENU, N_("Menu mapping") },
@@ -279,7 +279,7 @@ write_keymap(enum keymap keymap)
 }
 
 
-static struct strtonum key_table[] = {
+static struct action key_table[] = {
 	{ "Enter", KBD_ENTER },
 	{ "Space", ' ' },
 	{ "Backspace", KBD_BS },
@@ -427,25 +427,25 @@ add_actions_to_string(struct string *string, int *actions,
 #define ACTION_(map, name, action, caption, flags)	\
 	{ name, ACT_##map##_##action, caption }
 
-static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
+static struct action main_action_table[MAIN_ACTIONS + 1] = {
 #include "config/actions-main.inc"
 
 	{ NULL, 0, NULL }
 };
 
-static struct strtonum edit_action_table[EDIT_ACTIONS + 1] = {
+static struct action edit_action_table[EDIT_ACTIONS + 1] = {
 #include "config/actions-edit.inc"
 
 	{ NULL, 0, NULL }
 };
 
-static struct strtonum menu_action_table[MENU_ACTIONS + 1] = {
+static struct action menu_action_table[MENU_ACTIONS + 1] = {
 #include "config/actions-menu.inc"
 
 	{ NULL, 0, NULL }
 };
 
-static struct strtonum *action_table[KEYMAP_MAX] = {
+static struct action *action_table[KEYMAP_MAX] = {
 	main_action_table,
 	edit_action_table,
 	menu_action_table,
@@ -746,7 +746,7 @@ add_default_keybindings(void)
  * Config file tools.
  */
 
-static struct strtonum main_action_aliases[] = {
+static struct action main_action_aliases[] = {
 	{ "back", ACT_MAIN_HISTORY_MOVE_BACK, "history-move-back" },
 	{ "down", ACT_MAIN_MOVE_LINK_NEXT, "move-link-next" },
 	{ "download", ACT_MAIN_LINK_DOWNLOAD, "link-download" },
@@ -767,13 +767,13 @@ static struct strtonum main_action_aliases[] = {
 	{ NULL, 0, NULL }
 };
 
-static struct strtonum edit_action_aliases[] = {
+static struct action edit_action_aliases[] = {
 	{ "edit", ACT_EDIT_OPEN_EXTERNAL, "open-external" },
 
 	{ NULL, 0, NULL }
 };
 
-static struct strtonum *action_aliases[KEYMAP_MAX] = {
+static struct action *action_aliases[KEYMAP_MAX] = {
 	main_action_aliases,
 	edit_action_aliases,
 	NULL,

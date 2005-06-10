@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.303 2005/06/10 06:04:09 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.304 2005/06/10 06:04:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,7 +235,7 @@ get_action_name(struct action *table, long num)
 
 
 static unsigned char *
-numtodesc(struct action *table, long num)
+get_action_desc(struct action *table, long num)
 {
 	struct action *rec;
 
@@ -433,7 +433,7 @@ add_actions_to_string(struct string *string, int *actions,
 	for (i = 0; actions[i] != ACT_MAIN_NONE; i++) {
 		struct keybinding *kb = kbd_act_lookup(keymap_id, actions[i]);
 		int keystrokelen = string->length;
-		unsigned char *desc = numtodesc(action_table[keymap_id].actions, actions[i]);
+		unsigned char *desc = get_action_desc(action_table[keymap_id].actions, actions[i]);
 
 		if (!kb) continue;
 

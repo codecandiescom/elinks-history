@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.316 2005/06/10 12:15:05 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.317 2005/06/10 12:27:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,22 +317,19 @@ static struct key key_table[] = {
 	{ NULL, 0 }
 };
 
-static long
-strcasetonum(struct key *table, unsigned char *str)
+long
+read_key(unsigned char *key_str)
 {
-	struct key *rec;
+	struct key *key;
 
-	for (rec = table; rec->str; rec++)
-		if (!strcasecmp(rec->str, str))
-			return rec->num;
+	if (key_str[0] && !key_str[1])
+		return key_str[0];
+
+	for (key = key_table; key->str; key++)
+		if (!strcasecmp(key->str, key_str))
+			return key->num;
 
 	return -1;
-}
-
-long
-read_key(unsigned char *key)
-{
-	return (key[0] && !key[1]) ? *key : strcasetonum(key_table, key);
 }
 
 int

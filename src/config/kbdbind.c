@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.328 2005/06/10 18:44:27 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.329 2005/06/10 18:45:06 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,7 +172,7 @@ kbd_ev_lookup(enum keymap_id keymap_id, struct term_event_keyboard *kbd, int *ev
 	return NULL;
 }
 
-struct keybinding *
+static struct keybinding *
 kbd_act_lookup(enum keymap_id keymap_id, int action_id)
 {
 	struct keybinding *kb;

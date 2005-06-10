@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.229 2005/06/10 03:57:52 miciah Exp $ */
+/* $Id: dialogs.c,v 1.230 2005/06/10 04:10:50 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -690,8 +690,8 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term)
 	if (!init_string(&info))
 		return NULL;
 
-	action = write_action(keybinding->keymap, keybinding->action);
-	keymap = write_keymap(keybinding->keymap);
+	action = write_action(keybinding->keymap_id, keybinding->action);
+	keymap = write_keymap(keybinding->keymap_id);
 
 	add_format_to_string(&info, "%s: ", _("Keystroke", term));
 	make_keystroke(&info, &keybinding->kbd, 0);
@@ -709,19 +709,19 @@ get_keybinding_root(struct listbox_item *item)
 
 	if (item->depth == 1) {
 		struct action *action = item->udata;
-		int keymap;
+		int keymap_id;
 
-		for (keymap = 0; keymap < KEYMAP_MAX; keymap++) {
-			if (keymap_box_item_info[keymap].first <= action
-			    && keymap_box_item_info[keymap].last > action)
-				return keymap_box_item_info[keymap].box_item;
+		for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++) {
+			if (keymap_box_item_info[keymap_id].first <= action
+			    && keymap_box_item_info[keymap_id].last > action)
+				return keymap_box_item_info[keymap_id].box_item;
 		}
 
 		return NULL;
 	} else {
 		struct keybinding *kb = item->udata;
 
-		return get_keybinding_action_box_item(kb->keymap, kb->action);
+		return get_keybinding_action_box_item(kb->keymap_id, kb->action);
 	}
 }
 
@@ -779,7 +779,7 @@ static struct listbox_ops keybinding_listbox_ops = {
 
 struct kbdbind_add_hop {
 	struct terminal *term;
-	int action, keymap;
+	int action, keymap_id;
 	struct term_event_keyboard kbd;
 };
 
@@ -800,7 +800,7 @@ really_really_add_keybinding(void *data)
 
 	assert(hop);
 
-	add_keybinding(hop->keymap, hop->action, &hop->kbd, EVENT_NONE);
+	add_keybinding(hop->keymap_id, hop->action, &hop->kbd, EVENT_NONE);
 }
 
 static void
@@ -809,7 +809,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	struct kbdbind_add_hop *hop = data;
 	int action;
 
-	if (keybinding_exists(hop->keymap, &hop->kbd, &action)
+	if (keybinding_exists(hop->keymap_id, &hop->kbd, &action)
 	    && action != ACT_MAIN_NONE) {
 		struct kbdbind_add_hop *new_hop;
 
@@ -824,7 +824,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 			msg_text(new_hop->term, N_("The keystroke \"%s\" "
 			"is currently used for \"%s\".\n"
 			"Are you sure you want to replace it?"),
-			keystroke, write_action(hop->keymap, action)),
+			keystroke, write_action(hop->keymap_id, action)),
 			new_hop, 2,
 			N_("~Yes"), really_really_add_keybinding, B_ENTER,
 			N_("~No"), NULL, B_ESC);
@@ -874,7 +874,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		struct keybinding *keybinding = item->udata;
 
 		hop->action = keybinding->action;
-		hop->keymap = keybinding->keymap;
+		hop->keymap_id = keybinding->keymap_id;
 	} else {
 		struct action *action = item->udata;
 
@@ -887,7 +887,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		}
 
 		action = item->udata;
-		hop->keymap = action->num;
+		hop->keymap_id = action->num;
 	}
 
 	text = msg_text(term,
@@ -901,8 +901,8 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 			"Tab,Enter,Insert,F5,..."
 			"\n\n"
 			"Keystroke",
-			write_action(hop->keymap, hop->action),
-			write_keymap(hop->keymap));
+			write_action(hop->keymap_id, hop->action),
+			write_keymap(hop->keymap_id));
 
 	input_dialog(term, getml(hop, text, NULL),
 		     N_("Add keybinding"), text,

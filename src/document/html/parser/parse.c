@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.112 2005/06/09 08:32:04 zas Exp $ */
+/* $Id: parse.c,v 1.113 2005/06/10 13:38:03 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -448,8 +448,6 @@ struct element_info {
 	 *     <li>-specific hack */
 	int nopair;
 };
-
-#define NUMBER_OF_TAGS 65
 
 static struct element_info elements[] = {
 	{"A",		html_a,		0, 2},
@@ -1004,7 +1002,8 @@ process_element(unsigned char *name, int namelen, int endingtag,
 		name[namelen] = '\0';
 
 		elem.name = name;
-		ei = bsearch(&elem, elements, NUMBER_OF_TAGS, sizeof(elem), compar);
+		ei = bsearch(&elem, elements,
+			sizeof(elements) / sizeof(struct element_info) - 1, sizeof(elem), compar);
 		name[namelen] = tmp;
 	}
 #else

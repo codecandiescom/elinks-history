@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.323 2005/06/10 13:00:25 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.324 2005/06/10 13:05:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,7 +261,7 @@ get_action_desc(enum keymap_id keymap_id, long action_id)
 
 
 static enum keymap_id
-read_keymap(unsigned char *keymap_str)
+get_keymap_id(unsigned char *keymap_str)
 {
 	struct keymap *keymap;
 
@@ -526,16 +526,16 @@ bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event)
 	unsigned char *err = NULL;
 	struct term_event_keyboard kbd;
 	int action_id;
-	int kmap = read_keymap(ckmap);
+	enum keymap_id keymap_id = get_keymap_id(ckmap);
 
-	if (kmap < 0)
+	if (keymap_id < 0)
 		err = gettext("Unrecognised keymap");
 	else if (parse_keystroke(ckey, &kbd) < 0)
 		err = gettext("Error parsing keystroke");
-	else if ((action_id = read_action(kmap, " *scripting-function*")) < 0)
+	else if ((action_id = read_action(keymap_id, " *scripting-function*")) < 0)
 		err = gettext("Unrecognised action (internal error)");
 	else
-		add_keybinding(kmap, action_id, &kbd, event);
+		add_keybinding(keymap_id, action_id, &kbd, event);
 
 	return err;
 }
@@ -832,7 +832,7 @@ bind_do(unsigned char *keymap_str, unsigned char *keystroke_str,
 	int action_id;
 	struct term_event_keyboard kbd;
 
-	keymap_id = read_keymap(keymap_str);
+	keymap_id = get_keymap_id(keymap_str);
 	if (keymap_id < 0) return 1;
 
 	if (parse_keystroke(keystroke_str, &kbd) < 0) return 2;
@@ -845,24 +845,24 @@ bind_do(unsigned char *keymap_str, unsigned char *keystroke_str,
 }
 
 unsigned char *
-bind_act(unsigned char *keymap, unsigned char *keystroke)
+bind_act(unsigned char *keymap_str, unsigned char *keystroke_str)
 {
-	int keymap_;
+	enum keymap_id keymap_id;
 	struct term_event_keyboard kbd;
 	unsigned char *action;
 	struct keybinding *kb;
 
-	keymap_ = read_keymap(keymap);
-	if (keymap_ < 0)
+	keymap_id = get_keymap_id(keymap_str);
+	if (keymap_id < 0)
 		return NULL;
 
-	if (parse_keystroke(keystroke, &kbd) < 0)
+	if (parse_keystroke(keystroke_str, &kbd) < 0)
 		return NULL;
 
-	kb = kbd_ev_lookup(keymap_, &kbd, NULL);
+	kb = kbd_ev_lookup(keymap_id, &kbd, NULL);
 	if (!kb) return NULL;
 
-	action = write_action(keymap_, kb->action_id);
+	action = write_action(keymap_id, kb->action_id);
 	if (!action)
 		return NULL;
 

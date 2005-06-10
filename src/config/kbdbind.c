@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.332 2005/06/10 18:50:59 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.333 2005/06/10 19:06:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -358,7 +358,8 @@ parse_keystroke(unsigned char *s, struct term_event_keyboard *kbd)
 }
 
 void
-make_keystroke(struct string *str, struct term_event_keyboard *kbd, int escape)
+add_keystroke_to_string(struct string *str, struct term_event_keyboard *kbd,
+                        int escape)
 {
 	unsigned char key_buffer[3] = "\\x";
 	unsigned char *key_string = NULL;
@@ -397,7 +398,7 @@ add_keystroke_to_string(struct string *string, int action_id,
 	struct keybinding *kb = kbd_act_lookup(keymap_id, action_id);
 
 	if (kb)
-		make_keystroke(string, &kb->kbd, 0);
+		add_keystroke_to_string(string, &kb->kbd, 0);
 }
 
 unsigned char *
@@ -433,7 +434,7 @@ add_actions_to_string(struct string *string, int *actions,
 		if (!kb) continue;
 
 		add_char_to_string(string, '\n');
-		make_keystroke(string, &kb->kbd, 0);
+		add_keystroke_to_string(string, &kb->kbd, 0);
 		keystrokelen = string->length - keystrokelen;
 		add_xchar_to_string(string, ' ', int_max(15 - keystrokelen, 1));
 		add_to_string(string, _(desc, term));
@@ -870,7 +871,7 @@ single_bind_config_string(struct string *file, enum keymap_id keymap_id,
 	add_to_string(file, "bind \"");
 	add_to_string(file, keymap_str);
 	add_to_string(file, "\" \"");
-	make_keystroke(file, &keybinding->kbd, 1);
+	add_keystroke_to_string(file, &keybinding->kbd, 1);
 	add_to_string(file, "\" = \"");
 	add_to_string(file, action_str);
 	add_char_to_string(file, '\"');

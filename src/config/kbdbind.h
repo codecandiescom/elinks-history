@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.169 2005/06/10 17:30:25 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.170 2005/06/10 17:45:22 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -40,7 +40,8 @@ struct keymap {
 enum action_flags {
 	ACTION_RESTRICT_ANONYMOUS	=    (1 << 16),
 	ACTION_REQUIRE_VIEW_STATE	=    (1 << 17),
-	ACTION_JUMP_TO_LINK		=    (1 << 18),
+	ACTION_REQUIRE_LOCATION		=    (1 << 18),
+	ACTION_JUMP_TO_LINK		=    (1 << 19),
 	ACTION_FLAGS_MASK		= (0xFF << 16),
 };
 
@@ -131,6 +132,14 @@ action_requires_view_state(enum keymap_id keymap_id, long action_id)
 	struct action *action = get_action(keymap_id, action_id);
 
 	return action && (action->flags & ACTION_REQUIRE_VIEW_STATE);
+}
+
+static inline unsigned int
+action_requires_location(enum keymap_id keymap_id, long action_id)
+{
+	struct action *action = get_action(keymap_id, action_id);
+
+	return action && (action->flags & ACTION_REQUIRE_LOCATION);
 }
 
 static inline unsigned int

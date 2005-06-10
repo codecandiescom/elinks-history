@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.144 2005/06/10 17:30:25 miciah Exp $ */
+/* $Id: action.c,v 1.145 2005/06/10 17:45:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,8 +83,6 @@ do_frame_action(struct session *ses, struct document_view *doc_view,
 	assert(ses && action);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	if (!have_location(ses)) return FRAME_EVENT_OK;
-
 	/* There is a bug for this current_frame() returning NULL for recursive
 	 * framesets unfortunately bugzilla is down ATM so the number is
 	 * missing. --jonas */
@@ -138,6 +136,10 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 	} else if (action_requires_view_state(KEYMAP_MAIN, action_id)) {
 		goto ignore_action;
 	}
+
+	if (action_requires_location(KEYMAP_MAIN, action_id)
+	    && !have_location(ses))
+		return FRAME_EVENT_OK;
 
 	if (!action_is_anonymous_safe(KEYMAP_MAIN, action_id)
 	    && get_cmd_opt_bool("anonymous"))

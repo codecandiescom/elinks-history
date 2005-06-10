@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.142 2005/06/10 13:23:34 jonas Exp $ */
+/* $Id: action.c,v 1.143 2005/06/10 14:52:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,7 +139,7 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 		goto ignore_action;
 	}
 
-	if (does_action_jump_to_link(KEYMAP_MAIN, action_id)
+	if (!is_action_allowed_in_anonymous(KEYMAP_MAIN, action_id)
 	    && get_cmd_opt_bool("anonymous"))
 		goto ignore_action;
 

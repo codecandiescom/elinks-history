@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.113 2005/06/10 13:38:03 witekfl Exp $ */
+/* $Id: parse.c,v 1.114 2005/06/10 15:40:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -522,6 +522,8 @@ static struct element_info elements[] = {
 	{NULL,		NULL, 0, 0},
 };
 
+#define NUMBER_OF_TAGS (sizeof_array(elements) - 1)
+
 
 #ifndef USE_FASTFIND
 
@@ -1002,8 +1004,7 @@ process_element(unsigned char *name, int namelen, int endingtag,
 		name[namelen] = '\0';
 
 		elem.name = name;
-		ei = bsearch(&elem, elements,
-			sizeof(elements) / sizeof(struct element_info) - 1, sizeof(elem), compar);
+		ei = bsearch(&elem, elements, NUMBER_OF_TAGS, sizeof(elem), compar);
 		name[namelen] = tmp;
 	}
 #else

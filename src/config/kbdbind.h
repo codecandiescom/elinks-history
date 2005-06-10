@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.162 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.163 2005/06/10 05:06:04 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -17,6 +17,12 @@ struct action {
 	long num;
 	unsigned char *desc;
 	unsigned int flags;
+};
+
+struct keymap {
+	unsigned char *str;
+	int num;
+	unsigned char *desc;
 };
 
 enum keymap_id {

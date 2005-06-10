@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.298 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.299 2005/06/10 05:06:04 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,7 +259,7 @@ numtodesc(struct action *table, long num)
 }
 
 
-static struct action keymap_table[] = {
+static struct keymap keymap_table[] = {
 	{ "main", KEYMAP_MAIN, N_("Main mapping") },
 	{ "edit", KEYMAP_EDIT, N_("Edit mapping") },
 	{ "menu", KEYMAP_MENU, N_("Menu mapping") },
@@ -269,13 +269,21 @@ static struct action keymap_table[] = {
 static int
 read_keymap(unsigned char *keymap)
 {
-	return strtonum(keymap_table, keymap);
+	struct keymap *rec;
+
+	for (rec = keymap_table; rec->str; rec++)
+		if (!strcmp(rec->str, keymap))
+			return rec->num;
+
+	return -1;
 }
 
 unsigned char *
 write_keymap(enum keymap_id keymap_id)
 {
-	return numtostr(keymap_table, keymap_id);
+	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
+
+	return keymap_table[keymap_id].str;
 }
 
 
@@ -407,7 +415,7 @@ add_actions_to_string(struct string *string, int *actions,
 
 	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
 
-	add_format_to_string(string, "%s:\n", _(numtodesc(keymap_table, keymap_id), term));
+	add_format_to_string(string, "%s:\n", _(keymap_table[keymap_id].desc, term));
 
 	for (i = 0; actions[i] != ACT_MAIN_NONE; i++) {
 		struct keybinding *kb = kbd_act_lookup(keymap_id, actions[i]);

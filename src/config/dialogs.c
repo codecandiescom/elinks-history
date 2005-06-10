@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.232 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: dialogs.c,v 1.233 2005/06/10 05:06:04 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -574,10 +574,11 @@ struct keymap_box_item_info {
 struct keymap_box_item_info keymap_box_item_info[KEYMAP_MAX];
 
 void
-init_keybinding_listboxes(struct action *keymaps, struct action *actions[])
+init_keybinding_listboxes(struct keymap *keymaps, struct action *actions[])
 {
 	struct listbox_item *root = &keybinding_browser.root;
-	struct action *act, *map;
+	struct action *act;
+	struct keymap *map;
 
 	/* Do it backwards because add_listbox_item() add to front
 	 * of list. */
@@ -665,7 +666,12 @@ get_keybinding_text(struct listbox_item *item, struct terminal *term)
 	struct keybinding *keybinding = item->udata;
 	struct string info;
 
-	if (item->depth < 2) {
+	if (item->depth == 0) {
+		struct keymap *keymap = item->udata;
+
+		return stracpy(keybinding_text_toggle ? keymap->str
+		                                      : _(keymap->desc, term));
+	} else if (item->depth < 2) {
 		struct action *action = item->udata;
 
 		return stracpy(keybinding_text_toggle ? action->str

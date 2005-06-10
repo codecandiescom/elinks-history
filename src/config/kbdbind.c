@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.293 2005/06/10 03:19:19 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.294 2005/06/10 03:27:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -746,34 +746,39 @@ add_default_keybindings(void)
  * Config file tools.
  */
 
-static struct action main_action_aliases[] = {
-	{ "back", ACT_MAIN_HISTORY_MOVE_BACK, "history-move-back" },
-	{ "down", ACT_MAIN_MOVE_LINK_NEXT, "move-link-next" },
-	{ "download", ACT_MAIN_LINK_DOWNLOAD, "link-download" },
-	{ "download-image", ACT_MAIN_LINK_DOWNLOAD_IMAGE, "link-download-image" },
-	{ "end", ACT_MAIN_MOVE_DOCUMENT_END, "move-document-end" },
-	{ "enter", ACT_MAIN_LINK_FOLLOW, "link-follow" },
-	{ "enter-reload", ACT_MAIN_LINK_FOLLOW_RELOAD, "link-follow-reload" },
-	{ "home", ACT_MAIN_MOVE_DOCUMENT_START, "move-document-start" },
-	{ "next-frame", ACT_MAIN_FRAME_NEXT, "frame-next" },
-	{ "page-down", ACT_MAIN_MOVE_PAGE_DOWN, "move-page-down" },
-	{ "page-up", ACT_MAIN_MOVE_PAGE_UP, "move-page-up" },
-	{ "previous-frame", ACT_MAIN_FRAME_PREV, "frame-prev" },
-	{ "resume-download", ACT_MAIN_LINK_DOWNLOAD_RESUME, "link-download-resume" },
-	{ "unback", ACT_MAIN_HISTORY_MOVE_FORWARD, "history-move-forward" },
-	{ "up",	ACT_MAIN_MOVE_LINK_PREV, "move-link-prev" },
-	{ "zoom-frame", ACT_MAIN_FRAME_MAXIMIZE, "frame-maximize" },
-
-	{ NULL, 0, NULL }
+struct action_alias {
+	unsigned char *str;
+	long num;
 };
 
-static struct action edit_action_aliases[] = {
-	{ "edit", ACT_EDIT_OPEN_EXTERNAL, "open-external" },
+static struct action_alias main_action_aliases[] = {
+	{ "back", ACT_MAIN_HISTORY_MOVE_BACK },
+	{ "down", ACT_MAIN_MOVE_LINK_NEXT },
+	{ "download", ACT_MAIN_LINK_DOWNLOAD },
+	{ "download-image", ACT_MAIN_LINK_DOWNLOAD_IMAGE },
+	{ "end", ACT_MAIN_MOVE_DOCUMENT_END },
+	{ "enter", ACT_MAIN_LINK_FOLLOW },
+	{ "enter-reload", ACT_MAIN_LINK_FOLLOW_RELOAD },
+	{ "home", ACT_MAIN_MOVE_DOCUMENT_START },
+	{ "next-frame", ACT_MAIN_FRAME_NEXT },
+	{ "page-down", ACT_MAIN_MOVE_PAGE_DOWN },
+	{ "page-up", ACT_MAIN_MOVE_PAGE_UP },
+	{ "previous-frame", ACT_MAIN_FRAME_PREV },
+	{ "resume-download", ACT_MAIN_LINK_DOWNLOAD_RESUME },
+	{ "unback", ACT_MAIN_HISTORY_MOVE_FORWARD },
+	{ "up",	ACT_MAIN_MOVE_LINK_PREV },
+	{ "zoom-frame", ACT_MAIN_FRAME_MAXIMIZE },
 
-	{ NULL, 0, NULL }
+	{ NULL, 0 }
 };
 
-static struct action *action_aliases[KEYMAP_MAX] = {
+static struct action_alias edit_action_aliases[] = {
+	{ "edit", ACT_EDIT_OPEN_EXTERNAL },
+
+	{ NULL, 0 }
+};
+
+static struct action_alias *action_aliases[KEYMAP_MAX] = {
 	main_action_aliases,
 	edit_action_aliases,
 	NULL,
@@ -785,7 +790,7 @@ get_aliased_action(enum keymap keymap, unsigned char *action)
 	assert(keymap >= 0 && keymap < KEYMAP_MAX);
 
 	if (action_aliases[keymap]) {
-		struct action *rec;
+		struct action_alias *rec;
 
 		for (rec = action_aliases[keymap]; rec->str; rec++)
 			if (!strcmp(rec->str, action))

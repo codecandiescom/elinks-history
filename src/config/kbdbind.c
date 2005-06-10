@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.329 2005/06/10 18:45:06 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.330 2005/06/10 18:45:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,14 +195,7 @@ kbd_nm_lookup(enum keymap_id keymap_id, unsigned char *name)
 
 	if (action_id < 0) return NULL;
 
-	foreach (kb, keymaps[keymap_id]) {
-		if (action_id != kb->action_id)
-			continue;
-
-		return kb;
-	}
-
-	return NULL;
+	return kbd_act_lookup(keymap_id, action_id);
 }
 
 

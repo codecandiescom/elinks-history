@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.145 2005/06/10 17:45:22 miciah Exp $ */
+/* $Id: action.c,v 1.146 2005/06/10 18:02:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,12 +82,6 @@ do_frame_action(struct session *ses, struct document_view *doc_view,
 {
 	assert(ses && action);
 	if_assert_failed return FRAME_EVENT_OK;
-
-	/* There is a bug for this current_frame() returning NULL for recursive
-	 * framesets unfortunately bugzilla is down ATM so the number is
-	 * missing. --jonas */
-	if (action == set_frame && !doc_view)
-		return FRAME_EVENT_OK;
 
 	assertm(doc_view, "document not formatted");
 	if_assert_failed return FRAME_EVENT_OK;

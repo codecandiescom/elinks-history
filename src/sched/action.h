@@ -1,9 +1,10 @@
-/* $Id: action.h,v 1.10 2005/06/10 21:05:07 jonas Exp $ */
+/* $Id: action.h,v 1.11 2005/06/10 21:07:53 jonas Exp $ */
 
 #ifndef EL__SCHED_ACTION_H
 #define EL__SCHED_ACTION_H
 
 #include "config/kbdbind.h"
+#include "viewer/text/view.h"
 
 struct session;
 

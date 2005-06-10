@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.234 2005/06/10 05:45:08 miciah Exp $ */
+/* $Id: dialogs.c,v 1.235 2005/06/10 11:54:30 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -715,7 +715,7 @@ get_keybinding_root(struct listbox_item *item)
 
 	if (item->depth == 1) {
 		struct action *action = item->udata;
-		int keymap_id;
+		enum keymap_id keymap_id;
 
 		for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++) {
 			if (keymap_box_item_info[keymap_id].first <= action
@@ -785,12 +785,14 @@ static struct listbox_ops keybinding_listbox_ops = {
 
 struct kbdbind_add_hop {
 	struct terminal *term;
-	int action_id, keymap_id;
+	int action_id;
+	enum keymap_id keymap_id;
 	struct term_event_keyboard kbd;
 };
 
 struct kbdbind_add_hop *
-new_hop_from(struct kbdbind_add_hop *hop) {
+new_hop_from(struct kbdbind_add_hop *hop)
+{
 	struct kbdbind_add_hop *new_hop = mem_alloc(sizeof(*new_hop));
 
 	if (new_hop)

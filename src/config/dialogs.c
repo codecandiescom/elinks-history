@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.226 2005/06/10 01:28:31 miciah Exp $ */
+/* $Id: dialogs.c,v 1.227 2005/06/10 01:31:40 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -667,10 +667,10 @@ get_keybinding_text(struct listbox_item *item, struct terminal *term)
 	struct string info;
 
 	if (item->depth < 2) {
-		struct action *strtonum = item->udata;
+		struct action *action = item->udata;
 
 		keymap = keybinding_text_toggle
-			? strtonum->str : _(strtonum->desc, term);
+			? action->str : _(action->desc, term);
 		return stracpy(keymap);
 	}
 
@@ -731,14 +731,14 @@ static enum listbox_match
 match_keybinding(struct listbox_item *item, struct terminal *term,
 		 unsigned char *text)
 {
-	struct action *strtonum = item->udata;
+	struct action *action = item->udata;
 	unsigned char *desc;
 
 	if (item->depth != 1)
 		return LISTBOX_MATCH_IMPOSSIBLE;
 
 	desc = keybinding_text_toggle
-	     ? strtonum->str : _(strtonum->desc, term);
+	     ? action->str : _(action->desc, term);
 
 	if ((desc && strcasestr(desc, text)))
 		return LISTBOX_MATCH_OK;
@@ -878,9 +878,9 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		hop->action = keybinding->action;
 		hop->keymap = keybinding->keymap;
 	} else {
-		struct action *strtonum = item->udata;
+		struct action *action = item->udata;
 
-		hop->action = strtonum->num;
+		hop->action = action->num;
 
 		item = get_keybinding_root(item);
 		if (!item) {
@@ -888,8 +888,8 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 			return EVENT_PROCESSED;
 		}
 
-		strtonum = item->udata;
-		hop->keymap = strtonum->num;
+		action = item->udata;
+		hop->keymap = action->num;
 	}
 
 	text = msg_text(term,

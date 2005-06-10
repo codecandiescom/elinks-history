@@ -1,3 +1,495 @@
+Fri Jun 10 21:44:28 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Drop obsoleted frame_action_T typedef.  
+
+Fri Jun 10 21:39:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Drop the ending element from the <keymap>_action_tables. The size is
+	stored in the action_list table.  
+
+Fri Jun 10 21:37:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Columnize tables.  
+
+Fri Jun 10 21:25:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, lowlevel/timer.c:
+
+	Use the name keybinding for struct keybinding.  
+
+Fri Jun 10 21:14:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: search.h, view.h:
+
+	Cleanup stuff from the action_id_T patch.  
+
+Fri Jun 10 21:07:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.h:
+
+	Doh, stupid me. Revert last patch.  
+
+Fri Jun 10 21:05:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.h:
+
+	Drop unneeded include.  
+
+Fri Jun 10 20:58:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/dialogs.c, config/dialogs.h, config/kbdbind.c,
+	config/kbdbind.h, dialogs/info.c, dialogs/menu.c,
+	viewer/text/search.c, viewer/text/search.h, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Introduce new action_id_T typedef and use it to store all action
+	IDs. This should fix IDs being stored in both ints and longs.  
+
+Fri Jun 10 19:34:34 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/menu.c, config/kbdbind.c, config/kbdbind.h,
+	viewer/text/link.c:
+
+	Rename the _other_ add_keystroke_to_string to
+	add_keystroke_action_to_string.  
+
+Fri Jun 10 19:12:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/kbdbind.h, ecmascript/spidermonkey.c,
+	viewer/text/form.c, viewer/text/link.c:
+
+	Rename make_keystroke_from_accesskey to add_accesskey_to_string.  
+
+Fri Jun 10 19:06:00 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	Rename make_keystroke to add_keystroke_to_string.  
+
+Fri Jun 10 18:50:59 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	Rename write_keymap to get_keymap_name.  
+
+Fri Jun 10 18:47:00 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Remove a variable that is unused after the last patch.  
+
+Fri Jun 10 18:45:44 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Use kbd_act_lookup in kbd_nm_lookup.  
+
+Fri Jun 10 18:45:06 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Mark kbd_act_lookup static as it is not declared in the header.  
+
+Fri Jun 10 18:44:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Move kbd_act_lookup above kbd_nm_lookup.  
+
+Fri Jun 10 18:11:31 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/action.c:
+
+	Eliminate do_frame_action.  
+
+Fri Jun 10 18:02:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/action.c:
+
+	Remove the check in do_frame_action for doc_view when the action is
+	frame-maximize. This check has been unnecessary since the action
+	flags were introduced and frame-maximize was given the
+	ACTION_REQUIRE_VIEW_STATE flag.  
+
+Fri Jun 10 17:45:22 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/actions-main.inc, config/kbdbind.h, sched/action.c:
+
+	Add a ACTION_REQUIRE_LOCATION flag and action_requires_location
+	function and use them to check have_location when necessary in
+	do_action rather than in do_frame_action.  
+
+Fri Jun 10 17:30:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/kbdbind.h, sched/action.c:
+
+	Rename is_action_allowed_in_anonymous to action_is_anonymous_safe, 
+	does_action_require_view_state to action_requires_view_state, and
+	does_action_jump_to_link to action_prefix_is_link_number to appease
+	pasky.  
+
+Fri Jun 10 17:15:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	In kbd_nm_lookup, rename act to action_id.  
+
+Fri Jun 10 16:21:38 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	bind_key_to_event(): Reduce line length a bit.  
+
+Fri Jun 10 15:40:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	Improve upon witekfl's fix to still use NUMBER_OF_TAGS but have it
+	automatically updated.  
+
+Fri Jun 10 15:25:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, config/m4/ruby.m4:
+
+	More fixes for the configure error reporting. Make sure withval is
+	non-empty and not 'no'.  
+
+Fri Jun 10 14:52:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	do_action(): Fix the new checking for actions allowed in anonymous.  
+
+Fri Jun 10 14:10:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/protocol/ftp/ftp.c:
+
+	Fix crash for IPv6 FTP when EPSV was disabled. Patch by Mikael
+	Magnusson and me.  
+
+Fri Jun 10 13:38:03 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/parse.c:
+
+	Use exact number of elements instead of buggy NUMBER_OF_TAGS. There
+	was more tags.  
+
+Fri Jun 10 13:23:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/dialogs.c, config/kbdbind.c, config/kbdbind.h,
+	dialogs/exmode.c, sched/action.c:
+
+	Export get_action_name() and get_action_from_string() and obsolete
+	read_actio() and write_action().  
+
+Fri Jun 10 13:05:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Rename read_keymap() -> get_keymap_id(). Sanitize user functions a
+	bit.  
+
+Fri Jun 10 13:00:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	struct keymap: Store the ID in enum keymap_id named keymap_id. Maybe
+	it should just be id but I am trying to follow Miciahs latest
+	renamings.  
+
+Fri Jun 10 12:56:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	bind_do(): Append '_str' to string arguments. Use sane function
+	variables, i.e. keymap_id and action_id.  
+
+Fri Jun 10 12:51:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	get_aliased_action(): action -> action_str, rec -> alias.  
+
+Fri Jun 10 12:46:27 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Use sizeof_array(table) instead of sizeof(table) / sizeof(struct
+	action).  
+
+Fri Jun 10 12:41:40 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Use the name action for struct action variables.  
+
+Fri Jun 10 12:36:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Use the name key for struct key variables.  
+
+Fri Jun 10 12:27:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Merge strcasetonum() into read_key().  
+
+Fri Jun 10 12:16:13 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: dialogs.c, dialogs.h:
+
+	Use the name keymap for struct keymap variables. Required quite a
+	bit rearrangement.  
+
+Fri Jun 10 12:15:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Use the name keymap for struct keymap variables.  
+
+Fri Jun 10 11:54:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Use enum keymap_id for keymap_id variables. ;) Stylistically \n\r a
+	{.  
+
+Fri Jun 10 06:53:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Move a blank line.  
+
+Fri Jun 10 06:51:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/action.c:
+
+	Export get_action.  
+	
+	Use it in the new inline routines, is_action_allowed_in_anonymous, 
+	does_action_require_view_state, and does_action_jump_to_link.  
+	
+	Use them in do_action so that anonymous-mode is properly restricted 
+	again, numeric prefixes work again, and the view-state is again
+	checked when necessary.  
+
+Fri Jun 10 06:37:39 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Rename the parameter num to action_id in get_action,
+	get_action_name, and get_action_desc.  
+
+Fri Jun 10 06:35:02 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Factor get_action out of get_action_name and get_action_desc.  
+
+Fri Jun 10 06:32:02 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Remove some unused variables leftover after the last patch.  
+
+Fri Jun 10 06:28:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Add num_actions to struct action_list.  
+	
+	Using this new field for boundary-checking, use direct
+	array-indexing in get_action_name and get_action_desc.  
+
+Fri Jun 10 06:19:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Doh, make that action_list.  
+
+Fri Jun 10 06:17:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Introduce the local variable actions in get_action_from_string,
+	get_action_name, and get_action_desc.  
+
+Fri Jun 10 06:14:23 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Let get_action_from_string, get_action_name, and get_action_desc
+	take keymap_id instead of an action table and to the work of finding 
+	the table rather than relying on the callers to do the work.  
+
+Fri Jun 10 06:11:54 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Move keymap_table up a few lines.  
+
+Fri Jun 10 06:06:10 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Rename strtonum to get_action_from_string.  
+
+Fri Jun 10 06:04:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Rename numtodesc to get_action_desc.  
+
+Fri Jun 10 06:04:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Rename numtostr to get_action_name.  
+
+Fri Jun 10 05:45:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: dialogs.c, dialogs.h, kbdbind.c, kbdbind.h:
+
+	Introduce struct action_list, which holds an array of struct
+	actions.  
+	
+	Change action_table from an array of arrays of struct action to an
+	array of struct action_lists.  
+	
+	Change init_keybinding_listboxes, read_action, and write_action to
+	cope.  
+
+Fri Jun 10 05:18:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Introduce struct key.  
+	
+	Change key_table from struct action to struct key.  
+	
+	Change strcasetonum to use the new type.  
+	
+	Expand the call to numtostr in make_keystroke.  
+
+Fri Jun 10 05:11:10 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Move strcasetonum next to its only caller, read_key.  
+
+Fri Jun 10 05:06:04 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: dialogs.c, dialogs.h, kbdbind.c, kbdbind.h:
+
+	Introduce struct keymap.  
+	
+	Change keymap_table from struct action to struct keymap.  
+	
+	Change init_keybinding_listboxes and get_keybinding_text to cope.  
+	
+	Expand the call to strtonum in read_keymap.  
+	
+	Use direct array indexing into keymap_table instead of using 
+	numtostr and numtodesc.  
+
+Fri Jun 10 04:47:02 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/dialog.c, bfu/hierbox.c, bfu/inpfield.c,
+	bfu/inpfield.h, bfu/listbox.c, bfu/menu.c, bfu/menu.h,
+	config/dialogs.c, config/dialogs.h, config/kbdbind.c,
+	config/kbdbind.h, dialogs/exmode.c, dialogs/info.c, dialogs/menu.c,
+	sched/action.c, sched/action.h, viewer/text/form.c,
+	viewer/text/search.c, viewer/text/view.c, viewer/text/view.h:
+
+	Use the name action_id for variables that hold action ids.  
+
+Fri Jun 10 04:22:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: dialogs.h, kbdbind.c, kbdbind.h:
+
+	Use the name keymap_id for variables and fields the type of which is
+	enum keymap_id.  
+
+Fri Jun 10 04:14:03 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/info.c:
+
+	Use the name keymap_id for variables and fields the type of which is
+	enum keymap_id.  
+
+Fri Jun 10 04:10:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h, dialogs.c:
+
+	Use the name keymap_id for variables and fields the type of which is
+	enum keymap_id.  
+
+Fri Jun 10 03:57:52 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/dialogs.c, config/dialogs.h, config/kbdbind.c,
+	config/kbdbind.h, dialogs/info.c:
+
+	Rename enum keymap to enum keymap_id.  
+
+Fri Jun 10 03:41:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Simplify get_keybinding_text by removing an unnecessary intermediate
+	variable.  
+
+Fri Jun 10 03:27:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Introduce struct action_alias, which is struct action less the desc 
+	field.  
+	
+	Convert main_action_aliases and edit_action_aliases from arrays of 
+	struct action to arrays of struct action_alias, dropping the unused 
+	desc field.  
+	
+	Change get_aliased_action to use the proper type-name.  
+
+Fri Jun 10 03:19:19 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Expand the call to strtonum in get_aliased_action.  
+
+Fri Jun 10 01:42:00 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Add a flags field to struct action and include the flags field when
+	including actions-*.inc.  
+
+Fri Jun 10 01:40:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/actions-main.inc:
+
+	Fix two typos in the unused flags fields.  
+
+Fri Jun 10 01:31:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Rename local variables in get_keybinding_text, match_keybinding, and
+	push_kbdbind_add_button from strtonum to action.  
+
+Fri Jun 10 01:28:31 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: dialogs.c, dialogs.h, kbdbind.c, kbdbind.h:
+
+	Rename struct strtonum to struct action.  
+
 Thu Jun  9 08:43:02 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

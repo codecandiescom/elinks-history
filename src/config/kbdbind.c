@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.299 2005/06/10 05:06:04 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.300 2005/06/10 05:11:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,18 +221,6 @@ strtonum(struct action *table, unsigned char *str)
 	return -1;
 }
 
-static long
-strcasetonum(struct action *table, unsigned char *str)
-{
-	struct action *rec;
-
-	for (rec = table; rec->str; rec++)
-		if (!strcasecmp(rec->str, str))
-			return rec->num;
-
-	return -1;
-}
-
 static unsigned char *
 numtostr(struct action *table, long num)
 {
@@ -317,6 +305,18 @@ static struct action key_table[] = {
 	{ "F12", KBD_F12 },
 	{ NULL, 0 }
 };
+
+static long
+strcasetonum(struct action *table, unsigned char *str)
+{
+	struct action *rec;
+
+	for (rec = table; rec->str; rec++)
+		if (!strcasecmp(rec->str, str))
+			return rec->num;
+
+	return -1;
+}
 
 long
 read_key(unsigned char *key)

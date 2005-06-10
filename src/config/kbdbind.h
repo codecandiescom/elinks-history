@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.172 2005/06/10 19:06:00 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.173 2005/06/10 19:12:18 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -156,7 +156,7 @@ unsigned char *get_keymap_name(enum keymap_id);
 int parse_keystroke(unsigned char *, struct term_event_keyboard *);
 void add_keystroke_to_string(struct string *str, struct term_event_keyboard *kbd, int escape);
 
-#define make_keystroke_from_accesskey(str, accesskey) do { 	\
+#define add_accesskey_to_string(str, accesskey) do { 		\
 	struct term_event_keyboard kbd; 			\
 	kbd.key = accesskey; /* FIXME: unicode_val_T to int */	\
 	kbd.modifier = 0; 					\

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.210 2005/05/18 20:35:48 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.211 2005/06/10 19:12:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -566,7 +566,7 @@ input_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		if (!link) break;
 
 		init_string(&keystr);
-		make_keystroke_from_accesskey(&keystr, link->accesskey);
+		add_accesskey_to_string(&keystr, link->accesskey);
 		string_to_jsval(ctx, vp, keystr.source);
 		done_string(&keystr);
 		break;

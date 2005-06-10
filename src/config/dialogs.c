@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.240 2005/06/10 19:06:00 miciah Exp $ */
+/* $Id: dialogs.c,v 1.241 2005/06/10 20:58:06 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -558,12 +558,12 @@ static int keybinding_text_toggle;
 static struct listbox_item *action_box_items[KEYMAP_MAX][ACTION_BOX_SIZE];
 
 struct listbox_item *
-get_keybinding_action_box_item(enum keymap_id keymap_id, int action)
+get_keybinding_action_box_item(enum keymap_id keymap_id, action_id_T action_id)
 {
-	assert(action < ACTION_BOX_SIZE);
+	assert(action_id < ACTION_BOX_SIZE);
 	if_assert_failed return NULL;
 
-	return action_box_items[keymap_id][action];
+	return action_box_items[keymap_id][action_id];
 }
 
 struct keymap_box_item_info {
@@ -786,7 +786,7 @@ static struct listbox_ops keybinding_listbox_ops = {
 
 struct kbdbind_add_hop {
 	struct terminal *term;
-	int action_id;
+	action_id_T action_id;
 	enum keymap_id keymap_id;
 	struct term_event_keyboard kbd;
 };
@@ -816,7 +816,7 @@ static void
 really_add_keybinding(void *data, unsigned char *keystroke)
 {
 	struct kbdbind_add_hop *hop = data;
-	int action_id;
+	action_id_T action_id;
 
 	if (keybinding_exists(hop->keymap_id, &hop->kbd, &action_id)
 	    && action_id != ACT_MAIN_NONE) {

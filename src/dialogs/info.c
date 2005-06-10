@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.131 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: info.c,v 1.132 2005/06/10 20:58:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,7 @@ menu_keys(struct terminal *term, void *d_, void *xxx)
 	int d = (long) d_;
 
 	/* We scale by main mapping because it has the most actions */
-	int actions[MAIN_ACTIONS] = {
+	action_id_T action_ids[MAIN_ACTIONS] = {
 		ACT_MAIN_MENU,
 		ACT_MAIN_QUIT,
 		ACT_MAIN_MOVE_LINK_NEXT,
@@ -100,15 +100,15 @@ menu_keys(struct terminal *term, void *d_, void *xxx)
 	info->toggle = d;
 
 	if (info->toggle) {
-		int action_id;
+		action_id_T action_id;
 		enum keymap_id keymap_id;
 
 		for (action_id = 0; action_id < MAIN_ACTIONS - 1; action_id++) {
-			actions[action_id] = action_id + 1;
+			action_ids[action_id] = action_id + 1;
 		}
 
 		for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++) {
-			add_actions_to_string(&keys, actions, keymap_id, term);
+			add_actions_to_string(&keys, action_ids, keymap_id, term);
 			if (keymap_id + 1 < KEYMAP_MAX)
 				add_to_string(&keys, "\n\n");
 
@@ -118,13 +118,13 @@ menu_keys(struct terminal *term, void *d_, void *xxx)
 			assert(EDIT_ACTIONS > MENU_ACTIONS);
 
 			if (keymap_id == KEYMAP_MAIN) {
-				actions[EDIT_ACTIONS] = ACT_EDIT_NONE;
+				action_ids[EDIT_ACTIONS] = ACT_EDIT_NONE;
 			} else if (keymap_id == KEYMAP_EDIT) {
-				actions[MENU_ACTIONS] = ACT_MENU_NONE;
+				action_ids[MENU_ACTIONS] = ACT_MENU_NONE;
 			}
 		}
 	} else {
-		add_actions_to_string(&keys, (int *) actions, KEYMAP_MAIN, term);
+		add_actions_to_string(&keys, action_ids, KEYMAP_MAIN, term);
 	}
 
 	msg_box(term, getml(info, NULL), MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,

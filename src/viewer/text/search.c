@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.352 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: search.c,v 1.353 2005/06/10 20:58:06 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1448,7 +1448,7 @@ link_typeahead_handler(struct input_line *line, int action_id)
 
 enum frame_event_status
 search_typeahead(struct session *ses, struct document_view *doc_view,
-		 int action_id)
+		 action_id_T action_id)
 {
 	unsigned char *prompt = "#";
 	unsigned char *data = NULL;

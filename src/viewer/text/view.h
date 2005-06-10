@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.72 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: view.h,v 1.73 2005/06/10 20:58:06 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -7,6 +7,8 @@ struct document_view;
 struct session;
 struct term_event;
 struct terminal;
+
+#include "config/kbdbind.h"
 
 enum frame_event_status {
 	/* The event was not handled */
@@ -87,6 +89,6 @@ void send_event(struct session *, struct term_event *);
 
 enum frame_event_status save_formatted_dlg(struct session *ses, struct document_view *doc_view, int xxxx);
 enum frame_event_status view_image(struct session *ses, struct document_view *doc_view, int xxxx);
-enum frame_event_status download_link(struct session *ses, struct document_view *doc_view, int action_id);
+enum frame_event_status download_link(struct session *ses, struct document_view *doc_view, action_id_T action_id);
 
 #endif

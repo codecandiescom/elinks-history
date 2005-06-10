@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.693 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: view.c,v 1.694 2005/06/10 20:58:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1216,7 +1216,8 @@ send_event(struct session *ses, struct term_event *ev)
 }
 
 enum frame_event_status
-download_link(struct session *ses, struct document_view *doc_view, int action_id)
+download_link(struct session *ses, struct document_view *doc_view,
+	      action_id_T action_id)
 {
 	struct link *link = get_current_link(doc_view);
 	void (*download)(void *ses, unsigned char *file) = start_download;

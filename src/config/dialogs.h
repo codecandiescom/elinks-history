@@ -1,4 +1,4 @@
-/* $Id: dialogs.h,v 1.27 2005/06/10 12:16:13 jonas Exp $ */
+/* $Id: dialogs.h,v 1.28 2005/06/10 20:58:06 jonas Exp $ */
 
 #ifndef EL__CONFIG_DIALOGS_H
 #define EL__CONFIG_DIALOGS_H
@@ -17,7 +17,7 @@ void write_config_dialog(struct terminal *term, unsigned char *config_file,
 void options_manager(struct session *);
 void keybinding_manager(struct session *);
 
-struct listbox_item *get_keybinding_action_box_item(enum keymap_id keymap_id, int action_id);
+struct listbox_item *get_keybinding_action_box_item(enum keymap_id keymap_id, action_id_T action_id);
 void init_keybinding_listboxes(struct keymap keymap_table[], struct action_list actions[]);
 void done_keybinding_listboxes(void);
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.397 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: menu.c,v 1.398 2005/06/10 20:58:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -861,7 +861,7 @@ add_uri_command_to_menu(struct menu_item **mi, enum pass_uri_type type)
 	struct option *option;
 	int commands = 0;
 	enum menu_item_flags flags = NO_FLAG;
-	int action_id;
+	action_id_T action_id;
 	unsigned char *text;
 
 	switch (type) {

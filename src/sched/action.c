@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.146 2005/06/10 18:02:18 miciah Exp $ */
+/* $Id: action.c,v 1.147 2005/06/10 18:11:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,22 +75,6 @@ toggle_document_option(struct session *ses, unsigned char *option_name)
 }
 
 typedef enum frame_event_status (*frame_action_T)(struct session *, struct document_view *, int);
-
-static enum frame_event_status
-do_frame_action(struct session *ses, struct document_view *doc_view,
-		frame_action_T action, int magic)
-{
-	assert(ses && action);
-	if_assert_failed return FRAME_EVENT_OK;
-
-	assertm(doc_view, "document not formatted");
-	if_assert_failed return FRAME_EVENT_OK;
-
-	assertm(doc_view->vs, "document view has no state");
-	if_assert_failed return FRAME_EVENT_OK;
-
-	return action(ses, doc_view, magic);
-}
 
 static void
 goto_url_action(struct session *ses,
@@ -195,9 +179,7 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_COPY_CLIPBOARD:
-			status = do_frame_action(ses, doc_view,
-						 copy_current_link_to_clipboard,
-						 0);
+			status = copy_current_link_to_clipboard(ses, doc_view, 0);
 			break;
 
 		case ACT_MAIN_DOCUMENT_INFO:
@@ -219,13 +201,11 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_FIND_NEXT:
-			status = do_frame_action(ses, doc_view,
-						 find_next, 1);
+			status = find_next(ses, doc_view, 1);
 			break;
 
 		case ACT_MAIN_FIND_NEXT_BACK:
-			status = do_frame_action(ses, doc_view,
-						 find_next, -1);
+			status = find_next(ses, doc_view, -1);
 			break;
 
 		case ACT_MAIN_FORGET_CREDENTIALS:
@@ -240,9 +220,8 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_FRAME_EXTERNAL_COMMAND:
-			status = do_frame_action(ses, doc_view,
-						 pass_uri_to_command,
-						 PASS_URI_FRAME);
+			status = pass_uri_to_command(ses, doc_view,
+			                             PASS_URI_FRAME);
 			break;
 
 		case ACT_MAIN_FRAME_NEXT:
@@ -251,8 +230,7 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_FRAME_MAXIMIZE:
-			status = do_frame_action(ses, doc_view,
-						 set_frame, 0);
+			status = set_frame(ses, doc_view, 0);
 			break;
 
 		case ACT_MAIN_FRAME_PREV:
@@ -308,23 +286,20 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 		case ACT_MAIN_LINK_DOWNLOAD:
 		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
 		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
-			status = do_frame_action(ses, doc_view,
-						 download_link,
-						 action_id);
+			status = download_link(ses, doc_view, action_id);
 			break;
 
 		case ACT_MAIN_LINK_EXTERNAL_COMMAND:
-			status = do_frame_action(ses, doc_view,
-						 pass_uri_to_command,
-						 PASS_URI_LINK);
+			status = pass_uri_to_command(ses, doc_view,
+			                             PASS_URI_LINK);
 			break;
 
 		case ACT_MAIN_LINK_FOLLOW:
-			status = do_frame_action(ses, doc_view, enter, 0);
+			status = enter(ses, doc_view, 0);
 			break;
 
 		case ACT_MAIN_LINK_FOLLOW_RELOAD:
-			status = do_frame_action(ses, doc_view, enter, 1);
+			status = enter(ses, doc_view, 1);
 			break;
 
 		case ACT_MAIN_LINK_MENU:
@@ -423,7 +398,6 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
-			/* FIXME: Use do_frame_action(). --jonas */
 			open_in_new_window(term, send_open_in_new_window, ses);
 			break;
 
@@ -468,8 +442,7 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_RESET_FORM:
-			status = do_frame_action(ses, doc_view,
-						 reset_form, 0);
+			status = reset_form(ses, doc_view, 0);
 			break;
 
 		case ACT_MAIN_RESOURCE_INFO:
@@ -477,13 +450,11 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_SAVE_AS:
-			status = do_frame_action(ses, doc_view,
-						 save_as, 0);
+			status = save_as(ses, doc_view, 0);
 			break;
 
 		case ACT_MAIN_SAVE_FORMATTED:
-			status = do_frame_action(ses, doc_view,
-						 save_formatted_dlg, 0);
+			status = save_formatted_dlg(ses, doc_view, 0);
 			break;
 
 		case ACT_MAIN_SAVE_OPTIONS:
@@ -511,21 +482,18 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_SEARCH:
-			status = do_frame_action(ses, doc_view,
-						 search_dlg, 1);
+			status = search_dlg(ses, doc_view, 1);
 			break;
 
 		case ACT_MAIN_SEARCH_BACK:
-			status = do_frame_action(ses, doc_view,
-						 search_dlg, -1);
+			status = search_dlg(ses, doc_view, -1);
 			break;
 
 		case ACT_MAIN_SEARCH_TYPEAHEAD:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_LINK:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT_BACK:
-			status = do_frame_action(ses, doc_view,
-						 search_typeahead, action_id);
+			status = search_typeahead(ses, doc_view, action_id);
 			break;
 
 		case ACT_MAIN_SHOW_TERM_OPTIONS:
@@ -533,13 +501,11 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_SUBMIT_FORM:
-			status = do_frame_action(ses, doc_view,
-						 submit_form, 0);
+			status = submit_form(ses, doc_view, 0);
 			break;
 
 		case ACT_MAIN_SUBMIT_FORM_RELOAD:
-			status = do_frame_action(ses, doc_view,
-						 submit_form, 1);
+			status = submit_form(ses, doc_view, 1);
 			break;
 
 		case ACT_MAIN_TAB_CLOSE:
@@ -552,9 +518,8 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_TAB_EXTERNAL_COMMAND:
-			status = do_frame_action(ses, doc_view,
-						 pass_uri_to_command,
-						 PASS_URI_TAB);
+			status = pass_uri_to_command(ses, doc_view,
+			                             PASS_URI_TAB);
 			break;
 
 		case ACT_MAIN_TAB_MOVE_LEFT:
@@ -625,7 +590,7 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_VIEW_IMAGE:
-			status = do_frame_action(ses, doc_view, view_image, 0);
+			status = view_image(ses, doc_view, 0);
 			break;
 
 		case ACT_MAIN_SCRIPTING_FUNCTION:

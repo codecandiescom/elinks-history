@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.170 2005/06/10 17:45:22 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.171 2005/06/10 18:50:59 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -151,7 +151,7 @@ action_prefix_is_link_number(enum keymap_id keymap_id, long action_id)
 }
 
 long read_key(unsigned char *);
-unsigned char *write_keymap(enum keymap_id);
+unsigned char *get_keymap_name(enum keymap_id);
 
 int parse_keystroke(unsigned char *, struct term_event_keyboard *);
 void make_keystroke(struct string *str, struct term_event_keyboard *kbd, int escape);

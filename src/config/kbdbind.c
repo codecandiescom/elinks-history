@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.331 2005/06/10 18:47:00 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.332 2005/06/10 18:50:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,7 +266,7 @@ get_keymap_id(unsigned char *keymap_str)
 }
 
 unsigned char *
-write_keymap(enum keymap_id keymap_id)
+get_keymap_name(enum keymap_id keymap_id)
 {
 	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
 
@@ -855,7 +855,7 @@ static void
 single_bind_config_string(struct string *file, enum keymap_id keymap_id,
 			  struct keybinding *keybinding)
 {
-	unsigned char *keymap_str = write_keymap(keymap_id);
+	unsigned char *keymap_str = get_keymap_name(keymap_id);
 	unsigned char *action_str = get_action_name(keymap_id, keybinding->action_id);
 
 	if (!keymap_str || !action_str || action_str[0] == ' ')

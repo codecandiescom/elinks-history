@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.238 2005/06/10 13:23:34 jonas Exp $ */
+/* $Id: dialogs.c,v 1.239 2005/06/10 18:50:59 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -698,7 +698,7 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term)
 		return NULL;
 
 	action = get_action_name(keybinding->keymap_id, keybinding->action_id);
-	keymap = write_keymap(keybinding->keymap_id);
+	keymap = get_keymap_name(keybinding->keymap_id);
 
 	add_format_to_string(&info, "%s: ", _("Keystroke", term));
 	make_keystroke(&info, &keybinding->kbd, 0);
@@ -911,7 +911,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 			"\n\n"
 			"Keystroke",
 			get_action_name(hop->keymap_id, hop->action_id),
-			write_keymap(hop->keymap_id));
+			get_keymap_name(hop->keymap_id));
 
 	input_dialog(term, getml(hop, text, NULL),
 		     N_("Add keybinding"), text,

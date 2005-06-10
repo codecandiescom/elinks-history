@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.337 2005/06/10 21:37:04 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.338 2005/06/10 21:39:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -448,20 +448,14 @@ add_actions_to_string(struct string *string, action_id_T action_ids[],
 
 static struct action main_action_table[MAIN_ACTIONS + 1] = {
 #include "config/actions-main.inc"
-
-	{ NULL, 0, NULL }
 };
 
 static struct action edit_action_table[EDIT_ACTIONS + 1] = {
 #include "config/actions-edit.inc"
-
-	{ NULL, 0, NULL }
 };
 
 static struct action menu_action_table[MENU_ACTIONS + 1] = {
 #include "config/actions-menu.inc"
-
-	{ NULL, 0, NULL }
 };
 
 static struct action_list action_table[KEYMAP_MAX] = {

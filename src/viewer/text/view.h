@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.71 2005/01/08 03:17:50 miciah Exp $ */
+/* $Id: view.h,v 1.72 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -87,6 +87,6 @@ void send_event(struct session *, struct term_event *);
 
 enum frame_event_status save_formatted_dlg(struct session *ses, struct document_view *doc_view, int xxxx);
 enum frame_event_status view_image(struct session *ses, struct document_view *doc_view, int xxxx);
-enum frame_event_status download_link(struct session *ses, struct document_view *doc_view, int action);
+enum frame_event_status download_link(struct session *ses, struct document_view *doc_view, int action_id);
 
 #endif

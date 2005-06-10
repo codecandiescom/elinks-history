@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.293 2005/05/13 09:06:58 zas Exp $ */
+/* $Id: menu.c,v 1.294 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -131,7 +131,7 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 	/* We save these values due to delete_window() call below. */
 	menu_func_T func = it->func;
 	void *it_data = it->data;
-	enum main_action action = it->action;
+	enum main_action action_id = it->action_id;
 
 	if (!mi_is_selectable(it)) return;
 
@@ -150,10 +150,10 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 		}
 	}
 
-	if (action != ACT_MAIN_NONE && !func) {
+	if (action_id != ACT_MAIN_NONE && !func) {
 		struct session *ses = data;
 
-		do_action(ses, action, 1);
+		do_action(ses, action_id, 1);
 		return;
 	}
 
@@ -198,11 +198,11 @@ get_menuitem_rtext_width(struct terminal *term, struct menu_item *mi)
 	if (mi_is_submenu(mi)) {
 		rtext_width = L_RTEXT_SPACE + m_submenu_len + R_RTEXT_SPACE;
 
-	} else if (mi->action != ACT_MAIN_NONE) {
+	} else if (mi->action_id != ACT_MAIN_NONE) {
 		struct string keystroke;
 
 		if (init_string(&keystroke)) {
-			add_keystroke_to_string(&keystroke, mi->action, KEYMAP_MAIN);
+			add_keystroke_to_string(&keystroke, mi->action_id, KEYMAP_MAIN);
 			rtext_width = L_RTEXT_SPACE + keystroke.length + R_RTEXT_SPACE;
 			done_string(&keystroke);
 		}
@@ -508,7 +508,7 @@ display_menu(struct terminal *term, struct menu *menu)
 		if (mi_is_submenu(mi)) {
 			draw_menu_right_text(term, m_submenu, m_submenu_len,
 					     menu->box.x, box.y, box.width, color);
-		} else if (mi->action != ACT_MAIN_NONE) {
+		} else if (mi->action_id != ACT_MAIN_NONE) {
 			struct string keystroke;
 
 #ifdef CONFIG_DEBUG
@@ -523,7 +523,7 @@ display_menu(struct terminal *term, struct menu *menu)
 
 			if (init_string(&keystroke)) {
 				add_keystroke_to_string(&keystroke,
-							mi->action,
+							mi->action_id,
 							KEYMAP_MAIN);
 				draw_menu_right_text(term, keystroke.source,
 						     keystroke.length,
@@ -681,7 +681,7 @@ search_menu_item(struct menu_item *item, unsigned char *buffer,
 }
 
 static enum input_line_code
-menu_search_handler(struct input_line *line, int action)
+menu_search_handler(struct input_line *line, int action_id)
 {
 	struct menu *menu = line->data;
 	struct terminal *term = menu->win->term;
@@ -690,7 +690,7 @@ menu_search_handler(struct input_line *line, int action)
 	int pos = menu->selected;
 	int direction;
 
-	switch (action) {
+	switch (action_id) {
 	case ACT_EDIT_REDRAW:
 		return INPUT_LINE_PROCEED;
 
@@ -755,10 +755,10 @@ static void
 menu_kbd_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
-	enum menu_action action = kbd_action(KEYMAP_MENU, ev, NULL);
+	enum menu_action action_id = kbd_action(KEYMAP_MENU, ev, NULL);
 	int s = 0;
 
-	switch (action) {
+	switch (action_id) {
 		case ACT_MENU_LEFT:
 		case ACT_MENU_RIGHT:
 			if (list_has_next(win->term->windows, win)
@@ -772,7 +772,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 				return;
 			}
 
-			if (action == ACT_MENU_RIGHT)
+			if (action_id == ACT_MENU_RIGHT)
 				goto enter;
 
 			delete_window(win);
@@ -1078,9 +1078,9 @@ static void
 mainmenu_kbd_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
-	enum menu_action action = kbd_action(KEYMAP_MENU, ev, NULL);
+	enum menu_action action_id = kbd_action(KEYMAP_MENU, ev, NULL);
 
-	switch (action) {
+	switch (action_id) {
 	case ACT_MENU_ENTER:
 	case ACT_MENU_DOWN:
 	case ACT_MENU_UP:
@@ -1102,13 +1102,13 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev)
 	case ACT_MENU_PREVIOUS_ITEM:
 		/* This is pretty western centric since `what is next'?
 		 * Anyway we cycle clockwise by resetting the action ... */
-		action = (action == ACT_MENU_NEXT_ITEM)
+		action_id = (action_id == ACT_MENU_NEXT_ITEM)
 		       ? ACT_MENU_RIGHT : ACT_MENU_LEFT;
 		/* ... and then letting left/right handling take over. */
 
 	case ACT_MENU_LEFT:
 	case ACT_MENU_RIGHT:
-		scroll_menu(menu, action == ACT_MENU_LEFT ? -1 : 1, 1);
+		scroll_menu(menu, action_id == ACT_MENU_LEFT ? -1 : 1, 1);
 		break;
 
 	case ACT_MENU_REDRAW:
@@ -1126,7 +1126,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev)
 		}
 
 	case ACT_MENU_CANCEL:
-		delete_window_ev(win, action != ACT_MENU_CANCEL ? ev : NULL);
+		delete_window_ev(win, action_id != ACT_MENU_CANCEL ? ev : NULL);
 		return;
 	}
 
@@ -1179,7 +1179,7 @@ new_menu(enum menu_item_flags flags)
 
 void
 add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
-	    enum main_action action, menu_func_T func, void *data,
+	    enum main_action action_id, menu_func_T func, void *data,
 	    enum menu_item_flags flags)
 {
 	int n = count_items(*mi);
@@ -1194,7 +1194,7 @@ add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
 	copy_struct(item + 1, item);
 
 	/* Setup the new item. All menu items share the item_free value. */
-	SET_MENU_ITEM(item, text, rtext, action, func, data,
+	SET_MENU_ITEM(item, text, rtext, action_id, func, data,
 		      item->flags | flags, HKS_SHOW, 0);
 }
 

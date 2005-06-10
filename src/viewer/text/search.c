@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.351 2005/05/18 04:20:18 miciah Exp $ */
+/* $Id: search.c,v 1.352 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1217,13 +1217,13 @@ draw_typeahead_match(struct terminal *term, struct document_view *doc_view,
 
 static enum typeahead_code
 do_typeahead(struct session *ses, struct document_view *doc_view,
-	     unsigned char *text, int action, int *offset)
+	     unsigned char *text, int action_id, int *offset)
 {
 	int current = int_max(doc_view->vs->current_link, 0);
 	int direction, match, i = current;
 	struct document *document = doc_view->document;
 
-	switch (action) {
+	switch (action_id) {
 		case ACT_EDIT_PREVIOUS_ITEM:
 		case ACT_EDIT_UP:
 			direction = -1;
@@ -1288,19 +1288,19 @@ search_hit_boundary:
 /* Typeahead */
 
 static enum input_line_code
-text_typeahead_handler(struct input_line *line, int action)
+text_typeahead_handler(struct input_line *line, int action_id)
 {
 	struct session *ses = line->ses;
 	unsigned char *buffer = line->buffer;
 	struct document_view *doc_view = current_frame(ses);
 	int direction = ((unsigned char *) line->data)[0] == '/' ? 1 : -1;
-	int report_errors = action == -1;
+	int report_errors = action_id == -1;
 	enum find_error error;
 
 	assertm(doc_view, "document not formatted");
 	if_assert_failed return INPUT_LINE_CANCEL;
 
-	switch (action) {
+	switch (action_id) {
 		case ACT_EDIT_REDRAW:
 			return INPUT_LINE_PROCEED;
 
@@ -1356,7 +1356,7 @@ text_typeahead_handler(struct input_line *line, int action)
 }
 
 static enum input_line_code
-link_typeahead_handler(struct input_line *line, int action)
+link_typeahead_handler(struct input_line *line, int action_id)
 {
 	struct session *ses = line->ses;
 	unsigned char *buffer = line->buffer;
@@ -1374,7 +1374,7 @@ link_typeahead_handler(struct input_line *line, int action)
 		return INPUT_LINE_PROCEED;
 	}
 
-	if (action == ACT_EDIT_REDRAW) {
+	if (action_id == ACT_EDIT_REDRAW) {
 		int current = doc_view->vs->current_link;
 		int offset, bufferlen;
 
@@ -1396,19 +1396,19 @@ link_typeahead_handler(struct input_line *line, int action)
 
 	/* Hack time .. should we change mode? */
 	if (!line->data) {
-		enum main_action action = ACT_MAIN_NONE;
+		enum main_action action_id = ACT_MAIN_NONE;
 
 		switch (*buffer) {
 			case '#':
-				action = ACT_MAIN_SEARCH_TYPEAHEAD_LINK;
+				action_id = ACT_MAIN_SEARCH_TYPEAHEAD_LINK;
 				break;
 
 			case '?':
-				action = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT_BACK;
+				action_id = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT_BACK;
 				break;
 
 			case '/':
-				action = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT;
+				action_id = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT;
 				break;
 
 			default:
@@ -1416,15 +1416,15 @@ link_typeahead_handler(struct input_line *line, int action)
 		}
 
 		/* Should we reboot the input line .. (inefficient but easy) */
-		if (action != ACT_MAIN_NONE) {
-			search_typeahead(ses, doc_view, action);
+		if (action_id != ACT_MAIN_NONE) {
+			search_typeahead(ses, doc_view, action_id);
 			return INPUT_LINE_CANCEL;
 		}
 
 		line->data = "#";
 	}
 
-	switch (do_typeahead(ses, doc_view, buffer, action, &offset)) {
+	switch (do_typeahead(ses, doc_view, buffer, action_id, &offset)) {
 		case TYPEAHEAD_MATCHED:
 			fixup_typeahead_match(ses, doc_view);
 			draw_formatted(ses, 0);
@@ -1448,14 +1448,14 @@ link_typeahead_handler(struct input_line *line, int action)
 
 enum frame_event_status
 search_typeahead(struct session *ses, struct document_view *doc_view,
-		 int action)
+		 int action_id)
 {
 	unsigned char *prompt = "#";
 	unsigned char *data = NULL;
 	input_line_handler_T handler = text_typeahead_handler;
 	struct input_history *history = &search_history;
 
-	switch (action) {
+	switch (action_id) {
 		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT:
 			prompt = data = "/";
 			break;

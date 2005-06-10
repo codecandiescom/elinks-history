@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.69 2005/03/05 20:31:10 zas Exp $ */
+/* $Id: menu.h,v 1.70 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -90,7 +90,7 @@ struct menu_item {
 	 *   ``default'' handler defined in which case @rtext (if non NULL)
 	 *   will be drawn and @func will be called when selecting the item. */
 	unsigned char *rtext;		/* Right aligned guiding text */
-	enum main_action action;	/* Default item handlers */
+	enum main_action action_id;	/* Default item handlers */
 	menu_func_T func;		/* Called when selecting the item */
 
 	void *data;			/* Private data passed to handler */
@@ -102,11 +102,11 @@ struct menu_item {
 	int hotkey_pos;			/* The offset of the hotkey in @text */
 };
 
-#define INIT_MENU_ITEM(text, rtext, action, func, data, flags)		\
+#define INIT_MENU_ITEM(text, rtext, action_id, func, data, flags)	\
 {									\
 	(unsigned char *) (text),					\
 	(unsigned char *) (rtext),					\
-	(action),							\
+	(action_id),							\
 	(func),								\
 	(void *) (data),						\
 	(flags),							\
@@ -114,8 +114,8 @@ struct menu_item {
 	0								\
 }
 
-#define INIT_MENU_ACTION(text, action)					\
-	INIT_MENU_ITEM(text, NULL, action, NULL, NULL, 0)
+#define INIT_MENU_ACTION(text, action_id)				\
+	INIT_MENU_ITEM(text, NULL, action_id, NULL, NULL, 0)
 
 #define NULL_MENU_ITEM							\
 	INIT_MENU_ITEM(NULL, NULL, ACT_MAIN_NONE, NULL, NULL, 0)
@@ -123,12 +123,12 @@ struct menu_item {
 #define BAR_MENU_ITEM							\
 	INIT_MENU_ITEM("", NULL, ACT_MAIN_NONE, NULL, NULL, NO_SELECT)
 
-#define SET_MENU_ITEM(e_, text_, rtext_, action_, func_, data_, flags_,	\
-		      hotkey_state_, hotkey_pos_)			\
+#define SET_MENU_ITEM(e_, text_, rtext_, action_id_, func_, data_,	\
+		      flags_, hotkey_state_, hotkey_pos_)		\
 do {									\
 	(e_)->text = (unsigned char *) (text_);				\
 	(e_)->rtext = (unsigned char *) (rtext_);			\
-	(e_)->action = (action_);					\
+	(e_)->action_id = (action_id_);					\
 	(e_)->func = (func_);						\
 	(e_)->data = (void *) (data_);					\
 	(e_)->flags = (flags_);						\
@@ -164,15 +164,15 @@ struct menu_item *new_menu(enum menu_item_flags);
 
 void
 add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
-	    enum main_action action, menu_func_T func, void *data,
+	    enum main_action action_id, menu_func_T func, void *data,
 	    enum menu_item_flags flags);
 
 #define add_menu_separator(menu) \
 	add_to_menu(menu, "", NULL, ACT_MAIN_NONE, NULL, NULL, NO_SELECT)
 
 /* Implies that the action will be handled by do_action() */
-#define add_menu_action(menu, text, action) \
-	add_to_menu(menu, text, NULL, action, NULL, NULL, NO_FLAG)
+#define add_menu_action(menu, text, action_id) \
+	add_to_menu(menu, text, NULL, action_id, NULL, NULL, NO_FLAG)
 
 void do_menu(struct terminal *, struct menu_item *, void *, int);
 void do_menu_selected(struct terminal *, struct menu_item *, void *, int, int);

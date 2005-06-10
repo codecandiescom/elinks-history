@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.692 2005/05/23 12:42:50 zas Exp $ */
+/* $Id: view.c,v 1.693 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -744,15 +744,15 @@ try_form_insert_mode(struct session *ses, struct document_view *doc_view,
 		     struct link *link, struct term_event *ev)
 {
 	enum frame_event_status status = FRAME_EVENT_IGNORED;
-	enum edit_action action;
+	enum edit_action action_id;
 
 	if (!link_is_textinput(link))
 		return FRAME_EVENT_IGNORED;
 
-	action = kbd_action(KEYMAP_EDIT, ev, NULL);
+	action_id = kbd_action(KEYMAP_EDIT, ev, NULL);
 
 	if (ses->insert_mode == INSERT_MODE_OFF) {
-		if (action == ACT_EDIT_ENTER) {
+		if (action_id == ACT_EDIT_ENTER) {
 			ses->insert_mode = INSERT_MODE_ON;
 			status = FRAME_EVENT_REFRESH;
 		}
@@ -1107,20 +1107,20 @@ send_kbd_event(struct session *ses, struct document_view *doc_view,
 	       struct term_event *ev)
 {
 	int event;
-	enum main_action action;
+	enum main_action action_id;
 
 	if (doc_view && send_to_frame(ses, doc_view, ev) != FRAME_EVENT_IGNORED)
 		return NULL;
 
-	action = kbd_action(KEYMAP_MAIN, ev, &event);
+	action_id = kbd_action(KEYMAP_MAIN, ev, &event);
 
-	if (action == ACT_MAIN_QUIT) {
+	if (action_id == ACT_MAIN_QUIT) {
 		if (check_kbd_key(ev, KBD_CTRL_C))
 quit:
-			action = ACT_MAIN_REALLY_QUIT;
+			action_id = ACT_MAIN_REALLY_QUIT;
 	}
 
-	switch (do_action(ses, action, 0)) {
+	switch (do_action(ses, action_id, 0)) {
 		case FRAME_EVENT_SESSION_DESTROYED:
 			return NULL;
 		case FRAME_EVENT_IGNORED:
@@ -1130,7 +1130,7 @@ quit:
 			return ses;
 	}
 
-	if (action == ACT_MAIN_SCRIPTING_FUNCTION) {
+	if (action_id == ACT_MAIN_SCRIPTING_FUNCTION) {
 #ifdef CONFIG_SCRIPTING
 		trigger_event(event, ses);
 #endif
@@ -1173,17 +1173,17 @@ quit:
 			case 0:
 				return NULL;
 			case 1:
-				action = ACT_MAIN_SEARCH_TYPEAHEAD_LINK;
+				action_id = ACT_MAIN_SEARCH_TYPEAHEAD_LINK;
 				break;
 			case 2:
-				action = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT;
+				action_id = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT;
 				break;
 			default:
 				INTERNAL("invalid value for document.browse.search.typeahead");
 		}
 
 		/* FIXME: what if !doc_view ? --Zas */
-		search_typeahead(ses, doc_view, action);
+		search_typeahead(ses, doc_view, action_id);
 
 		/* Cross your fingers -- I'm just asking
 		 * for an infinite loop! -- Miciah */
@@ -1216,7 +1216,7 @@ send_event(struct session *ses, struct term_event *ev)
 }
 
 enum frame_event_status
-download_link(struct session *ses, struct document_view *doc_view, int action)
+download_link(struct session *ses, struct document_view *doc_view, int action_id)
 {
 	struct link *link = get_current_link(doc_view);
 	void (*download)(void *ses, unsigned char *file) = start_download;
@@ -1228,7 +1228,7 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 		ses->download_uri = NULL;
 	}
 
-	switch (action) {
+	switch (action_id) {
 		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
 			download = resume_download;
 		case ACT_MAIN_LINK_DOWNLOAD:

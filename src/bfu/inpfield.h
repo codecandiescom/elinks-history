@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.53 2005/03/23 14:16:13 zas Exp $ */
+/* $Id: inpfield.h,v 1.54 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -98,7 +98,7 @@ enum input_line_code {
 struct input_line;
 
 /* If the handler returns non zero value it means to cancel the input line */
-typedef enum input_line_code (*input_line_handler_T)(struct input_line *line, int action);
+typedef enum input_line_code (*input_line_handler_T)(struct input_line *line, int action_id);
 
 struct input_line {
 	struct session *ses;

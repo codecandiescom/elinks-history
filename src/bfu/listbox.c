@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.199 2005/05/12 23:34:27 miciah Exp $ */
+/* $Id: listbox.c,v 1.200 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -648,55 +648,55 @@ kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	 * the listbox browser anyway, so what.. */
 
 	switch (ev->ev) {
-		enum menu_action action;
+		enum menu_action action_id;
 
 		case EVENT_KBD:
-			action = kbd_action(KEYMAP_MENU, ev, NULL);
+			action_id = kbd_action(KEYMAP_MENU, ev, NULL);
 
 			/* Moving the box */
-			if (action == ACT_MENU_DOWN) {
+			if (action_id == ACT_MENU_DOWN) {
 				listbox_sel_move(dlg_item, 1);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_MENU_UP) {
+			if (action_id == ACT_MENU_UP) {
 				listbox_sel_move(dlg_item, -1);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_MENU_PAGE_DOWN) {
+			if (action_id == ACT_MENU_PAGE_DOWN) {
 				listbox_sel_move(dlg_item, dlg_item->box.height / 2);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_MENU_PAGE_UP) {
+			if (action_id == ACT_MENU_PAGE_UP) {
 				listbox_sel_move(dlg_item, -dlg_item->box.height / 2);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_MENU_HOME) {
+			if (action_id == ACT_MENU_HOME) {
 				listbox_sel_move(dlg_item, -INT_MAX);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_MENU_END) {
+			if (action_id == ACT_MENU_END) {
 				listbox_sel_move(dlg_item, INT_MAX);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_MENU_MARK_ITEM) {
+			if (action_id == ACT_MENU_MARK_ITEM) {
 				struct listbox_data *box;
 
 				box = get_listbox_widget_data(dlg_item);
@@ -709,7 +709,7 @@ kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_MENU_DELETE) {
+			if (action_id == ACT_MENU_DELETE) {
 				struct listbox_data *box;
 
 				box = get_listbox_widget_data(dlg_item);

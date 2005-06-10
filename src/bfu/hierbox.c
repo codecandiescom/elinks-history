@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.217 2005/05/27 03:39:02 miciah Exp $ */
+/* $Id: hierbox.c,v 1.218 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,7 +146,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 	struct widget *widget = widget_data->widget;
 	struct listbox_data *box;
 	struct listbox_item *selected;
-	enum menu_action action;
+	enum menu_action action_id;
 	struct term_event *ev = dlg_data->term_event;
 
 	/* Check if listbox has something to say to this */
@@ -157,15 +157,15 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 
 	box = get_dlg_listbox_data(dlg_data);
 	selected = box->sel;
-	action = kbd_action(KEYMAP_MENU, ev, NULL);
+	action_id = kbd_action(KEYMAP_MENU, ev, NULL);
 
-	if (action == ACT_MENU_SELECT) {
+	if (action_id == ACT_MENU_SELECT) {
 		if (!selected) return EVENT_PROCESSED;
 		if (selected->type != BI_FOLDER)
 			return EVENT_NOT_PROCESSED;
 		selected->expanded = !selected->expanded;
 
-	} else if (action == ACT_MENU_UNEXPAND) {
+	} else if (action_id == ACT_MENU_UNEXPAND) {
 		/* Recursively unexpand all folders */
 		if (!selected) return EVENT_PROCESSED;
 
@@ -185,7 +185,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 			recursively_set_expanded(selected, 0);
 		}
 
-	} else if (action == ACT_MENU_EXPAND) {
+	} else if (action_id == ACT_MENU_EXPAND) {
 		/* Recursively expand all folders */
 
 		if (!selected || box->sel->type != BI_FOLDER)
@@ -193,7 +193,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 
 		recursively_set_expanded(box->sel, 1);
 
-	} else if (action == ACT_MENU_SEARCH) {
+	} else if (action_id == ACT_MENU_SEARCH) {
 		if (!box->ops->match)
 			return EVENT_NOT_PROCESSED;
 

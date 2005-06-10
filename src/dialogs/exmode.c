@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.55 2005/03/05 21:02:15 zas Exp $ */
+/* $Id: exmode.c,v 1.56 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,15 +42,15 @@ static int
 exmode_action_handler(struct session *ses, unsigned char *command,
 		      unsigned char *args)
 {
-	enum main_action action = read_action(KEYMAP_MAIN, command);
+	enum main_action action_id = read_action(KEYMAP_MAIN, command);
 
-	if (action == ACT_MAIN_NONE) return 0;
-	if (action == ACT_MAIN_QUIT) action = ACT_MAIN_REALLY_QUIT;
+	if (action_id == ACT_MAIN_NONE) return 0;
+	if (action_id == ACT_MAIN_QUIT) action_id = ACT_MAIN_REALLY_QUIT;
 
 	if (!*args)
-		return do_action(ses, action, 0) != FRAME_EVENT_IGNORED;
+		return do_action(ses, action_id, 0) != FRAME_EVENT_IGNORED;
 
-	switch (action) {
+	switch (action_id) {
 		case ACT_MAIN_GOTO_URL:
 			goto_url_with_hook(ses, args);
 			return 1;
@@ -113,9 +113,9 @@ exmode_exec(struct session *ses, unsigned char buffer[INPUT_LINE_BUFFER_SIZE])
 
 
 static enum input_line_code
-exmode_input_handler(struct input_line *input_line, int action)
+exmode_input_handler(struct input_line *input_line, int action_id)
 {
-	switch (action) {
+	switch (action_id) {
 		case ACT_EDIT_ENTER:
 			exmode_exec(input_line->ses, input_line->buffer);
 			return INPUT_LINE_CANCEL;

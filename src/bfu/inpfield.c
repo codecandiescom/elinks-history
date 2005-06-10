@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.213 2005/05/30 22:30:03 zas Exp $ */
+/* $Id: inpfield.c,v 1.214 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -598,17 +598,17 @@ input_line_event_handler(struct dialog_data *dlg_data)
 {
 	struct input_line *input_line = dlg_data->dlg->udata;
 	input_line_handler_T handler = input_line->handler;
-	enum edit_action action;
+	enum edit_action action_id;
 	struct widget_data *widget_data = dlg_data->widgets_data;
 	struct term_event *ev = dlg_data->term_event;
 
 	/* Noodle time */
 	switch (ev->ev) {
 	case EVENT_KBD:
-		action = kbd_action(KEYMAP_EDIT, ev, NULL);
+		action_id = kbd_action(KEYMAP_EDIT, ev, NULL);
 
 		/* Handle some basic actions such as quiting for empty buffers */
-		switch (action) {
+		switch (action_id) {
 		case ACT_EDIT_ENTER:
 		case ACT_EDIT_NEXT_ITEM:
 		case ACT_EDIT_PREVIOUS_ITEM:
@@ -655,7 +655,7 @@ input_line_event_handler(struct dialog_data *dlg_data)
 		/* Fall thru */
 
 	case EVENT_RESIZE:
-		action = ACT_EDIT_REDRAW;
+		action_id = ACT_EDIT_REDRAW;
 		break;
 
 	default:
@@ -666,7 +666,7 @@ input_line_event_handler(struct dialog_data *dlg_data)
 
 send_action_to_handler:
 	/* Then pass it on to the specialized handler */
-	switch (handler(input_line, action)) {
+	switch (handler(input_line, action_id)) {
 	case INPUT_LINE_CANCEL:
 cancel_input_line:
 		cancel_dialog(dlg_data, widget_data);
@@ -689,7 +689,7 @@ cancel_input_line:
 
 	/* Hack: We want our caller to perform its redrawing routine,
 	 * even if we did process the event here. */
-	if (action == ACT_EDIT_REDRAW) return EVENT_NOT_PROCESSED;
+	if (action_id == ACT_EDIT_REDRAW) return EVENT_NOT_PROCESSED;
 
 	/* Completely bypass any further dialog event handling */
 	return EVENT_PROCESSED;

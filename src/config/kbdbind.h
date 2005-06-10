@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.161 2005/06/10 04:22:27 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.162 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -86,7 +86,7 @@ enum kbdbind_flags {
 struct keybinding {
 	LIST_HEAD(struct keybinding);
 	enum keymap_id keymap_id;
-	int action;
+	int action_id;
 	struct term_event_keyboard kbd;
 	int event;
 	int flags;
@@ -98,8 +98,8 @@ struct keybinding {
 void init_keymaps(void);
 void free_keymaps(void);
 
-struct keybinding *add_keybinding(enum keymap_id keymap_id, int action, struct term_event_keyboard *kbd, int event);
-int keybinding_exists(enum keymap_id keymap_id, struct term_event_keyboard *kbd, int *action);
+struct keybinding *add_keybinding(enum keymap_id keymap_id, int action_id, struct term_event_keyboard *kbd, int event);
+int keybinding_exists(enum keymap_id keymap_id, struct term_event_keyboard *kbd, int *action_id);
 void free_keybinding(struct keybinding *);
 
 long read_key(unsigned char *);
@@ -130,8 +130,8 @@ int bind_key_to_event_name(unsigned char *, unsigned char *, unsigned char *,
 			   unsigned char **);
 #endif
 
-void add_keystroke_to_string(struct string *string, int action, enum keymap_id keymap_id);
-unsigned char *get_keystroke(int action, enum keymap_id keymap_id);
+void add_keystroke_to_string(struct string *string, int action_id, enum keymap_id keymap_id);
+unsigned char *get_keystroke(int action_id, enum keymap_id keymap_id);
 
 void add_actions_to_string(struct string *string, int *actions,
 			   enum keymap_id keymap_id, struct terminal *term);

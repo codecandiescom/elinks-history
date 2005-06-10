@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.280 2005/05/17 21:50:32 zas Exp $ */
+/* $Id: form.c,v 1.281 2005/06/10 04:47:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1168,7 +1168,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 {
 	struct form_control *fc;
 	struct form_state *fs;
-	enum edit_action action;
+	enum edit_action action_id;
 	unsigned char *text;
 	int length;
 	enum frame_event_status status = FRAME_EVENT_REFRESH;
@@ -1184,12 +1184,12 @@ field_op(struct session *ses, struct document_view *doc_view,
 	    || ses->insert_mode == INSERT_MODE_OFF)
 		return FRAME_EVENT_IGNORED;
 
-	action = kbd_action(KEYMAP_EDIT, ev, NULL);
+	action_id = kbd_action(KEYMAP_EDIT, ev, NULL);
 
 	fs = find_form_state(doc_view, fc);
 	if (!fs || !fs->value) return FRAME_EVENT_OK;
 
-	switch (action) {
+	switch (action_id) {
 		case ACT_EDIT_LEFT:
 			fs->state = int_max(fs->state - 1, 0);
 			break;

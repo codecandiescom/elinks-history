@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.26 2005/05/17 15:58:27 zas Exp $ */
+/* $Id: timer.c,v 1.27 2005/06/10 21:25:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@ get_timer_duration(void)
 static void
 count_down(void *xxx)
 {
-	struct keybinding *kb;
+	struct keybinding *keybinding;
 
 	timer_duration--;
 	if (timer_duration) {
@@ -45,12 +45,13 @@ count_down(void *xxx)
 		countdown = TIMER_ID_UNDEF;
 	}
 
-	kb = kbd_nm_lookup(KEYMAP_MAIN, get_opt_str("ui.timer.action"));
-	if (kb) {
+	keybinding = kbd_nm_lookup(KEYMAP_MAIN, get_opt_str("ui.timer.action"));
+	if (keybinding) {
 		struct terminal *terminal;
 		struct term_event ev;
 
-		set_kbd_term_event(&ev, kb->kbd.key, kb->kbd.modifier);
+		set_kbd_term_event(&ev, keybinding->kbd.key,
+				   keybinding->kbd.modifier);
 
 		foreach (terminal, terminals) {
 			term_send_event(terminal, &ev);

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.324 2005/06/10 13:05:42 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.325 2005/06/10 13:23:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ struct keybinding *
 kbd_nm_lookup(enum keymap_id keymap_id, unsigned char *name)
 {
 	struct keybinding *kb;
-	int act = read_action(keymap_id, name);
+	int act = get_action_from_string(keymap_id, name);
 
 	if (act < 0) return NULL;
 
@@ -218,13 +218,14 @@ static struct keymap keymap_table[] = {
  * Config file helpers.
  */
 
-static long
+long
 get_action_from_string(enum keymap_id keymap_id, unsigned char *str)
 {
-	struct action_list *action_list = &action_table[keymap_id];
 	struct action *action;
 
-	for (action = action_list->actions; action->str; action++)
+	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
+
+	for (action = action_table[keymap_id].actions; action->str; action++)
 		if (!strcmp(action->str, str))
 			return action->num;
 
@@ -234,15 +235,15 @@ get_action_from_string(enum keymap_id keymap_id, unsigned char *str)
 struct action *
 get_action(enum keymap_id keymap_id, long action_id)
 {
-	struct action_list *action_list = &action_table[keymap_id];
+	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
 
-	if (action_id >= 0 && action_id < action_list->num_actions)
-		return &action_list->actions[action_id];
+	if (action_id >= 0 && action_id < action_table[keymap_id].num_actions)
+		return &action_table[keymap_id].actions[action_id];
 
 	return NULL;
 }
 
-static unsigned char *
+unsigned char *
 get_action_name(enum keymap_id keymap_id, long action_id)
 {
 	struct action *action = get_action(keymap_id, action_id);
@@ -476,20 +477,6 @@ static struct action_list action_table[KEYMAP_MAX] = {
 
 #undef ACTION_
 
-int
-read_action(enum keymap_id keymap_id, unsigned char *action)
-{
-	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
-	return get_action_from_string(keymap_id, action);
-}
-
-unsigned char *
-write_action(enum keymap_id keymap_id, int action_id)
-{
-	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
-	return get_action_name(keymap_id, action_id);
-}
-
 
 void
 init_keymaps(void)
@@ -532,7 +519,7 @@ bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event)
 		err = gettext("Unrecognised keymap");
 	else if (parse_keystroke(ckey, &kbd) < 0)
 		err = gettext("Error parsing keystroke");
-	else if ((action_id = read_action(keymap_id, " *scripting-function*")) < 0)
+	else if ((action_id = get_action_from_string(keymap_id, " *scripting-function*")) < 0)
 		err = gettext("Unrecognised action (internal error)");
 	else
 		add_keybinding(keymap_id, action_id, &kbd, event);
@@ -820,7 +807,7 @@ get_aliased_action(enum keymap_id keymap_id, unsigned char *action_str)
 				return alias->num;
 	}
 
-	return read_action(keymap_id, action_str);
+	return get_action_from_string(keymap_id, action_str);
 }
 
 /* Return 0 when ok, something strange otherwise. */
@@ -862,7 +849,7 @@ bind_act(unsigned char *keymap_str, unsigned char *keystroke_str)
 	kb = kbd_ev_lookup(keymap_id, &kbd, NULL);
 	if (!kb) return NULL;
 
-	action = write_action(keymap_id, kb->action_id);
+	action = get_action_name(keymap_id, kb->action_id);
 	if (!action)
 		return NULL;
 
@@ -875,7 +862,7 @@ single_bind_config_string(struct string *file, enum keymap_id keymap_id,
 			  struct keybinding *keybinding)
 {
 	unsigned char *keymap_str = write_keymap(keymap_id);
-	unsigned char *action_str = write_action(keymap_id, keybinding->action_id);
+	unsigned char *action_str = get_action_name(keymap_id, keybinding->action_id);
 
 	if (!keymap_str || !action_str || action_str[0] == ' ')
 		return;

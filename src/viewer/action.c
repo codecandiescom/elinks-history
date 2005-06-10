@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.141 2005/06/10 06:51:18 miciah Exp $ */
+/* $Id: action.c,v 1.142 2005/06/10 13:23:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -639,7 +639,7 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 unknown_action:
 			if (verbose) {
 				INTERNAL("No action handling defined for '%s'.",
-					 write_action(KEYMAP_MAIN, action_id));
+					 get_action_name(KEYMAP_MAIN, action_id));
 			}
 
 			status = FRAME_EVENT_IGNORED;

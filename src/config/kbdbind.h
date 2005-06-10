@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.167 2005/06/10 13:00:25 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.168 2005/06/10 13:23:34 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -114,6 +114,8 @@ int keybinding_exists(enum keymap_id keymap_id, struct term_event_keyboard *kbd,
 void free_keybinding(struct keybinding *);
 
 struct action *get_action(enum keymap_id keymap_id, long action_id);
+unsigned char *get_action_name(enum keymap_id keymap_id, long action_id);
+long get_action_from_string(enum keymap_id keymap_id, unsigned char *str);
 
 static inline unsigned int
 is_action_allowed_in_anonymous(enum keymap_id keymap_id, long action_id)
@@ -140,8 +142,6 @@ does_action_jump_to_link(enum keymap_id keymap_id, long action_id)
 }
 
 long read_key(unsigned char *);
-int read_action(enum keymap_id keymap_id, unsigned char *action);
-unsigned char *write_action(enum keymap_id, int);
 unsigned char *write_keymap(enum keymap_id);
 
 int parse_keystroke(unsigned char *, struct term_event_keyboard *);

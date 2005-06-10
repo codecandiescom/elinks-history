@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.237 2005/06/10 13:00:24 jonas Exp $ */
+/* $Id: dialogs.c,v 1.238 2005/06/10 13:23:34 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -697,7 +697,7 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term)
 	if (!init_string(&info))
 		return NULL;
 
-	action = write_action(keybinding->keymap_id, keybinding->action_id);
+	action = get_action_name(keybinding->keymap_id, keybinding->action_id);
 	keymap = write_keymap(keybinding->keymap_id);
 
 	add_format_to_string(&info, "%s: ", _("Keystroke", term));
@@ -833,7 +833,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 			msg_text(new_hop->term, N_("The keystroke \"%s\" "
 			"is currently used for \"%s\".\n"
 			"Are you sure you want to replace it?"),
-			keystroke, write_action(hop->keymap_id, action_id)),
+			keystroke, get_action_name(hop->keymap_id, action_id)),
 			new_hop, 2,
 			N_("~Yes"), really_really_add_keybinding, B_ENTER,
 			N_("~No"), NULL, B_ESC);
@@ -910,7 +910,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 			"Tab,Enter,Insert,F5,..."
 			"\n\n"
 			"Keystroke",
-			write_action(hop->keymap_id, hop->action_id),
+			get_action_name(hop->keymap_id, hop->action_id),
 			write_keymap(hop->keymap_id));
 
 	input_dialog(term, getml(hop, text, NULL),

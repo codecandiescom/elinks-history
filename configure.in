@@ -333,7 +333,7 @@ AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 	if test "[$]$1" != no; then
 		AC_MSG_RESULT(yes)
 		EL_SAVE_FLAGS
-		if test -d "$withval"; then
+		if test -n "$withval" && test -d "$withval"; then
 			CFLAGS="$CFLAGS -I$withval/include";
 			CPPFLAGS="$CPPFLAGS -I$withval/include";
 			LDFLAGS="$LDFLAGS -L$withval/lib";
@@ -348,7 +348,7 @@ AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 			EL_CONFIG([$1], [$2])
 			LIBS="$LIBS -l$4"
 		else
-			if test -n "$withval"; then
+			if test -n "$withval" && test "x$withval" != xno; then
 				AC_MSG_ERROR([$2 not found])
 			fi
 			EL_RESTORE_FLAGS
@@ -475,7 +475,7 @@ src/scripting/guile/README for further details and hints.
 ***********************************************************************
 EOF
 	else
-		if test -n "$withval"; then
+		if test -n "$withval" && test "x$withval" != xno; then
 			AC_MSG_ERROR([Guile not found])
 		else
 			AC_MSG_WARN([Guile support disabled])
@@ -803,7 +803,7 @@ else
 	done
 
 	if test "$cf_result" != yes; then
-		if test -n "$openssl_withval"; then
+		if test -n "$openssl_withval" && test "x$openssl_withval" != xno; then
 			AC_MSG_ERROR([OpenSSL not found])
 		fi
 		EL_RESTORE_FLAGS
@@ -870,7 +870,7 @@ else
 						  gnutls/openssl.h, gnutls-openssl,
 						  MD5_Init)
 		else
-			if test -n "$gnutls_withval"; then
+			if test -n "$gnutls_withval" && test "x$gnutls_withval" != xno; then
 				AC_MSG_ERROR([GNUTLS not found])
 			fi
 			EL_RESTORE_FLAGS

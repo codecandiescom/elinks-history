@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.235 2005/06/10 11:54:30 jonas Exp $ */
+/* $Id: dialogs.c,v 1.236 2005/06/10 12:16:13 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -574,23 +574,22 @@ struct keymap_box_item_info {
 struct keymap_box_item_info keymap_box_item_info[KEYMAP_MAX];
 
 void
-init_keybinding_listboxes(struct keymap *keymaps, struct action_list actions[])
+init_keybinding_listboxes(struct keymap keymap_table[], struct action_list actions[])
 {
 	struct listbox_item *root = &keybinding_browser.root;
 	struct action *act;
-	struct keymap *map;
+	struct keymap *keymap;
 
 	/* Do it backwards because add_listbox_item() add to front
 	 * of list. */
-	for (map = keymaps; map->str; map++) {
-		struct listbox_item *keymap;
+	for (keymap = keymap_table; keymap->str; keymap++) {
+		struct listbox_item *keymap_box;
+		struct keymap_box_item_info *box_info;
 
-		keymap = add_listbox_item(NULL, root, BI_FOLDER, map, -1);
-		if (!keymap) continue;
+		keymap_box = add_listbox_item(NULL, root, BI_FOLDER, keymap, -1);
+		if (!keymap_box) continue;
 
-		keymap_box_item_info[map->num].box_item = keymap;
-
-		for (act = actions[map->num].actions; act->str; act++) {
+		for (act = actions[keymap->num].actions; act->str; act++) {
 			struct listbox_item *item;
 
 			assert(act->num < ACTION_BOX_SIZE);
@@ -604,16 +603,18 @@ init_keybinding_listboxes(struct keymap *keymaps, struct action_list actions[])
 			assert(act->desc);
 #endif
 
-			item = add_listbox_item(NULL, keymap, BI_FOLDER, act, -1);
+			item = add_listbox_item(NULL, keymap_box, BI_FOLDER, act, -1);
 			if (!item) continue;
 
 			item->expanded = 1;
 
-			action_box_items[map->num][act->num] = item;
+			action_box_items[keymap->num][act->num] = item;
 		}
 
-		keymap_box_item_info[map->num].first = actions[map->num].actions;
-		keymap_box_item_info[map->num].last = act;
+		box_info = &keymap_box_item_info[keymap->num];
+		box_info->box_item = keymap_box;
+		box_info->first	   = actions[keymap->num].actions;
+		box_info->last	   = act;
 	}
 }
 

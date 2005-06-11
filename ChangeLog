@@ -1,3 +1,38 @@
+Sat Jun 11 19:12:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/kbd.c:
+
+	Rename set_terminal_name to get_terminal_name.  
+
+Sat Jun 11 16:15:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Set the window title to the value of $TERM if X11 wasn't compiled
+	in. Should hopefully make at least half the users happy. (debian bug
+	#312955) 
+	
+	Idea by Thomas Dickey.  
+
+Sat Jun 11 16:14:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Move TERM name setting to set_terminal_name().  
+
+Sat Jun 11 05:13:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: document/options.c, document/options.h, sched/action.c:
+
+	Move toggle_document_option from sched/action to document/options.  
+
+Fri Jun 10 23:53:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.h:
+
+	struct keybinding: use enum kbdbind_flags instead of int for the
+	flags member.  
+
 Fri Jun 10 21:44:28 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/action.c:

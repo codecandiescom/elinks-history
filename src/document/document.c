@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.94 2005/03/30 15:25:09 zas Exp $ */
+/* $Id: document.c,v 1.95 2005/06/11 23:32:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,28 +289,34 @@ shrink_format_cache(int whole)
 	if_assert_failed format_cache_entries = 0;
 }
 
-long
-formatted_info(int type)
+int
+get_format_cache_size(void)
 {
-	int i = 0;
+	return list_size(&format_cache);
+}
+
+int
+get_format_cache_used_count(void)
+{
 	struct document *document;
+	int i = 0;
 
-	switch (type) {
-		case INFO_FILES:
-			return list_size(&format_cache);
-		case INFO_LOCKED:
-			foreach (document, format_cache)
-				i += is_object_used(document);
-			return i;
-		case INFO_TIMERS:
-			foreach (document, format_cache)
-				if (document->refresh
-				    && document->refresh->timer != TIMER_ID_UNDEF)
-					i++;
-			return i;
-	}
+	foreach (document, format_cache)
+		i += is_object_used(document);
+	return i;
+}
 
-	return 0;
+int
+get_format_cache_refresh_count(void)
+{
+	struct document *document;
+	int i = 0;
+
+	foreach (document, format_cache)
+		if (document->refresh
+		    && document->refresh->timer != TIMER_ID_UNDEF)
+			i++;
+	return i;
 }
 
 static void

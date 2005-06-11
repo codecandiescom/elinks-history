@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.134 2005/06/11 23:24:04 jonas Exp $ */
+/* $Id: info.c,v 1.135 2005/06/11 23:32:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,15 +219,15 @@ get_resource_info(struct terminal *term, void *data)
 	add_to_string(&info, _("Document cache", term));
 	add_to_string(&info, ": ");
 
-	val = formatted_info(INFO_FILES);
+	val = get_format_cache_size();
 	val_add(n_("%d formatted", "%d formatted", val, term));
 	add_to_string(&info, ", ");
 
-	val = formatted_info(INFO_LOCKED);
-	val_add(n_("%d locked", "%d locked", val, term));
+	val = get_format_cache_used_count();
+	val_add(n_("%d in use", "%d in use", val, term));
 	add_to_string(&info, ", ");
 
-	val = formatted_info(INFO_TIMERS);
+	val = get_format_cache_refresh_count();
 	val_add(n_("%d refreshing", "%d refreshing", val, term));
 	add_to_string(&info, ".\n");
 

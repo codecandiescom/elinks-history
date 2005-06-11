@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.85 2005/05/18 20:35:48 zas Exp $ */
+/* $Id: document.h,v 1.86 2005/06/11 23:32:35 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -212,7 +212,9 @@ struct document *get_cached_document(struct cache_entry *cached, struct document
 /* Release a reference to the document. */
 void release_document(struct document *document);
 
-long formatted_info(int);
+int get_format_cache_size(void);
+int get_format_cache_used_count(void);
+int get_format_cache_refresh_count(void);
 
 void shrink_format_cache(int);
 

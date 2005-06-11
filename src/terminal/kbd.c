@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.145 2005/06/11 16:15:24 jonas Exp $ */
+/* $Id: kbd.c,v 1.146 2005/06/11 19:12:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ resize_terminal(void)
 }
 
 static void
-set_terminal_name(unsigned char name[MAX_TERM_LEN])
+get_terminal_name(unsigned char name[MAX_TERM_LEN])
 {
 	unsigned char *term = getenv("TERM");
 	int i;
@@ -316,7 +316,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 	handle_terminal_resize(ctl_in, resize_terminal);
 
-	set_terminal_name(info.name);
+	get_terminal_name(info.name);
 
 	ts = get_cwd();
 	if (ts) {
@@ -397,7 +397,7 @@ free_trm(struct itrm *itrm)
 		 * happy. (debian bug #312955) */
 		unsigned char title[MAX_TERM_LEN];
 
-		set_terminal_name(title);
+		get_terminal_name(title);
 		if (*title)
 			set_window_title(title);
 	}

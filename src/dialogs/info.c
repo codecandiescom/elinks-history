@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.135 2005/06/11 23:32:35 jonas Exp $ */
+/* $Id: info.c,v 1.136 2005/06/11 23:44:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,19 +181,19 @@ get_resource_info(struct terminal *term, void *data)
 	add_to_string(&info, _("Connections", term));
 	add_to_string(&info, ": ");
 
-	val = connect_info(INFO_FILES);
+	val = get_connections_count();
 	val_add(n_("%d connection", "%d connections", val, term));
 	add_to_string(&info, ", ");
 
-	val = connect_info(INFO_CONNECTING);
+	val = get_connections_connecting_count();
 	val_add(n_("%d connecting", "%d connecting", val, term));
 	add_to_string(&info, ", ");
 
-	val = connect_info(INFO_TRANSFER);
+	val = get_connections_transfering_count();
 	val_add(n_("%d transferring", "%d transferring", val, term));
 	add_to_string(&info, ", ");
 
-	val = connect_info(INFO_KEEP);
+	val = get_keepalive_connections_count();
 	val_add(n_("%d keepalive", "%d keepalive", val, term));
 	add_to_string(&info, ".\n");
 

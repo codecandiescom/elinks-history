@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.286 2005/05/01 14:28:11 jonas Exp $ */
+/* $Id: connection.c,v 1.287 2005/06/11 23:44:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,28 +83,40 @@ get_priority(struct connection *conn)
 	return priority;
 }
 
-long
-connect_info(int type)
+int
+get_connections_count(void)
 {
-	long info = 0;
+	return list_size(&connection_queue);
+}
+
+int
+get_keepalive_connections_count(void)
+{
+	return list_size(&keepalive_connections);
+}
+
+int
+get_connections_connecting_count(void)
+{
 	struct connection *conn;
+	int i = 0;
 
-	switch (type) {
-		case INFO_FILES:
-			return list_size(&connection_queue);
-		case INFO_CONNECTING:
-			foreach (conn, connection_queue)
-				info += is_in_connecting_state(conn->state);
-			break;
-		case INFO_TRANSFER:
-			foreach (conn, connection_queue)
-				info += is_in_transfering_state(conn->state);
-			break;
-		case INFO_KEEP:
-			return list_size(&keepalive_connections);
-	}
+	foreach (conn, connection_queue)
+		i += is_in_connecting_state(conn->state);
 
-	return info;
+	return i;
+}
+
+int
+get_connections_transfering_count(void)
+{
+	struct connection *conn;
+	int i = 0;
+
+	foreach (conn, connection_queue)
+		i += is_in_transfering_state(conn->state);
+
+	return i;
 }
 
 static inline int

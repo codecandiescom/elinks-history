@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.144 2005/06/11 16:14:21 jonas Exp $ */
+/* $Id: kbd.c,v 1.145 2005/06/11 16:15:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,6 +66,7 @@ struct itrm {
 
 	unsigned int blocked:1;		/* Whether it was blocked */
 	unsigned int altscreen:1;	/* Whether to use alternate screen */
+	unsigned int touched_title:1;	/* Whether the term title was changed */
 };
 
 static struct itrm *ditrm = NULL;
@@ -387,11 +388,21 @@ free_trm(struct itrm *itrm)
 {
 	if (!itrm) return;
 
-	if (itrm->orig_title) {
+	if (itrm->orig_title && *itrm->orig_title) {
 		set_window_title(itrm->orig_title);
-		mem_free(itrm->orig_title);
-		itrm->orig_title = NULL;
+
+	} else if (itrm->touched_title) {
+		/* Set the window title to the value of $TERM if X11 wasn't
+		 * compiled in. Should hopefully make at least half the users
+		 * happy. (debian bug #312955) */
+		unsigned char title[MAX_TERM_LEN];
+
+		set_terminal_name(title);
+		if (*title)
+			set_window_title(title);
 	}
+
+	mem_free_set(&itrm->orig_title, NULL);
 
 	unhandle_terminal_resize(itrm->ctl_in);
 	unhandle_mouse(itrm->mouse_h);
@@ -447,8 +458,11 @@ dispatch_special(unsigned char *text)
 {
 	switch (text[0]) {
 		case TERM_FN_TITLE:
-			if (ditrm && !ditrm->orig_title)
-				ditrm->orig_title = get_window_title();
+			if (ditrm) {
+				if (!ditrm->orig_title)
+					ditrm->orig_title = get_window_title();
+				ditrm->touched_title = 1;
+			}
 			set_window_title(text + 1);
 			break;
 		case TERM_FN_RESIZE:

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.56 2005/05/23 12:42:49 zas Exp $ */
+/* $Id: options.h,v 1.57 2005/06/11 05:13:50 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -6,6 +6,8 @@
 #include "terminal/color.h"
 #include "util/color.h"
 #include "util/box.h"
+
+struct session;
 
 /* This mostly acts as a option cache so rendering will be faster. However it
  * is also used to validate and invalidate documents in the format cache as to
@@ -120,5 +122,10 @@ int compare_opt(struct document_options *o1, struct document_options *o2);
 
 #define use_document_bg_colors(o) \
 	((o)->color_mode != COLOR_MODE_MONO && (o)->use_document_colors == 2)
+
+/* Increments the numeric value of the option identified by option_name,
+ * resetting it to the minimum value when it is already at the maximum value,
+ * and redraws the document. */
+void toggle_document_option(struct session *ses, unsigned char *option_name);
 
 #endif

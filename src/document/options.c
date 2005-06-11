@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.62 2005/06/01 09:37:34 jonas Exp $ */
+/* $Id: options.c,v 1.63 2005/06/11 05:13:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,9 +11,14 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "dialogs/document.h"
 #include "document/options.h"
+#include "document/view.h"
+#include "sched/session.h"
+#include "terminal/window.h"
 #include "util/color.h"
 #include "util/string.h"
+#include "viewer/text/draw.h"
 
 
 struct document_options *global_doc_opts;
@@ -98,4 +103,32 @@ copy_opt(struct document_options *o1, struct document_options *o2)
 {
 	copy_struct(o1, o2);
 	o1->framename = stracpy(o2->framename);
+}
+
+
+void
+toggle_document_option(struct session *ses, unsigned char *option_name)
+{
+	struct option *option;
+	long number;
+
+	assert(ses && ses->doc_view && ses->tab && ses->tab->term);
+	if_assert_failed return;
+
+	if (!ses->doc_view->vs) {
+		nowhere_box(ses->tab->term, NULL);
+		return;
+	}
+
+	option = get_opt_rec(config_options, option_name);
+	number = option->value.number + 1;
+
+	assert(option->type == OPT_BOOL || option->type == OPT_INT);
+	assert(option->max);
+
+	/* TODO: toggle per document. --Zas */
+	/* TODO: call change hooks. --jonas */
+	option->value.number = (number <= option->max) ? number : option->min;
+
+	draw_formatted(ses, 1);
 }

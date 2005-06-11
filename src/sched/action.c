@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.148 2005/06/10 21:44:28 jonas Exp $ */
+/* $Id: action.c,v 1.149 2005/06/11 05:13:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,33 +46,6 @@
 #include "viewer/text/search.h"
 #include "viewer/text/view.h"
 
-
-static void
-toggle_document_option(struct session *ses, unsigned char *option_name)
-{
-	struct option *option;
-	long number;
-
-	assert(ses && ses->doc_view && ses->tab && ses->tab->term);
-	if_assert_failed return;
-
-	if (!ses->doc_view->vs) {
-		nowhere_box(ses->tab->term, NULL);
-		return;
-	}
-
-	option = get_opt_rec(config_options, option_name);
-	number = option->value.number + 1;
-
-	assert(option->type == OPT_BOOL || option->type == OPT_INT);
-	assert(option->max);
-
-	/* TODO: toggle per document. --Zas */
-	/* TODO: call change hooks. --jonas */
-	option->value.number = (number <= option->max) ? number : option->min;
-
-	draw_formatted(ses, 1);
-}
 
 static void
 goto_url_action(struct session *ses,

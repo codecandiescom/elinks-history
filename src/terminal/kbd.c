@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.143 2005/06/06 16:55:29 witekfl Exp $ */
+/* $Id: kbd.c,v 1.144 2005/06/11 16:14:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,6 +229,20 @@ resize_terminal(void)
 	queue_event(ditrm, (char *) &ev, sizeof(ev));
 }
 
+static void
+set_terminal_name(unsigned char name[MAX_TERM_LEN])
+{
+	unsigned char *term = getenv("TERM");
+	int i;
+
+	memset(name, 0, MAX_TERM_LEN);
+
+	if (!term) return;
+
+	for (i = 0; term[i] != 0 && i < MAX_TERM_LEN - 1; i++)
+		name[i] = isident(term[i]) ? term[i] : '-';
+}
+
 
 static int
 setraw(int fd, struct termios *p)
@@ -301,13 +315,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 	handle_terminal_resize(ctl_in, resize_terminal);
 
-	ts = getenv("TERM");
-	if (ts) {
-		int i;
-
-		for (i = 0; ts[i] != 0 && i < MAX_TERM_LEN; i++)
-			info.name[i] = isident(ts[i]) ? ts[i] : '-';
-	}
+	set_terminal_name(info.name);
 
 	ts = get_cwd();
 	if (ts) {

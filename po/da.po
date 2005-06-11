@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-31 20:37+0200\n"
-"PO-Revision-Date: 2005-05-31 20:46+0200\n"
+"POT-Creation-Date: 2005-06-12 01:57+0200\n"
+"PO-Revision-Date: 2005-06-12 01:58+0200\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -74,14 +74,14 @@ msgid "Delete marked items?"
 msgstr "Slet markerede elementer?"
 
 #: src/bfu/hierbox.c:727 src/bfu/hierbox.c:763 src/bfu/hierbox.c:784
-#: src/bfu/hierbox.c:855 src/config/dialogs.c:831 src/dialogs/menu.c:126
+#: src/bfu/hierbox.c:855 src/config/dialogs.c:838 src/dialogs/menu.c:126
 #: src/formhist/formhist.c:419 src/mime/dialogs.c:70 src/sched/task.c:271
 #: src/terminal/tab.c:191 src/terminal/tab.c:227
 msgid "~Yes"
 msgstr "~Ja"
 
 #: src/bfu/hierbox.c:728 src/bfu/hierbox.c:764 src/bfu/hierbox.c:785
-#: src/bfu/hierbox.c:856 src/config/dialogs.c:832 src/dialogs/menu.c:127
+#: src/bfu/hierbox.c:856 src/config/dialogs.c:839 src/dialogs/menu.c:127
 #: src/formhist/formhist.c:420 src/mime/dialogs.c:71 src/sched/task.c:272
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
 msgid "~No"
@@ -432,14 +432,14 @@ msgid "~Edit"
 msgstr "R~edigér"
 
 #: src/bookmarks/dialogs.c:465 src/cache/dialogs.c:230
-#: src/config/dialogs.c:525 src/config/dialogs.c:946 src/cookies/dialogs.c:423
+#: src/config/dialogs.c:525 src/config/dialogs.c:953 src/cookies/dialogs.c:423
 #: src/dialogs/menu.c:446 src/formhist/dialogs.c:211
 #: src/globhist/dialogs.c:229 src/protocol/auth/dialogs.c:258
 msgid "~Delete"
 msgstr "~Slet"
 
 #: src/bookmarks/dialogs.c:466 src/config/dialogs.c:524
-#: src/config/dialogs.c:945 src/cookies/dialogs.c:421 src/dialogs/menu.c:444
+#: src/config/dialogs.c:952 src/cookies/dialogs.c:421 src/dialogs/menu.c:444
 msgid "~Add"
 msgstr "~Tilføj"
 
@@ -456,7 +456,7 @@ msgid "~Move"
 msgstr "~Flyt"
 
 #: src/bookmarks/dialogs.c:470 src/cache/dialogs.c:231
-#: src/config/dialogs.c:526 src/config/dialogs.c:948 src/dialogs/menu.c:397
+#: src/config/dialogs.c:526 src/config/dialogs.c:955 src/dialogs/menu.c:397
 #: src/globhist/dialogs.c:230
 msgid "~Search"
 msgstr "S~øg"
@@ -1789,7 +1789,7 @@ msgstr "Tilføj indstilling"
 msgid "Cannot add an option here."
 msgstr "Indstillinger kan ikke tilføjes her."
 
-#: src/config/dialogs.c:527 src/config/dialogs.c:949 src/cookies/dialogs.c:425
+#: src/config/dialogs.c:527 src/config/dialogs.c:956 src/cookies/dialogs.c:425
 #: src/dialogs/options.c:211 src/formhist/dialogs.c:214
 #: src/sched/download.c:1104
 msgid "Sa~ve"
@@ -1799,23 +1799,23 @@ msgstr "~Gem"
 msgid "Option manager"
 msgstr "Opsætningshåndtering"
 
-#: src/config/dialogs.c:698
+#: src/config/dialogs.c:703
 msgid "Keystroke"
 msgstr "Tastetildeling"
 
-#: src/config/dialogs.c:700 src/config/options.inc:1127
+#: src/config/dialogs.c:705 src/config/options.inc:1127
 msgid "Action"
 msgstr "Handling"
 
-#: src/config/dialogs.c:701
+#: src/config/dialogs.c:706
 msgid "Keymap"
 msgstr "Tasteoversigt"
 
-#: src/config/dialogs.c:825
+#: src/config/dialogs.c:832
 msgid "Keystroke already used"
 msgstr "Tastetildeling allerede i brug"
 
-#: src/config/dialogs.c:826
+#: src/config/dialogs.c:833
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
@@ -1824,51 +1824,51 @@ msgstr ""
 "Tastetildelingen \"%s\" bruges allerede af \"%s\".\n"
 "Er du sikker på at du vil erstatte den?"
 
-#: src/config/dialogs.c:849 src/config/dialogs.c:866 src/config/dialogs.c:910
+#: src/config/dialogs.c:856 src/config/dialogs.c:873 src/config/dialogs.c:917
 msgid "Add keybinding"
 msgstr "Tilføj tastetildeling"
 
-#: src/config/dialogs.c:850
+#: src/config/dialogs.c:857
 msgid "Invalid keystroke."
 msgstr "Ugyldig tastetildeling."
 
-#: src/config/dialogs.c:867
+#: src/config/dialogs.c:874
 msgid "Need to select a keymap."
 msgstr "Det er nødvendigt at vælge en tasteoversigt."
 
-#: src/config/dialogs.c:947 src/dialogs/info.c:135 src/globhist/dialogs.c:231
+#: src/config/dialogs.c:954 src/dialogs/info.c:135 src/globhist/dialogs.c:231
 msgid "~Toggle display"
 msgstr "Skift mellem ~visning"
 
-#: src/config/dialogs.c:954
+#: src/config/dialogs.c:961
 msgid "Keybinding manager"
 msgstr "Tastetildelingshåndtering"
 
-#: src/config/kbdbind.c:266
+#: src/config/kbdbind.c:204
 msgid "Main mapping"
 msgstr "Primære tastetildelinger"
 
-#: src/config/kbdbind.c:267
+#: src/config/kbdbind.c:205
 msgid "Edit mapping"
 msgstr "Tastetildelinger ved redigering"
 
-#: src/config/kbdbind.c:268
+#: src/config/kbdbind.c:206
 msgid "Menu mapping"
 msgstr "Tastetildelinger i menu"
 
-#: src/config/kbdbind.c:512
+#: src/config/kbdbind.c:507
 msgid "Unrecognised keymap"
 msgstr "Ugenkendt tasteoversigt"
 
-#: src/config/kbdbind.c:514
+#: src/config/kbdbind.c:510
 msgid "Error parsing keystroke"
 msgstr "Fortolkningsfejl i tastetryk"
 
-#: src/config/kbdbind.c:516
+#: src/config/kbdbind.c:514
 msgid "Unrecognised action (internal error)"
 msgstr "Ukendt handling (intern fejl)"
 
-#: src/config/kbdbind.c:532
+#: src/config/kbdbind.c:530
 msgid "Error registering event"
 msgstr "Fejl ved registrering af event"
 
@@ -4652,11 +4652,11 @@ msgstr[0] "%d fil"
 msgstr[1] "%d filer"
 
 #: src/dialogs/info.c:212 src/dialogs/info.c:227
-#, c-format
-msgid "%d locked"
-msgid_plural "%d locked"
-msgstr[0] "%d låst fil"
-msgstr[1] "%d låste filer"
+#,  c-format
+msgid "%d in use"
+msgid_plural "%d in use"
+msgstr[0] "%d i brug"
+msgstr[1] "%d i brug"
 
 #: src/dialogs/info.c:216
 #, c-format
@@ -5700,13 +5700,13 @@ msgstr ""
 "om variablen $HOME har en korrekt værdi og om du har skriverettigheder til "
 "dit hjemmekatalog."
 
-#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:263
+#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:256
 #, c-format
 msgid "The call to %s failed: %d (%s)"
 msgstr "Kaldet til %s fejlede: %d (%s)"
 
 #. Infinite loop prevention.
-#: src/lowlevel/select.c:266
+#: src/lowlevel/select.c:259
 #, c-format
 msgid "%d select() failures."
 msgstr "%d select() fejl."
@@ -7275,7 +7275,7 @@ msgid "Ruby Message"
 msgstr "Ruby-besked"
 
 #. name:
-#: src/scripting/scripting.c:41
+#: src/scripting/scripting.c:45
 msgid "Scripting"
 msgstr "Scriptning"
 
@@ -7363,7 +7363,7 @@ msgstr "Ugyldig hændelse %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Kunne ikke læse hændelse: %d (%s)"
 
-#: src/terminal/kbd.c:998
+#: src/terminal/kbd.c:1023
 msgid "Too many bytes read from the itrm!"
 msgstr "Læste for mange bytes fra itrm!"
 
@@ -7507,55 +7507,55 @@ msgstr "~Hent link"
 msgid "~Add link to bookmarks"
 msgstr "Tilføj ~link til bogmærker"
 
-#: src/viewer/text/link.c:1185 src/viewer/text/link.c:1220
+#: src/viewer/text/link.c:1185 src/viewer/text/link.c:1221
 msgid "~Reset form"
 msgstr "~Nulstil formular"
 
-#: src/viewer/text/link.c:1197
+#: src/viewer/text/link.c:1198
 msgid "Open in ~external editor"
 msgstr "Åbn i en ~ekstern tekstbehandler"
 
-#: src/viewer/text/link.c:1203
+#: src/viewer/text/link.c:1204
 msgid "~Submit form"
 msgstr "~Indsend formular"
 
-#: src/viewer/text/link.c:1204
+#: src/viewer/text/link.c:1205
 msgid "Submit form and rel~oad"
 msgstr "Indsend formular og ~genindlæs"
 
-#: src/viewer/text/link.c:1208
+#: src/viewer/text/link.c:1209
 msgid "Submit form and open in new ~window"
 msgstr "Indsend formular og åbn i nyt ~vindue"
 
-#: src/viewer/text/link.c:1210
+#: src/viewer/text/link.c:1211
 msgid "Submit form and open in new ~tab"
 msgstr "Indsend formular og åbn i nyt ~faneblad"
 
-#: src/viewer/text/link.c:1213
+#: src/viewer/text/link.c:1214
 msgid "Submit form and open in new tab in ~background"
 msgstr "Indsend formular og åben i nyt faneblad i ~baggrunden"
 
-#: src/viewer/text/link.c:1218
+#: src/viewer/text/link.c:1219
 msgid "Submit form and ~download"
 msgstr "Indsend formular og ~overfør fil"
 
-#: src/viewer/text/link.c:1225
+#: src/viewer/text/link.c:1226
 msgid "V~iew image"
 msgstr "V~is billede"
 
-#: src/viewer/text/link.c:1227
+#: src/viewer/text/link.c:1228
 msgid "Download ima~ge"
 msgstr "Hent bille~de"
 
-#: src/viewer/text/link.c:1235
+#: src/viewer/text/link.c:1236
 msgid "No link selected"
 msgstr "Ingen links valgt"
 
-#: src/viewer/text/link.c:1287
+#: src/viewer/text/link.c:1288
 msgid "Image"
 msgstr "Billede"
 
-#: src/viewer/text/link.c:1292
+#: src/viewer/text/link.c:1293
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -7638,13 +7638,18 @@ msgstr "Gå til link"
 msgid "Enter link number"
 msgstr "Skriv nummer på link"
 
-#: src/viewer/text/view.c:1297
+#: src/viewer/text/view.c:1298
 msgid "Save error"
 msgstr "Fejl ved skrivning"
 
-#: src/viewer/text/view.c:1298
+#: src/viewer/text/view.c:1299
 msgid "Error writing to file"
 msgstr "Fejl ved skrivning til fil"
+
+#~ msgid "%d locked"
+#~ msgid_plural "%d locked"
+#~ msgstr[0] "%d låst fil"
+#~ msgstr[1] "%d låste filer"
 
 #~ msgid "Allow dark colors on black background"
 #~ msgstr "Tillad mørke farver på sort baggrund"

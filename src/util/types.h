@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.8 2004/09/26 16:09:17 jonas Exp $ */
+/* $Id: types.h,v 1.9 2005/06/11 23:59:29 jonas Exp $ */
 
 #ifndef EL__UTIL_TYPES_H
 #define EL__UTIL_TYPES_H
@@ -70,17 +70,5 @@ typedef unsigned long long uint32_t;
 #else
 #define longlong long
 #endif
-
-/* *_info() types */
-enum info_type {
-	INFO_BYTES,
-	INFO_FILES,
-	INFO_LOCKED,
-	INFO_LOADING,
-	INFO_TIMERS,
-	INFO_TRANSFER,
-	INFO_CONNECTING,
-	INFO_KEEP,
-};
 
 #endif

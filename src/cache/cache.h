@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.101 2005/05/14 12:09:35 pasky Exp $ */
+/* $Id: cache.h,v 1.102 2005/06/11 23:57:17 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -141,6 +141,9 @@ void garbage_collection(int whole);
 
 /* Used by the resource and memory info dialogs for getting information about
  * the cache. */
-long cache_info(int type);
+int get_cache_size(void);
+int get_cache_entry_count(void);
+int get_cache_entry_used_count(void);
+int get_cache_entry_loading_count(void);
 
 #endif

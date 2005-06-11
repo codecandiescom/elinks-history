@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.218 2005/05/22 01:55:41 miciah Exp $ */
+/* $Id: cache.c,v 1.219 2005/06/11 23:57:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,28 +59,40 @@ do { \
 #define dump_frags(entry, comment)
 #endif /* DEBUG_CACHE */
 
-
-long
-cache_info(int type)
+int
+get_cache_size(void)
 {
-	int i = 0;
-	struct cache_entry *cached;
+	return cache_size;
+}
 
-	switch (type) {
-		case INFO_BYTES:
-			return cache_size;
-		case INFO_FILES:
-			return list_size(&cache_entries);
-		case INFO_LOCKED:
-			foreach (cached, cache_entries)
-				i += is_object_used(cached);
-			return i;
-		case INFO_LOADING:
-			foreach (cached, cache_entries)
-				i += is_entry_used(cached);
-			return i;
-	}
-	return 0;
+int
+get_cache_entry_count(void)
+{
+	return list_size(&cache_entries);
+}
+
+int
+get_cache_entry_used_count(void)
+{
+	struct cache_entry *cached;
+	int i = 0;
+
+	foreach (cached, cache_entries)
+		i += is_object_used(cached);
+
+	return i;
+}
+
+int
+get_cache_entry_loading_count(void)
+{
+	struct cache_entry *cached;
+	int i = 0;
+
+	foreach (cached, cache_entries)
+		i += is_entry_used(cached);
+
+	return i;
 }
 
 struct cache_entry *

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.136 2005/06/11 23:44:56 jonas Exp $ */
+/* $Id: info.c,v 1.137 2005/06/11 23:57:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,19 +200,19 @@ get_resource_info(struct terminal *term, void *data)
 	add_to_string(&info, _("Memory cache", term));
 	add_to_string(&info, ": ");
 
-	val = cache_info(INFO_BYTES);
+	val = get_cache_size();
 	val_add(n_("%d byte", "%d bytes", val, term));
 	add_to_string(&info, ", ");
 
-	val = cache_info(INFO_FILES);
+	val = get_cache_entry_count();
 	val_add(n_("%d file", "%d files", val, term));
 	add_to_string(&info, ", ");
 
-	val = cache_info(INFO_LOCKED);
-	val_add(n_("%d locked", "%d locked", val, term));
+	val = get_cache_entry_used_count();
+	val_add(n_("%d in use", "%d in use", val, term));
 	add_to_string(&info, ", ");
 
-	val = cache_info(INFO_LOADING);
+	val = get_cache_entry_loading_count();
 	val_add(n_("%d loading", "%d loading", val, term));
 	add_to_string(&info, ".\n");
 

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.132 2005/06/10 20:58:06 jonas Exp $ */
+/* $Id: info.c,v 1.133 2005/06/11 23:16:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,7 +170,7 @@ get_resource_info(struct terminal *term, void *data)
 	add_to_string(&info, _("Resources", term));
 	add_to_string(&info, ": ");
 
-	val = select_info(INFO_FILES);
+	val = get_file_handles_count();
 	val_add(n_("%d handle", "%d handles", val, term));
 	add_to_string(&info, ", ");
 

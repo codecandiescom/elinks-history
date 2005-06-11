@@ -1,4 +1,4 @@
-/* $Id: select.h,v 1.20 2005/04/12 18:31:06 jonas Exp $ */
+/* $Id: select.h,v 1.21 2005/06/11 23:16:13 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_SELECT_H
 #define EL__LOWLEVEL_SELECT_H
@@ -10,7 +10,7 @@ void select_loop(void (*init)(void));
 
 /* Get information about the number of descriptors being checked by the select
  * loop. */
-long select_info(int);
+int get_file_handles_count(void);
 
 /* Schedule work to be done when appropriate in the future. */
 int register_bottom_half_do(select_handler_T work_handler, void *data);

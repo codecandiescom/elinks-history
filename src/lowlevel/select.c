@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.86 2005/04/23 13:32:32 zas Exp $ */
+/* $Id: select.c,v 1.87 2005/06/11 23:16:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,24 +63,17 @@ static fd_set x_error;
 
 static int w_max;
 
-long
-select_info(int type)
+int
+get_file_handles_count(void)
 {
-	switch (type) {
-		case INFO_FILES:
-		{
-			int i = 0, j;
+	int i = 0, j;
 
-			for (j = 0; j < FD_SETSIZE; j++)
-				if (threads[j].read_func
-				    || threads[j].write_func
-				    || threads[j].error_func)
-					i++;
-			return i;
-		}
-	}
-
-	return 0;
+	for (j = 0; j < FD_SETSIZE; j++)
+		if (threads[j].read_func
+		    || threads[j].write_func
+		    || threads[j].error_func)
+			i++;
+	return i;
 }
 
 struct bottom_half {

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.240 2005/06/12 02:26:49 jonas Exp $ */
+/* $Id: socket.c,v 1.241 2005/06/12 12:26:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,11 +449,10 @@ complete_connect_socket(struct socket *socket, struct uri *uri,
 static void
 connected(struct socket *socket)
 {
-	struct connect_info *connect_info = socket->connect_info;
 	int err = 0;
 	int len = sizeof(err);
 
-	assertm(connect_info, "Lost connect_info!");
+	assertm(socket->connect_info, "Lost connect_info!");
 	if_assert_failed return;
 
 	if (getsockopt(socket->fd, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {

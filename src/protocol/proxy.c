@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.50 2005/03/20 10:13:45 jonas Exp $ */
+/* $Id: proxy.c,v 1.51 2005/06/12 00:59:33 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -15,11 +15,11 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "modules/event.h"
 #include "protocol/protocol.h"
 #include "protocol/proxy.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
-#include "sched/event.h"
 #include "util/memory.h"
 #include "util/string.h"
 

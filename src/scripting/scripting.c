@@ -1,5 +1,5 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.20 2005/06/05 14:32:12 witekfl Exp $ */
+/* $Id: scripting.c,v 1.21 2005/06/12 00:59:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,6 @@
 
 #include "intl/gettext/libintl.h"
 #include "modules/module.h"
-#include "sched/event.h"
 #include "scripting/scripting.h"
 
 

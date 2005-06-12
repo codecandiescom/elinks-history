@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.248 2005/06/12 00:42:29 jonas Exp $ */
+/* $Id: main.c,v 1.249 2005/06/12 00:59:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "main.h"
+#include "modules/event.h"
 #include "modules/module.h"
 #include "modules/version.h"
 #include "osdep/osdep.h"
@@ -43,7 +44,6 @@
 #include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/error.h"
-#include "sched/event.h"
 #include "sched/session.h"
 #include "terminal/kbd.h"
 #include "terminal/screen.h"

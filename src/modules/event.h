@@ -1,7 +1,7 @@
-/* $Id: event.h,v 1.14 2005/05/18 04:20:17 miciah Exp $ */
+/* $Id: event.h,v 1.15 2005/06/12 00:59:33 jonas Exp $ */
 
-#ifndef EL__SCHED_EVENT_H
-#define EL__SCHED_EVENT_H
+#ifndef EL__MODULES_EVENT_H
+#define EL__MODULES_EVENT_H
 
 #include <stdarg.h>
 

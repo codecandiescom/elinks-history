@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.241 2005/06/10 20:58:06 jonas Exp $ */
+/* $Id: dialogs.c,v 1.242 2005/06/12 00:59:33 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -20,7 +20,7 @@
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "intl/gettext/libintl.h"
-#include "sched/event.h"
+#include "modules/event.h"
 #include "sched/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"

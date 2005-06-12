@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.46 2005/05/18 04:54:23 rrowan Exp $ */
+/* $Id: rewrite.c,v 1.47 2005/06/12 00:59:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,10 +9,10 @@
 
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
+#include "modules/event.h"
 #include "modules/module.h"
 #include "protocol/rewrite/rewrite.h"
 #include "protocol/uri.h"
-#include "sched/event.h"
 #include "sched/location.h"
 #include "sched/session.h"
 #include "util/string.h"

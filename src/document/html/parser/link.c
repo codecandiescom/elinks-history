@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.78 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: link.c,v 1.79 2005/06/12 23:22:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,6 @@
 
 #include "elinks.h"
 
-#include "main.h"
 #include "bfu/listmenu.h"
 #include "bfu/menu.h"
 #include "bookmarks/bookmarks.h"

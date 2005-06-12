@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.541 2005/06/12 16:28:11 witekfl Exp $ */
+/* $Id: parser.c,v 1.542 2005/06/12 23:23:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,6 @@
 
 #include "elinks.h"
 
-#include "main.h"
 #include "bfu/listmenu.h"
 #include "bfu/menu.h"
 #include "document/css/apply.h"

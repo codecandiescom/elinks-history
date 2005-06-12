@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.175 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: renderer.c,v 1.176 2005/06/12 23:24:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,6 @@
 #include <string.h>
 
 #include "elinks.h"
-#include "main.h"
 
 #include "bookmarks/bookmarks.h"
 #include "cache/cache.h"

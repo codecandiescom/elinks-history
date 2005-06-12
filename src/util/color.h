@@ -1,9 +1,9 @@
-/* $Id: color.h,v 1.7 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: color.h,v 1.8 2005/06/12 00:23:36 jonas Exp $ */
 
 #ifndef EL__UTIL_COLOR_H
 #define EL__UTIL_COLOR_H
 
-#include "util/types.h"
+#include "osdep/types.h"
 
 typedef uint32_t color_T;
 

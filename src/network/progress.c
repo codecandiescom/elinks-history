@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.28 2005/05/27 19:56:25 jonas Exp $ */
+/* $Id: progress.c,v 1.29 2005/06/12 00:23:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,10 +7,10 @@
 
 #include "elinks.h"
 
+#include "osdep/types.h"
 #include "sched/progress.h"
 #include "util/error.h"
 #include "util/memory.h"
-#include "util/types.h"
 
 #define SPD_DISP_TIME			100	/* milliseconds */
 #define CURRENT_SPD_AFTER		100	/* milliseconds */

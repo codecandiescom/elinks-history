@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.111 2005/06/03 16:18:22 zas Exp $ */
+/* $Id: charsets.c,v 1.112 2005/06/12 00:23:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,12 +16,12 @@
 
 #include "document/options.h"
 #include "intl/charsets.h"
+#include "osdep/types.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/fastfind.h"
 #include "util/memory.h"
 #include "util/string.h"
-#include "util/types.h"
 
 
 /* Fix namespace clash on MacOS. */

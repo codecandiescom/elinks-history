@@ -1,7 +1,7 @@
-/* $Id: types.h,v 1.9 2005/06/11 23:59:29 jonas Exp $ */
+/* $Id: types.h,v 1.10 2005/06/12 00:23:36 jonas Exp $ */
 
-#ifndef EL__UTIL_TYPES_H
-#define EL__UTIL_TYPES_H
+#ifndef EL__OSDEP_TYPES_H
+#define EL__OSDEP_TYPES_H
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

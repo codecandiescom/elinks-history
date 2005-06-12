@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.32 2005/05/14 12:24:07 pasky Exp $ */
+/* $Id: generic.h,v 1.33 2005/06/12 00:23:36 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -21,7 +21,7 @@
 #ifdef MAXINT
 #define INT_MAX MAXINT
 #else
-/* XXX: We could use util/types.h to determine something useful? --pasky */
+/* XXX: We could use osdep/types.h to determine something useful? --pasky */
 #define INT_MAX 0x7fffffff
 #endif
 #endif
@@ -30,7 +30,7 @@
 #ifdef MAXLONG
 #define LONG_MAX MAXLONG
 #else
-/* XXX: We could use util/types.h to determine something useful? --pasky */
+/* XXX: We could use osdep/types.h to determine something useful? --pasky */
 #define LONG_MAX 0x7fffffff
 #endif
 #endif

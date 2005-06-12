@@ -1,10 +1,10 @@
-/* $Id: node.h,v 1.4 2005/05/01 12:47:42 jonas Exp $ */
+/* $Id: node.h,v 1.5 2005/06/12 00:23:36 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOM_NODE_H
 #define EL__DOCUMENT_DOM_NODE_H
 
+#include "osdep/types.h"
 #include "util/hash.h"
-#include "util/types.h"
 
 struct dom_node_list;
 

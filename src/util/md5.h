@@ -1,4 +1,4 @@
-/* $Id: md5.h,v 1.4 2005/04/18 14:32:04 jonas Exp $ */
+/* $Id: md5.h,v 1.5 2005/06/12 00:23:36 jonas Exp $ */
 
 #ifndef EL__UTIL_MD5_H
 #define EL__UTIL_MD5_H
@@ -13,7 +13,7 @@
 #endif
 #endif
 
-#include "util/types.h"
+#include "osdep/types.h"
 
 /* GNU TLS doesn't define this */
 #ifndef MD5_DIGEST_LENGTH

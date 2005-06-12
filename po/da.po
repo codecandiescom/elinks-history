@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-06-12 01:57+0200\n"
-"PO-Revision-Date: 2005-06-12 01:58+0200\n"
+"PO-Revision-Date: 2005-06-12 02:00+0200\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -7645,14 +7645,3 @@ msgstr "Fejl ved skrivning"
 #: src/viewer/text/view.c:1299
 msgid "Error writing to file"
 msgstr "Fejl ved skrivning til fil"
-
-#~ msgid "%d locked"
-#~ msgid_plural "%d locked"
-#~ msgstr[0] "%d låst fil"
-#~ msgstr[1] "%d låste filer"
-
-#~ msgid "Allow dark colors on black background"
-#~ msgstr "Tillad mørke farver på sort baggrund"
-
-#~ msgid "Open a Lua console (DISABLED)"
-#~ msgstr "Åbn en Lua-konsol (DEAKTIVERET)"

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.112 2005/06/12 00:23:36 jonas Exp $ */
+/* $Id: charsets.c,v 1.113 2005/06/12 16:44:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,9 +38,9 @@ struct codepage_desc {
 	struct table_entry *table;
 };
 
-#include "codepage.inc"
-#include "uni_7b.inc"
-#include "entity.inc"
+#include "intl/codepage.inc"
+#include "intl/uni_7b.inc"
+#include "intl/entity.inc"
 
 
 static char strings[256][2] = {

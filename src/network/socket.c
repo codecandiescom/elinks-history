@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.239 2005/06/12 01:47:54 jonas Exp $ */
+/* $Id: socket.c,v 1.240 2005/06/12 02:26:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,11 +40,11 @@
 #include "network/connection.h"
 #include "network/dns.h"
 #include "network/socket.h"
+#include "network/ssl/socket.h"
 #include "osdep/osdep.h"
 #include "osdep/getifaddrs.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
-#include "ssl/connect.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"

@@ -1240,6 +1240,7 @@ AC_OUTPUT([ \
  src/mime/backend/Makefile \
  src/modules/Makefile \
  src/network/Makefile \
+ src/network/ssl/Makefile \
  src/osdep/Makefile \
  src/osdep/beos/Makefile \
  src/osdep/os2/Makefile \
@@ -1263,7 +1264,6 @@ AC_OUTPUT([ \
  src/scripting/perl/Makefile \
  src/scripting/python/Makefile \
  src/scripting/ruby/Makefile \
- src/ssl/Makefile \
  src/terminal/Makefile \
  src/util/Makefile \
  src/viewer/Makefile \

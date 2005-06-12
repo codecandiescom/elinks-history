@@ -1,7 +1,7 @@
-/* $Id: ssl.h,v 1.23 2005/04/12 21:49:10 jonas Exp $ */
+/* $Id: ssl.h,v 1.24 2005/06/12 02:26:49 jonas Exp $ */
 
-#ifndef EL__SSL_SSL_H
-#define EL__SSL_SSL_H
+#ifndef EL__NETWORK_SSL_SSL_H
+#define EL__NETWORK_SSL_SSL_H
 
 #ifdef CONFIG_SSL
 

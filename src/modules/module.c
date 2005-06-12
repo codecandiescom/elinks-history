@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.40 2005/04/07 11:32:25 jonas Exp $ */
+/* $Id: module.c,v 1.41 2005/06/12 02:26:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,9 +25,9 @@
 #include "globhist/globhist.h"
 #include "lowlevel/timer.h"
 #include "mime/mime.h"
+#include "network/ssl/ssl.h"
 #include "protocol/protocol.h"
 #include "scripting/scripting.h"
-#include "ssl/ssl.h"
 #include "viewer/text/search.h"
 
 

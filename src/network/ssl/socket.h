@@ -1,7 +1,7 @@
-/* $Id: socket.h,v 1.21 2005/04/27 15:15:01 jonas Exp $ */
+/* $Id: socket.h,v 1.22 2005/06/12 02:26:49 jonas Exp $ */
 
-#ifndef EL__SSL_CONNECT_H
-#define EL__SSL_CONNECT_H
+#ifndef EL__NETWORK_SSL_SOCKET_H
+#define EL__NETWORK_SSL_SOCKET_H
 
 #ifdef CONFIG_SSL
 

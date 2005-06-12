@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.6 2005/01/13 14:14:51 jonas Exp $
+## $Id: Makefile.am,v 1.7 2005/06/12 02:26:49 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -9,8 +9,8 @@ INCLUDES += $(GNUTLS_CFLAGS) $(OPENSSL_CFLAGS)
 
 noinst_LIBRARIES = libssl.a
 libssl_a_SOURCES = \
- connect.c \
- connect.h \
+ socket.c \
+ socket.h \
  ssl.c \
  ssl.h
 

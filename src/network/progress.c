@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.29 2005/06/12 00:23:36 jonas Exp $ */
+/* $Id: progress.c,v 1.30 2005/06/12 02:46:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,8 +7,8 @@
 
 #include "elinks.h"
 
+#include "network/progress.h"
 #include "osdep/types.h"
-#include "sched/progress.h"
 #include "util/error.h"
 #include "util/memory.h"
 

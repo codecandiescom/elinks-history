@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.120 2005/06/12 02:02:44 jonas Exp $ */
+/* $Id: status.c,v 1.121 2005/06/12 02:46:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,10 +19,10 @@
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
 #include "network/connection.h"
+#include "network/progress.h"
 #include "network/state.h"
 #include "protocol/uri.h"
 #include "sched/download.h"
-#include "sched/progress.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/screen.h"

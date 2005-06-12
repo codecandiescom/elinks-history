@@ -1,7 +1,7 @@
-/* $Id: progress.h,v 1.27 2005/04/28 08:21:20 zas Exp $ */
+/* $Id: progress.h,v 1.28 2005/06/12 02:46:01 jonas Exp $ */
 
-#ifndef EL__SCHED_PROGRESS_H
-#define EL__SCHED_PROGRESS_H
+#ifndef EL__NETWORK_PROGRESS_H
+#define EL__NETWORK_PROGRESS_H
 
 #include "lowlevel/timers.h" /* timer_id_T */
 #include "util/time.h"

@@ -1,5 +1,5 @@
 /* Display of downloads progression stuff. */
-/* $Id: progress.c,v 1.11 2005/04/19 23:29:56 zas Exp $ */
+/* $Id: progress.c,v 1.12 2005/06/12 02:46:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 
 #include "bfu/dialog.h"
 #include "intl/gettext/libintl.h"
-#include "sched/progress.h"
+#include "network/progress.h"
 #include "terminal/draw.h"
 #include "util/conv.h"
 #include "util/error.h"

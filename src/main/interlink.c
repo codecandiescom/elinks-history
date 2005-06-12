@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.98 2005/06/12 20:47:10 jonas Exp $ */
+/* $Id: interlink.c,v 1.99 2005/06/12 20:50:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,14 @@
 #endif
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
+#endif
+
+#ifdef HAVE_SYS_UN_H
+#include <sys/un.h>
+#endif
+
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
 #endif
 
 #include "elinks.h"
@@ -97,10 +105,6 @@ enum addr_type {
 #ifdef USE_AF_UNIX
 
 /*** Unix file socket for internal communication. ***/
-
-#ifdef HAVE_SYS_UN_H
-#include <sys/un.h>
-#endif
 
 /* Compute socket file path and allocate space for it.
  * It returns 0 on error (in this case, there's no need
@@ -231,10 +235,6 @@ unlink_unix(struct sockaddr *addr)
 
 /*** TCP socket for internal communication. ***/
 /* FIXME: IPv6 support. */
-
-#ifdef HAVE_ARPA_INET_H
-#include <arpa/inet.h>
-#endif
 
 /* These may not be defined in netinet/in.h on some systems. */
 #ifndef INADDR_LOOPBACK

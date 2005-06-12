@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.211 2005/06/10 19:12:18 miciah Exp $ */
+/* $Id: spidermonkey.c,v 1.212 2005/06/12 00:34:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,8 +37,8 @@
 #include "ecmascript/spidermonkey.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
-#include "lowlevel/sysname.h"
 #include "osdep/newwin.h"
+#include "osdep/sysname.h"
 #include "protocol/http/http.h"
 #include "protocol/uri.h"
 #include "sched/history.h"

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.32 2005/06/12 00:30:12 jonas Exp $
+## $Id: Makefile.am,v 1.33 2005/06/12 00:34:02 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -53,6 +53,8 @@ libosdep_a_SOURCES = \
  stat.h \
  stub.c \
  stub.h \
+ sysname.c \
+ sysname.h \
  system.h \
  types.h
 

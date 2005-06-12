@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.17 2005/03/04 13:19:37 zas Exp $
+## $Id: Makefile.am,v 1.18 2005/06/12 00:34:02 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -17,8 +17,6 @@ liblowlevel_a_SOURCES = \
  select.h \
  signals.h \
  signals.c \
- sysname.c \
- sysname.h \
  timer.c \
  timer.h \
  timers.c \

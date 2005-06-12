@@ -1,7 +1,7 @@
-/* $Id: sysname.h,v 1.2 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: sysname.h,v 1.3 2005/06/12 00:34:02 jonas Exp $ */
 
-#ifndef EL__LOWLEVEL_SYSNAME_H
-#define EL__LOWLEVEL_SYSNAME_H
+#ifndef EL__OSDEP_SYSNAME_H
+#define EL__OSDEP_SYSNAME_H
 
 extern unsigned char system_name[];
 

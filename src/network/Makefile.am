@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.3 2005/06/12 01:47:54 jonas Exp $
+## $Id: Makefile.am,v 1.4 2005/06/12 01:53:49 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -10,5 +10,6 @@ libnetwork_a_SOURCES = \
  dns.c \
  dns.h \
  socket.c \
- socket.h
+ socket.h \
+ state.h
 

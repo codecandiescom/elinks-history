@@ -1,9 +1,9 @@
-/* $Id: encoding.h,v 1.17 2005/04/17 23:10:15 jonas Exp $ */
+/* $Id: encoding.h,v 1.18 2005/06/12 01:53:49 jonas Exp $ */
 
 #ifndef EL__ENCODING_ENCODING_H
 #define EL__ENCODING_ENCODING_H
 
-#include "sched/state.h"
+#include "network/state.h"
 #include "util/string.h"
 
 enum stream_encoding {

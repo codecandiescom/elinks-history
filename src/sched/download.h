@@ -1,9 +1,9 @@
-/* $Id: download.h,v 1.54 2005/04/27 22:49:46 jonas Exp $ */
+/* $Id: download.h,v 1.55 2005/06/12 01:53:49 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
 
-#include "sched/state.h"
+#include "network/state.h"
 #include "util/lists.h"
 #include "util/object.h"
 #include "util/time.h"

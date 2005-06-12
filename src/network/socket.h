@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.89 2005/06/12 01:34:50 jonas Exp $ */
+/* $Id: socket.h,v 1.90 2005/06/12 01:53:49 jonas Exp $ */
 
 #ifndef EL__NETWORK_SOCKET_H
 #define EL__NETWORK_SOCKET_H
@@ -8,7 +8,7 @@
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 #endif
 
-#include "sched/state.h"
+#include "network/state.h"
 
 struct connect_info;
 struct read_buffer;

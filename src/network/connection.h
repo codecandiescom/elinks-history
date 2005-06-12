@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.128 2005/06/12 01:47:54 jonas Exp $ */
+/* $Id: connection.h,v 1.129 2005/06/12 01:53:49 jonas Exp $ */
 
 #ifndef EL__NETWORK_CONNECTION_H
 #define EL__NETWORK_CONNECTION_H
@@ -6,7 +6,7 @@
 #include "cache/cache.h"
 #include "encoding/encoding.h"
 #include "lowlevel/timers.h" /* timer_id_T */
-#include "sched/state.h"
+#include "network/state.h"
 #include "util/lists.h"
 
 struct download;

@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.41 2005/06/12 02:26:49 jonas Exp $ */
+/* $Id: module.c,v 1.42 2005/06/12 18:33:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 
 #include "bfu/dialog.h"
 #include "bookmarks/bookmarks.h"
+#include "config/timer.h"
 #include "config/urlhist.h"
 #include "cookies/cookies.h"
 #include "dialogs/exmode.h"
@@ -38,6 +39,7 @@ struct module *main_modules[] = {
 
 /* This is also used for version string composing so keep NULL terminated */
 struct module *builtin_modules[] = {
+	&periodic_saving_module,
 	&timer_module,
 #ifdef CONFIG_CSS
 	&css_module,

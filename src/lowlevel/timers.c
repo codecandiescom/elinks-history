@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timers.c,v 1.26 2005/06/11 23:24:04 jonas Exp $ */
+/* $Id: timers.c,v 1.27 2005/06/12 00:02:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,6 @@
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/time.h"
-#include "util/types.h"	/* INFO_ type */
 
 
 struct timer {

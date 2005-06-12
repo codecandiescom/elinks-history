@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.219 2005/06/11 23:57:16 jonas Exp $ */
+/* $Id: cache.c,v 1.220 2005/06/12 00:02:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,6 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
-#include "util/types.h"
 
 /* The list of cache entries */
 static INIT_LIST_HEAD(cache_entries);

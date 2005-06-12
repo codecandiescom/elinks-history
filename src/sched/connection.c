@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.287 2005/06/11 23:44:56 jonas Exp $ */
+/* $Id: connection.c,v 1.288 2005/06/12 00:02:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,6 @@
 #include "util/object.h"
 #include "util/string.h"
 #include "util/time.h"
-#include "util/types.h"
 
 
 struct keepalive_connection {

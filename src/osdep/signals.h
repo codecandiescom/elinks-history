@@ -1,8 +1,8 @@
 /* Signals handling. */
-/* $Id: signals.h,v 1.7 2004/06/12 18:51:21 zas Exp $ */
+/* $Id: signals.h,v 1.8 2005/06/12 01:13:58 jonas Exp $ */
 
-#ifndef EL__LOWLEVEL_SIGNALS_H
-#define EL__LOWLEVEL_SIGNALS_H
+#ifndef EL__OSDEP_SIGNALS_H
+#define EL__OSDEP_SIGNALS_H
 
 struct terminal;
 

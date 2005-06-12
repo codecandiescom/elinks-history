@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.167 2005/03/01 11:08:40 zas Exp $ */
+/* $Id: osdep.c,v 1.168 2005/06/12 01:13:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,8 +72,8 @@
 #include "elinks.h"
 
 #include "lowlevel/select.h"
-#include "lowlevel/signals.h"
 #include "osdep/osdep.h"
+#include "osdep/signals.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"

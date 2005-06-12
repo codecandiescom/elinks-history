@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.42 2005/06/12 18:33:24 jonas Exp $ */
+/* $Id: module.c,v 1.43 2005/06/12 18:42:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,12 +24,12 @@
 #include "ecmascript/ecmascript.h"
 #include "formhist/formhist.h"
 #include "globhist/globhist.h"
-#include "lowlevel/timer.h"
 #include "mime/mime.h"
 #include "network/ssl/ssl.h"
 #include "protocol/protocol.h"
 #include "scripting/scripting.h"
 #include "viewer/text/search.h"
+#include "viewer/timer.h"
 
 
 struct module *main_modules[] = {

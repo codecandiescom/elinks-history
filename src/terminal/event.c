@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.86 2005/05/13 09:06:58 zas Exp $ */
+/* $Id: event.c,v 1.87 2005/06/12 18:42:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,6 @@
 #include "elinks.h"
 
 #include "intl/gettext/libintl.h"
-#include "lowlevel/timer.h"
 #include "main.h"			/* terminate */
 #include "sched/session.h"
 #include "terminal/draw.h"
@@ -32,6 +31,7 @@
 #include "util/object.h"
 #include "util/snprintf.h"
 #include "util/string.h"
+#include "viewer/timer.h"
 
 
 /* Information used for communication between ELinks instances */

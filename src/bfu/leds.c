@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.84 2005/05/31 15:33:41 jonas Exp $ */
+/* $Id: leds.c,v 1.85 2005/06/12 18:42:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,6 @@
 #include "bfu/leds.h"
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/timer.h"
 #include "lowlevel/timers.h"
 #include "modules/module.h"
 #include "sched/session.h"
@@ -29,6 +28,7 @@
 #include "terminal/window.h"
 #include "util/color.h"
 #include "util/error.h"
+#include "viewer/timer.h"
 
 
 /* Current leds allocation:

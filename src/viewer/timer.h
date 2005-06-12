@@ -1,7 +1,7 @@
-/* $Id: timer.h,v 1.6 2005/04/07 11:16:57 jonas Exp $ */
+/* $Id: timer.h,v 1.7 2005/06/12 18:42:40 jonas Exp $ */
 
-#ifndef EL__LOWLEVEL_TIMER_H
-#define EL__LOWLEVEL_TIMER_H
+#ifndef EL__VIEWER_TIMER_H
+#define EL__VIEWER_TIMER_H
 
 struct module;
 

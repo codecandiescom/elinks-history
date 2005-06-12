@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.540 2005/06/06 14:51:11 witekfl Exp $ */
+/* $Id: parser.c,v 1.541 2005/06/12 16:28:11 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1129,9 +1129,13 @@ free_and_return:
 	mem_free(rows);
 }
 
-
-
-
+void
+html_noscript(unsigned char *a)
+{
+#ifdef CONFIG_ECMASCRIPT
+	if (get_opt_bool("ecmascript.enable")) html_skip(a);
+#endif
+}
 
 void
 process_head(unsigned char *head)

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.114 2005/06/10 15:40:19 jonas Exp $ */
+/* $Id: parse.c,v 1.115 2005/06/12 16:28:11 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -406,6 +406,7 @@ void html_italic(unsigned char *);
 void html_li(unsigned char *);
 void html_linebrk(unsigned char *);
 void html_noframes(unsigned char *);
+void html_noscript(unsigned char *);
 void html_ol(unsigned char *);
 void html_p(unsigned char *);
 void html_pre(unsigned char *);
@@ -495,6 +496,7 @@ static struct element_info elements[] = {
 	{"LISTING",	html_pre,	2, 0},
 	{"MENU",	html_ul,	2, 0},
 	{"NOFRAMES",	html_noframes,	0, 0},
+	{"NOSCRIPT",	html_noscript,	0, 0},
 	{"OBJECT",	html_object,	1, 1},
 	{"OL",		html_ol,	2, 0},
 	{"OPTION",	html_option,	1, 1},

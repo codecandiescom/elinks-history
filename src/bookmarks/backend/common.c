@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.22 2005/04/19 23:06:47 jonas Exp $ */
+/* $Id: common.c,v 1.23 2005/06/12 00:42:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 #include "bfu/dialog.h"
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/backend/common.h"
-#include "lowlevel/home.h"
+#include "config/home.h"
 #include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"

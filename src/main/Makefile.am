@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.18 2005/06/12 00:34:02 jonas Exp $
+## $Id: Makefile.am,v 1.19 2005/06/12 00:42:30 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -9,8 +9,6 @@ liblowlevel_a_SOURCES = \
  connect.h \
  dns.c \
  dns.h \
- home.c \
- home.h \
  interlink.c \
  interlink.h \
  select.c \

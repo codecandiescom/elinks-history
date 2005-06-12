@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.15 2005/05/16 19:50:04 jonas Exp $
+## $Id: Makefile.am,v 1.16 2005/06/12 00:42:30 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -14,6 +14,8 @@ libconfig_a_SOURCES = \
  conf.h \
  dialogs.c \
  dialogs.h \
+ home.c \
+ home.h \
  kbdbind.c \
  kbdbind.h \
  options.c \

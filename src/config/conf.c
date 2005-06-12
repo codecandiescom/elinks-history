@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.157 2005/05/02 02:48:17 miciah Exp $ */
+/* $Id: conf.c,v 1.158 2005/06/12 00:42:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,11 +21,11 @@
 
 #include "config/conf.h"
 #include "config/dialogs.h"
+#include "config/home.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/home.h"
 #include "osdep/osdep.h"
 #include "terminal/terminal.h"
 #include "util/error.h"

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.624 2005/05/27 04:37:28 miciah Exp $ */
+/* $Id: session.c,v 1.625 2005/06/12 00:42:30 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -19,6 +19,7 @@
 #include "bfu/dialog.h"
 #include "bookmarks/bookmarks.h"
 #include "cache/cache.h"
+#include "config/home.h"
 #include "config/options.h"
 #include "dialogs/menu.h"
 #include "dialogs/status.h"
@@ -29,7 +30,6 @@
 #include "document/view.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/home.h"
 #include "lowlevel/timers.h"
 #include "osdep/newwin.h"
 #include "protocol/protocol.h"

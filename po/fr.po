@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-06-09 10:32+0200\n"
-"PO-Revision-Date: 2005-06-09 10:34+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-06-12 14:39+0200\n"
+"PO-Revision-Date: 2005-06-12 14:40+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
 #: src/bfu/hierbox.c:331
@@ -74,14 +74,14 @@ msgid "Delete marked items?"
 msgstr "Supprimer les items marqués ?"
 
 #: src/bfu/hierbox.c:727 src/bfu/hierbox.c:763 src/bfu/hierbox.c:784
-#: src/bfu/hierbox.c:855 src/config/dialogs.c:831 src/dialogs/menu.c:126
+#: src/bfu/hierbox.c:855 src/config/dialogs.c:838 src/dialogs/menu.c:126
 #: src/formhist/formhist.c:419 src/mime/dialogs.c:70 src/sched/task.c:271
 #: src/terminal/tab.c:191 src/terminal/tab.c:227
 msgid "~Yes"
 msgstr "~Oui"
 
 #: src/bfu/hierbox.c:728 src/bfu/hierbox.c:764 src/bfu/hierbox.c:785
-#: src/bfu/hierbox.c:856 src/config/dialogs.c:832 src/dialogs/menu.c:127
+#: src/bfu/hierbox.c:856 src/config/dialogs.c:839 src/dialogs/menu.c:127
 #: src/formhist/formhist.c:420 src/mime/dialogs.c:71 src/sched/task.c:272
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
 msgid "~No"
@@ -179,7 +179,7 @@ msgstr "Horloge digitale dans la barre de status."
 #: src/bfu/leds.c:76 src/bfu/leds.c:93 src/config/options.inc:1107
 #: src/config/options.inc:1114 src/ecmascript/ecmascript.c:41
 #: src/globhist/globhist.c:64 src/mime/backend/mailcap.c:94
-#: src/mime/backend/mimetypes.c:53 src/ssl/ssl.c:82
+#: src/mime/backend/mimetypes.c:53 src/network/ssl/ssl.c:82
 msgid "Enable"
 msgstr "Activation"
 
@@ -433,14 +433,14 @@ msgid "~Edit"
 msgstr "~Modifier"
 
 #: src/bookmarks/dialogs.c:465 src/cache/dialogs.c:230
-#: src/config/dialogs.c:525 src/config/dialogs.c:946 src/cookies/dialogs.c:423
+#: src/config/dialogs.c:525 src/config/dialogs.c:953 src/cookies/dialogs.c:423
 #: src/dialogs/menu.c:446 src/formhist/dialogs.c:211
 #: src/globhist/dialogs.c:229 src/protocol/auth/dialogs.c:258
 msgid "~Delete"
 msgstr "~Supprimer"
 
 #: src/bookmarks/dialogs.c:466 src/config/dialogs.c:524
-#: src/config/dialogs.c:945 src/cookies/dialogs.c:421 src/dialogs/menu.c:444
+#: src/config/dialogs.c:952 src/cookies/dialogs.c:421 src/dialogs/menu.c:444
 msgid "~Add"
 msgstr "~Ajouter"
 
@@ -457,7 +457,7 @@ msgid "~Move"
 msgstr "~Déplacer"
 
 #: src/bookmarks/dialogs.c:470 src/cache/dialogs.c:231
-#: src/config/dialogs.c:526 src/config/dialogs.c:948 src/dialogs/menu.c:397
+#: src/config/dialogs.c:526 src/config/dialogs.c:955 src/dialogs/menu.c:397
 #: src/globhist/dialogs.c:230
 msgid "~Search"
 msgstr "~Chercher"
@@ -1164,7 +1164,7 @@ msgstr "Trop de paramètres"
 msgid "error"
 msgstr "erreur"
 
-#: src/config/cmdline.c:165 src/sched/error.c:47
+#: src/config/cmdline.c:165 src/network/state.c:47
 msgid "Host not found"
 msgstr "Hôte introuvable"
 
@@ -1709,7 +1709,7 @@ msgstr "Échec du renommage du fichier"
 msgid "File saving disabled by option"
 msgstr "Sauvegarde de fichier désactivée par option"
 
-#: src/config/dialogs.c:82 src/sched/error.c:46
+#: src/config/dialogs.c:82 src/network/state.c:46
 msgid "Out of memory"
 msgstr "Mémoire saturée"
 
@@ -1801,7 +1801,7 @@ msgstr "Ajouter option"
 msgid "Cannot add an option here."
 msgstr "Impossible d'ajouter une option ici."
 
-#: src/config/dialogs.c:527 src/config/dialogs.c:949 src/cookies/dialogs.c:425
+#: src/config/dialogs.c:527 src/config/dialogs.c:956 src/cookies/dialogs.c:425
 #: src/dialogs/options.c:211 src/formhist/dialogs.c:214
 #: src/sched/download.c:1104
 msgid "Sa~ve"
@@ -1811,23 +1811,23 @@ msgstr "Enre~gistrer"
 msgid "Option manager"
 msgstr "Gestionnaire d'options"
 
-#: src/config/dialogs.c:698
+#: src/config/dialogs.c:703
 msgid "Keystroke"
 msgstr "Touches"
 
-#: src/config/dialogs.c:700 src/config/options.inc:1127
+#: src/config/dialogs.c:705 src/config/options.inc:1127
 msgid "Action"
 msgstr "Action"
 
-#: src/config/dialogs.c:701
+#: src/config/dialogs.c:706
 msgid "Keymap"
 msgstr "Table"
 
-#: src/config/dialogs.c:825
+#: src/config/dialogs.c:832
 msgid "Keystroke already used"
 msgstr "Touche déjà utilisée"
 
-#: src/config/dialogs.c:826
+#: src/config/dialogs.c:833
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
@@ -1836,51 +1836,74 @@ msgstr ""
 "La combinaison de touches \"%s\" est déjà utilisée pour l'action \"%s\".\n"
 "Etes-vous sûr de vouloir remplacer ?"
 
-#: src/config/dialogs.c:849 src/config/dialogs.c:866 src/config/dialogs.c:910
+#: src/config/dialogs.c:856 src/config/dialogs.c:873 src/config/dialogs.c:917
 msgid "Add keybinding"
 msgstr "Ajouter une association de touches"
 
-#: src/config/dialogs.c:850
+#: src/config/dialogs.c:857
 msgid "Invalid keystroke."
 msgstr "Touche invalide."
 
-#: src/config/dialogs.c:867
+#: src/config/dialogs.c:874
 msgid "Need to select a keymap."
 msgstr "Vous devez sélectionner une table."
 
-#: src/config/dialogs.c:947 src/dialogs/info.c:135 src/globhist/dialogs.c:231
+#: src/config/dialogs.c:954 src/dialogs/info.c:135 src/globhist/dialogs.c:231
 msgid "~Toggle display"
 msgstr "Co~mmuter affich."
 
-#: src/config/dialogs.c:954
+#: src/config/dialogs.c:961
 msgid "Keybinding manager"
 msgstr "Gestionnaire d'assoc. de touches"
 
-#: src/config/kbdbind.c:263
+#: src/config/home.c:122
+#, c-format
+msgid ""
+"Commandline options -config-dir set to %s, but could not create directory %s."
+msgstr ""
+"L'option de ligne de commande -config-dir vaut %s, mais le répertoire %s ne "
+"peut être créé."
+
+#: src/config/home.c:127
+#, c-format
+msgid "ELINKS_CONFDIR set to %s, but could not create directory %s."
+msgstr "ELINKS_CONFDIR vaut %s, mais le répertoire %s ne peut être créé."
+
+#: src/config/home.c:150
+msgid ""
+"Unable to find or create ELinks config directory. Please check if you have "
+"$HOME variable set correctly and if you have write permission to your home "
+"directory."
+msgstr ""
+"Impossible de trouver ou de créer le répertoire de configuration d'ELinks. "
+"Merci de vérifier si vous avez la variable $HOME correctement configurée et "
+"si vous avez le droit d'écrire dans votre répertoire personnel."
+
+#: src/config/kbdbind.c:204
 msgid "Main mapping"
 msgstr "Principal"
 
-#: src/config/kbdbind.c:264
+#: src/config/kbdbind.c:205
 msgid "Edit mapping"
 msgstr "Edition"
 
-#: src/config/kbdbind.c:265
+#: src/config/kbdbind.c:206
 msgid "Menu mapping"
 msgstr "Menu"
 
-#: src/config/kbdbind.c:509
+#: src/config/kbdbind.c:507
 msgid "Unrecognised keymap"
 msgstr "Table d'associations de touches non reconnue"
 
-#: src/config/kbdbind.c:511
+#: src/config/kbdbind.c:510
 msgid "Error parsing keystroke"
 msgstr "Erreur d'interprétation de touche"
 
-#: src/config/kbdbind.c:513
+#: src/config/kbdbind.c:514
 msgid "Unrecognised action (internal error)"
 msgstr "Action non reconnue (erreur interne)"
 
-#: src/config/kbdbind.c:529
+#: src/config/kbdbind.c:530
 msgid "Error registering event"
 msgstr "Erreur d'enregistrement d'événement"
 
@@ -2039,7 +2062,7 @@ msgstr ""
 "Nombre d'essais pour établir une connexion.\n"
 "Zéro signifie essais infinis."
 
-#: src/config/options.inc:93 src/sched/error.c:52
+#: src/config/options.inc:93 src/network/state.c:52
 msgid "Receive timeout"
 msgstr "Délai d'expiration pour la réception"
 
@@ -4647,10 +4670,10 @@ msgstr[1] "%d fichiers"
 
 #: src/dialogs/info.c:212 src/dialogs/info.c:227
 #, c-format
-msgid "%d locked"
-msgid_plural "%d locked"
-msgstr[0] "%d vérouillé"
-msgstr[1] "%d vérouillés"
+msgid "%d in use"
+msgid_plural "%d in use"
+msgstr[0] "%d utilisé"
+msgstr[1] "%d utilisés"
 
 #: src/dialogs/info.c:216
 #, c-format
@@ -5407,8 +5430,6 @@ msgstr "~Effacer"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show form history dialog"
 msgstr "Montrer le dialogue de mémorisation de formulaires"
@@ -5671,36 +5692,13 @@ msgstr "Turque"
 msgid "Ukrainian"
 msgstr "Ukrainien"
 
-#: src/lowlevel/home.c:122
-#, c-format
-msgid ""
-"Commandline options -config-dir set to %s, but could not create directory %s."
-msgstr ""
-"L'option de ligne de commande -config-dir vaut %s, mais le répertoire %s ne "
-"peut être créé."
-
-#: src/lowlevel/home.c:127
-#, c-format
-msgid "ELINKS_CONFDIR set to %s, but could not create directory %s."
-msgstr "ELINKS_CONFDIR vaut %s, mais le répertoire %s ne peut être créé."
-
-#: src/lowlevel/home.c:150
-msgid ""
-"Unable to find or create ELinks config directory. Please check if you have "
-"$HOME variable set correctly and if you have write permission to your home "
-"directory."
-msgstr ""
-"Impossible de trouver ou de créer le répertoire de configuration d'ELinks. "
-"Merci de vérifier si vous avez la variable $HOME correctement configurée et "
-"si vous avez le droit d'écrire dans votre répertoire personnel."
-
-#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:263
+#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:256
 #, c-format
 msgid "The call to %s failed: %d (%s)"
 msgstr "L'appel à %s a échoué: %d (%s)"
 
 #. Infinite loop prevention.
-#: src/lowlevel/select.c:266
+#: src/lowlevel/select.c:259
 #, c-format
 msgid "%d select() failures."
 msgstr "%d échecs de select()."
@@ -6028,6 +6026,310 @@ msgstr "Pas de Backtrace"
 msgid "No mouse"
 msgstr "Sans souris"
 
+#: src/network/ssl/ssl.c:73 src/network/ssl/ssl.c:158
+msgid "Verify certificates"
+msgstr "Vérification des certificats"
+
+#: src/network/ssl/ssl.c:75
+msgid ""
+"Verify the peer's SSL certificate. Note that this\n"
+"needs extensive configuration of OpenSSL by the user."
+msgstr ""
+"Vérifier le certificat SSL du serveur. Notez que cela nécessite\n"
+"une configuration particulière de OpenSSL par l'utilisateur."
+
+#: src/network/ssl/ssl.c:78
+msgid "Client Certificates"
+msgstr "Certificats du client"
+
+#: src/network/ssl/ssl.c:80
+msgid "X509 client certificate options."
+msgstr "Options concernant les certificats X509 du client."
+
+#: src/network/ssl/ssl.c:84
+msgid ""
+"Enable or not the sending of X509 client certificates\n"
+"to servers which request them."
+msgstr ""
+"Activer ou non l'envoi des certificats X509 du client aux\n"
+"serveurs qui le demandent."
+
+#: src/network/ssl/ssl.c:87
+msgid "Certificate File"
+msgstr "Fichier contenant le certificat"
+
+#: src/network/ssl/ssl.c:89
+msgid ""
+"The location of a file containing the client certificate\n"
+"and unencrypted private key in PEM format. If unset, the\n"
+"file pointed to by the X509_CLIENT_CERT variable is used\n"
+"instead."
+msgstr ""
+"Le chemin du fichier contenant le certificat du client et la\n"
+"clé privée non encryptée au format PEM. Si vide, le fichier\n"
+"indiqué par la variable d'environnement X509_CLIENT_CERT sera\n"
+"utilisé."
+
+#: src/network/ssl/ssl.c:160
+msgid ""
+"Verify the peer's SSL certificate. Note that this\n"
+"probably doesn't work properly at all with GnuTLS."
+msgstr ""
+"Vérifier le certificat SSL du serveur. Notez que cela ne marchera\n"
+"probablement pas correctement avec GnuTLS."
+
+#. name:
+#: src/network/ssl/ssl.c:179 src/network/ssl/ssl.c:196
+msgid "SSL"
+msgstr "SSL"
+
+#: src/network/ssl/ssl.c:181
+msgid "SSL options."
+msgstr "Options SSL."
+
+#: src/network/state.c:31
+msgid "Waiting in queue"
+msgstr "en liste d'attente"
+
+#: src/network/state.c:32
+msgid "Looking up host"
+msgstr "Recherche de l'hôte"
+
+#: src/network/state.c:33
+msgid "Making connection"
+msgstr "Établissement de la connexion"
+
+#: src/network/state.c:34
+msgid "SSL negotiation"
+msgstr "Négociation SSL"
+
+#: src/network/state.c:35
+msgid "Request sent"
+msgstr "Requête transmise"
+
+#: src/network/state.c:36
+msgid "Logging in"
+msgstr "Authentification"
+
+#: src/network/state.c:37
+msgid "Getting headers"
+msgstr "Réception des en-têtes"
+
+#: src/network/state.c:38
+msgid "Server is processing request"
+msgstr "Le serveur traîte la requête"
+
+#: src/network/state.c:39
+msgid "Transferring"
+msgstr "Transfert en cours"
+
+#: src/network/state.c:41
+msgid "Waiting for redirect confirmation"
+msgstr "Attente de confirmation de redirection"
+
+#: src/network/state.c:42
+msgid "OK"
+msgstr "OK"
+
+#: src/network/state.c:43
+msgid "Interrupted"
+msgstr "Interrompu"
+
+#: src/network/state.c:44
+msgid "Socket exception"
+msgstr "Exception socket"
+
+#: src/network/state.c:45
+msgid "Internal error"
+msgstr "Erreur interne"
+
+#: src/network/state.c:48
+msgid "Error writing to socket"
+msgstr "Erreur d'écriture sur le socket"
+
+#: src/network/state.c:49
+msgid "Error reading from socket"
+msgstr "Erreur de lecture sur le socket"
+
+#: src/network/state.c:50
+msgid "Data modified"
+msgstr "Données modifiées"
+
+#: src/network/state.c:51
+msgid "Bad URL syntax"
+msgstr "Erreur de syntaxe dans l'URL"
+
+#: src/network/state.c:53
+msgid "Request must be restarted"
+msgstr "Re-transmission de la requête"
+
+#: src/network/state.c:54
+msgid "Can't get socket state"
+msgstr "Impossible d'obtenir l'état du socket"
+
+#: src/network/state.c:55
+msgid "Only local connections are permitted"
+msgstr "Seules les connexions locales sont permises"
+
+#: src/network/state.c:56
+msgid "No host in the specified IP family was found"
+msgstr "Aucun hôte dans la famille IP spécifiée n'a été trouvé"
+
+#: src/network/state.c:58
+msgid ""
+"Error while decoding file. This might be caused\n"
+"by the encoded file being corrupt."
+msgstr ""
+"Erreur lors du décodage du fichier. Le fichier est peut-être\n"
+"corrompu."
+
+#: src/network/state.c:61
+msgid ""
+"This URL contains a protocol not yet known by ELinks.\n"
+"You can configure an external handler for it through\n"
+"the options system."
+msgstr ""
+"Cette URL utilise un protocole encore inconnu d'ELinks.\n"
+"Vous pouvez configurer la gestion de ce protocole par un\n"
+"programme externe grâce au système d'options."
+
+#: src/network/state.c:65
+msgid ""
+"This URL contains a protocol that is not natively known\n"
+"by ELinks which means that ELinks relies on external\n"
+"programs for handling it. Downloading URLs using external\n"
+"programs is not supported."
+msgstr ""
+"Cette URL contient un protocole non connu nativement par ELinks\n"
+"ce qui signifie qu'ELinks compte sur des programmes externes pour\n"
+"la manipuler. Télécharger des URLs en utilisant des programmes\n"
+"externes n'est pas supporté."
+
+#: src/network/state.c:70
+msgid "Bad HTTP response"
+msgstr "Réponse HTTP incorrecte"
+
+#: src/network/state.c:71
+msgid "HTTP 100 (???)"
+msgstr "HTTP 100 (???)"
+
+#: src/network/state.c:72
+msgid "No content"
+msgstr "Aucun contenu"
+
+#: src/network/state.c:74
+msgid "Unknown file type"
+msgstr "Type de fichier inconnu"
+
+#: src/network/state.c:75
+msgid "Error opening file"
+msgstr "Erreur lors de l'ouverture du fichier"
+
+#: src/network/state.c:76
+msgid "CGI script not in CGI path"
+msgstr "Script CGI absent du chemin des CGIs"
+
+#: src/network/state.c:79
+msgid "Bad FTP response"
+msgstr "Réponse FTP incorrecte"
+
+#: src/network/state.c:80
+msgid "FTP service unavailable"
+msgstr "Service FTP indisponible"
+
+#: src/network/state.c:81
+msgid "Bad FTP login"
+msgstr "Échec de l'authentification FTP"
+
+#: src/network/state.c:82
+msgid "FTP PORT command failed"
+msgstr "Échec de la commande FTP PORT"
+
+#: src/network/state.c:83
+msgid "File not found"
+msgstr "Fichier introuvable"
+
+#: src/network/state.c:84
+msgid "FTP file error"
+msgstr "Erreur de fichier FTP"
+
+#: src/network/state.c:88
+msgid "SSL error"
+msgstr "Erreur SSL"
+
+#: src/network/state.c:90
+msgid "This version of ELinks does not contain SSL/TLS support"
+msgstr "Cette version de ELinks ne supporte ni SSL ni TLS"
+
+#: src/network/state.c:93
+msgid "JavaScript support is not enabled."
+msgstr "Le support du Javascript n'est pas activé."
+
+#: src/network/state.c:96
+msgid "Bad NNTP response"
+msgstr "Réponse NNTP incorrecte"
+
+#: src/network/state.c:97
+msgid ""
+"Unable to handle news: URI because no news server has been\n"
+"been configured. Either set the option protocol.nntp.server\n"
+"or set the NNTPSERVER environment variable."
+msgstr ""
+"Impossible de gérer l'URI news: car aucun serveur de news\n"
+"n'a été configuré. Configurez l'option protocol.nntp.server\n"
+"ou la variable d'environnement NNTPSERVER."
+
+#: src/network/state.c:100
+msgid "Server hang up for some reason"
+msgstr "Le serveur est bloqué pour une raison inconnue"
+
+#: src/network/state.c:101
+msgid "No such newsgroup"
+msgstr "Groupe de nouvelles introuvable"
+
+#: src/network/state.c:102
+msgid "No such article"
+msgstr "Article introuvable"
+
+#: src/network/state.c:103
+msgid "Transfer failed"
+msgstr "Echec de transfert"
+
+#: src/network/state.c:104
+msgid "Authorization required"
+msgstr "Authentication requise"
+
+#: src/network/state.c:105
+msgid "Access to server denied"
+msgstr "Accès au serveur refusé"
+
+#: src/network/state.c:109
+msgid "The CSO phone-book protocol is not supported."
+msgstr "Le protocole de carnet d'adresse CSO n'est pas supporté."
+
+#: src/network/state.c:112
+msgid ""
+"Configuration of the proxy server failed.\n"
+"This might be caused by an incorrect proxy\n"
+"setting specified by an environment variable\n"
+"or returned by a scripting proxy hook.\n"
+"\n"
+"The correct syntax for proxy settings are\n"
+"a host name optionally followed by a colon\n"
+"and a port number. Example: 'localhost:8080'."
+msgstr ""
+"La configuration du serveur de proxy a échoué.\n"
+"Cela peut être causé par un réglage de proxy incorrect\n"
+"soit par une variable d'environnement soit par un script.\n"
+"\n"
+"La syntaxe correcte pour la sélection de proxy est\n"
+"le nom d'hôte éventuellement suivi de deux points et\n"
+"du numéro de port. Par exemple: 'localhost:8080'."
+
+#: src/network/state.c:142
+msgid "Unknown error"
+msgstr "Erreur inconnue"
+
 #: src/osdep/newwin.c:27
 msgid "~Xterm"
 msgstr "~Xterm"
@@ -6065,7 +6367,7 @@ msgstr "Authentification HTTP"
 msgid "Login"
 msgstr "Login"
 
-#: src/protocol/auth/dialogs.c:109 src/protocol/http/http.c:140
+#: src/protocol/auth/dialogs.c:109 src/protocol/http/http.c:138
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -6221,8 +6523,8 @@ msgstr "FTP"
 msgid "FTP specific options."
 msgstr "Options du protocole FTP."
 
-#: src/protocol/ftp/ftp.c:60 src/protocol/http/http.c:127
-#: src/protocol/http/http.c:209
+#: src/protocol/ftp/ftp.c:60 src/protocol/http/http.c:125
+#: src/protocol/http/http.c:207
 msgid "Proxy configuration"
 msgstr "Configuration proxy"
 
@@ -6230,8 +6532,8 @@ msgstr "Configuration proxy"
 msgid "FTP proxy configuration."
 msgstr "Configuration proxy FTP."
 
-#: src/protocol/ftp/ftp.c:64 src/protocol/http/http.c:131
-#: src/protocol/http/http.c:213
+#: src/protocol/ftp/ftp.c:64 src/protocol/http/http.c:129
+#: src/protocol/http/http.c:211
 msgid "Host and port-number"
 msgstr "Hôte et numéro de port"
 
@@ -6300,27 +6602,27 @@ msgstr ""
 "  sous-jascent dans le logiciel du serveur web.\n"
 
 #. name:
-#: src/protocol/http/http.c:95 src/protocol/http/http.c:223
+#: src/protocol/http/http.c:93 src/protocol/http/http.c:221
 msgid "HTTP"
 msgstr "HTTP"
 
-#: src/protocol/http/http.c:97
+#: src/protocol/http/http.c:95
 msgid "HTTP-specific options."
 msgstr "Options du protocole HTTP."
 
-#: src/protocol/http/http.c:100
+#: src/protocol/http/http.c:98
 msgid "Server bug workarounds"
 msgstr "Contournement des bogues des serveurs"
 
-#: src/protocol/http/http.c:102
+#: src/protocol/http/http.c:100
 msgid "Server-side HTTP bugs workarounds."
 msgstr "Contourner les bogues de certains serveurs HTTP."
 
-#: src/protocol/http/http.c:104
+#: src/protocol/http/http.c:102
 msgid "Do not send Accept-Charset"
 msgstr "Ne pas envoyer Accept-Charset"
 
-#: src/protocol/http/http.c:106
+#: src/protocol/http/http.c:104
 msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
@@ -6328,19 +6630,19 @@ msgstr ""
 "L'en-tête Accept-Charset est plutôt long et l'envoyer peut\n"
 "déclencher des bogues dans quelques rares serveurs."
 
-#: src/protocol/http/http.c:109
+#: src/protocol/http/http.c:107
 msgid "Allow blacklisting"
 msgstr "Autoriser la mise en liste noire"
 
-#: src/protocol/http/http.c:111
+#: src/protocol/http/http.c:109
 msgid "Allow blacklisting of buggy servers."
 msgstr "Autoriser la mise en liste noire des serveurs bogués."
 
-#: src/protocol/http/http.c:113
+#: src/protocol/http/http.c:111
 msgid "Broken 302 redirects"
 msgstr "Redirections 302 cassées"
 
-#: src/protocol/http/http.c:115
+#: src/protocol/http/http.c:113
 msgid ""
 "Broken 302 redirect (violates RFC but compatible with Netscape).\n"
 "This is a problem for a lot of web discussion boards and the like.\n"
@@ -6349,27 +6651,27 @@ msgstr ""
 "Redirections 302 cassées (ne respecte pas les RFCs mais compatible avec\n"
 "Netscape). Ceci est un problème pour beaucoup de forums web."
 
-#: src/protocol/http/http.c:119
+#: src/protocol/http/http.c:117
 msgid "No keepalive after POST requests"
 msgstr "Pas de maintien de connexion après les requêtes POST"
 
-#: src/protocol/http/http.c:121
+#: src/protocol/http/http.c:119
 msgid "Disable keepalive connection after POST request."
 msgstr "Désactive le maintien de connexion après une requête POST."
 
-#: src/protocol/http/http.c:123
+#: src/protocol/http/http.c:121
 msgid "Use HTTP/1.0"
 msgstr "Utiliser HTTP/1.0"
 
-#: src/protocol/http/http.c:125
+#: src/protocol/http/http.c:123
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
 msgstr "Utiliser le protocole HTTP/1.0 au lieu de HTTP/1.1."
 
-#: src/protocol/http/http.c:129
+#: src/protocol/http/http.c:127
 msgid "HTTP proxy configuration."
 msgstr "Configuration proxy HTTP."
 
-#: src/protocol/http/http.c:133
+#: src/protocol/http/http.c:131
 msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
@@ -6377,23 +6679,23 @@ msgstr ""
 "Hôte et numéro de port (hôte:port) du proxy HTTP, ou rien.\n"
 "Si rien, la variable d'environnement HTTP_PROXY sera utilisée."
 
-#: src/protocol/http/http.c:136
+#: src/protocol/http/http.c:134
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: src/protocol/http/http.c:138
+#: src/protocol/http/http.c:136
 msgid "Proxy authentication username."
 msgstr "Nom d'utilisateur pour l'authentification proxy."
 
-#: src/protocol/http/http.c:142
+#: src/protocol/http/http.c:140
 msgid "Proxy authentication password."
 msgstr "Mot de passe pour l'authentification proxy."
 
-#: src/protocol/http/http.c:145
+#: src/protocol/http/http.c:143
 msgid "Referer sending"
 msgstr "Envoi de référent"
 
-#: src/protocol/http/http.c:147
+#: src/protocol/http/http.c:145
 msgid ""
 "HTTP referer sending options. HTTP referer is a special header\n"
 "sent in the HTTP requests, which is supposed to contain the previous\n"
@@ -6408,11 +6710,11 @@ msgstr ""
 "connaitre quel lien vous avez suivi pour accéder à cette page. Toutefois,\n"
 "ce comportement ne donne pas toutes les garanties de sécurité et d'intimité."
 
-#: src/protocol/http/http.c:154
+#: src/protocol/http/http.c:152
 msgid "Policy"
 msgstr "Politique"
 
-#: src/protocol/http/http.c:157
+#: src/protocol/http/http.c:155
 msgid ""
 "Mode of sending HTTP referer:\n"
 "0 is send no referer\n"
@@ -6426,27 +6728,27 @@ msgstr ""
 "2 envoyer un référent fixe\n"
 "3 envoyer l'URL précédente comme référent (correct, mais risqué)"
 
-#: src/protocol/http/http.c:163
+#: src/protocol/http/http.c:161
 msgid "Fake referer URL"
 msgstr "Référent fixe"
 
-#: src/protocol/http/http.c:165
+#: src/protocol/http/http.c:163
 msgid "Fake referer to be sent when policy is 2."
 msgstr "Référent fixe à envoyer lorsque la politique 2 est choisie."
 
-#: src/protocol/http/http.c:168
+#: src/protocol/http/http.c:166
 msgid "Send Accept-Language header"
 msgstr "Envoyer l'en-tête Accept-Language"
 
-#: src/protocol/http/http.c:170
+#: src/protocol/http/http.c:168
 msgid "Send Accept-Language header."
 msgstr "Envoyer l'en-tête Accept-Language."
 
-#: src/protocol/http/http.c:172
+#: src/protocol/http/http.c:170
 msgid "Use UI language as Accept-Language"
 msgstr "Langage de l'interface comme Accept-Language"
 
-#: src/protocol/http/http.c:174
+#: src/protocol/http/http.c:172
 msgid ""
 "Request localised versions of documents from web-servers (using the\n"
 "Accept-Language header) using the language you have configured for\n"
@@ -6462,11 +6764,11 @@ msgstr ""
 "Notez que certains voient ici un risque potentiel car les webmasters\n"
 "auront connaissance de votre langue préférée ..."
 
-#: src/protocol/http/http.c:181
+#: src/protocol/http/http.c:179
 msgid "Activate HTTP TRACE debugging"
 msgstr "Activer l'option de déboguage HTTP TRACE"
 
-#: src/protocol/http/http.c:183
+#: src/protocol/http/http.c:181
 msgid ""
 "If active, all HTTP requests are sent with TRACE as their method\n"
 "rather than GET or POST. This is useful for debugging of both ELinks\n"
@@ -6481,11 +6783,11 @@ msgstr ""
 "n'est pas toujours présente au niveau serveur."
 
 #. OSNews.com is supposed to be relying on the textmode token, at least.
-#: src/protocol/http/http.c:190
+#: src/protocol/http/http.c:188
 msgid "User-agent identification"
 msgstr "Identification du client"
 
-#: src/protocol/http/http.c:192
+#: src/protocol/http/http.c:190
 msgid ""
 "Change the User Agent ID. That means identification string, which\n"
 "is sent to HTTP server when a document is requested. The 'textmode'\n"
@@ -6512,19 +6814,19 @@ msgstr ""
 "%b dans la chaîne insère le nombre de barres affichées par ELinks\n"
 "Utilisez \" \" si vous ne voulez aucun en-tête User-Agent."
 
-#: src/protocol/http/http.c:205
+#: src/protocol/http/http.c:203
 msgid "HTTPS"
 msgstr "HTTPS"
 
-#: src/protocol/http/http.c:207
+#: src/protocol/http/http.c:205
 msgid "HTTPS-specific options."
 msgstr "Options spécifiques à HTTPS."
 
-#: src/protocol/http/http.c:211
+#: src/protocol/http/http.c:209
 msgid "HTTPS proxy configuration."
 msgstr "Configuration proxy HTTPS."
 
-#: src/protocol/http/http.c:215
+#: src/protocol/http/http.c:213
 msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."
@@ -6902,249 +7204,6 @@ msgstr "A~fficher"
 msgid "Show ~header"
 msgstr "~Montrer les en-têtes"
 
-#: src/sched/error.c:31
-msgid "Waiting in queue"
-msgstr "en liste d'attente"
-
-#: src/sched/error.c:32
-msgid "Looking up host"
-msgstr "Recherche de l'hôte"
-
-#: src/sched/error.c:33
-msgid "Making connection"
-msgstr "Établissement de la connexion"
-
-#: src/sched/error.c:34
-msgid "SSL negotiation"
-msgstr "Négociation SSL"
-
-#: src/sched/error.c:35
-msgid "Request sent"
-msgstr "Requête transmise"
-
-#: src/sched/error.c:36
-msgid "Logging in"
-msgstr "Authentification"
-
-#: src/sched/error.c:37
-msgid "Getting headers"
-msgstr "Réception des en-têtes"
-
-#: src/sched/error.c:38
-msgid "Server is processing request"
-msgstr "Le serveur traîte la requête"
-
-#: src/sched/error.c:39
-msgid "Transferring"
-msgstr "Transfert en cours"
-
-#: src/sched/error.c:41
-msgid "Waiting for redirect confirmation"
-msgstr "Attente de confirmation de redirection"
-
-#: src/sched/error.c:42
-msgid "OK"
-msgstr "OK"
-
-#: src/sched/error.c:43
-msgid "Interrupted"
-msgstr "Interrompu"
-
-#: src/sched/error.c:44
-msgid "Socket exception"
-msgstr "Exception socket"
-
-#: src/sched/error.c:45
-msgid "Internal error"
-msgstr "Erreur interne"
-
-#: src/sched/error.c:48
-msgid "Error writing to socket"
-msgstr "Erreur d'écriture sur le socket"
-
-#: src/sched/error.c:49
-msgid "Error reading from socket"
-msgstr "Erreur de lecture sur le socket"
-
-#: src/sched/error.c:50
-msgid "Data modified"
-msgstr "Données modifiées"
-
-#: src/sched/error.c:51
-msgid "Bad URL syntax"
-msgstr "Erreur de syntaxe dans l'URL"
-
-#: src/sched/error.c:53
-msgid "Request must be restarted"
-msgstr "Re-transmission de la requête"
-
-#: src/sched/error.c:54
-msgid "Can't get socket state"
-msgstr "Impossible d'obtenir l'état du socket"
-
-#: src/sched/error.c:55
-msgid "Only local connections are permitted"
-msgstr "Seules les connexions locales sont permises"
-
-#: src/sched/error.c:56
-msgid "No host in the specified IP family was found"
-msgstr "Aucun hôte dans la famille IP spécifiée n'a été trouvé"
-
-#: src/sched/error.c:58
-msgid ""
-"Error while decoding file. This might be caused\n"
-"by the encoded file being corrupt."
-msgstr ""
-"Erreur lors du décodage du fichier. Le fichier est peut-être\n"
-"corrompu."
-
-#: src/sched/error.c:61
-msgid ""
-"This URL contains a protocol not yet known by ELinks.\n"
-"You can configure an external handler for it through\n"
-"the options system."
-msgstr ""
-"Cette URL utilise un protocole encore inconnu d'ELinks.\n"
-"Vous pouvez configurer la gestion de ce protocole par un\n"
-"programme externe grâce au système d'options."
-
-#: src/sched/error.c:65
-msgid ""
-"This URL contains a protocol that is not natively known\n"
-"by ELinks which means that ELinks relies on external\n"
-"programs for handling it. Downloading URLs using external\n"
-"programs is not supported."
-msgstr ""
-"Cette URL contient un protocole non connu nativement par ELinks\n"
-"ce qui signifie qu'ELinks compte sur des programmes externes pour\n"
-"la manipuler. Télécharger des URLs en utilisant des programmes\n"
-"externes n'est pas supporté."
-
-#: src/sched/error.c:70
-msgid "Bad HTTP response"
-msgstr "Réponse HTTP incorrecte"
-
-#: src/sched/error.c:71
-msgid "HTTP 100 (???)"
-msgstr "HTTP 100 (???)"
-
-#: src/sched/error.c:72
-msgid "No content"
-msgstr "Aucun contenu"
-
-#: src/sched/error.c:74
-msgid "Unknown file type"
-msgstr "Type de fichier inconnu"
-
-#: src/sched/error.c:75
-msgid "Error opening file"
-msgstr "Erreur lors de l'ouverture du fichier"
-
-#: src/sched/error.c:76
-msgid "CGI script not in CGI path"
-msgstr "Script CGI absent du chemin des CGIs"
-
-#: src/sched/error.c:79
-msgid "Bad FTP response"
-msgstr "Réponse FTP incorrecte"
-
-#: src/sched/error.c:80
-msgid "FTP service unavailable"
-msgstr "Service FTP indisponible"
-
-#: src/sched/error.c:81
-msgid "Bad FTP login"
-msgstr "Échec de l'authentification FTP"
-
-#: src/sched/error.c:82
-msgid "FTP PORT command failed"
-msgstr "Échec de la commande FTP PORT"
-
-#: src/sched/error.c:83
-msgid "File not found"
-msgstr "Fichier introuvable"
-
-#: src/sched/error.c:84
-msgid "FTP file error"
-msgstr "Erreur de fichier FTP"
-
-#: src/sched/error.c:88
-msgid "SSL error"
-msgstr "Erreur SSL"
-
-#: src/sched/error.c:90
-msgid "This version of ELinks does not contain SSL/TLS support"
-msgstr "Cette version de ELinks ne supporte ni SSL ni TLS"
-
-#: src/sched/error.c:93
-msgid "JavaScript support is not enabled."
-msgstr "Le support du Javascript n'est pas activé."
-
-#: src/sched/error.c:96
-msgid "Bad NNTP response"
-msgstr "Réponse NNTP incorrecte"
-
-#: src/sched/error.c:97
-msgid ""
-"Unable to handle news: URI because no news server has been\n"
-"been configured. Either set the option protocol.nntp.server\n"
-"or set the NNTPSERVER environment variable."
-msgstr ""
-"Impossible de gérer l'URI news: car aucun serveur de news\n"
-"n'a été configuré. Configurez l'option protocol.nntp.server\n"
-"ou la variable d'environnement NNTPSERVER."
-
-#: src/sched/error.c:100
-msgid "Server hang up for some reason"
-msgstr "Le serveur est bloqué pour une raison inconnue"
-
-#: src/sched/error.c:101
-msgid "No such newsgroup"
-msgstr "Groupe de nouvelles introuvable"
-
-#: src/sched/error.c:102
-msgid "No such article"
-msgstr "Article introuvable"
-
-#: src/sched/error.c:103
-msgid "Transfer failed"
-msgstr "Echec de transfert"
-
-#: src/sched/error.c:104
-msgid "Authorization required"
-msgstr "Authentication requise"
-
-#: src/sched/error.c:105
-msgid "Access to server denied"
-msgstr "Accès au serveur refusé"
-
-#: src/sched/error.c:109
-msgid "The CSO phone-book protocol is not supported."
-msgstr "Le protocole de carnet d'adresse CSO n'est pas supporté."
-
-#: src/sched/error.c:112
-msgid ""
-"Configuration of the proxy server failed.\n"
-"This might be caused by an incorrect proxy\n"
-"setting specified by an environment variable\n"
-"or returned by a scripting proxy hook.\n"
-"\n"
-"The correct syntax for proxy settings are\n"
-"a host name optionally followed by a colon\n"
-"and a port number. Example: 'localhost:8080'."
-msgstr ""
-"La configuration du serveur de proxy a échoué.\n"
-"Cela peut être causé par un réglage de proxy incorrect\n"
-"soit par une variable d'environnement soit par un script.\n"
-"\n"
-"La syntaxe correcte pour la sélection de proxy est\n"
-"le nom d'hôte éventuellement suivi de deux points et\n"
-"du numéro de port. Par exemple: 'localhost:8080'."
-
-#: src/sched/error.c:142
-msgid "Unknown error"
-msgstr "Erreur inconnue"
-
 #: src/sched/session.c:243
 #, c-format
 msgid "Unable to retrieve %s"
@@ -7280,70 +7339,9 @@ msgid "Ruby Message"
 msgstr "Message Ruby"
 
 #. name:
-#: src/scripting/scripting.c:45
+#: src/scripting/scripting.c:44
 msgid "Scripting"
 msgstr "Scripting"
-
-#: src/ssl/ssl.c:73 src/ssl/ssl.c:158
-msgid "Verify certificates"
-msgstr "Vérification des certificats"
-
-#: src/ssl/ssl.c:75
-msgid ""
-"Verify the peer's SSL certificate. Note that this\n"
-"needs extensive configuration of OpenSSL by the user."
-msgstr ""
-"Vérifier le certificat SSL du serveur. Notez que cela nécessite\n"
-"une configuration particulière de OpenSSL par l'utilisateur."
-
-#: src/ssl/ssl.c:78
-msgid "Client Certificates"
-msgstr "Certificats du client"
-
-#: src/ssl/ssl.c:80
-msgid "X509 client certificate options."
-msgstr "Options concernant les certificats X509 du client."
-
-#: src/ssl/ssl.c:84
-msgid ""
-"Enable or not the sending of X509 client certificates\n"
-"to servers which request them."
-msgstr ""
-"Activer ou non l'envoi des certificats X509 du client aux\n"
-"serveurs qui le demandent."
-
-#: src/ssl/ssl.c:87
-msgid "Certificate File"
-msgstr "Fichier contenant le certificat"
-
-#: src/ssl/ssl.c:89
-msgid ""
-"The location of a file containing the client certificate\n"
-"and unencrypted private key in PEM format. If unset, the\n"
-"file pointed to by the X509_CLIENT_CERT variable is used\n"
-"instead."
-msgstr ""
-"Le chemin du fichier contenant le certificat du client et la\n"
-"clé privée non encryptée au format PEM. Si vide, le fichier\n"
-"indiqué par la variable d'environnement X509_CLIENT_CERT sera\n"
-"utilisé."
-
-#: src/ssl/ssl.c:160
-msgid ""
-"Verify the peer's SSL certificate. Note that this\n"
-"probably doesn't work properly at all with GnuTLS."
-msgstr ""
-"Vérifier le certificat SSL du serveur. Notez que cela ne marchera\n"
-"probablement pas correctement avec GnuTLS."
-
-#. name:
-#: src/ssl/ssl.c:179 src/ssl/ssl.c:196
-msgid "SSL"
-msgstr "SSL"
-
-#: src/ssl/ssl.c:181
-msgid "SSL options."
-msgstr "Options SSL."
 
 #: src/terminal/event.c:72
 #, c-format
@@ -7368,7 +7366,7 @@ msgstr "Mauvais évènement %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évènement: %d (%s)"
 
-#: src/terminal/kbd.c:1001
+#: src/terminal/kbd.c:1023
 msgid "Too many bytes read from the itrm!"
 msgstr "Trop d'octets lus en provenance de itrm!"
 
@@ -7512,55 +7510,55 @@ msgstr "~Enregistrer le lien"
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/link.c:1185 src/viewer/text/link.c:1220
+#: src/viewer/text/link.c:1185 src/viewer/text/link.c:1221
 msgid "~Reset form"
 msgstr "Remettre à ~zéro le formulaire"
 
-#: src/viewer/text/link.c:1197
+#: src/viewer/text/link.c:1198
 msgid "Open in ~external editor"
 msgstr "Ouvrir dans un ~éditeur externe"
 
-#: src/viewer/text/link.c:1203
+#: src/viewer/text/link.c:1204
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/link.c:1204
+#: src/viewer/text/link.c:1205
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/link.c:1208
+#: src/viewer/text/link.c:1209
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1210
+#: src/viewer/text/link.c:1211
 msgid "Submit form and open in new ~tab"
 msgstr "Envoyer le formulaire et ouvrir un ~onglet"
 
-#: src/viewer/text/link.c:1213
+#: src/viewer/text/link.c:1214
 msgid "Submit form and open in new tab in ~background"
 msgstr "Envoyer le formulaire et ouvrir un onglet en ~arrière-plan"
 
-#: src/viewer/text/link.c:1218
+#: src/viewer/text/link.c:1219
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/link.c:1225
+#: src/viewer/text/link.c:1226
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/link.c:1227
+#: src/viewer/text/link.c:1228
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/link.c:1235
+#: src/viewer/text/link.c:1236
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/link.c:1287
+#: src/viewer/text/link.c:1288
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/link.c:1292
+#: src/viewer/text/link.c:1293
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -7643,10 +7641,15 @@ msgstr "Aller au lien"
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1297
+#: src/viewer/text/view.c:1298
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1298
+#: src/viewer/text/view.c:1299
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid "%d locked"
+#~ msgid_plural "%d locked"
+#~ msgstr[0] "%d vérouillé"
+#~ msgstr[1] "%d vérouillés"

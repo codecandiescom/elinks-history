@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.103 2005/06/12 22:22:45 jonas Exp $ */
+/* $Id: interlink.c,v 1.104 2005/06/12 22:33:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,8 +53,26 @@
 #include "util/string.h"
 
 /* Testing purpose. Do not remove. */
+/* At some point zas added experimental support for interlinking
+ * ELinks' over a TCP socket. However, it was removed due to some
+ * unsettled security related questions. More info in:
+ *
+ *	src/config/options.c (1.233 -> 1.234)
+ *	src/network/interlink.c (1.54 -> 1.55)
+ *
+ * The log message:
+ *
+ * 	Experimental remote mode is now (almost) functionnal. To test define
+ * 	ELINKS_REMOTE in setup.h, compile elinks, add a second ip to your
+ * 	machine or use a second machine, then launch elinks -listen
+ * 	<your_first_ip> on one side, and elinks -remote <your_first_ip> on the
+ * 	second side. There is many things to improve, and it may not function as
+ * 	you hope it does, but feel free to provide enhancements. Note this
+ * 	feature may disappear soon if none is interested in. Please report
+ * 	issues/comments/ideas/bugs on #elinks.
+ */
 #if 0
-#undef USE_AF_UNIX
+#undef CONFIG_TCP_INTERLINK
 #endif
 
 /* Common to both AF_UNIX and AF_INET stuff. */
@@ -81,7 +99,7 @@ enum addr_type {
 };
 
 
-#ifdef USE_AF_UNIX
+#ifndef CONFIG_TCP_INTERLINK
 
 /*** Unix file socket for internal communication. ***/
 
@@ -210,7 +228,7 @@ unlink_unix(struct sockaddr *addr)
 #define setsock_reuse_addr(fd)
 
 
-#else /* USE_AF_UNIX */
+#else /* CONFIG_TCP_INTERLINK */
 
 /*** TCP socket for internal communication. ***/
 /* FIXME: IPv6 support. */
@@ -286,7 +304,7 @@ setsock_reuse_addr(int fd)
 
 #define unlink_unix(s)
 
-#endif /* USE_AF_UNIX */
+#endif /* CONFIG_TCP_INTERLINK */
 
 /* Max. number of bind attempts. */
 #define MAX_BIND_TRIES			3

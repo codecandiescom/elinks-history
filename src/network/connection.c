@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.291 2005/06/12 01:47:54 jonas Exp $ */
+/* $Id: connection.c,v 1.292 2005/06/12 02:39:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "network/connection.h"
 #include "network/dns.h"
 #include "network/socket.h"
+#include "network/ssl/ssl.h"
 #include "protocol/protocol.h"
 #include "protocol/proxy.h"
 #include "protocol/uri.h"
@@ -376,6 +377,11 @@ free_connection_data(struct connection *conn)
 	active_connections--;
 	assertm(active_connections >= 0, "active connections underflow");
 	if_assert_failed active_connections = 0;
+
+#ifdef CONFIG_SSL
+	if (conn->socket->ssl && conn->cached)
+		mem_free_set(&conn->cached->ssl_info, get_ssl_connection_cipher(conn->socket));
+#endif
 
 	done_socket(conn->socket);
 	done_socket(conn->data_socket);

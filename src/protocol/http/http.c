@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.444 2005/06/12 02:26:49 jonas Exp $ */
+/* $Id: http.c,v 1.445 2005/06/12 02:39:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,8 +29,6 @@
 #include "modules/module.h"
 #include "network/connection.h"
 #include "network/socket.h"
-#include "network/ssl/socket.h"
-#include "network/ssl/ssl.h"
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "osdep/sysname.h"
@@ -1577,13 +1575,6 @@ again:
 			mem_free(d);
 		}
 	}
-
-#ifdef CONFIG_SSL
-	/* TODO: Move this to some more generic place like lowlevel/connect.c
-	 * or sched/connection.c when other protocols will need it. --jonas */
-	if (conn->socket->ssl)
-		mem_free_set(&conn->cached->ssl_info, get_ssl_connection_cipher(conn->socket));
-#endif
 
 	/* XXX: Is there some reason why NOT to follow the Location header
 	 * for any status? If the server didn't mean it, it wouldn't send

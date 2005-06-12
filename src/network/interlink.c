@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.97 2005/06/12 00:42:30 jonas Exp $ */
+/* $Id: interlink.c,v 1.98 2005/06/12 20:47:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,9 @@ enum addr_type {
 
 /*** Unix file socket for internal communication. ***/
 
+#ifdef HAVE_SYS_UN_H
 #include <sys/un.h>
+#endif
 
 /* Compute socket file path and allocate space for it.
  * It returns 0 on error (in this case, there's no need

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.14 2005/06/12 01:53:49 jonas Exp $
+## $Id: Makefile.am,v 1.15 2005/06/12 02:02:44 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -9,8 +9,6 @@ libsched_a_SOURCES = \
  action.h \
  download.c \
  download.h \
- error.c \
- error.h \
  history.c \
  history.h \
  location.c \

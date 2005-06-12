@@ -1,7 +1,9 @@
-/* $Id: state.h,v 1.2 2005/04/21 02:31:12 jonas Exp $ */
+/* $Id: state.h,v 1.3 2005/06/12 02:02:44 jonas Exp $ */
 
-#ifndef EL__SCHED_STATE_H
-#define EL__SCHED_STATE_H
+#ifndef EL__NETWORK_STATE_H
+#define EL__NETWORK_STATE_H
+
+struct terminal;
 
 enum connection_priority {
 	PRI_MAIN	= 0,
@@ -98,5 +100,8 @@ enum connection_state {
 
 	S_PROXY_ERROR		= -100700,
 };
+
+unsigned char *get_err_msg(enum connection_state state, struct terminal *term);
+void free_strerror_buf(void);
 
 #endif

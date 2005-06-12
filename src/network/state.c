@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.42 2005/06/12 01:47:54 jonas Exp $ */
+/* $Id: state.c,v 1.43 2005/06/12 02:02:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,7 @@
 
 #include "intl/gettext/libintl.h"
 #include "network/connection.h"
-#include "sched/error.h"
+#include "network/state.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/lists.h"

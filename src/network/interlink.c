@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.100 2005/06/12 20:58:58 jonas Exp $ */
+/* $Id: interlink.c,v 1.101 2005/06/12 21:08:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,13 +63,13 @@
 /*** No internal communication. ***/
 
 int
-af_unix_open(void)
+init_interlink(void)
 {
 	return -1;
 }
 
 void
-af_unix_close(void)
+done_interlink(void)
 {
 }
 
@@ -420,7 +420,7 @@ again:
 	return s_info_listen.fd;
 
 free_and_error:
-	af_unix_close();
+	done_interlink();
 	umask(saved_mask);
 
 	return -1;
@@ -472,7 +472,7 @@ static void safe_close(int *fd) {
 /* Free all allocated memory and close all descriptors if
  * needed. */
 void
-af_unix_close(void)
+done_interlink(void)
 {
 	/* We test for addr != NULL since
 	 * if it was not allocated then fd is not
@@ -504,7 +504,7 @@ af_unix_close(void)
  * return -1
  */
 int
-af_unix_open(void)
+init_interlink(void)
 {
 	int fd = connect_to_af_unix();
 

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.253 2005/06/12 02:02:43 jonas Exp $ */
+/* $Id: main.c,v 1.254 2005/06/12 21:08:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,7 +165,7 @@ init(void)
 	if (get_cmd_opt_bool("no-connect")
 	    || get_cmd_opt_bool("dump")
 	    || get_cmd_opt_bool("source")
-	    || (fd = af_unix_open()) == -1) {
+	    || (fd = init_interlink()) == -1) {
 
 		load_config();
 		update_options_visibility();
@@ -256,7 +256,7 @@ init(void)
 static void
 terminate_all_subsystems(void)
 {
-	af_unix_close();
+	done_interlink();
 	check_bottom_halves();
 	abort_all_downloads();
 	check_bottom_halves();

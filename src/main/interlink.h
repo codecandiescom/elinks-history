@@ -1,9 +1,9 @@
-/* $Id: interlink.h,v 1.5 2003/07/07 15:04:12 pasky Exp $ */
+/* $Id: interlink.h,v 1.6 2005/06/12 21:08:32 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_INTERLINK_H
 #define EL__LOWLEVEL_INTERLINK_H
 
-void af_unix_close(void);
-int af_unix_open(void);
+int init_interlink(void);
+void done_interlink(void);
 
 #endif

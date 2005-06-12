@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.7 2004/08/14 23:53:30 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.8 2005/06/12 22:22:45 jonas Exp $ */
 
 #ifndef EL__OSDEP_UNIX_SYSINFO_H
 #define EL__OSDEP_UNIX_SYSINFO_H
@@ -19,12 +19,6 @@ static inline int dir_sep(char x) { return x == '/'; }
 
 #include <pwd.h>
 #include <grp.h>
-
-#ifdef HAVE_SYS_UN_H
-#define USE_AF_UNIX
-#else
-#define DONT_USE_AF_UNIX
-#endif
 
 #endif
 

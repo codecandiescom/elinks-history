@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.102 2005/06/12 22:16:04 jonas Exp $ */
+/* $Id: interlink.c,v 1.103 2005/06/12 22:22:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,27 +54,8 @@
 
 /* Testing purpose. Do not remove. */
 #if 0
-#undef DONT_USE_AF_UNIX
 #undef USE_AF_UNIX
 #endif
-
-#ifdef DONT_USE_AF_UNIX
-
-/*** No internal communication. ***/
-
-int
-init_interlink(void)
-{
-	return -1;
-}
-
-void
-done_interlink(void)
-{
-}
-
-
-#else /* DONT_USE_AF_UNIX */
 
 /* Common to both AF_UNIX and AF_INET stuff. */
 struct socket_info {
@@ -520,5 +501,3 @@ init_interlink(void)
 #undef LISTEN_BACKLOG
 #undef MAX_CONNECT_TRIES
 #undef CONNECT_TRIES_DELAY
-
-#endif /* DONT_USE_AF_UNIX */

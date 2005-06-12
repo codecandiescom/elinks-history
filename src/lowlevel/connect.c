@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.236 2005/05/01 14:34:04 jonas Exp $ */
+/* $Id: connect.c,v 1.237 2005/06/12 01:27:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,8 +37,8 @@
 
 #include "config/options.h"
 #include "lowlevel/connect.h"
-#include "lowlevel/dns.h"
 #include "lowlevel/select.h"
+#include "network/dns.h"
 #include "osdep/osdep.h"
 #include "osdep/getifaddrs.h"
 #include "protocol/protocol.h"

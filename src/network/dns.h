@@ -1,7 +1,7 @@
-/* $Id: dns.h,v 1.15 2005/04/15 02:39:34 jonas Exp $ */
+/* $Id: dns.h,v 1.16 2005/06/12 01:27:56 jonas Exp $ */
 
-#ifndef EL__LOWLEVEL_DNS_H
-#define EL__LOWLEVEL_DNS_H
+#ifndef EL__NETWORK_DNS_H
+#define EL__NETWORK_DNS_H
 
 #include <sys/types.h>
 #ifdef HAVE_SYS_SOCKET_H

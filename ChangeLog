@@ -1,3 +1,321 @@
+Sun Jun 12 21:08:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, lowlevel/interlink.c, lowlevel/interlink.h,
+	network/interlink.c, network/interlink.h:
+
+	Rename af_unix_{open,close} -> {init,done}_interlink to better hint
+	at what is going on.  
+
+Sun Jun 12 20:58:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/interlink.c, network/interlink.c:
+
+	Drop unneeded include files.  
+
+Sun Jun 12 20:50:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/interlink.c, network/interlink.c:
+
+	Move up inclusion of system headers.  
+
+Sun Jun 12 20:47:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/interlink.c, network/interlink.c:
+
+	Guard <sys/un.h> in HAVE_SYS_UN_H.  
+
+Sun Jun 12 18:42:40 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: Makefile.am, bfu/leds.c, lowlevel/Makefile.am,
+	lowlevel/timer.c, lowlevel/timer.h, modules/module.c,
+	terminal/event.c, viewer/Makefile.am, viewer/timer.c,
+	viewer/timer.h:
+
+	mv lowlevel/timer.* viewer/timer.* 
+
+Sun Jun 12 18:31:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/Makefile.am, config/timer.c, config/timer.h,
+	lowlevel/timer.c, viewer/timer.c, modules/module.c:
+
+	Move periodic saving to its own module. Pasky threatened to come
+	knocking on doors if ... ;) 
+
+Sun Jun 12 16:44:03 2005  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Specify more complete paths for includes: prepend intl/.  
+
+Sun Jun 12 16:37:24 2005  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/: python/core.c, guile/core.c:
+
+	lowlevel/home.h -> config/home.h.  
+
+Sun Jun 12 16:28:11 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/: parser.c, parser/parse.c:
+
+	NOSCRIPT tag handling.  
+
+Sun Jun 12 12:42:36 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jun 12 12:26:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/network/socket.c:
+
+	Fix warning about unused variable connect_info when debuging is not
+	enabled. Reported by Neuromancer.  
+
+Sun Jun 12 09:23:26 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Make the edges in the graph directed, representing the 'using'
+	relation.  
+
+Sun Jun 12 09:17:20 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Update the diagram according to the recent network/ introduction.  
+
+Sun Jun 12 03:27:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/: guile/hooks.c, python/hooks.c:
+
+	mv sched/event.* modules/event.* 
+
+Sun Jun 12 02:46:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, dialogs/progress.c, dialogs/status.c,
+	network/Makefile.am, network/connection.c, network/progress.c,
+	network/progress.h, protocol/ftp/ftp.c, protocol/http/http.c,
+	sched/Makefile.am, sched/download.c, sched/progress.c,
+	sched/progress.h:
+
+	mv sched/progress.h network/progress.h 
+
+Sun Jun 12 02:39:12 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: network/connection.c, protocol/http/http.c:
+
+	Move storing of SSL cipher information from HTTP to the more generic
+	connection end handler aka. free_connection_data().  
+
+Sun Jun 12 02:26:49 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/Makefile.am, src/modules/module.c,
+	src/network/Makefile.am, src/network/socket.c,
+	src/network/ssl/Makefile.am, src/network/ssl/socket.c,
+	src/network/ssl/socket.h, src/network/ssl/ssl.c,
+	src/network/ssl/ssl.h, src/protocol/http/http.c:
+
+	mv ssl/ network/ssl/; mv network/ssl/connect.* network/ssl/socket.* 
+
+Sun Jun 12 02:04:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/network/ssl/: .cvsignore, .vimrc:
+
+	Add conf files.  
+
+Sun Jun 12 02:02:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, dialogs/status.c, network/Makefile.am,
+	network/state.c, network/state.h, sched/Makefile.am,
+	sched/download.c, sched/error.c, sched/error.h, sched/session.c,
+	viewer/dump/dump.c:
+
+	mv sched/error.c network/state.c; merge sched/error.h
+	network/state.h 
+
+Sun Jun 12 01:53:49 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: encoding/encoding.c, encoding/encoding.h,
+	network/Makefile.am, network/connection.h, network/socket.h,
+	sched/Makefile.am, sched/download.h, sched/session.h,
+	sched/state.h:
+
+	mv sched/state.h network/state.h 
+
+Sun Jun 12 01:47:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, cache/cache.c, config/options.c, dialogs/info.c,
+	dialogs/menu.c, dialogs/status.c, document/css/css.c,
+	network/Makefile.am, network/connection.c, network/connection.h,
+	network/socket.c, network/state.c, network/ssl/socket.c,
+	network/ssl/ssl.c, protocol/about.c, protocol/data.c,
+	protocol/protocol.c, protocol/proxy.c, protocol/file/cgi.c,
+	protocol/file/file.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/codes.c,
+	protocol/http/http.c, protocol/nntp/connection.c,
+	protocol/nntp/response.c, protocol/smb/smb.c, sched/Makefile.am,
+	sched/action.c, sched/connection.c, sched/connection.h,
+	sched/download.c, sched/error.c, sched/history.c, sched/session.c,
+	sched/task.c, viewer/dump/dump.c:
+
+	mv sched/connection.* network/connection.* 
+
+Sun Jun 12 01:34:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/Makefile.am, lowlevel/connect.c,
+	lowlevel/connect.h, lowlevel/dns.c, lowlevel/dns.h,
+	network/Makefile.am, network/connection.c, network/socket.c,
+	network/socket.h, network/ssl/socket.c, network/ssl/ssl.c,
+	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c, protocol/nntp/response.c,
+	protocol/smb/smb.c, sched/connection.c:
+
+	mv lowlevel/connect.* network/socket.* 
+
+Sun Jun 12 01:27:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/Makefile.am, src/main.c, src/config/cmdline.c,
+	src/lowlevel/Makefile.am, src/lowlevel/connect.c,
+	src/network/Makefile.am, src/network/connection.c,
+	src/network/dns.c, src/network/dns.h, src/network/socket.c,
+	src/sched/connection.c:
+
+	mv lowlevel/dns.* network/dns.* 
+
+Sun Jun 12 01:26:38 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Remove old translations.  
+
+Sun Jun 12 01:18:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/network/: .cvsignore, .vimrc:
+
+	Add conf files.  
+
+Sun Jun 12 01:13:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, lowlevel/Makefile.am, lowlevel/select.c,
+	lowlevel/signals.c, lowlevel/signals.h, osdep/Makefile.am,
+	osdep/osdep.c, osdep/signals.c, osdep/signals.h,
+	scripting/lua/core.c, terminal/terminal.c:
+
+	mv lowlevel/signals.* osdep/signals.* 
+
+Sun Jun 12 00:59:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, config/dialogs.c, config/kbdbind.c,
+	config/kbdbind.h, config/urlhist.c, dialogs/menu.c,
+	lowlevel/timer.c, modules/Makefile.am, modules/event.c,
+	modules/event.h, modules/module.h, protocol/proxy.c,
+	protocol/rewrite/rewrite.c, sched/Makefile.am, sched/action.c,
+	sched/event.c, sched/event.h, sched/session.c, sched/task.c,
+	scripting/scripting.c, scripting/lua/core.c, scripting/lua/hooks.c,
+	scripting/perl/hooks.c, scripting/ruby/hooks.c, viewer/timer.c,
+	viewer/text/search.c, viewer/text/view.c:
+
+	mv sched/event.* modules/event.* 
+
+Sun Jun 12 00:47:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: home.c, home.h, sysname.c, sysname.h:
+
+	Hmm. Remove moved files.  
+
+Sun Jun 12 00:42:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, bfu/inphist.c, bookmarks/bookmarks.c,
+	bookmarks/backend/common.c, config/Makefile.am, config/conf.c,
+	config/home.c, config/home.h, cookies/cookies.c,
+	document/css/css.c, formhist/formhist.c, globhist/globhist.c,
+	lowlevel/Makefile.am, lowlevel/interlink.c, network/interlink.c,
+	sched/session.c, scripting/lua/core.c, scripting/perl/core.c,
+	scripting/ruby/core.c:
+
+	mv lowlevel/home.* config/home.* 
+
+Sun Jun 12 00:34:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, ecmascript/spidermonkey.c, lowlevel/Makefile.am,
+	osdep/Makefile.am, osdep/sysname.c, osdep/sysname.h,
+	protocol/file/cgi.c, protocol/http/http.c:
+
+	mv lowlevel/sysname.* osdep/sysname.* 
+
+Sun Jun 12 00:30:12 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/Makefile.am, util/Makefile.am:
+
+	mv util/types.h osdep/types.h 
+
+Sun Jun 12 00:23:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/dom/node.h, intl/charsets.c, intl/charsets.h,
+	network/progress.c, osdep/generic.h, osdep/types.h,
+	sched/progress.c, util/color.h, util/md5.h, util/time.c,
+	util/types.h:
+
+	mv util/types.h osdep/types.h 
+
+Sun Jun 12 00:02:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, lowlevel/timers.c, network/connection.c,
+	sched/connection.c:
+
+	Remove unneeded inclusion of util/types.h.  
+
+Sat Jun 11 23:59:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/types.h, util/types.h:
+
+	Remove now obsolete info_type enum.  
+
+Sat Jun 11 23:58:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Sat Jun 11 23:57:16 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, dialogs/info.c:
+
+	Blast cache_info() into get_cache_size() and
+	get_cache_entry_{count,used_count,loading}_count(). Use '%d in use'
+	instead of '%d locked' in the resource dialog. Idea by Miciah.  
+
+Sat Jun 11 23:44:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/info.c, network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h:
+
+	Blast connect_info() into
+	get_connections{_connecting,_transfering,}_count() and
+	get_keepalive_connections_count(). Idea by Miciah.  
+
+Sat Jun 11 23:32:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/info.c, document/document.c, document/document.h:
+
+	Blast formatted_info() into
+	get_format_cache_{size,used_count,refresh_count}. Use '%d in use'
+	instead of '%d locked' in the resource dialog. Idea by Miciah.  
+
+Sat Jun 11 23:24:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/info.c, lowlevel/timers.c, lowlevel/timers.h:
+
+	Blast timers_info() into get_timers_count(). Idea by Miciah.  
+
+Sat Jun 11 23:16:12 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/info.c, lowlevel/select.c, lowlevel/select.h:
+
+	Blast select_info() into get_file_handles_count().  
+
 Sat Jun 11 19:12:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/terminal/kbd.c:
@@ -54,7 +372,7 @@ Fri Jun 10 21:37:04 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Jun 10 21:25:35 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: config/kbdbind.c, lowlevel/timer.c:
+	* src/: config/kbdbind.c, lowlevel/timer.c, viewer/timer.c:
 
 	Use the name keybinding for struct keybinding.  
 
@@ -962,7 +1280,7 @@ Sat May 28 09:37:48 2005  Russ Rowan <rrowan@dandy.net>:
 
 Fri May 27 19:56:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/progress.c:
+	* src/: network/progress.c, sched/progress.c:
 
 	update_progress(): Move progress size and pos member initialization
 	closer to the code actually using them.  
@@ -1566,8 +1884,9 @@ Wed May 18 04:21:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 Wed May 18 04:20:17 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/: bookmarks/bookmarks.c, config/urlhist.c,
-	globhist/globhist.c, protocol/rewrite/rewrite.c, sched/event.c,
-	sched/event.h, scripting/guile/hooks.c, scripting/lua/hooks.c,
+	globhist/globhist.c, modules/event.c, modules/event.h,
+	protocol/rewrite/rewrite.c, sched/event.c, sched/event.h,
+	scripting/guile/hooks.c, scripting/lua/hooks.c,
 	scripting/perl/hooks.c, scripting/ruby/hooks.c,
 	viewer/text/search.c:
 
@@ -1792,7 +2111,7 @@ Tue May 17 16:09:52 2005  Laurent Monin <zas@norz.org>:
 Tue May 17 15:58:27 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: config/dialogs.c, config/kbdbind.c, config/kbdbind.h,
-	lowlevel/timer.c:
+	lowlevel/timer.c, viewer/timer.c:
 
 	Use struct term_event_keyboard in struct default_kb and struct
 	keybinding.  
@@ -1882,14 +2201,14 @@ Tue May 17 13:15:22 2005  Laurent Monin <zas@norz.org>:
 Tue May 17 12:56:58 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: lowlevel/timer.c, terminal/event.h, terminal/kbd.c,
-	terminal/terminal.c, terminal/window.c:
+	terminal/terminal.c, terminal/window.c, viewer/timer.c:
 
 	Drop INIT_TERM_EVENT() static initializer for dynamic initialization
 	functions. It is saner to handle struct term_event union.  
 
 Tue May 17 11:36:37 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: lowlevel/timer.c, terminal/kbd.c:
+	* src/: lowlevel/timer.c, terminal/kbd.c, viewer/timer.c:
 
 	Use KBD_UNDEF and KBD_MOD_NONE.  
 
@@ -2264,7 +2583,7 @@ Fri May 13 09:29:04 2005  Laurent Monin <zas@norz.org>:
 Fri May 13 09:24:49 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: config/dialogs.c, config/kbdbind.c, config/kbdbind.h,
-	lowlevel/timer.c:
+	lowlevel/timer.c, viewer/timer.c:
 
 	meta -> modifier.  
 
@@ -2980,19 +3299,19 @@ Sun May  1 18:57:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun May  1 14:34:04 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Fix formatting.  
 
 Sun May  1 14:28:11 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Fix comment.  
 
 Sun May  1 13:58:36 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Fix comment.  
 
@@ -3057,13 +3376,15 @@ Thu Apr 28 12:53:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr 28 08:19:30 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: progress.c, progress.h, progress.h:
+	* src/: network/progress.c, network/progress.h, sched/progress.c,
+	sched/progress.h, network/progress.h, sched/progress.h:
 
 	int -> off_t.  
 
 Thu Apr 28 08:14:56 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: progress.h, connection.h:
+	* src/: network/progress.h, sched/progress.h, network/connection.h,
+	sched/connection.h:
 
 	int -> off_t.  
 
@@ -3100,21 +3421,26 @@ Wed Apr 27 22:24:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 27 22:23:10 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/: progress.c, progress.h:
+	* src/: network/progress.c, network/progress.h, sched/progress.c,
+	sched/progress.h:
 
 	struct progress: Store pos and seek members in off_t. Change the
 	callchain to reflect this.  
 
 Wed Apr 27 22:18:30 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/: connection.h, progress.c, progress.h:
+	* src/: network/connection.h, network/progress.c,
+	network/progress.h, sched/connection.h, sched/progress.c,
+	sched/progress.h:
 
 	struct connection: Store est_length member in off_t. Change the
 	callchain to reflect this.  
 
 Wed Apr 27 22:12:06 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/: connection.c, connection.h, progress.c, progress.h:
+	* src/: network/connection.c, network/connection.h,
+	network/progress.c, network/progress.h, sched/connection.c,
+	sched/connection.h, sched/progress.c, sched/progress.h:
 
 	struct connection: Store start member in off_t. Change the callchain
 	to reflect this.  
@@ -3133,7 +3459,8 @@ Wed Apr 27 21:51:47 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 27 21:41:53 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/: connection.c, connection.h:
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h:
 
 	change_connection(): Make newpri arg a connection_priority enum.  
 
@@ -3169,7 +3496,7 @@ Wed Apr 27 18:18:24 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 27 18:12:01 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Use size_t for read and write counters.  
 
@@ -3208,8 +3535,9 @@ Wed Apr 27 15:27:31 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 Wed Apr 27 15:15:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: config/conf.c, intl/gettext/loadmsgcat.c,
-	lowlevel/connect.c, lowlevel/dns.c, osdep/os2/os2.c,
-	protocol/ftp/ftp.c, sched/download.c, ssl/connect.c, ssl/connect.h,
+	lowlevel/connect.c, lowlevel/dns.c, network/dns.c,
+	network/socket.c, osdep/os2/os2.c, protocol/ftp/ftp.c,
+	sched/download.c, network/ssl/socket.c, network/ssl/socket.h,
 	terminal/event.c, terminal/hardio.c, terminal/hardio.h,
 	terminal/kbd.c, viewer/text/form.c:
 
@@ -3286,7 +3614,7 @@ Tue Apr 26 15:11:36 2005  Laurent Monin <zas@norz.org>:
 
 Tue Apr 26 14:50:18 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/progress.c:
+	* src/: network/progress.c, sched/progress.c:
 
 	Do not convert elapsed time to milliseconds anymore, use
 	timeval_div_int() and drop progress_elapsed_in_ms() macro.  
@@ -3348,7 +3676,7 @@ Sun Apr 24 17:42:08 2005  Laurent Monin <zas@norz.org>:
 
 Sun Apr 24 17:08:28 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/progress.c:
+	* src/: network/progress.c, sched/progress.c:
 
 	has_progress(): drop use of progress_elapsed_in_ms(), since it
 	converts timeval_T to milliseconds. timeval_to_milliseconds() will
@@ -3378,7 +3706,8 @@ Sat Apr 23 15:58:54 2005  Laurent Monin <zas@norz.org>:
 
 Sat Apr 23 15:43:00 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: connection.c, connection.h:
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h:
 
 	add_keepalive_connection(), init_keepalive_connection(): time_T
 	timeout -> long timeout_in_seconds.  
@@ -3386,9 +3715,9 @@ Sat Apr 23 15:43:00 2005  Laurent Monin <zas@norz.org>:
 Sat Apr 23 13:32:32 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: bfu/leds.c, config/dialogs.c, config/kbdbind.c,
-	lowlevel/connect.c, lowlevel/select.c, protocol/finger/finger.c,
-	sched/connection.c, sched/download.c, sched/session.c,
-	viewer/text/search.c:
+	lowlevel/connect.c, lowlevel/select.c, network/connection.c,
+	network/socket.c, protocol/finger/finger.c, sched/connection.c,
+	sched/download.c, sched/session.c, viewer/text/search.c:
 
 	Whitespaces cleanup.  
 
@@ -3442,7 +3771,8 @@ Fri Apr 22 01:20:23 2005  Laurent Monin <zas@norz.org>:
 Fri Apr 22 01:15:10 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: cache/cache.c, lowlevel/dns.c, lowlevel/select.c,
-	lowlevel/timers.c, protocol/http/http.c, sched/connection.c,
+	lowlevel/timers.c, network/connection.c, network/dns.c,
+	network/progress.c, protocol/http/http.c, sched/connection.c,
 	sched/progress.c, sched/session.c, util/time.c, util/time.h:
 
 	get_timeval() -> timeval_now().  
@@ -3455,21 +3785,23 @@ Fri Apr 22 01:11:36 2005  Laurent Monin <zas@norz.org>:
 
 Fri Apr 22 01:07:11 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: lowlevel/dns.c, protocol/http/http.c, sched/connection.c,
+	* src/: lowlevel/dns.c, network/dns.c, network/connection.c,
+	network/progress.c, protocol/http/http.c, sched/connection.c,
 	sched/progress.c, util/time.c, util/time.h:
 
 	seconds_to_timeval() -> timeval_from_seconds().  
 
 Fri Apr 22 01:03:03 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: lowlevel/timers.c, sched/progress.c, util/time.c,
-	util/time.h:
+	* src/: lowlevel/timers.c, network/progress.c, sched/progress.c,
+	util/time.c, util/time.h:
 
 	milliseconds_to_timeval() -> timeval_from_milliseconds().  
 
 Fri Apr 22 00:55:52 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: lowlevel/timers.c, sched/progress.c, util/time.h:
+	* src/: lowlevel/timers.c, network/progress.c, sched/progress.c,
+	util/time.h:
 
 	Introduce timeval_copy() and use it instead of direct call to
 	copy_struct().  
@@ -3524,7 +3856,8 @@ Thu Apr 21 02:35:52 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr 21 02:31:12 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/nntp/connection.c, sched/error.c, sched/state.h:
+	* src/: network/state.c, network/state.h,
+	protocol/nntp/connection.c, sched/error.c, sched/state.h:
 
 	Simplify the NNTP error reporting to just use the internal one.  
 
@@ -3562,7 +3895,7 @@ Wed Apr 20 22:17:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 20 20:15:08 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	read_select(): Use S_TRANS instead of S_SSL_NEG. Fixes the download
 	progress bar for HTTPS transfers. This is one place where the
@@ -3625,13 +3958,15 @@ Tue Apr 19 23:49:41 2005  Laurent Monin <zas@norz.org>:
 
 Tue Apr 19 23:32:42 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: progress.c, progress.h:
+	* src/: network/progress.c, network/progress.h, sched/progress.c,
+	sched/progress.h:
 
 	Do not export macro progress_elapsed_in_ms() anymore.  
 
 Tue Apr 19 23:29:56 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: dialogs/progress.c, sched/progress.c, sched/progress.h:
+	* src/: dialogs/progress.c, network/progress.c, network/progress.h,
+	sched/progress.c, sched/progress.h:
 
 	Calculate average_speed,current_speed,estimated_time in
 	update_progress(), saving the results in struct progress.  
@@ -3656,7 +3991,8 @@ Tue Apr 19 22:44:10 2005  Laurent Monin <zas@norz.org>:
 
 Tue Apr 19 22:43:10 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: progress.c, progress.h:
+	* src/: network/progress.c, network/progress.h, sched/progress.c,
+	sched/progress.h:
 
 	progress_estimated_time() now returns a pointer to a timeval_T.
 	Temporary move.  
@@ -3682,14 +4018,16 @@ Tue Apr 19 22:22:26 2005  Laurent Monin <zas@norz.org>:
 
 Tue Apr 19 22:16:32 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: progress.c, progress.h:
+	* src/: network/progress.c, sched/progress.c, network/progress.h,
+	sched/progress.h:
 
 	Convert struct progress elapsed field to timeval_T and modify
 	update_progress() to reflect that change.  
 
 Tue Apr 19 22:08:05 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: progress.c, progress.h:
+	* src/: network/progress.c, network/progress.h, sched/progress.c,
+	sched/progress.h:
 
 	Convert struct progress dis_b field to timeval_T and modify
 	update_progress() to reflect that change.  
@@ -3702,7 +4040,7 @@ Tue Apr 19 22:00:34 2005  Laurent Monin <zas@norz.org>:
 
 Tue Apr 19 21:48:51 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/progress.c:
+	* src/: network/progress.c, sched/progress.c:
 
 	update_progress(): regroup related lines, cleanup.  
 
@@ -3717,54 +4055,57 @@ Tue Apr 19 14:48:09 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Apr 19 11:58:09 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
-	protocol/gopher/gopher.c, protocol/http/http.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/file/cgi.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/response.c:
 
 	read_buffer->len -> read_buffer->length 
 
 Mon Apr 18 23:06:44 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/progress.c:
+	* src/: network/progress.c, sched/progress.c:
 
 	Oops, not seconds.  
 
 Mon Apr 18 22:53:25 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/progress.c:
+	* src/: network/progress.c, sched/progress.c:
 
 	start_update_progress(): make copy of old fields in a way where type
 	of fields not such important.  
 
 Mon Apr 18 22:45:10 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: progress.c, progress.h:
+	* src/: network/progress.c, network/progress.h, sched/progress.c,
+	sched/progress.h:
 
 	Clarify units used.  
 
 Mon Apr 18 22:18:00 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/progress.c:
+	* src/: network/progress.c, sched/progress.c:
 
 	Drop unneeded parenthesis.  
 
 Mon Apr 18 22:15:24 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: progress.c, progress.h:
+	* src/: network/progress.c, network/progress.h, sched/progress.c,
+	sched/progress.h:
 
 	Move SPD_DISP_TIME and CURRENT_SPD_AFTER in c file instead of
 	exporting them through header.  
 
 Mon Apr 18 22:13:12 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: progress.c, progress.h:
+	* src/: network/progress.c, network/progress.h, sched/progress.c,
+	sched/progress.h:
 
 	Convert progress_*() macros to functions.  
 
 Mon Apr 18 22:07:16 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: dialogs/progress.c, sched/progress.h:
+	* src/: dialogs/progress.c, network/progress.h, sched/progress.h:
 
 	average_speed(),current_speed(),estimated_time() ->
 	
@@ -3772,7 +4113,7 @@ Mon Apr 18 22:07:16 2005  Laurent Monin <zas@norz.org>:
 
 Mon Apr 18 22:00:27 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: dialogs/progress.c, sched/progress.h:
+	* src/: dialogs/progress.c, network/progress.h, sched/progress.h:
 
 	Use a macro to wrap access to @elapsed field of struct progress.
 	Temporary move.  
@@ -3862,14 +4203,15 @@ Mon Apr 18 16:29:13 2005  Laurent Monin <zas@norz.org>:
 
 Mon Apr 18 16:23:18 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: dialogs/status.c, sched/progress.h:
+	* src/: dialogs/status.c, network/progress.h, sched/progress.h:
 
 	Finally drop significant_progress() since it looks like it has not
 	much impact on display.  
 
 Mon Apr 18 16:05:59 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: dialogs/download.c, dialogs/status.c, sched/progress.h:
+	* src/: dialogs/download.c, dialogs/status.c, network/progress.h,
+	sched/progress.h:
 
 	Introduce has_progress() to fix bad move to significant_progress().  
 
@@ -3895,14 +4237,16 @@ Mon Apr 18 14:29:29 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Apr 18 12:53:50 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: setup.h, sched/progress.h:
+	* src/: setup.h, network/progress.h, sched/progress.h:
 
 	Move constants definitions from setup.h to progress.h since they are
 	not subject to change.  
 
 Mon Apr 18 12:46:35 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: connection.c, progress.c, progress.h:
+	* src/: network/connection.c, network/progress.c,
+	network/progress.h, sched/connection.c, sched/progress.c,
+	sched/progress.h:
 
 	Initialize progress timer callback function and data through
 	start_update_progress() and save them in struct progress().  
@@ -3915,13 +4259,14 @@ Mon Apr 18 12:28:47 2005  Laurent Monin <zas@norz.org>:
 
 Mon Apr 18 12:28:09 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: dialogs/status.c, sched/progress.h:
+	* src/: dialogs/status.c, network/progress.h, sched/progress.h:
 
 	Move progress related macros to progress.h.  
 
 Mon Apr 18 12:26:41 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: dialogs/download.c, dialogs/status.c, sched/progress.h:
+	* src/: dialogs/download.c, dialogs/status.c, network/progress.h,
+	sched/progress.h:
 
 	Introduce and use new macro significant_progress().  
 
@@ -3940,19 +4285,20 @@ Mon Apr 18 07:43:47 2005  Laurent Monin <zas@norz.org>:
 
 Sun Apr 17 23:23:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Use connection_state enum.  
 
 Sun Apr 17 23:10:37 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	Use connection_state enum instead of int.  
 
 Sun Apr 17 23:10:15 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: encoding/encoding.c, encoding/encoding.h,
+	* src/: encoding/encoding.c, encoding/encoding.h, network/state.h,
 	sched/Makefile.am, sched/download.h, sched/session.h,
 	sched/state.h:
 
@@ -3966,8 +4312,8 @@ Sun Apr 17 23:07:47 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Apr 17 23:03:14 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: document/renderer.c, protocol/nntp/response.h,
-	sched/connection.h, sched/task.c:
+	* src/: document/renderer.c, network/connection.h,
+	protocol/nntp/response.h, sched/connection.h, sched/task.c:
 
 	Fix some more includes.  
 
@@ -3980,75 +4326,87 @@ Sun Apr 17 22:26:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 Sun Apr 17 21:38:17 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	network/connection.c, network/socket.c, network/socket.h,
+	network/ssl/socket.c, protocol/file/cgi.c,
+	protocol/finger/finger.c, protocol/ftp/ftp.c,
 	protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/http/http.h, protocol/nntp/connection.c,
-	sched/connection.c, ssl/connect.c:
+	sched/connection.c:
 
 	Remove the void pointer parameter from all socket operations. This
 	means less casting, shorter lines and should hopefully be more safe.  
 
 Sun Apr 17 21:05:13 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: connection.c, progress.c, progress.h:
+	* src/: network/connection.c, network/progress.c,
+	network/progress.h, sched/connection.c, sched/progress.c,
+	sched/progress.h:
 
 	Move progress related code from connection.c to progress.c.  
 
 Sun Apr 17 20:41:42 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: sched/connection.h, sched/download.h, sched/location.h,
-	sched/session.h, viewer/dump/dump.c:
+	* src/: network/connection.h, sched/connection.h, sched/download.h,
+	sched/location.h, sched/session.h, viewer/dump/dump.c:
 
 	Move struct download to sched/download.h.  
 
 Sun Apr 17 20:32:31 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: dialogs/download.c, dialogs/status.c, protocol/ftp/ftp.c,
-	protocol/http/http.c, sched/connection.c, sched/connection.h,
-	sched/download.c:
+	* src/: dialogs/download.c, dialogs/status.c, network/connection.c,
+	network/connection.h, protocol/ftp/ftp.c, protocol/http/http.c,
+	sched/connection.c, sched/connection.h, sched/download.c:
 
 	Fix progress.h inclusions.  
 
 Sun Apr 17 20:18:57 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: connection.c, progress.c, progress.h:
+	* src/: network/connection.c, network/progress.c,
+	network/progress.h, sched/connection.c, sched/progress.c,
+	sched/progress.h:
 
 	Reduce abstraction level, suggested by Jonas.  
 
 Sun Apr 17 18:54:51 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: protocol/ftp/ftp.c, protocol/http/http.c,
-	sched/connection.c, sched/connection.h:
+	network/connection.c, network/connection.h, sched/connection.c,
+	sched/connection.h:
 
 	Make @progress a pointer to a struct progress in struct connection.  
 
 Sun Apr 17 18:46:04 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: progress.c, progress.h:
+	* src/: network/progress.c, network/progress.h, sched/progress.c,
+	sched/progress.h:
 
 	Introduce (init|done)_progress().  
 
 Sun Apr 17 18:17:57 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	conn_info -> connect_info 
 
 Sun Apr 17 18:11:53 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: connection.h, progress.h:
+	* src/: network/connection.h, network/progress.h,
+	sched/connection.h, sched/progress.h:
 
 	Move struct progress to progress.h.  
 
 Sun Apr 17 18:08:26 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	struct socket: Have separate members for read and write buffers.  
 
 Sun Apr 17 18:08:00 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: Makefile.am, progress.c, progress.h:
+	* src/: network/progress.c, network/progress.h, sched/Makefile.am,
+	sched/progress.c, sched/progress.h:
 
 	Add progress.{c,h}.  
 
@@ -4151,9 +4509,9 @@ Sun Apr 17 03:09:52 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Sun Apr 17 01:59:05 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
-	protocol/gopher/gopher.c, protocol/http/http.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/file/cgi.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
 	This yummi patch removes struct connection usage from the socket
@@ -4161,14 +4519,15 @@ Sun Apr 17 01:59:05 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Apr 17 01:28:44 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/ftp/ftp.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/ftp/ftp.c:
 
 	get_pasv_socket(): Take struct socket. Trims # of parameters.  
 
 Sun Apr 17 01:15:20 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/finger/finger.c, protocol/ftp/ftp.c,
+	* src/: lowlevel/connect.c, network/socket.c, lowlevel/connect.h,
+	network/socket.h, protocol/finger/finger.c, protocol/ftp/ftp.c,
 	protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
@@ -4203,7 +4562,7 @@ Sat Apr 16 15:36:55 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Apr 16 14:46:18 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	struct keepalive_connection: @add_time -> @creation_time.  
 
@@ -4215,19 +4574,19 @@ Sat Apr 16 14:41:50 2005  Laurent Monin <zas@norz.org>:
 
 Sat Apr 16 14:41:01 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Use timeval_T instead of double.  
 
 Sat Apr 16 14:23:54 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: setup.h, lowlevel/dns.c:
+	* src/: setup.h, lowlevel/dns.c, network/dns.c:
 
 	Use timeval_T instead of double.  
 
 Sat Apr 16 09:22:21 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Remove CONFIG_DEBUGs around assertion. Miciah thinks it is stupid.  
 
@@ -4302,32 +4661,33 @@ Sat Apr 16 04:21:36 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Sat Apr 16 01:46:59 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Regroup.  
 
 Sat Apr 16 01:44:17 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Describe conn_info.  
 
 Sat Apr 16 01:38:17 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.h:
+	* src/: lowlevel/connect.h, network/socket.h:
 
 	D-scribe.  
 
 Sat Apr 16 01:20:03 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	Make struct conn_info private.  
 
 Sat Apr 16 01:13:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/http/http.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c, protocol/http/http.c:
 
 	complete_connect_socket(): Provide functionality needed by HTTPs
 	CONNECT implementation. It is a bit ugly, well hella ugly but it
@@ -4335,69 +4695,73 @@ Sat Apr 16 01:13:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Apr 16 00:40:53 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Call the conn_info callback from complete_connect_socket().  
 
 Sat Apr 16 00:34:50 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	done_connection_info(): Make static.  
 
 Sat Apr 16 00:31:49 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	Move conn_info->need_ssl to socket->need_ssl.  
 
 Sat Apr 16 00:28:33 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c:
 
 	Make the SSL-layer use complete_connect_socket() instead of
 	done_connection_info().  
 
 Sat Apr 16 00:15:34 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Only set the socket protocol family on success.  
 
 Sat Apr 16 00:14:12 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	connect_socket(): Make the error handling the default path when the
 	connect() loop terminates.  
 
 Sat Apr 16 00:12:11 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	connect_socket(): Remove block variable and use function equivalent.  
 
 Sat Apr 16 00:10:13 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	connect_socket(): Move the successful connection handling deeper.  
 
 Sat Apr 16 00:03:27 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Move connect_socket() completion to complete_connect_socket().  
 
 Fri Apr 15 23:31:45 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Improve comment.  
 
 Fri Apr 15 23:25:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, sched/connection.h, sched/error.c:
+	* src/: lowlevel/connect.c, network/connection.h, network/socket.c,
+	network/state.c, sched/connection.h, sched/error.c:
 
 	Introduce S_NO_FORCED_DNS used when all addresses for http6:// type
 	URIs fails. The error message is a slightly modified version of
@@ -4405,13 +4769,13 @@ Fri Apr 15 23:25:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Apr 15 23:09:54 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Bitch about the irregularity of the world.  
 
 Fri Apr 15 23:08:04 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	done_connection(): Ensure that connection always is in result state
 	before notifying connection callbacks the last time. So set the
@@ -4420,13 +4784,13 @@ Fri Apr 15 23:08:04 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Apr 15 23:03:48 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	done_connection() notifies callbacks so remove commented out calls.  
 
 Fri Apr 15 22:41:48 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	connect_socket(): Retry with the connection_state state it was
 	passed. Fixes problem reported by Quazgaa when connecting fails, but
@@ -4435,7 +4799,7 @@ Fri Apr 15 22:41:48 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Apr 15 22:34:21 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Connections should _always_ end in result state, that is either
 	-errno or internal result state, so insert assertion but only for
@@ -4636,7 +5000,7 @@ Fri Apr 15 16:16:38 2005  Laurent Monin <zas@norz.org>:
 
 Fri Apr 15 15:18:38 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Remove unneeded SSL header.  
 
@@ -4650,7 +5014,7 @@ Fri Apr 15 15:03:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Fri Apr 15 15:01:23 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Move up connected() so no prototype is needed. Describe it.  
 
@@ -4713,32 +5077,34 @@ Fri Apr 15 14:14:48 2005  Laurent Monin <zas@norz.org>:
 
 Fri Apr 15 13:32:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	get_pasv_socket(): Close the socket on error.  
 
 Fri Apr 15 13:14:44 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	Remove get_pasv6_socket().  
 
 Fri Apr 15 13:14:01 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/ftp/ftp.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/ftp/ftp.c:
 
 	get_pasv_socket(): Support IPv6.  
 
 Fri Apr 15 13:03:01 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	get_pasv_socket(): Use local struct sockaddr variables and addrlen
 	size_t.  
 
 Fri Apr 15 12:57:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	get_pasv_socket(): sa -> addr, sb -> bind_addr4.  
 
@@ -4751,19 +5117,20 @@ Fri Apr 15 08:09:29 2005  Laurent Monin <zas@norz.org>:
 
 Fri Apr 15 04:42:30 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Dammit, patch fix part 2.  
 
 Fri Apr 15 04:38:42 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Oops: A few sizeof() fixes for last patch.  
 
 Fri Apr 15 04:11:50 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/ftp/ftp.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/ftp/ftp.c:
 
 	get_pasv_socket(): Take sockaddr_storage pointer instead of hackish
 	addr/port string.  
@@ -4794,13 +5161,14 @@ Fri Apr 15 02:50:27 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Apr 15 02:49:08 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Remove assertion.  
 
 Fri Apr 15 02:39:34 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, dns.c, dns.h:
+	* src/: lowlevel/connect.c, lowlevel/dns.c, lowlevel/dns.h,
+	network/dns.c, network/dns.h, network/socket.c:
 
 	Change the DNS lookup memory management so that the DNS callback has
 	to allocate the passed address array. This simplifies things a lot
@@ -4811,73 +5179,73 @@ Fri Apr 15 02:39:34 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Apr 15 02:09:05 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	done_dns_lookup(): Remove unneeded update of DNS result; the done
 	label ain't using it.  
 
 Fri Apr 15 01:27:19 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	async_dns_reader(): Move duplicate read loops to read_dns_data().  
 
 Fri Apr 15 01:20:30 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	async_dns_writer(): Move duplicate write loops to write_dns_data().  
 
 Fri Apr 15 01:00:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: config/cmdline.c, lowlevel/connect.c, lowlevel/dns.c,
-	lowlevel/dns.h:
+	lowlevel/dns.h, network/dns.c, network/dns.h, network/socket.c:
 
 	Introduce dns_result enum. Rename result variables to @result to get
 	a feeling of all users.  
 
 Fri Apr 15 00:13:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	done_async_dns_lookup(): Reduce indentation.  
 
 Fri Apr 15 00:11:20 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	async_dns_{reader,error}(): Take dnsquery arg.  
 
 Fri Apr 15 00:09:51 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	init_async_dns_lookup(): Ensure dnsquery->h is -1 if async DNS is
 	disabled so done_async_dns_lookup() won't do crazy things.  
 
 Fri Apr 15 00:08:30 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	init_async_dns_lookup(): Reduce indentation.  
 
 Fri Apr 15 00:00:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	lookup_fn() -> async_dns_writer(), end_real_lookup() ->
 	async_dns_reader(), failed_dns_lookup() -> async_dns_error().  
 
 Thu Apr 14 23:52:33 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	add_to_dns_cache(): Do all the allocation before filling the
 	dnsentry.  
 
 Thu Apr 14 22:43:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	find_host_no_cache() -> init_dns_lookup().  
 
@@ -4892,63 +5260,64 @@ Thu Apr 14 22:40:42 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Thu Apr 14 22:29:23 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Fix (1.101 -> 1.102) and only add_to_dns_cache() when @res(ult) is
 	success.  
 
 Thu Apr 14 22:27:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Regroup functions. Add labels.  
 
 Thu Apr 14 22:14:17 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	done_dns_lookup(): Split out DNS caching to add_to_dns_cache().  
 
 Thu Apr 14 15:45:23 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	kill_dns_request(): Call done_dns_lookup() directly.  
 
 Thu Apr 14 15:39:51 2005  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Initialize @now using get_timeval(). Thanks to Jonas for catching
 	this one.  
 
 Thu Apr 14 15:39:12 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	kill_dns_request(): No need to NULLify queryref. We do it elsewhere.  
 
 Thu Apr 14 15:34:37 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: dns.c, dns.h:
+	* src/: lowlevel/dns.c, lowlevel/dns.h, network/dns.c,
+	network/dns.h:
 
 	query_p -> queryref -- takes me back to SML.  
 
 Thu Apr 14 15:32:32 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Assert that we always have the query_p thingy.  
 
 Thu Apr 14 15:29:42 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Oops, still set query_p to NULL when failing.  
 
 Thu Apr 14 15:25:58 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	done_dns_lookup(): Fix bug from (1.84 -> 1.85) 'find_host(): Do not
 	take address and address length references ...' Since query->addr is
@@ -4957,20 +5326,20 @@ Thu Apr 14 15:25:58 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr 14 14:57:22 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Always set query->qyery_p to NULL when freeing.  
 
 Thu Apr 14 14:50:04 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Fix space, add an assertion and set dnsquery->h to -1 after closing
 	it.  
 
 Thu Apr 14 14:14:15 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	done_dns_lookup(): Fix mem_free_set() bug reported by zas.
 	mem_free_set() checks if NULL so simplify logic.  
@@ -4982,6 +5351,7 @@ Thu Apr 14 14:06:15 2005  Jonas Fonseca <fonseca@diku.dk>:
 	document/html/renderer.c, ecmascript/ecmascript.h,
 	globhist/globhist.c, globhist/globhist.h, lowlevel/dns.c,
 	lowlevel/select.c, lowlevel/timers.c, lowlevel/timers.h,
+	network/connection.c, network/connection.h, network/dns.c,
 	protocol/date.c, protocol/date.h, protocol/ftp/parse.c,
 	sched/connection.c, sched/connection.h, sched/download.c,
 	sched/download.h, sched/session.c, util/Makefile.am, util/conv.c,
@@ -4997,19 +5367,22 @@ Thu Apr 14 13:11:58 2005  Laurent Monin <zas@norz.org>:
 
 Thu Apr 14 13:07:48 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: connection.c, connection.h:
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h:
 
 	More timeval_T usage. Add some FIXME about milliseconds.  
 
 Thu Apr 14 13:03:03 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/socket.c, network/socket.h,
+	sched/connection.c:
 
 	connection_timeout(): Move code to new timeout_socket().  
 
 Thu Apr 14 12:50:29 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Use timeval_T in struct keepalive_connection and make needed
 	changes.  
@@ -5028,25 +5401,25 @@ Thu Apr 14 12:33:46 2005  Laurent Monin <zas@norz.org>:
 
 Thu Apr 14 12:15:00 2005  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	delta -> age.  
 
 Thu Apr 14 12:11:32 2005  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	get_time -> creation_time.  
 
 Thu Apr 14 12:09:55 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: setup.h, lowlevel/dns.c:
+	* src/: setup.h, lowlevel/dns.c, network/dns.c:
 
 	DNS_TIMEOUT -> DNS_CACHE_TIMEOUT.  
 
 Thu Apr 14 11:07:01 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: setup.h, lowlevel/dns.c:
+	* src/: setup.h, lowlevel/dns.c, network/dns.c:
 
 	Use timeval_T for dns cache timeouts, convert DNS_TIMEOUT from
 	milliseconds to seconds. Please check if changes are correct.  
@@ -5138,20 +5511,22 @@ Thu Apr 14 10:30:02 2005  Laurent Monin <zas@norz.org>:
 
 Thu Apr 14 10:25:19 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/socket.c, network/socket.h,
+	sched/connection.c:
 
 	Introduce done_socket() and move away code from
 	free_connection_data().  
 
 Thu Apr 14 10:18:23 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Compile fix ;) 
 
 Thu Apr 14 10:13:29 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c:
 
 	connect_socket(): It already clear_handlers() and most callers
 	already close_socket() and close_socket() clear_handlers() so
@@ -5159,21 +5534,23 @@ Thu Apr 14 10:13:29 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr 14 03:05:15 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, sched/connection.c:
+	* src/: lowlevel/connect.c, network/connection.c, network/socket.c,
+	sched/connection.c:
 
 	Revert last patch. close_socket() is called between connect_socket()
 	calls and we need the conn_info.  
 
 Thu Apr 14 02:59:06 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, sched/connection.c:
+	* src/: lowlevel/connect.c, network/connection.c, network/socket.c,
+	sched/connection.c:
 
 	Move socket->conn_info freeing code from free_connection_data() to
 	close_socket().  
 
 Thu Apr 14 02:53:08 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	add_keepalive_connection(): Explicitly clear handlers and set the
 	socket fd to -1 so it is safe to call close_socket() in
@@ -5181,8 +5558,9 @@ Thu Apr 14 02:53:08 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr 14 02:32:06 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
-	ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/socket.c, network/socket.h,
+	network/ssl/socket.c, sched/connection.c:
 
 	connect_socket(): Take connection_state parameter.  
 
@@ -5195,13 +5573,13 @@ Thu Apr 14 01:28:22 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr 14 01:25:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	connect_socket(): conn_socket -> csocket, to make lines shorter.  
 
 Thu Apr 14 01:02:39 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, protocol/ftp/ftp.c,
+	* src/: lowlevel/connect.c, network/socket.c, protocol/ftp/ftp.c,
 	protocol/http/http.c:
 
 	read_select(): Set connection timeout and remove
@@ -5209,8 +5587,9 @@ Thu Apr 14 01:02:39 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr 14 00:40:55 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, protocol/about.c, protocol/data.c,
-	protocol/file/cgi.c, protocol/file/file.c,
+	* src/: lowlevel/connect.c, network/connection.c,
+	network/connection.h, network/socket.c, protocol/about.c,
+	protocol/data.c, protocol/file/cgi.c, protocol/file/file.c,
 	protocol/finger/finger.c, protocol/ftp/ftp.c,
 	protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c, protocol/smb/smb.c, sched/connection.c,
@@ -5221,20 +5600,21 @@ Thu Apr 14 00:40:55 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr 14 00:34:47 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/: connection.c, connection.h:
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h:
 
 	Merge {abort,retry}_connection() with
 	{abort,retry}_conn_with_state().  
 
 Thu Apr 14 00:31:09 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	connection_timeout(): Reformat.  
 
 Thu Apr 14 00:28:10 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	connection_timeout(): Use ..._conn_with_state() functions.  
 
@@ -5252,64 +5632,69 @@ Thu Apr 14 00:17:49 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr 14 00:11:42 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/socket.c, network/socket.h,
+	sched/connection.c:
 
 	init_socket(): Move to lowlevel/.  
 
 Wed Apr 13 23:58:16 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	init_socket(): Take pointer to operations.  
 
 Wed Apr 13 23:44:47 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Prefer casting select handlers so they have the expected type.  
 
 Wed Apr 13 22:12:48 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Update comments.  
 
 Wed Apr 13 21:45:42 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, dns.c, dns.h:
+	* src/: lowlevel/connect.c, lowlevel/dns.c, lowlevel/dns.h,
+	network/dns.c, network/dns.h, network/socket.c:
 
 	find_host(): Do not take address and address length references but
 	pass the allocated variables via the dns_callback_T.  
 
 Wed Apr 13 21:22:59 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, dns.c, dns.h:
+	* src/: lowlevel/connect.c, lowlevel/dns.c, lowlevel/dns.h,
+	network/dns.c, network/dns.h, network/socket.c:
 
 	dns_callback_T: Pass address array and array length via the
 	callback.  
 
 Wed Apr 13 21:13:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.h:
+	* src/: lowlevel/dns.h, network/dns.h:
 
 	Describe the DNS interface.  
 
 Wed Apr 13 20:42:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.h:
+	* src/: lowlevel/connect.h, network/socket.h:
 
 	Restructure the types.  
 
 Wed Apr 13 20:40:57 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	More connect_socket() usage.  
 
 Wed Apr 13 20:13:50 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
-	ssl/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c, lowlevel/connect.h,
+	network/connection.c, network/socket.h, network/ssl/socket.c,
+	sched/connection.c:
 
 	Create dns_found() wrapper named connect_socket(), which doesn't
 	take state variable.  
@@ -5447,33 +5832,34 @@ Wed Apr 13 15:29:23 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 13 14:48:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, dns.c, dns.h:
+	* src/: lowlevel/connect.c, lowlevel/dns.c, lowlevel/dns.h,
+	network/dns.c, network/dns.h, network/socket.c:
 
 	find_host(): Take no_cache boolean and make _no_cache version
 	static.  
 
 Wed Apr 13 14:40:22 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Use dns_callback_T.  
 
 Wed Apr 13 14:35:23 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	done_dns_lookup(): Minor cleanup.  
 
 Wed Apr 13 14:19:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/dns.c, protocol/file/cgi.c:
+	* src/: lowlevel/dns.c, network/dns.c, protocol/file/cgi.c:
 
 	close_pipe_read(): Takes data_socket because we might have used it
 	as a callback for writing post data.  
 
 Wed Apr 13 14:16:10 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Split out async DNS setup and teardown to
 	{init,done}_async_dns_lookup(). #define them so the compiler will
@@ -5494,76 +5880,76 @@ Wed Apr 13 13:06:40 2005  Laurent Monin <zas@norz.org>:
 
 Wed Apr 13 12:55:10 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	More DNS struct descriptions.  
 
 Wed Apr 13 12:37:35 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	do_queued_lookup(): Simplify.  
 
 Wed Apr 13 12:33:14 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Space tidyup.  
 
 Wed Apr 13 12:28:06 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	struct dnsentry: Tidyup.  
 
 Wed Apr 13 12:20:11 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	struct dnsquery: Only include @h thread descriptor member #ifndef
 	NO_ASYNC_LOOKUP.  
 
 Wed Apr 13 12:10:32 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Minor tidyup.  
 
 Wed Apr 13 12:04:24 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Move end_real_lookup() inside #ifdef NO_ASYNC_LOOKUP. Fixes compile
 	warning.  
 
 Wed Apr 13 12:01:01 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	done_dns_lookup(): Also take care of clearing query->h handlers and
 	closing the descriptor. It should be safer.  
 
 Wed Apr 13 11:48:26 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	|&*query->addr| -> |query->addr|.  
 
 Wed Apr 13 11:44:41 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	del_dns_cache_entry(): Move up and remove duplicate code.  
 
 Wed Apr 13 11:42:33 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	|&*query->addr| -> |query->addr|.  
 
 Wed Apr 13 11:39:04 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	shrink_dns_cache(): Use foreachsafe() and simplify
 	del_dns_cache_entry().  
@@ -5606,15 +5992,15 @@ Wed Apr 13 10:29:31 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 13 04:41:05 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.h:
+	* src/: lowlevel/connect.h, network/socket.h:
 
 	Update socket->read_done description.  
 
 Wed Apr 13 04:28:11 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
-	protocol/gopher/gopher.c, protocol/http/http.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/file/cgi.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
 	read_from_socket(): Take and set connection state. It simplifies
@@ -5642,8 +6028,8 @@ Wed Apr 13 03:44:14 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 13 02:48:58 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/finger/finger.c, protocol/ftp/ftp.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/finger/finger.c, protocol/ftp/ftp.c,
 	protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
@@ -5652,18 +6038,18 @@ Wed Apr 13 02:48:58 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 13 02:28:42 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
-	protocol/gopher/gopher.c, protocol/http/http.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/file/cgi.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
 	Move read_buffer->state to socket->state.  
 
 Wed Apr 13 02:17:24 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
-	protocol/gopher/gopher.c, protocol/http/http.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/file/cgi.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
 	Introduce socket_{write,connect}_operation_T.  
@@ -5683,8 +6069,8 @@ Wed Apr 13 00:58:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 13 00:42:21 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/finger/finger.c, protocol/ftp/ftp.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/finger/finger.c, protocol/ftp/ftp.c,
 	protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/http/http.h, protocol/nntp/connection.c:
 
@@ -5692,45 +6078,50 @@ Wed Apr 13 00:42:21 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 13 00:08:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.h, protocol/ftp/ftp.c:
+	* src/: lowlevel/connect.h, network/socket.h, protocol/ftp/ftp.c:
 
 	Introduce socket_read_operation_T and remove socket->read_done
 	stupidity.  
 
 Tue Apr 12 22:53:14 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
-	ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/socket.c, network/socket.h,
+	network/ssl/socket.c, sched/connection.c:
 
 	Introduce socket_operations. Reduces the size of struct socket a
 	bit.  
 
 Tue Apr 12 22:39:24 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
-	ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/socket.c, network/socket.h,
+	network/ssl/socket.c, sched/connection.c:
 
 	Use socket_handler_T for all socket handlers even though it leads to
 	passing a few unused parameters.  
 
 Tue Apr 12 22:09:01 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c:
 
 	dns_exception(): Make it explicit that it takes socket parameter
 	because it is exported.  
 
 Tue Apr 12 21:54:33 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.h:
+	* src/: lowlevel/connect.h, network/socket.h:
 
 	Rearrange type declarations.  
 
 Tue Apr 12 21:49:09 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
-	sched/connection.h, ssl/connect.c, ssl/connect.h, ssl/ssl.c,
-	ssl/ssl.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/connection.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c, network/ssl/socket.h,
+	network/ssl/ssl.c, sched/connection.c, sched/connection.h,
+	network/ssl/ssl.h:
 
 	connection_socket -> socket 
 
@@ -5749,13 +6140,14 @@ Tue Apr 12 21:18:45 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Apr 12 21:11:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c:
 
 	SOCKET_WANT_READ -> SOCKET_SSL_WANT_READ.  
 
 Tue Apr 12 20:41:22 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, protocol/file/cgi.c,
+	* src/: lowlevel/connect.c, network/socket.c, protocol/file/cgi.c,
 	protocol/finger/finger.c, protocol/ftp/ftp.c,
 	protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
@@ -5772,9 +6164,9 @@ Tue Apr 12 20:32:06 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Apr 12 20:27:37 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
-	protocol/gopher/gopher.c, protocol/http/http.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/file/cgi.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
 	write_to_socket(): Take connection_state varible which will be set
@@ -5784,7 +6176,7 @@ Tue Apr 12 20:27:37 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Apr 12 20:16:01 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, protocol/file/cgi.c,
+	* src/: lowlevel/connect.c, network/socket.c, protocol/file/cgi.c,
 	protocol/ftp/ftp.c, protocol/nntp/connection.c:
 
 	Make write_to_connection() reset the connection timout. Remove
@@ -5799,8 +6191,9 @@ Tue Apr 12 20:08:24 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Apr 12 20:05:07 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, protocol/finger/finger.c,
-	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
+	* src/: lowlevel/connect.c, network/socket.c,
+	protocol/finger/finger.c, protocol/ftp/ftp.c,
+	protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
 	Make make_connection() take care of resetting the connection timout.
@@ -5844,41 +6237,44 @@ Tue Apr 12 18:08:13 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Apr 12 17:50:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/select.h, osdep/os2/os2.c,
-	osdep/unix/unix.c, protocol/ftp/ftp.c, protocol/smb/smb.c,
-	ssl/connect.c, terminal/kbd.c, terminal/terminal.c:
+	* src/: lowlevel/connect.c, lowlevel/select.h, network/socket.c,
+	network/ssl/socket.c, osdep/os2/os2.c, osdep/unix/unix.c,
+	protocol/ftp/ftp.c, protocol/smb/smb.c, terminal/kbd.c,
+	terminal/terminal.c:
 
 	Introduce select_handler_T so make casts more readable.  
 
 Tue Apr 12 17:37:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	SSL don't need DNS header.  
 
 Tue Apr 12 17:34:55 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c:
 
 	ssl_want_read(): Simplify but add assertion in
 	done_connection_info() to be save.  
 
 Tue Apr 12 17:13:38 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.h, sched/connection.h:
+	* src/: lowlevel/connect.h, network/connection.h, network/socket.h,
+	sched/connection.h:
 
 	struct connection: Rearrange a few members. Use connection_state
 	also for prev_error member.  
 
 Tue Apr 12 16:58:14 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/http/http.c, ssl/ssl.c, ssl/ssl.h:
+	* src/: protocol/http/http.c, network/ssl/ssl.c, network/ssl/ssl.h:
 
 	get_ssl_connection_cipher(): Take connection_socket.  
 
 Tue Apr 12 16:53:33 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.h, sched/connection.h, ssl/ssl.c:
+	* src/: lowlevel/connect.h, network/connection.h, network/socket.h,
+	network/ssl/ssl.c, sched/connection.h:
 
 	Move connection_socket to lowlevel/connect.h. The split is not very
 	clean.  
@@ -5887,14 +6283,16 @@ Tue Apr 12 16:47:04 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: protocol/file/cgi.c, protocol/finger/finger.c,
 	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
-	protocol/nntp/connection.c, protocol/smb/smb.c, sched/connection.c,
-	sched/connection.h, ssl/ssl.c:
+	protocol/nntp/connection.c, protocol/smb/smb.c,
+	network/connection.c, network/connection.h, network/ssl/ssl.c,
+	sched/connection.c, sched/connection.h:
 
 	Make connection socket members allocated.  
 
 Tue Apr 12 16:01:53 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/ftp/ftp.c, sched/connection.h:
+	* src/: network/connection.h, protocol/ftp/ftp.c,
+	sched/connection.h:
 
 	Move connection->read_func to connection_socket->read_done.  
 
@@ -5909,7 +6307,7 @@ Tue Apr 12 15:48:29 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Apr 12 15:38:57 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.h:
+	* src/: lowlevel/connect.h, network/socket.h:
 
 	Make socket_error descriptions more readable.  
 
@@ -5921,32 +6319,33 @@ Tue Apr 12 15:35:19 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Apr 12 14:45:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	free_connection_data(): close_socket() clears handlers so simplify.  
 
 Tue Apr 12 14:43:58 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Initialize both conn->socket and conn->data_socket.  
 
 Tue Apr 12 14:25:44 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c:
 
 	Merge {read,write}_buffer_state to socket_error enum.  
 
 Tue Apr 12 14:21:50 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.h:
+	* src/: lowlevel/connect.h, network/socket.h:
 
 	A litl reformatting.  
 
 Tue Apr 12 14:07:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/file/cgi.c, protocol/finger/finger.c,
 	protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
@@ -5962,27 +6361,27 @@ Tue Apr 12 13:51:28 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Apr 12 13:29:18 2005  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	find_host_no_cache(): simplification.  
 
 Tue Apr 12 13:26:08 2005  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	@s -> @query_p.  
 
 Tue Apr 12 13:13:24 2005  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	qp, d, e -> query_p, dnsentry, dnsentry_p.  
 
 Tue Apr 12 12:09:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
-	protocol/gopher/gopher.c, protocol/http/http.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/file/cgi.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
 	alloc_read_buffer(): Take connection_socket instead of connection.  
@@ -5996,169 +6395,184 @@ Tue Apr 12 08:11:05 2005  Laurent Monin <zas@norz.org>:
 
 Tue Apr 12 00:41:41 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.h:
+	* src/network/ssl/socket.h:
 
 	Remove unneeded includes.  
 
 Tue Apr 12 00:40:17 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c,
+	network/ssl/socket.h:
 
 	Change the socket reading interface and centralize the read_buffer
 	access.  
 
 Tue Apr 12 00:32:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Handle ssl_write()s using the new generic error handling.  
 
 Tue Apr 12 00:31:04 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c:
 
 	Introduce read_buffer_state enum to make handling of read()s in
 	read_select() more centralized.  
 
 Tue Apr 12 00:09:45 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Introduce generic_read() taking same variables as ssl_read().  
 
 Mon Apr 11 23:56:36 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c:
 
 	Introduce write_buffer_state enum to make handling of write()s in
 	write_select() more centralized.  
 
 Mon Apr 11 23:50:30 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Fix last patch.  
 
 Mon Apr 11 23:32:57 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Introduce generic_write() taking same variables as ssl_write().  
 
 Mon Apr 11 23:32:11 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	write_select(): f -> done.  
 
 Mon Apr 11 23:12:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.h:
+	* src/: lowlevel/connect.h, network/socket.h:
 
 	struct conn_info: Oops, need_ssl is boplean.  
 
 Mon Apr 11 23:09:46 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	struct read_buffer, write_buffer: Remove connection_socket member.
 	It is automatically available.  
 
 Mon Apr 11 23:07:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c:
 
 	More simplifications.  
 
 Mon Apr 11 23:04:48 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	write_select(): wb->socket -> socket.  
 
 Mon Apr 11 22:59:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	struct conn_info: The connection_socket member is no longer needed.  
 
 Mon Apr 11 22:57:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	read_select(): rb->socket -> socket.  
 
 Mon Apr 11 22:55:46 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c:
 
 	Change all select handlers to expect a connection_socket struct.  
 
 Mon Apr 11 22:50:34 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c,
+	network/ssl/socket.h:
 
 	ssl_read(): No need to pass connection struct.  
 
 Mon Apr 11 22:39:37 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
-	protocol/gopher/gopher.c, protocol/http/http.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/file/cgi.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
 	protocol/nntp/connection.c:
 
 	write_to_socket(): No need to pass struct connection.  
 
 Mon Apr 11 22:34:23 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c, protocol/ftp/ftp.c,
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/file/cgi.c, network/ssl/socket.c,
+	protocol/finger/finger.c, protocol/ftp/ftp.c,
 	protocol/gopher/gopher.c, protocol/http/http.c,
-	protocol/nntp/connection.c, ssl/connect.c:
+	protocol/nntp/connection.c:
 
 	read_from_socket(): No need to pass struct connection.  
 
 Mon Apr 11 22:23:12 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.c:
+	* src/: lowlevel/connect.c, network/socket.c, lowlevel/connect.c,
+	network/socket.c:
 
 	More connection_socket handler usage.  
 
 Mon Apr 11 22:16:39 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, sched/connection.c, sched/connection.h:
+	* src/: lowlevel/connect.c, network/connection.c,
+	network/connection.h, network/socket.c, sched/connection.c,
+	sched/connection.h:
 
 	struct connection_socket: Add set_timeout() handler. Use in
 	write_select().  
 
 Mon Apr 11 21:58:51 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, sched/connection.c, sched/connection.h:
+	* src/: lowlevel/connect.c, network/connection.c,
+	network/connection.h, network/socket.c, sched/connection.c,
+	sched/connection.h:
 
 	Move the void *buffer member from struct connection to
 	connection_socket.  
 
 Mon Apr 11 21:44:40 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	dns_exception(): Use connection_socket handlers and minor cleanup.  
 
 Mon Apr 11 21:39:31 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	Oops, dns_found() now takes connection_socket parameter.  
 
 Mon Apr 11 21:37:44 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/smb/smb.c, sched/connection.c, ssl/connect.c:
+	* src/: network/connection.c, network/ssl/socket.c,
+	protocol/smb/smb.c, sched/connection.c:
 
 	More close_socket() changes related to last patch.  
 
 Mon Apr 11 21:35:41 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/ftp/ftp.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/ftp/ftp.c:
 
 	close_socket(): No need to take connection parameter. I am a little
 	puzzled about whether conn = NULL is some hidden feature or simply
@@ -6168,39 +6582,43 @@ Mon Apr 11 21:35:41 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Apr 11 21:20:49 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/socket.c, network/socket.h,
+	sched/connection.c:
 
 	dns_found(): Take connection_socket instead of connection.  
 
 Mon Apr 11 21:15:39 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, protocol/http/http.c, ssl/connect.c,
-	ssl/connect.h:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c,
+	network/ssl/socket.h, protocol/http/http.c:
 
 	ssl_connect(): No need to pass struct connection.  
 
 Mon Apr 11 21:10:19 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	struct conn_info: Add boolean need_ssl member.  
 
 Mon Apr 11 21:04:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Fix comment: s/conn/conn_socket/.  
 
 Mon Apr 11 21:03:32 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	struct conn_info: Add a ip_family member initialized from
 	uri->ip_family.  
 
 Mon Apr 11 20:55:34 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	struct dnsquery: Remove xfn callback member. Rename end_dns_lookup()
 	-> done_dns_lookup(). Call done_dns_lookup() directly instead of
@@ -6208,54 +6626,56 @@ Mon Apr 11 20:55:34 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Apr 11 20:51:04 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: dns.c, dns.h:
+	* src/: lowlevel/dns.c, lowlevel/dns.h, network/dns.c,
+	network/dns.h:
 
 	Introduce dns_callback_T. struct dnsquery: fn -> done.  
 
 Mon Apr 11 20:28:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/http/http.c, sched/connection.c, sched/connection.h,
-	ssl/connect.c:
+	network/connection.c, network/connection.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c, protocol/http/http.c,
+	sched/connection.c, sched/connection.h:
 
 	Move conn->conn_info to connection_socket. A few hacks which will
 	have to be cleaned up was needed.  
 
 Mon Apr 11 20:22:36 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	done_connection_info(): Use mem_set_free() again when NULLifying but
 	pass the right pointer.  
 
 Mon Apr 11 20:20:44 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	done_connection_info(): Don't mem_set_free() when NULLifying.  
 
 Mon Apr 11 19:32:49 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	done_connection_info(): Use mem_set_free() when NULLifying.  
 
 Mon Apr 11 19:30:23 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	dns_exception(): Access conn->socket directly when calling
 	close_socket().  
 
 Mon Apr 11 19:22:31 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	dns_found(): Use connection_socket handlers.  
 
 Mon Apr 11 19:17:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	dns_found(): Use retry_conn_with_state(). I am not entirely sure the
 	new code is equivalent to the old but I am pretty sure it is not far
@@ -6263,47 +6683,49 @@ Mon Apr 11 19:17:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Apr 11 19:03:25 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Make dns_cache static.  
 
 Mon Apr 11 18:31:49 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, protocol/ftp/ftp.c, sched/connection.c,
-	sched/connection.h:
+	* src/: lowlevel/connect.c, network/connection.c,
+	network/connection.h, network/socket.c, protocol/ftp/ftp.c,
+	sched/connection.c, sched/connection.h:
 
 	Move the boolean conn->protocol_family to the connection_socket
 	struct.  
 
 Mon Apr 11 18:26:33 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Compile fix.  
 
 Mon Apr 11 18:23:21 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	dns_found(): Use local connection_socket variable. Assert that
 	conn_info->socket is always set.  
 
 Mon Apr 11 18:09:35 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	find_in_dns_cache(): e -> dnsentry.  
 
 Mon Apr 11 18:07:44 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
-	sched/connection.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/connection.h, network/socket.c,
+	network/socket.h, sched/connection.c, sched/connection.h:
 
 	Move the conn->dnsquery pointer to the conn_info struct.  
 
 Mon Apr 11 17:56:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	find_in_dns_cache(): Return the found dnsentry or NULL instead of
 	error code.  
@@ -6311,6 +6733,7 @@ Mon Apr 11 17:56:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 Mon Apr 11 17:16:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: lowlevel/connect.c, lowlevel/dns.c, lowlevel/select.h,
+	network/connection.c, network/dns.c, network/socket.c,
 	osdep/os2/os2.c, osdep/unix/unix.c, protocol/ftp/ftp.c,
 	protocol/smb/smb.c, sched/connection.c, terminal/kbd.c,
 	terminal/terminal.c:
@@ -6320,82 +6743,86 @@ Mon Apr 11 17:16:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Apr 11 16:45:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	dns_found() is already declared in the header so remove.  
 
 Mon Apr 11 16:35:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: sched/connection.c, sched/connection.h, ssl/connect.c:
+	* src/: network/connection.c, network/connection.h,
+	network/ssl/socket.c, sched/connection.c, sched/connection.h:
 
 	Introduce set_state() handler for the connection_socket. Use it in
 	the SSL code.  
 
 Mon Apr 11 16:23:59 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_connect(): Always use the connection_socket variable instead of
 	accessing it via connection or conn_info struct.  
 
 Mon Apr 11 16:21:17 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c,
+	network/ssl/socket.h:
 
 	No need to passs struct connection parameter to ssl_write().  
 
 Mon Apr 11 16:18:13 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/: connect.c, connect.h:
+	* src/network/ssl/: socket.c, socket.h:
 
 	No need to passs struct connection parameter to ssl_close().  
 
 Mon Apr 11 16:15:35 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.h:
+	* src/: network/connection.h, sched/connection.h:
 
 	Improve the socket done handler description.  
 
 Mon Apr 11 16:14:38 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	Use socket->conn instead of conn parameter.  
 
 Mon Apr 11 16:13:14 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	More socket operation usage.  
 
 Mon Apr 11 16:05:02 2005  Laurent Monin <zas@norz.org>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_write(): fix comment.  
 
 Mon Apr 11 16:04:04 2005  Laurent Monin <zas@norz.org>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_write(): try to make code more explicit.  
 
 Mon Apr 11 15:58:00 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: sched/connection.c, sched/connection.h, ssl/connect.c:
+	* src/: network/connection.c, network/connection.h,
+	network/ssl/socket.c, sched/connection.c, sched/connection.h:
 
 	struct connection_socket: Add a data member and done() + retry()
 	handlers. Use it in the SSL code.  
 
 Mon Apr 11 15:40:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.h:
+	* src/: network/connection.h, sched/connection.h:
 
 	Revert chunk which should not have been in last patch.  
 
 Mon Apr 11 15:39:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: sched/connection.h, ssl/connect.c:
+	* src/: network/connection.h, network/ssl/socket.c,
+	sched/connection.h:
 
 	ssl_write(), ssl_read(): Store the connection_state and use
 	{abort,retry}_conn_with_state() instead of set_connection_state() +
@@ -6403,7 +6830,8 @@ Mon Apr 11 15:39:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Apr 11 15:31:07 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: sched/connection.h, ssl/connect.c:
+	* src/: network/connection.h, network/ssl/socket.c,
+	sched/connection.h:
 
 	Move the no_tls boolean variable from struct connection to struct
 	connection_socket.  
@@ -6676,7 +7104,7 @@ Thu Apr  7 11:23:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 Thu Apr  7 11:16:57 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: main.c, lowlevel/timer.c, lowlevel/timer.h,
-	modules/module.c:
+	modules/module.c, viewer/timer.c, viewer/timer.h:
 
 	Introducing timer_module.  
 
@@ -6688,17 +7116,18 @@ Thu Apr  7 11:06:54 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr  7 10:48:47 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: main.c, main.h, dialogs/menu.c, intl/gettext/loadmsgcat.c,
-	lowlevel/home.c:
+	* src/: main.c, main.h, config/home.c, dialogs/menu.c,
+	intl/gettext/loadmsgcat.c, lowlevel/home.c:
 
 	Rename |path_to_exe| struct program field to |path| as
 	|program.path| is sufficiently explicit.  
 
 Thu Apr  7 10:45:42 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: main.c, main.h, dialogs/menu.c, intl/gettext/loadmsgcat.c,
-	lowlevel/home.c, lowlevel/select.c, lowlevel/signals.c,
-	terminal/event.c, terminal/terminal.c, viewer/dump/dump.c:
+	* src/: main.c, main.h, config/home.c, dialogs/menu.c,
+	intl/gettext/loadmsgcat.c, lowlevel/home.c, lowlevel/select.c,
+	lowlevel/signals.c, osdep/signals.c, terminal/event.c,
+	terminal/terminal.c, viewer/dump/dump.c:
 
 	Move globals @terminate, @retval and @path_to_exe to a struct named
 	@program. It makes more obvious that these are global, and let us
@@ -6802,7 +7231,8 @@ Wed Apr  6 15:50:33 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr  6 15:08:14 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/: config/kbdbind.c, config/kbdbind.h, lowlevel/timer.c:
+	* src/: config/kbdbind.c, config/kbdbind.h, lowlevel/timer.c,
+	viewer/timer.c:
 
 	Drop the func_ref parameter from kbd_nm_lookup since nothing uses it
 	or is likely to need it.  
@@ -6926,7 +7356,7 @@ Tue Apr  5 07:53:39 2005  Petr Baudis <pasky@ucw.cz>:
 
 Mon Apr  4 12:33:30 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	free_connection_data(): Move up active_connections decrementing so
 	assertion failures won't get triggered because conn->running is
@@ -7190,8 +7620,8 @@ Wed Mar 30 20:20:53 2005  Russ Rowan <rrowan@dandy.net>:
 Wed Mar 30 15:25:09 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: cache/cache.c, document/document.c,
-	document/html/renderer.c, lowlevel/dns.c, terminal/screen.c,
-	util/hash.c, util/lists.h:
+	document/html/renderer.c, lowlevel/dns.c, network/dns.c,
+	terminal/screen.c, util/hash.c, util/lists.h:
 
 	Introduce move_to_top_of_list() macro and use it where applicable.
 	Please review.  
@@ -9187,7 +9617,8 @@ Wed Mar  9 17:59:06 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 Wed Mar  9 17:58:54 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: connection.c, connection.h:
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h:
 
 	Revert attempt to fix ftp root directory issue (PWD). Last bits.  
 
@@ -9236,7 +9667,8 @@ Tue Mar  8 15:20:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Tue Mar  8 13:56:28 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: protocol/ftp/ftp.c, sched/connection.c, sched/connection.h:
+	* src/: network/connection.c, network/connection.h,
+	protocol/ftp/ftp.c, sched/connection.c, sched/connection.h:
 
 	Send PWD and parse its response to get base directory sent by ftp
 	server, and prepend it to URIs used to retrieve directories and
@@ -9295,7 +9727,8 @@ Sat Mar  5 22:14:31 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: cookies/cookies.c, cookies/cookies.h, cookies/dialogs.c,
 	globhist/globhist.c, globhist/globhist.h, lowlevel/dns.c,
-	lowlevel/select.c, lowlevel/timers.c, lowlevel/timers.h,
+	network/dns.c, lowlevel/select.c, lowlevel/timers.c,
+	lowlevel/timers.h, network/connection.c, network/connection.h,
 	protocol/date.c, protocol/date.h, sched/connection.c,
 	sched/connection.h, sched/download.h, sched/session.c, util/conv.c,
 	util/conv.h, util/time.c, util/time.h, util/ttime.c, util/ttime.h:
@@ -9345,7 +9778,8 @@ Sat Mar  5 21:34:30 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Mar  5 21:28:52 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: event.c, event.h:
+	* src/: modules/event.c, modules/event.h, sched/event.c,
+	sched/event.h:
 
 	event_hook -> event_hook_T.  
 
@@ -9376,8 +9810,8 @@ Sat Mar  5 21:14:38 2005  Laurent Monin <zas@norz.org>:
 
 Sat Mar  5 21:11:03 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: sched/connection.h, sched/download.c, sched/session.c,
-	sched/task.c, viewer/dump/dump.c:
+	* src/: network/connection.h, sched/connection.h, sched/download.c,
+	sched/session.c, sched/task.c, viewer/dump/dump.c:
 
 	download_callback -> download_callback_T.  
 
@@ -9395,9 +9829,9 @@ Sat Mar  5 21:06:35 2005  Laurent Monin <zas@norz.org>:
 
 Sat Mar  5 21:04:49 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/about.h, protocol/data.h, protocol/protocol.c,
-	protocol/protocol.h, protocol/user.h, protocol/file/file.h,
-	protocol/finger/finger.h, protocol/ftp/ftp.h,
+	* src/: network/connection.c, protocol/about.h, protocol/data.h,
+	protocol/protocol.c, protocol/protocol.h, protocol/user.h,
+	protocol/file/file.h, protocol/finger/finger.h, protocol/ftp/ftp.h,
 	protocol/gopher/gopher.h, protocol/http/http.h,
 	protocol/nntp/connection.h, protocol/smb/smb.h, sched/connection.c,
 	sched/task.c:
@@ -9511,7 +9945,8 @@ Fri Mar  4 18:33:24 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: bfu/dialog.c, bfu/leds.c, document/refresh.c,
 	lowlevel/timer.c, lowlevel/timers.c, lowlevel/timers.h,
-	sched/connection.c, sched/session.c, terminal/kbd.c:
+	network/connection.c, sched/connection.c, sched/session.c,
+	terminal/kbd.c, viewer/timer.c:
 
 	Pass timer_id_T * to install_timer() instead of returning the id.  
 
@@ -9519,7 +9954,8 @@ Fri Mar  4 17:55:36 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: bfu/dialog.c, bfu/leds.c, document/refresh.c,
 	lowlevel/timer.c, lowlevel/timers.c, lowlevel/timers.h,
-	sched/connection.c, sched/session.c, sched/task.c, terminal/kbd.c:
+	network/connection.c, sched/connection.c, sched/session.c,
+	sched/task.c, terminal/kbd.c, viewer/timer.c:
 
 	Pass a timer_id_T pointer to kill_timer(), and always undefine it
 	after kill. It simplifies code and is safer. Performance impact
@@ -9530,8 +9966,9 @@ Fri Mar  4 17:36:29 2005  Laurent Monin <zas@norz.org>:
 	* src/: bfu/dialog.c, bfu/dialog.h, bfu/leds.c,
 	document/document.c, document/refresh.c, document/refresh.h,
 	lowlevel/timer.c, lowlevel/timers.c, lowlevel/timers.h,
-	sched/connection.c, sched/connection.h, sched/session.c,
-	sched/session.h, sched/task.c, terminal/kbd.c:
+	network/connection.c, network/connection.h, sched/connection.c,
+	sched/connection.h, sched/session.c, sched/session.h, sched/task.c,
+	terminal/kbd.c, viewer/timer.c:
 
 	Define a type timer_id_T and TIMER_ID_UNDEF. Populate code with
 	them.  
@@ -9559,7 +9996,8 @@ Fri Mar  4 14:01:06 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Mar  4 13:25:32 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: bfu/leds.c, lowlevel/timer.c, lowlevel/timer.h:
+	* src/: bfu/leds.c, lowlevel/timer.c, lowlevel/timer.h,
+	viewer/timer.c, viewer/timer.h:
 
 	Access to |timer_duration| through new get_timer_duration(), and
 	make it static to timer.c.  
@@ -9569,7 +10007,8 @@ Fri Mar  4 13:19:37 2005  Laurent Monin <zas@norz.org>:
 	* src/: bfu/dialog.c, bfu/leds.c, document/refresh.c,
 	lowlevel/Makefile.am, lowlevel/select.c, lowlevel/timer.c,
 	lowlevel/timer.h, lowlevel/timers.c, lowlevel/timers.h,
-	sched/connection.c, sched/session.c, sched/task.c, terminal/kbd.c:
+	network/connection.c, sched/connection.c, sched/session.c,
+	sched/task.c, terminal/kbd.c, viewer/timer.c, viewer/timer.h:
 
 	Move code from timer.{c,h} to new timers.{c,h} since this code has
 	nothing to do with "Internal inactivity timer", header includes were
@@ -9579,7 +10018,8 @@ Fri Mar  4 10:21:12 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: bfu/dialog.c, document/refresh.c, lowlevel/select.c,
 	lowlevel/select.h, lowlevel/timer.c, lowlevel/timer.h,
-	sched/connection.c, sched/session.c, sched/task.c, terminal/kbd.c:
+	network/connection.c, sched/connection.c, sched/session.c,
+	sched/task.c, terminal/kbd.c, viewer/timer.c, viewer/timer.h:
 
 	Move all timers related code from lowlevel/select.{c,h} to
 	lowlevel/timer.{c,h} and make |timers| static. Fix headers
@@ -9594,7 +10034,7 @@ Fri Mar  4 10:08:48 2005  Laurent Monin <zas@norz.org>:
 
 Fri Mar  4 03:39:33 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	abort_background_connections(): Use foreachsafe().  
 
@@ -9607,7 +10047,8 @@ Fri Mar  4 02:14:22 2005  Jonas Fonseca <fonseca@diku.dk>:
 Fri Mar  4 02:05:57 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: cache/cache.c, dialogs/info.c, document/document.c,
-	lowlevel/select.c, sched/connection.c, util/lists.h:
+	lowlevel/select.c, network/connection.c, sched/connection.c,
+	util/lists.h:
 
 	Introduce list_size() as a generalized version of count_timers()
 	added in lowlevel/select.c (1.59 -> 1.60). It is declared as static
@@ -9685,7 +10126,8 @@ Thu Mar  3 15:49:43 2005  Laurent Monin <zas@norz.org>:
 
 Thu Mar  3 15:43:26 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: config/options.c, sched/connection.c, sched/connection.h:
+	* src/: config/options.c, network/connection.c,
+	network/connection.h, sched/connection.c, sched/connection.h:
 
 	Wrap call to register_bottom_half(check_queue, NULL) in new
 	register_check_queue() and make check_queue() static.  
@@ -9694,7 +10136,8 @@ Thu Mar  3 15:31:57 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: config/options.c, dialogs/download.c, dialogs/menu.c,
 	ecmascript/spidermonkey.c, lowlevel/select.c, lowlevel/select.h,
-	lowlevel/signals.c, sched/connection.c, terminal/kbd.c:
+	lowlevel/signals.c, osdep/signals.c, network/connection.c,
+	sched/connection.c, terminal/kbd.c:
 
 	Rename register_bottom_half() to register_bottom_half_do(), and use
 	a macro named register_bottom_half() to wrap the call and to do
@@ -9702,19 +10145,22 @@ Thu Mar  3 15:31:57 2005  Laurent Monin <zas@norz.org>:
 
 Thu Mar  3 15:14:20 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: connection.c, connection.h:
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h:
 
 	Make |connection_queue| static to sched/connection.c.  
 
 Thu Mar  3 15:11:44 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: cache/cache.c, sched/connection.c, sched/connection.h:
+	* src/: cache/cache.c, network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h:
 
 	Move is_entry_used() from cache/cache.c to sched/connection.{c,h}.  
 
 Thu Mar  3 15:06:50 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: cache/cache.c, sched/connection.c, sched/connection.h:
+	* src/: cache/cache.c, network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h:
 
 	Rename |queue| to |connection_queue|.  
 
@@ -9783,7 +10229,8 @@ Wed Mar  2 23:01:25 2005  Laurent Monin <zas@norz.org>:
 
 Wed Mar  2 18:00:27 2005  Laurent Monin <zas@norz.org>:
 
-	* src/: sched/connection.c, sched/connection.h, sched/download.c,
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h, sched/download.c,
 	sched/session.c, sched/task.c, viewer/dump/dump.c:
 
 	Introduce type download_callback to ease casts.  
@@ -9978,9 +10425,9 @@ Mon Feb 28 15:35:49 2005  Laurent Monin <zas@norz.org>:
 Mon Feb 28 15:32:36 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: bfu/hierbox.c, bfu/inpfield.c, bfu/listmenu.c,
-	config/opttypes.c, lowlevel/interlink.c, osdep/osdep.c,
-	sched/connection.c, sched/session.c, viewer/dump/dump.c,
-	viewer/text/form.c:
+	config/opttypes.c, lowlevel/interlink.c, network/interlink.c,
+	osdep/osdep.c, network/connection.c, sched/connection.c,
+	sched/session.c, viewer/dump/dump.c, viewer/text/form.c:
 
 	Use sizeof(*item) instead of sizeof(struct item_struct_name)
 	whenever possible.  
@@ -10009,8 +10456,9 @@ Mon Feb 28 14:33:14 2005  Laurent Monin <zas@norz.org>:
 
 Mon Feb 28 14:29:39 2005  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: connection.c, download.c, error.c, event.c,
-	location.c, session.c, task.c:
+	* src/: network/connection.c, sched/connection.c, sched/download.c,
+	network/state.c, sched/error.c, modules/event.c, sched/event.c,
+	sched/location.c, sched/session.c, sched/task.c:
 
 	Use sizeof(*item) instead of sizeof(struct item_struct_name)
 	whenever possible.  
@@ -10049,7 +10497,9 @@ Mon Feb 28 13:56:12 2005  Laurent Monin <zas@norz.org>:
 
 Mon Feb 28 13:51:10 2005  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/: connect.c, dns.c, interlink.c, select.c:
+	* src/: lowlevel/connect.c, network/socket.c, lowlevel/dns.c,
+	network/dns.c, lowlevel/interlink.c, network/interlink.c,
+	lowlevel/select.c:
 
 	Use sizeof(*item) instead of sizeof(struct item_struct_name)
 	whenever possible.  
@@ -10555,7 +11005,7 @@ Tue Feb  8 23:22:15 2005  Varga Balázs <vinnui@ent.hu>:
 
 Tue Feb  8 17:42:33 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/error.c:
+	* src/: network/state.c, sched/error.c:
 
 	Try to improve the proxy error message. Patch by Morten and me.  
 
@@ -10636,7 +11086,8 @@ Sun Feb  6 09:42:04 2005  Petr Baudis <pasky@ucw.cz>:
 Sat Feb  5 22:36:37 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: intl/gettext/dcigettext.c, lowlevel/interlink.c,
-	lowlevel/signals.c, osdep/osdep.c, util/time.c, util/ttime.c:
+	lowlevel/signals.c, network/interlink.c, osdep/osdep.c,
+	osdep/signals.c, util/time.c, util/ttime.c:
 
 	Some more compile fixes revealed on MingW. In get_address() port is
 	always > 65535.  
@@ -10729,28 +11180,28 @@ Sat Feb  5 04:35:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Feb  5 04:20:40 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	lookup_fn(): Wrap in #ifndef NO_ASYNC_LOOKUP because do_lookup()
 	will only call it if ... Patch by Gisle Vanem.  
 
 Sat Feb  5 04:15:06 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	dns_found(): Check also EWOULDBLOCK (if available on win32) after
 	calling connect(). Patch by Gisle Vanem.  
 
 Sat Feb  5 04:08:50 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.h:
+	* src/: network/connection.h, sched/connection.h:
 
 	Prepare for handling winsock errors by moving the internal error
 	numbers so they start at -100000. Patch by Gisle Vanem.  
 
 Sat Feb  5 03:35:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* configure.in, src/lowlevel/signals.c:
+	* configure.in, src/lowlevel/signals.c, src/osdep/signals.c:
 
 	Check not only sigaction.h but also sigaction() and fall back to use
 	signal() interface if it is not available. Not I am on thin ice
@@ -10759,7 +11210,8 @@ Sat Feb  5 03:35:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Feb  5 03:22:39 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/select.c, lowlevel/signals.c, osdep/osdep.c:
+	* src/: lowlevel/select.c, lowlevel/signals.c, osdep/osdep.c,
+	osdep/signals.c:
 
 	Various signal compile checks/fixes needed by mingw/win32 port.
 	Patch by Gisle Vanem and me.  
@@ -10847,7 +11299,8 @@ Thu Feb  3 12:40:40 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Feb  2 17:33:14 2005  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: cache/cache.c, sched/connection.c, protocol/proxy.c,
+	* src/: cache/cache.c, network/connection.c, sched/connection.c,
+	network/connection.h, network/state.c, protocol/proxy.c,
 	protocol/proxy.h, sched/connection.h, sched/error.c:
 
 	Try to detect errors in the proxy configuration and pop up an
@@ -11419,8 +11872,8 @@ Thu Jan 13 15:55:57 2005  Jonas Fonseca <fonseca@diku.dk>:
 Thu Jan 13 14:14:50 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in, src/ecmascript/Makefile.am, src/osdep/Makefile.am,
-	src/scripting/guile/Makefile.am, src/scripting/lua/Makefile.am,
-	src/scripting/perl/Makefile.am, src/ssl/Makefile.am:
+	src/scripting/guile/Makefile.am, src/network/ssl/Makefile.am,
+	src/scripting/lua/Makefile.am, src/scripting/perl/Makefile.am:
 
 	Add certain compile flags only when needed to decrease the build
 	output.  
@@ -12812,7 +13265,7 @@ Fri Dec 31 02:40:23 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Dec 31 02:37:16 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	Make generic i18n string for reporting interlinking failures.  
 
@@ -12852,9 +13305,9 @@ Thu Dec 30 23:50:39 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: main.c, config/options.c, dialogs/info.c, dialogs/status.c,
 	document/renderer.c, document/html/renderer.c,
-	protocol/file/file.c, protocol/ftp/ftp.c, protocol/http/http.c,
-	sched/connection.c, sched/download.c, scripting/lua/core.c,
-	viewer/dump/dump.c:
+	protocol/file/file.c, network/connection.c, protocol/ftp/ftp.c,
+	protocol/http/http.c, sched/connection.c, sched/download.c,
+	scripting/lua/core.c, viewer/dump/dump.c:
 
 	Alphabetize #includes.  
 
@@ -13028,7 +13481,7 @@ Wed Dec 29 22:07:56 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Dec 29 21:30:47 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Fix potential bug: memset() the size of the struct not the size of
 	the pointer.  
@@ -13168,7 +13621,7 @@ Wed Dec 29 14:59:34 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: document/options.c, document/html/frames.c,
 	document/html/renderer.c, document/sgml/parser.c,
-	lowlevel/connect.c:
+	lowlevel/connect.c, network/socket.c:
 
 	Use copy_struct().  
 
@@ -13750,7 +14203,7 @@ Fri Dec 24 02:37:09 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Dec 24 02:34:48 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: sched/connection.h, terminal/color.c:
+	* src/: network/connection.h, sched/connection.h, terminal/color.c:
 
 	Workaround namespace clashes with Windows headers.  
 
@@ -14364,7 +14817,7 @@ Sun Dec 19 14:49:26 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Dec 19 14:37:42 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/sched/error.c:
+	* src/: network/state.c, sched/error.c:
 
 	S_NO_JAVASCRIPT -> JavaScript support is not enabled.  
 
@@ -15499,14 +15952,15 @@ Thu Dec 16 15:14:49 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Dec 16 15:13:30 2004  Laurent Monin <zas@norz.org>:
 
-	* src/: config/options.c, config/opttypes.c, lowlevel/dns.c:
+	* src/: config/options.c, config/opttypes.c, lowlevel/dns.c,
+	network/dns.c:
 
 	More get_opt_*() fixes.  
 
 Thu Dec 16 15:10:44 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: protocol/http/http.c, document/options.c,
-	lowlevel/connect.c, viewer/text/view.c:
+	lowlevel/connect.c, network/socket.c, viewer/text/view.c:
 
 	Treat options as booleans.  
 
@@ -16216,7 +16670,8 @@ Thu Dec  2 16:34:01 2004  Laurent Monin <zas@norz.org>:
 	dialogs/exmode.c, dialogs/menu.c, dialogs/options.c,
 	formhist/formhist.c, globhist/globhist.c, lowlevel/timer.c,
 	protocol/file/file.c, sched/action.c, sched/download.c,
-	scripting/lua/core.c, viewer/text/form.c, viewer/text/link.c:
+	scripting/lua/core.c, viewer/timer.c, viewer/text/form.c,
+	viewer/text/link.c:
 
 	Be more coherent, use get_cmd_opt_bool("anonymous") everywhere
 	instead of mixed get_cmd_opt_bool()/get_cmd_opt_int(). This option
@@ -16936,7 +17391,7 @@ Fri Nov 19 09:28:40 2004  Laurent Monin <zas@norz.org>:
 
 Fri Nov 19 05:07:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Update a TODO comment to reflect the renaming of uncompress_shutdown 
 	to decompress_shutdown.  
@@ -18152,8 +18607,9 @@ Wed Nov 10 11:39:21 2004  Laurent Monin <zas@norz.org>:
 Wed Nov 10 11:06:35 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: config/options.inc, cookies/cookies.c, dialogs/options.c,
-	protocol/data.c, protocol/http/http.c, protocol/http/http.h,
-	protocol/smb/smb.c, sched/connection.c, util/conv.c:
+	network/connection.c, protocol/data.c, protocol/http/http.c,
+	protocol/http/http.h, protocol/smb/smb.c, sched/connection.c,
+	util/conv.c:
 
 	Whitespaces fixes.  
 
@@ -18251,13 +18707,13 @@ Mon Nov  8 20:16:49 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Nov  8 19:41:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/signals.c:
+	* src/: lowlevel/signals.c, osdep/signals.c:
 
 	Use pid_t for storing return value of getpid().  
 
 Mon Nov  8 19:37:52 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/signals.c:
+	* src/: lowlevel/signals.c, osdep/signals.c:
 
 	Fixed bad error codes because of errno modified by signal handler.
 	Patch by user in links-1.0pre9.  
@@ -18483,10 +18939,10 @@ Fri Nov  5 03:32:19 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Nov  4 21:10:10 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/file/cgi.c, protocol/finger/finger.c,
-	protocol/gopher/gopher.c, protocol/http/http.c,
-	protocol/nntp/connection.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c, protocol/file/cgi.c,
+	protocol/finger/finger.c, protocol/gopher/gopher.c,
+	protocol/http/http.c, protocol/nntp/connection.c:
 
 	Try to document read_buffer->close by introducing read_buffer_close
 	enum.  
@@ -19768,7 +20224,7 @@ Thu Oct 14 12:35:59 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Oct 14 12:34:37 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Cleanup and fix debugging code, log_data() was renamed
 	debug_transfer_log().  
@@ -19929,7 +20385,8 @@ Tue Oct 12 14:26:47 2004  Laurent Monin <zas@norz.org>:
 
 	* configure.in, features.conf, src/config/options.inc,
 	src/protocol/Makefile.am, src/protocol/protocol.c,
-	src/protocol/ftp/ftp.c, src/protocol/ftp/ftp.h, src/sched/error.c:
+	src/network/state.c, src/protocol/ftp/ftp.c,
+	src/protocol/ftp/ftp.h, src/sched/error.c:
 
 	Make ftp protocol a module, introducing --disable-ftp configure
 	option.  
@@ -20344,15 +20801,17 @@ Fri Oct  8 17:19:25 2004  Laurent Monin <zas@norz.org>:
 
 Fri Oct  8 16:57:52 2004  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: connection.c, connection.h:
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h:
 
 	|remaining_info| -> |progress|.  
 
 Fri Oct  8 16:54:57 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: dialogs/download.c, dialogs/status.c, dialogs/status.h,
-	protocol/ftp/ftp.c, protocol/http/http.c, sched/connection.c,
-	sched/connection.h, sched/download.c:
+	network/connection.c, network/connection.h, protocol/ftp/ftp.c,
+	protocol/http/http.c, sched/connection.c, sched/connection.h,
+	sched/download.c:
 
 	|prg| -> |progress|.  
 
@@ -20382,7 +20841,7 @@ Fri Oct  8 16:36:56 2004  Laurent Monin <zas@norz.org>:
 
 Fri Oct  8 16:32:51 2004  Laurent Monin <zas@norz.org>:
 
-	* src/sched/: session.c, connection.c:
+	* src/: sched/session.c, network/connection.c, sched/connection.c:
 
 	|stat| -> |download|.  
 
@@ -20413,8 +20872,9 @@ Fri Oct  8 16:12:17 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 Fri Oct  8 16:04:12 2004  Laurent Monin <zas@norz.org>:
 
-	* src/: lowlevel/connect.c, protocol/ftp/ftp.c, sched/connection.c,
-	sched/connection.h:
+	* src/: lowlevel/connect.c, network/connection.c,
+	network/connection.h, network/socket.c, protocol/ftp/ftp.c,
+	sched/connection.c, sched/connection.h:
 
 	Rename @pf to @protocol_family, and make it a bitfield (using 0 for
 	IPv4 and 1 for IPv6, instead 1 and 2).  
@@ -20477,7 +20937,7 @@ Thu Oct  7 10:01:30 2004  Fabio Bonelli <fabiobonelli@libero.it>:
 
 Thu Oct  7 03:15:15 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/dns.h:
+	* src/: lowlevel/dns.h, network/dns.h:
 
 	Other places #includes <sys/types.h> first required by OS/2.  
 
@@ -20485,13 +20945,15 @@ Thu Oct  7 02:54:50 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: config/cmdline.c, lowlevel/connect.c, lowlevel/connect.h,
 	lowlevel/dns.c, lowlevel/dns.h, lowlevel/interlink.c,
-	osdep/osdep.c, protocol/uri.c, protocol/ftp/ftp.c:
+	network/dns.c, network/dns.h, network/interlink.c,
+	network/socket.c, network/socket.h, osdep/osdep.c, protocol/uri.c,
+	protocol/ftp/ftp.c:
 
 	Add guards around 'exotic' #includes.  
 
 Thu Oct  7 02:54:06 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: config/conf.c, lowlevel/home.c:
+	* src/: config/conf.c, config/home.c, lowlevel/home.c:
 
 	Add missing #includes.  
 
@@ -20963,19 +21425,20 @@ Tue Sep 28 16:33:33 2004  Petr Baudis <pasky@ucw.cz>:
 
 Tue Sep 28 16:28:25 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/sched/connection.h:
+	* src/: network/connection.h, sched/connection.h:
 
 	Fixed download.callback description, I got it wrong.  
 
 Tue Sep 28 16:25:00 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	sched_connection_info() -> notify_connection_callbacks() 
 
 Tue Sep 28 16:21:48 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: sched/connection.c, sched/connection.h, sched/download.c,
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h, sched/download.c,
 	sched/session.c, sched/task.c, viewer/dump/dump.c:
 
 	download.end -> download.callback 
@@ -21341,7 +21804,7 @@ Sun Sep 26 16:43:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Sep 26 16:09:17 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* configure.in, src/util/types.h:
+	* configure.in, src/osdep/types.h, src/util/types.h:
 
 	Check for uint16_t type and merge fallback macros from the
 	ECMACSRIPT branch.  
@@ -21382,7 +21845,7 @@ Sun Sep 26 14:02:20 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Sep 26 13:28:51 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Something about download->end() calling from load_url().  
 
@@ -23674,22 +24137,22 @@ Tue Sep 14 20:05:07 2004  Petr Baudis <pasky@ucw.cz>:
 
 Tue Sep 14 19:48:59 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: config/options.inc, lowlevel/connect.c, protocol/uri.c,
-	protocol/uri.h:
+	* src/: config/options.inc, lowlevel/connect.c, network/socket.c,
+	protocol/uri.c, protocol/uri.h:
 
 	Added support for a 4/6 postfix to the protocol scheme (i.e.
 	http4://, http6://).  
 
 Tue Sep 14 17:14:31 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: config/options.inc, lowlevel/connect.c:
+	* src/: config/options.inc, lowlevel/connect.c, network/socket.c:
 
 	Introduced connection.try_ipv[46], which controls whether to use
 	IPv4/IPv6 at runtime on a global basis.  
 
 Tue Sep 14 17:10:09 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Move the (sin6|sin)_family logic from socket() call to setting a
 	separate @family variable. Purpose will be clear soon.  
@@ -24257,9 +24720,9 @@ Sat Sep  4 11:31:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 Sat Sep  4 11:19:11 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: main.c, bookmarks/backend/xbel.c, config/cmdline.c,
-	intl/gettext/libintl.h, lowlevel/home.c, lowlevel/interlink.c,
-	lowlevel/select.c, mime/backend/mailcap.c, terminal/kbd.c,
-	viewer/dump/dump.c:
+	config/home.c, intl/gettext/libintl.h, lowlevel/home.c,
+	lowlevel/interlink.c, lowlevel/select.c, mime/backend/mailcap.c,
+	network/interlink.c, terminal/kbd.c, viewer/dump/dump.c:
 
 	Revert G_() abbreviation introduction and always use gettext().
 	Apparently xgettext cannot recognize them. Hopefully some of the
@@ -24413,27 +24876,28 @@ Sat Aug 28 02:52:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Aug 23 17:22:08 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.h:
+	* src/: network/connection.h, sched/connection.h:
 
 	Renumerate.  
 
 Mon Aug 23 17:15:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: protocol/protocol.c, protocol/http/http.c,
-	sched/connection.h, sched/error.c:
+	network/connection.h, sched/connection.h, network/state.c,
+	sched/error.c:
 
 	Try to simplify connection states by making S_SSL_ERROR be
 	equivalent to S_NO_SSL when CONFIG_SSL is not defined.  
 
 Mon Aug 23 17:04:40 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.h:
+	* src/: network/connection.h, sched/connection.h:
 
 	Remove obsolete S_NO_FINGER and S_NO_SMB states.  
 
 Mon Aug 23 17:03:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/protocol.c, sched/error.c:
+	* src/: protocol/protocol.c, network/state.c, sched/error.c:
 
 	generic_external_protocol_handler(): Handle 'This version of ELinks
 	does not contain X protocol support' in the default case. Also
@@ -24467,7 +24931,7 @@ Mon Aug 23 00:29:35 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Mon Aug 23 00:20:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Fix a typo in a comment: s/managment/management/ 
 
@@ -24543,14 +25007,14 @@ Sat Aug 21 15:16:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Aug 21 14:57:55 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Remove unused #include.  
 
 Fri Aug 20 23:46:23 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: document/html/parser/parse.c, formhist/formhist.c,
-	sched/connection.c:
+	network/connection.c, sched/connection.c:
 
 	Clean up block trailing semicolons.  
 
@@ -24625,6 +25089,7 @@ Thu Aug 19 20:57:17 2004  Jonas Fonseca <fonseca@diku.dk>:
 Thu Aug 19 14:11:21 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* features.conf, src/protocol/gopher/gopher.c,
+	src/network/connection.h, src/network/state.c,
 	src/sched/connection.h, src/sched/error.c:
 
 	Make it more clear that the CSO phone-book protocol is non-existent
@@ -24853,8 +25318,9 @@ Wed Aug 18 20:40:57 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Aug 18 20:02:18 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: encoding/encoding.c, protocol/file/file.c,
-	sched/connection.h, sched/error.c:
+	* src/: encoding/encoding.c, network/connection.h,
+	protocol/file/file.c, sched/connection.h, network/state.c,
+	sched/error.c:
 
 	When loading encoded files that are corrupt read_file() would end up 
 	retuning -errno == 0 (which is used for S_WAIT). This patch
@@ -24972,7 +25438,7 @@ Tue Aug 17 08:05:15 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Tue Aug 17 08:03:17 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/: bfu/button.c, ssl/ssl.c, cookies/cookies.c,
+	* src/: bfu/button.c, network/ssl/ssl.c, cookies/cookies.c,
 	modules/module.h, document/plain/renderer.c:
 
 	Move end-of-line comments after the semicolons of the statements
@@ -25469,7 +25935,7 @@ Sat Aug 14 21:30:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Sat Aug 14 21:28:53 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/ssl/Makefile.am:
+	* src/network/ssl/Makefile.am:
 
 	Add TODO to EXTRA_DIST.  
 
@@ -25563,13 +26029,15 @@ Sat Aug 14 07:53:10 2004  Jonas Fonseca <fonseca@diku.dk>:
 	src/protocol/nntp/connection.c, src/protocol/nntp/connection.h,
 	src/protocol/nntp/nntp.c, src/protocol/nntp/nntp.h,
 	src/protocol/nntp/response.c, src/protocol/nntp/response.h,
+	src/network/connection.h, src/network/state.c,
 	src/sched/connection.h, src/sched/error.c, test/href_tests.html:
 
 	Add (experimental) NNTP support. Disabled by default.  
 
 Sat Aug 14 06:57:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: sched/connection.c, sched/connection.h, protocol/ftp/ftp.c,
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h, protocol/ftp/ftp.c,
 	protocol/http/http.c, main.c:
 
 	Add keep-alive connection time-out callback support.  
@@ -25666,7 +26134,7 @@ Thu Aug 12 08:44:04 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Thu Aug 12 08:40:28 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/: bfu/listmenu.c, ssl/connect.c, intl/charsets.c,
+	* src/: bfu/listmenu.c, network/ssl/socket.c, intl/charsets.c,
 	util/error.h, util/hash.c, util/snprintf.c, cookies/cookies.c,
 	dialogs/info.c, dialogs/options.c, osdep/os2/os2.c, osdep/osdep.c,
 	osdep/stub.c, sched/task.c, terminal/terminal.c,
@@ -25929,19 +26397,19 @@ Wed Aug  4 22:32:01 2004  Varga Balázs <vinnui@ent.hu>:
 
 Wed Aug  4 19:16:41 2004  Laurent Monin <zas@norz.org>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Indentation fix.  
 
 Wed Aug  4 05:16:57 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	What the heck, try to get it to work with OpenSSL as well.  
 
 Wed Aug  4 05:07:55 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	Fix a compilation error with GNUTLS by reverting the removal of the
 	ssl_error label in revision 1.82.  
@@ -26009,8 +26477,8 @@ Tue Aug  3 16:13:26 2004  Laurent Monin <zas@norz.org>:
 
 Tue Aug  3 10:41:05 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, protocol/http/http.c,
-	sched/connection.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, network/connection.c, network/socket.c,
+	network/ssl/socket.c, protocol/http/http.c, sched/connection.c:
 
 	Do the init_ssl_connection() call in ssl_connect(). It simplifies a
 	lot of things. Now all the SSL handle setup and teardown is done
@@ -26018,29 +26486,31 @@ Tue Aug  3 10:41:05 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Aug  3 10:31:16 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
-	ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/socket.c, network/socket.h,
+	network/ssl/socket.c, sched/connection.c:
 
 	Continue the rampage. Introduce done_connection_info().  
 
 Tue Aug  3 10:04:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/http/http.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/http/http.c:
 
 	Introduce init_connection_info().  
 
 Tue Aug  3 09:43:43 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	make_connection(): Why yes Mam but de gospel do say that man was
 	born of woman's womb.  
 
 Tue Aug  3 09:39:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/finger.c,
-	protocol/ftp/ftp.c, protocol/http/http.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/finger.c, protocol/ftp/ftp.c,
+	protocol/http/http.c:
 
 	make_connection(): Drop @port arg. It is needless code dublication.
 	The return value check in http_protocol_handler() should not be
@@ -26072,21 +26542,21 @@ Tue Aug  3 09:19:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Tue Aug  3 09:18:34 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/http/http.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c, protocol/http/http.c:
 
 	Rename struct conn_info's @func callback to @done. D-scribe
 	make_connection().  
 
 Tue Aug  3 09:11:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	connected(): No need to test for conn_info or conn_info->func.  
 
 Tue Aug  3 09:08:48 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c:
 
 	Rename all conn_info struct variables to conn_info.  
 
@@ -26099,13 +26569,14 @@ Tue Aug  3 08:43:12 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Aug  3 08:24:57 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: sched/connection.h, ssl/connect.c:
+	* src/: network/connection.h, sched/connection.h,
+	network/ssl/socket.c:
 
 	struct connection: Rename @no_tsl to @no_tls.  
 
 Tue Aug  3 08:14:48 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_set_no_tls(): It is only called after checking |if
 	(conn->no_tsl)| which means there is no need to test it in the
@@ -26114,44 +26585,44 @@ Tue Aug  3 08:14:48 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Aug  3 00:50:50 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/http/http.c, sched/connection.c, ssl/ssl.c,
-	ssl/ssl.h:
+	* src/: network/connection.c, network/ssl/ssl.c, network/ssl/ssl.h,
+	protocol/http/http.c, sched/connection.c:
 
 	init_ssl_connection(): Take connection_socket struct as arg.  
 
 Tue Aug  3 00:44:17 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_read(), ssl_do_read(): Use passed connection_socket struct.  
 
 Tue Aug  3 00:39:28 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_write(), ssl_do_write(): Use passed connection_socket struct.  
 
 Tue Aug  3 00:37:01 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_want_read(): Use local connection_socket pointer.  
 
 Tue Aug  3 00:35:25 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_do_connect(): Take connection_socket struct as arg.  
 
 Tue Aug  3 00:33:50 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_set_no_tls(): Take connection_socket struct as arg.  
 
 Tue Aug  3 00:10:49 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_connect(): Use the passed connection_socket for retrieving the
 	SSL handle.  
@@ -26171,40 +26642,42 @@ Mon Aug  2 23:58:58 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Aug  2 23:37:48 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/: connect.c, ssl.c, ssl.h:
+	* src/network/ssl/: socket.c, ssl.c, ssl.h:
 
 	done_ssl_connection(): Take only the connection_socket struct.
 	Rename? 
 
 Mon Aug  2 23:22:20 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c,
+	network/ssl/socket.h:
 
 	Use the read_buffer socket for testing SSL and pass the socket to
 	ssl_read().  
 
 Mon Aug  2 23:20:30 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c,
+	network/ssl/socket.h:
 
 	Use the write_buffer socket for testing SSL and pass the socket to
 	ssl_write().  
 
 Mon Aug  2 23:15:44 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	connected(): Check for SSL in the connection info struct's socket.  
 
 Mon Aug  2 23:10:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	dns_found(): Check for SSL in the connection info struct's socket.  
 
 Mon Aug  2 22:59:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	interrupt_connection(): Since close_socket() calls ssl_close() which
 	then calls done_ssl_connection() there is no need to do it here.
@@ -26213,26 +26686,29 @@ Mon Aug  2 22:59:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Aug  2 22:50:20 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	Oops, fix last patch. ;-) 
 
 Mon Aug  2 22:45:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_do_close(): Use the passed socket.  
 
 Mon Aug  2 22:43:40 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c,
+	network/ssl/socket.h:
 
 	close_socket(): Pass the mic to ssl_connect().  
 
 Mon Aug  2 22:13:24 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, protocol/http/http.c,
-	sched/connection.c, sched/connection.h, ssl/connect.c, ssl/ssl.c:
+	* src/: lowlevel/connect.c, network/connection.c,
+	network/connection.h, network/socket.c, network/ssl/socket.c,
+	network/ssl/ssl.c, protocol/http/http.c, sched/connection.c,
+	sched/connection.h:
 
 	Move the connection struct's ssl handle to struct connection_socket.
 	All users still assume that there can be only one ssl handle and it
@@ -26324,15 +26800,16 @@ Sun Aug  1 20:08:24 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Aug  1 10:00:28 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, protocol/http/http.c, ssl/connect.c,
-	ssl/connect.h:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c,
+	network/ssl/socket.h, protocol/http/http.c:
 
 	ssl_connect(): Take connection_socket struct.  
 
 Sun Aug  1 09:51:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/finger.c,
-	protocol/ftp/ftp.c, protocol/http/http.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c, protocol/finger.c,
+	protocol/ftp/ftp.c, protocol/http/http.c:
 
 	read_from_socket(): Take struct connection_socket instead of socket
 	fd. Describe it and rename @read_func to @done to reflect the
@@ -26342,54 +26819,58 @@ Sun Aug  1 09:51:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Aug  1 09:18:51 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	struct write_buffer: Replace |int sock| member with |struct
 	connection_socket *socket| member.  
 
 Sun Aug  1 09:14:52 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/finger.c,
-	protocol/ftp/ftp.c, protocol/http/http.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/finger.c, protocol/ftp/ftp.c,
+	protocol/http/http.c:
 
 	write_to_socket(): Take struct connection_socket instead of socket
 	fd. Describe it and rename write_func to done to reflect the change.  
 
 Sun Aug  1 09:08:40 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.h:
+	* src/: network/connection.h, sched/connection.h:
 
 	struct connection: Update @data_socket comment. SMB is also using
 	it.  
 
 Sun Aug  1 09:07:27 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/ftp/ftp.c,
-	protocol/smb/smb.c, sched/connection.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	network/connection.c, network/socket.c, network/socket.h,
+	network/ssl/socket.c, protocol/ftp/ftp.c, protocol/smb/smb.c,
+	sched/connection.c:
 
 	close_socket(): Take struct connection_socket instead of socket
 	descriptor pointer.  
 
 Sun Aug  1 09:01:28 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h,
-	protocol/http/http.c, ssl/connect.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, network/ssl/socket.c, protocol/http/http.c:
 
 	struct conn_info: Replace |int *sock| member with |struct
 	connection_socket *socket| member.  
 
 Sun Aug  1 08:55:09 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/finger.c,
-	protocol/ftp/ftp.c, protocol/http/http.c:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h, protocol/finger.c, protocol/ftp/ftp.c,
+	protocol/http/http.c:
 
 	make_connection(): Take struct connection_socket pointer.  
 
 Sun Aug  1 08:45:55 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/finger.c, protocol/ftp/ftp.c,
-	protocol/http/http.c, protocol/smb/smb.c, sched/connection.c,
-	sched/connection.h:
+	* src/: network/connection.c, network/connection.h,
+	protocol/finger.c, protocol/ftp/ftp.c, protocol/http/http.c,
+	protocol/smb/smb.c, sched/connection.c, sched/connection.h:
 
 	Introduce struct connection_socket. For now only holding the socket
 	descriptor.  
@@ -26532,7 +27013,7 @@ Fri Jul 30 14:52:42 2004  Petr Baudis <pasky@ucw.cz>:
 
 Fri Jul 30 14:31:25 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	check_keepalive_connections(): Use foreachsafe().  
 
@@ -26702,7 +27183,7 @@ Wed Jul 28 15:43:51 2004  Jonas Fonseca <fonseca@diku.dk>:
 	* src/: bfu/inpfield.c, bfu/listbox.c, bfu/menu.c, bfu/text.c,
 	lowlevel/timer.c, osdep/os2/os2.c, osdep/unix/unix.c,
 	terminal/event.c, terminal/event.h, terminal/kbd.c,
-	terminal/mouse.h, viewer/text/view.c:
+	terminal/mouse.h, viewer/timer.c, viewer/text/view.c:
 
 	struct term_event: Move remaining variables to union.  
 
@@ -26913,7 +27394,7 @@ Wed Jul 28 04:09:23 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Jul 28 03:36:36 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	read_select(): Fix buffer overflow by substracting the length of the
 	buffer that has already been read. Reported by Jan Braun
@@ -26987,13 +27468,13 @@ Tue Jul 27 17:54:09 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Jul 27 17:48:07 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	init_connection(): Improve referrer setup comment. Revisited.  
 
 Tue Jul 27 17:45:51 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Always set the referrer when loading file: URIs, so that CGI scripts
 	can use it.  
@@ -27007,7 +27488,7 @@ Tue Jul 27 17:34:19 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Jul 27 17:30:34 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	init_connection(): Improve referrer setup comment.  
 
@@ -27039,14 +27520,15 @@ Tue Jul 27 03:10:37 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Jul 27 03:07:54 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/: connection.c, session.c, session.h:
+	* src/: network/connection.c, sched/connection.c, sched/session.c,
+	sched/session.h:
 
 	Move the referrer weeding to init_connection(). It means that CGI
 	can now have referrer if it is desirable.  
 
 Tue Jul 27 02:44:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	Make ssl_want_read() static.  
 
@@ -27546,7 +28028,7 @@ Fri Jul 23 01:56:44 2004  Petr Baudis <pasky@ucw.cz>:
 
 Fri Jul 23 00:57:30 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/signals.c:
+	* src/: lowlevel/signals.c, osdep/signals.c:
 
 	AIX compilation fix (by Mikulas; from 1.00pre6).  
 
@@ -27566,7 +28048,7 @@ Thu Jul 22 22:23:19 2004  Laurent Monin <zas@norz.org>:
 
 Thu Jul 22 22:20:30 2004  Laurent Monin <zas@norz.org>:
 
-	* src/sched/error.c:
+	* src/: network/state.c, sched/error.c:
 
 	Stick a comment about get_err_msg() return value.  
 
@@ -27613,7 +28095,7 @@ Thu Jul 22 21:54:35 2004  Laurent Monin <zas@norz.org>:
 
 Thu Jul 22 21:50:47 2004  Laurent Monin <zas@norz.org>:
 
-	* src/sched/error.c:
+	* src/: network/state.c, sched/error.c:
 
 	get_err_msg(): drop goto/label.  
 
@@ -27632,13 +28114,14 @@ Thu Jul 22 21:28:38 2004  Laurent Monin <zas@norz.org>:
 
 Thu Jul 22 17:25:23 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Fix large files uploads timing out (by Mikulas; from 1.00pre2).  
 
 Thu Jul 22 17:15:09 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	Describe {read,write}_buffer.done.  
 
@@ -28217,58 +28700,58 @@ Sun Jul 18 16:00:33 2004  Laurent Monin <zas@norz.org>:
 
 Sun Jul 18 15:53:58 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): no need to set @s_info_connect.fd to -1, since
 	on error @s_info_connect.addr is set to NULL.  
 
 Sun Jul 18 15:52:01 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): drop |free_and_return| label.  
 
 Sun Jul 18 15:50:28 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): break loop instead of gotos.  
 
 Sun Jul 18 15:48:56 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): move @saved_errno declaration in while() loop.  
 
 Sun Jul 18 15:47:46 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): drop |again| label and use a while() loop
 	instead.  
 
 Sun Jul 18 15:46:08 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): add a goto free_and_error.  
 
 Sun Jul 18 15:43:29 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): reindent code.  
 
 Sun Jul 18 15:42:16 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): introduce @saved_errno, and close file
 	descriptor immediatly after connect() error.  
 
 Sun Jul 18 15:38:48 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): drop one goto free_and_error.  
 
@@ -28292,7 +28775,7 @@ Sun Jul 18 13:33:57 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Jul 18 12:40:23 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	Dropped unreviewable 1.79 (and depending 1.80) - please don't mix
 	reindenting code with anything else. You're my cosmo-girl, you're in
@@ -28390,31 +28873,31 @@ Sun Jul 18 00:58:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Sat Jul 17 22:57:36 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): drop another goto/label.  
 
 Sat Jul 17 22:53:39 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): drop goto/label and simplify code.  
 
 Sat Jul 17 22:28:43 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): drop commented out code.  
 
 Sat Jul 17 22:27:10 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	connect_to_af_unix(): use mem_free_set().  
 
 Sat Jul 17 22:21:42 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	Introduce safe_close() and slightly reduce code redundancy.  
 
@@ -28516,7 +28999,8 @@ Fri Jul 16 18:33:45 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Jul 16 18:30:27 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: config/options.inc, globhist/globhist.c, lowlevel/timer.c:
+	* src/: config/options.inc, globhist/globhist.c, lowlevel/timer.c,
+	viewer/timer.c:
 
 	Use global history code to make infrastructure for periodically
 	saving ~/.elinks info files to disk. It introduces 'infofiles'
@@ -28633,8 +29117,8 @@ Thu Jul 15 15:54:20 2004  Jonas Fonseca <fonseca@diku.dk>:
 	* src/: bfu/dialog.c, bfu/hierbox.c, bfu/inpfield.c, bfu/listbox.c,
 	bfu/menu.c, bfu/text.c, config/dialogs.c, config/kbdbind.c,
 	config/kbdbind.h, dialogs/exmode.c, dialogs/info.c,
-	lowlevel/timer.c, sched/action.c, viewer/text/form.c,
-	viewer/text/view.c:
+	lowlevel/timer.c, sched/action.c, viewer/timer.c,
+	viewer/text/form.c, viewer/text/view.c:
 
 	enum keymap: KM -> KEYMAP 
 
@@ -28646,7 +29130,8 @@ Thu Jul 15 15:52:32 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Jul 15 15:44:05 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/rewrite/rewrite.c, sched/event.c, sched/event.h,
+	* src/: modules/event.c, modules/event.h,
+	protocol/rewrite/rewrite.c, sched/event.c, sched/event.h,
 	scripting/guile/hooks.c, scripting/lua/core.c,
 	scripting/lua/hooks.c, scripting/perl/hooks.c:
 
@@ -28664,7 +29149,8 @@ Thu Jul 15 15:35:41 2004  Jonas Fonseca <fonseca@diku.dk>:
 	bfu/menu.c, config/kbdbind.c, lowlevel/timer.c, osdep/os2/os2.c,
 	osdep/unix/unix.c, sched/session.c, terminal/event.c,
 	terminal/event.h, terminal/kbd.c, terminal/terminal.h,
-	terminal/window.c, viewer/text/form.c, viewer/text/view.c:
+	terminal/window.c, viewer/timer.c, viewer/text/form.c,
+	viewer/text/view.c:
 
 	enum term_event_type: s/EV_/EVENT_/ 
 
@@ -28723,9 +29209,9 @@ Thu Jul 15 10:42:55 2004  Jonas Fonseca <fonseca@diku.dk>:
 Thu Jul 15 08:42:16 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: bfu/group.c, document/html/tables.c,
-	document/html/parser/table.h, sched/connection.c,
-	viewer/text/form.c, viewer/text/link.c, viewer/text/search.c,
-	viewer/text/textarea.c, viewer/text/view.c:
+	document/html/parser/table.h, network/connection.c,
+	sched/connection.c, viewer/text/form.c, viewer/text/link.c,
+	viewer/text/search.c, viewer/text/textarea.c, viewer/text/view.c:
 
 	Drop bunch of useless/obsolete comments.  
 
@@ -29099,7 +29585,7 @@ Wed Jul 14 00:31:09 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Jul 14 00:24:46 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	send_connection_info(): Use foreachsafe().  
 
@@ -29309,13 +29795,13 @@ Mon Jul 12 13:52:33 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Jul 12 13:43:44 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	@s -> @socket.  
 
 Mon Jul 12 13:39:44 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	log_data(): make it static and reduce indentation level.  
 
@@ -29347,7 +29833,7 @@ Mon Jul 12 11:31:17 2004  Jonas Fonseca <fonseca@diku.dk>:
 	* src/: protocol/Makefile.am, protocol/protocol.c,
 	protocol/protocol.h, protocol/http/Makefile.am,
 	protocol/http/http.h, protocol/http/https.c, protocol/http/https.h,
-	sched/connection.c:
+	network/connection.c, sched/connection.c:
 
 	Introduce need_ssl boolean member to protocol_backend. It will make
 	it easier to add nntps:// support. SSL initialization now happens in
@@ -29364,7 +29850,8 @@ Mon Jul 12 11:16:58 2004  Jonas Fonseca <fonseca@diku.dk>:
 Mon Jul 12 10:59:23 2004  Laurent Monin <zas@norz.org>:
 
 	* configure.in, src/config/cmdline.c, src/lowlevel/connect.c,
-	src/lowlevel/dns.c, src/lowlevel/interlink.c,
+	src/lowlevel/dns.c, src/lowlevel/interlink.c, src/network/dns.c,
+	src/network/interlink.c, src/network/socket.c,
 	src/osdep/getifaddrs.c, src/osdep/osdep.c, src/osdep/osdep.h,
 	src/protocol/ftp/ftp.c:
 
@@ -29375,7 +29862,7 @@ Mon Jul 12 10:59:23 2004  Laurent Monin <zas@norz.org>:
 
 Sat Jul 10 18:57:23 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Attempt to fix a potential bug in connected(): @func may be NULL and
 	still used, as func(conn). This case should not occur since with
@@ -31394,11 +31881,12 @@ Mon Jun 28 11:07:10 2004  Jonas Fonseca <fonseca@diku.dk>:
 	dialogs/options.c, document/css/value.c, document/html/parser.c,
 	document/html/renderer.c, document/html/tables.c,
 	document/html/parser/parse.c, formhist/dialogs.c,
-	formhist/formhist.c, mime/dialogs.c, protocol/user.c,
-	protocol/auth/dialogs.c, sched/connection.c, sched/download.c,
-	sched/session.c, sched/task.c, scripting/lua/core.c,
-	terminal/tab.c, viewer/text/draw.c, viewer/text/form.c,
-	viewer/text/search.c, viewer/text/textarea.c, viewer/text/view.c:
+	formhist/formhist.c, mime/dialogs.c, network/connection.c,
+	protocol/user.c, protocol/auth/dialogs.c, sched/connection.c,
+	sched/download.c, sched/session.c, sched/task.c,
+	scripting/lua/core.c, terminal/tab.c, viewer/text/draw.c,
+	viewer/text/form.c, viewer/text/search.c, viewer/text/textarea.c,
+	viewer/text/view.c:
 
 	enum format_align: AL_* -> ALIGN_* 
 
@@ -31536,19 +32024,19 @@ Sun Jun 27 14:06:41 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Jun 27 13:20:32 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	ssl_connect(): Cleanup client_cert setup.  
 
 Sun Jun 27 13:13:53 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	English fix.  
 
 Sun Jun 27 13:13:13 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	Introduce ssl_do_close() wrapper.  
 
@@ -31561,7 +32049,7 @@ Sun Jun 27 13:10:52 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Jun 27 13:09:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	Introduce also ssl_do_{read,write} wrappers.  
 
@@ -31573,26 +32061,26 @@ Sun Jun 27 13:06:57 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Jun 27 13:03:42 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	How are we not handling certificates w/ GNUTLS.  
 
 Sun Jun 27 13:01:21 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	get_ssl_error() -> ssl_do_connect(), because that is what it does
 	;-).  
 
 Sun Jun 27 12:59:00 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	Group OpenSSL code in same #ifdef.  
 
 Sun Jun 27 12:55:20 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	A little cleanup of over-switched ssl #ifdef'ing.  
 
@@ -32253,13 +32741,13 @@ Fri Jun 25 10:52:29 2004  Laurent Monin <zas@norz.org>:
 	document/html/tables.c, document/plain/renderer.c,
 	formhist/formhist.c, intl/charsets.c, osdep/generic.h,
 	osdep/osdep.c, protocol/header.c, protocol/uri.c,
-	protocol/file/cgi.c, protocol/ftp/ftp.c, protocol/http/http.c,
-	sched/download.c, sched/event.c, scripting/lua/core.c,
-	terminal/color.c, terminal/draw.c, terminal/event.c,
-	terminal/screen.c, util/base64.c, util/color.c, util/conv.c,
-	util/conv.h, util/fastfind.c, util/hash.c, util/string.c,
-	viewer/text/draw.c, viewer/text/form.c, viewer/text/link.c,
-	viewer/text/search.c, viewer/text/textarea.c:
+	protocol/file/cgi.c, modules/event.c, protocol/ftp/ftp.c,
+	protocol/http/http.c, sched/download.c, sched/event.c,
+	scripting/lua/core.c, terminal/color.c, terminal/draw.c,
+	terminal/event.c, terminal/screen.c, util/base64.c, util/color.c,
+	util/conv.c, util/conv.h, util/fastfind.c, util/hash.c,
+	util/string.c, viewer/text/draw.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/search.c, viewer/text/textarea.c:
 
 	Drop most register variable attribute.  
 
@@ -32290,7 +32778,8 @@ Fri Jun 25 10:04:43 2004  Laurent Monin <zas@norz.org>:
 Fri Jun 25 09:54:45 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: terminal/window.c, util/lists.h, viewer/text/form.c,
-	bfu/menu.c, cache/cache.c, sched/connection.c, sched/history.c:
+	bfu/menu.c, cache/cache.c, network/connection.c,
+	sched/connection.c, sched/history.c:
 
 	Introduce list_has_next(list, item) macro.  A little extra cleanup
 	in delete_window_ev() removing bogus check.  
@@ -32967,12 +33456,14 @@ Tue Jun 22 06:46:15 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 	document/html/parser/stack.c, formhist/dialogs.c,
 	globhist/dialogs.c, intl/charsets.c, lowlevel/connect.c,
 	lowlevel/interlink.c, lowlevel/select.c, lowlevel/signals.c,
+	network/interlink.c, network/socket.c, osdep/signals.c,
 	osdep/stub.c, osdep/beos/beos.c, osdep/beos/overrides.c,
 	osdep/os2/os2.c, protocol/auth/dialogs.c, protocol/ftp/ftp.c,
-	protocol/http/http.c, sched/connection.c, sched/session.c,
-	sched/task.c, scripting/lua/core.c, scripting/lua/hooks.c,
-	terminal/event.c, terminal/kbd.c, terminal/terminal.c,
-	util/color.c, util/memory.h, viewer/text/form.c:
+	protocol/http/http.c, network/connection.c, sched/connection.c,
+	sched/session.c, sched/task.c, scripting/lua/core.c,
+	scripting/lua/hooks.c, terminal/event.c, terminal/kbd.c,
+	terminal/terminal.c, util/color.c, util/memory.h,
+	viewer/text/form.c:
 
 	Put a space after each type-cast that lacks one.  
 
@@ -32997,7 +33488,8 @@ Tue Jun 22 04:48:57 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Tue Jun 22 00:59:33 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/: connect.c, connect.h:
+	* src/: lowlevel/connect.c, lowlevel/connect.h, network/socket.c,
+	network/socket.h:
 
 	Unexport struct write_buffer.  
 
@@ -33326,7 +33818,7 @@ Sun Jun 20 18:26:21 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Jun 20 18:22:10 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/ssl/: connect.c, ssl.c:
+	* src/network/ssl/: socket.c, ssl.c:
 
 	Merged Debian's GNUTLS tweaks to make it work with newer versions.
 	They should know what are they doing, being probably the only GNUTLS
@@ -34200,14 +34692,15 @@ Thu Jun 17 10:02:20 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: main.c, bfu/hierbox.c, bfu/inphist.c,
 	bookmarks/bookmarks.c, config/conf.c, config/options.h,
-	cookies/cookies.c, dialogs/exmode.c, dialogs/menu.c,
+	cookies/cookies.c, dialogs/exmode.c, config/home.c, dialogs/menu.c,
 	dialogs/options.c, formhist/formhist.c, globhist/globhist.c,
 	lowlevel/connect.c, lowlevel/home.c, lowlevel/interlink.c,
 	mime/backend/mailcap.c, mime/backend/mimetypes.c,
-	protocol/file/file.c, sched/action.c, sched/download.c,
-	sched/session.c, scripting/lua/core.c, terminal/kbd.c,
-	terminal/terminal.c, util/secsave.c, viewer/dump/dump.c,
-	viewer/text/form.c, viewer/text/link.c, viewer/text/textarea.c:
+	network/interlink.c, network/socket.c, protocol/file/file.c,
+	sched/action.c, sched/download.c, sched/session.c,
+	scripting/lua/core.c, terminal/kbd.c, terminal/terminal.c,
+	util/secsave.c, viewer/dump/dump.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/textarea.c:
 
 	Introduce and use get_cmd_opt_*() macros instead of
 	get_opt_*_tree(cmdline_options, ...).  
@@ -35683,9 +36176,10 @@ Sat Jun 12 19:07:48 2004  Laurent Monin <zas@norz.org>:
 
 Sat Jun 12 18:51:21 2004  Laurent Monin <zas@norz.org>:
 
-	* src/: lowlevel/signals.c, lowlevel/signals.h, viewer/text/form.c,
-	viewer/text/link.c, viewer/text/link.h, viewer/text/textarea.c,
-	viewer/text/textarea.h, viewer/text/view.c:
+	* src/: lowlevel/signals.c, lowlevel/signals.h, osdep/signals.c,
+	osdep/signals.h, viewer/text/form.c, viewer/text/link.c,
+	viewer/text/link.h, viewer/text/textarea.c, viewer/text/textarea.h,
+	viewer/text/view.c:
 
 	@t -> @term.  
 
@@ -36182,8 +36676,8 @@ Fri Jun 11 14:02:59 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Jun 11 14:00:24 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/interlink.c, terminal/terminal.c,
-	terminal/terminal.h:
+	* src/: lowlevel/interlink.c, network/interlink.c,
+	terminal/terminal.c, terminal/terminal.h:
 
 	init_term(): No need to take root_window arg anymore.  
 
@@ -37040,8 +37534,8 @@ Mon Jun  7 16:36:07 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Jun  7 16:25:59 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: cache/cache.c, cache/dialogs.c, sched/connection.c,
-	viewer/text/view.c:
+	* src/: cache/cache.c, cache/dialogs.c, network/connection.c,
+	sched/connection.c, viewer/text/view.c:
 
 	More compare_uri() usage. Hmm 
 
@@ -37362,7 +37856,8 @@ Tue Jun  1 00:03:41 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon May 31 23:56:39 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/uri.c, protocol/uri.h, sched/connection.c:
+	* src/: network/connection.c, protocol/uri.c, protocol/uri.h,
+	sched/connection.c:
 
 	Even use compare_uri() for comparing the port of the
 	keepalive_connection.  Port member can then be removed. The default
@@ -37370,7 +37865,8 @@ Mon May 31 23:56:39 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon May 31 23:49:25 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/uri.c, protocol/uri.h, sched/connection.c:
+	* src/: network/connection.c, protocol/uri.c, protocol/uri.h,
+	sched/connection.c:
 
 	get_keepalive_connection(): Use compare_uri() for checking
 	keepalive_connection. Note this is a bit more fine grained than
@@ -37379,14 +37875,14 @@ Mon May 31 23:49:25 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon May 31 23:27:32 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Replace keepalive_connection protocol and host member with URI
 	struct.  
 
 Mon May 31 23:19:51 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Why do we use protocol_handler for keepalive_connection->protocol.
 	It is not like it will ever change plus just using enum protocol
@@ -37396,14 +37892,14 @@ Mon May 31 23:19:51 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon May 31 17:34:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Replace host_connection->connection with a struct object to improve
 	debugging.  
 
 Mon May 31 17:19:18 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Use URI struct in struct host_connection instead of the host string.
 	Altho' it could pin down the URI a little longer than otherwise it
@@ -37950,7 +38446,8 @@ Sat May 29 13:26:03 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat May 29 13:21:08 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: cache/cache.c, cache/cache.h, sched/connection.c:
+	* src/: cache/cache.c, cache/cache.h, network/connection.c,
+	sched/connection.c:
 
 	Move the cache entry checking in load_uri() to separate function.
 	The fact that it 'mangles' the cache makes it a bit more
@@ -38070,7 +38567,7 @@ Fri May 28 21:18:44 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri May 28 21:16:54 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/uri.h, sched/connection.c:
+	* src/: network/connection.c, protocol/uri.h, sched/connection.c:
 
 	Don't know if it is worth it but factor out host length calculation
 	to get_uri_hostlen().  
@@ -38686,8 +39183,8 @@ Sun May 23 02:39:01 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun May 23 01:31:20 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* NEWS, configure.in, src/lowlevel/connect.c, src/protocol/proxy.c,
-	src/protocol/uri.c, src/protocol/uri.h:
+	* NEWS, configure.in, src/lowlevel/connect.c, src/network/socket.c,
+	src/protocol/proxy.c, src/protocol/uri.c, src/protocol/uri.h:
 
 	Whee .. internationalized domain name is now available. The real
 	magic is done in add_uri_to_string(). Only lowlevel stuff (like DNS
@@ -38721,7 +39218,8 @@ Sat May 22 18:48:55 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sat May 22 13:44:26 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+	* src/: lowlevel/connect.c, network/socket.c, network/ssl/socket.c,
+	network/ssl/socket.h:
 
 	ssl_write(): Take data + len args instead of write buffer.  
 
@@ -38865,11 +39363,12 @@ Thu May 20 12:49:45 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: bookmarks/bookmarks.c, bookmarks/dialogs.c,
 	formhist/formhist.c, globhist/dialogs.c, globhist/globhist.c,
+	network/ssl/socket.c, network/ssl/ssl.c,
 	protocol/rewrite/rewrite.c, protocol/smb/smb.c,
 	scripting/scripting.c, scripting/guile/core.c,
 	scripting/guile/hooks.c, scripting/lua/core.c,
 	scripting/lua/hooks.c, scripting/perl/core.c,
-	scripting/perl/hooks.c, ssl/connect.c, ssl/ssl.c:
+	scripting/perl/hooks.c:
 
 	Remove unneeded #ifdefs 
 
@@ -39335,7 +39834,8 @@ Mon May 10 01:51:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun May  9 23:33:13 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/protocol.c, sched/connection.h, sched/error.c:
+	* src/: protocol/protocol.c, network/connection.h, network/state.c,
+	sched/connection.h, sched/error.c:
 
 	A little advertisement shouldn't hurt anyone so pop up 'this version
 	does not support ... protocol' message for finger and smb. Or is
@@ -39395,7 +39895,7 @@ Sun May  9 00:59:51 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun May  9 00:56:24 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Make connected() static.  
 
@@ -40300,17 +40800,20 @@ Thu Apr 29 23:32:18 2004  Jonas Fonseca <fonseca@diku.dk>:
 Thu Apr 29 23:22:14 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* acconfig.h, configure.in, src/lowlevel/connect.c,
-	src/modules/module.c, src/protocol/http/http.c,
-	src/protocol/http/https.c, src/sched/connection.c,
-	src/sched/error.c, src/ssl/connect.c, src/ssl/connect.h,
-	src/ssl/ssl.c, src/ssl/ssl.h:
+	src/modules/module.c, src/network/connection.c,
+	src/network/socket.c, src/network/state.c,
+	src/protocol/http/http.c, src/protocol/http/https.c,
+	src/sched/connection.c, src/sched/error.c,
+	src/network/ssl/socket.c, src/network/ssl/socket.h,
+	src/network/ssl/ssl.c, src/network/ssl/ssl.h:
 
 	HAVE_{SSL,OPENSSL,GNUTLS} -> CONFIG_{SSL,OPENSSL,GNUTLS}.  
 
 Thu Apr 29 23:11:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in, src/config/cmdline.c, src/lowlevel/connect.c,
-	src/lowlevel/connect.h, src/lowlevel/dns.c, src/modules/version.c,
+	src/network/socket.c, src/lowlevel/connect.h, src/lowlevel/dns.c,
+	src/modules/version.c, src/network/dns.c, src/network/socket.h,
 	src/osdep/getifaddrs.c, src/protocol/uri.c, src/protocol/ftp/ftp.c:
 
 	IPV6 -> CONFIG_IPV6.  
@@ -40725,8 +41228,9 @@ Sun Apr 25 17:32:44 2004  Laurent Monin <zas@norz.org>:
 	* src/: bookmarks/backend/xbel.c, document/document.c,
 	document/html/parser.c, document/html/parser/forms.c,
 	document/html/parser/link.c, document/html/parser/parse.c,
-	sched/action.c, sched/connection.c, sched/download.c,
-	sched/history.c, sched/task.c, viewer/text/search.c:
+	network/connection.c, sched/action.c, sched/connection.c,
+	sched/download.c, sched/history.c, sched/task.c,
+	viewer/text/search.c:
 
 	Miscelleanous trivial tidyups: indentation, whitespaces fixes,
 	hacking document conformance.  
@@ -40745,7 +41249,7 @@ Sun Apr 25 09:52:34 2004  Laurent Monin <zas@norz.org>:
 
 Sun Apr 25 09:49:44 2004  Laurent Monin <zas@norz.org>:
 
-	* src/sched/error.c:
+	* src/: network/state.c, sched/error.c:
 
 	Typo fix: external -> external programs.  
 
@@ -40839,8 +41343,8 @@ Sat Apr 24 14:36:13 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 Sat Apr 24 12:21:01 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: dialogs/menu.c, sched/connection.h, sched/download.c,
-	sched/error.c:
+	* src/: dialogs/menu.c, network/connection.h, network/state.c,
+	sched/connection.h, sched/download.c, sched/error.c:
 
 	Fix bug 440 by checking for external hanlders in query_file()
 	through where all downloads are routed. S_EXTERNAL_PROTOCOL
@@ -41324,7 +41828,7 @@ Fri Apr 23 20:44:26 2004  Petr Baudis <pasky@ucw.cz>:
 	dialogs/status.c, document/refresh.c, document/css/scanner.c,
 	document/css/value.c, document/html/frames.c,
 	document/html/parser.c, document/html/renderer.c,
-	document/html/tables.c, document/plain/renderer.c,
+	document/html/tables.c, document/plain/renderer.c, modules/event.c,
 	osdep/getifaddrs.c, protocol/auth/auth.c, protocol/http/http.c,
 	sched/event.c, sched/session.c, terminal/draw.c, terminal/screen.h,
 	util/math.h, util/scanner.c, util/snprintf.c, viewer/text/form.c,
@@ -41389,9 +41893,9 @@ Fri Apr 23 19:30:01 2004  Petr Baudis <pasky@ucw.cz>:
 Fri Apr 23 19:26:46 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: main.c, bookmarks/backend/xbel.c, config/cmdline.c,
-	intl/gettext/libintl.h, lowlevel/home.c, lowlevel/interlink.c,
-	lowlevel/select.c, mime/backend/mailcap.c, terminal/kbd.c,
-	viewer/dump/dump.c:
+	config/home.c, intl/gettext/libintl.h, lowlevel/home.c,
+	lowlevel/interlink.c, lowlevel/select.c, mime/backend/mailcap.c,
+	network/interlink.c, terminal/kbd.c, viewer/dump/dump.c:
 
 	Introduced convenience G_() -> gettext() alias for use in
 	multi-level printing statements when we don't have a terminal
@@ -41399,7 +41903,7 @@ Fri Apr 23 19:26:46 2004  Petr Baudis <pasky@ucw.cz>:
 
 Fri Apr 23 19:20:17 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: bookmarks/backend/xbel.c, config/cmdline.c,
+	* src/: bookmarks/backend/xbel.c, config/cmdline.c, config/home.c,
 	lowlevel/home.c, mime/backend/mailcap.c, scripting/lua/core.c,
 	terminal/event.c, util/error.c, util/error.h, viewer/dump/dump.c:
 
@@ -41534,7 +42038,7 @@ Fri Apr 23 14:11:53 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Apr 23 13:55:15 2004  Laurent Monin <zas@norz.org>:
 
-	* src/ssl/connect.c:
+	* src/network/ssl/socket.c:
 
 	Cast @sock to (gnutls_transport_ptr) type, as indicated in recent
 	gnutls documentation.  
@@ -41619,7 +42123,8 @@ Fri Apr 23 11:22:25 2004  Petr Baudis <pasky@ucw.cz>:
 
 Fri Apr 23 10:28:27 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/: connection.c, download.c, session.c, task.c:
+	* src/: network/connection.c, sched/connection.c, sched/download.c,
+	sched/session.c, sched/task.c:
 
 	More is_in_progress_state() usage.  
 
@@ -42038,13 +42543,13 @@ Tue Apr 20 13:48:12 2004  Laurent Monin <zas@norz.org>:
 
 Tue Apr 20 07:45:48 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	do_lookup(): remove two goto and a label -> code simplification.  
 
 Tue Apr 20 07:35:32 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	end_dns_lookup(): @q -> @query, already used in other related
 	functions.  
@@ -42055,8 +42560,9 @@ Mon Apr 19 15:56:44 2004  Laurent Monin <zas@norz.org>:
 	cookies/dialogs.c, dialogs/status.c, document/html/parser.c,
 	document/html/renderer.c, document/html/tables.c,
 	globhist/dialogs.c, globhist/globhist.c, lowlevel/connect.c,
-	lowlevel/dns.c, protocol/uri.c, protocol/auth/auth.c,
-	protocol/file/file.c, protocol/http/codes.c, protocol/http/http.c,
+	lowlevel/dns.c, network/dns.c, network/socket.c, protocol/uri.c,
+	protocol/auth/auth.c, protocol/file/file.c, protocol/http/codes.c,
+	modules/event.c, network/connection.c, protocol/http/http.c,
 	sched/connection.c, sched/download.c, sched/event.c,
 	sched/history.c, sched/task.c, terminal/terminal.c, util/memory.h,
 	viewer/text/form.c, viewer/text/link.c, viewer/text/search.c,
@@ -42072,28 +42578,28 @@ Mon Apr 19 14:39:40 2004  Laurent Monin <zas@norz.org>:
 	* src/: bookmarks/dialogs.c, config/options.c, cookies/dialogs.c,
 	dialogs/status.c, document/html/parser.c, document/html/renderer.c,
 	document/html/tables.c, globhist/globhist.c, lowlevel/connect.c,
-	protocol/file/file.c, protocol/http/codes.c, protocol/http/http.c,
-	sched/task.c, terminal/terminal.c:
+	network/socket.c, protocol/file/file.c, protocol/http/codes.c,
+	protocol/http/http.c, sched/task.c, terminal/terminal.c:
 
 	Use mem_free_set_if() where applicable.  
 
 Mon Apr 19 09:41:16 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Unify read/write loops style, shorten lines by introducing @todo,
 	initialize @done just before loops, tidy up.  
 
 Mon Apr 19 08:58:15 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	end_dns_lookup(): assert dnsentry before it is used, use mem_alloc()
 	instead of mem_calloc() where zeroing is useless, cleanup.  
 
 Mon Apr 19 08:50:03 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	find_host(): assert dnsentry before using it, assert
 	dnsentry->addrno is positive, remove a goto and a label, and use
@@ -42378,7 +42884,7 @@ Sat Apr 17 11:19:03 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Apr 17 03:07:54 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/event.c:
+	* src/: modules/event.c, sched/event.c:
 
 	Doh. realloc_event() off by one error :|.  
 
@@ -42393,9 +42899,9 @@ Sat Apr 17 02:39:52 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: bfu/menu.c, bfu/text.c, document/docdata.h,
 	document/html/parser.c, document/html/renderer.c,
-	document/html/tables.c, sched/event.c, util/memory.h,
-	util/string.h, viewer/text/form.c, viewer/text/search.c,
-	viewer/text/textarea.c:
+	document/html/tables.c, modules/event.c, sched/event.c,
+	util/memory.h, util/string.h, viewer/text/form.c,
+	viewer/text/search.c, viewer/text/textarea.c:
 
 	Make the mem_align_alloc() macro apply the sizeof() to the object.  
 
@@ -42487,15 +42993,17 @@ Fri Apr 16 16:36:59 2004  Laurent Monin <zas@norz.org>:
 Fri Apr 16 16:33:27 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: cache/cache.c, globhist/dialogs.c, globhist/globhist.c,
-	lowlevel/connect.c, lowlevel/dns.c, lowlevel/home.c,
-	lowlevel/interlink.c, protocol/proxy.c, protocol/uri.c,
+	config/home.c, lowlevel/connect.c, lowlevel/dns.c, lowlevel/home.c,
+	lowlevel/interlink.c, network/dns.c, network/interlink.c,
+	network/socket.c, protocol/proxy.c, protocol/uri.c,
 	protocol/user.c, protocol/auth/auth.c, protocol/file/file.c,
-	protocol/http/codes.c, protocol/http/http.c, sched/connection.c,
-	sched/download.c, sched/event.c, sched/history.c, sched/session.c,
-	sched/task.c, ssl/connect.c, util/fastfind.c, util/file.c,
-	util/secsave.c, viewer/dump/dump.c, viewer/text/form.c,
-	viewer/text/link.c, viewer/text/search.c, viewer/text/textarea.c,
-	viewer/text/view.c, viewer/text/vs.c:
+	protocol/http/codes.c, protocol/http/http.c, modules/event.c,
+	network/connection.c, sched/connection.c, sched/download.c,
+	sched/event.c, sched/history.c, sched/session.c, sched/task.c,
+	network/ssl/socket.c, util/fastfind.c, util/file.c, util/secsave.c,
+	viewer/dump/dump.c, viewer/text/form.c, viewer/text/link.c,
+	viewer/text/search.c, viewer/text/textarea.c, viewer/text/view.c,
+	viewer/text/vs.c:
 
 	Populate with mem_free_if() and mem_free_set_if().  
 
@@ -42568,9 +43076,9 @@ Fri Apr 16 09:44:12 2004  Laurent Monin <zas@norz.org>:
 	document/css/scanner.c, document/css/value.c,
 	document/html/frames.c, document/html/parser.c,
 	document/html/renderer.c, document/html/tables.c,
-	document/plain/renderer.c, protocol/auth/auth.c, sched/event.c,
-	terminal/draw.c, terminal/screen.h, viewer/text/link.c,
-	viewer/text/vs.c:
+	document/plain/renderer.c, modules/event.c, protocol/auth/auth.c,
+	sched/event.c, terminal/draw.c, terminal/screen.h,
+	viewer/text/link.c, viewer/text/vs.c:
 
 	Include util/math.h where it is needed.  
 
@@ -42997,13 +43505,13 @@ Wed Apr 14 03:04:19 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 14 02:35:02 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/: select.h, signals.c:
+	* src/: lowlevel/select.h, lowlevel/signals.c, osdep/signals.c:
 
 	Fix includes? 
 
 Wed Apr 14 02:21:34 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.h:
+	* src/: network/connection.h, sched/connection.h:
 
 	Fix is_system_error() logic.  
 
@@ -43016,7 +43524,8 @@ Wed Apr 14 00:42:28 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 14 00:35:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: sched/connection.c, sched/connection.h, sched/download.c,
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h, sched/download.c,
 	viewer/dump/dump.c:
 
 	Last batch of state macros.  
@@ -43029,7 +43538,9 @@ Wed Apr 14 00:11:51 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr 14 00:09:22 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/: connection.c, connection.h, error.c:
+	* src/: network/connection.c, network/connection.h,
+	network/state.c, sched/connection.c, sched/connection.h,
+	sched/error.c:
 
 	Move connection state macros and add/use is_system_error().  
 
@@ -43153,7 +43664,7 @@ Tue Apr 13 15:59:31 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Apr 13 10:15:40 2004  Laurent Monin <zas@norz.org>:
 
-	* src/: lowlevel/connect.c, osdep/getifaddrs.h:
+	* src/: lowlevel/connect.c, network/socket.c, osdep/getifaddrs.h:
 
 	System headers should be included before any local headers, this is
 	fixing bug 439 reported by Victor Sahlstedt.  
@@ -43278,8 +43789,9 @@ Sun Apr 11 15:47:03 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Apr 11 15:32:22 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/protocol.c, protocol/protocol.h, protocol/uri.c,
-	sched/connection.c, sched/task.c:
+	* src/: network/connection.c, protocol/protocol.c,
+	protocol/protocol.h, protocol/uri.c, sched/connection.c,
+	sched/task.c:
 
 	Introduce an unknown_protocol_backend that will pop up an unknown
 	protocol dialog as the external handler.  
@@ -43496,7 +44008,7 @@ Thu Apr  8 14:38:54 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr  8 14:14:22 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/: connection.c, task.c:
+	* src/: network/connection.c, sched/connection.c, sched/task.c:
 
 	Fix bug in URI reference counting and add assertion about
 	ses->loading_uri. Thanks to iSteve for his irc presence that lead to
@@ -43534,7 +44046,7 @@ Thu Apr  8 02:52:52 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr  8 02:00:34 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: cache/cache.c, util/types.h:
+	* src/: cache/cache.c, osdep/types.h, util/types.h:
 
 	Remove gross INFO_LIST hack.  
 
@@ -43620,7 +44132,8 @@ Wed Apr  7 19:44:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Apr  7 19:34:51 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/uri.c, protocol/uri.h, sched/connection.c:
+	* src/: network/connection.c, protocol/uri.c, protocol/uri.h,
+	sched/connection.c:
 
 	Add support for proxy:// URIs on the command line. Before it caused
 	an assertion failure and it is really not that much code.  
@@ -43894,13 +44407,13 @@ Mon Apr  5 17:35:57 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Apr  5 16:58:57 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/uri.h, sched/connection.c:
+	* src/: network/connection.c, protocol/uri.h, sched/connection.c:
 
 	Disallow NULL args to get_uri_reference().  
 
 Mon Apr  5 16:06:03 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	init_connection(): Assert that proxied_uri is not PROTOCOL_PROXY.  
 
@@ -44111,8 +44624,8 @@ Sun Apr  4 05:55:16 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Apr  4 05:22:59 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/http/http.c, sched/connection.c,
-	sched/connection.h:
+	* src/: network/connection.c, network/connection.h,
+	protocol/http/http.c, sched/connection.c, sched/connection.h:
 
 	Like for the cache entry store both (proxy) uri and proxied uri for
 	connections. The new member is named proxied_uri. It should
@@ -44253,21 +44766,23 @@ Sun Apr  4 02:07:36 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Apr  4 01:48:18 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/protocol.c, sched/connection.h, sched/error.c:
+	* src/: network/connection.h, network/state.c, protocol/protocol.c,
+	sched/connection.h, sched/error.c:
 
 	We might as well use the print_error_dialog() function for the
 	javascript-not-supported popup.  
 
 Sun Apr  4 01:40:58 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/error.c:
+	* src/: network/state.c, sched/error.c:
 
 	More ænglish? 
 
 Sun Apr  4 01:40:20 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/: connection.h, download.c, error.c, session.c,
-	session.h, task.c:
+	* src/: network/connection.h, network/state.c, sched/connection.h,
+	sched/download.c, sched/error.c, sched/session.c, sched/session.h,
+	sched/task.c:
 
 	Introduce S_UNKNOWN_PROTOCOL and use it to substitute
 	print_unknown_protocol_dialog() with print_error_dialog(..,
@@ -44323,11 +44838,11 @@ Sat Apr  3 14:51:53 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Apr  3 14:32:15 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: cache/cache.c, protocol/finger.c, protocol/file/cgi.c,
-	protocol/file/file.c, protocol/ftp/ftp.c, protocol/http/http.c,
-	protocol/smb/smb.c, sched/connection.c, sched/connection.h,
-	sched/download.c, sched/history.c, sched/session.c, sched/task.c,
-	viewer/dump/dump.c:
+	* src/: cache/cache.c, network/connection.c, network/connection.h,
+	protocol/finger.c, protocol/file/cgi.c, protocol/file/file.c,
+	protocol/ftp/ftp.c, protocol/http/http.c, protocol/smb/smb.c,
+	sched/connection.c, sched/connection.h, sched/download.c,
+	sched/history.c, sched/session.c, sched/task.c, viewer/dump/dump.c:
 
 	Rename download->ce to download->cached and connection->cache to
 	conneciton->cached.  
@@ -44338,10 +44853,10 @@ Sat Apr  3 14:13:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 	document/document.h, document/renderer.c, document/css/css.c,
 	document/html/frames.c, document/html/renderer.c,
 	document/html/renderer.h, document/plain/renderer.c,
-	document/plain/renderer.h, lowlevel/select.c, protocol/finger.c,
-	protocol/file/file.c, sched/connection.c, sched/download.c,
-	sched/session.c, sched/task.c, scripting/lua/core.c,
-	viewer/dump/dump.c:
+	document/plain/renderer.h, lowlevel/select.c, network/connection.c,
+	protocol/finger.c, protocol/file/file.c, sched/connection.c,
+	sched/download.c, sched/session.c, sched/task.c,
+	scripting/lua/core.c, viewer/dump/dump.c:
 
 	Re-rename cache entry variables to cached to improve grepability.  
 
@@ -44378,8 +44893,8 @@ Sat Apr  3 13:29:22 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Apr  3 13:25:15 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: lowlevel/select.c, protocol/finger.c, sched/connection.c,
-	sched/download.c, sched/download.c:
+	* src/: lowlevel/select.c, protocol/finger.c, network/connection.c,
+	sched/connection.c, sched/download.c, sched/download.c:
 
 	Rename cache entry variables to cache to improve grepability.  
 
@@ -44630,8 +45145,8 @@ Fri Apr  2 21:21:59 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: cache/cache.c, cache/cache.h, dialogs/document.c,
 	document/document.c, document/renderer.c, document/css/css.c,
-	document/html/frames.c, protocol/http/codes.c, sched/connection.c,
-	sched/task.c:
+	document/html/frames.c, network/connection.c,
+	protocol/http/codes.c, sched/connection.c, sched/task.c:
 
 	find_in_cache(): Take URI arg.  
 
@@ -44773,7 +45288,8 @@ Fri Apr  2 07:27:00 2004  Laurent Monin <zas@norz.org>:
 
 Thu Apr  1 18:34:13 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/proxy.c, protocol/proxy.h, sched/connection.c:
+	* src/: protocol/proxy.c, protocol/proxy.h, network/connection.c,
+	sched/connection.c:
 
 	Make get_proxy() return URI struct. Move proxy_uri validation to
 	load_uri() and thus closer to the let-me-get-the-hell-out-of-here
@@ -44880,7 +45396,7 @@ Thu Apr  1 07:56:00 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr  1 07:53:52 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Pass URI struct to get_proxy().  
 
@@ -44892,13 +45408,14 @@ Thu Apr  1 06:22:38 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Apr  1 06:08:56 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	ALittleCleanup.  
 
 Thu Apr  1 06:06:20 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: sched/connection.c, sched/connection.h, sched/download.c,
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h, sched/download.c,
 	sched/session.c, sched/task.c, viewer/dump/dump.c:
 
 	load_url() -> load_uri() and take URI struct as arg.  
@@ -45046,8 +45563,9 @@ Thu Apr  1 00:09:59 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Mar 31 23:47:39 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/file/cgi.c, protocol/http/http.c,
-	sched/connection.c, sched/connection.h:
+	* src/: protocol/file/cgi.c, network/connection.c,
+	network/connection.h, protocol/http/http.c, sched/connection.c,
+	sched/connection.h:
 
 	Change connection referrer to point to an URI struct.  
 
@@ -45060,13 +45578,15 @@ Wed Mar 31 23:40:52 2004  Jonas Fonseca <fonseca@diku.dk>:
 Wed Mar 31 23:38:26 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: protocol/file/cgi.c, protocol/http/http.c,
-	sched/connection.c, sched/connection.h:
+	network/connection.c, network/connection.h, sched/connection.c,
+	sched/connection.h:
 
 	connection->ref_url -> connection->referrer 
 
 Wed Mar 31 23:33:39 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: sched/connection.c, sched/connection.h, sched/download.c,
+	* src/: network/connection.c, network/connection.h,
+	sched/connection.c, sched/connection.h, sched/download.c,
 	sched/session.c, viewer/dump/dump.c:
 
 	load_url(): Take referrer as URI struct.  
@@ -45115,7 +45635,8 @@ Wed Mar 31 21:50:32 2004  Jonas Fonseca <fonseca@diku.dk>:
 Wed Mar 31 20:31:22 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: cache/cache.c, cache/cache.h, cache/dialogs.c,
-	lowlevel/connect.c, protocol/finger.c, protocol/uri.c,
+	lowlevel/connect.c, network/connection.c, network/connection.h,
+	network/socket.c, protocol/finger.c, protocol/uri.c,
 	protocol/uri.h, protocol/user.c, protocol/file/cgi.c,
 	protocol/file/file.c, protocol/ftp/ftp.c, protocol/http/http.c,
 	protocol/smb/smb.c, sched/connection.c, sched/connection.h,
@@ -45311,7 +45832,7 @@ Fri Mar 26 17:56:53 2004  Laurent Monin <zas@norz.org>:
 
 Fri Mar 26 17:55:50 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/signals.c:
+	* src/: lowlevel/signals.c, osdep/signals.c:
 
 	Fix wrong #include: kbd.c -> kdb.h.  
 
@@ -45384,17 +45905,18 @@ Mon Mar 22 14:35:37 2004  Jonas Fonseca <fonseca@diku.dk>:
 	dialogs/menu.c, dialogs/status.c, document/document.c,
 	document/document.h, document/refresh.c, document/renderer.c,
 	document/html/frames.c, document/plain/renderer.c,
-	lowlevel/connect.c, mime/mime.c, mime/mime.h, protocol/finger.c,
-	protocol/uri.c, protocol/uri.h, protocol/user.c,
-	protocol/auth/auth.c, protocol/file/cgi.c, protocol/file/file.c,
-	protocol/ftp/ftp.c, protocol/http/blacklist.c,
-	protocol/http/blacklist.h, protocol/http/codes.c,
-	protocol/http/http.c, protocol/rewrite/rewrite.c,
-	sched/connection.c, sched/connection.h, sched/download.c,
-	sched/download.h, sched/history.c, sched/location.c,
-	sched/location.h, sched/session.c, sched/session.h, sched/task.c,
-	util/string.h, viewer/dump/dump.c, viewer/text/marks.c,
-	viewer/text/view.c, viewer/text/vs.c, viewer/text/vs.h:
+	lowlevel/connect.c, mime/mime.c, mime/mime.h, network/socket.c,
+	protocol/finger.c, protocol/uri.c, protocol/uri.h, protocol/user.c,
+	protocol/auth/auth.c, network/connection.c, network/connection.h,
+	protocol/file/cgi.c, protocol/file/file.c, protocol/ftp/ftp.c,
+	protocol/http/blacklist.c, protocol/http/blacklist.h,
+	protocol/http/codes.c, protocol/http/http.c,
+	protocol/rewrite/rewrite.c, sched/connection.c, sched/connection.h,
+	sched/download.c, sched/download.h, sched/history.c,
+	sched/location.c, sched/location.h, sched/session.c,
+	sched/session.h, sched/task.c, util/string.h, viewer/dump/dump.c,
+	viewer/text/marks.c, viewer/text/view.c, viewer/text/vs.c,
+	viewer/text/vs.h:
 
 	Revert the lot of struct uri changes. Pasky warned me that it
 	sounded scary and the very first bug report plus the fact that it
@@ -45512,9 +46034,10 @@ Mon Mar 22 01:04:20 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Mar 21 23:55:19 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/file/cgi.c, protocol/http/http.c,
-	sched/connection.c, sched/connection.h, sched/download.c,
-	sched/session.c, sched/session.h, sched/task.c, viewer/dump/dump.c:
+	* src/: network/connection.c, network/connection.h,
+	protocol/file/cgi.c, protocol/http/http.c, sched/connection.c,
+	sched/connection.h, sched/download.c, sched/session.c,
+	sched/session.h, sched/task.c, viewer/dump/dump.c:
 
 	Change both session->ref_url and connection->ref_url to use URI
 	struct and rename to referrer.  
@@ -45578,7 +46101,8 @@ Sun Mar 21 16:16:11 2004  Jonas Fonseca <fonseca@diku.dk>:
 Sun Mar 21 15:58:50 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: cache/cache.c, cache/cache.h, cache/dialogs.c,
-	lowlevel/connect.c, protocol/finger.c, protocol/uri.c,
+	lowlevel/connect.c, network/connection.c, network/connection.h,
+	network/socket.c, protocol/finger.c, protocol/uri.c,
 	protocol/uri.h, protocol/user.c, protocol/file/cgi.c,
 	protocol/file/file.c, protocol/ftp/ftp.c, protocol/http/http.c,
 	sched/connection.c, sched/connection.h, sched/session.c:
@@ -45656,7 +46180,8 @@ Sun Mar 21 02:22:23 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Mar 21 02:21:56 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/http/http.c, sched/connection.c:
+	* src/: network/connection.c, protocol/http/http.c,
+	sched/connection.c:
 
 	Convert last users in connection land to use URI host string.  
 
@@ -45668,7 +46193,7 @@ Sun Mar 21 02:21:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Mar 21 02:10:48 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/connection.c:
+	* src/: network/connection.c, sched/connection.c:
 
 	Use the URI host string for the host connection stuff.  
 
@@ -45704,7 +46229,7 @@ Sun Mar 21 01:41:11 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Mar 21 01:39:25 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Bleh.  
 
@@ -45747,13 +46272,15 @@ Sat Mar 20 23:53:06 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Mar 20 23:35:08 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: protocol/uri.h, protocol/user.c, sched/connection.c:
+	* src/: protocol/uri.h, protocol/user.c, network/connection.c,
+	sched/connection.c:
 
 	A little cleanup of the URI host sequence capturing.  
 
 Sat Mar 20 21:01:34 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: cookies/cookies.c, lowlevel/connect.c, protocol/uri.c,
+	* src/: cookies/cookies.c, lowlevel/connect.c,
+	network/connection.c, network/socket.c, protocol/uri.c,
 	protocol/uri.h, protocol/user.c, protocol/http/http.c,
 	sched/connection.c:
 
@@ -45774,8 +46301,8 @@ Sat Mar 20 18:55:22 2004  Jonas Fonseca <fonseca@diku.dk>:
 Sat Mar 20 18:32:45 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: protocol/finger.c, protocol/uri.c, protocol/uri.h,
-	protocol/user.c, protocol/auth/auth.c, protocol/ftp/ftp.c,
-	sched/connection.c, util/string.h:
+	protocol/user.c, network/connection.c, protocol/auth/auth.c,
+	protocol/ftp/ftp.c, sched/connection.c, util/string.h:
 
 	Store protocol user info in a string struct. Add a few handy string
 	struct macros.  
@@ -45912,7 +46439,7 @@ Tue Mar  9 12:24:33 2004  Jonas Fonseca <fonseca@diku.dk>:
 	* acconfig.h, configure.in, src/elinks.h, src/bfu/hotkey.c,
 	src/bfu/menu.c, src/cache/dialogs.c, src/config/options.c,
 	src/config/options.h, src/dialogs/menu.c, src/document/document.c,
-	src/modules/version.c, src/osdep/stub.h,
+	src/modules/version.c, src/osdep/stub.h, src/network/connection.c,
 	src/protocol/rewrite/rewrite.c, src/sched/connection.c,
 	src/util/error.c, src/util/error.h, src/util/lists.h,
 	src/util/memlist.h, src/util/object.h, src/util/profile.h,
@@ -46289,7 +46816,7 @@ Fri Feb 20 01:49:56 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Feb 19 20:43:56 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Make addrno writing/reading capable of dealing of partial
 	write()s/read()s, this should fix random DNS failures on some
@@ -46297,7 +46824,7 @@ Thu Feb 19 20:43:56 2004  Petr Baudis <pasky@ucw.cz>:
 
 Thu Feb 19 17:48:18 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/dns.c:
+	* src/: lowlevel/dns.c, network/dns.c:
 
 	Be more paranoid about passing data from the async resolver.  
 
@@ -46591,7 +47118,7 @@ Wed Feb 11 10:19:31 2004  Laurent Monin <zas@norz.org>:
 Wed Feb 11 10:12:34 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: main.c, config/cmdline.c, config/options.c,
-	ecmascript/core.c, lowlevel/connect.c:
+	ecmascript/core.c, lowlevel/connect.c, network/socket.c:
 
 	Useless spaces were trimmed.  
 
@@ -46845,7 +47372,7 @@ Sat Feb  7 10:58:01 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Feb  7 01:39:49 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/interlink.c:
+	* src/: lowlevel/interlink.c, network/interlink.c:
 
 	Use stricter mask for local socket creation, so socket is only
 	readable/writable by its user on systems honouring unix sockets
@@ -47128,8 +47655,8 @@ Tue Feb  3 19:28:04 2004  Laurent Monin <zas@norz.org>:
 Tue Feb  3 19:20:01 2004  Laurent Monin <zas@norz.org>:
 
 	* configure.in, src/config/cmdline.c, src/lowlevel/connect.c,
-	src/osdep/Makefile.am, src/osdep/getifaddrs.c,
-	src/osdep/getifaddrs.h:
+	src/network/socket.c, src/osdep/Makefile.am,
+	src/osdep/getifaddrs.c, src/osdep/getifaddrs.h:
 
 	Option -localhost now matches against all local addresses, gathered
 	by getifaddrs() function, either from system or if not available
@@ -47256,19 +47783,19 @@ Sun Feb  1 16:42:17 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Feb  1 15:56:25 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	check_if_local_address6() is only if IPV6 is defined.  
 
 Sun Feb  1 15:11:53 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Wrap tests for local addresses to functions.  
 
 Sun Feb  1 13:35:29 2004  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Save first errno to display proper error message. Use
 	@at_least_one_remote_ip to clarify things.  
@@ -47317,7 +47844,7 @@ Sat Jan 31 00:43:40 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Jan 31 00:40:47 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Dropped @not_local_count, instead fail with S_LOCAL_ONLY only if the
 	last attempt was local, because we do not have errno of previous
@@ -47325,13 +47852,13 @@ Sat Jan 31 00:40:47 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sat Jan 31 00:37:28 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Tidyup.  
 
 Sat Jan 31 00:36:29 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/connect.c:
+	* src/: lowlevel/connect.c, network/socket.c:
 
 	Do all the @local-testing things only if @only_local.  
 
@@ -47350,7 +47877,8 @@ Sat Jan 31 00:29:51 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sat Jan 31 00:28:37 2004  Laurent Monin <zas@norz.org>:
 
-	* src/: config/cmdline.c, lowlevel/connect.c, sched/connection.h,
+	* src/: config/cmdline.c, lowlevel/connect.c, network/connection.h,
+	network/socket.c, network/state.c, sched/connection.h,
 	sched/error.c:
 
 	A new commandline option was introduced: -localhost, it limits
@@ -48645,7 +49173,8 @@ Sun Jan 25 09:33:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 	* src/: document/document.c, document/document.h,
 	document/options.c, document/options.h, document/css/css.c,
 	document/css/css.h, document/html/parser.c, document/html/parser.h,
-	document/html/renderer.c, sched/connection.h, sched/session.c:
+	document/html/renderer.c, network/connection.h, sched/connection.h,
+	sched/session.c:
 
 	Add support for importing external stylesheets. It is done using the
 	import callback to add urls to a new document->css_imports string
@@ -49089,7 +49618,7 @@ Sat Jan 24 10:09:45 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sat Jan 24 10:08:26 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/signals.c:
+	* src/: lowlevel/signals.c, osdep/signals.c:
 
 	Try to make the I-crashed epitaph more brief so that the actually
 	useful info is less likely to scroll out of the screen.  
@@ -50683,7 +51212,7 @@ Sun Jan 18 15:10:29 2004  Petr Baudis <pasky@ucw.cz>:
 	src/protocol/ftp/.vimrc, src/protocol/http/.vimrc,
 	src/protocol/rewrite/.vimrc, src/protocol/smb/.vimrc,
 	src/sched/.vimrc, src/scripting/.vimrc, src/scripting/guile/.vimrc,
-	src/scripting/lua/.vimrc, src/ssl/.vimrc, src/terminal/.vimrc,
+	src/scripting/lua/.vimrc, src/terminal/.vimrc,
 	src/terminal/graphics/.vimrc, src/terminal/text/.vimrc,
 	src/util/.vimrc, src/viewer/.vimrc, src/viewer/dump/.vimrc,
 	src/viewer/graphics/.vimrc, doc/.vimrc, src/viewer/text/.vimrc,
@@ -50885,7 +51414,8 @@ Sun Jan 18 01:48:27 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Jan 18 00:59:10 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: config/cmdline.c, config/conf.c, lowlevel/home.c:
+	* src/: config/cmdline.c, config/conf.c, config/home.c,
+	lowlevel/home.c:
 
 	Use the new confdir/conffile option names (config-dir/config-file).  
 

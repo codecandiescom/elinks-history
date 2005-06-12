@@ -1,5 +1,5 @@
 /* Python scripting engine */
-/* $Id: core.c,v 1.8 2005/06/05 19:04:19 witekfl Exp $ */
+/* $Id: core.c,v 1.9 2005/06/12 16:37:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 #include "elinks.h"
 
 #include "main.h"
-#include "lowlevel/home.h"
+#include "config/home.h"
 #include "modules/module.h"
 #include "util/file.h"
 #include "util/string.h"

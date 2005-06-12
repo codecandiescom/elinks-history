@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.19 2005/04/01 17:36:46 zas Exp $ */
+/* $Id: core.c,v 1.20 2005/06/12 16:37:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 
 #include "elinks.h"
 
-#include "lowlevel/home.h"
+#include "config/home.h"
 #include "modules/module.h"
 #include "scripting/guile/core.h"
 #include "scripting/guile/hooks.h"

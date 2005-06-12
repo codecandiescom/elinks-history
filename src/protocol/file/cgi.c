@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.110 2005/06/12 01:34:50 jonas Exp $ */
+/* $Id: cgi.c,v 1.111 2005/06/12 01:47:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,13 +23,13 @@
 #include "cookies/cookies.h"
 #include "intl/gettext/libintl.h"
 #include "mime/backend/common.h"
+#include "network/connection.h"
 #include "network/socket.h"
 #include "osdep/osdep.h"
 #include "osdep/sysname.h"
 #include "protocol/file/cgi.h"
 #include "protocol/http/http.h"
 #include "protocol/uri.h"
-#include "sched/connection.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/string.h"

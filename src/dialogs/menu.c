@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.399 2005/06/12 00:59:33 jonas Exp $ */
+/* $Id: menu.c,v 1.400 2005/06/12 01:47:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,11 +27,11 @@
 #include "mime/dialogs.h"
 #include "mime/mime.h"
 #include "modules/event.h"
+#include "network/connection.h"
 #include "osdep/osdep.h"
 #include "osdep/newwin.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
-#include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/history.h"
 #include "sched/location.h"

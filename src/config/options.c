@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.480 2005/05/22 04:46:28 miciah Exp $ */
+/* $Id: options.c,v 1.481 2005/06/12 01:47:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "main.h" /* shrink_memory() */
-#include "sched/connection.h"
+#include "network/connection.h"
 #include "sched/session.h"
 #include "terminal/color.h"
 #include "terminal/screen.h"

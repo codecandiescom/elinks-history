@@ -1,5 +1,5 @@
 /* The "data" URI protocol implementation (RFC 2397) */
-/* $Id: data.c,v 1.11 2005/04/14 00:40:55 jonas Exp $ */
+/* $Id: data.c,v 1.12 2005/06/12 01:47:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,10 +8,10 @@
 #include "elinks.h"
 
 #include "cache/cache.h"
+#include "network/connection.h"
 #include "protocol/data.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
-#include "sched/connection.h"
 #include "util/base64.h"
 #include "util/string.h"
 

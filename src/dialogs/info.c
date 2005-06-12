@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.137 2005/06/11 23:57:17 jonas Exp $ */
+/* $Id: info.c,v 1.138 2005/06/12 01:47:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/timers.h"
 #include "modules/version.h"
-#include "sched/connection.h"
+#include "network/connection.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"

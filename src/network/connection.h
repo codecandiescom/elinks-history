@@ -1,7 +1,7 @@
-/* $Id: connection.h,v 1.127 2005/06/11 23:44:56 jonas Exp $ */
+/* $Id: connection.h,v 1.128 2005/06/12 01:47:54 jonas Exp $ */
 
-#ifndef EL__SCHED_CONNECTION_H
-#define EL__SCHED_CONNECTION_H
+#ifndef EL__NETWORK_CONNECTION_H
+#define EL__NETWORK_CONNECTION_H
 
 #include "cache/cache.h"
 #include "encoding/encoding.h"

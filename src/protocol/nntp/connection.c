@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.25 2005/04/21 02:31:12 jonas Exp $ */
+/* $Id: connection.c,v 1.26 2005/06/12 01:34:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -13,8 +13,8 @@
 
 #include "cache/cache.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/connect.h"
 #include "modules/module.h"
+#include "network/socket.h"
 #include "protocol/nntp/codes.h"
 #include "protocol/nntp/connection.h"
 #include "protocol/nntp/nntp.h"

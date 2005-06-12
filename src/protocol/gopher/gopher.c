@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.55 2005/04/19 11:58:09 jonas Exp $ */
+/* $Id: gopher.c,v 1.56 2005/06/12 01:34:50 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -33,8 +33,8 @@
 
 #include "cache/cache.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/connect.h"
 #include "modules/module.h"
+#include "network/socket.h"
 #include "protocol/gopher/gopher.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"

@@ -1,5 +1,5 @@
 /* Parses and converts NNTP responses to enum values and cache entry HTML */
-/* $Id: response.c,v 1.4 2005/04/19 11:58:09 jonas Exp $ */
+/* $Id: response.c,v 1.5 2005/06/12 01:34:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -13,8 +13,8 @@
 
 #include "cache/cache.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/connect.h"
 #include "mime/backend/common.h"
+#include "network/socket.h"
 #include "modules/module.h"
 #include "protocol/header.h"
 #include "protocol/nntp/codes.h"

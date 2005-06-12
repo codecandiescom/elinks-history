@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.123 2005/04/27 15:15:01 jonas Exp $ */
+/* $Id: socket.c,v 1.124 2005/06/12 01:34:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,8 +19,8 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "lowlevel/connect.h"
 #include "lowlevel/select.h"
+#include "network/socket.h"
 #include "sched/connection.h"
 #include "ssl/connect.h"
 #include "ssl/ssl.h"

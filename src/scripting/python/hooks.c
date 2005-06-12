@@ -1,5 +1,5 @@
 /* Python scripting hooks */
-/* $Id: hooks.c,v 1.6 2005/06/05 20:07:41 witekfl Exp $ */
+/* $Id: hooks.c,v 1.7 2005/06/12 03:27:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,8 +9,8 @@
 
 #include "elinks.h"
 
+#include "modules/event.h"
 #include "protocol/uri.h"
-#include "sched/event.h"
 #include "sched/location.h"
 #include "sched/session.h"
 #include "scripting/python/hooks.h"

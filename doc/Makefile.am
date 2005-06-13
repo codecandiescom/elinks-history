@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.70 2005/06/13 20:25:46 jonas Exp $
+## $Id: Makefile.am,v 1.71 2005/06/13 20:56:23 jonas Exp $
 
 SUBDIRS = man
 
@@ -115,24 +115,24 @@ HTML_DOCS = \
 PDF_DOCS = \
  $(PDF_DOCS_WITH_JW)
 
-html-asciidoc-yes: $(HTML_DOCS_WITH_ASCIIDOC)
+html-asciidoc-yes: doc-dirs $(HTML_DOCS_WITH_ASCIIDOC)
 html-asciidoc-no:
 
-html-pod2html-yes: $(HTML_DOCS_WITH_POD2HTML)
+html-pod2html-yes: doc-dirs $(HTML_DOCS_WITH_POD2HTML)
 html-pod2html-no:
 
-html-xmlto-yes: $(HTML_DOCS_WITH_XMLTO)
+html-xmlto-yes: doc-dirs $(HTML_DOCS_WITH_XMLTO)
 html-xmlto-no:
 
-man-xmlto-yes: $(MAN_DOCS_WITH_XMLTO)
+man-xmlto-yes: doc-dirs $(MAN_DOCS_WITH_XMLTO)
 man-xmlto-no:
 
-pdf-jw-yes: $(PDF_DOCS_WITH_JW)
+pdf-jw-yes: doc-dirs $(PDF_DOCS_WITH_JW)
 pdf-jw-no:
 
-man-docs: doc-dirs man-xmlto-@CONFIG_XMLTO@
-html-docs: doc-dirs html-asciidoc-@CONFIG_ASCIIDOC@ html-xmlto-@CONFIG_XMLTO@ html-pod2html-@CONFIG_POD2HTML@
-pdf-docs: doc-dirs pdf-jw-@CONFIG_JW@
+man-docs: man-xmlto-@CONFIG_XMLTO@
+html-docs: html-asciidoc-@CONFIG_ASCIIDOC@ html-xmlto-@CONFIG_XMLTO@ html-pod2html-@CONFIG_POD2HTML@
+pdf-docs: pdf-jw-@CONFIG_JW@
 
 all-docs: man-docs html-docs pdf-docs
 

@@ -34,13 +34,12 @@ EL_ARG_ENABLE(CONFIG_DOC, documentation, [Documentation],
 	      [  --disable-documentation disable documentation building])
 AM_CONDITIONAL(CONFIG_DOC, test "$CONFIG_DOC" = yes)
 
-# Check whether --enable-xbel or --disable-xbel was given.
-if test "x${enable_documentationl}" != xno; then
-	CONFIG_ASCIIDOC="no"
-	CONFIG_POD2HTML="no"
-	CONFIG_XMLTO="no"
-	CONFIG_JW="no"
+CONFIG_ASCIIDOC="no"
+CONFIG_POD2HTML="no"
+CONFIG_XMLTO="no"
+CONFIG_JW="no"
 
+if test "x$CONFIG_DOC" != xno; then
 	AC_PATH_PROGS(ASCIIDOC, "asciidoc")
       	if test "x$ASCIIDOC" != "x"; then
 		CONFIG_ASCIIDOC="yes"
@@ -60,17 +59,17 @@ if test "x${enable_documentationl}" != xno; then
       	if test "x$POD2HTML" != "x"; then
 		CONFIG_POD2HTML="yes"
 	fi
-
-	AM_CONDITIONAL(CONFIG_ASCIIDOC, test "$CONFIG_ASCIIDOC" = yes)
-	AM_CONDITIONAL(CONFIG_POD2HTML, test "$CONFIG_POD2HTML" = yes)
-	AM_CONDITIONAL(CONFIG_XMLTO, test "$CONFIG_XMLTO" = yes)
-	AM_CONDITIONAL(CONFIG_JW, test "$CONFIG_JW" = yes)
-
-	AC_SUBST(CONFIG_ASCIIDOC)
-	AC_SUBST(CONFIG_POD2HTML)
-	AC_SUBST(CONFIG_XMLTO)
-	AC_SUBST(CONFIG_JW)
 fi
+
+AC_SUBST(CONFIG_ASCIIDOC)
+AC_SUBST(CONFIG_POD2HTML)
+AC_SUBST(CONFIG_XMLTO)
+AC_SUBST(CONFIG_JW)
+
+AM_CONDITIONAL(CONFIG_ASCIIDOC, test "$CONFIG_ASCIIDOC" = yes)
+AM_CONDITIONAL(CONFIG_POD2HTML, test "$CONFIG_POD2HTML" = yes)
+AM_CONDITIONAL(CONFIG_XMLTO, test "$CONFIG_XMLTO" = yes)
+AM_CONDITIONAL(CONFIG_JW, test "$CONFIG_JW" = yes)
 
 dnl gcc specific options (to be continued at the bottom of configure)
 if test "x$ac_cv_prog_gcc" = "xyes"; then

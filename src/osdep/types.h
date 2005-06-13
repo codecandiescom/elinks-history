@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.10 2005/06/12 00:23:36 jonas Exp $ */
+/* $Id: types.h,v 1.11 2005/06/13 07:35:56 jonas Exp $ */
 
 #ifndef EL__OSDEP_TYPES_H
 #define EL__OSDEP_TYPES_H
@@ -15,6 +15,24 @@
 
 #ifdef HAVE_INTTYPES_H
 #include <inttypes.h>
+#endif
+
+#ifndef INT_MAX
+#ifdef MAXINT
+#define INT_MAX MAXINT
+#else
+/* XXX: We could use osdep/types.h to determine something useful? --pasky */
+#define INT_MAX 0x7fffffff
+#endif
+#endif
+
+#ifndef LONG_MAX
+#ifdef MAXLONG
+#define LONG_MAX MAXLONG
+#else
+/* XXX: We could use osdep/types.h to determine something useful? --pasky */
+#define LONG_MAX 0x7fffffff
+#endif
 #endif
 
 #ifndef HAVE_UINT16_T

@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.33 2005/06/12 00:23:36 jonas Exp $ */
+/* $Id: generic.h,v 1.34 2005/06/13 07:35:56 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -15,24 +15,6 @@
 
 #ifdef HAVE_STDDEF_H
 #include <stddef.h> /* may contain offsetof() */
-#endif
-
-#ifndef INT_MAX
-#ifdef MAXINT
-#define INT_MAX MAXINT
-#else
-/* XXX: We could use osdep/types.h to determine something useful? --pasky */
-#define INT_MAX 0x7fffffff
-#endif
-#endif
-
-#ifndef LONG_MAX
-#ifdef MAXLONG
-#define LONG_MAX MAXLONG
-#else
-/* XXX: We could use osdep/types.h to determine something useful? --pasky */
-#define LONG_MAX 0x7fffffff
-#endif
 #endif
 
 #ifndef SA_RESTART

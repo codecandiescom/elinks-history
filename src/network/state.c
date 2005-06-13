@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.43 2005/06/12 02:02:44 jonas Exp $ */
+/* $Id: state.c,v 1.44 2005/06/13 21:23:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,10 +17,6 @@
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
-
-
-/* TODO: Move S_* constants to sched/error.h as well? I'm not sure, personally.
- * --pasky */
 
 
 /* Global variables */

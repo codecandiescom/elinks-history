@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.71 2005/06/13 20:56:23 jonas Exp $
+## $Id: Makefile.am,v 1.72 2005/06/13 22:19:57 jonas Exp $
 
 SUBDIRS = man
 
@@ -135,8 +135,6 @@ html-docs: html-asciidoc-@CONFIG_ASCIIDOC@ html-xmlto-@CONFIG_XMLTO@ html-pod2ht
 pdf-docs: pdf-jw-@CONFIG_JW@
 
 all-docs: man-docs html-docs pdf-docs
-
-all-local: all-docs
 
 ### Build Rules
 #

@@ -3,7 +3,7 @@
 # Generate the elinkskeys(5) manpage.
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 #
-# $Id: make-elinkskeys-manpage,v 1.7 2005/05/23 01:42:06 jonas Exp $
+# $Id: make-elinkskeys-manpage,v 1.8 2005/06/13 20:41:48 jonas Exp $
 
 # FIXME:
 #
@@ -77,7 +77,7 @@ print_keymap_defaults()
 	do
 		entry=$(echo "$entry" | sed 's/.*{ { //' | sed 's/ }//')
 		key=$(echo "$entry" | sed "s/\(KBD_[^,]*\|'.*'\),.*/\1/")
-		modifier=$(echo "$entry" | sed "s/.*,.*KBD_MOD_\([A-Z_]*\),.*/\1/")
+		modifier=$(echo "$entry" | sed "s/.*KBD_MOD_\([A-Z_]*\).*/\1/")
 		action=$(echo "$entry" | sed "s/.*,.*\(ACT_$KEYMAP\)_\([A-Z_]*\).*/\2/")
 		action=$(grep " $action," "$CONFIGDIR/actions-$keymap.inc" \
 			| sed "s/.*\"\([^\"]*\)\".*N__(\"\(.*\)\").*/\2 ('\1')/")

@@ -393,6 +393,8 @@ dnl ===================================================================
 dnl Bookmark and XBEL support
 dnl ===================================================================
 
+EL_SAVE_FLAGS
+
 EL_ARG_ENABLE(CONFIG_BOOKMARKS, bookmarks, [Bookmarks],
 	      [  --disable-bookmarks     disable bookmark support])
 AM_CONDITIONAL(CONFIG_BOOKMARKS, test "$CONFIG_BOOKMARKS" = yes)
@@ -415,6 +417,10 @@ EL_ARG_DEPEND(CONFIG_XBEL_BOOKMARKS, xbel, [CONFIG_BOOKMARKS:yes HAVE_LIBEXPAT:y
 	      [  --disable-xbel          disable XBEL bookmark support (requires expat)])
 
 AM_CONDITIONAL(CONFIG_XBEL_BOOKMARKS, test "$CONFIG_XBEL_BOOKMARKS" = yes)
+
+if test "$CONFIG_XBEL_BOOKMARKS" != yes; then
+	EL_RESTORE_FLAGS
+fi
 
 dnl ===================================================================
 dnl Checks for OS/2

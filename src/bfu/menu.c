@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.295 2005/06/10 19:34:34 miciah Exp $ */
+/* $Id: menu.c,v 1.296 2005/06/13 21:21:10 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -19,7 +19,6 @@
 #include "bfu/menu.h"
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
-#include "sched/action.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/event.h"
@@ -31,6 +30,7 @@
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/memory.h"
+#include "viewer/action.h"
 
 /* Left and right main menu reserved spaces. */
 #define L_MAINMENU_SPACE	2

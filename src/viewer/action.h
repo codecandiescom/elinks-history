@@ -1,7 +1,7 @@
-/* $Id: action.h,v 1.11 2005/06/10 21:07:53 jonas Exp $ */
+/* $Id: action.h,v 1.12 2005/06/13 21:21:10 jonas Exp $ */
 
-#ifndef EL__SCHED_ACTION_H
-#define EL__SCHED_ACTION_H
+#ifndef EL__VIEWER_ACTION_H
+#define EL__VIEWER_ACTION_H
 
 #include "config/kbdbind.h"
 #include "viewer/text/view.h"

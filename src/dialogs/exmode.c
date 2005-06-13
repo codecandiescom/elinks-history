@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.58 2005/06/13 00:43:27 jonas Exp $ */
+/* $Id: exmode.c,v 1.59 2005/06/13 21:21:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,13 +17,13 @@
 #include "dialogs/exmode.h"
 #include "intl/gettext/libintl.h"
 #include "main/module.h"
-#include "sched/action.h"
 #include "sched/session.h"
 #include "sched/task.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/action.h"
 
 
 /* The Ex-mode commandline is that blue-yellow thing which appears at the

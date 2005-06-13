@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2005/06/12 18:42:40 jonas Exp $
+## $Id: Makefile.am,v 1.3 2005/06/13 21:21:10 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -22,6 +22,8 @@ libviewer_a_LIBADD = \
  text/vs.o
 
 libviewer_a_SOURCES = \
+ action.c \
+ action.h \
  timer.c \
  timer.h
 

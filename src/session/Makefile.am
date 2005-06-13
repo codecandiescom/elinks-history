@@ -1,12 +1,10 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.16 2005/06/12 02:46:01 jonas Exp $
+## $Id: Makefile.am,v 1.17 2005/06/13 21:21:10 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libsched.a
 libsched_a_SOURCES = \
- action.c \
- action.h \
  download.c \
  download.h \
  history.c \

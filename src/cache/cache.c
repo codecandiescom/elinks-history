@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.222 2005/06/13 00:43:27 jonas Exp $ */
+/* $Id: cache.c,v 1.223 2005/06/13 07:37:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,7 +318,7 @@ frag_free(struct fragment *f)
 }
 
 
-/* Contatenate overlapping fragments. */
+/* Concatenate overlapping fragments. */
 static void
 remove_overlaps(struct cache_entry *cached, struct fragment *f, int *trunc)
 {

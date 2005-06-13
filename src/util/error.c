@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.89 2005/06/13 22:03:49 jonas Exp $ */
+/* $Id: error.c,v 1.90 2005/06/13 22:06:59 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -203,9 +203,8 @@ void
 elinks_log(unsigned char *msg, unsigned char *file, int line,
 	   unsigned char *fmt, ...)
 {
-	static int init_log = 0;
 	static unsigned char *log_files = NULL;
-	static unsigned char *log_messages = NULL;
+	static unsigned char *log_msg = NULL;
 	unsigned char errbuf[4096];
 	va_list params;
 
@@ -241,7 +240,7 @@ elinks_log(unsigned char *msg, unsigned char *file, int line,
 	va_start(params, fmt);
 
 	snprintf(errbuf, sizeof(errbuf), "[%-5s %-13s %4d]: %s",
-		 message, file, line,  fmt);
+		 msg, file, line,  fmt);
 
 	vfprintf(log_file, errbuf, params);
 	fputc('\n', log_file);

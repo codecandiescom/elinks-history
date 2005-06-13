@@ -29,6 +29,7 @@ AC_PROG_AWK
 AC_PATH_PROGS(AWK, "$AWK")
 AC_PROG_RANLIB
 
+CONFIG_DOC=yes
 EL_ARG_ENABLE(CONFIG_DOC, documentation, [Documentation],
 	      [  --disable-documentation disable documentation building])
 AM_CONDITIONAL(CONFIG_DOC, test "$CONFIG_DOC" = yes)
@@ -850,7 +851,7 @@ else
 			GNUTLS_PATH="$gnutls_withval:$GNUTLS_PATH"
 		fi
 
-		AC_PATH_PROG(LIBGNUTLS_CONFIG, libgnutls-config, no, "$GNUTLS_PATH")
+		AC_PATH_PROG(LIBGNUTLS_CONFIG, libgnutls-config, no, $GNUTLS_PATH)
 
 		if test "$LIBGNUTLS_CONFIG" = "no" ; then
 			cf_result=no

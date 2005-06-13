@@ -51,6 +51,7 @@
 
 #include "intl/gettext/gettext.h"
 #include "intl/gettext/gettextP.h"
+#include "main/main.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -199,8 +200,6 @@ _nl_free_domain_conv(struct loaded_domain *domain)
 		iconv_close(domain->conv);
 #endif
 }
-
-#include "main.h"
 
 /* We cannot use our memory functions here because of circular library
  * dependencies. */

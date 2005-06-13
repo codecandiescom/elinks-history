@@ -1,5 +1,5 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.15 2005/06/12 00:42:30 jonas Exp $ */
+/* $Id: core.c,v 1.16 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,9 +10,8 @@
 
 #include "elinks.h"
 
-#include "main.h"
 #include "config/home.h"
-#include "modules/module.h"
+#include "main/module.h"
 #include "scripting/perl/core.h"
 #include "util/file.h"
 

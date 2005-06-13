@@ -1,7 +1,7 @@
-/* $Id: main.h,v 1.23 2005/05/07 11:12:18 jonas Exp $ */
+/* $Id: main.h,v 1.24 2005/06/13 00:43:28 jonas Exp $ */
 
-#ifndef EL__MAIN_H
-#define EL__MAIN_H
+#ifndef EL__MAIN_MAIN_H
+#define EL__MAIN_MAIN_H
 
 enum retval {
 	RET_OK,		/* All is well */

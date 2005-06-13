@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.33 2005/06/12 01:13:58 jonas Exp $ */
+/* $Id: signals.c,v 1.34 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,10 +22,10 @@
 
 #include "elinks.h"
 
-#include "main.h"
-#include "lowlevel/select.h"
+#include "main/main.h"
+#include "main/select.h"
+#include "main/version.h"
 #include "osdep/signals.h"
-#include "modules/version.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/error.h"

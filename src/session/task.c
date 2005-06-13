@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.176 2005/06/12 01:47:54 jonas Exp $ */
+/* $Id: task.c,v 1.177 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,8 +20,8 @@
 #include "document/refresh.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/timers.h"
-#include "modules/event.h"
+#include "main/event.h"
+#include "main/timer.h"
 #include "network/connection.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"

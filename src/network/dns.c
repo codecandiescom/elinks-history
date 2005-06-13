@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.124 2005/06/12 01:27:56 jonas Exp $ */
+/* $Id: dns.c,v 1.125 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "lowlevel/select.h"
+#include "main/select.h"
 #include "network/dns.h"
 #include "osdep/osdep.h"
 #include "util/error.h"

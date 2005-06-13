@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.108 2005/06/12 00:42:30 jonas Exp $ */
+/* $Id: globhist.c,v 1.109 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -24,8 +24,8 @@
 #include "globhist/dialogs.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/select.h"
-#include "modules/module.h"
+#include "main/module.h"
+#include "main/select.h"
 #include "util/conv.h"
 #include "util/file.h"
 #include "util/hash.h"

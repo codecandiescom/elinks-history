@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.43 2005/06/12 18:42:40 jonas Exp $ */
+/* $Id: module.c,v 1.44 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,7 +8,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "modules/module.h"
+#include "main/module.h"
 
 
 /* Dynamic area: */

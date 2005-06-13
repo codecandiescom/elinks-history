@@ -1,4 +1,4 @@
-/* $Id: ecmascript.h,v 1.11 2005/04/14 14:06:15 jonas Exp $ */
+/* $Id: ecmascript.h,v 1.12 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifndef EL__ECMASCRIPT_ECMASCRIPT_H
 #define EL__ECMASCRIPT_ECMASCRIPT_H
@@ -7,7 +7,7 @@
 /* In the future you will get DOM, a complete ECMAScript interface and free
  * plasm displays for everyone. */
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "util/time.h"
 
 struct string;

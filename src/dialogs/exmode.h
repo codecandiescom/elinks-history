@@ -1,9 +1,9 @@
-/* $Id: exmode.h,v 1.4 2004/07/04 14:03:37 jonas Exp $ */
+/* $Id: exmode.h,v 1.5 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifndef EL__DIALOGS_EXMODE_H
 #define EL__DIALOGS_EXMODE_H
 
-#include "modules/module.h"
+#include "main/module.h"
 
 struct session;
 

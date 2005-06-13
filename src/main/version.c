@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.37 2004/12/29 22:30:05 jonas Exp $ */
+/* $Id: version.c,v 1.38 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,8 +15,8 @@
 #include "elinks.h"
 
 #include "intl/gettext/libintl.h"
-#include "modules/module.h"
-#include "modules/version.h"
+#include "main/module.h"
+#include "main/version.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"

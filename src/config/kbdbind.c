@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.339 2005/06/12 00:59:33 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.340 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
-#include "modules/event.h"
+#include "main/event.h"
 #include "terminal/kbd.h"
 #include "util/memory.h"
 #include "util/string.h"

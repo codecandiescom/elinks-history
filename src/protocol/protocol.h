@@ -1,9 +1,9 @@
-/* $Id: protocol.h,v 1.39 2005/03/05 21:04:49 jonas Exp $ */
+/* $Id: protocol.h,v 1.40 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
 
-#include "modules/module.h"
+#include "main/module.h"
 
 struct connection;
 struct session;

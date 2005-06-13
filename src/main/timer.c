@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timer.c,v 1.27 2005/06/12 00:02:41 jonas Exp $ */
+/* $Id: timer.c,v 1.28 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,8 +7,8 @@
 
 #include "elinks.h"
 
-#include "lowlevel/select.h"
-#include "lowlevel/timers.h"
+#include "main/select.h"
+#include "main/timer.h"
 #include "util/error.h"
 #include "util/lists.h"
 #include "util/memory.h"

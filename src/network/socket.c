@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.241 2005/06/12 12:26:51 jonas Exp $ */
+/* $Id: socket.c,v 1.242 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "lowlevel/select.h"
+#include "main/select.h"
 #include "network/connection.h"
 #include "network/dns.h"
 #include "network/socket.h"

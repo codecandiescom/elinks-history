@@ -1,5 +1,5 @@
 /* Python module */
-/* $Id: python.c,v 1.2 2005/06/05 14:22:08 witekfl Exp $ */
+/* $Id: python.c,v 1.3 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 
 #include "elinks.h"
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "scripting/python/hooks.h"
 
 

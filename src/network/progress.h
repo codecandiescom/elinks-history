@@ -1,9 +1,9 @@
-/* $Id: progress.h,v 1.28 2005/06/12 02:46:01 jonas Exp $ */
+/* $Id: progress.h,v 1.29 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifndef EL__NETWORK_PROGRESS_H
 #define EL__NETWORK_PROGRESS_H
 
-#include "lowlevel/timers.h" /* timer_id_T */
+#include "main/timer.h" /* timer_id_T */
 #include "util/time.h"
 
 #define CURRENT_SPD_SEC 	50	/* number of seconds */

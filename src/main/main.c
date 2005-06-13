@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.255 2005/06/12 22:16:04 jonas Exp $ */
+/* $Id: main.c,v 1.256 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,11 +30,11 @@
 #include "document/document.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/select.h"
-#include "main.h"
-#include "modules/event.h"
-#include "modules/module.h"
-#include "modules/version.h"
+#include "main/event.h"
+#include "main/main.h"
+#include "main/module.h"
+#include "main/select.h"
+#include "main/version.h"
 #include "network/connection.h"
 #include "network/dns.h"
 #include "network/interlink.h"

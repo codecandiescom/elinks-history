@@ -1,5 +1,5 @@
 /* Lua module */
-/* $Id: lua.c,v 1.1 2005/04/01 09:41:37 zas Exp $ */
+/* $Id: lua.c,v 1.2 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,7 @@
 
 #include "elinks.h"
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "scripting/lua/core.h"
 #include "scripting/lua/hooks.h"
 

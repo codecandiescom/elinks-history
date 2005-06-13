@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.79 2005/03/26 11:56:54 jonas Exp $ */
+/* $Id: user.c,v 1.80 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 #include "bfu/dialog.h"
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
-#include "modules/module.h"
+#include "main/module.h"
 #include "osdep/osdep.h"
 #include "protocol/uri.h"
 #include "protocol/user.h"

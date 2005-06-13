@@ -1,9 +1,9 @@
-/* $Id: refresh.h,v 1.5 2005/04/26 19:20:46 jonas Exp $ */
+/* $Id: refresh.h,v 1.6 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_REFRESH_H
 #define EL__DOCUMENT_REFRESH_H
 
-#include "lowlevel/timers.h" /* timer_id_T */
+#include "main/timer.h" /* timer_id_T */
 
 struct session;
 struct uri;

@@ -1,6 +1,6 @@
 /* Network news transport protocol implementation (RFC 977 and 2980) */
 
-/* $Id: nntp.c,v 1.2 2004/09/23 10:28:47 zas Exp $ */
+/* $Id: nntp.c,v 1.3 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -10,7 +10,7 @@
 
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
-#include "modules/module.h"
+#include "main/module.h"
 #include "protocol/nntp/nntp.h"
 
 /* The official color for this planet is green,

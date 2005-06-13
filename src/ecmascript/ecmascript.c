@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.28 2005/02/28 13:06:33 zas Exp $ */
+/* $Id: ecmascript.c,v 1.29 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,7 @@
 #include "ecmascript/ecmascript.h"
 #include "ecmascript/spidermonkey.h"
 #include "intl/gettext/libintl.h"
-#include "modules/module.h"
+#include "main/module.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "sched/task.h"

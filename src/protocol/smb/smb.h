@@ -1,9 +1,9 @@
-/* $Id: smb.h,v 1.7 2005/03/05 21:04:49 jonas Exp $ */
+/* $Id: smb.h,v 1.8 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_SMB_SMB_H
 #define EL__PROTOCOL_SMB_SMB_H
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "protocol/protocol.h"
 
 extern struct module smb_protocol_module;

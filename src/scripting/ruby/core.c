@@ -1,5 +1,5 @@
 /* Ruby interface (scripting engine) */
-/* $Id: core.c,v 1.12 2005/06/12 00:42:30 jonas Exp $ */
+/* $Id: core.c,v 1.13 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 #include "bfu/dialog.h"
 #include "intl/gettext/libintl.h"
 #include "config/home.h"
-#include "modules/module.h"
+#include "main/module.h"
 #include "sched/session.h"
 #include "scripting/ruby/core.h"
 #include "terminal/terminal.h"

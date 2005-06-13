@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.56 2005/06/12 00:42:30 jonas Exp $ */
+/* $Id: home.c,v 1.57 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,10 +16,10 @@
 
 #include "elinks.h"
 
-#include "main.h"
 #include "config/home.h"
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
+#include "main/main.h"
 #include "osdep/osdep.h"
 #include "util/memory.h"
 #include "util/string.h"

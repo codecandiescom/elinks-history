@@ -1,9 +1,9 @@
-/* $Id: bookmarks.h,v 1.36 2004/07/15 00:45:33 jonas Exp $ */
+/* $Id: bookmarks.h,v 1.37 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "util/lists.h"
 #include "util/object.h"
 

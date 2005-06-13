@@ -1,9 +1,9 @@
-/* $Id: gopher.h,v 1.3 2005/03/05 21:04:49 jonas Exp $ */
+/* $Id: gopher.h,v 1.4 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_GOPHER_GOPHER_H
 #define EL__PROTOCOL_GOPHER_GOPHER_H
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "protocol/protocol.h"
 
 #ifdef CONFIG_GOPHER

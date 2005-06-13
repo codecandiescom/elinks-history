@@ -1,5 +1,5 @@
 /* Periodic saving module */
-/* $Id: timer.c,v 1.1 2005/06/12 18:31:42 jonas Exp $ */
+/* $Id: timer.c,v 1.2 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,9 +9,9 @@
 
 #include "config/options.h"
 #include "config/timer.h"
-#include "lowlevel/timers.h"
-#include "modules/event.h"
-#include "modules/module.h"
+#include "main/event.h"
+#include "main/module.h"
+#include "main/timer.h"
 
 
 /* Timer for periodically saving configuration files to disk */

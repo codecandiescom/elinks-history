@@ -1,11 +1,11 @@
-/* $Id: session.h,v 1.173 2005/06/12 01:53:49 jonas Exp $ */
+/* $Id: session.h,v 1.174 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
 
 #include "bfu/dialog.h"
 #include "cache/cache.h"
-#include "lowlevel/timers.h" /* timer_id_T */
+#include "main/timer.h" /* timer_id_T */
 #include "network/state.h"
 #include "sched/download.h"
 #include "sched/history.h"

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.194 2005/06/12 01:47:54 jonas Exp $ */
+/* $Id: file.c,v 1.195 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@
 #include "config/options.h"
 #include "encoding/encoding.h"
 #include "intl/gettext/libintl.h"
-#include "modules/module.h"
+#include "main/module.h"
 #include "network/connection.h"
 #include "protocol/file/cgi.h"
 #include "protocol/file/file.h"

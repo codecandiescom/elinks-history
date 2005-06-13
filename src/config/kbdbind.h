@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.177 2005/06/12 00:59:33 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.178 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -7,7 +7,7 @@
 struct listbox_item;
 
 #include "config/options.h"
-#include "modules/event.h"
+#include "main/event.h"
 #include "terminal/terminal.h"
 #include "util/object.h"
 #include "util/string.h"

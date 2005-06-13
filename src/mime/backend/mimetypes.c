@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.51 2005/04/19 23:06:47 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.52 2005/06/13 00:43:28 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-2004 The ELinks Project */
@@ -17,7 +17,7 @@
 
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
-#include "modules/module.h"
+#include "main/module.h"
 #include "mime/backend/common.h"
 #include "mime/backend/mimetypes.h"
 #include "mime/mime.h"

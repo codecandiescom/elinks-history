@@ -1,9 +1,9 @@
-/* $Id: cookies.h,v 1.31 2005/05/22 03:09:50 miciah Exp $ */
+/* $Id: cookies.h,v 1.32 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "protocol/uri.h"
 #include "util/object.h"
 #include "util/string.h"

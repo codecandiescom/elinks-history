@@ -1,7 +1,7 @@
-/* $Id: select.h,v 1.21 2005/06/11 23:16:13 jonas Exp $ */
+/* $Id: select.h,v 1.22 2005/06/13 00:43:28 jonas Exp $ */
 
-#ifndef EL__LOWLEVEL_SELECT_H
-#define EL__LOWLEVEL_SELECT_H
+#ifndef EL__MAIN_SELECT_H
+#define EL__MAIN_SELECT_H
 
 typedef void (*select_handler_T)(void *);
 

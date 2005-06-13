@@ -1,9 +1,9 @@
-/* $Id: user.h,v 1.10 2005/03/05 21:04:49 jonas Exp $ */
+/* $Id: user.h,v 1.11 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_USER_H
 #define EL__PROTOCOL_USER_H
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "protocol/protocol.h"
 #include "terminal/terminal.h"
 

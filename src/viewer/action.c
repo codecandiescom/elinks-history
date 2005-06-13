@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.151 2005/06/12 01:47:54 jonas Exp $ */
+/* $Id: action.c,v 1.152 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,7 +8,6 @@
 #include <stdlib.h>
 
 #include "elinks.h"
-#include "main.h"
 
 #include "bookmarks/dialogs.h"
 #include "cache/dialogs.h"
@@ -29,6 +28,7 @@
 #include "document/view.h"
 #include "formhist/dialogs.h"
 #include "globhist/dialogs.h"
+#include "main/main.h"
 #include "network/connection.h"
 #include "protocol/auth/auth.h"
 #include "protocol/auth/dialogs.h"

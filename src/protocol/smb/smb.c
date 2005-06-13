@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.77 2005/06/12 01:47:54 jonas Exp $ */
+/* $Id: smb.c,v 1.78 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -32,8 +32,8 @@
 #include "cache/cache.h"
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/select.h"
-#include "modules/module.h"
+#include "main/module.h"
+#include "main/select.h"
 #include "network/connection.h"
 #include "network/socket.h"
 #include "osdep/osdep.h"

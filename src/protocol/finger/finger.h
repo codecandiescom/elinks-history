@@ -1,9 +1,9 @@
-/* $Id: finger.h,v 1.3 2005/03/05 21:04:49 jonas Exp $ */
+/* $Id: finger.h,v 1.4 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_FINGER_FINGER_H
 #define EL__PROTOCOL_FINGER_FINGER_H
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "protocol/protocol.h"
 
 #ifdef CONFIG_FINGER

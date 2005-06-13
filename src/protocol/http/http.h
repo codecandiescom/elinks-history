@@ -1,9 +1,9 @@
-/* $Id: http.h,v 1.22 2005/04/17 21:38:17 jonas Exp $ */
+/* $Id: http.h,v 1.23 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_HTTP_H
 #define EL__PROTOCOL_HTTP_HTTP_H
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "protocol/protocol.h"
 
 struct connection;

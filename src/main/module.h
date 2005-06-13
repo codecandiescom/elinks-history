@@ -1,10 +1,10 @@
-/* $Id: module.h,v 1.16 2005/06/12 00:59:33 jonas Exp $ */
+/* $Id: module.h,v 1.17 2005/06/13 00:43:28 jonas Exp $ */
 
-#ifndef EL__MODULES_MODULE_H
-#define EL__MODULES_MODULE_H
+#ifndef EL__MAIN_MODULE_H
+#define EL__MAIN_MODULE_H
 
 #include "config/options.h"
-#include "modules/event.h"
+#include "main/event.h"
 
 /* The module record */
 

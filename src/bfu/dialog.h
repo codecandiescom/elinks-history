@@ -1,11 +1,11 @@
-/* $Id: dialog.h,v 1.56 2005/03/05 20:46:46 zas Exp $ */
+/* $Id: dialog.h,v 1.57 2005/06/13 00:43:26 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
 
 #include "bfu/style.h"
 #include "bfu/widget.h"
-#include "lowlevel/timers.h" /* timer_id_T */
+#include "main/timer.h" /* timer_id_T */
 #include "terminal/terminal.h"
 #include "terminal/window.h" /* dialog_data->win->term is so common that... */
 #include "util/memlist.h"

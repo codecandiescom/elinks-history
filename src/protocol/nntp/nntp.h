@@ -1,9 +1,9 @@
-/* $Id: nntp.h,v 1.1 2004/08/14 07:53:15 jonas Exp $ */
+/* $Id: nntp.h,v 1.2 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_NNTP_NNTP_H
 #define EL__PROTOCOL_NNTP_NNTP_H
 
-#include "modules/module.h"
+#include "main/module.h"
 
 /* Returns the server that should be used when expanding news: URIs */
 unsigned char *get_nntp_server(void);

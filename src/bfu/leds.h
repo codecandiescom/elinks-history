@@ -1,11 +1,11 @@
-/* $Id: leds.h,v 1.22 2005/04/26 10:05:22 zas Exp $ */
+/* $Id: leds.h,v 1.23 2005/06/13 00:43:27 jonas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
 
 #ifdef CONFIG_LEDS
 
-#include "modules/module.h"
+#include "main/module.h"
 #include "util/color.h"
 
 struct session;

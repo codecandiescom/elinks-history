@@ -1,7 +1,7 @@
-/* $Id: timer.h,v 1.19 2005/06/11 23:24:04 jonas Exp $ */
+/* $Id: timer.h,v 1.20 2005/06/13 00:43:28 jonas Exp $ */
 
-#ifndef EL__LOWLEVEL_TIMERS_H
-#define EL__LOWLEVEL_TIMERS_H
+#ifndef EL__MAIN_TIMER_H
+#define EL__MAIN_TIMER_H
 
 #include "util/time.h"
 

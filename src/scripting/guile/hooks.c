@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.33 2005/06/12 03:27:19 jonas Exp $ */
+/* $Id: hooks.c,v 1.34 2005/06/13 00:43:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 
 #include "elinks.h"
 
-#include "modules/event.h"
+#include "main/event.h"
 #include "sched/session.h"
 #include "scripting/guile/hooks.h"
 #include "util/string.h"

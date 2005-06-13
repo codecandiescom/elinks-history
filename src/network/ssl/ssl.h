@@ -1,11 +1,11 @@
-/* $Id: ssl.h,v 1.24 2005/06/12 02:26:49 jonas Exp $ */
+/* $Id: ssl.h,v 1.25 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifndef EL__NETWORK_SSL_SSL_H
 #define EL__NETWORK_SSL_SSL_H
 
 #ifdef CONFIG_SSL
 
-#include "modules/module.h"
+#include "main/module.h"
 
 struct socket;
 

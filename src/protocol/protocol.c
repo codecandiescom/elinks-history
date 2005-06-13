@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.96 2005/06/12 01:47:54 jonas Exp $ */
+/* $Id: protocol.c,v 1.97 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 #include "document/view.h"
 #include "ecmascript/ecmascript.h"
 #include "intl/gettext/libintl.h"
-#include "modules/module.h"
+#include "main/module.h"
 #include "network/connection.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"

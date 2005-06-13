@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.25 2005/05/17 13:15:22 zas Exp $ */
+/* $Id: unix.c,v 1.26 2005/06/13 00:43:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 
 #include "elinks.h"
 
-#include "lowlevel/select.h"
+#include "main/select.h"
 #include "osdep/unix/unix.h"
 #include "osdep/osdep.h"
 #include "terminal/event.h"

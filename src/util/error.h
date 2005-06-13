@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.45 2004/08/12 08:40:30 miciah Exp $ */
+/* $Id: error.h,v 1.46 2005/06/13 22:03:49 jonas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -53,6 +53,43 @@ void elinks_internal(unsigned char *fmt, ...);
  * ELinks run. It does not belong to the family above - it doesn't print code
  * location, beep nor sleep, it just wraps around fprintf(stderr, "...\n");. */
 void usrerror(unsigned char *fmt, ...);
+
+
+#ifdef HAVE_VARIADIC_MACROS
+#ifdef CONFIG_DEBUG
+/* The LOG_*() macros can be used to log to a file, however, by default log
+ * messages are written to stderr. Set the following environment variables
+ * to configure the log behavior:
+ *
+ *	ELINKS_LOG	- The path to the log file, it is opened for appending
+ *	ELINKS_MSG	- A comma separated list containing "error", "warn",
+ *			  "info" and/or "debug" which can be used to limit
+ *			  what messages to emit to the log.
+ *	ELINKS_FILES	- A comma separated list of which files names to
+ *			  emit log messages from.
+ */
+void
+elinks_log(unsigned char *msg, unsigned char *file, int line,
+	   unsigned char *fmt, ...);
+
+#undef LOG_ERR
+#define LOG_ERR(args...) \
+	elinks_log("error", __FILE__, __LINE__, args)
+
+#undef LOG_WARN
+#define LOG_WARN(args...) \
+	elinks_log("warn", __FILE__, __LINE__, args)
+
+#undef LOG_INFO
+#define LOG_INFO(args...) \
+	elinks_log("info", __FILE__, __LINE__, args)
+
+#undef LOG_DBG
+#define LOG_DBG(args...) \
+	elinks_log("debug", __FILE__, __LINE__, args)
+
+#endif
+#endif
 
 
 

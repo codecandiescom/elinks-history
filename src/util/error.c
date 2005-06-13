@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.88 2005/02/05 05:26:41 jonas Exp $ */
+/* $Id: error.c,v 1.89 2005/06/13 22:03:49 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -16,6 +16,13 @@
 #include <string.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
+#ifdef HAVE_TIME_H
+#include <time.h>
 #endif
 
 #include "elinks.h"
@@ -170,6 +177,77 @@ force_dump(void)
 #endif
 	fflush(stderr);
 	raise(SIGSEGV);
+}
+
+static FILE *log_file = NULL;
+
+static void
+done_log(void)
+{
+	unsigned char errbuf[4096];
+	time_t curtime = time(NULL);
+	struct tm *loctime = localtime(&curtime);
+	int len;
+
+	len = strftime(errbuf, sizeof(errbuf), "%a, %d %b %Y %H:%M:%S %z",
+		       loctime);
+	errbuf[len] = '\0';
+
+	fprintf(log_file, "[%-5s %-13s %4s]: Log stopped at %s\n\n\n",
+		"", "", "", errbuf);
+
+	fclose(log_file);
+}
+
+void
+elinks_log(unsigned char *msg, unsigned char *file, int line,
+	   unsigned char *fmt, ...)
+{
+	static int init_log = 0;
+	static unsigned char *log_files = NULL;
+	static unsigned char *log_messages = NULL;
+	unsigned char errbuf[4096];
+	va_list params;
+
+	if (!log_file) {
+		unsigned char *log_name;
+		time_t curtime = time(NULL);
+		struct tm *loctime = localtime(&curtime);
+		int len;
+
+		log_files = getenv("ELINKS_FILES");
+		log_msg	  = getenv("ELINKS_MSG");
+		log_name  = getenv("ELINKS_LOG");
+		log_file  = log_name ? fopen(log_name, "a") : stderr;
+
+		if (!log_file) return;
+
+		len = strftime(errbuf, sizeof(errbuf), "%a, %d %b %Y %H:%M:%S %z",
+			       loctime);
+		errbuf[len] = '\0';
+
+		fprintf(log_file, "\n\n[%-5s %-13s %4s]: Log started at %s\n",
+			"type", "file", "line", errbuf);
+
+		atexit(done_log);
+	}
+
+	if (log_files && !strstr(log_files, file))
+		return;
+
+	if (log_msg && !strstr(log_msg, msg))
+		return;
+
+	va_start(params, fmt);
+
+	snprintf(errbuf, sizeof(errbuf), "[%-5s %-13s %4d]: %s",
+		 message, file, line,  fmt);
+
+	vfprintf(log_file, errbuf, params);
+	fputc('\n', log_file);
+	fflush(log_file);
+
+	va_end(params);
 }
 #endif
 

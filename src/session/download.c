@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.376 2005/06/14 14:03:37 jonas Exp $ */
+/* $Id: download.c,v 1.377 2005/06/14 17:32:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,18 +317,17 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	}
 
 	if (download->state != S_OK) {
-		unsigned char *errmsg = get_err_msg(download->state, term);
 		unsigned char *url = get_uri_string(file_download->uri, URI_PUBLIC);
 
-		if (url) {
-			info_box(term, MSGBOX_FREE_TEXT,
-				 N_("Download error"), ALIGN_CENTER,
-				 msg_text(term, N_("Error downloading %s:\n\n%s"),
-					  url, errmsg));
-			mem_free(url);
-		}
-
 		abort_download_and_beep(file_download, term);
+
+		if (!url) return;
+
+		info_box(term, MSGBOX_FREE_TEXT,
+			 N_("Download error"), ALIGN_CENTER,
+			 msg_text(term, N_("Error downloading %s:\n\n%s"), url,
+				  get_err_msg(download->state, term)));
+		mem_free(url);
 		return;
 	}
 

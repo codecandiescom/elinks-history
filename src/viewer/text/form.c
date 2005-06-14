@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.286 2005/06/14 16:44:52 jonas Exp $ */
+/* $Id: form.c,v 1.287 2005/06/14 19:28:01 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1096,7 +1096,11 @@ submit_form(struct session *ses, struct document_view *doc_view, int do_reload)
 void
 submit_given_form(struct session *ses, struct document_view *doc_view, struct form *form)
 {
+/* Added support for submitting forms in hidden
+ * links in 1.285, commented code can safely be removed once we have made sure the new
+ * code does the right thing. */
 #if 0
+
 	struct document *document = doc_view->document;
 	int link;
 

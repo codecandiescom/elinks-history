@@ -28,7 +28,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.18 2004/09/27 12:24:34 witekfl Exp $
+# $Id: elinks.spec.in,v 1.19 2005/06/14 13:34:04 witekfl Exp $
 
 Summary:	Enhanced version of Links (Lynx-like text WWW browser)
 Name:		elinks
@@ -45,7 +45,6 @@ BuildRequires:	expat-devel
 BuildRequires:	gpm-devel
 BuildRequires:	openssl-devel
 BuildRequires:	zlib-devel
-BuildRequires:	/usr/bin/texi2html
 %{!?_without_x:BuildRequires:	XFree86-devel}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-build
 
@@ -94,9 +93,6 @@ provide good rock-solid releases inside stable branches.
 
 %{__make}
 
-cd doc
-texi2html elinks-lua.texi
-cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -133,13 +129,15 @@ rm -rf $RPM_BUILD_ROOT
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %attr (755,root,root) %{_bindir}/%{name}
-%dir %{_libdir}/%{name}
-%{_libdir}/%{name}/
 %doc %{_defaultdocdir}/%{name}
 %doc %{_mandir}/man?/*
 
 # date +"%a %b %d %Y"
 %changelog
+*Tue Jun 14 2005 Witold Filipczyk <witekfl@pld-linux.org>
+- removed unused texi2html dependency
+- removed unused libdir directory
+
 *Mon Sep 27 2004 Witold Filipczyk <witekfl@pld-linux.org>
 - by default build feature rich ELinks
 

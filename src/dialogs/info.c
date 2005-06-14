@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.140 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: info.c,v 1.141 2005/06/14 13:16:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,6 +160,7 @@ get_resource_info(struct terminal *term, void *data)
 {
 	struct string info;
 	long val;
+	unsigned longlong bigval;
 
 	if (!init_string(&info))
 		return NULL;
@@ -200,8 +201,9 @@ get_resource_info(struct terminal *term, void *data)
 	add_to_string(&info, _("Memory cache", term));
 	add_to_string(&info, ": ");
 
-	val = get_cache_size();
-	val_add(n_("%d byte", "%d bytes", val, term));
+	/* What about just using Kibi/Mebi representation here? --jonas */
+	bigval = get_cache_size();
+	val_add(n_("%ld byte", "%ld bytes", val, term));
 	add_to_string(&info, ", ");
 
 	val = get_cache_entry_count();

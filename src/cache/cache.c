@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.223 2005/06/13 07:37:36 jonas Exp $ */
+/* $Id: cache.c,v 1.224 2005/06/14 13:16:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,10 +26,10 @@
 /* The list of cache entries */
 static INIT_LIST_HEAD(cache_entries);
 
-static long cache_size;
+static unsigned longlong cache_size;
 static int id_counter = 1;
 
-static void truncate_entry(struct cache_entry *cached, int offset, int final);
+static void truncate_entry(struct cache_entry *cached, off_t offset, int final);
 
 /* Change 0 to 1 to enable cache debugging features (redirect stderr to a file). */
 #if 0
@@ -58,7 +58,7 @@ do { \
 #define dump_frags(entry, comment)
 #endif /* DEBUG_CACHE */
 
-int
+unsigned longlong
 get_cache_size(void)
 {
 	return cache_size;
@@ -255,7 +255,7 @@ get_redirected_cache_entry(struct uri *uri)
 
 
 static inline void
-enlarge_entry(struct cache_entry *cached, int size)
+enlarge_entry(struct cache_entry *cached, off_t size)
 {
 	cached->data_size += size;
 	assertm(cached->data_size >= 0,
@@ -300,6 +300,7 @@ static struct fragment *
 frag_alloc(size_t size)
 {
 	struct fragment *f = mem_mmap_alloc(FRAGSIZE(size));
+
 	if (!f) return NULL;
 	memset(f, 0, FRAGSIZE(size));
 	return f;
@@ -322,13 +323,13 @@ frag_free(struct fragment *f)
 static void
 remove_overlaps(struct cache_entry *cached, struct fragment *f, int *trunc)
 {
-	int f_end_offset = f->offset + f->length;
+	off_t f_end_offset = f->offset + f->length;
 
 	/* Iterate thru all fragments we still overlap to. */
 	while (list_has_next(cached->frag, f)
 		&& f_end_offset > f->next->offset) {
 		struct fragment *nf;
-		int end_offset = f->next->offset + f->next->length;
+		off_t end_offset = f->next->offset + f->next->length;
 
 		if (f_end_offset < end_offset) {
 			/* We end before end of the following fragment, though.
@@ -373,12 +374,12 @@ remove_overlaps(struct cache_entry *cached, struct fragment *f, int *trunc)
 /* Note that this function is maybe overcommented, but I'm certainly not
  * unhappy from that. */
 int
-add_fragment(struct cache_entry *cached, int offset,
-	     const unsigned char *data, int length)
+add_fragment(struct cache_entry *cached, off_t offset,
+	     const unsigned char *data, ssize_t length)
 {
 	struct fragment *f, *nf;
 	int trunc = 0;
-	int end_offset;
+	off_t end_offset;
 
 	if (!length) return 0;
 
@@ -393,7 +394,7 @@ add_fragment(struct cache_entry *cached, int offset,
 	/* Possibly insert the new data in the middle of existing fragment. */
 	foreach (f, cached->frag) {
 		int ret = 0;
-		int f_end_offset = f->offset + f->length;
+		off_t f_end_offset = f->offset + f->length;
 
 		/* No intersection? */
 		if (f->offset > offset) break;
@@ -564,7 +565,7 @@ delete_fragment(struct cache_entry *cached, struct fragment *f)
 }
 
 static void
-truncate_entry(struct cache_entry *cached, int offset, int final)
+truncate_entry(struct cache_entry *cached, off_t offset, int final)
 {
 	struct fragment *f;
 
@@ -574,7 +575,7 @@ truncate_entry(struct cache_entry *cached, int offset, int final)
 	}
 
 	foreach (f, cached->frag) {
-		long size = offset - f->offset;
+		off_t size = offset - f->offset;
 
 		/* XXX: is zero length fragment really legal here ? --Zas */
 		assert(f->length >= 0);
@@ -608,7 +609,7 @@ truncate_entry(struct cache_entry *cached, int offset, int final)
 }
 
 void
-free_entry_to(struct cache_entry *cached, int offset)
+free_entry_to(struct cache_entry *cached, off_t offset)
 {
 	struct fragment *f;
 
@@ -621,7 +622,7 @@ free_entry_to(struct cache_entry *cached, int offset)
 			del_from_list(tmp);
 			frag_free(tmp);
 		} else if (f->offset < offset) {
-			long size = offset - f->offset;
+			off_t size = offset - f->offset;
 
 			enlarge_entry(cached, -size);
 			f->length -= size;
@@ -684,7 +685,7 @@ delete_cache_entry(struct cache_entry *cached)
 
 
 void
-normalize_cache_entry(struct cache_entry *cached, int truncate_length)
+normalize_cache_entry(struct cache_entry *cached, off_t truncate_length)
 {
 	if (truncate_length < 0)
 		return;
@@ -753,20 +754,20 @@ garbage_collection(int whole)
 	struct cache_entry *cached;
 	/* We recompute cache_size when scanning cache entries, to ensure
 	 * consistency. */
-	long old_cache_size = 0;
+	unsigned longlong old_cache_size = 0;
 	/* The maximal cache size tolerated by user. Note that this is only
 	 * size of the "just stored" unused cache entries, used cache entries
 	 * are not counted to that. */
-	long opt_cache_size = get_opt_long("document.cache.memory.size");
+	unsigned longlong opt_cache_size = get_opt_long("document.cache.memory.size");
 	/* The low-treshold cache size. Basically, when the cache size is
 	 * higher than opt_cache_size, we free the cache so that there is no
 	 * more than this value in the cache anymore. This is to make sure we
 	 * aren't cleaning cache too frequently when working with a lot of
 	 * small cache entries but rather free more and then let it grow a
 	 * little more as well. */
-	long gc_cache_size = opt_cache_size * MEMORY_CACHE_GC_PERCENT / 100;
+	unsigned longlong gc_cache_size = opt_cache_size * MEMORY_CACHE_GC_PERCENT / 100;
 	/* The cache size we aim to reach. */
-	long new_cache_size = cache_size;
+	unsigned longlong new_cache_size = cache_size;
 #ifdef DEBUG_CACHE
 	/* Whether we've hit an used (unfreeable) entry when collecting
 	 * garbage. */
@@ -792,11 +793,12 @@ garbage_collection(int whole)
 		if (!is_object_used(cached) && !is_entry_used(cached))
 			continue;
 
+		assertm(new_cache_size >= cached->data_size,
+			"cache_size (%ld) underflow: subtracting %ld from %ld",
+			cache_size, cached->data_size, new_cache_size);
+
 		new_cache_size -= cached->data_size;
 
-		assertm(new_cache_size >= 0,
-				"cache_size (%ld) underflow: %ld",
-				cache_size, new_cache_size);
 		if_assert_failed { new_cache_size = 0; }
 	}
 
@@ -830,13 +832,14 @@ garbage_collection(int whole)
 		 * but that will probably complicate things too much. We'd have
 		 * to sort entries so prioritize removing the oldest entries. */
 
+		assertm(new_cache_size >= cached->data_size,
+			"cache_size (%ld) underflow: subtracting %ld from %ld",
+			cache_size, cached->data_size, new_cache_size);
+
 		/* Mark me for destruction, sir. */
 		cached->gc_target = 1;
 		new_cache_size -= cached->data_size;
 
-		assertm(new_cache_size >= 0,
-			"cache_size (%ld) underflow: %ld",
-			cache_size, new_cache_size);
 		if_assert_failed { new_cache_size = 0; }
 	}
 
@@ -871,7 +874,7 @@ shrinked_enough:
 		 * situation. */
 
 		for (entry = cached; (void *) entry != &cache_entries; entry = entry->next) {
-			long newer_cache_size = new_cache_size + entry->data_size;
+			unsigned longlong newer_cache_size = new_cache_size + entry->data_size;
 
 			if (newer_cache_size > gc_cache_size)
 				continue;

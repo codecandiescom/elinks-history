@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.102 2005/06/11 23:57:17 jonas Exp $ */
+/* $Id: cache.h,v 1.103 2005/06/14 13:16:14 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -46,8 +46,8 @@ struct cache_entry {
 
 	unsigned int id;		/* Change each time entry is modified. */
 
-	int length;			/* The expected and complete size */
-	int data_size;			/* The actual size of all fragments */
+	off_t length;			/* The expected and complete size */
+	off_t data_size;		/* The actual size of all fragments */
 
 	struct listbox_item *box_item;	/* Dialog data for cache manager */
 	struct object object;		/* Usage refcount object */
@@ -71,9 +71,9 @@ struct cache_entry {
 struct fragment {
 	LIST_HEAD(struct fragment);
 
-	int offset;
-	int length;
-	int real_length;
+	off_t offset;
+	off_t length;
+	off_t real_length;
 	unsigned char data[1]; /* Must be last */
 };
 
@@ -106,8 +106,8 @@ struct cache_entry *get_redirected_cache_entry(struct uri *uri);
 /* Returns -1 upon error,
  *	    1 if cache entry was enlarged,
  *	    0 if only old data were overwritten. */
-int add_fragment(struct cache_entry *cached, int offset,
-		 const unsigned char *data, int length);
+int add_fragment(struct cache_entry *cached, off_t offset,
+		 const unsigned char *data, ssize_t length);
 
 /* Defragments the cache entry and returns the resulting fragment containing the
  * complete source of all currently downloaded fragments. Returns NULL if
@@ -116,9 +116,9 @@ struct fragment *get_cache_fragment(struct cache_entry *cached);
 
 /* Should be called when creation of a new cache has been completed. Most
  * importantly, it will updates cached->incomplete. */
-void normalize_cache_entry(struct cache_entry *cached, int length);
+void normalize_cache_entry(struct cache_entry *cached, off_t length);
 
-void free_entry_to(struct cache_entry *cached, int offset);
+void free_entry_to(struct cache_entry *cached, off_t offset);
 void delete_entry_content(struct cache_entry *cached);
 void delete_cache_entry(struct cache_entry *cached);
 
@@ -141,7 +141,7 @@ void garbage_collection(int whole);
 
 /* Used by the resource and memory info dialogs for getting information about
  * the cache. */
-int get_cache_size(void);
+unsigned longlong get_cache_size(void);
 int get_cache_entry_count(void);
 int get_cache_entry_used_count(void);
 int get_cache_entry_loading_count(void);

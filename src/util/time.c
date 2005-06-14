@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.44 2005/06/12 00:23:36 jonas Exp $ */
+/* $Id: time.c,v 1.45 2005/06/14 13:04:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,8 +14,7 @@
 
 #include "elinks.h"
 
-#include "osdep/win32/win32.h"	/* For gettimeofday stub */
-#include "osdep/types.h"	/* longlong */
+#include "osdep/osdep.h" /* For win32 gettimeofday() stub */
 #include "util/time.h"
 
 /* Get the current time.

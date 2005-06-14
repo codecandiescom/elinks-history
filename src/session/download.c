@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.377 2005/06/14 17:32:45 jonas Exp $ */
+/* $Id: download.c,v 1.378 2005/06/14 17:35:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,7 +326,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		info_box(term, MSGBOX_FREE_TEXT,
 			 N_("Download error"), ALIGN_CENTER,
 			 msg_text(term, N_("Error downloading %s:\n\n%s"), url,
-				  get_err_msg(download->state, term)));
+				  get_state_message(download->state, term)));
 		mem_free(url);
 		return;
 	}

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.165 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: dump.c,v 1.166 2005/06/14 17:35:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,7 +233,7 @@ dump_loading_callback(struct download *download, void *p)
 	}
 
 	if (download->state != S_OK) {
-		usrerror(get_err_msg(download->state, NULL));
+		usrerror(get_state_message(download->state, NULL));
 		program.retval = RET_ERROR;
 		goto terminate;
 	}

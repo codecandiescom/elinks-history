@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.44 2005/06/13 21:23:12 jonas Exp $ */
+/* $Id: state.c,v 1.45 2005/06/14 17:36:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,7 +130,7 @@ static INIT_LIST_HEAD(strerror_buf); /* struct strerror_val */
  * It never returns NULL (if one changes that, be warn that
  * callers may not test for this condition) --Zas */
 unsigned char *
-get_err_msg(int state, struct terminal *term)
+get_state_message(int state, struct terminal *term)
 {
 	unsigned char *e;
 	struct strerror_val *s;
@@ -166,7 +166,7 @@ get_err_msg(int state, struct terminal *term)
 }
 
 void
-free_strerror_buf(void)
+done_state_message(void)
 {
 	free_list(strerror_buf);
 }

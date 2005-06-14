@@ -1,4 +1,4 @@
-/* $Id: state.h,v 1.3 2005/06/12 02:02:44 jonas Exp $ */
+/* $Id: state.h,v 1.4 2005/06/14 17:35:17 jonas Exp $ */
 
 #ifndef EL__NETWORK_STATE_H
 #define EL__NETWORK_STATE_H
@@ -101,7 +101,7 @@ enum connection_state {
 	S_PROXY_ERROR		= -100700,
 };
 
-unsigned char *get_err_msg(enum connection_state state, struct terminal *term);
-void free_strerror_buf(void);
+unsigned char *get_state_message(enum connection_state state, struct terminal *term);
+void done_state_message(void);
 
 #endif

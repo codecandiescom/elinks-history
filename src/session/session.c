@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.630 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: session.c,v 1.631 2005/06/14 17:35:17 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -246,7 +246,7 @@ print_error_dialog(struct session *ses, enum connection_state state,
 		add_to_string(&msg, ":\n\n");
 	}
 
-	add_to_string(&msg, get_err_msg(state, ses->tab->term));
+	add_to_string(&msg, get_state_message(state, ses->tab->term));
 
 	info_box(ses->tab->term, MSGBOX_FREE_TEXT,
 		 N_("Error"), ALIGN_CENTER,

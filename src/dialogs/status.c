@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.122 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: status.c,v 1.123 2005/06/14 17:35:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ get_download_msg(struct download *download, struct terminal *term,
 {
 	if (!download_is_progressing(download)) {
 		/* DBG("%d -> %s", download->state, _(get_err_msg(download->state), term)); */
-		return stracpy(get_err_msg(download->state, term));
+		return stracpy(get_state_message(download->state, term));
 	}
 
 	return get_progress_msg(download->progress, term, wide, full, separator);

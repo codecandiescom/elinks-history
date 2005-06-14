@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.84 2005/06/13 00:43:29 jonas Exp $ */
+/* $Id: tab.c,v 1.85 2005/06/14 12:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,7 @@
 #include "intl/gettext/libintl.h"
 #include "main/select.h"
 #include "protocol/uri.h"
-#include "sched/session.h"
+#include "session/session.h"
 #include "terminal/screen.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"

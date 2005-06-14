@@ -1,5 +1,5 @@
 /* Python scripting hooks */
-/* $Id: hooks.c,v 1.8 2005/06/13 00:43:29 jonas Exp $ */
+/* $Id: hooks.c,v 1.9 2005/06/14 12:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,9 +11,9 @@
 
 #include "main/event.h"
 #include "protocol/uri.h"
-#include "sched/location.h"
-#include "sched/session.h"
 #include "scripting/python/hooks.h"
+#include "session/location.h"
+#include "session/session.h"
 #include "util/string.h"
 
 /* The events that will trigger the functions below and what they are expected

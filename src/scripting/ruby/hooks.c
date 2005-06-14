@@ -1,5 +1,5 @@
 /* Ruby scripting hooks */
-/* $Id: hooks.c,v 1.13 2005/06/13 00:43:29 jonas Exp $ */
+/* $Id: hooks.c,v 1.14 2005/06/14 12:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,10 +11,10 @@
 
 #include "main/event.h"
 #include "protocol/uri.h"
-#include "sched/location.h"
-#include "sched/session.h"
 #include "scripting/ruby/core.h"
 #include "scripting/ruby/hooks.h"
+#include "session/location.h"
+#include "session/session.h"
 #include "util/string.h"
 
 

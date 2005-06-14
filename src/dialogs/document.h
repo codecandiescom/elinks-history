@@ -1,9 +1,9 @@
-/* $Id: document.h,v 1.6 2004/10/19 05:08:17 miciah Exp $ */
+/* $Id: document.h,v 1.7 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifndef EL__DIALOGS_DOCUMENT_H
 #define EL__DIALOGS_DOCUMENT_H
 
-#include "sched/session.h"
+#include "session/session.h"
 
 void nowhere_box(struct terminal *term, unsigned char *title);
 void document_info_dialog(struct session *);

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.112 2005/05/31 15:33:41 jonas Exp $ */
+/* $Id: options.h,v 1.113 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -78,7 +78,7 @@ enum option_type {
 	OPT_TREE,
 };
 
-/* Defined in bfu/listbox.h, later and sched/session.h */
+/* Defined in bfu/listbox.h, later and session/session.h */
 struct listbox_item;
 struct option;
 struct session;

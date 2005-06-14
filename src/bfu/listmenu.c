@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.37 2005/02/28 15:33:12 zas Exp $ */
+/* $Id: listmenu.c,v 1.38 2005/06/14 12:25:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 
 #include "bfu/listmenu.h"
 #include "bfu/menu.h"
-#include "sched/session.h"
+#include "session/session.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/string.h"

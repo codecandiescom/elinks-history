@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.325 2005/06/10 19:34:34 miciah Exp $ */
+/* $Id: link.c,v 1.326 2005/06/14 12:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,8 +23,8 @@
 #include "ecmascript/ecmascript.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/uri.h"
-#include "sched/session.h"
-#include "sched/task.h"
+#include "session/session.h"
+#include "session/task.h"
 #include "terminal/color.h"
 #include "terminal/draw.h"
 #include "terminal/kbd.h"

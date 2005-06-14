@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.88 2005/06/13 00:43:27 jonas Exp $ */
+/* $Id: download.c,v 1.89 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,8 +21,8 @@
 #include "main/select.h"
 #include "network/progress.h"
 #include "protocol/uri.h"
-#include "sched/download.h"
-#include "sched/session.h"
+#include "session/download.h"
+#include "session/session.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
 #include "util/color.h"

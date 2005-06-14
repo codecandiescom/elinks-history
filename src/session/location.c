@@ -1,5 +1,5 @@
 /* Locations handling */
-/* $Id: location.c,v 1.14 2005/02/28 14:30:51 zas Exp $ */
+/* $Id: location.c,v 1.15 2005/06/14 12:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,8 +9,8 @@
 
 #include "elinks.h"
 
-#include "sched/location.h"
-#include "sched/session.h"
+#include "session/location.h"
+#include "session/session.h"
 #include "util/memory.h"
 #include "util/string.h"
 

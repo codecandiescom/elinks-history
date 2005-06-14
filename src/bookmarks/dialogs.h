@@ -1,4 +1,4 @@
-/* $Id: dialogs.h,v 1.16 2005/03/30 10:28:13 zas Exp $ */
+/* $Id: dialogs.h,v 1.17 2005/06/14 12:25:19 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
@@ -6,7 +6,7 @@
 #include "bfu/dialog.h"
 #include "bfu/hierbox.h"
 #include "terminal/terminal.h"
-#include "sched/session.h"
+#include "session/session.h"
 
 extern struct hierbox_browser bookmark_browser;
 

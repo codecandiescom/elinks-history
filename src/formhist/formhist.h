@@ -1,11 +1,11 @@
-/* $Id: formhist.h,v 1.34 2005/06/13 00:43:27 jonas Exp $ */
+/* $Id: formhist.h,v 1.35 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifndef EL__FORMHIST_FORMHIST_H
 #define EL__FORMHIST_FORMHIST_H
 
 #include "document/forms.h"
 #include "main/module.h"
-#include "sched/session.h"
+#include "session/session.h"
 #include "util/lists.h"
 #include "util/object.h"
 

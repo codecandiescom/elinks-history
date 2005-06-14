@@ -1,10 +1,10 @@
-/* $Id: task.h,v 1.18 2005/04/27 21:51:47 jonas Exp $ */
+/* $Id: task.h,v 1.19 2005/06/14 12:25:21 jonas Exp $ */
 
-#ifndef EL__SCHED_TASK_H
-#define EL__SCHED_TASK_H
+#ifndef EL__SESSION_TASK_H
+#define EL__SESSION_TASK_H
 
 #include "cache/cache.h"
-#include "sched/session.h"
+#include "session/session.h"
 
 struct download;
 struct location;

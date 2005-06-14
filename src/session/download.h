@@ -1,7 +1,7 @@
-/* $Id: download.h,v 1.55 2005/06/12 01:53:49 jonas Exp $ */
+/* $Id: download.h,v 1.56 2005/06/14 12:25:21 jonas Exp $ */
 
-#ifndef EL__SCHED_DOWNLOAD_H
-#define EL__SCHED_DOWNLOAD_H
+#ifndef EL__SESSION_DOWNLOAD_H
+#define EL__SESSION_DOWNLOAD_H
 
 #include "network/state.h"
 #include "util/lists.h"
@@ -24,7 +24,7 @@ typedef void (download_callback_T)(struct download *, void *);
 
 struct download {
 	/* XXX: order matters there, there's some hard initialization in
-	 * src/sched/session.c and src/viewer/text/view.c */
+	 * src/session/session.c and src/viewer/text/view.c */
 	LIST_HEAD(struct download);
 
 	struct connection *conn;

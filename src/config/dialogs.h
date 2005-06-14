@@ -1,11 +1,11 @@
-/* $Id: dialogs.h,v 1.28 2005/06/10 20:58:06 jonas Exp $ */
+/* $Id: dialogs.h,v 1.29 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifndef EL__CONFIG_DIALOGS_H
 #define EL__CONFIG_DIALOGS_H
 
 #include "bfu/hierbox.h"
 #include "config/kbdbind.h"
-#include "sched/session.h"
+#include "session/session.h"
 #include "terminal/terminal.h"
 #include "util/memlist.h"
 

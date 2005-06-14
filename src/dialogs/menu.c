@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.401 2005/06/13 00:43:27 jonas Exp $ */
+/* $Id: menu.c,v 1.402 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,11 +32,11 @@
 #include "osdep/newwin.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
-#include "sched/download.h"
-#include "sched/history.h"
-#include "sched/location.h"
-#include "sched/session.h"
-#include "sched/task.h"
+#include "session/download.h"
+#include "session/history.h"
+#include "session/location.h"
+#include "session/session.h"
+#include "session/task.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"

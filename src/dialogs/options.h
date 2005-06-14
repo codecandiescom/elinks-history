@@ -1,9 +1,9 @@
-/* $Id: options.h,v 1.8 2004/12/30 23:42:02 jonas Exp $ */
+/* $Id: options.h,v 1.9 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifndef EL__DIALOGS_OPTIONS_H
 #define EL__DIALOGS_OPTIONS_H
 
-#include "sched/session.h"
+#include "session/session.h"
 #include "terminal/terminal.h"
 
 void charset_list(struct terminal *, void *, void *);

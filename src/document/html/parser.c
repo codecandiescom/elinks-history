@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.542 2005/06/12 23:23:35 jonas Exp $ */
+/* $Id: parser.c,v 1.543 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,8 +31,8 @@
 #include "protocol/date.h"
 #include "protocol/header.h"
 #include "protocol/uri.h"
-#include "sched/session.h"
-#include "sched/task.h"
+#include "session/session.h"
+#include "session/task.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
 #include "util/color.h"

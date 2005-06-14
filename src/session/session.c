@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.629 2005/06/13 00:43:29 jonas Exp $ */
+/* $Id: session.c,v 1.630 2005/06/14 12:25:21 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -37,11 +37,11 @@
 #include "osdep/newwin.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
-#include "sched/download.h"
-#include "sched/history.h"
-#include "sched/location.h"
-#include "sched/session.h"
-#include "sched/task.h"
+#include "session/download.h"
+#include "session/history.h"
+#include "session/location.h"
+#include "session/session.h"
+#include "session/task.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"

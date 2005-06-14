@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.218 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: hierbox.c,v 1.219 2005/06/14 12:25:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/uri.h"
-#include "sched/task.h"
+#include "session/task.h"
 #include "terminal/screen.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"

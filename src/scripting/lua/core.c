@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.214 2005/06/13 00:43:29 jonas Exp $ */
+/* $Id: core.c,v 1.215 2005/06/14 12:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,16 +27,16 @@
 #include "document/document.h"
 #include "document/renderer.h"
 #include "document/view.h"
-#include "intl/gettext/libintl.h"
 #include "intl/charsets.h"
+#include "intl/gettext/libintl.h"
 #include "main/event.h"
 #include "main/module.h"
 #include "osdep/signals.h"
 #include "protocol/uri.h"
-#include "sched/location.h"
-#include "sched/session.h"
-#include "sched/task.h"
 #include "scripting/lua/core.h"
+#include "session/location.h"
+#include "session/session.h"
+#include "session/task.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
 #include "util/conv.h"

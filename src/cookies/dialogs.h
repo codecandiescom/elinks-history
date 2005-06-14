@@ -1,10 +1,10 @@
-/* $Id: dialogs.h,v 1.6 2005/02/04 21:49:26 pasky Exp $ */
+/* $Id: dialogs.h,v 1.7 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifndef EL__COOKIES_DIALOGS_H
 #define EL__COOKIES_DIALOGS_H
 
 #include "bfu/hierbox.h"
-#include "sched/session.h"
+#include "session/session.h"
 #include "terminal/terminal.h"
 #include "util/lists.h"
 

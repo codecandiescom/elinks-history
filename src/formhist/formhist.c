@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.117 2005/06/13 00:43:27 jonas Exp $ */
+/* $Id: formhist.c,v 1.118 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 #include "formhist/formhist.h"
 #include "intl/gettext/libintl.h"
 #include "main/module.h"
-#include "sched/session.h"
+#include "session/session.h"
 #include "terminal/window.h"
 #include "util/base64.h"
 #include "util/file.h"

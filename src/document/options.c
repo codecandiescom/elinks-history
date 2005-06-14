@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.63 2005/06/11 05:13:50 miciah Exp $ */
+/* $Id: options.c,v 1.64 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 #include "dialogs/document.h"
 #include "document/options.h"
 #include "document/view.h"
-#include "sched/session.h"
+#include "session/session.h"
 #include "terminal/window.h"
 #include "util/color.h"
 #include "util/string.h"

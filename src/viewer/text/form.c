@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.283 2005/06/13 21:21:10 jonas Exp $ */
+/* $Id: form.c,v 1.284 2005/06/14 12:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "protocol/uri.h"
-#include "sched/session.h"
+#include "session/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"

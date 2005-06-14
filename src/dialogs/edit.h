@@ -1,10 +1,10 @@
-/* $Id: edit.h,v 1.11 2005/03/05 20:14:24 zas Exp $ */
+/* $Id: edit.h,v 1.12 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifndef EL__DIALOGS_EDIT_H
 #define EL__DIALOGS_EDIT_H
 
 #include "bfu/dialog.h"
-#include "sched/session.h"
+#include "session/session.h"
 #include "terminal/terminal.h"
 
 enum edit_dialog_type {

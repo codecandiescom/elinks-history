@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.125 2005/06/12 01:27:56 jonas Exp $ */
+/* $Id: cmdline.c,v 1.126 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@
 #include "intl/gettext/libintl.h"
 #include "network/dns.h"
 #include "protocol/uri.h"
-#include "sched/session.h"
+#include "session/session.h"
 #include "util/error.h"
 #include "util/file.h"
 #include "util/lists.h"

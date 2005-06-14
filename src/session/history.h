@@ -1,7 +1,7 @@
-/* $Id: history.h,v 1.28 2005/04/13 17:31:17 jonas Exp $ */
+/* $Id: history.h,v 1.29 2005/06/14 12:25:21 jonas Exp $ */
 
-#ifndef EL__SCHED_HISTORY_H
-#define EL__SCHED_HISTORY_H
+#ifndef EL__SESSION_HISTORY_H
+#define EL__SESSION_HISTORY_H
 
 struct location;
 struct session;

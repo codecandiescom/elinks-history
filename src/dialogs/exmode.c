@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.59 2005/06/13 21:21:10 jonas Exp $ */
+/* $Id: exmode.c,v 1.60 2005/06/14 12:25:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,8 +17,8 @@
 #include "dialogs/exmode.h"
 #include "intl/gettext/libintl.h"
 #include "main/module.h"
-#include "sched/session.h"
-#include "sched/task.h"
+#include "session/session.h"
+#include "session/task.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"

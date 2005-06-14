@@ -21,6 +21,8 @@
 
 #include <stdlib.h>		/* Just for NULL.  */
 
+#include "elinks.h"
+
 #include "intl/gettext/gettextP.h"
 #include "intl/gettext/libintl.h"
 

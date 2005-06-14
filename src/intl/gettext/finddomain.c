@@ -29,6 +29,8 @@
 #include <unistd.h>
 #endif
 
+#include "elinks.h"
+
 #include "intl/gettext/gettextP.h"
 #include "intl/gettext/libintl.h"
 #include "util/string.h"

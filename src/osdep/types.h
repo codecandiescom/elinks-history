@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.12 2005/06/13 23:35:57 jonas Exp $ */
+/* $Id: types.h,v 1.13 2005/06/14 18:02:25 jonas Exp $ */
 
 #ifndef EL__OSDEP_TYPES_H
 #define EL__OSDEP_TYPES_H
@@ -7,7 +7,9 @@
 #include "config.h"
 #endif
 
+#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
+#endif
 
 #ifdef HAVE_LIMITS_H
 #include <limits.h>

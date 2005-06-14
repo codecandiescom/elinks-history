@@ -1,7 +1,9 @@
-/* $Id: link.h,v 1.48 2005/03/02 13:50:02 zas Exp $ */
+/* $Id: link.h,v 1.49 2005/06/14 16:44:52 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
+
+#include "viewer/action.h"
 
 struct document;
 struct document_view;

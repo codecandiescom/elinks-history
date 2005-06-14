@@ -1,10 +1,11 @@
-/* $Id: textarea.h,v 1.28 2004/12/18 00:27:54 pasky Exp $ */
+/* $Id: textarea.h,v 1.29 2005/06/14 16:44:52 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_TEXTAREA_H
 #define EL__VIEWER_TEXT_TEXTAREA_H
 
 /* This file is largely a supserset of this header, so it doesn't hurt to just
  * include it here, IMHO. --pasky */
+#include "viewer/action.h"
 #include "viewer/text/form.h"
 
 struct document_view;

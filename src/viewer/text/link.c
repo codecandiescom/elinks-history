@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.326 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: link.c,v 1.327 2005/06/14 16:44:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
+#include "viewer/action.h"
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
 #include "viewer/text/search.h"

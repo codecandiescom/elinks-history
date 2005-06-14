@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.150 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: textarea.c,v 1.151 2005/06/14 16:44:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +32,7 @@
 #include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/action.h"
 #include "viewer/text/form.h"
 #include "viewer/text/textarea.h"
 #include "viewer/text/view.h"

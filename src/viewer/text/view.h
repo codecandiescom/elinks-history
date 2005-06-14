@@ -1,25 +1,15 @@
-/* $Id: view.h,v 1.74 2005/06/10 21:14:53 jonas Exp $ */
+/* $Id: view.h,v 1.75 2005/06/14 16:44:52 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
 
 #include "config/kbdbind.h"
+#include "viewer/action.h"
 
 struct document_view;
 struct session;
 struct term_event;
 struct terminal;
-
-enum frame_event_status {
-	/* The event was not handled */
-	FRAME_EVENT_IGNORED,
-	/* The event was handled, and the screen should be redrawn */
-	FRAME_EVENT_REFRESH,
-	/* The event was handled, and the screen should _not_ be redrawn */
-	FRAME_EVENT_OK,
-	/* The event was handled, and the current session was destroyed */
-	FRAME_EVENT_SESSION_DESTROYED,
-};
 
 /* Releases the document view's resources. But doesn't free() the @view. */
 void detach_formatted(struct document_view *doc_view);

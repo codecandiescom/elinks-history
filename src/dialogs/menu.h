@@ -1,11 +1,11 @@
-/* $Id: menu.h,v 1.53 2005/03/05 20:31:11 zas Exp $ */
+/* $Id: menu.h,v 1.54 2005/06/14 16:44:52 jonas Exp $ */
 
 #ifndef EL__DIALOGS_MENU_H
 #define EL__DIALOGS_MENU_H
 
 #include "bfu/menu.h"
 #include "terminal/terminal.h"
-#include "viewer/text/view.h"
+#include "viewer/action.h"
 
 struct document_view;
 struct open_in_new;

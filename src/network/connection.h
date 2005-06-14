@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.131 2005/06/14 13:18:34 jonas Exp $ */
+/* $Id: connection.h,v 1.132 2005/06/14 17:54:02 jonas Exp $ */
 
 #ifndef EL__NETWORK_CONNECTION_H
 #define EL__NETWORK_CONNECTION_H
@@ -65,7 +65,7 @@ struct connection {
 	 * the struct download it got to the connection, _and_ updates its @pri
 	 * array by the priority it has thus, sum of values in all fields of
 	 * @pri is also kinda refcount of the connection. */
-	int pri[PRIORITIES];
+	enum connection_priority pri[PRIORITIES];
 
 	/* Private protocol specific info. If non-NULL it is free()d when
 	 * stopping the connection. */
@@ -79,7 +79,7 @@ int get_keepalive_connections_count(void);
 int get_connections_connecting_count(void);
 int get_connections_transfering_count(void);
 
-void set_connection_state(struct connection *, int);
+void set_connection_state(struct connection *, enum connection_state);
 
 int has_keepalive_connection(struct connection *);
 void add_keepalive_connection(struct connection *conn, long timeout_in_seconds,

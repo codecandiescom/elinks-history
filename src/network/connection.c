@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.295 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: connection.c,v 1.296 2005/06/14 13:18:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1027,15 +1027,15 @@ change_connection(struct download *old, struct download *new,
 /* This will remove 'pos' bytes from the start of the cache for the specified
  * connection, if the cached object is already too big. */
 void
-detach_connection(struct download *download, int pos)
+detach_connection(struct download *download, off_t pos)
 {
 	struct connection *conn = download->conn;
 
 	if (is_in_result_state(download->state)) return;
 
 	if (!conn->detached) {
-		int total_len;
-		int i, total_pri = 0;
+		off_t total_len;
+		off_t i, total_pri = 0;
 
 		if (!conn->cached)
 			return;

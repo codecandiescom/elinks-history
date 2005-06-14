@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.130 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: connection.h,v 1.131 2005/06/14 13:18:34 jonas Exp $ */
 
 #ifndef EL__NETWORK_CONNECTION_H
 #define EL__NETWORK_CONNECTION_H
@@ -29,9 +29,8 @@ struct connection {
 	enum cache_mode cache_mode;
 	struct cache_entry *cached;
 
-	/* Index to where in the cache entry new data should be inserted. */
-	int from;
-
+	off_t from;		/* Position for new data in the cache entry. */
+	off_t received;		/* The number of received bytes. */
 	off_t est_length;	/* Estimated number of bytes to transfer. */
 
 	enum stream_encoding content_encoding;
@@ -50,7 +49,6 @@ struct connection {
 	struct socket *data_socket;
 
 	int tries;
-	off_t received;
 	timer_id_T timer;
 	int cgi_pipes[2];
 	int stream_pipes[2];
@@ -92,7 +90,7 @@ void retry_connection(struct connection *, int);
 
 void change_connection(struct download *old, struct download *new,
 		       enum connection_priority newpri, int interrupt);
-void detach_connection(struct download *, int);
+void detach_connection(struct download *, off_t);
 void abort_all_connections(void);
 void abort_background_connections(void);
 

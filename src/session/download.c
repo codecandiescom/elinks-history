@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.375 2005/06/14 13:27:52 jonas Exp $ */
+/* $Id: download.c,v 1.376 2005/06/14 14:03:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -927,7 +927,7 @@ tp_save(struct type_query *type_query)
 
 /* This button handler uses the add_dlg_button() interface so that pressing
  * 'Show header' will not close the type query dialog. */
-widget_handler_status_T
+static widget_handler_status_T
 tp_show_header(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct type_query *type_query = widget_data->widget->data;

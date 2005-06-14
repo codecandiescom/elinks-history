@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.72 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: renderer.h,v 1.73 2005/06/14 13:55:14 witekfl Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -35,7 +35,6 @@ void draw_frame_hchars(struct part *, int, int, int, unsigned char data, color_T
 void draw_frame_vchars(struct part *, int, int, int, unsigned char data, color_T bgcolor, color_T fgcolor);
 
 void free_table_cache(void);
-void process_hidden_link(struct part *);
 
 struct part *format_html_part(unsigned char *, unsigned char *, int, int, int, struct document *, int, int, unsigned char *, int);
 

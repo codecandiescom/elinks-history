@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.284 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: form.c,v 1.285 2005/06/14 13:50:54 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,7 @@
 #include "osdep/osdep.h"
 #include "protocol/uri.h"
 #include "session/session.h"
+#include "session/task.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
@@ -1094,6 +1095,7 @@ submit_form(struct session *ses, struct document_view *doc_view, int do_reload)
 void
 submit_given_form(struct session *ses, struct document_view *doc_view, struct form *form)
 {
+#if 0
 	struct document *document = doc_view->document;
 	int link;
 
@@ -1105,6 +1107,17 @@ submit_given_form(struct session *ses, struct document_view *doc_view, struct fo
 			submit_form(ses, doc_view, 0);
 			return;
 		}
+	}
+#endif
+	if (!list_empty(form->items)) {
+		struct form_control *fc = (struct form_control *)form->items.next;
+		struct uri *uri;
+
+		if (!fc) return;
+		uri = get_form_uri(ses, doc_view, fc);
+		if (!uri) return;
+		goto_uri_frame(ses, uri, form->target, CACHE_MODE_NORMAL);
+		done_uri(uri);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.258 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: ftp.c,v 1.259 2005/06/14 13:26:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1023,7 +1023,7 @@ ftp_got_final_response(struct socket *socket, struct read_buffer *rb)
 
 /* Display directory entry formatted in HTML. */
 static int
-display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
+display_dir_entry(struct cache_entry *cached, off_t *pos, int *tries,
 		  int colorize_dir, unsigned char *dircolor,
 		  struct ftp_file_info *ftp_info)
 {
@@ -1136,7 +1136,7 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 
 /* List a directory in html format. */
 static int
-ftp_process_dirlist(struct cache_entry *cached, int *pos,
+ftp_process_dirlist(struct cache_entry *cached, off_t *pos,
 		    unsigned char *buffer, int buflen, int last,
 		    int *tries, int colorize_dir, unsigned char *dircolor)
 {

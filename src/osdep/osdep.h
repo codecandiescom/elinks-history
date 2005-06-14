@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.44 2005/02/05 04:35:43 jonas Exp $ */
+/* $Id: osdep.h,v 1.45 2005/06/14 12:56:09 jonas Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
@@ -43,8 +43,8 @@ int can_open_os_shell(int);
 void set_highpri(void);
 
 #ifdef USE_OPEN_PREALLOC
-int open_prealloc(char *, int, int, int);
-void prealloc_truncate(int, int);
+int open_prealloc(char *, int, int, off_t);
+void prealloc_truncate(int, off_t);
 #else
 static inline void prealloc_truncate(int x, int y) { }
 #endif

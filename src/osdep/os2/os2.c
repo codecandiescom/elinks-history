@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.37 2005/05/17 13:22:25 zas Exp $ */
+/* $Id: os2.c,v 1.38 2005/06/14 12:56:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -759,7 +759,7 @@ get_input_handle(void)
 
 #ifdef USE_OPEN_PREALLOC
 int
-open_prealloc(unsigned char *name, int flags, int mode, int siz)
+open_prealloc(unsigned char *name, int flags, int mode, off_t siz)
 {
 	/* This is good for OS/2, where this will prevent file fragmentation,
 	 * preallocating the desired file size upon open(). */
@@ -767,7 +767,7 @@ open_prealloc(unsigned char *name, int flags, int mode, int siz)
 }
 
 void
-prealloc_truncate(int h, int siz)
+prealloc_truncate(int h, off_t siz)
 {
 	ftruncate(h, siz);
 }

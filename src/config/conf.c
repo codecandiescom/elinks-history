@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.158 2005/06/12 00:42:30 jonas Exp $ */
+/* $Id: conf.c,v 1.159 2005/06/15 02:09:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,8 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 
 	/* Option name */
 	optname = *file;
-	while (isident(**file) || **file == '*' || **file == '.') (*file)++;
+	while (isident(**file) || **file == '*' || **file == '.' || **file == '+')
+		(*file)++;
 
 	bin = **file;
 	**file = '\0';
@@ -174,7 +175,8 @@ parse_unset(struct option *opt_tree, unsigned char **file, int *line,
 
 	/* Option name */
 	optname = *file;
-	while (isident(**file) || **file == '*' || **file == '.') (*file)++;
+	while (isident(**file) || **file == '*' || **file == '.' || **file == '+')
+		(*file)++;
 
 	bin = **file;
 	**file = '\0';

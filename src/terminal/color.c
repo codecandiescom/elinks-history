@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.82 2005/06/15 18:45:00 jonas Exp $ */
+/* $Id: color.c,v 1.83 2005/06/15 21:25:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,8 +288,12 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 			palette_range = PALETTE_HALF;
 		break;
 #if defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
+#ifdef CONFIG_88_COLORS
 	case COLOR_MODE_88:
+#endif
+#ifdef CONFIG_256_COLORS
 	case COLOR_MODE_256:
+#endif
 		/* TODO: Handle decrease lightness by converting to
 		 * hue-ligthness-saturation color model */
 		break;
@@ -315,8 +319,12 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		break;
 
 #if defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
+#ifdef CONFIG_88_COLORS
 	case COLOR_MODE_88:
+#endif
+#ifdef CONFIG_256_COLORS
 	case COLOR_MODE_256:
+#endif
 		/* Adjusts the foreground color to be more visible. */
 		/* TODO: Be smarter! Here we just choose either black or white
 		 * ANSI color to make sure the color is visible. Pasky

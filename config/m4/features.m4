@@ -128,7 +128,7 @@ AC_DEFUN([EL_CHECK_CODE],
 	AC_MSG_RESULT([$]$2)
 ])
 
-dnl EL_CHECK_TYPE(type, define, default)
+dnl EL_CHECK_TYPE(type, default)
 AC_DEFUN([EL_CHECK_TYPE],
 [
         EL_CHECK_TYPE_LOCAL=yes;

@@ -1,3 +1,81 @@
+Wed Jun 15 21:25:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/color.c:
+
+	Build fixes related to 88-colour support.  
+
+Wed Jun 15 21:24:35 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Something, per Miciah's request.  
+
+Wed Jun 15 21:15:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/network/: socket.c, socket.h:
+
+	Make sockets support duplex mode which the introduction of separate
+	read and write buffers was all about. Needed by BitTorrent.  
+
+Wed Jun 15 21:07:03 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* config/m4/ruby.m4:
+
+	Introduce CONFIG_RUBY_WITHVAL so withval is only accessed in the
+	scope of AC_ARG_WITH().  
+
+Wed Jun 15 20:08:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: installation.txt, terminals.txt:
+
+	Springle with comments about 88 color mode.  
+
+Wed Jun 15 18:49:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Nothing much new, but mention 88 colors support.  
+
+Wed Jun 15 18:45:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf, src/config/options.c,
+	src/dialogs/options.c, src/terminal/color.c, src/terminal/color.h,
+	src/terminal/draw.c, src/terminal/draw.h, src/terminal/palette.inc,
+	src/terminal/screen.c:
+
+	Add 88-color support available via --enable-88-colors. It basically
+	just adds 88-color data structs and changes the CONFIG_256_COLOR
+	#ifdefs to also depend on CONFIG_88_COLORS. Tested lightly in
+	rxvt-unicode. The feature description is pasted from the 256 color
+	one, maybe they should be merged somehow.  
+
+Wed Jun 15 18:44:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* config/m4/features.m4:
+
+	Change macro description.  
+
+Wed Jun 15 13:45:50 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/uri.c:
+
+	Do not encode file uri string, because it stripped query part of
+	URI.  CGI scripts run like this: elinks cgiscript?tralala were
+	affected by that.  
+
+Wed Jun 15 13:39:36 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/mime/backend/default.c:
+
+	File with extension .html is HTML file.  
+
+Wed Jun 15 02:09:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/conf.c:
+
+	Allow +'s in option names so MIME-types like application/rdf+xml is
+	handled correctly. Reported by Toksyuryel.  
+
 Tue Jun 14 19:28:01 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/viewer/text/form.c:

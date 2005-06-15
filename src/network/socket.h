@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.90 2005/06/12 01:53:49 jonas Exp $ */
+/* $Id: socket.h,v 1.91 2005/06/15 21:15:58 jonas Exp $ */
 
 #ifndef EL__NETWORK_SOCKET_H
 #define EL__NETWORK_SOCKET_H
@@ -99,6 +99,7 @@ struct socket {
 	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
 	unsigned int need_ssl:1;	/* If the socket needs SSL support */
 	unsigned int no_tls:1;		/* Internal SSL flag. */
+	unsigned int duplex:1;		/* Allow simultaneous reads & writes. */
 };
 
 

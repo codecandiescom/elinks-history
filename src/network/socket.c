@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.242 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: socket.c,v 1.243 2005/06/15 21:15:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -721,6 +721,7 @@ void
 write_to_socket(struct socket *socket, unsigned char *data, int len,
 		enum connection_state state, socket_write_T write_done)
 {
+	select_handler_T read_handler;
 	struct write_buffer *wb;
 
 	debug_transfer_log(data, len);
@@ -741,6 +742,13 @@ write_to_socket(struct socket *socket, unsigned char *data, int len,
 	wb->done = write_done;
 	memcpy(wb->data, data, len);
 	mem_free_set(&socket->write_buffer, wb);
+
+	if (socket->duplex) {
+		read_handler = get_handler(socket->fd, SELECT_HANDLER_READ);
+	} else {
+		read_handler = NULL;
+	}
+
 	set_handlers(socket->fd, NULL, (select_handler_T) write_select,
 		     (select_handler_T) exception, socket);
 	socket->ops->set_state(socket, state);
@@ -860,6 +868,8 @@ void
 read_from_socket(struct socket *socket, struct read_buffer *buffer,
 		 enum connection_state state, socket_read_T done)
 {
+	select_handler_T write_handler;
+
 	buffer->done = done;
 
 	socket->ops->set_timeout(socket, 0);
@@ -869,7 +879,13 @@ read_from_socket(struct socket *socket, struct read_buffer *buffer,
 		mem_free(socket->read_buffer);
 	socket->read_buffer = buffer;
 
-	set_handlers(socket->fd, (select_handler_T) read_select, NULL,
+	if (socket->duplex) {
+		write_handler = get_handler(socket->fd, SELECT_HANDLER_WRITE);
+	} else {
+		write_handler = NULL;
+	}
+
+	set_handlers(socket->fd, (select_handler_T) read_select, write_handler,
 		     (select_handler_T) exception, socket);
 }
 

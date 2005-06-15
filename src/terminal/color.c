@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.81 2005/05/31 18:32:05 jonas Exp $ */
+/* $Id: color.c,v 1.82 2005/06/15 18:45:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,6 +108,16 @@ static struct color_mode_info color_mode_16 = {
 	}
 };
 
+#ifdef CONFIG_88_COLORS
+static struct color_mode_info color_mode_88 = {
+	palette88,
+	{
+		/* PALETTE_FULL */	{ 88, 88 },
+		/* PALETTE_HALF */	{ 88, 44 },
+	}
+};
+#endif
+
 #ifdef CONFIG_256_COLORS
 static struct color_mode_info color_mode_256 = {
 	palette256,
@@ -121,6 +131,9 @@ static struct color_mode_info color_mode_256 = {
 static struct color_mode_info *color_modes[] = {
 	/* COLOR_MODE_MONO */	&color_mode_16,
 	/* COLOR_MODE_16 */	&color_mode_16,
+#ifdef CONFIG_88_COLORS
+	/* COLOR_MODE_88 */	&color_mode_88,
+#endif
 #ifdef CONFIG_256_COLORS
 	/* COLOR_MODE_256 */	&color_mode_256,
 #endif
@@ -229,7 +242,7 @@ set_term_color16(struct screen_char *schar, enum color_flags flags,
 		schar->attr |= SCREEN_ATTR_STANDOUT;
 	}
 
-#ifdef CONFIG_256_COLORS
+#if defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
 	/* With 256 color support we use memcmp() when comparing color in
 	 * terminal/screen.c:add_char*() so we need to clear this byte. */
 	TERM_COLOR_FOREGROUND(schar->color) = (fg & TERM_COLOR_MASK);
@@ -274,7 +287,8 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		if (flags & COLOR_DECREASE_LIGHTNESS)
 			palette_range = PALETTE_HALF;
 		break;
-#ifdef CONFIG_256_COLORS
+#if defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
+	case COLOR_MODE_88:
 	case COLOR_MODE_256:
 		/* TODO: Handle decrease lightness by converting to
 		 * hue-ligthness-saturation color model */
@@ -300,7 +314,8 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		INTERNAL("Bad color mode, it should _never_ occur here.");
 		break;
 
-#ifdef CONFIG_256_COLORS
+#if defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
+	case COLOR_MODE_88:
 	case COLOR_MODE_256:
 		/* Adjusts the foreground color to be more visible. */
 		/* TODO: Be smarter! Here we just choose either black or white

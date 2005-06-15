@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.49 2004/08/06 09:02:29 zas Exp $ */
+/* $Id: draw.h,v 1.50 2005/06/15 18:45:00 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -27,10 +27,10 @@ struct screen_char {
 	unsigned char attr;
 
 	/* The encoded fore- and background color. */
-#ifndef CONFIG_256_COLORS
-	unsigned char color[1];
-#else
+#if defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
 	unsigned char color[2];
+#else
+	unsigned char color[1];
 #endif
 };
 

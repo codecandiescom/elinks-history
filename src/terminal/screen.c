@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.162 2005/05/06 09:34:49 zas Exp $ */
+/* $Id: screen.c,v 1.163 2005/06/15 18:45:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -345,14 +345,14 @@ struct screen_state {
 	unsigned char bold;
 	unsigned char attr;
 	/* Following should match struct screen_char color field. */
-#ifndef CONFIG_256_COLORS
-	unsigned char color[1];
-#else
+#if defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
 	unsigned char color[2];
+#else
+	unsigned char color[1];
 #endif
 };
 
-#ifdef CONFIG_256_COLORS
+#if defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
 #define compare_color(a, b)	((a)[0] == (b)[0] && (a)[1] == (b)[1])
 #define copy_color(a, b)	do { (a)[0] = (b)[0]; (a)[1] = (b)[1]; } while (0)
 #define INIT_SCREEN_STATE 	{ 0xFF, 0xFF, 0xFF, 0, { 0xFF, 0xFF } }
@@ -457,7 +457,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 	add_char_data(screen, driver, ch->data, border);
 }
 
-#ifdef CONFIG_256_COLORS
+#if defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
 static struct string color256_seqs[] = {
 	/* foreground: */	TERM_STRING("\033[0;38;5;%dm"),
 	/* background: */	TERM_STRING("\033[48;5;%dm"),
@@ -646,6 +646,11 @@ redraw_screen(struct terminal *term)
 	case COLOR_MODE_16:
 		add_chars(&image, term, driver, &state, add_char16);
 		break;
+#ifdef CONFIG_88_COLORS
+	case COLOR_MODE_88:
+		add_chars(&image, term, driver, &state, add_char256);
+		break;
+#endif
 #ifdef CONFIG_256_COLORS
 	case COLOR_MODE_256:
 		add_chars(&image, term, driver, &state, add_char256);

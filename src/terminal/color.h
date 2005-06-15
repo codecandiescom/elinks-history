@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.33 2005/05/31 18:19:11 jonas Exp $ */
+/* $Id: color.h,v 1.34 2005/06/15 18:45:00 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -16,7 +16,7 @@ struct screen_char;
 
 #define TERM_COLOR_MASK	0x07
 
-#ifdef CONFIG_256_COLORS
+#if defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
 #define TERM_COLOR_FOREGROUND(color) ((color)[0])
 #define TERM_COLOR_BACKGROUND(color) ((color)[1])
 #else
@@ -47,6 +47,9 @@ enum color_mode {
 	COLOR_MODE_DUMP = -1,
 	COLOR_MODE_MONO,
 	COLOR_MODE_16,
+#ifdef CONFIG_88_COLORS
+	COLOR_MODE_88,
+#endif
 #ifdef CONFIG_256_COLORS
 	COLOR_MODE_256,
 #endif

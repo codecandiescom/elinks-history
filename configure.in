@@ -1038,6 +1038,10 @@ EL_ARG_ENABLE(CONFIG_MOUSE, mouse, [Mouse handling],
 	      [  --disable-mouse         disable mouse support])
 AM_CONDITIONAL(CONFIG_MOUSE, test "$CONFIG_MOUSE" = yes)
 
+EL_ARG_ENABLE(CONFIG_88_COLORS, 88-colors, [88 colors],
+	      [  --enable-88-colors     enable 88 color support])
+AM_CONDITIONAL(CONFIG_256_COLORS, test "$CONFIG_256_COLORS" = yes)
+
 EL_ARG_ENABLE(CONFIG_256_COLORS, 256-colors, [256 colors],
 	      [  --enable-256-colors     enable 256 color support])
 AM_CONDITIONAL(CONFIG_256_COLORS, test "$CONFIG_256_COLORS" = yes)

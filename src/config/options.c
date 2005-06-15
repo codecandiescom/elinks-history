@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.483 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: options.c,v 1.484 2005/06/15 18:45:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -664,6 +664,11 @@ register_autocreated_options(void)
 	get_opt_int("terminal.xterm-color.type") = 1;
 	get_opt_int("terminal.xterm-color.colors") = COLOR_MODE_16;
 	get_opt_bool("terminal.xterm-color.underline") = 1;
+#ifdef CONFIG_88_COLORS
+	get_opt_int("terminal.xterm-88color.type") = 1;
+	get_opt_int("terminal.xterm-88color.colors") = COLOR_MODE_88;
+	get_opt_bool("terminal.xterm-88color.underline") = 1;
+#endif
 #ifdef CONFIG_256_COLORS
 	get_opt_int("terminal.xterm-256color.type") = 1;
 	get_opt_int("terminal.xterm-256color.colors") = COLOR_MODE_256;

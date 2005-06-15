@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.177 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: options.c,v 1.178 2005/06/15 18:45:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,9 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 	return EVENT_PROCESSED;
 }
 
-#ifdef CONFIG_256_COLORS
+#if	defined(CONFIG_88_COLORS) && defined(CONFIG_256_COLORS)
+#define TERMOPT_WIDGETS_COUNT 21
+#elif	defined(CONFIG_88_COLORS) || defined(CONFIG_256_COLORS)
 #define TERMOPT_WIDGETS_COUNT 20
 #else
 #define TERMOPT_WIDGETS_COUNT 19
@@ -195,6 +197,9 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	add_dlg_text(dlg, _("Color mode:", term), ALIGN_LEFT, 1);
 	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, &values[TERM_OPT_COLORS].number);
 	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, &values[TERM_OPT_COLORS].number);
+#ifdef CONFIG_88_COLORS
+	add_dlg_radio(dlg, _("88 colors", term), 2, COLOR_MODE_88, &values[TERM_OPT_COLORS].number);
+#endif
 #ifdef CONFIG_256_COLORS
 	add_dlg_radio(dlg, _("256 colors", term), 2, COLOR_MODE_256, &values[TERM_OPT_COLORS].number);
 #endif

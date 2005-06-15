@@ -43,6 +43,7 @@ OpenSSL or GNU TLS	For handling secure HTTP browsing.
 GPM			'General Purpose Mouse' for mouse support.
 expat			'XML Parser Toolkit' needed for XBEL support.
 smbclient		Program needed for smb:// protocol support.
+rxvt-unicode		For terminal emulator which supports 88 colors.
 xterm with 256 colors	Program atleast patch level  179 or rxvt program    \
 			from version 2.7.9 for support of 256 colors.	    \
 			Newer PuTTY also has 256 color support.
@@ -75,5 +76,5 @@ include::txt/import-features.conf.txt[]
 endif::installation-webpage[]
 
 ///////////////////////////////////////////////////////////////////////////////
-$Id: installation.txt,v 1.11 2005/05/24 18:21:45 jonas Exp $
+$Id: installation.txt,v 1.12 2005/06/15 20:08:14 jonas Exp $
 ///////////////////////////////////////////////////////////////////////////////

@@ -65,6 +65,7 @@ Mode			Color codes
 ------------------------------------------------------------------------------
 Mono mode		Only 2 colors are used
 16 color mode		Uses the common ANSI colors
+88 color mode		Uses XTerm RGB codes (if compiled in)
 256 color mode		Uses XTerm RGB codes (if compiled in)
 ------------------------------------------------------------------------------
 
@@ -152,10 +153,11 @@ Built-in configurations exists for the following terminals:
  - vt110
  - xterm
  - xterm-color
+ - xterm-88color
  - xterm-256color
 
-The last configuration requires that support for 256 colors is compiled in to
-xterm.
+The last two configurations requires that support for either 88 or 256 colors
+is compiled in to xterm.
 
 GNU Screen is VT100-compatible, so select 'VT 100 frames'.  GNU Screen also
 supports colors just fine, so select '16 colors', or, if you are running Screen
@@ -163,5 +165,5 @@ within a terminal emulator that supports 256 colors and you have compiled both
 Screen and ELinks to support it, choose '256 colors'.
 
 ///////////////////////////////////////////////////////////////////////////////
-$Id: terminals.txt,v 1.5 2005/05/24 18:21:45 jonas Exp $
+$Id: terminals.txt,v 1.6 2005/06/15 20:08:14 jonas Exp $
 ///////////////////////////////////////////////////////////////////////////////

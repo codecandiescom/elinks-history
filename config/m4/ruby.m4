@@ -6,19 +6,24 @@ AC_DEFUN([EL_CONFIG_RUBY],
 [
 AC_MSG_CHECKING([for Ruby])
 
-CONFIG_RUBY="no";
+CONFIG_RUBY_WITHVAL="no"
+CONFIG_RUBY=
 
 EL_SAVE_FLAGS
 
 AC_ARG_WITH(ruby,
 	[  --with-ruby             enable Ruby support],
-	[if test "$withval" != no; then CONFIG_RUBY="yes"; fi])
+	[CONFIG_RUBY_WITHVAL="$withval"])
+
+if test "$CONFIG_RUBY_WITHVAL" != no; then
+	CONFIG_RUBY="yes"
+fi
 
 AC_MSG_RESULT($CONFIG_RUBY)
 
 if test "$CONFIG_RUBY" = "yes"; then
-	if test -d "$withval"; then
-		RUBY_PATH="$withval:$PATH"
+	if test -d "$CONFIG_RUBY_WITHVAL"; then
+		RUBY_PATH="$CONFIG_RUBY_WITHVAL:$PATH"
 	else
 		RUBY_PATH="$PATH"
 	fi
@@ -86,7 +91,8 @@ if test "$CONFIG_RUBY" = "yes"; then
 fi
 
 if test "$CONFIG_RUBY" != "yes"; then
-	if test -n "$withval" && test "x$withval" != xno; then
+	if test -n "$CONFIG_RUBY_WITHVAL" &&
+	   test "$CONFIG_RUBY_WITHVAL" != no; then
 		AC_MSG_ERROR([Ruby not found])
 	fi
 	EL_RESTORE_FLAGS

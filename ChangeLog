@@ -1,3 +1,22 @@
+Thu Jun 16 22:05:05 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Reordered and rearranged the POD.  I hope not to incur the wrath of
+	Pasky...  It's actually bigger and more commented now, oddly enough.  
+
+Thu Jun 16 18:00:44 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Enhanced comment about problem with ECMAScript.  
+
+Thu Jun 16 08:12:58 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
 Wed Jun 15 21:25:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/terminal/color.c:

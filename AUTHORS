@@ -150,6 +150,7 @@ Dmitry Pinchukov <dpinch@mail.ru>
 
 Doug Kearns <djkea2@mugca.its.monash.edu.au>
 	Fixes in linkskeys.5
+	Fix Ruby detection
 
 Edwin Groothuis <edwin@mavetju.org>
 	Dump-width option
@@ -556,4 +557,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.194 2005/06/10 14:10:08 jonas Exp $
+$Id: AUTHORS,v 1.195 2005/06/17 13:16:31 jonas Exp $

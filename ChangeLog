@@ -1,3 +1,32 @@
+Fri Jun 17 14:01:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/session/session.c:
+
+	Fix inverted logic and only open the goto URL dialog if no URI was
+	passed on the command line. (debian bug 310114) 
+
+Fri Jun 17 13:44:10 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/encoding/encoding.c:
+
+	There is no /dev/stdin on Cygwin, so this additional check.  
+
+Fri Jun 17 13:16:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, config/m4/ruby.m4:
+
+	The current ruby detection code won't pick up anything later than,
+	1.6.8 when VERSION was changed to RUBY_VERSION.  
+	
+	Patch by Doug Kearns.  
+
+Fri Jun 17 10:37:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/network/socket.c:
+
+	Fix the socket duplex logic so write_select() doesn't
+	clear_handlers().  
+
 Thu Jun 16 22:05:05 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/hooks.pl:

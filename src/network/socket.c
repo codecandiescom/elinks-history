@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.243 2005/06/15 21:15:58 jonas Exp $ */
+/* $Id: socket.c,v 1.244 2005/06/17 10:37:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,7 +710,22 @@ write_select(struct socket *socket)
 		if (wb->pos == wb->length) {
 			socket_write_T done = wb->done;
 
-			clear_handlers(socket->fd);
+			if (!socket->duplex) {
+				clear_handlers(socket->fd);
+
+			} else {
+				select_handler_T read_handler;
+				select_handler_T error_handler;
+
+				read_handler  = get_handler(socket->fd, SELECT_HANDLER_READ);
+				error_handler = read_handler
+					      ? (select_handler_T) exception
+					      : NULL;
+
+				set_handlers(socket->fd, read_handler, NULL,
+					     error_handler, socket);
+			}
+
 			mem_free_set(&socket->write_buffer, NULL);
 			done(socket);
 		}
@@ -749,7 +764,7 @@ write_to_socket(struct socket *socket, unsigned char *data, int len,
 		read_handler = NULL;
 	}
 
-	set_handlers(socket->fd, NULL, (select_handler_T) write_select,
+	set_handlers(socket->fd, read_handler, (select_handler_T) write_select,
 		     (select_handler_T) exception, socket);
 	socket->ops->set_state(socket, state);
 }

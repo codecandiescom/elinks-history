@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.44 2005/06/12 01:53:49 jonas Exp $ */
+/* $Id: encoding.c,v 1.45 2005/06/17 13:44:10 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -313,7 +313,15 @@ read_encoded_file(struct string *filename, struct string *page)
 		encoding = guess_encoding(filename->source);
 	}
 
-	if (fd == -1) return state;
+	if (fd == -1) {
+#ifdef HAVE_SYS_CYGWIN_H
+		/* There is no /dev/stdin on Cygwin. */
+		if (!strlcmp(filename->source, filename->length, "/dev/stdin", 10)) {
+			fd = STDIN_FILENO;
+		} else
+#endif
+		return state;
+	}
 
 	/* Some file was opened so let's get down to bi'ness */
 	set_bin(fd);

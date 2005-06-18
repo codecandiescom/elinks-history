@@ -1,3 +1,29 @@
+Sat Jun 18 15:24:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/dump/dump.c:
+
+	In dump_formatted, remove an unneeded memset to zero vs, which is
+	handled by init_vs.  
+
+Sat Jun 18 15:13:10 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Change page-up and page-down to scroll a full have in listboxes.  
+
+Sat Jun 18 15:09:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Put more logic in listbox_sel_move and use a new, simpler callback, 
+	calc_dist, replacing the old listbox_sel_move_do. The advantages
+	are: 
+	
+	 - better readability; 
+	 - probably a little more efficient; and 
+	 - doesn't scroll an extra line when told to move the selection down 
+	   past the last item in the listbox.  
+
 Fri Jun 17 14:01:43 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/session/session.c:

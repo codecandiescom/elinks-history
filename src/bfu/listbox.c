@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.200 2005/06/10 04:47:02 miciah Exp $ */
+/* $Id: listbox.c,v 1.201 2005/06/18 15:09:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,33 +257,15 @@ done_down:
 	return visible_item;
 }
 
-/* Takes care about listbox top moving. */
 static int
-listbox_sel_move_do(struct listbox_item *item, void *data_, int *offset)
+calc_dist(struct listbox_item *item, void *data_, int *offset)
 {
-	struct listbox_context *data = data_;
+	struct listbox_context *listbox_context = data_;
 
-	if (item == data->box->top)
-		data->box->sel_offset = 0; /* assure resync */
-
-	if (data->dist > 0) {
-		if (data->box->sel_offset
-		    < data->widget_data->box.height - 1) {
-			data->box->sel_offset++;
-		} else {
-			data->box->top =
-				traverse_listbox_items_list(data->box->top,
-					data->box, 1, 1, NULL, NULL);
-		}
-	} else if (data->dist < 0) {
-		if (data->box->sel_offset > 0) {
-			data->box->sel_offset--;
-		} else {
-			data->box->top =
-				traverse_listbox_items_list(data->box->top,
-					data->box, -1, 1, NULL, NULL);
-		}
-	}
+	if (*offset < 0)
+		listbox_context->offset--;
+	else if (*offset > 0)
+		listbox_context->offset++;
 
 	return 0;
 }
@@ -294,6 +276,7 @@ void
 listbox_sel_move(struct widget_data *widget_data, int dist)
 {
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
+	struct listbox_context data;
 
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
@@ -307,21 +290,30 @@ listbox_sel_move(struct widget_data *widget_data, int dist)
 		box->sel = box->top;
 	}
 
-	if (traverse_listbox_items_list(box->sel, box, dist, 1, NULL, NULL)
-	    != box->sel) {
-		struct listbox_context data;
+	memset(&data, 0, sizeof(data));
 
-		memset(&data, 0, sizeof(data));
+	data.box = box;
+	data.widget_data = widget_data;
+	data.offset = box->sel_offset;
 
-		data.box = box;
-		data.widget_data = widget_data;
-		data.dist = dist;
+	box->sel = traverse_listbox_items_list(box->sel, box, dist, 1,
+					       calc_dist, &data);
+	/* data.offset becomes the offset of the new box->sel
+	 * from box->top. */
 
-		/* XXX: This is ugly, yes; but we don't want to call the
-		 * callback if we won't move on at all. */
-		box->sel = traverse_listbox_items_list(box->sel, box, dist, 1,
-						       listbox_sel_move_do,
-						       &data);
+	if (data.offset < 0) {
+		/* We must scroll up. */
+		box->sel_offset = 0;
+		box->top = box->sel;
+	} else if (data.offset >= widget_data->box.height) {
+		/* We must scroll down. */
+		box->sel_offset = widget_data->box.height - 1;
+		box->top = traverse_listbox_items_list(box->sel, box,
+					   1 - widget_data->box.height,
+					   1, NULL, NULL);
+	} else {
+		/* No scolling necessary. */
+		box->sel_offset = data.offset;
 	}
 }
 

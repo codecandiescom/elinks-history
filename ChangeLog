@@ -1,3 +1,30 @@
+Tue Jun 21 20:39:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/lists.h:
+
+	Fix initialization of prev pointer in foreachbacksafe() iterater.
+	Hurrah for Miciah.  
+
+Tue Jun 21 20:05:23 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Set document.cookies to an empty string in case there are no cookies
+	set. Might help with lewellyn's woes.  
+
+Tue Jun 21 18:30:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/lists.h:
+
+	Add safe foreachback iterator.  
+
+Tue Jun 21 09:50:10 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/table.c:
+
+	TODO: cellpadding may be expressed as a percentage, this is not
+	handled yet.  
+
 Sat Jun 18 15:24:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/dump/dump.c:

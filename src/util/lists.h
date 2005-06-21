@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.49 2005/06/21 18:30:58 jonas Exp $ */
+/* $Id: lists.h,v 1.50 2005/06/21 20:39:23 jonas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -182,7 +182,7 @@ do { \
 	     (e) = (n), (n) = (e)->next)
 
 #define foreachbacksafe(e, p, l) \
-	for ((e) = (l).prev, (p) = (p)->prev; \
+	for ((e) = (l).prev, (p) = (e)->prev; \
 	     (list_typeof(e)) (e) != (list_typeof(e)) &(l); \
 	     (e) = (p), (p) = (e)->prev)
 

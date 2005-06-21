@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.215 2005/06/16 18:00:44 witekfl Exp $ */
+/* $Id: spidermonkey.c,v 1.216 2005/06/21 20:05:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1410,8 +1410,10 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 				done_string(cookies);
 
 				string_to_jsval(ctx, vp, cookiestr);
-				return JS_TRUE;
+			} else {
+				string_to_jsval(ctx, vp, "");
 			}
+			return JS_TRUE;
 		}
 #endif
 		foreach (form, document->forms) {

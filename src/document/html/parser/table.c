@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.38 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: table.c,v 1.39 2005/06/21 09:50:10 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -223,6 +223,8 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 
 	set_table_frame(table, attr);
 
+	/* TODO: cellpadding may be expressed as a percentage, this is not
+	 * handled yet. */
 	table->cellpadding = get_num(attr, "cellpadding");
 	if (table->cellpadding == -1) {
 		table->vcellpadding = 0;

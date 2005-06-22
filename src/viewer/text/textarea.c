@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.151 2005/06/14 16:44:52 jonas Exp $ */
+/* $Id: textarea.c,v 1.152 2005/06/22 20:04:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,13 +373,16 @@ textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
 	}
 
 	if (op == 0 && !textarea_editor) {
-		unsigned char *ed = getenv("EDITOR");
+		unsigned char *ed = get_opt_str("document.browse.forms.editor");
 		unsigned char *ex;
 
 		fn = save_textarea_file(fs_->value);
 		if (!fn) return;
 
-		if (!ed || !*ed) ed = "vi";
+		if (!ed || !*ed) {
+			ed = getenv("EDITOR");
+			if (!ed || !*ed) ed = "vi";
+		}
 
 		ex = straconcat(ed, " ", fn, NULL);
 		if (!ex) {

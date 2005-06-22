@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.199 2005/06/01 09:37:34 jonas Exp $ */
+/* $Id: options.inc,v 1.200 2005/06/22 20:04:34 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -190,6 +190,14 @@ static struct option_info config_options_info[] = {
 		"text fields from capturing key presses, such as presses of a scroll\n"
 		"key, when it is inadvertently selected. When disabled, key presses\n"
 		"are always inserted into a selected text field.")),
+
+	INIT_OPT_STRING("document.browse.forms", N_("External editor"),
+		"editor", 0, "",
+		N_("Path to the executable that ELinks should launch when the user\n"
+		"requests to edit a textarea with an external editor.\n\n"
+		"If this is blank, ELinks will use the value of the environmental\n"
+		"variable $EDITOR. If $EDITOR is empty or not set, ELinks will then\n"
+		"default to \"vi\".")),
 
 
 	INIT_OPT_TREE("document.browse", N_("Images"),

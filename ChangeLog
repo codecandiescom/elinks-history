@@ -1,3 +1,24 @@
+Wed Jun 22 20:04:34 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/options.inc, viewer/text/textarea.c:
+
+	Add the option document.browse.forms.editor to allow users to change
+	the external editor for textareas without having to change the
+	environmental variable $EDITOR.  
+
+Wed Jun 22 14:00:44 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/bfu/msgbox.c:
+
+	msgbox_text_do can be inline.  
+
+Wed Jun 22 13:59:05 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* configure.in:
+
+	Better check for C99 vsnprintf compliance.  Buggy Cygwin vsnprintf
+	should be caught.  
+
 Tue Jun 21 20:39:23 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/util/lists.h:

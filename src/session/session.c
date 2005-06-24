@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.632 2005/06/17 14:01:43 jonas Exp $ */
+/* $Id: session.c,v 1.633 2005/06/24 23:47:07 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -559,7 +559,9 @@ doc_loading_callback(struct download *download, struct session *ses)
 		load_ecmascript_imports(ses, ses->doc_view);
 		process_file_requests(ses);
 
-		if (ses->doc_view->document->refresh
+		if (ses->doc_view
+		    && ses->doc_view->document
+		    && ses->doc_view->document->refresh
 		    && get_opt_bool("document.browse.refresh")) {
 			start_document_refresh(ses->doc_view->document->refresh,
 					       ses);

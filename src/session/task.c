@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.178 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: task.c,v 1.179 2005/06/24 23:47:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -502,9 +502,10 @@ do_move(struct session *ses, struct download **download_p)
 	}
 
 	if (is_in_progress_state((*download_p)->state)) {
-		*download_p = &cur_loc(ses)->download;
+		if (have_location(ses))
+			*download_p = &cur_loc(ses)->download;
 		change_connection(&ses->loading, *download_p, PRI_MAIN, 0);
-	} else {
+	} else if (have_location(ses)) {
 		cur_loc(ses)->download.state = ses->loading.state;
 	}
 

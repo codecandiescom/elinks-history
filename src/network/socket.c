@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.244 2005/06/17 10:37:53 jonas Exp $ */
+/* $Id: socket.c,v 1.245 2005/06/24 12:15:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -800,7 +800,8 @@ read_select(struct socket *socket)
 	 * has to do it. */
 	socket->ops->set_timeout(socket, 0);
 
-	clear_handlers(socket->fd);
+	if (!socket->duplex)
+		clear_handlers(socket->fd);
 
 	if (!rb->freespace) {
 		int size = RD_SIZE(rb, rb->length);

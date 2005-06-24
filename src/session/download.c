@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.379 2005/06/14 17:48:11 jonas Exp $ */
+/* $Id: download.c,v 1.380 2005/06/24 17:32:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,6 +134,9 @@ abort_download(struct file_download *file_download)
 #endif
 
 	done_download_display(file_download);
+
+	if (file_download->ses)
+		check_questions_queue(file_download->ses);
 
 	if (file_download->dlg_data)
 		cancel_dialog(file_download->dlg_data, NULL);

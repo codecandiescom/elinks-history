@@ -1,3 +1,38 @@
+Fri Jun 24 18:48:14 2005  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Trash trailing whitespaces.  
+
+Fri Jun 24 18:30:27 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/status.c:
+
+	Set X Terminal title to "title - ELinks" instead of "ELinks -
+	title", suggested by Mike Miller. Fix bug 689.  
+
+Fri Jun 24 17:32:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/session/download.c:
+
+	Check for any queue stuff left behind from file downloads. Makes the
+	bittorrent tracker request failure messages pop up right away
+	instead of when loading the next URL.  
+
+Fri Jun 24 16:32:36 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Jun 24 12:15:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/network/socket.c:
+
+	read_select(): Don't clear_handlers() when socket->duplex. Another
+	duplex bug which has been biting my *b33b* the last few days. Now
+	the BitTorrent client can really push out some serious data.  
+
 Wed Jun 22 20:04:34 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/: config/options.inc, viewer/text/textarea.c:

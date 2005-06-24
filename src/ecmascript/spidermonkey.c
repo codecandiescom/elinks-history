@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.216 2005/06/21 20:05:23 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.217 2005/06/24 18:48:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1718,7 +1718,7 @@ location_goto(struct document_view *doc_view, unsigned char *url)
 	struct delayed_goto *deg;
 
 	/* Workaround for bug 611. Does not crash, but may lead to infinite loop.*/
-	if (!doc_view) return; 
+	if (!doc_view) return;
 	new_abs_url = join_urls(doc_view->document->uri,
 	                        trim_chars(url, ' ', 0));
 	if (!new_abs_url)

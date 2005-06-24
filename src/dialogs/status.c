@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.123 2005/06/14 17:35:17 jonas Exp $ */
+/* $Id: status.c,v 1.124 2005/06/24 18:30:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -441,10 +441,8 @@ display_window_title(struct session *ses, struct terminal *term)
 	    && ses->doc_view->document->title[0])
 		doc_title = ses->doc_view->document->title;
 
-	title = straconcat("ELinks",
-			   doc_title ? " - " : NULL,
-			   doc_title,
-			   NULL);
+	title = doc_title ? straconcat(doc_title, " - ELinks", NULL)
+			  : stracpy("ELinks");
 	if (!title) return;
 
 	titlelen = strlen(title);

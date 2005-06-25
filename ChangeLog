@@ -1,3 +1,10 @@
+Fri Jun 24 23:47:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/session/: session.c, task.c:
+
+	Fix crashes when pushing the Goto button in the cache manager and
+	the browser is nowhere.  
+
 Fri Jun 24 18:48:14 2005  Laurent Monin <zas@norz.org>:
 
 	* src/ecmascript/spidermonkey.c:

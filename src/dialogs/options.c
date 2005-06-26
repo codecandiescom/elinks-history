@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.178 2005/06/15 18:45:00 jonas Exp $ */
+/* $Id: options.c,v 1.179 2005/06/26 09:08:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,8 +107,7 @@ push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 	if (commit_option_values(resolvers, term->spec, values, TERM_OPTIONS)) {
 		/* TODO: The change hook thing should be handled by the
 		 * commit function. */
-		term->spec->change_hook(NULL, term->spec, NULL);
-		cls_redraw_all_terminals();
+		call_change_hooks(NULL, term->spec, NULL);
 	}
 
 	if (button->widget->handler == push_ok_button)

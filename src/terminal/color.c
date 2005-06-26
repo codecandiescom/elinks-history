@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.84 2005/06/26 23:01:50 zas Exp $ */
+/* $Id: color.c,v 1.85 2005/06/26 23:17:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,10 +35,6 @@ color_distance(struct rgb *c1, struct rgb *c2)
 	return (3 * r * r) + (4 * g * g) + (2 * b * b);
 }
 
-/* FIXME: Namespace clash with <wingdi.h> */
-#undef RGB
-
-#define ALPHA_COLOR_MASK	0xFF000000
 #define RED_COLOR_MASK		0x00FF0000
 #define GREEN_COLOR_MASK	0x0000FF00
 #define BLUE_COLOR_MASK		0x000000FF
@@ -50,15 +46,15 @@ color_distance(struct rgb *c1, struct rgb *c2)
 #define RED(color)	(RED_COLOR(color)   << 3)
 #define GREEN(color)	(GREEN_COLOR(color) << 2)
 #define BLUE(color)	(BLUE_COLOR(color)  << 0)
-#define RGB(color)	(RED(color) + GREEN(color) + BLUE(color))
+
+#define RGBCOLOR(color)	(RED(color) + GREEN(color) + BLUE(color))
 
 #define RGB_HASH_SIZE		4096
-#define HASH_RGB(color, l)	((RGB(color) + (l)) & (RGB_HASH_SIZE - 1))
+#define HASH_RGB(color, l)	((RGBCOLOR(color) + (l)) & (RGB_HASH_SIZE - 1))
 
 /* Initialize a rgb struct from a color_T */
 #define INIT_RGB(color) \
 	{ RED_COLOR(color), GREEN_COLOR(color), BLUE_COLOR(color) }
-
 
 /* Locates the nearest terminal color. */
 static inline unsigned char
@@ -96,8 +92,21 @@ get_color(color_T color, struct rgb *palette, int level)
 	return rgb_cache->color;
 }
 
+#undef INIT_RGB
 #undef HASH_RGB
 #undef RGB_HASH_SIZE
+
+#undef RED
+#undef GREEN
+#undef BLUE
+
+#undef RED_COLOR
+#undef GREEN_COLOR
+#undef BLUE_COLOR
+
+#undef RED_COLOR_MASK
+#undef GREEN_COLOR_MASK
+#undef BLUE_COLOR_MASK
 
 /* Controls what color ranges to use when setting the terminal color. */
 /* TODO: Part of the 256 color palette is gray scale, maybe we could experiment

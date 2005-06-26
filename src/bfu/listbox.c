@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.206 2005/06/26 11:33:08 miciah Exp $ */
+/* $Id: listbox.c,v 1.207 2005/06/26 11:34:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,7 +276,6 @@ void
 listbox_sel_move(struct widget_data *widget_data, int dist)
 {
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
-	int item_offset;
 
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
@@ -290,26 +289,21 @@ listbox_sel_move(struct widget_data *widget_data, int dist)
 		box->sel = box->top;
 	}
 
-	item_offset = box->sel_offset;
-
 	box->sel = traverse_listbox_items_list(box->sel, box, dist, 1,
-					       calc_dist, &item_offset);
-	/* item_offset becomes the offset of the new box->sel
+					       calc_dist, &box->sel_offset);
+	/* box->sel_offset becomes the offset of the new box->sel
 	 * from box->top. */
 
-	if (item_offset < 0) {
+	if (box->sel_offset < 0) {
 		/* We must scroll up. */
 		box->sel_offset = 0;
 		box->top = box->sel;
-	} else if (item_offset >= widget_data->box.height) {
+	} else if (box->sel_offset >= widget_data->box.height) {
 		/* We must scroll down. */
 		box->sel_offset = widget_data->box.height - 1;
 		box->top = traverse_listbox_items_list(box->sel, box,
 					   1 - widget_data->box.height,
 					   1, NULL, NULL);
-	} else {
-		/* No scrolling necessary. */
-		box->sel_offset = item_offset;
 	}
 }
 

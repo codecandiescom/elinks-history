@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.64 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: options.c,v 1.65 2005/06/26 08:17:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,11 +106,21 @@ copy_opt(struct document_options *o1, struct document_options *o2)
 }
 
 
+static void toggle_option(struct session *ses, struct option *option)
+{
+	long number = option->value.number + 1;
+
+	assert(option->type == OPT_BOOL || option->type == OPT_INT);
+	assert(option->max);
+
+	/* TODO: call change hooks. --jonas */
+	option->value.number = (number <= option->max) ? number : option->min;
+}
+
 void
 toggle_document_option(struct session *ses, unsigned char *option_name)
 {
 	struct option *option;
-	long number;
 
 	assert(ses && ses->doc_view && ses->tab && ses->tab->term);
 	if_assert_failed return;
@@ -121,14 +131,9 @@ toggle_document_option(struct session *ses, unsigned char *option_name)
 	}
 
 	option = get_opt_rec(config_options, option_name);
-	number = option->value.number + 1;
-
-	assert(option->type == OPT_BOOL || option->type == OPT_INT);
-	assert(option->max);
 
 	/* TODO: toggle per document. --Zas */
-	/* TODO: call change hooks. --jonas */
-	option->value.number = (number <= option->max) ? number : option->min;
+	toggle_option(ses, option);
 
 	draw_formatted(ses, 1);
 }

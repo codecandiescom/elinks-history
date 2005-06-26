@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.9 2005/06/14 13:04:31 jonas Exp $ */
+/* $Id: color.h,v 1.10 2005/06/26 22:57:12 zas Exp $ */
 
 #ifndef EL__UTIL_COLOR_H
 #define EL__UTIL_COLOR_H
@@ -22,13 +22,6 @@ struct rgb {
 /* Initialize a rgb strubt from a color_T */
 #define INIT_RGB(color) \
 	{ RED_COLOR(color), GREEN_COLOR(color), BLUE_COLOR(color) }
-
-#define INT2RGB(color, rgb) \
-	do { \
-		(rgb).r = RED_COLOR(color); \
-		(rgb).g = GREEN_COLOR(color); \
-		(rgb).b = BLUE_COLOR(color); \
-	} while (0)
 
 struct color_pair {
 	color_T background;

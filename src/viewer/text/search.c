@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.358 2005/06/26 09:42:57 miciah Exp $ */
+/* $Id: search.c,v 1.359 2005/06/26 09:46:22 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1532,7 +1532,8 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	update_dialog_data(dlg_data);
 
-	commit_option_values(resolvers, get_opt_tree("document.browse.search"),
+	commit_option_values(resolvers, get_opt_rec(config_options,
+						    "document.browse.search"),
 			     hop->values, SEARCH_OPTIONS);
 
 	if (check_dialog(dlg_data)) return EVENT_NOT_PROCESSED;
@@ -1559,8 +1560,8 @@ search_dlg_do(struct terminal *term, struct memory_list *ml,
 	hop = mem_calloc(1, sizeof(*hop));
 	if (!hop) return;
 
-	checkout_option_values(resolvers,
-			       get_opt_tree("document.browse.search"),
+	checkout_option_values(resolvers, get_opt_rec(config_options,
+						      "document.browse.search"),
 			       hop->values, SEARCH_OPTIONS);
 	hop->data = data;
 

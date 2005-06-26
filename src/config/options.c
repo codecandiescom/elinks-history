@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.484 2005/06/15 18:45:00 jonas Exp $ */
+/* $Id: options.c,v 1.485 2005/06/26 08:24:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -951,6 +951,17 @@ update_options_visibility(void)
 {
 	update_visibility(config_options->value.tree,
 			  get_opt_bool("config.show_template"));
+}
+
+void toggle_option(struct session *ses, struct option *option)
+{
+	long number = option->value.number + 1;
+
+	assert(option->type == OPT_BOOL || option->type == OPT_INT);
+	assert(option->max);
+
+	/* TODO: call change hooks. --jonas */
+	option->value.number = (number <= option->max) ? number : option->min;
 }
 
 static int

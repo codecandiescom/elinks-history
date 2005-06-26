@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.65 2005/06/26 08:17:33 miciah Exp $ */
+/* $Id: options.c,v 1.66 2005/06/26 08:24:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,17 +105,6 @@ copy_opt(struct document_options *o1, struct document_options *o2)
 	o1->framename = stracpy(o2->framename);
 }
 
-
-static void toggle_option(struct session *ses, struct option *option)
-{
-	long number = option->value.number + 1;
-
-	assert(option->type == OPT_BOOL || option->type == OPT_INT);
-	assert(option->max);
-
-	/* TODO: call change hooks. --jonas */
-	option->value.number = (number <= option->max) ? number : option->min;
-}
 
 void
 toggle_document_option(struct session *ses, unsigned char *option_name)

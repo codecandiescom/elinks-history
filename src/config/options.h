@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.113 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: options.h,v 1.114 2005/06/26 08:24:45 miciah Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -174,6 +174,10 @@ struct option_resolver {
 /* Update the visibility of the box item of each option
  * in config_options to honour the value of config.show_template. */
 void update_options_visibility(void);
+
+/* Toggle the value of the given option numeric, respecting option->min
+ * and option->max. */
+void toggle_option(struct session *ses, struct option *option);
 
 extern int commit_option_values(struct option_resolver *resolvers,
 				struct option *root,

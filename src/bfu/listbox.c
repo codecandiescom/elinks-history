@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.205 2005/06/26 11:31:39 miciah Exp $ */
+/* $Id: listbox.c,v 1.206 2005/06/26 11:33:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,7 +308,7 @@ listbox_sel_move(struct widget_data *widget_data, int dist)
 					   1 - widget_data->box.height,
 					   1, NULL, NULL);
 	} else {
-		/* No scolling necessary. */
+		/* No scrolling necessary. */
 		box->sel_offset = item_offset;
 	}
 }

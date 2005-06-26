@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.699 2005/06/26 10:53:07 miciah Exp $ */
+/* $Id: view.c,v 1.700 2005/06/26 10:54:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1117,7 +1117,6 @@ try_typeahead(struct session *ses, struct document_view *doc_view,
 			INTERNAL("invalid value for document.browse.search.typeahead");
 	}
 
-	/* FIXME: what if !doc_view ? --Zas */
 	search_typeahead(ses, doc_view, action_id);
 
 	/* Cross your fingers -- I'm just asking
@@ -1193,7 +1192,7 @@ quit:
 	}
 
 	if (!(get_kbd_modifier(ev) & KBD_MOD_CTRL)) {
-		try_typeahead(ses, doc_view, ev, action_id);
+		if (doc_view) try_typeahead(ses, doc_view, ev, action_id);
 	}
 
 	return NULL;

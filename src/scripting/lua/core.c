@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.216 2005/06/26 08:55:49 miciah Exp $ */
+/* $Id: core.c,v 1.217 2005/06/26 09:49:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -512,6 +512,8 @@ l_set_option(LS)
 	default:
 		goto lua_error;
 	}
+
+	opt->flags |= OPT_TOUCHED;
 
 	/* Call hook */
 	current = opt;

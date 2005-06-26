@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.77 2005/04/29 15:54:55 zas Exp $ */
+/* $Id: conv.c,v 1.78 2005/06/26 18:16:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,10 +167,10 @@ add_knum_to_string(struct string *string, long num)
 }
 
 struct string *
-add_xnum_to_string(struct string *string, int xnum)
+add_xnum_to_string(struct string *string, off_t xnum)
 {
 	unsigned char suff[3] = "\0i";
-	int d = -1;
+	off_t d = -1;
 
 	/* XXX: I don't completely like the computation of d here. --pasky */
 	/* Mebi (Mi), 2^20 */
@@ -184,6 +184,8 @@ add_xnum_to_string(struct string *string, int xnum)
 		d = (xnum / (int) ((int) 1024 / (int) 10)) % 10;
 		xnum /= 1024;
 	}
+
+	assert(xnum == (long) xnum);
 	add_long_to_string(string, xnum);
 
 	if (xnum < 10 && d != -1) {

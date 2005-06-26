@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.115 2005/06/26 08:55:49 miciah Exp $ */
+/* $Id: options.h,v 1.116 2005/06/26 10:02:29 miciah Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -128,8 +128,6 @@ struct option {
 	 * tree checking for change handlers. */
 	change_hook_T change_hook;
 
-	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
-	 * and simpler. */
 	struct listbox_item *box_item;
 	struct object object;
 };

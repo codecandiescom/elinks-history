@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.37 2005/06/13 00:43:27 jonas Exp $ */
+/* $Id: bookmarks.h,v 1.38 2005/06/26 10:02:29 miciah Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -17,8 +17,6 @@ struct bookmark {
 
 	struct bookmark *root;
 
-	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
-	 * and simpler. */
 	struct listbox_item *box_item;
 
 	unsigned char *title;   /* title of bookmark */

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.246 2005/06/26 08:55:49 miciah Exp $ */
+/* $Id: dialogs.c,v 1.247 2005/06/26 12:20:33 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -778,6 +778,7 @@ struct kbdbind_add_hop {
 	action_id_T action_id;
 	enum keymap_id keymap_id;
 	struct term_event_keyboard kbd;
+	struct widget_data *widget_data;
 };
 
 struct kbdbind_add_hop *
@@ -795,10 +796,16 @@ static void
 really_really_add_keybinding(void *data)
 {
 	struct kbdbind_add_hop *hop = data;
+	struct keybinding *keybinding;
 
 	assert(hop);
 
-	add_keybinding(hop->keymap_id, hop->action_id, &hop->kbd, EVENT_NONE);
+	keybinding = add_keybinding(hop->keymap_id, hop->action_id, &hop->kbd,
+	                            EVENT_NONE);
+
+	if (keybinding && keybinding->box_item)
+		listbox_sel(hop->widget_data, keybinding->box_item);
+;
 }
 
 static void
@@ -867,6 +874,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 	hop = mem_calloc(1, sizeof(*hop));
 	if (!hop) return EVENT_PROCESSED;
 	hop->term = term;
+	hop->widget_data = dlg_data->widgets_data;
 
 	if (item->depth == 2) {
 		struct keybinding *keybinding = item->udata;

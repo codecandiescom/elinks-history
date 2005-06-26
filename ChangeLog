@@ -1,3 +1,176 @@
+Sun Jun 26 19:43:35 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/file/cgi.c:
+
+	Use full path as second argument. This parameter will be argv[0] of
+	CGI script.  Some scripts may rely on it.  
+
+Sun Jun 26 18:16:39 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: conv.c, conv.h:
+
+	Make add_xnum_to_string() take off_t so the download dialog can
+	handle big files.  
+
+Sun Jun 26 12:32:03 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	In push_kbdbind_add_button, use struct keymap instead of struct
+	action for the item->udata corresponding to a struct keymap. This
+	should have been done as part of revision 1.233.  
+
+Sun Jun 26 12:20:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Add struct widget_data *widget_data to struct kbdbind_add_hop.  
+	
+	Initialise the new field in push_kbdbind_add_button.  
+	
+	Use the new data in really_really_add_keybinding to jump to the
+	newly added binding.  
+
+Sun Jun 26 11:41:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Do not initialise ctx.box in listbox_item_offset as it is not used
+	by the traverse_listbox_items_list callback as of revision 1.194.  
+
+Sun Jun 26 11:37:32 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Since listbox_item_offset only uses struct widget_data to obtain 
+	struct listbox_data, have listbox_sel pass listbox_item_offset 
+	struct listbox_data to start with.  
+
+Sun Jun 26 11:34:21 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Use box->sel_offset directly instead of using the intermediate
+	item_offset.  
+
+Sun Jun 26 11:33:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	s/scolling/scrolling/ 
+
+Sun Jun 26 11:31:39 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Replace struct listbox_context data by int item_offset.  
+
+Sun Jun 26 11:29:54 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Pass the callback data.offset directly.  
+
+Sun Jun 26 11:28:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Do not initialise data.box or data.widget_data in listbox_sel_move 
+	as they are no longer used in the traverse_listbox_items_list
+	callback as of revision 1.201.  
+
+Sun Jun 26 10:54:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Check doc_view before calling try_typeahead to fix a crash spotted
+	by zas.  
+
+Sun Jun 26 10:53:07 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Factor try_typeahead out of send_kbd_event.  
+
+Sun Jun 26 10:02:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bookmarks/bookmarks.h, config/options.h:
+
+	Remove an obsolete comment.  
+
+Sun Jun 26 09:49:03 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.c:
+
+	In l_set_option, set the touched flag on the option.  
+
+Sun Jun 26 09:46:22 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Build-fix for the last patch.  
+
+Sun Jun 26 09:42:57 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Instead of including "document.browse.search" in the resolvers and
+	passing config_options for root when checking out and committing the
+	options, use the option for "document.browse.search" as the root.  
+
+Sun Jun 26 09:36:24 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/options.c, dialogs/options.c:
+
+	Let commit_option_values call the change-hooks of the changed
+	options.  
+	
+	Don't do it in push_ok_button for the terminal-options box.  
+
+Sun Jun 26 09:20:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Check whether ses is NULL in change_hook_html.  
+
+Sun Jun 26 09:08:01 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/options.c:
+
+	In push_ok_button for the terminal-options box, use
+	call_change_hooks instead of directly calling the change-hook of the
+	terminal's option.  
+	
+	Because call_change_hooks is recursive and there is a change-hook
+	for the terminal subtree that calls cls_redraw_all_terminals, drop
+	the call in push_ok_button to cls_redraw_all_terminals.  
+
+Sun Jun 26 08:55:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/dialogs.c, config/options.c, config/options.h,
+	scripting/lua/core.c:
+
+	Move call_change_hooks from config/dialogs to config/options. Use it
+	in l_set_option.  
+
+Sun Jun 26 08:45:54 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Factor call_change_hooks out of check_valid_option.  
+
+Sun Jun 26 08:24:45 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/options.c, config/options.h, document/options.c:
+
+	Move toggle_option from document/options to config/options.  
+
+Sun Jun 26 08:17:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/options.c:
+
+	Factor toggle_option out of toggle_document_option.  
+
 Fri Jun 24 23:47:07 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/session/: session.c, task.c:

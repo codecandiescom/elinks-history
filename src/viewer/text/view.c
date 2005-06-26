@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.698 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: view.c,v 1.699 2005/06/26 10:53:07 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1100,6 +1100,31 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 }
 #endif /* CONFIG_MOUSE */
 
+static void
+try_typeahead(struct session *ses, struct document_view *doc_view,
+              struct term_event *ev, enum main_action action_id)
+{
+	switch (get_opt_int("document.browse.search.typeahead")) {
+		case 0:
+			return;
+		case 1:
+			action_id = ACT_MAIN_SEARCH_TYPEAHEAD_LINK;
+			break;
+		case 2:
+			action_id = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT;
+			break;
+		default:
+			INTERNAL("invalid value for document.browse.search.typeahead");
+	}
+
+	/* FIXME: what if !doc_view ? --Zas */
+	search_typeahead(ses, doc_view, action_id);
+
+	/* Cross your fingers -- I'm just asking
+	 * for an infinite loop! -- Miciah */
+	term_send_event(ses->tab->term, ev);
+}
+
 /* Returns the session if event cleanup should be done or NULL if no cleanup is
  * needed. */
 static struct session *
@@ -1168,26 +1193,7 @@ quit:
 	}
 
 	if (!(get_kbd_modifier(ev) & KBD_MOD_CTRL)) {
-
-		switch (get_opt_int("document.browse.search.typeahead")) {
-			case 0:
-				return NULL;
-			case 1:
-				action_id = ACT_MAIN_SEARCH_TYPEAHEAD_LINK;
-				break;
-			case 2:
-				action_id = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT;
-				break;
-			default:
-				INTERNAL("invalid value for document.browse.search.typeahead");
-		}
-
-		/* FIXME: what if !doc_view ? --Zas */
-		search_typeahead(ses, doc_view, action_id);
-
-		/* Cross your fingers -- I'm just asking
-		 * for an infinite loop! -- Miciah */
-		term_send_event(ses->tab->term, ev);
+		try_typeahead(ses, doc_view, ev, action_id);
 	}
 
 	return NULL;

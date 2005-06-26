@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.203 2005/06/26 11:28:49 miciah Exp $ */
+/* $Id: listbox.c,v 1.204 2005/06/26 11:29:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,12 +260,12 @@ done_down:
 static int
 calc_dist(struct listbox_item *item, void *data_, int *offset)
 {
-	struct listbox_context *listbox_context = data_;
+	int *item_offset = data_;
 
 	if (*offset < 0)
-		listbox_context->offset--;
+		--*item_offset;
 	else if (*offset > 0)
-		listbox_context->offset++;
+		++*item_offset;
 
 	return 0;
 }
@@ -295,7 +295,7 @@ listbox_sel_move(struct widget_data *widget_data, int dist)
 	data.offset = box->sel_offset;
 
 	box->sel = traverse_listbox_items_list(box->sel, box, dist, 1,
-					       calc_dist, &data);
+					       calc_dist, &data.offset);
 	/* data.offset becomes the offset of the new box->sel
 	 * from box->top. */
 

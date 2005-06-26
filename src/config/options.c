@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.487 2005/06/26 09:20:25 miciah Exp $ */
+/* $Id: options.c,v 1.488 2005/06/26 09:36:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1034,9 +1034,21 @@ commit_option_values(struct option_resolver *resolvers,
 		if (memcmp(&option->value, &values[id], sizeof(union option_value))) {
 			option->value = values[id];
 			option->flags |= OPT_TOUCHED;
+			/* Speed hack: Directly call the change-hook for each
+			 * option in resolvers and later call call_change_hooks
+			 * on the root; if we were to call call_change_hooks
+			 * on each option in resolvers, we would end up calling
+			 * the change-hooks of root, its parents, its
+			 * grandparents, and so on for each option in resolvers
+			 * because call_change_hooks is recursive. -- Miciah */
+			if (option->change_hook)
+				option->change_hook(NULL, option, NULL);
 			touched++;
 		}
 	}
+
+	/* See above 'Speed hack' comment. */
+	call_change_hooks(NULL, root, NULL);
 
 	return touched;
 }

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.114 2005/06/26 08:24:45 miciah Exp $ */
+/* $Id: options.h,v 1.115 2005/06/26 08:55:49 miciah Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -178,6 +178,10 @@ void update_options_visibility(void);
 /* Toggle the value of the given option numeric, respecting option->min
  * and option->max. */
 void toggle_option(struct session *ses, struct option *option);
+
+/* Call the change-hooks for the given option and recur on its parent. */
+void call_change_hooks(struct session *ses, struct option *current,
+                       struct option *option);
 
 extern int commit_option_values(struct option_resolver *resolvers,
 				struct option *root,

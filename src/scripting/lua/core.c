@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.215 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: core.c,v 1.216 2005/06/26 08:55:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -515,13 +515,7 @@ l_set_option(LS)
 
 	/* Call hook */
 	current = opt;
-	while (current && (!current->change_hook ||
-		!current->change_hook(lua_ses, current, opt))) {
-		if (current->root)
-			current = current->root;
-		else
-			break;
-	}
+	call_change_hooks(lua_ses, current, opt);
 	return 1;
 
 lua_error:

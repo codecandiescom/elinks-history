@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.245 2005/06/26 08:45:54 miciah Exp $ */
+/* $Id: dialogs.c,v 1.246 2005/06/26 08:55:49 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -288,22 +288,6 @@ static struct listbox_ops options_listbox_ops = {
 };
 
 /* Button handlers */
-
-static void
-call_change_hooks(struct session *ses, struct option *current, struct option *option)
-{
-	/* This boolean thing can look a little weird - it
-	 * basically says that we should proceed when there's
-	 * no change_hook or there's one and its return value
-	 * was zero. */
-	while (current && (!current->change_hook ||
-		!current->change_hook(ses, current, option))) {
-		if (!current->root)
-			break;
-
-		current = current->root;
-	}
-}
 
 static widget_handler_status_T
 check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data)

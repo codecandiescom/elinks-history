@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.485 2005/06/26 08:24:45 miciah Exp $ */
+/* $Id: options.c,v 1.486 2005/06/26 08:55:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -998,6 +998,22 @@ static struct change_hook_info change_hooks[] = {
 	{ "ui",				change_hook_ui },
 	{ NULL,				NULL },
 };
+
+void
+call_change_hooks(struct session *ses, struct option *current, struct option *option)
+{
+	/* This boolean thing can look a little weird - it
+	 * basically says that we should proceed when there's
+	 * no change_hook or there's one and its return value
+	 * was zero. */
+	while (current && (!current->change_hook ||
+		!current->change_hook(ses, current, option))) {
+		if (!current->root)
+			break;
+
+		current = current->root;
+	}
+}
 
 int
 commit_option_values(struct option_resolver *resolvers,

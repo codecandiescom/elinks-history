@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.208 2005/06/26 11:37:32 miciah Exp $ */
+/* $Id: listbox.c,v 1.209 2005/06/26 11:41:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,7 +326,6 @@ listbox_item_offset(struct listbox_data *box, struct listbox_item *item)
 	struct listbox_context ctx;
 
 	memset(&ctx, 0, sizeof(ctx));
-	ctx.box = box;
 	ctx.item = item;
 	ctx.offset = 0;
 

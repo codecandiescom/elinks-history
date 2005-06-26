@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.83 2005/06/15 21:25:51 miciah Exp $ */
+/* $Id: color.c,v 1.84 2005/06/26 23:01:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,8 +12,12 @@
 #include "util/color.h"
 #include "util/error.h"
 
-#include "terminal/palette.inc"
+struct rgb {
+	unsigned char r, g, b;
+	unsigned char pad;
+};
 
+#include "terminal/palette.inc"
 
 struct rgb_cache_entry {
 	int color;
@@ -34,6 +38,15 @@ color_distance(struct rgb *c1, struct rgb *c2)
 /* FIXME: Namespace clash with <wingdi.h> */
 #undef RGB
 
+#define ALPHA_COLOR_MASK	0xFF000000
+#define RED_COLOR_MASK		0x00FF0000
+#define GREEN_COLOR_MASK	0x0000FF00
+#define BLUE_COLOR_MASK		0x000000FF
+
+#define RED_COLOR(color)	(((color) & RED_COLOR_MASK)   >> 16)
+#define GREEN_COLOR(color)	(((color) & GREEN_COLOR_MASK) >>  8)
+#define BLUE_COLOR(color)	(((color) & BLUE_COLOR_MASK)  >>  0)
+
 #define RED(color)	(RED_COLOR(color)   << 3)
 #define GREEN(color)	(GREEN_COLOR(color) << 2)
 #define BLUE(color)	(BLUE_COLOR(color)  << 0)
@@ -41,6 +54,11 @@ color_distance(struct rgb *c1, struct rgb *c2)
 
 #define RGB_HASH_SIZE		4096
 #define HASH_RGB(color, l)	((RGB(color) + (l)) & (RGB_HASH_SIZE - 1))
+
+/* Initialize a rgb struct from a color_T */
+#define INIT_RGB(color) \
+	{ RED_COLOR(color), GREEN_COLOR(color), BLUE_COLOR(color) }
+
 
 /* Locates the nearest terminal color. */
 static inline unsigned char

@@ -1,27 +1,9 @@
-/* $Id: color.h,v 1.10 2005/06/26 22:57:12 zas Exp $ */
+/* $Id: color.h,v 1.11 2005/06/26 23:01:50 zas Exp $ */
 
 #ifndef EL__UTIL_COLOR_H
 #define EL__UTIL_COLOR_H
 
 typedef uint32_t color_T;
-
-#define ALPHA_COLOR_MASK	0xFF000000
-#define RED_COLOR_MASK		0x00FF0000
-#define GREEN_COLOR_MASK	0x0000FF00
-#define BLUE_COLOR_MASK		0x000000FF
-
-#define RED_COLOR(color)	(((color) & RED_COLOR_MASK)   >> 16)
-#define GREEN_COLOR(color)	(((color) & GREEN_COLOR_MASK) >>  8)
-#define BLUE_COLOR(color)	(((color) & BLUE_COLOR_MASK)  >>  0)
-
-struct rgb {
-	unsigned char r, g, b;
-	unsigned char pad;
-};
-
-/* Initialize a rgb strubt from a color_T */
-#define INIT_RGB(color) \
-	{ RED_COLOR(color), GREEN_COLOR(color), BLUE_COLOR(color) }
 
 struct color_pair {
 	color_T background;

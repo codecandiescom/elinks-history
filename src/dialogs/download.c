@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.89 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: download.c,v 1.90 2005/06/27 01:57:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,6 +130,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 		mem_free(msg);
 		return;
 	}
+	decode_uri_for_display(url);
 	url_len = strlen(url);
 
 	if (show_meter) {
@@ -162,6 +163,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 			url[--url_len] = '.';
 		}
 	}
+
 	y = dlg_data->box.y + DIALOG_TB + 1;
 	x = dlg_data->box.x + DIALOG_LB;
 	dlg_format_text_do(term, url, x, &y, w, NULL,

@@ -1,5 +1,5 @@
 /* CGI script for FSP protocol support */
-/* $Id: fspcgi.c,v 1.1 2005/06/27 18:30:37 witekfl Exp $ */
+/* $Id: fspcgi.c,v 1.2 2005/06/27 19:09:31 witekfl Exp $ */
 #include <fsplib.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,8 +32,9 @@ process_directory(FSP_SESSION *ses)
 {
 	char buf[1024];
 	FSP_DIR *dir;
+	/* TODO: password */
 
-	snprintf(buf, 1024, "fsp:%s:%d%s/", data.host, data.port, data.path);
+	snprintf(buf, 1024, "file://%s?%s:%d%s/", pname, data.host, data.port, data.path);
 	printf("Content-Type: text/html\r\n\r\n");
 	printf("<html><head><title>%s</title></head><body>\n", buf);
 	dir = fsp_opendir(ses, data.path);

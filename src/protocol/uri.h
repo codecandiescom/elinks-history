@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.156 2005/04/16 21:21:08 jonas Exp $ */
+/* $Id: uri.h,v 1.157 2005/06/27 03:31:51 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -238,6 +238,11 @@ struct uri *get_composed_uri(struct uri *uri, enum uri_component components);
  * @uristring	is the URI to resolve or translate.
  * @cwd		if non NULL @uristring will be translated using this CWD. */
 struct uri *get_translated_uri(unsigned char *uristring, unsigned char *cwd);
+
+/* Normalizes the directory structure given in uristring. XXX: The function
+ * modifies the uristring and returns it. The uri argument should be NULL
+ * if the uri is not the parsed uristring. */
+unsigned char *normalize_uri(struct uri *uri, unsigned char *uristring);
 
 /* Check if two URIs are equal. If @components are 0 simply compare the whole
  * URI else only compare the specific parts. */

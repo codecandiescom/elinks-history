@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.315 2005/06/15 13:45:50 witekfl Exp $ */
+/* $Id: uri.c,v 1.316 2005/06/27 03:31:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -640,7 +640,7 @@ add_string_uri_to_string(struct string *string, unsigned char *uristring,
 #define normalize_uri_reparse(str)	normalize_uri(NULL, str)
 #define normalize_uri_noparse(uri)	normalize_uri(uri, struri(uri))
 
-static unsigned char *
+unsigned char *
 normalize_uri(struct uri *uri, unsigned char *uristring)
 {
 	unsigned char *parse_string = uristring;
@@ -1420,7 +1420,7 @@ free_uri_list(struct uri_list *list)
 		done_uri(uri);
 	}
 
-	mem_free(list->uris);
+	mem_free_set(&list->uris, NULL);
 	list->size = 0;
 }
 

@@ -1,5 +1,6 @@
 /* CGI script for FSP protocol support */
-/* $Id: fspcgi.c,v 1.2 2005/06/27 19:09:31 witekfl Exp $ */
+/* $Id: fspcgi.c,v 1.3 2005/06/27 21:42:50 miciah Exp $ */
+
 #include <fsplib.h>
 #include <stdio.h>
 #include <stdlib.h>

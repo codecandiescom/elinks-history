@@ -1,3 +1,83 @@
+Mon Jun 27 21:42:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/cgi/fspcgi.c:
+
+	Add a blank line between the $Id$ and the #include directives.  
+
+Mon Jun 27 19:10:11 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/cgi/README.FSP:
+
+	Small readme about fspcgi.  
+
+Mon Jun 27 19:09:31 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/cgi/fspcgi.c:
+
+	It works.  
+
+Mon Jun 27 18:30:37 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/cgi/: fspcgi.c, Makefile:
+
+	Experimental support for FSP protocol as CGI script.  Need to
+	rewrite some parts of ELinks (treat smart prefixes as valid protocol 
+	names and/or treat file:///blabla?query as valid base href).  
+
+Mon Jun 27 15:35:21 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added three replacements.  %5B -> "[", %5D -> "]", and %20 -> " ". 
+	I hope this does not break anything.  Opinions and suggestions
+	welcomed.  
+
+Mon Jun 27 14:29:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Remove funny allocation fallback scheme. Vetoed by Miciah.  
+
+Mon Jun 27 13:36:27 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Decode file download URIs. Idea by Neuromancer.  
+
+Mon Jun 27 03:31:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Export normalize_uri(), t'will be used by BitTorrent for checking
+	safety of file paths. Set the URI list table to NULL so it truely
+	resets the list.  
+
+Mon Jun 27 01:57:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Decode the download URI for display.  
+
+Sun Jun 26 23:17:19 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/color.c:
+
+	Cleanup macros: drop unused ALPHA_COLOR_MASK, fix RGB (->RGBCOLOR)
+	nameclash and undefined macros after use.  
+
+Sun Jun 26 23:01:50 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: terminal/color.c, util/color.h:
+
+	Move rgb stuff from util/color.h to terminal/color.c since it is
+	only used there.  
+
+Sun Jun 26 22:57:12 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/color.h:
+
+	Drop unused macro INT2RGB().  
+
 Sun Jun 26 19:43:35 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/protocol/file/cgi.c:

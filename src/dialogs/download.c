@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.90 2005/06/27 01:57:29 jonas Exp $ */
+/* $Id: download.c,v 1.91 2005/06/27 13:36:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,8 +251,12 @@ static unsigned char *
 get_file_download_text(struct listbox_item *item, struct terminal *term)
 {
 	struct file_download *file_download = item->udata;
+	unsigned char *uristring;
 
-	return get_uri_string(file_download->uri, URI_PUBLIC);
+	uristring = get_uri_string(file_download->uri, URI_PUBLIC);
+	if (uristring) decode_uri_for_display(uristring);
+
+	return uristring;
 }
 
 static unsigned char *
@@ -309,8 +313,8 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 	struct download *download = &file_download->download;
 	unsigned char *stylename;
 	struct color_pair *color;
-	unsigned char *text = struri(file_download->uri);
-	int length = strlen(text);
+	unsigned char *text;
+	int length;
 	int trimmedlen;
 	int meter = DOWNLOAD_METER_WIDTH;
 
@@ -323,6 +327,10 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 
 	color = get_bfu_color(context->term, stylename);
 
+	text = get_file_download_text(item, NULL);
+	if (!text) text = struri(file_download->uri);
+
+	length = strlen(text);
 	/* Show atleast the required percentage of the URI */
 	if (length * DOWNLOAD_URI_PERCENTAGE / 100 < width - meter - 4) {
 		trimmedlen = int_min(length, width - meter - 4);
@@ -335,6 +343,8 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 		draw_text(context->term, x + trimmedlen, y, "...", 3, 0, color);
 		trimmedlen += 3;
 	}
+	if (text != struri(file_download->uri))
+		mem_free(text);
 
 	if (!download->progress
 	    || download->progress->size < 0

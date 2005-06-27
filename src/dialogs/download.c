@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.91 2005/06/27 13:36:27 jonas Exp $ */
+/* $Id: download.c,v 1.92 2005/06/27 14:29:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -328,7 +328,7 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 	color = get_bfu_color(context->term, stylename);
 
 	text = get_file_download_text(item, NULL);
-	if (!text) text = struri(file_download->uri);
+	if (!text) return;
 
 	length = strlen(text);
 	/* Show atleast the required percentage of the URI */
@@ -343,8 +343,8 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 		draw_text(context->term, x + trimmedlen, y, "...", 3, 0, color);
 		trimmedlen += 3;
 	}
-	if (text != struri(file_download->uri))
-		mem_free(text);
+
+	mem_free(text);
 
 	if (!download->progress
 	    || download->progress->size < 0

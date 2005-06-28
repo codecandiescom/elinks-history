@@ -1,6 +1,7 @@
 /* CGI script for FSP protocol support */
-/* $Id: fspcgi.c,v 1.3 2005/06/27 21:42:50 miciah Exp $ */
+/* $Id: fspcgi.c,v 1.4 2005/06/28 14:05:31 witekfl Exp $ */
 
+#include <ctype.h>
 #include <fsplib.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +9,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <dirent.h>
 
 char *pname, *query;
 
@@ -19,7 +19,7 @@ struct fq {
 	unsigned short port;
 } data;
 
-void
+static void
 error(const char *str)
 {
 	printf("Content-Type: text/plain\r\nConnection: close\r\n\r\n");
@@ -28,14 +28,14 @@ error(const char *str)
 	exit(1);
 }
 
-void
+static void
 process_directory(FSP_SESSION *ses)
 {
 	char buf[1024];
 	FSP_DIR *dir;
 	/* TODO: password */
 
-	snprintf(buf, 1024, "file://%s?%s:%d%s/", pname, data.host, data.port, data.path);
+	snprintf(buf, sizeof(buf), "file://%s?%s:%d%s", pname, data.host, data.port, data.path);
 	printf("Content-Type: text/html\r\n\r\n");
 	printf("<html><head><title>%s</title></head><body>\n", buf);
 	dir = fsp_opendir(ses, data.path);
@@ -54,7 +54,7 @@ process_directory(FSP_SESSION *ses)
 	exit(0);
 }
 
-void
+static void
 process_data(void)
 {
 	FSP_SESSION *ses = fsp_open_session(data.host, data.port, data.password);
@@ -78,7 +78,7 @@ process_data(void)
 	}
 }
 
-void
+static void
 process_query(void)
 {
 	char *at = strchr(query, '@');
@@ -117,6 +117,46 @@ process_query(void)
 	process_data();
 }
 
+static inline int
+unhx(register unsigned char a)
+{
+	if (isdigit(a)) return a - '0';
+	if (a >= 'a' && a <= 'f') return a - 'a' + 10;
+	if (a >= 'A' && a <= 'F') return a - 'A' + 10;
+	return -1;
+}
+
+static void
+decode_query(unsigned char *src)
+{
+	unsigned char *dst = src;
+	unsigned char c;
+
+	do {
+		c = *src++;
+
+		if (c == '%') {
+			int x1 = unhx(*src);
+
+			if (x1 >= 0) {
+				int x2 = unhx(*(src + 1));
+
+				if (x2 >= 0) {
+					x1 = (x1 << 4) + x2;
+					if (x1 != 0) { /* don't allow %00 */
+						c = (unsigned char) x1;
+						src += 2;
+					}
+				}
+			}	
+
+		} else if (c == '+') {
+			c = ' ';
+		}
+
+		*dst++ = c;
+	} while (c != '\0');
+}
 
 int
 main(int argc, char **argv)
@@ -127,6 +167,7 @@ main(int argc, char **argv)
 	pname = argv[0];
 	query = strdup(q);
 	if (!query) return 2;
+	decode_query(query);
 	process_query();
 	return 0;
 }

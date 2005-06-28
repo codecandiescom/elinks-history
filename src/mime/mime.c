@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.71 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: mime.c,v 1.72 2005/06/28 19:38:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,6 +64,22 @@ get_content_filename(struct uri *uri, struct cache_entry *cached)
 	filename = parse_header_param(pos, "filename");
 	mem_free(pos);
 	if (!filename) return NULL;
+
+	/* Remove start and ending quotes. */
+	if (filename[0] == '"') {
+		int len = strlen(filename);
+
+		if (len > 1 && filename[len - 1] == '"') {
+			filename[len - 1] = 0;
+			memmove(filename, filename + 1, len);
+		}
+
+		/* It was an empty quotation: "" */
+		if (!filename[1]) {
+			mem_free(filename);
+			return NULL;
+		}
+	}
 
 	/* We don't want to add any directories from the path so make sure we
 	 * only add the filename. */

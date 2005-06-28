@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.95 2005/06/27 15:35:21 rrowan Exp $
+# $Id: hooks.pl,v 1.96 2005/06/28 22:12:27 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1126,9 +1126,11 @@ Rewrites some evil characters to entities and vice versa.
 	$html =~ s/\&#252/ü/g;
 	$html =~ s/\&#039(?!;)/'/g;
 	$html =~ s/]\n>$//gsm;
-	$html =~ s/%5B/[/g;
-	$html =~ s/%5D/]/g;
-	$html =~ s/%20/ /g;
+#	$html =~ s/%5B/[/g;
+#	$html =~ s/%5D/]/g;
+#	$html =~ s/%20/ /g;
+#	$html =~ s/%2F/\//g;
+#	$html =~ s/%23/#/g;
 
 
 	return $html;

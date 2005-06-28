@@ -1,3 +1,15 @@
+Tue Jun 28 19:38:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Remove quotes from Content-Disposition: ...; filename="s" 
+
+Tue Jun 28 14:05:31 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/cgi/fspcgi.c:
+
+	Statification. Some improvements. Decoding query.  
+
 Mon Jun 27 21:42:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* contrib/cgi/fspcgi.c:

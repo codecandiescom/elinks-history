@@ -1,5 +1,5 @@
 /* CGI script for FSP protocol support */
-/* $Id: fspcgi.c,v 1.4 2005/06/28 14:05:31 witekfl Exp $ */
+/* $Id: fspcgi.c,v 1.5 2005/06/29 14:08:13 witekfl Exp $ */
 
 #include <ctype.h>
 #include <fsplib.h>
@@ -42,7 +42,6 @@ process_directory(FSP_SESSION *ses)
 	if (dir) {
 		FSP_RDENTRY fentry, *fresult;
 
-		fsp_rewinddir(dir);
 		while (!fsp_readdir_native(dir, &fentry, &fresult)) {
 			if (!fresult) break;
 			printf("<a href=\"%s%s\">%s</a><br>\n", buf, fentry.name, fentry.name);

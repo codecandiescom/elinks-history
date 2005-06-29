@@ -1,5 +1,5 @@
 /* CGI script for FSP protocol support */
-/* $Id: fspcgi.c,v 1.6 2005/06/29 15:07:34 witekfl Exp $ */
+/* $Id: fspcgi.c,v 1.7 2005/06/29 15:11:47 witekfl Exp $ */
 
 #include <ctype.h>
 #include <fsplib.h>
@@ -35,7 +35,8 @@ process_directory(FSP_SESSION *ses)
 	FSP_DIR *dir;
 	/* TODO: password */
 
-	snprintf(buf, sizeof(buf), "file://%s?%s:%d%s", pname, data.host, data.port, data.path);
+	snprintf(buf, sizeof(buf), "file://%s?%s:%d%s", pname, data.host,
+		data.port, data.path);
 	printf("Content-Type: text/html\r\n\r\n");
 	printf("<html><head><title>%s</title></head><body>\n", buf);
 	dir = fsp_opendir(ses, data.path);
@@ -44,7 +45,7 @@ process_directory(FSP_SESSION *ses)
 
 		while (!fsp_readdir_native(dir, &fentry, &fresult)) {
 			if (!fresult) break;
-			printf("<a href=\"%s%s\" name=\"%s\">%s</a><br>\n", buf, fentry.name, fentry.name, fentry.name);
+			printf("<a href=\"%s%s\">%s</a><br>\n", buf, fentry.name, fentry.name);
 		}
 		fsp_closedir(dir);
 	}	

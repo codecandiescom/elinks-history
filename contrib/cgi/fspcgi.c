@@ -1,5 +1,5 @@
 /* CGI script for FSP protocol support */
-/* $Id: fspcgi.c,v 1.5 2005/06/29 14:08:13 witekfl Exp $ */
+/* $Id: fspcgi.c,v 1.6 2005/06/29 15:07:34 witekfl Exp $ */
 
 #include <ctype.h>
 #include <fsplib.h>
@@ -44,7 +44,7 @@ process_directory(FSP_SESSION *ses)
 
 		while (!fsp_readdir_native(dir, &fentry, &fresult)) {
 			if (!fresult) break;
-			printf("<a href=\"%s%s\">%s</a><br>\n", buf, fentry.name, fentry.name);
+			printf("<a href=\"%s%s\" name=\"%s\">%s</a><br>\n", buf, fentry.name, fentry.name, fentry.name);
 		}
 		fsp_closedir(dir);
 	}	
@@ -126,10 +126,10 @@ unhx(register unsigned char a)
 }
 
 static void
-decode_query(unsigned char *src)
+decode_query(char *src)
 {
-	unsigned char *dst = src;
-	unsigned char c;
+	char *dst = src;
+	char c;
 
 	do {
 		c = *src++;

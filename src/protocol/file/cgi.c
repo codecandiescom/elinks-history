@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.112 2005/06/26 19:43:35 witekfl Exp $ */
+/* $Id: cgi.c,v 1.113 2005/06/29 09:46:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +32,7 @@
 #include "protocol/uri.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
+#include "util/env.h"
 #include "util/string.h"
 
 
@@ -119,7 +120,7 @@ set_vars(struct connection *conn, unsigned char *script)
 	unsigned char *post = conn->uri->post;
 	unsigned char *query = get_uri_string(conn->uri, URI_QUERY);
 	unsigned char *str;
-	int res = setenv("QUERY_STRING", empty_string_or_(query), 1);
+	int res = env_set("QUERY_STRING", empty_string_or_(query), -1);
 
 	mem_free_if(query);
 	if (res) return -1;
@@ -129,29 +130,27 @@ set_vars(struct connection *conn, unsigned char *script)
 		unsigned char buf[16];
 
 		if (postend) {
-			*postend = '\0';
-			res = setenv("CONTENT_TYPE", post, 1);
-			*postend = '\n';
+			res = env_set("CONTENT_TYPE", post, postend - post);
 			if (res) return -1;
 			post = postend + 1;
 		}
 		snprintf(buf, 16, "%d", (int) strlen(post) / 2);
-		if (setenv("CONTENT_LENGTH", buf, 1)) return -1;
+		if (env_set("CONTENT_LENGTH", buf, -1)) return -1;
 	}
 
-	if (setenv("REQUEST_METHOD", post ? "POST" : "GET", 1)) return -1;
-	if (setenv("SERVER_SOFTWARE", "ELinks/" VERSION, 1)) return -1;
-	if (setenv("SERVER_PROTOCOL", "HTTP/1.0", 1)) return -1;
+	if (env_set("REQUEST_METHOD", post ? "POST" : "GET", -1)) return -1;
+	if (env_set("SERVER_SOFTWARE", "ELinks/" VERSION, -1)) return -1;
+	if (env_set("SERVER_PROTOCOL", "HTTP/1.0", -1)) return -1;
 	/* XXX: Maybe it is better to set this to an empty string? --pasky */
-	if (setenv("SERVER_NAME", "localhost", 1)) return -1;
+	if (env_set("SERVER_NAME", "localhost", -1)) return -1;
 	/* XXX: Maybe it is better to set this to an empty string? --pasky */
-	if (setenv("REMOTE_ADDR", "127.0.0.1", 1)) return -1;
-	if (setenv("GATEWAY_INTERFACE", "CGI/1.1", 1)) return -1;
+	if (env_set("REMOTE_ADDR", "127.0.0.1", -1)) return -1;
+	if (env_set("GATEWAY_INTERFACE", "CGI/1.1", -1)) return -1;
 	/* This is the path name extracted from the URI and decoded, per
 	 * http://cgi-spec.golux.com/draft-coar-cgi-v11-03-clean.html#8.1 */
-	if (setenv("SCRIPT_NAME", script, 1)) return -1;
-	if (setenv("SCRIPT_FILENAME", script, 1)) return -1;
-	if (setenv("PATH_TRANSLATED", script, 1)) return -1;
+	if (env_set("SCRIPT_NAME", script, -1)) return -1;
+	if (env_set("SCRIPT_FILENAME", script, -1)) return -1;
+	if (env_set("PATH_TRANSLATED", script, -1)) return -1;
 
 	/* From now on, just HTTP-like headers are being set. Missing variables
 	 * due to full environment are not a problem according to the CGI/1.1
@@ -173,7 +172,7 @@ set_vars(struct connection *conn, unsigned char *script)
 		ustr = subst_user_agent(str, VERSION_STRING, system_name, ts);
 
 		if (ustr) {
-			setenv("HTTP_USER_AGENT", ustr, 1);
+			env_set("HTTP_USER_AGENT", ustr, -1);
 			mem_free(ustr);
 		}
 	}
@@ -185,50 +184,50 @@ set_vars(struct connection *conn, unsigned char *script)
 
 	case REFERER_FAKE:
 		str = get_opt_str("protocol.http.referer.fake");
-		setenv("HTTP_REFERER", str, 1);
+		env_set("HTTP_REFERER", str, -1);
 		break;
 
 	case REFERER_TRUE:
 		/* XXX: Encode as in add_url_to_http_string() ? --pasky */
 		if (conn->referrer)
-			setenv("HTTP_REFERER", struri(conn->referrer), 1);
+			env_set("HTTP_REFERER", struri(conn->referrer), -1);
 		break;
 
 	case REFERER_SAME_URL:
 		str = get_uri_string(conn->uri, URI_HTTP_REFERRER);
 		if (str) {
-			setenv("HTTP_REFERER", str, 1);
+			env_set("HTTP_REFERER", str, -1);
 			mem_free(str);
 		}
 		break;
 	}
 
 	/* Protection against vim cindent bugs ;-). */
-	setenv("HTTP_ACCEPT", "*/" "*", 1);
+	env_set("HTTP_ACCEPT", "*/" "*", -1);
 
 	/* We do not set HTTP_ACCEPT_ENCODING. Yeah, let's let the CGI script
 	 * gzip the stuff so that the CPU doesn't at least sit idle. */
 
 	str = get_opt_str("protocol.http.accept_language");
 	if (*str) {
-		setenv("HTTP_ACCEPT_LANGUAGE", str, 1);
+		env_set("HTTP_ACCEPT_LANGUAGE", str, -1);
 	}
 #ifdef CONFIG_NLS
 	else if (get_opt_bool("protocol.http.accept_ui_language")) {
-		setenv("HTTP_ACCEPT_LANGUAGE",
-			language_to_iso639(current_language), 1);
+		env_set("HTTP_ACCEPT_LANGUAGE",
+			language_to_iso639(current_language), -1);
 	}
 #endif
 
 	if (conn->cached && !conn->cached->incomplete && conn->cached->head
 	    && conn->cached->last_modified
 	    && conn->cache_mode <= CACHE_MODE_CHECK_IF_MODIFIED) {
-		setenv("HTTP_IF_MODIFIED_SINCE", conn->cached->last_modified, 1);
+		env_set("HTTP_IF_MODIFIED_SINCE", conn->cached->last_modified, -1);
 	}
 
 	if (conn->cache_mode >= CACHE_MODE_FORCE_RELOAD) {
-		setenv("HTTP_PRAGMA", "no-cache", 1);
-		setenv("HTTP_CACHE_CONTROL", "no-cache", 1);
+		env_set("HTTP_PRAGMA", "no-cache", -1);
+		env_set("HTTP_CACHE_CONTROL", "no-cache", -1);
 	}
 
 	/* TODO: HTTP auth support. On the other side, it was weird over CGI
@@ -239,7 +238,7 @@ set_vars(struct connection *conn, unsigned char *script)
 		struct string *cookies = send_cookies(conn->uri);
 
 		if (cookies) {
-			setenv("HTTP_COOKIE", cookies->source, 1);
+			env_set("HTTP_COOKIE", cookies->source, -1);
 
 			done_string(cookies);
 		}

@@ -1,3 +1,46 @@
+Wed Jun 29 19:53:18 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/cgi/fspcgi.c:
+
+	There must be slash.  
+
+Wed Jun 29 15:11:47 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/cgi/fspcgi.c:
+
+	Split long line. Removed unintentional addition from previous
+	commit.  
+
+Wed Jun 29 15:07:34 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/cgi/fspcgi.c:
+
+	char * instead of unsigned char * (killed warning).  
+
+Wed Jun 29 14:08:13 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/cgi/fspcgi.c:
+
+	Removed superfluous instruction.  
+
+Wed Jun 29 09:46:01 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/file/cgi.c, scripting/python/core.c:
+
+	Use env_set() instead of setenv().  
+
+Wed Jun 29 09:44:49 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: Makefile.am, env.c, env.h:
+
+	Introduce env_set() as a wrapper of setenv().  
+
+Tue Jun 28 22:12:27 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Removed the rewrites added yesterday.  They are broken.  
+
 Tue Jun 28 19:38:51 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/mime/mime.c:

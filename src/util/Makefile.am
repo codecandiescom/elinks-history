@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.50 2005/06/12 00:30:12 jonas Exp $
+## $Id: Makefile.am,v 1.51 2005/06/29 09:44:49 zas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -49,6 +49,8 @@ libutil_a_SOURCES = \
  color_s.inc \
  conv.c \
  conv.h \
+ env.c \
+ env.h \
  error.c \
  error.h \
  file.c \

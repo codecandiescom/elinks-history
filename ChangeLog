@@ -1,3 +1,15 @@
+Thu Jun 30 15:10:04 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/scripting/python/hooks.c:
+
+	PyString_Size() is probably faster then strlen.  
+
+Thu Jun 30 09:52:50 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/env.c:
+
+	Let env_set() use putenv() if setenv() is not available.  
+
 Wed Jun 29 19:53:18 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* contrib/cgi/fspcgi.c:

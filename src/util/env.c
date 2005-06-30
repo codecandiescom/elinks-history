@@ -1,5 +1,5 @@
 /* Environment variables handling */
-/* $Id: env.c,v 1.1 2005/06/29 09:44:49 zas Exp $ */
+/* $Id: env.c,v 1.2 2005/06/30 09:52:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,25 +26,50 @@
 int
 env_set(unsigned char *name, unsigned char *value, int length)
 {
-	int ret, true_length, allocated = 0;
+	int true_length, substring = 0;
 
-	if (!value) return -1;
+	if (!value || !name || !*name) return -1;
 
 	true_length = strlen(value);
-	if (length >= 0 && length < true_length) {
-		/* Copy the substring. */
-		value = memacpy(value, length);
-		if (!value) return -1;
-		allocated = 1;
+	substring = (length >= 0 && length < true_length);
+	if (!substring) length = true_length;
+
+#if defined(HAVE_SETENV)
+	{
+		int ret, allocated = 0;
+
+		if (substring) {
+			/* Copy the substring. */
+			value = memacpy(value, length);
+			if (!value) return -1;
+			allocated = 1;
+		}
+
+		ret = setenv(name, value, 1);
+		if (allocated) mem_free(value);
+		return ret;
 	}
 
-#ifdef HAVE_SETENV
-	ret = setenv(name, value, 1);
+#elif defined(HAVE_PUTENV)
+
+	{
+		int namelen = strlen(name);
+		char *s = malloc(namelen + length + 2);
+
+		if (!s) return -1;
+		memcpy(s, name, namelen);
+		s[namelen] = '=';
+		memcpy(&s[namelen + 1], value, length);
+		s[namelen + 1 + length] = '\0';
+
+		/* @s is never freed by us, this is intentional.
+		 * --> Possible memleaks on repeated use of
+		 * this function. */
+		return putenv(s);
+	}
+
 #else
 	/* XXX: what to do ?? */
-	ret = -1;
+	return -1;
 #endif
-
-	if (allocated) mem_free(value);
-	return ret;
 }

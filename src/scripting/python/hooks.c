@@ -1,5 +1,5 @@
 /* Python scripting hooks */
-/* $Id: hooks.c,v 1.9 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: hooks.c,v 1.10 2005/06/30 15:10:04 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,7 @@ do_script_hook_pre_format_html(unsigned char *url, unsigned char **html,
 			const unsigned char *str = PyString_AsString(pValue);
 
 			if (str) {
-				*html_len = strlen(str);
+				*html_len = PyString_Size(pValue); /* strlen(str); */
 				*html = memacpy((unsigned char *)str, *html_len);
 				/* Isn't a memleak here? --witekfl */
 				if (!*html) *html_len = 0;

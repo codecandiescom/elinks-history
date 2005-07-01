@@ -1,3 +1,12 @@
+Fri Jul  1 13:15:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, doc/tools/make-elinks-manpage, src/config/cmdline.c:
+
+	Make the elinks(1) manpage and --help option reflect the fact that
+	elinks accepts multiple URL's on the command line 
+	
+	Patch by Doug Kearns.  
+
 Thu Jun 30 15:10:04 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/scripting/python/hooks.c:

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.126 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: cmdline.c,v 1.127 2005/07/01 13:15:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -556,7 +556,7 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 		print_full_help(config_options, "");
 	} else {
 		printf("%s\n\n%s:\n",
-		       gettext("Usage: elinks [OPTION]... [URL]"),
+		       gettext("Usage: elinks [OPTION]... [URL]..."),
 		       gettext("Options"));
 		if (!strcmp(option->name, "long-help")) {
 			print_full_help(cmdline_options, "-");

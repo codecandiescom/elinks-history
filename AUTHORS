@@ -149,7 +149,7 @@ Dmitry Pinchukov <dpinch@mail.ru>
 	Referred as Dmitry in ChangeLog etc.
 
 Doug Kearns <djkea2@mugca.its.monash.edu.au>
-	Fixes in linkskeys.5
+	Fixes in linkskeys.5 and elinks.1
 	Fix Ruby detection
 
 Edwin Groothuis <edwin@mavetju.org>
@@ -557,4 +557,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.195 2005/06/17 13:16:31 jonas Exp $
+$Id: AUTHORS,v 1.196 2005/07/01 13:15:53 jonas Exp $

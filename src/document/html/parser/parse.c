@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.117 2005/07/03 21:42:42 zas Exp $ */
+/* $Id: parse.c,v 1.118 2005/07/03 21:44:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,9 +355,7 @@ get_width(unsigned char *a, unsigned char *name, int limited)
 unsigned char *
 skip_comment(unsigned char *html, unsigned char *eof)
 {
-	int comm = html + 4 <= eof && html[2] == '-' && html[3] == '-';
-
-	if (comm) {
+	if (html + 4 <= eof && html[2] == '-' && html[3] == '-') {
 		html += 4;
 		while (html < eof) {
 			if (html + 2 <= eof && html[0] == '-' && html[1] == '-') {

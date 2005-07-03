@@ -1,3 +1,39 @@
+Sun Jul  3 21:44:43 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	skip_comment(): drop @comm variable.  
+
+Sun Jul  3 21:42:42 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	skip_comment(): simplify code.  
+
+Sun Jul  3 21:41:32 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	skip_comment(): explode the loop.  
+
+Sun Jul  3 18:27:27 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	get_target(): cleanup.  
+
+Sun Jul  3 18:01:16 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser.c:
+
+	Treat empty target as "_self".  
+
+Sun Jul  3 17:32:44 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* configure.in:
+
+	This comment wasn't true. It works on Cygwin.  
+
 Fri Jul  1 13:15:53 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* AUTHORS, doc/tools/make-elinks-manpage, src/config/cmdline.c:

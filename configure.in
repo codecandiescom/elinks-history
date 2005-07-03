@@ -267,8 +267,6 @@ AC_TRY_RUN([
 #include <stdlib.h>
 #include <string.h>
 
-/* This test should catch buggy Cygwin vsnprintf. */
-
 char buf[8];
 
 int bar(char *buf, const char *format, va_list ap)

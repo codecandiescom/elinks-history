@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.543 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: parser.c,v 1.544 2005/07/03 18:01:16 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,7 +137,7 @@ get_target(unsigned char *a)
 	unsigned char *v = get_attr_val(a, "target");
 
 	if (v) {
-		if (!strcasecmp(v, "_self")) {
+		if (!strcasecmp(v, "_self") || !strcasecmp(v, "")) {
 			mem_free(v);
 			v = stracpy(global_doc_opts->framename);
 		}

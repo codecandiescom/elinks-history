@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.119 2005/07/04 15:43:35 zas Exp $ */
+/* $Id: parse.c,v 1.120 2005/07/04 15:57:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,20 +356,16 @@ unsigned char *
 skip_comment(unsigned char *html, unsigned char *eof)
 {
 	if (html + 4 <= eof && html[2] == '-' && html[3] == '-') {
-		int in_a_comment = 1;
-
 		html += 4;
-
 		while (html < eof) {
 			if (html + 2 <= eof && html[0] == '-' && html[1] == '-') {
-				in_a_comment = !in_a_comment;
 				html += 2;
+				while (html < eof && *html == '-') html++;
+				while (html < eof && isspace(*html)) html++;
+				if (html >= eof) return eof;
+				if (*html == '>') return html + 1;
 				continue;
 			}
-
-			if (!in_a_comment && *html == '>')
-				return html + 1;
-
 			html++;
 		}
 

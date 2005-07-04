@@ -23,7 +23,7 @@ elinks \- lynx-like alternative character mode WWW browser
 .SH "SYNOPSIS"
 
 
-\fIelinks\fR [options] [url]
+\fIelinks\fR [OPTION]... [URL]...
 
 .SH "DESCRIPTION"
 
@@ -39,7 +39,7 @@ ELinks can handle both local files and remote URLs\&. The main supported remote 
 .SH "OPTIONS"
 
 
-Most options can be set in the user interface or config file, so usually you do not need to care about them\&. Note that this list is by no means complete and it is not kept up\-to\-date\&. To get complete list of commandline options, start \fIELinks\fR with parameter --help\&.
+Most options can be set in the user interface or config file, so usually you do not need to care about them\&. Note that this list is by no means complete and it is not kept up\-to\-date\&. To get complete list of commandline options, start \fIELinks\fR with parameter \-\-help\&.
 
 .TP
 \-anonymous [0|1] (default: 0)
@@ -56,6 +56,10 @@ Used internally when opening \fIELinks\fR instances in new windows\&. The ID map
 .TP
 \-config\-dir <str> (default: "")
 Path of the directory \fIELinks\fR will read and write its config and runtime state files to instead of ~/\&.elinks\&. If the path does not begin with a '/' it is assumed to be relative to your \fIHOME\fR directory\&.
+
+.TP
+\-config\-dump
+Print a configuration file with options set to the built\-in defaults to stdout\&.
 
 .TP
 \-config\-file <str> (default: "elinks\&.conf")
@@ -90,9 +94,7 @@ Width of the dump output\&.
 Specify configuration file directives on the command\-line which will be evaluated after all configuration files has been read\&. Example usage:
 
 .nf
-
 \-eval 'set protocol\&.file\&.allow_special_files = 1'
-
 .fi
 
 .TP
@@ -124,11 +126,11 @@ Run \fIELinks\fR as a separate instance instead of connecting to an existing ins
 Disables creation and use of files in the user specific home configuration directory (~/\&.elinks)\&. It forces default configuration values to be used and disables saving of runtime state files\&.
 
 .TP
-\-no\-numbering [0|1] (default: 0)
+\-no\-numbering (alias for document\&.dump\&.numbering)
 Prevents printing of link number in dump output\&. Note that this really affects only \-dump, nothing else\&.
 
 .TP
-\-no\-references [0|1] (default: 0)
+\-no\-references (alias for document\&.dump\&.references)
 Prevents printing of references (URIs) of document links in dump output\&. Note that this really affects only \-dump, nothing else\&.
 
 .TP

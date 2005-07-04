@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.545 2005/07/03 18:27:27 zas Exp $ */
+/* $Id: parser.c,v 1.546 2005/07/04 17:14:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1130,7 +1130,10 @@ free_and_return:
 void
 html_noscript(unsigned char *a)
 {
-#ifdef CONFIG_ECMASCRIPT
+	/* We shouldn't throw <noscript> away until our ECMAScript support is
+	 * halfway decent. */
+#if 0
+// #ifdef CONFIG_ECMASCRIPT
 	if (get_opt_bool("ecmascript.enable")) html_skip(a);
 #endif
 }

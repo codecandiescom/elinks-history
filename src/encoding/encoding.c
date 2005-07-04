@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.45 2005/06/17 13:44:10 witekfl Exp $ */
+/* $Id: encoding.c,v 1.46 2005/07/04 15:03:57 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,7 +204,6 @@ get_encoding_name(enum stream_encoding encoding)
 static inline enum stream_encoding
 try_encoding_extensions(struct string *filename, int *fd)
 {
-	int length = filename->length;
 	int encoding;
 
 	/* No file of that name was found, try some others names. */
@@ -212,15 +211,21 @@ try_encoding_extensions(struct string *filename, int *fd)
 		unsigned char **ext = listext_encoded(encoding);
 
 		for (; ext && *ext; ext++) {
-			add_to_string(filename, *ext);
+			struct string newfilename;
+
+			if (!init_string(&newfilename)) return ENCODING_NONE;
+			add_string_to_string(&newfilename, filename);
+			add_to_string(&newfilename, *ext);
 
 			/* We try with some extensions. */
-			*fd = open(filename->source, O_RDONLY | O_NOCTTY);
+			*fd = open(newfilename.source, O_RDONLY | O_NOCTTY);
 
-			if (*fd >= 0)
+			if (*fd >= 0) {
 				/* Ok, found one, use it. */
+				done_string(&newfilename);
 				return encoding;
-			filename->source[length] = 0;
+			}
+			done_string(&newfilename);
 		}
 	}
 

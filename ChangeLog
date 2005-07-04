@@ -1,3 +1,99 @@
+Mon Jul  4 20:23:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Only show format info if there are any.  
+
+Mon Jul  4 20:11:16 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* config/m4/ruby.m4:
+
+	checking for Ruby... no 
+
+Mon Jul  4 17:17:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Make the documentation configuration also inform about what
+	documentation and formats are available. Idea by Miciah.  
+	
+	Documentation ................... AsciiDoc, XmlTo, JadeWrapper,
+	Pod2HTML Manual Formats .................. HTML (one file), HTML
+	(multiple files), PDF Man Page Formats ................ HTML, man
+	(groff) 
+
+Mon Jul  4 17:14:02 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Don't skip contents of the <noscript> element yet. Let's do that
+	only after our ECMAScript support is halfway decent.  
+
+Mon Jul  4 17:03:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, asciidoc.conf, man/man5/elinkskeys.5:
+
+	Update the manpage to AsciiDoc v7. Amongst other things it fixes
+	'--' being replaced by '&#8212;' which means there is no use for the
+	workaround in asciidoc.conf anymore. Rebuild elinkskeys(5) too.  
+
+Mon Jul  4 16:32:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/elinks.1.in:
+
+	Update elinks(1) to reflect the current command line option tree.
+	Now it also shows that ELinks supports multiple URLs on the command
+	line.  
+
+Mon Jul  4 16:23:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Remove documentation option and display any found tools like: 
+	
+	Documentation ................... AsciiDoc, XmlTo, JadeWrapper,
+	Pod2HTML 
+
+Mon Jul  4 15:57:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	Revert comment parsing patch, it breaks at least one page:
+	lemonde.fr.  
+
+Mon Jul  4 15:43:35 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	Attempt to improve comments parsing, see bug 681. Please report any
+	issue, this is beta software.  
+
+Mon Jul  4 15:39:33 2005  Laurent Monin <zas@norz.org>:
+
+	* test/comments.html:
+
+	Add a testfile for comment parsing. By diab0l and me.  
+
+Mon Jul  4 15:03:57 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/encoding/encoding.c:
+
+	try_encoding_extensions was broken. It should try file.gz, file.bz2
+	etc.  not file.gz, file.gz.bz2.  
+
+Mon Jul  4 14:52:56 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/network/dns.c:
+
+	gethostbyaddr is slow on Cygwin.  
+
+Mon Jul  4 01:37:36 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/osdep/signals.c:
+
+	At the suggestion of grok <grok@sprint.ca> in Debian bug report
+	#315886, add a few the's to the 'ELinks crashed' message.  
+
 Sun Jul  3 21:44:43 2005  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser/parse.c:

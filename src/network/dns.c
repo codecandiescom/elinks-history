@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.125 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: dns.c,v 1.126 2005/07/04 14:52:56 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,8 +163,9 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 
 #else
 	/* Seems there are problems on Mac, so we first need to try
-	 * gethostbyaddr(). */
-#ifdef HAVE_GETHOSTBYADDR
+	 * gethostbyaddr(), but there are problems with gethostbyaddr on Cygwin,
+	 * so we do not use gethostbyaddr there. */
+#if defined(HAVE_GETHOSTBYADDR) && !defined(HAVE_SYS_CYGWIN_H)
 	hostent = gethostbyaddr(name, strlen(name), AF_INET);
 	if (!hostent)
 #endif

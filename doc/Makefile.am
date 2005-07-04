@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.72 2005/06/13 22:19:57 jonas Exp $
+## $Id: Makefile.am,v 1.73 2005/07/04 17:03:21 jonas Exp $
 
 SUBDIRS = man
 
@@ -44,7 +44,6 @@ MANUAL_FILES = \
 EXTRA_DIST = \
  README \
  $(MANUAL_FILES) \
- asciidoc.conf \
  color-model.txt \
  events.txt \
  feedback.txt \
@@ -179,7 +178,7 @@ $(MAN_DIR)/man5/elinks.conf.5: doc-dirs $(ELINKS)
 # XHTML/CSS Man Pages
 
 $(HTML_DIR)/%.html: $(TXT_DIR)/%.html.txt doc-dirs
-	$(ASCIIDOC) -b css-embedded -f $(top_srcdir)/doc/asciidoc.conf -d manpage -o $@ $<
+	$(ASCIIDOC) -b xhtml11 -d manpage -o $@ $<
 
 # The Manual
 
@@ -189,10 +188,10 @@ MANUAL_EXTRA_FILES = \
  $(TXT_DIR)/elinkskeys.5.html.txt
 
 $(HTML_DIR)/manual.html: $(MANUAL_FILES) doc-dirs $(MANUAL_EXTRA_FILES)
-	$(ASCIIDOC) -b css-embedded -d book -o $@ -n -f $(top_srcdir)/doc/asciidoc.conf $<
+	$(ASCIIDOC) -b xhtml11 -d book -o $@ -n $<
 
 $(HTML_DIR)/hacking.html: $(top_srcdir)/doc/hacking.txt doc-dirs
-	$(ASCIIDOC) -b css-embedded -d book -o $@ -n -f $(top_srcdir)/doc/asciidoc.conf $<
+	$(ASCIIDOC) -b xhtml11 -d book -o $@ -n $<
 
 $(XML_DIR)/manual.xml: $(MANUAL_FILES) doc-dirs $(MANUAL_EXTRA_FILES)
 	$(ASCIIDOC) -b docbook -d book -o $@ $<

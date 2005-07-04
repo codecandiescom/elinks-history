@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.34 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: signals.c,v 1.35 2005/07/04 01:37:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,9 +104,9 @@ sig_segv(struct terminal *term)
 
 	/* Rant. */
 	fputs(	"ELinks crashed. That shouldn't happen. Please report this incident to\n"
-		"developers. If you would like to help to debug the problem you just\n"
+		"the developers. If you would like to help to debug the problem you just\n"
 		"uncovered, please keep the core you just got and send the developers\n"
-		"output of 'bt' command entered inside of gdb (which you run as:\n"
+		"the output of 'bt' command entered inside of gdb (which you run as:\n"
 		"gdb elinks core). Thanks a lot for your cooperation!\n\n", stderr);
 
 	/* version information */

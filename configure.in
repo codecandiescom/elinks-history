@@ -29,11 +29,6 @@ AC_PROG_AWK
 AC_PATH_PROGS(AWK, "$AWK")
 AC_PROG_RANLIB
 
-CONFIG_DOC=yes
-EL_ARG_ENABLE(CONFIG_DOC, documentation, [Documentation],
-	      [  --disable-documentation disable documentation building])
-AM_CONDITIONAL(CONFIG_DOC, test "$CONFIG_DOC" = yes)
-
 CONFIG_ASCIIDOC="no"
 CONFIG_POD2HTML="no"
 CONFIG_XMLTO="no"
@@ -42,22 +37,22 @@ CONFIG_JW="no"
 if test "x$CONFIG_DOC" != xno; then
 	AC_PATH_PROGS(ASCIIDOC, "asciidoc")
       	if test "x$ASCIIDOC" != "x"; then
-		CONFIG_ASCIIDOC="yes"
+		EL_CONFIG(CONFIG_ASCIIDOC, [AsciiDoc])
 	fi
 
 	AC_PATH_PROGS(XMLTO, "xmlto")
       	if test "x$XMLTO" != "x"; then
-		CONFIG_XMLTO="yes"
+		EL_CONFIG(CONFIG_XMLTO, [XmlTo])
 	fi
 
 	AC_PATH_PROGS(JW, "jw")
       	if test "x$JW" != "x"; then
-		CONFIG_JW="yes"
+		EL_CONFIG(CONFIG_JW, [JadeWrapper])
 	fi
 
 	AC_PATH_PROGS(POD2HTML, "pod2html")
       	if test "x$POD2HTML" != "x"; then
-		CONFIG_POD2HTML="yes"
+		EL_CONFIG(CONFIG_POD2HTML, [Pod2HTML])
 	fi
 fi
 
@@ -65,6 +60,8 @@ AC_SUBST(CONFIG_ASCIIDOC)
 AC_SUBST(CONFIG_POD2HTML)
 AC_SUBST(CONFIG_XMLTO)
 AC_SUBST(CONFIG_JW)
+
+EL_CONFIG_DEPENDS(CONFIG_DOC, [CONFIG_ASCIIDOC CONFIG_XMLTO CONFIG_JW CONFIG_POD2HTML], [Documentation])
 
 AM_CONDITIONAL(CONFIG_ASCIIDOC, test "$CONFIG_ASCIIDOC" = yes)
 AM_CONDITIONAL(CONFIG_POD2HTML, test "$CONFIG_POD2HTML" = yes)

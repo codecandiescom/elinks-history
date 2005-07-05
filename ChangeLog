@@ -1,3 +1,29 @@
+Tue Jul  5 19:48:14 2005  Laurent Monin <zas@norz.org>:
+
+	* test/comments.html:
+
+	Add example for bug 681.  
+
+Tue Jul  5 16:49:35 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	window.open has two parameters. The second is target frame.  
+	Introduced delayed_goto_uri_frame (the same trick as in delayed
+	goto).  
+
+Tue Jul  5 13:33:32 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/bfu/menu.c:
+
+	Menu shadow.  
+
+Tue Jul  5 13:29:31 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Typo.  
+
 Mon Jul  4 20:23:32 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:

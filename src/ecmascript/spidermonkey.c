@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.217 2005/06/24 18:48:14 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.218 2005/07/05 16:49:35 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -377,6 +377,7 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 struct delayed_open {
 	struct session *ses;
 	struct uri *uri;
+	unsigned char *target;
 };
 
 static void
@@ -390,12 +391,24 @@ delayed_open(void *data)
 	mem_free(deo);
 }
 
+static void
+delayed_goto_uri_frame(void *data)
+{
+	struct delayed_open *deo = data;
+
+	assert(deo);
+	goto_uri_frame(deo->ses, deo->uri, deo->target, CACHE_MODE_NORMAL);
+	done_uri(deo->uri);
+	mem_free(deo);
+}
+
 static JSBool
 window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
 	struct document_view *doc_view = vs->doc_view;
 	struct session *ses = doc_view->session;
+	unsigned char *target = "";
 	unsigned char *url;
 	struct uri *uri;
 	static time_t ratelimit_start;
@@ -434,6 +447,21 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	mem_free(url);
 	if (!uri) return JS_TRUE;
 
+	if (argc > 1) target = jsval_to_string(ctx, &argv[1]);
+
+	if (*target && strcasecmp(target, "_blank")) {
+		struct delayed_open *deo = mem_calloc(1, sizeof(*deo));
+
+		if (deo) {
+			deo->ses = ses;
+			deo->uri = get_uri_reference(uri);
+			deo->target = target;
+			register_bottom_half(delayed_goto_uri_frame, deo);
+			boolean_to_jsval(ctx, rval, 1);
+			goto end;
+		}
+	}
+
 	if (!get_cmd_opt_bool("no-connect")
 	    && !get_cmd_opt_bool("no-home")
 	    && !get_cmd_opt_bool("anonymous")
@@ -455,6 +483,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 		}
 	}
 
+end:
 	done_uri(uri);
 
 	return JS_TRUE;

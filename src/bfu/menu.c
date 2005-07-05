@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.297 2005/06/14 12:25:19 jonas Exp $ */
+/* $Id: menu.c,v 1.298 2005/07/05 13:33:32 witekfl Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -444,6 +444,12 @@ display_menu(struct terminal *term, struct menu *menu)
 
 	draw_box(term, &box, ' ', 0, normal_color);
 	draw_border(term, &box, frame_color, 1);
+
+	if (get_opt_bool("ui.dialogs.shadows")) {
+		/* Draw shadow */
+		draw_shadow(term, &menu->box,
+			    get_bfu_color(term, "dialog.shadow"), 2, 1);
+	}
 
 	menu_height = box.height;
 	box.height = 1;

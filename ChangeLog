@@ -1,3 +1,24 @@
+Thu Jul  7 14:39:09 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jul  7 13:57:13 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/osdep.c:
+
+	Stupid hack. On Cygwin all terminals are able to change window
+	title.  If this is wrong, at least check for TERM=cygwin.  
+
+Thu Jul  7 13:53:04 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/intl/gettext/l10nflist.c:
+
+	osdep/types.h includes config.h, elinks.h includes osdep/types.h, so
+	config.h is included twice. Weird things happen. Here was one.
+	Despite of #undef some symbols were still defined.  
+
 Wed Jul  6 14:59:54 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:

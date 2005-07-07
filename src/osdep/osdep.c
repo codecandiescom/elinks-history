@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.170 2005/06/13 21:27:47 jonas Exp $ */
+/* $Id: osdep.c,v 1.171 2005/07/07 13:57:13 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -382,8 +382,10 @@ set_window_title(unsigned char *title)
 	int xsize, ysize;
 	int j = 0;
 
+#ifndef HAVE_SYS_CYGWIN_H
 	/* Check if we're in a xterm-like terminal. */
 	if (!is_xterm() && !is_gnuscreen()) return;
+#endif
 
 	/* Retrieve terminal dimensions. */
 	get_terminal_size(0, &xsize, &ysize);

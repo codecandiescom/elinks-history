@@ -28,6 +28,15 @@
 
 #include <string.h>
 
+#include <ctype.h>
+#include <sys/types.h>
+#include <stdlib.h>
+
+#include "elinks.h"
+
+#include "intl/gettext/loadinfo.h"
+#include "util/string.h"
+
 /* Awful hack to permit compilation under cygwin and its broken configure.
  * Configure script detects these functions, but compilation clashes on
  * implicit declarations of them... So we force use of internal ones.
@@ -43,15 +52,6 @@
 #include <argz.h>
 #endif
 #endif
-
-#include <ctype.h>
-#include <sys/types.h>
-#include <stdlib.h>
-
-#include "elinks.h"
-
-#include "intl/gettext/loadinfo.h"
-#include "util/string.h"
 
 /* On some strange systems still no definition of NULL is found.  Sigh!  */
 #ifndef NULL

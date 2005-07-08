@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.73 2005/06/14 13:55:14 witekfl Exp $ */
+/* $Id: renderer.h,v 1.74 2005/07/08 21:04:55 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -14,6 +14,10 @@ void render_html_document(struct cache_entry *cached, struct document *document,
 
 /* Interface with tables.c */
 
+/* This holds some context about what we're currently rendering. We only need
+ * one of these, until we start dealing with tables, at which point the table
+ * code will create short-lived parts to provide context when it calls routines
+ * in the renderer or the parser. */
 struct part {
 	struct document *document;
 

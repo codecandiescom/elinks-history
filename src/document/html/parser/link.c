@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.81 2005/07/08 22:42:51 miciah Exp $ */
+/* $Id: link.c,v 1.82 2005/07/08 23:34:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,7 +202,7 @@ put_image_label(unsigned char *a, unsigned char *label)
 
 	fg = format.style.fg;
 	format.style.fg = format.image_link;
-	put_chrs(label, strlen(label), global_html_context.put_chars_f, global_html_context.part);
+	put_chrs(label, strlen(label), &global_html_context);
 	format.style.fg = fg;
 }
 
@@ -358,11 +358,11 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	mem_free_set(&format.target, NULL);
 	mem_free_set(&format.title, NULL);
 	format.form = NULL;
-	put_chrs(prefix, strlen(prefix), global_html_context.put_chars_f, global_html_context.part);
+	put_chrs(prefix, strlen(prefix), &global_html_context);
 	format.link = join_urls(global_html_context.base_href, link);
 	format.target = stracpy(target);
 	format.style.fg = format.clink;
-	put_chrs(linkname, strlen(linkname), global_html_context.put_chars_f, global_html_context.part);
+	put_chrs(linkname, strlen(linkname), &global_html_context);
 	ln_break(1, &global_html_context);
 	kill_html_stack_item(&html_top);
 }

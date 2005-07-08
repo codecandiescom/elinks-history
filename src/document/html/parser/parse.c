@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.123 2005/07/08 22:42:51 miciah Exp $ */
+/* $Id: parse.c,v 1.124 2005/07/08 23:34:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -637,7 +637,7 @@ main_loop:
 				h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
-					put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+					put_chrs(base_pos, html - base_pos, &global_html_context);
 					base_pos = html = h;
 					global_html_context.putsp = HTML_SPACE_ADD;
 					goto element;
@@ -652,10 +652,10 @@ main_loop:
 					noupdate = 1;
 					continue;
 				}
-				put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+				put_chrs(base_pos, html - base_pos, &global_html_context);
 			} else {
-				put_chrs(base_pos, html - base_pos - 1, global_html_context.put_chars_f, part);
-				put_chrs(" ", 1, global_html_context.put_chars_f, part);
+				put_chrs(base_pos, html - base_pos - 1, &global_html_context);
+				put_chrs(" ", 1, &global_html_context);
 			}
 
 skip_w:
@@ -667,14 +667,14 @@ skip_w:
 		if (html_is_preformatted()) {
 			global_html_context.putsp = HTML_SPACE_NORMAL;
 			if (*html == ASCII_TAB) {
-				put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+				put_chrs(base_pos, html - base_pos, &global_html_context);
 				put_chrs("        ", 8 - (global_html_context.position % 8),
-					 global_html_context.put_chars_f, part);
+					 &global_html_context);
 				html++;
 				continue;
 
 			} else if (*html == ASCII_CR || *html == ASCII_LF) {
-				put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+				put_chrs(base_pos, html - base_pos, &global_html_context);
 				if (html - base_pos == 0 && global_html_context.line_breax > 0)
 					global_html_context.line_breax--;
 next_break:
@@ -708,7 +708,7 @@ next_break:
 				}
 
 				if (newlines) {
-					put_chrs(base_pos, length, global_html_context.put_chars_f, part);
+					put_chrs(base_pos, length, &global_html_context);
 					ln_break(newlines, &global_html_context);
 					continue;
 				}
@@ -717,7 +717,7 @@ next_break:
 
 		while (*html < ' ') {
 			if (html - base_pos)
-				put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+				put_chrs(base_pos, html - base_pos, &global_html_context);
 
 			dotcounter++;
 			base_pos = ++html;
@@ -726,7 +726,7 @@ next_break:
 
 				if (dots) {
 					memset(dots, '.', dotcounter);
-					put_chrs(dots, dotcounter, global_html_context.put_chars_f, part);
+					put_chrs(dots, dotcounter, &global_html_context);
 					fmem_free(dots);
 				}
 				goto main_loop;
@@ -735,7 +735,7 @@ next_break:
 
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?')
 		    && !global_html_context.was_xmp) {
-			put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+			put_chrs(base_pos, html - base_pos, &global_html_context);
 			html = skip_comment(html, eof);
 			continue;
 		}
@@ -749,8 +749,8 @@ next_break:
 element:
 		endingtag = *name == '/'; name += endingtag; namelen -= endingtag;
 		if (!endingtag && global_html_context.putsp == HTML_SPACE_ADD && !html_top.invisible)
-			put_chrs(" ", 1, global_html_context.put_chars_f, part);
-		put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+			put_chrs(" ", 1, &global_html_context);
+		put_chrs(base_pos, html - base_pos, &global_html_context);
 		if (!html_is_preformatted() && !endingtag && global_html_context.putsp == HTML_SPACE_NORMAL) {
 			unsigned char *ee = end;
 			unsigned char *nm;
@@ -759,7 +759,7 @@ element:
 				if (*nm == '/')
 					goto ng;
 			if (ee < eof && isspace(*ee)) {
-				put_chrs(" ", 1, global_html_context.put_chars_f, part);
+				put_chrs(" ", 1, &global_html_context);
 			}
 ng:;
 		}
@@ -768,7 +768,7 @@ ng:;
 		html = process_element(name, namelen, endingtag, end, prev_html, eof, attr, part);
 	}
 
-	if (noupdate) put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+	if (noupdate) put_chrs(base_pos, html - base_pos, &global_html_context);
 	ln_break(1, &global_html_context);
 	/* Restore the part in case the global_html_context was trashed in the last
 	 * iteration so that when destroying the stack in the caller we still
@@ -793,7 +793,7 @@ start_element(struct element_info *ei,
 #endif
 
 	if (global_html_context.was_xmp) {
-		put_chrs("<", 1, global_html_context.put_chars_f, part);
+		put_chrs("<", 1, &global_html_context);
 		html = prev_html + 1;
 		return html;
 	}

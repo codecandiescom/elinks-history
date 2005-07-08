@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.124 2005/07/08 23:34:08 miciah Exp $ */
+/* $Id: parse.c,v 1.125 2005/07/08 23:35:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -822,7 +822,7 @@ start_element(struct element_info *ei,
 
 	if (ei->func == html_table && global_doc_opts->tables
 	    && global_html_context.table_level < HTML_MAX_TABLE_LEVEL) {
-		format_table(attr, html, eof, &html, part);
+		format_table(attr, html, eof, &html, &global_html_context);
 		ln_break(2, &global_html_context);
 		return html;
 	}

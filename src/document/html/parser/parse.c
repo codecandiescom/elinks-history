@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.126 2005/07/08 23:42:09 miciah Exp $ */
+/* $Id: parse.c,v 1.127 2005/07/08 23:47:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -802,7 +802,7 @@ start_element(struct element_info *ei,
 
 	a = get_attr_val(attr, "id");
 	if (a) {
-		global_html_context.special_f(part, SP_TAG, a);
+		global_html_context.special_f(global_html_context.part, SP_TAG, a);
 		mem_free(a);
 	}
 
@@ -827,11 +827,11 @@ start_element(struct element_info *ei,
 		return html;
 	}
 	if (ei->func == html_select) {
-		if (!do_html_select(attr, html, eof, &html, part))
+		if (!do_html_select(attr, html, eof, &html, global_html_context.part))
 			return html;
 	}
 	if (ei->func == html_textarea) {
-		do_html_textarea(attr, html, eof, &html, part);
+		do_html_textarea(attr, html, eof, &html, global_html_context.part);
 		return html;
 	}
 #ifdef CONFIG_CSS
@@ -889,7 +889,7 @@ start_element(struct element_info *ei,
 	/* We need to have own element in the stack, that's why we waited for
 	 * so long. */
 	if (ei->func == html_script) {
-		if (!do_html_script(attr, html, eof, &html, part))
+		if (!do_html_script(attr, html, eof, &html, global_html_context.part))
 			return html;
 	}
 #endif

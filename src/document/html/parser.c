@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.548 2005/07/08 19:42:21 miciah Exp $ */
+/* $Id: parser.c,v 1.549 2005/07/08 19:53:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,13 +175,18 @@ put_chrs(unsigned char *start, int len,
 	if (!len || html_top.invisible)
 		return;
 
-	if (html_context.putsp == HTML_SPACE_ADD) {
+	switch (html_context.putsp) {
+	case HTML_SPACE_NORMAL:
+		break;
+
+	case HTML_SPACE_ADD:
 		put_chars(part, " ", 1);
 		html_context.position++;
 		html_context.putsp = HTML_SPACE_SUPPRESS;
-	}
 
-	if (html_context.putsp == HTML_SPACE_SUPPRESS) {
+		break;
+
+	case HTML_SPACE_SUPPRESS:
 		html_context.putsp = HTML_SPACE_NORMAL;
 		if (isspace(start[0])) {
 			start++, len--;
@@ -191,6 +196,8 @@ put_chrs(unsigned char *start, int len,
 				return;
 			}
 		}
+
+		break;
 	}
 
 	if (isspace(start[len - 1]) && !html_is_preformatted())

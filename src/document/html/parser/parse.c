@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.131 2005/07/08 23:53:08 miciah Exp $ */
+/* $Id: parse.c,v 1.132 2005/07/08 23:57:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -794,17 +794,17 @@ start_element(struct element_info *ei,
 	struct css_selector *selector = NULL;
 #endif
 
-	if (global_html_context.was_xmp) {
-		put_chrs("<", 1, &global_html_context);
+	if (html_context->was_xmp) {
+		put_chrs("<", 1, html_context);
 		html = prev_html + 1;
 		return html;
 	}
 
-	ln_break(ei->linebreak, &global_html_context);
+	ln_break(ei->linebreak, html_context);
 
 	a = get_attr_val(attr, "id");
 	if (a) {
-		global_html_context.special_f(global_html_context.part, SP_TAG, a);
+		html_context->special_f(html_context->part, SP_TAG, a);
 		mem_free(a);
 	}
 
@@ -823,23 +823,23 @@ start_element(struct element_info *ei,
 	old_format = par_format;
 
 	if (ei->func == html_table && global_doc_opts->tables
-	    && global_html_context.table_level < HTML_MAX_TABLE_LEVEL) {
-		format_table(attr, html, eof, &html, &global_html_context);
-		ln_break(2, &global_html_context);
+	    && html_context->table_level < HTML_MAX_TABLE_LEVEL) {
+		format_table(attr, html, eof, &html, html_context);
+		ln_break(2, html_context);
 		return html;
 	}
 	if (ei->func == html_select) {
-		if (!do_html_select(attr, html, eof, &html, global_html_context.part))
+		if (!do_html_select(attr, html, eof, &html, html_context->part))
 			return html;
 	}
 	if (ei->func == html_textarea) {
-		do_html_textarea(attr, html, eof, &html, global_html_context.part);
+		do_html_textarea(attr, html, eof, &html, html_context->part);
 		return html;
 	}
 #ifdef CONFIG_CSS
 	if (ei->func == html_style && global_doc_opts->css_enable) {
-		css_parse_stylesheet(&global_html_context.css_styles,
-				     global_html_context.base_href, html, eof);
+		css_parse_stylesheet(&html_context->css_styles,
+				     html_context->base_href, html, eof);
 	}
 #endif
 
@@ -847,17 +847,17 @@ start_element(struct element_info *ei,
 		struct html_element *e;
 
 		if (ei->nopair == 2) {
-			foreach (e, global_html_context.stack) {
+			foreach (e, html_context->stack) {
 				if (e->type < ELEMENT_KILLABLE) break;
 				if (e->linebreak || !ei->linebreak) break;
 			}
-		} else foreach (e, global_html_context.stack) {
+		} else foreach (e, html_context->stack) {
 			if (e->linebreak && !ei->linebreak) break;
 			if (e->type < ELEMENT_KILLABLE) break;
 			if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
 		}
 		if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
-			while (e->prev != (void *) &global_html_context.stack)
+			while (e->prev != (void *) &html_context->stack)
 				kill_html_stack_item(e->prev);
 
 			if (e->type > ELEMENT_IMMORTAL)
@@ -876,7 +876,7 @@ start_element(struct element_info *ei,
 		if (has_attr(attr, "onClick")) {
 			/* XXX: Put something better to format.link. --pasky */
 			mem_free_set(&format.link, stracpy("javascript:void(0);"));
-			mem_free_set(&format.target, stracpy(global_html_context.base_target));
+			mem_free_set(&format.target, stracpy(html_context->base_target));
 			format.style.fg = format.clink;
 			html_top.pseudo_class = ELEMENT_LINK;
 			mem_free_set(&format.title, stracpy("onClick placeholder"));
@@ -891,7 +891,7 @@ start_element(struct element_info *ei,
 	/* We need to have own element in the stack, that's why we waited for
 	 * so long. */
 	if (ei->func == html_script) {
-		if (!do_html_script(attr, html, eof, &html, global_html_context.part))
+		if (!do_html_script(attr, html, eof, &html, html_context->part))
 			return html;
 	}
 #endif
@@ -910,8 +910,8 @@ start_element(struct element_info *ei,
 		 * lead to wrong styles being applied to following elements, so
 		 * disabled for now. */
 		selector = get_css_selector_for_element(&html_top,
-							&global_html_context.css_styles,
-							&global_html_context.stack);
+							&html_context->css_styles,
+							&html_context->stack);
 
 		if (selector) {
 			apply_css_selector_style(&html_top, selector);
@@ -924,8 +924,8 @@ start_element(struct element_info *ei,
 	if (selector && html_top.options) {
 		/* Call it now to override default colors of the elements. */
 		selector = get_css_selector_for_element(&html_top,
-							&global_html_context.css_styles,
-							&global_html_context.stack);
+							&html_context->css_styles,
+							&html_context->stack);
 
 		if (selector) {
 			apply_css_selector_style(&html_top, selector);
@@ -934,7 +934,7 @@ start_element(struct element_info *ei,
 	}
 #endif
 
-	if (ei->func != html_br) global_html_context.was_br = 0;
+	if (ei->func != html_br) html_context->was_br = 0;
 
 	if (restore_format) par_format = old_format;
 
@@ -952,18 +952,18 @@ end_element(struct element_info *ei,
 	int lnb = 0;
 	int kill = 0;
 
-	if (global_html_context.was_xmp) {
+	if (html_context->was_xmp) {
 		if (ei->func != html_xmp)
 			return html;
-		global_html_context.was_xmp = 0;
+		html_context->was_xmp = 0;
 	}
 
-	global_html_context.was_br = 0;
+	html_context->was_br = 0;
 	if (ei->nopair == 1 || ei->nopair == 3)
 		return html;
 
 	/* dump_html_stack(); */
-	foreach (e, global_html_context.stack) {
+	foreach (e, html_context->stack) {
 		if (e->linebreak && !ei->linebreak) kill = 1;
 		if (strlcasecmp(e->name, e->namelen, name, namelen)) {
 			if (e->type < ELEMENT_KILLABLE)
@@ -976,7 +976,7 @@ end_element(struct element_info *ei,
 			break;
 		}
 		for (elt = e;
-		     elt != (void *) &global_html_context.stack;
+		     elt != (void *) &html_context->stack;
 		     elt = elt->prev)
 			if (elt->linebreak > lnb)
 				lnb = elt->linebreak;
@@ -985,11 +985,11 @@ end_element(struct element_info *ei,
 		 * when ending a list with the last <li> having no text the
 		 * line_breax is 2 so the ending list's linebreak will be
 		 * ignored when calling ln_break(). */
-		if (global_html_context.was_li)
-			global_html_context.line_breax = 0;
+		if (html_context->was_li)
+			html_context->line_breax = 0;
 
-		ln_break(lnb, &global_html_context);
-		while (e->prev != (void *) &global_html_context.stack)
+		ln_break(lnb, html_context);
+		while (e->prev != (void *) &html_context->stack)
 			kill_html_stack_item(e->prev);
 		kill_html_stack_item(e);
 		break;

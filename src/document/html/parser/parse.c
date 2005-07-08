@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.125 2005/07/08 23:35:43 miciah Exp $ */
+/* $Id: parse.c,v 1.126 2005/07/08 23:42:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -943,7 +943,7 @@ static unsigned char *
 end_element(struct element_info *ei,
             unsigned char *name, int namelen, int endingtag,
             unsigned char *html, unsigned char *prev_html,
-            unsigned char *eof, unsigned char *attr, struct part *part)
+            unsigned char *eof, unsigned char *attr)
 {
 	struct html_element *e, *elt;
 	int lnb = 0;
@@ -1024,7 +1024,7 @@ process_element(unsigned char *name, int namelen, int endingtag,
 	if (!endingtag) {
 		return start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, part);
 	} else {
-		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, part);
+		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.551 2005/07/08 22:42:51 miciah Exp $ */
+/* $Id: parser.c,v 1.552 2005/07/08 22:58:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,33 +166,32 @@ ln_break(int n, struct html_context *html_context)
 }
 
 void
-put_chrs(unsigned char *start, int len,
-	 void (*put_chars)(struct part *, unsigned char *, int), struct part *part)
+put_chrs(unsigned char *start, int len, struct html_context *html_context)
 {
 	if (html_is_preformatted())
-		global_html_context.putsp = HTML_SPACE_NORMAL;
+		html_context->putsp = HTML_SPACE_NORMAL;
 
 	if (!len || html_top.invisible)
 		return;
 
-	switch (global_html_context.putsp) {
+	switch (html_context->putsp) {
 	case HTML_SPACE_NORMAL:
 		break;
 
 	case HTML_SPACE_ADD:
-		put_chars(part, " ", 1);
-		global_html_context.position++;
-		global_html_context.putsp = HTML_SPACE_SUPPRESS;
+		html_context->put_chars_f(html_context->part, " ", 1);
+		html_context->position++;
+		html_context->putsp = HTML_SPACE_SUPPRESS;
 
 		break;
 
 	case HTML_SPACE_SUPPRESS:
-		global_html_context.putsp = HTML_SPACE_NORMAL;
+		html_context->putsp = HTML_SPACE_NORMAL;
 		if (isspace(start[0])) {
 			start++, len--;
 
 			if (!len) {
-				global_html_context.putsp = HTML_SPACE_SUPPRESS;
+				html_context->putsp = HTML_SPACE_SUPPRESS;
 				return;
 			}
 		}
@@ -201,15 +200,15 @@ put_chrs(unsigned char *start, int len,
 	}
 
 	if (isspace(start[len - 1]) && !html_is_preformatted())
-		global_html_context.putsp = HTML_SPACE_SUPPRESS;
-	global_html_context.was_br = 0;
+		html_context->putsp = HTML_SPACE_SUPPRESS;
+	html_context->was_br = 0;
 
-	put_chars(part, start, len);
+	html_context->put_chars_f(html_context->part, start, len);
 
-	global_html_context.position += len;
-	global_html_context.line_breax = 0;
-	if (global_html_context.was_li > 0)
-		global_html_context.was_li--;
+	html_context->position += len;
+	html_context->line_breax = 0;
+	if (html_context->was_li > 0)
+		html_context->was_li--;
 }
 
 void
@@ -768,7 +767,7 @@ html_hr(unsigned char *a)
 	format.style.attr = AT_GRAPHICS;
 	global_html_context.special_f(global_html_context.part, SP_NOWRAP, 1);
 	while (i-- > 0) {
-		put_chrs(&r, 1, global_html_context.put_chars_f, global_html_context.part);
+		put_chrs(&r, 1, &global_html_context);
 	}
 	global_html_context.special_f(global_html_context.part, SP_NOWRAP, 0);
 	ln_break(2, &global_html_context);
@@ -796,7 +795,7 @@ html_th(unsigned char *a)
 	/*html_linebrk(a);*/
 	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.style.attr |= AT_BOLD;
-	put_chrs(" ", 1, global_html_context.put_chars_f, global_html_context.part);
+	put_chrs(" ", 1, &global_html_context);
 }
 
 void
@@ -805,7 +804,7 @@ html_td(unsigned char *a)
 	/*html_linebrk(a);*/
 	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.style.attr &= ~AT_BOLD;
-	put_chrs(" ", 1, global_html_context.put_chars_f, global_html_context.part);
+	put_chrs(" ", 1, &global_html_context);
 }
 
 void
@@ -909,7 +908,7 @@ html_li(unsigned char *a)
 
 		if (t == P_O) x[0] = 'o';
 		if (t == P_PLUS) x[0] = '+';
-		put_chrs(x, 7, global_html_context.put_chars_f, global_html_context.part);
+		put_chrs(x, 7, &global_html_context);
 		par_format.leftmargin += 2;
 		par_format.align = ALIGN_LEFT;
 
@@ -923,7 +922,7 @@ html_li(unsigned char *a)
 		if (s != -1) par_format.list_number = s;
 
 		if (t == P_ALPHA || t == P_alpha) {
-			put_chrs("&nbsp;", 6, global_html_context.put_chars_f, global_html_context.part);
+			put_chrs("&nbsp;", 6, &global_html_context);
 			c = 1;
 			n[0] = par_format.list_number
 			       ? (par_format.list_number - 1) % 26
@@ -941,7 +940,7 @@ html_li(unsigned char *a)
 
 		} else {
 			if (par_format.list_number < 10) {
-				put_chrs("&nbsp;", 6, global_html_context.put_chars_f, global_html_context.part);
+				put_chrs("&nbsp;", 6, &global_html_context);
 				c = 1;
 			}
 
@@ -949,8 +948,8 @@ html_li(unsigned char *a)
 		}
 
 		nlen = strlen(n);
-		put_chrs(n, nlen, global_html_context.put_chars_f, global_html_context.part);
-		put_chrs(".&nbsp;", 7, global_html_context.put_chars_f, global_html_context.part);
+		put_chrs(n, nlen, &global_html_context);
+		put_chrs(".&nbsp;", 7, &global_html_context);
 		par_format.leftmargin += nlen + c + 2;
 		par_format.align = ALIGN_LEFT;
 

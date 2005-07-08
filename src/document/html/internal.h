@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.43 2005/07/08 19:34:56 miciah Exp $ */
+/* $Id: internal.h,v 1.44 2005/07/08 20:25:27 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -57,7 +57,7 @@ struct html_context {
 
 	/* For parser/parse.c: */
 	unsigned char *eoff; /* For parser/forms.c too */
-	int line_breax;
+	int line_breax; /* This is for ln_break. */
 	int position;
 	enum html_whitespace_state putsp; /* This is for the put_chrs
 					   * state-machine. */

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.80 2005/05/18 20:35:48 zas Exp $ */
+/* $Id: parser.h,v 1.81 2005/07/08 20:25:27 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -186,6 +186,14 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 
 /* For html/parser/forms.c,link.c,parse.c,stack.c */
 
+/* Ensure that there are at least n successive line-breaks at the current
+ * position, but don't add more than necessary to bring the current number
+ * of successive line-breaks above n.
+ *
+ * For example, there should be two line-breaks after a <br>, but multiple
+ * successive <br>'s warrant still only two line-breaks.  ln_break will be
+ * called with n = 2 for each of multiple successive <br>'s, but ln_break
+ * will only add two line-breaks for the entire run of <br>'s. */
 void ln_break(int n, void (*line_break)(struct part *), struct part *part);
 
 #ifdef CONFIG_ECMASCRIPT

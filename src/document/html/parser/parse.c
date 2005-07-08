@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.128 2005/07/08 23:48:10 miciah Exp $ */
+/* $Id: parse.c,v 1.129 2005/07/08 23:48:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -598,7 +598,7 @@ free_tags_lookup(void)
 
 static unsigned char *process_element(unsigned char *name, int namelen, int endingtag,
                 unsigned char *html, unsigned char *prev_html,
-                unsigned char *eof, unsigned char *attr, struct part *part);
+                unsigned char *eof, unsigned char *attr);
 
 void
 parse_html(unsigned char *html, unsigned char *eof,
@@ -765,7 +765,7 @@ ng:;
 		}
 
 		prev_html = html;
-		html = process_element(name, namelen, endingtag, end, prev_html, eof, attr, part);
+		html = process_element(name, namelen, endingtag, end, prev_html, eof, attr);
 	}
 
 	if (noupdate) put_chrs(base_pos, html - base_pos, &global_html_context);
@@ -999,7 +999,7 @@ end_element(struct element_info *ei,
 static unsigned char *
 process_element(unsigned char *name, int namelen, int endingtag,
                 unsigned char *html, unsigned char *prev_html,
-                unsigned char *eof, unsigned char *attr, struct part *part)
+                unsigned char *eof, unsigned char *attr)
 
 {
 	struct element_info *ei;

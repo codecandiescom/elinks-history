@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.41 2005/07/08 19:24:51 miciah Exp $ */
+/* $Id: internal.h,v 1.42 2005/07/08 19:33:26 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -15,20 +15,20 @@ void process_head(unsigned char *head);
 void put_chrs(unsigned char *start, int len, void (*put_chars)(struct part *, unsigned char *, int), struct part *part);
 
 enum html_whitespace_state {
-	/* We are either starting a new "block" or ended the
-	 * last segment of the current "block" by a whitespace and we should
-	 * eat the leading whitespace of the next segment passed to put_chrs(),
-	 * if it starts by any. This prevents HTML whitespaces to indent new
-	 * blocks by one or create two consecutive whitespaces in the middle
+	/* Either we are starting a new "block" or the
+	 * last segment of the current "block" is ending with whitespace and we should
+	 * eat any leading whitespace of the next segment passed to put_chrs().
+	 * This prevents HTML whitespace from indenting new
+	 * blocks by one or creating two consecutive segments of whitespace in the middle
 	 * of a block. */
 	HTML_SPACE_SUPPRESS,
 
 	/* Do not do anything special.  */
 	HTML_SPACE_NORMAL,
 
-	/* We should start the next segment with a whitespace
-	 * (if it won't start by any on its own). It is used in an
-	 * "x  </y>  z" scenario when the parser hits </y> - it renders "x"
+	/* We should add a space when we start the next segment
+	 * if it doesn't already start with whitespace. This is used in an
+	 * "x  </y>  z" scenario when the parser hits </y>: it renders "x"
 	 * and sets this, so that it will then render " z". XXX: Then we could
 	 * of course render "x " and set -1. But we test for this value in
 	 * parse_html() if we hit an opening tag of an element and potentially
@@ -59,7 +59,8 @@ struct html_context {
 	unsigned char *eoff; /* For parser/forms.c too */
 	int line_breax;
 	int position;
-	enum html_whitespace_state putsp;
+	enum html_whitespace_state putsp; /* This is for the put_chrs
+					   * state-machine. */
 	int was_br; /* For parser/forms.c too */
 	int was_li;
 	int was_xmp;

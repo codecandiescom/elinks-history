@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.40 2004/12/29 15:43:31 zas Exp $ */
+/* $Id: internal.h,v 1.41 2005/07/08 19:24:51 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -13,6 +13,28 @@ struct uri;
 
 void process_head(unsigned char *head);
 void put_chrs(unsigned char *start, int len, void (*put_chars)(struct part *, unsigned char *, int), struct part *part);
+
+enum html_whitespace_state {
+	/* We are either starting a new "block" or ended the
+	 * last segment of the current "block" by a whitespace and we should
+	 * eat the leading whitespace of the next segment passed to put_chrs(),
+	 * if it starts by any. This prevents HTML whitespaces to indent new
+	 * blocks by one or create two consecutive whitespaces in the middle
+	 * of a block. */
+	HTML_SPACE_SUPPRESS,
+
+	/* Do not do anything special.  */
+	HTML_SPACE_NORMAL,
+
+	/* We should start the next segment with a whitespace
+	 * (if it won't start by any on its own). It is used in an
+	 * "x  </y>  z" scenario when the parser hits </y> - it renders "x"
+	 * and sets this, so that it will then render " z". XXX: Then we could
+	 * of course render "x " and set -1. But we test for this value in
+	 * parse_html() if we hit an opening tag of an element and potentially
+	 * put_chrs(" "). That needs more investigation yet. --pasky */
+	HTML_SPACE_ADD,
+};
 
 struct html_context {
 #ifdef CONFIG_CSS
@@ -37,23 +59,7 @@ struct html_context {
 	unsigned char *eoff; /* For parser/forms.c too */
 	int line_breax;
 	int position;
-	/* -1 means that we are either starting a new "block" or ended the
-	 * last segment of the current "block" by a whitespace and we should
-	 * eat the leading whitespace of the next segment passed to put_chrs(),
-	 * if it starts by any. This prevents HTML whitespaces to indent new
-	 * blocks by one or create two consecutive whitespaces in the middle
-	 * of a block.
-	 *
-	 * 0 means do not do anything special.
-	 *
-	 * 1 means that we should start the next segment with a whitespace
-	 * (if it won't start by any on its own). It is used in an
-	 * "x  </y>  z" scenario when the parser hits </y> - it renders "x"
-	 * and sets this, so that it will then render " z". XXX: Then we could
-	 * of course render "x " and set -1. But we test for this value in
-	 * parse_html() if we hit an opening tag of an element and potentially
-	 * put_chrs(" "). That needs more investigation yet. --pasky */
-	int putsp;
+	enum html_whitespace_state putsp;
 	int was_br; /* For parser/forms.c too */
 	int was_li;
 	int was_xmp;

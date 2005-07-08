@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.120 2005/07/04 15:57:44 zas Exp $ */
+/* $Id: parse.c,v 1.121 2005/07/08 19:24:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,7 +607,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 	unsigned char *base_pos = html;
 	int noupdate = 0;
 
-	html_context.putsp = -1;
+	html_context.putsp = HTML_SPACE_SUPPRESS;
 	html_context.line_breax = html_context.table_level ? 2 : 1;
 	html_context.position = 0;
 	html_context.was_br = 0;
@@ -639,7 +639,7 @@ main_loop:
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
 					put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
 					base_pos = html = h;
-					html_context.putsp = 1;
+					html_context.putsp = HTML_SPACE_ADD;
 					goto element;
 				}
 			}
@@ -665,7 +665,7 @@ skip_w:
 		}
 
 		if (html_is_preformatted()) {
-			html_context.putsp = 0;
+			html_context.putsp = HTML_SPACE_NORMAL;
 			if (*html == ASCII_TAB) {
 				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
 				put_chrs("        ", 8 - (html_context.position % 8),
@@ -748,10 +748,10 @@ next_break:
 
 element:
 		endingtag = *name == '/'; name += endingtag; namelen -= endingtag;
-		if (!endingtag && html_context.putsp == 1 && !html_top.invisible)
+		if (!endingtag && html_context.putsp == HTML_SPACE_ADD && !html_top.invisible)
 			put_chrs(" ", 1, html_context.put_chars_f, part);
 		put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
-		if (!html_is_preformatted() && !endingtag && !html_context.putsp) {
+		if (!html_is_preformatted() && !endingtag && html_context.putsp == HTML_SPACE_NORMAL) {
 			unsigned char *ee = end;
 			unsigned char *nm;
 
@@ -774,7 +774,7 @@ ng:;
 	 * iteration so that when destroying the stack in the caller we still
 	 * get the right part pointer. */
 	html_context.part = part;
-	html_context.putsp = -1;
+	html_context.putsp = HTML_SPACE_SUPPRESS;
 	html_context.position = 0;
 	html_context.was_br = 0;
 }

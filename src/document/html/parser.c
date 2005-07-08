@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.546 2005/07/04 17:14:02 pasky Exp $ */
+/* $Id: parser.c,v 1.547 2005/07/08 19:24:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,7 +162,7 @@ ln_break(int n, void (*line_break)(struct part *), struct part *part)
 		line_break(part);
 	}
 	html_context.position = 0;
-	html_context.putsp = -1;
+	html_context.putsp = HTML_SPACE_SUPPRESS;
 }
 
 void
@@ -170,32 +170,32 @@ put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(struct part *, unsigned char *, int), struct part *part)
 {
 	if (html_is_preformatted())
-		html_context.putsp = 0;
+		html_context.putsp = HTML_SPACE_NORMAL;
 
 	if (!len || html_top.invisible)
 		return;
 
-	if (html_context.putsp == 1) {
+	if (html_context.putsp == HTML_SPACE_ADD) {
 		put_chars(part, " ", 1);
 		html_context.position++;
-		html_context.putsp = -1;
+		html_context.putsp = HTML_SPACE_SUPPRESS;
 	}
 
-	if (html_context.putsp == -1) {
-		html_context.putsp = 0;
+	if (html_context.putsp == HTML_SPACE_SUPPRESS) {
+		html_context.putsp = HTML_SPACE_NORMAL;
 		if (isspace(start[0])) {
 			start++, len--;
 
 			if (!len) {
 				if (!html_is_preformatted())
-					html_context.putsp = -1;
+					html_context.putsp = HTML_SPACE_SUPPRESS;
 				return;
 			}
 		}
 	}
 
 	if (isspace(start[len - 1]) && !html_is_preformatted())
-		html_context.putsp = -1;
+		html_context.putsp = HTML_SPACE_SUPPRESS;
 	html_context.was_br = 0;
 
 	put_chars(part, start, len);
@@ -959,7 +959,7 @@ html_li(unsigned char *a)
 		par_format.list_number = 0;
 	}
 
-	html_context.putsp = -1;
+	html_context.putsp = HTML_SPACE_SUPPRESS;
 	html_context.line_breax = 2;
 	html_context.was_li = 1;
 }

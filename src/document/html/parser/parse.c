@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.121 2005/07/08 19:24:51 miciah Exp $ */
+/* $Id: parse.c,v 1.122 2005/07/08 22:25:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,13 +607,13 @@ parse_html(unsigned char *html, unsigned char *eof,
 	unsigned char *base_pos = html;
 	int noupdate = 0;
 
-	html_context.putsp = HTML_SPACE_SUPPRESS;
-	html_context.line_breax = html_context.table_level ? 2 : 1;
-	html_context.position = 0;
-	html_context.was_br = 0;
-	html_context.was_li = 0;
-	html_context.part = part;
-	html_context.eoff = eof;
+	global_html_context.putsp = HTML_SPACE_SUPPRESS;
+	global_html_context.line_breax = global_html_context.table_level ? 2 : 1;
+	global_html_context.position = 0;
+	global_html_context.was_br = 0;
+	global_html_context.was_li = 0;
+	global_html_context.part = part;
+	global_html_context.eoff = eof;
 	if (head) process_head(head);
 
 main_loop:
@@ -623,8 +623,8 @@ main_loop:
 		int dotcounter = 0;
 
 		if (!noupdate) {
-			html_context.part = part;
-			html_context.eoff = eof;
+			global_html_context.part = part;
+			global_html_context.eoff = eof;
 			base_pos = html;
 		} else {
 			noupdate = 0;
@@ -637,14 +637,14 @@ main_loop:
 				h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
-					put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
+					put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
 					base_pos = html = h;
-					html_context.putsp = HTML_SPACE_ADD;
+					global_html_context.putsp = HTML_SPACE_ADD;
 					goto element;
 				}
 			}
 			html++;
-			if (!(html_context.position + (html - base_pos - 1)))
+			if (!(global_html_context.position + (html - base_pos - 1)))
 				goto skip_w; /* ??? */
 			if (*(html - 1) == ' ') {	/* Do not replace with isspace() ! --Zas */
 				/* BIG performance win; not sure if it doesn't cause any bug */
@@ -652,10 +652,10 @@ main_loop:
 					noupdate = 1;
 					continue;
 				}
-				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
+				put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
 			} else {
-				put_chrs(base_pos, html - base_pos - 1, html_context.put_chars_f, part);
-				put_chrs(" ", 1, html_context.put_chars_f, part);
+				put_chrs(base_pos, html - base_pos - 1, global_html_context.put_chars_f, part);
+				put_chrs(" ", 1, global_html_context.put_chars_f, part);
 			}
 
 skip_w:
@@ -665,26 +665,26 @@ skip_w:
 		}
 
 		if (html_is_preformatted()) {
-			html_context.putsp = HTML_SPACE_NORMAL;
+			global_html_context.putsp = HTML_SPACE_NORMAL;
 			if (*html == ASCII_TAB) {
-				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
-				put_chrs("        ", 8 - (html_context.position % 8),
-					 html_context.put_chars_f, part);
+				put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+				put_chrs("        ", 8 - (global_html_context.position % 8),
+					 global_html_context.put_chars_f, part);
 				html++;
 				continue;
 
 			} else if (*html == ASCII_CR || *html == ASCII_LF) {
-				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
-				if (html - base_pos == 0 && html_context.line_breax > 0)
-					html_context.line_breax--;
+				put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+				if (html - base_pos == 0 && global_html_context.line_breax > 0)
+					global_html_context.line_breax--;
 next_break:
 				if (*html == ASCII_CR && html < eof - 1
 				    && html[1] == ASCII_LF)
 					html++;
-				ln_break(1, html_context.line_break_f, part);
+				ln_break(1, global_html_context.line_break_f, part);
 				html++;
 				if (*html == ASCII_CR || *html == ASCII_LF) {
-					html_context.line_breax = 0;
+					global_html_context.line_breax = 0;
 					goto next_break;
 				}
 				continue;
@@ -708,8 +708,8 @@ next_break:
 				}
 
 				if (newlines) {
-					put_chrs(base_pos, length, html_context.put_chars_f, part);
-					ln_break(newlines, html_context.line_break_f, part);
+					put_chrs(base_pos, length, global_html_context.put_chars_f, part);
+					ln_break(newlines, global_html_context.line_break_f, part);
 					continue;
 				}
 			}
@@ -717,7 +717,7 @@ next_break:
 
 		while (*html < ' ') {
 			if (html - base_pos)
-				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
+				put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
 
 			dotcounter++;
 			base_pos = ++html;
@@ -726,7 +726,7 @@ next_break:
 
 				if (dots) {
 					memset(dots, '.', dotcounter);
-					put_chrs(dots, dotcounter, html_context.put_chars_f, part);
+					put_chrs(dots, dotcounter, global_html_context.put_chars_f, part);
 					fmem_free(dots);
 				}
 				goto main_loop;
@@ -734,8 +734,8 @@ next_break:
 		}
 
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?')
-		    && !html_context.was_xmp) {
-			put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
+		    && !global_html_context.was_xmp) {
+			put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
 			html = skip_comment(html, eof);
 			continue;
 		}
@@ -748,10 +748,10 @@ next_break:
 
 element:
 		endingtag = *name == '/'; name += endingtag; namelen -= endingtag;
-		if (!endingtag && html_context.putsp == HTML_SPACE_ADD && !html_top.invisible)
-			put_chrs(" ", 1, html_context.put_chars_f, part);
-		put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
-		if (!html_is_preformatted() && !endingtag && html_context.putsp == HTML_SPACE_NORMAL) {
+		if (!endingtag && global_html_context.putsp == HTML_SPACE_ADD && !html_top.invisible)
+			put_chrs(" ", 1, global_html_context.put_chars_f, part);
+		put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+		if (!html_is_preformatted() && !endingtag && global_html_context.putsp == HTML_SPACE_NORMAL) {
 			unsigned char *ee = end;
 			unsigned char *nm;
 
@@ -759,7 +759,7 @@ element:
 				if (*nm == '/')
 					goto ng;
 			if (ee < eof && isspace(*ee)) {
-				put_chrs(" ", 1, html_context.put_chars_f, part);
+				put_chrs(" ", 1, global_html_context.put_chars_f, part);
 			}
 ng:;
 		}
@@ -768,15 +768,15 @@ ng:;
 		html = process_element(name, namelen, endingtag, end, prev_html, eof, attr, part);
 	}
 
-	if (noupdate) put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
-	ln_break(1, html_context.line_break_f, part);
-	/* Restore the part in case the html_context was trashed in the last
+	if (noupdate) put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
+	ln_break(1, global_html_context.line_break_f, part);
+	/* Restore the part in case the global_html_context was trashed in the last
 	 * iteration so that when destroying the stack in the caller we still
 	 * get the right part pointer. */
-	html_context.part = part;
-	html_context.putsp = HTML_SPACE_SUPPRESS;
-	html_context.position = 0;
-	html_context.was_br = 0;
+	global_html_context.part = part;
+	global_html_context.putsp = HTML_SPACE_SUPPRESS;
+	global_html_context.position = 0;
+	global_html_context.was_br = 0;
 }
 
 static unsigned char *
@@ -792,17 +792,17 @@ start_element(struct element_info *ei,
 	struct css_selector *selector = NULL;
 #endif
 
-	if (html_context.was_xmp) {
-		put_chrs("<", 1, html_context.put_chars_f, part);
+	if (global_html_context.was_xmp) {
+		put_chrs("<", 1, global_html_context.put_chars_f, part);
 		html = prev_html + 1;
 		return html;
 	}
 
-	ln_break(ei->linebreak, html_context.line_break_f, part);
+	ln_break(ei->linebreak, global_html_context.line_break_f, part);
 
 	a = get_attr_val(attr, "id");
 	if (a) {
-		html_context.special_f(part, SP_TAG, a);
+		global_html_context.special_f(part, SP_TAG, a);
 		mem_free(a);
 	}
 
@@ -821,9 +821,9 @@ start_element(struct element_info *ei,
 	old_format = par_format;
 
 	if (ei->func == html_table && global_doc_opts->tables
-	    && html_context.table_level < HTML_MAX_TABLE_LEVEL) {
+	    && global_html_context.table_level < HTML_MAX_TABLE_LEVEL) {
 		format_table(attr, html, eof, &html, part);
-		ln_break(2, html_context.line_break_f, part);
+		ln_break(2, global_html_context.line_break_f, part);
 		return html;
 	}
 	if (ei->func == html_select) {
@@ -836,8 +836,8 @@ start_element(struct element_info *ei,
 	}
 #ifdef CONFIG_CSS
 	if (ei->func == html_style && global_doc_opts->css_enable) {
-		css_parse_stylesheet(&html_context.css_styles,
-				     html_context.base_href, html, eof);
+		css_parse_stylesheet(&global_html_context.css_styles,
+				     global_html_context.base_href, html, eof);
 	}
 #endif
 
@@ -845,17 +845,17 @@ start_element(struct element_info *ei,
 		struct html_element *e;
 
 		if (ei->nopair == 2) {
-			foreach (e, html_context.stack) {
+			foreach (e, global_html_context.stack) {
 				if (e->type < ELEMENT_KILLABLE) break;
 				if (e->linebreak || !ei->linebreak) break;
 			}
-		} else foreach (e, html_context.stack) {
+		} else foreach (e, global_html_context.stack) {
 			if (e->linebreak && !ei->linebreak) break;
 			if (e->type < ELEMENT_KILLABLE) break;
 			if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
 		}
 		if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
-			while (e->prev != (void *) &html_context.stack)
+			while (e->prev != (void *) &global_html_context.stack)
 				kill_html_stack_item(e->prev);
 
 			if (e->type > ELEMENT_IMMORTAL)
@@ -874,7 +874,7 @@ start_element(struct element_info *ei,
 		if (has_attr(attr, "onClick")) {
 			/* XXX: Put something better to format.link. --pasky */
 			mem_free_set(&format.link, stracpy("javascript:void(0);"));
-			mem_free_set(&format.target, stracpy(html_context.base_target));
+			mem_free_set(&format.target, stracpy(global_html_context.base_target));
 			format.style.fg = format.clink;
 			html_top.pseudo_class = ELEMENT_LINK;
 			mem_free_set(&format.title, stracpy("onClick placeholder"));
@@ -908,8 +908,8 @@ start_element(struct element_info *ei,
 		 * lead to wrong styles being applied to following elements, so
 		 * disabled for now. */
 		selector = get_css_selector_for_element(&html_top,
-							&html_context.css_styles,
-							&html_context.stack);
+							&global_html_context.css_styles,
+							&global_html_context.stack);
 
 		if (selector) {
 			apply_css_selector_style(&html_top, selector);
@@ -922,8 +922,8 @@ start_element(struct element_info *ei,
 	if (selector && html_top.options) {
 		/* Call it now to override default colors of the elements. */
 		selector = get_css_selector_for_element(&html_top,
-							&html_context.css_styles,
-							&html_context.stack);
+							&global_html_context.css_styles,
+							&global_html_context.stack);
 
 		if (selector) {
 			apply_css_selector_style(&html_top, selector);
@@ -932,7 +932,7 @@ start_element(struct element_info *ei,
 	}
 #endif
 
-	if (ei->func != html_br) html_context.was_br = 0;
+	if (ei->func != html_br) global_html_context.was_br = 0;
 
 	if (restore_format) par_format = old_format;
 
@@ -949,18 +949,18 @@ end_element(struct element_info *ei,
 	int lnb = 0;
 	int kill = 0;
 
-	if (html_context.was_xmp) {
+	if (global_html_context.was_xmp) {
 		if (ei->func != html_xmp)
 			return html;
-		html_context.was_xmp = 0;
+		global_html_context.was_xmp = 0;
 	}
 
-	html_context.was_br = 0;
+	global_html_context.was_br = 0;
 	if (ei->nopair == 1 || ei->nopair == 3)
 		return html;
 
 	/* dump_html_stack(); */
-	foreach (e, html_context.stack) {
+	foreach (e, global_html_context.stack) {
 		if (e->linebreak && !ei->linebreak) kill = 1;
 		if (strlcasecmp(e->name, e->namelen, name, namelen)) {
 			if (e->type < ELEMENT_KILLABLE)
@@ -973,7 +973,7 @@ end_element(struct element_info *ei,
 			break;
 		}
 		for (elt = e;
-		     elt != (void *) &html_context.stack;
+		     elt != (void *) &global_html_context.stack;
 		     elt = elt->prev)
 			if (elt->linebreak > lnb)
 				lnb = elt->linebreak;
@@ -982,11 +982,11 @@ end_element(struct element_info *ei,
 		 * when ending a list with the last <li> having no text the
 		 * line_breax is 2 so the ending list's linebreak will be
 		 * ignored when calling ln_break(). */
-		if (html_context.was_li)
-			html_context.line_breax = 0;
+		if (global_html_context.was_li)
+			global_html_context.line_breax = 0;
 
-		ln_break(lnb, html_context.line_break_f, part);
-		while (e->prev != (void *) &html_context.stack)
+		ln_break(lnb, global_html_context.line_break_f, part);
+		while (e->prev != (void *) &global_html_context.stack)
 			kill_html_stack_item(e->prev);
 		kill_html_stack_item(e);
 		break;

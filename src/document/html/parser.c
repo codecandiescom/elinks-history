@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.549 2005/07/08 19:53:26 miciah Exp $ */
+/* $Id: parser.c,v 1.550 2005/07/08 22:25:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,9 +146,9 @@ get_target(unsigned char *a)
 }
 
 
-struct html_context html_context = {
+struct html_context global_html_context = {
 #ifdef CONFIG_CSS
-	INIT_CSS_STYLESHEET(html_context.css_styles, import_css_stylesheet),
+	INIT_CSS_STYLESHEET(global_html_context.css_styles, import_css_stylesheet),
 #endif
 };
 
@@ -157,12 +157,12 @@ void
 ln_break(int n, void (*line_break)(struct part *), struct part *part)
 {
 	if (!n || html_top.invisible) return;
-	while (n > html_context.line_breax) {
-		html_context.line_breax++;
+	while (n > global_html_context.line_breax) {
+		global_html_context.line_breax++;
 		line_break(part);
 	}
-	html_context.position = 0;
-	html_context.putsp = HTML_SPACE_SUPPRESS;
+	global_html_context.position = 0;
+	global_html_context.putsp = HTML_SPACE_SUPPRESS;
 }
 
 void
@@ -170,29 +170,29 @@ put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(struct part *, unsigned char *, int), struct part *part)
 {
 	if (html_is_preformatted())
-		html_context.putsp = HTML_SPACE_NORMAL;
+		global_html_context.putsp = HTML_SPACE_NORMAL;
 
 	if (!len || html_top.invisible)
 		return;
 
-	switch (html_context.putsp) {
+	switch (global_html_context.putsp) {
 	case HTML_SPACE_NORMAL:
 		break;
 
 	case HTML_SPACE_ADD:
 		put_chars(part, " ", 1);
-		html_context.position++;
-		html_context.putsp = HTML_SPACE_SUPPRESS;
+		global_html_context.position++;
+		global_html_context.putsp = HTML_SPACE_SUPPRESS;
 
 		break;
 
 	case HTML_SPACE_SUPPRESS:
-		html_context.putsp = HTML_SPACE_NORMAL;
+		global_html_context.putsp = HTML_SPACE_NORMAL;
 		if (isspace(start[0])) {
 			start++, len--;
 
 			if (!len) {
-				html_context.putsp = HTML_SPACE_SUPPRESS;
+				global_html_context.putsp = HTML_SPACE_SUPPRESS;
 				return;
 			}
 		}
@@ -201,15 +201,15 @@ put_chrs(unsigned char *start, int len,
 	}
 
 	if (isspace(start[len - 1]) && !html_is_preformatted())
-		html_context.putsp = HTML_SPACE_SUPPRESS;
-	html_context.was_br = 0;
+		global_html_context.putsp = HTML_SPACE_SUPPRESS;
+	global_html_context.was_br = 0;
 
 	put_chars(part, start, len);
 
-	html_context.position += len;
-	html_context.line_breax = 0;
-	if (html_context.was_li > 0)
-		html_context.was_li--;
+	global_html_context.position += len;
+	global_html_context.line_breax = 0;
+	if (global_html_context.was_li > 0)
+		global_html_context.was_li--;
 }
 
 void
@@ -218,7 +218,7 @@ set_fragment_identifier(unsigned char *attr_name, unsigned char *attr)
 	unsigned char *id_attr = get_attr_val(attr_name, attr);
 
 	if (id_attr) {
-		html_context.special_f(html_context.part, SP_TAG, id_attr);
+		global_html_context.special_f(global_html_context.part, SP_TAG, id_attr);
 		mem_free(id_attr);
 	}
 }
@@ -226,7 +226,7 @@ set_fragment_identifier(unsigned char *attr_name, unsigned char *attr)
 void
 add_fragment_identifier(struct part *part, unsigned char *attr)
 {
-	html_context.special_f(part, SP_TAG, attr);
+	global_html_context.special_f(part, SP_TAG, attr);
 }
 
 #ifdef CONFIG_CSS
@@ -258,7 +258,7 @@ import_css_stylesheet(struct css_stylesheet *css, struct uri *base_uri,
 	if (!uri) return;
 
 	/* Request the imported stylesheet as part of the document ... */
-	html_context.special_f(html_context.part, SP_STYLESHEET, uri);
+	global_html_context.special_f(global_html_context.part, SP_STYLESHEET, uri);
 
 	/* ... and then attempt to import from the cache. */
 	import_css(css, uri);
@@ -387,22 +387,22 @@ html_body(unsigned char *a)
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
 	 * it _and_ prefer it over bgcolor attribute. */
 	if (global_doc_opts->css_enable)
-		css_apply(&html_top, &html_context.css_styles,
-		          &html_context.stack);
+		css_apply(&html_top, &global_html_context.css_styles,
+		          &global_html_context.stack);
 #endif
 
 	if (par_format.bgcolor != format.style.bg) {
 		/* Modify the root HTML element - format_html_part() will take
 		 * this from there. */
-		struct html_element *e = html_context.stack.prev;
+		struct html_element *e = global_html_context.stack.prev;
 
 		e->parattr.bgcolor = e->attr.style.bg = par_format.bgcolor = format.style.bg;
 	}
 
-	if (html_context.has_link_lines
+	if (global_html_context.has_link_lines
 	    && par_format.bgcolor
 	    && !search_html_stack("BODY")) {
-		html_context.special_f(html_context.part, SP_COLOR_LINK_LINES);
+		global_html_context.special_f(global_html_context.part, SP_COLOR_LINK_LINES);
 	}
 }
 
@@ -466,7 +466,7 @@ not_processed:
 		}
 
 		/* HTML <head> urls should already be fine but we can.t detect them. */
-		import_url = join_urls(html_context.base_href, src);
+		import_url = join_urls(global_html_context.base_href, src);
 		mem_free(src);
 		if (!import_url) goto imported;
 
@@ -474,7 +474,7 @@ not_processed:
 		if (!uri) goto imported;
 
 		/* Request the imported script as part of the document ... */
-		html_context.special_f(html_context.part, SP_SCRIPT, uri);
+		global_html_context.special_f(global_html_context.part, SP_SCRIPT, uri);
 		done_uri(uri);
 
 		/* Create URL reference onload snippet. */
@@ -589,7 +589,7 @@ html_html(unsigned char *a)
 
 	/* Modify the root HTML element - format_html_part() will take
 	 * this from there. */
-	struct html_element *e = html_context.stack.prev;
+	struct html_element *e = global_html_context.stack.prev;
 
 	if (par_format.bgcolor != format.style.bg)
 		e->parattr.bgcolor = e->attr.style.bg = par_format.bgcolor = format.style.bg;
@@ -613,7 +613,7 @@ void
 html_center(unsigned char *a)
 {
 	par_format.align = ALIGN_CENTER;
-	if (!html_context.table_level)
+	if (!global_html_context.table_level)
 		par_format.leftmargin = par_format.rightmargin = 0;
 }
 
@@ -627,7 +627,7 @@ html_linebrk(unsigned char *a)
 		else if (!strcasecmp(al, "right")) par_format.align = ALIGN_RIGHT;
 		else if (!strcasecmp(al, "center")) {
 			par_format.align = ALIGN_CENTER;
-			if (!html_context.table_level)
+			if (!global_html_context.table_level)
 				par_format.leftmargin = par_format.rightmargin = 0;
 		} else if (!strcasecmp(al, "justify")) par_format.align = ALIGN_JUSTIFY;
 		mem_free(al);
@@ -638,17 +638,17 @@ void
 html_br(unsigned char *a)
 {
 	html_linebrk(a);
-	if (html_context.was_br)
-		ln_break(2, html_context.line_break_f, html_context.part);
+	if (global_html_context.was_br)
+		ln_break(2, global_html_context.line_break_f, global_html_context.part);
 	else
-		html_context.was_br = 1;
+		global_html_context.was_br = 1;
 }
 
 void
 html_p(unsigned char *a)
 {
-	int_lower_bound(&par_format.leftmargin, html_context.margin);
-	int_lower_bound(&par_format.rightmargin, html_context.margin);
+	int_lower_bound(&par_format.leftmargin, global_html_context.margin);
+	int_lower_bound(&par_format.rightmargin, global_html_context.margin);
 	/*par_format.align = ALIGN_LEFT;*/
 	html_linebrk(a);
 }
@@ -743,7 +743,7 @@ html_pre(unsigned char *a)
 void
 html_xmp(unsigned char *a)
 {
-	html_context.was_xmp = 1;
+	global_html_context.was_xmp = 1;
 	html_pre(a);
 }
 
@@ -761,24 +761,24 @@ html_hr(unsigned char *a)
 	format.form = NULL;
 	html_linebrk(a);
 	if (par_format.align == ALIGN_JUSTIFY) par_format.align = ALIGN_CENTER;
-	par_format.leftmargin = par_format.rightmargin = html_context.margin;
+	par_format.leftmargin = par_format.rightmargin = global_html_context.margin;
 
 	i = get_width(a, "width", 1);
 	if (i == -1) i = get_html_max_width();
 	format.style.attr = AT_GRAPHICS;
-	html_context.special_f(html_context.part, SP_NOWRAP, 1);
+	global_html_context.special_f(global_html_context.part, SP_NOWRAP, 1);
 	while (i-- > 0) {
-		put_chrs(&r, 1, html_context.put_chars_f, html_context.part);
+		put_chrs(&r, 1, global_html_context.put_chars_f, global_html_context.part);
 	}
-	html_context.special_f(html_context.part, SP_NOWRAP, 0);
-	ln_break(2, html_context.line_break_f, html_context.part);
+	global_html_context.special_f(global_html_context.part, SP_NOWRAP, 0);
+	ln_break(2, global_html_context.line_break_f, global_html_context.part);
 	kill_html_stack_item(&html_top);
 }
 
 void
 html_table(unsigned char *a)
 {
-	par_format.leftmargin = par_format.rightmargin = html_context.margin;
+	par_format.leftmargin = par_format.rightmargin = global_html_context.margin;
 	par_format.align = ALIGN_LEFT;
 	html_linebrk(a);
 	format.style.attr = 0;
@@ -796,7 +796,7 @@ html_th(unsigned char *a)
 	/*html_linebrk(a);*/
 	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.style.attr |= AT_BOLD;
-	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
+	put_chrs(" ", 1, global_html_context.put_chars_f, global_html_context.part);
 }
 
 void
@@ -805,7 +805,7 @@ html_td(unsigned char *a)
 	/*html_linebrk(a);*/
 	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.style.attr &= ~AT_BOLD;
-	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
+	put_chrs(" ", 1, global_html_context.put_chars_f, global_html_context.part);
 }
 
 void
@@ -815,20 +815,20 @@ html_base(unsigned char *a)
 
 	al = get_url_val(a, "href");
 	if (al) {
-		unsigned char *base = join_urls(html_context.base_href, al);
+		unsigned char *base = join_urls(global_html_context.base_href, al);
 		struct uri *uri = base ? get_uri(base, 0) : NULL;
 
 		mem_free(al);
 		mem_free_if(base);
 
 		if (uri) {
-			done_uri(html_context.base_href);
-			html_context.base_href = uri;
+			done_uri(global_html_context.base_href);
+			global_html_context.base_href = uri;
 		}
 	}
 
 	al = get_target(a);
-	if (al) mem_free_set(&html_context.base_target, al);
+	if (al) mem_free_set(&global_html_context.base_target, al);
 }
 
 void
@@ -850,7 +850,7 @@ html_ul(unsigned char *a)
 		mem_free(al);
 	}
 	par_format.leftmargin += 2 + (par_format.list_level > 1);
-	if (!html_context.table_level)
+	if (!global_html_context.table_level)
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 
 	par_format.align = ALIGN_LEFT;
@@ -884,7 +884,7 @@ html_ol(unsigned char *a)
 	}
 
 	par_format.leftmargin += (par_format.list_level > 1);
-	if (!html_context.table_level)
+	if (!global_html_context.table_level)
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 
 	par_format.align = ALIGN_LEFT;
@@ -897,9 +897,9 @@ html_li(unsigned char *a)
 	/* When handling the code <li><li> @was_li will be 1 and it means we
 	 * have to insert a line break since no list item content has done it
 	 * for us. */
-	if (html_context.was_li) {
-		html_context.line_breax = 0;
-		ln_break(1, html_context.line_break_f, html_context.part);
+	if (global_html_context.was_li) {
+		global_html_context.line_breax = 0;
+		ln_break(1, global_html_context.line_break_f, global_html_context.part);
 	}
 
 	/*kill_html_stack_until(0, "", "UL", "OL", NULL);*/
@@ -909,7 +909,7 @@ html_li(unsigned char *a)
 
 		if (t == P_O) x[0] = 'o';
 		if (t == P_PLUS) x[0] = '+';
-		put_chrs(x, 7, html_context.put_chars_f, html_context.part);
+		put_chrs(x, 7, global_html_context.put_chars_f, global_html_context.part);
 		par_format.leftmargin += 2;
 		par_format.align = ALIGN_LEFT;
 
@@ -923,7 +923,7 @@ html_li(unsigned char *a)
 		if (s != -1) par_format.list_number = s;
 
 		if (t == P_ALPHA || t == P_alpha) {
-			put_chrs("&nbsp;", 6, html_context.put_chars_f, html_context.part);
+			put_chrs("&nbsp;", 6, global_html_context.put_chars_f, global_html_context.part);
 			c = 1;
 			n[0] = par_format.list_number
 			       ? (par_format.list_number - 1) % 26
@@ -941,7 +941,7 @@ html_li(unsigned char *a)
 
 		} else {
 			if (par_format.list_number < 10) {
-				put_chrs("&nbsp;", 6, html_context.put_chars_f, html_context.part);
+				put_chrs("&nbsp;", 6, global_html_context.put_chars_f, global_html_context.part);
 				c = 1;
 			}
 
@@ -949,8 +949,8 @@ html_li(unsigned char *a)
 		}
 
 		nlen = strlen(n);
-		put_chrs(n, nlen, html_context.put_chars_f, html_context.part);
-		put_chrs(".&nbsp;", 7, html_context.put_chars_f, html_context.part);
+		put_chrs(n, nlen, global_html_context.put_chars_f, global_html_context.part);
+		put_chrs(".&nbsp;", 7, global_html_context.put_chars_f, global_html_context.part);
 		par_format.leftmargin += nlen + c + 2;
 		par_format.align = ALIGN_LEFT;
 
@@ -965,9 +965,9 @@ html_li(unsigned char *a)
 		par_format.list_number = 0;
 	}
 
-	html_context.putsp = HTML_SPACE_SUPPRESS;
-	html_context.line_breax = 2;
-	html_context.was_li = 1;
+	global_html_context.putsp = HTML_SPACE_SUPPRESS;
+	global_html_context.line_breax = 2;
+	global_html_context.was_li = 1;
 }
 
 void
@@ -982,7 +982,7 @@ html_dl(unsigned char *a)
 	par_format.dd_margin = par_format.leftmargin;
 	html_top.type = ELEMENT_DONT_KILL;
 	if (!(par_format.flags & P_COMPACT)) {
-		ln_break(2, html_context.line_break_f, html_context.part);
+		ln_break(2, global_html_context.line_break_f, global_html_context.part);
 		html_top.linebreak = 2;
 	}
 }
@@ -994,7 +994,7 @@ html_dt(unsigned char *a)
 	par_format.align = ALIGN_LEFT;
 	par_format.leftmargin = par_format.dd_margin;
 	if (!(par_format.flags & P_COMPACT) && !has_attr(a, "compact"))
-		ln_break(2, html_context.line_break_f, html_context.part);
+		ln_break(2, global_html_context.line_break_f, global_html_context.part);
 }
 
 void
@@ -1004,7 +1004,7 @@ html_dd(unsigned char *a)
 
 	par_format.leftmargin = par_format.dd_margin + 3;
 
-	if (!html_context.table_level) {
+	if (!global_html_context.table_level) {
 		par_format.leftmargin += 5;
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 	}
@@ -1035,7 +1035,7 @@ html_frame(unsigned char *a)
 	if (!src) {
 		url = stracpy("about:blank");
 	} else {
-		url = join_urls(html_context.base_href, src);
+		url = join_urls(global_html_context.base_href, src);
 		mem_free(src);
 	}
 	if (!url) return;
@@ -1055,8 +1055,8 @@ html_frame(unsigned char *a)
 		put_link_line("Frame: ", name, url, "");
 
 	} else {
-		if (html_context.special_f(html_context.part, SP_USED, NULL)) {
-			html_context.special_f(html_context.part, SP_FRAME,
+		if (global_html_context.special_f(global_html_context.part, SP_USED, NULL)) {
+			global_html_context.special_f(global_html_context.part, SP_FRAME,
 					       html_top.frameset, name, url);
 		}
 	}
@@ -1080,7 +1080,7 @@ html_frameset(unsigned char *a)
 	 * <body> elements ;-). See also bug 171. --pasky */
 	if (search_html_stack("BODY")
 	    || !global_doc_opts->frames
-	    || !html_context.special_f(html_context.part, SP_USED, NULL))
+	    || !global_html_context.special_f(global_html_context.part, SP_USED, NULL))
 		return;
 
 	cols = get_attr_val(a, "cols");
@@ -1123,7 +1123,7 @@ html_frameset(unsigned char *a)
 
 	fp.parent = html_top.frameset;
 	if (fp.x && fp.y) {
-		html_top.frameset = html_context.special_f(html_context.part, SP_FRAMESET, &fp);
+		html_top.frameset = global_html_context.special_f(global_html_context.part, SP_FRAMESET, &fp);
 	}
 	mem_free_if(fp.width);
 	mem_free_if(fp.height);
@@ -1156,7 +1156,7 @@ process_head(unsigned char *head)
 	if (!url) {
 		/* If the URL parameter is missing assume that the
 		 * document being processed should be refreshed. */
-		url = get_uri_string(html_context.base_href, URI_ORIGINAL);
+		url = get_uri_string(global_html_context.base_href, URI_ORIGINAL);
 	}
 
 	if (url) {
@@ -1188,12 +1188,12 @@ process_head(unsigned char *head)
 		}
 
 		if (valid) {
-			unsigned char *joined_url = join_urls(html_context.base_href, url);
+			unsigned char *joined_url = join_urls(global_html_context.base_href, url);
 
 			html_focusable(NULL);
 
 			put_link_line("Refresh: ", url, joined_url, global_doc_opts->framename);
-			html_context.special_f(html_context.part, SP_REFRESH, seconds, joined_url);
+			global_html_context.special_f(global_html_context.part, SP_REFRESH, seconds, joined_url);
 
 			mem_free(joined_url);
 		}
@@ -1259,9 +1259,9 @@ process_head(unsigned char *head)
 		}
 
 		if (no_cache)
-			html_context.special_f(html_context.part, SP_CACHE_CONTROL);
+			global_html_context.special_f(global_html_context.part, SP_CACHE_CONTROL);
 		else if (expires)
-			html_context.special_f(html_context.part,
+			global_html_context.special_f(global_html_context.part,
 					       SP_CACHE_EXPIRES, expires);
 	}
 }
@@ -1561,7 +1561,7 @@ init_html_parser_state(enum html_element_type type, int align, int margin, int w
 void
 done_html_parser_state(struct html_element *element)
 {
-	html_context.line_breax = 1;
+	global_html_context.line_breax = 1;
 
 	while (&html_top != element) {
 		kill_html_stack_item(&html_top);
@@ -1593,21 +1593,21 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	assert(uri && options);
 	if_assert_failed return;
 
-	init_list(html_context.stack);
+	init_list(global_html_context.stack);
 
-	html_context.startf = start;
-	html_context.put_chars_f = put_chars;
-	html_context.line_break_f = line_break;
-	html_context.special_f = special;
+	global_html_context.startf = start;
+	global_html_context.put_chars_f = put_chars;
+	global_html_context.line_break_f = line_break;
+	global_html_context.special_f = special;
 
-	html_context.base_href = get_uri_reference(uri);
-	html_context.base_target = null_or_stracpy(options->framename);
+	global_html_context.base_href = get_uri_reference(uri);
+	global_html_context.base_target = null_or_stracpy(options->framename);
 
 	scan_http_equiv(start, end, head, title);
 
 	e = mem_calloc(1, sizeof(*e));
 	if (!e) return;
-	add_to_list(html_context.stack, e);
+	add_to_list(global_html_context.stack, e);
 
 	format.style.attr = 0;
 	format.fontsize = 3;
@@ -1645,13 +1645,13 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	html_top.linebreak = 1;
 	html_top.type = ELEMENT_DONT_KILL;
 
-	html_context.has_link_lines = 0;
-	html_context.table_level = 0;
+	global_html_context.has_link_lines = 0;
+	global_html_context.table_level = 0;
 
 #ifdef CONFIG_CSS
 	if (global_doc_opts->css_enable)
 		mirror_css_stylesheet(&default_stylesheet,
-				      &html_context.css_styles);
+				      &global_html_context.css_styles);
 #endif
 }
 
@@ -1660,15 +1660,15 @@ done_html_parser(void)
 {
 #ifdef CONFIG_CSS
 	if (global_doc_opts->css_enable)
-		done_css_stylesheet(&html_context.css_styles);
+		done_css_stylesheet(&global_html_context.css_styles);
 #endif
 
-	mem_free(html_context.base_target);
-	done_uri(html_context.base_href);
+	mem_free(global_html_context.base_target);
+	done_uri(global_html_context.base_href);
 
-	kill_html_stack_item(html_context.stack.next);
+	kill_html_stack_item(global_html_context.stack.next);
 
-	assertm(list_empty(html_context.stack),
+	assertm(list_empty(global_html_context.stack),
 		"html stack not empty after operation");
-	if_assert_failed init_list(html_context.stack);
+	if_assert_failed init_list(global_html_context.stack);
 }

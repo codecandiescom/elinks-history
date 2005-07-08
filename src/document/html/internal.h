@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.44 2005/07/08 20:25:27 miciah Exp $ */
+/* $Id: internal.h,v 1.45 2005/07/08 22:25:47 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -111,16 +111,16 @@ struct html_context {
 	void *(*special_f)(struct part *, enum html_special_type, ...);
 };
 
-#define format (((struct html_element *) html_context.stack.next)->attr)
-#define par_format (((struct html_element *) html_context.stack.next)->parattr)
-#define html_top (*(struct html_element *) html_context.stack.next)
+#define format (((struct html_element *) global_html_context.stack.next)->attr)
+#define par_format (((struct html_element *) global_html_context.stack.next)->parattr)
+#define html_top (*(struct html_element *) global_html_context.stack.next)
 
 #define html_is_preformatted() (format.style.attr & AT_PREFORMATTED)
 
 #define get_html_max_width() \
 	int_max(par_format.width - (par_format.leftmargin + par_format.rightmargin), 0)
 
-extern struct html_context html_context;
+extern struct html_context global_html_context;
 
 /* For parser/link.c: */
 

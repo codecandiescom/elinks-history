@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.30 2005/02/28 11:20:18 zas Exp $ */
+/* $Id: stack.c,v 1.31 2005/07/08 22:25:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@ dump_html_stack(void)
 	struct html_element *element;
 
 	DBG("HTML stack debug:");
-	foreach (element, html_context.stack) {
+	foreach (element, global_html_context.stack) {
 		DBG("&name/len:%p:%d name:%.*s type:%d",
 		    element->name, element->namelen,
 		    element->namelen, element->name,
@@ -60,7 +60,7 @@ search_html_stack(unsigned char *name)
 	dump_html_stack();
 #endif
 
-	foreach (element, html_context.stack) {
+	foreach (element, global_html_context.stack) {
 		if (element == &html_top)
 			continue; /* skip the top element */
 		if (strlcasecmp(element->name, element->namelen, name, namelen))
@@ -81,7 +81,7 @@ kill_html_stack_item(struct html_element *e)
 
 	assert(e);
 	if_assert_failed return;
-	assertm((void *) e != &html_context.stack, "trying to free bad html element");
+	assertm((void *) e != &global_html_context.stack, "trying to free bad html element");
 	if_assert_failed return;
 	assertm(e->type != ELEMENT_IMMORTAL, "trying to kill unkillable element");
 	if_assert_failed return;
@@ -90,11 +90,11 @@ kill_html_stack_item(struct html_element *e)
 	/* As our another tiny l33t extension, we allow the onLoad attribute for
 	 * any element, executing it when that element is fully loaded. */
 	if (e->options)	onload = get_attr_val(e->options, "onLoad");
-	if (html_context.part
-	    && html_context.part->document
+	if (global_html_context.part
+	    && global_html_context.part->document
 	    && onload && *onload && *onload != '^') {
 		/* XXX: The following expression alone amounts two #includes. */
-		add_to_string_list(&html_context.part->document->onload_snippets,
+		add_to_string_list(&global_html_context.part->document->onload_snippets,
 		                   onload, -1);
 	}
 	if (onload) mem_free(onload);
@@ -117,8 +117,8 @@ kill_html_stack_item(struct html_element *e)
 	del_from_list(e);
 	mem_free(e);
 #if 0
-	if (list_empty(html_context.stack)
-	    || !html_context.stack.next) {
+	if (list_empty(global_html_context.stack)
+	    || !global_html_context.stack.next) {
 		DBG("killing last element");
 	}
 #endif
@@ -129,9 +129,9 @@ void
 html_stack_dup(enum html_element_type type)
 {
 	struct html_element *e;
-	struct html_element *ep = html_context.stack.next;
+	struct html_element *ep = global_html_context.stack.next;
 
-	assertm(ep && (void *) ep != &html_context.stack, "html stack empty");
+	assertm(ep && (void *) ep != &global_html_context.stack, "html stack empty");
 	if_assert_failed return;
 
 	e = mem_alloc(sizeof(*e));
@@ -164,7 +164,7 @@ html_stack_dup(enum html_element_type type)
 	e->namelen = 0;
 	e->type = type;
 
-	add_to_list(html_context.stack, e);
+	add_to_list(global_html_context.stack, e);
 }
 
 static void
@@ -172,8 +172,8 @@ kill_element(int ls, struct html_element *e)
 {
 	int l = 0;
 
-	while ((void *) e != &html_context.stack) {
-		if (ls && e == html_context.stack.next)
+	while ((void *) e != &global_html_context.stack) {
+		if (ls && e == global_html_context.stack.next)
 			break;
 
 		if (e->linebreak > l)
@@ -182,7 +182,7 @@ kill_element(int ls, struct html_element *e)
 		kill_html_stack_item(e->next);
 	}
 
-	ln_break(l, html_context.line_break_f, html_context.part);
+	ln_break(l, global_html_context.line_break_f, global_html_context.part);
 }
 
 void
@@ -192,7 +192,7 @@ kill_html_stack_until(int ls, ...)
 
 	if (ls) e = e->next;
 
-	while ((void *) e != &html_context.stack) {
+	while ((void *) e != &global_html_context.stack) {
 		int sk = 0;
 		va_list arg;
 

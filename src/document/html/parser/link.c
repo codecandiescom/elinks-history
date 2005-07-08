@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.79 2005/06/12 23:22:16 jonas Exp $ */
+/* $Id: link.c,v 1.80 2005/07/08 22:25:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ html_a(unsigned char *a)
 		unsigned char *target;
 
 		mem_free_set(&format.link,
-			     join_urls(html_context.base_href,
+			     join_urls(global_html_context.base_href,
 				       trim_chars(href, ' ', 0)));
 
 		mem_free(href);
@@ -59,7 +59,7 @@ html_a(unsigned char *a)
 		if (target) {
 			mem_free_set(&format.target, target);
 		} else {
-			mem_free_set(&format.target, stracpy(html_context.base_target));
+			mem_free_set(&format.target, stracpy(global_html_context.base_target));
 		}
 
 		if (0) {
@@ -202,7 +202,7 @@ put_image_label(unsigned char *a, unsigned char *label)
 
 	fg = format.style.fg;
 	format.style.fg = format.image_link;
-	put_chrs(label, strlen(label), html_context.put_chars_f, html_context.part);
+	put_chrs(label, strlen(label), global_html_context.put_chars_f, global_html_context.part);
 	format.style.fg = fg;
 }
 
@@ -224,7 +224,7 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 
 	usemap_attr = get_attr_val(a, "usemap");
 	if (usemap_attr) {
-		unsigned char *joined_urls = join_urls(html_context.base_href,
+		unsigned char *joined_urls = join_urls(global_html_context.base_href,
 						       usemap_attr);
 		unsigned char *map_url;
 
@@ -313,7 +313,7 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 
 		} else {
 			if (src) {
-				format.image = join_urls(html_context.base_href, src);
+				format.image = join_urls(global_html_context.base_href, src);
 			}
 
 			format.title = get_attr_val(a, "title");
@@ -351,19 +351,19 @@ void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
 	      unsigned char *link, unsigned char *target)
 {
-	html_context.has_link_lines = 1;
+	global_html_context.has_link_lines = 1;
 	html_stack_dup(ELEMENT_KILLABLE);
-	ln_break(1, html_context.line_break_f, html_context.part);
+	ln_break(1, global_html_context.line_break_f, global_html_context.part);
 	mem_free_set(&format.link, NULL);
 	mem_free_set(&format.target, NULL);
 	mem_free_set(&format.title, NULL);
 	format.form = NULL;
-	put_chrs(prefix, strlen(prefix), html_context.put_chars_f, html_context.part);
-	format.link = join_urls(html_context.base_href, link);
+	put_chrs(prefix, strlen(prefix), global_html_context.put_chars_f, global_html_context.part);
+	format.link = join_urls(global_html_context.base_href, link);
 	format.target = stracpy(target);
 	format.style.fg = format.clink;
-	put_chrs(linkname, strlen(linkname), html_context.put_chars_f, html_context.part);
-	ln_break(1, html_context.line_break_f, html_context.part);
+	put_chrs(linkname, strlen(linkname), global_html_context.put_chars_f, global_html_context.part);
+	ln_break(1, global_html_context.line_break_f, global_html_context.part);
 	kill_html_stack_item(&html_top);
 }
 
@@ -775,8 +775,8 @@ html_link(unsigned char *a)
 	if (link.type == LT_STYLESHEET) {
 		int len = strlen(link.href);
 
-		import_css_stylesheet(&html_context.css_styles,
-				      html_context.base_href, link.href, len);
+		import_css_stylesheet(&global_html_context.css_styles,
+				      global_html_context.base_href, link.href, len);
 	}
 
 	if (!link_display) goto free_and_return;
@@ -845,10 +845,10 @@ html_link(unsigned char *a)
 only_title:
 	if (text.length)
 		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
-			      text.source, link.href, html_context.base_target);
+			      text.source, link.href, global_html_context.base_target);
 	else
 		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
-			      name, link.href, html_context.base_target);
+			      name, link.href, global_html_context.base_target);
 
 	if (text.source) done_string(&text);
 

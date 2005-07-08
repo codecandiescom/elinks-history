@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.538 2005/06/14 13:55:14 witekfl Exp $ */
+/* $Id: renderer.c,v 1.539 2005/07/08 22:25:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1645,7 +1645,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	int llm = renderer_context.last_link_to_move;
 	struct tag *ltm = renderer_context.last_tag_to_move;
 	/*struct tag *ltn = last_tag_for_newline;*/
-	int lm = html_context.margin;
+	int lm = global_html_context.margin;
 	int ef = renderer_context.empty_format;
 	struct table_cache_entry *tce;
 
@@ -1689,7 +1689,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		struct node *node = mem_alloc(sizeof(*node));
 
 		if (node) {
-			int node_width = !html_context.table_level ? INT_MAX : width;
+			int node_width = !global_html_context.table_level ? INT_MAX : width;
 
 			set_box(&node->box, x, y, node_width, 1);
 			add_to_list(document->nodes, node);
@@ -1704,7 +1704,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		renderer_context.last_tag_for_newline = NULL;
 	}
 
-	html_context.margin = margin;
+	global_html_context.margin = margin;
 	renderer_context.empty_format = !document;
 
 	done_link_state_info();
@@ -1743,10 +1743,10 @@ ret:
 	renderer_context.last_link_to_move = llm;
 	renderer_context.last_tag_to_move = ltm;
 	/* renderer_context.last_tag_for_newline = ltn; */
-	html_context.margin = lm;
+	global_html_context.margin = lm;
 	renderer_context.empty_format = ef;
 
-	if (html_context.table_level > 1 && !document
+	if (global_html_context.table_level > 1 && !document
 	    && renderer_context.table_cache
 	    && renderer_context.table_cache_entries < MAX_TABLE_CACHE_ENTRIES) {
 		/* Create a new entry. */
@@ -1870,7 +1870,7 @@ render_html_document(struct cache_entry *cached, struct document *document,
 		}
 	}
 
-	/* @part was residing in html_context so it has to stay alive until
+	/* @part was residing in global_html_context so it has to stay alive until
 	 * done_html_parser(). */
 	done_string(&head);
 	mem_free_if(part);

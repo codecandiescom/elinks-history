@@ -1,3 +1,51 @@
+Fri Jul  8 21:04:55 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.h:
+
+	Try to describe struct part.  
+
+Fri Jul  8 20:25:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.h:
+
+	Comment ln_break and html_context.line_breax.  
+
+Fri Jul  8 19:53:26 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	Use a switch in put_chrs to allow its true nature to shine thru.  
+
+Fri Jul  8 19:42:21 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	Remove a superfluous check in put_chrs.  
+	
+	The check is for !html_is_preformatted and lies under if putsp ==
+	HTML_SPACE_SUPPRESS, but above that if statement, putsp is assigned
+	HTML_SPACE_NORMAL if html_is_preformatted.  
+
+Fri Jul  8 19:34:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/internal.h:
+
+	Rewrap the comments in enum html_whitespace_state.  
+
+Fri Jul  8 19:33:26 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/internal.h:
+
+	Reword the comments in enum html_whitespace_state and add a comment 
+	for putsp in html_context.  
+
+Fri Jul  8 19:24:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser/parse.c:
+
+	Change html_context.putsp from an int to the new enum
+	html_whitespace_state.  
+
 Thu Jul  7 14:39:09 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

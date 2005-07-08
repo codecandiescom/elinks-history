@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.81 2005/07/08 20:25:27 miciah Exp $ */
+/* $Id: parser.h,v 1.82 2005/07/08 22:42:51 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -11,6 +11,7 @@
 struct document_options;
 struct form_control;
 struct frameset_desc;
+struct html_context;
 struct memory_list;
 struct menu_item;
 struct part;
@@ -194,7 +195,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
  * successive <br>'s warrant still only two line-breaks.  ln_break will be
  * called with n = 2 for each of multiple successive <br>'s, but ln_break
  * will only add two line-breaks for the entire run of <br>'s. */
-void ln_break(int n, void (*line_break)(struct part *), struct part *part);
+void ln_break(int n, struct html_context *global_html_context);
 
 #ifdef CONFIG_ECMASCRIPT
 int do_html_script(unsigned char *attr, unsigned char *html, unsigned char *eof, unsigned char **end, struct part *part);

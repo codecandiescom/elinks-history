@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.550 2005/07/08 22:25:47 miciah Exp $ */
+/* $Id: parser.c,v 1.551 2005/07/08 22:42:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,15 +154,15 @@ struct html_context global_html_context = {
 
 
 void
-ln_break(int n, void (*line_break)(struct part *), struct part *part)
+ln_break(int n, struct html_context *html_context)
 {
 	if (!n || html_top.invisible) return;
-	while (n > global_html_context.line_breax) {
-		global_html_context.line_breax++;
-		line_break(part);
+	while (n > html_context->line_breax) {
+		html_context->line_breax++;
+		html_context->line_break_f(html_context->part);
 	}
-	global_html_context.position = 0;
-	global_html_context.putsp = HTML_SPACE_SUPPRESS;
+	html_context->position = 0;
+	html_context->putsp = HTML_SPACE_SUPPRESS;
 }
 
 void
@@ -639,7 +639,7 @@ html_br(unsigned char *a)
 {
 	html_linebrk(a);
 	if (global_html_context.was_br)
-		ln_break(2, global_html_context.line_break_f, global_html_context.part);
+		ln_break(2, &global_html_context);
 	else
 		global_html_context.was_br = 1;
 }
@@ -771,7 +771,7 @@ html_hr(unsigned char *a)
 		put_chrs(&r, 1, global_html_context.put_chars_f, global_html_context.part);
 	}
 	global_html_context.special_f(global_html_context.part, SP_NOWRAP, 0);
-	ln_break(2, global_html_context.line_break_f, global_html_context.part);
+	ln_break(2, &global_html_context);
 	kill_html_stack_item(&html_top);
 }
 
@@ -899,7 +899,7 @@ html_li(unsigned char *a)
 	 * for us. */
 	if (global_html_context.was_li) {
 		global_html_context.line_breax = 0;
-		ln_break(1, global_html_context.line_break_f, global_html_context.part);
+		ln_break(1, &global_html_context);
 	}
 
 	/*kill_html_stack_until(0, "", "UL", "OL", NULL);*/
@@ -982,7 +982,7 @@ html_dl(unsigned char *a)
 	par_format.dd_margin = par_format.leftmargin;
 	html_top.type = ELEMENT_DONT_KILL;
 	if (!(par_format.flags & P_COMPACT)) {
-		ln_break(2, global_html_context.line_break_f, global_html_context.part);
+		ln_break(2, &global_html_context);
 		html_top.linebreak = 2;
 	}
 }
@@ -994,7 +994,7 @@ html_dt(unsigned char *a)
 	par_format.align = ALIGN_LEFT;
 	par_format.leftmargin = par_format.dd_margin;
 	if (!(par_format.flags & P_COMPACT) && !has_attr(a, "compact"))
-		ln_break(2, global_html_context.line_break_f, global_html_context.part);
+		ln_break(2, &global_html_context);
 }
 
 void

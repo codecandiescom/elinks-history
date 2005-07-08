@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.122 2005/07/08 22:25:47 miciah Exp $ */
+/* $Id: parse.c,v 1.123 2005/07/08 22:42:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -681,7 +681,7 @@ next_break:
 				if (*html == ASCII_CR && html < eof - 1
 				    && html[1] == ASCII_LF)
 					html++;
-				ln_break(1, global_html_context.line_break_f, part);
+				ln_break(1, &global_html_context);
 				html++;
 				if (*html == ASCII_CR || *html == ASCII_LF) {
 					global_html_context.line_breax = 0;
@@ -709,7 +709,7 @@ next_break:
 
 				if (newlines) {
 					put_chrs(base_pos, length, global_html_context.put_chars_f, part);
-					ln_break(newlines, global_html_context.line_break_f, part);
+					ln_break(newlines, &global_html_context);
 					continue;
 				}
 			}
@@ -769,7 +769,7 @@ ng:;
 	}
 
 	if (noupdate) put_chrs(base_pos, html - base_pos, global_html_context.put_chars_f, part);
-	ln_break(1, global_html_context.line_break_f, part);
+	ln_break(1, &global_html_context);
 	/* Restore the part in case the global_html_context was trashed in the last
 	 * iteration so that when destroying the stack in the caller we still
 	 * get the right part pointer. */
@@ -798,7 +798,7 @@ start_element(struct element_info *ei,
 		return html;
 	}
 
-	ln_break(ei->linebreak, global_html_context.line_break_f, part);
+	ln_break(ei->linebreak, &global_html_context);
 
 	a = get_attr_val(attr, "id");
 	if (a) {
@@ -823,7 +823,7 @@ start_element(struct element_info *ei,
 	if (ei->func == html_table && global_doc_opts->tables
 	    && global_html_context.table_level < HTML_MAX_TABLE_LEVEL) {
 		format_table(attr, html, eof, &html, part);
-		ln_break(2, global_html_context.line_break_f, part);
+		ln_break(2, &global_html_context);
 		return html;
 	}
 	if (ei->func == html_select) {
@@ -985,7 +985,7 @@ end_element(struct element_info *ei,
 		if (global_html_context.was_li)
 			global_html_context.line_breax = 0;
 
-		ln_break(lnb, global_html_context.line_break_f, part);
+		ln_break(lnb, &global_html_context);
 		while (e->prev != (void *) &global_html_context.stack)
 			kill_html_stack_item(e->prev);
 		kill_html_stack_item(e);

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.130 2005/07/08 23:51:26 miciah Exp $ */
+/* $Id: parse.c,v 1.131 2005/07/08 23:53:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -784,7 +784,8 @@ static unsigned char *
 start_element(struct element_info *ei,
               unsigned char *name, int namelen, int endingtag,
               unsigned char *html, unsigned char *prev_html,
-              unsigned char *eof, unsigned char *attr)
+              unsigned char *eof, unsigned char *attr,
+              struct html_context *html_context)
 {
 	unsigned char *a;
 	struct par_attrib old_format;
@@ -944,7 +945,8 @@ static unsigned char *
 end_element(struct element_info *ei,
             unsigned char *name, int namelen, int endingtag,
             unsigned char *html, unsigned char *prev_html,
-            unsigned char *eof, unsigned char *attr)
+            unsigned char *eof, unsigned char *attr,
+            struct html_context *html_context)
 {
 	struct html_element *e, *elt;
 	int lnb = 0;
@@ -1024,9 +1026,9 @@ process_element(unsigned char *name, int namelen, int endingtag,
 	if (!ei) return html;
 
 	if (!endingtag) {
-		return start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr);
+		return start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, html_context);
 	} else {
-		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr);
+		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, html_context);
 	}
 }
 

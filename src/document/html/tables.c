@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.378 2005/07/08 23:35:43 miciah Exp $ */
+/* $Id: tables.c,v 1.379 2005/07/08 23:36:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1195,7 +1195,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct html_element *state;
 	int indent, margins;
 
-	global_html_context.table_level++;
+	html_context->table_level++;
 
 	table = parse_table(html, eof, end, attr, (part->document || part->box.x));
 	if (!table) goto ret0;
@@ -1267,12 +1267,12 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 ret2:
 	part->link_num = table->link_num;
 	int_lower_bound(&part->box.height, part->cy);
-	global_html_context.part = part; /* Might've changed in draw_table_cells(). */
+	html_context->part = part; /* Might've changed in draw_table_cells(). */
 	done_html_parser_state(state);
 
 	free_table(table);
 
 ret0:
-	global_html_context.table_level--;
-	if (!global_html_context.table_level) free_table_cache();
+	html_context->table_level--;
+	if (!html_context->table_level) free_table_cache();
 }

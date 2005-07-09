@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.150 2005/07/09 00:31:04 miciah Exp $ */
+/* $Id: kbd.c,v 1.151 2005/07/09 01:14:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,10 +238,13 @@ toggle_mouse(void)
 {
 	int h = get_output_handle(); /* XXX: Is this all right? -- Miciah */
 
-	if (mouse_enabled)
+	if (mouse_enabled) {
+		unhandle_mouse(ditrm->mouse_h);
 		send_mouse_done_sequence(h);
-	else
+	} else {
 		send_mouse_init_sequence(h);
+		ditrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, ditrm);
+	}
 }
 
 #undef write_sequence

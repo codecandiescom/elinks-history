@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.548 2005/07/09 23:16:08 miciah Exp $ */
+/* $Id: renderer.c,v 1.549 2005/07/09 23:21:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1058,7 +1058,7 @@ init_link_state_info(unsigned char *link, unsigned char *target,
 	renderer_context.link_state_info.link = null_or_stracpy(link);
 	renderer_context.link_state_info.target = null_or_stracpy(target);
 	renderer_context.link_state_info.image = null_or_stracpy(image);
-	renderer_context.link_state_info.form = format.form;
+	renderer_context.link_state_info.form = form;
 }
 
 static inline void

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.565 2005/07/09 20:30:54 miciah Exp $ */
+/* $Id: parser.c,v 1.566 2005/07/09 20:34:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -797,7 +797,8 @@ void
 html_th(unsigned char *a)
 {
 	/*html_linebrk(a);*/
-	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
+	kill_html_stack_until(1, &global_html_context,
+	                      "TD", "TH", "", "TR", "TABLE", NULL);
 	format.style.attr |= AT_BOLD;
 	put_chrs(" ", 1, &global_html_context);
 }
@@ -806,7 +807,8 @@ void
 html_td(unsigned char *a)
 {
 	/*html_linebrk(a);*/
-	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
+	kill_html_stack_until(1, &global_html_context,
+	                      "TD", "TH", "", "TR", "TABLE", NULL);
 	format.style.attr &= ~AT_BOLD;
 	put_chrs(" ", 1, &global_html_context);
 }
@@ -905,7 +907,8 @@ html_li(unsigned char *a)
 		ln_break(1, &global_html_context);
 	}
 
-	/*kill_html_stack_until(0, "", "UL", "OL", NULL);*/
+	/*kill_html_stack_until(0, &global_html_context,
+	                      "", "UL", "OL", NULL);*/
 	if (!par_format.list_number) {
 		unsigned char x[7] = "*&nbsp;";
 		int t = par_format.flags & P_LISTMASK;
@@ -993,7 +996,7 @@ html_dl(unsigned char *a)
 void
 html_dt(unsigned char *a)
 {
-	kill_html_stack_until(0, "", "DL", NULL);
+	kill_html_stack_until(0, &global_html_context, "", "DL", NULL);
 	par_format.align = ALIGN_LEFT;
 	par_format.leftmargin = par_format.dd_margin;
 	if (!(par_format.flags & P_COMPACT) && !has_attr(a, "compact"))
@@ -1003,7 +1006,7 @@ html_dt(unsigned char *a)
 void
 html_dd(unsigned char *a)
 {
-	kill_html_stack_until(0, "", "DL", NULL);
+	kill_html_stack_until(0, &global_html_context, "", "DL", NULL);
 
 	par_format.leftmargin = par_format.dd_margin + 3;
 

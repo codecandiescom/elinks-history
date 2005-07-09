@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.384 2005/07/09 20:17:08 miciah Exp $ */
+/* $Id: tables.c,v 1.385 2005/07/09 20:20:15 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ get_table_frames(struct table *table, struct table_frames *result)
 
 /* Distance of the table from the left margin. */
 static int
-get_table_indent(struct table *table)
+get_table_indent(struct table *table, struct html_context *html_context)
 {
 	int width = par_format.width - table->real_width;
 	int indent;
@@ -1253,7 +1253,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	node = part->document->nodes.next;
 	node->box.height = part->box.y - node->box.y + part->cy;
 
-	indent = get_table_indent(table);
+	indent = get_table_indent(table, html_context);
 
 	/* FIXME: See bug 432. It should be possible to align the caption at
 	 * the top, bottom or the sides. */

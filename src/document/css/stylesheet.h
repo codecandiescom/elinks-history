@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.41 2005/03/05 21:08:11 zas Exp $ */
+/* $Id: stylesheet.h,v 1.42 2005/07/09 18:06:49 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -73,8 +73,7 @@ typedef void (*css_stylesheet_importer_T)(struct css_stylesheet *, struct uri *,
  * documents. */
 struct css_stylesheet {
 	/* The import callback function. */
-	/* TODO: Maybe we need some CSS parser struct for these, and some
-	 * possibility to have some import data as well. --jonas */
+	/* TODO: Possibility to have some import data as well. --jonas */
 	css_stylesheet_importer_T import;
 
 	/* The list of basic element selectors (which can then somehow

@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.73 2005/07/09 01:31:51 miciah Exp $ */
+/* $Id: forms.c,v 1.74 2005/07/09 01:34:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,7 +116,8 @@ get_form_mode(unsigned char *attr)
 }
 
 static struct form_control *
-init_form_control(enum form_type type, unsigned char *attr)
+init_form_control(enum form_type type, unsigned char *attr,
+                  struct html_context *html_context)
 {
 	struct form_control *fc;
 
@@ -124,7 +125,7 @@ init_form_control(enum form_type type, unsigned char *attr)
 	if (!fc) return NULL;
 
 	fc->type = type;
-	fc->position = attr - global_html_context.startf;
+	fc->position = attr - html_context->startf;
 	fc->mode = get_form_mode(attr);
 
 	return fc;
@@ -154,7 +155,7 @@ html_button(unsigned char *a)
 	mem_free(al);
 
 no_type_attr:
-	fc = init_form_control(type, a);
+	fc = init_form_control(type, a, &global_html_context);
 	if (!fc) return;
 
 	fc->name = get_attr_val(a, "name");
@@ -196,7 +197,7 @@ html_input(unsigned char *a)
 	mem_free(al);
 
 no_type_attr:
-	fc = init_form_control(type, a);
+	fc = init_form_control(type, a, &global_html_context);
 	if (!fc) return;
 
 	fc->name = get_attr_val(a, "name");
@@ -348,7 +349,7 @@ sp:
 	}
 
 end_parse:
-	fc = init_form_control(FC_CHECKBOX, a);
+	fc = init_form_control(FC_CHECKBOX, a, &global_html_context);
 	if (!fc) {
 		mem_free_if(val);
 		return;
@@ -499,7 +500,7 @@ end_parse:
 	labels = mem_calloc(order, sizeof(unsigned char *));
 	if (!labels) goto abort;
 
-	fc = init_form_control(FC_SELECT, attr);
+	fc = init_form_control(FC_SELECT, attr, html_context);
 	if (!fc) {
 		mem_free(labels);
 		goto abort;
@@ -566,7 +567,7 @@ pp:
 	if (parse_element(p, eof, &t_name, &t_namelen, NULL, end)) goto pp;
 	if (strlcasecmp(t_name, t_namelen, "/TEXTAREA", 9)) goto pp;
 
-	fc = init_form_control(FC_TEXTAREA, attr);
+	fc = init_form_control(FC_TEXTAREA, attr, html_context);
 	if (!fc) return;
 
 	fc->name = get_attr_val(attr, "name");

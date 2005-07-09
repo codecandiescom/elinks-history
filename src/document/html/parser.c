@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.555 2005/07/09 01:58:08 miciah Exp $ */
+/* $Id: parser.c,v 1.556 2005/07/09 02:00:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,9 +224,10 @@ set_fragment_identifier(unsigned char *attr_name, unsigned char *attr,
 }
 
 void
-add_fragment_identifier(struct part *part, unsigned char *attr)
+add_fragment_identifier(struct part *part, unsigned char *attr,
+                        struct html_context *html_context)
 {
-	global_html_context.special_f(part, SP_TAG, attr);
+	html_context->special_f(part, SP_TAG, attr);
 }
 
 #ifdef CONFIG_CSS

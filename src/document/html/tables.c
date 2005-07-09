@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.381 2005/07/09 18:56:20 miciah Exp $ */
+/* $Id: tables.c,v 1.382 2005/07/09 18:57:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -805,7 +805,8 @@ get_table_heights(struct table *table)
 }
 
 static void
-draw_table_cell(struct table *table, int col, int row, int x, int y)
+draw_table_cell(struct table *table, int col, int row, int x, int y,
+                struct html_context *html_context)
 {
 	struct table_cell *cell = CELL(table, col, row);
 	struct document *document = table->part->document;
@@ -855,7 +856,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 
 		if (cell->fragment_id)
 			add_fragment_identifier(part, cell->fragment_id,
-			                        &global_html_context);
+			                        html_context);
 	}
 
 	done_html_parser_state(state);
@@ -890,7 +891,7 @@ draw_table_cells(struct table *table, int x, int y,
 			int row_height = table->rows_heights[row] +
 				(row < table->rows - 1 && has_hline_width(table, row + 1));
 
-			draw_table_cell(table, col, row, xp, yp);
+			draw_table_cell(table, col, row, xp, yp, html_context);
 
 			yp += row_height;
 		}

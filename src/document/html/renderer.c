@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.549 2005/07/09 23:21:29 miciah Exp $ */
+/* $Id: renderer.c,v 1.550 2005/07/09 23:28:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1154,7 +1154,7 @@ process_link(struct html_context *html_context, enum link_state link_state,
 }
 
 static inline enum link_state
-get_link_state(void)
+get_link_state(struct html_context *html_context)
 {
 	enum link_state state;
 
@@ -1242,7 +1242,7 @@ put_chars(struct html_context *html_context, unsigned char *chars, int charslen)
 
 	int_lower_bound(&part->box.height, part->cy + 1);
 
-	link_state = get_link_state();
+	link_state = get_link_state(html_context);
 
 	if (link_state == LINK_STATE_NEW) {
 		int x_offset = 0;
@@ -1271,7 +1271,7 @@ put_chars(struct html_context *html_context, unsigned char *chars, int charslen)
 		if (link_state == LINK_STATE_NEW
 		    && (is_drawing_subs_or_sups()
 			|| update_after_subscript != renderer_context.did_subscript)) {
-			link_state = get_link_state();
+			link_state = get_link_state(html_context);
 		}
 
 		process_link(html_context, link_state, chars, charslen);

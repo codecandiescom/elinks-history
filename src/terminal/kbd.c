@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.148 2005/07/09 00:15:03 miciah Exp $ */
+/* $Id: kbd.c,v 1.149 2005/07/09 00:30:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,12 +175,15 @@ kbd_ctrl_c(void)
 #define INIT_XWIN_MOUSE_SEQ	"\033[?1000h"	/* Send Mouse X & Y on button press and release */
 #define INIT_ALT_SCREEN_SEQ	"\033[?47h"	/* Use Alternate Screen Buffer */
 
+static int mouse_enabled;
+
 static void
 send_mouse_init_sequence(int h)
 {
 #ifdef CONFIG_MOUSE
 	write_sequence(h, INIT_TWIN_MOUSE_SEQ);
 	write_sequence(h, INIT_XWIN_MOUSE_SEQ);
+	mouse_enabled = 1;
 #endif
 }
 
@@ -211,6 +214,7 @@ send_mouse_done_sequence(int h)
 	 * released it seems, in rxvt and xterm... --Zas */
 	write_sequence(h, DONE_TWIN_MOUSE_SEQ);
 	write_sequence(h, DONE_XWIN_MOUSE_SEQ);
+	mouse_enabled = 0;
 #endif
 }
 
@@ -227,6 +231,17 @@ send_done_sequence(int h, int altscreen)
 	}
 
 	write_sequence(h, DONE_TERMINAL_SEQ);
+}
+
+void
+toggle_mouse()
+{
+	int h = get_output_handle(); /* XXX: Is this all right? -- Miciah */
+
+	if (mouse_enabled)
+		send_mouse_done_sequence(h);
+	else
+		send_mouse_init_sequence(h);
 }
 
 #undef write_sequence

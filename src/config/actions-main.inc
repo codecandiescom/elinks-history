@@ -110,6 +110,7 @@ ACTION_(MAIN, "toggle-display-images", TOGGLE_DISPLAY_IMAGES, N__("Toggle displa
 ACTION_(MAIN, "toggle-display-tables", TOGGLE_DISPLAY_TABLES, N__("Toggle rendering of tables"), 0),
 ACTION_(MAIN, "toggle-document-colors", TOGGLE_DOCUMENT_COLORS, N__("Toggle usage of document specific colors"), 0),
 ACTION_(MAIN, "toggle-html-plain", TOGGLE_HTML_PLAIN, N__("Toggle rendering page as HTML / plain text"), 0),
+ACTION_(MAIN, "toggle-mouse", TOGGLE_MOUSE, N__("Toggle mouse handling"), 0),
 ACTION_(MAIN, "toggle-numbered-links", TOGGLE_NUMBERED_LINKS, N__("Toggle displaying of links numbers"), 0),
 ACTION_(MAIN, "toggle-plain-compress-empty-lines", TOGGLE_PLAIN_COMPRESS_EMPTY_LINES, N__("Toggle plain renderer compression of empty lines"), 0),
 ACTION_(MAIN, "toggle-wrap-text", TOGGLE_WRAP_TEXT, N__("Toggle wrapping of text"), 0),

@@ -1,4 +1,4 @@
-/* $Id: kbd.h,v 1.9 2005/05/17 15:21:47 zas Exp $ */
+/* $Id: kbd.h,v 1.10 2005/07/09 00:30:10 miciah Exp $ */
 
 #ifndef EL__TERMINAL_KBD_H
 #define EL__TERMINAL_KBD_H
@@ -52,6 +52,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 void block_itrm(int);
 int unblock_itrm(int);
 void free_all_itrms(void);
+void toggle_mouse(void);
 void resize_terminal(void);
 void dispatch_special(unsigned char *);
 void kbd_ctrl_c(void);

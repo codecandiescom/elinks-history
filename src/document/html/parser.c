@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.562 2005/07/09 19:31:40 miciah Exp $ */
+/* $Id: parser.c,v 1.563 2005/07/09 20:00:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1594,25 +1594,26 @@ init_html_parser(struct uri *uri, struct document_options *options,
 		 void *(*special)(struct part *, enum html_special_type, ...))
 {
 	struct html_element *e;
+	struct html_context *html_context = &global_html_context;
 
 	assert(uri && options);
 	if_assert_failed return;
 
-	init_list(global_html_context.stack);
+	init_list(html_context->stack);
 
-	global_html_context.startf = start;
-	global_html_context.put_chars_f = put_chars;
-	global_html_context.line_break_f = line_break;
-	global_html_context.special_f = special;
+	html_context->startf = start;
+	html_context->put_chars_f = put_chars;
+	html_context->line_break_f = line_break;
+	html_context->special_f = special;
 
-	global_html_context.base_href = get_uri_reference(uri);
-	global_html_context.base_target = null_or_stracpy(options->framename);
+	html_context->base_href = get_uri_reference(uri);
+	html_context->base_target = null_or_stracpy(options->framename);
 
 	scan_http_equiv(start, end, head, title);
 
 	e = mem_calloc(1, sizeof(*e));
 	if (!e) return;
-	add_to_list(global_html_context.stack, e);
+	add_to_list(html_context->stack, e);
 
 	format.style.attr = 0;
 	format.fontsize = 3;
@@ -1650,15 +1651,15 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	html_top.linebreak = 1;
 	html_top.type = ELEMENT_DONT_KILL;
 
-	global_html_context.has_link_lines = 0;
-	global_html_context.table_level = 0;
+	html_context->has_link_lines = 0;
+	html_context->table_level = 0;
 
 #ifdef CONFIG_CSS
-	global_html_context.css_styles.import_data = &global_html_context;
+	html_context->css_styles.import_data = html_context;
 
 	if (global_doc_opts->css_enable)
 		mirror_css_stylesheet(&default_stylesheet,
-				      &global_html_context.css_styles);
+				      &html_context->css_styles);
 #endif
 }
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.550 2005/07/09 23:28:55 miciah Exp $ */
+/* $Id: renderer.c,v 1.551 2005/07/09 23:37:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1527,12 +1527,17 @@ html_special(struct part *part, enum html_special_type c, ...)
 {
 	va_list l;
 	unsigned char *t;
-	struct document *document = part->document;
+	struct document *document;
 	unsigned long seconds;
 	struct form *form;
 	struct form_control *fc;
 
 	assert(part);
+	if_assert_failed return NULL;
+
+	document = part->document;
+
+	assert(document);
 	if_assert_failed return NULL;
 
 	va_start(l, c);

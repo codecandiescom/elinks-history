@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.82 2005/07/08 23:34:08 miciah Exp $ */
+/* $Id: link.c,v 1.83 2005/07/09 01:46:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,21 +349,22 @@ html_img(unsigned char *a)
 
 void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
-	      unsigned char *link, unsigned char *target)
+	      unsigned char *link, unsigned char *target,
+	      struct html_context *html_context)
 {
-	global_html_context.has_link_lines = 1;
+	html_context->has_link_lines = 1;
 	html_stack_dup(ELEMENT_KILLABLE);
-	ln_break(1, &global_html_context);
+	ln_break(1, html_context);
 	mem_free_set(&format.link, NULL);
 	mem_free_set(&format.target, NULL);
 	mem_free_set(&format.title, NULL);
 	format.form = NULL;
-	put_chrs(prefix, strlen(prefix), &global_html_context);
-	format.link = join_urls(global_html_context.base_href, link);
+	put_chrs(prefix, strlen(prefix), html_context);
+	format.link = join_urls(html_context->base_href, link);
 	format.target = stracpy(target);
 	format.style.fg = format.clink;
-	put_chrs(linkname, strlen(linkname), &global_html_context);
-	ln_break(1, &global_html_context);
+	put_chrs(linkname, strlen(linkname), html_context);
+	ln_break(1, html_context);
 	kill_html_stack_item(&html_top);
 }
 
@@ -381,9 +382,11 @@ html_applet(unsigned char *a)
 	html_focusable(a);
 
 	if (alt && *alt) {
-		put_link_line("Applet: ", alt, code, global_doc_opts->framename);
+		put_link_line("Applet: ", alt, code, global_doc_opts->framename,
+		              &global_html_context);
 	} else {
-		put_link_line("", "Applet", code, global_doc_opts->framename);
+		put_link_line("", "Applet", code, global_doc_opts->framename,
+		              &global_html_context);
 	}
 
 	mem_free_if(alt);
@@ -410,9 +413,11 @@ html_iframe_do(unsigned char *a, unsigned char *object_src)
 	html_focusable(a);
 
 	if (*name) {
-		put_link_line("IFrame: ", name, url, global_doc_opts->framename);
+		put_link_line("IFrame: ", name, url, global_doc_opts->framename,
+		              &global_html_context);
 	} else {
-		put_link_line("", "IFrame", url, global_doc_opts->framename);
+		put_link_line("", "IFrame", url, global_doc_opts->framename,
+		              &global_html_context);
 	}
 
 	mem_free(name);
@@ -456,9 +461,13 @@ html_object(unsigned char *a)
 		html_focusable(a);
 
 		if (name && *name) {
-			put_link_line("Object: ", name, url, global_doc_opts->framename);
+			put_link_line("Object: ", name, url,
+			              global_doc_opts->framename,
+			              &global_html_context);
 		} else {
-			put_link_line("Object: ", type, url, global_doc_opts->framename);
+			put_link_line("Object: ", type, url,
+			              global_doc_opts->framename,
+			              &global_html_context);
 		}
 
 		mem_free_if(name);
@@ -845,10 +854,12 @@ html_link(unsigned char *a)
 only_title:
 	if (text.length)
 		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
-			      text.source, link.href, global_html_context.base_target);
+			      text.source, link.href, global_html_context.base_target,
+			      &global_html_context);
 	else
 		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
-			      name, link.href, global_html_context.base_target);
+			      name, link.href, global_html_context.base_target,
+			      &global_html_context);
 
 	if (text.source) done_string(&text);
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.553 2005/07/09 01:39:19 miciah Exp $ */
+/* $Id: parser.c,v 1.554 2005/07/09 01:46:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1051,7 +1051,7 @@ html_frame(unsigned char *a)
 
 	if (!global_doc_opts->frames || !html_top.frameset) {
 		html_focusable(a);
-		put_link_line("Frame: ", name, url, "");
+		put_link_line("Frame: ", name, url, "", &global_html_context);
 
 	} else {
 		if (global_html_context.special_f(global_html_context.part, SP_USED, NULL)) {
@@ -1191,7 +1191,8 @@ process_head(unsigned char *head, struct html_context *html_context)
 
 			html_focusable(NULL);
 
-			put_link_line("Refresh: ", url, joined_url, global_doc_opts->framename);
+			put_link_line("Refresh: ", url, joined_url,
+			              global_doc_opts->framename, html_context);
 			html_context->special_f(html_context->part, SP_REFRESH, seconds, joined_url);
 
 			mem_free(joined_url);

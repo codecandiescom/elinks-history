@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.146 2005/07/09 22:28:39 miciah Exp $ */
+/* $Id: parse.c,v 1.147 2005/07/09 22:34:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -962,7 +962,7 @@ end_element(struct element_info *ei,
 	if (ei->nopair == 1 || ei->nopair == 3)
 		return html;
 
-	/* dump_html_stack(); */
+	/* dump_html_stack(html_context); */
 	foreach (e, html_context->stack) {
 		if (e->linebreak && !ei->linebreak) kill = 1;
 		if (strlcasecmp(e->name, e->namelen, name, namelen)) {
@@ -994,7 +994,7 @@ end_element(struct element_info *ei,
 		kill_html_stack_item(e, html_context);
 		break;
 	}
-	/* dump_html_stack(); */
+	/* dump_html_stack(html_context); */
 
 	return html;
 }

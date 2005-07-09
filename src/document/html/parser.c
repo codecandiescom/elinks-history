@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.573 2005/07/09 22:28:39 miciah Exp $ */
+/* $Id: parser.c,v 1.574 2005/07/09 22:34:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -841,7 +841,7 @@ html_ul(unsigned char *a, struct html_context *html_context)
 {
 	unsigned char *al;
 
-	/* dump_html_stack(); */
+	/* dump_html_stack(html_context); */
 	par_format.list_level++;
 	par_format.list_number = 0;
 	par_format.flags = P_STAR;

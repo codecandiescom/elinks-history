@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.40 2005/07/09 22:32:30 miciah Exp $ */
+/* $Id: stack.c,v 1.41 2005/07/09 22:34:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,12 +31,12 @@
 
 #if 0
 void
-dump_html_stack(void)
+dump_html_stack(struct html_context *html_context)
 {
 	struct html_element *element;
 
 	DBG("HTML stack debug:");
-	foreach (element, global_html_context.stack) {
+	foreach (element, html_context->stack) {
 		DBG("&name/len:%p:%d name:%.*s type:%d",
 		    element->name, element->namelen,
 		    element->namelen, element->name,
@@ -57,7 +57,7 @@ search_html_stack(unsigned char *name, struct html_context *html_context)
 	namelen = strlen(name);
 
 #if 0	/* Debug code. Please keep. */
-	dump_html_stack();
+	dump_html_stack(html_context);
 #endif
 
 	foreach (element, html_context->stack) {

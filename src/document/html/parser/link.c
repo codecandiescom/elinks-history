@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.84 2005/07/09 01:50:25 miciah Exp $ */
+/* $Id: link.c,v 1.85 2005/07/09 01:52:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,7 +208,8 @@ put_image_label(unsigned char *a, unsigned char *label,
 }
 
 static void
-html_img_do(unsigned char *a, unsigned char *object_src)
+html_img_do(unsigned char *a, unsigned char *object_src,
+            struct html_context *html_context)
 {
 	int ismap, usemap = 0;
 	int add_brackets = 0;
@@ -225,7 +226,7 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 
 	usemap_attr = get_attr_val(a, "usemap");
 	if (usemap_attr) {
-		unsigned char *joined_urls = join_urls(global_html_context.base_href,
+		unsigned char *joined_urls = join_urls(html_context->base_href,
 						       usemap_attr);
 		unsigned char *map_url;
 
@@ -310,11 +311,11 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 		}
 
 		if (!get_opt_bool("document.browse.images.show_any_as_links")) {
-			put_image_label(a, label, &global_html_context);
+			put_image_label(a, label, html_context);
 
 		} else {
 			if (src) {
-				format.image = join_urls(global_html_context.base_href, src);
+				format.image = join_urls(html_context->base_href, src);
 			}
 
 			format.title = get_attr_val(a, "title");
@@ -328,7 +329,7 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 					mem_free_set(&format.link, new_link);
 			}
 
-			put_image_label(a, label, &global_html_context);
+			put_image_label(a, label, html_context);
 
 			if (ismap) kill_html_stack_item(&html_top);
 			mem_free_set(&format.image, NULL);
@@ -345,7 +346,7 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 void
 html_img(unsigned char *a)
 {
-	html_img_do(a, NULL);
+	html_img_do(a, NULL, &global_html_context);
 }
 
 void
@@ -455,7 +456,7 @@ html_object(unsigned char *a)
 	} else if (!strncasecmp(type, "image/", 6)) {
 		/* <img> emulation. */
 		/* TODO: Use the enclosed text as 'alt' attribute. */
-		html_img_do(a, url);
+		html_img_do(a, url, &global_html_context);
 	} else {
 		unsigned char *name = get_attr_val(a, "standby");
 
@@ -501,7 +502,7 @@ html_embed(unsigned char *a)
 
 	type = get_extension_content_type(extension);
 	if (type && !strncasecmp(type, "image/", 6)) {
-		html_img_do(a, object_src);
+		html_img_do(a, object_src, &global_html_context);
 	} else {
 		/* We will just emulate <iframe>. */
 		html_iframe_do(a, object_src);

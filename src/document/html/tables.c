@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.388 2005/07/09 20:23:42 miciah Exp $ */
+/* $Id: tables.c,v 1.389 2005/07/09 20:24:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -978,7 +978,7 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 
 static inline void
 draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
-		 int col, int row)
+		 int col, int row, struct html_context *html_context)
 {
 	static unsigned char const hltable[] = { ' ', BORDER_SHLINE, BORDER_DHLINE };
 	int pos = H_FRAME_POSITION(table, col, row);
@@ -1108,7 +1108,8 @@ draw_table_frames(struct table *table, int indent, int y,
 					cx++;
 				}
 
-				draw_frame_hline(table, frame, cx, cy, col, row);
+				draw_frame_hline(table, frame, cx, cy, col, row,
+				                 html_context);
 				cx += table->cols_widths[col];
 			}
 

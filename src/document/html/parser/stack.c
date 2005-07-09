@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.38 2005/07/09 22:30:13 miciah Exp $ */
+/* $Id: stack.c,v 1.39 2005/07/09 22:31:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,7 +192,7 @@ kill_html_stack_until(int ls, struct html_context *html_context, ...)
 
 	if (ls) e = e->next;
 
-	while ((void *) e != &global_html_context.stack) {
+	while ((void *) e != &html_context->stack) {
 		int sk = 0;
 		va_list arg;
 

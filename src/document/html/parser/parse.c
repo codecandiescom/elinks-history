@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.139 2005/07/09 02:09:09 miciah Exp $ */
+/* $Id: parse.c,v 1.140 2005/07/09 19:18:04 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -386,51 +386,51 @@ skip_comment(unsigned char *html, unsigned char *eof)
 /* These should be exported properly by specific HTML parser modules
  * implementing them. But for now... */
 
-void html_address(unsigned char *);
-void html_base(unsigned char *);
-void html_blockquote(unsigned char *);
-void html_body(unsigned char *);
-void html_bold(unsigned char *);
-void html_br(unsigned char *);
-void html_center(unsigned char *);
-void html_dd(unsigned char *);
-void html_dl(unsigned char *);
-void html_dt(unsigned char *);
-void html_fixed(unsigned char *);
-void html_font(unsigned char *);
-void html_frame(unsigned char *);
-void html_frameset(unsigned char *);
-void html_h1(unsigned char *);
-void html_h2(unsigned char *);
-void html_h3(unsigned char *);
-void html_h4(unsigned char *);
-void html_h5(unsigned char *);
-void html_h6(unsigned char *);
-void html_head(unsigned char *);
-void html_html(unsigned char *);
-void html_hr(unsigned char *);
-void html_italic(unsigned char *);
-void html_li(unsigned char *);
-void html_linebrk(unsigned char *);
-void html_noframes(unsigned char *);
-void html_noscript(unsigned char *);
-void html_ol(unsigned char *);
-void html_p(unsigned char *);
-void html_pre(unsigned char *);
-void html_script(unsigned char *);
-void html_skip(unsigned char *);
-void html_span(unsigned char *);
-void html_style(unsigned char *);
-void html_subscript(unsigned char *);
-void html_superscript(unsigned char *);
-void html_table(unsigned char *);
-void html_td(unsigned char *);
-void html_th(unsigned char *);
-void html_title(unsigned char *);
-void html_tr(unsigned char *);
-void html_ul(unsigned char *);
-void html_underline(unsigned char *);
-void html_xmp(unsigned char *);
+element_handler_T html_address;
+element_handler_T html_base;
+element_handler_T html_blockquote;
+element_handler_T html_body;
+element_handler_T html_bold;
+element_handler_T html_br;
+element_handler_T html_center;
+element_handler_T html_dd;
+element_handler_T html_dl;
+element_handler_T html_dt;
+element_handler_T html_fixed;
+element_handler_T html_font;
+element_handler_T html_frame;
+element_handler_T html_frameset;
+element_handler_T html_h1;
+element_handler_T html_h2;
+element_handler_T html_h3;
+element_handler_T html_h4;
+element_handler_T html_h5;
+element_handler_T html_h6;
+element_handler_T html_head;
+element_handler_T html_html;
+element_handler_T html_hr;
+element_handler_T html_italic;
+element_handler_T html_li;
+element_handler_T html_linebrk;
+element_handler_T html_noframes;
+element_handler_T html_noscript;
+element_handler_T html_ol;
+element_handler_T html_p;
+element_handler_T html_pre;
+element_handler_T html_script;
+element_handler_T html_skip;
+element_handler_T html_span;
+element_handler_T html_style;
+element_handler_T html_subscript;
+element_handler_T html_superscript;
+element_handler_T html_table;
+element_handler_T html_td;
+element_handler_T html_th;
+element_handler_T html_title;
+element_handler_T html_tr;
+element_handler_T html_ul;
+element_handler_T html_underline;
+element_handler_T html_xmp;
 
 
 struct element_info {
@@ -441,7 +441,7 @@ struct element_info {
 	 * formatting (by calling renderer hooks). Note that in a few cases,
 	 * this is just a placeholder and the element is given special care
 	 * in start_element() (which is also where we call these handlers). */
-	void (*func)(unsigned char *);
+	element_handler_T *func;
 
 	/* Basically something like how many line-breaks to put before
 	 * (and sometimes after) an element. Also, for various element closing

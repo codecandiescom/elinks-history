@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.539 2005/07/08 22:25:47 miciah Exp $ */
+/* $Id: renderer.c,v 1.540 2005/07/09 20:17:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1720,7 +1720,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	part->cy = 0;
 	part->link_num = link_num;
 
-	html_state = init_html_parser_state(ELEMENT_IMMORTAL, align, margin, width);
+	html_state = init_html_parser_state(ELEMENT_IMMORTAL, align, margin, width, &global_html_context);
 
 	parse_html(start, end, part, head);
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.563 2005/07/09 20:00:44 miciah Exp $ */
+/* $Id: parser.c,v 1.564 2005/07/09 20:17:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1539,7 +1539,8 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 
 
 struct html_element *
-init_html_parser_state(enum html_element_type type, int align, int margin, int width)
+init_html_parser_state(enum html_element_type type, int align, int margin, int width,
+                       struct html_context *html_context)
 {
 	struct html_element *element;
 

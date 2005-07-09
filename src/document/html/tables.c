@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.383 2005/07/09 20:12:50 miciah Exp $ */
+/* $Id: tables.c,v 1.384 2005/07/09 20:17:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -830,7 +830,8 @@ draw_table_cell(struct table *table, int col, int row, int x, int y,
 			 has_hline_width(table, row + s + 1));
 	}
 
-	state = init_html_parser_state(ELEMENT_DONT_KILL, cell->align, 0, 0);
+	state = init_html_parser_state(ELEMENT_DONT_KILL, cell->align, 0, 0,
+	                               html_context);
 
 	if (cell->is_header) format.style.attr |= AT_BOLD;
 
@@ -1213,7 +1214,8 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	 * Otherwise i.e. <form> tags between <table> and <tr> are broken. */
 	draw_table_bad_html(table);
 
-	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0);
+	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0,
+	                               html_context);
 
 	margins = par_format.leftmargin + par_format.rightmargin;
 	if (get_table_cellpadding(table)) goto ret2;

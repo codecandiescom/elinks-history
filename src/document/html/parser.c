@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.564 2005/07/09 20:17:08 miciah Exp $ */
+/* $Id: parser.c,v 1.565 2005/07/09 20:30:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,7 +404,7 @@ html_body(unsigned char *a)
 
 	if (global_html_context.has_link_lines
 	    && par_format.bgcolor
-	    && !search_html_stack("BODY")) {
+	    && !search_html_stack("BODY", &global_html_context)) {
 		global_html_context.special_f(global_html_context.part, SP_COLOR_LINK_LINES);
 	}
 }
@@ -960,7 +960,7 @@ html_li(unsigned char *a)
 		{
 			struct html_element *element;
 
-			element = search_html_stack("ol");
+			element = search_html_stack("ol", &global_html_context);
 			if (element)
 				element->parattr.list_number = par_format.list_number + 1;
 		}
@@ -1023,7 +1023,7 @@ html_noframes(unsigned char *a)
 
 	if (!global_doc_opts->frames) return;
 
-	element = search_html_stack("frameset");
+	element = search_html_stack("frameset", &global_html_context);
 	if (element && !element->frameset) return;
 
 	html_skip(a, &global_html_context);
@@ -1081,7 +1081,7 @@ html_frameset(unsigned char *a)
 	 * is still better than nothing and it should heal up the security
 	 * concerns at least because sane sites should enclose the documents in
 	 * <body> elements ;-). See also bug 171. --pasky */
-	if (search_html_stack("BODY")
+	if (search_html_stack("BODY", &global_html_context)
 	    || !global_doc_opts->frames
 	    || !global_html_context.special_f(global_html_context.part, SP_USED, NULL))
 		return;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.558 2005/07/09 02:09:09 miciah Exp $ */
+/* $Id: parser.c,v 1.559 2005/07/09 02:10:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -455,7 +455,7 @@ not_processed:
 		mem_free(language);
 	}
 
-	if (global_html_context.part->document && (src = get_attr_val(a, "src"))) {
+	if (html_context->part->document && (src = get_attr_val(a, "src"))) {
 		/* External reference. */
 
 		unsigned char *import_url;
@@ -467,7 +467,7 @@ not_processed:
 		}
 
 		/* HTML <head> urls should already be fine but we can.t detect them. */
-		import_url = join_urls(global_html_context.base_href, src);
+		import_url = join_urls(html_context->base_href, src);
 		mem_free(src);
 		if (!import_url) goto imported;
 
@@ -475,12 +475,12 @@ not_processed:
 		if (!uri) goto imported;
 
 		/* Request the imported script as part of the document ... */
-		global_html_context.special_f(global_html_context.part, SP_SCRIPT, uri);
+		html_context->special_f(html_context->part, SP_SCRIPT, uri);
 		done_uri(uri);
 
 		/* Create URL reference onload snippet. */
 		insert_in_string(&import_url, 0, "^", 1);
-		add_to_string_list(&global_html_context.part->document->onload_snippets,
+		add_to_string_list(&html_context->part->document->onload_snippets,
 		                   import_url, -1);
 
 imported:
@@ -559,8 +559,8 @@ imported:
 		return 1;
 	}
 
-	if (global_html_context.part->document && *html != '^') {
-		add_to_string_list(&global_html_context.part->document->onload_snippets,
+	if (html_context->part->document && *html != '^') {
+		add_to_string_list(&html_context->part->document->onload_snippets,
 		                   html, *end - html);
 	}
 	return 0;

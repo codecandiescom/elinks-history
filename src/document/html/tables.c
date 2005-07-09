@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.387 2005/07/09 20:22:41 miciah Exp $ */
+/* $Id: tables.c,v 1.388 2005/07/09 20:23:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -941,7 +941,7 @@ get_frame_pos(int a, int a_size, int b, int b_size)
 
 static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
-		 int col, int row)
+		 int col, int row, struct html_context *html_context)
 {
 	/* TODO: Use /BORDER._.* / macros ! --pasky */
 	static unsigned char const border_chars[81] = {
@@ -1101,7 +1101,8 @@ draw_table_frames(struct table *table, int indent, int y,
 					w = get_vline_width(table, col);
 
 				if (w >= 0) {
-					draw_frame_point(table, frame, cx, cy, col, row);
+					draw_frame_point(table, frame, cx, cy, col, row,
+					                 html_context);
 					if (row < table->rows)
 						draw_frame_vline(table, frame, cx, cy + 1, col, row);
 					cx++;
@@ -1112,7 +1113,8 @@ draw_table_frames(struct table *table, int indent, int y,
 			}
 
 			if (table_frames.right) {
-				draw_frame_point(table, frame, cx, cy, col, row);
+				draw_frame_point(table, frame, cx, cy, col, row,
+				                 html_context);
 				if (row < table->rows)
 					draw_frame_vline(table, frame, cx, cy + 1, col, row);
 				cx++;

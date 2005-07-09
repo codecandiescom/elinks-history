@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.134 2005/07/09 01:26:50 miciah Exp $ */
+/* $Id: parse.c,v 1.135 2005/07/09 01:30:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -829,7 +829,7 @@ start_element(struct element_info *ei,
 		return html;
 	}
 	if (ei->func == html_select) {
-		if (!do_html_select(attr, html, eof, &html, html_context->part))
+		if (!do_html_select(attr, html, eof, &html))
 			return html;
 	}
 	if (ei->func == html_textarea) {

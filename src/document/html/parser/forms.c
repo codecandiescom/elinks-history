@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.71 2005/07/09 01:26:50 miciah Exp $ */
+/* $Id: forms.c,v 1.72 2005/07/09 01:30:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,9 +373,9 @@ static struct list_menu lnk_menu;
 
 int
 do_html_select(unsigned char *attr, unsigned char *html,
-	       unsigned char *eof, unsigned char **end, struct part *part)
+	       unsigned char *eof, unsigned char **end)
 {
-	struct conv_table *ct = global_html_context.special_f(part, SP_TABLE, NULL);
+	struct conv_table *ct = global_html_context.special_f(global_html_context.part, SP_TABLE, NULL);
 	struct form_control *fc;
 	struct string lbl = NULL_STRING, orig_lbl = NULL_STRING;
 	unsigned char **values = NULL;

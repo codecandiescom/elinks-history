@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.36 2005/07/09 22:23:46 miciah Exp $ */
+/* $Id: stack.c,v 1.37 2005/07/09 22:28:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,12 +126,12 @@ kill_html_stack_item(struct html_element *e, struct html_context *html_context)
 
 
 void
-html_stack_dup(enum html_element_type type)
+html_stack_dup(enum html_element_type type, struct html_context *html_context)
 {
 	struct html_element *e;
-	struct html_element *ep = global_html_context.stack.next;
+	struct html_element *ep = html_context->stack.next;
 
-	assertm(ep && (void *) ep != &global_html_context.stack, "html stack empty");
+	assertm(ep && (void *) ep != &html_context->stack, "html stack empty");
 	if_assert_failed return;
 
 	e = mem_alloc(sizeof(*e));
@@ -164,7 +164,7 @@ html_stack_dup(enum html_element_type type)
 	e->namelen = 0;
 	e->type = type;
 
-	add_to_list(global_html_context.stack, e);
+	add_to_list(html_context->stack, e);
 }
 
 static void

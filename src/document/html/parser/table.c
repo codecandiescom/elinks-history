@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.41 2005/07/09 20:12:50 miciah Exp $ */
+/* $Id: table.c,v 1.42 2005/07/09 20:37:13 miciah Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -111,7 +111,8 @@ get_valign(unsigned char *attr, int *a)
 }
 
 static void
-get_column_width(unsigned char *attr, int *width, int sh)
+get_column_width(unsigned char *attr, int *width, int sh,
+                 struct html_context *html_context)
 {
 	unsigned char *al = get_attr_val(attr, "width");
 	int len;
@@ -615,7 +616,7 @@ see:
 		c_width = WIDTH_AUTO;
 		get_align(t_attr, &c_al);
 		get_valign(t_attr, &c_val);
-		get_column_width(t_attr, &c_width, sh);
+		get_column_width(t_attr, &c_width, sh, html_context);
 		c_span = get_num(t_attr, "span");
 		if (c_span == -1) c_span = 1;
 		else if (c_span > HTML_MAX_COLSPAN) c_span = HTML_MAX_COLSPAN;
@@ -648,7 +649,7 @@ see:
 		val = c_val;
 		get_align(t_attr, &al);
 		get_valign(t_attr, &val);
-		get_column_width(t_attr, &width, sh);
+		get_column_width(t_attr, &width, sh, html_context);
 		new_columns(table, sp, width, al, val, !!c_span);
 		c_span = 0;
 		goto see;
@@ -789,7 +790,7 @@ see:
 	if (colspan == 1) {
 		int width = WIDTH_AUTO;
 
-		get_column_width(t_attr, &width, sh);
+		get_column_width(t_attr, &width, sh, html_context);
 		if (width != WIDTH_AUTO)
 			set_td_width(table, col, width, 0);
 	}

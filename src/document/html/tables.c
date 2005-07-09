@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.380 2005/07/09 02:00:29 miciah Exp $ */
+/* $Id: tables.c,v 1.381 2005/07/09 18:56:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -864,7 +864,8 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 }
 
 static void
-draw_table_cells(struct table *table, int x, int y)
+draw_table_cells(struct table *table, int x, int y,
+                 struct html_context *html_context)
 {
 	int col, row;
 	int xp;
@@ -875,7 +876,7 @@ draw_table_cells(struct table *table, int x, int y)
 
 	if (table->fragment_id)
 		add_fragment_identifier(table->part, table->fragment_id,
-		                        &global_html_context);
+		                        html_context);
 
 	/* Expand using the background color of the ``parent context'' all the
 	 * way down the start of the left edge of the table. */
@@ -1253,7 +1254,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	/* FIXME: See bug 432. It should be possible to align the caption at
 	 * the top, bottom or the sides. */
 	draw_table_caption(table, indent + part->box.x, part->box.y + part->cy);
-	draw_table_cells(table, indent, part->cy);
+	draw_table_cells(table, indent, part->cy, html_context);
 	draw_table_frames(table, indent, part->cy);
 
 	part->cy += table->real_height;

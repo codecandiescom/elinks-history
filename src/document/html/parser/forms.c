@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.69 2005/07/08 23:34:08 miciah Exp $ */
+/* $Id: forms.c,v 1.70 2005/07/09 01:23:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -542,7 +542,7 @@ html_textarea(unsigned char *a)
 
 void
 do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
-		 unsigned char **end, struct part *part)
+		 unsigned char **end)
 {
 	struct form_control *fc;
 	unsigned char *p, *t_name, *wrap_attr;
@@ -645,5 +645,5 @@ pp:
 		ln_break(1, &global_html_context);
 	else
 		put_chrs(" ", 1, &global_html_context);
-	global_html_context.special_f(part, SP_CONTROL, fc);
+	global_html_context.special_f(global_html_context.part, SP_CONTROL, fc);
 }

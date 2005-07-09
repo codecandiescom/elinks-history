@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.37 2005/07/09 22:28:39 miciah Exp $ */
+/* $Id: stack.c,v 1.38 2005/07/09 22:30:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ kill_html_stack_item(struct html_element *e, struct html_context *html_context)
 
 	assert(e);
 	if_assert_failed return;
-	assertm((void *) e != &global_html_context.stack, "trying to free bad html element");
+	assertm((void *) e != &html_context->stack, "trying to free bad html element");
 	if_assert_failed return;
 	assertm(e->type != ELEMENT_IMMORTAL, "trying to kill unkillable element");
 	if_assert_failed return;
@@ -90,11 +90,11 @@ kill_html_stack_item(struct html_element *e, struct html_context *html_context)
 	/* As our another tiny l33t extension, we allow the onLoad attribute for
 	 * any element, executing it when that element is fully loaded. */
 	if (e->options)	onload = get_attr_val(e->options, "onLoad");
-	if (global_html_context.part
-	    && global_html_context.part->document
+	if (html_context->part
+	    && html_context->part->document
 	    && onload && *onload && *onload != '^') {
 		/* XXX: The following expression alone amounts two #includes. */
-		add_to_string_list(&global_html_context.part->document->onload_snippets,
+		add_to_string_list(&html_context->part->document->onload_snippets,
 		                   onload, -1);
 	}
 	if (onload) mem_free(onload);
@@ -117,8 +117,8 @@ kill_html_stack_item(struct html_element *e, struct html_context *html_context)
 	del_from_list(e);
 	mem_free(e);
 #if 0
-	if (list_empty(global_html_context.stack)
-	    || !global_html_context.stack.next) {
+	if (list_empty(html_context->stack)
+	    || !html_context->stack.next) {
 		DBG("killing last element");
 	}
 #endif

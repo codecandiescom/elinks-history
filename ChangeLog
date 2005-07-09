@@ -1,3 +1,406 @@
+Sat Jul  9 21:26:44 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/forms.c, parser/link.c,
+	parser/parse.c, parser/parse.h:
+
+	Add html_context to element_handler_T.  
+
+Sat Jul  9 21:16:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c, tables.c:
+
+	Pass the html_context to done_html_parser_state.  
+
+Sat Jul  9 20:58:45 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	Pass the html_context to html_h.  
+
+Sat Jul  9 20:41:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/parse.c, parser/parse.h,
+	parser/table.c:
+
+	Pass get_width the html_context.  
+
+Sat Jul  9 20:37:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/table.c:
+
+	Pass get_column_width the html_context.  
+
+Sat Jul  9 20:34:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/stack.c, parser/stack.h:
+
+	Pass kill_html_stack_until the html_context.  
+
+Sat Jul  9 20:30:54 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/stack.c, parser/stack.h:
+
+	Pass search_html_stack the html_context.  
+
+Sat Jul  9 20:25:44 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass draw_frame_vline the html_context.  
+
+Sat Jul  9 20:24:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass draw_frame_hline the html_context.  
+
+Sat Jul  9 20:23:42 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass draw_frame_point the html_context.  
+
+Sat Jul  9 20:22:41 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass draw_table_frames the html_context.  
+
+Sat Jul  9 20:21:32 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass the html_context to get_table_cellpadding.  
+
+Sat Jul  9 20:20:15 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass get_table_indent the html_context.  
+
+Sat Jul  9 20:17:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c, tables.c:
+
+	Pass init_html_parser_state the html_context.  
+
+Sat Jul  9 20:12:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: tables.c, parser/table.c, parser/table.h:
+
+	Pass parse_table the html_context.  
+
+Sat Jul  9 20:11:17 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/table.c:
+
+	Pass parse_table_attributes the html_context.  
+
+Sat Jul  9 20:00:44 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	In init_html_parser, introduce the local variable html_context, 
+	assign it the global html_context, and use that instead of the
+	global.  
+
+Sat Jul  9 19:31:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser/link.c:
+
+	Pass html_skip the html_context and use that instead of the global.  
+
+Sat Jul  9 19:27:07 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Don't prototype html_skip because it is no longer used here as of 
+	revision 1.90 and because the prototype is WRONG, WRONG, WRONG!!! 
+	Since revision 1.90, html_skip is no longer used as an element
+	handler.  
+
+Sat Jul  9 19:23:22 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c,
+	parser/link.c, parser/parse.c:
+
+	html_focusable is revealed not to be an element handler. Pass it the
+	html_context and use that instead of the global.  
+
+Sat Jul  9 19:18:04 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/: forms.h, link.h, parse.c, parse.h:
+
+	Introduce element_handler_T.  
+
+Sat Jul  9 18:57:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass the html_context to draw_table_cell and use it instead of the
+	global.  
+
+Sat Jul  9 18:56:20 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass the html_context to draw_table_cells and use it instead of the
+	global.  
+
+Sat Jul  9 18:41:52 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/: css/stylesheet.c, css/stylesheet.h, html/parser.c:
+
+	Implement the TODO in struct css_stylesheet by adding a void
+	*import_data member for the import callback.  
+	
+	Add an import_data to init_css_stylesheet.  
+	
+	Initialise html_context.css.import_data to the global html_context 
+	in init_html_parser.  
+	
+	Get the html_context from the struct css_stylesheet's import_data
+	member and use it instead of the global in import_css_stylesheet.  
+
+Sat Jul  9 18:06:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/css/stylesheet.h:
+
+	Drop a confusing TODO that Jonas says can be ignored.  
+
+Sat Jul  9 02:10:26 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	...and use it instead of the global! 
+
+Sat Jul  9 02:09:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, parser/parse.c:
+
+	Pass the html_context to do_html_script and use it instead of the
+	global.  
+
+Sat Jul  9 02:07:21 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, parser/parse.c:
+
+	Drop the part parameter from do_html_script and use the html_context
+	to get the part.  
+
+Sat Jul  9 02:00:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, tables.c:
+
+	Pass the html_context to add_fragment_identifier and use it instead
+	of the global.  
+
+Sat Jul  9 01:58:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, parser/link.c:
+
+	Pass the html_context to set_fragment_identifier and use it instead
+	of the global.  
+
+Sat Jul  9 01:53:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	Pass the html_context to html_iframe_do and use it instead of the
+	global.  
+
+Sat Jul  9 01:52:24 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	Pass the html_context to html_img_do and use it instead of the
+	global.  
+
+Sat Jul  9 01:50:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	Pass the html_context to put_image_label and use it instead of the
+	global.  
+
+Sat Jul  9 01:48:26 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/forms.c:
+
+	Fix a few instances where do_html_select was still using the global
+	html_context.  
+
+Sat Jul  9 01:46:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/link.c, parser/link.h:
+
+	Pass the html_context to put_link_line and use it instead of the
+	global.  
+
+Sat Jul  9 01:39:19 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser/parse.c:
+
+	Pass the html_context to process_head and use it instead of the
+	global.  
+
+Sat Jul  9 01:34:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/forms.c:
+
+	Pass the html_context to init_form_control and use it instead of the
+	global.  
+
+Sat Jul  9 01:31:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/: forms.c, forms.h, parse.c:
+
+	Pass the html_context to do_html_select and use it instead of the
+	global.  
+
+Sat Jul  9 01:30:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/: forms.c, forms.h, parse.c:
+
+	Drop the part parameter from do_html_select and use the html_context
+	to get the part.  
+
+Sat Jul  9 01:26:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/: forms.c, forms.h, parse.c:
+
+	Pass the html_context to do_html_textarea and use it instead of the
+	global.  
+
+Sat Jul  9 01:23:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/: forms.c, forms.h, parse.c:
+
+	Drop the part parameter from do_html_textarea and use the
+	html_context to get the part.  
+
+Sat Jul  9 01:14:02 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/kbd.c:
+
+	Have toggle_mouse call unhandle_mouse or handle_mouse as
+	appropriate.  
+
+Sat Jul  9 00:31:04 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/kbd.c:
+
+	An empty parameter list should be 'void'.  
+
+Sat Jul  9 00:30:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/actions-main.inc, terminal/kbd.c, terminal/kbd.h:
+
+	Add toggle_mouse. Use it for the new toggle-mouse action.  
+
+Sat Jul  9 00:15:03 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/kbd.c:
+
+	Factor send_mouse_init_sequence out of send_init_sequence and
+	send_mouse_done_sequence out of send_done_sequence.  
+
+Fri Jul  8 23:57:21 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Use the passed context instead of the global in start_element and
+	end_element.  
+
+Fri Jul  8 23:53:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Pass the context to start_element and end_element.  
+
+Fri Jul  8 23:51:26 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Pass the html_context to process_element.  
+
+Fri Jul  8 23:48:59 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Drop the unused part parameter from process_element.  
+
+Fri Jul  8 23:48:10 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Drop the unused part parameter from start_element.  
+
+Fri Jul  8 23:47:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Get the part from the context instead of using the given part in
+	start_element.  
+
+Fri Jul  8 23:42:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Drop the unused part parameter from end_element.  
+
+Fri Jul  8 23:36:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Use the passed html_context instead of the global in format_table.  
+
+Fri Jul  8 23:35:43 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: tables.c, tables.h, parser/parse.c:
+
+	Pass format_table the html_context instead of the part.  
+
+Fri Jul  8 23:34:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser/forms.c, parser/link.c,
+	parser/parse.c:
+
+	Pass put_chrs the html_context instead of the part and the put_chars
+	callback.  
+	
+	This was supposed to have been committed earlier.  I hope that
+	nothing else forgot to be committed...  
+
+Fri Jul  8 23:02:36 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.h:
+
+	Doh. ln_break's parameter is html_context, not global_html_context.  
+
+Fri Jul  8 22:58:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	Change put_chrs to use the passed html_context instead of
+	global_html_context, ignoring the cases where such use of the global
+	is obscured by macros.  
+
+Fri Jul  8 22:42:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, parser/forms.c,
+	parser/link.c, parser/parse.c, parser/stack.c:
+
+	Pass ln_break the html_context instead of the part and the linebreak
+	callback.  
+
+Fri Jul  8 22:25:47 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, renderer.c, tables.c,
+	parser/forms.c, parser/link.c, parser/parse.c, parser/stack.c:
+
+	Rename html_context to global_html_context.  
+
 Fri Jul  8 21:04:55 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/document/html/renderer.h:

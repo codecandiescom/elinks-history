@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.567 2005/07/09 20:41:56 miciah Exp $ */
+/* $Id: parser.c,v 1.568 2005/07/09 20:58:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -672,7 +672,7 @@ html_blockquote(unsigned char *a)
 
 void
 html_h(int h, unsigned char *a,
-       enum format_align default_align)
+       enum format_align default_align, struct html_context *html_context)
 {
 	if (!par_format.align) par_format.align = default_align;
 	html_linebrk(a);
@@ -702,37 +702,37 @@ void
 html_h1(unsigned char *a)
 {
 	format.style.attr |= AT_BOLD;
-	html_h(1, a, ALIGN_CENTER);
+	html_h(1, a, ALIGN_CENTER, &global_html_context);
 }
 
 void
 html_h2(unsigned char *a)
 {
-	html_h(2, a, ALIGN_LEFT);
+	html_h(2, a, ALIGN_LEFT, &global_html_context);
 }
 
 void
 html_h3(unsigned char *a)
 {
-	html_h(3, a, ALIGN_LEFT);
+	html_h(3, a, ALIGN_LEFT, &global_html_context);
 }
 
 void
 html_h4(unsigned char *a)
 {
-	html_h(4, a, ALIGN_LEFT);
+	html_h(4, a, ALIGN_LEFT, &global_html_context);
 }
 
 void
 html_h5(unsigned char *a)
 {
-	html_h(5, a, ALIGN_LEFT);
+	html_h(5, a, ALIGN_LEFT, &global_html_context);
 }
 
 void
 html_h6(unsigned char *a)
 {
-	html_h(6, a, ALIGN_LEFT);
+	html_h(6, a, ALIGN_LEFT, &global_html_context);
 }
 
 void

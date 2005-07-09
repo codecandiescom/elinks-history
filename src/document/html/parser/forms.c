@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.70 2005/07/09 01:23:18 miciah Exp $ */
+/* $Id: forms.c,v 1.71 2005/07/09 01:26:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -542,7 +542,7 @@ html_textarea(unsigned char *a)
 
 void
 do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
-		 unsigned char **end)
+		 unsigned char **end, struct html_context *html_context)
 {
 	struct form_control *fc;
 	unsigned char *p, *t_name, *wrap_attr;
@@ -624,8 +624,8 @@ pp:
 	fc->maxlength = get_num(attr, "maxlength");
 	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 
-	if (rows > 1) ln_break(1, &global_html_context);
-	else put_chrs(" ", 1, &global_html_context);
+	if (rows > 1) ln_break(1, html_context);
+	else put_chrs(" ", 1, html_context);
 
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
@@ -635,15 +635,15 @@ pp:
 		int j;
 
 		for (j = 0; j < cols; j++)
-			put_chrs("_", 1, &global_html_context);
+			put_chrs("_", 1, html_context);
 		if (i < rows - 1)
-			ln_break(1, &global_html_context);
+			ln_break(1, html_context);
 	}
 
 	kill_html_stack_item(&html_top);
 	if (rows > 1)
-		ln_break(1, &global_html_context);
+		ln_break(1, html_context);
 	else
-		put_chrs(" ", 1, &global_html_context);
-	global_html_context.special_f(global_html_context.part, SP_CONTROL, fc);
+		put_chrs(" ", 1, html_context);
+	html_context->special_f(html_context->part, SP_CONTROL, fc);
 }

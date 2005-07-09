@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.543 2005/07/09 23:00:32 miciah Exp $ */
+/* $Id: renderer.c,v 1.544 2005/07/09 23:03:04 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,7 +308,8 @@ draw_frame_vchars(struct part *part, int x, int y, int height,
 }
 
 static inline struct screen_char *
-get_format_screen_char(struct part *part, enum link_state link_state)
+get_format_screen_char(struct html_context *html_context,
+                       enum link_state link_state)
 {
 	static struct text_attrib_style ta_cache = { -1, 0x0, 0x0 };
 	static struct screen_char schar_cache;
@@ -354,11 +355,11 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 			if (format.style.attr & AT_SUBSCRIPT) {
 				if (!renderer_context.did_subscript) {
 					renderer_context.did_subscript = 1;
-					put_chars(&global_html_context, "[", 1);
+					put_chars(html_context, "[", 1);
 				}
 			} else {
 				if (renderer_context.did_subscript) {
-					put_chars(&global_html_context, "]", 1);
+					put_chars(html_context, "]", 1);
 					renderer_context.did_subscript = 0;
 				}
 			}
@@ -370,7 +371,7 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 			if (format.style.attr & AT_SUPERSCRIPT) {
 				if (!super) {
 					super = 1;
-					put_chars(&global_html_context, "^", 1);
+					put_chars(html_context, "^", 1);
 				}
 			} else {
 				if (super) {
@@ -395,7 +396,8 @@ set_hline(struct html_context *html_context, unsigned char *chars, int charslen,
 	  enum link_state link_state)
 {
 	struct part *part = html_context->part;
-	struct screen_char *schar = get_format_screen_char(part, link_state);
+	struct screen_char *schar = get_format_screen_char(html_context,
+	                                                   link_state);
 	int x = part->cx;
 	int y = part->cy;
 

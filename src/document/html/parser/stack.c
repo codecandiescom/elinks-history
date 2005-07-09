@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.34 2005/07/09 20:34:30 miciah Exp $ */
+/* $Id: stack.c,v 1.35 2005/07/09 22:18:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ search_html_stack(unsigned char *name, struct html_context *html_context)
 	dump_html_stack();
 #endif
 
-	foreach (element, global_html_context.stack) {
+	foreach (element, html_context->stack) {
 		if (element == &html_top)
 			continue; /* skip the top element */
 		if (strlcasecmp(element->name, element->namelen, name, namelen))

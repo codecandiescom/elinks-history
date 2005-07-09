@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.79 2005/07/09 22:28:39 miciah Exp $ */
+/* $Id: forms.c,v 1.80 2005/07/09 23:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,7 @@ html_form(unsigned char *a, struct html_context *html_context)
 	al = get_target(a);
 	form->target = al ? al : stracpy(html_context->base_target);
 
-	html_context->special_f(html_context->part, SP_FORM, form);
+	html_context->special_f(html_context, SP_FORM, form);
 }
 
 
@@ -167,7 +167,7 @@ no_type_attr:
 
 	/* XXX: Does this make sense here? Where do we get FC_IMAGE? */
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
-	html_context->special_f(html_context->part, SP_CONTROL, fc);
+	html_context->special_f(html_context, SP_CONTROL, fc);
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
 }
@@ -278,7 +278,7 @@ no_type_attr:
 	put_chrs(" ", 1, html_context);
 
 hid:
-	html_context->special_f(html_context->part, SP_CONTROL, fc);
+	html_context->special_f(html_context, SP_CONTROL, fc);
 }
 
 void
@@ -367,7 +367,7 @@ end_parse:
 	put_chrs("[ ]", 3, html_context);
 	kill_html_stack_item(&html_top, html_context);
 	put_chrs(" ", 1, html_context);
-	html_context->special_f(html_context->part, SP_CONTROL, fc);
+	html_context->special_f(html_context, SP_CONTROL, fc);
 }
 
 static struct list_menu lnk_menu;
@@ -377,7 +377,7 @@ do_html_select(unsigned char *attr, unsigned char *html,
 	       unsigned char *eof, unsigned char **end,
 	       struct html_context *html_context)
 {
-	struct conv_table *ct = html_context->special_f(html_context->part, SP_TABLE, NULL);
+	struct conv_table *ct = html_context->special_f(html_context, SP_TABLE, NULL);
 	struct form_control *fc;
 	struct string lbl = NULL_STRING, orig_lbl = NULL_STRING;
 	unsigned char **values = NULL;
@@ -531,7 +531,7 @@ end_parse:
 
 	kill_html_stack_item(&html_top, html_context);
 	put_chrs("]", 1, html_context);
-	html_context->special_f(html_context->part, SP_CONTROL, fc);
+	html_context->special_f(html_context, SP_CONTROL, fc);
 
 	return 0;
 }
@@ -647,5 +647,5 @@ pp:
 		ln_break(1, html_context);
 	else
 		put_chrs(" ", 1, html_context);
-	html_context->special_f(html_context->part, SP_CONTROL, fc);
+	html_context->special_f(html_context, SP_CONTROL, fc);
 }

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.50 2005/07/09 22:58:03 miciah Exp $ */
+/* $Id: internal.h,v 1.51 2005/07/09 23:43:41 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -108,7 +108,7 @@ struct html_context {
 	 * html/parser/forms.c
 	 * html/parser/parse.c
 	 * html/parser.c */
-	void *(*special_f)(struct part *, enum html_special_type, ...);
+	void *(*special_f)(struct html_context *, enum html_special_type, ...);
 };
 
 #define format (((struct html_element *) global_html_context.stack.next)->attr)

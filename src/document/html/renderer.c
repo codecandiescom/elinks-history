@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.551 2005/07/09 23:37:37 miciah Exp $ */
+/* $Id: renderer.c,v 1.552 2005/07/09 23:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1523,14 +1523,20 @@ color_link_lines(struct document *document)
 }
 
 static void *
-html_special(struct part *part, enum html_special_type c, ...)
+html_special(struct html_context *html_context, enum html_special_type c, ...)
 {
 	va_list l;
 	unsigned char *t;
+	struct part *part;
 	struct document *document;
 	unsigned long seconds;
 	struct form *form;
 	struct form_control *fc;
+
+	assert(html_context);
+	if_assert_failed return NULL;
+
+	part = html_context->part;
 
 	assert(part);
 	if_assert_failed return NULL;

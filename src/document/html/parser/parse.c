@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.147 2005/07/09 22:34:14 miciah Exp $ */
+/* $Id: parse.c,v 1.148 2005/07/09 23:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -804,7 +804,7 @@ start_element(struct element_info *ei,
 
 	a = get_attr_val(attr, "id");
 	if (a) {
-		html_context->special_f(html_context->part, SP_TAG, a);
+		html_context->special_f(html_context, SP_TAG, a);
 		mem_free(a);
 	}
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.575 2005/07/09 22:58:03 miciah Exp $ */
+/* $Id: parser.c,v 1.576 2005/07/09 23:43:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,7 +218,7 @@ set_fragment_identifier(unsigned char *attr_name, unsigned char *attr,
 	unsigned char *id_attr = get_attr_val(attr_name, attr);
 
 	if (id_attr) {
-		html_context->special_f(html_context->part, SP_TAG, id_attr);
+		html_context->special_f(html_context, SP_TAG, id_attr);
 		mem_free(id_attr);
 	}
 }
@@ -227,7 +227,7 @@ void
 add_fragment_identifier(struct part *part, unsigned char *attr,
                         struct html_context *html_context)
 {
-	html_context->special_f(part, SP_TAG, attr);
+	html_context->special_f(html_context, SP_TAG, attr);
 }
 
 #ifdef CONFIG_CSS
@@ -261,7 +261,7 @@ import_css_stylesheet(struct css_stylesheet *css, struct uri *base_uri,
 	if (!uri) return;
 
 	/* Request the imported stylesheet as part of the document ... */
-	html_context->special_f(html_context->part, SP_STYLESHEET, uri);
+	html_context->special_f(html_context, SP_STYLESHEET, uri);
 
 	/* ... and then attempt to import from the cache. */
 	import_css(css, uri);
@@ -405,7 +405,7 @@ html_body(unsigned char *a, struct html_context *html_context)
 	if (html_context->has_link_lines
 	    && par_format.bgcolor
 	    && !search_html_stack("BODY", html_context)) {
-		html_context->special_f(html_context->part, SP_COLOR_LINK_LINES);
+		html_context->special_f(html_context, SP_COLOR_LINK_LINES);
 	}
 }
 
@@ -477,7 +477,7 @@ not_processed:
 		if (!uri) goto imported;
 
 		/* Request the imported script as part of the document ... */
-		html_context->special_f(html_context->part, SP_SCRIPT, uri);
+		html_context->special_f(html_context, SP_SCRIPT, uri);
 		done_uri(uri);
 
 		/* Create URL reference onload snippet. */
@@ -769,11 +769,11 @@ html_hr(unsigned char *a, struct html_context *html_context)
 	i = get_width(a, "width", 1, html_context);
 	if (i == -1) i = get_html_max_width();
 	format.style.attr = AT_GRAPHICS;
-	html_context->special_f(html_context->part, SP_NOWRAP, 1);
+	html_context->special_f(html_context, SP_NOWRAP, 1);
 	while (i-- > 0) {
 		put_chrs(&r, 1, html_context);
 	}
-	html_context->special_f(html_context->part, SP_NOWRAP, 0);
+	html_context->special_f(html_context, SP_NOWRAP, 0);
 	ln_break(2, html_context);
 	kill_html_stack_item(&html_top, html_context);
 }
@@ -1061,8 +1061,8 @@ html_frame(unsigned char *a, struct html_context *html_context)
 		put_link_line("Frame: ", name, url, "", html_context);
 
 	} else {
-		if (html_context->special_f(html_context->part, SP_USED, NULL)) {
-			html_context->special_f(html_context->part, SP_FRAME,
+		if (html_context->special_f(html_context, SP_USED, NULL)) {
+			html_context->special_f(html_context, SP_FRAME,
 					       html_top.frameset, name, url);
 		}
 	}
@@ -1086,7 +1086,7 @@ html_frameset(unsigned char *a, struct html_context *html_context)
 	 * <body> elements ;-). See also bug 171. --pasky */
 	if (search_html_stack("BODY", html_context)
 	    || !global_doc_opts->frames
-	    || !html_context->special_f(html_context->part, SP_USED, NULL))
+	    || !html_context->special_f(html_context, SP_USED, NULL))
 		return;
 
 	cols = get_attr_val(a, "cols");
@@ -1129,7 +1129,7 @@ html_frameset(unsigned char *a, struct html_context *html_context)
 
 	fp.parent = html_top.frameset;
 	if (fp.x && fp.y) {
-		html_top.frameset = html_context->special_f(html_context->part, SP_FRAMESET, &fp);
+		html_top.frameset = html_context->special_f(html_context, SP_FRAMESET, &fp);
 	}
 	mem_free_if(fp.width);
 	mem_free_if(fp.height);
@@ -1201,7 +1201,7 @@ process_head(unsigned char *head, struct html_context *html_context)
 
 			put_link_line("Refresh: ", url, joined_url,
 			              global_doc_opts->framename, html_context);
-			html_context->special_f(html_context->part, SP_REFRESH, seconds, joined_url);
+			html_context->special_f(html_context, SP_REFRESH, seconds, joined_url);
 
 			mem_free(joined_url);
 		}
@@ -1267,9 +1267,9 @@ process_head(unsigned char *head, struct html_context *html_context)
 		}
 
 		if (no_cache)
-			html_context->special_f(html_context->part, SP_CACHE_CONTROL);
+			html_context->special_f(html_context, SP_CACHE_CONTROL);
 		else if (expires)
-			html_context->special_f(html_context->part,
+			html_context->special_f(html_context,
 					       SP_CACHE_EXPIRES, expires);
 	}
 }
@@ -1596,7 +1596,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 		 struct string *head, struct string *title,
 		 void (*put_chars)(struct html_context *, unsigned char *, int),
 		 void (*line_break)(struct part *),
-		 void *(*special)(struct part *, enum html_special_type, ...))
+		 void *(*special)(struct html_context *, enum html_special_type, ...))
 {
 	struct html_element *e;
 	struct html_context *html_context = &global_html_context;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.88 2005/07/09 19:23:22 miciah Exp $ */
+/* $Id: link.c,v 1.89 2005/07/09 19:31:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,7 +452,7 @@ html_object(unsigned char *a)
 	if (!strncasecmp(type, "text/", 5)) {
 		/* We will just emulate <iframe>. */
 		html_iframe_do(a, url, &global_html_context);
-		html_skip(a);
+		html_skip(a, &global_html_context);
 
 	} else if (!strncasecmp(type, "image/", 6)) {
 		/* <img> emulation. */

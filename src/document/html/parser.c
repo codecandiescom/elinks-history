@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.570 2005/07/09 21:26:44 miciah Exp $ */
+/* $Id: parser.c,v 1.571 2005/07/09 22:15:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,7 +183,7 @@ put_chrs(unsigned char *start, int len, struct html_context *html_context)
 		html_context->position++;
 		html_context->putsp = HTML_SPACE_SUPPRESS;
 
-		break;
+		/* Fall thru. */
 
 	case HTML_SPACE_SUPPRESS:
 		html_context->putsp = HTML_SPACE_NORMAL;

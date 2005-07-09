@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.39 2005/07/09 22:31:01 miciah Exp $ */
+/* $Id: stack.c,v 1.40 2005/07/09 22:32:30 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,21 +168,21 @@ html_stack_dup(enum html_element_type type, struct html_context *html_context)
 }
 
 static void
-kill_element(int ls, struct html_element *e)
+kill_element(int ls, struct html_element *e, struct html_context *html_context)
 {
 	int l = 0;
 
-	while ((void *) e != &global_html_context.stack) {
-		if (ls && e == global_html_context.stack.next)
+	while ((void *) e != &html_context->stack) {
+		if (ls && e == html_context->stack.next)
 			break;
 
 		if (e->linebreak > l)
 			l = e->linebreak;
 		e = e->prev;
-		kill_html_stack_item(e->next, &global_html_context);
+		kill_html_stack_item(e->next, html_context);
 	}
 
-	ln_break(l, &global_html_context);
+	ln_break(l, html_context);
 }
 
 void
@@ -215,13 +215,13 @@ kill_html_stack_until(int ls, struct html_context *html_context, ...)
 			if (!sk) {
 				if (e->type < ELEMENT_KILLABLE) break;
 				va_end(arg);
-				kill_element(ls, e);
+				kill_element(ls, e, html_context);
 				return;
 
 			} else if (sk == 1) {
 				va_end(arg);
 				e = e->prev;
-				kill_element(ls, e);
+				kill_element(ls, e, html_context);
 				return;
 
 			} else {

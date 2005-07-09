@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.552 2005/07/08 22:58:51 miciah Exp $ */
+/* $Id: parser.c,v 1.553 2005/07/09 01:39:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1144,7 +1144,7 @@ html_noscript(unsigned char *a)
 }
 
 void
-process_head(unsigned char *head)
+process_head(unsigned char *head, struct html_context *html_context)
 {
 	unsigned char *refresh, *url;
 
@@ -1155,7 +1155,7 @@ process_head(unsigned char *head)
 	if (!url) {
 		/* If the URL parameter is missing assume that the
 		 * document being processed should be refreshed. */
-		url = get_uri_string(global_html_context.base_href, URI_ORIGINAL);
+		url = get_uri_string(html_context->base_href, URI_ORIGINAL);
 	}
 
 	if (url) {
@@ -1187,12 +1187,12 @@ process_head(unsigned char *head)
 		}
 
 		if (valid) {
-			unsigned char *joined_url = join_urls(global_html_context.base_href, url);
+			unsigned char *joined_url = join_urls(html_context->base_href, url);
 
 			html_focusable(NULL);
 
 			put_link_line("Refresh: ", url, joined_url, global_doc_opts->framename);
-			global_html_context.special_f(global_html_context.part, SP_REFRESH, seconds, joined_url);
+			html_context->special_f(html_context->part, SP_REFRESH, seconds, joined_url);
 
 			mem_free(joined_url);
 		}
@@ -1258,9 +1258,9 @@ process_head(unsigned char *head)
 		}
 
 		if (no_cache)
-			global_html_context.special_f(global_html_context.part, SP_CACHE_CONTROL);
+			html_context->special_f(html_context->part, SP_CACHE_CONTROL);
 		else if (expires)
-			global_html_context.special_f(global_html_context.part,
+			html_context->special_f(html_context->part,
 					       SP_CACHE_EXPIRES, expires);
 	}
 }

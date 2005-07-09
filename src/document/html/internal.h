@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.46 2005/07/08 23:34:08 miciah Exp $ */
+/* $Id: internal.h,v 1.47 2005/07/09 01:39:19 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -11,7 +11,7 @@ struct uri;
 
 /* For parser/parse.c: */
 
-void process_head(unsigned char *head);
+void process_head(unsigned char *head, struct html_context *html_context);
 void put_chrs(unsigned char *start, int len, struct html_context *html_context);
 
 enum html_whitespace_state {

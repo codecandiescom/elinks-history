@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.552 2005/07/09 23:43:41 miciah Exp $ */
+/* $Id: renderer.c,v 1.553 2005/07/09 23:45:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1497,8 +1497,9 @@ check_html_form_hierarchy(struct part *part)
 }
 
 static inline void
-color_link_lines(struct document *document)
+color_link_lines(struct html_context *html_context)
 {
+	struct document *document = html_context->part->document;
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	enum color_mode color_mode = document->options.color_mode;
 	enum color_flags color_flags = document->options.color_flags;
@@ -1629,7 +1630,7 @@ html_special(struct html_context *html_context, enum html_special_type c, ...)
 		case SP_COLOR_LINK_LINES:
 			va_end(l);
 			if (document && use_document_bg_colors(&document->options))
-				color_link_lines(document);
+				color_link_lines(html_context);
 			break;
 		case SP_STYLESHEET:
 		{

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.547 2005/07/09 23:11:30 miciah Exp $ */
+/* $Id: renderer.c,v 1.548 2005/07/09 23:16:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -845,13 +845,27 @@ align_line(struct part *part, int y, int last)
 }
 
 static struct link *
-new_link(struct document *document, int link_number,
-	 unsigned char *name, int namelen)
+new_link(struct html_context *html_context, unsigned char *name, int namelen)
 {
+	struct document *document;
+	struct part *part;
+	int link_number;
 	struct link *link;
+
+	assert(html_context);
+	if_assert_failed return NULL;
+
+	part = html_context->part;
+
+	assert(part);
+	if_assert_failed return NULL;
+
+	document = part->document;
 
 	assert(document);
 	if_assert_failed return NULL;
+
+	link_number = part->link_num;
 
 	if (!ALIGN_LINK(&document->links, document->nlinks, document->nlinks + 1))
 		return NULL;
@@ -1113,8 +1127,7 @@ process_link(struct html_context *html_context, enum link_state link_state,
 			chars += x_offset;
 		}
 
-		link = new_link(part->document, part->link_num,
-				chars, charslen);
+		link = new_link(html_context, chars, charslen);
 		if (!link) return;
 
 		break;

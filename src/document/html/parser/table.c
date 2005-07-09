@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.40 2005/07/09 20:11:17 miciah Exp $ */
+/* $Id: table.c,v 1.41 2005/07/09 20:12:50 miciah Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -524,7 +524,7 @@ skip_table(unsigned char *html, unsigned char *eof)
 
 struct table *
 parse_table(unsigned char *html, unsigned char *eof, unsigned char **end,
-	    unsigned char *attr, int sh)
+	    unsigned char *attr, int sh, struct html_context *html_context)
 {
 	struct table *table;
 	struct table_cell *cell;
@@ -548,7 +548,7 @@ parse_table(unsigned char *html, unsigned char *eof, unsigned char **end,
 	table = new_table();
 	if (!table) return NULL;
 
-	parse_table_attributes(table, attr, sh, &global_html_context);
+	parse_table_attributes(table, attr, sh, html_context);
 	last_bgcolor = table->bgcolor;
 
 se:

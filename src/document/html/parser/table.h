@@ -1,10 +1,11 @@
-/* $Id: table.h,v 1.15 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: table.h,v 1.16 2005/07/09 20:12:50 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_TABLE_H
 #define EL__DOCUMENT_HTML_PARSER_TABLE_H
 
 #include "util/color.h"
 
+struct html_context;
 struct part;
 
 /* Fix namespace clash on MacOS. */
@@ -114,7 +115,7 @@ struct table {
 
 struct table *
 parse_table(unsigned char *html, unsigned char *eof, unsigned char **end,
-	    unsigned char *attr, int sh);
+	    unsigned char *attr, int sh, struct html_context *html_context);
 
 void free_table(struct table *table);
 

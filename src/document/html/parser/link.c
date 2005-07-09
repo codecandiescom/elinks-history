@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.89 2005/07/09 19:31:40 miciah Exp $ */
+/* $Id: link.c,v 1.90 2005/07/09 21:26:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@
 
 
 void
-html_a(unsigned char *a)
+html_a(unsigned char *a, struct html_context *html_context)
 {
 	unsigned char *href;
 
@@ -50,7 +50,7 @@ html_a(unsigned char *a)
 		unsigned char *target;
 
 		mem_free_set(&format.link,
-			     join_urls(global_html_context.base_href,
+			     join_urls(html_context->base_href,
 				       trim_chars(href, ' ', 0)));
 
 		mem_free(href);
@@ -59,7 +59,7 @@ html_a(unsigned char *a)
 		if (target) {
 			mem_free_set(&format.target, target);
 		} else {
-			mem_free_set(&format.target, stracpy(global_html_context.base_target));
+			mem_free_set(&format.target, stracpy(html_context->base_target));
 		}
 
 		if (0) {
@@ -85,13 +85,13 @@ html_a(unsigned char *a)
 
 		mem_free_set(&format.title, get_attr_val(a, "title"));
 
-		html_focusable(a, &global_html_context);
+		html_focusable(a, html_context);
 
 	} else {
 		kill_html_stack_item(&html_top);
 	}
 
-	set_fragment_identifier(a, "name", &global_html_context);
+	set_fragment_identifier(a, "name", html_context);
 }
 
 /* Returns an allocated string made after @label
@@ -344,9 +344,9 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 }
 
 void
-html_img(unsigned char *a)
+html_img(unsigned char *a, struct html_context *html_context)
 {
-	html_img_do(a, NULL, &global_html_context);
+	html_img_do(a, NULL, html_context);
 }
 
 void
@@ -372,7 +372,7 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 
 
 void
-html_applet(unsigned char *a)
+html_applet(unsigned char *a, struct html_context *html_context)
 {
 	unsigned char *code, *alt;
 
@@ -381,14 +381,14 @@ html_applet(unsigned char *a)
 
 	alt = get_attr_val(a, "alt");
 
-	html_focusable(a, &global_html_context);
+	html_focusable(a, html_context);
 
 	if (alt && *alt) {
 		put_link_line("Applet: ", alt, code, global_doc_opts->framename,
-		              &global_html_context);
+		              html_context);
 	} else {
 		put_link_line("", "Applet", code, global_doc_opts->framename,
-		              &global_html_context);
+		              html_context);
 	}
 
 	mem_free_if(alt);
@@ -428,13 +428,13 @@ html_iframe_do(unsigned char *a, unsigned char *object_src,
 }
 
 void
-html_iframe(unsigned char *a)
+html_iframe(unsigned char *a, struct html_context *html_context)
 {
-	html_iframe_do(a, NULL, &global_html_context);
+	html_iframe_do(a, NULL, html_context);
 }
 
 void
-html_object(unsigned char *a)
+html_object(unsigned char *a, struct html_context *html_context)
 {
 	unsigned char *type, *url;
 
@@ -451,26 +451,26 @@ html_object(unsigned char *a)
 
 	if (!strncasecmp(type, "text/", 5)) {
 		/* We will just emulate <iframe>. */
-		html_iframe_do(a, url, &global_html_context);
-		html_skip(a, &global_html_context);
+		html_iframe_do(a, url, html_context);
+		html_skip(a, html_context);
 
 	} else if (!strncasecmp(type, "image/", 6)) {
 		/* <img> emulation. */
 		/* TODO: Use the enclosed text as 'alt' attribute. */
-		html_img_do(a, url, &global_html_context);
+		html_img_do(a, url, html_context);
 	} else {
 		unsigned char *name = get_attr_val(a, "standby");
 
-		html_focusable(a, &global_html_context);
+		html_focusable(a, html_context);
 
 		if (name && *name) {
 			put_link_line("Object: ", name, url,
 			              global_doc_opts->framename,
-			              &global_html_context);
+			              html_context);
 		} else {
 			put_link_line("Object: ", type, url,
 			              global_doc_opts->framename,
-			              &global_html_context);
+			              html_context);
 		}
 
 		mem_free_if(name);
@@ -481,7 +481,7 @@ html_object(unsigned char *a)
 }
 
 void
-html_embed(unsigned char *a)
+html_embed(unsigned char *a, struct html_context *html_context)
 {
 	unsigned char *type, *extension;
 	unsigned char *object_src;
@@ -503,10 +503,10 @@ html_embed(unsigned char *a)
 
 	type = get_extension_content_type(extension);
 	if (type && !strncasecmp(type, "image/", 6)) {
-		html_img_do(a, object_src, &global_html_context);
+		html_img_do(a, object_src, html_context);
 	} else {
 		/* We will just emulate <iframe>. */
-		html_iframe_do(a, object_src, &global_html_context);
+		html_iframe_do(a, object_src, html_context);
 	}
 
 	mem_free_if(type);
@@ -766,7 +766,7 @@ html_link_parse(unsigned char *a, struct hlink *link)
 }
 
 void
-html_link(unsigned char *a)
+html_link(unsigned char *a, struct html_context *html_context)
 {
 	int link_display = global_doc_opts->meta_link_display;
 	unsigned char *name;
@@ -787,8 +787,8 @@ html_link(unsigned char *a)
 	if (link.type == LT_STYLESHEET) {
 		int len = strlen(link.href);
 
-		import_css_stylesheet(&global_html_context.css_styles,
-				      global_html_context.base_href, link.href, len);
+		import_css_stylesheet(&html_context->css_styles,
+				      html_context->base_href, link.href, len);
 	}
 
 	if (!link_display) goto free_and_return;
@@ -810,7 +810,7 @@ html_link(unsigned char *a)
 	if (!name) goto free_and_return;
 	if (!init_string(&text)) goto free_and_return;
 
-	html_focusable(a, &global_html_context);
+	html_focusable(a, html_context);
 
 	if (link.title) {
 		add_to_string(&text, link.title);
@@ -857,12 +857,12 @@ html_link(unsigned char *a)
 only_title:
 	if (text.length)
 		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
-			      text.source, link.href, global_html_context.base_target,
-			      &global_html_context);
+			      text.source, link.href, html_context->base_target,
+			      html_context);
 	else
 		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
-			      name, link.href, global_html_context.base_target,
-			      &global_html_context);
+			      name, link.href, html_context->base_target,
+			      html_context);
 
 	if (text.source) done_string(&text);
 

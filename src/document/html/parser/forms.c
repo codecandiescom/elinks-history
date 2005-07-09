@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.76 2005/07/09 19:23:22 miciah Exp $ */
+/* $Id: forms.c,v 1.77 2005/07/09 21:26:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,18 +37,18 @@
 
 
 void
-html_form(unsigned char *a)
+html_form(unsigned char *a, struct html_context *html_context)
 {
 	unsigned char *al;
 	struct form *form;
 
-	global_html_context.was_br = 1;
+	html_context->was_br = 1;
 
 	form = init_form();
 	if (!form) return;
 
 	form->method = FORM_METHOD_GET;
-	form->form_num = a - global_html_context.startf;
+	form->form_num = a - html_context->startf;
 
 	al = get_attr_val(a, "method");
 	if (al) {
@@ -76,7 +76,7 @@ html_form(unsigned char *a)
 	 * Mozilla handles action="" as action="<current-URI>" which seems
 	 * reasonable. (bug 615) */
 	if (al && *al) {
-		form->action = join_urls(global_html_context.base_href, trim_chars(al, ' ', 0));
+		form->action = join_urls(html_context->base_href, trim_chars(al, ' ', 0));
 		mem_free(al);
 
 	} else {
@@ -89,7 +89,7 @@ html_form(unsigned char *a)
 		if (form->method == FORM_METHOD_GET)
 			components = URI_FORM_GET;
 
-		form->action = get_uri_string(global_html_context.base_href, components);
+		form->action = get_uri_string(html_context->base_href, components);
 
 		/* No action URI should contain post data */
 		assert(!form->action || !strchr(form->action, POST_CHAR));
@@ -101,9 +101,9 @@ html_form(unsigned char *a)
 	}
 
 	al = get_target(a);
-	form->target = al ? al : stracpy(global_html_context.base_target);
+	form->target = al ? al : stracpy(html_context->base_target);
 
-	global_html_context.special_f(global_html_context.part, SP_FORM, form);
+	html_context->special_f(html_context->part, SP_FORM, form);
 }
 
 
@@ -132,13 +132,13 @@ init_form_control(enum form_type type, unsigned char *attr,
 }
 
 void
-html_button(unsigned char *a)
+html_button(unsigned char *a, struct html_context *html_context)
 {
 	unsigned char *al;
 	struct form_control *fc;
 	enum form_type type = FC_SUBMIT;
 
-	html_focusable(a, &global_html_context);
+	html_focusable(a, html_context);
 
 	al = get_attr_val(a, "type");
 	if (!al) goto no_type_attr;
@@ -155,7 +155,7 @@ html_button(unsigned char *a)
 	mem_free(al);
 
 no_type_attr:
-	fc = init_form_control(type, a, &global_html_context);
+	fc = init_form_control(type, a, html_context);
 	if (!fc) return;
 
 	fc->name = get_attr_val(a, "name");
@@ -167,13 +167,13 @@ no_type_attr:
 
 	/* XXX: Does this make sense here? Where do we get FC_IMAGE? */
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
-	global_html_context.special_f(global_html_context.part, SP_CONTROL, fc);
+	html_context->special_f(html_context->part, SP_CONTROL, fc);
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
 }
 
 void
-html_input(unsigned char *a)
+html_input(unsigned char *a, struct html_context *html_context)
 {
 	int i;
 	unsigned char *al;
@@ -197,7 +197,7 @@ html_input(unsigned char *a)
 	mem_free(al);
 
 no_type_attr:
-	fc = init_form_control(type, a, &global_html_context);
+	fc = init_form_control(type, a, html_context);
 	if (!fc) return;
 
 	fc->name = get_attr_val(a, "name");
@@ -219,9 +219,9 @@ no_type_attr:
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
 	if (fc->type == FC_HIDDEN) goto hid;
 
-	put_chrs(" ", 1, &global_html_context);
+	put_chrs(" ", 1, html_context);
 	html_stack_dup(ELEMENT_KILLABLE);
-	html_focusable(a, &global_html_context);
+	html_focusable(a, html_context);
 	format.form = fc;
 	if (format.title) mem_free(format.title);
 	format.title = get_attr_val(a, "title");
@@ -231,43 +231,43 @@ no_type_attr:
 		case FC_FILE:
 			format.style.attr |= AT_BOLD;
 			for (i = 0; i < fc->size; i++)
-				put_chrs("_", 1, &global_html_context);
+				put_chrs("_", 1, html_context);
 			break;
 		case FC_CHECKBOX:
 			format.style.attr |= AT_BOLD;
-			put_chrs("[&nbsp;]", 8, &global_html_context);
+			put_chrs("[&nbsp;]", 8, html_context);
 			break;
 		case FC_RADIO:
 			format.style.attr |= AT_BOLD;
-			put_chrs("(&nbsp;)", 8, &global_html_context);
+			put_chrs("(&nbsp;)", 8, html_context);
 			break;
 		case FC_IMAGE:
 			mem_free_set(&format.image, NULL);
 			al = get_url_val(a, "src");
 			if (!al) al = get_url_val(a, "dynsrc");
 			if (al) {
-				format.image = join_urls(global_html_context.base_href, al);
+				format.image = join_urls(html_context->base_href, al);
 				mem_free(al);
 			}
 			format.style.attr |= AT_BOLD;
-			put_chrs("[&nbsp;", 7, &global_html_context);
+			put_chrs("[&nbsp;", 7, html_context);
 			if (fc->alt)
-				put_chrs(fc->alt, strlen(fc->alt), &global_html_context);
+				put_chrs(fc->alt, strlen(fc->alt), html_context);
 			else if (fc->name)
-				put_chrs(fc->name, strlen(fc->name), &global_html_context);
+				put_chrs(fc->name, strlen(fc->name), html_context);
 			else
-				put_chrs("Submit", 6, &global_html_context);
+				put_chrs("Submit", 6, html_context);
 
-			put_chrs("&nbsp;]", 7, &global_html_context);
+			put_chrs("&nbsp;]", 7, html_context);
 			break;
 		case FC_SUBMIT:
 		case FC_RESET:
 		case FC_BUTTON:
 			format.style.attr |= AT_BOLD;
-			put_chrs("[&nbsp;", 7, &global_html_context);
+			put_chrs("[&nbsp;", 7, html_context);
 			if (fc->default_value)
-				put_chrs(fc->default_value, strlen(fc->default_value), &global_html_context);
-			put_chrs("&nbsp;]", 7, &global_html_context);
+				put_chrs(fc->default_value, strlen(fc->default_value), html_context);
+			put_chrs("&nbsp;]", 7, html_context);
 			break;
 		case FC_TEXTAREA:
 		case FC_SELECT:
@@ -275,14 +275,14 @@ no_type_attr:
 			INTERNAL("bad control type");
 	}
 	kill_html_stack_item(&html_top);
-	put_chrs(" ", 1, &global_html_context);
+	put_chrs(" ", 1, html_context);
 
 hid:
-	global_html_context.special_f(global_html_context.part, SP_CONTROL, fc);
+	html_context->special_f(html_context->part, SP_CONTROL, fc);
 }
 
 void
-html_select(unsigned char *a)
+html_select(unsigned char *a, struct html_context *html_context)
 {
 	/* Note I haven't seen this code in use, do_html_select() seems to take
 	 * care of bussiness. --FF */
@@ -291,14 +291,14 @@ html_select(unsigned char *a)
 	unsigned char *al = get_attr_val(a, "name");
 
 	if (!al) return;
-	html_focusable(a, &global_html_context);
+	html_focusable(a, html_context);
 	html_top.type = ELEMENT_DONT_KILL;
 	mem_free_set(&format.select, al);
 	format.select_disabled = has_attr(a, "disabled") ? FORM_MODE_DISABLED : FORM_MODE_NORMAL;
 }
 
 void
-html_option(unsigned char *a)
+html_option(unsigned char *a, struct html_context *html_context)
 {
 	struct form_control *fc;
 	unsigned char *val;
@@ -315,15 +315,15 @@ html_option(unsigned char *a)
 		for (p = a - 1; *p != '<'; p--);
 
 		if (!init_string(&str)) goto end_parse;
-		if (parse_element(p, global_html_context.eoff, NULL, NULL, NULL, &p)) {
+		if (parse_element(p, html_context->eoff, NULL, NULL, NULL, &p)) {
 			INTERNAL("parse element failed");
 			val = str.source;
 			goto end_parse;
 		}
 
 se:
-		while (p < global_html_context.eoff && isspace(*p)) p++;
-		while (p < global_html_context.eoff && !isspace(*p) && *p != '<') {
+		while (p < html_context->eoff && isspace(*p)) p++;
+		while (p < html_context->eoff && !isspace(*p) && *p != '<') {
 
 sp:
 			add_char_to_string(&str, *p ? *p : ' '), p++;
@@ -332,13 +332,13 @@ sp:
 		r = p;
 		val = str.source; /* Has to be before the possible 'goto end_parse' */
 
-		while (r < global_html_context.eoff && isspace(*r)) r++;
-		if (r >= global_html_context.eoff) goto end_parse;
-		if (r - 2 <= global_html_context.eoff && (r[1] == '!' || r[1] == '?')) {
-			p = skip_comment(r, global_html_context.eoff);
+		while (r < html_context->eoff && isspace(*r)) r++;
+		if (r >= html_context->eoff) goto end_parse;
+		if (r - 2 <= html_context->eoff && (r[1] == '!' || r[1] == '?')) {
+			p = skip_comment(r, html_context->eoff);
 			goto se;
 		}
-		if (parse_element(r, global_html_context.eoff, &name, &namelen, NULL, &p)) goto sp;
+		if (parse_element(r, html_context->eoff, &name, &namelen, NULL, &p)) goto sp;
 		if (strlcasecmp(name, namelen, "OPTION", 6)
 		    && strlcasecmp(name, namelen, "/OPTION", 7)
 		    && strlcasecmp(name, namelen, "SELECT", 6)
@@ -349,7 +349,7 @@ sp:
 	}
 
 end_parse:
-	fc = init_form_control(FC_CHECKBOX, a, &global_html_context);
+	fc = init_form_control(FC_CHECKBOX, a, html_context);
 	if (!fc) {
 		mem_free_if(val);
 		return;
@@ -360,14 +360,14 @@ end_parse:
 	fc->default_state = has_attr(a, "selected");
 	fc->mode = has_attr(a, "disabled") ? FORM_MODE_DISABLED : format.select_disabled;
 
-	put_chrs(" ", 1, &global_html_context);
+	put_chrs(" ", 1, html_context);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
-	put_chrs("[ ]", 3, &global_html_context);
+	put_chrs("[ ]", 3, html_context);
 	kill_html_stack_item(&html_top);
-	put_chrs(" ", 1, &global_html_context);
-	global_html_context.special_f(global_html_context.part, SP_CONTROL, fc);
+	put_chrs(" ", 1, html_context);
+	html_context->special_f(html_context->part, SP_CONTROL, fc);
 }
 
 static struct list_menu lnk_menu;
@@ -537,7 +537,7 @@ end_parse:
 }
 
 void
-html_textarea(unsigned char *a)
+html_textarea(unsigned char *a, struct html_context *html_context)
 {
 	INTERNAL("This should be never called");
 }

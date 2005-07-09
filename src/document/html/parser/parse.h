@@ -1,4 +1,4 @@
-/* $Id: parse.h,v 1.11 2005/07/09 20:41:56 miciah Exp $ */
+/* $Id: parse.h,v 1.12 2005/07/09 21:26:44 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
@@ -47,7 +47,7 @@ void parse_html(unsigned char *html, unsigned char *eof, struct part *part, unsi
 
 
 /* Interface for element handlers */
-typedef void (element_handler_T)(unsigned char *);
+typedef void (element_handler_T)(unsigned char *, struct html_context *);
 
 /* Interface for the table handling */
 

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.39 2005/06/21 09:50:10 zas Exp $ */
+/* $Id: table.c,v 1.40 2005/07/09 20:11:17 miciah Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -184,7 +184,8 @@ set_table_rules(struct table *table, unsigned char *attr)
 }
 
 static void
-parse_table_attributes(struct table *table, unsigned char *attr, int real)
+parse_table_attributes(struct table *table, unsigned char *attr, int real,
+                       struct html_context *html_context)
 {
 	table->fragment_id = get_attr_val(attr, "id");
 
@@ -547,7 +548,7 @@ parse_table(unsigned char *html, unsigned char *eof, unsigned char **end,
 	table = new_table();
 	if (!table) return NULL;
 
-	parse_table_attributes(table, attr, sh);
+	parse_table_attributes(table, attr, sh, &global_html_context);
 	last_bgcolor = table->bgcolor;
 
 se:

@@ -1,8 +1,9 @@
-/* $Id: parse.h,v 1.10 2005/07/09 19:18:04 miciah Exp $ */
+/* $Id: parse.h,v 1.11 2005/07/09 20:41:56 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
 
+struct html_context;
 struct part;
 struct string;
 
@@ -53,7 +54,7 @@ typedef void (element_handler_T)(unsigned char *);
 int parse_element(unsigned char *, unsigned char *, unsigned char **, int *, unsigned char **, unsigned char **);
 
 int get_num(unsigned char *, unsigned char *);
-int get_width(unsigned char *, unsigned char *, int);
+int get_width(unsigned char *, unsigned char *, int, struct html_context *);
 
 unsigned char *skip_comment(unsigned char *, unsigned char *);
 

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.142 2005/07/09 19:27:07 miciah Exp $ */
+/* $Id: parse.c,v 1.143 2005/07/09 20:41:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,7 +270,8 @@ get_num(unsigned char *a, unsigned char *name)
  * @limited must be set to be able to parse percentage widths. */
 /* The function returns width in characters or -1 in case of error. */
 int
-get_width(unsigned char *a, unsigned char *name, int limited)
+get_width(unsigned char *a, unsigned char *name, int limited,
+          struct html_context *html_context)
 {
 	unsigned char *value = get_attr_val(a, name);
 	unsigned char *str = value;

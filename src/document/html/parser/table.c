@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.42 2005/07/09 20:37:13 miciah Exp $ */
+/* $Id: table.c,v 1.43 2005/07/09 20:41:56 miciah Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -130,7 +130,7 @@ get_column_width(unsigned char *attr, int *width, int sh,
 		if (!errno && n >= 0 && !*en)
 			*width = WIDTH_RELATIVE - n;
 	} else {
-		int w = get_width(attr, "width", sh);
+		int w = get_width(attr, "width", sh, html_context);
 
 		if (w >= 0) *width = w;
 	}
@@ -192,7 +192,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real,
 
 	get_bordercolor(attr, &table->bordercolor);
 
-	table->width = get_width(attr, "width", real);
+	table->width = get_width(attr, "width", real, html_context);
 	if (table->width == -1) {
 		table->width = get_html_max_width();
 		table->full_width = 1;

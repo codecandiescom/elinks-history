@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.566 2005/07/09 20:34:29 miciah Exp $ */
+/* $Id: parser.c,v 1.567 2005/07/09 20:41:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -766,7 +766,7 @@ html_hr(unsigned char *a)
 	if (par_format.align == ALIGN_JUSTIFY) par_format.align = ALIGN_CENTER;
 	par_format.leftmargin = par_format.rightmargin = global_html_context.margin;
 
-	i = get_width(a, "width", 1);
+	i = get_width(a, "width", 1, &global_html_context);
 	if (i == -1) i = get_html_max_width();
 	format.style.attr = AT_GRAPHICS;
 	global_html_context.special_f(global_html_context.part, SP_NOWRAP, 1);

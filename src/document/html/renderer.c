@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.542 2005/07/09 22:58:03 miciah Exp $ */
+/* $Id: renderer.c,v 1.543 2005/07/09 23:00:32 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -391,9 +391,10 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 /* First possibly do the format change and then find out what coordinates
  * to use since sub- or superscript might change them */
 static inline void
-set_hline(struct part *part, unsigned char *chars, int charslen,
+set_hline(struct html_context *html_context, unsigned char *chars, int charslen,
 	  enum link_state link_state)
 {
+	struct part *part = html_context->part;
 	struct screen_char *schar = get_format_screen_char(part, link_state);
 	int x = part->cx;
 	int y = part->cy;
@@ -1243,7 +1244,7 @@ put_chars(struct html_context *html_context, unsigned char *chars, int charslen)
 			put_link_number(part);
 	}
 
-	set_hline(part, chars, charslen, link_state);
+	set_hline(html_context, chars, charslen, link_state);
 
 	if (link_state != LINK_STATE_NONE) {
 		/* We need to update the current @link_state because <sub> and

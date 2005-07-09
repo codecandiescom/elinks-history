@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.35 2005/07/09 22:18:40 miciah Exp $ */
+/* $Id: stack.c,v 1.36 2005/07/09 22:23:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ search_html_stack(unsigned char *name, struct html_context *html_context)
 
 
 void
-kill_html_stack_item(struct html_element *e)
+kill_html_stack_item(struct html_element *e, struct html_context *html_context)
 {
 #ifdef CONFIG_ECMASCRIPT
 	unsigned char *onload = NULL;
@@ -179,7 +179,7 @@ kill_element(int ls, struct html_element *e)
 		if (e->linebreak > l)
 			l = e->linebreak;
 		e = e->prev;
-		kill_html_stack_item(e->next);
+		kill_html_stack_item(e->next, &global_html_context);
 	}
 
 	ln_break(l, &global_html_context);

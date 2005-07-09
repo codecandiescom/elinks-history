@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.77 2005/07/09 21:26:44 miciah Exp $ */
+/* $Id: forms.c,v 1.78 2005/07/09 22:23:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,7 +274,7 @@ no_type_attr:
 		case FC_HIDDEN:
 			INTERNAL("bad control type");
 	}
-	kill_html_stack_item(&html_top);
+	kill_html_stack_item(&html_top, html_context);
 	put_chrs(" ", 1, html_context);
 
 hid:
@@ -365,7 +365,7 @@ end_parse:
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
 	put_chrs("[ ]", 3, html_context);
-	kill_html_stack_item(&html_top);
+	kill_html_stack_item(&html_top, html_context);
 	put_chrs(" ", 1, html_context);
 	html_context->special_f(html_context->part, SP_CONTROL, fc);
 }
@@ -529,7 +529,7 @@ end_parse:
 	for (i = 0; i < max_width; i++)
 		put_chrs("_", 1, html_context);
 
-	kill_html_stack_item(&html_top);
+	kill_html_stack_item(&html_top, html_context);
 	put_chrs("]", 1, html_context);
 	html_context->special_f(html_context->part, SP_CONTROL, fc);
 
@@ -642,7 +642,7 @@ pp:
 			ln_break(1, html_context);
 	}
 
-	kill_html_stack_item(&html_top);
+	kill_html_stack_item(&html_top, html_context);
 	if (rows > 1)
 		ln_break(1, html_context);
 	else

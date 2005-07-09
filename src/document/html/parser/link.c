@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.90 2005/07/09 21:26:44 miciah Exp $ */
+/* $Id: link.c,v 1.91 2005/07/09 22:23:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ html_a(unsigned char *a, struct html_context *html_context)
 		html_focusable(a, html_context);
 
 	} else {
-		kill_html_stack_item(&html_top);
+		kill_html_stack_item(&html_top, html_context);
 	}
 
 	set_fragment_identifier(a, "name", html_context);
@@ -268,7 +268,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 		 * If not, just exit now. */
 		if (!global_doc_opts->images && !format.link) {
 			mem_free_if(src);
-			if (usemap) kill_html_stack_item(&html_top);
+			if (usemap) kill_html_stack_item(&html_top, html_context);
 			return;
 		}
 
@@ -331,7 +331,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 
 			put_image_label(a, label, html_context);
 
-			if (ismap) kill_html_stack_item(&html_top);
+			if (ismap) kill_html_stack_item(&html_top, html_context);
 			mem_free_set(&format.image, NULL);
 			mem_free_set(&format.title, NULL);
 		}
@@ -340,7 +340,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	}
 
 	mem_free_if(src);
-	if (usemap) kill_html_stack_item(&html_top);
+	if (usemap) kill_html_stack_item(&html_top, html_context);
 }
 
 void
@@ -367,7 +367,7 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	format.style.fg = format.clink;
 	put_chrs(linkname, strlen(linkname), html_context);
 	ln_break(1, html_context);
-	kill_html_stack_item(&html_top);
+	kill_html_stack_item(&html_top, html_context);
 }
 
 

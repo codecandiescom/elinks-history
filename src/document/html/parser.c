@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.568 2005/07/09 20:58:45 miciah Exp $ */
+/* $Id: parser.c,v 1.569 2005/07/09 21:16:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1568,9 +1568,10 @@ init_html_parser_state(enum html_element_type type, int align, int margin, int w
 
 
 void
-done_html_parser_state(struct html_element *element)
+done_html_parser_state(struct html_element *element,
+                       struct html_context *html_context)
 {
-	global_html_context.line_breax = 1;
+	html_context->line_breax = 1;
 
 	while (&html_top != element) {
 		kill_html_stack_item(&html_top);

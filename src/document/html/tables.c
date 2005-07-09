@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.390 2005/07/09 20:25:44 miciah Exp $ */
+/* $Id: tables.c,v 1.391 2005/07/09 21:16:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -860,7 +860,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y,
 			                        html_context);
 	}
 
-	done_html_parser_state(state);
+	done_html_parser_state(state, html_context);
 
 	if (part) mem_free(part);
 }
@@ -1279,7 +1279,7 @@ ret2:
 	part->link_num = table->link_num;
 	int_lower_bound(&part->box.height, part->cy);
 	html_context->part = part; /* Might've changed in draw_table_cells(). */
-	done_html_parser_state(state);
+	done_html_parser_state(state, html_context);
 
 	free_table(table);
 

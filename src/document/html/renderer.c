@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.540 2005/07/09 20:17:08 miciah Exp $ */
+/* $Id: renderer.c,v 1.541 2005/07/09 21:16:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1724,7 +1724,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	parse_html(start, end, part, head);
 
-	done_html_parser_state(html_state);
+	done_html_parser_state(html_state, &global_html_context);
 
 	int_lower_bound(&part->max_width, part->box.width);
 

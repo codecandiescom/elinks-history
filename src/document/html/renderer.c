@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.544 2005/07/09 23:03:04 miciah Exp $ */
+/* $Id: renderer.c,v 1.545 2005/07/09 23:03:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -996,8 +996,9 @@ put_chars_conv(struct html_context *html_context,
 }
 
 static inline void
-put_link_number(struct part *part)
+put_link_number(struct html_context *html_context)
 {
+	struct part *part = html_context->part;
 	unsigned char s[64];
 	unsigned char *fl = format.link;
 	unsigned char *ft = format.target;
@@ -1243,7 +1244,7 @@ put_chars(struct html_context *html_context, unsigned char *chars, int charslen)
 		if (x_offset == charslen)
 			link_state = LINK_STATE_NONE;
 		else if (global_doc_opts->links_numbering)
-			put_link_number(part);
+			put_link_number(html_context);
 	}
 
 	set_hline(html_context, chars, charslen, link_state);

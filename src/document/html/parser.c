@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.574 2005/07/09 22:34:14 miciah Exp $ */
+/* $Id: parser.c,v 1.575 2005/07/09 22:58:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,7 +179,7 @@ put_chrs(unsigned char *start, int len, struct html_context *html_context)
 		break;
 
 	case HTML_SPACE_ADD:
-		html_context->put_chars_f(html_context->part, " ", 1);
+		html_context->put_chars_f(html_context, " ", 1);
 		html_context->position++;
 		html_context->putsp = HTML_SPACE_SUPPRESS;
 
@@ -203,7 +203,7 @@ put_chrs(unsigned char *start, int len, struct html_context *html_context)
 		html_context->putsp = HTML_SPACE_SUPPRESS;
 	html_context->was_br = 0;
 
-	html_context->put_chars_f(html_context->part, start, len);
+	html_context->put_chars_f(html_context, start, len);
 
 	html_context->position += len;
 	html_context->line_breax = 0;
@@ -1594,7 +1594,7 @@ void
 init_html_parser(struct uri *uri, struct document_options *options,
 		 unsigned char *start, unsigned char *end,
 		 struct string *head, struct string *title,
-		 void (*put_chars)(struct part *, unsigned char *, int),
+		 void (*put_chars)(struct html_context *, unsigned char *, int),
 		 void (*line_break)(struct part *),
 		 void *(*special)(struct part *, enum html_special_type, ...))
 {

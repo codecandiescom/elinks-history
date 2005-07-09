@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.89 2005/07/09 21:16:51 miciah Exp $ */
+/* $Id: parser.h,v 1.90 2005/07/09 22:58:03 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -164,7 +164,7 @@ void
 init_html_parser(struct uri *uri, struct document_options *options,
 		 unsigned char *start, unsigned char *end,
 		 struct string *head, struct string *title,
-		 void (*put_chars)(struct part *, unsigned char *, int),
+		 void (*put_chars)(struct html_context *, unsigned char *, int),
 		 void (*line_break)(struct part *),
 		 void *(*special)(struct part *, enum html_special_type, ...));
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.541 2005/07/09 21:16:51 miciah Exp $ */
+/* $Id: renderer.c,v 1.542 2005/07/09 22:58:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ static struct renderer_context renderer_context;
 
 /* Prototypes */
 void line_break(struct part *);
-void put_chars(struct part *, unsigned char *, int);
+void put_chars(struct html_context *, unsigned char *, int);
 
 #define X(x_)	(part->box.x + (x_))
 #define Y(y_)	(part->box.y + (y_))
@@ -354,11 +354,11 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 			if (format.style.attr & AT_SUBSCRIPT) {
 				if (!renderer_context.did_subscript) {
 					renderer_context.did_subscript = 1;
-					put_chars(part, "[", 1);
+					put_chars(&global_html_context, "[", 1);
 				}
 			} else {
 				if (renderer_context.did_subscript) {
-					put_chars(part, "]", 1);
+					put_chars(&global_html_context, "]", 1);
 					renderer_context.did_subscript = 0;
 				}
 			}
@@ -370,7 +370,7 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 			if (format.style.attr & AT_SUPERSCRIPT) {
 				if (!super) {
 					super = 1;
-					put_chars(part, "^", 1);
+					put_chars(&global_html_context, "^", 1);
 				}
 			} else {
 				if (super) {
@@ -970,13 +970,21 @@ html_special_tag(struct document *document, unsigned char *t, int x, int y)
 
 
 static void
-put_chars_conv(struct part *part, unsigned char *chars, int charslen)
+put_chars_conv(struct html_context *html_context,
+               unsigned char *chars, int charslen)
 {
+	struct part *part;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
+
 	assert(part && chars && charslen);
 	if_assert_failed return;
 
 	if (format.style.attr & AT_GRAPHICS) {
-		put_chars(part, chars, charslen);
+		put_chars(html_context, chars, charslen);
 		return;
 	}
 
@@ -1003,7 +1011,7 @@ put_link_number(struct part *part)
 	s[slen] = '\0';
 
 	renderer_context.nosearchable = 1;
-	put_chars(part, s, slen);
+	put_chars(&global_html_context, s, slen);
 	renderer_context.nosearchable = 0;
 
 	if (ff && ff->type == FC_TEXTAREA) line_break(part);
@@ -1171,10 +1179,16 @@ html_has_non_space_chars(unsigned char *chars, int charslen)
 }
 
 void
-put_chars(struct part *part, unsigned char *chars, int charslen)
+put_chars(struct html_context *html_context, unsigned char *chars, int charslen)
 {
 	enum link_state link_state;
 	int update_after_subscript = renderer_context.did_subscript;
+	struct part *part;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
 
 	assert(part);
 	if_assert_failed return;

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.389 2005/07/09 20:24:50 miciah Exp $ */
+/* $Id: tables.c,v 1.390 2005/07/09 20:25:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -994,7 +994,7 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 
 static inline void
 draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
-		 int col, int row)
+		 int col, int row, struct html_context *html_context)
 {
 	static unsigned char const vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
 	int pos = V_FRAME_POSITION(table, col, row);
@@ -1104,7 +1104,7 @@ draw_table_frames(struct table *table, int indent, int y,
 					draw_frame_point(table, frame, cx, cy, col, row,
 					                 html_context);
 					if (row < table->rows)
-						draw_frame_vline(table, frame, cx, cy + 1, col, row);
+						draw_frame_vline(table, frame, cx, cy + 1, col, row, html_context);
 					cx++;
 				}
 
@@ -1117,7 +1117,7 @@ draw_table_frames(struct table *table, int indent, int y,
 				draw_frame_point(table, frame, cx, cy, col, row,
 				                 html_context);
 				if (row < table->rows)
-					draw_frame_vline(table, frame, cx, cy + 1, col, row);
+					draw_frame_vline(table, frame, cx, cy + 1, col, row, html_context);
 				cx++;
 			}
 
@@ -1128,7 +1128,7 @@ draw_table_frames(struct table *table, int indent, int y,
 				if ((col > 0 && col < table->cols && has_vline_width(table, col))
 				    || (col == 0 && table_frames.left)
 				    || (col == table->cols && table_frames.right)) {
-					draw_frame_vline(table, frame, cx, cy, col, row);
+					draw_frame_vline(table, frame, cx, cy, col, row, html_context);
 					cx++;
 				}
 				if (col < table->cols) cx += table->cols_widths[col];

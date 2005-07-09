@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.149 2005/07/09 00:30:10 miciah Exp $ */
+/* $Id: kbd.c,v 1.150 2005/07/09 00:31:04 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,7 @@ send_done_sequence(int h, int altscreen)
 }
 
 void
-toggle_mouse()
+toggle_mouse(void)
 {
 	int h = get_output_handle(); /* XXX: Is this all right? -- Miciah */
 

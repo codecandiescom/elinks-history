@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.83 2005/07/09 01:46:49 miciah Exp $ */
+/* $Id: link.c,v 1.84 2005/07/09 01:50:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,7 +191,8 @@ get_image_label(unsigned char *label)
 }
 
 static void
-put_image_label(unsigned char *a, unsigned char *label)
+put_image_label(unsigned char *a, unsigned char *label,
+                struct html_context *html_context)
 {
 	color_T fg;
 
@@ -202,7 +203,7 @@ put_image_label(unsigned char *a, unsigned char *label)
 
 	fg = format.style.fg;
 	format.style.fg = format.image_link;
-	put_chrs(label, strlen(label), &global_html_context);
+	put_chrs(label, strlen(label), html_context);
 	format.style.fg = fg;
 }
 
@@ -309,7 +310,7 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 		}
 
 		if (!get_opt_bool("document.browse.images.show_any_as_links")) {
-			put_image_label(a, label);
+			put_image_label(a, label, &global_html_context);
 
 		} else {
 			if (src) {
@@ -327,7 +328,7 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 					mem_free_set(&format.link, new_link);
 			}
 
-			put_image_label(a, label);
+			put_image_label(a, label, &global_html_context);
 
 			if (ismap) kill_html_stack_item(&html_top);
 			mem_free_set(&format.image, NULL);

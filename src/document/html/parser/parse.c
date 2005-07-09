@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.141 2005/07/09 19:23:22 miciah Exp $ */
+/* $Id: parse.c,v 1.142 2005/07/09 19:27:07 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -418,7 +418,6 @@ element_handler_T html_ol;
 element_handler_T html_p;
 element_handler_T html_pre;
 element_handler_T html_script;
-element_handler_T html_skip;
 element_handler_T html_span;
 element_handler_T html_style;
 element_handler_T html_subscript;

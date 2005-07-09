@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.74 2005/07/09 01:34:40 miciah Exp $ */
+/* $Id: forms.c,v 1.75 2005/07/09 01:48:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -515,7 +515,7 @@ end_parse:
 	fc->labels = labels;
 
 	menu_labels(fc->menu, "", labels);
-	put_chrs("[", 1, &global_html_context);
+	put_chrs("[", 1, html_context);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
@@ -527,10 +527,10 @@ end_parse:
 	}
 
 	for (i = 0; i < max_width; i++)
-		put_chrs("_", 1, &global_html_context);
+		put_chrs("_", 1, html_context);
 
 	kill_html_stack_item(&html_top);
-	put_chrs("]", 1, &global_html_context);
+	put_chrs("]", 1, html_context);
 	html_context->special_f(html_context->part, SP_CONTROL, fc);
 
 	return 0;

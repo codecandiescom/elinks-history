@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.546 2005/07/09 23:08:38 miciah Exp $ */
+/* $Id: renderer.c,v 1.547 2005/07/09 23:11:30 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1058,9 +1058,10 @@ done_link_state_info(void)
 }
 
 static inline void
-process_link(struct part *part, enum link_state link_state,
+process_link(struct html_context *html_context, enum link_state link_state,
 	     unsigned char *chars, int charslen)
 {
+	struct part *part = html_context->part;
 	struct link *link;
 	int x_offset = 0;
 
@@ -1260,7 +1261,7 @@ put_chars(struct html_context *html_context, unsigned char *chars, int charslen)
 			link_state = get_link_state();
 		}
 
-		process_link(part, link_state, chars, charslen);
+		process_link(html_context, link_state, chars, charslen);
 	}
 
 	if (renderer_context.nowrap

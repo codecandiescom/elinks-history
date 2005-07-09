@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.72 2005/07/09 01:30:08 miciah Exp $ */
+/* $Id: forms.c,v 1.73 2005/07/09 01:31:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,9 +373,10 @@ static struct list_menu lnk_menu;
 
 int
 do_html_select(unsigned char *attr, unsigned char *html,
-	       unsigned char *eof, unsigned char **end)
+	       unsigned char *eof, unsigned char **end,
+	       struct html_context *html_context)
 {
-	struct conv_table *ct = global_html_context.special_f(global_html_context.part, SP_TABLE, NULL);
+	struct conv_table *ct = html_context->special_f(html_context->part, SP_TABLE, NULL);
 	struct form_control *fc;
 	struct string lbl = NULL_STRING, orig_lbl = NULL_STRING;
 	unsigned char **values = NULL;
@@ -529,7 +530,7 @@ end_parse:
 
 	kill_html_stack_item(&html_top);
 	put_chrs("]", 1, &global_html_context);
-	global_html_context.special_f(global_html_context.part, SP_CONTROL, fc);
+	html_context->special_f(html_context->part, SP_CONTROL, fc);
 
 	return 0;
 }

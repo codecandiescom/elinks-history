@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.386 2005/07/09 20:21:32 miciah Exp $ */
+/* $Id: tables.c,v 1.387 2005/07/09 20:22:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1063,7 +1063,8 @@ init_table_rules(struct table *table, signed char *frame[2])
 }
 
 static void
-draw_table_frames(struct table *table, int indent, int y)
+draw_table_frames(struct table *table, int indent, int y,
+                  struct html_context *html_context)
 {
 	struct table_frames table_frames;
 	signed char *frame[2];
@@ -1259,7 +1260,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	 * the top, bottom or the sides. */
 	draw_table_caption(table, indent + part->box.x, part->box.y + part->cy);
 	draw_table_cells(table, indent, part->cy, html_context);
-	draw_table_frames(table, indent, part->cy);
+	draw_table_frames(table, indent, part->cy, html_context);
 
 	part->cy += table->real_height;
 	part->cx = -1;

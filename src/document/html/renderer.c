@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.545 2005/07/09 23:03:58 miciah Exp $ */
+/* $Id: renderer.c,v 1.546 2005/07/09 23:08:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1015,7 +1015,7 @@ put_link_number(struct html_context *html_context)
 	s[slen] = '\0';
 
 	renderer_context.nosearchable = 1;
-	put_chars(&global_html_context, s, slen);
+	put_chars(html_context, s, slen);
 	renderer_context.nosearchable = 0;
 
 	if (ff && ff->type == FC_TEXTAREA) line_break(part);

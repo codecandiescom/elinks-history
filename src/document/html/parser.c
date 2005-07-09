@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.559 2005/07/09 02:10:26 miciah Exp $ */
+/* $Id: parser.c,v 1.560 2005/07/09 18:41:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,9 +235,11 @@ void
 import_css_stylesheet(struct css_stylesheet *css, struct uri *base_uri,
 		      unsigned char *url, int len)
 {
+	struct html_context *html_context = css->import_data;
 	unsigned char *import_url;
 	struct uri *uri;
 
+	assert(html_context);
 	assert(base_uri);
 
 	if (!global_doc_opts->css_enable
@@ -259,7 +261,7 @@ import_css_stylesheet(struct css_stylesheet *css, struct uri *base_uri,
 	if (!uri) return;
 
 	/* Request the imported stylesheet as part of the document ... */
-	global_html_context.special_f(global_html_context.part, SP_STYLESHEET, uri);
+	html_context->special_f(html_context->part, SP_STYLESHEET, uri);
 
 	/* ... and then attempt to import from the cache. */
 	import_css(css, uri);
@@ -1651,6 +1653,8 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	global_html_context.table_level = 0;
 
 #ifdef CONFIG_CSS
+	global_html_context.css_styles.import_data = &global_html_context;
+
 	if (global_doc_opts->css_enable)
 		mirror_css_stylesheet(&default_stylesheet,
 				      &global_html_context.css_styles);

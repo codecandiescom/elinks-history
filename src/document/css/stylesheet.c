@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.49 2005/03/05 21:08:11 zas Exp $ */
+/* $Id: stylesheet.c,v 1.50 2005/07/09 18:41:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,7 +213,7 @@ dump_css_selector_tree(struct list_head *sels)
 
 
 struct css_stylesheet *
-init_css_stylesheet(css_stylesheet_importer_T importer)
+init_css_stylesheet(css_stylesheet_importer_T importer, void *import_data)
 {
 	struct css_stylesheet *css;
 
@@ -221,6 +221,7 @@ init_css_stylesheet(css_stylesheet_importer_T importer)
 	if (!css)
 		return NULL;
 	css->import = importer;
+	css->import_data = import_data;
 	init_list(css->selectors);
 	return css;
 }
@@ -242,7 +243,7 @@ clone_css_stylesheet(struct css_stylesheet *orig)
 	struct css_stylesheet *copy;
 	struct css_selector *selector;
 
-	copy = init_css_stylesheet(orig->import);
+	copy = init_css_stylesheet(orig->import, orig->import_data);
 	if (!copy)
 		return NULL;
 	mirror_css_stylesheet(orig, copy);

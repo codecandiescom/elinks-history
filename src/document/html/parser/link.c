@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.87 2005/07/09 01:58:08 miciah Exp $ */
+/* $Id: link.c,v 1.88 2005/07/09 19:23:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,7 @@ html_a(unsigned char *a)
 
 		mem_free_set(&format.title, get_attr_val(a, "title"));
 
-		html_focusable(a);
+		html_focusable(a, &global_html_context);
 
 	} else {
 		kill_html_stack_item(&html_top);
@@ -199,7 +199,7 @@ put_image_label(unsigned char *a, unsigned char *label,
 	/* This is not 100% appropriate for <img>, but well, accepting
 	 * accesskey and tabindex near <img> is just our little
 	 * extension to the standard. After all, it makes sense. */
-	html_focusable(a);
+	html_focusable(a, html_context);
 
 	fg = format.style.fg;
 	format.style.fg = format.image_link;
@@ -381,7 +381,7 @@ html_applet(unsigned char *a)
 
 	alt = get_attr_val(a, "alt");
 
-	html_focusable(a);
+	html_focusable(a, &global_html_context);
 
 	if (alt && *alt) {
 		put_link_line("Applet: ", alt, code, global_doc_opts->framename,
@@ -413,7 +413,7 @@ html_iframe_do(unsigned char *a, unsigned char *object_src,
 		return;
 	}
 
-	html_focusable(a);
+	html_focusable(a, html_context);
 
 	if (*name) {
 		put_link_line("IFrame: ", name, url, global_doc_opts->framename,
@@ -461,7 +461,7 @@ html_object(unsigned char *a)
 	} else {
 		unsigned char *name = get_attr_val(a, "standby");
 
-		html_focusable(a);
+		html_focusable(a, &global_html_context);
 
 		if (name && *name) {
 			put_link_line("Object: ", name, url,
@@ -810,7 +810,7 @@ html_link(unsigned char *a)
 	if (!name) goto free_and_return;
 	if (!init_string(&text)) goto free_and_return;
 
-	html_focusable(a);
+	html_focusable(a, &global_html_context);
 
 	if (link.title) {
 		add_to_string(&text, link.title);

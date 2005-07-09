@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.85 2005/07/09 01:52:24 miciah Exp $ */
+/* $Id: link.c,v 1.86 2005/07/09 01:53:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -396,7 +396,8 @@ html_applet(unsigned char *a)
 }
 
 static void
-html_iframe_do(unsigned char *a, unsigned char *object_src)
+html_iframe_do(unsigned char *a, unsigned char *object_src,
+               struct html_context *html_context)
 {
 	unsigned char *name, *url = NULL;
 
@@ -416,10 +417,10 @@ html_iframe_do(unsigned char *a, unsigned char *object_src)
 
 	if (*name) {
 		put_link_line("IFrame: ", name, url, global_doc_opts->framename,
-		              &global_html_context);
+		              html_context);
 	} else {
 		put_link_line("", "IFrame", url, global_doc_opts->framename,
-		              &global_html_context);
+		              html_context);
 	}
 
 	mem_free(name);
@@ -429,7 +430,7 @@ html_iframe_do(unsigned char *a, unsigned char *object_src)
 void
 html_iframe(unsigned char *a)
 {
-	html_iframe_do(a, NULL);
+	html_iframe_do(a, NULL, &global_html_context);
 }
 
 void
@@ -450,7 +451,7 @@ html_object(unsigned char *a)
 
 	if (!strncasecmp(type, "text/", 5)) {
 		/* We will just emulate <iframe>. */
-		html_iframe_do(a, url);
+		html_iframe_do(a, url, &global_html_context);
 		html_skip(a);
 
 	} else if (!strncasecmp(type, "image/", 6)) {
@@ -505,7 +506,7 @@ html_embed(unsigned char *a)
 		html_img_do(a, object_src, &global_html_context);
 	} else {
 		/* We will just emulate <iframe>. */
-		html_iframe_do(a, object_src);
+		html_iframe_do(a, object_src, &global_html_context);
 	}
 
 	mem_free_if(type);

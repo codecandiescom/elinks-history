@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.557 2005/07/09 02:07:21 miciah Exp $ */
+/* $Id: parser.c,v 1.558 2005/07/09 02:09:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -416,7 +416,7 @@ html_skip(unsigned char *a)
 
 #ifdef CONFIG_ECMASCRIPT
 int
-do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsigned char **end)
+do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsigned char **end, struct html_context *html_context)
 {
 	/* TODO: <noscript> processing. Well, same considerations apply as to
 	 * CSS property display: none processing. */

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.86 2005/07/09 02:07:21 miciah Exp $ */
+/* $Id: parser.h,v 1.87 2005/07/09 02:09:09 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -200,7 +200,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 void ln_break(int n, struct html_context *html_context);
 
 #ifdef CONFIG_ECMASCRIPT
-int do_html_script(unsigned char *attr, unsigned char *html, unsigned char *eof, unsigned char **end);
+int do_html_script(unsigned char *attr, unsigned char *html, unsigned char *eof, unsigned char **end, struct html_context *html_context);
 #endif
 
 #endif

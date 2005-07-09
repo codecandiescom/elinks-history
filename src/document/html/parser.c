@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.556 2005/07/09 02:00:29 miciah Exp $ */
+/* $Id: parser.c,v 1.557 2005/07/09 02:07:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -416,7 +416,7 @@ html_skip(unsigned char *a)
 
 #ifdef CONFIG_ECMASCRIPT
 int
-do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsigned char **end, struct part *part)
+do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsigned char **end)
 {
 	/* TODO: <noscript> processing. Well, same considerations apply as to
 	 * CSS property display: none processing. */
@@ -455,7 +455,7 @@ not_processed:
 		mem_free(language);
 	}
 
-	if (part->document && (src = get_attr_val(a, "src"))) {
+	if (global_html_context.part->document && (src = get_attr_val(a, "src"))) {
 		/* External reference. */
 
 		unsigned char *import_url;
@@ -480,7 +480,7 @@ not_processed:
 
 		/* Create URL reference onload snippet. */
 		insert_in_string(&import_url, 0, "^", 1);
-		add_to_string_list(&part->document->onload_snippets,
+		add_to_string_list(&global_html_context.part->document->onload_snippets,
 		                   import_url, -1);
 
 imported:
@@ -559,8 +559,8 @@ imported:
 		return 1;
 	}
 
-	if (part->document && *html != '^') {
-		add_to_string_list(&part->document->onload_snippets,
+	if (global_html_context.part->document && *html != '^') {
+		add_to_string_list(&global_html_context.part->document->onload_snippets,
 		                   html, *end - html);
 	}
 	return 0;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.573 2005/07/10 02:02:03 miciah Exp $ */
+/* $Id: renderer.c,v 1.574 2005/07/10 03:34:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,10 +249,10 @@ clear_hchars(struct html_context *html_context, int x, int y, int width)
 /* Allocates the required chars on the given line and returns the char at
  * position (x, y) ready to be used as a template char.  */
 static inline struct screen_char *
-get_frame_char(struct html_context *html_context, int x, int y,
-               unsigned char data, color_T bgcolor, color_T fgcolor)
+get_frame_char(struct html_context *html_context, struct part *part,
+	       int x, int y, unsigned char data,
+               color_T bgcolor, color_T fgcolor)
 {
-	struct part *part;
 	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, fgcolor);
 	struct screen_char *template;
 	static enum color_flags color_flags;
@@ -260,8 +260,6 @@ get_frame_char(struct html_context *html_context, int x, int y,
 
 	assert(html_context);
 	if_assert_failed return NULL;
-
-	part = html_context->part;
 
 	assert(part && part->document && x >= 0 && y >= 0);
 	if_assert_failed return NULL;
@@ -294,7 +292,7 @@ draw_frame_hchars(struct part *part, int x, int y, int width,
 	assert(width > 0);
 	if_assert_failed return;
 
-	template = get_frame_char(html_context, x + width - 1, y, data, bgcolor, fgcolor);
+	template = get_frame_char(html_context, part, x + width - 1, y, data, bgcolor, fgcolor);
 	if (!template) return;
 
 	/* The template char is the last we need to draw so only decrease @width. */
@@ -308,8 +306,8 @@ draw_frame_vchars(struct part *part, int x, int y, int height,
 		  unsigned char data, color_T bgcolor, color_T fgcolor,
 		  struct html_context *html_context)
 {
-	struct screen_char *template = get_frame_char(html_context, x, y, data,
-						      bgcolor, fgcolor);
+	struct screen_char *template = get_frame_char(html_context, part, x, y,
+	                                              data, bgcolor, fgcolor);
 
 	if (!template) return;
 

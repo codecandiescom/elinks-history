@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.44 2005/07/10 23:04:57 miciah Exp $ */
+/* $Id: stack.c,v 1.45 2005/07/10 23:07:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,7 +186,7 @@ kill_element(int ls, struct html_element *e, struct html_context *html_context)
 }
 
 void
-kill_html_stack_until(int ls, struct html_context *html_context, ...)
+kill_html_stack_until(struct html_context *html_context, int ls, ...)
 {
 	struct html_element *e = &html_top;
 
@@ -196,7 +196,7 @@ kill_html_stack_until(int ls, struct html_context *html_context, ...)
 		int sk = 0;
 		va_list arg;
 
-		va_start(arg, html_context);
+		va_start(arg, ls);
 		while (1) {
 			unsigned char *s = va_arg(arg, unsigned char *);
 			int slen;

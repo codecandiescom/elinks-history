@@ -1,4 +1,4 @@
-/* $Id: stack.h,v 1.12 2005/07/10 23:04:57 miciah Exp $ */
+/* $Id: stack.h,v 1.13 2005/07/10 23:07:29 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_STACK_H
 #define EL__DOCUMENT_HTML_PARSER_STACK_H
@@ -15,7 +15,7 @@ void html_stack_dup(enum html_element_type type,
 
 void kill_html_stack_item(struct html_context *html_context,
                           struct html_element *e);
-void kill_html_stack_until(int ls, struct html_context *html_context, ...);
+void kill_html_stack_until(struct html_context *html_context, int ls, ...);
 
 /* void dump_html_stack(struct html_context *html_context); */
 

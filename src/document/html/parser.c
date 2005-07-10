@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.591 2005/07/10 23:04:57 miciah Exp $ */
+/* $Id: parser.c,v 1.592 2005/07/10 23:07:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -790,7 +790,7 @@ void
 html_th(struct html_context *html_context, unsigned char *a)
 {
 	/*html_linebrk(html_context, a);*/
-	kill_html_stack_until(1, html_context,
+	kill_html_stack_until(html_context, 1,
 	                      "TD", "TH", "", "TR", "TABLE", NULL);
 	format.style.attr |= AT_BOLD;
 	put_chrs(html_context, " ", 1);
@@ -800,7 +800,7 @@ void
 html_td(struct html_context *html_context, unsigned char *a)
 {
 	/*html_linebrk(html_context, a);*/
-	kill_html_stack_until(1, html_context,
+	kill_html_stack_until(html_context, 1,
 	                      "TD", "TH", "", "TR", "TABLE", NULL);
 	format.style.attr &= ~AT_BOLD;
 	put_chrs(html_context, " ", 1);
@@ -900,7 +900,7 @@ html_li(struct html_context *html_context, unsigned char *a)
 		ln_break(html_context, 1);
 	}
 
-	/*kill_html_stack_until(0, html_context,
+	/*kill_html_stack_until(html_context, 0
 	                      "", "UL", "OL", NULL);*/
 	if (!par_format.list_number) {
 		unsigned char x[7] = "*&nbsp;";
@@ -989,7 +989,7 @@ html_dl(struct html_context *html_context, unsigned char *a)
 void
 html_dt(struct html_context *html_context, unsigned char *a)
 {
-	kill_html_stack_until(0, html_context, "", "DL", NULL);
+	kill_html_stack_until(html_context, 0, "", "DL", NULL);
 	par_format.align = ALIGN_LEFT;
 	par_format.leftmargin = par_format.dd_margin;
 	if (!(par_format.flags & P_COMPACT) && !has_attr(a, "compact"))
@@ -999,7 +999,7 @@ html_dt(struct html_context *html_context, unsigned char *a)
 void
 html_dd(struct html_context *html_context, unsigned char *a)
 {
-	kill_html_stack_until(0, html_context, "", "DL", NULL);
+	kill_html_stack_until(html_context, 0, "", "DL", NULL);
 
 	par_format.leftmargin = par_format.dd_margin + 3;
 

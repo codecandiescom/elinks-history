@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.554 2005/07/10 00:22:49 miciah Exp $ */
+/* $Id: renderer.c,v 1.555 2005/07/10 00:32:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1543,9 +1543,6 @@ html_special(struct html_context *html_context, enum html_special_type c, ...)
 	if_assert_failed return NULL;
 
 	document = part->document;
-
-	assert(document);
-	if_assert_failed return NULL;
 
 	va_start(l, c);
 	switch (c) {

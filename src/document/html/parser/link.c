@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.92 2005/07/09 22:28:39 miciah Exp $ */
+/* $Id: link.c,v 1.93 2005/07/10 22:39:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@
 
 
 void
-html_a(unsigned char *a, struct html_context *html_context)
+html_a(struct html_context *html_context, unsigned char *a)
 {
 	unsigned char *href;
 
@@ -344,7 +344,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 }
 
 void
-html_img(unsigned char *a, struct html_context *html_context)
+html_img(struct html_context *html_context, unsigned char *a)
 {
 	html_img_do(a, NULL, html_context);
 }
@@ -372,7 +372,7 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 
 
 void
-html_applet(unsigned char *a, struct html_context *html_context)
+html_applet(struct html_context *html_context, unsigned char *a)
 {
 	unsigned char *code, *alt;
 
@@ -428,13 +428,13 @@ html_iframe_do(unsigned char *a, unsigned char *object_src,
 }
 
 void
-html_iframe(unsigned char *a, struct html_context *html_context)
+html_iframe(struct html_context *html_context, unsigned char *a)
 {
 	html_iframe_do(a, NULL, html_context);
 }
 
 void
-html_object(unsigned char *a, struct html_context *html_context)
+html_object(struct html_context *html_context, unsigned char *a)
 {
 	unsigned char *type, *url;
 
@@ -481,7 +481,7 @@ html_object(unsigned char *a, struct html_context *html_context)
 }
 
 void
-html_embed(unsigned char *a, struct html_context *html_context)
+html_embed(struct html_context *html_context, unsigned char *a)
 {
 	unsigned char *type, *extension;
 	unsigned char *object_src;
@@ -766,7 +766,7 @@ html_link_parse(unsigned char *a, struct hlink *link)
 }
 
 void
-html_link(unsigned char *a, struct html_context *html_context)
+html_link(struct html_context *html_context, unsigned char *a)
 {
 	int link_display = global_doc_opts->meta_link_display;
 	unsigned char *name;

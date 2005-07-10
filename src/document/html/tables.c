@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.404 2005/07/10 23:10:40 miciah Exp $ */
+/* $Id: tables.c,v 1.405 2005/07/10 23:11:32 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -535,7 +535,7 @@ free_widths:
 
 
 static int
-get_table_cellpadding(struct table *table, struct html_context *html_context)
+get_table_cellpadding(struct html_context *html_context, struct table *table)
 {
 	struct part *part = table->part;
 	int cpd_pass = 0, cpd_width = 0, cpd_last = table->cellpadding;
@@ -1232,7 +1232,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	                               html_context);
 
 	margins = par_format.leftmargin + par_format.rightmargin;
-	if (get_table_cellpadding(table, html_context)) goto ret2;
+	if (get_table_cellpadding(html_context, table)) goto ret2;
 
 	/* DBG("%d %d %d", t->min_width, t->max_width, table->width); */
 	if (table->min_width >= table->width)

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.560 2005/07/10 00:55:00 miciah Exp $ */
+/* $Id: renderer.c,v 1.561 2005/07/10 00:58:32 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -670,9 +670,15 @@ split_line_at(struct part *part, int width)
  *           ie. if the next line_break() should really break the line; we don't
  *           want to see any blank lines to pop up, do we?). */
 static int
-split_line(struct part *part)
+split_line(struct html_context *html_context)
 {
+	struct part *part;
 	int x;
+
+	assert(html_context);
+	if_assert_failed return 0;
+
+	part = html_context->part;
 
 	assert(part);
 	if_assert_failed return 0;
@@ -1302,7 +1308,7 @@ put_chars(struct html_context *html_context, unsigned char *chars, int charslen)
 	if (!html_is_preformatted()) {
 		while (part->cx > overlap(par_format)
 		       && part->cx > par_format.leftmargin) {
-			int x = split_line(part);
+			int x = split_line(html_context);
 
 			if (!x) break;
 			if (part->document)

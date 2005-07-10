@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.401 2005/07/10 21:44:15 miciah Exp $ */
+/* $Id: tables.c,v 1.402 2005/07/10 21:47:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,8 +80,9 @@ get_table_indent(struct table *table, struct html_context *html_context)
 }
 
 static inline struct part *
-format_cell(struct table *table, struct table_cell *cell,
-	    struct document *document, int x, int y, int width)
+format_cell(struct html_context *html_context, struct table *table,
+            struct table_cell *cell, struct document *document,
+            int x, int y, int width)
 {
 	if (document) {
 		x += table->part->box.x;
@@ -767,7 +768,8 @@ get_table_heights(struct html_context *html_context, struct table *table)
 					  has_vline_width(table, col + sp + 1));
 			}
 
-			part = format_cell(table, cell, NULL, 2, 2, width);
+			part = format_cell(html_context, table, cell, NULL,
+			                   2, 2, width);
 			if (!part) return;
 
 			cell->height = part->box.height;
@@ -849,7 +851,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y,
 	else if (cell->valign == VALIGN_BOTTOM)
 		tmpy += (height - cell->height);
 
-	part = format_cell(table, cell, document, x, tmpy, width);
+	part = format_cell(html_context, table, cell, document, x, tmpy, width);
 	if (part) {
 		/* The cell content doesn't necessarily fill out the whole cell
 		 * height so use the calculated @height because it is an upper

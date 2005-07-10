@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.553 2005/07/09 23:45:53 miciah Exp $ */
+/* $Id: renderer.c,v 1.554 2005/07/10 00:22:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1006,7 +1006,7 @@ put_chars_conv(struct html_context *html_context,
 	}
 
 	convert_string(renderer_context.convert_table, chars, charslen,
-	               CSM_DEFAULT, NULL, (void (*)(void *, unsigned char *, int)) put_chars, part);
+	               CSM_DEFAULT, NULL, (void (*)(void *, unsigned char *, int)) put_chars, html_context);
 }
 
 static inline void

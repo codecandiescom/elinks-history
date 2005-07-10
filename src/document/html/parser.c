@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.580 2005/07/10 21:31:46 miciah Exp $ */
+/* $Id: parser.c,v 1.581 2005/07/10 22:19:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1590,19 +1590,19 @@ done_html_parser_state(struct html_element *element,
 
 }
 
-void
-init_html_parser(struct uri *uri, struct html_context *html_context,
-		 struct document_options *options,
+struct html_context *
+init_html_parser(struct uri *uri, struct document_options *options,
 		 unsigned char *start, unsigned char *end,
 		 struct string *head, struct string *title,
 		 void (*put_chars)(struct html_context *, unsigned char *, int),
 		 void (*line_break)(struct html_context *),
 		 void *(*special)(struct html_context *, enum html_special_type, ...))
 {
+	struct html_context *html_context = &global_html_context;
 	struct html_element *e;
 
 	assert(uri && options);
-	if_assert_failed return;
+	if_assert_failed return NULL;
 
 	init_list(html_context->stack);
 
@@ -1617,7 +1617,7 @@ init_html_parser(struct uri *uri, struct html_context *html_context,
 	scan_http_equiv(start, end, head, title);
 
 	e = mem_calloc(1, sizeof(*e));
-	if (!e) return;
+	if (!e) return NULL;
 	add_to_list(html_context->stack, e);
 
 	format.style.attr = 0;
@@ -1666,6 +1666,8 @@ init_html_parser(struct uri *uri, struct html_context *html_context,
 		mirror_css_stylesheet(&default_stylesheet,
 				      &html_context->css_styles);
 #endif
+
+	return html_context;
 }
 
 void

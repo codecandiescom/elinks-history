@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.561 2005/07/10 00:58:32 miciah Exp $ */
+/* $Id: renderer.c,v 1.562 2005/07/10 01:00:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -608,10 +608,16 @@ del_chars(struct part *part, int x, int y)
 #define overlap(x) int_max((x).width - (x).rightmargin, 0)
 
 static int inline
-split_line_at(struct part *part, int width)
+split_line_at(struct html_context *html_context, int width)
 {
+	struct part *part;
 	int tmp;
 	int new_width = width + par_format.rightmargin;
+
+	assert(html_context);
+	if_assert_failed return 0;
+
+	part = html_context->part;
 
 	assert(part);
 	if_assert_failed return 0;
@@ -685,11 +691,11 @@ split_line(struct html_context *html_context)
 
 	for (x = overlap(par_format); x >= par_format.leftmargin; x--)
 		if (x < part->spaces_len && part->spaces[x])
-			return split_line_at(part, x);
+			return split_line_at(html_context, x);
 
 	for (x = par_format.leftmargin; x < part->cx ; x++)
 		if (x < part->spaces_len && part->spaces[x])
-			return split_line_at(part, x);
+			return split_line_at(html_context, x);
 
 	/* Make sure that we count the right margin to the total
 	 * actual box width. */

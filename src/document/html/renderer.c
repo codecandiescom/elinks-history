@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.563 2005/07/10 01:01:21 miciah Exp $ */
+/* $Id: renderer.c,v 1.564 2005/07/10 01:02:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -603,8 +603,15 @@ shift_chars(struct html_context *html_context, int y, int shift)
 }
 
 static inline void
-del_chars(struct part *part, int x, int y)
+del_chars(struct html_context *html_context, int x, int y)
 {
+	struct part *part;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
+
 	assert(part && part->document && part->document->data);
 	if_assert_failed return;
 
@@ -639,7 +646,7 @@ split_line_at(struct html_context *html_context, int width)
 		assertm(POS(width, part->cy).data == ' ',
 			"bad split: %c", POS(width, part->cy).data);
 		move_chars(html_context, width + 1, part->cy, par_format.leftmargin, part->cy + 1);
-		del_chars(part, width, part->cy);
+		del_chars(html_context, width, part->cy);
 	}
 
 	width++; /* Since we were using (x + 1) only later... */
@@ -1372,7 +1379,7 @@ line_break(struct html_context *html_context)
 
 	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1
 	    && POS(part->cx - 1, part->cy).data == ' ') {
-		del_chars(part, part->cx - 1, part->cy);
+		del_chars(html_context, part->cx - 1, part->cy);
 		part->cx--;
 	}
 

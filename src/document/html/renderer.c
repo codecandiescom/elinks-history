@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.566 2005/07/10 01:06:18 miciah Exp $ */
+/* $Id: renderer.c,v 1.567 2005/07/10 01:07:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,10 +214,16 @@ realloc_spaces(struct part *part, int length)
  * when drawing table cells. So make the cleared chars share the colors in
  * place. */
 static inline void
-clear_hchars(struct part *part, int x, int y, int width)
+clear_hchars(struct html_context *html_context, int x, int y, int width)
 {
+	struct part *part;
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char *pos, *end;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
 
 	assert(part && part->document && width > 0);
 	if_assert_failed return;
@@ -601,7 +607,7 @@ shift_chars(struct html_context *html_context, int y, int shift)
 
 	copy_screen_chars(a, &POS(0, y), len);
 
-	clear_hchars(part, 0, y, shift);
+	clear_hchars(html_context, 0, y, shift);
 	copy_chars(part, shift, y, len, a);
 	mem_free(a);
 
@@ -827,7 +833,7 @@ justify_line(struct html_context *html_context, int y)
 		int prev_end = 0;
 		int word;
 
-		clear_hchars(part, 0, y, overlap(par_format));
+		clear_hchars(html_context, 0, y, overlap(par_format));
 
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.396 2005/07/10 21:36:27 miciah Exp $ */
+/* $Id: tables.c,v 1.397 2005/07/10 21:37:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,7 +121,7 @@ get_cell_width(unsigned char *start, unsigned char *end,
 }
 
 static void
-get_cell_widths(struct table *table)
+get_cell_widths(struct html_context *html_context, struct table *table)
 {
 	int link_num = table->part->link_num;
 
@@ -535,7 +535,7 @@ get_table_cellpadding(struct table *table, struct html_context *html_context)
 	int margins = par_format.leftmargin + par_format.rightmargin;
 
 again:
-	get_cell_widths(table);
+	get_cell_widths(html_context, table);
 	if (get_column_widths(table)) return -1;
 
 	get_table_width(table);

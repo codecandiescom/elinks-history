@@ -1,4 +1,4 @@
-/* $Id: parse.h,v 1.12 2005/07/09 21:26:44 miciah Exp $ */
+/* $Id: parse.h,v 1.13 2005/07/10 21:09:11 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
@@ -43,7 +43,7 @@ unsigned char *get_attr_value(register unsigned char *e, unsigned char *name, en
 
 /* Interface for both the renderer and the table handling */
 
-void parse_html(unsigned char *html, unsigned char *eof, struct part *part, unsigned char *head);
+void parse_html(unsigned char *html, unsigned char *eof, struct part *part, unsigned char *head, struct html_context *html_context);
 
 
 /* Interface for element handlers */

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.149 2005/07/10 01:32:28 miciah Exp $ */
+/* $Id: parse.c,v 1.150 2005/07/10 21:09:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -603,9 +603,9 @@ static unsigned char *process_element(unsigned char *name, int namelen, int endi
 
 void
 parse_html(unsigned char *html, unsigned char *eof,
-	   struct part *part, unsigned char *head)
+	   struct part *part, unsigned char *head,
+	   struct html_context *html_context)
 {
-	struct html_context *html_context = &global_html_context;
 	unsigned char *base_pos = html;
 	int noupdate = 0;
 

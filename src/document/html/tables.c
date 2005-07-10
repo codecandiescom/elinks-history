@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.393 2005/07/10 00:43:49 miciah Exp $ */
+/* $Id: tables.c,v 1.394 2005/07/10 21:09:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1190,7 +1190,7 @@ draw_table_bad_html(struct table *table)
 
 		if (start >= end) continue;
 
-		parse_html(start, end, table->part, NULL);
+		parse_html(start, end, table->part, NULL, &global_html_context);
 	}
 }
 

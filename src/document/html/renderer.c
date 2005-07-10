@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.569 2005/07/10 01:10:21 miciah Exp $ */
+/* $Id: renderer.c,v 1.570 2005/07/10 01:18:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,7 +137,8 @@ void put_chars(struct html_context *, unsigned char *, int);
 #define ALIGN_SPACES(x, o, n) mem_align_alloc(x, o, n, unsigned char, SPACES_GRANULARITY)
 
 static int
-realloc_line(struct document *document, int y, int length)
+realloc_line(struct html_context *html_context, struct document *document,
+             int y, int length)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char *pos, *end;
@@ -186,7 +187,7 @@ expand_lines(struct part *part, int x, int y, int lines, color_T bgcolor,
 	par_format.bgcolor = bgcolor;
 
 	for (line = 0; line < lines; line++)
-		realloc_line(part->document, Y(y + line), X(x));
+		realloc_line(html_context, part->document, Y(y + line), X(x));
 }
 
 static inline int
@@ -228,7 +229,7 @@ clear_hchars(struct html_context *html_context, int x, int y, int width)
 	assert(part && part->document && width > 0);
 	if_assert_failed return;
 
-	if (realloc_line(part->document, Y(y), X(x) + width - 1))
+	if (realloc_line(html_context, part->document, Y(y), X(x) + width - 1))
 		return;
 
 	assert(part->document->data);
@@ -265,7 +266,7 @@ get_frame_char(struct html_context *html_context, int x, int y,
 	assert(part && part->document && x >= 0 && y >= 0);
 	if_assert_failed return NULL;
 
-	if (realloc_line(part->document, Y(y), X(x)))
+	if (realloc_line(html_context, part->document, Y(y), X(x)))
 		return NULL;
 
 	assert(part->document->data);
@@ -315,7 +316,7 @@ draw_frame_vchars(struct part *part, int x, int y, int height,
 	/* The template char is the first vertical char to be drawn. So
 	 * copy it to the rest. */
 	for (height -= 1, y += 1; height; height--, y++) {
-	    	if (realloc_line(part->document, Y(y), X(x)))
+	    	if (realloc_line(html_context, part->document, Y(y), X(x)))
 			return;
 
 		copy_screen_chars(&POS(x, y), template, 1);
@@ -423,7 +424,8 @@ set_hline(struct html_context *html_context, unsigned char *chars, int charslen,
 		return;
 
 	if (part->document) {
-		if (realloc_line(part->document, Y(y), X(x) + charslen - 1))
+		if (realloc_line(html_context, part->document,
+		                 Y(y), X(x) + charslen - 1))
 			return;
 
 		for (; charslen > 0; charslen--, x++, chars++) {
@@ -572,7 +574,7 @@ copy_chars(struct html_context *html_context, int x, int y, int width, struct sc
 	assert(width > 0 && part && part->document && part->document->data);
 	if_assert_failed return;
 
-	if (realloc_line(part->document, Y(y), X(x) + width - 1))
+	if (realloc_line(html_context, part->document, Y(y), X(x) + width - 1))
 		return;
 
 	copy_screen_chars(&POS(x, y), d, width);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.568 2005/07/10 01:09:06 miciah Exp $ */
+/* $Id: renderer.c,v 1.569 2005/07/10 01:10:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -560,8 +560,15 @@ move_links(struct html_context *html_context, int xf, int yf, int xt, int yt)
 }
 
 static inline void
-copy_chars(struct part *part, int x, int y, int width, struct screen_char *d)
+copy_chars(struct html_context *html_context, int x, int y, int width, struct screen_char *d)
 {
+	struct part *part;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
+
 	assert(width > 0 && part && part->document && part->document->data);
 	if_assert_failed return;
 
@@ -585,7 +592,7 @@ move_chars(struct html_context *html_context, int x, int y, int nx, int ny)
 	if_assert_failed return;
 
 	if (LEN(y) - x <= 0) return;
-	copy_chars(part, nx, ny, LEN(y) - x, &POS(x, y));
+	copy_chars(html_context, nx, ny, LEN(y) - x, &POS(x, y));
 
 	LINE(y).length = X(x);
 	move_links(html_context, x, y, nx, ny);
@@ -614,7 +621,7 @@ shift_chars(struct html_context *html_context, int y, int shift)
 	copy_screen_chars(a, &POS(0, y), len);
 
 	clear_hchars(html_context, 0, y, shift);
-	copy_chars(part, shift, y, len, a);
+	copy_chars(html_context, shift, y, len, a);
 	mem_free(a);
 
 	move_links(html_context, 0, y, shift, y);
@@ -858,7 +865,7 @@ justify_line(struct html_context *html_context, int y)
 			word_shift = (word * insert) / (spaces - 1);
 			new_start = word_start + word_shift;
 
-			copy_chars(part, new_start, y, word_len,
+			copy_chars(html_context, new_start, y, word_len,
 				   &line[word_start]);
 
 			new_spaces = new_start - prev_end - 1;

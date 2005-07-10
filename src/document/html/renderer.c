@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.565 2005/07/10 01:04:20 miciah Exp $ */
+/* $Id: renderer.c,v 1.566 2005/07/10 01:06:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,11 +433,17 @@ set_hline(struct html_context *html_context, unsigned char *chars, int charslen,
 }
 
 static void
-move_links(struct part *part, int xf, int yf, int xt, int yt)
+move_links(struct html_context *html_context, int xf, int yf, int xt, int yt)
 {
+	struct part *part;
 	struct tag *tag;
 	int nlink = renderer_context.last_link_to_move;
 	int matched = 0;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
 
 	assert(part && part->document);
 	if_assert_failed return;
@@ -570,7 +576,7 @@ move_chars(struct html_context *html_context, int x, int y, int nx, int ny)
 	copy_chars(part, nx, ny, LEN(y) - x, &POS(x, y));
 
 	LINE(y).length = X(x);
-	move_links(part, x, y, nx, ny);
+	move_links(html_context, x, y, nx, ny);
 }
 
 static inline void
@@ -599,7 +605,7 @@ shift_chars(struct html_context *html_context, int y, int shift)
 	copy_chars(part, shift, y, len, a);
 	mem_free(a);
 
-	move_links(part, 0, y, shift, y);
+	move_links(html_context, 0, y, shift, y);
 }
 
 static inline void
@@ -616,7 +622,7 @@ del_chars(struct html_context *html_context, int x, int y)
 	if_assert_failed return;
 
 	LINE(y).length = X(x);
-	move_links(part, x, y, -1, -1);
+	move_links(html_context, x, y, -1, -1);
 }
 
 #define overlap(x) int_max((x).width - (x).rightmargin, 0)
@@ -845,7 +851,7 @@ justify_line(struct html_context *html_context, int y)
 
 			new_spaces = new_start - prev_end - 1;
 			if (word && new_spaces) {
-				move_links(part, prev_end + 1, y, new_start, y);
+				move_links(html_context, prev_end + 1, y, new_start, y);
 				insert_spaces_in_link(part,
 						      new_start, y, new_spaces);
 			}

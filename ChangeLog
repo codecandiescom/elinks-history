@@ -1,3 +1,369 @@
+Sun Jul 10 21:51:59 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	Pass format_html_part the html_context and it instead of the global.  
+
+Sun Jul 10 21:47:05 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass format_cell the html_context.  
+
+Sun Jul 10 21:44:15 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass draw_table_caption the html_context.  
+
+Sun Jul 10 21:42:53 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass get_table_caption_height the html_context.  
+
+Sun Jul 10 21:41:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass get_cell_width the html_context.  
+
+Sun Jul 10 21:39:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass check_table_widths the html_context.  
+
+Sun Jul 10 21:37:53 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass get_cell_widths the html_context.  
+
+Sun Jul 10 21:36:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass get_table_heights the html_context.  
+
+Sun Jul 10 21:31:46 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Pass init_html_parser the html_context.  
+
+Sun Jul 10 21:28:22 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Pass done_html_parser the html_context.  
+
+Sun Jul 10 21:11:45 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Pass draw_table_bad_html the html_context.  
+
+Sun Jul 10 21:09:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: renderer.c, tables.c, parser/parse.c,
+	parser/parse.h:
+
+	Pass parse_html the html_context.  
+
+Sun Jul 10 03:34:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Looks like get_frame_char can't use the part from the html_context, 
+	so let draw_frame_hchars and draw_frame_vchars pass it the part that
+	they are given by the table code. This fixes a bug introduced in
+	revision 1.568 that led to crashes with tables with borders.  
+
+Sun Jul 10 02:02:03 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, renderer.c:
+
+	Introduce the local variable html_context in render_html_document 
+	and assign it the global html_context.  
+	
+	Use the local html_context instead of the global in the format, 
+	par_format, html_top, html_is_preformatted, and get_html_max_width 
+	macros.  
+
+Sun Jul 10 01:56:42 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/menu.c, config/kbdbind.c, config/kbdbind.h,
+	config/options.c, config/options.h, dialogs/menu.c, dialogs/menu.h,
+	document/html/internal.h, document/html/renderer.c,
+	viewer/action.c, viewer/text/view.c:
+
+	Try to revert that mess that is my private tree of weird hacks and
+	experiments. I did not mean to commit it.  
+
+Sun Jul 10 01:38:02 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/menu.c, config/kbdbind.c, config/kbdbind.h,
+	config/options.c, config/options.h, dialogs/menu.c, dialogs/menu.h,
+	document/html/internal.h, document/html/renderer.c,
+	viewer/action.c, viewer/text/view.c:
+
+	src/document 
+
+Sun Jul 10 01:34:00 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	Ditto, done_html_parser.  
+
+Sun Jul 10 01:32:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Introduce, initialise to the global history_context, and use instead
+	of the global the local variable history_context in parse_html.  
+
+Sun Jul 10 01:18:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass realloc_line the html_context.  
+
+Sun Jul 10 01:10:21 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass copy_chars the html_context instead of the part.  
+
+Sun Jul 10 01:09:06 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass get_frame_char the html_context instead of the part.  
+
+Sun Jul 10 01:07:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass clear_hchars the html_context instead of the part.  
+
+Sun Jul 10 01:06:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass move_links the html_context instead of the part.  
+
+Sun Jul 10 01:04:20 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass justify_line the html_context instead of the part.  
+
+Sun Jul 10 01:02:02 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass del_chars the html_context instead of the part.  
+
+Sun Jul 10 01:01:21 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass move_chars the html_context instead of the part.  
+
+Sun Jul 10 01:00:10 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass split_line_at the html_context instead of the part.  
+
+Sun Jul 10 00:58:32 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass split_line the html_context instead of the part.  
+
+Sun Jul 10 00:55:00 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass shift_chars the html_context instead of the part.  
+
+Sun Jul 10 00:53:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass align_line the html_context instead of the part.  
+
+Sun Jul 10 00:49:38 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser.h, renderer.c:
+
+	Pass the html_context instead of the part to the line_break_f
+	callback, line_break.  
+
+Sun Jul 10 00:43:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	Pass expand_lines the html_context.  
+
+Sun Jul 10 00:37:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	Pass draw_frame_hchars and draw_frame_vchars the html_context.  
+
+Sun Jul 10 00:32:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Do _not_ assert document in html_special. It seems that it is
+	allowed to be NULL.  
+
+Sun Jul 10 00:22:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	In put_chars_conv, pass convert_string the html_context for the
+	callback data now that put_chars (the callback) takes the
+	html_context instead of the part. Unfortunately, this doesn't seem
+	to be the only stupid mistake as it is still crashing...  
+
+Sat Jul  9 23:45:53 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass color_link_lines the html_context instead of the part.  
+
+Sat Jul  9 23:43:41 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser.h, renderer.c,
+	parser/forms.c, parser/parse.c:
+
+	Pass the html_context instead of the part to the special_f callback,
+	html_special.  
+
+Sat Jul  9 23:37:37 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Don't dereference part until after it is asserted in html_special.
+	While we're at it, assert document, too.  
+
+Sat Jul  9 23:28:55 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass get_link_state the html_context.  
+
+Sat Jul  9 23:21:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Instead of using format.form, use the passed form (which is the
+	same) in init_link_state_info.  
+
+Sat Jul  9 23:16:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass new_link the html_context instead of the document and the
+	link_num.  
+
+Sat Jul  9 23:11:30 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass process_link the html_context instead of the part.  
+
+Sat Jul  9 23:08:38 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	...and use the local html_context instead of the global.  
+
+Sat Jul  9 23:03:58 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass put_link_number the html_context instead of the part.  
+
+Sat Jul  9 23:03:04 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass get_format_screen_char the html_context instead of the part.  
+
+Sat Jul  9 23:00:32 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Pass set_hline the html_context instead of the part.  
+
+Sat Jul  9 22:58:03 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser.h, renderer.c:
+
+	Pass the html_context instead of the part to the put_chars_f
+	callbacks, put_chars and put_chars_conv.  
+
+Sat Jul  9 22:34:14 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/parse.c, parser/stack.c,
+	parser/stack.h:
+
+	Pass the html_context to dump_html_stack.  
+
+Sat Jul  9 22:32:30 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/stack.c:
+
+	Pass kill_element the html_context.  
+
+Sat Jul  9 22:31:01 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/stack.c:
+
+	...and then I missed this usage of the global in
+	kill_html_stack_until.  
+
+Sat Jul  9 22:30:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/stack.c:
+
+	Use the darn local html_context instead of the global one in
+	kill_html_stack_item.  
+
+Sat Jul  9 22:28:39 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/forms.c, parser/link.c,
+	parser/parse.c, parser/stack.c, parser/stack.h:
+
+	Pass the html_context to html_stack_dup.  
+
+Sat Jul  9 22:23:46 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/forms.c, parser/link.c,
+	parser/parse.c, parser/stack.c, parser/stack.h:
+
+	Pass the html_context to kill_html_stack_item.  
+
+Sat Jul  9 22:18:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/stack.c:
+
+	Whoops. Use the local html_context in search_html_stack.  
+
+Sat Jul  9 22:15:19 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	Fall thru from HTML_SPACE_ADD to HTML_SPACE_SUPPRESS in put_chrs to
+	restore the behaviour from before the introduction of the switch in
+	revision 1.549. This bug was causing extra blank-lines after some 
+	elements.  
+
 Sat Jul  9 21:26:44 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/document/html/: parser.c, parser/forms.c, parser/link.c,

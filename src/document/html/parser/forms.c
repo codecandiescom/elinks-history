@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.83 2005/07/10 22:53:55 miciah Exp $ */
+/* $Id: forms.c,v 1.84 2005/07/10 22:56:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,7 @@ html_button(struct html_context *html_context, unsigned char *a)
 	struct form_control *fc;
 	enum form_type type = FC_SUBMIT;
 
-	html_focusable(a, html_context);
+	html_focusable(html_context, a);
 
 	al = get_attr_val(a, "type");
 	if (!al) goto no_type_attr;
@@ -221,7 +221,7 @@ no_type_attr:
 
 	put_chrs(html_context, " ", 1);
 	html_stack_dup(ELEMENT_KILLABLE, html_context);
-	html_focusable(a, html_context);
+	html_focusable(html_context, a);
 	format.form = fc;
 	if (format.title) mem_free(format.title);
 	format.title = get_attr_val(a, "title");
@@ -291,7 +291,7 @@ html_select(struct html_context *html_context, unsigned char *a)
 	unsigned char *al = get_attr_val(a, "name");
 
 	if (!al) return;
-	html_focusable(a, html_context);
+	html_focusable(html_context, a);
 	html_top.type = ELEMENT_DONT_KILL;
 	mem_free_set(&format.select, al);
 	format.select_disabled = has_attr(a, "disabled") ? FORM_MODE_DISABLED : FORM_MODE_NORMAL;
@@ -391,7 +391,7 @@ do_html_select(unsigned char *attr, unsigned char *html,
 	int i, max_width;
 
 	if (has_attr(attr, "multiple")) return 1;
-	html_focusable(attr, html_context);
+	html_focusable(html_context, attr);
 	init_menu(&lnk_menu);
 
 se:
@@ -552,7 +552,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	int cols, rows;
 	int i;
 
-	html_focusable(attr, html_context);
+	html_focusable(html_context, attr);
 	while (html < eof && (*html == '\n' || *html == '\r')) html++;
 	p = html;
 	while (p < eof && *p != '<') {

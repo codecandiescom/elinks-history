@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.585 2005/07/10 22:53:55 miciah Exp $ */
+/* $Id: parser.c,v 1.586 2005/07/10 22:56:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -313,7 +313,7 @@ html_superscript(struct html_context *html_context, unsigned char *a)
  * attributes even near tags where we're not supposed to (like IFRAME, FRAME or
  * LINK). I think this doesn't make any harm ;). --pasky */
 void
-html_focusable(unsigned char *a, struct html_context *html_context)
+html_focusable(struct html_context *html_context, unsigned char *a)
 {
 	unsigned char *accesskey;
 	int tabindex;
@@ -1050,7 +1050,7 @@ html_frame(struct html_context *html_context, unsigned char *a)
 	if (!name) return;
 
 	if (!global_doc_opts->frames || !html_top.frameset) {
-		html_focusable(a, html_context);
+		html_focusable(html_context, a);
 		put_link_line("Frame: ", name, url, "", html_context);
 
 	} else {
@@ -1190,7 +1190,7 @@ process_head(unsigned char *head, struct html_context *html_context)
 		if (valid) {
 			unsigned char *joined_url = join_urls(html_context->base_href, url);
 
-			html_focusable(NULL, html_context);
+			html_focusable(html_context, NULL);
 
 			put_link_line("Refresh: ", url, joined_url,
 			              global_doc_opts->framename, html_context);

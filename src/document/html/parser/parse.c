@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.154 2005/07/10 22:53:55 miciah Exp $ */
+/* $Id: parse.c,v 1.155 2005/07/10 22:56:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -883,7 +883,7 @@ start_element(struct element_info *ei,
 			mem_free_set(&format.title, stracpy("onClick placeholder"));
 			/* Er. I know. Well, double html_focusable()s shouldn't
 			 * really hurt. */
-			html_focusable(attr, html_context);
+			html_focusable(html_context, attr);
 		}
 #endif
 	}

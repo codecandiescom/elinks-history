@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.57 2005/07/10 22:53:55 miciah Exp $ */
+/* $Id: internal.h,v 1.58 2005/07/10 22:56:08 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -122,7 +122,7 @@ struct html_context {
 
 /* For parser/link.c: */
 
-void html_focusable(unsigned char *a, struct html_context *html_context);
+void html_focusable(struct html_context *html_context, unsigned char *a);
 void html_skip(unsigned char *a, struct html_context *html_context);
 unsigned char *get_target(unsigned char *a);
 

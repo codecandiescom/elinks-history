@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.392 2005/07/10 00:37:28 miciah Exp $ */
+/* $Id: tables.c,v 1.393 2005/07/10 00:43:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -853,7 +853,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y,
 		/* The line expansion draws the _remaining_ background color of
 		 * both untouched lines and lines that doesn't stretch the
 		 * whole cell width. */
-		expand_lines(table->part, x + width - 1, y, height, cell->bgcolor);
+		expand_lines(table->part, x + width - 1, y, height, cell->bgcolor, html_context);
 
 		if (cell->fragment_id)
 			add_fragment_identifier(part, cell->fragment_id,
@@ -882,7 +882,7 @@ draw_table_cells(struct table *table, int x, int y,
 
 	/* Expand using the background color of the ``parent context'' all the
 	 * way down the start of the left edge of the table. */
-	expand_lines(table->part, x - 1, y, table->real_height, bgcolor);
+	expand_lines(table->part, x - 1, y, table->real_height, bgcolor, html_context);
 
 	xp = x + table_frames.left;
 	for (col = 0; col < table->cols; col++) {
@@ -905,7 +905,7 @@ draw_table_cells(struct table *table, int x, int y,
 	/* Finish the table drawing by aligning the right and bottom edge of
 	 * the table */
 	x += table->real_width - 1;
-	expand_lines(table->part, x, y, table->real_height, table->bgcolor);
+	expand_lines(table->part, x, y, table->real_height, table->bgcolor, html_context);
 
 	/* Tables are renderer column-wise which breaks forms where the
 	 * form items appears in a column before the actual form tag is

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.99 2005/07/10 23:09:38 miciah Exp $ */
+/* $Id: link.c,v 1.100 2005/07/10 23:32:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ html_a(struct html_context *html_context, unsigned char *a)
 		kill_html_stack_item(html_context, &html_top);
 	}
 
-	set_fragment_identifier(a, "name", html_context);
+	set_fragment_identifier(html_context, a, "name");
 }
 
 /* Returns an allocated string made after @label

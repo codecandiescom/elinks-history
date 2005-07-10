@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.595 2005/07/10 23:30:21 miciah Exp $ */
+/* $Id: parser.c,v 1.596 2005/07/10 23:32:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,8 +205,8 @@ put_chrs(struct html_context *html_context, unsigned char *start, int len)
 }
 
 void
-set_fragment_identifier(unsigned char *attr_name, unsigned char *attr,
-                        struct html_context *html_context)
+set_fragment_identifier(struct html_context *html_context,
+                        unsigned char *attr_name, unsigned char *attr)
 {
 	unsigned char *id_attr = get_attr_val(attr_name, attr);
 

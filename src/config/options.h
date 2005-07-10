@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.117 2005/07/10 01:38:03 miciah Exp $ */
+/* $Id: options.h,v 1.118 2005/07/10 01:56:42 miciah Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -139,8 +139,8 @@ extern struct option *config_options;
 extern struct option *cmdline_options;
 
 
-void init_options(void);
-void done_options(void);
+extern void init_options(void);
+extern void done_options(void);
 
 
 struct change_hook_info {
@@ -148,18 +148,18 @@ struct change_hook_info {
 	change_hook_T change_hook;
 };
 
-void register_change_hooks(struct change_hook_info *change_hooks);
+extern void register_change_hooks(struct change_hook_info *change_hooks);
 
 
-struct list_head *init_options_tree(void);
-void unmark_options_tree(struct list_head *);
+extern struct list_head *init_options_tree(void);
+extern void unmark_options_tree(struct list_head *);
 void watermark_deleted_options(struct list_head *);
 
-void smart_config_string(struct string *, int, int, struct list_head *, unsigned char *, int,
+extern void smart_config_string(struct string *, int, int, struct list_head *, unsigned char *, int,
 				void (*)(struct string *, struct option *, unsigned char *, int, int, int, int));
 
-struct option *copy_option(struct option *);
-void delete_option(struct option *);
+extern struct option *copy_option(struct option *);
+extern void delete_option(struct option *);
 void mark_option_as_deleted(struct option *);
 
 /* Some minimal option cache */
@@ -181,10 +181,10 @@ void toggle_option(struct session *ses, struct option *option);
 void call_change_hooks(struct session *ses, struct option *current,
                        struct option *option);
 
-int commit_option_values(struct option_resolver *resolvers,
+extern int commit_option_values(struct option_resolver *resolvers,
 				struct option *root,
 				union option_value *values, int size);
-void checkout_option_values(struct option_resolver *resolvers,
+extern void checkout_option_values(struct option_resolver *resolvers,
 				   struct option *root,
 				   union option_value *values, int size);
 
@@ -195,13 +195,13 @@ void checkout_option_values(struct option_resolver *resolvers,
  * use get_opt_type() and add_opt_type(). For command line options, you want to
  * use get_opt_type_tree(cmdline_options, "option"). */
 
-struct option *get_opt_rec(struct option *, unsigned char *);
-struct option *get_opt_rec_real(struct option *, unsigned char *);
+extern struct option *get_opt_rec(struct option *, unsigned char *);
+extern struct option *get_opt_rec_real(struct option *, unsigned char *);
 #ifdef CONFIG_DEBUG
-union option_value *get_opt_(unsigned char *, int, enum option_type, struct option *, unsigned char *);
+extern union option_value *get_opt_(unsigned char *, int, enum option_type, struct option *, unsigned char *);
 #define get_opt(tree, name, type) get_opt_(__FILE__, __LINE__, type, tree, name)
 #else
-union option_value *get_opt_(struct option *, unsigned char *);
+extern union option_value *get_opt_(struct option *, unsigned char *);
 #define get_opt(tree, name, type) get_opt_(tree, name)
 #endif
 
@@ -229,7 +229,7 @@ union option_value *get_opt_(struct option *, unsigned char *);
 #define get_cmd_opt_color(name) get_opt_color_tree(cmdline_options, name)
 #define get_cmd_opt_tree(name) get_opt_tree_tree(cmdline_options, name)
 
-struct option *add_opt(struct option *, unsigned char *, unsigned char *,
+extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 			      unsigned char *, enum option_flags, enum option_type,
 			      int, int, void *, unsigned char *);
 
@@ -285,8 +285,8 @@ struct option_info {
 	unsigned char *path;
 };
 
-void register_options(struct option_info info[], struct option *tree);
-void unregister_options(struct option_info info[], struct option *tree);
+extern void register_options(struct option_info info[], struct option *tree);
+extern void unregister_options(struct option_info info[], struct option *tree);
 
 #define NULL_OPTION_INFO \
 	{ INIT_OPTION(NULL, 0, 0, 0, 0, NULL, NULL, NULL), NULL }

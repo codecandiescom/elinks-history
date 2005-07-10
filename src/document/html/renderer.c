@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.571 2005/07/10 01:38:03 miciah Exp $ */
+/* $Id: renderer.c,v 1.572 2005/07/10 01:56:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1905,7 +1905,6 @@ void
 render_html_document(struct cache_entry *cached, struct document *document,
 		     struct string *buffer)
 {
-	struct html_context *html_context = &global_html_context;
 	struct part *part;
 	unsigned char *start = NULL;
 	unsigned char *end = NULL;

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.179 2005/07/10 01:38:03 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.180 2005/07/10 01:56:42 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -103,7 +103,7 @@ struct keybinding {
 	enum keymap_id keymap_id;
 	action_id_T action_id;
 	struct term_event_keyboard kbd;
-	int event_id;
+	int event;
 	enum kbdbind_flags flags;
 	struct listbox_item *box_item;
 	struct object object;
@@ -113,7 +113,7 @@ struct keybinding {
 void init_keymaps(void);
 void free_keymaps(void);
 
-struct keybinding *add_keybinding(enum keymap_id keymap_id, action_id_T action_id, struct term_event_keyboard *kbd, int event_id);
+struct keybinding *add_keybinding(enum keymap_id keymap_id, action_id_T action_id, struct term_event_keyboard *kbd, int event);
 int keybinding_exists(enum keymap_id keymap_id, struct term_event_keyboard *kbd, action_id_T *action_id);
 void free_keybinding(struct keybinding *);
 

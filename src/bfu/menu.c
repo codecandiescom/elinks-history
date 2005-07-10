@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.299 2005/07/10 01:38:02 miciah Exp $ */
+/* $Id: menu.c,v 1.300 2005/07/10 01:56:42 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1027,7 +1027,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 	/* Mouse was clicked outside the mainmenu bar */
 	if (ev->info.mouse.y) {
 		if (check_mouse_action(ev, B_DOWN))
-			delete_window_ev(win, NULL); /* XXX: Why not pass on ev? -- Miciah, 20050626 */
+			delete_window_ev(win, NULL);
 
 		return;
 	}

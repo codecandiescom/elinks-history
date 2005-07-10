@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.404 2005/07/10 01:38:03 miciah Exp $ */
+/* $Id: menu.c,v 1.405 2005/07/10 01:56:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -510,16 +510,9 @@ static struct menu_item main_menu[] = {
 };
 
 void
-activate_bfu_technology(struct session *ses, int item, struct term_event *ev)
+activate_bfu_technology(struct session *ses, int item)
 {
 	do_mainmenu(ses->tab->term, main_menu, ses, item);
-
-	if (ev) {
-		struct window *win;
-
-		win = ses->tab->term->windows.next;
-		win->handler(win, ev);
-	}
 }
 
 

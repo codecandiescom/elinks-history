@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.341 2005/07/10 01:38:02 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.342 2005/07/10 01:56:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ delete_keybinding(enum keymap_id keymap_id, struct term_event_keyboard *kbd)
 
 struct keybinding *
 add_keybinding(enum keymap_id keymap_id, action_id_T action_id,
-	       struct term_event_keyboard *kbd, int event_id)
+	       struct term_event_keyboard *kbd, int event)
 {
 	struct keybinding *keybinding;
 	struct listbox_item *root;
@@ -74,7 +74,7 @@ add_keybinding(enum keymap_id keymap_id, action_id_T action_id,
 	keybinding->keymap_id = keymap_id;
 	keybinding->action_id = action_id;
 	copy_struct(&keybinding->kbd, kbd);
-	keybinding->event_id = event_id;
+	keybinding->event = event;
 	keybinding->flags = is_default * KBDB_DEFAULT;
 
 	object_nolock(keybinding, "keybinding");
@@ -104,8 +104,8 @@ free_keybinding(struct keybinding *keybinding)
 
 #ifdef CONFIG_SCRIPTING
 /* TODO: unref function must be implemented. */
-/*	if (keybinding->event_id != EVENT_NONE)
-		scripting_unref(keybinding->event_id); */
+/*	if (keybinding->event != EVENT_NONE)
+		scripting_unref(keybinding->event); */
 #endif
 
 	if (keybinding->flags & KBDB_DEFAULT) {
@@ -143,18 +143,18 @@ keybinding_exists(enum keymap_id keymap_id, struct term_event_keyboard *kbd,
 
 
 action_id_T
-kbd_action(enum keymap_id keymap_id, struct term_event *ev, int *event_id)
+kbd_action(enum keymap_id keymap_id, struct term_event *ev, int *event)
 {
 	struct keybinding *keybinding;
 
 	if (ev->ev != EVENT_KBD) return -1;
 
-	keybinding = kbd_ev_lookup(keymap_id, &ev->info.keyboard, event_id);
+	keybinding = kbd_ev_lookup(keymap_id, &ev->info.keyboard, event);
 	return keybinding ? keybinding->action_id : -1;
 }
 
 struct keybinding *
-kbd_ev_lookup(enum keymap_id keymap_id, struct term_event_keyboard *kbd, int *event_id)
+kbd_ev_lookup(enum keymap_id keymap_id, struct term_event_keyboard *kbd, int *event)
 {
 	struct keybinding *keybinding;
 
@@ -165,8 +165,8 @@ kbd_ev_lookup(enum keymap_id keymap_id, struct term_event_keyboard *kbd, int *ev
 		if (!kbd_modifier_is(&keybinding->kbd, kbd->modifier))
 			continue;
 
-		if (keybinding->action_id == ACT_MAIN_SCRIPTING_FUNCTION && event_id)
-			*event_id = keybinding->event_id;
+		if (keybinding->action_id == ACT_MAIN_SCRIPTING_FUNCTION && event)
+			*event = keybinding->event;
 
 		return keybinding;
 	}
@@ -497,7 +497,7 @@ free_keymaps(void)
 
 #ifdef CONFIG_SCRIPTING
 static unsigned char *
-bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event_id)
+bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event)
 {
 	struct term_event_keyboard kbd;
 	action_id_T action_id;
@@ -513,7 +513,7 @@ bind_key_to_event(unsigned char *ckmap, unsigned char *ckey, int event_id)
 	if (action_id < 0)
 		return gettext("Unrecognised action (internal error)");
 
-	add_keybinding(keymap_id, action_id, &kbd, event_id);
+	add_keybinding(keymap_id, action_id, &kbd, event);
 
 	return NULL;
 }

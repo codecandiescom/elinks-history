@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.53 2005/07/10 01:38:03 miciah Exp $ */
+/* $Id: internal.h,v 1.54 2005/07/10 01:56:42 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -111,9 +111,9 @@ struct html_context {
 	void *(*special_f)(struct html_context *, enum html_special_type, ...);
 };
 
-#define format (((struct html_element *) html_context->stack.next)->attr)
-#define par_format (((struct html_element *) html_context->stack.next)->parattr)
-#define html_top (*(struct html_element *) html_context->stack.next)
+#define format (((struct html_element *) global_html_context.stack.next)->attr)
+#define par_format (((struct html_element *) global_html_context.stack.next)->parattr)
+#define html_top (*(struct html_element *) global_html_context.stack.next)
 
 #define html_is_preformatted() (format.style.attr & AT_PREFORMATTED)
 

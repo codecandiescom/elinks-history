@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.400 2005/07/10 21:42:53 miciah Exp $ */
+/* $Id: tables.c,v 1.401 2005/07/10 21:44:15 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1148,7 +1148,8 @@ draw_table_frames(struct table *table, int indent, int y,
 }
 
 static void
-draw_table_caption(struct table *table, int x, int y)
+draw_table_caption(struct html_context *html_context, struct table *table,
+                   int x, int y)
 {
 	unsigned char *start = table->caption.start;
 	unsigned char *end = table->caption.end;
@@ -1267,7 +1268,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	/* FIXME: See bug 432. It should be possible to align the caption at
 	 * the top, bottom or the sides. */
-	draw_table_caption(table, indent + part->box.x, part->box.y + part->cy);
+	draw_table_caption(html_context, table, indent + part->box.x, part->box.y + part->cy);
 	draw_table_cells(table, indent, part->cy, html_context);
 	draw_table_frames(table, indent, part->cy, html_context);
 

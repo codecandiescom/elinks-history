@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.397 2005/07/10 21:37:53 miciah Exp $ */
+/* $Id: tables.c,v 1.398 2005/07/10 21:39:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -570,7 +570,7 @@ again:
 
 #ifdef HTML_TABLE_2ND_PASS /* This is by default ON! (<setup.h>) */
 static void
-check_table_widths(struct table *table)
+check_table_widths(struct html_context *html_context, struct table *table)
 {
 	int col, row;
 	int colspan;
@@ -1243,7 +1243,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 #ifdef HTML_TABLE_2ND_PASS
-	check_table_widths(table);
+	check_table_widths(html_context, table);
 #endif
 
 	get_table_heights(html_context, table);

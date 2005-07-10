@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.82 2005/07/10 22:43:33 miciah Exp $ */
+/* $Id: forms.c,v 1.83 2005/07/10 22:53:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,7 +219,7 @@ no_type_attr:
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
 	if (fc->type == FC_HIDDEN) goto hid;
 
-	put_chrs(" ", 1, html_context);
+	put_chrs(html_context, " ", 1);
 	html_stack_dup(ELEMENT_KILLABLE, html_context);
 	html_focusable(a, html_context);
 	format.form = fc;
@@ -231,15 +231,15 @@ no_type_attr:
 		case FC_FILE:
 			format.style.attr |= AT_BOLD;
 			for (i = 0; i < fc->size; i++)
-				put_chrs("_", 1, html_context);
+				put_chrs(html_context, "_", 1);
 			break;
 		case FC_CHECKBOX:
 			format.style.attr |= AT_BOLD;
-			put_chrs("[&nbsp;]", 8, html_context);
+			put_chrs(html_context, "[&nbsp;]", 8);
 			break;
 		case FC_RADIO:
 			format.style.attr |= AT_BOLD;
-			put_chrs("(&nbsp;)", 8, html_context);
+			put_chrs(html_context, "(&nbsp;)", 8);
 			break;
 		case FC_IMAGE:
 			mem_free_set(&format.image, NULL);
@@ -250,24 +250,24 @@ no_type_attr:
 				mem_free(al);
 			}
 			format.style.attr |= AT_BOLD;
-			put_chrs("[&nbsp;", 7, html_context);
+			put_chrs(html_context, "[&nbsp;", 7);
 			if (fc->alt)
-				put_chrs(fc->alt, strlen(fc->alt), html_context);
+				put_chrs(html_context, fc->alt, strlen(fc->alt));
 			else if (fc->name)
-				put_chrs(fc->name, strlen(fc->name), html_context);
+				put_chrs(html_context, fc->name, strlen(fc->name));
 			else
-				put_chrs("Submit", 6, html_context);
+				put_chrs(html_context, "Submit", 6);
 
-			put_chrs("&nbsp;]", 7, html_context);
+			put_chrs(html_context, "&nbsp;]", 7);
 			break;
 		case FC_SUBMIT:
 		case FC_RESET:
 		case FC_BUTTON:
 			format.style.attr |= AT_BOLD;
-			put_chrs("[&nbsp;", 7, html_context);
+			put_chrs(html_context, "[&nbsp;", 7);
 			if (fc->default_value)
-				put_chrs(fc->default_value, strlen(fc->default_value), html_context);
-			put_chrs("&nbsp;]", 7, html_context);
+				put_chrs(html_context, fc->default_value, strlen(fc->default_value));
+			put_chrs(html_context, "&nbsp;]", 7);
 			break;
 		case FC_TEXTAREA:
 		case FC_SELECT:
@@ -275,7 +275,7 @@ no_type_attr:
 			INTERNAL("bad control type");
 	}
 	kill_html_stack_item(&html_top, html_context);
-	put_chrs(" ", 1, html_context);
+	put_chrs(html_context, " ", 1);
 
 hid:
 	html_context->special_f(html_context, SP_CONTROL, fc);
@@ -360,13 +360,13 @@ end_parse:
 	fc->default_state = has_attr(a, "selected");
 	fc->mode = has_attr(a, "disabled") ? FORM_MODE_DISABLED : format.select_disabled;
 
-	put_chrs(" ", 1, html_context);
+	put_chrs(html_context, " ", 1);
 	html_stack_dup(ELEMENT_KILLABLE, html_context);
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
-	put_chrs("[ ]", 3, html_context);
+	put_chrs(html_context, "[ ]", 3);
 	kill_html_stack_item(&html_top, html_context);
-	put_chrs(" ", 1, html_context);
+	put_chrs(html_context, " ", 1);
 	html_context->special_f(html_context, SP_CONTROL, fc);
 }
 
@@ -515,7 +515,7 @@ end_parse:
 	fc->labels = labels;
 
 	menu_labels(fc->menu, "", labels);
-	put_chrs("[", 1, html_context);
+	put_chrs(html_context, "[", 1);
 	html_stack_dup(ELEMENT_KILLABLE, html_context);
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
@@ -527,10 +527,10 @@ end_parse:
 	}
 
 	for (i = 0; i < max_width; i++)
-		put_chrs("_", 1, html_context);
+		put_chrs(html_context, "_", 1);
 
 	kill_html_stack_item(&html_top, html_context);
-	put_chrs("]", 1, html_context);
+	put_chrs(html_context, "]", 1);
 	html_context->special_f(html_context, SP_CONTROL, fc);
 
 	return 0;
@@ -627,7 +627,7 @@ pp:
 	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 
 	if (rows > 1) ln_break(html_context, 1);
-	else put_chrs(" ", 1, html_context);
+	else put_chrs(html_context, " ", 1);
 
 	html_stack_dup(ELEMENT_KILLABLE, html_context);
 	format.form = fc;
@@ -637,7 +637,7 @@ pp:
 		int j;
 
 		for (j = 0; j < cols; j++)
-			put_chrs("_", 1, html_context);
+			put_chrs(html_context, "_", 1);
 		if (i < rows - 1)
 			ln_break(html_context, 1);
 	}
@@ -646,6 +646,6 @@ pp:
 	if (rows > 1)
 		ln_break(html_context, 1);
 	else
-		put_chrs(" ", 1, html_context);
+		put_chrs(html_context, " ", 1);
 	html_context->special_f(html_context, SP_CONTROL, fc);
 }

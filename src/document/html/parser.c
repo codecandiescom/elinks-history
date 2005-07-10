@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.584 2005/07/10 22:43:33 miciah Exp $ */
+/* $Id: parser.c,v 1.585 2005/07/10 22:53:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,7 @@ ln_break(struct html_context *html_context, int n)
 }
 
 void
-put_chrs(unsigned char *start, int len, struct html_context *html_context)
+put_chrs(struct html_context *html_context, unsigned char *start, int len)
 {
 	if (html_is_preformatted())
 		html_context->putsp = HTML_SPACE_NORMAL;
@@ -764,7 +764,7 @@ html_hr(struct html_context *html_context, unsigned char *a)
 	format.style.attr = AT_GRAPHICS;
 	html_context->special_f(html_context, SP_NOWRAP, 1);
 	while (i-- > 0) {
-		put_chrs(&r, 1, html_context);
+		put_chrs(html_context, &r, 1);
 	}
 	html_context->special_f(html_context, SP_NOWRAP, 0);
 	ln_break(html_context, 2);
@@ -793,7 +793,7 @@ html_th(struct html_context *html_context, unsigned char *a)
 	kill_html_stack_until(1, html_context,
 	                      "TD", "TH", "", "TR", "TABLE", NULL);
 	format.style.attr |= AT_BOLD;
-	put_chrs(" ", 1, html_context);
+	put_chrs(html_context, " ", 1);
 }
 
 void
@@ -803,7 +803,7 @@ html_td(struct html_context *html_context, unsigned char *a)
 	kill_html_stack_until(1, html_context,
 	                      "TD", "TH", "", "TR", "TABLE", NULL);
 	format.style.attr &= ~AT_BOLD;
-	put_chrs(" ", 1, html_context);
+	put_chrs(html_context, " ", 1);
 }
 
 void
@@ -908,7 +908,7 @@ html_li(struct html_context *html_context, unsigned char *a)
 
 		if (t == P_O) x[0] = 'o';
 		if (t == P_PLUS) x[0] = '+';
-		put_chrs(x, 7, html_context);
+		put_chrs(html_context, x, 7);
 		par_format.leftmargin += 2;
 		par_format.align = ALIGN_LEFT;
 
@@ -922,7 +922,7 @@ html_li(struct html_context *html_context, unsigned char *a)
 		if (s != -1) par_format.list_number = s;
 
 		if (t == P_ALPHA || t == P_alpha) {
-			put_chrs("&nbsp;", 6, html_context);
+			put_chrs(html_context, "&nbsp;", 6);
 			c = 1;
 			n[0] = par_format.list_number
 			       ? (par_format.list_number - 1) % 26
@@ -940,7 +940,7 @@ html_li(struct html_context *html_context, unsigned char *a)
 
 		} else {
 			if (par_format.list_number < 10) {
-				put_chrs("&nbsp;", 6, html_context);
+				put_chrs(html_context, "&nbsp;", 6);
 				c = 1;
 			}
 
@@ -948,8 +948,8 @@ html_li(struct html_context *html_context, unsigned char *a)
 		}
 
 		nlen = strlen(n);
-		put_chrs(n, nlen, html_context);
-		put_chrs(".&nbsp;", 7, html_context);
+		put_chrs(html_context, n, nlen);
+		put_chrs(html_context, ".&nbsp;", 7);
 		par_format.leftmargin += nlen + c + 2;
 		par_format.align = ALIGN_LEFT;
 

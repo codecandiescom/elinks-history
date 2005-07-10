@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.56 2005/07/10 22:32:36 miciah Exp $ */
+/* $Id: internal.h,v 1.57 2005/07/10 22:53:55 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -12,7 +12,7 @@ struct uri;
 /* For parser/parse.c: */
 
 void process_head(unsigned char *head, struct html_context *html_context);
-void put_chrs(unsigned char *start, int len, struct html_context *html_context);
+void put_chrs(struct html_context *html_context, unsigned char *start, int len);
 
 enum html_whitespace_state {
 	/* Either we are starting a new "block" or the last segment of the

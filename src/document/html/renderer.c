@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.577 2005/07/10 21:31:46 miciah Exp $ */
+/* $Id: renderer.c,v 1.578 2005/07/10 21:51:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1754,7 +1754,8 @@ free_table_cache(void)
 }
 
 struct part *
-format_html_part(unsigned char *start, unsigned char *end,
+format_html_part(struct html_context *html_context,
+		 unsigned char *start, unsigned char *end,
 		 int align, int margin, int width, struct document *document,
 		 int x, int y, unsigned char *head,
 		 int link_num)
@@ -1764,7 +1765,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	int llm = renderer_context.last_link_to_move;
 	struct tag *ltm = renderer_context.last_tag_to_move;
 	/*struct tag *ltn = last_tag_for_newline;*/
-	int lm = global_html_context.margin;
+	int lm = html_context->margin;
 	int ef = renderer_context.empty_format;
 	struct table_cache_entry *tce;
 
@@ -1808,7 +1809,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		struct node *node = mem_alloc(sizeof(*node));
 
 		if (node) {
-			int node_width = !global_html_context.table_level ? INT_MAX : width;
+			int node_width = !html_context->table_level ? INT_MAX : width;
 
 			set_box(&node->box, x, y, node_width, 1);
 			add_to_list(document->nodes, node);
@@ -1823,7 +1824,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		renderer_context.last_tag_for_newline = NULL;
 	}
 
-	global_html_context.margin = margin;
+	html_context->margin = margin;
 	renderer_context.empty_format = !document;
 
 	done_link_state_info();
@@ -1839,11 +1840,11 @@ format_html_part(unsigned char *start, unsigned char *end,
 	part->cy = 0;
 	part->link_num = link_num;
 
-	html_state = init_html_parser_state(ELEMENT_IMMORTAL, align, margin, width, &global_html_context);
+	html_state = init_html_parser_state(ELEMENT_IMMORTAL, align, margin, width, html_context);
 
-	parse_html(start, end, part, head, &global_html_context);
+	parse_html(start, end, part, head, html_context);
 
-	done_html_parser_state(html_state, &global_html_context);
+	done_html_parser_state(html_state, html_context);
 
 	int_lower_bound(&part->max_width, part->box.width);
 
@@ -1862,10 +1863,10 @@ ret:
 	renderer_context.last_link_to_move = llm;
 	renderer_context.last_tag_to_move = ltm;
 	/* renderer_context.last_tag_for_newline = ltn; */
-	global_html_context.margin = lm;
+	html_context->margin = lm;
 	renderer_context.empty_format = ef;
 
-	if (global_html_context.table_level > 1 && !document
+	if (html_context->table_level > 1 && !document
 	    && renderer_context.table_cache
 	    && renderer_context.table_cache_entries < MAX_TABLE_CACHE_ENTRIES) {
 		/* Create a new entry. */
@@ -1942,7 +1943,7 @@ render_html_document(struct cache_entry *cached, struct document *document,
 	}
 	done_string(&title);
 
-	part = format_html_part(start, end, par_format.align,
+	part = format_html_part(html_context, start, end, par_format.align,
 			        par_format.leftmargin,
 				document->options.box.width, document,
 			        0, 0, head.source, 1);

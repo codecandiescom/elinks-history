@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.402 2005/07/10 21:47:05 miciah Exp $ */
+/* $Id: tables.c,v 1.403 2005/07/10 21:51:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,9 +89,9 @@ format_cell(struct html_context *html_context, struct table *table,
 		y += table->part->box.y;
 	}
 
-	return format_html_part(cell->start, cell->end, cell->align,
-				table->cellpadding, width, document, x, y,
-				NULL, cell->link_num);
+	return format_html_part(html_context, cell->start, cell->end,
+				cell->align, table->cellpadding, width,
+	                        document, x, y, NULL, cell->link_num);
 }
 
 static inline void
@@ -107,7 +107,8 @@ get_cell_width(struct html_context *html_context,
 	if (max) *max = -1;
 	if (new_link_num) *new_link_num = link_num;
 
-	part = format_html_part(start, end, ALIGN_LEFT, cellpadding, width, NULL,
+	part = format_html_part(html_context, start, end, ALIGN_LEFT,
+				cellpadding, width, NULL,
 				!!a, !!a, NULL, link_num);
 	if (!part) return;
 
@@ -711,7 +712,7 @@ get_table_caption_height(struct html_context *html_context, struct table *table)
 
 	if (start >= end) return 0;
 
-	part = format_html_part(start, end, table->align,
+	part = format_html_part(html_context, start, end, table->align,
 		0, table->real_width, NULL, 0, 0,
 		NULL, table->link_num);
 
@@ -1167,7 +1168,7 @@ draw_table_caption(struct html_context *html_context, struct table *table,
 
 	if (start >= end) return;
 
-	part = format_html_part(start, end, table->align,
+	part = format_html_part(html_context, start, end, table->align,
 		0, table->real_width, table->part->document, x, y,
 		NULL, table->link_num);
 

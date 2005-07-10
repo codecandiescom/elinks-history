@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.558 2005/07/10 00:49:38 miciah Exp $ */
+/* $Id: renderer.c,v 1.559 2005/07/10 00:53:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -821,10 +821,16 @@ justify_line(struct part *part, int y)
 }
 
 static void
-align_line(struct part *part, int y, int last)
+align_line(struct html_context *html_context, int y, int last)
 {
+	struct part *part;
 	int shift;
 	int len;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
 
 	assert(part && part->document && part->document->data);
 	if_assert_failed return;
@@ -1294,7 +1300,7 @@ put_chars(struct html_context *html_context, unsigned char *chars, int charslen)
 
 			if (!x) break;
 			if (part->document)
-				align_line(part, part->cy - 1, 0);
+				align_line(html_context, part->cy - 1, 0);
 			renderer_context.nobreak = x - 1;
 		}
 	}
@@ -1345,7 +1351,7 @@ line_break(struct html_context *html_context)
 		part->cx--;
 	}
 
-	if (part->cx > 0) align_line(part, part->cy, 1);
+	if (part->cx > 0) align_line(html_context, part->cy, 1);
 
 	for (tag = renderer_context.last_tag_for_newline;
 	     tag && (void *) tag != &part->document->tags;

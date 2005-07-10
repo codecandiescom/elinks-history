@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.594 2005/07/10 23:28:43 miciah Exp $ */
+/* $Id: parser.c,v 1.595 2005/07/10 23:30:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1562,8 +1562,8 @@ init_html_parser_state(struct html_context *html_context,
 
 
 void
-done_html_parser_state(struct html_element *element,
-                       struct html_context *html_context)
+done_html_parser_state(struct html_context *html_context,
+                       struct html_element *element)
 {
 	html_context->line_breax = 1;
 

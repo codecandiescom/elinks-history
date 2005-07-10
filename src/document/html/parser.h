@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.98 2005/07/10 23:28:43 miciah Exp $ */
+/* $Id: parser.h,v 1.99 2005/07/10 23:30:21 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -171,8 +171,8 @@ init_html_parser(struct uri *uri, struct document_options *options,
 
 void done_html_parser(struct html_context *html_context);
 struct html_element *init_html_parser_state(struct html_context *html_context, enum html_element_type type, int align, int margin, int width);
-void done_html_parser_state(struct html_element *element,
-                            struct html_context *html_context);
+void done_html_parser_state(struct html_context *html_context,
+                            struct html_element *element);
 
 /* Interface for the table handling */
 

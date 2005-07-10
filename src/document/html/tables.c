@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.399 2005/07/10 21:41:33 miciah Exp $ */
+/* $Id: tables.c,v 1.400 2005/07/10 21:42:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -694,7 +694,7 @@ check_table_height(struct table *table, struct table_frames *frames, int y)
 }
 
 static int
-get_table_caption_height(struct table *table)
+get_table_caption_height(struct html_context *html_context, struct table *table)
 {
 	unsigned char *start = table->caption.start;
 	unsigned char *end = table->caption.end;
@@ -751,7 +751,7 @@ get_table_heights(struct html_context *html_context, struct table *table)
 	int rowspan;
 	int col, row;
 
-	table->caption_height = get_table_caption_height(table);
+	table->caption_height = get_table_caption_height(html_context, table);
 
 	for (row = 0; row < table->rows; row++) {
 		for (col = 0; col < table->cols; col++) {

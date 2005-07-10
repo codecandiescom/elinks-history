@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.395 2005/07/10 21:11:45 miciah Exp $ */
+/* $Id: tables.c,v 1.396 2005/07/10 21:36:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -740,7 +740,7 @@ get_table_real_height(struct table *table)
 }
 
 static void
-get_table_heights(struct table *table)
+get_table_heights(struct html_context *html_context, struct table *table)
 {
 	int rowspan;
 	int col, row;
@@ -1246,7 +1246,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	check_table_widths(table);
 #endif
 
-	get_table_heights(table);
+	get_table_heights(html_context, table);
 
 	if (!part->document) {
 		int_lower_bound(&part->box.width, table->real_width + margins);

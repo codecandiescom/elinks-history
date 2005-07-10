@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.557 2005/07/10 00:43:49 miciah Exp $ */
+/* $Id: renderer.c,v 1.558 2005/07/10 00:49:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,7 @@ static struct renderer_context renderer_context;
 
 
 /* Prototypes */
-void line_break(struct part *);
+void line_break(struct html_context *);
 void put_chars(struct html_context *, unsigned char *, int);
 
 #define X(x_)	(part->box.x + (x_))
@@ -1035,7 +1035,7 @@ put_link_number(struct html_context *html_context)
 	put_chars(html_context, s, slen);
 	renderer_context.nosearchable = 0;
 
-	if (ff && ff->type == FC_TEXTAREA) line_break(part);
+	if (ff && ff->type == FC_TEXTAREA) line_break(html_context);
 
 	/* We might have ended up on a new line after the line breaking
 	 * or putting the link number chars. */
@@ -1312,9 +1312,15 @@ put_chars(struct html_context *html_context, unsigned char *chars, int charslen)
 #undef overlap
 
 void
-line_break(struct part *part)
+line_break(struct html_context *html_context)
 {
+	struct part *part;
 	struct tag *tag;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
 
 	assert(part);
 	if_assert_failed return;

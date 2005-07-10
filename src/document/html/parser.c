@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.576 2005/07/09 23:43:41 miciah Exp $ */
+/* $Id: parser.c,v 1.577 2005/07/10 00:49:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,7 @@ ln_break(int n, struct html_context *html_context)
 	if (!n || html_top.invisible) return;
 	while (n > html_context->line_breax) {
 		html_context->line_breax++;
-		html_context->line_break_f(html_context->part);
+		html_context->line_break_f(html_context);
 	}
 	html_context->position = 0;
 	html_context->putsp = HTML_SPACE_SUPPRESS;
@@ -1595,7 +1595,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 		 unsigned char *start, unsigned char *end,
 		 struct string *head, struct string *title,
 		 void (*put_chars)(struct html_context *, unsigned char *, int),
-		 void (*line_break)(struct part *),
+		 void (*line_break)(struct html_context *),
 		 void *(*special)(struct html_context *, enum html_special_type, ...))
 {
 	struct html_element *e;

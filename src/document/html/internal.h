@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.51 2005/07/09 23:43:41 miciah Exp $ */
+/* $Id: internal.h,v 1.52 2005/07/10 00:49:38 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -102,7 +102,7 @@ struct html_context {
 	 * html/parser/parse.c
 	 * html/parser/stack.c
 	 * html/parser.c */
-	void (*line_break_f)(struct part *);
+	void (*line_break_f)(struct html_context *);
 
 	/* For:
 	 * html/parser/forms.c

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.155 2005/07/10 22:56:08 miciah Exp $ */
+/* $Id: parse.c,v 1.156 2005/07/10 22:59:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -892,7 +892,7 @@ start_element(struct element_info *ei,
 	/* We need to have own element in the stack, that's why we waited for
 	 * so long. */
 	if (ei->func == html_script) {
-		if (!do_html_script(attr, html, eof, &html, html_context))
+		if (!do_html_script(html_context, attr, html, eof, &html))
 			return html;
 	}
 #endif

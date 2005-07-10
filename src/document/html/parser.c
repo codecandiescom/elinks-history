@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.579 2005/07/10 21:28:22 miciah Exp $ */
+/* $Id: parser.c,v 1.580 2005/07/10 21:31:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1591,7 +1591,8 @@ done_html_parser_state(struct html_element *element,
 }
 
 void
-init_html_parser(struct uri *uri, struct document_options *options,
+init_html_parser(struct uri *uri, struct html_context *html_context,
+		 struct document_options *options,
 		 unsigned char *start, unsigned char *end,
 		 struct string *head, struct string *title,
 		 void (*put_chars)(struct html_context *, unsigned char *, int),
@@ -1599,7 +1600,6 @@ init_html_parser(struct uri *uri, struct document_options *options,
 		 void *(*special)(struct html_context *, enum html_special_type, ...))
 {
 	struct html_element *e;
-	struct html_context *html_context = &global_html_context;
 
 	assert(uri && options);
 	if_assert_failed return;

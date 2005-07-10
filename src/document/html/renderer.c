@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.576 2005/07/10 21:28:22 miciah Exp $ */
+/* $Id: renderer.c,v 1.577 2005/07/10 21:31:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1924,8 +1924,9 @@ render_html_document(struct cache_entry *cached, struct document *document,
 
 	if (cached->head) add_to_string(&head, cached->head);
 
-	init_html_parser(cached->uri, &document->options, start, end, &head, &title,
-			 put_chars_conv, line_break, html_special);
+	init_html_parser(cached->uri, html_context, &document->options,
+	                 start, end, &head, &title, put_chars_conv, line_break,
+	                 html_special);
 
 	renderer_context.convert_table = get_convert_table(head.source,
 							   document->options.cp,

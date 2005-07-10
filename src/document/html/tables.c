@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.398 2005/07/10 21:39:08 miciah Exp $ */
+/* $Id: tables.c,v 1.399 2005/07/10 21:41:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,8 @@ format_cell(struct table *table, struct table_cell *cell,
 }
 
 static inline void
-get_cell_width(unsigned char *start, unsigned char *end,
+get_cell_width(struct html_context *html_context,
+	       unsigned char *start, unsigned char *end,
 	       int cellpadding, int width,
 	       int a, int *min, int *max,
 	       int link_num, int *new_link_num)
@@ -134,8 +135,10 @@ get_cell_widths(struct html_context *html_context, struct table *table)
 
 				if (!cell->start) continue;
 				cell->link_num = link_num;
-				get_cell_width(cell->start, cell->end, table->cellpadding, 0, 0,
-					       &cell->min_width, &cell->max_width,
+				get_cell_width(html_context, cell->start,
+					       cell->end, table->cellpadding,
+					       0, 0, &cell->min_width,
+					       &cell->max_width,
 					       link_num, &link_num);
 			}
 	} else {
@@ -147,8 +150,10 @@ get_cell_widths(struct html_context *html_context, struct table *table)
 
 				if (!cell->start) continue;
 				cell->link_num = link_num;
-				get_cell_width(cell->start, cell->end, table->cellpadding, 0, 0,
-					       &cell->min_width, &cell->max_width,
+				get_cell_width(html_context, cell->start,
+					       cell->end, table->cellpadding,
+					       0, 0, &cell->min_width,
+					       &cell->max_width,
 					       link_num, &link_num);
 			}
 	}
@@ -591,7 +596,8 @@ check_table_widths(struct html_context *html_context, struct table *table)
 			     (k && has_vline_width(table, col + k));
 		}
 
-		get_cell_width(cell->start, cell->end, table->cellpadding, p, 1, &cell->width,
+		get_cell_width(html_context, cell->start, cell->end,
+			       table->cellpadding, p, 1, &cell->width,
 			       NULL, cell->link_num, NULL);
 
 		int_upper_bound(&cell->width, p);

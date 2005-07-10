@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.150 2005/07/10 21:09:11 miciah Exp $ */
+/* $Id: parse.c,v 1.151 2005/07/10 22:32:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -772,7 +772,7 @@ ng:;
 
 	if (noupdate) put_chrs(base_pos, html - base_pos, html_context);
 	ln_break(1, html_context);
-	/* Restore the part in case the global_html_context was trashed in the last
+	/* Restore the part in case the html_context was trashed in the last
 	 * iteration so that when destroying the stack in the caller we still
 	 * get the right part pointer. */
 	html_context->part = part;

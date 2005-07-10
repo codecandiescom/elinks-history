@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.55 2005/07/10 02:02:03 miciah Exp $ */
+/* $Id: internal.h,v 1.56 2005/07/10 22:32:36 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -119,8 +119,6 @@ struct html_context {
 
 #define get_html_max_width() \
 	int_max(par_format.width - (par_format.leftmargin + par_format.rightmargin), 0)
-
-extern struct html_context global_html_context;
 
 /* For parser/link.c: */
 

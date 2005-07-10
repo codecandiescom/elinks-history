@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.581 2005/07/10 22:19:27 miciah Exp $ */
+/* $Id: parser.c,v 1.582 2005/07/10 22:32:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,13 +144,6 @@ get_target(unsigned char *a)
 
 	return v;
 }
-
-
-struct html_context global_html_context = {
-#ifdef CONFIG_CSS
-	INIT_CSS_STYLESHEET(global_html_context.css_styles, import_css_stylesheet),
-#endif
-};
 
 
 void
@@ -1598,11 +1591,19 @@ init_html_parser(struct uri *uri, struct document_options *options,
 		 void (*line_break)(struct html_context *),
 		 void *(*special)(struct html_context *, enum html_special_type, ...))
 {
-	struct html_context *html_context = &global_html_context;
+	struct html_context *html_context;
 	struct html_element *e;
 
 	assert(uri && options);
 	if_assert_failed return NULL;
+
+	html_context = mem_calloc(1, sizeof(*html_context));
+	if (!html_context) return NULL;
+
+#ifdef CONFIG_CSS
+	html_context->css_styles.import = import_css_stylesheet;
+	init_list(html_context->css_styles.selectors);
+#endif
 
 	init_list(html_context->stack);
 
@@ -1686,4 +1687,6 @@ done_html_parser(struct html_context *html_context)
 	assertm(list_empty(html_context->stack),
 		"html stack not empty after operation");
 	if_assert_failed init_list(html_context->stack);
+
+	mem_free(html_context);
 }

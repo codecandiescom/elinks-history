@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.579 2005/07/10 22:19:27 miciah Exp $ */
+/* $Id: renderer.c,v 1.580 2005/07/10 22:32:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1994,7 +1994,7 @@ render_html_document(struct cache_entry *cached, struct document *document,
 		}
 	}
 
-	/* @part was residing in global_html_context so it has to stay alive until
+	/* @part was residing in html_context so it has to stay alive until
 	 * done_html_parser(). */
 	done_string(&head);
 	mem_free_if(part);

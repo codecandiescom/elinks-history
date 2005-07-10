@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.74 2005/07/08 21:04:55 miciah Exp $ */
+/* $Id: renderer.h,v 1.75 2005/07/10 00:37:28 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -7,6 +7,7 @@
 
 struct box;
 struct cache_entry;
+struct html_context;
 struct string;
 
 
@@ -35,8 +36,8 @@ struct part {
 void expand_lines(struct part *part, int x, int y, int lines, color_T bgcolor);
 void check_html_form_hierarchy(struct part *part);
 
-void draw_frame_hchars(struct part *, int, int, int, unsigned char data, color_T bgcolor, color_T fgcolor);
-void draw_frame_vchars(struct part *, int, int, int, unsigned char data, color_T bgcolor, color_T fgcolor);
+void draw_frame_hchars(struct part *, int, int, int, unsigned char data, color_T bgcolor, color_T fgcolor, struct html_context *html_context);
+void draw_frame_vchars(struct part *, int, int, int, unsigned char data, color_T bgcolor, color_T fgcolor, struct html_context *html_context);
 
 void free_table_cache(void);
 

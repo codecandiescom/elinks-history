@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.555 2005/07/10 00:32:29 miciah Exp $ */
+/* $Id: renderer.c,v 1.556 2005/07/10 00:37:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,7 +272,8 @@ get_frame_char(struct part *part, int x, int y, unsigned char data,
 
 void
 draw_frame_hchars(struct part *part, int x, int y, int width,
-		  unsigned char data, color_T bgcolor, color_T fgcolor)
+		  unsigned char data, color_T bgcolor, color_T fgcolor,
+		  struct html_context *html_context)
 {
 	struct screen_char *template;
 
@@ -290,7 +291,8 @@ draw_frame_hchars(struct part *part, int x, int y, int width,
 
 void
 draw_frame_vchars(struct part *part, int x, int y, int height,
-		  unsigned char data, color_T bgcolor, color_T fgcolor)
+		  unsigned char data, color_T bgcolor, color_T fgcolor,
+		  struct html_context *html_context)
 {
 	struct screen_char *template = get_frame_char(part, x, y, data,
 						      bgcolor, fgcolor);

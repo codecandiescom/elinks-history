@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.577 2005/07/10 00:49:38 miciah Exp $ */
+/* $Id: parser.c,v 1.578 2005/07/10 01:34:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1671,18 +1671,19 @@ init_html_parser(struct uri *uri, struct document_options *options,
 void
 done_html_parser(void)
 {
+	struct html_context *html_context = &global_html_context;
+
 #ifdef CONFIG_CSS
 	if (global_doc_opts->css_enable)
-		done_css_stylesheet(&global_html_context.css_styles);
+		done_css_stylesheet(&html_context->css_styles);
 #endif
 
-	mem_free(global_html_context.base_target);
-	done_uri(global_html_context.base_href);
+	mem_free(html_context->base_target);
+	done_uri(html_context->base_href);
 
-	kill_html_stack_item(global_html_context.stack.next,
-	                     &global_html_context);
+	kill_html_stack_item(html_context->stack.next, html_context);
 
-	assertm(list_empty(global_html_context.stack),
+	assertm(list_empty(html_context->stack),
 		"html stack not empty after operation");
-	if_assert_failed init_list(global_html_context.stack);
+	if_assert_failed init_list(html_context->stack);
 }

@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.42 2005/07/10 22:43:33 miciah Exp $ */
+/* $Id: stack.c,v 1.43 2005/07/10 23:02:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ dump_html_stack(struct html_context *html_context)
 
 
 struct html_element *
-search_html_stack(unsigned char *name, struct html_context *html_context)
+search_html_stack(struct html_context *html_context, unsigned char *name)
 {
 	struct html_element *element;
 	int namelen;

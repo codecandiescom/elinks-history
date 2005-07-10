@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.45 2005/07/10 23:07:29 miciah Exp $ */
+/* $Id: stack.c,v 1.46 2005/07/10 23:08:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,7 +168,7 @@ html_stack_dup(enum html_element_type type, struct html_context *html_context)
 }
 
 static void
-kill_element(int ls, struct html_element *e, struct html_context *html_context)
+kill_element(struct html_context *html_context, int ls, struct html_element *e)
 {
 	int l = 0;
 
@@ -215,13 +215,13 @@ kill_html_stack_until(struct html_context *html_context, int ls, ...)
 			if (!sk) {
 				if (e->type < ELEMENT_KILLABLE) break;
 				va_end(arg);
-				kill_element(ls, e, html_context);
+				kill_element(html_context, ls, e);
 				return;
 
 			} else if (sk == 1) {
 				va_end(arg);
 				e = e->prev;
-				kill_element(ls, e, html_context);
+				kill_element(html_context, ls, e);
 				return;
 
 			} else {

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.590 2005/07/10 23:02:48 miciah Exp $ */
+/* $Id: parser.c,v 1.591 2005/07/10 23:04:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -768,7 +768,7 @@ html_hr(struct html_context *html_context, unsigned char *a)
 	}
 	html_context->special_f(html_context, SP_NOWRAP, 0);
 	ln_break(html_context, 2);
-	kill_html_stack_item(&html_top, html_context);
+	kill_html_stack_item(html_context, &html_top);
 }
 
 void
@@ -1567,7 +1567,7 @@ done_html_parser_state(struct html_element *element,
 	html_context->line_breax = 1;
 
 	while (&html_top != element) {
-		kill_html_stack_item(&html_top, html_context);
+		kill_html_stack_item(html_context, &html_top);
 #if 0
 		/* I've preserved this bit to show an example of the Old Code
 		 * of the Mikulas days (I _HOPE_ it's by Mikulas, at least ;-).
@@ -1579,7 +1579,7 @@ done_html_parser_state(struct html_element *element,
 	}
 
 	html_top.type = ELEMENT_KILLABLE;
-	kill_html_stack_item(&html_top, html_context);
+	kill_html_stack_item(html_context, &html_top);
 
 }
 
@@ -1682,7 +1682,7 @@ done_html_parser(struct html_context *html_context)
 	mem_free(html_context->base_target);
 	done_uri(html_context->base_href);
 
-	kill_html_stack_item(html_context->stack.next, html_context);
+	kill_html_stack_item(html_context, html_context->stack.next);
 
 	assertm(list_empty(html_context->stack),
 		"html stack not empty after operation");

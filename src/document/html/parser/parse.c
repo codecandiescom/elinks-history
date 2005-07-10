@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.157 2005/07/10 23:00:50 miciah Exp $ */
+/* $Id: parse.c,v 1.158 2005/07/10 23:04:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -810,7 +810,7 @@ start_element(struct element_info *ei,
 	}
 
 	if (html_top.type == ELEMENT_WEAK) {
-		kill_html_stack_item(&html_top, html_context);
+		kill_html_stack_item(html_context, &html_top);
 	}
 
 	/* We try to process nested <script> if we didn't process the parent
@@ -859,10 +859,10 @@ start_element(struct element_info *ei,
 		}
 		if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
 			while (e->prev != (void *) &html_context->stack)
-				kill_html_stack_item(e->prev, html_context);
+				kill_html_stack_item(html_context, e->prev);
 
 			if (e->type > ELEMENT_IMMORTAL)
-				kill_html_stack_item(e, html_context);
+				kill_html_stack_item(html_context, e);
 		}
 	}
 
@@ -973,7 +973,7 @@ end_element(struct element_info *ei,
 				continue;
 		}
 		if (kill) {
-			kill_html_stack_item(e, html_context);
+			kill_html_stack_item(html_context, e);
 			break;
 		}
 		for (elt = e;
@@ -991,8 +991,8 @@ end_element(struct element_info *ei,
 
 		ln_break(html_context, lnb);
 		while (e->prev != (void *) &html_context->stack)
-			kill_html_stack_item(e->prev, html_context);
-		kill_html_stack_item(e, html_context);
+			kill_html_stack_item(html_context, e->prev);
+		kill_html_stack_item(html_context, e);
 		break;
 	}
 	/* dump_html_stack(html_context); */

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.158 2005/07/10 23:04:57 miciah Exp $ */
+/* $Id: parse.c,v 1.159 2005/07/10 23:09:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -867,7 +867,7 @@ start_element(struct element_info *ei,
 	}
 
 	if (ei->nopair != 1) {
-		html_stack_dup(ELEMENT_KILLABLE, html_context);
+		html_stack_dup(html_context, ELEMENT_KILLABLE);
 		html_top.name = name;
 		html_top.namelen = namelen;
 		html_top.options = attr;

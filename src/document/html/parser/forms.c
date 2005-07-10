@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.85 2005/07/10 23:04:57 miciah Exp $ */
+/* $Id: forms.c,v 1.86 2005/07/10 23:09:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,7 +220,7 @@ no_type_attr:
 	if (fc->type == FC_HIDDEN) goto hid;
 
 	put_chrs(html_context, " ", 1);
-	html_stack_dup(ELEMENT_KILLABLE, html_context);
+	html_stack_dup(html_context, ELEMENT_KILLABLE);
 	html_focusable(html_context, a);
 	format.form = fc;
 	if (format.title) mem_free(format.title);
@@ -361,7 +361,7 @@ end_parse:
 	fc->mode = has_attr(a, "disabled") ? FORM_MODE_DISABLED : format.select_disabled;
 
 	put_chrs(html_context, " ", 1);
-	html_stack_dup(ELEMENT_KILLABLE, html_context);
+	html_stack_dup(html_context, ELEMENT_KILLABLE);
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
 	put_chrs(html_context, "[ ]", 3);
@@ -516,7 +516,7 @@ end_parse:
 
 	menu_labels(fc->menu, "", labels);
 	put_chrs(html_context, "[", 1);
-	html_stack_dup(ELEMENT_KILLABLE, html_context);
+	html_stack_dup(html_context, ELEMENT_KILLABLE);
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
 
@@ -629,7 +629,7 @@ pp:
 	if (rows > 1) ln_break(html_context, 1);
 	else put_chrs(html_context, " ", 1);
 
-	html_stack_dup(ELEMENT_KILLABLE, html_context);
+	html_stack_dup(html_context, ELEMENT_KILLABLE);
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
 

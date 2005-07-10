@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.98 2005/07/10 23:04:57 miciah Exp $ */
+/* $Id: link.c,v 1.99 2005/07/10 23:09:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,7 +236,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 		mem_free(joined_urls);
 		if (!map_url) return;
 
-		html_stack_dup(ELEMENT_KILLABLE, html_context);
+		html_stack_dup(html_context, ELEMENT_KILLABLE);
 		mem_free_set(&format.link, map_url);
 		format.form = NULL;
 		format.style.attr |= AT_BOLD;
@@ -323,7 +323,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 			if (ismap) {
 				unsigned char *new_link;
 
-				html_stack_dup(ELEMENT_KILLABLE, html_context);
+				html_stack_dup(html_context, ELEMENT_KILLABLE);
 				new_link = straconcat(format.link, "?0,0", NULL);
 				if (new_link)
 					mem_free_set(&format.link, new_link);
@@ -355,7 +355,7 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	      struct html_context *html_context)
 {
 	html_context->has_link_lines = 1;
-	html_stack_dup(ELEMENT_KILLABLE, html_context);
+	html_stack_dup(html_context, ELEMENT_KILLABLE);
 	ln_break(html_context, 1);
 	mem_free_set(&format.link, NULL);
 	mem_free_set(&format.target, NULL);

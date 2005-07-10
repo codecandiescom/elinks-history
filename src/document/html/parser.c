@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.592 2005/07/10 23:07:29 miciah Exp $ */
+/* $Id: parser.c,v 1.593 2005/07/10 23:09:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -751,7 +751,7 @@ html_hr(struct html_context *html_context, unsigned char *a)
 	int q = get_num(a, "size");
 
 	if (q >= 0 && q < 2) r = (unsigned char) BORDER_SHLINE;
-	html_stack_dup(ELEMENT_KILLABLE, html_context);
+	html_stack_dup(html_context, ELEMENT_KILLABLE);
 	par_format.align = ALIGN_CENTER;
 	mem_free_set(&format.link, NULL);
 	format.form = NULL;
@@ -1540,7 +1540,7 @@ init_html_parser_state(enum html_element_type type, int align, int margin, int w
 {
 	struct html_element *element;
 
-	html_stack_dup(type, html_context);
+	html_stack_dup(html_context, type);
 	element = &html_top;
 
 	par_format.align = align;

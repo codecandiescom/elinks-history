@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.54 2005/06/14 16:44:52 jonas Exp $ */
+/* $Id: menu.h,v 1.55 2005/07/10 01:38:03 miciah Exp $ */
 
 #ifndef EL__DIALOGS_MENU_H
 #define EL__DIALOGS_MENU_H
@@ -12,7 +12,7 @@ struct open_in_new;
 struct session;
 struct uri;
 
-void activate_bfu_technology(struct session *, int);
+void activate_bfu_technology(struct session *, int, struct term_event *);
 
 void dialog_goto_url(struct session *ses, unsigned char *url);
 /* void dialog_save_url(struct session *ses); */

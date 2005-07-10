@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.154 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: action.c,v 1.155 2005/07/10 01:38:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,7 +167,7 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_FILE_MENU:
-			activate_bfu_technology(ses, 0);
+			activate_bfu_technology(ses, 0, NULL);
 			break;
 
 		case ACT_MAIN_FIND_NEXT:
@@ -300,7 +300,7 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_MENU:
-			activate_bfu_technology(ses, -1);
+			activate_bfu_technology(ses, -1, NULL);
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_UP:

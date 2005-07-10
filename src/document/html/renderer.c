@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.580 2005/07/10 22:32:36 miciah Exp $ */
+/* $Id: renderer.c,v 1.581 2005/07/10 23:26:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,8 +173,8 @@ realloc_line(struct html_context *html_context, struct document *document,
 }
 
 void
-expand_lines(struct part *part, int x, int y, int lines, color_T bgcolor,
-             struct html_context *html_context)
+expand_lines(struct html_context *html_context, struct part *part,
+             int x, int y, int lines, color_T bgcolor)
 {
 	int line;
 

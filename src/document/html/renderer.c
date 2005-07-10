@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.562 2005/07/10 01:00:10 miciah Exp $ */
+/* $Id: renderer.c,v 1.563 2005/07/10 01:01:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,8 +554,15 @@ copy_chars(struct part *part, int x, int y, int width, struct screen_char *d)
 }
 
 static inline void
-move_chars(struct part *part, int x, int y, int nx, int ny)
+move_chars(struct html_context *html_context, int x, int y, int nx, int ny)
 {
+	struct part *part;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
+
 	assert(part && part->document && part->document->data);
 	if_assert_failed return;
 
@@ -631,7 +638,7 @@ split_line_at(struct html_context *html_context, int width)
 		if_assert_failed return 0;
 		assertm(POS(width, part->cy).data == ' ',
 			"bad split: %c", POS(width, part->cy).data);
-		move_chars(part, width + 1, part->cy, par_format.leftmargin, part->cy + 1);
+		move_chars(html_context, width + 1, part->cy, par_format.leftmargin, part->cy + 1);
 		del_chars(part, width, part->cy);
 	}
 

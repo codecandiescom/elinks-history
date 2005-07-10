@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.405 2005/07/10 23:11:32 miciah Exp $ */
+/* $Id: tables.c,v 1.406 2005/07/10 23:12:12 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1183,7 +1183,7 @@ draw_table_caption(struct html_context *html_context, struct table *table,
 /* This renders tag soup elements that the parser detected while chewing it's
  * way through the table HTML. */
 static void
-draw_table_bad_html(struct table *table, struct html_context *html_context)
+draw_table_bad_html(struct html_context *html_context, struct table *table)
 {
 	int i;
 
@@ -1226,7 +1226,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	 * parser state. Something to do with link numbering. */
 	/* It needs to be done _before_ processing the actual table, too.
 	 * Otherwise i.e. <form> tags between <table> and <tr> are broken. */
-	draw_table_bad_html(table, html_context);
+	draw_table_bad_html(html_context, table);
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0,
 	                               html_context);

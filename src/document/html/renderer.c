@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.559 2005/07/10 00:53:13 miciah Exp $ */
+/* $Id: renderer.c,v 1.560 2005/07/10 00:55:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -567,10 +567,16 @@ move_chars(struct part *part, int x, int y, int nx, int ny)
 }
 
 static inline void
-shift_chars(struct part *part, int y, int shift)
+shift_chars(struct html_context *html_context, int y, int shift)
 {
+	struct part *part;
 	struct screen_char *a;
 	int len;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
 
 	assert(part && part->document && part->document->data);
 	if_assert_failed return;
@@ -850,7 +856,7 @@ align_line(struct html_context *html_context, int y, int last)
 	if (par_format.align == ALIGN_CENTER)
 		shift /= 2;
 	if (shift > 0)
-		shift_chars(part, y, shift);
+		shift_chars(html_context, y, shift);
 }
 
 static struct link *

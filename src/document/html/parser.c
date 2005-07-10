@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.583 2005/07/10 22:39:13 miciah Exp $ */
+/* $Id: parser.c,v 1.584 2005/07/10 22:43:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,7 +147,7 @@ get_target(unsigned char *a)
 
 
 void
-ln_break(int n, struct html_context *html_context)
+ln_break(struct html_context *html_context, int n)
 {
 	if (!n || html_top.invisible) return;
 	while (n > html_context->line_breax) {
@@ -635,7 +635,7 @@ html_br(struct html_context *html_context, unsigned char *a)
 {
 	html_linebrk(html_context, a);
 	if (html_context->was_br)
-		ln_break(2, html_context);
+		ln_break(html_context, 2);
 	else
 		html_context->was_br = 1;
 }
@@ -767,7 +767,7 @@ html_hr(struct html_context *html_context, unsigned char *a)
 		put_chrs(&r, 1, html_context);
 	}
 	html_context->special_f(html_context, SP_NOWRAP, 0);
-	ln_break(2, html_context);
+	ln_break(html_context, 2);
 	kill_html_stack_item(&html_top, html_context);
 }
 
@@ -897,7 +897,7 @@ html_li(struct html_context *html_context, unsigned char *a)
 	 * for us. */
 	if (html_context->was_li) {
 		html_context->line_breax = 0;
-		ln_break(1, html_context);
+		ln_break(html_context, 1);
 	}
 
 	/*kill_html_stack_until(0, html_context,
@@ -981,7 +981,7 @@ html_dl(struct html_context *html_context, unsigned char *a)
 	par_format.dd_margin = par_format.leftmargin;
 	html_top.type = ELEMENT_DONT_KILL;
 	if (!(par_format.flags & P_COMPACT)) {
-		ln_break(2, html_context);
+		ln_break(html_context, 2);
 		html_top.linebreak = 2;
 	}
 }
@@ -993,7 +993,7 @@ html_dt(struct html_context *html_context, unsigned char *a)
 	par_format.align = ALIGN_LEFT;
 	par_format.leftmargin = par_format.dd_margin;
 	if (!(par_format.flags & P_COMPACT) && !has_attr(a, "compact"))
-		ln_break(2, html_context);
+		ln_break(html_context, 2);
 }
 
 void

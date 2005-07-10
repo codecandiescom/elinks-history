@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.152 2005/07/10 22:39:14 miciah Exp $ */
+/* $Id: parse.c,v 1.153 2005/07/10 22:43:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -683,7 +683,7 @@ next_break:
 				if (*html == ASCII_CR && html < eof - 1
 				    && html[1] == ASCII_LF)
 					html++;
-				ln_break(1, html_context);
+				ln_break(html_context, 1);
 				html++;
 				if (*html == ASCII_CR || *html == ASCII_LF) {
 					html_context->line_breax = 0;
@@ -711,7 +711,7 @@ next_break:
 
 				if (newlines) {
 					put_chrs(base_pos, length, html_context);
-					ln_break(newlines, html_context);
+					ln_break(html_context, newlines);
 					continue;
 				}
 			}
@@ -771,7 +771,7 @@ ng:;
 	}
 
 	if (noupdate) put_chrs(base_pos, html - base_pos, html_context);
-	ln_break(1, html_context);
+	ln_break(html_context, 1);
 	/* Restore the part in case the html_context was trashed in the last
 	 * iteration so that when destroying the stack in the caller we still
 	 * get the right part pointer. */
@@ -801,7 +801,7 @@ start_element(struct element_info *ei,
 		return html;
 	}
 
-	ln_break(ei->linebreak, html_context);
+	ln_break(html_context, ei->linebreak);
 
 	a = get_attr_val(attr, "id");
 	if (a) {
@@ -826,7 +826,7 @@ start_element(struct element_info *ei,
 	if (ei->func == html_table && global_doc_opts->tables
 	    && html_context->table_level < HTML_MAX_TABLE_LEVEL) {
 		format_table(attr, html, eof, &html, html_context);
-		ln_break(2, html_context);
+		ln_break(html_context, 2);
 		return html;
 	}
 	if (ei->func == html_select) {
@@ -989,7 +989,7 @@ end_element(struct element_info *ei,
 		if (html_context->was_li)
 			html_context->line_breax = 0;
 
-		ln_break(lnb, html_context);
+		ln_break(html_context, lnb);
 		while (e->prev != (void *) &html_context->stack)
 			kill_html_stack_item(e->prev, html_context);
 		kill_html_stack_item(e, html_context);

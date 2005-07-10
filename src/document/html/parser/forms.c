@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.81 2005/07/10 22:39:14 miciah Exp $ */
+/* $Id: forms.c,v 1.82 2005/07/10 22:43:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -626,7 +626,7 @@ pp:
 	fc->maxlength = get_num(attr, "maxlength");
 	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 
-	if (rows > 1) ln_break(1, html_context);
+	if (rows > 1) ln_break(html_context, 1);
 	else put_chrs(" ", 1, html_context);
 
 	html_stack_dup(ELEMENT_KILLABLE, html_context);
@@ -639,12 +639,12 @@ pp:
 		for (j = 0; j < cols; j++)
 			put_chrs("_", 1, html_context);
 		if (i < rows - 1)
-			ln_break(1, html_context);
+			ln_break(html_context, 1);
 	}
 
 	kill_html_stack_item(&html_top, html_context);
 	if (rows > 1)
-		ln_break(1, html_context);
+		ln_break(html_context, 1);
 	else
 		put_chrs(" ", 1, html_context);
 	html_context->special_f(html_context, SP_CONTROL, fc);

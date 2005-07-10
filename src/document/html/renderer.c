@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.575 2005/07/10 21:09:11 miciah Exp $ */
+/* $Id: renderer.c,v 1.576 2005/07/10 21:28:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1972,7 +1972,7 @@ render_html_document(struct cache_entry *cached, struct document *document,
 
 	document->bgcolor = par_format.bgcolor;
 
-	done_html_parser();
+	done_html_parser(html_context);
 
 	/* Drop forms which has been serving as a placeholder for form items
 	 * added in the wrong order due to the ordering of table rendering. */

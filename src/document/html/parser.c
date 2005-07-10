@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.578 2005/07/10 01:34:00 miciah Exp $ */
+/* $Id: parser.c,v 1.579 2005/07/10 21:28:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1669,10 +1669,8 @@ init_html_parser(struct uri *uri, struct document_options *options,
 }
 
 void
-done_html_parser(void)
+done_html_parser(struct html_context *html_context)
 {
-	struct html_context *html_context = &global_html_context;
-
 #ifdef CONFIG_CSS
 	if (global_doc_opts->css_enable)
 		done_css_stylesheet(&html_context->css_styles);

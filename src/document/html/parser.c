@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.588 2005/07/10 22:59:28 miciah Exp $ */
+/* $Id: parser.c,v 1.589 2005/07/10 23:00:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1145,7 +1145,7 @@ html_noscript(struct html_context *html_context, unsigned char *a)
 }
 
 void
-process_head(unsigned char *head, struct html_context *html_context)
+process_head(struct html_context *html_context, unsigned char *head)
 {
 	unsigned char *refresh, *url;
 

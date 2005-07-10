@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.100 2005/07/10 23:32:09 miciah Exp $ */
+/* $Id: parser.h,v 1.101 2005/07/10 23:33:41 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -179,8 +179,8 @@ void done_html_parser_state(struct html_context *html_context,
 int get_bgcolor(unsigned char *, color_T *);
 void set_fragment_identifier(struct html_context *html_context,
                              unsigned char *attr_name, unsigned char *attr);
-void add_fragment_identifier(struct part *, unsigned char *attr,
-                             struct html_context *html_context);
+void add_fragment_identifier(struct html_context *html_context,
+                             struct part *, unsigned char *attr);
 
 /* Interface for the viewer */
 

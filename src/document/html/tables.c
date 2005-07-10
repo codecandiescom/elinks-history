@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.409 2005/07/10 23:30:21 miciah Exp $ */
+/* $Id: tables.c,v 1.410 2005/07/10 23:33:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -865,8 +865,8 @@ draw_table_cell(struct table *table, int col, int row, int x, int y,
 		expand_lines(html_context, table->part, x + width - 1, y, height, cell->bgcolor);
 
 		if (cell->fragment_id)
-			add_fragment_identifier(part, cell->fragment_id,
-			                        html_context);
+			add_fragment_identifier(html_context, part,
+			                        cell->fragment_id);
 	}
 
 	done_html_parser_state(html_context, state);
@@ -886,8 +886,8 @@ draw_table_cells(struct table *table, int x, int y,
 	get_table_frames(table, &table_frames);
 
 	if (table->fragment_id)
-		add_fragment_identifier(table->part, table->fragment_id,
-		                        html_context);
+		add_fragment_identifier(html_context, table->part,
+		                        table->fragment_id);
 
 	/* Expand using the background color of the ``parent context'' all the
 	 * way down the start of the left edge of the table. */

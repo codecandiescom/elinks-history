@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.564 2005/07/10 01:02:02 miciah Exp $ */
+/* $Id: renderer.c,v 1.565 2005/07/10 01:04:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -759,13 +759,19 @@ insert_spaces_in_link(struct part *part, int x, int y, int new_spaces)
 /* This function is very rare exemplary of clean and beautyful code here.
  * Please handle with care. --pasky */
 static void
-justify_line(struct part *part, int y)
+justify_line(struct html_context *html_context, int y)
 {
+	struct part *part;
 	struct screen_char *line; /* we save original line here */
 	int len;
 	int pos;
 	int *space_list;
 	int spaces;
+
+	assert(html_context);
+	if_assert_failed return;
+
+	part = html_context->part;
 
 	assert(part && part->document && part->document->data);
 	if_assert_failed return;
@@ -874,7 +880,7 @@ align_line(struct html_context *html_context, int y, int last)
 
 	if (par_format.align == ALIGN_JUSTIFY) {
 		if (!last)
-			justify_line(part, y);
+			justify_line(html_context, y);
 		return;
 	}
 

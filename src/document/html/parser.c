@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.586 2005/07/10 22:56:08 miciah Exp $ */
+/* $Id: parser.c,v 1.587 2005/07/10 22:57:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -403,7 +403,7 @@ html_body(struct html_context *html_context, unsigned char *a)
 }
 
 void
-html_skip(unsigned char *a, struct html_context *html_context)
+html_skip(struct html_context *html_context, unsigned char *a)
 {
 	html_top.invisible = 1;
 	html_top.type = ELEMENT_DONT_KILL;
@@ -419,7 +419,7 @@ do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsign
 	unsigned char *type, *language, *src;
 	int in_comment = 0;
 
-	html_skip(a, html_context);
+	html_skip(html_context, a);
 
 	/* We try to process nested <script> if we didn't process the parent
 	 * one. That's why's all the fuzz. */
@@ -568,14 +568,14 @@ html_script(struct html_context *html_context, unsigned char *a)
 #ifdef CONFIG_ECMASCRIPT
 	/* We did everything (even possibly html_skip()) in do_html_script(). */
 #else
-	html_skip(a, html_context);
+	html_skip(html_context, a);
 #endif
 }
 
 void
 html_style(struct html_context *html_context, unsigned char *a)
 {
-	html_skip(a, html_context);
+	html_skip(html_context, a);
 }
 
 void
@@ -1022,7 +1022,7 @@ html_noframes(struct html_context *html_context, unsigned char *a)
 	element = search_html_stack("frameset", html_context);
 	if (element && !element->frameset) return;
 
-	html_skip(a, html_context);
+	html_skip(html_context, a);
 }
 
 void
@@ -1140,7 +1140,7 @@ html_noscript(struct html_context *html_context, unsigned char *a)
 #if 0
 // #ifdef CONFIG_ECMASCRIPT
 	if (get_opt_bool("ecmascript.enable"))
-		html_skip(a, html_context);
+		html_skip(html_context, a);
 #endif
 }
 

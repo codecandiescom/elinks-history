@@ -1,3 +1,219 @@
+Mon Jul 11 19:18:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/get-cvs-docs:
+
+	Do not prompt for password. Someone on #elinks mentioned adding the
+	':' after the user name to signal empty password.  
+
+Mon Jul 11 19:12:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, dev-intro.txt:
+
+	A small intro to the lower layers.  
+
+Mon Jul 11 12:58:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/bittorrent/Makefile.am:
+
+	Remove the README. I will port something back from our paper.  
+
+Mon Jul 11 12:37:03 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/bittorrent/: bittorrent.c, bittorrent.h, common.c,
+	common.h, connection.c, connection.h, peerwire.c, peerwire.h,
+	piececache.c, piececache.h:
+
+	Revert a bunch of bogus peer selection ratings. Fix peer ID setup.  
+
+Mon Jul 11 12:27:37 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Revert version change. :/ 
+
+Mon Jul 11 11:59:11 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/download.c, protocol/bittorrent/connection.c,
+	protocol/bittorrent/piececache.c:
+
+	Bunch of compile fixes of the bittorrent thing. Fixes compilation
+	over here on my ancient system.  
+
+Mon Jul 11 10:59:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, configure.in, features.conf, src/dialogs/download.c,
+	src/dialogs/progress.c, src/dialogs/status.c,
+	src/mime/backend/default.c, src/network/connection.c,
+	src/network/connection.h, src/network/state.c, src/network/state.h,
+	src/protocol/Makefile.am, src/protocol/protocol.c,
+	src/protocol/protocol.h, src/protocol/bittorrent/.cvsignore,
+	src/protocol/bittorrent/.vimrc,
+	src/protocol/bittorrent/Makefile.am,
+	src/protocol/bittorrent/bencoding.c,
+	src/protocol/bittorrent/bencoding.h,
+	src/protocol/bittorrent/bittorrent.c,
+	src/protocol/bittorrent/bittorrent.h,
+	src/protocol/bittorrent/common.c, src/protocol/bittorrent/common.h,
+	src/protocol/bittorrent/connection.c,
+	src/protocol/bittorrent/connection.h,
+	src/protocol/bittorrent/dialogs.c,
+	src/protocol/bittorrent/dialogs.h,
+	src/protocol/bittorrent/peerconnect.c,
+	src/protocol/bittorrent/peerconnect.h,
+	src/protocol/bittorrent/peerwire.c,
+	src/protocol/bittorrent/peerwire.h,
+	src/protocol/bittorrent/piececache.c,
+	src/protocol/bittorrent/piececache.h,
+	src/protocol/bittorrent/tracker.c,
+	src/protocol/bittorrent/tracker.h, src/session/download.c,
+	src/session/download.h, src/util/Makefile.am, src/util/bitfield.h,
+	src/util/sha1.c, src/util/sha1.h:
+
+	Add BitTorrent protocol backend. Patch by Lilja Fjeldsted, Basim
+	Reza and me.  
+
+Sun Jul 10 23:33:41 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, tables.c:
+
+	Put the html_context parameter first in add_fragment_identifier.  
+
+Sun Jul 10 23:32:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, parser/link.c:
+
+	Put the html_context parameter first in set_fragment_identifier.  
+
+Sun Jul 10 23:30:21 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c, tables.c:
+
+	Put the html_context parameter first in done_html_parser_state.  
+
+Sun Jul 10 23:28:43 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c, tables.c:
+
+	Put the html_context parameter first in init_html_parser_state.  
+
+Sun Jul 10 23:26:02 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	Put the html_context parameter first in expand_lines.  
+
+Sun Jul 10 23:12:12 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Put the html_context parameter first in draw_table_bad_html.  
+
+Sun Jul 10 23:11:32 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Put the html_context parameter first in get_table_cellpadding.  
+
+Sun Jul 10 23:10:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/tables.c:
+
+	Put the html_context parameter first in get_table_indent.  
+
+Sun Jul 10 23:09:38 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/forms.c, parser/link.c,
+	parser/parse.c, parser/stack.c, parser/stack.h:
+
+	Put the html_context parameter first in html_stack_dup.  
+
+Sun Jul 10 23:08:14 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/stack.c:
+
+	Put the html_context parameter first in kill_element.  
+
+Sun Jul 10 23:07:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/stack.c, parser/stack.h:
+
+	Put the html_context parameter first in kill_html_stack_until.  
+
+Sun Jul 10 23:04:57 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/forms.c, parser/link.c,
+	parser/parse.c, parser/stack.c, parser/stack.h:
+
+	Put the html_context parameter first in kill_html_stack_item.  
+
+Sun Jul 10 23:02:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/stack.c, parser/stack.h:
+
+	Put the html_context parameter first in search_html_stack.  
+
+Sun Jul 10 23:00:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser/parse.c:
+
+	Put the html_context parameter first in process_head.  
+
+Sun Jul 10 22:59:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, parser/parse.c:
+
+	Put the html_context parameter first in do_html_script.  
+
+Sun Jul 10 22:57:54 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser/link.c:
+
+	Put the html_context parameter first in html_skip.  
+
+Sun Jul 10 22:56:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c,
+	parser/link.c, parser/parse.c:
+
+	Put the html_context parameter first in html_focusable.  
+
+Sun Jul 10 22:53:55 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c,
+	parser/link.c, parser/parse.c:
+
+	Put the html_context parameter first in put_chrs.  
+
+Sun Jul 10 22:43:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, parser/forms.c,
+	parser/link.c, parser/parse.c, parser/stack.c:
+
+	Put the html_context parameter first in ln_break.  
+
+Sun Jul 10 22:39:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser/forms.c, parser/link.c,
+	parser/parse.c, parser/parse.h:
+
+	Put the html_context first in element_handler_T.  
+
+Sun Jul 10 22:32:36 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: internal.h, parser.c, renderer.c,
+	parser/parse.c:
+
+	Eliminate global_html_context from the code. The html_context is now
+	allocated by init_html_parser and freed by done_html_parser.  
+
+Sun Jul 10 22:19:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Let render_html_document get the html_context from init_html_parser
+	instead of just using the global. For now, change init_html_parser
+	to return the global.  
+
 Sun Jul 10 21:51:59 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/document/html/: renderer.c, renderer.h, tables.c:

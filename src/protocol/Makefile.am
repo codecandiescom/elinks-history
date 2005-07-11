@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.47 2005/04/23 16:51:40 jonas Exp $
+## $Id: Makefile.am,v 1.48 2005/07/11 10:59:04 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -7,6 +7,20 @@ authobj = auth/auth.o auth/dialogs.o auth/digest.o
 
 if CONFIG_CGI
 cgiobj = file/cgi.o
+endif
+
+if CONFIG_BITTORRENT
+bittorrentdir = bittorrent
+bittorrentobj = \
+ $(bittorrentdir)/bencoding.o \
+ $(bittorrentdir)/bittorrent.o \
+ $(bittorrentdir)/common.o \
+ $(bittorrentdir)/connection.o \
+ $(bittorrentdir)/dialogs.o \
+ $(bittorrentdir)/peerconnect.o \
+ $(bittorrentdir)/peerwire.o \
+ $(bittorrentdir)/piececache.o \
+ $(bittorrentdir)/tracker.o
 endif
 
 if CONFIG_DATA
@@ -49,6 +63,7 @@ endif
 
 SUBDIRS = \
  auth \
+ $(bittorrentdir) \
  file \
  $(fingerdir) \
  $(ftpdir) \
@@ -63,6 +78,7 @@ noinst_LIBRARIES = libprotocol.a
 EXTRA_libprotocol_a_SOURCES = data.c data.h
 libprotocol_a_LIBADD = \
  $(authobj) \
+ $(bittorrentobj) \
  $(dataobj) \
  $(cgiobj) \
  $(fileobj) \

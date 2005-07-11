@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.56 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: download.h,v 1.57 2005/07/11 10:59:05 jonas Exp $ */
 
 #ifndef EL__SESSION_DOWNLOAD_H
 #define EL__SESSION_DOWNLOAD_H
@@ -115,5 +115,10 @@ int setup_download_handler(struct session *, struct download *, struct cache_ent
 
 void abort_download(struct file_download *file_download);
 void done_type_query(struct type_query *type_query);
+
+void tp_display(struct type_query *type_query);
+void tp_save(struct type_query *type_query);
+void tp_cancel(void *data);
+struct file_download *init_file_download(struct uri *uri, struct session *ses, unsigned char *file, int fd);
 
 #endif

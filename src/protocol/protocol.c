@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.98 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: protocol.c,v 1.99 2005/07/11 10:59:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,8 @@
 /* Backends dynamic area: */
 
 #include "protocol/about.h"
+#include "protocol/bittorrent/bittorrent.h"
+#include "protocol/bittorrent/connection.h"
 #include "protocol/data.h"
 #include "protocol/file/file.h"
 #include "protocol/finger/finger.h"
@@ -51,6 +53,7 @@ struct protocol_backend {
 
 static const struct protocol_backend protocol_backends[] = {
 	{ "about",	   0, about_protocol_handler,		0, 0, 1, 0 },
+	{ "bittorrent",	   0, bittorrent_protocol_handler,	0, 0, 1, 0 },
 	{ "data",	   0, data_protocol_handler,		0, 0, 1, 0 },
 	{ "file",	   0, file_protocol_handler,		1, 0, 0, 0 },
 	{ "finger",	  79, finger_protocol_handler,		1, 1, 0, 0 },
@@ -262,6 +265,9 @@ static struct option_info protocol_options[] = {
 	NULL_OPTION_INFO,
 };
 static struct module *protocol_submodules[] = {
+#ifdef CONFIG_BITTORRENT
+	&bittorrent_protocol_module,
+#endif
 	&file_protocol_module,
 #ifdef CONFIG_FINGER
 	&finger_protocol_module,

@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.45 2005/06/14 17:36:10 jonas Exp $ */
+/* $Id: state.c,v 1.46 2005/07/11 10:59:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,11 @@ struct s_msg_dsc {
 	{S_GETH,		N_("Getting headers")},
 	{S_PROC,		N_("Server is processing request")},
 	{S_TRANS,		N_("Transferring")},
+#ifdef CONFIG_BITTORRENT
+	{S_RESUME,		N_("Resuming")},
+	{S_CONN_PEERS,		N_("Connecting to peers")},
+	{S_CONN_TRACKER,	N_("Connecting to tracker")},
+#endif
 
 	{S_WAIT_REDIR,		N_("Waiting for redirect confirmation")},
 	{S_OK,			N_("OK")},
@@ -113,6 +118,12 @@ struct s_msg_dsc {
 				"The correct syntax for proxy settings are\n"
 				"a host name optionally followed by a colon\n"
 				"and a port number. Example: 'localhost:8080'.")},
+
+#ifdef CONFIG_BITTORRENT
+	{S_BITTORRENT_ERROR,	N_("BitTorrent error")},
+	{S_BITTORRENT_METAINFO,	N_("The BitTorrent metainfo file contained errors")},
+	{S_BITTORRENT_TRACKER,	N_("The tracker requesting failed")},
+#endif
 
 	{0,			NULL}
 };

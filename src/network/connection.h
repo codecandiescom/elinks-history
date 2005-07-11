@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.132 2005/06/14 17:54:02 jonas Exp $ */
+/* $Id: connection.h,v 1.133 2005/07/11 10:59:04 jonas Exp $ */
 
 #ifndef EL__NETWORK_CONNECTION_H
 #define EL__NETWORK_CONNECTION_H
@@ -35,6 +35,9 @@ struct connection {
 
 	enum stream_encoding content_encoding;
 	struct stream_encoded *stream;
+
+	/* Called if non NULL when shutting down a connection. */
+	void (*done)(struct connection *);
 
 	unsigned int id;
 

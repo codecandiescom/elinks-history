@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.92 2005/06/27 14:29:23 jonas Exp $ */
+/* $Id: download.c,v 1.93 2005/07/11 10:59:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,10 @@
 #include "dialogs/status.h"
 #include "intl/gettext/libintl.h"
 #include "main/select.h"
+#include "network/connection.h"
 #include "network/progress.h"
+#include "protocol/bittorrent/dialogs.h"
+#include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "session/download.h"
 #include "session/session.h"
@@ -59,6 +62,11 @@ dlg_set_notify(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	struct file_download *file_download = dlg_data->dlg->udata;
 
 	file_download->notify = 1;
+#if CONFIG_BITTORRENT
+	if (file_download->uri->protocol == PROTOCOL_BITTORRENT)
+		set_bittorrent_notify_on_completion(&file_download->download,
+						    file_download->term);
+#endif
 	undisplay_download(file_download);
 	return EVENT_PROCESSED;
 }
@@ -79,6 +87,10 @@ push_delete_button(struct dialog_data *dlg_data, struct widget_data *widget_data
 	struct file_download *file_download = dlg_data->dlg->udata;
 
 	file_download->delete = 1;
+#if CONFIG_BITTORRENT
+	if (file_download->uri->protocol == PROTOCOL_BITTORRENT)
+		set_bittorrent_files_for_deletion(&file_download->download);
+#endif
 	object_unlock(file_download);
 	register_bottom_half(do_abort_download, file_download);
 	return EVENT_PROCESSED;
@@ -142,6 +154,12 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	y++;
 	if (show_meter) y += 2;
+
+#if CONFIG_BITTORRENT
+	if (file_download->uri->protocol == PROTOCOL_BITTORRENT
+	    && (show_meter || download->state == S_RESUME))
+		y += 2;
+#endif
 	dlg_format_text_do(NULL, msg, 0, &y, w, &rw,
 			dialog_text_color, ALIGN_LEFT);
 
@@ -175,6 +193,14 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 		y++;
 	}
 
+#if CONFIG_BITTORRENT
+	if (file_download->uri->protocol == PROTOCOL_BITTORRENT
+	    && (show_meter || download->state == S_RESUME)) {
+		y++;
+		draw_bittorrent_piece_progress(download, term, x, y, w, NULL, NULL);
+		y++;
+	}
+#endif
 	y++;
 	dlg_format_text_do(term, msg, x, &y, w, NULL,
 			dialog_text_color, ALIGN_LEFT);
@@ -197,7 +223,12 @@ display_download(struct terminal *term, struct file_download *file_download,
 	if (!is_in_downloads_list(file_download))
 		return;
 
+#if CONFIG_BITTORRENT
+#define DOWNLOAD_WIDGETS_COUNT 5
+#else
 #define DOWNLOAD_WIDGETS_COUNT 4
+#endif
+
 	dlg = calloc_dialog(DOWNLOAD_WIDGETS_COUNT, 0);
 	if (!dlg) return;
 
@@ -212,16 +243,25 @@ display_download(struct terminal *term, struct file_download *file_download,
 
 	add_dlg_button(dlg, _("~Background", term), B_ENTER | B_ESC, dlg_undisplay_download, NULL);
 	add_dlg_button(dlg, _("Background with ~notify", term), B_ENTER | B_ESC, dlg_set_notify, NULL);
+
+#if CONFIG_BITTORRENT
+	if (file_download->uri->protocol == PROTOCOL_BITTORRENT)
+		add_dlg_button(dlg, _("~Info", term), B_ENTER | B_ESC, dlg_show_bittorrent_info, NULL);
+#endif
+
 	add_dlg_button(dlg, _("~Abort", term), 0, dlg_abort_download, NULL);
 
 	/* Downloads scheduled to be opened by external handlers are always
 	 * deleted. */
 	if (!file_download->external_handler) {
 		add_dlg_button(dlg, _("Abort and ~delete file", term), 0, push_delete_button, NULL);
-		add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT);
-	} else {
-		add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT - 1);
 	}
+
+	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT - !!file_download->external_handler
+#if CONFIG_BITTORRENT
+		    - (file_download->uri->protocol != PROTOCOL_BITTORRENT)
+#endif
+		);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

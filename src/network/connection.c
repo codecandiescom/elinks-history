@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.296 2005/06/14 13:18:34 jonas Exp $ */
+/* $Id: connection.c,v 1.297 2005/07/11 10:59:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -382,6 +382,9 @@ free_connection_data(struct connection *conn)
 	if (conn->socket->ssl && conn->cached)
 		mem_free_set(&conn->cached->ssl_info, get_ssl_connection_cipher(conn->socket));
 #endif
+
+	if (conn->done)
+		conn->done(conn);
 
 	done_socket(conn->socket);
 	done_socket(conn->data_socket);

@@ -1,5 +1,5 @@
 /* Sessions status management */
-/* $Id: status.c,v 1.124 2005/06/24 18:30:27 zas Exp $ */
+/* $Id: status.c,v 1.125 2005/07/11 10:59:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,8 @@
 #include "network/connection.h"
 #include "network/progress.h"
 #include "network/state.h"
+#include "protocol/bittorrent/dialogs.h"
+#include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "session/download.h"
 #include "session/session.h"
@@ -48,6 +50,12 @@ get_download_msg(struct download *download, struct terminal *term,
 		/* DBG("%d -> %s", download->state, _(get_err_msg(download->state), term)); */
 		return stracpy(get_state_message(download->state, term));
 	}
+
+#ifdef CONFIG_BITTORRENT
+	if (download->conn
+	    && download->conn->uri->protocol == PROTOCOL_BITTORRENT)
+		return get_bittorrent_message(download, term, wide, full, separator);
+#endif
 
 	return get_progress_msg(download->progress, term, wide, full, separator);
 }

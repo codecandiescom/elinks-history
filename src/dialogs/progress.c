@@ -1,5 +1,5 @@
 /* Display of downloads progression stuff. */
-/* $Id: progress.c,v 1.12 2005/06/12 02:46:01 jonas Exp $ */
+/* $Id: progress.c,v 1.13 2005/07/11 10:59:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,8 +97,11 @@ draw_progress_bar(struct progress *progress, struct terminal *term,
 		  unsigned char *text, struct color_pair *meter_color)
 {
 	/* Note : values > 100% are theorically possible and were seen. */
-	int percent = (int) ((longlong) 100 * progress->pos / progress->size);
+	int percent = 0;
 	struct box barprogress;
+
+	if (progress->size > 0)
+		percent = (int) ((longlong) 100 * progress->pos / progress->size);
 
 	/* Draw the progress meter part "[###    ]" */
 	if (!text && width > 2) {

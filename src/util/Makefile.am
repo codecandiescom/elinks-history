@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.51 2005/06/29 09:44:49 zas Exp $
+## $Id: Makefile.am,v 1.52 2005/07/11 10:59:05 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -13,6 +13,10 @@ endif
 
 if CONFIG_SCANNER
 scannerobj = scanner.o
+endif
+
+if CONFIG_SHA1
+sha1obj = sha1.o
 endif
 
 if CONFIG_SMALL
@@ -30,18 +34,22 @@ EXTRA_libutil_a_SOURCES = \
  memdebug.c \
  memdebug.h \
  scanner.c \
- scanner.h
+ scanner.h \
+ sha1.c \
+ sha1.h
 
 libutil_a_LIBADD = \
  $(debugobj) \
  $(fastfindobj) \
  $(md5obj) \
- $(scannerobj)
+ $(scannerobj) \
+ $(sha1obj)
 
 libutil_a_SOURCES = \
  align.h \
  base64.c \
  base64.h \
+ bitfield.h \
  box.h	\
  color.c \
  color.h \

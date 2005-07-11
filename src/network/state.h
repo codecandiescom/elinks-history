@@ -1,4 +1,4 @@
-/* $Id: state.h,v 1.4 2005/06/14 17:35:17 jonas Exp $ */
+/* $Id: state.h,v 1.5 2005/07/11 10:59:04 jonas Exp $ */
 
 #ifndef EL__NETWORK_STATE_H
 #define EL__NETWORK_STATE_H
@@ -45,6 +45,9 @@ enum connection_state {
 	S_PROC,
 	S_TRANS,
 	S_QUESTIONS,
+	S_CONN_PEERS,
+	S_CONN_TRACKER,
+	S_RESUME,
 
 	/* State < 0 are used for the final result of a connection
 	 * (it's finished already and it ended up like this) */
@@ -99,6 +102,10 @@ enum connection_state {
 	S_NO_JAVASCRIPT		= -100600,
 
 	S_PROXY_ERROR		= -100700,
+
+	S_BITTORRENT_ERROR	= -100800,
+	S_BITTORRENT_METAINFO	= -100801,
+	S_BITTORRENT_TRACKER	= -100802,
 };
 
 unsigned char *get_state_message(enum connection_state state, struct terminal *term);

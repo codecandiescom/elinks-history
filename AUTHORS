@@ -63,6 +63,9 @@ Aurimas Mikalauskas <inner@dammit.lt>
 Baris Metin <baris@gelecek.com.tr>
 	Turkish translation
 
+Basim Reza <basim@diku.dk>
+	BitTorrent support
+
 beckers <beckers@st-oneline.de>
 	German translation
 
@@ -303,6 +306,9 @@ Laurent Monin <zas@norz.org>
 
 Lewis Collard <lewis@lewis.x3fusion.com>
 	Fixed mmap() usage on FreeBSD
+
+Lilja Heiðarsdottir Fjeldsted <lilja@diku.dk>
+	BitTorrent support
 
 Lukasz Dobrek <dobrek@student.ifpan.edu.pl>
 	$CONFIG_DIR for config directory (later changed to $ELINKS_CONFDIR)
@@ -557,4 +563,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.196 2005/07/01 13:15:53 jonas Exp $
+$Id: AUTHORS,v 1.197 2005/07/11 10:59:04 jonas Exp $

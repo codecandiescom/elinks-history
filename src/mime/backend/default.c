@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.40 2005/06/15 13:39:36 witekfl Exp $ */
+/* $Id: default.c,v 1.41 2005/07/11 10:59:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,6 +95,9 @@ static struct option_info default_mime_options[] = {
 	INIT_OPT_MIME_EXTENSION("txt",		"text/plain"),
 	INIT_OPT_MIME_EXTENSION("htm",		"text/html"),
 	INIT_OPT_MIME_EXTENSION("html",		"text/html"),
+#ifdef CONFIG_BITTORRENT
+	INIT_OPT_MIME_EXTENSION("torrent",	"application/x-bittorrent"),
+#endif
 
 	NULL_OPTION_INFO,
 };

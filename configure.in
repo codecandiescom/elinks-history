@@ -4,7 +4,7 @@ AC_PREREQ(2.13)
 AC_INIT(src/main/main.c)
 AC_CONFIG_AUX_DIR(config)
 
-AM_INIT_AUTOMAKE(elinks, 0.11.CVS)
+AM_INIT_AUTOMAKE(elinks, 0.11-bittorrent)
 AM_CONFIG_HEADER(config.h)
 
 AC_PROG_MAKE_SET
@@ -1023,6 +1023,10 @@ EL_ARG_DEPEND(CONFIG_IPV6, ipv6,
 	      [  --disable-ipv6          disable IPv6 support])
 AM_CONDITIONAL(CONFIG_IPV6, test "$CONFIG_IPV6" = yes)
 
+EL_ARG_ENABLE(CONFIG_BITTORRENT, bittorrent, [BitTorrent protocol],
+	      [  --enable-bittorrent     enable BitTorrent protocol support])
+AM_CONDITIONAL(CONFIG_BITTORRENT, test "$CONFIG_BITTORRENT" = yes)
+
 EL_ARG_ENABLE(CONFIG_DATA, data, [Data protocol],
 	      [  --disable-data          disable data protocol support])
 AM_CONDITIONAL(CONFIG_DATA, test "$CONFIG_DATA" = yes)
@@ -1130,6 +1134,18 @@ then
 fi
 
 AM_CONDITIONAL(CONFIG_MD5, test "$CONFIG_MD5" = yes)
+
+if test "$CONFIG_BITTORRENT" = yes; then
+	if test "$CONFIG_OPENSSL" != yes ||
+	   test "$CONFIG_OWN_LIBC" = yes;
+	then
+		AC_MSG_CHECKING(for built-in SHA1 support)
+		AC_MSG_RESULT(yes)
+		EL_CONFIG(CONFIG_SHA1, [Built-in SHA1])
+	fi
+fi
+
+AM_CONDITIONAL(CONFIG_SHA1, test "$CONFIG_SHA1" = yes)
 
 if test "$CONFIG_CSS" = yes || test "$CONFIG_DOM" = yes;
 then
@@ -1285,6 +1301,7 @@ AC_OUTPUT([ \
  src/osdep/win32/Makefile \
  src/protocol/Makefile \
  src/protocol/auth/Makefile \
+ src/protocol/bittorrent/Makefile \
  src/protocol/file/Makefile \
  src/protocol/finger/Makefile \
  src/protocol/ftp/Makefile \

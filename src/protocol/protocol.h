@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.40 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: protocol.h,v 1.41 2005/07/11 10:59:04 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -11,6 +11,7 @@ struct uri;
 
 enum protocol {
 	PROTOCOL_ABOUT,
+	PROTOCOL_BITTORRENT,
 	PROTOCOL_DATA,
 	PROTOCOL_FILE,
 	PROTOCOL_FINGER,

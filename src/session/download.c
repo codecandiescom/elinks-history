@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.380 2005/06/24 17:32:17 jonas Exp $ */
+/* $Id: download.c,v 1.381 2005/07/11 10:59:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "network/progress.h"
 #include "network/state.h"
 #include "osdep/osdep.h"
+#include "protocol/bittorrent/dialogs.h"
 #include "protocol/date.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
@@ -86,7 +87,7 @@ are_there_downloads(void)
 
 static void download_data(struct download *download, struct file_download *file_download);
 
-static struct file_download *
+struct file_download *
 init_file_download(struct uri *uri, struct session *ses, unsigned char *file, int fd)
 {
 	struct file_download *file_download;
@@ -786,8 +787,6 @@ struct codw_hop {
 	unsigned char *file;
 };
 
-static void tp_cancel(void *);
-
 static void
 continue_download_do(struct terminal *term, int fd, void *data, int resume)
 {
@@ -911,7 +910,7 @@ done_type_query(struct type_query *type_query)
 }
 
 
-static void
+void
 tp_cancel(void *data)
 {
 	struct type_query *type_query = data;
@@ -921,7 +920,7 @@ tp_cancel(void *data)
 }
 
 
-static void
+void
 tp_save(struct type_query *type_query)
 {
 	mem_free_set(&type_query->external_handler, NULL);
@@ -944,7 +943,7 @@ tp_show_header(struct dialog_data *dlg_data, struct widget_data *widget_data)
 /* FIXME: We need to modify this function to take frame data instead, as we
  * want to use this function for frames as well (now, when frame has content
  * type text/plain, it is ignored and displayed as HTML). */
-static void
+void
 tp_display(struct type_query *type_query)
 {
 	struct view_state *vs;
@@ -1184,7 +1183,15 @@ setup_download_handler(struct session *ses, struct download *loading,
 	type_query = init_type_query(ses, loading, cached);
 	if (type_query) {
 		ret = 1;
-		do_type_query(type_query, ctype, handler);
+#ifdef CONFIG_BITTORRENT
+		if (!handler
+		    && (!strcasecmp(ctype, "application/x-bittorrent")
+			|| !strcasecmp(ctype, "application/x-torrent"))
+		    && !get_cmd_opt_bool("anonymous"))
+			query_bittorrent_dialog(type_query);
+		else
+#endif
+			do_type_query(type_query, ctype, handler);
 	}
 
 	mem_free_if(handler);

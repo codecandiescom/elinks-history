@@ -1,5 +1,5 @@
 /* Internal "bittorrent" protocol implementation */
-/* $Id: bittorrent.c,v 1.1 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: bittorrent.c,v 1.2 2005/07/11 12:37:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,6 +143,7 @@ static struct option_info bittorrent_protocol_options[] = {
 	/* Strategy options: */
 	/* ****************************************************************** */
 
+#if 0
 	INIT_OPT_STRING("protocol.bittorrent", N_("Sharing rate"),
 		"sharing_rate", 0, "1.0",
 		N_("The minimum sharing rate to achieve before stop seeding.\n"
@@ -151,7 +152,7 @@ static struct option_info bittorrent_protocol_options[] = {
 		"be a double value between 0.0 and 1.0 both included.\n"
 		"Set to 1.0 to atleast upload a complete copy of all data and\n"
 		"set to 0.0 to have unlimited sharing rate.")),
-
+#endif
 	INIT_OPT_INT("protocol.bittorrent", N_("Maximum number of uploads"),
 		"max_uploads", 0, 0, INT_MAX, 7,
 		N_("The maximum number of uploads to allow at once.")),
@@ -162,11 +163,12 @@ static struct option_info bittorrent_protocol_options[] = {
 		N_("The minimum number of uploads which should at least\n"
 		"be used for new connections.")),
 
+#if 0
 	INIT_OPT_INT("protocol.bittorrent", N_("Keep-alive interval"),
 		"keepalive_interval", 0, 0, INT_MAX, 120,
 		N_("The number of seconds to pause between sending keep-alive\n"
 		"messages.")),
-
+#endif
 	INIT_OPT_INT("protocol.bittorrent", N_("Number of pending requests"),
 		"request_queue_size", 0, 1, INT_MAX, 5,
 		N_("How many piece requests to continuosly keep queue. Pipelining\n"
@@ -176,12 +178,13 @@ static struct option_info bittorrent_protocol_options[] = {
 		"of the connection since remaining piece blocks will be requested\n"
 		"from multiple peers.")),
 
+#if 0
 	/* Bram uses 30 seconds here. */
 	INIT_OPT_INT("protocol.bittorrent", N_("Peer snubbing interval"),
 		"snubbing_interval", 0, 0, INT_MAX, 30,
 		N_("The number of seconds to wait for file data before assuming\n"
 		"the peer has been snubbed.")),
-
+#endif
 	INIT_OPT_INT("protocol.bittorrent", N_("Peer choke interval"),
 		"choke_interval", 0, 0, INT_MAX, BITTORRENT_DEFAULT_CHOKE_INTERVAL,
 		N_("The number of seconds between updating the connection state\n"
@@ -194,14 +197,6 @@ static struct option_info bittorrent_protocol_options[] = {
 		"rarest_first_cutoff", 0, 0, INT_MAX, 4,
 		N_("The number of pieces to obtain before switching piece\n"
 		"selection strategy from random to rarest first.")),
-
-	INIT_OPT_INT("protocol.bittorrent", N_("Peer selection strategy"),
-		"peer_selection", 0, 0, 3, 0,
-		N_("The peer selection strategy decides how peers are rated:\n"
-		"0 means use the default BitTorrent strategy (download rate)\n"
-		"1 means use the free rider strategy\n"
-		"2 means use the merchant strategy\n"
-		"3 means use the altruistic strategy")),
 
 	INIT_OPT_BOOL("protocol.bittorrent", N_("Allow blacklisting"),
 		"allow_blacklist", 0, 1,
@@ -222,32 +217,6 @@ get_bittorrent_peerwire_max_request_length(void)
 {
 	return get_opt_int_tree(&bittorrent_protocol_options[0].option,
 				"peerwire.max_request_length");
-}
-
-/* The lack of native support for double value options makes this
- * necessary. */
-double get_bittorrent_sharing_rate(void)
-{
-	unsigned char *str;
-	char *end;
-	double sharing_rate;
-
-	str = get_opt_str_tree(&bittorrent_protocol_options[0].option,
-			       "sharing_rate");
-
-	if (!*str)
-		return BITTORRENT_DEFAULT_SHARING_RATE;
-
-	errno = 0;
-	sharing_rate = strtod(str, &end);
-	if (errno || *end != '\0')
-		return BITTORRENT_DEFAULT_SHARING_RATE;
-
-	/* XXX: Zero sharing means unlimited! */
-	if (sharing_rate < 0.0)
-		sharing_rate = 0.0;
-
-	return sharing_rate;
 }
 
 

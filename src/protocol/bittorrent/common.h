@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.1 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: common.h,v 1.2 2005/07/11 12:37:03 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_BITTORRENT_COMMON_H
 #define EL__PROTOCOL_BITTORRENT_COMMON_H
@@ -19,7 +19,6 @@ struct bitfield;
 struct bittorrent_fetcher;
 struct connection;
 struct terminal;
-
 
 /* The least acceptable default sharing rate. */
 #define BITTORRENT_DEFAULT_SHARING_RATE		0.250
@@ -73,12 +72,6 @@ struct bittorrent_message {
 	unsigned char string[1];
 };
 
-enum bittorrent_behaviour {
-	BITTORRENT_BEHAVIOUR_DEFAULT,
-	BITTORRENT_BEHAVIOUR_FREERIDER,
-	BITTORRENT_BEHAVIOUR_MERCHANT,
-	BITTORRENT_BEHAVIOUR_ALTRUISTIC,
-};
 
 /* ************************************************************************** */
 /* Peer-wire types: */
@@ -137,7 +130,6 @@ struct bittorrent_peer_status {
 	unsigned int bitfield:1;	/* The bitfield was sent. */
 	unsigned int initiater:1;	/* Initiater of the connection. */
 	unsigned int seeder:1;		/* The peer has the complete torrent. */
-	unsigned int opt_unchoke:1;	/* For doing RR optimistic unchoking. */
 };
 
 struct bittorrent_peer_stats {
@@ -145,20 +137,10 @@ struct bittorrent_peer_stats {
 	time_t age;
 
 	double download_rate;
-	double upload_rate;
 	double have_rate;
-	double bitfield_rate;
-	double loyalty_rate;
 
 	off_t downloaded;
 	off_t uploaded;
-
-	double download_rank;
-	double have_rank;
-	double bitfield_rank;
-	double loyalty_rank;
-
-	double rank;
 };
 
 /* Peer connection information. */
@@ -351,7 +333,6 @@ struct bittorrent_connection {
 	uint32_t incomplete;
 
 	double sharing_rate;
-	double min_sharing_rate;
 
 	/* Information about any running metainfo file or tracker request. */
 	struct bittorrent_fetcher *fetch;

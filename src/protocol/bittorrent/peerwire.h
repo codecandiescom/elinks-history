@@ -1,4 +1,4 @@
-/* $Id: peerwire.h,v 1.1 2005/07/11 10:59:05 jonas Exp $ */
+/* $Id: peerwire.h,v 1.2 2005/07/11 12:37:03 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_BITTORRENT_PEERWIRE_H
 #define EL__PROTOCOL_BITTORRENT_PEERWIRE_H
@@ -16,7 +16,9 @@ void
 update_bittorrent_peer_connection_state(struct bittorrent_peer_connection *peer);
 
 void
-update_bittorrent_peer_connection_rates(struct bittorrent_peer_connection *peer);
+update_bittorrent_peer_connection_stats(struct bittorrent_peer_connection *peer,
+					uint32_t downloaded, uint32_t have_piece,
+					uint32_t uploaded);
 
 void
 send_bittorrent_peer_message(struct bittorrent_peer_connection *peer,

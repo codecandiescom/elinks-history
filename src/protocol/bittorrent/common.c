@@ -1,5 +1,5 @@
 /* Library of common BitTorrent code */
-/* $Id: common.c,v 1.1 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: common.c,v 1.2 2005/07/11 12:37:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,11 +142,7 @@ void
 init_bittorrent_peer_id(bittorrent_id_T peer_id)
 {
 	unsigned char *version = VERSION;
-	unsigned char *cvs = strstr(version, ".CVS");
-	unsigned char *end = cvs ? cvs : cvs + strlen(version);
-	/* 9 chars for version info leaves room for both 0.11.11 and
-	 * 0.11pre12 */
-	int versionlen = int_min(end - version, 9);
+	int dots = 0;
 	int i = 0;
 
 	srand(time(NULL));
@@ -154,10 +150,20 @@ init_bittorrent_peer_id(bittorrent_id_T peer_id)
 	peer_id[i++] = 'E';
 	peer_id[i++] = 'L';
 
-	memcpy(peer_id + i, version, versionlen);
-	i += versionlen;
+	for (; *version && i < sizeof(bittorrent_id_T); version++) {
+		if (isdigit(*version)) {
+			peer_id[i++] = *version;
 
-	peer_id[i++] = '-';
+		} else if (*version == '.' && !dots) {
+			dots = 1;
+
+		} else {
+			peer_id[i++] = '-';
+			break;
+		}
+
+		peer_id[i++] = *version;
+	}
 
 	/* Hmm, sizeof(peer_id) don't work here. */
 	while (i < sizeof(bittorrent_id_T)) {

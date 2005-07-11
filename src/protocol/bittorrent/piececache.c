@@ -1,5 +1,5 @@
 /* BitTorrent piece cache */
-/* $Id: piececache.c,v 1.2 2005/07/11 11:59:11 pasky Exp $ */
+/* $Id: piececache.c,v 1.3 2005/07/11 12:37:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -574,30 +574,6 @@ remove_bittorrent_peer_from_piece_cache(struct bittorrent_peer_connection *peer)
 		    && !cache->entries[piece].rarity)
 			cache->unavailable_pieces++;
 	}
-}
-
-/* Calculate bitfield rarity */
-double
-get_bittorrent_peer_bitfield_rate(struct bittorrent_peer_connection *peer)
-{
-	struct bittorrent_piece_cache *cache = peer->bittorrent->cache;
-	unsigned int piece;
-	unsigned int pieces = 0;
-	double rarity_avg = 0;
-
-	if (cache->rarity_avg)
-		return 99999999;
-
-	foreach_bitfield_cleared (piece, peer->bitfield) {
-		rarity_avg += cache->entries[piece].rarity;
-		pieces++;
-	}
-
-	if (!pieces) return 1.0;
-
-	rarity_avg /= pieces;
-
-	return rarity_avg / cache->rarity_avg;
 }
 
 
@@ -1259,17 +1235,6 @@ update_bittorrent_piece_cache_state(struct bittorrent_connection *bittorrent)
 	struct bittorrent_piece_cache_entry *entry, *next;
 	off_t cache_size = get_opt_int("protocol.bittorrent.piece_cache_size");
 	off_t current_size = 0;
-	unsigned int piece;
-	unsigned int pieces = 0;
-
-	cache->rarity_avg = 0;
-	foreach_bitfield_cleared (piece, cache->bitfield) {
-		cache->rarity_avg += cache->entries[piece].rarity;
-		pieces++;
-	}
-
-	if (pieces)
-		cache->rarity_avg /= pieces;
 
 	if (!cache_size) return;
 

@@ -1,5 +1,5 @@
 /* Internal "bittorrent" protocol implementation */
-/* $Id: connection.c,v 1.2 2005/07/11 11:59:11 pasky Exp $ */
+/* $Id: connection.c,v 1.3 2005/07/11 12:37:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,267 +50,6 @@ set_bittorrent_connection_timer(struct connection *conn)
 		      conn);
 }
 
-static int
-compare_bittorrent_download_rate(const void *p1, const void *p2)
-{
-	const struct bittorrent_peer_connection *peer1 = p1;
-	const struct bittorrent_peer_connection *peer2 = p2;
-
-	if (peer1->stats.download_rate < peer2->stats.download_rate)
-		return -1;
-
-	if (peer1->stats.download_rate > peer2->stats.download_rate)
-		return 1;
-
-	return 0;
-}
-
-static int
-compare_bittorrent_have_rate(const void *p1, const void *p2)
-{
-	const struct bittorrent_peer_connection *peer1 = p1;
-	const struct bittorrent_peer_connection *peer2 = p2;
-
-	if (peer1->stats.have_rate < peer2->stats.have_rate)
-		return -1;
-
-	if (peer1->stats.have_rate > peer2->stats.have_rate)
-		return 1;
-
-	return 0;
-}
-
-static int
-compare_bittorrent_bitfield_rate(const void *p1, const void *p2)
-{
-	const struct bittorrent_peer_connection *peer1 = p1;
-	const struct bittorrent_peer_connection *peer2 = p2;
-
-	if (peer1->stats.bitfield_rate < peer2->stats.bitfield_rate)
-		return 1;
-
-	if (peer1->stats.bitfield_rate > peer2->stats.bitfield_rate)
-		return -1;
-
-	return 0;
-}
-
-static int
-compare_bittorrent_loyalty_rate(const void *p1, const void *p2)
-{
-	const struct bittorrent_peer_connection *peer1 = p1;
-	const struct bittorrent_peer_connection *peer2 = p2;
-
-	if (peer1->stats.loyalty_rate < peer2->stats.loyalty_rate)
-		return -1;
-
-	if (peer1->stats.loyalty_rate > peer2->stats.loyalty_rate)
-		return 1;
-
-	return 0;
-}
-
-static void
-rank_bittorrent_peer_connections(struct bittorrent_connection *bittorrent)
-{
-	struct bittorrent_peer_connection *peer, **peers;
-	size_t size = list_size(&bittorrent->peers);
-	double behaviour_scales[][4] = {
-		/* Default: */		{ 1.0, 0.0,  0.0,  0.0 },
-		/* Free rider: */	{ 0.7, 0.1,  0.2,  0.0 },
-		/* Merchant: */		{ 0.6, 0.15, 0.15, 0.1 },
-		/* Altruistic: */	{ 0.4, 0.15, 0.25, 0.2 },
-	};
-	enum bittorrent_behaviour behaviour;
-	double prev_rank = 2.0;
-	int index;
-
-	peers = mem_alloc(size * sizeof(*peers));
-	if (!peers) return;
-
-	index = 0;
-	foreach (peer, bittorrent->peers) {
-		peers[index++] = peer;
-		if (!peer->remote.handshake)
-			continue;
-
-		update_bittorrent_peer_connection_rates(peer);
-	}
-
-	qsort(peers, size, sizeof(*peers), compare_bittorrent_download_rate);
-
-	for (index = 0; index < size; index++) {
-		peers[index]->stats.download_rank = (double) (size - index) / size;
-		assert(prev_rank > peers[index]->stats.download_rank);
-		prev_rank = peers[index]->stats.download_rank;
-	}
-
-	qsort(peers, size, sizeof(*peers), compare_bittorrent_have_rate);
-
-	prev_rank = 2.0;
-	for (index = 0; index < size; index++) {
-		peers[index]->stats.have_rank = (double) (size - index) / size;
-		assert(prev_rank > peers[index]->stats.have_rank);
-		prev_rank = peers[index]->stats.have_rank;
-	}
-
-	qsort(peers, size, sizeof(*peers), compare_bittorrent_bitfield_rate);
-
-	prev_rank = 2.0;
-	for (index = 0; index < size; index++) {
-		peers[index]->stats.bitfield_rank = (double) (size - index) / size;
-		assert(prev_rank > peers[index]->stats.bitfield_rank);
-		prev_rank = peers[index]->stats.bitfield_rank;
-	}
-
-	qsort(peers, size, sizeof(*peers), compare_bittorrent_loyalty_rate);
-
-	prev_rank = 2.0;
-	for (index = 0; index < size; index++) {
-		peers[index]->stats.loyalty_rank = (double) (size - index) / size;
-		assert(prev_rank > peers[index]->stats.loyalty_rank);
-		assert(peers[index]->stats.loyalty_rank <= 1.0);
-		assert(peers[index]->stats.loyalty_rank >= 0.0);
-		prev_rank = peers[index]->stats.loyalty_rank;
-	}
-
-	behaviour = get_opt_int("protocol.bittorrent.peer_selection");
-
-	foreach (peer, bittorrent->peers) {
-		struct bittorrent_peer_stats *stats = &peer->stats;
-
-		stats->rank  = 0.0;
-		stats->rank += behaviour_scales[behaviour][0] * stats->download_rank;
-		stats->rank += behaviour_scales[behaviour][1] * stats->have_rank;
-		stats->rank += behaviour_scales[behaviour][2] * stats->bitfield_rank;
-		stats->rank += behaviour_scales[behaviour][3] * stats->loyalty_rank;
-	}
-
-	mem_free(peers);
-}
-
-#if 0
-static int
-compare_bittorrent_opt_unchoke_rating(const void *p1, const void *p2)
-{
-	const struct bittorrent_peer_connection *peer1 = p1;
-	const struct bittorrent_peer_connection *peer2 = p2;
-
-	if (peer1->stats.rank < peer2->stats.rank)
-		return -1;
-
-	if (peer1->stats.rank > peer2->stats.rank)
-		return 1;
-
-	return 0;
-}
-
-static void
-opt_unchoke_bittorrent_peer_connections(struct bittorrent_connection *bittorrent)
-{
-	struct bittorrent_peer_connection *peer, **peers;
-	enum bittorrent_behaviour behaviour = get_opt_int("protocol.bittorrent.peer_selection");
-	double prev_rank = 2.0;
-	int index, min_uploads;
-	size_t size = list_size(&bittorrent->peers);
-	int unflagged_peers;
-
-	peers = mem_alloc(size * sizeof(*peers));
-	if (!peers) return;
-
-	size = 0;
-	foreach (peer, bittorrent->peers) {
-		struct bittorrent_peer_stats *stats = &peer->stats;
-
-		if (!peer->remote.handshake || !peer->local.choked) {
-			peer->local.opt_unchoke = 1;
-			continue;
-		}
-
-		peers[size++] = peer;
-
-		stats->rank  = stats->have_rank
-			     + stats->bitfield_rank
-			     + stats->loyalty_rank;
-	}
-
-	qsort(peers, size, sizeof(*peers), compare_bittorrent_opt_unchoke_rating);
-
-	for (index = 0, unflagged_peers = 0; index < size; index++) {
-		peers[index]->stats.rank = (double) (size - index) / size;
-		assert(prev_rank > peers[index]->stats.rank);
-		prev_rank = peers[index]->stats.rank;
-		if (!peer->local.opt_unchoke)
-			unflagged_peers++;
-	}
-
-	min_uploads = get_opt_int("protocol.bittorrent.min_uploads");
-	if (min_uploads > size) min_uploads = size;
-
-	while (min_uploads > 0) {
-		enum { BITTORRENT_MAX, BITTORRENT_MIN } select;
-
-		switch (behaviour) {
-		case BITTORRENT_BEHAVIOUR_FREERIDER:
-			/* Always prefer good peers */
-			select = BITTORRENT_MAX;
-			break;
-
-		case BITTORRENT_BEHAVIOUR_MERCHANT:
-			/* Alternate */
-			select = (index % 2) ? BITTORRENT_MIN : BITTORRENT_MAX;
-			break;
-
-		case BITTORRENT_BEHAVIOUR_ALTRUISTIC:
-		case BITTORRENT_BEHAVIOUR_DEFAULT:
-		default:
-			/* Always prefer new peers */
-			select = BITTORRENT_MIN;
-		};
-
-		/* Handle round robin */
-
-		if (!unflagged_peers) {
-			for (index = 0; index < size; index++) {
-				if (!peer->remote.choked)
-					continue;
-				peers[index]->local.opt_unchoke = 0;
-				unflagged_peers++;
-			}
-
-			if (!unflagged_peers)
-				break;
-		}
-
-		peer = NULL;
-
-		if (select == BITTORRENT_MAX) {
-			for (index = 0; index < size; index++) {
-				if (peers[index]->local.opt_unchoke)
-					continue;
-
-				peer = peers[index];
-			}
-		} else {
-			for (index = size - 1; index >= 0; index--) {
-				if (peers[index]->local.opt_unchoke)
-					continue;
-
-				peer = peers[index];
-			}
-		}
-
-		if (!peer) break;
-
-		if (peer->remote.choked)
-			unchoke_bittorrent_peer(peer);
-		peer->remote.choked = 0;
-	}
-
-	mem_free(peers);
-}
-#endif
-
 /* Sort the peers based on the stats rate, bubbaly style! */
 static void
 sort_bittorrent_peer_connections(struct bittorrent_connection *bittorrent)
@@ -325,7 +64,7 @@ sort_bittorrent_peer_connections(struct bittorrent_connection *bittorrent)
 		resort = 0;
 
 		foreachsafe (peer, next, bittorrent->peers) {
-			if (prev && prev->stats.rank < peer->stats.rank) {
+			if (prev && prev->stats.download_rate < peer->stats.download_rate) {
 				resort = 1;
 				del_from_list(prev);
 				add_at_pos(peer, prev);
@@ -339,8 +78,7 @@ sort_bittorrent_peer_connections(struct bittorrent_connection *bittorrent)
 #ifdef CONFIG_DEBUG
 	prev = NULL;
 	foreach (peer, bittorrent->peers) {
-		assertm(!prev || prev->stats.rank >= peer->stats.rank,
-			"%10.3f %10.3f", prev->stats.rank, peer->stats.rank);
+		assert(!prev || prev->stats.download_rate >= peer->stats.download_rate);
 		prev = peer;
 	}
 #endif
@@ -359,14 +97,12 @@ update_bittorrent_connection_state(struct connection *conn)
 	set_bittorrent_connection_timer(conn);
 	set_connection_timeout(conn);
 
-	bittorrent->min_sharing_rate = get_bittorrent_sharing_rate();
-
 	peer_conns = list_size(&bittorrent->peers);
 	max_peer_conns = get_opt_int("protocol.bittorrent.peerwire.connections");
 
-	update_bittorrent_piece_cache_state(bittorrent);
-
-	rank_bittorrent_peer_connections(bittorrent);
+	/* First ``age'' the peer rates _before_ the sorting. */
+	foreach (peer, bittorrent->peers)
+		update_bittorrent_peer_connection_stats(peer, 0, 0, 0);
 
 	/* Sort the peers so that the best peers are at the list start. */
 	sort_bittorrent_peer_connections(bittorrent);
@@ -399,10 +135,10 @@ update_bittorrent_connection_state(struct connection *conn)
 		update_bittorrent_peer_connection_state(peer);
 	}
 
-#if 0
-	/* Find peer(s) to optimistically unchoke. */
-	opt_unchoke_bittorrent_peer_connections(bittorrent);
-#endif
+	/* FIXME: Find peer(s) to optimistically unchoke. */
+
+	update_bittorrent_piece_cache_state(bittorrent);
+
 	/* Close or open peers connections. */
 	if (peer_conns > max_peer_conns) {
 		struct bittorrent_peer_connection *prev;

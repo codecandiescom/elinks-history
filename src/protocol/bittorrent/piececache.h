@@ -1,4 +1,4 @@
-/* $Id: piececache.h,v 1.1 2005/07/11 10:59:05 jonas Exp $ */
+/* $Id: piececache.h,v 1.2 2005/07/11 12:37:03 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_BITTORRENT_PIECECACHE_H
 #define EL__PROTOCOL_BITTORRENT_PIECECACHE_H
@@ -45,8 +45,6 @@ struct bittorrent_piece_cache {
 	unsigned int unavailable_pieces;/* Number of unavailable pieces */
 	unsigned int partial_pieces;	/* Number of selected file pieces */
 	unsigned int locked_pieces;	/* Pieces locked due to partial download */
-
-	double rarity_avg;	/* The average rarity of all uncompleted pieces. */
 
 	/* Flags set from the download dialog. */
 	unsigned int delete_files:1;	/* Unlink files on shutdown? */
@@ -116,8 +114,6 @@ update_bittorrent_piece_cache_from_bitfield(struct bittorrent_peer_connection *p
 
 void
 remove_bittorrent_peer_from_piece_cache(struct bittorrent_peer_connection *peer);
-
-double get_bittorrent_peer_bitfield_rate(struct bittorrent_peer_connection *peer);
 
 enum bittorrent_state
 add_to_bittorrent_piece_cache(struct bittorrent_peer_connection *peer,

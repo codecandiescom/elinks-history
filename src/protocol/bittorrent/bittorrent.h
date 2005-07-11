@@ -1,4 +1,4 @@
-/* $Id: bittorrent.h,v 1.1 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: bittorrent.h,v 1.2 2005/07/11 12:37:03 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_BITTORRENT_BITTORRENT_H
 #define EL__PROTOCOL_BITTORRENT_BITTORRENT_H
@@ -13,7 +13,6 @@ extern struct module bittorrent_protocol_module;
 
 uint32_t get_bittorrent_peerwire_max_message_length(void);
 uint32_t get_bittorrent_peerwire_max_request_length(void);
-double get_bittorrent_sharing_rate(void);
 
 int *get_bittorrent_selection(struct uri *uri, size_t size);
 void add_bittorrent_selection(struct uri *uri, int *selection, size_t size);

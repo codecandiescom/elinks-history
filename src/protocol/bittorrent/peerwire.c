@@ -1,5 +1,5 @@
 /* BitTorrent peer-wire protocol implementation */
-/* $Id: peerwire.c,v 1.1 2005/07/11 10:59:05 jonas Exp $ */
+/* $Id: peerwire.c,v 1.2 2005/07/11 12:37:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,7 +162,7 @@ get_bittorrent_rate(struct bittorrent_peer_stats *stats, time_t now,
 		/ (now - stats->age);
 }
 
-static void
+void
 update_bittorrent_peer_connection_stats(struct bittorrent_peer_connection *peer,
 					uint32_t downloaded, uint32_t have_piece,
 					uint32_t uploaded)
@@ -171,7 +171,6 @@ update_bittorrent_peer_connection_stats(struct bittorrent_peer_connection *peer,
 	time_t now = time(NULL);
 
 	stats->download_rate = get_bittorrent_rate(stats, now, stats->download_rate, downloaded);
-	stats->upload_rate   = get_bittorrent_rate(stats, now, stats->upload_rate, uploaded);
 	stats->have_rate     = get_bittorrent_rate(stats, now, stats->have_rate, have_piece);
 
 	stats->downloaded   += downloaded;
@@ -180,21 +179,8 @@ update_bittorrent_peer_connection_stats(struct bittorrent_peer_connection *peer,
 
 	/* Push the age along, so it will be no older than the requested number
 	 * of seconds. */
-	/* FIXME: Make configurable? */
 	if (stats->age < now - 20)
 		stats->age = stats->age ? now - 20 : now - 1;
-}
-
-void
-update_bittorrent_peer_connection_rates(struct bittorrent_peer_connection *peer)
-{
-	struct bittorrent_peer_stats *stats = &peer->stats;
-
-	/* First ``age'' the peer rates _before_ the sorting. */
-	update_bittorrent_peer_connection_stats(peer, 0, 0, 0);
-
-	stats->bitfield_rate = get_bittorrent_peer_bitfield_rate(peer);
-	stats->loyalty_rate = stats->downloaded - stats->uploaded;
 }
 
 

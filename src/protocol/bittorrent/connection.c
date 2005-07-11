@@ -1,5 +1,5 @@
 /* Internal "bittorrent" protocol implementation */
-/* $Id: connection.c,v 1.1 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: connection.c,v 1.2 2005/07/11 11:59:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,6 +189,7 @@ rank_bittorrent_peer_connections(struct bittorrent_connection *bittorrent)
 	mem_free(peers);
 }
 
+#if 0
 static int
 compare_bittorrent_opt_unchoke_rating(const void *p1, const void *p2)
 {
@@ -308,6 +309,7 @@ opt_unchoke_bittorrent_peer_connections(struct bittorrent_connection *bittorrent
 
 	mem_free(peers);
 }
+#endif
 
 /* Sort the peers based on the stats rate, bubbaly style! */
 static void

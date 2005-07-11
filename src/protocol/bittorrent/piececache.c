@@ -1,5 +1,5 @@
 /* BitTorrent piece cache */
-/* $Id: piececache.c,v 1.1 2005/07/11 10:59:05 jonas Exp $ */
+/* $Id: piececache.c,v 1.2 2005/07/11 11:59:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,12 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#endif
-#ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */
-#endif
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif

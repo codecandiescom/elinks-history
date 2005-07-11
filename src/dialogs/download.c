@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.93 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: download.c,v 1.94 2005/07/11 11:59:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,11 +257,12 @@ display_download(struct terminal *term, struct file_download *file_download,
 		add_dlg_button(dlg, _("Abort and ~delete file", term), 0, push_delete_button, NULL);
 	}
 
-	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT - !!file_download->external_handler
 #if CONFIG_BITTORRENT
-		    - (file_download->uri->protocol != PROTOCOL_BITTORRENT)
+	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT - !!file_download->external_handler
+		         - (file_download->uri->protocol != PROTOCOL_BITTORRENT));
+#else
+	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT - !!file_download->external_handler);
 #endif
-		);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

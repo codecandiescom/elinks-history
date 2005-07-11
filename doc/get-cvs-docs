@@ -2,7 +2,7 @@
 #
 # Copyright (c) Jonas Fonseca <fonseca@diku.dk>, 2005
 
-CVSROOT=:pserver:anonymous@cvs.elinks.or.cz:/var/cvs/elinks
+CVSROOT=:pserver:anonymous:@cvs.elinks.or.cz:/var/cvs/elinks
 DOCTYPES=
 
 check_docdir()
@@ -57,7 +57,7 @@ __END__
 		;;
 
 	--version)
-		echo "$(basename $0)" '$Id: get-cvs-docs,v 1.1 2005/05/23 00:18:20 jonas Exp $'
+		echo "$(basename $0)" '$Id: get-cvs-docs,v 1.2 2005/07/11 19:18:35 jonas Exp $'
 		exit
 		;;
 

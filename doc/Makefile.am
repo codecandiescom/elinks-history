@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.73 2005/07/04 17:03:21 jonas Exp $
+## $Id: Makefile.am,v 1.74 2005/07/11 19:12:50 jonas Exp $
 
 SUBDIRS = man
 
@@ -49,6 +49,7 @@ EXTRA_DIST = \
  feedback.txt \
  get-cvs-docs \
  hacking.txt \
+ dev-intro.txt \
  index.txt \
  perl.pod \
  tools/help2doc \
@@ -191,6 +192,9 @@ $(HTML_DIR)/manual.html: $(MANUAL_FILES) doc-dirs $(MANUAL_EXTRA_FILES)
 	$(ASCIIDOC) -b xhtml11 -d book -o $@ -n $<
 
 $(HTML_DIR)/hacking.html: $(top_srcdir)/doc/hacking.txt doc-dirs
+	$(ASCIIDOC) -b xhtml11 -d book -o $@ -n $<
+
+$(HTML_DIR)/dev-intro.html: $(top_srcdir)/doc/dev-intro.txt doc-dirs
 	$(ASCIIDOC) -b xhtml11 -d book -o $@ -n $<
 
 $(XML_DIR)/manual.xml: $(MANUAL_FILES) doc-dirs $(MANUAL_EXTRA_FILES)

@@ -1,9 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2005/07/11 10:59:04 jonas Exp $
+## $Id: Makefile.am,v 1.2 2005/07/11 12:58:26 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
-
-EXTRA_DIST = README
 
 noinst_LIBRARIES = libbittorrent.a
 

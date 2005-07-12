@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.101 2005/07/12 15:30:57 jonas Exp $ */
+/* $Id: link.c,v 1.102 2005/07/12 16:31:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ html_a(struct html_context *html_context, unsigned char *a)
 
 		mem_free(href);
 
-		target = get_target(a);
+		target = get_target(html_context->options, a);
 		if (target) {
 			mem_free_set(&format.target, target);
 		} else {

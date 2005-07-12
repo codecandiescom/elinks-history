@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.87 2005/07/12 15:30:57 jonas Exp $ */
+/* $Id: forms.c,v 1.88 2005/07/12 16:31:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ html_form(struct html_context *html_context, unsigned char *a)
 			|| !strchr(form->action, '?'));
 	}
 
-	al = get_target(a);
+	al = get_target(html_context->options, a);
 	form->target = al ? al : stracpy(html_context->base_target);
 
 	html_context->special_f(html_context, SP_FORM, form);

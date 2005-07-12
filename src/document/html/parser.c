@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.600 2005/07/12 16:27:53 jonas Exp $ */
+/* $Id: parser.c,v 1.601 2005/07/12 16:31:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,14 +133,14 @@ get_bgcolor(struct html_context *html_context, unsigned char *a, color_T *rgb)
 }
 
 unsigned char *
-get_target(unsigned char *a)
+get_target(struct document_options *options, unsigned char *a)
 {
 	unsigned char *v = get_attr_val(a, "target");
 
 	if (!v) return NULL;
 
 	if (!*v || !strcasecmp(v, "_self")) {
-		mem_free_set(&v, stracpy(global_doc_opts->framename));
+		mem_free_set(&v, stracpy(options->framename));
 	}
 
 	return v;
@@ -830,7 +830,7 @@ html_base(struct html_context *html_context, unsigned char *a)
 		}
 	}
 
-	al = get_target(a);
+	al = get_target(html_context->options, a);
 	if (al) mem_free_set(&html_context->base_target, al);
 }
 
@@ -1366,7 +1366,8 @@ look_for_tag(unsigned char **pos, unsigned char *eof,
 static int
 look_for_link(unsigned char **pos, unsigned char *eof, struct menu_item **menu,
 	      struct memory_list **ml, struct uri *href_base,
-	      unsigned char *target_base, struct conv_table *ct)
+	      unsigned char *target_base, struct conv_table *ct,
+	      struct document_options *options)
 {
 	unsigned char *attr, *href, *name, *target;
 	unsigned char *label = NULL; /* shut up warning */
@@ -1415,7 +1416,7 @@ look_for_link(unsigned char **pos, unsigned char *eof, struct menu_item **menu,
 		return 1;
 	}
 
-	target = get_target(attr);
+	target = get_target(options, attr);
 	if (!target) target = null_or_stracpy(target_base);
 	if (!target) target = stracpy("");
 	if (!target) {
@@ -1501,7 +1502,8 @@ look_for_link(unsigned char **pos, unsigned char *eof, struct menu_item **menu,
 int
 get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	      struct menu_item **menu, struct memory_list **ml, struct uri *uri,
-	      unsigned char *target_base, int to, int def, int hdef)
+	      struct document_options *options, unsigned char *target_base,
+	      int to, int def, int hdef)
 {
 	struct conv_table *ct;
 	struct string hd;
@@ -1525,7 +1527,8 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 
 	*ml = NULL;
 
-	while (look_for_link(&pos, eof, menu, ml, uri, target_base, ct)) ;
+	while (look_for_link(&pos, eof, menu, ml, uri, target_base, ct, options))
+		;
 
 	if (pos >= eof) {
 		freeml(*ml);

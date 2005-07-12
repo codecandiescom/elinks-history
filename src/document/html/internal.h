@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.62 2005/07/12 15:30:56 jonas Exp $ */
+/* $Id: internal.h,v 1.63 2005/07/12 16:31:02 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -126,7 +126,7 @@ struct html_context {
 
 void html_focusable(struct html_context *html_context, unsigned char *a);
 void html_skip(struct html_context *html_context, unsigned char *a);
-unsigned char *get_target(unsigned char *a);
+unsigned char *get_target(struct document_options *options, unsigned char *a);
 
 void
 import_css_stylesheet(struct css_stylesheet *css, struct uri *base_uri,

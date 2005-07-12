@@ -1,5 +1,5 @@
 /* The DOM node handling */
-/* $Id: node.c,v 1.5 2005/02/28 11:17:17 zas Exp $ */
+/* $Id: node.c,v 1.6 2005/07/12 15:46:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -361,7 +361,7 @@ compress_string(unsigned char *string, unsigned int length)
 }
 
 unsigned char *
-get_dom_node_value(struct dom_node *node)
+get_dom_node_value(struct dom_node *node, int codepage)
 {
 	unsigned char *value;
 	uint16_t valuelen;
@@ -387,7 +387,8 @@ get_dom_node_value(struct dom_node *node)
 			break;
 
 		case DOM_NODE_ENTITY_REFERENCE:
-			value = get_entity_string(node->string, node->length, global_doc_opts->cp);
+			value = get_entity_string(node->string, node->length,
+						  codepage);
 			valuelen = value ? strlen(value) : 0;
 			break;
 

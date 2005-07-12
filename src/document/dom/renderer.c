@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.24 2005/04/08 06:40:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.25 2005/07/12 15:46:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,13 +52,15 @@ struct dom_renderer {
 
 
 static void
-init_template(struct screen_char *template, color_T background, color_T foreground)
+init_template(struct screen_char *template, struct document_options *options,
+	      color_T background, color_T foreground)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(background, foreground);
 
 	template->attr = 0;
 	template->data = ' ';
-	set_term_color(template, &colors, global_doc_opts->color_flags, global_doc_opts->color_mode);
+	set_term_color(template, &colors,
+		       options->color_flags, options->color_mode);
 }
 
 static inline struct css_property *
@@ -95,8 +97,8 @@ init_dom_renderer(struct dom_renderer *renderer, struct document *document,
 
 	for (type = 0; type < DOM_NODES; type++) {
 		struct screen_char *template = &renderer->styles[type];
-		color_T background = global_doc_opts->default_bg;
-		color_T foreground = global_doc_opts->default_fg;
+		color_T background = document->options.default_bg;
+		color_T foreground = document->options.default_fg;
 		static int i_want_struct_module_for_dom;
 
 		unsigned char *name = get_dom_node_type_name(type);
@@ -140,7 +142,7 @@ init_dom_renderer(struct dom_renderer *renderer, struct document *document,
 			if (property) foreground = property->value.color;
 		}
 
-		init_template(template, background, foreground);
+		init_template(template, &document->options, background, foreground);
 	}
 }
 
@@ -366,7 +368,8 @@ add_dom_link(struct dom_renderer *renderer, unsigned char *string, int length)
 	link->color.background = document->options.default_bg;
 	link->color.foreground = fgcolor;
 
-	init_template(&template, link->color.background, link->color.foreground);
+	init_template(&template, &document->options,
+		      link->color.background, link->color.foreground);
 
 	render_dom_text(renderer, &template, string, length);
 
@@ -415,7 +418,7 @@ render_dom_tree_id_leaf(struct dom_navigator *navigator, struct dom_node *node, 
 	assert(node && document);
 
 	name	= get_dom_node_name(node);
-	value	= get_dom_node_value(node);
+	value	= get_dom_node_value(node, document->options.cp);
 	id	= get_dom_node_type_name(node->type);
 
 	renderer->canvas_x += navigator->depth;
@@ -438,7 +441,7 @@ render_dom_tree_leaf(struct dom_navigator *navigator, struct dom_node *node, voi
 	assert(node && document);
 
 	name	= get_dom_node_name(node);
-	value	= get_dom_node_value(node);
+	value	= get_dom_node_value(node, document->options.cp);
 
 	renderer->canvas_x += navigator->depth;
 	render_dom_printf(renderer, template, "%-16s: %s\n", name, value);
@@ -709,7 +712,7 @@ render_dom_document(struct cache_entry *cached, struct document *document,
 	init_dom_renderer(&renderer, document, buffer, root, convert_table);
 	init_dom_navigator(&navigator, &renderer, callbacks, 0);
 
-	document->bgcolor = global_doc_opts->default_bg;
+	document->bgcolor = document->options.default_bg;
 
 	walk_dom_nodes(&navigator, root);
 	/* If there are no non-element nodes after the last element node make

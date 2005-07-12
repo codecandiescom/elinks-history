@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.96 2005/06/28 22:12:27 rrowan Exp $
+# $Id: hooks.pl,v 1.97 2005/07/12 01:21:25 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1118,14 +1118,16 @@ better Gmail experience.
 
 =item Source readability improvements
 
-Rewrites some evil characters to entities and vice versa.
+Rewrites some evil characters to entities and vice versa.  These will be
+disabled until such time as pre_format_html_hook only gets called for
+content-type:text/html.
 
 =cut
 	# demoronizer
-	$html =~ s/Ñ/\&mdash;/g;
-	$html =~ s/\&#252/ü/g;
-	$html =~ s/\&#039(?!;)/'/g;
-	$html =~ s/]\n>$//gsm;
+#	$html =~ s/Ñ/\&mdash;/g;
+#	$html =~ s/\&#252/ü/g;
+#	$html =~ s/\&#039(?!;)/'/g;
+#	$html =~ s/]\n>$//gsm;
 #	$html =~ s/%5B/[/g;
 #	$html =~ s/%5D/]/g;
 #	$html =~ s/%20/ /g;

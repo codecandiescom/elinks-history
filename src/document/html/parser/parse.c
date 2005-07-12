@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.159 2005/07/10 23:09:38 miciah Exp $ */
+/* $Id: parse.c,v 1.160 2005/07/12 15:30:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -823,7 +823,7 @@ start_element(struct element_info *ei,
 	restore_format = html_is_preformatted();
 	old_format = par_format;
 
-	if (ei->func == html_table && global_doc_opts->tables
+	if (ei->func == html_table && html_context->options->tables
 	    && html_context->table_level < HTML_MAX_TABLE_LEVEL) {
 		format_table(attr, html, eof, &html, html_context);
 		ln_break(html_context, 2);
@@ -838,7 +838,7 @@ start_element(struct element_info *ei,
 		return html;
 	}
 #ifdef CONFIG_CSS
-	if (ei->func == html_style && global_doc_opts->css_enable) {
+	if (ei->func == html_style && html_context->options->css_enable) {
 		css_parse_stylesheet(&html_context->css_styles,
 				     html_context->base_href, html, eof);
 	}
@@ -898,7 +898,7 @@ start_element(struct element_info *ei,
 #endif
 
 #ifdef CONFIG_CSS
-	if (html_top.options && global_doc_opts->css_enable) {
+	if (html_top.options && html_context->options->css_enable) {
 		/* XXX: We should apply CSS otherwise as well, but that'll need
 		 * some deeper changes in order to have options filled etc.
 		 * Probably just applying CSS from more places, since we

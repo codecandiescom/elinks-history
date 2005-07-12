@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.598 2005/07/12 14:08:55 miciah Exp $ */
+/* $Id: parser.c,v 1.599 2005/07/12 15:30:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,8 +239,8 @@ import_css_stylesheet(struct css_stylesheet *css, struct uri *base_uri,
 	assert(html_context);
 	assert(base_uri);
 
-	if (!global_doc_opts->css_enable
-	    || !global_doc_opts->css_import)
+	if (!html_context->options->css_enable
+	    || !html_context->options->css_import)
 		return;
 
 	url = memacpy(url, len);
@@ -386,7 +386,7 @@ html_body(struct html_context *html_context, unsigned char *a)
 #ifdef CONFIG_CSS
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
 	 * it _and_ prefer it over bgcolor attribute. */
-	if (global_doc_opts->css_enable)
+	if (html_context->options->css_enable)
 		css_apply(&html_top, &html_context->css_styles,
 		          &html_context->stack);
 #endif
@@ -1021,7 +1021,7 @@ html_noframes(struct html_context *html_context, unsigned char *a)
 {
 	struct html_element *element;
 
-	if (!global_doc_opts->frames) return;
+	if (!html_context->options->frames) return;
 
 	element = search_html_stack(html_context, "frameset");
 	if (element && !element->frameset) return;
@@ -1053,7 +1053,7 @@ html_frame(struct html_context *html_context, unsigned char *a)
 	}
 	if (!name) return;
 
-	if (!global_doc_opts->frames || !html_top.frameset) {
+	if (!html_context->options->frames || !html_top.frameset) {
 		html_focusable(html_context, a);
 		put_link_line("Frame: ", name, url, "", html_context);
 
@@ -1082,7 +1082,7 @@ html_frameset(struct html_context *html_context, unsigned char *a)
 	 * concerns at least because sane sites should enclose the documents in
 	 * <body> elements ;-). See also bug 171. --pasky */
 	if (search_html_stack(html_context, "BODY")
-	    || !global_doc_opts->frames
+	    || !html_context->options->frames
 	    || !html_context->special_f(html_context, SP_USED, NULL))
 		return;
 
@@ -1102,9 +1102,9 @@ html_frameset(struct html_context *html_context, unsigned char *a)
 	}
 
 	if (!html_top.frameset) {
-		width = global_doc_opts->box.width;
-		height = global_doc_opts->box.height;
-		global_doc_opts->needs_height = 1;
+		width = html_context->options->box.width;
+		height = html_context->options->box.height;
+		html_context->options->needs_height = 1;
 	} else {
 		struct frameset_desc *frameset_desc = html_top.frameset;
 		int offset;
@@ -1197,7 +1197,7 @@ process_head(struct html_context *html_context, unsigned char *head)
 			html_focusable(html_context, NULL);
 
 			put_link_line("Refresh: ", url, joined_url,
-			              global_doc_opts->framename, html_context);
+			              html_context->options->framename, html_context);
 			html_context->special_f(html_context, SP_REFRESH, seconds, joined_url);
 
 			mem_free(joined_url);
@@ -1620,6 +1620,8 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	html_context->base_href = get_uri_reference(uri);
 	html_context->base_target = null_or_stracpy(options->framename);
 
+	html_context->options = options;
+
 	scan_http_equiv(start, end, head, title);
 
 	e = mem_calloc(1, sizeof(*e));
@@ -1668,7 +1670,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 #ifdef CONFIG_CSS
 	html_context->css_styles.import_data = html_context;
 
-	if (global_doc_opts->css_enable)
+	if (options->css_enable)
 		mirror_css_stylesheet(&default_stylesheet,
 				      &html_context->css_styles);
 #endif
@@ -1680,7 +1682,7 @@ void
 done_html_parser(struct html_context *html_context)
 {
 #ifdef CONFIG_CSS
-	if (global_doc_opts->css_enable)
+	if (html_context->options->css_enable)
 		done_css_stylesheet(&html_context->css_styles);
 #endif
 

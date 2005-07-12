@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.86 2005/07/10 23:09:38 miciah Exp $ */
+/* $Id: forms.c,v 1.87 2005/07/12 15:30:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,10 +209,11 @@ no_type_attr:
 	if (!fc->default_value) fc->default_value = stracpy("");
 
 	fc->size = get_num(a, "size");
-	if (fc->size == -1) fc->size = global_doc_opts->default_form_input_size;
+	if (fc->size == -1)
+		fc->size = html_context->options->default_form_input_size;
 	fc->size++;
-	if (fc->size > global_doc_opts->box.width)
-		fc->size = global_doc_opts->box.width;
+	if (fc->size > html_context->options->box.width)
+		fc->size = html_context->options->box.width;
 	fc->maxlength = get_num(a, "maxlength");
 	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
@@ -588,19 +589,20 @@ pp:
 	}
 
 	cols = get_num(attr, "cols");
-	if (cols <= 0) cols = global_doc_opts->default_form_input_size;
+	if (cols <= 0)
+		cols = html_context->options->default_form_input_size;
 	cols++; /* Add 1 column, other browsers may have different
 		   behavior here (mozilla adds 2) --Zas */
-	if (cols > global_doc_opts->box.width)
-		cols = global_doc_opts->box.width;
+	if (cols > html_context->options->box.width)
+		cols = html_context->options->box.width;
 	fc->cols = cols;
 
 	rows = get_num(attr, "rows");
 	if (rows <= 0) rows = 1;
-	if (rows > global_doc_opts->box.height)
-		rows = global_doc_opts->box.height;
+	if (rows > html_context->options->box.height)
+		rows = html_context->options->box.height;
 	fc->rows = rows;
-	global_doc_opts->needs_height = 1;
+	html_context->options->needs_height = 1;
 
 	wrap_attr = get_attr_val(attr, "wrap");
 	if (wrap_attr) {

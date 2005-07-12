@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.100 2005/07/10 23:32:09 miciah Exp $ */
+/* $Id: link.c,v 1.101 2005/07/12 15:30:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,7 +266,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 		/* Do we want to display images with no alt/title and with no
 		 * link on them ?
 		 * If not, just exit now. */
-		if (!global_doc_opts->images && !format.link) {
+		if (!html_context->options->images && !format.link) {
 			mem_free_if(src);
 			if (usemap) kill_html_stack_item(html_context, &html_top);
 			return;
@@ -384,11 +384,11 @@ html_applet(struct html_context *html_context, unsigned char *a)
 	html_focusable(html_context, a);
 
 	if (alt && *alt) {
-		put_link_line("Applet: ", alt, code, global_doc_opts->framename,
-		              html_context);
+		put_link_line("Applet: ", alt, code,
+			      html_context->options->framename, html_context);
 	} else {
-		put_link_line("", "Applet", code, global_doc_opts->framename,
-		              html_context);
+		put_link_line("", "Applet", code,
+			      html_context->options->framename, html_context);
 	}
 
 	mem_free_if(alt);
@@ -416,11 +416,11 @@ html_iframe_do(unsigned char *a, unsigned char *object_src,
 	html_focusable(html_context, a);
 
 	if (*name) {
-		put_link_line("IFrame: ", name, url, global_doc_opts->framename,
-		              html_context);
+		put_link_line("IFrame: ", name, url,
+			      html_context->options->framename, html_context);
 	} else {
-		put_link_line("", "IFrame", url, global_doc_opts->framename,
-		              html_context);
+		put_link_line("", "IFrame", url,
+			      html_context->options->framename, html_context);
 	}
 
 	mem_free(name);
@@ -465,11 +465,11 @@ html_object(struct html_context *html_context, unsigned char *a)
 
 		if (name && *name) {
 			put_link_line("Object: ", name, url,
-			              global_doc_opts->framename,
-			              html_context);
+			              html_context->options->framename,
+				      html_context);
 		} else {
 			put_link_line("Object: ", type, url,
-			              global_doc_opts->framename,
+			              html_context->options->framename,
 			              html_context);
 		}
 
@@ -768,7 +768,7 @@ html_link_parse(unsigned char *a, struct hlink *link)
 void
 html_link(struct html_context *html_context, unsigned char *a)
 {
-	int link_display = global_doc_opts->meta_link_display;
+	int link_display = html_context->options->meta_link_display;
 	unsigned char *name;
 	struct hlink link;
 	static unsigned char link_rel_string[] = "Link: ";

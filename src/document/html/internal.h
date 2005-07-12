@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.61 2005/07/12 15:09:58 jonas Exp $ */
+/* $Id: internal.h,v 1.62 2005/07/12 15:30:56 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -7,6 +7,7 @@
 #include "document/html/parser.h"
 #include "util/lists.h"
 
+struct document_options;
 struct uri;
 
 /* For parser/parse.c: */
@@ -48,6 +49,8 @@ struct html_context {
 	 * element. */
 	struct uri *base_href;
 	unsigned char *base_target;
+
+	struct document_options *options;
 
 	/* For:
 	 * html/parser/parse.c

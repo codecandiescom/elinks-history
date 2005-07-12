@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.410 2005/07/10 23:33:41 miciah Exp $ */
+/* $Id: tables.c,v 1.411 2005/07/12 15:30:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ get_cell_widths(struct html_context *html_context, struct table *table)
 {
 	int link_num = table->part->link_num;
 
-	if (!global_doc_opts->table_order) {
+	if (!html_context->options->table_order) {
 		int col, row;
 
 		for (row = 0; row < table->rows; row++)

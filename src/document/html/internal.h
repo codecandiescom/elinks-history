@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.60 2005/07/10 23:00:50 miciah Exp $ */
+/* $Id: internal.h,v 1.61 2005/07/12 15:09:58 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -61,15 +61,14 @@ struct html_context {
 	int position;
 	enum html_whitespace_state putsp; /* This is for the put_chrs
 					   * state-machine. */
-	int was_br; /* For parser/forms.c too */
 	int was_li;
-	int was_xmp;
+
+	unsigned int was_br:1;
+	unsigned int was_xmp:1;
+	unsigned int has_link_lines:1;
 
 	/* For html/parser.c, html/renderer.c */
 	int margin;
-
-	/* For parser/link.c: */
-	int has_link_lines;
 
 	/* For parser/forms.c: */
 	unsigned char *startf;

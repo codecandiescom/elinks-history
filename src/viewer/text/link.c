@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.327 2005/06/14 16:44:52 jonas Exp $ */
+/* $Id: link.c,v 1.328 2005/07/12 16:02:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,17 +158,10 @@ init_link_drawing(struct document_view *doc_view, struct link *link, int invert)
 
 	template->attr = SCREEN_ATTR_STANDOUT;
 
-	/* For the color mode options we use the options set for the document.
-	 * But for the active link options we prefer to use the global
-	 * global_doc_opts since it is kept up to date by an option change
-	 * hook. However if it is not available fall back to use the options
-	 * from the viewed document. */
 	doc_opts = &doc_view->document->options;
 
 	color_flags = (doc_opts->color_flags | COLOR_DECREASE_LIGHTNESS);
 	color_mode = doc_opts->color_mode;
-
-	if (global_doc_opts) doc_opts = global_doc_opts;
 
 	if (doc_opts->underline_active_link)
 		template->attr |= SCREEN_ATTR_UNDERLINE;

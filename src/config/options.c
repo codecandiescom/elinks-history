@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.490 2005/07/10 01:56:42 miciah Exp $ */
+/* $Id: options.c,v 1.491 2005/07/12 16:02:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "dialogs/status.h"
+#include "document/document.h"
 #include "document/options.h"
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
@@ -898,15 +899,7 @@ change_hook_insert_mode(struct session *ses, struct option *current, struct opti
 static int
 change_hook_active_link(struct session *ses, struct option *current, struct option *changed)
 {
-	if (!global_doc_opts) return 0;
-
-	global_doc_opts->active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
-	global_doc_opts->active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");
-	global_doc_opts->color_active_link = get_opt_bool("document.browse.links.active_link.enable_color");
-	global_doc_opts->invert_active_link = get_opt_bool("document.browse.links.active_link.invert");
-	global_doc_opts->underline_active_link = get_opt_bool("document.browse.links.active_link.underline");
-	global_doc_opts->bold_active_link = get_opt_bool("document.browse.links.active_link.bold");
-
+	update_cached_document_options();
 	return 0;
 }
 

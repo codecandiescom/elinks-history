@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.86 2005/06/11 23:32:35 jonas Exp $ */
+/* $Id: document.h,v 1.87 2005/07/12 16:02:22 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -206,6 +206,8 @@ void done_link_members(struct link *link);
 /* Calculates css magic from available CSS imports. Used for determining
  * validity of formatted documents in the cache. */
 unsigned long get_document_css_magic(struct document *document);
+
+void update_cached_document_options(void);
 
 struct document *get_cached_document(struct cache_entry *cached, struct document_options *options);
 

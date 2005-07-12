@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.96 2005/06/13 00:43:27 jonas Exp $ */
+/* $Id: document.c,v 1.97 2005/07/12 16:02:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,6 +212,26 @@ get_document_css_magic(struct document *document)
 #define check_document_css_magic(document) 1
 #endif
 
+void
+update_cached_document_options(void)
+{
+	color_T active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
+	color_T active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");
+	int color_active_link = get_opt_bool("document.browse.links.active_link.enable_color");
+	int invert_active_link = get_opt_bool("document.browse.links.active_link.invert");
+	int underline_active_link = get_opt_bool("document.browse.links.active_link.underline");
+	int bold_active_link = get_opt_bool("document.browse.links.active_link.bold");
+	struct document *document;
+
+	foreach (document, format_cache) {
+		document->options.active_link_fg = active_link_fg;
+		document->options.active_link_bg = active_link_bg;
+		document->options.color_active_link = color_active_link;
+		document->options.invert_active_link = invert_active_link;
+		document->options.underline_active_link = underline_active_link;
+		document->options.bold_active_link = bold_active_link;
+	}
+}
 
 struct document *
 get_cached_document(struct cache_entry *cached, struct document_options *options)

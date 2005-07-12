@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.93 2005/03/05 21:04:25 zas Exp $ */
+/* $Id: apply.c,v 1.94 2005/07/12 16:42:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,9 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+/* XXX: Some strange dependency makes it necessary to this include last. */
+#include "document/html/internal.h"
+
 /* #define DEBUG_CSS */
 
 
@@ -33,30 +36,34 @@
  * or aligning or colors but keeping all the others.) --pasky */
 
 
-typedef void (*css_applier_T)(struct html_element *element,
+typedef void (*css_applier_T)(struct html_context *html_context,
+			      struct html_element *element,
 			      struct css_property *prop);
 
 static void
-css_apply_color(struct html_element *element, struct css_property *prop)
+css_apply_color(struct html_context *html_context, struct html_element *element,
+		struct css_property *prop)
 {
 	assert(prop->value_type == CSS_VT_COLOR);
 
-	if (use_document_fg_colors(global_doc_opts))
+	if (use_document_fg_colors(html_context->options))
 		element->attr.style.fg = prop->value.color;
 }
 
 static void
-css_apply_background_color(struct html_element *element,
+css_apply_background_color(struct html_context *html_context,
+			   struct html_element *element,
 			   struct css_property *prop)
 {
 	assert(prop->value_type == CSS_VT_COLOR);
 
-	if (use_document_bg_colors(global_doc_opts))
+	if (use_document_bg_colors(html_context->options))
 		element->attr.style.bg = prop->value.color;
 }
 
 static void
-css_apply_font_attribute(struct html_element *element, struct css_property *prop)
+css_apply_font_attribute(struct html_context *html_context,
+			 struct html_element *element, struct css_property *prop)
 {
 	assert(prop->value_type == CSS_VT_FONT_ATTRIBUTE);
 	element->attr.style.attr |= prop->value.font_attribute.add;
@@ -66,7 +73,8 @@ css_apply_font_attribute(struct html_element *element, struct css_property *prop
 /* FIXME: Because the current CSS doesn't provide reasonable defaults for each
  * HTML element this applier will cause bad rendering of <pre> tags. */
 static void
-css_apply_text_align(struct html_element *element, struct css_property *prop)
+css_apply_text_align(struct html_context *html_context,
+		     struct html_element *element, struct css_property *prop)
 {
 	assert(prop->value_type == CSS_VT_TEXT_ALIGN);
 	element->parattr.align = prop->value.text_align;
@@ -216,7 +224,9 @@ get_css_selector_for_element(struct html_element *element, struct css_stylesheet
 }
 
 void
-apply_css_selector_style(struct html_element *element, struct css_selector *selector)
+apply_css_selector_style(struct html_context *html_context,
+			 struct html_element *element,
+			 struct css_selector *selector)
 {
 	struct css_property *property;
 
@@ -226,20 +236,20 @@ apply_css_selector_style(struct html_element *element, struct css_selector *sele
 		 * don't want hinder properties' ability to potentially make
 		 * use of multiple value types. */
 		assert(css_appliers[property->type]);
-		css_appliers[property->type](element, property);
+		css_appliers[property->type](html_context, element, property);
 	}
 }
 
 void
-css_apply(struct html_element *element, struct css_stylesheet *css,
-	  struct list_head *html_stack)
+css_apply(struct html_context *html_context, struct html_element *element,
+	  struct css_stylesheet *css, struct list_head *html_stack)
 {
 	struct css_selector *selector;
 
 	selector = get_css_selector_for_element(element, css, html_stack);
 	if (!selector) return;
 
-	apply_css_selector_style(element, selector);
+	apply_css_selector_style(html_context, element, selector);
 
 	done_css_selector(selector);
 }

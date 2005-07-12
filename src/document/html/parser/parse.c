@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.160 2005/07/12 15:30:57 jonas Exp $ */
+/* $Id: parse.c,v 1.161 2005/07/12 16:42:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -915,7 +915,7 @@ start_element(struct element_info *ei,
 							&html_context->stack);
 
 		if (selector) {
-			apply_css_selector_style(&html_top, selector);
+			apply_css_selector_style(html_context, &html_top, selector);
 			done_css_selector(selector);
 		}
 	}
@@ -929,7 +929,7 @@ start_element(struct element_info *ei,
 							&html_context->stack);
 
 		if (selector) {
-			apply_css_selector_style(&html_top, selector);
+			apply_css_selector_style(html_context, &html_top, selector);
 			done_css_selector(selector);
 		}
 	}

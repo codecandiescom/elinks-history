@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.601 2005/07/12 16:31:02 jonas Exp $ */
+/* $Id: parser.c,v 1.602 2005/07/12 16:42:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,7 +388,7 @@ html_body(struct html_context *html_context, unsigned char *a)
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
 	 * it _and_ prefer it over bgcolor attribute. */
 	if (html_context->options->css_enable)
-		css_apply(&html_top, &html_context->css_styles,
+		css_apply(html_context, &html_top, &html_context->css_styles,
 		          &html_context->stack);
 #endif
 

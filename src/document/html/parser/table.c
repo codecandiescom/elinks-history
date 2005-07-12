@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.43 2005/07/09 20:41:56 miciah Exp $ */
+/* $Id: table.c,v 1.44 2005/07/12 16:27:53 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -242,7 +242,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real,
 	get_align(attr, &table->align);
 
 	table->bgcolor = par_format.bgcolor;
-	get_bgcolor(attr, &table->bgcolor);
+	get_bgcolor(html_context, attr, &table->bgcolor);
 }
 
 
@@ -694,7 +694,7 @@ see:
 		last_bgcolor = table->bgcolor;
 		get_align(t_attr, &l_al);
 		get_valign(t_attr, &l_val);
-		get_bgcolor(t_attr, &last_bgcolor);
+		get_bgcolor(html_context, t_attr, &last_bgcolor);
 		mem_free_set(&l_fragment_id, get_attr_val(t_attr, "id"));
 		row++;
 		col = 0;
@@ -772,7 +772,7 @@ see:
 
 	get_align(t_attr, &cell->align);
 	get_valign(t_attr, &cell->valign);
-	get_bgcolor(t_attr, &cell->bgcolor);
+	get_bgcolor(html_context, t_attr, &cell->bgcolor);
 
 	colspan = get_num(t_attr, "colspan");
 	if (colspan == -1) colspan = 1;

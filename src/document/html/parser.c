@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.599 2005/07/12 15:30:56 jonas Exp $ */
+/* $Id: parser.c,v 1.600 2005/07/12 16:27:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,12 +105,13 @@ roman(unsigned char *p, unsigned n)
 }
 
 static int
-get_color(unsigned char *a, unsigned char *c, color_T *rgb)
+get_color(struct html_context *html_context, unsigned char *a,
+	  unsigned char *c, color_T *rgb)
 {
 	unsigned char *at;
 	int r;
 
-	if (!use_document_fg_colors(global_doc_opts))
+	if (!use_document_fg_colors(html_context->options))
 		return -1;
 
 	at = get_attr_val(a, c);
@@ -123,12 +124,12 @@ get_color(unsigned char *a, unsigned char *c, color_T *rgb)
 }
 
 int
-get_bgcolor(unsigned char *a, color_T *rgb)
+get_bgcolor(struct html_context *html_context, unsigned char *a, color_T *rgb)
 {
-	if (!use_document_bg_colors(global_doc_opts))
+	if (!use_document_bg_colors(html_context->options))
 		return -1;
 
-	return get_color(a, "bgcolor", rgb);
+	return get_color(html_context, a, "bgcolor", rgb);
 }
 
 unsigned char *
@@ -372,17 +373,17 @@ html_font(struct html_context *html_context, unsigned char *a)
 		}
 		mem_free(al);
 	}
-	get_color(a, "color", &format.style.fg);
+	get_color(html_context, a, "color", &format.style.fg);
 }
 
 void
 html_body(struct html_context *html_context, unsigned char *a)
 {
-	get_color(a, "text", &format.style.fg);
-	get_color(a, "link", &format.clink);
-	get_color(a, "vlink", &format.vlink);
+	get_color(html_context, a, "text", &format.style.fg);
+	get_color(html_context, a, "link", &format.clink);
+	get_color(html_context, a, "vlink", &format.vlink);
 
-	get_bgcolor(a, &format.style.bg);
+	get_bgcolor(html_context, a, &format.style.bg);
 #ifdef CONFIG_CSS
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
 	 * it _and_ prefer it over bgcolor attribute. */

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.44 2005/07/12 16:27:53 jonas Exp $ */
+/* $Id: table.c,v 1.45 2005/07/12 16:44:47 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -64,11 +64,11 @@ add_table_bad_html_end(struct table *table, unsigned char *end)
 
 
 static void
-get_bordercolor(unsigned char *a, color_T *rgb)
+get_bordercolor(struct html_context *html_context, unsigned char *a, color_T *rgb)
 {
 	unsigned char *at;
 
-	if (!use_document_fg_colors(global_doc_opts))
+	if (!use_document_fg_colors(html_context->options))
 		return;
 
 	at = get_attr_val(a, "bordercolor");
@@ -190,7 +190,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real,
 {
 	table->fragment_id = get_attr_val(attr, "id");
 
-	get_bordercolor(attr, &table->bordercolor);
+	get_bordercolor(html_context, attr, &table->bordercolor);
 
 	table->width = get_width(attr, "width", real, html_context);
 	if (table->width == -1) {

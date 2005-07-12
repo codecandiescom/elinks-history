@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.176 2005/06/12 23:24:17 jonas Exp $ */
+/* $Id: renderer.c,v 1.177 2005/07/12 15:39:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,13 +404,16 @@ add_document_line(struct plain_renderer *renderer,
 }
 
 static void
-init_template(struct screen_char *template, color_T background, color_T foreground)
+init_template(struct screen_char *template, struct document_options *options)
 {
+	color_T background = options->default_bg;
+	color_T foreground = options->default_fg;
 	struct color_pair colors = INIT_COLOR_PAIR(background, foreground);
 
 	template->attr = 0;
 	template->data = ' ';
-	set_term_color(template, &colors, global_doc_opts->color_flags, global_doc_opts->color_mode);
+	set_term_color(template, &colors,
+		       options->color_flags, options->color_mode);
 }
 
 static struct node *
@@ -533,9 +536,6 @@ render_plain_document(struct cache_entry *cached, struct document *document,
 					  &document->cp_status,
 					  document->options.hard_assume);
 
-	document->bgcolor = global_doc_opts->default_bg;
-	document->width = 0;
-
 	renderer.source = buffer->source;
 	renderer.length = buffer->length;
 
@@ -546,9 +546,11 @@ render_plain_document(struct cache_entry *cached, struct document *document,
 	renderer.max_width = document->options.wrap ? document->options.box.width
 						    : INT_MAX;
 
+	document->bgcolor = document->options.default_bg;
+	document->width = 0;
+
 	/* Setup the style */
-	init_template(&renderer.template, global_doc_opts->default_bg,
-					  global_doc_opts->default_fg);
+	init_template(&renderer.template, &document->options);
 
 	add_document_lines(&renderer);
 }

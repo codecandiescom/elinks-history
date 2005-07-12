@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.583 2005/07/10 23:30:21 miciah Exp $ */
+/* $Id: renderer.c,v 1.584 2005/07/12 15:32:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -333,10 +333,8 @@ get_format_screen_char(struct html_context *html_context,
 		static enum color_mode color_mode;
 		static enum color_flags color_flags;
 
-		if (global_doc_opts) {
-			color_mode = global_doc_opts->color_mode;
-			color_flags = global_doc_opts->color_flags;
-		}
+		color_mode = html_context->options->color_mode;
+		color_flags = html_context->options->color_flags;
 
 		schar_cache.attr = 0;
 		if (format.style.attr) {
@@ -358,14 +356,14 @@ get_format_screen_char(struct html_context *html_context,
 		}
 
 		if (link_state != LINK_STATE_NONE
-		    && global_doc_opts->underline_links) {
+		    && html_context->options->underline_links) {
 			schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
 		}
 
 		copy_struct(&ta_cache, &format.style);
 		set_term_color(&schar_cache, &colors, color_flags, color_mode);
 
-		if (global_doc_opts->display_subs) {
+		if (html_context->options->display_subs) {
 			if (format.style.attr & AT_SUBSCRIPT) {
 				if (!renderer_context.did_subscript) {
 					renderer_context.did_subscript = 1;
@@ -379,7 +377,7 @@ get_format_screen_char(struct html_context *html_context,
 			}
 		}
 
-		if (global_doc_opts->display_sups) {
+		if (html_context->options->display_sups) {
 			static int super = 0;
 
 			if (format.style.attr & AT_SUPERSCRIPT) {
@@ -429,7 +427,7 @@ set_hline(struct html_context *html_context, unsigned char *chars, int charslen,
 		for (; charslen > 0; charslen--, x++, chars++) {
 			if (*chars == NBSP_CHAR) {
 				schar->data = ' ';
-				part->spaces[x] = global_doc_opts->wrap_nbsp;
+				part->spaces[x] = html_context->options->wrap_nbsp;
 			} else {
 				part->spaces[x] = (*chars == ' ');
 				schar->data = *chars;
@@ -1253,8 +1251,8 @@ get_link_state(struct html_context *html_context)
 }
 
 #define is_drawing_subs_or_sups() \
-	((format.style.attr & AT_SUBSCRIPT && global_doc_opts->display_subs) \
-	 || (format.style.attr & AT_SUPERSCRIPT && global_doc_opts->display_sups))
+	((format.style.attr & AT_SUBSCRIPT && html_context->options->display_subs) \
+	 || (format.style.attr & AT_SUPERSCRIPT && html_context->options->display_sups))
 
 static inline int
 html_has_non_space_chars(unsigned char *chars, int charslen)
@@ -1329,7 +1327,7 @@ put_chars(struct html_context *html_context, unsigned char *chars, int charslen)
 		/* For pure spaces reset the link state */
 		if (x_offset == charslen)
 			link_state = LINK_STATE_NONE;
-		else if (global_doc_opts->links_numbering)
+		else if (html_context->options->links_numbering)
 			put_link_number(html_context);
 	}
 

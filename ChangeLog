@@ -1,3 +1,107 @@
+Tue Jul 12 19:49:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Remove the inclusion of document/options.h, which was made
+	unnecessary in the last revision.  
+
+Tue Jul 12 16:44:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/table.c:
+
+	Pass the html_context to get_bordercolor() and remove the last
+	remains of global_doc_opts usage in the HTML renderer.  
+
+Tue Jul 12 16:42:40 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/apply.c, css/apply.h, html/parser.c,
+	html/parser/parse.c:
+
+	Pass the html_context all the way down to the css appliers, so they
+	can stop using global_doc_opts.  
+
+Tue Jul 12 16:31:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/internal.h, document/html/parser.c,
+	document/html/parser.h, document/html/parser/forms.c,
+	document/html/parser/link.c, session/task.c:
+
+	Pass the document_options to get_target() with the goal of removing
+	usage of global_doc_opts.  
+
+Tue Jul 12 16:27:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, parser/table.c:
+
+	Pass the html_context to get_color() and get_bgcolor() with the goal
+	of removing usage of global_doc_opts.  
+
+Tue Jul 12 16:02:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, document/document.c, document/document.h,
+	viewer/text/link.c:
+
+	Add a half ugly hook for updating active link options for every
+	document in the format cache, so that we can use the
+	document->options instead of global_doc_options in the link drawing.  
+
+Tue Jul 12 15:46:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/: node.c, node.h, renderer.c:
+
+	Use document->options instead of global_doc_options in the DOM
+	renderer.  
+
+Tue Jul 12 15:39:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Use document->options instead of global_doc_options in the plain
+	renderer.  
+
+Tue Jul 12 15:32:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Use html_context->options instead of global_doc_options in the
+	renderer.  
+
+Tue Jul 12 15:30:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: internal.h, parser.c, tables.c,
+	parser/forms.c, parser/link.c, parser/parse.c:
+
+	Add document_options member to html_context. Use it in the HTML
+	parser instead of global_doc_opts. Idea by Miciah.  
+
+Tue Jul 12 15:09:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/internal.h:
+
+	Clarify some boolean members in struct html_context.  
+
+Tue Jul 12 14:08:55 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	Assign the passed part to html_context->part before calling
+	special_f in add_fragment_identifier and restore the old value
+	afterwards. This ugly hack reportedly fixes a crash (which crash I
+	cannot reproduce on this SPARC-powered Solaris).  
+
+Tue Jul 12 01:51:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinkskeys.5:
+
+	Sync with current keybindings.  
+
+Tue Jul 12 01:21:25 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Disabling all of the "demoronizer" rewrites until such time as
+	pre_format_html_hook only gets called for content-type:text/html.  
+
 Mon Jul 11 19:18:35 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/get-cvs-docs:

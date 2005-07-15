@@ -1,5 +1,5 @@
 /* General element handlers */ 
-/* $Id: general.c,v 1.3 2005/07/15 19:53:40 miciah Exp $ */
+/* $Id: general.c,v 1.4 2005/07/15 20:22:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 /* #include "config/options.h" */
 #include "document/css/apply.h"
 #include "document/html/frames.h"
+#include "document/html/parser/general.h"
 #include "document/html/parser/link.h"
 #include "document/html/parser/stack.h"
 #include "document/html/parser/parse.h"

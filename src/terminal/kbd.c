@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.154 2005/07/15 02:20:12 miciah Exp $ */
+/* $Id: kbd.c,v 1.155 2005/07/15 02:22:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ send_done_sequence(int h, int altscreen)
 	write_sequence(h, DONE_TERMINAL_SEQ);
 }
 
-void
+static void
 disable_mouse(void)
 {
 	int h = get_output_handle(); /* XXX: Is this all right? -- Miciah */
@@ -242,7 +242,7 @@ disable_mouse(void)
 	mouse_enabled = 0;
 }
 
-void
+static void
 enable_mouse(void)
 {
 	int h = get_output_handle(); /* XXX: Is this all right? -- Miciah */

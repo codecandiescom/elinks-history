@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.102 2005/07/12 16:31:02 jonas Exp $ */
+/* $Id: link.c,v 1.103 2005/07/15 19:17:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -711,7 +711,8 @@ html_link_clear(struct hlink *link)
 /* Parse a link and return results in @link.
  * It tries to identify known types. */
 static int
-html_link_parse(unsigned char *a, struct hlink *link)
+html_link_parse(struct html_context *html_context, unsigned char *a,
+                struct hlink *link)
 {
 	int i;
 
@@ -780,7 +781,7 @@ html_link(struct html_context *html_context, unsigned char *a)
 #ifndef CONFIG_CSS
 	if (!link_display) return;
 #endif
-	if (!html_link_parse(a, &link)) return;
+	if (!html_link_parse(html_context, a, &link)) return;
 	if (!link.href) goto free_and_return;
 
 #ifdef CONFIG_CSS

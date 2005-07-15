@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.95 2005/07/15 19:11:10 miciah Exp $ */
+/* $Id: apply.c,v 1.96 2005/07/15 19:14:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,7 +95,7 @@ static css_applier_T css_appliers[CSS_PT_LAST] = {
 
 /* This looks for a match in list of selectors. */
 static void
-examine_element(struct css_selector *base,
+examine_element(struct html_context *html_context, struct css_selector *base,
 		enum css_selector_type seltype, enum css_selector_relation rel,
                 struct list_head *selectors, struct html_element *element,
                 struct list_head *html_stack)
@@ -104,7 +104,7 @@ examine_element(struct css_selector *base,
 	unsigned char *code;
 
 #ifdef DEBUG_CSS
- 	DBG("examine_element(%s, %d, %d, %p, %.*s);", base->name, seltype, rel, selectors, element->namelen, element->name);
+ 	DBG("examine_element(%p, %s, %d, %d, %p, %.*s);", html_context, base->name, seltype, rel, selectors, element->namelen, element->name);
 #define dbginfo(sel, type_, base) \
 	DBG("Matched selector %s (rel %d type %d [m%d])! Children %p !!%d, props !!%d", sel->name, sel->relation, sel->type, sel->type == type_, &sel->leaves, !list_empty(sel->leaves), !list_empty(sel->properties))
 #else
@@ -127,15 +127,18 @@ examine_element(struct css_selector *base,
 			for (ancestor = element->next; \
 			     (struct list_head *) ancestor != html_stack;\
 			     ancestor = ancestor->next) \
-				examine_element(base,CST_ELEMENT,CSR_ANCESTOR, \
+				examine_element(html_context, base, \
+						CST_ELEMENT, CSR_ANCESTOR, \
 						&sel->leaves, ancestor, \
 						html_stack); \
-			examine_element(base, CST_ELEMENT, CSR_PARENT, \
+			examine_element(html_context, base, \
+			                CST_ELEMENT, CSR_PARENT, \
 			                &sel->leaves, element->next, \
 			                html_stack); \
 		} \
 		/* More specific matches? */ \
-		examine_element(base, type + 1, CSR_SPECIFITY, \
+		examine_element(html_context, base, type + 1, \
+		                CSR_SPECIFITY, \
 		                &sel->leaves, element, html_stack); \
 	}
 
@@ -199,7 +202,7 @@ get_css_selector_for_element(struct html_context *html_context,
 	DBG("Applying to element %.*s...", element->namelen, element->name);
 #endif
 
-	examine_element(selector, CST_ELEMENT, CSR_ROOT,
+	examine_element(html_context, selector, CST_ELEMENT, CSR_ROOT,
 	                &css->selectors, element, html_stack);
 
 #ifdef DEBUG_CSS

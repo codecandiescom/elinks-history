@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.342 2005/07/10 01:56:42 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.343 2005/07/15 02:12:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -722,7 +722,7 @@ keybinding_is_default(struct keybinding *keybinding)
 	struct default_kb *pos;
 
 	for (pos = default_keybindings[keybinding->keymap_id]; pos->kbd.key; pos++)
-		if (!memcmp(&default_keybinding, pos, sizeof(keybinding)))
+		if (!memcmp(&default_keybinding, pos, sizeof(default_keybinding)))
 			return 1;
 
 	return 0;

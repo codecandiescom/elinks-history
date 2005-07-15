@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.45 2005/07/12 16:44:47 jonas Exp $ */
+/* $Id: table.c,v 1.46 2005/07/15 19:19:43 miciah Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -167,7 +167,8 @@ set_table_frame(struct table *table, unsigned char *attr)
 }
 
 static void
-set_table_rules(struct table *table, unsigned char *attr)
+set_table_rules(struct html_context *html_context, struct table *table,
+                unsigned char *attr)
 {
 	unsigned char *al;
 
@@ -236,7 +237,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real,
 		table->cellpadding = (table->cellpadding >= HTML_CHAR_WIDTH / 2 + 1);
 	}
 
-	set_table_rules(table, attr);
+	set_table_rules(html_context, table, attr);
 
 	table->align = par_format.align;
 	get_align(attr, &table->align);

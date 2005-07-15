@@ -4725,7 +4725,7 @@ msgstr[2] "%d po³±czeñ"
 #, c-format
 msgid "%d connecting"
 msgid_plural "%d connecting"
-msgstr[0] "%d ³±cz±cy siê"
+msgstr[0] "%d ³±cz±ce siê"
 msgstr[1] "%d ³±cz±ce siê"
 msgstr[2] "%d ³±cz±cych siê"
 
@@ -4733,7 +4733,7 @@ msgstr[2] "%d ³±cz±cych siê"
 #, c-format
 msgid "%d transferring"
 msgid_plural "%d transferring"
-msgstr[0] "%d przesy³aj±cy"
+msgstr[0] "%d przesy³aj±ce"
 msgstr[1] "%d przesy³aj±ce"
 msgstr[2] "%d przysy³aj±cych"
 
@@ -4749,9 +4749,9 @@ msgstr[2] "%d trwa³ych"
 #, c-format
 msgid "%ld byte"
 msgid_plural "%ld bytes"
-msgstr[0] "%d bajt"
-msgstr[1] "%d bajty"
-msgstr[2] "%d bajtów"
+msgstr[0] "%ld bajt"
+msgstr[1] "%ld bajty"
+msgstr[2] "%ld bajtów"
 
 #: src/dialogs/info.c:210
 #, c-format
@@ -4765,9 +4765,9 @@ msgstr[2] "%d plików"
 #, c-format
 msgid "%d in use"
 msgid_plural "%d in use"
-msgstr[0] "%d w u¿yciu"
-msgstr[1] "%d w u¿yciu"
-msgstr[2] "%d w u¿yciu"
+msgstr[0] "%d u¿ywany"
+msgstr[1] "%d u¿ywane"
+msgstr[2] "%d u¿ywanych"
 
 #
 #: src/dialogs/info.c:218
@@ -4781,7 +4781,7 @@ msgstr[2] "%d pobieranych"
 #
 #: src/dialogs/info.c:221
 msgid "Document cache"
-msgstr "Pamiêæ podrêczna dokumentu"
+msgstr "Dokumenty w pamiêci podrêcznej"
 
 #
 #: src/dialogs/info.c:225
@@ -4789,15 +4789,16 @@ msgstr "Pamiêæ podrêczna dokumentu"
 msgid "%d formatted"
 msgid_plural "%d formatted"
 msgstr[0] "%d sformatowany"
-msgstr[1] "%d sformatowanych"
+msgstr[1] "%d sformatowane"
+msgstr[2] "%d sformatowanych"
 
 #: src/dialogs/info.c:233
 #, c-format
 msgid "%d refreshing"
 msgid_plural "%d refreshing"
-msgstr[0] "%d od¶wie¿aj±cy"
-msgstr[1] "%d od¶wie¿aj±ce"
-msgstr[2] "%d od¶wie¿aj±cych"
+msgstr[0] "%d z od¶wie¿aniem"
+msgstr[1] "%d z od¶wie¿aniem"
+msgstr[2] "%d z od¶wie¿aniem"
 
 #: src/dialogs/info.c:236
 msgid "Interlinking"

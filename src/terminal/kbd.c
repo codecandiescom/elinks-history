@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.152 2005/07/15 02:14:16 miciah Exp $ */
+/* $Id: kbd.c,v 1.153 2005/07/15 02:15:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,7 +183,6 @@ send_mouse_init_sequence(int h)
 #ifdef CONFIG_MOUSE
 	write_sequence(h, INIT_TWIN_MOUSE_SEQ);
 	write_sequence(h, INIT_XWIN_MOUSE_SEQ);
-	mouse_enabled = 1;
 #endif
 }
 
@@ -214,7 +213,6 @@ send_mouse_done_sequence(int h)
 	 * released it seems, in rxvt and xterm... --Zas */
 	write_sequence(h, DONE_TWIN_MOUSE_SEQ);
 	write_sequence(h, DONE_XWIN_MOUSE_SEQ);
-	mouse_enabled = 0;
 #endif
 }
 
@@ -240,6 +238,8 @@ disable_mouse(void)
 
 	unhandle_mouse(ditrm->mouse_h);
 	send_mouse_done_sequence(h);
+
+	mouse_enabled = 0;
 }
 
 void
@@ -249,6 +249,8 @@ enable_mouse(void)
 
 	send_mouse_init_sequence(h);
 	ditrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, ditrm);
+
+	mouse_enabled = 1;
 }
 
 void

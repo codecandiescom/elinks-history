@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.47 2005/07/10 23:09:38 miciah Exp $ */
+/* $Id: stack.c,v 1.48 2005/07/15 19:53:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,9 @@ kill_html_stack_item(struct html_context *html_context, struct html_element *e)
 #ifdef CONFIG_ECMASCRIPT
 	/* As our another tiny l33t extension, we allow the onLoad attribute for
 	 * any element, executing it when that element is fully loaded. */
-	if (e->options)	onload = get_attr_val(e->options, "onLoad");
+	if (e->options)
+		onload = get_attr_val(e->options, "onLoad",
+		                     html_context->options);
 	if (html_context->part
 	    && html_context->part->document
 	    && onload && *onload && *onload != '^') {

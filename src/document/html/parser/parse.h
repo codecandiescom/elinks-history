@@ -1,4 +1,4 @@
-/* $Id: parse.h,v 1.16 2005/07/15 19:31:53 miciah Exp $ */
+/* $Id: parse.h,v 1.17 2005/07/15 19:53:40 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
@@ -34,12 +34,12 @@ enum html_attr_flags {
  * - name is searched attribute
  *
  * Returns allocated string containing the attribute, or NULL on unsuccess. */
-unsigned char *get_attr_value(register unsigned char *e, unsigned char *name, enum html_attr_flags flags);
+unsigned char *get_attr_value(register unsigned char *e, unsigned char *name, struct document_options *options, enum html_attr_flags flags);
 
 /* Wrappers for get_attr_value(). */
-#define get_attr_val(e, name) get_attr_value(e, name, HTML_ATTR_NONE)
-#define get_url_val(e, name) get_attr_value(e, name, HTML_ATTR_EAT_NL)
-#define has_attr(e, name) (!!get_attr_value(e, name, HTML_ATTR_TEST))
+#define get_attr_val(e, name, options) get_attr_value(e, name, options, HTML_ATTR_NONE)
+#define get_url_val(e, name, options) get_attr_value(e, name, options, HTML_ATTR_EAT_NL)
+#define has_attr(e, name, options) (!!get_attr_value(e, name, options, HTML_ATTR_TEST))
 
 
 /* Interface for both the renderer and the table handling */

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.103 2005/07/15 19:17:08 miciah Exp $ */
+/* $Id: link.c,v 1.104 2005/07/15 19:53:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ html_a(struct html_context *html_context, unsigned char *a)
 {
 	unsigned char *href;
 
-	href = get_url_val(a, "href");
+	href = get_url_val(a, "href", html_context->options);
 	if (href) {
 		unsigned char *target;
 
@@ -83,7 +83,8 @@ html_a(struct html_context *html_context, unsigned char *a)
 			html_top.pseudo_class |= ELEMENT_LINK;
 		}
 
-		mem_free_set(&format.title, get_attr_val(a, "title"));
+		mem_free_set(&format.title,
+		             get_attr_val(a, "title", html_context->options));
 
 		html_focusable(html_context, a);
 
@@ -224,7 +225,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	 * 2     means display alt/title attribute if possible, IMG if not
 	 * 3     means display alt/title attribute if possible, filename if not */
 
-	usemap_attr = get_attr_val(a, "usemap");
+	usemap_attr = get_attr_val(a, "usemap", html_context->options);
 	if (usemap_attr) {
 		unsigned char *joined_urls = join_urls(html_context->base_href,
 						       usemap_attr);
@@ -243,11 +244,14 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 		usemap = 1;
  	}
 
-	ismap = format.link && has_attr(a, "ismap") && !usemap;
+	ismap = format.link
+	        && has_attr(a, "ismap", html_context->options)
+	        && !usemap;
 
 	if (display_style == 2 || display_style == 3) {
-		label = get_attr_val(a, "alt");
-		if (!label) label = get_attr_val(a, "title");
+		label = get_attr_val(a, "alt", html_context->options);
+		if (!label)
+			label = get_attr_val(a, "title", html_context->options);
 
 		/* Little hack to preserve rendering of [   ], in directories listing,
 		 * but we still want to drop extra spaces in alt or title attribute
@@ -256,8 +260,8 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	}
 
 	src = null_or_stracpy(object_src);
-	if (!src) src = get_url_val(a, "src");
-	if (!src) src = get_url_val(a, "dynsrc");
+	if (!src) src = get_url_val(a, "src", html_context->options);
+	if (!src) src = get_url_val(a, "dynsrc", html_context->options);
 
 	/* If we have no label yet (no title or alt), so
 	 * just use default ones, or image filename. */
@@ -318,7 +322,8 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 				format.image = join_urls(html_context->base_href, src);
 			}
 
-			format.title = get_attr_val(a, "title");
+			format.title = get_attr_val(a, "title",
+			                           html_context->options);
 
 			if (ismap) {
 				unsigned char *new_link;
@@ -376,10 +381,10 @@ html_applet(struct html_context *html_context, unsigned char *a)
 {
 	unsigned char *code, *alt;
 
-	code = get_url_val(a, "code");
+	code = get_url_val(a, "code", html_context->options);
 	if (!code) return;
 
-	alt = get_attr_val(a, "alt");
+	alt = get_attr_val(a, "alt", html_context->options);
 
 	html_focusable(html_context, a);
 
@@ -402,11 +407,11 @@ html_iframe_do(unsigned char *a, unsigned char *object_src,
 	unsigned char *name, *url = NULL;
 
 	url = null_or_stracpy(object_src);
-	if (!url) url = get_url_val(a, "src");
+	if (!url) url = get_url_val(a, "src", html_context->options);
 	if (!url) return;
 
-	name = get_attr_val(a, "name");
-	if (!name) name = get_attr_val(a, "id");
+	name = get_attr_val(a, "name", html_context->options);
+	if (!name) name = get_attr_val(a, "id", html_context->options);
 	if (!name) name = stracpy("");
 	if (!name) {
 		mem_free(url);
@@ -442,11 +447,11 @@ html_object(struct html_context *html_context, unsigned char *a)
 	 * this, which is anyway in the spirit of <object> element, unifying
 	 * <img> and <iframe> etc. */
 
-	url = get_url_val(a, "data");
-	if (!url) url = get_url_val(a, "codebase");
+	url = get_url_val(a, "data", html_context->options);
+	if (!url) url = get_url_val(a, "codebase", html_context->options);
 	if (!url) return;
 
-	type = get_attr_val(a, "type");
+	type = get_attr_val(a, "type", html_context->options);
 	if (!type) { mem_free(url); return; }
 
 	if (!strncasecmp(type, "text/", 5)) {
@@ -459,7 +464,9 @@ html_object(struct html_context *html_context, unsigned char *a)
 		/* TODO: Use the enclosed text as 'alt' attribute. */
 		html_img_do(a, url, html_context);
 	} else {
-		unsigned char *name = get_attr_val(a, "standby");
+		unsigned char *name;
+
+		name = get_attr_val(a, "standby", html_context->options);
 
 		html_focusable(html_context, a);
 
@@ -490,7 +497,7 @@ html_embed(struct html_context *html_context, unsigned char *a)
 	 * this, which is anyway in the spirit of <object> element, unifying
 	 * <img> and <iframe> etc. */
 
-	object_src = get_url_val(a, "src");
+	object_src = get_url_val(a, "src", html_context->options);
 	if (!object_src || !*object_src) {
 		mem_free_set(&object_src, NULL);
 		return;
@@ -719,20 +726,20 @@ html_link_parse(struct html_context *html_context, unsigned char *a,
 	assert(a && link);
 	memset(link, 0, sizeof(*link));
 
-	link->href = get_url_val(a, "href");
+	link->href = get_url_val(a, "href", html_context->options);
 	if (!link->href) return 0;
 
-	link->lang = get_attr_val(a, "lang");
-	link->hreflang = get_attr_val(a, "hreflang");
-	link->title = get_attr_val(a, "title");
-	link->content_type = get_attr_val(a, "type");
-	link->media = get_attr_val(a, "media");
+	link->lang = get_attr_val(a, "lang", html_context->options);
+	link->hreflang = get_attr_val(a, "hreflang", html_context->options);
+	link->title = get_attr_val(a, "title", html_context->options);
+	link->content_type = get_attr_val(a, "type", html_context->options);
+	link->media = get_attr_val(a, "media", html_context->options);
 
-	link->name = get_attr_val(a, "rel");
+	link->name = get_attr_val(a, "rel", html_context->options);
 	if (link->name) {
 		link->direction = LD_REL;
 	} else {
-		link->name = get_attr_val(a, "rev");
+		link->name = get_attr_val(a, "rev", html_context->options);
 		if (link->name) link->direction = LD_REV;
 	}
 

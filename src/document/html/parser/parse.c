@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.167 2005/07/15 19:31:53 miciah Exp $ */
+/* $Id: parse.c,v 1.168 2005/07/15 19:53:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,7 @@ end:
 
 unsigned char *
 get_attr_value(register unsigned char *e, unsigned char *name,
-	       enum html_attr_flags flags)
+	       struct document_options *options, enum html_attr_flags flags)
 {
 	unsigned char *n;
 	unsigned char *name_start;
@@ -248,7 +248,7 @@ parse_error:
 int
 get_num(unsigned char *a, unsigned char *name, struct document_options *options)
 {
-	unsigned char *al = get_attr_val(a, name);
+	unsigned char *al = get_attr_val(a, name, options);
 	int result = -1;
 
 	if (al) {
@@ -274,7 +274,7 @@ int
 get_width(unsigned char *a, unsigned char *name, int limited,
           struct html_context *html_context)
 {
-	unsigned char *value = get_attr_val(a, name);
+	unsigned char *value = get_attr_val(a, name, html_context->options);
 	unsigned char *str = value;
 	unsigned char *end;
 	int percentage = 0;
@@ -757,7 +757,7 @@ start_element(struct element_info *ei,
 
 	ln_break(html_context, ei->linebreak);
 
-	a = get_attr_val(attr, "id");
+	a = get_attr_val(attr, "id", html_context->options);
 	if (a) {
 		html_context->special_f(html_context, SP_TAG, a);
 		mem_free(a);
@@ -829,7 +829,7 @@ start_element(struct element_info *ei,
 		html_top.linebreak = ei->linebreak;
 
 #ifdef CONFIG_ECMASCRIPT
-		if (has_attr(attr, "onClick")) {
+		if (has_attr(attr, "onClick", html_context->options)) {
 			/* XXX: Put something better to format.link. --pasky */
 			mem_free_set(&format.link, stracpy("javascript:void(0);"));
 			mem_free_set(&format.target, stracpy(html_context->base_target));
@@ -1041,20 +1041,20 @@ xsp:
 	}
 	if (strlcasecmp(name, namelen, "META", 4)) goto se;
 
-	he = get_attr_val(attr, "charset");
+	he = get_attr_val(attr, "charset", options);
 	if (he) {
 		add_to_string(head, "Charset: ");
 		add_to_string(head, he);
 		mem_free(he);
 	}
 
-	he = get_attr_val(attr, "http-equiv");
+	he = get_attr_val(attr, "http-equiv", options);
 	if (!he) goto se;
 
 	add_to_string(head, he);
 	mem_free(he);
 
-	c = get_attr_val(attr, "content");
+	c = get_attr_val(attr, "content", options);
 	if (c) {
 		add_to_string(head, ": ");
 		add_to_string(head, c);

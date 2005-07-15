@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.91 2005/07/15 19:31:53 miciah Exp $ */
+/* $Id: forms.c,v 1.92 2005/07/15 19:53:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,10 +50,13 @@ html_form(struct html_context *html_context, unsigned char *a)
 	form->method = FORM_METHOD_GET;
 	form->form_num = a - html_context->startf;
 
-	al = get_attr_val(a, "method");
+	al = get_attr_val(a, "method", html_context->options);
 	if (al) {
 		if (!strcasecmp(al, "post")) {
-			unsigned char *enctype = get_attr_val(a, "enctype");
+			unsigned char *enctype;
+
+			enctype  = get_attr_val(a, "enctype",
+			                        html_context->options);
 
 			form->method = FORM_METHOD_POST;
 			if (enctype) {
@@ -66,10 +69,10 @@ html_form(struct html_context *html_context, unsigned char *a)
 		}
 		mem_free(al);
 	}
-	al = get_attr_val(a, "name");
+	al = get_attr_val(a, "name", html_context->options);
 	if (al) form->name = al;
 
-	al = get_attr_val(a, "action");
+	al = get_attr_val(a, "action", html_context->options);
 	/* The HTML specification at
 	 * http://www.w3.org/TR/REC-html40/interact/forms.html#h-17.3 states
 	 * that the behavior of an empty action attribute should be undefined.
@@ -110,8 +113,12 @@ html_form(struct html_context *html_context, unsigned char *a)
 static int
 get_form_mode(struct html_context *html_context, unsigned char *attr)
 {
-	if (has_attr(attr, "disabled")) return FORM_MODE_DISABLED;
-	if (has_attr(attr, "readonly")) return FORM_MODE_READONLY;
+	if (has_attr(attr, "disabled", html_context->options))
+		return FORM_MODE_DISABLED;
+
+	if (has_attr(attr, "readonly", html_context->options))
+		return FORM_MODE_READONLY;
+
 	return FORM_MODE_NORMAL;
 }
 
@@ -140,7 +147,7 @@ html_button(struct html_context *html_context, unsigned char *a)
 
 	html_focusable(html_context, a);
 
-	al = get_attr_val(a, "type");
+	al = get_attr_val(a, "type", html_context->options);
 	if (!al) goto no_type_attr;
 
 	if (!strcasecmp(al, "button")) {
@@ -158,15 +165,15 @@ no_type_attr:
 	fc = init_form_control(type, a, html_context);
 	if (!fc) return;
 
-	fc->name = get_attr_val(a, "name");
-	fc->default_value = get_attr_val(a, "value");
+	fc->name = get_attr_val(a, "name", html_context->options);
+	fc->default_value = get_attr_val(a, "value", html_context->options);
 	if (!fc->default_value && fc->type == FC_SUBMIT) fc->default_value = stracpy("Submit");
 	if (!fc->default_value && fc->type == FC_RESET) fc->default_value = stracpy("Reset");
 	if (!fc->default_value && fc->type == FC_BUTTON) fc->default_value = stracpy("Button");
 	if (!fc->default_value) fc->default_value = stracpy("");
 
 	/* XXX: Does this make sense here? Where do we get FC_IMAGE? */
-	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
+	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt", html_context->options);
 	html_context->special_f(html_context, SP_CONTROL, fc);
 	format.form = fc;
 	format.style.attr |= AT_BOLD;
@@ -180,7 +187,7 @@ html_input(struct html_context *html_context, unsigned char *a)
 	struct form_control *fc;
 	enum form_type type = FC_TEXT;
 
-	al = get_attr_val(a, "type");
+	al = get_attr_val(a, "type", html_context->options);
 	if (!al) goto no_type_attr;
 
 	if (!strcasecmp(al, "text")) type = FC_TEXT;
@@ -200,8 +207,10 @@ no_type_attr:
 	fc = init_form_control(type, a, html_context);
 	if (!fc) return;
 
-	fc->name = get_attr_val(a, "name");
-	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
+	fc->name = get_attr_val(a, "name", html_context->options);
+	if (fc->type != FC_FILE)
+		fc->default_value = get_attr_val(a, "value",
+		                                 html_context->options);
 	if (!fc->default_value && fc->type == FC_CHECKBOX) fc->default_value = stracpy("on");
 	if (!fc->default_value && fc->type == FC_SUBMIT) fc->default_value = stracpy("Submit");
 	if (!fc->default_value && fc->type == FC_RESET) fc->default_value = stracpy("Reset");
@@ -216,8 +225,11 @@ no_type_attr:
 		fc->size = html_context->options->box.width;
 	fc->maxlength = get_num(a, "maxlength", html_context->options);
 	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
-	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
-	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
+	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO)
+		fc->default_state = has_attr(a, "checked",
+		                             html_context->options);
+	if (fc->type == FC_IMAGE)
+		fc->alt = get_attr_val(a, "alt", html_context->options);
 	if (fc->type == FC_HIDDEN) goto hid;
 
 	put_chrs(html_context, " ", 1);
@@ -225,7 +237,7 @@ no_type_attr:
 	html_focusable(html_context, a);
 	format.form = fc;
 	if (format.title) mem_free(format.title);
-	format.title = get_attr_val(a, "title");
+	format.title = get_attr_val(a, "title", html_context->options);
 	switch (fc->type) {
 		case FC_TEXT:
 		case FC_PASSWORD:
@@ -244,8 +256,10 @@ no_type_attr:
 			break;
 		case FC_IMAGE:
 			mem_free_set(&format.image, NULL);
-			al = get_url_val(a, "src");
-			if (!al) al = get_url_val(a, "dynsrc");
+			al = get_url_val(a, "src", html_context->options);
+			if (!al)
+				al = get_url_val(a, "dynsrc",
+				                 html_context->options);
 			if (al) {
 				format.image = join_urls(html_context->base_href, al);
 				mem_free(al);
@@ -289,13 +303,15 @@ html_select(struct html_context *html_context, unsigned char *a)
 	 * care of bussiness. --FF */
 	/* It gets called when the "multiple" attribute is set. --jonas */
 
-	unsigned char *al = get_attr_val(a, "name");
+	unsigned char *al = get_attr_val(a, "name", html_context->options);
 
 	if (!al) return;
 	html_focusable(html_context, a);
 	html_top.type = ELEMENT_DONT_KILL;
 	mem_free_set(&format.select, al);
-	format.select_disabled = has_attr(a, "disabled") ? FORM_MODE_DISABLED : FORM_MODE_NORMAL;
+	format.select_disabled = has_attr(a, "disabled", html_context->options)
+	                         ? FORM_MODE_DISABLED
+	                         : FORM_MODE_NORMAL;
 }
 
 void
@@ -306,7 +322,7 @@ html_option(struct html_context *html_context, unsigned char *a)
 
 	if (!format.select) return;
 
-	val = get_attr_val(a, "value");
+	val = get_attr_val(a, "value", html_context->options);
 	if (!val) {
 		struct string str;
 		unsigned char *p, *r;
@@ -358,8 +374,10 @@ end_parse:
 
 	fc->name = null_or_stracpy(format.select);
 	fc->default_value = val;
-	fc->default_state = has_attr(a, "selected");
-	fc->mode = has_attr(a, "disabled") ? FORM_MODE_DISABLED : format.select_disabled;
+	fc->default_state = has_attr(a, "selected", html_context->options);
+	fc->mode = has_attr(a, "disabled", html_context->options)
+	           ? FORM_MODE_DISABLED
+	           : format.select_disabled;
 
 	put_chrs(html_context, " ", 1);
 	html_stack_dup(html_context, ELEMENT_KILLABLE);
@@ -391,7 +409,7 @@ do_html_select(unsigned char *attr, unsigned char *html,
 	int group = 0;
 	int i, max_width;
 
-	if (has_attr(attr, "multiple")) return 1;
+	if (has_attr(attr, "multiple", html_context->options)) return 1;
 	html_focusable(html_context, attr);
 	init_menu(&lnk_menu);
 
@@ -456,15 +474,18 @@ abort:
 
 		add_select_item(&lnk_menu, &lbl, &orig_lbl, values, order, nnmi);
 
-		if (has_attr(t_attr, "disabled")) goto see;
-		if (preselect == -1 && has_attr(t_attr, "selected")) preselect = order;
-		value = get_attr_val(t_attr, "value");
+		if (has_attr(t_attr, "disabled", html_context->options))
+			goto see;
+		if (preselect == -1
+		    && has_attr(t_attr, "selected", html_context->options))
+			preselect = order;
+		value = get_attr_val(t_attr, "value", html_context->options);
 
 		if (!mem_align_alloc(&values, order, order + 1, unsigned char *, 0xFF))
 			goto abort;
 
 		values[order++] = value;
-		label = get_attr_val(t_attr, "label");
+		label = get_attr_val(t_attr, "label", html_context->options);
 		if (label) new_menu_item(&lnk_menu, label, order - 1, 0);
 		if (!value || !label) {
 			init_string(&lbl);
@@ -482,7 +503,9 @@ abort:
 	}
 
 	if (!strlcasecmp(t_name, t_namelen, "OPTGROUP", 8)) {
-		unsigned char *label = get_attr_val(t_attr, "label");
+		unsigned char *label;
+
+		label = get_attr_val(t_attr, "label", html_context->options);
 
 		if (!label) {
 			label = stracpy("");
@@ -507,7 +530,7 @@ end_parse:
 		goto abort;
 	}
 
-	fc->name = get_attr_val(attr, "name");
+	fc->name = get_attr_val(attr, "name", html_context->options);
 	fc->default_state = preselect < 0 ? 0 : preselect;
 	fc->default_value = order ? stracpy(values[fc->default_state]) : stracpy("");
 	fc->nvalues = order;
@@ -571,7 +594,7 @@ pp:
 	fc = init_form_control(FC_TEXTAREA, attr, html_context);
 	if (!fc) return;
 
-	fc->name = get_attr_val(attr, "name");
+	fc->name = get_attr_val(attr, "name", html_context->options);
 	fc->default_value = memacpy(html, p - html);
 	for (p = fc->default_value; p && p[0]; p++) {
 		/* FIXME: We don't cope well with entities here. Bugzilla uses
@@ -604,7 +627,7 @@ pp:
 	fc->rows = rows;
 	html_context->options->needs_height = 1;
 
-	wrap_attr = get_attr_val(attr, "wrap");
+	wrap_attr = get_attr_val(attr, "wrap", html_context->options);
 	if (wrap_attr) {
 		if (!strcasecmp(wrap_attr, "hard")
 		    || !strcasecmp(wrap_attr, "physical")) {
@@ -618,7 +641,7 @@ pp:
 		}
 		mem_free(wrap_attr);
 
-	} else if (has_attr(attr, "nowrap")) {
+	} else if (has_attr(attr, "nowrap", html_context->options)) {
 		fc->wrap = FORM_WRAP_NONE;
 
 	} else {

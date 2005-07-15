@@ -1,5 +1,5 @@
 /* General element handlers */ 
-/* $Id: general.c,v 1.2 2005/07/15 19:31:53 miciah Exp $ */
+/* $Id: general.c,v 1.3 2005/07/15 19:53:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ html_superscript(struct html_context *html_context, unsigned char *a)
 void
 html_font(struct html_context *html_context, unsigned char *a)
 {
-	unsigned char *al = get_attr_val(a, "size");
+	unsigned char *al = get_attr_val(a, "size", html_context->options);
 
 	if (al) {
 		int p = 0;
@@ -194,7 +194,7 @@ html_center(struct html_context *html_context, unsigned char *a)
 void
 html_linebrk(struct html_context *html_context, unsigned char *a)
 {
-	unsigned char *al = get_attr_val(a, "align");
+	unsigned char *al = get_attr_val(a, "align", html_context->options);
 
 	if (al) {
 		if (!strcasecmp(al, "left")) par_format.align = ALIGN_LEFT;
@@ -389,7 +389,7 @@ html_base(struct html_context *html_context, unsigned char *a)
 {
 	unsigned char *al;
 
-	al = get_url_val(a, "href");
+	al = get_url_val(a, "href", html_context->options);
 	if (al) {
 		unsigned char *base = join_urls(html_context->base_href, al);
 		struct uri *uri = base ? get_uri(base, 0) : NULL;
@@ -417,7 +417,7 @@ html_ul(struct html_context *html_context, unsigned char *a)
 	par_format.list_number = 0;
 	par_format.flags = P_STAR;
 
-	al = get_attr_val(a, "type");
+	al = get_attr_val(a, "type", html_context->options);
 	if (al) {
 		if (!strcasecmp(al, "disc") || !strcasecmp(al, "circle"))
 			par_format.flags = P_O;
@@ -445,7 +445,7 @@ html_ol(struct html_context *html_context, unsigned char *a)
 	par_format.list_number = st;
 	par_format.flags = P_NUMBER;
 
-	al = get_attr_val(a, "type");
+	al = get_attr_val(a, "type", html_context->options);
 	if (al) {
 		if (*al && !al[1]) {
 			if (*al == '1') par_format.flags = P_NUMBER;
@@ -603,7 +603,8 @@ void
 html_dl(struct html_context *html_context, unsigned char *a)
 {
 	par_format.flags &= ~P_COMPACT;
-	if (has_attr(a, "compact")) par_format.flags |= P_COMPACT;
+	if (has_attr(a, "compact", html_context->options))
+		par_format.flags |= P_COMPACT;
 	if (par_format.list_level) par_format.leftmargin += 5;
 	par_format.list_level++;
 	par_format.list_number = 0;
@@ -622,7 +623,8 @@ html_dt(struct html_context *html_context, unsigned char *a)
 	kill_html_stack_until(html_context, 0, "", "DL", NULL);
 	par_format.align = ALIGN_LEFT;
 	par_format.leftmargin = par_format.dd_margin;
-	if (!(par_format.flags & P_COMPACT) && !has_attr(a, "compact"))
+	if (!(par_format.flags & P_COMPACT)
+	    && !has_attr(a, "compact", html_context->options))
 		ln_break(html_context, 2);
 }
 
@@ -660,7 +662,7 @@ html_frame(struct html_context *html_context, unsigned char *a)
 {
 	unsigned char *name, *src, *url;
 
-	src = get_url_val(a, "src");
+	src = get_url_val(a, "src", html_context->options);
 	if (!src) {
 		url = stracpy("about:blank");
 	} else {
@@ -669,7 +671,7 @@ html_frame(struct html_context *html_context, unsigned char *a)
 	}
 	if (!url) return;
 
-	name = get_attr_val(a, "name");
+	name = get_attr_val(a, "name", html_context->options);
 	if (!name) {
 		name = stracpy(url);
 	} else if (!name[0]) {
@@ -712,13 +714,13 @@ html_frameset(struct html_context *html_context, unsigned char *a)
 	    || !html_context->special_f(html_context, SP_USED, NULL))
 		return;
 
-	cols = get_attr_val(a, "cols");
+	cols = get_attr_val(a, "cols", html_context->options);
 	if (!cols) {
 		cols = stracpy("100%");
 		if (!cols) return;
 	}
 
-	rows = get_attr_val(a, "rows");
+	rows = get_attr_val(a, "rows", html_context->options);
 	if (!rows) {
 		rows = stracpy("100%");
 	       	if (!rows) {

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.50 2005/07/15 19:31:53 miciah Exp $ */
+/* $Id: table.c,v 1.51 2005/07/15 19:53:40 miciah Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -71,10 +71,12 @@ get_bordercolor(struct html_context *html_context, unsigned char *a, color_T *rg
 	if (!use_document_fg_colors(html_context->options))
 		return;
 
-	at = get_attr_val(a, "bordercolor");
+	at = get_attr_val(a, "bordercolor", html_context->options);
 	/* Try some other MSIE-specific attributes if any. */
-	if (!at) at = get_attr_val(a, "bordercolorlight");
-	if (!at) at = get_attr_val(a, "bordercolordark");
+	if (!at)
+		at = get_attr_val(a, "bordercolorlight", html_context->options);
+	if (!at)
+		at = get_attr_val(a, "bordercolordark", html_context->options);
 	if (!at) return;
 
 	decode_color(at, strlen(at), rgb);
@@ -84,7 +86,7 @@ get_bordercolor(struct html_context *html_context, unsigned char *a, color_T *rg
 static void
 get_align(struct html_context *html_context, unsigned char *attr, int *a)
 {
-	unsigned char *al = get_attr_val(attr, "align");
+	unsigned char *al = get_attr_val(attr, "align", html_context->options);
 
 	if (!al) return;
 
@@ -99,7 +101,7 @@ get_align(struct html_context *html_context, unsigned char *attr, int *a)
 static void
 get_valign(struct html_context *html_context, unsigned char *attr, int *a)
 {
-	unsigned char *al = get_attr_val(attr, "valign");
+	unsigned char *al = get_attr_val(attr, "valign", html_context->options);
 
 	if (!al) return;
 
@@ -114,7 +116,7 @@ static void
 get_column_width(unsigned char *attr, int *width, int sh,
                  struct html_context *html_context)
 {
-	unsigned char *al = get_attr_val(attr, "width");
+	unsigned char *al = get_attr_val(attr, "width", html_context->options);
 	int len;
 
 	if (!al) return;
@@ -150,7 +152,7 @@ set_table_frame(struct html_context *html_context, struct table *table,
 
 	table->frame = TABLE_FRAME_BOX;
 
-	al = get_attr_val(attr, "frame");
+	al = get_attr_val(attr, "frame", html_context->options);
 	if (!al) return;
 
 	if (!strcasecmp(al, "void")) table->frame = TABLE_FRAME_VOID;
@@ -175,7 +177,7 @@ set_table_rules(struct html_context *html_context, struct table *table,
 
 	table->rules = table->border ? TABLE_RULE_ALL : TABLE_RULE_NONE;
 
-	al = get_attr_val(attr, "rules");
+	al = get_attr_val(attr, "rules", html_context->options);
 	if (!al) return;
 
 	if (!strcasecmp(al, "none")) table->rules = TABLE_RULE_NONE;
@@ -190,7 +192,7 @@ static void
 parse_table_attributes(struct table *table, unsigned char *attr, int real,
                        struct html_context *html_context)
 {
-	table->fragment_id = get_attr_val(attr, "id");
+	table->fragment_id = get_attr_val(attr, "id", html_context->options);
 
 	get_bordercolor(html_context, attr, &table->bordercolor);
 
@@ -213,9 +215,10 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real,
 	 * attribute. */
 	table->border = get_num(attr, "border", html_context->options);
 	if (table->border == -1) {
-		table->border = has_attr(attr, "border")
-				|| has_attr(attr, "rules")
-				|| has_attr(attr, "frame");
+		table->border =
+		              has_attr(attr, "border", html_context->options)
+			      || has_attr(attr, "rules", html_context->options)
+			      || has_attr(attr, "frame", html_context->options);
 	}
 
 	if (table->border) {
@@ -697,7 +700,8 @@ see:
 		get_align(html_context, t_attr, &l_al);
 		get_valign(html_context, t_attr, &l_val);
 		get_bgcolor(html_context, t_attr, &last_bgcolor);
-		mem_free_set(&l_fragment_id, get_attr_val(t_attr, "id"));
+		mem_free_set(&l_fragment_id,
+		             get_attr_val(t_attr, "id", html_context->options));
 		row++;
 		col = 0;
 		goto see;
@@ -752,7 +756,7 @@ see:
 
 	cell->align = l_al;
 	cell->valign = l_val;
-	cell->fragment_id = get_attr_val(t_attr, "id");
+	cell->fragment_id = get_attr_val(t_attr, "id", html_context->options);
 	if (!cell->fragment_id && l_fragment_id) {
 		cell->fragment_id = l_fragment_id;
 		l_fragment_id = NULL;

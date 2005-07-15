@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.608 2005/07/15 19:31:52 miciah Exp $ */
+/* $Id: parser.c,v 1.609 2005/07/15 19:53:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ get_color(struct html_context *html_context, unsigned char *a,
 	if (!use_document_fg_colors(html_context->options))
 		return -1;
 
-	at = get_attr_val(a, c);
+	at = get_attr_val(a, c, html_context->options);
 	if (!at) return -1;
 
 	r = decode_color(at, strlen(at), rgb);
@@ -79,7 +79,7 @@ get_bgcolor(struct html_context *html_context, unsigned char *a, color_T *rgb)
 unsigned char *
 get_target(struct document_options *options, unsigned char *a)
 {
-	unsigned char *v = get_attr_val(a, "target");
+	unsigned char *v = get_attr_val(a, "target", options);
 
 	if (!v) return NULL;
 
@@ -153,7 +153,9 @@ void
 set_fragment_identifier(struct html_context *html_context,
                         unsigned char *attr_name, unsigned char *attr)
 {
-	unsigned char *id_attr = get_attr_val(attr_name, attr);
+	unsigned char *id_attr;
+
+	id_attr = get_attr_val(attr_name, attr, html_context->options);
 
 	if (id_attr) {
 		html_context->special_f(html_context, SP_TAG, id_attr);
@@ -231,7 +233,7 @@ html_focusable(struct html_context *html_context, unsigned char *a)
 
 	if (!a) return;
 
-	accesskey = get_attr_val(a, "accesskey");
+	accesskey = get_attr_val(a, "accesskey", html_context->options);
 	if (accesskey) {
 		format.accesskey = accesskey_string_to_unicode(accesskey);
 		mem_free(accesskey);
@@ -242,13 +244,28 @@ html_focusable(struct html_context *html_context, unsigned char *a)
 		format.tabindex = (tabindex & 0x7fff) << 16;
 	}
 
-	mem_free_if(format.onclick); format.onclick = get_attr_val(a, "onclick");
-	mem_free_if(format.ondblclick); format.ondblclick = get_attr_val(a, "ondblclick");
-	mem_free_if(format.onmouseover); format.onmouseover = get_attr_val(a, "onmouseover");
-	mem_free_if(format.onhover); format.onhover = get_attr_val(a, "onhover");
-	mem_free_if(format.onfocus); format.onfocus = get_attr_val(a, "onfocus");
-	mem_free_if(format.onmouseout); format.onmouseout = get_attr_val(a, "onmouseout");
-	mem_free_if(format.onblur); format.onblur = get_attr_val(a, "onblur");
+	mem_free_if(format.onclick);
+	format.onclick = get_attr_val(a, "onclick", html_context->options);
+
+	mem_free_if(format.ondblclick);
+	format.ondblclick = get_attr_val(a, "ondblclick",
+	                                 html_context->options);
+
+	mem_free_if(format.onmouseover);
+	format.onmouseover = get_attr_val(a, "onmouseover",
+	                                  html_context->options);
+	mem_free_if(format.onhover);
+	format.onhover = get_attr_val(a, "onhover", html_context->options);
+
+	mem_free_if(format.onfocus);
+	format.onfocus = get_attr_val(a, "onfocus", html_context->options);
+
+	mem_free_if(format.onmouseout);
+	format.onmouseout = get_attr_val(a, "onmouseout",
+	                                 html_context->options);
+
+	mem_free_if(format.onblur);
+	format.onblur = get_attr_val(a, "onblur", html_context->options);
 }
 
 void
@@ -272,7 +289,7 @@ do_html_script(struct html_context *html_context, unsigned char *a, unsigned cha
 
 	/* We try to process nested <script> if we didn't process the parent
 	 * one. That's why's all the fuzz. */
-	type = get_attr_val(a, "type");
+	type = get_attr_val(a, "type", html_context->options);
 	if (type && strcasecmp(type, "text/javascript")) {
 		mem_free(type);
 not_processed:
@@ -285,7 +302,7 @@ not_processed:
 	/* Check that the script content is ecmascript. The value of the
 	 * language attribute can be JavaScript with optional version digits
 	 * postfixed (like: ``JavaScript1.1''). */
-	language = get_attr_val(a, "language");
+	language = get_attr_val(a, "language", html_context->options);
 	if (language) {
 		int languagelen = strlen(language);
 
@@ -299,7 +316,8 @@ not_processed:
 		mem_free(language);
 	}
 
-	if (html_context->part->document && (src = get_attr_val(a, "src"))) {
+	if (html_context->part->document
+	    && (src = get_attr_val(a, "src", html_context->options))) {
 		/* External reference. */
 
 		unsigned char *import_url;
@@ -563,7 +581,7 @@ look_for_map(unsigned char **pos, unsigned char *eof, struct uri *uri,
 	if (strlcasecmp(name, namelen, "MAP", 3)) return 1;
 
 	if (uri && uri->fragment) {
-		al = get_attr_val(attr, "name");
+		al = get_attr_val(attr, "name", options);
 		if (!al) return 1;
 
 		if (strlcasecmp(al, -1, uri->fragment, uri->fragmentlen)) {
@@ -661,7 +679,7 @@ look_for_link(unsigned char **pos, unsigned char *eof, struct menu_item **menu,
 		if (*pos >= eof) return 0;
 
 	} else if (!strlcasecmp(name, namelen, "AREA", 4)) {
-		unsigned char *alt = get_attr_val(attr, "alt");
+		unsigned char *alt = get_attr_val(attr, "alt", options);
 
 		if (alt) {
 			label = convert_string(ct, alt, strlen(alt), CSM_DEFAULT, NULL, NULL, NULL);
@@ -694,7 +712,7 @@ look_for_link(unsigned char **pos, unsigned char *eof, struct menu_item **menu,
 		return 1;
 	}
 
-	href = get_url_val(attr, "href");
+	href = get_url_val(attr, "href", options);
 	if (!href) {
 		mem_free_if(label);
 		mem_free(target);

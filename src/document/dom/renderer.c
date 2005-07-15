@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.25 2005/07/12 15:46:34 jonas Exp $ */
+/* $Id: renderer.c,v 1.26 2005/07/15 20:17:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,7 +200,8 @@ render_dom_line(struct dom_renderer *renderer, struct screen_char *template,
 
 	assert(renderer && template && string && length);
 
-	string = convert_string(convert, string, length, mode, &length, NULL, NULL);
+	string = convert_string(convert, string, length, document->options.cp,
+	                        mode, &length, NULL, NULL);
 	if (!string) return;
 
 	if (!realloc_line(document, WIDTH(renderer, length), Y(renderer))) {
@@ -341,8 +342,8 @@ add_dom_link(struct dom_renderer *renderer, unsigned char *string, int length)
 		return NULL;
 
 	uristring = convert_string(renderer->convert_table,
-				   string, length, CSM_DEFAULT,
-				   NULL, NULL, NULL);
+				   string, length, document->options.cp,
+	                           CSM_DEFAULT, NULL, NULL, NULL);
 	if (!uristring) return NULL;
 
 	where = join_urls(document->uri, uristring);

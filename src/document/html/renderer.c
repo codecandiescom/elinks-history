@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.584 2005/07/12 15:32:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.585 2005/07/15 20:17:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1076,6 +1076,7 @@ put_chars_conv(struct html_context *html_context,
 	}
 
 	convert_string(renderer_context.convert_table, chars, charslen,
+	               html_context->options->cp,
 	               CSM_DEFAULT, NULL, (void (*)(void *, unsigned char *, int)) put_chars, html_context);
 }
 
@@ -1507,6 +1508,7 @@ html_special_form_control(struct part *part, struct form_control *fc)
 		unsigned char *dv = convert_string(renderer_context.convert_table,
 						   fc->default_value,
 						   strlen(fc->default_value),
+						   part->document->options.cp,
 						   CSM_QUERY, NULL, NULL, NULL);
 
 		if (dv) mem_free_set(&fc->default_value, dv);
@@ -1939,6 +1941,7 @@ render_html_document(struct cache_entry *cached, struct document *document,
 	if (title.length) {
 		document->title = convert_string(renderer_context.convert_table,
 						 title.source, title.length,
+						 document->options.cp,
 						 CSM_DEFAULT, NULL, NULL, NULL);
 	}
 	done_string(&title);

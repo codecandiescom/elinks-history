@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.114 2005/06/14 13:04:31 jonas Exp $ */
+/* $Id: charsets.c,v 1.115 2005/07/15 20:17:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -586,7 +586,7 @@ end:
 
 unsigned char *
 convert_string(struct conv_table *convert_table,
-	       unsigned char *chars, int charslen,
+	       unsigned char *chars, int charslen, int cp,
 	       enum convert_string_mode mode, int *length,
 	       void (*callback)(void *data, unsigned char *buf, int buflen),
 	       void *callback_data)
@@ -658,7 +658,7 @@ convert_string(struct conv_table *convert_table,
 			    && i > start
 			    && !isasciialpha(chars[i]) && !isdigit(chars[i])) {
 				translit = get_entity_string(&chars[start], i - start,
-						      global_doc_opts->cp);
+						      cp);
 				if (chars[i] != ';') {
 					/* Eat &nbsp &nbsp<foo> happily, but
 					 * pull back from the character after

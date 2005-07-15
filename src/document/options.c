@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.66 2005/06/26 08:24:45 miciah Exp $ */
+/* $Id: options.c,v 1.67 2005/07/15 20:17:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,8 +20,6 @@
 #include "util/string.h"
 #include "viewer/text/draw.h"
 
-
-struct document_options *global_doc_opts;
 
 void
 init_document_options(struct document_options *doo)

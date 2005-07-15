@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.92 2005/07/15 19:53:40 miciah Exp $ */
+/* $Id: forms.c,v 1.93 2005/07/15 20:17:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -444,7 +444,9 @@ abort:
 
 		while (l && isspace(s[0])) s++, l--;
 		while (l && isspace(s[l-1])) l--;
-		q = convert_string(ct, s, l, CSM_DEFAULT, NULL, NULL, NULL);
+		q = convert_string(ct, s, l,
+		                   html_context->options->cp,
+		                   CSM_DEFAULT, NULL, NULL, NULL);
 		if (q) add_to_string(&lbl, q), mem_free(q);
 		add_bytes_to_string(&orig_lbl, s, l);
 	}

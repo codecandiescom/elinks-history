@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.57 2005/06/11 05:13:50 miciah Exp $ */
+/* $Id: options.h,v 1.58 2005/07/15 20:17:25 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -103,8 +103,6 @@ struct document_options {
 	color_T active_link_fg;
 	color_T active_link_bg;
 };
-
-extern struct document_options *global_doc_opts;
 
 /* Fills the structure with values from the option system. */
 void init_document_options(struct document_options *doo);

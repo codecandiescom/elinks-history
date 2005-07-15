@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.180 2005/07/12 16:31:02 jonas Exp $ */
+/* $Id: task.c,v 1.181 2005/07/15 20:18:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -375,7 +375,6 @@ ses_imgmap(struct session *ses)
 	if (!fragment) return;
 
 	if (!doc_view || !doc_view->document) return;
-	global_doc_opts = &doc_view->document->options;
 
 	if (get_image_map(cached->head, fragment->data,
 			  fragment->data + fragment->length,

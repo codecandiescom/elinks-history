@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.97 2005/07/12 16:02:22 jonas Exp $ */
+/* $Id: document.c,v 1.98 2005/07/15 20:17:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,6 @@ init_document(struct cache_entry *cached, struct document_options *options)
 	object_lock(document);
 
 	copy_opt(&document->options, options);
-	global_doc_opts = &document->options;
 
 	add_to_list(format_cache, document);
 
@@ -163,11 +162,6 @@ done_document(struct document *document)
 	mem_free_if(document->search);
 	mem_free_if(document->slines1);
 	mem_free_if(document->slines2);
-
-	/* Blast off global document option pointer if we are the `owner'
-	 * so we don't have a dangling pointer. */
-	if (global_doc_opts == &document->options)
-		global_doc_opts = NULL;
 
 	del_from_list(document);
 	mem_free(document);

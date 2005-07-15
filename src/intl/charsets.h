@@ -1,4 +1,4 @@
-/* $Id: charsets.h,v 1.25 2005/06/14 13:04:31 jonas Exp $ */
+/* $Id: charsets.h,v 1.26 2005/07/15 20:17:25 miciah Exp $ */
 
 #ifndef EL__INTL_CHARSETS_H
 #define EL__INTL_CHARSETS_H
@@ -45,7 +45,7 @@ unsigned char *get_entity_string(const unsigned char *str, const int strlen, int
  * it each few bytes instead and always returns NULL (@length is undefined).
  * Note that it's ok not to care and pass NULL as @length. */
 unsigned char *convert_string(struct conv_table *convert_table,
-			      unsigned char *chars, int charslen,
+			      unsigned char *chars, int charslen, int cp,
 			      enum convert_string_mode mode, int *length,
 			      void (*callback)(void *data, unsigned char *buf, int buflen),
 			      void *callback_data);

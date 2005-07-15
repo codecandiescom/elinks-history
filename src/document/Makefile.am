@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.48 2004/12/18 00:27:53 pasky Exp $
+## $Id: Makefile.am,v 1.49 2005/07/15 04:37:55 miciah Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -38,6 +38,7 @@ libdocument_a_LIBADD = \
  $(cssobj) \
  $(domobj) \
  html/parser/forms.o \
+ html/parser/general.o \
  html/parser/link.o \
  html/parser/parse.o \
  html/parser/stack.o \

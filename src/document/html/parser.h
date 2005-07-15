@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.103 2005/07/12 16:31:02 jonas Exp $ */
+/* $Id: parser.h,v 1.104 2005/07/15 04:37:55 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -190,7 +190,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	      struct document_options *options, unsigned char *target_base,
 	      int to, int def, int hdef);
 
-/* For html/parser/forms.c,link.c,parse.c,stack.c */
+/* For html/parser/forms.c,general.c,link.c,parse.c,stack.c */
 
 /* Ensure that there are at least n successive line-breaks at the current
  * position, but don't add more than necessary to bring the current number
@@ -201,6 +201,8 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
  * called with n = 2 for each of multiple successive <br>'s, but ln_break
  * will only add two line-breaks for the entire run of <br>'s. */
 void ln_break(struct html_context *html_context, int n);
+
+int get_color(struct html_context *html_context, unsigned char *a, unsigned char *c, color_T *rgb);
 
 #ifdef CONFIG_ECMASCRIPT
 int do_html_script(struct html_context *html_context, unsigned char *attr, unsigned char *html, unsigned char *eof, unsigned char **end);

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.163 2005/07/15 02:47:19 miciah Exp $ */
+/* $Id: parse.c,v 1.164 2005/07/15 04:37:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "document/css/apply.h"
 #include "document/css/parser.h"
 #include "document/html/parser/forms.h"
+#include "document/html/parser/general.h"
 #include "document/html/parser/link.h"
 #include "document/html/parser/parse.h"
 #include "document/html/parser/stack.h"
@@ -382,55 +383,6 @@ skip_comment(unsigned char *html, unsigned char *eof)
 }
 
 
-
-
-/* These should be exported properly by specific HTML parser modules
- * implementing them. But for now... */
-
-element_handler_T html_address;
-element_handler_T html_base;
-element_handler_T html_blockquote;
-element_handler_T html_body;
-element_handler_T html_bold;
-element_handler_T html_br;
-element_handler_T html_center;
-element_handler_T html_dd;
-element_handler_T html_dl;
-element_handler_T html_dt;
-element_handler_T html_fixed;
-element_handler_T html_font;
-element_handler_T html_frame;
-element_handler_T html_frameset;
-element_handler_T html_h1;
-element_handler_T html_h2;
-element_handler_T html_h3;
-element_handler_T html_h4;
-element_handler_T html_h5;
-element_handler_T html_h6;
-element_handler_T html_head;
-element_handler_T html_html;
-element_handler_T html_hr;
-element_handler_T html_italic;
-element_handler_T html_li;
-element_handler_T html_linebrk;
-element_handler_T html_noframes;
-element_handler_T html_noscript;
-element_handler_T html_ol;
-element_handler_T html_p;
-element_handler_T html_pre;
-element_handler_T html_script;
-element_handler_T html_span;
-element_handler_T html_style;
-element_handler_T html_subscript;
-element_handler_T html_superscript;
-element_handler_T html_table;
-element_handler_T html_td;
-element_handler_T html_th;
-element_handler_T html_title;
-element_handler_T html_tr;
-element_handler_T html_ul;
-element_handler_T html_underline;
-element_handler_T html_xmp;
 
 
 enum element_type {

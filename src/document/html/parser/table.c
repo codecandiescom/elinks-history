@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.47 2005/07/15 19:20:54 miciah Exp $ */
+/* $Id: table.c,v 1.48 2005/07/15 19:22:23 miciah Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -97,7 +97,7 @@ get_align(unsigned char *attr, int *a)
 }
 
 static void
-get_valign(unsigned char *attr, int *a)
+get_valign(struct html_context *html_context, unsigned char *attr, int *a)
 {
 	unsigned char *al = get_attr_val(attr, "valign");
 
@@ -617,7 +617,7 @@ see:
 		c_val = VALIGN_TR;
 		c_width = WIDTH_AUTO;
 		get_align(t_attr, &c_al);
-		get_valign(t_attr, &c_val);
+		get_valign(html_context, t_attr, &c_val);
 		get_column_width(t_attr, &c_width, sh, html_context);
 		c_span = get_num(t_attr, "span");
 		if (c_span == -1) c_span = 1;
@@ -650,7 +650,7 @@ see:
 		al = c_al;
 		val = c_val;
 		get_align(t_attr, &al);
-		get_valign(t_attr, &val);
+		get_valign(html_context, t_attr, &val);
 		get_column_width(t_attr, &width, sh, html_context);
 		new_columns(table, sp, width, al, val, !!c_span);
 		c_span = 0;
@@ -695,7 +695,7 @@ see:
 		l_val = VALIGN_MIDDLE;
 		last_bgcolor = table->bgcolor;
 		get_align(t_attr, &l_al);
-		get_valign(t_attr, &l_val);
+		get_valign(html_context, t_attr, &l_val);
 		get_bgcolor(html_context, t_attr, &last_bgcolor);
 		mem_free_set(&l_fragment_id, get_attr_val(t_attr, "id"));
 		row++;
@@ -773,7 +773,7 @@ see:
 	cell->bgcolor = last_bgcolor;
 
 	get_align(t_attr, &cell->align);
-	get_valign(t_attr, &cell->valign);
+	get_valign(html_context, t_attr, &cell->valign);
 	get_bgcolor(html_context, t_attr, &cell->bgcolor);
 
 	colspan = get_num(t_attr, "colspan");

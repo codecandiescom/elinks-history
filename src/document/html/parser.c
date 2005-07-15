@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.603 2005/07/15 03:50:27 miciah Exp $ */
+/* $Id: parser.c,v 1.604 2005/07/15 03:51:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "document/html/parser/parse.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
+#include "document/options.h"
 #include "document/renderer.h"
 #include "intl/charsets.h"
 #include "protocol/date.h"
@@ -31,6 +32,8 @@
 #include "protocol/uri.h"
 #include "session/task.h"
 #include "terminal/draw.h"
+#include "util/align.h"
+#include "util/box.h"
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"

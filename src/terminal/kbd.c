@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.153 2005/07/15 02:15:40 miciah Exp $ */
+/* $Id: kbd.c,v 1.154 2005/07/15 02:20:12 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,7 +373,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	queue_event(itrm, (char *) init_string, init_len);
 	send_init_sequence(std_out, itrm->altscreen);
 
-	itrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, itrm);
+	enable_mouse();
 }
 
 
@@ -450,7 +450,7 @@ free_trm(struct itrm *itrm)
 	mem_free_set(&itrm->orig_title, NULL);
 
 	unhandle_terminal_resize(itrm->ctl_in);
-	unhandle_mouse(itrm->mouse_h);
+	disable_mouse();
 	send_done_sequence(itrm->std_out,itrm->altscreen);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 

@@ -1,4 +1,4 @@
-/* $Id: apply.h,v 1.12 2005/07/12 16:42:40 jonas Exp $ */
+/* $Id: apply.h,v 1.13 2005/07/15 19:11:10 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_APPLY_H
 #define EL__DOCUMENT_CSS_APPLY_H
@@ -15,7 +15,9 @@ struct html_element;
 /* Gather all style information for the given @element, so it can later be
  * applied. Returned value should be freed using done_css_selector(). */
 struct css_selector *
-get_css_selector_for_element(struct html_element *element, struct css_stylesheet *css,
+get_css_selector_for_element(struct html_context *html_context,
+			     struct html_element *element,
+			     struct css_stylesheet *css,
 			     struct list_head *html_stack);
 
 

@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.26 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: unix.c,v 1.27 2005/07/15 13:48:03 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ gpm_mouse_in(struct gpm_mouse_spec *gms)
 	gms->fn(gms->data, (char *) &ev, sizeof(ev));
 }
 
-int
+static int
 init_mouse(int cons, int suspend)
 {
 	Gpm_Connect conn;
@@ -80,7 +80,7 @@ init_mouse(int cons, int suspend)
 	return Gpm_Open(&conn, cons);
 }
 
-int
+static int
 done_mouse(void)
 {
 	return Gpm_Close();

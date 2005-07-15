@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.156 2005/07/10 01:56:42 miciah Exp $ */
+/* $Id: action.c,v 1.157 2005/07/15 02:13:07 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -545,6 +545,10 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 
 		case ACT_MAIN_TOGGLE_HTML_PLAIN:
 			toggle_plain_html(ses, ses->doc_view, 0);
+			break;
+ 
+		case ACT_MAIN_TOGGLE_MOUSE:
+			toggle_mouse();
 			break;
 
 		case ACT_MAIN_TOGGLE_NUMBERED_LINKS:

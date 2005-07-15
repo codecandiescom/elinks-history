@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.606 2005/07/15 19:18:20 miciah Exp $ */
+/* $Id: parser.c,v 1.607 2005/07/15 19:27:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -774,7 +774,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	if (!init_string(&hd)) return -1;
 
 	if (head) add_to_string(&hd, head);
-	scan_http_equiv(pos, eof, &hd, NULL);
+	scan_http_equiv(pos, eof, &hd, NULL, options);
 	ct = get_convert_table(hd.source, to, def, NULL, NULL, hdef);
 	done_string(&hd);
 
@@ -889,7 +889,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 
 	html_context->options = options;
 
-	scan_http_equiv(start, end, head, title);
+	scan_http_equiv(start, end, head, title, options);
 
 	e = mem_calloc(1, sizeof(*e));
 	if (!e) return NULL;

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.165 2005/07/15 19:11:10 miciah Exp $ */
+/* $Id: parse.c,v 1.166 2005/07/15 19:27:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -991,7 +991,7 @@ process_element(unsigned char *name, int namelen, int endingtag,
 
 void
 scan_http_equiv(unsigned char *s, unsigned char *eof, struct string *head,
-		struct string *title)
+		struct string *title, struct document_options *options)
 {
 	unsigned char *name, *attr, *he, *c;
 	int namelen;

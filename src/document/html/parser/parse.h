@@ -1,9 +1,10 @@
-/* $Id: parse.h,v 1.14 2005/07/10 22:39:14 miciah Exp $ */
+/* $Id: parse.h,v 1.15 2005/07/15 19:27:58 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
 
 struct html_context;
+struct document_options;
 struct part;
 struct string;
 
@@ -59,7 +60,7 @@ int get_width(unsigned char *, unsigned char *, int, struct html_context *);
 unsigned char *skip_comment(unsigned char *, unsigned char *);
 
 
-void scan_http_equiv(unsigned char *s, unsigned char *eof, struct string *head, struct string *title);
+void scan_http_equiv(unsigned char *s, unsigned char *eof, struct string *head, struct string *title, struct document_options *options);
 
 
 /* Lifecycle functions for the tags fastfind cache, if being in use. */

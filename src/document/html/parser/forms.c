@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.89 2005/07/15 18:49:33 miciah Exp $ */
+/* $Id: forms.c,v 1.90 2005/07/15 19:16:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,7 @@ html_form(struct html_context *html_context, unsigned char *a)
 
 
 static int
-get_form_mode(unsigned char *attr)
+get_form_mode(struct html_context *html_context, unsigned char *attr)
 {
 	if (has_attr(attr, "disabled")) return FORM_MODE_DISABLED;
 	if (has_attr(attr, "readonly")) return FORM_MODE_READONLY;
@@ -126,7 +126,7 @@ init_form_control(enum form_type type, unsigned char *attr,
 
 	fc->type = type;
 	fc->position = attr - html_context->startf;
-	fc->mode = get_form_mode(attr);
+	fc->mode = get_form_mode(html_context, attr);
 
 	return fc;
 }

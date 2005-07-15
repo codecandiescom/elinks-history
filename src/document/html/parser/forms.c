@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.90 2005/07/15 19:16:13 miciah Exp $ */
+/* $Id: forms.c,v 1.91 2005/07/15 19:31:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,13 +208,13 @@ no_type_attr:
 	if (!fc->default_value && fc->type == FC_BUTTON) fc->default_value = stracpy("Button");
 	if (!fc->default_value) fc->default_value = stracpy("");
 
-	fc->size = get_num(a, "size");
+	fc->size = get_num(a, "size", html_context->options);
 	if (fc->size == -1)
 		fc->size = html_context->options->default_form_input_size;
 	fc->size++;
 	if (fc->size > html_context->options->box.width)
 		fc->size = html_context->options->box.width;
-	fc->maxlength = get_num(a, "maxlength");
+	fc->maxlength = get_num(a, "maxlength", html_context->options);
 	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
@@ -588,7 +588,7 @@ pp:
 		}
 	}
 
-	cols = get_num(attr, "cols");
+	cols = get_num(attr, "cols", html_context->options);
 	if (cols <= 0)
 		cols = html_context->options->default_form_input_size;
 	cols++; /* Add 1 column, other browsers may have different
@@ -597,7 +597,7 @@ pp:
 		cols = html_context->options->box.width;
 	fc->cols = cols;
 
-	rows = get_num(attr, "rows");
+	rows = get_num(attr, "rows", html_context->options);
 	if (rows <= 0) rows = 1;
 	if (rows > html_context->options->box.height)
 		rows = html_context->options->box.height;
@@ -625,7 +625,7 @@ pp:
 		fc->wrap = FORM_WRAP_SOFT;
 	}
 
-	fc->maxlength = get_num(attr, "maxlength");
+	fc->maxlength = get_num(attr, "maxlength", html_context->options);
 	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 
 	if (rows > 1) ln_break(html_context, 1);

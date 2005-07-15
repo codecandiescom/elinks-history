@@ -1,4 +1,4 @@
-/* $Id: parse.h,v 1.15 2005/07/15 19:27:58 miciah Exp $ */
+/* $Id: parse.h,v 1.16 2005/07/15 19:31:53 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
@@ -54,7 +54,7 @@ typedef void (element_handler_T)(struct html_context *, unsigned char *);
 
 int parse_element(unsigned char *, unsigned char *, unsigned char **, int *, unsigned char **, unsigned char **);
 
-int get_num(unsigned char *, unsigned char *);
+int get_num(unsigned char *, unsigned char *, struct document_options *);
 int get_width(unsigned char *, unsigned char *, int, struct html_context *);
 
 unsigned char *skip_comment(unsigned char *, unsigned char *);

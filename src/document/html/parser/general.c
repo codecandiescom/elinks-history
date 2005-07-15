@@ -1,5 +1,5 @@
 /* General element handlers */ 
-/* $Id: general.c,v 1.1 2005/07/15 04:37:55 miciah Exp $ */
+/* $Id: general.c,v 1.2 2005/07/15 19:31:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,7 +326,7 @@ html_hr(struct html_context *html_context, unsigned char *a)
 {
 	int i/* = par_format.width - 10*/;
 	unsigned char r = (unsigned char) BORDER_DHLINE;
-	int q = get_num(a, "size");
+	int q = get_num(a, "size", html_context->options);
 
 	if (q >= 0 && q < 2) r = (unsigned char) BORDER_SHLINE;
 	html_stack_dup(html_context, ELEMENT_KILLABLE);
@@ -440,7 +440,7 @@ html_ol(struct html_context *html_context, unsigned char *a)
 	int st;
 
 	par_format.list_level++;
-	st = get_num(a, "start");
+	st = get_num(a, "start", html_context->options);
 	if (st == -1) st = 1;
 	par_format.list_number = st;
 	par_format.flags = P_NUMBER;
@@ -547,7 +547,7 @@ html_li(struct html_context *html_context, unsigned char *a)
 		unsigned char n[32];
 		int nlen;
 		int t = par_format.flags & P_LISTMASK;
-		int s = get_num(a, "value");
+		int s = get_num(a, "value", html_context->options);
 
 		if (s != -1) par_format.list_number = s;
 

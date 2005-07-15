@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.49 2005/07/15 19:23:52 miciah Exp $ */
+/* $Id: table.c,v 1.50 2005/07/15 19:31:53 miciah Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -211,7 +211,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real,
 	 * interpreted as the value of the frame attribute. It implies
 	 * rules="all" and some default (non-zero) value for the border
 	 * attribute. */
-	table->border = get_num(attr, "border");
+	table->border = get_num(attr, "border", html_context->options);
 	if (table->border == -1) {
 		table->border = has_attr(attr, "border")
 				|| has_attr(attr, "rules")
@@ -221,7 +221,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real,
 	if (table->border) {
 		int_upper_bound(&table->border, 2);
 
-		table->cellspacing = get_num(attr, "cellspacing");
+		table->cellspacing = get_num(attr, "cellspacing", html_context->options);
 		int_bounds(&table->cellspacing, 1, 2);
 	}
 
@@ -229,7 +229,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real,
 
 	/* TODO: cellpadding may be expressed as a percentage, this is not
 	 * handled yet. */
-	table->cellpadding = get_num(attr, "cellpadding");
+	table->cellpadding = get_num(attr, "cellpadding", html_context->options);
 	if (table->cellpadding == -1) {
 		table->vcellpadding = 0;
 		table->cellpadding = !!table->border;
@@ -619,7 +619,7 @@ see:
 		get_align(html_context, t_attr, &c_al);
 		get_valign(html_context, t_attr, &c_val);
 		get_column_width(t_attr, &c_width, sh, html_context);
-		c_span = get_num(t_attr, "span");
+		c_span = get_num(t_attr, "span", html_context->options);
 		if (c_span == -1) c_span = 1;
 		else if (c_span > HTML_MAX_COLSPAN) c_span = HTML_MAX_COLSPAN;
 		goto see;
@@ -642,7 +642,7 @@ see:
 
 		add_table_bad_html_end(table, html);
 
-		sp = get_num(t_attr, "span");
+		sp = get_num(t_attr, "span", html_context->options);
 		if (sp == -1) sp = 1;
 		else if (sp > HTML_MAX_COLSPAN) sp = HTML_MAX_COLSPAN;
 
@@ -776,12 +776,12 @@ see:
 	get_valign(html_context, t_attr, &cell->valign);
 	get_bgcolor(html_context, t_attr, &cell->bgcolor);
 
-	colspan = get_num(t_attr, "colspan");
+	colspan = get_num(t_attr, "colspan", html_context->options);
 	if (colspan == -1) colspan = 1;
 	else if (!colspan) colspan = -1;
 	else if (colspan > HTML_MAX_COLSPAN) colspan = HTML_MAX_COLSPAN;
 
-	rowspan = get_num(t_attr, "rowspan");
+	rowspan = get_num(t_attr, "rowspan", html_context->options);
 	if (rowspan == -1) rowspan = 1;
 	else if (!rowspan) rowspan = -1;
 	else if (rowspan > HTML_MAX_ROWSPAN) rowspan = HTML_MAX_ROWSPAN;

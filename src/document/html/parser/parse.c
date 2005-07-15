@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.166 2005/07/15 19:27:58 miciah Exp $ */
+/* $Id: parse.c,v 1.167 2005/07/15 19:31:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -246,7 +246,7 @@ parse_error:
  * It will return a positive integer value on success,
  * or -1 on error. */
 int
-get_num(unsigned char *a, unsigned char *name)
+get_num(unsigned char *a, unsigned char *name, struct document_options *options)
 {
 	unsigned char *al = get_attr_val(a, name);
 	int result = -1;

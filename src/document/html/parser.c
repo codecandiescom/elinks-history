@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.605 2005/07/15 04:37:55 miciah Exp $ */
+/* $Id: parser.c,v 1.606 2005/07/15 19:18:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -538,7 +538,8 @@ process_head(struct html_context *html_context, unsigned char *head)
 
 
 static int
-look_for_map(unsigned char **pos, unsigned char *eof, struct uri *uri)
+look_for_map(unsigned char **pos, unsigned char *eof, struct uri *uri,
+             struct document_options *options)
 {
 	unsigned char *al, *attr, *name;
 	int namelen;
@@ -780,7 +781,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	*menu = mem_calloc(1, sizeof(**menu));
 	if (!*menu) return -1;
 
-	while (look_for_map(&pos, eof, uri));
+	while (look_for_map(&pos, eof, uri, options));
 
 	if (pos >= eof) {
 		mem_free(*menu);

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.48 2005/07/15 19:22:23 miciah Exp $ */
+/* $Id: table.c,v 1.49 2005/07/15 19:23:52 miciah Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -82,7 +82,7 @@ get_bordercolor(struct html_context *html_context, unsigned char *a, color_T *rg
 }
 
 static void
-get_align(unsigned char *attr, int *a)
+get_align(struct html_context *html_context, unsigned char *attr, int *a)
 {
 	unsigned char *al = get_attr_val(attr, "align");
 
@@ -241,7 +241,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real,
 	set_table_rules(html_context, table, attr);
 
 	table->align = par_format.align;
-	get_align(attr, &table->align);
+	get_align(html_context, attr, &table->align);
 
 	table->bgcolor = par_format.bgcolor;
 	get_bgcolor(html_context, attr, &table->bgcolor);
@@ -616,7 +616,7 @@ see:
 		c_al = ALIGN_TR;
 		c_val = VALIGN_TR;
 		c_width = WIDTH_AUTO;
-		get_align(t_attr, &c_al);
+		get_align(html_context, t_attr, &c_al);
 		get_valign(html_context, t_attr, &c_val);
 		get_column_width(t_attr, &c_width, sh, html_context);
 		c_span = get_num(t_attr, "span");
@@ -649,7 +649,7 @@ see:
 		width = c_width;
 		al = c_al;
 		val = c_val;
-		get_align(t_attr, &al);
+		get_align(html_context, t_attr, &al);
 		get_valign(html_context, t_attr, &val);
 		get_column_width(t_attr, &width, sh, html_context);
 		new_columns(table, sp, width, al, val, !!c_span);
@@ -694,7 +694,7 @@ see:
 		l_al = ALIGN_LEFT;
 		l_val = VALIGN_MIDDLE;
 		last_bgcolor = table->bgcolor;
-		get_align(t_attr, &l_al);
+		get_align(html_context, t_attr, &l_al);
 		get_valign(html_context, t_attr, &l_val);
 		get_bgcolor(html_context, t_attr, &last_bgcolor);
 		mem_free_set(&l_fragment_id, get_attr_val(t_attr, "id"));
@@ -772,7 +772,7 @@ see:
 
 	cell->bgcolor = last_bgcolor;
 
-	get_align(t_attr, &cell->align);
+	get_align(html_context, t_attr, &cell->align);
 	get_valign(html_context, t_attr, &cell->valign);
 	get_bgcolor(html_context, t_attr, &cell->bgcolor);
 

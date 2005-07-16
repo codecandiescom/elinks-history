@@ -1,3 +1,36 @@
+Sat Jul 16 21:57:26 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: session/history.c, session/history.h, util/lists.h,
+	viewer/action.c:
+
+	Add the list_has_prev macro.  
+	
+	Introduce go_history_by_n, which goes back -n times if n is
+	negative, forward n times if n is positive.  
+	
+	Rewrite go_back and go_unback as wrappers for go_history_by_n.  
+	
+	Utilise go_history_by_n to allow prefixes to history-move-back and
+	history-move-forward.  
+
+Sat Jul 16 21:16:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/actions-main.inc:
+
+	Let document-info take a prefix to specify the link number.  
+
+Sat Jul 16 21:13:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/actions-main.inc:
+
+	Let add-bookmark-link take a prefix to specify the link number.  
+
+Sat Jul 16 21:10:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/actions-main.inc:
+
+	Let goto-url-current-link take a prefix to specify the link number.  
+
 Fri Jul 15 20:22:00 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/document/html/parser/general.c:

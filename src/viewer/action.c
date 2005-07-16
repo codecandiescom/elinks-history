@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.157 2005/07/15 02:13:07 miciah Exp $ */
+/* $Id: action.c,v 1.158 2005/07/16 21:57:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,11 +235,17 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_HISTORY_MOVE_BACK:
-			go_back(ses);
+			go_history_by_n(ses, ses->kbdprefix.repeat_count
+			                      ? -ses->kbdprefix.repeat_count
+			                      : -1);
+			ses->kbdprefix.repeat_count = 0;
 			break;
 
 		case ACT_MAIN_HISTORY_MOVE_FORWARD:
-			go_unback(ses);
+			go_history_by_n(ses, ses->kbdprefix.repeat_count
+			                      ? ses->kbdprefix.repeat_count
+			                      : 1);
+			ses->kbdprefix.repeat_count = 0;
 			break;
 
 		case ACT_MAIN_JUMP_TO_LINK:

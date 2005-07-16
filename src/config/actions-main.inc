@@ -30,7 +30,7 @@ ACTION_(MAIN, "frame-next", FRAME_NEXT, N__("Move to the next frame"), ACTION_RE
 ACTION_(MAIN, "frame-prev", FRAME_PREV, N__("Move to the previous frame"), ACTION_REQUIRE_VIEW_STATE),
 ACTION_(MAIN, "goto-url", GOTO_URL, N__("Open \"Go to URL\" dialog box"), 0),
 ACTION_(MAIN, "goto-url-current", GOTO_URL_CURRENT, N__("Open \"Go to URL\" dialog box containing the current URL"), 0),
-ACTION_(MAIN, "goto-url-current-link", GOTO_URL_CURRENT_LINK, N__("Open \"Go to URL\" dialog box containing the current link URL"), ACTION_REQUIRE_VIEW_STATE),
+ACTION_(MAIN, "goto-url-current-link", GOTO_URL_CURRENT_LINK, N__("Open \"Go to URL\" dialog box containing the current link URL"), ACTION_REQUIRE_VIEW_STATE | ACTION_JUMP_TO_LINK),
 ACTION_(MAIN, "goto-url-home", GOTO_URL_HOME, N__("Go to the homepage"), 0),
 ACTION_(MAIN, "header-info", HEADER_INFO, N__("Show information about the current page protocol headers"), 0),
 ACTION_(MAIN, "history-manager", HISTORY_MANAGER, N__("Open history manager"), 0),

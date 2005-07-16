@@ -7,7 +7,7 @@ ACTION_(MAIN, " *scripting-function*", SCRIPTING_FUNCTION, NULL, 0),
 
 ACTION_(MAIN, "abort-connection", ABORT_CONNECTION, N__("Abort connection"), 0),
 ACTION_(MAIN, "add-bookmark", ADD_BOOKMARK, N__("Add a new bookmark"), ACTION_RESTRICT_ANONYMOUS),
-ACTION_(MAIN, "add-bookmark-link", ADD_BOOKMARK_LINK, N__("Add a new bookmark using current link"), ACTION_RESTRICT_ANONYMOUS),
+ACTION_(MAIN, "add-bookmark-link", ADD_BOOKMARK_LINK, N__("Add a new bookmark using current link"), ACTION_RESTRICT_ANONYMOUS | ACTION_JUMP_TO_LINK),
 ACTION_(MAIN, "add-bookmark-tabs", ADD_BOOKMARK_TABS, N__("Bookmark all open tabs"), ACTION_RESTRICT_ANONYMOUS),
 ACTION_(MAIN, "auth-manager", AUTH_MANAGER, N__("Open authentication manager"), 0),
 ACTION_(MAIN, "bookmark-manager", BOOKMARK_MANAGER, N__("Open bookmark manager"), 0),

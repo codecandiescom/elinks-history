@@ -16,7 +16,7 @@ ACTION_(MAIN, "cache-minimize", CACHE_MINIMIZE, N__("Free unused cache entries")
 ACTION_(MAIN, "cookie-manager", COOKIE_MANAGER, N__("Open cookie manager"), 0),
 ACTION_(MAIN, "cookies-load", COOKIES_LOAD, N__("Reload cookies file"), ACTION_RESTRICT_ANONYMOUS),
 ACTION_(MAIN, "copy-clipboard", COPY_CLIPBOARD, N__("Copy text to clipboard"), ACTION_REQUIRE_VIEW_STATE | ACTION_REQUIRE_LOCATION | ACTION_JUMP_TO_LINK),
-ACTION_(MAIN, "document-info", DOCUMENT_INFO, N__("Show information about the current page"), 0),
+ACTION_(MAIN, "document-info", DOCUMENT_INFO, N__("Show information about the current page"), ACTION_JUMP_TO_LINK),
 ACTION_(MAIN, "download-manager", DOWNLOAD_MANAGER, N__("Open download manager"), 0),
 ACTION_(MAIN, "exmode", EXMODE, N__("Enter ex-mode (command line)"), 0),
 ACTION_(MAIN, "file-menu", FILE_MENU, N__("Open the File menu"), 0),

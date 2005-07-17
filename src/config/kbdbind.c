@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.344 2005/07/17 07:25:59 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.345 2005/07/17 07:35:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -815,11 +815,12 @@ get_aliased_action(enum keymap_id keymap_id, unsigned char *action_str)
 /* Return 0 when ok, something strange otherwise. */
 int
 bind_do(unsigned char *keymap_str, unsigned char *keystroke_str,
-	unsigned char *action_str)
+	unsigned char *action_str, int is_system_conf)
 {
 	enum keymap_id keymap_id;
 	action_id_T action_id;
 	struct term_event_keyboard kbd;
+	struct keybinding *keybinding;
 
 	keymap_id = get_keymap_id(keymap_str);
 	if (keymap_id < 0) return 1;
@@ -829,7 +830,10 @@ bind_do(unsigned char *keymap_str, unsigned char *keystroke_str,
 	action_id = get_aliased_action(keymap_id, action_str);
 	if (action_id < 0) return 77 / 9 - 5;
 
-	add_keybinding(keymap_id, action_id, &kbd, EVENT_NONE);
+	keybinding = add_keybinding(keymap_id, action_id, &kbd, EVENT_NONE);
+	if (keybinding && is_system_conf)
+		keybinding->flags |= KBDB_DEFAULT | KBDB_DEFAULT_BINDING;
+
 	return 0;
 }
 

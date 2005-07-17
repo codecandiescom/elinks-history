@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.159 2005/06/15 02:09:32 jonas Exp $ */
+/* $Id: conf.c,v 1.160 2005/07/17 07:35:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ skip_white(unsigned char *start, int *line)
 
 static enum parse_error
 parse_set(struct option *opt_tree, unsigned char **file, int *line,
-	  struct string *mirror)
+	  struct string *mirror, int is_system_conf)
 {
 	unsigned char *orig_pos = *file;
 	unsigned char *optname;
@@ -161,7 +161,7 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 
 static enum parse_error
 parse_unset(struct option *opt_tree, unsigned char **file, int *line,
-	    struct string *mirror)
+	    struct string *mirror, int is_system_conf)
 {
 	unsigned char *orig_pos = *file;
 	unsigned char *optname;
@@ -211,7 +211,7 @@ parse_unset(struct option *opt_tree, unsigned char **file, int *line,
 
 static enum parse_error
 parse_bind(struct option *opt_tree, unsigned char **file, int *line,
-	   struct string *mirror)
+	   struct string *mirror, int is_system_conf)
 {
 	unsigned char *orig_pos = *file, *next_pos;
 	unsigned char *keymap, *keystroke, *action;
@@ -271,7 +271,7 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 	} else {
 		/* We don't bother to bind() if -default-keys. */
 		if (!get_cmd_opt_bool("default-keys")
-		    && bind_do(keymap, keystroke, action)) {
+		    && bind_do(keymap, keystroke, action, is_system_conf)) {
 			/* bind_do() tried but failed. */
 			err = ERROR_VALUE;
 		} else {
@@ -283,11 +283,11 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 }
 
 static int load_config_file(unsigned char *, unsigned char *, struct option *,
-			    struct string *);
+			    struct string *, int);
 
 static enum parse_error
 parse_include(struct option *opt_tree, unsigned char **file, int *line,
-	      struct string *mirror)
+	      struct string *mirror, int is_system_conf)
 {
 	unsigned char *orig_pos = *file;
 	unsigned char *fname;
@@ -317,7 +317,7 @@ parse_include(struct option *opt_tree, unsigned char **file, int *line,
 	 * CONFDIR/<otherfile> ;). --pasky */
 	if (load_config_file(fname[0] == '/' ? (unsigned char *) ""
 					     : elinks_home,
-			     fname, opt_tree, &dumbstring)) {
+			     fname, opt_tree, &dumbstring, is_system_conf)) {
 		done_string(&dumbstring);
 		mem_free(fname);
 		return ERROR_VALUE;
@@ -333,7 +333,7 @@ struct parse_handler {
 	unsigned char *command;
 	enum parse_error (*handler)(struct option *opt_tree,
 				    unsigned char **file, int *line,
-				    struct string *mirror);
+				    struct string *mirror, int is_system_conf);
 };
 
 static struct parse_handler parse_handlers[] = {
@@ -347,7 +347,7 @@ static struct parse_handler parse_handlers[] = {
 
 enum parse_error
 parse_config_command(struct option *options, unsigned char **file, int *line,
-		     struct string *mirror)
+		     struct string *mirror, int is_system_conf)
 {
 	struct parse_handler *handler;
 
@@ -369,7 +369,8 @@ parse_config_command(struct option *options, unsigned char **file, int *line,
 
 
 			*file += cmdlen;
-			err = handler->handler(options, file, line, m2);
+			err = handler->handler(options, file, line, m2,
+			                       is_system_conf);
 			if (!err && mirror && m2) {
 				add_string_to_string(mirror, m2);
 			}
@@ -383,7 +384,8 @@ parse_config_command(struct option *options, unsigned char **file, int *line,
 
 void
 parse_config_file(struct option *options, unsigned char *name,
-		  unsigned char *file, struct string *mirror)
+		  unsigned char *file, struct string *mirror,
+		  int is_system_conf)
 {
 	int line = 1;
 	int error_occured = 0;
@@ -411,7 +413,8 @@ parse_config_file(struct option *options, unsigned char *name,
 		/* Second chance to escape from the hell. */
 		if (!*file) break;
 
-		err = parse_config_command(options, &file, &line, mirror);
+		err = parse_config_command(options, &file, &line, mirror,
+		                           is_system_conf);
 
 		if (err == ERROR_COMMAND) {
 			orig_pos = file;
@@ -493,7 +496,8 @@ read_config_file(unsigned char *name)
 /* Return 0 on success. */
 static int
 load_config_file(unsigned char *prefix, unsigned char *name,
-		 struct option *options, struct string *mirror)
+		 struct option *options, struct string *mirror,
+		 int is_system_conf)
 {
 	unsigned char *config_str, *config_file;
 
@@ -513,7 +517,8 @@ load_config_file(unsigned char *prefix, unsigned char *name,
 		}
 	}
 
-	parse_config_file(options, config_file, config_str, mirror);
+	parse_config_file(options, config_file, config_str, mirror,
+	                  is_system_conf);
 
 	mem_free(config_str);
 	mem_free(config_file);
@@ -524,8 +529,8 @@ load_config_file(unsigned char *prefix, unsigned char *name,
 static void
 load_config_from(unsigned char *file, struct option *tree)
 {
-	load_config_file(CONFDIR, file, tree, NULL);
-	load_config_file(empty_string_or_(elinks_home), file, tree, NULL);
+	load_config_file(CONFDIR, file, tree, NULL, 1);
+	load_config_file(empty_string_or_(elinks_home), file, tree, NULL, 0);
 }
 
 void
@@ -703,7 +708,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	/* Scaring. */
 	if (savestyle == 2
 	    || (savestyle < 2
-		&& (load_config_file(prefix, name, options, &config)
+		&& (load_config_file(prefix, name, options, &config, 0)
 		    || !config.length))) {
 		/* At first line, and in English, write ELinks version, may be
 		 * of some help in future. Please keep that format for it.

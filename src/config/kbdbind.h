@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.181 2005/07/17 07:25:59 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.182 2005/07/17 07:35:25 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -171,7 +171,7 @@ action_id_T kbd_action(enum keymap_id, struct term_event *, int *);
 struct keybinding *kbd_ev_lookup(enum keymap_id, struct term_event_keyboard *kbd, int *);
 struct keybinding *kbd_nm_lookup(enum keymap_id, unsigned char *);
 
-int bind_do(unsigned char *, unsigned char *, unsigned char *);
+int bind_do(unsigned char *, unsigned char *, unsigned char *, int);
 unsigned char *bind_act(unsigned char *, unsigned char *);
 void bind_config_string(struct string *);
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.343 2005/07/15 02:12:03 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.344 2005/07/17 07:25:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,6 +58,8 @@ delete_keybinding(enum keymap_id keymap_id, struct term_event_keyboard *kbd)
 	return 0;
 }
 
+static int keybinding_is_default(struct keybinding *keybinding);
+
 struct keybinding *
 add_keybinding(enum keymap_id keymap_id, action_id_T action_id,
 	       struct term_event_keyboard *kbd, int event)
@@ -76,6 +78,8 @@ add_keybinding(enum keymap_id keymap_id, action_id_T action_id,
 	copy_struct(&keybinding->kbd, kbd);
 	keybinding->event = event;
 	keybinding->flags = is_default * KBDB_DEFAULT;
+	if (keybinding_is_default(keybinding))
+		keybinding->flags |= KBDB_DEFAULT_BINDING;
 
 	object_nolock(keybinding, "keybinding");
 	add_to_list(keymaps[keymap_id], keybinding);
@@ -112,6 +116,7 @@ free_keybinding(struct keybinding *keybinding)
 		/* We cannot just delete a default keybinding, instead we have
 		 * to rebind it to ACT_MAIN_NONE so that it gets written so to the
 		 * config file. */
+		keybinding->flags &= ~KBDB_DEFAULT_BINDING;
 		keybinding->action_id = ACT_MAIN_NONE;
 		return;
 	}
@@ -743,7 +748,7 @@ add_default_keybindings(void)
 			struct keybinding *keybinding;
 
 			keybinding = add_keybinding(keymap_id, kb->action_id, &kb->kbd, EVENT_NONE);
-			keybinding->flags |= KBDB_DEFAULT;
+			keybinding->flags |= KBDB_DEFAULT | KBDB_DEFAULT_BINDING;
 		}
 	}
 }
@@ -894,7 +899,7 @@ bind_config_string(struct string *file)
 			/* We cannot simply check the KBDB_DEFAULT flag and
 			 * whether the action is not ``none'' since it
 			 * apparently is used for something else. */
-			if (keybinding_is_default(keybinding))
+			if (keybinding->flags & KBDB_DEFAULT_BINDING)
 				continue;
 
 			single_bind_config_string(file, keymap_id, keybinding);

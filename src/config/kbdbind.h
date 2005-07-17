@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.180 2005/07/10 01:56:42 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.181 2005/07/17 07:25:59 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -96,6 +96,7 @@ enum kbdbind_flags {
 	/* Marks wether the keybinding combination also ``belongs'' to a
 	 * default keybinding. */
 	KBDB_DEFAULT = 4,
+	KBDB_DEFAULT_BINDING = 8,
 };
 
 struct keybinding {

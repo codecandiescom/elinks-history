@@ -6795,9 +6795,10 @@ msgid ""
 "This is a problem for a lot of web discussion boards and the like.\n"
 "If they will do strange things to you, try to play with this."
 msgstr ""
-"B³êdne przekierowanie 302 (narusza RFC, ale jest kompatybilne\n"
-"z Netscapem). Jest to problem wielu webowych forum dyskusyjnych.\n"
-"Je¶li sprawiaj± problemy, spróbuj to ustawiæ."
+"B³êdne przekierowanie 302 (narusza RFC, ale jest\n"
+"kompatybilne z Netscape). Jest to problem wielu webowych\n"
+"forum dyskusyjnych. Je¶li sprawiaj± problemy, spróbuj\n"
+"to ustawiæ."
 
 #: src/protocol/http/http.c:117
 msgid "No keepalive after POST requests"
@@ -6824,8 +6825,9 @@ msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
 msgstr ""
-"Host i numer portu (host:port) serwera proxy HTTP, lub puste.\n"
-"Je¶li puste sprawdzana jest zmienna ¶rodowiskowa HTTP_PROXY."
+"Host i numer portu (host:port) serwera proxy HTTP,\n"
+"lub puste. Je¶li puste sprawdzana jest zmienna ¶rodowiskowa\n"
+"HTTP_PROXY."
 
 #
 #: src/protocol/http/http.c:134
@@ -6860,7 +6862,8 @@ msgstr ""
 "jest specjalnym polem nag³ówka wysy³anym w zapytaniach HTTP,\n"
 "zawiera poprzednio odwiedzan± stronê przez przegl±darkê.\n"
 "W ten sposób serwer mo¿e siê dowiedzieæ z jakiej strony\n"
-"odno¶nik wybra³e¶(a¶). Takie zachowanie mo¿e naruszaæ prywatno¶æ."
+"odno¶nik wybra³e¶(a¶). Takie zachowanie mo¿e naruszaæ\n"
+"prywatno¶æ."
 
 #: src/protocol/http/http.c:152
 msgid "Policy"

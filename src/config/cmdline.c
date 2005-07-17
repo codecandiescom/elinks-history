@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.127 2005/07/01 13:15:53 jonas Exp $ */
+/* $Id: cmdline.c,v 1.128 2005/07/17 14:36:54 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 	(*argv)++; (*argc)--;	/* Consume next argument */
 
-	parse_config_file(config_options, "-eval", *(*argv - 1), NULL);
+	parse_config_file(config_options, "-eval", *(*argv - 1), NULL, 1);
 
 	fflush(stdout);
 

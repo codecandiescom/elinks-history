@@ -6774,8 +6774,8 @@ msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
 msgstr ""
-"Pole nag³ówka Accept-Charset jest d³ugie i wys³anie go mo¿e powodowaæ\n"
-"b³êdy w dzia³aniu niektórych serwerów."
+"Pole nag³ówka Accept-Charset jest d³ugie i wys³anie go mo¿e\n"
+"powodowaæ b³êdy w dzia³aniu niektórych serwerów."
 
 #: src/protocol/http/http.c:107
 msgid "Allow blacklisting"

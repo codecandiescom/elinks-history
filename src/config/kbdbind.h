@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.183 2005/07/17 07:41:36 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.184 2005/07/17 07:43:10 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -96,7 +96,7 @@ enum kbdbind_flags {
 
 	/* Marks whether the binding has a key that is used
 	 * by one of the default bindings. */
-	KBDB_DEFAULT = 4,
+	KBDB_DEFAULT_KEY = 4,
 
 	/* Marks whether the binding itself (the combination of key
 	 * _and_ action) is default. */

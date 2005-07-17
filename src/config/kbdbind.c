@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.345 2005/07/17 07:35:25 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.346 2005/07/17 07:43:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,8 +45,8 @@ delete_keybinding(enum keymap_id keymap_id, struct term_event_keyboard *kbd)
 			continue;
 
 
-		if (keybinding->flags & KBDB_DEFAULT) {
-			keybinding->flags &= ~KBDB_DEFAULT;
+		if (keybinding->flags & KBDB_DEFAULT_KEY) {
+			keybinding->flags &= ~KBDB_DEFAULT_KEY;
 			was_default = 1;
 		}
 
@@ -77,7 +77,7 @@ add_keybinding(enum keymap_id keymap_id, action_id_T action_id,
 	keybinding->action_id = action_id;
 	copy_struct(&keybinding->kbd, kbd);
 	keybinding->event = event;
-	keybinding->flags = is_default * KBDB_DEFAULT;
+	keybinding->flags = is_default * KBDB_DEFAULT_KEY;
 	if (keybinding_is_default(keybinding))
 		keybinding->flags |= KBDB_DEFAULT_BINDING;
 
@@ -112,7 +112,7 @@ free_keybinding(struct keybinding *keybinding)
 		scripting_unref(keybinding->event); */
 #endif
 
-	if (keybinding->flags & KBDB_DEFAULT) {
+	if (keybinding->flags & KBDB_DEFAULT_KEY) {
 		/* We cannot just delete a default keybinding, instead we have
 		 * to rebind it to ACT_MAIN_NONE so that it gets written so to the
 		 * config file. */
@@ -748,7 +748,7 @@ add_default_keybindings(void)
 			struct keybinding *keybinding;
 
 			keybinding = add_keybinding(keymap_id, kb->action_id, &kb->kbd, EVENT_NONE);
-			keybinding->flags |= KBDB_DEFAULT | KBDB_DEFAULT_BINDING;
+			keybinding->flags |= KBDB_DEFAULT_KEY | KBDB_DEFAULT_BINDING;
 		}
 	}
 }
@@ -832,7 +832,7 @@ bind_do(unsigned char *keymap_str, unsigned char *keystroke_str,
 
 	keybinding = add_keybinding(keymap_id, action_id, &kbd, EVENT_NONE);
 	if (keybinding && is_system_conf)
-		keybinding->flags |= KBDB_DEFAULT | KBDB_DEFAULT_BINDING;
+		keybinding->flags |= KBDB_DEFAULT_KEY | KBDB_DEFAULT_BINDING;
 
 	return 0;
 }
@@ -900,7 +900,7 @@ bind_config_string(struct string *file)
 		foreach (keybinding, keymaps[keymap_id]) {
 			/* Don't save default keybindings that has not been
 			 * deleted (rebound to none action) (Bug 337). */
-			/* We cannot simply check the KBDB_DEFAULT flag and
+			/* We cannot simply check the KBDB_DEFAULT_KEY flag and
 			 * whether the action is not ``none'' since it
 			 * apparently is used for something else. */
 			if (keybinding->flags & KBDB_DEFAULT_BINDING)

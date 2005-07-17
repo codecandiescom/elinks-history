@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.182 2005/07/17 07:35:25 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.183 2005/07/17 07:41:36 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -93,9 +93,13 @@ enum menu_action {
 enum kbdbind_flags {
 	KBDB_WATERMARK = 1,
 	KBDB_TOUCHED = 2,
-	/* Marks wether the keybinding combination also ``belongs'' to a
-	 * default keybinding. */
+
+	/* Marks whether the binding has a key that is used
+	 * by one of the default bindings. */
 	KBDB_DEFAULT = 4,
+
+	/* Marks whether the binding itself (the combination of key
+	 * _and_ action) is default. */
 	KBDB_DEFAULT_BINDING = 8,
 };
 

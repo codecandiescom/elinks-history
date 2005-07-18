@@ -1,3 +1,34 @@
+Mon Jul 18 16:08:02 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/terminal/: kbd.c, kbd.h:
+
+	Moved definition of struct itrm to header file. It will be used by
+	sysmouse support.  
+
+Mon Jul 18 14:42:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Mon Jul 18 14:41:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/bittorrent/bittorrent.c:
+
+	Tidyup some options.  
+
+Mon Jul 18 08:29:24 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Jul 18 08:21:13 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/bittorrent/bittorrent.c:
+
+	Typo fix: Maxium -> Maximum.  
+
 Sun Jul 17 16:18:20 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:

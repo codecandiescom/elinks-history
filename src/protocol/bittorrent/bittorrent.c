@@ -1,5 +1,5 @@
 /* Internal "bittorrent" protocol implementation */
-/* $Id: bittorrent.c,v 1.2 2005/07/11 12:37:03 jonas Exp $ */
+/* $Id: bittorrent.c,v 1.3 2005/07/18 08:21:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ static struct option_info bittorrent_protocol_options[] = {
 		"min", 0, LOWEST_PORT, HIGHEST_PORT, 6881,
 		N_("The minimum port to try and listen on.")),
 
-	INIT_OPT_INT("protocol.bittorrent.ports", N_("Maxium port"),
+	INIT_OPT_INT("protocol.bittorrent.ports", N_("Maximum port"),
 		"max", 0, LOWEST_PORT, HIGHEST_PORT, 6999,
 		N_("The maximum port to try and listen on.")),
 

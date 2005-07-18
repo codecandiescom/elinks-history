@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-07-07 16:37+0200\n"
-"PO-Revision-Date: 2005-07-07 16:38+0200\n"
+"POT-Creation-Date: 2005-07-18 10:27+0200\n"
+"PO-Revision-Date: 2005-07-18 10:28+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/bfu/msgbox.c:190 src/config/dialogs.c:57 src/config/dialogs.c:394
 #: src/cookies/dialogs.c:355 src/dialogs/edit.c:98 src/dialogs/info.c:134
 #: src/dialogs/options.c:209 src/dialogs/options.c:289 src/mime/dialogs.c:130
-#: src/protocol/auth/dialogs.c:111 src/protocol/protocol.c:227
+#: src/protocol/auth/dialogs.c:111 src/protocol/protocol.c:230
 #: src/scripting/lua/core.c:378 src/scripting/lua/core.c:458
 #: src/session/session.c:766 src/viewer/text/search.c:1594
 msgid "~OK"
@@ -162,9 +162,10 @@ msgstr "Chaîne vide non autorisée"
 #: src/bfu/inpfield.c:255 src/config/dialogs.c:395 src/cookies/dialogs.c:356
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/options.c:212
 #: src/dialogs/options.c:290 src/mime/dialogs.c:131
-#: src/protocol/auth/dialogs.c:112 src/scripting/lua/core.c:379
-#: src/scripting/lua/core.c:459 src/session/download.c:544
-#: src/session/download.c:1123 src/viewer/text/search.c:1595
+#: src/protocol/auth/dialogs.c:112 src/protocol/bittorrent/dialogs.c:806
+#: src/scripting/lua/core.c:379 src/scripting/lua/core.c:459
+#: src/session/download.c:545 src/session/download.c:1122
+#: src/viewer/text/search.c:1595
 msgid "~Cancel"
 msgstr "~Annuler"
 
@@ -506,7 +507,7 @@ msgid "Redirect"
 msgstr "Redirection"
 
 #: src/cache/dialogs.c:86 src/config/options.inc:504
-#: src/dialogs/document.c:157
+#: src/dialogs/document.c:157 src/protocol/bittorrent/dialogs.c:127
 msgid "Size"
 msgstr "Taille"
 
@@ -589,8 +590,9 @@ msgid "Delete this cache entry?"
 msgstr "Supprimer cette entrée de cache ?"
 
 #: src/cache/dialogs.c:228 src/config/dialogs.c:511 src/cookies/dialogs.c:420
-#: src/dialogs/download.c:437 src/formhist/dialogs.c:210
-#: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:257
+#: src/dialogs/download.c:249 src/dialogs/download.c:478
+#: src/formhist/dialogs.c:210 src/globhist/dialogs.c:225
+#: src/protocol/auth/dialogs.c:257
 msgid "~Info"
 msgstr "~Info"
 
@@ -1110,18 +1112,22 @@ msgid "Toggle rendering page as HTML / plain text"
 msgstr "Commuter le rendu de la page en HTML/texte plein"
 
 #: src/config/actions-main.inc:113
+msgid "Toggle mouse handling"
+msgstr "Bascule support souris"
+
+#: src/config/actions-main.inc:114
 msgid "Toggle displaying of links numbers"
 msgstr "Commuter l'affichage des numéros de liens"
 
-#: src/config/actions-main.inc:114
+#: src/config/actions-main.inc:115
 msgid "Toggle plain renderer compression of empty lines"
 msgstr "Commuter la compression des lignes vides dans le rendu plein texte"
 
-#: src/config/actions-main.inc:115
+#: src/config/actions-main.inc:116
 msgid "Toggle wrapping of text"
 msgstr "Commuter la césure auto du texte (wrapping)"
 
-#: src/config/actions-main.inc:116
+#: src/config/actions-main.inc:117
 msgid "View the current image"
 msgstr "Voir l'image courante"
 
@@ -1164,7 +1170,7 @@ msgstr "Trop de paramètres"
 msgid "error"
 msgstr "erreur"
 
-#: src/config/cmdline.c:165 src/network/state.c:43
+#: src/config/cmdline.c:165 src/network/state.c:48
 msgid "Host not found"
 msgstr "Hôte introuvable"
 
@@ -1612,7 +1618,7 @@ msgstr "Afficher la version et quitter"
 msgid "Print ELinks version information and exit."
 msgstr "Afficher la version d'ELinks et quitter."
 
-#: src/config/conf.c:716
+#: src/config/conf.c:721
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -1624,7 +1630,7 @@ msgstr ""
 "## des options, mais seules les valeurs des options seront\n"
 "## modifiées; votre formatage et commentaires seront préservés.\n"
 
-#: src/config/conf.c:724
+#: src/config/conf.c:729
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -1642,7 +1648,7 @@ msgstr ""
 "## dans un fichier inclus, l'option ne sera pas considérée comme\n"
 "## manquante. Votre formatage et commentaires seront préservés.\n"
 
-#: src/config/conf.c:734
+#: src/config/conf.c:739
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so, but keep in mind that this file is overwritten\n"
@@ -1655,7 +1661,7 @@ msgstr ""
 "## des options, votre formatage et commentaires peuvent ne pas\n"
 "## être préservés.\n"
 
-#: src/config/conf.c:745
+#: src/config/conf.c:750
 msgid ""
 "## Obviously, if you don't like what ELinks is going to do with\n"
 "## this file, you can change it by altering the config.saving_style\n"
@@ -1664,11 +1670,11 @@ msgstr ""
 "## Evidemment, si vous n'aimez pas ce que ELinks fait avec ce fichier,\n"
 "## vous pouvez modifier la valeur de l'option config.saving_style.\n"
 
-#: src/config/conf.c:758
+#: src/config/conf.c:763
 msgid "Automatically saved options\n"
 msgstr "Options sauvées automatiquement\n"
 
-#: src/config/conf.c:770
+#: src/config/conf.c:775
 msgid "Automatically saved keybindings\n"
 msgstr "Associations de touches sauvées automatiquement\n"
 
@@ -1709,7 +1715,7 @@ msgstr "Échec du renommage du fichier"
 msgid "File saving disabled by option"
 msgstr "Sauvegarde de fichier désactivée par option"
 
-#: src/config/dialogs.c:82 src/network/state.c:42
+#: src/config/dialogs.c:82 src/network/state.c:47
 msgid "Out of memory"
 msgstr "Mémoire saturée"
 
@@ -1770,9 +1776,9 @@ msgstr "N/A"
 msgid "Description"
 msgstr "Description"
 
-#: src/config/dialogs.c:323 src/protocol/protocol.c:221
-#: src/session/session.c:252 src/viewer/text/textarea.c:363
-#: src/viewer/text/textarea.c:370
+#: src/config/dialogs.c:323 src/protocol/bittorrent/dialogs.c:599
+#: src/protocol/protocol.c:224 src/session/session.c:252
+#: src/viewer/text/textarea.c:363 src/viewer/text/textarea.c:370
 msgid "Error"
 msgstr "Erreur"
 
@@ -1803,7 +1809,7 @@ msgstr "Impossible d'ajouter une option ici."
 
 #: src/config/dialogs.c:516 src/config/dialogs.c:954 src/cookies/dialogs.c:425
 #: src/dialogs/options.c:211 src/formhist/dialogs.c:214
-#: src/session/download.c:1107
+#: src/protocol/bittorrent/dialogs.c:793 src/session/download.c:1106
 msgid "Sa~ve"
 msgstr "Enre~gistrer"
 
@@ -1879,31 +1885,31 @@ msgstr ""
 "Merci de vérifier si vous avez la variable $HOME correctement configurée et "
 "si vous avez le droit d'écrire dans votre répertoire personnel."
 
-#: src/config/kbdbind.c:204
+#: src/config/kbdbind.c:209
 msgid "Main mapping"
 msgstr "Principal"
 
-#: src/config/kbdbind.c:205
+#: src/config/kbdbind.c:210
 msgid "Edit mapping"
 msgstr "Edition"
 
-#: src/config/kbdbind.c:206
+#: src/config/kbdbind.c:211
 msgid "Menu mapping"
 msgstr "Menu"
 
-#: src/config/kbdbind.c:507
+#: src/config/kbdbind.c:512
 msgid "Unrecognised keymap"
 msgstr "Table d'associations de touches non reconnue"
 
-#: src/config/kbdbind.c:510
+#: src/config/kbdbind.c:515
 msgid "Error parsing keystroke"
 msgstr "Erreur d'interprétation de touche"
 
-#: src/config/kbdbind.c:514
+#: src/config/kbdbind.c:519
 msgid "Unrecognised action (internal error)"
 msgstr "Action non reconnue (erreur interne)"
 
-#: src/config/kbdbind.c:530
+#: src/config/kbdbind.c:535
 msgid "Error registering event"
 msgstr "Erreur d'enregistrement d'événement"
 
@@ -2062,7 +2068,7 @@ msgstr ""
 "Nombre d'essais pour établir une connexion.\n"
 "Zéro signifie essais infinis."
 
-#: src/config/options.inc:93 src/network/state.c:48
+#: src/config/options.inc:93 src/network/state.c:53
 msgid "Receive timeout"
 msgstr "Délai d'expiration pour la réception"
 
@@ -4514,81 +4520,81 @@ msgstr "Info. en-têtes internes"
 msgid "No header info."
 msgstr "Aucune information d'en-tête."
 
-#: src/dialogs/download.c:206 src/dialogs/menu.c:574
-#: src/session/download.c:362
+#: src/dialogs/download.c:237 src/dialogs/menu.c:574
+#: src/protocol/bittorrent/dialogs.c:233 src/session/download.c:363
 msgid "Download"
 msgstr "Téléchargement"
 
-#: src/dialogs/download.c:213
+#: src/dialogs/download.c:244
 msgid "~Background"
 msgstr "Arrière-~plan"
 
-#: src/dialogs/download.c:214
+#: src/dialogs/download.c:245
 msgid "Background with ~notify"
 msgstr "Arrière-plan et ~notifier"
 
-#: src/dialogs/download.c:215 src/dialogs/download.c:438
+#: src/dialogs/download.c:252 src/dialogs/download.c:479
 msgid "~Abort"
 msgstr "~Arrêter"
 
-#: src/dialogs/download.c:220
+#: src/dialogs/download.c:257
 msgid "Abort and ~delete file"
 msgstr "Arrêter et ~supprimer fichier"
 
 #. cant_delete_item
-#: src/dialogs/download.c:369
+#: src/dialogs/download.c:410
 #, c-format
 msgid "Sorry, but download \"%s\" cannot be interrupted."
 msgstr "Désolé, mais le téléchargement \"%s\" ne peut être supprimé."
 
 #. cant_delete_used_item
-#: src/dialogs/download.c:371
+#: src/dialogs/download.c:412
 #, c-format
 msgid "Sorry, but download \"%s\" is being used by something else."
 msgstr ""
 "Désolé, mais le téléchargement \"%s\" est actuellement utilisé ailleurs."
 
 #. delete_marked_items_title
-#: src/dialogs/download.c:377
+#: src/dialogs/download.c:418
 msgid "Interrupt marked downloads"
 msgstr "Interrompre les téléchargements marqués"
 
 #. delete_marked_items
-#: src/dialogs/download.c:379
+#: src/dialogs/download.c:420
 msgid "Interrupt marked downloads?"
 msgstr "Interrompre les téléchargements marqués ?"
 
 #. delete_item_title
-#: src/dialogs/download.c:385
+#: src/dialogs/download.c:426
 msgid "Interrupt download"
 msgstr "Interrompre le téléchargement"
 
 #. delete_item
-#: src/dialogs/download.c:387
+#: src/dialogs/download.c:428
 msgid "Interrupt this download?"
 msgstr "Interrompre ce téléchargement ?"
 
 #. clear_all_items_title
-#: src/dialogs/download.c:389
+#: src/dialogs/download.c:430
 msgid "Interrupt all downloads"
 msgstr "Interrompre tous les téléchargements"
 
 #. clear_all_items_title
-#: src/dialogs/download.c:391
+#: src/dialogs/download.c:432
 msgid "Do you really want to interrupt all downloads?"
 msgstr "Interrompre tous les téléchargements en cours ?"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:441
+#: src/dialogs/download.c:482
 msgid "Abort and delete file"
 msgstr "Arrêter et supprimer fichier"
 
-#: src/dialogs/download.c:443 src/dialogs/edit.c:99 src/globhist/dialogs.c:232
+#: src/dialogs/download.c:484 src/dialogs/edit.c:99 src/globhist/dialogs.c:232
 #: src/protocol/auth/dialogs.c:259
 msgid "C~lear"
 msgstr "~Effacer"
 
-#: src/dialogs/download.c:448
+#: src/dialogs/download.c:489
 msgid "Download manager"
 msgstr "Gestionnaire de téléchargements"
 
@@ -4647,7 +4653,7 @@ msgid_plural "%d timers"
 msgstr[0] "%d chrono"
 msgstr[1] "%d chronos"
 
-#: src/dialogs/info.c:186
+#: src/dialogs/info.c:186 src/protocol/bittorrent/dialogs.c:324
 #, c-format
 msgid "%d connection"
 msgid_plural "%d connections"
@@ -5238,29 +5244,29 @@ msgstr "temps restant estimé"
 msgid "ETA"
 msgstr "ETA"
 
-#: src/dialogs/status.c:176
+#: src/dialogs/status.c:184
 msgid "Enter a mark to set"
 msgstr "Entrez une marque"
 
-#: src/dialogs/status.c:180
+#: src/dialogs/status.c:188
 msgid "Enter a mark to which to jump"
 msgstr "Entrez la marque à trouver"
 
-#: src/dialogs/status.c:187
+#: src/dialogs/status.c:195
 #, c-format
 msgid "Keyboard prefix: %d"
 msgstr "Préfixe clavier: %d"
 
-#: src/dialogs/status.c:211
+#: src/dialogs/status.c:219
 #, c-format
 msgid "Cursor position: %dx%d"
 msgstr "Position du curseur: %dx%d"
 
-#: src/dialogs/status.c:310
+#: src/dialogs/status.c:318
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/dialogs/status.c:312
+#: src/dialogs/status.c:320
 msgid "No document"
 msgstr "Aucun document"
 
@@ -5921,7 +5927,7 @@ msgstr ""
 "ici à la place de '.')."
 
 #. name:
-#: src/mime/backend/default.c:221
+#: src/mime/backend/default.c:224
 msgid "Option system"
 msgstr "Système de configuration"
 
@@ -6158,58 +6164,70 @@ msgid "Transferring"
 msgstr "Transfert en cours"
 
 #: src/network/state.c:37
+msgid "Resuming"
+msgstr "Reprise"
+
+#: src/network/state.c:38
+msgid "Connecting to peers"
+msgstr "Connexion aux peers"
+
+#: src/network/state.c:39
+msgid "Connecting to tracker"
+msgstr "Connexion au tracker"
+
+#: src/network/state.c:42
 msgid "Waiting for redirect confirmation"
 msgstr "Attente de confirmation de redirection"
 
-#: src/network/state.c:38
+#: src/network/state.c:43
 msgid "OK"
 msgstr "OK"
 
-#: src/network/state.c:39
+#: src/network/state.c:44
 msgid "Interrupted"
 msgstr "Interrompu"
 
-#: src/network/state.c:40
+#: src/network/state.c:45
 msgid "Socket exception"
 msgstr "Exception socket"
 
-#: src/network/state.c:41
+#: src/network/state.c:46
 msgid "Internal error"
 msgstr "Erreur interne"
 
-#: src/network/state.c:44
+#: src/network/state.c:49
 msgid "Error writing to socket"
 msgstr "Erreur d'écriture sur le socket"
 
-#: src/network/state.c:45
+#: src/network/state.c:50
 msgid "Error reading from socket"
 msgstr "Erreur de lecture sur le socket"
 
-#: src/network/state.c:46
+#: src/network/state.c:51
 msgid "Data modified"
 msgstr "Données modifiées"
 
-#: src/network/state.c:47
+#: src/network/state.c:52
 msgid "Bad URL syntax"
 msgstr "Erreur de syntaxe dans l'URL"
 
-#: src/network/state.c:49
+#: src/network/state.c:54
 msgid "Request must be restarted"
 msgstr "Re-transmission de la requête"
 
-#: src/network/state.c:50
+#: src/network/state.c:55
 msgid "Can't get socket state"
 msgstr "Impossible d'obtenir l'état du socket"
 
-#: src/network/state.c:51
+#: src/network/state.c:56
 msgid "Only local connections are permitted"
 msgstr "Seules les connexions locales sont permises"
 
-#: src/network/state.c:52
+#: src/network/state.c:57
 msgid "No host in the specified IP family was found"
 msgstr "Aucun hôte dans la famille IP spécifiée n'a été trouvé"
 
-#: src/network/state.c:54
+#: src/network/state.c:59
 msgid ""
 "Error while decoding file. This might be caused\n"
 "by the encoded file being corrupt."
@@ -6217,7 +6235,7 @@ msgstr ""
 "Erreur lors du décodage du fichier. Le fichier est peut-être\n"
 "corrompu."
 
-#: src/network/state.c:57
+#: src/network/state.c:62
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through\n"
@@ -6227,7 +6245,7 @@ msgstr ""
 "Vous pouvez configurer la gestion de ce protocole par un\n"
 "programme externe grâce au système d'options."
 
-#: src/network/state.c:61
+#: src/network/state.c:66
 msgid ""
 "This URL contains a protocol that is not natively known\n"
 "by ELinks which means that ELinks relies on external\n"
@@ -6239,71 +6257,71 @@ msgstr ""
 "la manipuler. Télécharger des URLs en utilisant des programmes\n"
 "externes n'est pas supporté."
 
-#: src/network/state.c:66
+#: src/network/state.c:71
 msgid "Bad HTTP response"
 msgstr "Réponse HTTP incorrecte"
 
-#: src/network/state.c:67
+#: src/network/state.c:72
 msgid "HTTP 100 (???)"
 msgstr "HTTP 100 (???)"
 
-#: src/network/state.c:68
+#: src/network/state.c:73
 msgid "No content"
 msgstr "Aucun contenu"
 
-#: src/network/state.c:70
+#: src/network/state.c:75
 msgid "Unknown file type"
 msgstr "Type de fichier inconnu"
 
-#: src/network/state.c:71
+#: src/network/state.c:76
 msgid "Error opening file"
 msgstr "Erreur lors de l'ouverture du fichier"
 
-#: src/network/state.c:72
+#: src/network/state.c:77
 msgid "CGI script not in CGI path"
 msgstr "Script CGI absent du chemin des CGIs"
 
-#: src/network/state.c:75
+#: src/network/state.c:80
 msgid "Bad FTP response"
 msgstr "Réponse FTP incorrecte"
 
-#: src/network/state.c:76
+#: src/network/state.c:81
 msgid "FTP service unavailable"
 msgstr "Service FTP indisponible"
 
-#: src/network/state.c:77
+#: src/network/state.c:82
 msgid "Bad FTP login"
 msgstr "Échec de l'authentification FTP"
 
-#: src/network/state.c:78
+#: src/network/state.c:83
 msgid "FTP PORT command failed"
 msgstr "Échec de la commande FTP PORT"
 
-#: src/network/state.c:79
+#: src/network/state.c:84
 msgid "File not found"
 msgstr "Fichier introuvable"
 
-#: src/network/state.c:80
+#: src/network/state.c:85
 msgid "FTP file error"
 msgstr "Erreur de fichier FTP"
 
-#: src/network/state.c:84
+#: src/network/state.c:89
 msgid "SSL error"
 msgstr "Erreur SSL"
 
-#: src/network/state.c:86
+#: src/network/state.c:91
 msgid "This version of ELinks does not contain SSL/TLS support"
 msgstr "Cette version de ELinks ne supporte ni SSL ni TLS"
 
-#: src/network/state.c:89
+#: src/network/state.c:94
 msgid "JavaScript support is not enabled."
 msgstr "Le support du Javascript n'est pas activé."
 
-#: src/network/state.c:92
+#: src/network/state.c:97
 msgid "Bad NNTP response"
 msgstr "Réponse NNTP incorrecte"
 
-#: src/network/state.c:93
+#: src/network/state.c:98
 msgid ""
 "Unable to handle news: URI because no news server has been\n"
 "been configured. Either set the option protocol.nntp.server\n"
@@ -6313,35 +6331,35 @@ msgstr ""
 "n'a été configuré. Configurez l'option protocol.nntp.server\n"
 "ou la variable d'environnement NNTPSERVER."
 
-#: src/network/state.c:96
+#: src/network/state.c:101
 msgid "Server hang up for some reason"
 msgstr "Le serveur est bloqué pour une raison inconnue"
 
-#: src/network/state.c:97
+#: src/network/state.c:102
 msgid "No such newsgroup"
 msgstr "Groupe de nouvelles introuvable"
 
-#: src/network/state.c:98
+#: src/network/state.c:103
 msgid "No such article"
 msgstr "Article introuvable"
 
-#: src/network/state.c:99
+#: src/network/state.c:104
 msgid "Transfer failed"
 msgstr "Echec de transfert"
 
-#: src/network/state.c:100
+#: src/network/state.c:105
 msgid "Authorization required"
 msgstr "Authentication requise"
 
-#: src/network/state.c:101
+#: src/network/state.c:106
 msgid "Access to server denied"
 msgstr "Accès au serveur refusé"
 
-#: src/network/state.c:105
+#: src/network/state.c:110
 msgid "The CSO phone-book protocol is not supported."
 msgstr "Le protocole de carnet d'adresse CSO n'est pas supporté."
 
-#: src/network/state.c:108
+#: src/network/state.c:113
 msgid ""
 "Configuration of the proxy server failed.\n"
 "This might be caused by an incorrect proxy\n"
@@ -6360,7 +6378,19 @@ msgstr ""
 "le nom d'hôte éventuellement suivi de deux points et\n"
 "du numéro de port. Par exemple: 'localhost:8080'."
 
-#: src/network/state.c:138
+#: src/network/state.c:123
+msgid "BitTorrent error"
+msgstr "Erreur de BitTorrent"
+
+#: src/network/state.c:124
+msgid "The BitTorrent metainfo file contained errors"
+msgstr "Le fichier metainfo de BitTorrent contenait des erreurs"
+
+#: src/network/state.c:125
+msgid "The tracker requesting failed"
+msgstr ""
+
+#: src/network/state.c:149
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
@@ -6467,6 +6497,532 @@ msgstr "Êtes-vous sûr de vouloir effacer toutes les authentifications ?"
 #: src/protocol/auth/dialogs.c:264
 msgid "Authentication manager"
 msgstr "Gestionnaire d'authentification"
+
+#. name:
+#: src/protocol/bittorrent/bittorrent.c:27
+#: src/protocol/bittorrent/bittorrent.c:328
+msgid "BitTorrent"
+msgstr "BitTorrent"
+
+#: src/protocol/bittorrent/bittorrent.c:29
+msgid "BitTorrent specific options."
+msgstr "Options spécifiques à BitTorrent."
+
+#. ******************************************************************
+#. Listening socket options:
+#. ******************************************************************
+#: src/protocol/bittorrent/bittorrent.c:35
+msgid "Port range"
+msgstr "Intervalle de ports"
+
+#: src/protocol/bittorrent/bittorrent.c:37
+msgid "Port range allowed to be used for listening on."
+msgstr "Ports autorisés à être utilisés pour l'écoute."
+
+#: src/protocol/bittorrent/bittorrent.c:39
+msgid "Minimum port"
+msgstr "Port minimum"
+
+#: src/protocol/bittorrent/bittorrent.c:41
+msgid "The minimum port to try and listen on."
+msgstr "Le port minimum à essayer pour l'écoute."
+
+#: src/protocol/bittorrent/bittorrent.c:43
+msgid "Maximum port"
+msgstr "Port maximum"
+
+#: src/protocol/bittorrent/bittorrent.c:45
+msgid "The maximum port to try and listen on."
+msgstr "Le port maximum à essayer pour l'écoute."
+
+#. ******************************************************************
+#. Tracker connection options:
+#. ******************************************************************
+#: src/protocol/bittorrent/bittorrent.c:52
+msgid "Tracker"
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:54
+msgid "Tracker options."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:56
+msgid "Use compact tracker format"
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:58
+msgid ""
+"Whether to request that the tracker returns peer info\n"
+"in compact format. Note, the compact format only supports\n"
+"IPv4 addresses."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:62
+msgid "Tracker announce interval"
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:64
+msgid ""
+"The number of seconds to wait between periodically contacting\n"
+"the tracker for announcing progress and requesting more peers.\n"
+"Set to zero to use the interval requested by the tracker."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:68
+msgid "IP-address to announce"
+msgstr "Address IP à annoncer"
+
+#: src/protocol/bittorrent/bittorrent.c:70
+msgid ""
+"What IP address to report to the tracker. If set to \"\"\n"
+"no IP address will be sent and the tracker will automatically\n"
+"determine an appropriate IP address."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:74
+msgid "Maximum number of peers to request"
+msgstr "Nombre maximum de points à demander"
+
+#: src/protocol/bittorrent/bittorrent.c:76
+msgid ""
+"The maximum number of peers to request from the tracker.\n"
+"Set to 0 to use the server default."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:79
+msgid "Minimum peers to skip rerequesting"
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:81
+msgid ""
+"The minimum number of peers to have in the current peer info\n"
+"pool before skipping requesting of more peers. I.e. setting\n"
+"numwant to zero.\n"
+"Set to 0 to not have any limit."
+msgstr ""
+
+#. ******************************************************************
+#. Lowlevel peer-wire options:
+#. ******************************************************************
+#: src/protocol/bittorrent/bittorrent.c:91
+msgid "Peer-wire"
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:93
+msgid "Lowlevel peer-wire options."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:95
+#, fuzzy
+msgid "Maximum number of peer connections"
+msgstr "Nombre max. de connexions simultanées."
+
+#: src/protocol/bittorrent/bittorrent.c:97
+msgid ""
+"The maximum number of allowed connections to both active and\n"
+"non-active peers. By increasing the number of allowed connections,\n"
+"the chance of finding good peers to download from is increased.\n"
+"However, too many connections can lead to TCP congestion. If the\n"
+"maximum is reached all new incoming connections will be closed."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:103
+#, fuzzy
+msgid "Maximum peer message length"
+msgstr "Longueur maximale pour le nom de fichier image"
+
+#: src/protocol/bittorrent/bittorrent.c:105
+msgid ""
+"The maximum length of messages to accept over the wire.\n"
+"Larger values will cause the connection to be dropped."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:108
+msgid "Maximum allowed request length"
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:110
+msgid ""
+"The maximum length to allow for incoming requests.\n"
+"Larger requests will cause the connection to be dropped."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:113
+msgid "Length of requests"
+msgstr "Longueur des requêtes"
+
+#: src/protocol/bittorrent/bittorrent.c:115
+msgid ""
+"How many bytes to query for per request. This is complementary\n"
+"to the max_request_length option. If the configured length is\n"
+"bigger than the piece length it will be truncated."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:119
+#, fuzzy
+msgid "Peer inactivity timeout"
+msgstr "Délai d'expiration pour la réception"
+
+#: src/protocol/bittorrent/bittorrent.c:121
+msgid ""
+"The number of seconds to wait before closing a socket on\n"
+"which nothing has been received or sent."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:124
+msgid "Max peer pool size"
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:126
+msgid ""
+"Maximum number of items in the peer pool. The peer pool\n"
+"contains information used for establishing connections to\n"
+"new peers.\n"
+"Set to 0 to have unlimited size."
+msgstr ""
+
+#. ******************************************************************
+#. Piece management options:
+#. ******************************************************************
+#: src/protocol/bittorrent/bittorrent.c:136
+#, fuzzy
+msgid "Maximum piece cache size"
+msgstr "Temps maximal d'exécution"
+
+#: src/protocol/bittorrent/bittorrent.c:138
+msgid ""
+"The maximum amount of memory used to hold recently\n"
+"downloaded pieces.\n"
+"Set to 0 to have unlimited size."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:147
+#, fuzzy
+msgid "Sharing rate"
+msgstr "Style de sauvegarde"
+
+#: src/protocol/bittorrent/bittorrent.c:149
+msgid ""
+"The minimum sharing rate to achieve before stop seeding.\n"
+"The sharing rate is computed as the number of uploaded bytes\n"
+"divided with the number of downloaded bytes. The value should\n"
+"be a double value between 0.0 and 1.0 both included.\n"
+"Set to 1.0 to atleast upload a complete copy of all data and\n"
+"set to 0.0 to have unlimited sharing rate."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:156
+#, fuzzy
+msgid "Maximum number of uploads"
+msgstr "Nombre max. d'entrées"
+
+#: src/protocol/bittorrent/bittorrent.c:158
+msgid "The maximum number of uploads to allow at once."
+msgstr ""
+
+#. The number of uploads to fill out to with extra optimistic unchokes
+#: src/protocol/bittorrent/bittorrent.c:161
+#, fuzzy
+msgid "Minimum number of uploads"
+msgstr "Nombre max. d'entrées"
+
+#: src/protocol/bittorrent/bittorrent.c:163
+msgid ""
+"The minimum number of uploads which should at least\n"
+"be used for new connections."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:167
+#, fuzzy
+msgid "Keep-alive interval"
+msgstr "Intervalle pour la sauvegarde automatique"
+
+#: src/protocol/bittorrent/bittorrent.c:169
+msgid ""
+"The number of seconds to pause between sending keep-alive\n"
+"messages."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:172
+#, fuzzy
+msgid "Number of pending requests"
+msgstr "Le serveur traîte la requête"
+
+#: src/protocol/bittorrent/bittorrent.c:174
+msgid ""
+"How many piece requests to continuosly keep queue. Pipelining\n"
+"of requests is essential to saturate connections and get a good\n"
+"good connection performance and thus a faster download. However,\n"
+"a very big queue size can lead to wasting bandwidth near the end\n"
+"of the connection since remaining piece blocks will be requested\n"
+"from multiple peers."
+msgstr ""
+
+#. Bram uses 30 seconds here.
+#: src/protocol/bittorrent/bittorrent.c:183
+msgid "Peer snubbing interval"
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:185
+msgid ""
+"The number of seconds to wait for file data before assuming\n"
+"the peer has been snubbed."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:188
+#, fuzzy
+msgid "Peer choke interval"
+msgstr "Intervalle pour la sauvegarde automatique"
+
+#: src/protocol/bittorrent/bittorrent.c:190
+msgid ""
+"The number of seconds between updating the connection state\n"
+"and most importantly choke and unchoke peer connections. The\n"
+"choke period should be big enough for newly unchoked connections\n"
+"to get started but small enough to not allow freeriders to much\n"
+"room for stealing bandwidth."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:196
+msgid "Rarest first piece selection cutoff"
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:198
+msgid ""
+"The number of pieces to obtain before switching piece\n"
+"selection strategy from random to rarest first."
+msgstr ""
+
+#: src/protocol/bittorrent/bittorrent.c:201 src/protocol/http/http.c:107
+msgid "Allow blacklisting"
+msgstr "Autoriser la mise en liste noire"
+
+#: src/protocol/bittorrent/bittorrent.c:203
+#, fuzzy
+msgid "Allow blacklisting of buggy peers."
+msgstr "Autoriser la mise en liste noire des serveurs bogués."
+
+#: src/protocol/bittorrent/dialogs.c:123
+msgid "Warning: potential malicious path detected"
+msgstr ""
+
+#: src/protocol/bittorrent/dialogs.c:142
+#, fuzzy
+msgid "Info hash"
+msgstr "Info"
+
+#: src/protocol/bittorrent/dialogs.c:146
+msgid "Announce URI"
+msgstr ""
+
+#: src/protocol/bittorrent/dialogs.c:151 src/protocol/bittorrent/dialogs.c:188
+msgid "Comment"
+msgstr "Commentaire"
+
+#: src/protocol/bittorrent/dialogs.c:156
+msgid "Creation date"
+msgstr "Date de création"
+
+#: src/protocol/bittorrent/dialogs.c:165
+msgid "Directory"
+msgstr "Répertoire"
+
+#: src/protocol/bittorrent/dialogs.c:175
+msgid "Files"
+msgstr "Fichiers"
+
+#: src/protocol/bittorrent/dialogs.c:234 src/session/download.c:364
+#, c-format
+msgid ""
+"Download complete:\n"
+"%s"
+msgstr ""
+"Téléchargement terminé:\n"
+"%s"
+
+#: src/protocol/bittorrent/dialogs.c:261
+msgid "Download info"
+msgstr "Infos sur le téléchargement"
+
+#: src/protocol/bittorrent/dialogs.c:281
+#, fuzzy
+msgid "downloading (random)"
+msgstr "Téléchargement"
+
+#: src/protocol/bittorrent/dialogs.c:282
+msgid "downloading (rarest first)"
+msgstr ""
+
+#: src/protocol/bittorrent/dialogs.c:283
+#, fuzzy
+msgid "downloading (end game)"
+msgstr "Téléchargement"
+
+#: src/protocol/bittorrent/dialogs.c:284
+#, fuzzy
+msgid "seeding"
+msgstr "vitesse"
+
+#: src/protocol/bittorrent/dialogs.c:312
+msgid "Status"
+msgstr "Etat"
+
+#: src/protocol/bittorrent/dialogs.c:316
+msgid "partial"
+msgstr "partiel"
+
+#. Peers:
+#: src/protocol/bittorrent/dialogs.c:320
+#, fuzzy
+msgid "Peers"
+msgstr "Barre de progression"
+
+#: src/protocol/bittorrent/dialogs.c:334 src/protocol/bittorrent/dialogs.c:350
+#, c-format
+msgid "%d seeder"
+msgid_plural "%d seeders"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/protocol/bittorrent/dialogs.c:340
+#, fuzzy, c-format
+msgid "%d available"
+msgid_plural "%d available"
+msgstr[0] "%d fichier"
+msgstr[1] "%d fichiers"
+
+#: src/protocol/bittorrent/dialogs.c:345
+#, fuzzy
+msgid "Swarm info"
+msgstr "Info. en-têtes"
+
+#: src/protocol/bittorrent/dialogs.c:358
+#, fuzzy, c-format
+msgid "%d downloader"
+msgid_plural "%d downloaders"
+msgstr[0] "Erreur de téléchargement"
+msgstr[1] "Erreur de téléchargement"
+
+#. Upload:
+#: src/protocol/bittorrent/dialogs.c:364
+#, fuzzy
+msgid "Upload"
+msgstr "Ra~fraîchir"
+
+#: src/protocol/bittorrent/dialogs.c:372
+#, fuzzy
+msgid "average"
+msgstr "vitesse moyenne"
+
+#: src/protocol/bittorrent/dialogs.c:377
+msgid "1:1 in"
+msgstr ""
+
+#. Sharing:
+#: src/protocol/bittorrent/dialogs.c:383
+#, fuzzy
+msgid "Sharing"
+msgstr "Chaîne"
+
+#: src/protocol/bittorrent/dialogs.c:392
+#, fuzzy
+msgid "uploaded"
+msgstr "Envoi de fichier"
+
+#: src/protocol/bittorrent/dialogs.c:394
+#, fuzzy
+msgid "downloaded"
+msgstr "Téléchargement"
+
+#. Pieces:
+#: src/protocol/bittorrent/dialogs.c:398
+msgid "Pieces"
+msgstr ""
+
+#: src/protocol/bittorrent/dialogs.c:402
+#, fuzzy, c-format
+msgid "%d completed"
+msgid_plural "%d completed"
+msgstr[0] "incomplet"
+msgstr[1] "incomplet"
+
+#: src/protocol/bittorrent/dialogs.c:408
+#, fuzzy, c-format
+msgid "%d in progress"
+msgid_plural "%d in progress"
+msgstr[0] "%d utilisé"
+msgstr[1] "%d utilisés"
+
+#: src/protocol/bittorrent/dialogs.c:419
+#, fuzzy, c-format
+msgid "%d remaining"
+msgid_plural "%d remaining"
+msgstr[0] "%d en transfert"
+msgstr[1] "%d en transfert"
+
+#. Statistics:
+#: src/protocol/bittorrent/dialogs.c:424
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: src/protocol/bittorrent/dialogs.c:428
+#, c-format
+msgid "%d in memory"
+msgid_plural "%d in memory"
+msgstr[0] "%d en mémoire"
+msgstr[1] "%d en mémoire"
+
+#: src/protocol/bittorrent/dialogs.c:434
+#, c-format
+msgid "%d locked"
+msgid_plural "%d locked"
+msgstr[0] "%d vérouillé"
+msgstr[1] "%d vérouillés"
+
+#: src/protocol/bittorrent/dialogs.c:441
+#, c-format
+msgid "%d rejected"
+msgid_plural "%d rejected"
+msgstr[0] "%d rejeté"
+msgstr[1] "%d rejetés"
+
+#: src/protocol/bittorrent/dialogs.c:448
+#, fuzzy, c-format
+msgid "%d unavailable"
+msgid_plural "%d unavailable"
+msgstr[0] "Service FTP indisponible"
+msgstr[1] "Service FTP indisponible"
+
+#: src/protocol/bittorrent/dialogs.c:584 src/session/session.c:243
+#, c-format
+msgid "Unable to retrieve %s"
+msgstr "Incapable de récupérer %s"
+
+#: src/protocol/bittorrent/dialogs.c:730
+#, c-format
+msgid "What would you like to do with the file '%s'?"
+msgstr "Que voulez-vous faire avec le fichier '%s' ?"
+
+#: src/protocol/bittorrent/dialogs.c:746
+msgid "Information about the torrent"
+msgstr "Informations sur le torrent"
+
+#: src/protocol/bittorrent/dialogs.c:768 src/session/download.c:1018
+msgid "What to do?"
+msgstr "Que faire ?"
+
+#: src/protocol/bittorrent/dialogs.c:790
+#, fuzzy
+msgid "Down~load"
+msgstr "Téléchargement"
+
+#: src/protocol/bittorrent/dialogs.c:796 src/session/download.c:1112
+msgid "~Display"
+msgstr "A~fficher"
+
+#: src/protocol/bittorrent/dialogs.c:800 src/session/download.c:1116
+msgid "Show ~header"
+msgstr "~Montrer les en-têtes"
 
 #: src/protocol/file/file.c:38
 msgid "Local files"
@@ -6663,10 +7219,6 @@ msgid ""
 msgstr ""
 "L'en-tête Accept-Charset est plutôt long et l'envoyer peut\n"
 "déclencher des bogues dans quelques rares serveurs."
-
-#: src/protocol/http/http.c:107
-msgid "Allow blacklisting"
-msgstr "Autoriser la mise en liste noire"
 
 #: src/protocol/http/http.c:109
 msgid "Allow blacklisting of buggy servers."
@@ -6905,25 +7457,25 @@ msgstr ""
 "Toutes les entrées possibles peuvent être lues dans le dialogue\n"
 "Info. En-têtes."
 
-#: src/protocol/protocol.c:223
+#: src/protocol/protocol.c:226
 #, c-format
 msgid "This version of ELinks does not contain %s protocol support"
 msgstr ""
 "Cette version de ELinks ne contient pas le support pour le protocole %s"
 
-#: src/protocol/protocol.c:251
+#: src/protocol/protocol.c:254
 msgid "Protocols"
 msgstr "Protocoles"
 
-#: src/protocol/protocol.c:253
+#: src/protocol/protocol.c:256
 msgid "Protocol specific options."
 msgstr "Options des protocoles."
 
-#: src/protocol/protocol.c:255
+#: src/protocol/protocol.c:258
 msgid "No-proxy domains"
 msgstr "Domaines ignorés en ce qui concerne les proxys"
 
-#: src/protocol/protocol.c:257
+#: src/protocol/protocol.c:260
 msgid ""
 "Comma separated list of domains for which the proxy (HTTP/FTP)\n"
 "should be disabled. Optionally, a port can be specified for some\n"
@@ -6936,7 +7488,7 @@ msgstr ""
 "NO_PROXY sera utilisé."
 
 #. name:
-#: src/protocol/protocol.c:290
+#: src/protocol/protocol.c:296
 msgid "Protocol"
 msgstr "Protocole"
 
@@ -7162,12 +7714,12 @@ msgstr "Message Ruby"
 msgid "Scripting"
 msgstr "Scripting"
 
-#: src/session/download.c:234 src/session/download.c:331
-#: src/session/download.c:498 src/session/download.c:590
+#: src/session/download.c:235 src/session/download.c:332
+#: src/session/download.c:499 src/session/download.c:591
 msgid "Download error"
 msgstr "Erreur de téléchargement"
 
-#: src/session/download.c:235 src/session/download.c:591
+#: src/session/download.c:236 src/session/download.c:592
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -7176,7 +7728,7 @@ msgstr ""
 "Impossible de créer le fichier '%s':\n"
 "%s"
 
-#: src/session/download.c:332
+#: src/session/download.c:333
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -7187,25 +7739,16 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/session/download.c:363
-#, c-format
-msgid ""
-"Download complete:\n"
-"%s"
-msgstr ""
-"Téléchargement terminé:\n"
-"%s"
-
-#: src/session/download.c:499
+#: src/session/download.c:500
 #, c-format
 msgid "'%s' is a directory."
 msgstr "'%s' est un répertoire."
 
-#: src/session/download.c:533
+#: src/session/download.c:534
 msgid "File exists"
 msgstr "Fichier existant"
 
-#: src/session/download.c:534
+#: src/session/download.c:535
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -7220,61 +7763,44 @@ msgstr ""
 "Le nom alternatif est:\n"
 "%s"
 
-#: src/session/download.c:541
+#: src/session/download.c:542
 msgid "Sa~ve under the alternative name"
 msgstr "Sau~ver sous un nom alternatif"
 
-#: src/session/download.c:542
+#: src/session/download.c:543
 msgid "~Overwrite the original file"
 msgstr "Ecraser le fichier ~original"
 
-#: src/session/download.c:543
+#: src/session/download.c:544
 msgid "~Resume download of the original file"
 msgstr "~Reprendre le téléchargement du fichier original"
 
-#: src/session/download.c:1019
-msgid "What to do?"
-msgstr "Que faire ?"
-
-#: src/session/download.c:1022
+#: src/session/download.c:1021
 msgid "Unknown type"
 msgstr "Type inconnu"
 
-#: src/session/download.c:1039
+#: src/session/download.c:1038
 #, c-format
 msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
 msgstr "Que voulez-vous faire avec le fichier '%s' (type: %s%s%s) ?"
 
-#: src/session/download.c:1069
+#: src/session/download.c:1068
 #, no-c-format
 msgid "Program ('%' will be replaced by the filename)"
 msgstr "Programme ('%' sera remplacé par le nom du fichier)"
 
-#: src/session/download.c:1073
+#: src/session/download.c:1072
 msgid "Block the terminal"
 msgstr "Bloquer le terminal"
 
-#: src/session/download.c:1079
+#: src/session/download.c:1078
 #, c-format
 msgid "The file will be opened with the program '%s'."
 msgstr "Le fichier sera ouvert avec le programme '%s'."
 
-#: src/session/download.c:1100
+#: src/session/download.c:1099
 msgid "~Open"
 msgstr "~Ouvrir"
-
-#: src/session/download.c:1113
-msgid "~Display"
-msgstr "A~fficher"
-
-#: src/session/download.c:1117
-msgid "Show ~header"
-msgstr "~Montrer les en-têtes"
-
-#: src/session/session.c:243
-#, c-format
-msgid "Unable to retrieve %s"
-msgstr "Incapable de récupérer %s"
 
 #: src/session/session.c:717 src/session/session.c:735 src/session/task.c:268
 msgid "Warning"
@@ -7400,7 +7926,7 @@ msgstr "Mauvais évènement %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évènement: %d (%s)"
 
-#: src/terminal/kbd.c:1023
+#: src/terminal/kbd.c:1068
 msgid "Too many bytes read from the itrm!"
 msgstr "Trop d'octets lus en provenance de itrm!"
 
@@ -7512,87 +8038,87 @@ msgstr "pressez %s pour soumettre à %s"
 msgid "press %s to post to %s"
 msgstr "pressez %s pour poster à %s"
 
-#: src/viewer/text/link.c:1153
+#: src/viewer/text/link.c:1146
 msgid "Display ~usemap"
 msgstr "Afficher ~usemap"
 
-#: src/viewer/text/link.c:1156
+#: src/viewer/text/link.c:1149
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/link.c:1158
+#: src/viewer/text/link.c:1151
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/link.c:1162
+#: src/viewer/text/link.c:1155
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1164
+#: src/viewer/text/link.c:1157
 msgid "Open in new ~tab"
 msgstr "Ouvrir dans un nouvel ongle~t"
 
-#: src/viewer/text/link.c:1166
+#: src/viewer/text/link.c:1159
 msgid "Open in new tab in ~background"
 msgstr "Ouvrir dans un nouvel onglet en arrière-~plan"
 
-#: src/viewer/text/link.c:1171
+#: src/viewer/text/link.c:1164
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/link.c:1174
+#: src/viewer/text/link.c:1167
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/link.c:1186 src/viewer/text/link.c:1222
+#: src/viewer/text/link.c:1179 src/viewer/text/link.c:1215
 msgid "~Reset form"
 msgstr "Remettre à ~zéro le formulaire"
 
-#: src/viewer/text/link.c:1199
+#: src/viewer/text/link.c:1192
 msgid "Open in ~external editor"
 msgstr "Ouvrir dans un ~éditeur externe"
 
-#: src/viewer/text/link.c:1205
+#: src/viewer/text/link.c:1198
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/link.c:1206
+#: src/viewer/text/link.c:1199
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/link.c:1210
+#: src/viewer/text/link.c:1203
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1212
+#: src/viewer/text/link.c:1205
 msgid "Submit form and open in new ~tab"
 msgstr "Envoyer le formulaire et ouvrir un ~onglet"
 
-#: src/viewer/text/link.c:1215
+#: src/viewer/text/link.c:1208
 msgid "Submit form and open in new tab in ~background"
 msgstr "Envoyer le formulaire et ouvrir un onglet en ~arrière-plan"
 
-#: src/viewer/text/link.c:1220
+#: src/viewer/text/link.c:1213
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/link.c:1227
+#: src/viewer/text/link.c:1220
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/link.c:1229
+#: src/viewer/text/link.c:1222
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/link.c:1237
+#: src/viewer/text/link.c:1230
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/link.c:1289
+#: src/viewer/text/link.c:1282
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/link.c:1294
+#: src/viewer/text/link.c:1287
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -7682,8 +8208,3 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1304
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid "%d locked"
-#~ msgid_plural "%d locked"
-#~ msgstr[0] "%d vérouillé"
-#~ msgstr[1] "%d vérouillés"

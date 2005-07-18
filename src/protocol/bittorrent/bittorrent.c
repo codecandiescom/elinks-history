@@ -1,5 +1,5 @@
 /* Internal "bittorrent" protocol implementation */
-/* $Id: bittorrent.c,v 1.3 2005/07/18 08:21:13 zas Exp $ */
+/* $Id: bittorrent.c,v 1.4 2005/07/18 14:41:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,7 +121,7 @@ static struct option_info bittorrent_protocol_options[] = {
 		N_("The number of seconds to wait before closing a socket on\n"
 		"which nothing has been received or sent.")),
 
-	INIT_OPT_INT("protocol.bittorrent.peerwire", N_("Max peer pool size"),
+	INIT_OPT_INT("protocol.bittorrent.peerwire", N_("Maximum peer pool size"),
 		"pool_size", 0, 0, INT_MAX, 55,
 		N_("Maximum number of items in the peer pool. The peer pool\n"
 		"contains information used for establishing connections to\n"
@@ -164,9 +164,9 @@ static struct option_info bittorrent_protocol_options[] = {
 		"be used for new connections.")),
 
 #if 0
-	INIT_OPT_INT("protocol.bittorrent", N_("Keep-alive interval"),
+	INIT_OPT_INT("protocol.bittorrent", N_("Keepalive interval"),
 		"keepalive_interval", 0, 0, INT_MAX, 120,
-		N_("The number of seconds to pause between sending keep-alive\n"
+		N_("The number of seconds to pause between sending keepalive\n"
 		"messages.")),
 #endif
 	INIT_OPT_INT("protocol.bittorrent", N_("Number of pending requests"),

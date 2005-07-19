@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-07-18 17:42+0200\n"
-"PO-Revision-Date: 2005-07-19 09:55+0200\n"
+"POT-Creation-Date: 2005-07-19 10:02+0200\n"
+"PO-Revision-Date: 2005-07-19 10:03+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -6617,16 +6617,15 @@ msgstr ""
 #. ******************************************************************
 #: src/protocol/bittorrent/bittorrent.c:91
 msgid "Peer-wire"
-msgstr ""
+msgstr "Liens postes"
 
 #: src/protocol/bittorrent/bittorrent.c:93
 msgid "Lowlevel peer-wire options."
-msgstr ""
+msgstr "Options de bas niveau pour les liens postes"
 
 #: src/protocol/bittorrent/bittorrent.c:95
-#, fuzzy
 msgid "Maximum number of peer connections"
-msgstr "Nombre maximum . de connexions simultanées."
+msgstr "Nombre maximum de connexions aux postes"
 
 #: src/protocol/bittorrent/bittorrent.c:97
 msgid ""
@@ -6636,27 +6635,35 @@ msgid ""
 "However, too many connections can lead to TCP congestion. If the\n"
 "maximum is reached all new incoming connections will be closed."
 msgstr ""
+"Nombre maximum de connexions autorisées vers des postes actifs ou\n"
+"inactifs. En augmentant le nombre de connexions autorisées, la chance\n"
+"de trouver de bons postes pour télécharger est augmentée.\n"
+"Toutefois, trop de connexions peuvent conduire à une congestion TCP.\n"
+"Si le maximum est atteint, toutes les nouvelles connexions seront fermées."
 
 #: src/protocol/bittorrent/bittorrent.c:103
-#, fuzzy
 msgid "Maximum peer message length"
-msgstr "Longueur maximale pour le nom de fichier image"
+msgstr "Longueur maximale des messages"
 
 #: src/protocol/bittorrent/bittorrent.c:105
 msgid ""
 "The maximum length of messages to accept over the wire.\n"
 "Larger values will cause the connection to be dropped."
 msgstr ""
+"Longueur maximale des messages à accepter sur le lien.\n"
+"De plus grande valeurs causeront une déconnexion."
 
 #: src/protocol/bittorrent/bittorrent.c:108
 msgid "Maximum allowed request length"
-msgstr ""
+msgstr "Longueur maximale de requête autorisée"
 
 #: src/protocol/bittorrent/bittorrent.c:110
 msgid ""
 "The maximum length to allow for incoming requests.\n"
 "Larger requests will cause the connection to be dropped."
 msgstr ""
+"Longueur maximale autorisée pour les requêtes entrantes.\n"
+"De plus grande valeurs causeront une déconnexion."
 
 #: src/protocol/bittorrent/bittorrent.c:113
 msgid "Length of requests"
@@ -6670,15 +6677,16 @@ msgid ""
 msgstr ""
 
 #: src/protocol/bittorrent/bittorrent.c:119
-#, fuzzy
 msgid "Peer inactivity timeout"
-msgstr "Délai d'expiration pour la réception"
+msgstr "Délai d'inactivité pour un poste"
 
 #: src/protocol/bittorrent/bittorrent.c:121
 msgid ""
 "The number of seconds to wait before closing a socket on\n"
 "which nothing has been received or sent."
 msgstr ""
+"Le nombre de secondes à attendre avant de fermer une\n"
+"connexion sur laquelle rien n'a circulé."
 
 #: src/protocol/bittorrent/bittorrent.c:124
 #, fuzzy
@@ -6709,9 +6717,8 @@ msgid ""
 msgstr ""
 
 #: src/protocol/bittorrent/bittorrent.c:147
-#, fuzzy
 msgid "Sharing rate"
-msgstr "Style de sauvegarde"
+msgstr "Taux de partage"
 
 #: src/protocol/bittorrent/bittorrent.c:149
 msgid ""
@@ -6724,9 +6731,8 @@ msgid ""
 msgstr ""
 
 #: src/protocol/bittorrent/bittorrent.c:156
-#, fuzzy
 msgid "Maximum number of uploads"
-msgstr "Nombre max. d'entrées"
+msgstr "Nombre maximal de téléchargements montants"
 
 #: src/protocol/bittorrent/bittorrent.c:158
 msgid "The maximum number of uploads to allow at once."
@@ -6734,9 +6740,8 @@ msgstr ""
 
 #. The number of uploads to fill out to with extra optimistic unchokes
 #: src/protocol/bittorrent/bittorrent.c:161
-#, fuzzy
 msgid "Minimum number of uploads"
-msgstr "Nombre max. d'entrées"
+msgstr "Nombre minimal de téléchargements montants"
 
 #: src/protocol/bittorrent/bittorrent.c:163
 msgid ""
@@ -6745,9 +6750,8 @@ msgid ""
 msgstr ""
 
 #: src/protocol/bittorrent/bittorrent.c:167
-#, fuzzy
 msgid "Keepalive interval"
-msgstr "Intervalle pour la sauvegarde automatique"
+msgstr "Intervalle pour le maintien en vie des connexions"
 
 #: src/protocol/bittorrent/bittorrent.c:169
 msgid ""
@@ -6756,9 +6760,8 @@ msgid ""
 msgstr ""
 
 #: src/protocol/bittorrent/bittorrent.c:172
-#, fuzzy
 msgid "Number of pending requests"
-msgstr "Le serveur traîte la requête"
+msgstr "Nombre de requêtes en attente"
 
 #: src/protocol/bittorrent/bittorrent.c:174
 msgid ""
@@ -6810,13 +6813,12 @@ msgid "Allow blacklisting"
 msgstr "Autoriser la mise en liste noire"
 
 #: src/protocol/bittorrent/bittorrent.c:203
-#, fuzzy
 msgid "Allow blacklisting of buggy peers."
-msgstr "Autoriser la mise en liste noire des serveurs bogués."
+msgstr "Autoriser la mise en liste noire des postes bogués."
 
 #: src/protocol/bittorrent/dialogs.c:123
 msgid "Warning: potential malicious path detected"
-msgstr ""
+msgstr "Attention: chemin potentiellement malicieux détecté"
 
 #: src/protocol/bittorrent/dialogs.c:142
 #, fuzzy
@@ -6885,9 +6887,8 @@ msgstr "partiel"
 
 #. Peers:
 #: src/protocol/bittorrent/dialogs.c:320
-#, fuzzy
 msgid "Peers"
-msgstr "Barre de progression"
+msgstr "Postes"
 
 #: src/protocol/bittorrent/dialogs.c:334 src/protocol/bittorrent/dialogs.c:350
 #, c-format
@@ -6897,11 +6898,11 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/protocol/bittorrent/dialogs.c:340
-#, fuzzy, c-format
+#, c-format
 msgid "%d available"
 msgid_plural "%d available"
-msgstr[0] "%d fichier"
-msgstr[1] "%d fichiers"
+msgstr[0] "%d disponible"
+msgstr[1] "%d disponibles"
 
 #: src/protocol/bittorrent/dialogs.c:345
 #, fuzzy
@@ -6909,22 +6910,20 @@ msgid "Swarm info"
 msgstr "Info. en-têtes"
 
 #: src/protocol/bittorrent/dialogs.c:358
-#, fuzzy, c-format
+#, c-format
 msgid "%d downloader"
 msgid_plural "%d downloaders"
-msgstr[0] "Erreur de téléchargement"
-msgstr[1] "Erreur de téléchargement"
+msgstr[0] "%d téléchargeur"
+msgstr[1] "%d téléchargeurs"
 
 #. Upload:
 #: src/protocol/bittorrent/dialogs.c:364
-#, fuzzy
 msgid "Upload"
-msgstr "Ra~fraîchir"
+msgstr "Envoi"
 
 #: src/protocol/bittorrent/dialogs.c:372
-#, fuzzy
 msgid "average"
-msgstr "vitesse moyenne"
+msgstr "moyenne"
 
 #: src/protocol/bittorrent/dialogs.c:377
 msgid "1:1 in"
@@ -6937,14 +6936,12 @@ msgid "Sharing"
 msgstr "Chaîne"
 
 #: src/protocol/bittorrent/dialogs.c:392
-#, fuzzy
 msgid "uploaded"
-msgstr "Envoi de fichier"
+msgstr "envoyés"
 
 #: src/protocol/bittorrent/dialogs.c:394
-#, fuzzy
 msgid "downloaded"
-msgstr "Téléchargement"
+msgstr "reçus"
 
 #. Pieces:
 #: src/protocol/bittorrent/dialogs.c:398
@@ -6952,25 +6949,25 @@ msgid "Pieces"
 msgstr ""
 
 #: src/protocol/bittorrent/dialogs.c:402
-#, fuzzy, c-format
+#, c-format
 msgid "%d completed"
 msgid_plural "%d completed"
-msgstr[0] "incomplet"
-msgstr[1] "incomplet"
+msgstr[0] "%d completé"
+msgstr[1] "%d completés"
 
 #: src/protocol/bittorrent/dialogs.c:408
-#, fuzzy, c-format
+#, c-format
 msgid "%d in progress"
 msgid_plural "%d in progress"
-msgstr[0] "%d utilisé"
-msgstr[1] "%d utilisés"
+msgstr[0] "%d en cours"
+msgstr[1] "%d en cours"
 
 #: src/protocol/bittorrent/dialogs.c:419
-#, fuzzy, c-format
+#, c-format
 msgid "%d remaining"
 msgid_plural "%d remaining"
-msgstr[0] "%d en transfert"
-msgstr[1] "%d en transfert"
+msgstr[0] "%d restant"
+msgstr[1] "%d restants"
 
 #. Statistics:
 #: src/protocol/bittorrent/dialogs.c:424
@@ -6999,11 +6996,11 @@ msgstr[0] "%d rejeté"
 msgstr[1] "%d rejetés"
 
 #: src/protocol/bittorrent/dialogs.c:448
-#, fuzzy, c-format
+#, c-format
 msgid "%d unavailable"
 msgid_plural "%d unavailable"
-msgstr[0] "Service FTP indisponible"
-msgstr[1] "Service FTP indisponible"
+msgstr[0] "%d indisponible"
+msgstr[1] "%d indisponibles"
 
 #: src/protocol/bittorrent/dialogs.c:584 src/session/session.c:243
 #, c-format
@@ -7024,9 +7021,8 @@ msgid "What to do?"
 msgstr "Que faire ?"
 
 #: src/protocol/bittorrent/dialogs.c:790
-#, fuzzy
 msgid "Down~load"
-msgstr "Téléchargement"
+msgstr "Té~lécharger"
 
 #: src/protocol/bittorrent/dialogs.c:796 src/session/download.c:1112
 msgid "~Display"
@@ -7938,7 +7934,7 @@ msgstr "Mauvais évènement %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évènement: %d (%s)"
 
-#: src/terminal/kbd.c:1068
+#: src/terminal/kbd.c:1042
 msgid "Too many bytes read from the itrm!"
 msgstr "Trop d'octets lus en provenance de itrm!"
 

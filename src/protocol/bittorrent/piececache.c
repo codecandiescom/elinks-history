@@ -1,5 +1,5 @@
 /* BitTorrent piece cache */
-/* $Id: piececache.c,v 1.3 2005/07/11 12:37:03 jonas Exp $ */
+/* $Id: piececache.c,v 1.4 2005/07/19 15:44:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -650,7 +650,7 @@ get_bittorrent_file_name(struct bittorrent_meta *meta, struct bittorrent_file *f
 	add_to_strn(&name, "/");
 	add_to_strn(&name, meta->name);
 
-	if (meta->type == BITTORRENT_MULTI_FILE) { 
+	if (meta->type == BITTORRENT_MULTI_FILE) {
 		add_to_strn(&name, "/");
 		add_to_strn(&name, file->name);
 	}
@@ -665,7 +665,7 @@ enum bittorrent_translation {
 };
 
 static int
-open_bittorrent_file(struct bittorrent_meta *meta, struct bittorrent_file *file, 
+open_bittorrent_file(struct bittorrent_meta *meta, struct bittorrent_file *file,
 		     enum bittorrent_translation trans, off_t offset)
 {
 	unsigned char *name = get_bittorrent_file_name(meta, file);
@@ -709,7 +709,7 @@ open_bittorrent_file(struct bittorrent_meta *meta, struct bittorrent_file *file,
 	return fd;
 }
 
-static enum bittorrent_state 
+static enum bittorrent_state
 bittorrent_file_piece_translation(struct bittorrent_meta *meta,
 				  struct bittorrent_piece_cache *cache,
 				  struct bittorrent_piece_cache_entry *entry,
@@ -739,7 +739,7 @@ bittorrent_file_piece_translation(struct bittorrent_meta *meta,
 		ssize_t length;
 		int fd;
 
-		if (piece_offset >= piece_length) 
+		if (piece_offset >= piece_length)
 			break;
 
 		if (current_offset + file->length < torrent_offset) {
@@ -751,7 +751,7 @@ bittorrent_file_piece_translation(struct bittorrent_meta *meta,
 
 		/* Figure out where in the file we need access. */
 		file_offset = torrent_offset - current_offset;
-		if (file_offset < 0) 
+		if (file_offset < 0)
 			file_offset = 0;
 
 		assertm(file_offset <= file->length, "%ld %ld", file_offset, file->length);
@@ -980,7 +980,7 @@ add_to_bittorrent_piece_cache(struct bittorrent_peer_connection *peer,
 }
 
 unsigned char *
-get_bittorrent_piece_cache_data(struct bittorrent_connection *bittorrent, 
+get_bittorrent_piece_cache_data(struct bittorrent_connection *bittorrent,
 				uint32_t piece)
 {
 	struct bittorrent_piece_cache *cache = bittorrent->cache;
@@ -1293,7 +1293,7 @@ init_bittorrent_piece_cache(struct bittorrent_connection *bittorrent,
 
  	for (piece = 0; piece < pieces; piece++)
  		set_bittorrent_piece_cache_remaining(cache, piece, 1);
-  
+
  	start_bittorrent_resume(bittorrent, metafile);
 
 	assert(list_empty(cache->queue));

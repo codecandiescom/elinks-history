@@ -1,5 +1,5 @@
-/* General element handlers */ 
-/* $Id: general.c,v 1.4 2005/07/15 20:22:00 miciah Exp $ */
+/* General element handlers */
+/* $Id: general.c,v 1.5 2005/07/19 15:44:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

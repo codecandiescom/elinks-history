@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.585 2005/07/15 20:17:25 miciah Exp $ */
+/* $Id: renderer.c,v 1.586 2005/07/19 15:44:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1924,7 +1924,7 @@ render_html_document(struct cache_entry *cached, struct document *document,
 	end = buffer->source + buffer->length;
 
 	if (cached->head) add_to_string(&head, cached->head);
-  
+
 	html_context = init_html_parser(cached->uri, &document->options,
 	                                start, end, &head, &title,
 	                                put_chars_conv, line_break,

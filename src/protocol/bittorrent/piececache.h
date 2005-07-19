@@ -1,4 +1,4 @@
-/* $Id: piececache.h,v 1.2 2005/07/11 12:37:03 jonas Exp $ */
+/* $Id: piececache.h,v 1.3 2005/07/19 15:44:53 zas Exp $ */
 
 #ifndef EL__PROTOCOL_BITTORRENT_PIECECACHE_H
 #define EL__PROTOCOL_BITTORRENT_PIECECACHE_H
@@ -122,7 +122,7 @@ add_to_bittorrent_piece_cache(struct bittorrent_peer_connection *peer,
 			      int *write_errno);
 
 unsigned char *
-get_bittorrent_piece_cache_data(struct bittorrent_connection *bittorrent, 
-				uint32_t piece); 
+get_bittorrent_piece_cache_data(struct bittorrent_connection *bittorrent,
+				uint32_t piece);
 
 #endif

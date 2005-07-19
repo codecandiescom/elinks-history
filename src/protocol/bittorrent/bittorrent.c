@@ -1,5 +1,5 @@
 /* Internal "bittorrent" protocol implementation */
-/* $Id: bittorrent.c,v 1.4 2005/07/18 14:41:29 jonas Exp $ */
+/* $Id: bittorrent.c,v 1.5 2005/07/19 15:44:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -246,7 +246,7 @@ get_bittorrent_selection(struct uri *uri, size_t size)
 			del_from_list(info);
 
 			if (info->size == size) {
-				selection = info->selection; 
+				selection = info->selection;
 
 			} else {
 				mem_free(info->selection);

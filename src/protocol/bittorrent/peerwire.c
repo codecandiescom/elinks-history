@@ -1,5 +1,5 @@
 /* BitTorrent peer-wire protocol implementation */
-/* $Id: peerwire.c,v 1.2 2005/07/11 12:37:03 jonas Exp $ */
+/* $Id: peerwire.c,v 1.3 2005/07/19 15:44:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,7 +462,7 @@ check_bittorrent_peer_message(struct bittorrent_peer_connection *peer,
 	return message_id;
 }
 
-static enum bittorrent_state 
+static enum bittorrent_state
 read_bittorrent_peer_message(struct bittorrent_peer_connection *peer,
 			     enum bittorrent_message_id message_id,
 			     struct read_buffer *buffer, uint32_t message_length,

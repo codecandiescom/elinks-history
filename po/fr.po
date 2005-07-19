@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-07-18 10:27+0200\n"
-"PO-Revision-Date: 2005-07-18 10:28+0200\n"
+"POT-Creation-Date: 2005-07-18 17:42+0200\n"
+"PO-Revision-Date: 2005-07-19 09:55+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -6540,15 +6540,15 @@ msgstr "Le port maximum à essayer pour l'écoute."
 #. ******************************************************************
 #: src/protocol/bittorrent/bittorrent.c:52
 msgid "Tracker"
-msgstr ""
+msgstr "Serveur (tracker)"
 
 #: src/protocol/bittorrent/bittorrent.c:54
 msgid "Tracker options."
-msgstr ""
+msgstr "Options du serveur."
 
 #: src/protocol/bittorrent/bittorrent.c:56
 msgid "Use compact tracker format"
-msgstr ""
+msgstr "Utiliser le format compact"
 
 #: src/protocol/bittorrent/bittorrent.c:58
 msgid ""
@@ -6556,10 +6556,13 @@ msgid ""
 "in compact format. Note, the compact format only supports\n"
 "IPv4 addresses."
 msgstr ""
+"Demander ou non que le serveur retourne les informations\n"
+"de poste dans un format compact. Notez que le format compact\n"
+"ne supporte que les adresses IPv4."
 
 #: src/protocol/bittorrent/bittorrent.c:62
 msgid "Tracker announce interval"
-msgstr ""
+msgstr "Intervalle d'annonce au serveur"
 
 #: src/protocol/bittorrent/bittorrent.c:64
 msgid ""
@@ -6567,6 +6570,9 @@ msgid ""
 "the tracker for announcing progress and requesting more peers.\n"
 "Set to zero to use the interval requested by the tracker."
 msgstr ""
+"Le nombre de secondes à attendre entre chaque connexion périodique\n"
+"au serveur pour annoncer le progrès et demander d'autres postes.\n"
+"Mettre à zéro pour utiliser l'intervalle demandé par le serveur."
 
 #: src/protocol/bittorrent/bittorrent.c:68
 msgid "IP-address to announce"
@@ -6578,16 +6584,21 @@ msgid ""
 "no IP address will be sent and the tracker will automatically\n"
 "determine an appropriate IP address."
 msgstr ""
+"Adresse IP a annoncé au serveur. Si mis à \"\", aucune adresse\n"
+"n'est transmise et le serveur déterminera automatiquement\n"
+"l'adresse appropriée."
 
 #: src/protocol/bittorrent/bittorrent.c:74
 msgid "Maximum number of peers to request"
-msgstr "Nombre maximum de points à demander"
+msgstr "Nombre maximum de postes à demander"
 
 #: src/protocol/bittorrent/bittorrent.c:76
 msgid ""
 "The maximum number of peers to request from the tracker.\n"
 "Set to 0 to use the server default."
 msgstr ""
+"Nombre maximum de postes à demander au serveur.\n"
+"Mettre à 0 pour utiliser la valeur par défaut du serveur."
 
 #: src/protocol/bittorrent/bittorrent.c:79
 msgid "Minimum peers to skip rerequesting"
@@ -6615,7 +6626,7 @@ msgstr ""
 #: src/protocol/bittorrent/bittorrent.c:95
 #, fuzzy
 msgid "Maximum number of peer connections"
-msgstr "Nombre max. de connexions simultanées."
+msgstr "Nombre maximum . de connexions simultanées."
 
 #: src/protocol/bittorrent/bittorrent.c:97
 msgid ""
@@ -6670,8 +6681,9 @@ msgid ""
 msgstr ""
 
 #: src/protocol/bittorrent/bittorrent.c:124
-msgid "Max peer pool size"
-msgstr ""
+#, fuzzy
+msgid "Maximum peer pool size"
+msgstr "Temps maximal d'exécution"
 
 #: src/protocol/bittorrent/bittorrent.c:126
 msgid ""
@@ -6734,12 +6746,12 @@ msgstr ""
 
 #: src/protocol/bittorrent/bittorrent.c:167
 #, fuzzy
-msgid "Keep-alive interval"
+msgid "Keepalive interval"
 msgstr "Intervalle pour la sauvegarde automatique"
 
 #: src/protocol/bittorrent/bittorrent.c:169
 msgid ""
-"The number of seconds to pause between sending keep-alive\n"
+"The number of seconds to pause between sending keepalive\n"
 "messages."
 msgstr ""
 

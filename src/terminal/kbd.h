@@ -1,17 +1,7 @@
-/* $Id: kbd.h,v 1.12 2005/07/20 17:19:47 witekfl Exp $ */
+/* $Id: kbd.h,v 1.13 2005/07/20 20:00:57 miciah Exp $ */
 
 #ifndef EL__TERMINAL_KBD_H
 #define EL__TERMINAL_KBD_H
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#ifdef HAVE_TERMIOS_H
-#include <termios.h>
-#endif
-
-#include "main/timer.h"
 
 struct term_event_keyboard {
 	int key;

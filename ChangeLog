@@ -1,3 +1,64 @@
+Wed Jul 20 20:00:57 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/kbd.h:
+
+	Drop some cruft leftover from reverting revision 1.11 in revision
+	1.12.  
+
+Wed Jul 20 17:50:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Define CONFIG_SYSMOUSE AM conditional.  
+
+Wed Jul 20 17:34:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Try to make the BSD (sys)mouse support optional. It required a
+	little creative changing of the EL_CONFIG_OPTIONAL_LIBRARY() macro.  
+
+Wed Jul 20 17:22:42 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/unix/bsd.c:
+
+	Used void instead of struct itrm.  
+
+Wed Jul 20 17:19:47 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/terminal/: kbd.c, kbd.h:
+
+	Do not put struct itrm to header file.  
+
+Wed Jul 20 17:02:45 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/unix/bsd.c:
+
+	Use get_output_handle() and 0 as last parameter to
+	install_signal_handler.  Now mouse works even on slave terminals.  
+
+Wed Jul 20 16:02:56 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/unix/bsd.c:
+
+	stdio.h is not required. In resume_mouse install signal handler only
+	when it was previously installed (data != NULL).  Last parameter of
+	install_signal_handler should be 1 or 0? 
+
+Wed Jul 20 15:41:33 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* configure.in, src/osdep/Makefile.am, src/osdep/osdep.c,
+	src/osdep/unix/Makefile.am, src/osdep/unix/bsd.c:
+
+	Support for BSD mouse. FIXME: It should be optional. Selection
+	doesn't work.  
+
+Wed Jul 20 08:07:33 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
 Tue Jul 19 15:44:52 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: document/html/renderer.c, document/html/parser/general.c,

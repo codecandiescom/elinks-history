@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-07-19 10:02+0200\n"
+"POT-Creation-Date: 2005-07-20 10:00+0200\n"
 "PO-Revision-Date: 2005-07-19 10:03+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
@@ -6689,9 +6689,8 @@ msgstr ""
 "connexion sur laquelle rien n'a circulé."
 
 #: src/protocol/bittorrent/bittorrent.c:124
-#, fuzzy
 msgid "Maximum peer pool size"
-msgstr "Temps maximal d'exécution"
+msgstr "Taille maximale du groupe de postes"
 
 #: src/protocol/bittorrent/bittorrent.c:126
 msgid ""
@@ -6700,14 +6699,17 @@ msgid ""
 "new peers.\n"
 "Set to 0 to have unlimited size."
 msgstr ""
+"Nombre maximal d'items dans le groupe de postes. Le groupe\n"
+"de postes contient les informations utilisées pour établir\n"
+"les connexions vers de nouveaux postes.\n"
+"Mettre à 0 pour avoir une taille illimitée."
 
 #. ******************************************************************
 #. Piece management options:
 #. ******************************************************************
 #: src/protocol/bittorrent/bittorrent.c:136
-#, fuzzy
 msgid "Maximum piece cache size"
-msgstr "Temps maximal d'exécution"
+msgstr "Taille maximale du cache de morceaux"
 
 #: src/protocol/bittorrent/bittorrent.c:138
 msgid ""
@@ -6715,6 +6717,9 @@ msgid ""
 "downloaded pieces.\n"
 "Set to 0 to have unlimited size."
 msgstr ""
+"La quantité maximale de mémoire utilisée pour contenir\n"
+"les morceaux récemment téléchargés.\n"
+"Mettre à 0 pour une taille illimitée."
 
 #: src/protocol/bittorrent/bittorrent.c:147
 msgid "Sharing rate"
@@ -6737,6 +6742,8 @@ msgstr "Nombre maximal de téléchargements montants"
 #: src/protocol/bittorrent/bittorrent.c:158
 msgid "The maximum number of uploads to allow at once."
 msgstr ""
+"Nombre maximal de téléchargements montants autorisés\n"
+"à un instant."
 
 #. The number of uploads to fill out to with extra optimistic unchokes
 #: src/protocol/bittorrent/bittorrent.c:161
@@ -6748,6 +6755,8 @@ msgid ""
 "The minimum number of uploads which should at least\n"
 "be used for new connections."
 msgstr ""
+"Le nombre minimal de téléchargements montants qui devraient\n"
+"être utilisés pour les nouvelles connexions."
 
 #: src/protocol/bittorrent/bittorrent.c:167
 msgid "Keepalive interval"

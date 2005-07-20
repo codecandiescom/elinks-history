@@ -1,5 +1,5 @@
 /* BSD mouse system-specific routines. */
-/* $Id: bsd.c,v 1.2 2005/07/20 16:02:56 witekfl Exp $ */
+/* $Id: bsd.c,v 1.3 2005/07/20 17:02:45 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@ sysmouse_handler(void *data)
 	static int prev_buttons;
 	struct sysmouse_spec *sp = data;
 	struct itrm *itrm = sp->itrm;
-	int fd = itrm->std_out;
+	int fd = get_output_handle();
 	int buttons, change;
 	mouse_info_t mi;
 	struct term_event_mouse mouse;
@@ -166,7 +166,7 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 	static struct sysmouse_spec mouse_spec;
 	video_info_t vi;
 	mouse_info_t mi;
-	int fd = ((struct itrm *)data)->std_out;
+	int fd = get_output_handle();
 
 	if (is_xterm()) return NULL;
 	mouse_spec.itrm = data;
@@ -186,7 +186,7 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 	mi.u.mode.signal = SIGUSR2;
 	if (ioctl(fd, CONS_MOUSECTL, &mi) != -1) {
 		install_signal_handler(SIGUSR2,
-		(void (*)(void *))sysmouse_signal_handler, &mouse_spec, 1);
+		(void (*)(void *))sysmouse_signal_handler, &mouse_spec, 0);
 		mi.operation = MOUSE_SHOW;
 		ioctl(fd, CONS_MOUSECTL, &mi);
 		return &mouse_spec;
@@ -212,7 +212,7 @@ void
 resume_mouse(void *data)
 {
 	if (data) install_signal_handler(SIGUSR2,
-		(void (*)(void *))sysmouse_signal_handler, data, 1);
+		(void (*)(void *))sysmouse_signal_handler, data, 0);
 }
 
 #endif

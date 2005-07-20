@@ -168,6 +168,21 @@ AC_CHECK_HEADERS(stdint.h inttypes.h)
 AC_CHECK_HEADERS(locale.h pwd.h)
 AC_CHECK_HEADERS(termios.h)
 
+
+dnl ===================================================================
+dnl BSD mouse
+dnl ===================================================================
+dnl FIXME: BSD mouse should be optional.
+CONFIG_SYSMOUSE=no
+AC_CHECK_HEADERS(sys/consio.h,
+	[CONFIG_SYSMOUSE=yes
+	 EL_CONFIG([CONFIG_SYSMOUSE], [BSD mouse support])],
+	[])
+AC_CHECK_HEADERS(machine/console.h,
+	[CONFIG_SYSMOUSE=yes
+	 EL_CONFIG([CONFIG_SYSMOUSE], [BSD mouse support])],
+	[])
+
 AC_CHECK_HEADERS(sys/un.h,
 	[CONFIG_INTERLINK=yes
 	 EL_CONFIG([CONFIG_INTERLINK], [interlinking])],

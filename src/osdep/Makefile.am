@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.34 2005/06/12 01:13:58 jonas Exp $
+## $Id: Makefile.am,v 1.35 2005/07/20 15:41:33 witekfl Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -20,7 +20,7 @@ endif
 
 if CONFIG_UNIX
 unixdir = unix
-unixobj = $(unixdir)/unix.o
+unixobj = $(unixdir)/bsd.o $(unixdir)/unix.o
 endif
 
 if CONFIG_WIN32

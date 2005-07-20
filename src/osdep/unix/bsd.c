@@ -1,5 +1,5 @@
 /* BSD mouse system-specific routines. */
-/* $Id: bsd.c,v 1.3 2005/07/20 17:02:45 witekfl Exp $ */
+/* $Id: bsd.c,v 1.4 2005/07/20 17:22:42 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ sysmouse_handler(void *data)
 	static struct term_event_mouse prev_mouse;
 	static int prev_buttons;
 	struct sysmouse_spec *sp = data;
-	struct itrm *itrm = sp->itrm;
+	void *itrm = sp->itrm;
 	int fd = get_output_handle();
 	int buttons, change;
 	mouse_info_t mi;

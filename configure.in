@@ -406,6 +406,7 @@ EL_CONFIG_OPTIONAL_LIBRARY(CONFIG_GPM, gpm, gpm.h, gpm, Gpm_Open,
 EL_CONFIG_OPTIONAL_LIBRARY(CONFIG_SYSMOUSE, sysmouse,
 			   [sys/consio.h machine/console.h], [NULL], [NULL],
 	[  --without-sysmouse      disable BSD mouse support])
+AM_CONDITIONAL(CONFIG_SYSMOUSE, test "$CONFIG_SYSMOUSE" = yes)
 
 EL_CONFIG_OPTIONAL_LIBRARY(CONFIG_GZIP, zlib, zlib.h, z, gzdopen,
 	[  --without-zlib          disable zlib support])

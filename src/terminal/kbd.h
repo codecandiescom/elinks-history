@@ -1,4 +1,4 @@
-/* $Id: kbd.h,v 1.11 2005/07/18 16:08:03 witekfl Exp $ */
+/* $Id: kbd.h,v 1.12 2005/07/20 17:19:47 witekfl Exp $ */
 
 #ifndef EL__TERMINAL_KBD_H
 #define EL__TERMINAL_KBD_H
@@ -12,33 +12,6 @@
 #endif
 
 #include "main/timer.h"
-
-#define IN_BUF_SIZE	16
-
-struct itrm {
-	int std_in;
-	int std_out;
-	int sock_in;
-	int sock_out;
-	int ctl_in;
-
-	/* Input queue */
-	unsigned char kqueue[IN_BUF_SIZE];
-	int qlen;
-
-	/* Output queue */
-	unsigned char *ev_queue;
-	int eqlen;
-
-	timer_id_T timer;		/* ESC timeout timer */
-	struct termios t;		/* For restoring original attributes */
-	void *mouse_h;			/* Mouse handle */
-	unsigned char *orig_title;	/* For restoring window title */
-
-	unsigned int blocked:1;		/* Whether it was blocked */
-	unsigned int altscreen:1;	/* Whether to use alternate screen */
-	unsigned int touched_title:1;	/* Whether the term title was changed */
-};
 
 struct term_event_keyboard {
 	int key;

@@ -1,11 +1,9 @@
 /* BSD mouse system-specific routines. */
-/* $Id: bsd.c,v 1.1 2005/07/20 15:41:33 witekfl Exp $ */
+/* $Id: bsd.c,v 1.2 2005/07/20 16:02:56 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#include <stdio.h>
 
 #include "osdep/system.h"
 
@@ -213,7 +211,7 @@ suspend_mouse(void *h)
 void
 resume_mouse(void *data)
 {
-	install_signal_handler(SIGUSR2,
+	if (data) install_signal_handler(SIGUSR2,
 		(void (*)(void *))sysmouse_signal_handler, data, 1);
 }
 

@@ -169,20 +169,6 @@ AC_CHECK_HEADERS(locale.h pwd.h)
 AC_CHECK_HEADERS(termios.h)
 
 
-dnl ===================================================================
-dnl BSD mouse
-dnl ===================================================================
-dnl FIXME: BSD mouse should be optional.
-CONFIG_SYSMOUSE=no
-AC_CHECK_HEADERS(sys/consio.h,
-	[CONFIG_SYSMOUSE=yes
-	 EL_CONFIG([CONFIG_SYSMOUSE], [BSD mouse support])],
-	[])
-AC_CHECK_HEADERS(machine/console.h,
-	[CONFIG_SYSMOUSE=yes
-	 EL_CONFIG([CONFIG_SYSMOUSE], [BSD mouse support])],
-	[])
-
 AC_CHECK_HEADERS(sys/un.h,
 	[CONFIG_INTERLINK=yes
 	 EL_CONFIG([CONFIG_INTERLINK], [interlinking])],
@@ -381,14 +367,16 @@ AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 			LDFLAGS="$LDFLAGS -L$withval/lib";
 		fi
 
-		AC_CHECK_HEADERS([$3], [$1=yes], [$1=no])
-		if test "[$]$1" = yes; then
+		AC_CHECK_HEADERS([$3], [$1=yes], [$1=no; break;])
+		if test "[$]$1" = yes && test "$4" != NULL; then
 			AC_CHECK_LIB([$4], [$5], [$1=yes], [$1=no])
 		fi
 
 		if test "[$]$1" = yes; then
 			EL_CONFIG([$1], [$2])
-			LIBS="$LIBS -l$4"
+			if test "$4" != NULL; then
+				LIBS="$LIBS -l$4"
+			fi
 		else
 			if test -n "$withval" && test "x$withval" != xno; then
 				AC_MSG_ERROR([$2 not found])
@@ -414,6 +402,10 @@ AC_DEFUN([EL_CONFIG_OPTIONAL_LIBRARY],
 
 EL_CONFIG_OPTIONAL_LIBRARY(CONFIG_GPM, gpm, gpm.h, gpm, Gpm_Open,
 	[  --without-gpm           disable gpm (mouse) support])
+
+EL_CONFIG_OPTIONAL_LIBRARY(CONFIG_SYSMOUSE, sysmouse,
+			   [sys/consio.h machine/console.h], [NULL], [NULL],
+	[  --without-sysmouse      disable BSD mouse support])
 
 EL_CONFIG_OPTIONAL_LIBRARY(CONFIG_GZIP, zlib, zlib.h, z, gzdopen,
 	[  --without-zlib          disable zlib support])

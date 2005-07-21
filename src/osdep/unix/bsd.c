@@ -1,5 +1,5 @@
 /* BSD mouse system-specific routines. */
-/* $Id: bsd.c,v 1.6 2005/07/21 15:07:43 witekfl Exp $ */
+/* $Id: bsd.c,v 1.7 2005/07/21 17:26:54 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,10 +53,12 @@ sysmouse_handler(void *data)
 	mouse.y = int_max(mi.u.data.y / sp->cheight, 0);
 
 	/* for cosmetic bug in syscons.c on FreeBSD 3.3/3.4 */
+#ifdef HAVE_MACHINE_CONSOLE_H
 	mi.operation = MOUSE_HIDE;
 	ioctl(fd, CONS_MOUSECTL, &mi);
 	mi.operation = MOUSE_SHOW;
 	ioctl(fd, CONS_MOUSECTL, &mi);
+#endif
 	buttons = mi.u.data.buttons & 7;
 	change = (mouse.x != prev_mouse.x || mouse.y != prev_mouse.y);
 	prev_mouse = mouse;

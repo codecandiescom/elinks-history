@@ -1,3 +1,102 @@
+Thu Jul 21 20:59:55 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Thu Jul 21 17:55:38 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/general.c:
+
+	Instructions should follow variable definitions.  
+
+Thu Jul 21 17:26:54 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/unix/bsd.c:
+
+	Show/hide trick with mouse only for older BSD version.  
+
+Thu Jul 21 17:21:17 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/: internal.h, parser/general.c, parser/parse.c:
+
+	Fix for bug 696.  
+
+Thu Jul 21 16:07:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Either sys/consio.h or machine/console.h will do for BSD sysmouse
+	support. Also make it depend on CONFIG_MOUSE=yes and CONFIG_GPM=no.
+	Revert the creative changes done to the EL_*_OPTIONAL_LIBRARY()
+	macros.  
+
+Thu Jul 21 15:37:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/draw.c:
+
+	Use the default document background color
+	(document.colors.background) for empty documents. Fixes bug 697.  
+
+Thu Jul 21 15:24:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fix compile error for open_uri_in_new_window().  
+
+Thu Jul 21 15:07:43 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/unix/bsd.c:
+
+	Replaced tab with space.  
+
+Thu Jul 21 14:32:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, dialogs/menu.c, dialogs/menu.h,
+	session/session.c, session/session.h, session/task.c:
+
+	Add support for opening target=_blank in a new window. Fixes the
+	remaining part of bug 468.  
+
+Thu Jul 21 13:50:27 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/unix/bsd.c:
+
+	"Uninstall" signal handler only when it was previously installed.  
+
+Thu Jul 21 10:35:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	EL_CONFIG_OPTIONAL_LIBRARY(): Record the withval in WITHVAL_CONFIG_*
+	variable so the following EL_CHECK_OPTIONAL_LIBRARY() can use the
+	correct value when checking for configure errors. Problem recorded
+	by Toksyuryel.  
+
+Thu Jul 21 09:42:34 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Minor punctuation fix.  
+
+Thu Jul 21 08:23:07 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/bittorrent/Makefile.am:
+
+	Compilation fix: path to openssl headers is needed.  
+
+Thu Jul 21 07:56:23 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jul 21 07:38:57 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/bittorrent/bittorrent.c:
+
+	Typo fixes.  
+
 Wed Jul 20 20:00:57 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/terminal/kbd.h:

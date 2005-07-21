@@ -1,5 +1,5 @@
 /* Internal "bittorrent" protocol implementation */
-/* $Id: bittorrent.c,v 1.5 2005/07/19 15:44:53 zas Exp $ */
+/* $Id: bittorrent.c,v 1.6 2005/07/21 07:38:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,8 +173,8 @@ static struct option_info bittorrent_protocol_options[] = {
 		"request_queue_size", 0, 1, INT_MAX, 5,
 		N_("How many piece requests to continuosly keep queue. Pipelining\n"
 		"of requests is essential to saturate connections and get a good\n"
-		"good connection performance and thus a faster download. However,\n"
-		"a very big queue size can lead to wasting bandwidth near the end\n"
+		"connection performance and thus a faster download. However, a\n"
+		"very big queue size can lead to wasting bandwidth near the end\n"
 		"of the connection since remaining piece blocks will be requested\n"
 		"from multiple peers.")),
 
@@ -190,7 +190,7 @@ static struct option_info bittorrent_protocol_options[] = {
 		N_("The number of seconds between updating the connection state\n"
 		"and most importantly choke and unchoke peer connections. The\n"
 		"choke period should be big enough for newly unchoked connections\n"
-		"to get started but small enough to not allow freeriders to much\n"
+		"to get started but small enough to not allow freeriders too much\n"
 		"room for stealing bandwidth.")),
 
 	INIT_OPT_INT("protocol.bittorrent", N_("Rarest first piece selection cutoff"),

@@ -1,5 +1,5 @@
 /* BSD mouse system-specific routines. */
-/* $Id: bsd.c,v 1.5 2005/07/21 13:50:27 witekfl Exp $ */
+/* $Id: bsd.c,v 1.6 2005/07/21 15:07:43 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,7 +199,7 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 void
 unhandle_mouse(void *data)
 {
-	if (data)	install_signal_handler(SIGUSR2, NULL, NULL, 0);
+	if (data) install_signal_handler(SIGUSR2, NULL, NULL, 0);
 }
 
 void

@@ -5879,7 +5879,7 @@ msgstr "%d b³êdów select()."
 #: src/main/version.c:80
 #, c-format
 msgid "Built on %s %s"
-msgstr "Zbudowany na %s %s"
+msgstr "Zbudowany %s %s"
 
 #: src/main/version.c:83
 msgid "Text WWW browser"

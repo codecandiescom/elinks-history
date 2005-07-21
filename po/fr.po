@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-07-20 10:00+0200\n"
-"PO-Revision-Date: 2005-07-19 10:03+0200\n"
+"POT-Creation-Date: 2005-07-21 09:47+0200\n"
+"PO-Revision-Date: 2005-07-21 09:49+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -6388,7 +6388,7 @@ msgstr "Le fichier metainfo de BitTorrent contenait des erreurs"
 
 #: src/network/state.c:125
 msgid "The tracker requesting failed"
-msgstr ""
+msgstr "L'interrogation du serveur a échouée"
 
 #: src/network/state.c:149
 msgid "Unknown error"
@@ -6767,6 +6767,8 @@ msgid ""
 "The number of seconds to pause between sending keepalive\n"
 "messages."
 msgstr ""
+"Nombre de secondes entre chaque envoi de messages de maintien\n"
+"en vie."
 
 #: src/protocol/bittorrent/bittorrent.c:172
 msgid "Number of pending requests"
@@ -6776,8 +6778,8 @@ msgstr "Nombre de requêtes en attente"
 msgid ""
 "How many piece requests to continuosly keep queue. Pipelining\n"
 "of requests is essential to saturate connections and get a good\n"
-"good connection performance and thus a faster download. However,\n"
-"a very big queue size can lead to wasting bandwidth near the end\n"
+"connection performance and thus a faster download. However, a\n"
+"very big queue size can lead to wasting bandwidth near the end\n"
 "of the connection since remaining piece blocks will be requested\n"
 "from multiple peers."
 msgstr ""
@@ -6803,7 +6805,7 @@ msgid ""
 "The number of seconds between updating the connection state\n"
 "and most importantly choke and unchoke peer connections. The\n"
 "choke period should be big enough for newly unchoked connections\n"
-"to get started but small enough to not allow freeriders to much\n"
+"to get started but small enough to not allow freeriders too much\n"
 "room for stealing bandwidth."
 msgstr ""
 
@@ -6830,13 +6832,12 @@ msgid "Warning: potential malicious path detected"
 msgstr "Attention: chemin potentiellement malicieux détecté"
 
 #: src/protocol/bittorrent/dialogs.c:142
-#, fuzzy
 msgid "Info hash"
-msgstr "Info"
+msgstr "Hachage info"
 
 #: src/protocol/bittorrent/dialogs.c:146
 msgid "Announce URI"
-msgstr ""
+msgstr "URI d'annonce"
 
 #: src/protocol/bittorrent/dialogs.c:151 src/protocol/bittorrent/dialogs.c:188
 msgid "Comment"
@@ -6868,23 +6869,20 @@ msgid "Download info"
 msgstr "Infos sur le téléchargement"
 
 #: src/protocol/bittorrent/dialogs.c:281
-#, fuzzy
 msgid "downloading (random)"
-msgstr "Téléchargement"
+msgstr "réception (hasard)"
 
 #: src/protocol/bittorrent/dialogs.c:282
 msgid "downloading (rarest first)"
-msgstr ""
+msgstr "réception (+rare)"
 
 #: src/protocol/bittorrent/dialogs.c:283
-#, fuzzy
 msgid "downloading (end game)"
-msgstr "Téléchargement"
+msgstr "réception (fin)"
 
 #: src/protocol/bittorrent/dialogs.c:284
-#, fuzzy
 msgid "seeding"
-msgstr "vitesse"
+msgstr "nourris."
 
 #: src/protocol/bittorrent/dialogs.c:312
 msgid "Status"
@@ -6903,8 +6901,8 @@ msgstr "Postes"
 #, c-format
 msgid "%d seeder"
 msgid_plural "%d seeders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d nourisse"
+msgstr[1] "%d nourisses"
 
 #: src/protocol/bittorrent/dialogs.c:340
 #, c-format
@@ -6914,9 +6912,8 @@ msgstr[0] "%d disponible"
 msgstr[1] "%d disponibles"
 
 #: src/protocol/bittorrent/dialogs.c:345
-#, fuzzy
 msgid "Swarm info"
-msgstr "Info. en-têtes"
+msgstr "Info. nuage"
 
 #: src/protocol/bittorrent/dialogs.c:358
 #, c-format
@@ -6936,13 +6933,12 @@ msgstr "moyenne"
 
 #: src/protocol/bittorrent/dialogs.c:377
 msgid "1:1 in"
-msgstr ""
+msgstr "1:1 sur"
 
 #. Sharing:
 #: src/protocol/bittorrent/dialogs.c:383
-#, fuzzy
 msgid "Sharing"
-msgstr "Chaîne"
+msgstr "Partage"
 
 #: src/protocol/bittorrent/dialogs.c:392
 msgid "uploaded"
@@ -6955,7 +6951,7 @@ msgstr "reçus"
 #. Pieces:
 #: src/protocol/bittorrent/dialogs.c:398
 msgid "Pieces"
-msgstr ""
+msgstr "Morceaux"
 
 #: src/protocol/bittorrent/dialogs.c:402
 #, c-format
@@ -7943,7 +7939,7 @@ msgstr "Mauvais évènement %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évènement: %d (%s)"
 
-#: src/terminal/kbd.c:1042
+#: src/terminal/kbd.c:1068
 msgid "Too many bytes read from the itrm!"
 msgstr "Trop d'octets lus en provenance de itrm!"
 

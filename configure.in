@@ -378,7 +378,8 @@ AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 				LIBS="$LIBS -l$4"
 			fi
 		else
-			if test -n "$withval" && test "x$withval" != xno; then
+			if test -n "[$]WITHVAL_$1" &&
+			   test "[$]WITHVAL_$1" != xno; then
 				AC_MSG_ERROR([$2 not found])
 			fi
 			EL_RESTORE_FLAGS
@@ -388,12 +389,14 @@ AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 	fi
 ])
 
-dnl EL_CHECK_OPTIONAL_LIBRARY(define, name, header, lib, function, confhelp)
+dnl EL_CONFIG_OPTIONAL_LIBRARY(define, name, header, lib, function, confhelp)
 AC_DEFUN([EL_CONFIG_OPTIONAL_LIBRARY],
 [
 	$1=yes
-	AC_ARG_WITH([$2], [$6],
-	[ if test "x$withval" = xno; then $1=no; fi])
+	WITHVAL_$1=
+
+	AC_ARG_WITH([$2], [$6], [WITHVAL_$1="[$]withval"])
+	if test "x[$]WITHVAL_$1" = xno; then $1=no; fi
 
 	EL_CHECK_OPTIONAL_LIBRARY([$1], [$2], [$3], [$4], [$5])
 

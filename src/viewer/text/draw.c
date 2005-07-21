@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.24 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: draw.c,v 1.25 2005/07/21 15:37:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,8 +213,9 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 		}
 	}
 
-	if (doc_view->document->height)
-		color.background = doc_view->document->bgcolor;
+	color.background = doc_view->document->height
+			 ? doc_view->document->bgcolor
+			 : get_opt_color("document.colors.background");
 
 	vs = doc_view->vs;
 	if (!vs) {

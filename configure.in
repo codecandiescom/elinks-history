@@ -368,15 +368,13 @@ AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 		fi
 
 		AC_CHECK_HEADERS([$3], [$1=yes], [$1=no; break;])
-		if test "[$]$1" = yes && test "$4" != NULL; then
+		if test "[$]$1" = yes; then
 			AC_CHECK_LIB([$4], [$5], [$1=yes], [$1=no])
 		fi
 
 		if test "[$]$1" = yes; then
 			EL_CONFIG([$1], [$2])
-			if test "$4" != NULL; then
-				LIBS="$LIBS -l$4"
-			fi
+			LIBS="$LIBS -l$4"
 		else
 			if test -n "[$]WITHVAL_$1" &&
 			   test "[$]WITHVAL_$1" != xno; then
@@ -405,11 +403,6 @@ AC_DEFUN([EL_CONFIG_OPTIONAL_LIBRARY],
 
 EL_CONFIG_OPTIONAL_LIBRARY(CONFIG_GPM, gpm, gpm.h, gpm, Gpm_Open,
 	[  --without-gpm           disable gpm (mouse) support])
-
-EL_CONFIG_OPTIONAL_LIBRARY(CONFIG_SYSMOUSE, sysmouse,
-			   [sys/consio.h machine/console.h], [NULL], [NULL],
-	[  --without-sysmouse      disable BSD mouse support])
-AM_CONDITIONAL(CONFIG_SYSMOUSE, test "$CONFIG_SYSMOUSE" = yes)
 
 EL_CONFIG_OPTIONAL_LIBRARY(CONFIG_GZIP, zlib, zlib.h, z, gzdopen,
 	[  --without-zlib          disable zlib support])
@@ -454,6 +447,15 @@ AM_CONDITIONAL(CONFIG_XBEL_BOOKMARKS, test "$CONFIG_XBEL_BOOKMARKS" = yes)
 if test "$CONFIG_XBEL_BOOKMARKS" != yes; then
 	EL_RESTORE_FLAGS
 fi
+
+dnl ===================================================================
+dnl Checks for BSD sysmouse
+dnl ===================================================================
+
+HAVE_SYSMOUSE_HEADER="no"
+
+# Either of these header files provides the (same) sysmouse interface
+AC_CHECK_HEADERS(sys/consio.h machine/console.h, [HAVE_SYSMOUSE_HEADER="yes"])
 
 dnl ===================================================================
 dnl Checks for OS/2
@@ -1074,6 +1076,14 @@ AM_CONDITIONAL(CONFIG_SMB, test "$CONFIG_SMB" = yes)
 EL_ARG_ENABLE(CONFIG_MOUSE, mouse, [Mouse handling],
 	      [  --disable-mouse         disable mouse support])
 AM_CONDITIONAL(CONFIG_MOUSE, test "$CONFIG_MOUSE" = yes)
+
+# GPM mouse is Linux specific, so ...
+CONFIG_SYSMOUSE=yes
+EL_ARG_DEPEND(CONFIG_SYSMOUSE, sysmouse,
+	      [CONFIG_MOUSE:yes CONFIG_GPM:no HAVE_SYSMOUSE_HEADER:yes],
+	      [BSD sysmouse],
+	      [  --disable-sysmouse      disable BSD sysmouse support])
+AM_CONDITIONAL(CONFIG_SYSMOUSE, test "$CONFIG_SYSMOUSE" = yes)
 
 EL_ARG_ENABLE(CONFIG_88_COLORS, 88-colors, [88 colors],
 	      [  --enable-88-colors     enable 88 color support])

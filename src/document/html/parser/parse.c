@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.169 2005/07/15 20:17:25 miciah Exp $ */
+/* $Id: parse.c,v 1.170 2005/07/21 17:21:17 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -921,6 +921,10 @@ end_element(struct element_info *ei,
 	    || ei->type == ELEMENT_TYPE_LI)
 		return html;
 
+	if (ei->func == html_html) if (!html_context->was_body_background) {
+		html_body(html_context, attr);
+		html_context->was_body_background = 0;
+	}
 	/* dump_html_stack(html_context); */
 	foreach (e, html_context->stack) {
 		if (e->linebreak && !ei->linebreak) kill = 1;

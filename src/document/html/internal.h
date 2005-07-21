@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.63 2005/07/12 16:31:02 jonas Exp $ */
+/* $Id: internal.h,v 1.64 2005/07/21 17:21:17 witekfl Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -69,6 +69,7 @@ struct html_context {
 	unsigned int was_br:1;
 	unsigned int was_xmp:1;
 	unsigned int has_link_lines:1;
+	unsigned int was_body_background:1;
 
 	/* For html/parser.c, html/renderer.c */
 	int margin;

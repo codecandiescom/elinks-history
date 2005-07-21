@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.6 2005/07/21 17:21:17 witekfl Exp $ */
+/* $Id: general.c,v 1.7 2005/07/21 17:55:38 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,11 +127,11 @@ html_body(struct html_context *html_context, unsigned char *a)
 #endif
 
 	if (par_format.bgcolor != format.style.bg) {
-		html_context->was_body_background = 1;
 		/* Modify the root HTML element - format_html_part() will take
 		 * this from there. */
 		struct html_element *e = html_context->stack.prev;
 
+		html_context->was_body_background = 1;
 		e->parattr.bgcolor = e->attr.style.bg = par_format.bgcolor = format.style.bg;
 	}
 

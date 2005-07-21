@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.218 2005/07/05 16:49:35 witekfl Exp $ */
+/* $Id: spidermonkey.c,v 1.219 2005/07/21 15:24:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "elinks.h"
 
 #include "bfu/dialog.h"
+#include "cache/cache.h"
 #include "cookies/cookies.h"
 #include "dialogs/menu.h"
 #include "dialogs/status.h"
@@ -466,7 +467,8 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	    && !get_cmd_opt_bool("no-home")
 	    && !get_cmd_opt_bool("anonymous")
 	    && can_open_in_new(ses->tab->term)) {
-		open_uri_in_new_window(ses, uri, ENV_ANY);
+		open_uri_in_new_window(ses, uri, NULL, ENV_ANY,
+				       CACHE_MODE_NORMAL, TASK_NONE);
 		boolean_to_jsval(ctx, rval, 1);
 	} else {
 		/* When opening a new tab, we might get rerendered, losing our

@@ -1,9 +1,11 @@
-/* $Id: menu.h,v 1.56 2005/07/10 01:56:42 miciah Exp $ */
+/* $Id: menu.h,v 1.57 2005/07/21 14:32:59 jonas Exp $ */
 
 #ifndef EL__DIALOGS_MENU_H
 #define EL__DIALOGS_MENU_H
 
 #include "bfu/menu.h"
+#include "cache/cache.h"
+#include "session/task.h"
 #include "terminal/terminal.h"
 #include "viewer/action.h"
 
@@ -30,7 +32,10 @@ void exit_prog(struct session *ses, int query);
 
 void save_url_as(struct session *ses);
 
-void open_uri_in_new_window(struct session *ses, struct uri *uri, enum term_env_type);
+void
+open_uri_in_new_window(struct session *ses, struct uri *uri, struct uri *referrer,
+		       enum term_env_type env, enum cache_mode cache_mode,
+		       enum task_type task);
 
 void send_open_new_window(struct terminal *term, const struct open_in_new *open, struct session *ses);
 void send_open_in_new_window(struct terminal *term, const struct open_in_new *open, struct session *ses);

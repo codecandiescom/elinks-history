@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.633 2005/06/24 23:47:07 jonas Exp $ */
+/* $Id: session.c,v 1.634 2005/07/21 14:32:59 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -82,6 +82,9 @@ struct session_info {
 	timer_id_T timer;
 	struct session *ses;
 	struct uri *uri;
+	struct uri *referrer;
+	enum task_type task;
+	enum cache_mode cache_mode;
 };
 
 #define file_to_load_is_active(ftl) ((ftl)->req_sent && is_in_progress_state((ftl)->download.state))
@@ -131,6 +134,7 @@ done_session_info(struct session_info *info)
 	kill_timer(&info->timer);
 
 	if (info->uri) done_uri(info->uri);
+	if (info->referrer) done_uri(info->referrer);
 	mem_free(info);
 }
 
@@ -152,7 +156,8 @@ session_info_timeout(int id)
 }
 
 int
-add_session_info(struct session *ses, struct uri *uri)
+add_session_info(struct session *ses, struct uri *uri, struct uri *referrer,
+		 enum cache_mode cache_mode, enum task_type task)
 {
 	struct session_info *info = mem_calloc(1, sizeof(*info));
 
@@ -163,8 +168,14 @@ add_session_info(struct session *ses, struct uri *uri)
 	 * but it won't hurt to have a few seconds atleast. --jonas */
 	install_timer(&info->timer, 10000, (void (*)(void *)) session_info_timeout,
 			(void *) (long) info->id);
+
 	info->ses = ses;
+	info->task = task;
+	info->cache_mode = cache_mode;
+
 	if (uri) info->uri = get_uri_reference(uri);
+	if (referrer) info->referrer = get_uri_reference(referrer);
+
 	add_to_list(session_info, info);
 
 	return info->id;
@@ -179,6 +190,25 @@ init_saved_session(struct terminal *term, int id)
 	if (!info) return NULL;
 
 	ses = init_session(info->ses, term, info->uri, 0);
+
+	if (!ses) {
+		done_session_info(info);
+		return ses;
+	}
+
+	/* Only do the ses_goto()-thing for target=_blank. */
+	if (info->uri && info->task != TASK_NONE) {
+		/* The init_session() call would have started the download but
+		 * not with the requested cache mode etc. so interrupt that
+		 * download . */
+		abort_loading(ses, 1);
+
+		ses->reloadlevel = info->cache_mode;
+		set_session_referrer(ses, info->referrer);
+		ses_goto(ses, info->uri, NULL, NULL, info->cache_mode,
+			 info->task, 0);
+	}
+
 	done_session_info(info);
 
 	return ses;
@@ -898,7 +928,9 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 		if (!can_open_in_new(ses->tab->term))
 			return;
 
-		open_uri_in_new_window(ses, uri, ses->tab->term->environment);
+		open_uri_in_new_window(ses, uri, NULL,
+				       ses->tab->term->environment,
+				       CACHE_MODE_NORMAL, TASK_NONE);
 
 	} else if (remote & SES_REMOTE_ADD_BOOKMARK) {
 #ifdef CONFIG_BOOKMARKS

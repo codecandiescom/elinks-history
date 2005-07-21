@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.181 2005/07/15 20:18:13 miciah Exp $ */
+/* $Id: task.c,v 1.182 2005/07/21 14:32:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "bfu/menu.h"
 #include "bfu/dialog.h"
 #include "cache/cache.h"
+#include "dialogs/menu.h"
 #include "dialogs/status.h"
 #include "document/document.h"
 #include "document/html/parser.h"
@@ -23,6 +24,7 @@
 #include "main/event.h"
 #include "main/timer.h"
 #include "network/connection.h"
+#include "osdep/newwin.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "terminal/terminal.h"
@@ -566,8 +568,27 @@ do_follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 		return;
 	}
 
+	if (do_referrer) {
+		struct document_view *doc_view = current_frame(ses);
+
+		if (doc_view && doc_view->document)
+			referrer = doc_view->document->uri;
+	}
+
 	if (target && !strcmp(target, "_blank")) {
 		int mode = get_opt_int("document.browse.links.target_blank");
+
+		if (mode == 3
+		    && !get_cmd_opt_bool("anonymous")
+		    && can_open_in_new(ses->tab->term)
+		    && !get_cmd_opt_bool("no-connect")
+		    && !get_cmd_opt_bool("no-home")) {
+			enum term_env_type env = ses->tab->term->environment;
+
+			open_uri_in_new_window(ses, uri, referrer, env,
+					       cache_mode, task);
+			return;
+		}
 
 		if (mode > 0) {
 			struct session *new_ses;
@@ -587,13 +608,6 @@ do_follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 	}
 
 	abort_loading(ses, 0);
-
-	if (do_referrer) {
-		struct document_view *doc_view = current_frame(ses);
-
-		if (doc_view && doc_view->document)
-			referrer = doc_view->document->uri;
-	}
 
 	set_session_referrer(ses, referrer);
 

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.175 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: session.h,v 1.176 2005/07/21 14:32:59 jonas Exp $ */
 
 #ifndef EL__SESSION_SESSION_H
 #define EL__SESSION_SESSION_H
@@ -218,7 +218,9 @@ struct string *encode_session_info(struct string *info, struct list_head *url_li
 int decode_session_info(struct terminal *term, struct terminal_info *info);
 
 /* Registers a base session and returns it's id. Value <= 0 means error. */
-int add_session_info(struct session *ses, struct uri *uri);
+int
+add_session_info(struct session *ses, struct uri *uri, struct uri *referrer,
+		 enum cache_mode cache_mode, enum task_type task);
 
 void done_saved_session_info(void);
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.405 2005/07/10 01:56:42 miciah Exp $ */
+/* $Id: menu.c,v 1.406 2005/07/21 14:32:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -602,8 +602,9 @@ add_cmdline_bool_option(struct string *string, unsigned char *name)
 }
 
 void
-open_uri_in_new_window(struct session *ses, struct uri *uri,
-		       enum term_env_type env)
+open_uri_in_new_window(struct session *ses, struct uri *uri, struct uri *referrer,
+		       enum term_env_type env, enum cache_mode cache_mode,
+		       enum task_type task)
 {
 	int ring = get_cmd_opt_int("session-ring");
 	struct string parameters;
@@ -612,7 +613,7 @@ open_uri_in_new_window(struct session *ses, struct uri *uri,
 	assert(env && ses);
 	if_assert_failed return;
 
-	id = add_session_info(ses, uri);
+	id = add_session_info(ses, uri, referrer, cache_mode, task);
 	if (id < 1) return;
 
 	if (!init_string(&parameters)) return;
@@ -655,7 +656,8 @@ send_open_in_new_window(struct terminal *term, const struct open_in_new *open,
 	uri = get_link_uri(ses, doc_view, link);
 	if (!uri) return;
 
-	open_uri_in_new_window(ses, uri, open->env);
+	open_uri_in_new_window(ses, uri, NULL, open->env,
+			       CACHE_MODE_NORMAL, TASK_NONE);
 	done_uri(uri);
 }
 
@@ -663,7 +665,8 @@ void
 send_open_new_window(struct terminal *term, const struct open_in_new *open,
 		     struct session *ses)
 {
-	open_uri_in_new_window(ses, NULL, open->env);
+	open_uri_in_new_window(ses, NULL, NULL, open->env,
+			       CACHE_MODE_NORMAL, TASK_NONE);
 }
 
 

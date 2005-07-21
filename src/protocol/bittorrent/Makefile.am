@@ -1,7 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2005/07/11 12:58:26 jonas Exp $
+## $Id: Makefile.am,v 1.3 2005/07/21 08:23:07 zas Exp $
 
 include $(top_srcdir)/Makefile.base
+
+INCLUDES += $(GNUTLS_CFLAGS) $(OPENSSL_CFLAGS)
 
 noinst_LIBRARIES = libbittorrent.a
 

@@ -1,5 +1,5 @@
 /* Internal "bittorrent" protocol implementation */
-/* $Id: bittorrent.c,v 1.6 2005/07/21 07:38:57 zas Exp $ */
+/* $Id: bittorrent.c,v 1.7 2005/07/22 08:05:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,7 +171,7 @@ static struct option_info bittorrent_protocol_options[] = {
 #endif
 	INIT_OPT_INT("protocol.bittorrent", N_("Number of pending requests"),
 		"request_queue_size", 0, 1, INT_MAX, 5,
-		N_("How many piece requests to continuosly keep queue. Pipelining\n"
+		N_("How many piece requests to continuously keep in queue. Pipelining\n"
 		"of requests is essential to saturate connections and get a good\n"
 		"connection performance and thus a faster download. However, a\n"
 		"very big queue size can lead to wasting bandwidth near the end\n"

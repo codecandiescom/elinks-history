@@ -1,3 +1,35 @@
+Fri Jul 22 17:47:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Change realloc_line to reallocate not only when the new length is 
+	greater than the old length, but whenever the two lengths differ.  
+	
+	Change add_document_line to call realloc_line at the end with the
+	length of the final line.  
+	
+	This saves a wee bit of memory and fixes bug 699, whereby lines with 
+	backspaces had gaps in the background following the ends of the
+	lines.  
+
+Fri Jul 22 08:51:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Minor tidyup.  
+
+Fri Jul 22 08:19:15 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Jul 22 08:05:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/bittorrent/bittorrent.c:
+
+	Minor typo fix.  
+
 Thu Jul 21 20:59:55 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:

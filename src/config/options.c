@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.492 2005/07/12 19:49:18 miciah Exp $ */
+/* $Id: options.c,v 1.493 2005/07/22 08:51:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -947,7 +947,8 @@ update_options_visibility(void)
 			  get_opt_bool("config.show_template"));
 }
 
-void toggle_option(struct session *ses, struct option *option)
+void
+toggle_option(struct session *ses, struct option *option)
 {
 	long number = option->value.number + 1;
 

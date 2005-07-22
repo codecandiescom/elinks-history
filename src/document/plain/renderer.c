@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.179 2005/07/19 15:44:53 zas Exp $ */
+/* $Id: renderer.c,v 1.180 2005/07/22 17:47:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ realloc_line(struct document *document, int x, int y)
 
 	if (!line) return NULL;
 
-	if (x > line->length) {
+	if (x != line->length) {
 		if (!ALIGN_LINE(&line->chars, line->length, x))
 			return NULL;
 
@@ -401,6 +401,8 @@ add_document_line(struct plain_renderer *renderer,
 	}
 
 	mem_free(line);
+
+	realloc_line(document, pos - startpos, lineno);
 
 	return width + expanded;
 }

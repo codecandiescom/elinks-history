@@ -1,4 +1,4 @@
-/* $Id: general.h,v 1.1 2005/07/15 04:37:55 miciah Exp $ */
+/* $Id: general.h,v 1.2 2005/07/24 15:57:10 witekfl Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_GENERAL_H
 #define EL__DOCUMENT_HTML_PARSER_GENERAL_H
@@ -50,4 +50,5 @@ element_handler_T html_ul;
 element_handler_T html_underline;
 element_handler_T html_xmp;
 
+element_handler_T html_html2;
 #endif

@@ -1296,7 +1296,7 @@ msgid ""
 "defaults to stdout."
 msgstr ""
 "Wypisz plik konfiguracyjny z domy¶lnymi ustawieniami na\n"
-"standardowe wyj¶cie"
+"standardowe wyj¶cie."
 
 #: src/config/cmdline.c:670
 msgid "Name of configuration file"
@@ -2689,10 +2689,10 @@ msgid ""
 "1 for basic regular expression searches\n"
 "2 for extended regular expression searches"
 msgstr ""
-"W³±cz szukanie z u¿yciem wyra¿eñ regularnych.\n"
-"0 - zwyk³e szukanie.\n"
-"1 - szukanie z u¿yciem prostych wyra¿eñ regularnych.\n"
-"2 - szukanie z u¿yciem rozszerzonych wyra¿eñ regularnych."
+"W³±cz szukanie z u¿yciem wyra¿eñ regularnych:\n"
+"0 - zwyk³e szukanie\n"
+"1 - szukanie z u¿yciem prostych wyra¿eñ regularnych\n"
+"2 - szukanie z u¿yciem rozszerzonych wyra¿eñ regularnych"
 
 #: src/config/options.inc:396
 msgid "Show search hit top or bottom dialogs"
@@ -3122,9 +3122,9 @@ msgid ""
 "2 is ask the user"
 msgstr ""
 "Zapobiegaj nadpisywaniu lokalnych plików:\n"
-"0 - pliki bêd± zawsze nadpisywane.\n"
-"1 - dodaj przyrostek .{liczba} (na przyk³ad '.1') do nazwy.\n"
-"2 - zapytaj u¿ytkownika."
+"0 - pliki bêd± zawsze nadpisywane\n"
+"1 - dodaj przyrostek .{liczba} (na przyk³ad '.1') do nazwy\n"
+"2 - zapytaj u¿ytkownika"
 
 #
 #: src/config/options.inc:614
@@ -4104,9 +4104,9 @@ msgid ""
 "2 means always"
 msgstr ""
 "Pokazuj pasek kart na ekranie:\n"
-"0 - nigdy.\n"
-"1 - tylko gdy wiêcej ni¿ jeden tab.\n"
-"2 - zawsze."
+"0 - nigdy\n"
+"1 - tylko gdy wiêcej ni¿ jedna karta jest otwarta\n"
+"2 - zawsze"
 
 #: src/config/options.inc:1151
 msgid "Wrap-around tabs cycling"
@@ -6080,10 +6080,10 @@ msgid ""
 msgstr ""
 "Typ opisu do wy¶wietlenia w oknie dialogowym \"co zrobiæ\n"
 "z tym plikiem\":\n"
-"0 - wy¶wietla \"mailcap\".\n"
-"1 - wy¶wietla program, który ma byæ uruchomiony.\n"
+"0 - wy¶wietla \"mailcap\"\n"
+"1 - wy¶wietla program, który ma byæ uruchomiony\n"
 "2 - wy¶wietla opis pola mailcap, je¶li istnieje; \"mailcap\"\n"
-"    w przeciwnym przypadku."
+"    w przeciwnym przypadku"
 
 #: src/mime/backend/mailcap.c:115
 msgid "Prioritize entries by file"
@@ -7138,7 +7138,7 @@ msgstr "Inteligentne przedrostki"
 #: src/protocol/rewrite/rewrite.c:81
 msgid "Smart prefixes, see enable-smart description for details."
 msgstr ""
-"Inteligentne przedrostki, zobacz opis w³±czania inteligentnych przedrostków"
+"Inteligentne przedrostki, zobacz opis w³±czania inteligentnych przedrostków."
 
 #: src/protocol/rewrite/rewrite.c:88
 #, no-c-format

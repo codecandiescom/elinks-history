@@ -1,3 +1,15 @@
+Sun Jul 24 18:02:49 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Punctuation fixes.  
+
+Sun Jul 24 15:57:10 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/: general.c, general.h, parse.c:
+
+	Call new function html_html2 instead of call to html_body.  
+
 Fri Jul 22 17:47:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/document/plain/renderer.c:

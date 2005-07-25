@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.171 2005/07/24 15:57:10 witekfl Exp $ */
+/* $Id: parse.c,v 1.172 2005/07/25 15:14:44 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -921,7 +921,8 @@ end_element(struct element_info *ei,
 	    || ei->type == ELEMENT_TYPE_LI)
 		return html;
 
-	if (ei->func == html_html) if (!html_context->was_body_background) {
+	if (ei->func == html_html && html_top.type >= ELEMENT_KILLABLE
+		&& !html_context->was_body_background) {
 		html_html2(html_context, NULL);
 		html_context->was_body_background = 0;
 	}

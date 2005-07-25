@@ -1,3 +1,16 @@
+Mon Jul 25 20:18:05 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Add a note about our massive C aliasing rules violation in the lists
+	code.  
+
+Mon Jul 25 15:14:44 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/parse.c:
+
+	Fix for bug 701 by Miciah.  
+
 Sun Jul 24 18:02:49 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:

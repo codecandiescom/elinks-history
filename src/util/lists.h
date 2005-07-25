@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.51 2005/07/16 21:57:26 miciah Exp $ */
+/* $Id: lists.h,v 1.52 2005/07/25 20:18:05 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -8,6 +8,13 @@
 /* BEWARE! You MAY NOT use ternary operator as parameter to there functions,
  * because they are likely to take & of the parameter. Worst of all, it will
  * work with gcc. But nowhere else (at least not w/ tcc). */
+
+/* Note that this whole lists implementation code is severely broken. All of
+ * it is a single huge violation of C aliasing rules, just accessing things
+ * like we do here is totally prohibited and bound to generate segfaults in
+ * proportion with rising optimization level and gcc version.
+ *
+ * Fixing this would be a nice and needed janitorial project. */
 
 /* Lists debugging
  * Two unsigned int magic number will be put before and after the next and

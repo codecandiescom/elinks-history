@@ -1,3 +1,23 @@
+Tue Jul 26 14:18:58 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/parse.c:
+
+	Replaced tabs with spaces.  
+
+Tue Jul 26 14:13:48 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/: general.c, general.h, parse.c:
+
+	Drop unused parameter to html_html2.  
+
+Tue Jul 26 14:10:22 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/: internal.h, parser/general.c,
+	parser/general.h, parser/parse.c:
+
+	Fixed bug 700. Small comments about was_body and
+	was_body_background.  
+
 Mon Jul 25 20:18:05 2005  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/lists.h:

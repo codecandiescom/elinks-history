@@ -1,4 +1,4 @@
-/* $Id: general.h,v 1.3 2005/07/26 14:10:22 witekfl Exp $ */
+/* $Id: general.h,v 1.4 2005/07/26 14:13:48 witekfl Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_GENERAL_H
 #define EL__DOCUMENT_HTML_PARSER_GENERAL_H
@@ -51,6 +51,6 @@ element_handler_T html_ul;
 element_handler_T html_underline;
 element_handler_T html_xmp;
 
-element_handler_T html_html2;
+void html_html2(struct html_context *);
 void html_meta2(struct html_context *, unsigned char *, unsigned char *);
 #endif

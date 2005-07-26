@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.9 2005/07/26 14:10:22 witekfl Exp $ */
+/* $Id: general.c,v 1.10 2005/07/26 14:13:48 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,7 +145,7 @@ html_body(struct html_context *html_context, unsigned char *a)
 }
 
 void
-html_html2(struct html_context *html_context, unsigned char *a)
+html_html2(struct html_context *html_context)
 {
 #ifdef CONFIG_CSS
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.174 2005/07/26 14:13:48 witekfl Exp $ */
+/* $Id: parse.c,v 1.175 2005/07/26 14:18:58 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -458,7 +458,7 @@ static struct element_info elements[] = {
         {"LINK",        html_link,        1, ELEMENT_TYPE_NON_PAIRABLE},
         {"LISTING",     html_pre,         2, ELEMENT_TYPE_NESTABLE    },
         {"MENU",        html_ul,          2, ELEMENT_TYPE_NESTABLE    },
-				{"META",        html_meta,        0, ELEMENT_TYPE_NON_PAIRABLE},
+        {"META",        html_meta,        0, ELEMENT_TYPE_NON_PAIRABLE},
         {"NOFRAMES",    html_noframes,    0, ELEMENT_TYPE_NESTABLE    },
         {"NOSCRIPT",    html_noscript,    0, ELEMENT_TYPE_NESTABLE    },
         {"OBJECT",      html_object,      1, ELEMENT_TYPE_NON_PAIRABLE},

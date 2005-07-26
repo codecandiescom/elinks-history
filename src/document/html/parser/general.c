@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.8 2005/07/24 15:57:10 witekfl Exp $ */
+/* $Id: general.c,v 1.9 2005/07/26 14:10:22 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,6 +118,8 @@ html_body(struct html_context *html_context, unsigned char *a)
 	get_color(html_context, a, "vlink", &format.vlink);
 
 	get_bgcolor(html_context, a, &format.style.bg);
+
+	html_context->was_body = 1; /* this will be used by "meta inside body" */
 #ifdef CONFIG_CSS
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
 	 * it _and_ prefer it over bgcolor attribute. */
@@ -202,6 +204,25 @@ html_head(struct html_context *html_context, unsigned char *a)
 {
 	/* This makes sure it gets to the stack and helps tame down unclosed
 	 * <title>. */
+}
+
+void
+html_meta(struct html_context *html_context, unsigned char *a)
+{
+	/* html_meta2 do all work. */
+}
+
+void
+html_meta2(struct html_context *html_context, unsigned char *meta,
+	unsigned char *eof)
+{
+	struct string head;
+
+	if (!init_string(&head)) return;
+	/* scan_http_equiv requires from pointer to point before "META", so -1 here.*/ 
+	scan_http_equiv(meta - 1, eof, &head, NULL, html_context->options);
+	if (head.source) process_head(html_context, head.source);
+	done_string(&head);
 }
 
 void

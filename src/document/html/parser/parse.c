@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.172 2005/07/25 15:14:44 witekfl Exp $ */
+/* $Id: parse.c,v 1.173 2005/07/26 14:10:22 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -458,6 +458,7 @@ static struct element_info elements[] = {
         {"LINK",        html_link,        1, ELEMENT_TYPE_NON_PAIRABLE},
         {"LISTING",     html_pre,         2, ELEMENT_TYPE_NESTABLE    },
         {"MENU",        html_ul,          2, ELEMENT_TYPE_NESTABLE    },
+				{"META",        html_meta,        0, ELEMENT_TYPE_NON_PAIRABLE},
         {"NOFRAMES",    html_noframes,    0, ELEMENT_TYPE_NESTABLE    },
         {"NOSCRIPT",    html_noscript,    0, ELEMENT_TYPE_NESTABLE    },
         {"OBJECT",      html_object,      1, ELEMENT_TYPE_NON_PAIRABLE},
@@ -570,6 +571,8 @@ parse_html(unsigned char *html, unsigned char *eof,
 	html_context->position = 0;
 	html_context->was_br = 0;
 	html_context->was_li = 0;
+	html_context->was_body = 0;
+	html_context->was_body_background = 0;
 	html_context->part = part;
 	html_context->eoff = eof;
 	if (head) process_head(html_context, head);
@@ -792,6 +795,10 @@ start_element(struct element_info *ei,
 	if (ei->func == html_textarea) {
 		do_html_textarea(attr, html, eof, &html, html_context);
 		return html;
+	}
+	if (ei->func == html_meta && html_context->was_body) {
+		html_meta2(html_context, name, eof);
+		html_context->was_body = 0;
 	}
 #ifdef CONFIG_CSS
 	if (ei->func == html_style && html_context->options->css_enable) {

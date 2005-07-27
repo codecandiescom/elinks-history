@@ -1,11 +1,11 @@
-/* $Id: download.h,v 1.58 2005/07/27 22:25:48 jonas Exp $ */
+/* $Id: download.h,v 1.59 2005/07/27 23:38:33 jonas Exp $ */
 
 #ifndef EL__SESSION_DOWNLOAD_H
 #define EL__SESSION_DOWNLOAD_H
 
+#include "main/object.h"
 #include "network/state.h"
 #include "util/lists.h"
-#include "util/object.h"
 #include "util/time.h"
 
 /* Silly BFU stuff */

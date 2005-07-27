@@ -1,9 +1,9 @@
-/* $Id: uri.h,v 1.157 2005/06/27 03:31:51 jonas Exp $ */
+/* $Id: uri.h,v 1.158 2005/07/27 23:38:33 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
 
-#include "util/object.h"
+#include "main/object.h"
 
 struct string;
 

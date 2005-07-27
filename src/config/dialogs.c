@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.248 2005/06/26 12:32:03 miciah Exp $ */
+/* $Id: dialogs.c,v 1.249 2005/07/27 23:38:32 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -21,6 +21,7 @@
 #include "config/opttypes.h"
 #include "intl/gettext/libintl.h"
 #include "main/event.h"
+#include "main/object.h"
 #include "session/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
@@ -28,7 +29,6 @@
 #include "util/error.h"
 #include "util/lists.h"
 #include "util/memory.h"
-#include "util/object.h"
 #include "util/secsave.h"
 
 

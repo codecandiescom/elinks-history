@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.83 2005/06/14 12:25:19 jonas Exp $ */
+/* $Id: dialogs.c,v 1.84 2005/07/27 23:38:32 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -18,13 +18,13 @@
 #include "cache/dialogs.h"
 #include "dialogs/edit.h"
 #include "intl/gettext/libintl.h"
+#include "main/object.h"
 #include "protocol/uri.h"
 #include "session/session.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/memory.h"
-#include "util/object.h"
 #include "util/string.h"
 
 

@@ -1,14 +1,14 @@
-/* $Id: document.h,v 1.88 2005/07/27 22:25:48 jonas Exp $ */
+/* $Id: document.h,v 1.89 2005/07/27 23:38:33 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
 
 #include "document/options.h"
 #include "intl/charsets.h" /* unicode_val_T */
+#include "main/object.h"
 #include "protocol/uri.h"
 #include "util/color.h"
 #include "util/lists.h"
-#include "util/object.h"
 #include "util/box.h"
 
 struct cache_entry;

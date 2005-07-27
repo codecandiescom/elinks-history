@@ -1,10 +1,10 @@
-/* $Id: auth.h,v 1.31 2005/07/27 22:41:47 jonas Exp $ */
+/* $Id: auth.h,v 1.32 2005/07/27 23:38:33 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
 
+#include "main/object.h"
 #include "protocol/uri.h"
-#include "util/object.h"
 #include "util/lists.h"
 
 struct listbox_item;

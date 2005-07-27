@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.185 2005/07/27 22:25:48 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.186 2005/07/27 23:38:32 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -8,8 +8,8 @@ struct listbox_item;
 
 #include "config/options.h"
 #include "main/event.h"
+#include "main/object.h"
 #include "terminal/terminal.h"
-#include "util/object.h"
 #include "util/string.h"
 
 /* Used for holding enum <keymap>_action values. */

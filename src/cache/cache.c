@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.224 2005/06/14 13:16:14 jonas Exp $ */
+/* $Id: cache.c,v 1.225 2005/07/27 23:38:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,13 +14,13 @@
 #include "cache/dialogs.h"
 #include "config/options.h"
 #include "main/main.h"
+#include "main/object.h"
 #include "network/connection.h"
 #include "protocol/protocol.h"
 #include "protocol/proxy.h"
 #include "protocol/uri.h"
 #include "util/error.h"
 #include "util/memory.h"
-#include "util/object.h"
 #include "util/string.h"
 
 /* The list of cache entries */

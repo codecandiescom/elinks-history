@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.206 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: cookies.c,v 1.207 2005/07/27 23:38:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
 #include "main/module.h"
+#include "main/object.h"
 #include "protocol/date.h"
 #include "protocol/header.h"
 #include "protocol/protocol.h"
@@ -41,7 +42,6 @@
 #endif
 #include "util/file.h"
 #include "util/memory.h"
-#include "util/object.h"
 #include "util/secsave.h"
 #include "util/string.h"
 #include "util/time.h"

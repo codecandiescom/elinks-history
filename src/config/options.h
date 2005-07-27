@@ -1,12 +1,12 @@
-/* $Id: options.h,v 1.119 2005/07/27 22:25:48 jonas Exp $ */
+/* $Id: options.h,v 1.120 2005/07/27 23:38:32 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
 
+#include "main/object.h"
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/memory.h"
-#include "util/object.h"
 #include "util/string.h"
 
 /* TODO: We should provide some generic mechanism for options caching. */

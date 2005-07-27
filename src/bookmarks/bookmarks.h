@@ -1,11 +1,11 @@
-/* $Id: bookmarks.h,v 1.39 2005/07/27 22:25:47 jonas Exp $ */
+/* $Id: bookmarks.h,v 1.40 2005/07/27 23:38:32 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
 
 #include "main/module.h"
+#include "main/object.h"
 #include "util/lists.h"
-#include "util/object.h"
 
 struct listbox_item;
 struct terminal;

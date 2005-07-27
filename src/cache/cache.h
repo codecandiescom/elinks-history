@@ -1,10 +1,10 @@
-/* $Id: cache.h,v 1.104 2005/07/27 22:25:48 jonas Exp $ */
+/* $Id: cache.h,v 1.105 2005/07/27 23:38:32 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
 
+#include "main/object.h"
 #include "util/lists.h"
-#include "util/object.h"
 #include "util/time.h"
 
 struct listbox_item;

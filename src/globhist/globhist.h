@@ -1,10 +1,10 @@
-/* $Id: globhist.h,v 1.25 2005/07/27 22:25:48 jonas Exp $ */
+/* $Id: globhist.h,v 1.26 2005/07/27 23:38:33 jonas Exp $ */
 
 #ifndef EL__GLOBHIST_GLOBHIST_H
 #define EL__GLOBHIST_GLOBHIST_H
 
+#include "main/object.h"
 #include "util/lists.h"
-#include "util/object.h"
 #include "util/time.h"
 
 struct listbox_item;

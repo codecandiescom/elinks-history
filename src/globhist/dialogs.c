@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.128 2005/03/23 15:43:41 miciah Exp $ */
+/* $Id: dialogs.c,v 1.129 2005/07/27 23:38:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,11 +15,11 @@
 #include "globhist/dialogs.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
+#include "main/object.h"
 #include "protocol/uri.h"
 #include "terminal/terminal.h"
 #include "util/memory.h"
 #include "util/string.h"
-#include "util/object.h"
 
 
 /* Implementation of the listbox operations */

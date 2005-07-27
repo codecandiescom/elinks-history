@@ -5,6 +5,10 @@ ELinks now:
 * support for Lua 4.x was dropped, we only support Lua 5.x now.
 * Python scripting back-end (experimental)
 * 88 colors support
+* external editor is configurable at run-time
+* BitTorrent protocol (experimental)
+* FSP protocol via a CGI script (experimental)
+* sysmouse support on the BSD console
 
 ELinks 0.10.4:
 
@@ -24,6 +28,7 @@ ELinks 0.10.0 (Thelma):
 * HTML source high-lighting using DOM implementation
 * multiple URIs on the command line
 * tabs moving (press Alt-'>' or Alt-'<')
+* periodic snapshotting of all tabs in all terminals
 * exmode CLI support (press ':' followed by action and args) (experimental)
 * cursor routing (aka w3m-style navigation)
 * modal text-input form-fields editing (enabled by default)

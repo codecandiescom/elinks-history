@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.10 2005/07/26 14:13:48 witekfl Exp $ */
+/* $Id: general.c,v 1.11 2005/07/27 10:49:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,28 +120,7 @@ html_body(struct html_context *html_context, unsigned char *a)
 	get_bgcolor(html_context, a, &format.style.bg);
 
 	html_context->was_body = 1; /* this will be used by "meta inside body" */
-#ifdef CONFIG_CSS
-	/* If there are any CSS twaks regarding bgcolor, make sure we will get
-	 * it _and_ prefer it over bgcolor attribute. */
-	if (html_context->options->css_enable)
-		css_apply(html_context, &html_top, &html_context->css_styles,
-		          &html_context->stack);
-#endif
-
-	if (par_format.bgcolor != format.style.bg) {
-		/* Modify the root HTML element - format_html_part() will take
-		 * this from there. */
-		struct html_element *e = html_context->stack.prev;
-
-		html_context->was_body_background = 1;
-		e->parattr.bgcolor = e->attr.style.bg = par_format.bgcolor = format.style.bg;
-	}
-
-	if (html_context->has_link_lines
-	    && par_format.bgcolor
-	    && !search_html_stack(html_context, "BODY")) {
-		html_context->special_f(html_context, SP_COLOR_LINK_LINES);
-	}
+	html_html2(html_context);
 }
 
 void

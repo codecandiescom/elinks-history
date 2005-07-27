@@ -1,7 +1,7 @@
-/* $Id: object.h,v 1.10 2005/07/27 22:25:48 jonas Exp $ */
+/* $Id: object.h,v 1.11 2005/07/27 23:42:14 jonas Exp $ */
 
-#ifndef EL__UTIL_OBJECT_H
-#define EL__UTIL_OBJECT_H
+#ifndef EL__MAIN_OBJECT_H
+#define EL__MAIN_OBJECT_H
 
 #include "util/lists.h"
 

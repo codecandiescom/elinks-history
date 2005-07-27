@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.12 2005/07/27 13:37:33 witekfl Exp $ */
+/* $Id: general.c,v 1.13 2005/07/27 14:01:27 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,8 @@ html_body(struct html_context *html_context, unsigned char *a)
 	get_color(html_context, a, "link", &format.clink);
 	get_color(html_context, a, "vlink", &format.vlink);
 
-	get_bgcolor(html_context, a, &format.style.bg);
+	if (get_bgcolor(html_context, a, &format.style.bg) != -1)
+		html_context->was_body_background = 1;
 
 	html_context->was_body = 1; /* this will be used by "meta inside body" */
 	html_html2(html_context);
@@ -139,6 +140,7 @@ html_html2(struct html_context *html_context)
 		 * this from there. */
 		struct html_element *e = html_context->stack.prev;
 
+		html_context->was_body_background = 1;
 		e->parattr.bgcolor = e->attr.style.bg = par_format.bgcolor = format.style.bg;
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: auth.h,v 1.30 2005/04/18 14:46:39 jonas Exp $ */
+/* $Id: auth.h,v 1.31 2005/07/27 22:41:47 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
@@ -10,7 +10,7 @@
 struct listbox_item;
 
 struct auth_entry {
-	LIST_HEAD(struct auth_entry);
+	OBJECT_HEAD(struct auth_entry);
 
 	/* Only the user, password and host part is supposed to be used in this
 	 * URI. It is mainly a convenient way to store host info so later when
@@ -23,7 +23,6 @@ struct auth_entry {
 	unsigned char *opaque;
 
 	struct listbox_item *box_item;
-	struct object object;
 
 	unsigned char user[AUTH_USER_MAXLEN];
 	unsigned char password[AUTH_PASSWORD_MAXLEN];

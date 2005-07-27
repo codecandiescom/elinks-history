@@ -7,7 +7,7 @@ ELinks now:
 * 88 colors support
 * external editor is configurable at run-time
 * BitTorrent protocol (experimental)
-* FSP protocol via a CGI script (experimental)
+* FSP protocol via a CGI script (see contrib/cgi/README.FSP) (experimental)
 * sysmouse support on the BSD console
 
 ELinks 0.10.4:

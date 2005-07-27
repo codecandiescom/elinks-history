@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.175 2005/07/26 14:18:58 witekfl Exp $ */
+/* $Id: parse.c,v 1.176 2005/07/27 10:47:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -796,10 +796,13 @@ start_element(struct element_info *ei,
 		do_html_textarea(attr, html, eof, &html, html_context);
 		return html;
 	}
+
+	/* Support for <meta refresh="..."> inside <body>. (bug 700) */
 	if (ei->func == html_meta && html_context->was_body) {
 		html_meta2(html_context, name, eof);
 		html_context->was_body = 0;
 	}
+
 #ifdef CONFIG_CSS
 	if (ei->func == html_style && html_context->options->css_enable) {
 		css_parse_stylesheet(&html_context->css_styles,

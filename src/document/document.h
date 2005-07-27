@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.87 2005/07/12 16:02:22 jonas Exp $ */
+/* $Id: document.h,v 1.88 2005/07/27 22:25:48 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -129,7 +129,7 @@ struct search {
 
 
 struct document {
-	LIST_HEAD(struct document);
+	OBJECT_HEAD(struct document);
 
 	struct document_options options;
 
@@ -180,7 +180,6 @@ struct document {
 
 	unsigned int id; /* Used to check cache entries. */
 
-	struct object object; /* No direct access, use provided macros for that. */
 	int cp;
 	int width, height; /* size of document */
 	int nlinks;

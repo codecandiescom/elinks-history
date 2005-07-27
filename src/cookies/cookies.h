@@ -1,4 +1,4 @@
-/* $Id: cookies.h,v 1.32 2005/06/13 00:43:27 jonas Exp $ */
+/* $Id: cookies.h,v 1.33 2005/07/27 22:25:48 jonas Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
@@ -18,15 +18,14 @@ enum cookies_accept {
 };
 
 struct cookie_server {
-	LIST_HEAD(struct cookie_server);
+	OBJECT_HEAD(struct cookie_server);
 
 	struct listbox_item *box_item;
-	struct object object;
 	unsigned char host[1]; /* Must be at end of struct. */
 };
 
 struct cookie {
-	LIST_HEAD(struct cookie);
+	OBJECT_HEAD(struct cookie);
 
 	unsigned char *name, *value;
 	unsigned char *path, *domain;
@@ -38,7 +37,6 @@ struct cookie {
 	/* This is indeed maintained by cookies.c, not dialogs.c; much easier
 	 * and simpler. */
 	struct listbox_item *box_item;
-	struct object object;
 };
 
 void accept_cookie(struct cookie *);

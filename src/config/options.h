@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.118 2005/07/10 01:56:42 miciah Exp $ */
+/* $Id: options.h,v 1.119 2005/07/27 22:25:48 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -111,7 +111,7 @@ typedef int (*change_hook_T)(struct session *, struct option *current,
 			     struct option *changed);
 
 struct option {
-	LIST_HEAD(struct option);
+	OBJECT_HEAD(struct option);
 
 	unsigned char *name;
 	enum option_flags flags;
@@ -129,11 +129,10 @@ struct option {
 	change_hook_T change_hook;
 
 	struct listbox_item *box_item;
-	struct object object;
 };
 
 #define INIT_OPTION(name, flags, type, min, max, value, desc, capt) \
-	{ NULL_LIST_HEAD, name, flags, type, min, max, { (struct list_head *) (value) }, desc, capt }
+	{ NULL_LIST_HEAD, INIT_OBJECT("option"), name, flags, type, min, max, { (struct list_head *) (value) }, desc, capt }
 
 extern struct option *config_options;
 extern struct option *cmdline_options;

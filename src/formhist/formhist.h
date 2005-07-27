@@ -1,4 +1,4 @@
-/* $Id: formhist.h,v 1.35 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: formhist.h,v 1.36 2005/07/27 22:25:48 jonas Exp $ */
 
 #ifndef EL__FORMHIST_FORMHIST_H
 #define EL__FORMHIST_FORMHIST_H
@@ -10,7 +10,7 @@
 #include "util/object.h"
 
 struct formhist_data {
-	LIST_HEAD(struct formhist_data);
+	OBJECT_HEAD(struct formhist_data);
 
 	/* List of submitted_values for this form */
 	struct list_head *submit;
@@ -18,7 +18,6 @@ struct formhist_data {
 	/* This is indeed maintained by formhist.c, not dialogs.c; much easier
 	 * and simpler. */
 	struct listbox_item *box_item;
-	struct object object;
 
 	/* Whether to save this form or not. */
 	unsigned int dontsave:1;

@@ -1,7 +1,9 @@
-/* $Id: object.h,v 1.9 2004/04/03 17:42:35 jonas Exp $ */
+/* $Id: object.h,v 1.10 2005/07/27 22:25:48 jonas Exp $ */
 
 #ifndef EL__UTIL_OBJECT_H
 #define EL__UTIL_OBJECT_H
+
+#include "util/lists.h"
 
 #if 0
 #define DEBUG_REFCOUNT
@@ -12,6 +14,14 @@ struct object {
 #ifdef CONFIG_DEBUG
 	unsigned char *name;
 #endif
+};
+
+#define OBJECT_HEAD(type)						\
+	LIST_HEAD(type);						\
+	struct object object;
+
+struct object_head {
+	OBJECT_HEAD(struct object *);
 };
 
 #ifdef DEBUG_REFCOUNT
@@ -41,9 +51,11 @@ struct object {
 
 #define object_set_name(obj, objname)					\
 	do { (obj)->object.name = (objname); } while (0)
+#define INIT_OBJECT(name)	{ 0, name }
 #else
 #define object_sanity_check(obj)
 #define object_set_name(obj, name)
+#define INIT_OBJECT(name)	{ 0 }
 #endif /* CONFIG_DEBUG */
 
 #define get_object_refcount(obj) ((obj)->object.refcount)

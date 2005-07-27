@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.38 2005/06/26 10:02:29 miciah Exp $ */
+/* $Id: bookmarks.h,v 1.39 2005/07/27 22:25:47 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -13,7 +13,7 @@ struct terminal;
 /* Bookmark record structure */
 
 struct bookmark {
-	LIST_HEAD(struct bookmark);
+	OBJECT_HEAD(struct bookmark);
 
 	struct bookmark *root;
 
@@ -21,7 +21,6 @@ struct bookmark {
 
 	unsigned char *title;   /* title of bookmark */
 	unsigned char *url;     /* Location of bookmarked item */
-	struct object object;	/* No direct access, use provided macros for that. */
 
 	struct list_head child;
 };

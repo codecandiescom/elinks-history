@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.297 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: connection.c,v 1.298 2005/07/27 22:25:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,12 +140,11 @@ connection_disappeared(struct connection *conn)
  * in the list. */
 
 struct host_connection {
-	LIST_HEAD(struct host_connection);
+	OBJECT_HEAD(struct host_connection);
 
 	/* XXX: This is just the URI of the connection that registered the
 	 * host connection so only rely on the host part. */
 	struct uri *uri;
-	struct object object;
 };
 
 static struct host_connection *

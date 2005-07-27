@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.57 2005/07/11 10:59:05 jonas Exp $ */
+/* $Id: download.h,v 1.58 2005/07/27 22:25:48 jonas Exp $ */
 
 #ifndef EL__SESSION_DOWNLOAD_H
 #define EL__SESSION_DOWNLOAD_H
@@ -54,7 +54,7 @@ struct type_query {
 };
 
 struct file_download {
-	LIST_HEAD(struct file_download);
+	OBJECT_HEAD(struct file_download);
 
 	struct uri *uri;
 	unsigned char *file;
@@ -80,7 +80,6 @@ struct file_download {
 	/* The current dialog for this download. Can be NULL. */
 	struct dialog_data *dlg_data;
 	struct listbox_item *box_item;
-	struct object object;
 };
 
 /* Stack of all running downloads */

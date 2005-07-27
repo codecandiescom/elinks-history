@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.11 2005/07/27 10:49:39 jonas Exp $ */
+/* $Id: general.c,v 1.12 2005/07/27 13:37:33 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,7 +200,7 @@ html_meta2(struct html_context *html_context, unsigned char *meta,
 	if (!init_string(&head)) return;
 	/* scan_http_equiv requires from pointer to point before "META", so -1 here.*/ 
 	scan_http_equiv(meta - 1, eof, &head, NULL, html_context->options);
-	if (head.source) process_head(html_context, head.source);
+	process_head(html_context, head.source);
 	done_string(&head);
 }
 

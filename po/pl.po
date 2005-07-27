@@ -5888,7 +5888,7 @@ msgstr "Tekstowa przegl±darka WWW"
 #: src/main/version.c:85
 #, c-format
 msgid " (built on %s %s)"
-msgstr " (zbudowany na %s %s)"
+msgstr " (zbudowany %s %s)"
 
 #
 #: src/main/version.c:91

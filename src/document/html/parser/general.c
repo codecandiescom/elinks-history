@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.13 2005/07/27 14:01:27 witekfl Exp $ */
+/* $Id: general.c,v 1.14 2005/07/28 10:05:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,11 +121,11 @@ html_body(struct html_context *html_context, unsigned char *a)
 		html_context->was_body_background = 1;
 
 	html_context->was_body = 1; /* this will be used by "meta inside body" */
-	html_html2(html_context);
+	html_apply_canvas_bgcolor(html_context);
 }
 
 void
-html_html2(struct html_context *html_context)
+html_apply_canvas_bgcolor(struct html_context *html_context)
 {
 #ifdef CONFIG_CSS
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
@@ -190,17 +190,20 @@ html_head(struct html_context *html_context, unsigned char *a)
 void
 html_meta(struct html_context *html_context, unsigned char *a)
 {
-	/* html_meta2 do all work. */
+	/* html_handle_body_meta() does all the work. */
 }
 
+/* Handles meta tags in the HTML body. */
 void
-html_meta2(struct html_context *html_context, unsigned char *meta,
-	unsigned char *eof)
+html_handle_body_meta(struct html_context *html_context, unsigned char *meta,
+		      unsigned char *eof)
 {
 	struct string head;
 
 	if (!init_string(&head)) return;
-	/* scan_http_equiv requires from pointer to point before "META", so -1 here.*/ 
+
+	/* scan_http_equiv() requires that the from-pointer points before
+	 * "META", so use a '- 1' here. */ 
 	scan_http_equiv(meta - 1, eof, &head, NULL, html_context->options);
 	process_head(html_context, head.source);
 	done_string(&head);

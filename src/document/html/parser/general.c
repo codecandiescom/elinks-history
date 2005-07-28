@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.14 2005/07/28 10:05:32 jonas Exp $ */
+/* $Id: general.c,v 1.15 2005/07/28 14:12:22 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 
 #include "elinks.h"
 
-/* #include "config/options.h" */
+#include "config/options.h"
 #include "document/css/apply.h"
 #include "document/html/frames.h"
 #include "document/html/parser/general.h"
@@ -145,7 +145,7 @@ html_apply_canvas_bgcolor(struct html_context *html_context)
 	}
 
 	if (html_context->has_link_lines
-	    && par_format.bgcolor
+	    && par_format.bgcolor != get_opt_color("document.colors.background")
 	    && !search_html_stack(html_context, "BODY")) {
 		html_context->special_f(html_context, SP_COLOR_LINK_LINES);
 	}

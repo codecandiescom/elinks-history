@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.179 2005/07/28 10:05:32 jonas Exp $ */
+/* $Id: parse.c,v 1.180 2005/07/28 13:04:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -938,7 +938,7 @@ end_element(struct element_info *ei,
 	if (ei->func == html_html
 	    && html_top.type >= ELEMENT_KILLABLE
 	    && !html_context->was_body_background)
-		html_html2(html_context);
+		html_apply_canvas_bgcolor(html_context);
 #endif
 
 	/* dump_html_stack(html_context); */

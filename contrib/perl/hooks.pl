@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.99 2005/07/28 13:34:31 rrowan Exp $
+# $Id: hooks.pl,v 1.100 2005/07/28 13:44:17 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -967,7 +967,7 @@ Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglati
 	{
 		return $url if $url =~ /^([a-zA-Z]{3,}(|4|6):\/\/|(www|ftp)\.)/;
 		return $url if $url =~ /\.(com|org|net|edu)$/;
-		return $url if $url =~ /^[a-zA-Z0-9]+/ and $url =~ /[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/;
+		return $url if $url =~ /^[a-zA-Z0-9]+/ and $url =~ /[a-zA-Z0-9-]+\.[a-zA-Z]{2,4}$/;
 		return search(loadrc("search"), $url);
 	}
 

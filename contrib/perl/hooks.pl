@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.97 2005/07/12 01:21:25 rrowan Exp $
+# $Id: hooks.pl,v 1.98 2005/07/28 13:10:32 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -963,10 +963,10 @@ Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglati
 
 	############################################################################
 	# Anything not otherwise useful is a search
-	#if ($current_url and loadrc("gotosearch") eq "yes")
-	#{
-	#	return search(loadrc("search"), $url);
-	#}
+	if ($current_url and loadrc("gotosearch") eq "yes")
+	{
+		return search(loadrc("search"), $url);
+	}
 
 
 	return $url;

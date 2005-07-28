@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.177 2005/07/27 10:59:59 jonas Exp $ */
+/* $Id: parse.c,v 1.178 2005/07/28 09:50:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -931,11 +931,15 @@ end_element(struct element_info *ei,
 	    || ei->type == ELEMENT_TYPE_LI)
 		return html;
 
+#if 0
+	/* XXX: Disabled since it breaks php.net ... */
+
 	/* Apply background color from the <HTML> element. (bug 696) */
 	if (ei->func == html_html
 	    && html_top.type >= ELEMENT_KILLABLE
 	    && !html_context->was_body_background)
 		html_html2(html_context);
+#endif
 
 	/* dump_html_stack(html_context); */
 	foreach (e, html_context->stack) {

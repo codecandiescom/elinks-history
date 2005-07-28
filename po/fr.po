@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-07-22 10:06+0200\n"
-"PO-Revision-Date: 2005-07-22 10:07+0200\n"
+"POT-Creation-Date: 2005-07-28 09:54+0200\n"
+"PO-Revision-Date: 2005-07-28 09:57+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -6604,7 +6604,7 @@ msgstr ""
 
 #: src/protocol/bittorrent/bittorrent.c:79
 msgid "Minimum peers to skip rerequesting"
-msgstr ""
+msgstr "Nombre minimal de postes avant abandon de requêtes"
 
 #: src/protocol/bittorrent/bittorrent.c:81
 msgid ""
@@ -6613,6 +6613,9 @@ msgid ""
 "numwant to zero.\n"
 "Set to 0 to not have any limit."
 msgstr ""
+"Nombre minimal de postes à avoir dans le groupe actuel avant\n"
+"d'abandonner les requêtes pour plus de postes.\n"
+"Mettre à 0 pour n'avoir aucune limite."
 
 #. ******************************************************************
 #. Lowlevel peer-wire options:
@@ -6728,7 +6731,7 @@ msgstr ""
 
 #: src/protocol/bittorrent/bittorrent.c:147
 msgid "Sharing rate"
-msgstr "Taux de partage"
+msgstr "Ratio de partage"
 
 #: src/protocol/bittorrent/bittorrent.c:149
 msgid ""
@@ -6739,6 +6742,12 @@ msgid ""
 "Set to 1.0 to atleast upload a complete copy of all data and\n"
 "set to 0.0 to have unlimited sharing rate."
 msgstr ""
+"Taux minimal de partage à atteindre.\n"
+"Le ratio de partage est fonction du nombre d'octets téléchargés\n"
+"en amont par rapport au nombre d'octets téléchargés en aval.\n"
+"La valeur est un nombre flottant entre 0.0 et 1.0 (compris).\n"
+"Mettre à 1.0 pour uploader une copie complète des données et\n"
+"à 0.0 pour avoir un ratio de partage sans limite."
 
 #: src/protocol/bittorrent/bittorrent.c:156
 msgid "Maximum number of uploads"

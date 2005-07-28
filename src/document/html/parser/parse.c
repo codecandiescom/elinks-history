@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.180 2005/07/28 13:04:53 miciah Exp $ */
+/* $Id: parse.c,v 1.181 2005/07/28 14:33:34 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -933,13 +933,12 @@ end_element(struct element_info *ei,
 
 #if 0
 	/* XXX: Disabled since it breaks php.net ... */
-
+#endif
 	/* Apply background color from the <HTML> element. (bug 696) */
 	if (ei->func == html_html
 	    && html_top.type >= ELEMENT_KILLABLE
 	    && !html_context->was_body_background)
 		html_apply_canvas_bgcolor(html_context);
-#endif
 
 	/* dump_html_stack(html_context); */
 	foreach (e, html_context->stack) {

@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.100 2005/07/28 13:44:17 rrowan Exp $
+# $Id: hooks.pl,v 1.101 2005/07/28 15:26:01 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -965,10 +965,17 @@ Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglati
 	# Anything not otherwise useful is a search
 	if ($current_url and loadrc("gotosearch") eq "yes")
 	{
-		return $url if $url =~ /^([a-zA-Z]{3,}(|4|6):\/\/|(www|ftp)\.)/;
-		return $url if $url =~ /\.(com|org|net|edu)$/;
-		return $url if $url =~ /^[a-zA-Z0-9]+/ and $url =~ /[a-zA-Z0-9-]+\.[a-zA-Z]{2,4}$/;
-		return search(loadrc("search"), $url);
+		if ($url =~ /^(([a-zA-Z]{3,}(|4|6):\/\/|(www|ftp)\.)|)[a-zA-Z0-9]+/ and
+		   ($url =~ /[a-zA-Z0-9-]+\.(com|org|net|edu|gov|int|mil)$/         or
+			$url =~ /[a-zA-Z0-9-]+\.(biz|info|name|pro|aero|coop|museum)$/  or
+			$url =~ /[a-zA-Z0-9-]+\.[a-zA-Z]{2}$/))
+		{
+			return $url;
+		}
+		else
+		{
+			return search(loadrc("search"), $url);
+		}
 	}
 
 

@@ -1,3 +1,152 @@
+Thu Jul 28 15:26:17 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/parse.c:
+
+	This comment should help with www.php.net.  
+
+Thu Jul 28 15:26:01 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Improved the URL detection for gotosearch.  
+
+Thu Jul 28 14:33:34 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/parse.c:
+
+	I don't see any difference on php.net with or without that code
+	enabled.  It is likely that I "fixed" this in general.c rev. 1.13.  
+
+Thu Jul 28 14:12:22 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/general.c:
+
+	Proper check whether current background color is different than
+	default background color. When default background color wasn't black 
+	bugzilla.elinks.or.cz looked ugly.  
+
+Thu Jul 28 14:04:21 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/dom/renderer.c:
+
+	Links are numbered. On Cygwin qsort is not stable sort and order of
+	links was not such as expected.  
+
+Thu Jul 28 13:59:06 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Typo.  
+
+Thu Jul 28 13:44:17 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Hyphens are allowed in domains too.  
+
+Thu Jul 28 13:34:31 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	A little URL detecting action in gotosearch might help things a bit.  
+
+Thu Jul 28 13:10:32 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Might as well allow use of 'gotosearch' if someone wants it.  It's
+	disabled by default.  It works fine if you don't plan on putting an
+	actual URL in the goto dialog...  
+
+Thu Jul 28 13:06:17 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* NEWS:
+
+	Add default URI-rewrite rule and support for prefixes for more
+	bindings.  
+
+Thu Jul 28 13:04:53 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Reflect the renaming of html_html2 to html_apply_canvas_bgcolor in
+	the commented-out fix for bug 696.  
+
+Thu Jul 28 10:05:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/: general.c, general.h, parse.c:
+
+	Rename the recently added '2'-handlers: html_html2() ->
+	html_apply_canvas_bgcolor(), html_meta2() ->
+	html_handle_body_meta(); it should make them a bit more descriptive.
+	Tune some comments along the way.  
+
+Thu Jul 28 09:50:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	Disable the code for bug 696. It breaks php.net as noticed by
+	Toksyuryel.  
+
+Thu Jul 28 08:04:40 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Jul 27 23:50:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	See contrib/cgi/README.FSP.  
+
+Wed Jul 27 23:42:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main/object.h:
+
+	EL__UTIL_* -> EL__MAIN_* 
+
+Wed Jul 27 23:38:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/bookmarks.h,
+	bookmarks/dialogs.c, cache/cache.c, cache/cache.h, cache/dialogs.c,
+	config/dialogs.c, config/kbdbind.h, config/options.h,
+	cookies/cookies.c, cookies/cookies.h, cookies/dialogs.c,
+	dialogs/download.c, document/document.c, document/document.h,
+	document/renderer.c, formhist/dialogs.c, formhist/formhist.c,
+	formhist/formhist.h, globhist/dialogs.c, globhist/globhist.c,
+	globhist/globhist.h, network/connection.c, protocol/uri.c,
+	protocol/uri.h, protocol/auth/auth.h, protocol/auth/dialogs.c,
+	session/download.c, session/download.h, session/session.c,
+	terminal/event.c, terminal/terminal.c, util/object.h,
+	viewer/text/link.c:
+
+	mv util/object.h main/object.h 
+
+Wed Jul 27 23:26:53 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* NEWS:
+
+	Add 'external editor is configurable at run-time', BitTorrent
+	support, FSP support, sysmouse support, and (under 0.10) periodic
+	snapshotting.  
+
+Wed Jul 27 22:41:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/auth.h:
+
+	Use OBJECT_HEAD() macro for struct auth_entry.  
+
+Wed Jul 27 22:25:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.h, cache/cache.h, config/kbdbind.h,
+	config/options.h, cookies/cookies.h, document/document.h,
+	formhist/formhist.h, globhist/globhist.h, main/object.h,
+	network/connection.c, session/download.h, util/object.h:
+
+	Add OBJECT_HEAD() macro which expands to a list head and an object
+	struct. Simplifies declaration of viewable objects.  
+
 Wed Jul 27 14:33:03 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:
@@ -47545,7 +47694,7 @@ Sat Apr  3 20:26:05 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Apr  3 17:42:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/util/object.h:
+	* src/: main/object.h, util/object.h:
 
 	Make lock debug output more human readable.  
 
@@ -47556,8 +47705,8 @@ Sat Apr  3 17:40:52 2004  Jonas Fonseca <fonseca@diku.dk>:
 	cookies/cookies.c, cookies/cookies.h, document/document.c,
 	document/document.h, formhist/formhist.c, formhist/formhist.h,
 	globhist/globhist.c, globhist/globhist.h, protocol/uri.c,
-	protocol/uri.h, session/download.c, session/download.h,
-	util/object.h:
+	main/object.h, protocol/uri.h, session/download.c,
+	session/download.h, util/object.h:
 
 	Improve object refcount debugging by introducing an object struct
 	that holds the counter and if debugging is enabled also the type
@@ -49174,9 +49323,10 @@ Tue Mar  9 12:24:33 2004  Jonas Fonseca <fonseca@diku.dk>:
 	src/bfu/menu.c, src/cache/dialogs.c, src/config/options.c,
 	src/config/options.h, src/dialogs/menu.c, src/document/document.c,
 	src/main/version.c, src/osdep/stub.h, src/network/connection.c,
-	src/protocol/rewrite/rewrite.c, src/util/error.c, src/util/error.h,
-	src/util/lists.h, src/util/memlist.h, src/util/object.h,
-	src/util/profile.h, src/util/string.h:
+	src/protocol/rewrite/rewrite.c, src/main/object.h,
+	src/util/error.c, src/util/error.h, src/util/lists.h,
+	src/util/memlist.h, src/util/object.h, src/util/profile.h,
+	src/util/string.h:
 
 	DEBUG -> CONFIG_DEBUG .. it seems that perl is a namespace polluter
 	.. like we didn't know that already! ;-) 

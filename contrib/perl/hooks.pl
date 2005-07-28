@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.98 2005/07/28 13:10:32 rrowan Exp $
+# $Id: hooks.pl,v 1.99 2005/07/28 13:34:31 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -44,7 +44,7 @@ values:
 	email:                # Set to show one's own bugs with the "bug" prefix.
 	fortune:    elinks    # *fortune*, *elinks* tip, or *none* on quit?
 	googlebeta: hell no   # I miss DejaNews...
-	gotosearch: not yet   # Don't use this yet.  It's broken.  Don't use it at all, actually.
+	gotosearch: why not   # Anything not a URL in the Goto URL dialog...
 	ipv6:       sure      # IPV4 or 6 address blocks with "ip" prefix?
 	language:   english   # "bf nl en" still works, but now "bf nl" does too
 	news:       msnbc     # Agency to use for "news" and "n" prefixes
@@ -965,6 +965,9 @@ Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglati
 	# Anything not otherwise useful is a search
 	if ($current_url and loadrc("gotosearch") eq "yes")
 	{
+		return $url if $url =~ /^([a-zA-Z]{3,}(|4|6):\/\/|(www|ftp)\.)/;
+		return $url if $url =~ /\.(com|org|net|edu)$/;
+		return $url if $url =~ /^[a-zA-Z0-9]+/ and $url =~ /[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/;
 		return search(loadrc("search"), $url);
 	}
 
@@ -1057,6 +1060,7 @@ sub pre_format_html_hook
 {
 	my $url = shift;
 	my $html = shift;
+#	my $content_type = shift;
 
 
 =item Slashdot Sanitation
@@ -1124,15 +1128,18 @@ content-type:text/html.
 
 =cut
 	# demoronizer
-#	$html =~ s/Ñ/\&mdash;/g;
-#	$html =~ s/\&#252/ü/g;
-#	$html =~ s/\&#039(?!;)/'/g;
-#	$html =~ s/]\n>$//gsm;
-#	$html =~ s/%5B/[/g;
-#	$html =~ s/%5D/]/g;
-#	$html =~ s/%20/ /g;
-#	$html =~ s/%2F/\//g;
-#	$html =~ s/%23/#/g;
+#	if ($content_type =~ 'text/html')
+#	{
+#		$html =~ s/Ñ/\&mdash;/g;
+#		$html =~ s/\&#252/ü/g;
+#		$html =~ s/\&#039(?!;)/'/g;
+#		$html =~ s/]\n>$//gsm;
+		#$html =~ s/%5B/[/g;
+		#$html =~ s/%5D/]/g;
+		#$html =~ s/%20/ /g;
+		#$html =~ s/%2F/\//g;
+		#$html =~ s/%23/#/g;
+#	}
 
 
 	return $html;

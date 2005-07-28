@@ -1762,7 +1762,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Ta warto¶æ uleg³a zmiane od czasu ostatniego zapisu konfiguracji."
+"Ta warto¶æ uleg³a zmianie od momentu ostatniego zapisu konfiguracji."
 
 #: src/config/dialogs.c:211 src/config/dialogs.c:365
 msgid "N/A"

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.493 2005/07/22 08:51:17 jonas Exp $ */
+/* $Id: options.c,v 1.494 2005/07/30 22:33:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,10 +593,7 @@ mark_option_as_deleted(struct option *option)
 			mark_option_as_deleted(unmarked);
 	}
 
-	if (option->box_item) {
-		done_listbox_item(&option_browser, option->box_item);
-		option->box_item = NULL;
-	}
+	option->box_item->visible = 0;
 
 	option->flags |= (OPT_TOUCHED | OPT_DELETED);
 }
@@ -924,6 +921,8 @@ update_visibility(struct list_head *tree, int show)
 	struct option *opt;
 
 	foreach (opt, *tree) {
+		if (opt->flags & OPT_DELETED) continue;
+
 		if (!strcmp(opt->name, "_template_")) {
 			if (opt->box_item)
 				opt->box_item->visible = (show & 1);

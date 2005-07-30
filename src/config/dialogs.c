@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.250 2005/07/30 14:51:57 jonas Exp $ */
+/* $Id: dialogs.c,v 1.251 2005/07/30 20:32:46 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -581,22 +581,22 @@ struct keymap_box_item_info {
 struct keymap_box_item_info keymap_box_item_info[KEYMAP_MAX];
 
 void
-init_keybinding_listboxes(struct keymap keymap_table[], struct action_list actions[])
+init_keybinding_listboxes(struct keymap keymap_table[KEYMAP_MAX], struct action_list actions[])
 {
 	struct listbox_item *root = &keybinding_browser.root;
 	struct action *act;
-	struct keymap *keymap;
+	enum keymap_id keymap_id;
 
 	/* Do it backwards because add_listbox_item() add to front
 	 * of list. */
-	for (keymap = keymap_table; keymap->str; keymap++) {
+	for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++) {
 		struct listbox_item *keymap_box;
 		struct keymap_box_item_info *box_info;
 
-		keymap_box = add_listbox_item(NULL, root, BI_FOLDER, keymap, -1);
+		keymap_box = add_listbox_item(NULL, root, BI_FOLDER, &keymap_table[keymap_id], -1);
 		if (!keymap_box) continue;
 
-		for (act = actions[keymap->keymap_id].actions; act->str; act++) {
+		for (act = actions[keymap_id].actions; act->str; act++) {
 			struct listbox_item *item;
 
 			assert(act->num < ACTION_BOX_SIZE);
@@ -615,12 +615,12 @@ init_keybinding_listboxes(struct keymap keymap_table[], struct action_list actio
 
 			item->expanded = 1;
 
-			action_box_items[keymap->keymap_id][act->num] = item;
+			action_box_items[keymap_id][act->num] = item;
 		}
 
-		box_info = &keymap_box_item_info[keymap->keymap_id];
+		box_info = &keymap_box_item_info[keymap_id];
 		box_info->box_item = keymap_box;
-		box_info->first	   = actions[keymap->keymap_id].actions;
+		box_info->first	   = actions[keymap_id].actions;
 		box_info->last	   = act;
 	}
 }

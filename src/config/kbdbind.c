@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.347 2005/07/17 07:44:37 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.348 2005/07/30 20:32:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #define table table_elinks
 
 static struct action_list action_table[KEYMAP_MAX];
+static struct keymap keymap_table[KEYMAP_MAX];
 static struct list_head keymaps[KEYMAP_MAX];
 
 static void add_default_keybindings(void);
@@ -209,7 +210,6 @@ static struct keymap keymap_table[] = {
 	{ "main", KEYMAP_MAIN, N_("Main mapping") },
 	{ "edit", KEYMAP_EDIT, N_("Edit mapping") },
 	{ "menu", KEYMAP_MENU, N_("Menu mapping") },
-	{ NULL, 0, NULL }
 };
 
 
@@ -263,11 +263,11 @@ get_action_desc(enum keymap_id keymap_id, action_id_T action_id)
 static enum keymap_id
 get_keymap_id(unsigned char *keymap_str)
 {
-	struct keymap *keymap;
+	enum keymap_id keymap_id;
 
-	for (keymap = keymap_table; keymap->str; keymap++)
-		if (!strcmp(keymap->str, keymap_str))
-			return keymap->keymap_id;
+	for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++)
+		if (!strcmp(keymap_table[keymap_id].str, keymap_str))
+			return keymap_id;
 
 	return -1;
 }

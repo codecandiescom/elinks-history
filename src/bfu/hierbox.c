@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.219 2005/06/14 12:25:19 jonas Exp $ */
+/* $Id: hierbox.c,v 1.220 2005/07/30 22:38:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,7 +115,6 @@ done_listbox_item(struct hierbox_browser *browser, struct listbox_item *box_item
 		}
 
 		del_from_list(box_item);
-		box_item->prev = box_item->next = NULL;
 
 		update_hierbox_browser(browser);
 	}

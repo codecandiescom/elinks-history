@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.249 2005/07/27 23:38:32 jonas Exp $ */
+/* $Id: dialogs.c,v 1.250 2005/07/30 14:51:57 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -449,6 +449,24 @@ add_option_to_tree(void *data, unsigned char *name)
 }
 
 static widget_handler_status_T
+check_option_name(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	unsigned char *p;
+
+	for (p = widget_data->cdata; *p; p++)
+		/* Not '*' since it is used internally. */
+		if (!isident(*p)) {
+			/* FIXME: Encode '.' into '*'? */
+			info_box(dlg_data->win->term, 0,
+				 N_("Bad string"), ALIGN_CENTER,
+				 N_("Option names may only contain alpha-numeric characters\n"
+				 "in addition to '_' and '-'."));
+			return EVENT_NOT_PROCESSED;
+		}
+
+	return EVENT_PROCESSED;
+}
+static widget_handler_status_T
 push_add_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
@@ -488,7 +506,7 @@ invalid_option:
 
 	input_dialog(term, getml(ctx, NULL), N_("Add option"), N_("Name"),
 		     ctx, NULL,
-		     MAX_STR_LEN, "", 0, 0, check_nonempty,
+		     MAX_STR_LEN, "", 0, 0, check_option_name,
 		     add_option_to_tree, NULL);
 
 	return EVENT_PROCESSED;

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.209 2005/06/26 11:41:28 miciah Exp $ */
+/* $Id: listbox.c,v 1.210 2005/07/30 23:05:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,10 +289,13 @@ listbox_sel_move(struct widget_data *widget_data, int dist)
 		box->sel = box->top;
 	}
 
-	box->sel = traverse_listbox_items_list(box->sel, box, dist, 1,
-					       calc_dist, &box->sel_offset);
-	/* box->sel_offset becomes the offset of the new box->sel
-	 * from box->top. */
+	if (dist) {
+		box->sel = traverse_listbox_items_list(box->sel, box, dist, 1,
+		                                       calc_dist,
+		                                       &box->sel_offset);
+		/* box->sel_offset becomes the offset of the new box->sel
+		 * from box->top. */
+	}
 
 	if (box->sel_offset < 0) {
 		/* We must scroll up. */
@@ -481,29 +484,11 @@ display_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
 	struct listbox_context data;
-	/* Add one to offset to get the actual height of the selected item */
-	int moves = box->sel_offset + 1 - widget_data->box.height;
 
-	if (moves > 0) {
-		/* Move selected listbox to visible and update box->top while we're
-		 * at it. Fixes bug 58. */
-		listbox_sel_move(widget_data, -moves);
-
-	} else if (!list_empty(*box->items)) {
-		if (!box->top) box->top = box->items->next;
-		if (!box->sel) box->sel = box->top;
-	}
+	listbox_sel_move(widget_data, 0);
 
 	draw_box(term, &widget_data->box, ' ', 0,
 		 get_bfu_color(term, "menu.normal"));
-
-	/* We want to have these visible if possible. */
-	if (box->top && !box->top->visible) {
-		/* DBG("top: %s - (%d) %p\n", box->top->text, box->top->visible, box->top); */
-		box->top = traverse_listbox_items_list(box->top, box, 1,
-				1, NULL, NULL);
-		box->sel = box->top;
-	}
 
 	memset(&data, 0, sizeof(data));
 	data.term = term;

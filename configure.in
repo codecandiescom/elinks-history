@@ -543,14 +543,6 @@ if test "$withval" = yes; then
 	# so that you can specify one of several perl installations.
 	withval="";
 	enable_perl=yes;
-	cat <<EOF
-***********************************************************************
-The Perl support is incomplete and not so well integrated to ELinks
-yet. That means, ie., that you have no Perl console and there might
-not be all the necessary hooks. Also, the Perl interface is not too
-well tested (success stories heartily welcomed!).
-***********************************************************************
-EOF
 fi
 	    ])
 

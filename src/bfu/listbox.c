@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.210 2005/07/30 23:05:01 miciah Exp $ */
+/* $Id: listbox.c,v 1.211 2005/07/30 23:06:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,6 +288,8 @@ listbox_sel_move(struct widget_data *widget_data, int dist)
 				1, 1, NULL, NULL);
 		box->sel = box->top;
 	}
+
+	if (!dist && !box->sel->visible) dist = 1;
 
 	if (dist) {
 		box->sel = traverse_listbox_items_list(box->sel, box, dist, 1,

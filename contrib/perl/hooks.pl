@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.105 2005/07/31 06:19:53 rrowan Exp $
+# $Id: hooks.pl,v 1.106 2005/07/31 06:26:43 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -810,13 +810,14 @@ B<babelfish>, B<babel>, B<bf>, B<translate>, B<trans>, or B<b>
 		# $url = 'http://sundae.triumf.ca/pub2/cave/node001.html';
 		srand();
 		my $yzzyx;
-		my $xyzzy = int(rand(6));
+		my $xyzzy = int(rand(7));
 		$yzzyx = 1   if ($xyzzy == 0); # Colossal Cave Adventure
-		$yzzyx = 227 if ($xyzzy == 1); # Zork Zero: The Revenge of Megaboz
-		$yzzyx = 3   if ($xyzzy == 2); # Zork I: The Great Underground Empire
-		$yzzyx = 4   if ($xyzzy == 3); # Zork II: The Wizard of Frobozz
-		$yzzyx = 5   if ($xyzzy == 4); # Zork III: The Dungeon Master
-		$yzzyx = 6   if ($xyzzy == 5); # Zork: The Undiscovered Underground
+		$yzzyx = 2   if ($xyzzy == 1); # Dungeon
+		$yzzyx = 227 if ($xyzzy == 2); # Zork Zero: The Revenge of Megaboz
+		$yzzyx = 3   if ($xyzzy == 3); # Zork I: The Great Underground Empire
+		$yzzyx = 4   if ($xyzzy == 4); # Zork II: The Wizard of Frobozz
+		$yzzyx = 5   if ($xyzzy == 5); # Zork III: The Dungeon Master
+		$yzzyx = 6   if ($xyzzy == 6); # Zork: The Undiscovered Underground
 		return 'http://ifiction.org/games/play.php?game=' . $yzzyx;
 	}
 

@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.104 2005/07/31 06:17:13 rrowan Exp $
+# $Id: hooks.pl,v 1.105 2005/07/31 06:19:53 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -333,10 +333,6 @@ found.
 	{
 		return search(loadrc('search'), $search);
 	}
-	#if ($url =~ s/^("|\'|')(.+)$/$2/)
-	#{
-	#	return search(loadrc('search'), $url);
-	#}
 	foreach my $prefix (keys %search_prefixes)
 	{
 		next unless $url =~ /$prefix/;

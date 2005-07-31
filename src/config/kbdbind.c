@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.349 2005/07/31 21:38:12 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.350 2005/07/31 22:00:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,6 +260,14 @@ get_action_desc(enum keymap_id keymap_id, action_id_T action_id)
 }
 
 
+static struct keymap *
+get_keymap(enum keymap_id keymap_id)
+{
+	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
+
+	return &keymap_table[keymap_id];
+}
+
 static enum keymap_id
 get_keymap_id(unsigned char *keymap_str)
 {
@@ -275,9 +283,7 @@ get_keymap_id(unsigned char *keymap_str)
 unsigned char *
 get_keymap_name(enum keymap_id keymap_id)
 {
-	assert(keymap_id >= 0 && keymap_id < KEYMAP_MAX);
-
-	return keymap_table[keymap_id].str;
+	return get_keymap(keymap_id)->str;
 }
 
 

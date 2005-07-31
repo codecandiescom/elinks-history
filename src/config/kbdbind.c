@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.350 2005/07/31 22:00:51 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.351 2005/07/31 22:04:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 
 static struct action_list action_table[KEYMAP_MAX];
 static struct keymap keymap_table[KEYMAP_MAX];
-static struct list_head keymaps[KEYMAP_MAX];
+static struct list_head keymaps[KEYMAP_MAX]; /* struct keybinding */
 
 static void add_default_keybindings(void);
 

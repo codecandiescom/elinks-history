@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.101 2005/07/28 15:26:01 rrowan Exp $
+# $Id: hooks.pl,v 1.102 2005/07/31 06:07:55 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -236,85 +236,71 @@ found.
 	############################################################################
 	# Search engines
 	my %search_prefixes;
-	$search_prefixes{'^(g|google)(| .*)$'}						= 'google';		# Google (default)
-	$search_prefixes{'^(y|yahoo)(| .*)$'}						= 'yahoo';		# Yahoo
-	$search_prefixes{'^(ask|jeeves)(| .*)$'}					= 'ask jeeves';	# Ask Jeeves
-	$search_prefixes{'^a9(| .*)$'}								= 'a9';			# Amazon A9
-	$search_prefixes{'^(av|altavista)(| .*)$'}					= 'altavista';	# Altavista
-	$search_prefixes{'^(msn|microsoft)(| .*)$'}					= 'msn';		# Microsoft
-	$search_prefixes{'^(dmoz|odp|mozilla)(| .*)$'}				= 'dmoz';		# Mozilla Open Directory
-	$search_prefixes{'^(dp|dogpile)(| .*)$'}					= 'dogpile';	# Dogpile
-	$search_prefixes{'^(ma|mamma)(| .*)$'}						= 'mamma';		# Mamma
-	$search_prefixes{'^(wc|webcrawler)(| .*)$'}					= 'webcrawler';	# Webcrawler
-	$search_prefixes{'^(ns|netscape)(| .*)$'}					= 'netscape';	# Netscape
-	$search_prefixes{'^(ly|lycos)(| .*)$'}						= 'lycos';		# Lycos
-	$search_prefixes{'^(hb|hotbot)(| .*)$'}						= 'hotbot';		# Hotbot
-	$search_prefixes{'^(ex|excite)(| .*)$'}						= 'excite';		# Excite
-	$search_prefixes{'^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$'}	= 'elgoog';		# Elgoog
+	$search_prefixes{'^(g|google)(| .*)$'}                     = 'google';     # Google (default)
+	$search_prefixes{'^(y|yahoo)(| .*)$'}                      = 'yahoo';      # Yahoo
+	$search_prefixes{'^(ask|jeeves)(| .*)$'}                   = 'ask jeeves'; # Ask Jeeves
+	$search_prefixes{'^a9(| .*)$'}                             = 'a9';         # Amazon A9
+	$search_prefixes{'^(av|altavista)(| .*)$'}                 = 'altavista';  # Altavista
+	$search_prefixes{'^(msn|microsoft)(| .*)$'}                = 'msn';        # Microsoft
+	$search_prefixes{'^(dmoz|odp|mozilla)(| .*)$'}             = 'dmoz';       # Mozilla Open Directory
+	$search_prefixes{'^(dp|dogpile)(| .*)$'}                   = 'dogpile';    # Dogpile
+	$search_prefixes{'^(ma|mamma)(| .*)$'}                     = 'mamma';      # Mamma
+	$search_prefixes{'^(wc|webcrawler)(| .*)$'}                = 'webcrawler'; # Webcrawler
+	$search_prefixes{'^(ns|netscape)(| .*)$'}                  = 'netscape';   # Netscape
+	$search_prefixes{'^(ly|lycos)(| .*)$'}                     = 'lycos';      # Lycos
+	$search_prefixes{'^(hb|hotbot)(| .*)$'}                    = 'hotbot';     # Hotbot
+	$search_prefixes{'^(ex|excite)(| .*)$'}                    = 'excite';     # Excite
+	$search_prefixes{'^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$'} = 'elgoog';     # Elgoog
 
 	sub search
 	{
-		my %search_engines = (
-			"elgoog"		=> {
-				home		=> 'http://alltooflat.com/geeky/elgoog/m/index.cgi',
-				search		=> 'http://alltooflat.com/geeky/elgoog/m/index.cgi?page=%2fsearch&cgi=get&q='
-			},
-			"google"		=> {
-				home		=> 'http://google.com!bork!',
-				search		=> 'http://google.com/search?!bork!q='
-			},
-			"yahoo"			=> {
-				home		=> 'http://yahoo.com',
-				search		=> 'http://search.yahoo.com/search?p='
-			},
-			"ask jeeves"	=> {
-				home		=> 'http://ask.com',
-				search		=> 'http://web.ask.com/web?q='
-			},
-			"a9"			=> {
-				home		=> 'http://a9.com',
-				search		=> 'http://a9.com/?q='
-			},
-			"altavista"		=> {
-				home		=> 'http://altavista.com',
-				search		=> 'http://altavista.com/web/results?q='
-			},
-			"msn"			=> {
-				home		=> 'http://msn.com',
-				search		=> 'http://search.msn.com/results.aspx?q='
-			},
-			"dmoz"			=> {
-				home		=> 'http://dmoz.org',
-				search		=> 'http://search.dmoz.org/cgi-bin/search?search='
-			},
-			"dogpile"		=> {
-				home		=> 'http://dogpile.com',
-				search		=> 'http://dogpile.com/info.dogpl/search/web/'
-			},
-			"mamma"			=> {
-				home		=> 'http://mamma.com',
-				search		=> 'http://mamma.com/Mamma?query='
-			},
-			"webcrawler"	=> {
-				home		=> 'http://webcrawler.com',
-				search		=> 'http://webcrawler.com/info.wbcrwl/search/web/'
-			},
-			"netscape"		=> {
-				home		=> 'http://search.netscape.com',
-				search		=> 'http://channels.netscape.com/ns/search/default.jsp?query='
-			},
-			"lycos"			=> {
-				home		=> 'http://lycos.com',
-				search		=> 'http://search.lycos.com/default.asp?query='
-			},
-			"hotbot"		=> {
-				home		=> 'http://hotbot.com',
-				search		=> 'http://hotbot.com/default.asp?query='
-			},
-			"excite"		=> {
-				home		=> 'http://search.excite.com',
-				search		=> 'http://search.excite.com/info.xcite/search/web/'
-			},
+		my %search_engines =
+		(
+			"elgoog"     => {
+				home     => 'http://alltooflat.com/geeky/elgoog/m/index.cgi',
+				search   => 'http://alltooflat.com/geeky/elgoog/m/index.cgi?page=%2fsearch&cgi=get&q='},
+			"google"     => {
+				home     => 'http://google.com!bork!',
+				search   => 'http://google.com/search?!bork!q='},
+			"yahoo"      => {
+				home     => 'http://yahoo.com',
+				search   => 'http://search.yahoo.com/search?p='},
+			"ask jeeves" => {
+				home     => 'http://ask.com',
+				search   => 'http://web.ask.com/web?q='},
+			"a9"         => {
+				home     => 'http://a9.com',
+				search   => 'http://a9.com/?q='},
+			"altavista"  => {
+				home     => 'http://altavista.com',
+				search   => 'http://altavista.com/web/results?q='},
+			"msn"        => {
+				home     => 'http://msn.com',
+				search   => 'http://search.msn.com/results.aspx?q='},
+			"dmoz"       => {
+				home     => 'http://dmoz.org',
+				search   => 'http://search.dmoz.org/cgi-bin/search?search='},
+			"dogpile"    => {
+				home     => 'http://dogpile.com',
+				search   => 'http://dogpile.com/info.dogpl/search/web/'},
+			"mamma"      => {
+				home     => 'http://mamma.com',
+				search   => 'http://mamma.com/Mamma?query='},
+			"webcrawler" => {
+				home     => 'http://webcrawler.com',
+				search   => 'http://webcrawler.com/info.wbcrwl/search/web/'},
+			"netscape"   => {
+				home     => 'http://search.netscape.com',
+				search   => 'http://channels.netscape.com/ns/search/default.jsp?query='},
+			"lycos"      => {
+				home     => 'http://lycos.com',
+				search   => 'http://search.lycos.com/default.asp?query='},
+			"hotbot"     => {
+				home     => 'http://hotbot.com',
+				search   => 'http://hotbot.com/default.asp?query='},
+			"excite"     => {
+				home     => 'http://search.excite.com',
+				search   => 'http://search.excite.com/info.xcite/search/web/'},
 		);
 
 		my ($engine, $search) = @_;
@@ -417,85 +403,71 @@ I<BBC> is used as the default search engine if the given engine is not found.
 	############################################################################
 	# News
 	my %news_prefixes;
-	$news_prefixes{'^bbc(| .*)$'}					= 'bbc';		# British Broadcasting Corporation (default)
-	$news_prefixes{'^msnbc(| .*)$'}					= 'msnbc';		# MSNBC
-	$news_prefixes{'^cnn(| .*)$'}					= 'cnn';		# Cable News Network
-	$news_prefixes{'^fox(| .*)$'}					= 'fox';		# FOXNews
-	$news_prefixes{'^gn(| .*)$'}					= 'google';		# Google News
-	$news_prefixes{'^yn(| .*)$'}					= 'yahoo';		# Yahoo News
-	$news_prefixes{'^(reuters|rs)(| .*)$'}			= 'reuters';	# Reuters
-	$news_prefixes{'^eff(| .*)$'}					= 'eff';		# Electronic Frontier Foundation
-	$news_prefixes{'^(wired|wd)(| .*)$'}			= 'wired';		# Wired
-	$news_prefixes{'^(\/\.|slashdot|sd)(| .*)$'}	= 'slashdot';	# Slashdot
-	$news_prefixes{'^(newsforge|nf)(| .*)$'}		= 'newsforge';	# NewsForge
-	$news_prefixes{'^(us|usnews)(| .*)$'}			= 'usnews';		# U.S.News & World Report
-	$news_prefixes{'^(nsci|newsci)(| .*)$'}			= 'newsci';		# New Scientist
-	$news_prefixes{'^dm(| .*)$'}					= 'discover';	# Discover Magazine
-	$news_prefixes{'^(sa|sciam)(| .*)$'}			= 'sciam';		# Scientific American
+	$news_prefixes{'^bbc(| .*)$'}                = 'bbc';       # British Broadcasting Corporation (default)
+	$news_prefixes{'^msnbc(| .*)$'}              = 'msnbc';     # MSNBC
+	$news_prefixes{'^cnn(| .*)$'}                = 'cnn';       # Cable News Network
+	$news_prefixes{'^fox(| .*)$'}                = 'fox';       # FOXNews
+	$news_prefixes{'^gn(| .*)$'}                 = 'google';    # Google News
+	$news_prefixes{'^yn(| .*)$'}                 = 'yahoo';     # Yahoo News
+	$news_prefixes{'^(reuters|rs)(| .*)$'}       = 'reuters';   # Reuters
+	$news_prefixes{'^eff(| .*)$'}                = 'eff';       # Electronic Frontier Foundation
+	$news_prefixes{'^(wired|wd)(| .*)$'}         = 'wired';     # Wired
+	$news_prefixes{'^(\/\.|slashdot|sd)(| .*)$'} = 'slashdot';  # Slashdot
+	$news_prefixes{'^(newsforge|nf)(| .*)$'}     = 'newsforge'; # NewsForge
+	$news_prefixes{'^(us|usnews)(| .*)$'}        = 'usnews';    # U.S.News & World Report
+	$news_prefixes{'^(nsci|newsci)(| .*)$'}      = 'newsci';    # New Scientist
+	$news_prefixes{'^dm(| .*)$'}                 = 'discover';  # Discover Magazine
+	$news_prefixes{'^(sa|sciam)(| .*)$'}         = 'sciam';     # Scientific American
 
 	sub news
 	{
-		my %news_servers = (
+		my %news_servers =
+		(
 			"bbc"       => {
 				home    => 'http://news.bbc.co.uk',
-				search  => 'http://newssearch.bbc.co.uk/cgi-bin/search/results.pl?q=',
-			},
-			"msnbc"     => {	# The bastard child of Microsoft and the National Broadcasting Corporation
+				search  => 'http://newssearch.bbc.co.uk/cgi-bin/search/results.pl?q='},
+			"msnbc"     => { # The bastard child of Microsoft and the National Broadcasting Corporation
 				home    => 'http://msnbc.com',
-				search  => 'http://msnbc.msn.com/?id=3053419&action=fulltext&querytext=',
-			},
+				search  => 'http://msnbc.msn.com/?id=3053419&action=fulltext&querytext='},
 			"cnn"       => {
 				home    => 'http://cnn.com',
-				search  => 'http://search.cnn.com/pages/search.jsp?query=',
-			},
+				search  => 'http://search.cnn.com/pages/search.jsp?query='},
 			"fox"       => {
 				home    => 'http://foxnews.com',
-				search  => 'http://search.foxnews.com/info.foxnws/redirs_all.htm?pgtarg=wbsdogpile&qkw=',
-			},
+				search  => 'http://search.foxnews.com/info.foxnws/redirs_all.htm?pgtarg=wbsdogpile&qkw='},
 			"google"    => {
 				home    => 'http://news.google.com',
-				search  => 'http://news.google.com/news?q=',
-			},
+				search  => 'http://news.google.com/news?q='},
 			"yahoo"     => {
 				home    => 'http://news.yahoo.com',
-				search  => 'http://news.search.yahoo.com/search/news/?p=',
-			},
+				search  => 'http://news.search.yahoo.com/search/news/?p='},
 			"reuters"   => {
 				home    => 'http://reuters.com',
-				search  => 'http://reuters.com/newsSearchResultsHome.jhtml?query=',
-			},
+				search  => 'http://reuters.com/newsSearchResultsHome.jhtml?query='},
 			"eff"       => {
 				home    => 'http://eff.org',
-				search  => 'http://google.com/search?sitesearch=http://eff.org&q=',
-			},
+				search  => 'http://google.com/search?sitesearch=http://eff.org&q='},
 			"wired"     => {
 				home    => 'http://wired.com',
-				search  => 'http://search.wired.com/wnews/default.asp?query=',
-			},
+				search  => 'http://search.wired.com/wnews/default.asp?query='},
 			"slashdot"  => {
 				home    => 'http://slashdot.org',
-				search  => 'http://slashdot.org/search.pl?query=',
-			},
+				search  => 'http://slashdot.org/search.pl?query='},
 			"newsforge" => {
 				home    => 'http://newsforge.com',
-				search  => 'http://newsforge.com/search.pl?query=',
-			},
+				search  => 'http://newsforge.com/search.pl?query='},
 			"usnews"    => {
 				home    => 'http://usnews.com',
-				search  => 'http://www.usnews.com/search/Search?keywords=',
-			},
+				search  => 'http://www.usnews.com/search/Search?keywords='},
 			"newsci"    => {
 				home    => 'http://newscientist.com',
-				search  => 'http://www.newscientist.com/search.ns?doSearch=true&articleQuery.queryString=',
-			},
+				search  => 'http://www.newscientist.com/search.ns?doSearch=true&articleQuery.queryString='},
 			"discover"  => {
 				home    => 'http://discover.com',
-				search  => 'http://www.discover.com/search-results/?searchStr=',
-			},
+				search  => 'http://www.discover.com/search-results/?searchStr='},
 			"sciam"     => {
 				home    => 'http://sciam.com',
-				search  => 'http://sciam.com/search/index.cfm?QT=Q&SC=Q&Q=',
-			},
+				search  => 'http://sciam.com/search/index.cfm?QT=Q&SC=Q&Q='},
 		);
 
 		my ($server, $search) = @_;
@@ -589,79 +561,69 @@ An error is produced if the given locator is not found.
 	############################################################################
 	# Locators
 	my %locator_prefixes;
-	$locator_prefixes{'^(imdb|movie|flick)(| .*)$'}			= 'imdb';			# Internet Movie Database
-	$locator_prefixes{'^(stock|ticker|quote)(| .*)$'}		= 'stock';			# Yahoo! Finance / NASD Regulation
-	$locator_prefixes{'^(urban|legend|ul)(| .*)$'}			= 'bs';				# Snopes
-	$locator_prefixes{'^(bittorrent|torrent|bt)(| .*)$'}	= 'torrent';		# Torrent search / ISOHunt
-	$locator_prefixes{'^(archive|arc|ar|ia)(| .*)$'}		= 'archive';		# Wayback Machine
-	$locator_prefixes{'^(freshmeat|fm)(| .*)$'}				= 'freshmeat';		# Freshmeat
-	$locator_prefixes{'^(sourceforge|sf)(| .*)$'}			= 'sourceforge';	# SourceForge
-	$locator_prefixes{'^(savannah|sv)(| .*)$'}				= 'savannah';		# Savannah
-	$locator_prefixes{'^gna(| .*)$'}						= 'gna';			# Gna!
-	$locator_prefixes{'^(alive|dead)(| .*)$'}				= 'dead';			# Who's Alive and Who's Dead
-	$locator_prefixes{'^(book|read)(| .*)$'}				= 'book';			# Google Library / Project Gutenberg
-	$locator_prefixes{'^ipl(| .*)$'}						= 'ipl';			# Internet Public Library
+	$locator_prefixes{'^(imdb|movie|flick)(| .*)$'}      = 'imdb';        # Internet Movie Database
+	$locator_prefixes{'^(stock|ticker|quote)(| .*)$'}    = 'stock';       # Yahoo! Finance / NASD Regulation
+	$locator_prefixes{'^(urban|legend|ul)(| .*)$'}       = 'bs';          # Snopes
+	$locator_prefixes{'^(bittorrent|torrent|bt)(| .*)$'} = 'torrent';     # Torrent search / ISOHunt
+	$locator_prefixes{'^(archive|arc|ar|ia)(| .*)$'}     = 'archive';     # Wayback Machine
+	$locator_prefixes{'^(freshmeat|fm)(| .*)$'}          = 'freshmeat';   # Freshmeat
+	$locator_prefixes{'^(sourceforge|sf)(| .*)$'}        = 'sourceforge'; # SourceForge
+	$locator_prefixes{'^(savannah|sv)(| .*)$'}           = 'savannah';    # Savannah
+	$locator_prefixes{'^gna(| .*)$'}                     = 'gna';         # Gna!
+	$locator_prefixes{'^(alive|dead)(| .*)$'}            = 'dead';        # Who's Alive and Who's Dead
+	$locator_prefixes{'^(book|read)(| .*)$'}             = 'book';        # Google Library / Project Gutenberg
+	$locator_prefixes{'^ipl(| .*)$'}                     = 'ipl';         # Internet Public Library
 
-	my %weather_locators = (
-		'weather underground'	=> 'http://wunderground.com/cgi-bin/findweather/getForecast?query=!query!',
-		'google'				=> 'http://google.com/search?q=weather+"!query!"',
-		'yahoo'					=> 'http://search.yahoo.com/search?p=weather+"!query!"',
-		'cnn'					=> 'http://weather.cnn.com/weather/search?wsearch=!query!',
-		'accuweather'			=> 'http://wwwa.accuweather.com/adcbin/public/us_getcity.asp?zipcode=!query!',
-		'ask jeeves'			=> 'http://web.ask.com/web?&q=weather !query!',
+	my %weather_locators =
+	(
+		'weather underground' => 'http://wunderground.com/cgi-bin/findweather/getForecast?query=!query!',
+		'google'              => 'http://google.com/search?q=weather+"!query!"',
+		'yahoo'               => 'http://search.yahoo.com/search?p=weather+"!query!"',
+		'cnn'                 => 'http://weather.cnn.com/weather/search?wsearch=!query!',
+		'accuweather'         => 'http://wwwa.accuweather.com/adcbin/public/us_getcity.asp?zipcode=!query!',
+		'ask jeeves'          => 'http://web.ask.com/web?&q=weather !query!',
 	);
 
 	sub location
 	{
-		my %locators = (
-			'imdb'			=> {
-				home		=> 'http://imdb.com',
-				search		=> 'http://imdb.com/Find?select=All&for=',
-			},
-			'stock'			=> {
-				home		=> 'http://nasdr.com',
-				search		=> 'http://finance.yahoo.com/l?s=',
-			},
-			'bs'			=> {
-				home		=> 'http://snopes.com',
-				search		=> 'http://search.atomz.com/search/?sp-a=00062d45-sp00000000&sp-q=',
-			},
-			'torrent'		=> {
-				home		=> 'http://isohunt.com',
-				search		=> 'http://google.com/search?q=filetype:torrent !query!!bork!',
-			},
-			'archive'		=> {
-				home		=> 'http://web.archive.org/web/*/!current!',
-				search		=> 'http://web.archive.org/web/*/',
-			},
-			'freshmeat'		=> {
-				home		=> 'http://freshmeat.net',
-				search		=> 'http://freshmeat.net/search/?q=',
-			},
-			'sourceforge'	=> {
-				home		=> 'http://sourceforge.net',
-				search		=> 'http://sourceforge.net/search/?q=',
-			},
-			'savannah'		=> {
-				home		=> 'http://savannah.nongnu.org',
-				search		=> 'http://savannah.nongnu.org/search/?type_of_search=soft&words=',
-			},
-			'gna'			=> {
-				home		=> 'http://gna.org',
-				search		=> 'https://gna.org/search/?type_of_search=soft&words=',
-			},
-			'dead'			=> {
-				home		=> 'http://www.whosaliveandwhosdead.com',
-				search		=> 'http://google.com/search?btnI&sitesearch=http://whosaliveandwhosdead.com&q=',
-			},
-			'book'			=> {
-				home		=> 'http://gutenberg.org',
-				search		=> 'http://google.com/search?q=book+"!query!"',
-			},
-			'ipl'			=> {
-				home		=> 'http://ipl.org',
-				search		=> 'http://ipl.org/div/searchresults/?words=',
-			},
+		my %locators =
+		(
+			'imdb'        => {
+				home      => 'http://imdb.com',
+				search    => 'http://imdb.com/Find?select=All&for='},
+			'stock'       => {
+				home      => 'http://nasdr.com',
+				search    => 'http://finance.yahoo.com/l?s='},
+			'bs'          => {
+				home      => 'http://snopes.com',
+				search    => 'http://search.atomz.com/search/?sp-a=00062d45-sp00000000&sp-q='},
+			'torrent'     => {
+				home      => 'http://isohunt.com',
+				search    => 'http://google.com/search?q=filetype:torrent !query!!bork!'},
+			'archive'     => {
+				home      => 'http://web.archive.org/web/*/!current!',
+				search    => 'http://web.archive.org/web/*/'},
+			'freshmeat'   => {
+				home      => 'http://freshmeat.net',
+				search    => 'http://freshmeat.net/search/?q='},
+			'sourceforge' => {
+				home      => 'http://sourceforge.net',
+				search    => 'http://sourceforge.net/search/?q='},
+			'savannah'    => {
+				home      => 'http://savannah.nongnu.org',
+				search    => 'http://savannah.nongnu.org/search/?type_of_search=soft&words='},
+			'gna'         => {
+				home      => 'http://gna.org',
+				search    => 'https://gna.org/search/?type_of_search=soft&words='},
+			'dead'        => {
+				home      => 'http://www.whosaliveandwhosdead.com',
+				search    => 'http://google.com/search?btnI&sitesearch=http://whosaliveandwhosdead.com&q='},
+			'book'        => {
+				home      => 'http://gutenberg.org',
+				search    => 'http://google.com/search?q=book+"!query!"'},
+			'ipl'         => {
+				home      => 'http://ipl.org',
+				search    => 'http://ipl.org/div/searchresults/?words='},
 		);
 
 		my ($server, $search, $current_url) = @_;
@@ -692,40 +654,40 @@ An error is produced if the given locator is not found.
 		my ($thingy) = $url =~ /^[a-z]* (.*)/;
 		my ($domain) = $current_url =~ /([a-z0-9-]+\.(com|net|org|edu|gov|mil))/;
 
-		my $locator_zip				= 'http://usps.com';
-		my $ipv						= "ipv4-address-space"; $ipv = "ipv6-address-space" if loadrc("ipv6") eq "yes";
-			my $locator_ip			= 'http://www.iana.org/assignments/' . $ipv;
-		my $whois					= 'http://reports.internic.net/cgi/whois?type=domain&whois_nic=';
-			my $locator_whois		= 'http://www.iana.org/cctld/cctld-whois.htm';
-			$locator_whois			= $whois . $domain if $domain;
-		my $locator_rfc				= 'http://ietf.org';
-		my $locator_weather			= 'http://weather.noaa.gov';
-		my $locator_whatis			= 'http://uptime.netcraft.com';
-			$locator_whatis			= 'http://uptime.netcraft.com/up/graph/?host=' . $domain if $domain;
-		my $locator_vim				= 'http://www.vim.org/tips';
+		my $locator_zip          = 'http://usps.com';
+		my $ipv                  = "ipv4-address-space"; $ipv = "ipv6-address-space" if loadrc("ipv6") eq "yes";
+			my $locator_ip       = 'http://www.iana.org/assignments/' . $ipv;
+		my $whois                = 'http://reports.internic.net/cgi/whois?type=domain&whois_nic=';
+			my $locator_whois    = 'http://www.iana.org/cctld/cctld-whois.htm';
+			$locator_whois       = $whois . $domain if $domain;
+		my $locator_rfc          = 'http://ietf.org';
+		my $locator_weather      = 'http://weather.noaa.gov';
+		my $locator_whatis       = 'http://uptime.netcraft.com';
+			$locator_whatis      = 'http://uptime.netcraft.com/up/graph/?host=' . $domain if $domain;
+		my $locator_vim          = 'http://www.vim.org/tips';
 		if ($thingy)
 		{
-			$locator_zip			= 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;
-				$locator_zip		= 'http://zipinfo.com/cgi-local/zipsrch.exe?zip=' . $thingy if $thingy !~ '^[0-9]*$';
-			$locator_ip				= 'http://melissadata.com/lookups/iplocation.asp?ipaddress=' . $thingy;
-			$locator_whois			= $whois . $thingy;
-			$locator_rfc			= 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?num=37&searchwords=' . $thingy;
-				$locator_rfc		= 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless $thingy !~ '^[0-9]*$';
-			my $weather				= loadrc("weather");
-				$locator_weather	= $weather_locators{$weather};
-				$locator_weather	||= $weather_locators{'weather underground'};
-				$locator_weather	=~ s/!query!/$thingy/;
-			$locator_whatis			= 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
-			$locator_vim			= 'http://www.vim.org/tips/tip_search_results.php?order_by=rating&keywords=' . $thingy;
-				$locator_vim		= 'http://www.vim.org/tips/tip.php?tip_id=' . $thingy unless $thingy !~ '^[0-9]*$';
+			$locator_zip         = 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;
+				$locator_zip     = 'http://zipinfo.com/cgi-local/zipsrch.exe?zip=' . $thingy if $thingy !~ '^[0-9]*$';
+			$locator_ip          = 'http://melissadata.com/lookups/iplocation.asp?ipaddress=' . $thingy;
+			$locator_whois       = $whois . $thingy;
+			$locator_rfc         = 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?num=37&searchwords=' . $thingy;
+				$locator_rfc     = 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless $thingy !~ '^[0-9]*$';
+			my $weather          = loadrc("weather");
+				$locator_weather = $weather_locators{$weather};
+				$locator_weather ||= $weather_locators{'weather underground'};
+				$locator_weather =~ s/!query!/$thingy/;
+			$locator_whatis      = 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
+			$locator_vim         = 'http://www.vim.org/tips/tip_search_results.php?order_by=rating&keywords=' . $thingy;
+				$locator_vim     = 'http://www.vim.org/tips/tip.php?tip_id=' . $thingy unless $thingy !~ '^[0-9]*$';
 		}
-		return $locator_zip			if ($url =~ '^(zip|usps)(| .*)$');
-		return $locator_ip			if ($url =~ '^ip(| .*)$');
-		return $locator_whois		if ($url =~ '^whois(| .*)$');
-		return $locator_rfc			if ($url =~ '^rfc(| .*)$');
-		return $locator_weather		if ($url =~ '^(weather|w)(| .*)$');
-		return $locator_whatis		if ($url =~ '^(whatis|uptime)(| .*)$');
-		return $locator_vim			if ($url =~ '^vt(| .*)$');
+		return $locator_zip     if ($url =~ '^(zip|usps)(| .*)$');
+		return $locator_ip      if ($url =~ '^ip(| .*)$');
+		return $locator_whois   if ($url =~ '^whois(| .*)$');
+		return $locator_rfc     if ($url =~ '^rfc(| .*)$');
+		return $locator_weather if ($url =~ '^(weather|w)(| .*)$');
+		return $locator_whatis  if ($url =~ '^(whatis|uptime)(| .*)$');
+		return $locator_vim     if ($url =~ '^vt(| .*)$');
 	}
 
 

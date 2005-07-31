@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.220 2005/07/30 22:38:45 miciah Exp $ */
+/* $Id: hierbox.c,v 1.221 2005/07/31 00:14:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,13 +83,13 @@ add_listbox_item(struct hierbox_browser *browser, struct listbox_item *root,
 static inline struct listbox_item *
 replace_listbox_item(struct listbox_item *item, struct listbox_data *data)
 {
-	struct listbox_item *box;
+	struct listbox_item *new_item;
 
-	box = traverse_listbox_items_list(item, data, 1, 1, NULL, NULL);
-	if (item != box) return box;
+	new_item = traverse_listbox_items_list(item, data, 1, 1, NULL, NULL);
+	if (item != new_item) return new_item;
 
-	box = traverse_listbox_items_list(item, data, -1, 1, NULL, NULL);
-	return (item == box) ? NULL : box;
+	new_item = traverse_listbox_items_list(item, data, -1, 1, NULL, NULL);
+	return (item == new_item) ? NULL : new_item;
 }
 
 void
@@ -124,16 +124,16 @@ done_listbox_item(struct hierbox_browser *browser, struct listbox_item *box_item
 
 
 static void
-recursively_set_expanded(struct listbox_item *box, int expanded)
+recursively_set_expanded(struct listbox_item *item, int expanded)
 {
 	struct listbox_item *child;
 
-	if (box->type != BI_FOLDER)
+	if (item->type != BI_FOLDER)
 		return;
 
-	box->expanded = expanded;
+	item->expanded = expanded;
 
-	foreach (child, box->child)
+	foreach (child, item->child)
 		recursively_set_expanded(child, expanded);
 }
 

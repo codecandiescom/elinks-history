@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.494 2005/07/30 22:33:38 miciah Exp $ */
+/* $Id: options.c,v 1.495 2005/07/31 00:14:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -431,16 +431,16 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 static inline struct listbox_item *
 init_option_listbox_item(struct option *option)
 {
-	struct listbox_item *box = mem_calloc(1, sizeof(*box));
+	struct listbox_item *item = mem_calloc(1, sizeof(*item));
 
-	if (!box) return NULL;
+	if (!item) return NULL;
 
-	init_list(box->child);
-	box->visible = 1;
-	box->udata = option;
-	box->type = (option->type == OPT_TREE) ? BI_FOLDER : BI_LEAF;
+	init_list(item->child);
+	item->visible = 1;
+	item->udata = option;
+	item->type = (option->type == OPT_TREE) ? BI_FOLDER : BI_LEAF;
 
-	return box;
+	return item;
 }
 
 struct option *

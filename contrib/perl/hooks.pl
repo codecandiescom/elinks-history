@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.103 2005/07/31 06:09:02 rrowan Exp $
+# $Id: hooks.pl,v 1.104 2005/07/31 06:17:13 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -524,6 +524,8 @@ I<BBC> is used as the default search engine if the given engine is not found.
 
 =item Gna!:                               B<gna>
 
+=item BerliOS:                            B<bl> or B<berlios>
+
 =item Netcraft Uptime Survey:             B<whatis> or B<uptime> (current url or specified)
 
 =item Who's Alive and Who's Dead:         Wanted, B<dead> or B<alive>!
@@ -570,6 +572,7 @@ An error is produced if the given locator is not found.
 	$locator_prefixes{'^(sourceforge|sf)(| .*)$'}        = 'sourceforge'; # SourceForge
 	$locator_prefixes{'^(savannah|sv)(| .*)$'}           = 'savannah';    # Savannah
 	$locator_prefixes{'^gna(| .*)$'}                     = 'gna';         # Gna!
+	$locator_prefixes{'^(berlios|bl)(| .*)$'}            = 'berlios';     # BerliOS
 	$locator_prefixes{'^(alive|dead)(| .*)$'}            = 'dead';        # Who's Alive and Who's Dead
 	$locator_prefixes{'^(book|read)(| .*)$'}             = 'book';        # Google Library / Project Gutenberg
 	$locator_prefixes{'^ipl(| .*)$'}                     = 'ipl';         # Internet Public Library
@@ -615,6 +618,9 @@ An error is produced if the given locator is not found.
 			'gna'         => {
 				home      => 'http://gna.org',
 				search    => 'https://gna.org/search/?type_of_search=soft&words='},
+			'berlios'     => {
+				home      => 'http://www.berlios.de',
+				search    => 'http://developer.berlios.de/search/?type_of_search=soft&words='},
 			'dead'        => {
 				home      => 'http://www.whosaliveandwhosdead.com',
 				search    => 'http://google.com/search?btnI&sitesearch=http://whosaliveandwhosdead.com&q='},

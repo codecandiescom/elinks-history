@@ -1,3 +1,142 @@
+Sun Jul 31 22:04:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Label struct list_head keymaps[] as a list of struct keybinding.  
+
+Sun Jul 31 22:00:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Factor get_keymap out of get_keymap_name.  
+
+Sun Jul 31 21:38:12 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	Add the keymap_id to struct action.  
+	
+	Use that instead of keymap_box_item_info to find the keymap of an
+	action.  
+	
+	Drop struct keymap_box_item_info keymap_box_item_info[] in favour of
+	a simpler struct listbox_item *keymap_box_item[].  
+
+Sun Jul 31 09:55:25 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added somewhat more advanced local file detection.  In addition to
+	/path/to/file and ~/file, the 'URL' is compared to the contents of
+	ELinks' working directory.  
+
+Sun Jul 31 09:52:35 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added basic file detection for 'gotosearch'.  
+
+Sun Jul 31 09:51:52 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Improved the URL detection.  
+
+Sun Jul 31 06:28:22 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added 'Hunt the Wumpus', a classic from 1972.  
+
+Sun Jul 31 06:26:43 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added 'Dungeon' (c) 1979.  
+
+Sun Jul 31 06:19:53 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Removed the now useless quote searching code.  
+
+Sun Jul 31 06:17:13 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added a prefix for berlios.de.  
+
+Sun Jul 31 06:09:02 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Fixed a bug in gotosearch's URL detection.  
+
+Sun Jul 31 06:07:55 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Fixed alignment issues.  
+
+Sun Jul 31 00:14:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, config/options.c:
+
+	Do not use the name 'box' for listbox items.  
+
+Sat Jul 30 23:06:57 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	If listbox_sel_move is given dist 0 but the selected item is
+	invisible, move to the next item.  
+
+Sat Jul 30 23:05:01 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Change listbox_sel_move to take 0 dist to mean no change in
+	selection.  
+	
+	Have display_listbox always call listbox_sel_move instead of only 
+	calling it when the selected item is past the bottom of the box 
+	since listbox_sel_move does that check itself. Drop some other
+	checks in display_listbox that listbox_sel_move performs.  
+
+Sat Jul 30 22:38:45 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	Revert revision 1.215, for it is a useless assignment.  
+
+Sat Jul 30 22:33:38 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Mark a non-allocated option invisible instead of deleting its
+	listbox_item when deleting the option.  
+
+Sat Jul 30 20:32:46 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: dialogs.c, kbdbind.c:
+
+	Drop the NULL terminator from keymap_table and instead compare the
+	index against KEYMAP_MAX in loops.  
+
+Sat Jul 30 14:51:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Add check_option_name() handler and use it when adding options. Now
+	parse_set() won't complain about option names added via the option
+	manager.  
+
+Sat Jul 30 05:38:44 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* configure.in:
+
+	Removed the message about Perl scripting being only lightly tested.  
+
 Thu Jul 28 15:26:17 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/document/html/parser/parse.c:

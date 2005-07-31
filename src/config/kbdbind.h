@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.186 2005/07/27 23:38:32 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.187 2005/07/31 21:38:12 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -15,9 +15,17 @@ struct listbox_item;
 /* Used for holding enum <keymap>_action values. */
 typedef long action_id_T;
 
+enum keymap_id {
+	KEYMAP_MAIN,
+	KEYMAP_EDIT,
+	KEYMAP_MENU,
+	KEYMAP_MAX
+};
+
 struct action {
 	unsigned char *str;
 	action_id_T num;
+	enum keymap_id keymap_id;
 	unsigned char *desc;
 	unsigned int flags;
 };
@@ -26,14 +34,6 @@ struct action_list {
 	struct action *actions;
 	int num_actions;
 };
-
-enum keymap_id {
-	KEYMAP_MAIN,
-	KEYMAP_EDIT,
-	KEYMAP_MENU,
-	KEYMAP_MAX
-};
-
 struct keymap {
 	unsigned char *str;
 	enum keymap_id keymap_id;

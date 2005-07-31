@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.251 2005/07/30 20:32:46 miciah Exp $ */
+/* $Id: dialogs.c,v 1.252 2005/07/31 21:38:12 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -573,12 +573,7 @@ get_keybinding_action_box_item(enum keymap_id keymap_id, action_id_T action_id)
 	return action_box_items[keymap_id][action_id];
 }
 
-struct keymap_box_item_info {
-	struct listbox_item *box_item;
-	struct action *first, *last;
-};
-
-struct keymap_box_item_info keymap_box_item_info[KEYMAP_MAX];
+struct listbox_item *keymap_box_item[KEYMAP_MAX];
 
 void
 init_keybinding_listboxes(struct keymap keymap_table[KEYMAP_MAX], struct action_list actions[])
@@ -591,7 +586,6 @@ init_keybinding_listboxes(struct keymap keymap_table[KEYMAP_MAX], struct action_
 	 * of list. */
 	for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++) {
 		struct listbox_item *keymap_box;
-		struct keymap_box_item_info *box_info;
 
 		keymap_box = add_listbox_item(NULL, root, BI_FOLDER, &keymap_table[keymap_id], -1);
 		if (!keymap_box) continue;
@@ -618,10 +612,7 @@ init_keybinding_listboxes(struct keymap keymap_table[KEYMAP_MAX], struct action_
 			action_box_items[keymap_id][act->num] = item;
 		}
 
-		box_info = &keymap_box_item_info[keymap_id];
-		box_info->box_item = keymap_box;
-		box_info->first	   = actions[keymap_id].actions;
-		box_info->last	   = act;
+		keymap_box_item[keymap_id] = keymap_box;
 	}
 }
 
@@ -723,15 +714,8 @@ get_keybinding_root(struct listbox_item *item)
 
 	if (item->depth == 1) {
 		struct action *action = item->udata;
-		enum keymap_id keymap_id;
 
-		for (keymap_id = 0; keymap_id < KEYMAP_MAX; keymap_id++) {
-			if (keymap_box_item_info[keymap_id].first <= action
-			    && keymap_box_item_info[keymap_id].last > action)
-				return keymap_box_item_info[keymap_id].box_item;
-		}
-
-		return NULL;
+		return keymap_box_item[action->keymap_id];
 	} else {
 		struct keybinding *kb = item->udata;
 

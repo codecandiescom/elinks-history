@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.109 2005/07/31 09:52:35 rrowan Exp $
+# $Id: hooks.pl,v 1.110 2005/07/31 09:55:25 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -931,6 +931,13 @@ Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglati
 	# Anything not otherwise useful is a search
 	if ($current_url and loadrc("gotosearch") eq "yes")
 	{
+		opendir(DIR, '.');
+		my @files = readdir(DIR);
+		closedir(DIR);
+		foreach my $file (@files)
+		{
+			return $url if $url eq $file;
+		}
 		return $url if $url =~ /^(\/|~)/;
 		if ($url =~ /^(([a-zA-Z]{3,}(|4|6):\/\/|(www|ftp)\.)|)[a-zA-Z0-9]+/       and
 		   ($url =~ /[a-zA-Z0-9-]+\.(com|org|net|edu|gov|int|mil)($|\/|\?)/        or

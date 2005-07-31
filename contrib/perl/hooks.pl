@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.106 2005/07/31 06:26:43 rrowan Exp $
+# $Id: hooks.pl,v 1.107 2005/07/31 06:28:22 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -810,7 +810,7 @@ B<babelfish>, B<babel>, B<bf>, B<translate>, B<trans>, or B<b>
 		# $url = 'http://sundae.triumf.ca/pub2/cave/node001.html';
 		srand();
 		my $yzzyx;
-		my $xyzzy = int(rand(7));
+		my $xyzzy = int(rand(8));
 		$yzzyx = 1   if ($xyzzy == 0); # Colossal Cave Adventure
 		$yzzyx = 2   if ($xyzzy == 1); # Dungeon
 		$yzzyx = 227 if ($xyzzy == 2); # Zork Zero: The Revenge of Megaboz
@@ -818,6 +818,7 @@ B<babelfish>, B<babel>, B<bf>, B<translate>, B<trans>, or B<b>
 		$yzzyx = 4   if ($xyzzy == 4); # Zork II: The Wizard of Frobozz
 		$yzzyx = 5   if ($xyzzy == 5); # Zork III: The Dungeon Master
 		$yzzyx = 6   if ($xyzzy == 6); # Zork: The Undiscovered Underground
+		$yzzyx = 249 if ($xyzzy == 7); # Hunt the Wumpus
 		return 'http://ifiction.org/games/play.php?game=' . $yzzyx;
 	}
 

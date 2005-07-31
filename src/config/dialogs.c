@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.252 2005/07/31 21:38:12 miciah Exp $ */
+/* $Id: dialogs.c,v 1.253 2005/07/31 22:28:03 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -655,7 +655,7 @@ unlock_keybinding(struct listbox_item *item)
 static int
 is_keybinding_used(struct listbox_item *item)
 {
-	if (item->depth == 2) return 0;
+	if (item->depth != 2) return 0;
 	return is_object_used((struct keybinding *) item->udata);
 }
 

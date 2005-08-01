@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.254 2005/08/01 17:42:23 miciah Exp $ */
+/* $Id: dialogs.c,v 1.255 2005/08/01 20:00:11 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -807,7 +807,6 @@ really_really_add_keybinding(void *data)
 
 	if (keybinding && keybinding->box_item)
 		listbox_sel(hop->widget_data, keybinding->box_item);
-;
 }
 
 static void

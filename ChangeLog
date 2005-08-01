@@ -1,3 +1,36 @@
+Mon Aug  1 20:00:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Drop an extra semi-colon that came with revision 1.247.  
+
+Mon Aug  1 19:41:15 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Synced pl.po with sources.  
+
+Mon Aug  1 17:42:23 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Use the new keymap_id member of struct action to simplify
+	push_kbdbind_add_button.  
+
+Mon Aug  1 07:15:00 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jul 31 22:28:03 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Fix a logic error in the depth check (introduced in revision 1.174 )
+	in is_keybinding_used, which error allowed the concurrency errors
+	that the check was supposed to prevent.  
+
 Sun Jul 31 22:04:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/config/kbdbind.c:

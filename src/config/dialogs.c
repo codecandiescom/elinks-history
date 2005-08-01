@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.253 2005/07/31 22:28:03 miciah Exp $ */
+/* $Id: dialogs.c,v 1.254 2005/08/01 17:42:23 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -885,18 +885,9 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		hop->keymap_id = keybinding->keymap_id;
 	} else {
 		struct action *action = item->udata;
-		struct keymap *keymap;
 
 		hop->action_id = action->num;
-
-		item = get_keybinding_root(item);
-		if (!item) {
-			mem_free(hop);
-			return EVENT_PROCESSED;
-		}
-
-		keymap = item->udata;
-		hop->keymap_id = keymap->keymap_id;
+		hop->keymap_id = action->keymap_id;
 	}
 
 	text = msg_text(term,

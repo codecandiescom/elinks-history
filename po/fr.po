@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-07-28 09:54+0200\n"
-"PO-Revision-Date: 2005-07-28 09:57+0200\n"
+"POT-Creation-Date: 2005-08-01 09:12+0200\n"
+"PO-Revision-Date: 2005-08-01 09:14+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,21 +15,21 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: src/bfu/hierbox.c:331
+#: src/bfu/hierbox.c:330
 msgid "Close"
 msgstr "Fermer"
 
 #. | MSGBOX_SCROLLABLE
-#: src/bfu/hierbox.c:426 src/bfu/hierbox.c:435 src/dialogs/document.c:44
+#: src/bfu/hierbox.c:425 src/bfu/hierbox.c:434 src/dialogs/document.c:44
 #: src/dialogs/document.c:241
 msgid "Info"
 msgstr "Info"
 
-#: src/bfu/hierbox.c:427
+#: src/bfu/hierbox.c:426
 msgid "Press space to expand this folder."
 msgstr "Pressez espace pour déployer le dossier."
 
-#: src/bfu/hierbox.c:438 src/bfu/inpfield.c:255 src/bfu/msgbox.c:173
+#: src/bfu/hierbox.c:437 src/bfu/inpfield.c:255 src/bfu/msgbox.c:173
 #: src/bfu/msgbox.c:190 src/config/dialogs.c:57 src/config/dialogs.c:394
 #: src/cookies/dialogs.c:355 src/dialogs/edit.c:98 src/dialogs/info.c:134
 #: src/dialogs/options.c:209 src/dialogs/options.c:289 src/mime/dialogs.c:130
@@ -39,69 +39,69 @@ msgstr "Pressez espace pour déployer le dossier."
 msgid "~OK"
 msgstr "~OK"
 
-#: src/bfu/hierbox.c:549
+#: src/bfu/hierbox.c:548
 #, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "Désolé, mais l'item \"%s\" ne peut être supprimé."
 
-#: src/bfu/hierbox.c:550
+#: src/bfu/hierbox.c:549
 #, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Désolé, mais l'item \"%s\" est actuellement utilisé ailleurs."
 
 #. cant_delete_folder
-#: src/bfu/hierbox.c:553 src/bookmarks/dialogs.c:120
+#: src/bfu/hierbox.c:552 src/bookmarks/dialogs.c:120
 #, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Désolé, mais le dossier \"%s\" ne peut être supprimé."
 
 #. cant_delete_used_folder
-#: src/bfu/hierbox.c:554 src/bookmarks/dialogs.c:122
+#: src/bfu/hierbox.c:553 src/bookmarks/dialogs.c:122
 #, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr "Désolé, mais le dossier \"%s\" est actuellement utilisé ailleurs."
 
-#: src/bfu/hierbox.c:619
+#: src/bfu/hierbox.c:618
 msgid "Delete error"
 msgstr "Erreur de suppression"
 
-#: src/bfu/hierbox.c:713
+#: src/bfu/hierbox.c:712
 msgid "Delete marked items"
 msgstr "Supprimer les items marqués"
 
-#: src/bfu/hierbox.c:714
+#: src/bfu/hierbox.c:713
 msgid "Delete marked items?"
 msgstr "Supprimer les items marqués ?"
 
-#: src/bfu/hierbox.c:727 src/bfu/hierbox.c:763 src/bfu/hierbox.c:784
-#: src/bfu/hierbox.c:855 src/config/dialogs.c:834 src/dialogs/menu.c:127
+#: src/bfu/hierbox.c:726 src/bfu/hierbox.c:762 src/bfu/hierbox.c:783
+#: src/bfu/hierbox.c:854 src/config/dialogs.c:836 src/dialogs/menu.c:127
 #: src/formhist/formhist.c:419 src/mime/dialogs.c:70 src/session/task.c:273
 #: src/terminal/tab.c:191 src/terminal/tab.c:227
 msgid "~Yes"
 msgstr "~Oui"
 
-#: src/bfu/hierbox.c:728 src/bfu/hierbox.c:764 src/bfu/hierbox.c:785
-#: src/bfu/hierbox.c:856 src/config/dialogs.c:835 src/dialogs/menu.c:128
+#: src/bfu/hierbox.c:727 src/bfu/hierbox.c:763 src/bfu/hierbox.c:784
+#: src/bfu/hierbox.c:855 src/config/dialogs.c:837 src/dialogs/menu.c:128
 #: src/formhist/formhist.c:420 src/mime/dialogs.c:71 src/session/task.c:274
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
 msgid "~No"
 msgstr "~Non"
 
 #. delete_folder_title
-#: src/bfu/hierbox.c:748 src/bookmarks/dialogs.c:128
+#: src/bfu/hierbox.c:747 src/bookmarks/dialogs.c:128
 msgid "Delete folder"
 msgstr "Supprimer un dossier"
 
-#: src/bfu/hierbox.c:749
+#: src/bfu/hierbox.c:748
 #, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Supprimer le dossier \"%s\" et son contenu ?"
 
-#: src/bfu/hierbox.c:766
+#: src/bfu/hierbox.c:765
 msgid "Delete item"
 msgstr "Supprimer un item"
 
-#: src/bfu/hierbox.c:767
+#: src/bfu/hierbox.c:766
 #, c-format
 msgid ""
 "Delete \"%s\"?\n"
@@ -112,27 +112,27 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/bfu/hierbox.c:824
+#: src/bfu/hierbox.c:823
 msgid "Clear all items"
 msgstr "Effacer tous les items"
 
-#: src/bfu/hierbox.c:825
+#: src/bfu/hierbox.c:824
 msgid "Do you really want to remove all items?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les items ?"
 
-#: src/bfu/hierbox.c:922 src/bfu/hierbox.c:953 src/viewer/text/search.c:1014
+#: src/bfu/hierbox.c:921 src/bfu/hierbox.c:952 src/viewer/text/search.c:1014
 #: src/viewer/text/search.c:1022 src/viewer/text/search.c:1038
 #: src/viewer/text/search.c:1613
 msgid "Search"
 msgstr "Chercher"
 
-#: src/bfu/hierbox.c:924 src/viewer/text/search.c:1015
+#: src/bfu/hierbox.c:923 src/viewer/text/search.c:1015
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Chaîne recherchée '%s' introuvable"
 
-#: src/bfu/hierbox.c:953 src/config/dialogs.c:168 src/config/dialogs.c:360
-#: src/config/dialogs.c:489 src/cookies/dialogs.c:35 src/cookies/dialogs.c:349
+#: src/bfu/hierbox.c:952 src/config/dialogs.c:168 src/config/dialogs.c:360
+#: src/config/dialogs.c:507 src/cookies/dialogs.c:35 src/cookies/dialogs.c:349
 #: src/dialogs/edit.c:92 src/dialogs/edit.c:94 src/scripting/lua/core.c:374
 #: src/scripting/lua/core.c:375 src/scripting/lua/core.c:455
 msgid "Name"
@@ -151,7 +151,7 @@ msgstr "Saisir un nombre"
 msgid "Number should be in the range from %d to %d."
 msgstr "Le nombre doit être compris entre %d et %d."
 
-#: src/bfu/inpfield.c:99
+#: src/bfu/inpfield.c:99 src/config/dialogs.c:461
 msgid "Bad string"
 msgstr "Mauvaise chaîne"
 
@@ -428,20 +428,20 @@ msgstr "Modifier un signet"
 msgid "~Goto"
 msgstr "A~ller à"
 
-#: src/bookmarks/dialogs.c:464 src/config/dialogs.c:512
+#: src/bookmarks/dialogs.c:464 src/config/dialogs.c:530
 #: src/cookies/dialogs.c:422
 msgid "~Edit"
 msgstr "~Modifier"
 
 #: src/bookmarks/dialogs.c:465 src/cache/dialogs.c:230
-#: src/config/dialogs.c:514 src/config/dialogs.c:951 src/cookies/dialogs.c:423
+#: src/config/dialogs.c:532 src/config/dialogs.c:953 src/cookies/dialogs.c:423
 #: src/dialogs/menu.c:447 src/formhist/dialogs.c:211
 #: src/globhist/dialogs.c:229 src/protocol/auth/dialogs.c:258
 msgid "~Delete"
 msgstr "~Supprimer"
 
-#: src/bookmarks/dialogs.c:466 src/config/dialogs.c:513
-#: src/config/dialogs.c:950 src/cookies/dialogs.c:421 src/dialogs/menu.c:445
+#: src/bookmarks/dialogs.c:466 src/config/dialogs.c:531
+#: src/config/dialogs.c:952 src/cookies/dialogs.c:421 src/dialogs/menu.c:445
 msgid "~Add"
 msgstr "~Ajouter"
 
@@ -458,7 +458,7 @@ msgid "~Move"
 msgstr "~Déplacer"
 
 #: src/bookmarks/dialogs.c:470 src/cache/dialogs.c:231
-#: src/config/dialogs.c:515 src/config/dialogs.c:953 src/dialogs/menu.c:398
+#: src/config/dialogs.c:533 src/config/dialogs.c:955 src/dialogs/menu.c:398
 #: src/globhist/dialogs.c:230
 msgid "~Search"
 msgstr "~Chercher"
@@ -589,7 +589,7 @@ msgstr "Supprimer l'entrée de cache"
 msgid "Delete this cache entry?"
 msgstr "Supprimer cette entrée de cache ?"
 
-#: src/cache/dialogs.c:228 src/config/dialogs.c:511 src/cookies/dialogs.c:420
+#: src/cache/dialogs.c:228 src/config/dialogs.c:529 src/cookies/dialogs.c:420
 #: src/dialogs/download.c:249 src/dialogs/download.c:478
 #: src/formhist/dialogs.c:210 src/globhist/dialogs.c:225
 #: src/protocol/auth/dialogs.c:257
@@ -1799,41 +1799,49 @@ msgstr ""
 "Il s'agit d'une option spéciale (comme un dossier),\n"
 "essayez de presser la touche ESPACE pour voir son contenu."
 
-#: src/config/dialogs.c:464 src/config/dialogs.c:489
+#: src/config/dialogs.c:462
+msgid ""
+"Option names may only contain alpha-numeric characters\n"
+"in addition to '_' and '-'."
+msgstr ""
+"Les noms d'options ne doivent contenir que des caractères\n"
+"alphanumériques ou les caractères '_' et '-'."
+
+#: src/config/dialogs.c:482 src/config/dialogs.c:507
 msgid "Add option"
 msgstr "Ajouter option"
 
-#: src/config/dialogs.c:465
+#: src/config/dialogs.c:483
 msgid "Cannot add an option here."
 msgstr "Impossible d'ajouter une option ici."
 
-#: src/config/dialogs.c:516 src/config/dialogs.c:954 src/cookies/dialogs.c:425
+#: src/config/dialogs.c:534 src/config/dialogs.c:956 src/cookies/dialogs.c:425
 #: src/dialogs/options.c:211 src/formhist/dialogs.c:214
 #: src/protocol/bittorrent/dialogs.c:793 src/session/download.c:1106
 msgid "Sa~ve"
 msgstr "Enre~gistrer"
 
-#: src/config/dialogs.c:521
+#: src/config/dialogs.c:539
 msgid "Option manager"
 msgstr "Gestionnaire d'options"
 
-#: src/config/dialogs.c:692
+#: src/config/dialogs.c:701
 msgid "Keystroke"
 msgstr "Touches"
 
-#: src/config/dialogs.c:694 src/config/options.inc:1136
+#: src/config/dialogs.c:703 src/config/options.inc:1136
 msgid "Action"
 msgstr "Action"
 
-#: src/config/dialogs.c:695
+#: src/config/dialogs.c:704
 msgid "Keymap"
 msgstr "Table"
 
-#: src/config/dialogs.c:828
+#: src/config/dialogs.c:830
 msgid "Keystroke already used"
 msgstr "Touche déjà utilisée"
 
-#: src/config/dialogs.c:829
+#: src/config/dialogs.c:831
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
@@ -1842,23 +1850,23 @@ msgstr ""
 "La combinaison de touches \"%s\" est déjà utilisée pour l'action \"%s\".\n"
 "Etes-vous sûr de vouloir remplacer ?"
 
-#: src/config/dialogs.c:852 src/config/dialogs.c:869 src/config/dialogs.c:915
+#: src/config/dialogs.c:854 src/config/dialogs.c:871 src/config/dialogs.c:917
 msgid "Add keybinding"
 msgstr "Ajouter une association de touches"
 
-#: src/config/dialogs.c:853
+#: src/config/dialogs.c:855
 msgid "Invalid keystroke."
 msgstr "Touche invalide."
 
-#: src/config/dialogs.c:870
+#: src/config/dialogs.c:872
 msgid "Need to select a keymap."
 msgstr "Vous devez sélectionner une table."
 
-#: src/config/dialogs.c:952 src/dialogs/info.c:135 src/globhist/dialogs.c:231
+#: src/config/dialogs.c:954 src/dialogs/info.c:135 src/globhist/dialogs.c:231
 msgid "~Toggle display"
 msgstr "Co~mmuter affich."
 
-#: src/config/dialogs.c:959
+#: src/config/dialogs.c:961
 msgid "Keybinding manager"
 msgstr "Gestionnaire d'assoc. de touches"
 
@@ -1885,31 +1893,31 @@ msgstr ""
 "Merci de vérifier si vous avez la variable $HOME correctement configurée et "
 "si vous avez le droit d'écrire dans votre répertoire personnel."
 
-#: src/config/kbdbind.c:209
+#: src/config/kbdbind.c:210
 msgid "Main mapping"
 msgstr "Principal"
 
-#: src/config/kbdbind.c:210
+#: src/config/kbdbind.c:211
 msgid "Edit mapping"
 msgstr "Edition"
 
-#: src/config/kbdbind.c:211
+#: src/config/kbdbind.c:212
 msgid "Menu mapping"
 msgstr "Menu"
 
-#: src/config/kbdbind.c:512
+#: src/config/kbdbind.c:525
 msgid "Unrecognised keymap"
 msgstr "Table d'associations de touches non reconnue"
 
-#: src/config/kbdbind.c:515
+#: src/config/kbdbind.c:528
 msgid "Error parsing keystroke"
 msgstr "Erreur d'interprétation de touche"
 
-#: src/config/kbdbind.c:519
+#: src/config/kbdbind.c:532
 msgid "Unrecognised action (internal error)"
 msgstr "Action non reconnue (erreur interne)"
 
-#: src/config/kbdbind.c:535
+#: src/config/kbdbind.c:548
 msgid "Error registering event"
 msgstr "Erreur d'enregistrement d'événement"
 

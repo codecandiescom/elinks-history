@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.195 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: file.c,v 1.196 2005/08/02 19:24:02 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */
 #ifdef HAVE_FCNTL_H
@@ -243,9 +244,12 @@ file_protocol_handler(struct connection *connection)
 	unsigned char *type = NULL;
 
 	if (get_cmd_opt_bool("anonymous")) {
-		/* FIXME: Better connection_state ;-) */
-		abort_connection(connection, S_BAD_URL);
-		return;
+		if (strcmp(connection->uri->string, "file:///dev/stdin")
+		    || isatty(STDIN_FILENO)) {
+			/* FIXME: Better connection_state ;-) */
+			abort_connection(connection, S_BAD_URL);
+			return;
+		}
 	}
 
 #ifdef CONFIG_CGI

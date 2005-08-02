@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.211 2005/07/30 23:06:57 miciah Exp $ */
+/* $Id: listbox.c,v 1.212 2005/08/02 01:20:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -277,10 +277,10 @@ listbox_sel_move(struct widget_data *widget_data, int dist)
 {
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
 
-	if (!list_empty(*box->items)) {
-		if (!box->top) box->top = box->items->next;
-		if (!box->sel) box->sel = box->top;
-	}
+	if (list_empty(*box->items)) return;
+
+	if (!box->top) box->top = box->items->next;
+	if (!box->sel) box->sel = box->top;
 
 	/* We want to have these visible if possible. */
 	if (box->top && !box->top->visible) {

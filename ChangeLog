@@ -1,3 +1,15 @@
+Tue Aug  2 19:24:02 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/file/file.c:
+
+	Allow reading from pipe in anonymous mode.  
+
+Tue Aug  2 01:20:45 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	In listbox_sel_move, do nothing if the listbox is empty.  
+
 Mon Aug  1 20:00:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/config/dialogs.c:

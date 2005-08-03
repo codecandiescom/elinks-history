@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.180 2005/07/22 17:47:27 miciah Exp $ */
+/* $Id: renderer.c,v 1.181 2005/08/03 13:59:01 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,6 +95,7 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 	link->where = uri;
 	link->color.background = document->options.default_bg;
 	link->color.foreground = document->options.default_link;
+	link->number = document->nlinks;
 
 	for (point = link->points; length > 0; length--, point++, x++) {
 		point->x = x;

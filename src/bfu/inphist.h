@@ -1,4 +1,4 @@
-/* $Id: inphist.h,v 1.18 2004/11/19 17:19:05 zas Exp $ */
+/* $Id: inphist.h,v 1.19 2005/08/03 23:02:59 jonas Exp $ */
 
 #ifndef EL__BFU_INPHIST_H
 #define EL__BFU_INPHIST_H
@@ -45,6 +45,7 @@ struct input_history {
 void add_to_input_history(struct input_history *, unsigned char *, int);
 
 void do_tab_compl(struct dialog_data *, struct list_head *);
+void do_tab_compl_file(struct dialog_data *, struct list_head *);
 void do_tab_compl_unambiguous(struct dialog_data *, struct list_head *);
 
 /* Load history file from elinks home. */

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.351 2005/07/31 22:04:40 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.352 2005/08/03 23:02:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -662,6 +662,7 @@ static struct default_kb default_edit_keymap[] = {
 	{ { 'K',	 KBD_MOD_CTRL }, ACT_EDIT_KILL_TO_EOL },
 	{ { 'L',	 KBD_MOD_CTRL }, ACT_EDIT_REDRAW },
 	{ { 'r',	 KBD_MOD_ALT  }, ACT_EDIT_SEARCH_TOGGLE_REGEX },
+	{ { 'F',	 KBD_MOD_CTRL }, ACT_EDIT_AUTO_COMPLETE_FILE },
 	{ { 'R',	 KBD_MOD_CTRL }, ACT_EDIT_AUTO_COMPLETE_UNAMBIGUOUS },
 	{ { 'T',	 KBD_MOD_CTRL }, ACT_EDIT_OPEN_EXTERNAL },
 	{ { 'U',	 KBD_MOD_CTRL }, ACT_EDIT_KILL_TO_BOL },

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.95 2005/06/12 00:42:30 jonas Exp $ */
+/* $Id: inphist.c,v 1.96 2005/08/03 23:02:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "bfu/menu.h"
 #include "config/home.h"
 #include "config/options.h"
+#include "dialogs/menu.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/file.h"
@@ -136,6 +137,53 @@ do_tab_compl_unambiguous(struct dialog_data *dlg_data, struct list_head *history
 	if (!match) return;
 
 	tab_compl_n(dlg_data, match, longest_common_match);
+}
+
+
+/* menu_func_T */
+static void
+set_complete_file_menu(struct terminal *term, void *filename_, void *dlg_data_)
+{
+	struct dialog_data *dlg_data = dlg_data_;
+	struct widget_data *widget_data = selected_widget(dlg_data);
+	unsigned char *filename = filename_;
+	int filenamelen;
+
+	assert(widget_is_textfield(widget_data));
+
+	filenamelen = int_min(widget_data->widget->datalen - 1, strlen(filename));
+	memcpy(widget_data->cdata, filename, filenamelen);
+
+	widget_data->cdata[filenamelen] = 0;
+	widget_data->info.field.cpos = filenamelen;
+	widget_data->info.field.vpos = 0;
+
+	mem_free(filename);
+
+	redraw_dialog(dlg_data, 1);
+}
+
+/* menu_func_T */
+static void
+tab_complete_file_menu(struct terminal *term, void *path_, void *dlg_data_)
+{
+	struct dialog_data *dlg_data = dlg_data_;
+	unsigned char *path = path_;
+
+	auto_complete_file(term, 0 /* no_elevator */, path,
+			   set_complete_file_menu, tab_complete_file_menu,
+			   dlg_data);
+}
+
+void
+do_tab_compl_file(struct dialog_data *dlg_data, struct list_head *history)
+{
+	struct widget_data *widget_data = selected_widget(dlg_data);
+
+	if (get_cmd_opt_bool("anonymous"))
+		return;
+
+	tab_complete_file_menu(dlg_data->win->term, widget_data->cdata, dlg_data);
 }
 
 

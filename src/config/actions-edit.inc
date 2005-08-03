@@ -5,6 +5,7 @@
 ACTION_(EDIT, "none", NONE, N__("Do nothing"), 0),
 ACTION_(EDIT, " *scripting-function*", SCRIPTING_FUNCTION, NULL, 0),
 ACTION_(EDIT, "auto-complete", AUTO_COMPLETE, N__("Attempt to auto-complete the input"), 0),
+ACTION_(EDIT, "auto-complete-file", AUTO_COMPLETE_FILE, N__("Attempt to auto-complete a local file"), ACTION_RESTRICT_ANONYMOUS),
 ACTION_(EDIT, "auto-complete-unambiguous", AUTO_COMPLETE_UNAMBIGUOUS, N__("Attempt to unambiguously auto-complete the input"), 0),
 ACTION_(EDIT, "backspace", BACKSPACE, N__("Delete character in front of the cursor"), 0),
 ACTION_(EDIT, "beginning-of-buffer", BEGINNING_OF_BUFFER, N__("Go to the first line of the buffer"), 0),

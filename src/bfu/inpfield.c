@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.215 2005/06/14 12:25:19 jonas Exp $ */
+/* $Id: inpfield.c,v 1.216 2005/08/03 23:02:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -407,8 +407,15 @@ kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	struct window *win = dlg_data->win;
 	struct terminal *term = win->term;
 	struct term_event *ev = dlg_data->term_event;
+	action_id_T action_id;
 
-	switch (kbd_action(KEYMAP_EDIT, ev, NULL)) {
+	action_id = kbd_action(KEYMAP_EDIT, ev, NULL);
+	if (action_id != -1
+	    && !action_is_anonymous_safe(KEYMAP_EDIT, action_id)
+	    && get_cmd_opt_bool("anonymous"))
+		return EVENT_NOT_PROCESSED;
+
+	switch (action_id) {
 		case ACT_EDIT_UP:
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
@@ -507,6 +514,13 @@ kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 				return EVENT_NOT_PROCESSED;
 
 			do_tab_compl(dlg_data, &widget_data->info.field.history);
+			goto display_field;
+
+		case ACT_EDIT_AUTO_COMPLETE_FILE:
+			if (!widget_has_history(widget_data))
+				return EVENT_NOT_PROCESSED;
+
+			do_tab_compl_file(dlg_data, &widget_data->info.field.history);
 			goto display_field;
 
 		case ACT_EDIT_AUTO_COMPLETE_UNAMBIGUOUS:

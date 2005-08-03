@@ -1,3 +1,17 @@
+Wed Aug  3 21:42:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: network/state.c, network/state.h, protocol/file/file.c:
+
+	Add S_FILE_ANONYMOUS connection_state which gives a proper error
+	message for file access in anonymous mode. (Remove non-standard
+	ending punctuation from error message).  
+
+Wed Aug  3 13:59:01 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/plain/renderer.c:
+
+	Number links in plain renderer.  
+
 Tue Aug  2 19:24:02 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/protocol/file/file.c:

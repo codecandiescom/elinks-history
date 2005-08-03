@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.46 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: state.c,v 1.47 2005/08/03 21:42:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,6 +75,7 @@ struct s_msg_dsc {
 	{S_FILE_TYPE,		N_("Unknown file type")},
 	{S_FILE_ERROR,		N_("Error opening file")},
 	{S_FILE_CGI_BAD_PATH,	N_("CGI script not in CGI path")},
+	{S_FILE_ANONYMOUS,	N_("Local file access is not allowed in anonymous mode")},
 
 #ifdef CONFIG_FTP
 	{S_FTP_ERROR,		N_("Bad FTP response")},
@@ -91,7 +92,7 @@ struct s_msg_dsc {
 	{S_SSL_ERROR,		N_("This version of ELinks does not contain SSL/TLS support")},
 #endif
 
-	{S_NO_JAVASCRIPT,	N_("JavaScript support is not enabled.")},
+	{S_NO_JAVASCRIPT,	N_("JavaScript support is not enabled")},
 
 #ifdef CONFIG_NNTP
 	{S_NNTP_ERROR,		N_("Bad NNTP response")},

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.196 2005/08/02 19:24:02 witekfl Exp $ */
+/* $Id: file.c,v 1.197 2005/08/03 21:42:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -246,8 +246,7 @@ file_protocol_handler(struct connection *connection)
 	if (get_cmd_opt_bool("anonymous")) {
 		if (strcmp(connection->uri->string, "file:///dev/stdin")
 		    || isatty(STDIN_FILENO)) {
-			/* FIXME: Better connection_state ;-) */
-			abort_connection(connection, S_BAD_URL);
+			abort_connection(connection, S_FILE_ANONYMOUS);
 			return;
 		}
 	}

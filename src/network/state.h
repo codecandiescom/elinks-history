@@ -1,4 +1,4 @@
-/* $Id: state.h,v 1.5 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: state.h,v 1.6 2005/08/03 21:42:34 jonas Exp $ */
 
 #ifndef EL__NETWORK_STATE_H
 #define EL__NETWORK_STATE_H
@@ -79,6 +79,7 @@ enum connection_state {
 	S_FILE_TYPE		= -100200,
 	S_FILE_ERROR		= -100201,
 	S_FILE_CGI_BAD_PATH	= -100202,
+	S_FILE_ANONYMOUS	= -100203,
 
 	S_FTP_ERROR		= -100300,
 	S_FTP_UNAVAIL		= -100301,

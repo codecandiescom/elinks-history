@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.636 2005/08/04 12:37:48 jonas Exp $ */
+/* $Id: session.c,v 1.637 2005/08/04 12:53:10 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -938,7 +938,7 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 		add_bookmark(NULL, 1, struri(uri), struri(uri));
 #endif
 
-	} else if (remote & SES_REMOTE_POP_UP) {
+	} else if (remote & SES_REMOTE_INFO_BOX) {
 		unsigned char *text;
 
 		if (!uri) return;

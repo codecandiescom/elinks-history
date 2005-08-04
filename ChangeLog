@@ -1,3 +1,52 @@
+Thu Aug  4 17:17:15 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Further obfuscate the bugmenot prefix code.  
+
+Thu Aug  4 14:15:22 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/util/file.c:
+
+	Anchors with '#' didn't "work" for libstdc++ local documentation due 
+	to encoded filenames. This change fixes it and hopefully has no
+	impact for other parts of ELinks.  
+
+Thu Aug  4 12:53:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, session/session.c, session/session.h:
+
+	popUP() -> infoBox().  
+
+Thu Aug  4 12:37:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, session/session.c, session/session.h:
+
+	Add support for --remote popUp() command, which will open an
+	info_box() on the remote side with the string argument given to
+	popUp().  
+
+Thu Aug  4 12:37:34 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Cleanup redundancies in the bugmenot prefix.  
+
+Thu Aug  4 11:59:06 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Rewrote the bugmenot prefix.  
+
+Wed Aug  3 23:02:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/inphist.c, bfu/inphist.h,
+	config/actions-edit.inc, config/kbdbind.c:
+
+	Add support for local filename completion (through
+	auto-complete-file action). Accessible as Ctrl-F. Fixes final part
+	of the already closed bug 294.  
+
 Wed Aug  3 21:42:34 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: network/state.c, network/state.h, protocol/file/file.c:

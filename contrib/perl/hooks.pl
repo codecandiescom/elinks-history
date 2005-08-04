@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.112 2005/08/04 12:37:34 rrowan Exp $
+# $Id: hooks.pl,v 1.113 2005/08/04 17:17:15 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -150,24 +150,38 @@ sub goto_url_hook
 	{
 		($current_url) = $current_url =~ /^.*:\/\/(.*)/;
 		my $bugmenot = 'http://bugmenot.com/view.php?url=' . $current_url;
-		my $tempfile = '/tmp/elinks.' . rand;
-		my ($login, $password);
+		my $tempfile = $ENV{'HOME'} . '/.elinks/elinks.';
+		my $matrix = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+		for (0..int(rand(7) + 9))
+		{
+			$tempfile = $tempfile . substr($matrix, (length($matrix) - 1) - rand(length($matrix) + 1), 1);
+		}
+		my ($message, $login, $password);
 		system('elinks -dump "' . $bugmenot . '" >' . $tempfile);
 		open FILE, "<$tempfile" or return $bugmenot;
+		$message = <FILE>;
 		while (<FILE>)
 		{
 			$login    = <FILE> if $. eq 5;
 			$password = <FILE> if $. eq 6;
 		}
-			$login    =~ s/^\s*//g;
-			$password =~ s/^\s*//g;
+			$login    =~ s/(^\s*|\n|\s*$)//g if $login;
+			$password =~ s/(^\s*|\n|\s*$)//g if $password;
 		close FILE;
 		system('rm -f ' . $tempfile);
+		return $bugmenot unless $message =~ /[a-z]+/ and $message !~ /404/;
+		unless ($message =~ s/.*(No accounts found\.).*/${1}/)
+		{
+			return $bugmenot if not $login or not $password and $message;
+			$message = "Login:    " . $login . "\nPassword: " . $password;
+		}
 		open FILE, ">$tempfile" or return $bugmenot;
-			print (FILE "Login:    " . $login . "Password: " . $password);
+			print (FILE $message);
 		close FILE;
 		system('sleep 5 && rm -f ' . $tempfile . ' &');
 		return $tempfile;
+#		system('elinks -remote infoBox\($message\)');
+#		return $current_url;
 	}
 
 

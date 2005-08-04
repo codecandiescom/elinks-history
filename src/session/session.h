@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.176 2005/07/21 14:32:59 jonas Exp $ */
+/* $Id: session.h,v 1.177 2005/08/04 12:37:48 jonas Exp $ */
 
 #ifndef EL__SESSION_SESSION_H
 #define EL__SESSION_SESSION_H
@@ -29,6 +29,7 @@ enum remote_session_flags {
 	SES_REMOTE_PROMPT_URL = 8,
 	SES_REMOTE_PING = 16,
 	SES_REMOTE_ADD_BOOKMARK = 32,
+	SES_REMOTE_POP_UP = 64,
 };
 
 /* This is generic frame descriptor, meaningful mainly for ses_*_frame*(). */

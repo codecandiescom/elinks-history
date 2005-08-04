@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.635 2005/07/27 23:38:33 jonas Exp $ */
+/* $Id: session.c,v 1.636 2005/08/04 12:37:48 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -937,6 +937,18 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 		if (!uri) return;
 		add_bookmark(NULL, 1, struri(uri), struri(uri));
 #endif
+
+	} else if (remote & SES_REMOTE_POP_UP) {
+		unsigned char *text;
+
+		if (!uri) return;
+
+		text = memacpy(uri->data, uri->datalen);
+		if (!text) return;
+
+		info_box(ses->tab->term, MSGBOX_FREE_TEXT,
+			 N_("Error"), ALIGN_CENTER,
+			 text);
 
 	} else if (remote & SES_REMOTE_PROMPT_URL) {
 		dialog_goto_url_open(ses);

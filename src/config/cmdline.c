@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.129 2005/07/17 15:12:00 miciah Exp $ */
+/* $Id: cmdline.c,v 1.130 2005/08/04 12:37:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,12 +208,14 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 			REMOTE_METHOD_PING,
 			REMOTE_METHOD_XFEDOCOMMAND,
 			REMOTE_METHOD_ADDBOOKMARK,
+			REMOTE_METHOD_POPUP,
 			REMOTE_METHOD_NOT_SUPPORTED,
 		} type;
 	} remote_methods[] = {
 		{ "openURL",	  REMOTE_METHOD_OPENURL },
 		{ "ping",	  REMOTE_METHOD_PING },
 		{ "addBookmark",  REMOTE_METHOD_ADDBOOKMARK },
+		{ "popUp",	  REMOTE_METHOD_POPUP },
 		{ "xfeDoCommand", REMOTE_METHOD_XFEDOCOMMAND },
 		{ NULL,		  REMOTE_METHOD_NOT_SUPPORTED },
 	};
@@ -308,6 +310,14 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		if (arg == argend) break;
 		remote_url = memacpy(arg, argend - arg);
 		remote_session_flags = SES_REMOTE_ADD_BOOKMARK;
+		break;
+
+	case REMOTE_METHOD_POPUP:
+		if (arg == argend) break;
+		remote_url = memacpy(arg, argend - arg);
+		if (remote_url)
+			insert_in_string(&remote_url, 0, "about:", 6);
+		remote_session_flags = SES_REMOTE_POP_UP;
 		break;
 
 	case REMOTE_METHOD_NOT_SUPPORTED:
@@ -776,6 +786,7 @@ struct option_info cmdline_options_info[] = {
 		"\topenURL(URL, new-tab)     : open URL in new tab\n"
 		"\topenURL(URL, new-window)  : open URL in new window\n"
 		"\taddBookmark(URL)          : bookmark URL\n"
+		"\tpopUp(text)               : show text in a message box\n"
 		"\txfeDoCommand(openBrowser) : open new window")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),

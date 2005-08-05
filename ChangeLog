@@ -1,3 +1,9 @@
+Fri Aug  5 03:45:05 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	More cleanups to the bugmenot prefix.  
+
 Thu Aug  4 17:17:15 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/hooks.pl:

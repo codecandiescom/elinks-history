@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.113 2005/08/04 17:17:15 rrowan Exp $
+# $Id: hooks.pl,v 1.114 2005/08/05 03:45:05 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -146,11 +146,11 @@ sub goto_url_hook
 
 	############################################################################
 	# "bugmenot" (no blood today, thank you)
-	if ($url eq 'bugmenot' && $current_url)
+	if ($url eq 'bugmenot' and $current_url)
 	{
 		($current_url) = $current_url =~ /^.*:\/\/(.*)/;
 		my $bugmenot = 'http://bugmenot.com/view.php?url=' . $current_url;
-		my $tempfile = $ENV{'HOME'} . '/.elinks/elinks.';
+		my $tempfile = $ENV{'HOME'} . '/.elinks/elinks';
 		my $matrix = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 		for (0..int(rand(7) + 9))
 		{
@@ -168,11 +168,11 @@ sub goto_url_hook
 			$login    =~ s/(^\s*|\n|\s*$)//g if $login;
 			$password =~ s/(^\s*|\n|\s*$)//g if $password;
 		close FILE;
-		system('rm -f ' . $tempfile);
+		unlink $tempfile;
 		return $bugmenot unless $message =~ /[a-z]+/ and $message !~ /404/;
 		unless ($message =~ s/.*(No accounts found\.).*/${1}/)
 		{
-			return $bugmenot if not $login or not $password and $message;
+			return $bugmenot if not $login or not $password;
 			$message = "Login:    " . $login . "\nPassword: " . $password;
 		}
 		open FILE, ">$tempfile" or return $bugmenot;

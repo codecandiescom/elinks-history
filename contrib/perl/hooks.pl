@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.115 2005/08/06 18:52:31 rrowan Exp $
+# $Id: hooks.pl,v 1.116 2005/08/06 19:11:08 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -973,17 +973,14 @@ Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglati
 		return $url if $url =~ /^(\/|~)/;
 		return $url if $url =~ /^([0-9]{1,3}\.){3}[0-9]{1,3}($|\/|\?)/;
 		return $url if $url =~ /^((::|)[[:xdigit:]]{1,4}(:|::|)){1,8}($|\/|\?)/;
-		if ($url =~ /^(([a-zA-Z]{3,}(|4|6):\/\/|(www|ftp)\.)|)[a-zA-Z0-9]+/       and
-		   ($url =~ /[a-zA-Z0-9-]+\.(com|org|net|edu|gov|int|mil)($|\/|\?)/        or
-			$url =~ /[a-zA-Z0-9-]+\.(biz|info|name|pro|aero|coop|museum)($|\/|\?)/ or
-			$url =~ /[a-zA-Z0-9-]+\.[a-zA-Z]{2}($|\/|\?)/))
+		if (     $url =~ /^(([a-zA-Z]{3,}(|4|6):\/\/|(www|ftp)\.)|)[a-zA-Z0-9]+/
+			and ($url =~ /[a-zA-Z0-9-]+\.(com|org|net|edu|gov|int|mil)($|\/|\?)/
+			or   $url =~ /[a-zA-Z0-9-]+\.(biz|info|name|pro|aero|coop|museum)($|\/|\?)/
+			or   $url =~ /[a-zA-Z0-9-]+\.[a-zA-Z]{2}($|\/|\?)/))
 		{
 			return $url;
 		}
-		else
-		{
-			return search(loadrc("search"), $url);
-		}
+		return search(loadrc("search"), $url);
 	}
 
 

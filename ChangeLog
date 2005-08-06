@@ -1,3 +1,15 @@
+Sat Aug  6 19:11:08 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Minor cleanup in gotosearch.  
+
+Sat Aug  6 18:52:31 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added a couple of regexps to catch IP addresses to 'gotosearch'.  
+
 Fri Aug  5 03:45:05 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/hooks.pl:

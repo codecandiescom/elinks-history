@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.118 2005/08/07 22:48:01 rrowan Exp $
+# $Id: hooks.pl,v 1.119 2005/08/07 23:02:31 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -967,8 +967,8 @@ B<send>
 =over 4
 
 Send the current URL to the application specified by the configuration variable
-'external'.  Optionally, override this by specifying the application as in
-'send someapp'.
+'I<external>'.  Optionally, override this by specifying the application as in
+'I<send> <I<application>>'.
 
 =back
 

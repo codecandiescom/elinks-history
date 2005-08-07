@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.117 2005/08/07 21:14:04 rrowan Exp $
+# $Id: hooks.pl,v 1.118 2005/08/07 22:48:01 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -960,17 +960,38 @@ Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglati
 	}
 
 
+=item Sender:
+
+B<send>
+
+=over 4
+
+Send the current URL to the application specified by the configuration variable
+'external'.  Optionally, override this by specifying the application as in
+'send someapp'.
+
+=back
+
+=cut
 	############################################################################
 	# send the current URL to another application
-	if ($url eq 'send' and $current_url)
+	if ($url =~ '^send(| .*)$' and $current_url)
 	{
-		if (loadrc("external"))
+		my ($external) = $url =~ /^send (.*)/;
+		if ($external)
 		{
-			system(loadrc("external") . ' ' . $current_url . ' 2>/dev/null');
+			system($external . ' "' . $current_url . '" 2>/dev/null');
 			return $current_url;
 		}
+		else
+		{
+			if (loadrc("external"))
+			{
+				system(loadrc("external") . ' "' . $current_url . '" 2>/dev/null');
+				return $current_url;
+			}
+		}
 	}
-
 
 
 	############################################################################

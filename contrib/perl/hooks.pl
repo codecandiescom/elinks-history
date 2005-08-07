@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.116 2005/08/06 19:11:08 rrowan Exp $
+# $Id: hooks.pl,v 1.117 2005/08/07 21:14:04 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -42,6 +42,7 @@ values:
 	bork:       yep       # BORKify Google?
 	collapse:   okay      # Collapse all XBEL bookmark folders on exit?
 	email:                # Set to show one's own bugs with the "bug" prefix.
+	external:   wget      # Send the current URL to this application.
 	fortune:    elinks    # *fortune*, *elinks* tip, or *none* on quit?
 	googlebeta: hell no   # I miss DejaNews...
 	gotosearch: why not   # Anything not a URL in the Goto URL dialog...
@@ -957,6 +958,19 @@ Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglati
 		}
 		return $url;
 	}
+
+
+	############################################################################
+	# send the current URL to another application
+	if ($url eq 'send' and $current_url)
+	{
+		if (loadrc("external"))
+		{
+			system(loadrc("external") . ' ' . $current_url . ' 2>/dev/null');
+			return $current_url;
+		}
+	}
+
 
 
 	############################################################################

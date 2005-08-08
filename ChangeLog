@@ -1,3 +1,25 @@
+Mon Aug  8 09:21:10 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Run the application 'send' sent the current URL to in the
+	background.  It doesn't work so well on the same console anyway. 
+	This is mainly for sending URLs to another browser.  If you expect
+	this to work at the console, do some creative shell scripting.  
+
+Sun Aug  7 23:02:31 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Make the POD for 'send' a bit nicer.  
+
+Sun Aug  7 22:48:01 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Add the option to override the configured application to send the
+	URL to.  Also, comments are good.  
+
 Sun Aug  7 21:14:04 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/: config.pl, hooks.pl:

@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.119 2005/08/07 23:02:31 rrowan Exp $
+# $Id: hooks.pl,v 1.120 2005/08/08 09:21:10 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -183,6 +183,7 @@ sub goto_url_hook
 		return $tempfile;
 #		system('elinks -remote infoBox\($message\)');
 #		return $current_url;
+#		return;
 	}
 
 
@@ -980,15 +981,17 @@ Send the current URL to the application specified by the configuration variable
 		my ($external) = $url =~ /^send (.*)/;
 		if ($external)
 		{
-			system($external . ' "' . $current_url . '" 2>/dev/null');
+			system($external . ' "' . $current_url . '" 2>/dev/null &');
 			return $current_url;
+			#return;
 		}
 		else
 		{
 			if (loadrc("external"))
 			{
-				system(loadrc("external") . ' "' . $current_url . '" 2>/dev/null');
+				system(loadrc("external") . ' "' . $current_url . '" 2>/dev/null &');
 				return $current_url;
+				#return;
 			}
 		}
 	}

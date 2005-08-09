@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.317 2005/07/27 23:38:33 jonas Exp $ */
+/* $Id: uri.c,v 1.318 2005/08/09 14:11:59 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,7 @@ end_with_known_tld(unsigned char *s, int slen)
 }
 
 static int
-check_uri_file(unsigned char *name)
+check_whether_file_exists(unsigned char *name)
 {
 	/* Check POST_CHAR etc ... */
 	static const unsigned char chars[] = POST_CHAR_S "#?";
@@ -141,6 +141,29 @@ check_uri_file(unsigned char *name)
 	}
 
 	return -1;
+}
+
+static int
+check_uri_file(unsigned char *name)
+{
+	/* Check POST_CHAR etc ... */
+	static const unsigned char chars[] = POST_CHAR_S "#?";
+	int i;
+
+	for (i = 0; i < sizeof(chars) - 1; i++) {
+		unsigned char *pos = strchr(name, chars[i]);
+		int namelen;
+
+		if (!pos) continue;
+
+		*pos = 0;
+		namelen = strlen(name);
+		*pos = chars[i];
+
+		return namelen;
+	}
+
+	return strlen(name);
 }
 
 /* Encodes URIs without encoding stuff like fragments and query separators. */
@@ -955,7 +978,7 @@ find_uri_protocol(unsigned char *newurl)
 
 	/* First see if it is a file so filenames that look like hostnames
 	 * won't confuse us below. */
-	if (check_uri_file(newurl) >= 0) return PROTOCOL_FILE;
+	if (check_whether_file_exists(newurl) >= 0) return PROTOCOL_FILE;
 
 	/* Yes, it would be simpler to make test for IPv6 address first,
 	 * but it would result in confusing mix of ifdefs ;-). */

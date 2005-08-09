@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.74 2005/07/11 19:12:50 jonas Exp $
+## $Id: Makefile.am,v 1.75 2005/08/09 17:44:23 jonas Exp $
 
 SUBDIRS = man
 
@@ -102,9 +102,10 @@ HTML_DOCS_WITH_POD2HTML = \
  $(HTML_DIR)/perl-hooks.html
 endif
 
+MAN_DOCS_WITH_SHELL = $(MAN_DIR)/man5/elinks.conf.5
 
 MAN_DOCS = \
- $(MAN_DIR)/man5/elinks.conf.5 \
+ $(MAN_DOCS_WITH_SHELL)
  $(MAN_DOCS_WITH_ASCIIDOC)
 
 HTML_DOCS = \
@@ -130,7 +131,7 @@ man-xmlto-no:
 pdf-jw-yes: doc-dirs $(PDF_DOCS_WITH_JW)
 pdf-jw-no:
 
-man-docs: man-xmlto-@CONFIG_XMLTO@
+man-docs: man-xmlto-@CONFIG_XMLTO@ $(MAN_DOCS_WITH_SHELL)
 html-docs: html-asciidoc-@CONFIG_ASCIIDOC@ html-xmlto-@CONFIG_XMLTO@ html-pod2html-@CONFIG_POD2HTML@
 pdf-docs: pdf-jw-@CONFIG_JW@
 

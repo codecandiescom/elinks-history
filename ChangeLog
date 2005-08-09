@@ -1,3 +1,43 @@
+Tue Aug  9 18:06:41 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/util/string.c:
+
+	This code works. Results may have different signs than original
+	version.  This code maybe isn't faster but is smarter.  
+
+Tue Aug  9 17:45:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/: elinks.conf.5, elinkskeys.5:
+
+	Update to current option tree and action mappings.  
+
+Tue Aug  9 17:44:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Fix elinks.conf(5) dependencies so it is build with the man-docs
+	rule.  
+
+Tue Aug  9 17:06:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/win32/sysinfo.h:
+
+	Make latest CVS compile on Windows. Patch by Gisle Vanem.  
+
+Tue Aug  9 17:04:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf:
+
+	Our env_set() interface can use putenv(), so CGI is now possible if
+	either setenv() or putenv() is found.  
+
+Tue Aug  9 14:11:59 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/uri.c:
+
+	Checking for file existence for every link was big slowdown, 
+	especially on Cygwin. Now, browsing local files is faster.  
+
 Mon Aug  8 09:21:10 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/hooks.pl:

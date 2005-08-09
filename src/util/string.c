@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.111 2005/02/28 10:08:07 zas Exp $ */
+/* $Id: string.c,v 1.112 2005/08/09 18:06:41 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,19 +201,16 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
  \
 	/* n1,n2 is unsigned, so don't assume -1 < 0 ! >:) */ \
  \
-	/* TODO: Don't precompute strlen()s but rather make the loop smarter.
-	 * --pasky */ \
-	if (n1 == -1) n1 = strlen(s1); \
-	if (n2 == -1) n2 = strlen(s2); \
  \
-	string_assert(errfile, errline, n1 >= 0 && n2 >= 0, c); \
+	if (n1 == -1) n1 = n2; \
+	if (n2 == -1) n2 = n1; \
+	if (n1 != n2) return 1; \
  \
-	d = n1 - n2; \
-	if (d) return d; \
  \
-	for (p = 0; p < n1 && s1[p] && s2[p]; p++) { \
+	for (p = 0; p != n1; p++) { \
 		d = t1 - t2; \
  		if (d) return d; \
+		if (!s1[p]) return 0; \
 	} \
 	return 0; \
 }

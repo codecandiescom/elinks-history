@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.6 2005/02/05 05:26:40 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.7 2005/08/09 17:06:53 jonas Exp $ */
 
 #ifndef EL__OSDEP_WIN32_SYSINFO_H
 #define EL__OSDEP_WIN32_SYSINFO_H
@@ -41,6 +41,7 @@
 #define ECONNRESET    WSAECONNRESET
 #define EINPROGRESS   WSAEINPROGRESS
 #define EWOULDBLOCK   WSAEWOULDBLOCK
+#define ENETUNREACH   WSAENETUNREACH
 
 #endif
 #endif

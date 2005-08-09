@@ -240,7 +240,7 @@ AC_CHECK_FUNCS(gettimeofday clock_gettime)
 
 AC_HAVE_FUNCS(cygwin_conv_to_full_win32_path)
 
-AC_CHECK_FUNCS(setenv, HAVE_SETENV=yes)
+AC_CHECK_FUNCS(setenv putenv, HAVE_SETENV_OR_PUTENV=yes)
 AC_CHECK_FUNCS(getuid, HAVE_GETUID=yes)
 AC_CHECK_FUNCS(geteuid, HAVE_GETEUID=yes)
 
@@ -1040,7 +1040,7 @@ EL_ARG_ENABLE(CONFIG_URI_REWRITE, uri-rewrite, [URI rewriting],
 	      [  --disable-uri-rewrite   disable URI rewrite support])
 AM_CONDITIONAL(CONFIG_URI_REWRITE, test "$CONFIG_URI_REWRITE" = yes)
 
-EL_ARG_DEPEND(CONFIG_CGI, cgi, [HAVE_SETENV:yes], [Local CGI],
+EL_ARG_DEPEND(CONFIG_CGI, cgi, [HAVE_SETENV_OR_PUTENV:yes], [Local CGI],
 	      [  --enable-cgi            enable local CGI support])
 AM_CONDITIONAL(CONFIG_CGI, test "$CONFIG_CGI" = yes)
 

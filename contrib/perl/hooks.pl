@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.121 2005/08/10 16:05:44 rrowan Exp $
+# $Id: hooks.pl,v 1.122 2005/08/10 16:15:24 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -158,7 +158,7 @@ sub goto_url_hook
 			$tempfile = $tempfile . substr($matrix, (length($matrix) - 1) - rand(length($matrix) + 1), 1);
 		}
 		my ($message, $login, $password);
-		system('elinks -dump "' . $bugmenot . '" >' . $tempfile);
+		system('elinks -dump "' . $bugmenot . '" >' . $tempfile . ' 2>/dev/null');
 		open FILE, "<$tempfile" or return $bugmenot;
 		$message = <FILE>;
 		while (<FILE>)

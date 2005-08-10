@@ -1,3 +1,53 @@
+Wed Aug 10 19:21:44 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: config/options.inc, viewer/text/draw.c:
+
+	Make annoying popup box "Missing fragment" optional.  Description
+	need corrections.  
+
+Wed Aug 10 16:54:03 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/util/string.c:
+
+	Strange error. Compilation fix.  
+
+Wed Aug 10 16:51:13 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/util/string.c:
+
+	- Revert buggy strlcmp.  
+
+Wed Aug 10 16:15:24 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	If the -dump fails, I don't want to hear about it.  
+
+Wed Aug 10 16:05:44 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	The bugmenot prefix now displays the login and password in a dialog.
+	Well, an error dialog, and with some weirdness, but still.  
+
+Wed Aug 10 15:38:28 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/main/main.c:
+
+	Make elinks not check for stdin and stdout, if invoked in remote
+	mode. If elinks is invoked in remote mode, from a program that
+	redirects stdin and stdout to a file or pipe, elinks will leave
+	remote mode. This is bad, if we already have a running session where
+	we want to create a new tab/window.  
+	
+	Patch by Sven Wegener <swegener@gentoo.org> 
+
+Wed Aug 10 14:01:17 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/: general.c, general.h, parse.c:
+
+	Added TT tag. Python docs use TT tags as anchors.  
+
 Tue Aug  9 18:06:41 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/util/string.c:

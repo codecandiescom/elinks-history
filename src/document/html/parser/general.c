@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.15 2005/07/28 14:12:22 witekfl Exp $ */
+/* $Id: general.c,v 1.16 2005/08/10 14:01:17 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -389,6 +389,11 @@ html_table(struct html_context *html_context, unsigned char *a)
 	par_format.align = ALIGN_LEFT;
 	html_linebrk(html_context, a);
 	format.style.attr = 0;
+}
+
+void
+html_tt(struct html_context *html_context, unsigned char *a)
+{
 }
 
 void

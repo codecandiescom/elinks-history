@@ -1,4 +1,4 @@
-/* $Id: general.h,v 1.5 2005/07/28 10:05:32 jonas Exp $ */
+/* $Id: general.h,v 1.6 2005/08/10 14:01:17 witekfl Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_GENERAL_H
 #define EL__DOCUMENT_HTML_PARSER_GENERAL_H
@@ -47,6 +47,7 @@ element_handler_T html_td;
 element_handler_T html_th;
 element_handler_T html_title;
 element_handler_T html_tr;
+element_handler_T html_tt;
 element_handler_T html_ul;
 element_handler_T html_underline;
 element_handler_T html_xmp;

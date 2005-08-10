@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.182 2005/07/28 15:26:17 witekfl Exp $ */
+/* $Id: parse.c,v 1.183 2005/08/10 14:01:17 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -482,6 +482,7 @@ static struct element_info elements[] = {
         {"TH",          html_th,          0, ELEMENT_TYPE_NESTABLE    },
         {"TITLE",       html_title,       0, ELEMENT_TYPE_NESTABLE    },
         {"TR",          html_tr,          1, ELEMENT_TYPE_NESTABLE    },
+        {"TT",          html_tt,          0, ELEMENT_TYPE_NON_NESTABLE},
         {"U",           html_underline,   0, ELEMENT_TYPE_NESTABLE    },
         {"UL",          html_ul,          2, ELEMENT_TYPE_NESTABLE    },
         {"XMP",         html_xmp,         2, ELEMENT_TYPE_NESTABLE    },

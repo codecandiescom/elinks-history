@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.201 2005/07/21 14:32:59 jonas Exp $ */
+/* $Id: options.inc,v 1.202 2005/08/10 19:21:44 witekfl Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -327,6 +327,10 @@ static struct option_info config_options_info[] = {
 		"The TABINDEX attribute in HTML elements specifies the order\n"
 		"in which links should receive focus when using the keyboard\n"
 		"to navigating the document.")),
+
+	INIT_OPT_BOOL("document.browse.links", N_("Missing fragment reporting"),
+		"missing_fragment", 0, 1,
+		N_("Open a message box when document has no tag with given id.")),
 
 	INIT_OPT_INT("document.browse.links", N_("Number keys select links"),
 		"number_keys_select_link", 0, 0, 2, 1,

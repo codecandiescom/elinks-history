@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.260 2005/06/14 17:39:38 jonas Exp $ */
+/* $Id: main.c,v 1.261 2005/08/10 15:38:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,6 +66,8 @@ static int init_b = 0;
 static void
 check_stdio(struct list_head *url_list)
 {
+	assert(!remote_session_flags);
+
 	/* Should the document be read from stdin? */
 	if (!isatty(STDIN_FILENO)) {
 		/* Only start reading from stdin if no URL was given on the
@@ -153,7 +155,9 @@ init(void)
 		return;
 	}
 
-	check_stdio(&url_list);
+	if (!remote_session_flags) {
+		check_stdio(&url_list);
+	}
 
 	if (!get_cmd_opt_bool("no-home")) {
 		init_home();
@@ -174,7 +178,9 @@ init(void)
 		parse_options(ac - 1, av + 1, NULL);
 		/* ... and re-check stdio, in order to override any command
 		 * line options! >;) */
-		check_stdio(NULL);
+		if (!remote_session_flags) {
+			check_stdio(NULL);
+		}
 
 		init_b = 1;
 		init_modules(builtin_modules);

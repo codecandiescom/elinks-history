@@ -515,6 +515,9 @@ Suzanne Britton <trillinks@ironphoenix.org>
 Suveg Gabor <gsuveg@sgmobil2000.hu>
 	Hungarian translation
 
+Sven Wegener <swegener@gentoo.org>
+	Fix stdio checks for remote sessions
+
 Taniel Kirikal <taniel@colleduc.ee>
 	Estonian translation
 
@@ -563,4 +566,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.197 2005/07/11 10:59:04 jonas Exp $
+$Id: AUTHORS,v 1.198 2005/08/10 15:38:28 jonas Exp $

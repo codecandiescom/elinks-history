@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.113 2005/08/10 16:51:13 witekfl Exp $ */
+/* $Id: string.c,v 1.114 2005/08/10 16:54:03 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,7 +217,6 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 	} \
 	return 0; \
 }
-		if (!s1[p]) return 0; \
 
 int
 elinks_strlcmp(const unsigned char *s1, size_t n1,

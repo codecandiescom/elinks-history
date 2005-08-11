@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.183 2005/08/10 14:01:17 witekfl Exp $ */
+/* $Id: parse.c,v 1.184 2005/08/11 18:33:02 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -580,7 +580,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 
 main_loop:
 	while (html < eof) {
-		unsigned char *name, *attr, *end, *prev_html;
+		unsigned char *name, *attr, *end;
 		int namelen, endingtag;
 		int dotcounter = 0;
 
@@ -726,8 +726,7 @@ element:
 ng:;
 		}
 
-		prev_html = html;
-		html = process_element(name, namelen, endingtag, end, prev_html, eof, attr, html_context);
+		html = process_element(name, namelen, endingtag, end, html, eof, attr, html_context);
 	}
 
 	if (noupdate) put_chrs(html_context, base_pos, html - base_pos);

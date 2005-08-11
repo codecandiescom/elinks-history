@@ -1,3 +1,9 @@
+Thu Aug 11 18:33:02 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/parse.c:
+
+	Use html directly. Do not use prev_html.  
+
 Wed Aug 10 19:21:44 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/: config/options.inc, viewer/text/draw.c:

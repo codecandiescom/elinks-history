@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.184 2005/08/11 18:33:02 witekfl Exp $ */
+/* $Id: parse.c,v 1.185 2005/08/12 13:44:54 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -754,11 +754,6 @@ start_element(struct element_info *ei,
 	struct css_selector *selector = NULL;
 #endif
 
-	if (html_context->was_xmp) {
-		put_chrs(html_context, "<", 1);
-		html = prev_html + 1;
-		return html;
-	}
 
 	ln_break(html_context, ei->linebreak);
 
@@ -920,20 +915,13 @@ end_element(struct element_info *ei,
 	int lnb = 0;
 	int kill = 0;
 
-	if (html_context->was_xmp) {
-		if (ei->func != html_xmp)
-			return html;
-		html_context->was_xmp = 0;
-	}
+	if (ei->func == html_xmp) html_context->was_xmp = 0;
 
 	html_context->was_br = 0;
 	if (ei->type == ELEMENT_TYPE_NON_PAIRABLE
 	    || ei->type == ELEMENT_TYPE_LI)
 		return html;
 
-#if 0
-	/* XXX: Disabled since it breaks php.net ... */
-#endif
 	/* Apply background color from the <HTML> element. (bug 696) */
 	if (ei->func == html_html
 	    && html_top.type >= ELEMENT_KILLABLE
@@ -1001,6 +989,13 @@ process_element(unsigned char *name, int namelen, int endingtag,
 #else
 	ei = (struct element_info *) fastfind_search(&ff_tags_index, name, namelen);
 #endif
+	if (html_context->was_xmp) {
+		if (!ei || ei->func != html_xmp || !endingtag) {
+			put_chrs(html_context, "<", 1);
+			return prev_html + 1;
+		}
+	}
+
 	if (!ei) return html;
 
 	if (!endingtag) {

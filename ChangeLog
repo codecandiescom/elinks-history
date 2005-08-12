@@ -1,3 +1,16 @@
+Fri Aug 12 13:44:54 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/parse.c:
+
+	XMP handling was broken. Neither ending nor unknown tags were
+	handled properly.  
+
+Fri Aug 12 13:43:48 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* test/xmp.html:
+
+	Test for XMP handling.  
+
 Thu Aug 11 18:33:02 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/document/html/parser/parse.c:

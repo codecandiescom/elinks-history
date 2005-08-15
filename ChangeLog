@@ -1,3 +1,11 @@
+Mon Aug 15 01:37:15 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/actions-main.inc, config/kbdbind.h, viewer/action.c:
+
+	Add a new flag ACTION_REQUIRE_LINK and add it to all actions with
+	ACTION_JUMP_TO_LINK except document-info. Now document-info will
+	work even if there is no selected link.  
+
 Fri Aug 12 13:44:54 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/document/html/parser/parse.c:

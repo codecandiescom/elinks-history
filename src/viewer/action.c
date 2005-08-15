@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.159 2005/07/19 15:44:53 zas Exp $ */
+/* $Id: action.c,v 1.160 2005/08/15 01:37:15 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,8 +75,7 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 
 	if (doc_view && doc_view->vs) {
 		if (action_prefix_is_link_number(KEYMAP_MAIN, action_id)
-		    && (!try_jump_to_link_number(ses, doc_view)
-		         || doc_view->vs->current_link == -1))
+		    && !try_jump_to_link_number(ses, doc_view))
 			goto ignore_action;
 
 		link = get_current_link(doc_view);
@@ -88,6 +87,10 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 	if (action_requires_location(KEYMAP_MAIN, action_id)
 	    && !have_location(ses))
 		return FRAME_EVENT_OK;
+
+	if (action_requires_link(KEYMAP_MAIN, action_id)
+	    && (!doc_view || !doc_view->vs || doc_view->vs->current_link == -1))
+		goto ignore_action;
 
 	if (!action_is_anonymous_safe(KEYMAP_MAIN, action_id)
 	    && get_cmd_opt_bool("anonymous"))

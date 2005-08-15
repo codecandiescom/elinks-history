@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.187 2005/07/31 21:38:12 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.188 2005/08/15 01:37:15 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -45,6 +45,7 @@ enum action_flags {
 	ACTION_REQUIRE_VIEW_STATE	=    (1 << 17),
 	ACTION_REQUIRE_LOCATION		=    (1 << 18),
 	ACTION_JUMP_TO_LINK		=    (1 << 19),
+	ACTION_REQUIRE_LINK		=    (1 << 20),
 	ACTION_FLAGS_MASK		= (0xFF << 16),
 };
 
@@ -156,6 +157,14 @@ action_prefix_is_link_number(enum keymap_id keymap_id, action_id_T action_id)
 	struct action *action = get_action(keymap_id, action_id);
 
 	return action && (action->flags & ACTION_JUMP_TO_LINK);
+}
+
+static inline unsigned int
+action_requires_link(enum keymap_id keymap_id, action_id_T action_id)
+{
+	struct action *action = get_action(keymap_id, action_id);
+
+	return action && (action->flags & ACTION_REQUIRE_LINK);
 }
 
 long read_key(unsigned char *);

@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.31 2005/05/27 00:38:20 miciah Exp $ */
+/* $Id: memdebug.c,v 1.32 2005/08/16 12:00:45 miciah Exp $ */
 
 /* Wrappers for libc memory managment providing protection against common
  * pointers manipulation mistakes - bad realloc()/free() pointers, double
@@ -292,7 +292,7 @@ patience(unsigned char *file, int line, unsigned char *of)
 	if (alloc_try < ALLOC_MAXTRIES) {
 		elinks_error("Out of memory (%s returned NULL): retry #%d/%d, "
 			"I still exercise my patience and retry tirelessly.",
-			of, alloc_try, ALLOC_MAXTRIES, ALLOC_DELAY);
+			of, alloc_try, ALLOC_MAXTRIES);
 		sleep(ALLOC_DELAY);
 		return alloc_try;
 	}

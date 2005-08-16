@@ -1,5 +1,5 @@
 /* BitTorrent specific dialogs */
-/* $Id: dialogs.c,v 1.1 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.2 2005/08/16 15:52:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,10 +146,6 @@ add_bittorrent_meta_to_string(struct string *msg, struct bittorrent_meta *meta,
 		_("Announce URI", term),
 		struri(meta->tracker_uris.uris[0]));
 
-	if (meta->comment && *meta->comment)
-		add_format_to_string(msg, "\n%s: %d",
-			_("Comment", term), meta->comment);
-
 #ifdef HAVE_STRFTIME
 	if (meta->creation_date) {
 		add_format_to_string(msg, "\n%s: ",
@@ -183,7 +179,7 @@ add_bittorrent_meta_to_string(struct string *msg, struct bittorrent_meta *meta,
 		}
 	}
 
-	if (meta->comment) {
+	if (meta->comment && *meta->comment)
 		add_format_to_string(msg, "\n%s:\n %s",
 		_("Comment", term), meta->comment);
 	}

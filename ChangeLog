@@ -1,3 +1,24 @@
+Tue Aug 16 15:52:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/bittorrent/dialogs.c:
+
+	Only show one comment when summarising the torrent info. Thanks to
+	Miciah.  
+
+Tue Aug 16 12:00:45 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/memdebug.c:
+
+	Drop an extra argument to elinks_error in patience.  
+
+Tue Aug 16 02:11:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Use [^>]- instead of .- in the mangle_blank_alt hook to greatly
+	improve performance on large documents with many <img> tags, closing
+	bug 708.  
+
 Mon Aug 15 01:37:15 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/: config/actions-main.inc, config/kbdbind.h, viewer/action.c:

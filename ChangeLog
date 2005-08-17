@@ -1,3 +1,17 @@
+Wed Aug 17 15:26:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main/Makefile.am, util/Makefile.am:
+
+	Reflect the moving of util/object.h to main/object.h in the
+	Makefiles. Reported by miernik.  
+
+Wed Aug 17 02:15:36 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/bittorrent/dialogs.c:
+
+	Add a brace that was dropped in the last revision, resulting in a
+	build failure that was reported by Toksyuryel.  
+
 Tue Aug 16 15:52:36 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/bittorrent/dialogs.c:

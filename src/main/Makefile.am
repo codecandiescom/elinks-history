@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.26 2005/06/13 00:52:14 jonas Exp $
+## $Id: Makefile.am,v 1.27 2005/08/17 15:26:22 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -22,6 +22,7 @@ libmain_a_SOURCES = \
  main.h \
  module.c \
  module.h \
+ object.h \
  select.c \
  select.h \
  timer.c \

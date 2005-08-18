@@ -1,3 +1,24 @@
+Thu Aug 18 02:49:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Add a boolean itrm->remote member and disable various terminal
+	handling and initialisation for remote sessions.  
+
+Thu Aug 18 02:40:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: cache/cache.c, cache/dialogs.c, dialogs/document.c,
+	dialogs/info.c, document/renderer.c, document/dom/node.c,
+	intl/charsets.c, intl/gettext/libintl.h, main/interlink.c,
+	osdep/win32/overrides.c, protocol/bittorrent/dialogs.c,
+	protocol/bittorrent/peerconnect.c,
+	protocol/bittorrent/piececache.c, protocol/bittorrent/tracker.c,
+	protocol/nntp/connection.c, protocol/nntp/response.c,
+	util/fastfind.c, util/memdebug.c:
+
+	Fix some formats: "%d" for int, "%ld" for long, "%u" for unsigned
+	int, "%" PRId64 for off_t, and "%zu" for size_t.  
+
 Wed Aug 17 15:26:22 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: main/Makefile.am, util/Makefile.am:

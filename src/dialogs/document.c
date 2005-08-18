@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.122 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: document.c,v 1.123 2005/08/18 02:40:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ document_info_dialog(struct session *ses)
 	if (cached) {
 		unsigned char *a;
 
-		add_format_to_string(&msg, "\n%s: %d",
+		add_format_to_string(&msg, "\n%s: %" PRId64,
 				     _("Size", term), cached->length);
 
 		if (cached->incomplete) {

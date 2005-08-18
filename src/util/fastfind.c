@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.73 2005/02/28 09:48:58 zas Exp $ */
+/* $Id: fastfind.c,v 1.74 2005/08/18 02:40:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,15 +238,15 @@ FF_DBG_dump_stats(struct fastfind_info *info)
 	fprintf(stderr, "Entries     : %d/%d max.\n", info->pointers_count, FF_MAX_KEYS);
 	fprintf(stderr, "Leafsets    : %d/%d max.\n", info->leafsets_count, FF_MAX_LEAFSETS);
 	if (info->compress)
-		fprintf(stderr, "C. leafsets : %d/%d (%0.2f%%)\n",
+		fprintf(stderr, "C. leafsets : %u/%d (%0.2f%%)\n",
 			info->debug.compressed_nodes,
 			info->leafsets_count,
 			100 * (double) info->debug.compressed_nodes / info->leafsets_count);
 	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",
 		info->debug.memory_usage, (double) info->debug.memory_usage / info->pointers_count);
-	fprintf(stderr, "Struct info : %d bytes\n", sizeof(*info) - sizeof(info->debug));
-	fprintf(stderr, "Struct node : %d bytes\n", sizeof(struct ff_node));
-	fprintf(stderr, "Struct cnode: %d bytes\n", sizeof(struct ff_node_c));
+	fprintf(stderr, "Struct info : %zu bytes\n", sizeof(*info) - sizeof(info->debug));
+	fprintf(stderr, "Struct node : %zu bytes\n", sizeof(struct ff_node));
+	fprintf(stderr, "Struct cnode: %zu bytes\n", sizeof(struct ff_node_c));
 	fprintf(stderr, "Searches    : %lu\n", info->debug.searches);
 	fprintf(stderr, "Found       : %lu (%0.2f%%)\n",
 		info->debug.found, 100 * (double) info->debug.found / info->debug.searches);

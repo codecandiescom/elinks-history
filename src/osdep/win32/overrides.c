@@ -1,4 +1,4 @@
-/* $Id: overrides.c,v 1.4 2005/05/17 13:25:02 zas Exp $ */
+/* $Id: overrides.c,v 1.5 2005/08/18 02:40:50 miciah Exp $ */
 
 /* Elinks overrides for Win32 (MSVC + MingW)
  * Loosely based on osdep/beos/overrides.c by Mikulas Patocka.
@@ -360,7 +360,7 @@ win32_socket(int family, int type, int protocol)
 		rc = s + SOCK_SHIFT;
 	}
 
-	TRACE("family %d, type %d, proto %d -> rc %u", family, type, protocol, rc);
+	TRACE("family %d, type %d, proto %d -> rc %d", family, type, protocol, rc);
 
 	return rc;
 }

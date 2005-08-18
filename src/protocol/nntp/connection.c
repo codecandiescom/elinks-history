@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.28 2005/06/13 00:43:29 jonas Exp $ */
+/* $Id: connection.c,v 1.29 2005/08/18 02:40:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -483,7 +483,7 @@ add_nntp_command_to_string(struct string *req, struct nntp_connection_info *nntp
 
 		assert(nntp->current_article <= nntp->end_article);
 
-		add_format_to_string(req, "HEAD %d", nntp->current_article++);
+		add_format_to_string(req, "HEAD %ld", nntp->current_article++);
 		break;
 
 	case NNTP_COMMAND_QUIT:

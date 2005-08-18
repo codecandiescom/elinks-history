@@ -1,5 +1,5 @@
 /* BitTorrent specific dialogs */
-/* $Id: dialogs.c,v 1.3 2005/08/17 02:15:36 miciah Exp $ */
+/* $Id: dialogs.c,v 1.4 2005/08/18 02:40:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,7 +317,7 @@ get_bittorrent_message(struct download *download, struct terminal *term,
 
 	value = list_size(&bittorrent->peers);
 	add_format_to_string(&string,
-		n_("%d connection", "%d connections", value, term), value);
+		n_("%u connection", "%u connections", value, term), value);
 
 	add_to_string(&string, ", ");
 
@@ -327,13 +327,13 @@ get_bittorrent_message(struct download *download, struct terminal *term,
 			value++;
 
 	add_format_to_string(&string,
-		n_("%d seeder", "%d seeders", value, term), value);
+		n_("%u seeder", "%u seeders", value, term), value);
 
 	add_to_string(&string, ", ");
 
 	value = list_size(&bittorrent->peer_pool);
 	add_format_to_string(&string,
-		n_("%d available", "%d available", value, term), value);
+		n_("%u available", "%u available", value, term), value);
 
 	/* Swarm info: */
 
@@ -343,7 +343,7 @@ get_bittorrent_message(struct download *download, struct terminal *term,
 		if (bittorrent->complete > 0) {
 			value = bittorrent->complete;
 			add_format_to_string(&string,
-				n_("%d seeder", "%d seeders", value, term), value);
+				n_("%u seeder", "%u seeders", value, term), value);
 		}
 
 		if (bittorrent->incomplete > 0) {
@@ -351,7 +351,7 @@ get_bittorrent_message(struct download *download, struct terminal *term,
 				add_to_string(&string, ", ");
 			value = bittorrent->incomplete;
 			add_format_to_string(&string,
-				n_("%d downloader", "%d downloaders", value, term), value);
+				n_("%u downloader", "%u downloaders", value, term), value);
 		}
 	}
 
@@ -395,13 +395,13 @@ get_bittorrent_message(struct download *download, struct terminal *term,
 
 	value = bittorrent->cache->completed_pieces;
 	add_format_to_string(&string,
-		n_("%d completed", "%d completed", value, term), value);
+		n_("%u completed", "%u completed", value, term), value);
 
 	value = bittorrent->cache->loading_pieces;
 	if (value) {
 		add_to_string(&string, ", ");
 		add_format_to_string(&string,
-			n_("%d in progress", "%d in progress", value, term), value);
+			n_("%u in progress", "%u in progress", value, term), value);
 	}
 
 	if (bittorrent->cache->partial)
@@ -412,7 +412,7 @@ get_bittorrent_message(struct download *download, struct terminal *term,
 	if (value) {
 		add_to_string(&string, ", ");
 		add_format_to_string(&string,
-			n_("%d remaining", "%d remaining", value, term), value);
+			n_("%u remaining", "%u remaining", value, term), value);
 	}
 
 	/* Statistics: */
@@ -421,27 +421,27 @@ get_bittorrent_message(struct download *download, struct terminal *term,
 
 	value = list_size(&bittorrent->cache->queue);
 	add_format_to_string(&string,
-		n_("%d in memory", "%d in memory", value, term), value);
+		n_("%u in memory", "%u in memory", value, term), value);
 
 	value = bittorrent->cache->locked_pieces;
 	if (value) {
 		add_to_string(&string, ", ");
 		add_format_to_string(&string,
-			n_("%d locked", "%d locked", value, term), value);
+			n_("%u locked", "%u locked", value, term), value);
 	}
 
 	value = bittorrent->cache->rejected_pieces;
 	if (value) {
 		add_to_string(&string, ", ");
 		add_format_to_string(&string,
-			n_("%d rejected", "%d rejected", value, term), value);
+			n_("%u rejected", "%u rejected", value, term), value);
 	}
 
 	value = bittorrent->cache->unavailable_pieces;
 	if (value) {
 		add_to_string(&string, ", ");
 		add_format_to_string(&string,
-			n_("%d unavailable", "%d unavailable", value, term), value);
+			n_("%u unavailable", "%u unavailable", value, term), value);
 	}
 
 	return string.source;

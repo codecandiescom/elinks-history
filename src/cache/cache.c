@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.225 2005/07/27 23:38:32 jonas Exp $ */
+/* $Id: cache.c,v 1.226 2005/08/18 02:40:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,8 +40,9 @@ static void truncate_entry(struct cache_entry *cached, off_t offset, int final);
 
 #define dump_frag(frag, count) \
 do { \
-	DBG(" [%d] f=%p offset=%li length=%li real_length=%li", \
-	      count, frag, frag->offset, frag->length, frag->real_length); \
+	DBG(" [%d] f=%p offset=%" PRId64 " length=%" PRId64 \
+	    " real_length=%" PRId64, \
+	    count, frag, frag->offset, frag->length, frag->real_length); \
 } while (0)
 
 #define dump_frags(entry, comment) \

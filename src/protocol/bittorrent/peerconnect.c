@@ -1,5 +1,5 @@
 /* BitTorrent peer-wire connection management */
-/* $Id: peerconnect.c,v 1.1 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: peerconnect.c,v 1.2 2005/08/18 02:40:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,7 +294,7 @@ make_bittorrent_peer_connection(struct bittorrent_connection *bittorrent,
 	uri.host     = peer_info->ip;
 	uri.hostlen  = strlen(peer_info->ip);
 	uri.port     = port;
-	uri.portlen  = snprintf(port, sizeof(port), "%d", peer_info->port);
+	uri.portlen  = snprintf(port, sizeof(port), "%u", peer_info->port);
 
 	make_connection(peer->socket, &uri, send_bittorrent_peer_handshake, 1);
 

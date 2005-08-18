@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.32 2005/05/16 19:50:04 jonas Exp $ */
+/* $Id: libintl.h,v 1.33 2005/08/18 02:40:50 miciah Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -118,7 +118,7 @@ __(unsigned char *file, unsigned int line, unsigned char *func,
 
 	/* Prevent useless (and possibly dangerous) calls. */
 	if (!msg || !*msg) {
-		ERROR("%s:%d %s msg parameter", file, line, msg ? "empty": "NULL");
+		ERROR("%s:%u %s msg parameter", file, line, msg ? "empty": "NULL");
 		return msg;
 	}
 
@@ -129,7 +129,7 @@ __(unsigned char *file, unsigned int line, unsigned char *func,
 	if (!strcmp(result, last_result)
 	    && !strcmp(file, last_file)
 	    && !strcmp(func, last_func)) {
-		ERROR("%s:%d Duplicate call to _() in %s() (previous at line %d)",
+		ERROR("%s:%u Duplicate call to _() in %s() (previous at line %u)",
 		      file, line, func, last_line);
 	}
 

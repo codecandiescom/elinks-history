@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.106 2005/06/13 00:52:14 jonas Exp $ */
+/* $Id: interlink.c,v 1.107 2005/08/18 02:40:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,7 +168,7 @@ get_address(struct socket_info *info, enum addr_type type)
 
 	sun_path_freespace = sizeof(addr->sun_path) - (path.length + 1);
 	if (sun_path_freespace < 0) {
-		INTERNAL("Socket path name '%s' is too long: %d >= %d",
+		INTERNAL("Socket path name '%s' is too long: %d >= %zu",
 			 path.source, path.length, sizeof(addr->sun_path));
 		goto free_and_error;
 	}

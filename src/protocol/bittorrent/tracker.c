@@ -1,5 +1,5 @@
 /* BitTorrent tracker HTTP protocol implementation */
-/* $Id: tracker.c,v 1.1 2005/07/11 10:59:05 jonas Exp $ */
+/* $Id: tracker.c,v 1.2 2005/08/18 02:40:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -193,7 +193,7 @@ do_send_bittorrent_tracker_request(struct connection *conn)
 	if (*ip) add_format_to_string(&request, "&ip=%s", ip);
 
 	/* This one is required for each request. */
-	add_format_to_string(&request, "&port=%d", bittorrent->port);
+	add_format_to_string(&request, "&port=%u", bittorrent->port);
 
 	if (bittorrent->tracker.event != BITTORRENT_EVENT_REGULAR) {
 		unsigned char *event;

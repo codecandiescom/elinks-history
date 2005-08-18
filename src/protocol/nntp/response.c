@@ -1,5 +1,5 @@
 /* Parses and converts NNTP responses to enum values and cache entry HTML */
-/* $Id: response.c,v 1.7 2005/06/13 00:02:41 jonas Exp $ */
+/* $Id: response.c,v 1.8 2005/08/18 02:40:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -156,7 +156,7 @@ get_nntp_title(struct connection *conn)
 
 	switch (nntp->target) {
 	case NNTP_TARGET_ARTICLE_RANGE:
-		add_format_to_string(&title, "Articles in the range %d to %d",
+		add_format_to_string(&title, "Articles in the range %ld to %ld",
 				     nntp->current_article, nntp->end_article);
 		break;
 

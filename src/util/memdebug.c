@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.32 2005/08/16 12:00:45 miciah Exp $ */
+/* $Id: memdebug.c,v 1.33 2005/08/18 02:40:51 miciah Exp $ */
 
 /* Wrappers for libc memory managment providing protection against common
  * pointers manipulation mistakes - bad realloc()/free() pointers, double
@@ -496,7 +496,7 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 	 * and change nothing, this conforms to usual realloc() behavior. */
 	if (ah->size == size) {
 #ifdef CHECK_USELESS_REALLOC
-		fprintf(stderr, "[%s:%d] mem_realloc() oldsize = newsize = %d\n", file, line, size);
+		fprintf(stderr, "[%s:%d] mem_realloc() oldsize = newsize = %zu\n", file, line, size);
 #endif
 		return (void *) ptr;
 	}

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.115 2005/07/15 20:17:25 miciah Exp $ */
+/* $Id: charsets.c,v 1.116 2005/08/18 02:40:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -558,7 +558,7 @@ end:
 		if (nb_entity_cache[slen] < ENTITY_CACHE_SIZE) nb_entity_cache[slen]++;
 
 #ifdef DEBUG_ENTITY_CACHE
-		fprintf(stderr, "Added in [%d]: l=%d st='%s'\n", slen,
+		fprintf(stderr, "Added in [%u]: l=%d st='%s'\n", slen,
 				entity_cache[slen][0].strlen, entity_cache[slen][0].str);
 
 #endif
@@ -572,9 +572,9 @@ end:
 	{
 		unsigned int i;
 
-		fprintf(stderr, "- Cache entries [%d] -\n", slen);
+		fprintf(stderr, "- Cache entries [%u] -\n", slen);
 		for (i = 0; i < nb_entity_cache[slen] ; i++)
-			fprintf(stderr, "%d: hits=%d l=%d st='%s'\n", i,
+			fprintf(stderr, "%d: hits=%u l=%d st='%s'\n", i,
 				entity_cache[slen][i].hits, entity_cache[slen][i].strlen,
 				entity_cache[slen][i].str);
 		fprintf(stderr, "-----------------\n");

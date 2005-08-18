@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.84 2005/07/27 23:38:32 jonas Exp $ */
+/* $Id: dialogs.c,v 1.85 2005/08/18 02:40:50 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -83,8 +83,9 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term)
 		}
 	}
 
-	add_format_to_string(&msg, "\n%s: %d", _("Size", term), cached->length);
-	add_format_to_string(&msg, "\n%s: %d", _("Loaded size", term),
+	add_format_to_string(&msg, "\n%s: %" PRId64, _("Size", term),
+	                     cached->length);
+	add_format_to_string(&msg, "\n%s: %" PRId64, _("Loaded size", term),
 						cached->data_size);
 	if (cached->content_type) {
 		add_format_to_string(&msg, "\n%s: %s", _("Content type", term),
@@ -128,7 +129,7 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term)
 #endif
 #ifdef CONFIG_DEBUG
 	add_format_to_string(&msg, "\n%s: %d", "Refcount", get_object_refcount(cached));
-	add_format_to_string(&msg, "\n%s: %d", _("ID", term), cached->id);
+	add_format_to_string(&msg, "\n%s: %u", _("ID", term), cached->id);
 
 	if (cached->head && *cached->head) {
 		add_format_to_string(&msg, "\n%s:\n\n%s", _("Header", term),

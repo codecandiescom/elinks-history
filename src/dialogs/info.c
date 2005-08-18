@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.141 2005/06/14 13:16:14 jonas Exp $ */
+/* $Id: info.c,v 1.142 2005/08/18 02:40:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,30 +172,30 @@ get_resource_info(struct terminal *term, void *data)
 	add_to_string(&info, ": ");
 
 	val = get_file_handles_count();
-	val_add(n_("%d handle", "%d handles", val, term));
+	val_add(n_("%ld handle", "%ld handles", val, term));
 	add_to_string(&info, ", ");
 
 	val = get_timers_count();
-	val_add(n_("%d timer", "%d timers", val, term));
+	val_add(n_("%ld timer", "%ld timers", val, term));
 	add_to_string(&info, ".\n");
 
 	add_to_string(&info, _("Connections", term));
 	add_to_string(&info, ": ");
 
 	val = get_connections_count();
-	val_add(n_("%d connection", "%d connections", val, term));
+	val_add(n_("%ld connection", "%ld connections", val, term));
 	add_to_string(&info, ", ");
 
 	val = get_connections_connecting_count();
-	val_add(n_("%d connecting", "%d connecting", val, term));
+	val_add(n_("%ld connecting", "%ld connecting", val, term));
 	add_to_string(&info, ", ");
 
 	val = get_connections_transfering_count();
-	val_add(n_("%d transferring", "%d transferring", val, term));
+	val_add(n_("%ld transferring", "%ld transferring", val, term));
 	add_to_string(&info, ", ");
 
 	val = get_keepalive_connections_count();
-	val_add(n_("%d keepalive", "%d keepalive", val, term));
+	val_add(n_("%ld keepalive", "%ld keepalive", val, term));
 	add_to_string(&info, ".\n");
 
 	add_to_string(&info, _("Memory cache", term));
@@ -207,30 +207,30 @@ get_resource_info(struct terminal *term, void *data)
 	add_to_string(&info, ", ");
 
 	val = get_cache_entry_count();
-	val_add(n_("%d file", "%d files", val, term));
+	val_add(n_("%ld file", "%ld files", val, term));
 	add_to_string(&info, ", ");
 
 	val = get_cache_entry_used_count();
-	val_add(n_("%d in use", "%d in use", val, term));
+	val_add(n_("%ld in use", "%ld in use", val, term));
 	add_to_string(&info, ", ");
 
 	val = get_cache_entry_loading_count();
-	val_add(n_("%d loading", "%d loading", val, term));
+	val_add(n_("%ld loading", "%ld loading", val, term));
 	add_to_string(&info, ".\n");
 
 	add_to_string(&info, _("Document cache", term));
 	add_to_string(&info, ": ");
 
 	val = get_format_cache_size();
-	val_add(n_("%d formatted", "%d formatted", val, term));
+	val_add(n_("%ld formatted", "%ld formatted", val, term));
 	add_to_string(&info, ", ");
 
 	val = get_format_cache_used_count();
-	val_add(n_("%d in use", "%d in use", val, term));
+	val_add(n_("%ld in use", "%ld in use", val, term));
 	add_to_string(&info, ", ");
 
 	val = get_format_cache_refresh_count();
-	val_add(n_("%d refreshing", "%d refreshing", val, term));
+	val_add(n_("%ld refreshing", "%ld refreshing", val, term));
 	add_to_string(&info, ".\n");
 
 	add_to_string(&info, _("Interlinking", term));
@@ -242,11 +242,11 @@ get_resource_info(struct terminal *term, void *data)
 	add_to_string(&info, ", ");
 
 	val = list_size(&terminals);
-	val_add(n_("%d terminal", "%d terminals", val, term));
+	val_add(n_("%ld terminal", "%ld terminals", val, term));
 	add_to_string(&info, ", ");
 
 	val = list_size(&sessions);
-	val_add(n_("%d session", "%d sessions", val, term));
+	val_add(n_("%ld session", "%ld sessions", val, term));
 	add_char_to_string(&info, '.');
 
 #ifdef DEBUG_MEMLEAK
@@ -255,11 +255,11 @@ get_resource_info(struct terminal *term, void *data)
 	add_to_string(&info, ": ");
 
 	val = mem_stats.amount;
-	val_add(n_("%d byte", "%d bytes", val, term));
+	val_add(n_("%ld byte", "%ld bytes", val, term));
 	add_to_string(&info, ", ");
 
 	val = mem_stats.true_amount - mem_stats.amount;
-	val_add(n_("%d byte overhead", "%d bytes overhead", val, term));
+	val_add(n_("%ld byte overhead", "%ld bytes overhead", val, term));
 
 	add_format_to_string(&info, " (%0.2f%%).",
 		(double) (mem_stats.true_amount - mem_stats.amount) / (double) mem_stats.amount * 100);

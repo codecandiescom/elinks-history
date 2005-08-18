@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.153 2005/07/27 23:38:33 jonas Exp $ */
+/* $Id: renderer.c,v 1.154 2005/08/18 02:40:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,7 +267,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	if_assert_failed return;
 
 #if 0
-	DBG("(Re%d)Rendering %s on doc_view %p [%s] while attaching it to %p",
+	DBG("(Re%u)Rendering %s on doc_view %p [%s] while attaching it to %p",
 	    options->gradual_rerendering, struri(vs->uri),
 	    doc_view, doc_view->name, vs);
 #endif

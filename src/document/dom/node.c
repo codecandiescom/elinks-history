@@ -1,5 +1,5 @@
 /* The DOM node handling */
-/* $Id: node.c,v 1.6 2005/07/12 15:46:34 jonas Exp $ */
+/* $Id: node.c,v 1.7 2005/08/18 02:40:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ add_to_dom_node_list(struct dom_node_list **list_ptr,
 	if (!list) return NULL;
 
 	assertm(position < 0 || position <= list->size,
-		"position out of bound %d > %d", position, list->size);
+		"position out of bound %d > %zu", position, list->size);
 
 	if (position < 0) {
 		position = list->size;

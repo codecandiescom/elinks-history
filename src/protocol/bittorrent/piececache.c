@@ -1,5 +1,5 @@
 /* BitTorrent piece cache */
-/* $Id: piececache.c,v 1.4 2005/07/19 15:44:53 zas Exp $ */
+/* $Id: piececache.c,v 1.5 2005/08/18 02:40:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -929,7 +929,7 @@ add_to_bittorrent_piece_cache(struct bittorrent_peer_connection *peer,
 
 	set_bitfield_bit(entry->blocks, request->block);
 	assertm(get_bitfield_set_count(entry->blocks),
-		"Bit %d in bitfield size %d",
+		"Bit %u in bitfield size %u",
 		request->block, entry->blocks->bitsize);
 
 	update_bittorrent_connection_stats(bittorrent, request->length, 0, 0);
@@ -1340,7 +1340,7 @@ done_bittorrent_piece_cache(struct bittorrent_connection *bittorrent)
 
 		entry = &cache->entries[piece];
 
-		assertm(entry->rarity == 0, "Rarity out of sync (%d for %d)",
+		assertm(entry->rarity == 0, "Rarity out of sync (%u for %u)",
 			entry->rarity, piece);
 
 		mem_free_if(entry->blocks);

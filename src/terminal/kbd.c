@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.157 2005/07/20 17:19:47 witekfl Exp $ */
+/* $Id: kbd.c,v 1.158 2005/08/18 02:49:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,6 +66,7 @@ struct itrm {
 	unsigned int blocked:1;		/* Whether it was blocked */
 	unsigned int altscreen:1;	/* Whether to use alternate screen */
 	unsigned int touched_title:1;	/* Whether the term title was changed */
+	unsigned int remote:1;		/* Whether it is a remote session */
 };
 
 
@@ -345,21 +346,26 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm->sock_out = sock_out;
 	itrm->ctl_in = ctl_in;
 	itrm->timer = TIMER_ID_UNDEF;
+	itrm->remote = !!remote;
 
 	/* FIXME: Combination altscreen + xwin does not work as it should,
 	 * mouse clicks are reportedly partially ignored. */
 	if (info.system_env & (ENV_SCREEN | ENV_XWIN))
 		itrm->altscreen = 1;
 
-	if (ctl_in >= 0) setraw(ctl_in, &itrm->t);
+	if (!remote) {
+		if (ctl_in >= 0) setraw(ctl_in, &itrm->t);
+		send_init_sequence(std_out, itrm->altscreen);
+		handle_terminal_resize(ctl_in, resize_terminal);
+		enable_mouse();
+	}
+
 	set_handlers(std_in, (select_handler_T) in_kbd,
 		     NULL, (select_handler_T) free_trm, itrm);
 
 	if (sock_in != std_out)
 		set_handlers(sock_in, (select_handler_T) in_sock,
 			     NULL, (select_handler_T) free_trm, itrm);
-
-	handle_terminal_resize(ctl_in, resize_terminal);
 
 	get_terminal_name(info.name);
 
@@ -371,9 +377,6 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 	queue_event(itrm, (char *) &info, TERMINAL_INFO_SIZE);
 	queue_event(itrm, (char *) init_string, init_len);
-	send_init_sequence(std_out, itrm->altscreen);
-
-	enable_mouse();
 }
 
 
@@ -433,26 +436,29 @@ free_trm(struct itrm *itrm)
 {
 	if (!itrm) return;
 
-	if (itrm->orig_title && *itrm->orig_title) {
-		set_window_title(itrm->orig_title);
+	if (!itrm->remote) {
+		if (itrm->orig_title && *itrm->orig_title) {
+			set_window_title(itrm->orig_title);
 
-	} else if (itrm->touched_title) {
-		/* Set the window title to the value of $TERM if X11 wasn't
-		 * compiled in. Should hopefully make at least half the users
-		 * happy. (debian bug #312955) */
-		unsigned char title[MAX_TERM_LEN];
+		} else if (itrm->touched_title) {
+			/* Set the window title to the value of $TERM if X11
+			 * wasn't compiled in. Should hopefully make at least
+			 * half the users happy. (debian bug #312955) */
+			unsigned char title[MAX_TERM_LEN];
 
-		get_terminal_name(title);
-		if (*title)
-			set_window_title(title);
+			get_terminal_name(title);
+			if (*title)
+				set_window_title(title);
+		}
+
+
+		unhandle_terminal_resize(itrm->ctl_in);
+		disable_mouse();
+		send_done_sequence(itrm->std_out,itrm->altscreen);
+		tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 	}
 
 	mem_free_set(&itrm->orig_title, NULL);
-
-	unhandle_terminal_resize(itrm->ctl_in);
-	disable_mouse();
-	send_done_sequence(itrm->std_out,itrm->altscreen);
-	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 
 	clear_handlers(itrm->std_in);
 	clear_handlers(itrm->sock_in);
@@ -504,6 +510,9 @@ dispatch_special(unsigned char *text)
 	switch (text[0]) {
 		case TERM_FN_TITLE:
 			if (ditrm) {
+				if (ditrm->remote)
+					break;
+
 				if (!ditrm->orig_title)
 					ditrm->orig_title = get_window_title();
 				ditrm->touched_title = 1;
@@ -511,6 +520,9 @@ dispatch_special(unsigned char *text)
 			set_window_title(text + 1);
 			break;
 		case TERM_FN_RESIZE:
+			if (ditrm && ditrm->remote)
+				break;
+
 			resize_terminal_from_str(text + 1);
 			break;
 	}

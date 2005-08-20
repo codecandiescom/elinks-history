@@ -1,5 +1,5 @@
 /* BitTorrent peer-wire connection management */
-/* $Id: peerconnect.c,v 1.2 2005/08/18 02:40:51 miciah Exp $ */
+/* $Id: peerconnect.c,v 1.3 2005/08/20 12:03:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,6 +323,11 @@ accept_bittorrent_peer_connection(void *____)
 
 	peer_sock = accept(bittorrent_socket, (struct sockaddr *) &addr, &addrlen);
 	if (peer_sock < 0) return;
+
+	if (set_nonblocking_fd(peer_sock) < 0) {
+		close(peer_sock);
+		return;
+	}
 
 	peer = init_bittorrent_peer_connection(peer_sock);
 	if (!peer) {

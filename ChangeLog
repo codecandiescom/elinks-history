@@ -1,3 +1,11 @@
+Sat Aug 20 12:03:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/bittorrent/peerconnect.c:
+
+	Set accepted incoming connections to use non-blocking I/O. The
+	make_connection() thing makes sure that outgoing connections are
+	also non-blocking. Reported by pasky.  
+
 Thu Aug 18 02:49:06 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/terminal/kbd.c:

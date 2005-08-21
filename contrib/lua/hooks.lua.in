@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.76 2005/08/21 21:03:01 miciah Exp $
+-- $Id: hooks.lua.in,v 1.77 2005/08/21 21:05:41 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -205,7 +205,7 @@ function debian_package (url, t)
 	..'&arch='..(t.arch or string.gsub(pipe_read('uname -m | tr -d \\\\n'), 'i%d86', 'i386') or 'i386') -- like this'll work...
 end
 
-function debian_contents (url)
+function debian_file (url)
 	return debian_package (url, { searchmode = "searchfilesanddirs", case = "sensitive" })
 end
 
@@ -267,7 +267,7 @@ smartprefixes = {
     -- just create a lambda like this. Aren't high-level languages fun?
     cvs = function (x) return cvsweb ("http://cvsweb.elinks.or.cz/cvsweb.cgi/", "elinks", x) end,
     d = "http://www.dict.org/bin/Dict?Query=%s&Form=Dict1&Strategy=*&Database=*&submit=Submit+query",
-    debcontents = debian_contents,
+    debfile = debian_file,
     dmoz = "http://search.dmoz.org/cgi-bin/search?search=%s",
     foldoc = "http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?%s",
     g  = "http://www.google.com/search?q=%s&btnG=Google+Search",

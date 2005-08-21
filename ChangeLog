@@ -1,3 +1,50 @@
+Sun Aug 21 21:21:24 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Be more careful to default to stable if /etc/debian_version does not
+	exist.  
+
+Sun Aug 21 21:12:24 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Add a new prefix debcontents to list the contents of the specified
+	package.  
+
+Sun Aug 21 21:09:50 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Revert the case-sensitivity that I accidentally added in revision
+	1.75.  
+
+Sun Aug 21 21:05:41 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Rename the function debian_contents to debian_file and the
+	corresponding prefix debcontents to debfile.  
+
+Sun Aug 21 21:03:01 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Test whether /etc/debian_version exists and is readable before
+	trying to open it.  
+
+Sun Aug 21 20:53:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Factor debian_package out of debian_contents.  
+
+Sun Aug 21 10:45:13 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
 Sat Aug 20 12:03:55 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/bittorrent/peerconnect.c:

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.77 2005/08/21 21:05:41 miciah Exp $
+-- $Id: hooks.lua.in,v 1.78 2005/08/21 21:09:50 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -206,7 +206,7 @@ function debian_package (url, t)
 end
 
 function debian_file (url)
-	return debian_package (url, { searchmode = "searchfilesanddirs", case = "sensitive" })
+	return debian_package (url, { searchmode = "searchfilesanddirs" })
 end
 
 function cvsweb (base, project, url)

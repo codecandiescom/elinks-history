@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.74 2005/08/16 02:11:18 miciah Exp $
+-- $Id: hooks.lua.in,v 1.75 2005/08/21 20:53:25 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -194,9 +194,7 @@ dumbprefixes = {
     vcss = "http://jigsaw.w3.org/css-validator/validator?uri=%c",
 }
 
-function debian_contents (url)
-	local t = {}
-
+function debian_package (url, t)
 	url = string.gsub(url, '(%w+):(%w+)', function (key, val) t[key] = val end)
 
 	return 'http://packages.debian.org/cgi-bin/search_contents.pl?word='
@@ -205,6 +203,10 @@ function debian_contents (url)
 	..'&case='..(t.case or 'insensitive')
 	..'&version='..(t.version or pipe_read('cut -d/ -f1 /etc/debian_version | tr -d \\\\n') or 'stable')
 	..'&arch='..(t.arch or string.gsub(pipe_read('uname -m | tr -d \\\\n'), 'i%d86', 'i386') or 'i386') -- like this'll work...
+end
+
+function debian_contents (url)
+	return debian_package (url, { searchmode = "searchfilesanddirs", case = "sensitive" })
 end
 
 function cvsweb (base, project, url)

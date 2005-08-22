@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.80 2005/08/21 21:21:24 miciah Exp $
+-- $Id: hooks.lua.in,v 1.81 2005/08/22 22:05:35 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -202,7 +202,7 @@ function debian_package (url, t)
 	..'&searchmode='..(t.searchmode or 'searchfilesanddirs')
 	..'&case='..(t.case or 'insensitive')
 	..'&version='..(t.version or pipe_read('test -r /etc/debian_version && cut -d/ -f1 /etc/debian_version | tr -d \\\\n || echo stable') or 'stable')
-	..'&arch='..(t.arch or string.gsub(pipe_read('uname -m | tr -d \\\\n'), 'i%d86', 'i386') or 'i386') -- like this'll work...
+	..'&arch='..(t.arch or pipe_read('test -x /usr/bin/dpkg-architecture && dpkg-architecture -qDEB_HOST_ARCH | tr -d \\\\n || echo i386'))
 end
 
 function debian_contents (url)

@@ -1,3 +1,10 @@
+Mon Aug 22 22:05:35 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Simplify debian_package by using /usr/bin/dpkg-architecture if it is
+	found.  
+
 Sun Aug 21 21:21:24 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* contrib/lua/hooks.lua.in:

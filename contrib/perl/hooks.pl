@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.123 2005/08/23 01:24:49 rrowan Exp $
+# $Id: hooks.pl,v 1.124 2005/08/23 07:03:52 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -564,6 +564,10 @@ I<BBC> is used as the default search engine if the given engine is not found.
 
 =item Internet Public Library:            B<ipl>
 
+=item VIM Tips:                           B<vt> (# or search)
+
+=item Urban Dictionary:                   B<urbandict> or B<ud> <I<word>>
+
 =back
 
 =over 4
@@ -606,6 +610,7 @@ An error is produced if the given locator is not found.
 	$locator_prefixes{'^(alive|dead)(| .*)$'}            = 'dead';        # Who's Alive and Who's Dead
 	$locator_prefixes{'^(book|read)(| .*)$'}             = 'book';        # Google Library / Project Gutenberg
 	$locator_prefixes{'^ipl(| .*)$'}                     = 'ipl';         # Internet Public Library
+	$locator_prefixes{'^(urbandict|ud)(| .*)$'}          = 'urbandict';   # Urban Dictionary
 
 	my %weather_locators =
 	(
@@ -660,6 +665,9 @@ An error is produced if the given locator is not found.
 			'ipl'         => {
 				home      => 'http://ipl.org',
 				search    => 'http://ipl.org/div/searchresults/?words='},
+			'urbandict'   => {
+				home      => 'http://urbandictionary.com/random.php',
+				search    => 'http://urbandictionary.com/define.php?term='},
 		);
 
 		my ($server, $search, $current_url) = @_;
@@ -994,27 +1002,6 @@ Send the current URL to the application specified by the configuration variable
 				#return;
 			}
 		}
-	}
-
-
-=item Urban Dictionary:
-
-B<urbandict> or B<ud> <I<word>>
-
-=over 4
-
-Look up a word in the Urban Dictionary.
-
-=back
-
-=cut
-	############################################################################
-	# Urban Dictionary
-	if ($url =~ '^(urbandict|ud)(| .*)$')
-	{
-		my ($word) = $url =~ /^.* (.*)/;
-		return 'http://urbandictionary.com/random.php' unless $word;
-		return 'http://urbandictionary.com/define.php?term=' . $word if $word;
 	}
 
 

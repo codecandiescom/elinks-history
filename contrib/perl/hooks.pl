@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.125 2005/08/23 07:56:47 rrowan Exp $
+# $Id: hooks.pl,v 1.126 2005/08/23 16:35:26 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1044,7 +1044,7 @@ B<dict>, B<d>, B<def>, or B<define> <I<word>>
 		}
 		return $url if $url =~ /^(\/|~)/;
 		return $url if $url =~ /^([0-9]{1,3}\.){3}[0-9]{1,3}($|\/|\?)/;
-		return $url if $url =~ /^((::|)[[:xdigit:]]{1,4}(:|::|)){1,8}($|\/|\?)/;
+		return $url if $url =~ /^((::|)[[:xdigit:]]{1,4}(:|::|)){1,8}($|\/|\?)/ and $url =~ /:/;
 		if (     $url =~ /^(([a-zA-Z]{3,}(|4|6):\/\/|(www|ftp)\.)|)[a-zA-Z0-9]+/
 			and ($url =~ /[a-zA-Z0-9-]+\.(com|org|net|edu|gov|int|mil)($|\/|\?)/
 			or   $url =~ /[a-zA-Z0-9-]+\.(biz|info|name|pro|aero|coop|museum)($|\/|\?)/

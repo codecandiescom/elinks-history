@@ -35,16 +35,16 @@ Short summary: you can place a mark (e.g. 'z') in a document by pressing
 Restrictions
 ~~~~~~~~~~~~
 
-To make a good start, one non-restriction comes first. The document marks
-are local to the document. That means you can have a mark "x" in one
-document and another mark "x" in another document and ELinks won't mind and
-it will get it right each time.
+Currently, only A-Za-z characters are valid marks.
 
-Now for the restrictions. ALL the document marks are always local to the
-document. I.e. the vim text editor has an extension that makes the
-capital-letter marks to be global to the whole program and going to such a
-mark will make it to open the right document. This is not implemented in
-ELinks _yet_.
+Only one mark named "a" (or anything else) may exist at a time, so if one
+puts a mark "a" in a first document and set another mark "a" in a second
+document, ELinks will simply replace the former one.
+
+ALL the document marks are always local to the document. I.e. the vim text
+editor has an extension that makes the capital-letter marks to be global to
+the whole program and going to such a mark will make it to open the right
+document. This is not implemented in ELinks _yet_.
 
 Contrary to vim, ELinks doesn't support numbered marks (jumping to the last
 n documents in history) nor the special "'" mark (jumping to the last mark).
@@ -86,5 +86,5 @@ you must quit (or kill) them all to get rid of the damn thing.  But that's a
 different story.
 
 ///////////////////////////////////////////////////////////////////////////////
-$Id: marks.txt,v 1.12 2005/05/24 18:21:45 jonas Exp $
+$Id: marks.txt,v 1.13 2005/08/23 13:19:58 zas Exp $
 ///////////////////////////////////////////////////////////////////////////////

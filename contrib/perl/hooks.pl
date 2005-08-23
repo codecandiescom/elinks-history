@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.124 2005/08/23 07:03:52 rrowan Exp $
+# $Id: hooks.pl,v 1.125 2005/08/23 07:56:47 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1002,6 +1002,32 @@ Send the current URL to the application specified by the configuration variable
 				#return;
 			}
 		}
+	}
+
+
+=item Dictionary:
+
+B<dict>, B<d>, B<def>, or B<define> <I<word>>
+
+=cut
+	############################################################################
+	# Dictionary
+	if ($url =~ '^(dict|d|def|define)(| .*)$')
+	{
+		my $dict = 'http://dict.org/bin/Dict?Form=Dict1&Strategy=*&Database=*&Query=';
+		my ($word) = $url =~ /^[a-z]* (.*)/;
+		unless ($word)
+		{
+			open FILE, '</usr/share/dict/words'
+				or open FILE, '</usr/share/dict/linux.words'
+				or open FILE, '</usr/dict/words'
+				or open FILE, '</usr/dict/linux.words'
+				or open FILE, '</usr/share/dict/yawl.list'
+				or return 'http://ypass.net/dictionary/index.html?random=1';
+			rand($.) < 1 && ($word = $_) while <FILE>;
+			close FILE;
+		}
+		return $dict . $word;
 	}
 
 

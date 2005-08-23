@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.88 2005/07/16 21:57:26 miciah Exp $ */
+/* $Id: history.c,v 1.89 2005/08/23 13:02:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,33 +63,9 @@ clean_unhistory(struct ses_history *history)
 	}
 }
 
-/* If history->current points to an entry redundant to @loc, remove that
- * entry. */
-#ifdef BUG_309_FIX
-static void
-compress_history(struct ses_history *history, struct location *loc)
-{
-	struct location *current = history->current;
-
-	assert(current);
-
-	if (uris_compare(current->vs.uri, loc->vs.uri)
-	    || (current->download.cached->redirect
-		&& current->download.cached->redirect == loc->vs.uri)) {
-		del_from_history(history, current);
-		destroy_location(current);
-	}
-}
-#endif
-
 void
 add_to_history(struct ses_history *history, struct location *loc)
 {
-#ifdef BUG_309_FIX
-	if (history->current)
-		compress_history(history, loc);
-#endif
-
 	if (!history->current) {
 		add_to_list(history->history, loc);
 	} else {

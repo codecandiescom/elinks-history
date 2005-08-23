@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.122 2005/08/10 16:15:24 rrowan Exp $
+# $Id: hooks.pl,v 1.123 2005/08/23 01:24:49 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -994,6 +994,27 @@ Send the current URL to the application specified by the configuration variable
 				#return;
 			}
 		}
+	}
+
+
+=item Urban Dictionary:
+
+B<urbandict> or B<ud> <I<word>>
+
+=over 4
+
+Look up a word in the Urban Dictionary.
+
+=back
+
+=cut
+	############################################################################
+	# Urban Dictionary
+	if ($url =~ '^(urbandict|ud)(| .*)$')
+	{
+		my ($word) = $url =~ /^.* (.*)/;
+		return 'http://urbandictionary.com/random.php' unless $word;
+		return 'http://urbandictionary.com/define.php?term=' . $word if $word;
 	}
 
 

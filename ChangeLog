@@ -1,3 +1,45 @@
+Tue Aug 23 16:35:26 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Make the IPv6 address regexp in gotosearch a bit more picky.  
+
+Tue Aug 23 13:19:58 2005  Laurent Monin <zas@norz.org>:
+
+	* doc/marks.txt:
+
+	Attempt to fix marks documentation. Please improve.  
+
+Tue Aug 23 13:02:15 2005  Laurent Monin <zas@norz.org>:
+
+	* src/session/history.c:
+
+	Drop inactive code which was an attempt to fix bug 309.  
+
+Tue Aug 23 07:56:47 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added a 'dict' prefix complete with the usual randomness.  
+
+Tue Aug 23 07:03:52 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Moved 'urbandict' in with the locators to save some bloat.  
+
+Tue Aug 23 01:24:49 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Add the urbandict prefix for urbandictionary.com.  
+
+Tue Aug 23 00:18:45 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Add the urbandict prefix for urbandictionary.com.  
+
 Mon Aug 22 22:05:35 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* contrib/lua/hooks.lua.in:

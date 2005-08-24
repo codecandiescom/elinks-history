@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.126 2005/08/23 16:35:26 rrowan Exp $
+# $Id: hooks.pl,v 1.127 2005/08/24 04:54:23 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1052,6 +1052,7 @@ B<dict>, B<d>, B<def>, or B<define> <I<word>>
 		{
 			return $url;
 		}
+		return $url if $url =~ /^about:/;
 		return search(loadrc("search"), $url);
 	}
 

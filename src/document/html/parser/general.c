@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.16 2005/08/10 14:01:17 witekfl Exp $ */
+/* $Id: general.c,v 1.17 2005/08/24 08:39:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,7 +203,7 @@ html_handle_body_meta(struct html_context *html_context, unsigned char *meta,
 	if (!init_string(&head)) return;
 
 	/* scan_http_equiv() requires that the from-pointer points before
-	 * "META", so use a '- 1' here. */ 
+	 * "META", so use a '- 1' here. */
 	scan_http_equiv(meta - 1, eof, &head, NULL, html_context->options);
 	process_head(html_context, head.source);
 	done_string(&head);

@@ -1,5 +1,5 @@
 /* BSD mouse system-specific routines. */
-/* $Id: bsd.c,v 1.7 2005/07/21 17:26:54 witekfl Exp $ */
+/* $Id: bsd.c,v 1.8 2005/08/24 08:39:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 #else
 #include <machine/console.h>
 #endif	/* HAVE_SYS_CONSIO_H */
-#endif	/* CONFIG_SYSMOUSE */ 
+#endif	/* CONFIG_SYSMOUSE */
 
 #include "elinks.h"
 
@@ -195,7 +195,7 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 	} else {
 		return NULL;
 	}
-	    
+
 }
 
 void

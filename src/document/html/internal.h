@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.65 2005/07/26 14:10:22 witekfl Exp $ */
+/* $Id: internal.h,v 1.66 2005/08/24 08:38:59 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -69,7 +69,7 @@ struct html_context {
 	unsigned int was_br:1;
 	unsigned int was_xmp:1;
 	unsigned int has_link_lines:1;
-	unsigned int was_body:1; /* For META refresh inside <body>. */ 
+	unsigned int was_body:1; /* For META refresh inside <body>. */
 	unsigned int was_body_background:1; /* For <HTML> with style. */
 
 	/* For html/parser.c, html/renderer.c */

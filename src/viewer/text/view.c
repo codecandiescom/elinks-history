@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.702 2005/07/10 01:56:42 miciah Exp $ */
+/* $Id: view.c,v 1.703 2005/08/24 08:52:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ move_down(struct session *ses, struct document_view *doc_view, int type)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	ses->navigate_mode = NAVIGATE_LINKWISE;	/* XXX: why here and not in move_up() ??? */
+	assert(ses->navigate_mode == NAVIGATE_LINKWISE);	/* XXX: drop it at some time. --Zas */
 
 	newpos = doc_view->vs->y + doc_view->box.height;
 	if (newpos < doc_view->document->height)
@@ -115,6 +115,7 @@ move_page_down(struct session *ses, struct document_view *doc_view)
 
 	count = ses->kbdprefix.repeat_count;
 	ses->kbdprefix.repeat_count = 0;
+	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	do {
 		status = move_down(ses, doc_view, 0);
@@ -131,6 +132,8 @@ move_up(struct session *ses, struct document_view *doc_view, int type)
 {
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return FRAME_EVENT_OK;
+
+	assert(ses->navigate_mode == NAVIGATE_LINKWISE);	/* XXX: drop it at some time. --Zas */
 
 	if (doc_view->vs->y == 0) return FRAME_EVENT_OK;
 
@@ -156,6 +159,7 @@ move_page_up(struct session *ses, struct document_view *doc_view)
 
 	count = ses->kbdprefix.repeat_count;
 	ses->kbdprefix.repeat_count = 0;
+	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	do {
 		status = move_up(ses, doc_view, 0);

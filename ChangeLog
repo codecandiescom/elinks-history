@@ -1,3 +1,38 @@
+Wed Aug 24 09:04:34 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Minor update.  
+
+Wed Aug 24 08:52:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Set ses->navigate_mode to NAVIGATE_LINKWISE in move_page_{up|down}()
+	and assert it in move_{up|down}().  
+
+Wed Aug 24 08:38:59 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/internal.h, document/html/parser/general.c,
+	osdep/unix/bsd.c:
+
+	Trim trailing whitespaces.  
+
+Wed Aug 24 08:36:20 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/draw.c:
+
+	Pass colors as parameter to draw_frame_lines() and use
+	document.colors.text option value as default foreground color.
+	Frames colors are now affected by document.colors.{text,background)
+	options changes.  
+
+Wed Aug 24 04:54:23 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Pass through about: URLs in gotosearch.  
+
 Tue Aug 23 16:35:26 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/hooks.pl:

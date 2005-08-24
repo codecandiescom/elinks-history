@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.26 2005/08/10 19:21:49 witekfl Exp $ */
+/* $Id: draw.c,v 1.27 2005/08/24 08:36:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,10 +77,8 @@ check_document_fragment(struct session *ses, struct document_view *doc_view)
 
 static void
 draw_frame_lines(struct terminal *term, struct frameset_desc *frameset_desc,
-		 int xp, int yp)
+		 int xp, int yp, struct color_pair *colors)
 {
-	/* Optionalize? */
-	struct color_pair colors = INIT_COLOR_PAIR(0x000000, 0xCCCCCC);
 	int y, j;
 
 	assert(term && frameset_desc && frameset_desc->frame_desc);
@@ -99,33 +97,33 @@ draw_frame_lines(struct terminal *term, struct frameset_desc *frameset_desc,
 				struct box box;
 
 				set_box(&box, x, y + 1, 1, height);
-				draw_box(term, &box, BORDER_SVLINE, SCREEN_ATTR_FRAME, &colors);
+				draw_box(term, &box, BORDER_SVLINE, SCREEN_ATTR_FRAME, colors);
 
 				if (j == frameset_desc->box.height - 1)
 					draw_border_cross(term, x, y + height + 1,
-							  BORDER_X_UP, &colors);
+							  BORDER_X_UP, colors);
 			} else if (j) {
 				if (x >= 0)
 					draw_border_cross(term, x, y,
-							  BORDER_X_RIGHT, &colors);
+							  BORDER_X_RIGHT, colors);
 			}
 
 			if (j) {
 				struct box box;
 
 				set_box(&box, x + 1, y, width, 1);
-				draw_box(term, &box, BORDER_SHLINE, SCREEN_ATTR_FRAME, &colors);
+				draw_box(term, &box, BORDER_SHLINE, SCREEN_ATTR_FRAME, colors);
 
 				if (i == frameset_desc->box.width - 1
 				    && x + width + 1 < term->width)
 					draw_border_cross(term, x + width + 1, y,
-							  BORDER_X_LEFT, &colors);
+							  BORDER_X_LEFT, colors);
 			} else if (i) {
-				draw_border_cross(term, x, y, BORDER_X_DOWN, &colors);
+				draw_border_cross(term, x, y, BORDER_X_DOWN, colors);
 			}
 
 			if (i && j)
-				draw_border_char(term, x, y, BORDER_SCROSS, &colors);
+				draw_border_char(term, x, y, BORDER_SCROSS, colors);
 
 			x += width + 1;
 		}
@@ -145,7 +143,7 @@ draw_frame_lines(struct terminal *term, struct frameset_desc *frameset_desc,
 
 			if (frameset_desc->frame_desc[p].subframe) {
 				draw_frame_lines(term, frameset_desc->frame_desc[p].subframe,
-						 x + 1, y + 1);
+						 x + 1, y + 1, colors);
 			}
 			x += width + 1;
 		}
@@ -187,7 +185,7 @@ check_link_under_cursor(struct session *ses, struct document_view *doc_view)
 static void
 draw_doc(struct session *ses, struct document_view *doc_view, int active)
 {
-	struct color_pair color = INIT_COLOR_PAIR(0, 0);
+	struct color_pair color;
 	struct view_state *vs;
 	struct terminal *term;
 	struct box *box;
@@ -215,6 +213,7 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 		}
 	}
 
+	color.foreground = get_opt_color("document.colors.text");
 	color.background = doc_view->document->height
 			 ? doc_view->document->bgcolor
 			 : get_opt_color("document.colors.background");
@@ -227,7 +226,7 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 
 	if (document_has_frames(doc_view->document)) {
 	 	draw_box(term, box, ' ', 0, &color);
-		draw_frame_lines(term, doc_view->document->frame_desc, box->x, box->y);
+		draw_frame_lines(term, doc_view->document->frame_desc, box->x, box->y, &color);
 		if (vs->current_link == -1)
 			vs->current_link = 0;
 		return;

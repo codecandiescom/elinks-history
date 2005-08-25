@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.127 2005/08/24 04:54:23 rrowan Exp $
+# $Id: hooks.pl,v 1.128 2005/08/25 14:05:22 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -158,13 +158,16 @@ sub goto_url_hook
 			$tempfile = $tempfile . substr($matrix, (length($matrix) - 1) - rand(length($matrix) + 1), 1);
 		}
 		my ($message, $login, $password);
-		system('elinks -dump "' . $bugmenot . '" >' . $tempfile . ' 2>/dev/null');
+		system('elinks -no-home -source "' . $bugmenot . '" >' . $tempfile . ' 2>/dev/null');
 		open FILE, "<$tempfile" or return $bugmenot;
 		$message = <FILE>;
 		while (<FILE>)
 		{
-			$login    = <FILE> if $. eq 5;
-			$password = <FILE> if $. eq 6;
+			next unless (m/^<dd>(.*)<br \/>(.*)<\/dd><\/dl>$/);
+			$login    = $1;
+			$password = $2;
+			#$login    = <FILE> if $. eq 5;
+			#$password = <FILE> if $. eq 6;
 		}
 			$login    =~ s/(^\s*|\n|\s*$)//g if $login;
 			$password =~ s/(^\s*|\n|\s*$)//g if $password;
@@ -174,7 +177,7 @@ sub goto_url_hook
 		unless ($message =~ s/.*(No accounts found\.).*/${1}/)
 		{
 			return $bugmenot if not $login or not $password;
-			$message = "Login:    " . $login . "\nPassword: " . $password;
+			$message = "Login: " . $login . "\nPassword: " . $password;
 		}
 		#open FILE, ">$tempfile" or return $bugmenot;
 			#print (FILE $message);

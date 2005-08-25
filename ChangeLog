@@ -1,3 +1,48 @@
+Thu Aug 25 18:42:10 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	More documentation improvements.  
+
+Thu Aug 25 18:26:58 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Documentation improvement.  
+
+Thu Aug 25 15:07:59 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, bfu/leds.c, config/timer.c, document/refresh.c,
+	main/timer.c, main/timer.h, network/connection.c,
+	network/progress.c, protocol/bittorrent/connection.c,
+	protocol/bittorrent/peerconnect.c, protocol/bittorrent/tracker.c,
+	session/session.c, terminal/kbd.c, util/time.c, util/time.h,
+	viewer/timer.c:
+
+	Introduce a milliseconds_T type to make usage and conversion of
+	milliseconds more obvious. Add some constants were needed.  
+
+Thu Aug 25 14:46:58 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Don't go to bugmenot.com if no login was found.  Just send a dialog
+	stating that.  
+
+Thu Aug 25 14:05:22 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Made the bugmenot dialog more reliable.  Fixed the garbage being
+	added to it as well.  
+
+Thu Aug 25 13:01:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/document.c:
+
+	Minor cleanup: make @pos local and only attempt to free
+	@document->links stuff if needed.  
+
 Wed Aug 24 09:04:34 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

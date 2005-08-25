@@ -1,10 +1,9 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.129 2005/08/25 14:46:58 rrowan Exp $
+# $Id: hooks.pl,v 1.130 2005/08/25 18:26:58 rrowan Exp $
 #
-# This file is (c) Russ Rowan and Petr Baudis and GPL'd.
+# Copyleft by Russ Rowan (See the file "COPYING" for details.)
 #
-# To get the complete user documentation for this file in a user-friendly
-# manner, do either:
+# To get documentation for this file:
 #   pod2html hooks.pl > hooks.html && elinks hooks.html
 # or
 #   perldoc hooks.pl
@@ -17,27 +16,19 @@ hooks.pl -- Perl hooks for the ELinks text WWW browser
 
 This file contains the Perl hooks for the ELinks text WWW browser.
 
-These hooks can alter the browser's behavior in various ways; probably the most
-popular is processing the user input in the Goto URL dialog box and rewriting
-it in various ways (like the builtin URL prefix capability, but much more
-powerful and flexible).
-
-Another popular capability of the hooks is to rewrite the HTML source of a page
-before it is rendered, usually to get rid of ads and/or make the web page more
-ELinks-friendly.  The hooks also allow you to fine-tune the proxying rules, can
-show a fortune when ELinks exits, and more!
+These hooks change the browser's behavior in various ways.  They allow
+shortcuts to be used in the Goto URL dialog, modifying the source of a page,
+proxy handling, and other things such as displaying a fortune at exit.
 
 =cut
-
 use strict;
 use warnings;
 use diagnostics;
 
 =head1 CONFIGURATION FILE
 
-The hooks file reads its configuration from I<~/.elinks/config.pl>.
-Note that the following is only an example, and does not contain the default
-values:
+This hooks file reads its configuration from I<~/.elinks/config.pl>.
+The following is an example of the configuration file:
 
 	bork:       yep       # BORKify Google?
 	collapse:   okay      # Collapse all XBEL bookmark folders on exit?
@@ -59,7 +50,6 @@ values:
 	#          dogpile, mamma, webcrawler, netscape, lycos, hotbot, excite
 	# weather: weather underground, google, yahoo, cnn, accuweather,
 	#          ask jeeves
-
 
 I<Developer's usage>: The function I<loadrc()> takes a preference name as its
 single argument and returns either an empty string if it is not specified,
@@ -103,37 +93,27 @@ sub loadrc($)
 
 
 
-=head1 GOTO URL REWRITES
+=head1 GOTO URL HOOK
 
-This is a summary of all the available rewrites of what you type into the Goto
-URL box.  They are similar in spirit to the builtin URL rewrites, but more
-flexible and immensely more powerful.
+This is a summary of the shortcuts defined in this file for use in the Goto URL
+dialog.  They are similar to the builtin URL prefixes, but more flexible and
+powerful.
+
+=over
 
 I<Developer's usage>: The function I<goto_url_hook> is called when the hook is
 triggered, taking the target URL and current URL as its two arguments.  It
 returns the final target URL.
 
-=over 4
+These routines do a name->URL mapping - for example, the I<goto_url_hook()>
+described above maps a certain prefix to C<google> and then asks the
+I<search()> mapping routine described below to map the C<google> string to an
+appropriate URL.
 
-In this section, name mapping routines are described.  They are probably of no
-interest to regular hooks users, only for hooks developers.
-
-These routines do a name->URL mapping - e.g. the I<goto_url_hook()> described
-above maps a certain prefix to C<google> and then asks the I<search()> mapping
-routine described below to map the C<google> string to an appropriate URL.
-
-The mappings themselves should be obvious and are not described here.
-Interested readers can look them up themselves in the I<hooks.pl> file.
-
-There are generally two URLs for each name, one for a direct shortcut jump and
-another for a search on the given site (if any string is specified after the
-prefix, usually).
-
-=item Miscellaneous shortcuts:
-
-B<bugmenot>, B<bored>, B<random>, B<bofh>, B<xyzzy>, B<jack> or B<handey>
-
-=back
+There are generally two URLs for each name.  One to go to the particular URL's
+main page, and another for a search on the given site (if any string is
+specified after the prefix).  A few of these prefixes will change their
+behavior depending on the URL currently beung displayed in the browser.
 
 =cut
 # Don't call them "dumb".  They hate that.  Rather, "interactivity challenged".
@@ -145,9 +125,14 @@ sub goto_url_hook
 	my $current_url = shift;
 
 
+=item Bugmenot:
+
+B<bugmenot> or B<bn>
+
+=cut
 	############################################################################
 	# "bugmenot" (no blood today, thank you)
-	if ($url eq 'bugmenot' and $current_url)
+	if ($url =~ '^(bugmenot|bn)$' and $current_url)
 	{
 		($current_url) = $current_url =~ /^.*:\/\/(.*)/;
 		my $bugmenot = 'http://bugmenot.com/view.php?url=' . $current_url;
@@ -209,11 +194,9 @@ sub goto_url_hook
 	}
 
 
-=over 4
-
 =item Web search:
 
-=over 4
+=over
 
 =item Google:                 B<g> or B<google>  (default)
 
@@ -249,20 +232,14 @@ sub goto_url_hook
 
 default engine:         B<search>, B<find>, B<www>, B<web>, B<s>, B<f>, B<go>
 
-=over 4
+=over
 
 The I<%search_engines> hash maps each engine name to two URLs, I<home> and
-I<search>.  In case of I<search>, the query is appended to the mapped URL.
-
-B<!bork!> string in the URL is substitued for an optional I<xx-bork>
-localization specifier, but only in the C<google> mapping.
+I<search>.  With I<search>, the query is appended to the URL.
 
 The search engines mapping is done by the I<search()> function, taking the
 search engine name as its first parameter and optional search string as its
 second parameter.  It returns the mapped target URL.
-
-I<Google> is used as the default search engine if the given engine is not
-found.
 
 =back
 
@@ -376,11 +353,11 @@ found.
 	}
 
 
-=over 4
+=over
 
 =item News agencies:
 
-=over 4
+=over
 
 =item British Broadcasting Corporation: B<bbc>  (default)
 
@@ -416,16 +393,14 @@ found.
 
 default agency:                   B<n>, B<news>
 
-=over 4
+=over
 
 The I<%news_servers> hash maps each engine name to two URLs, I<home> and
-I<search>.  In case of I<search>, the query is appended to the mapped URL.
+I<search>.  With I<search>, the query is appended to the mapped URL.
 
 The news servers mapping is done by the I<news()> function, taking the search
 engine name as its first parameter and optional search string as its second
 parameter.  It returns the mapped target URL.
-
-I<BBC> is used as the default search engine if the given engine is not found.
 
 =back
 
@@ -522,11 +497,11 @@ I<BBC> is used as the default search engine if the given engine is not found.
 	}
 
 
-=over 4
+=over
 
 =item Locators:
 
-=over 4
+=over
 
 =item Internet Movie Database:            B<imdb>, B<movie>, or B<flick>
 
@@ -572,12 +547,9 @@ I<BBC> is used as the default search engine if the given engine is not found.
 
 =back
 
-=over 4
+=over
 
 The I<%locators> hash maps each engine name to two URLs, I<home> and I<search>.
-
-B<!bork!> string in the URL is substitued for an optional I<xx-bork>
-localization specifier (for any mappings in this case, not just C<google>).
 
 B<!current!> string in the URL is substitued for the URL of the current
 document.
@@ -590,8 +562,6 @@ The locators mapping is done by the I<location()> function, taking the search
 engine name as its first parameter, optional search string as its second
 parameter and the current document's URL as its third parameter.  It returns
 the mapped target URL.
-
-An error is produced if the given locator is not found.
 
 =back
 
@@ -814,9 +784,11 @@ B<cc>, B<coral>, or B<nyud> (requires URL)
 
 B<babelfish>, B<babel>, B<bf>, B<translate>, B<trans>, or B<b>
 
+"babelfish german english" or "bf de en"
+
 =cut
 	############################################################################
-	# Babelfish ("babelfish german english"  or  "bf de en")
+	# AltaVista Babelfish ("babelfish german english"  or  "bf de en")
 	if (($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]* [a-zA-Z]*)$')
 		or ($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$'
 		and loadrc("language") and $current_url))
@@ -893,7 +865,7 @@ B<vhtml> or B<vcss> (current url or specified)
 
 =item ELinks:
 
-=over 4
+=over
 
 =item Home:                  B<el> or B<elinks>
 
@@ -946,7 +918,7 @@ There's no place like home...
 
 =item The Dialectizer:
 
-B<dia> <dialect> (current url or specified)
+B<dia> <I<dialect>> (current url or specified)
 
 Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglatin>, or I<hacker>
 
@@ -975,7 +947,7 @@ Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglati
 
 B<send>
 
-=over 4
+=over
 
 Send the current URL to the application specified by the configuration variable
 'I<external>'.  Optionally, override this by specifying the application as in
@@ -1064,14 +1036,17 @@ B<dict>, B<d>, B<def>, or B<define> <I<word>>
 
 
 
-=head1 GLOBAL URL REWRITES
+=head1 FOLLOW URL HOOK
 
-These rewrites happen everytime ELinks is about to follow an URL and load it,
-so this is an order of magnitude more powerful than the Goto URL rewrites.
+These hooks effect a URL before ELinks has a chance to load it.
+
+=over
 
 I<Developer's usage>: The function I<follow_url_hook> is called when the hook
 is triggered, taking the target URL as its only argument.  It returns the final
 target URL.
+
+=back
 
 =cut
 ################################################################################
@@ -1082,7 +1057,7 @@ sub follow_url_hook
 
 =item Bork! Bork! Bork!
 
-Rewrites many I<google.com> URLs to use the phenomenal I<xx-bork> localization.
+Rewrites many I<google.com> URLs.
 
 =cut
 	# Bork! Bork! Bork!
@@ -1101,7 +1076,7 @@ Rewrites many I<google.com> URLs to use the phenomenal I<xx-bork> localization.
 
 =item NNTP over Google
 
-Rewrites any I<nntp:> or I<news:> URLs to Google Groups HTTP URLs.
+Translates any I<nntp:> or I<news:> URLs to Google Groups HTTP URLs.
 
 =cut
 	# nntp?  try Google Groups
@@ -1124,21 +1099,24 @@ Rewrites any I<nntp:> or I<news:> URLs to Google Groups HTTP URLs.
 
 
 
-=head1 HTML REWRITING RULES
+=head1 PRE FORMAT HTML HOOK
 
 When an HTML document is downloaded and is about to undergo the final
-rendering, the rewrites described here are done first.  This is frequently used
-to get rid of ads, but also various ELinks-unfriendly HTML code and HTML
-snippets which are irrelevant to ELinks but can obfuscate the rendered
-document.
+rendering, this hook is called.  This is frequently used to get rid of ads, but
+also various ELinks-unfriendly HTML code and HTML snippets which are irrelevant
+to ELinks but can obfuscate the rendered document.
 
-Note well that these rules are applied B<only> before the final rendering, not
+Note that these hooks are applied B<only> before the final rendering, not
 before the gradual re-renderings which happen when only part of the document is
 available.
+
+=over
 
 I<Developer's usage>: The function I<pre_format_html_hook> is called when the
 hook is triggered, taking the document's URL and the HTML source as its two
 arguments.  It returns the rewritten HTML code.
+
+=back
 
 =cut
 ################################################################################
@@ -1152,11 +1130,8 @@ sub pre_format_html_hook
 
 =item Slashdot Sanitation
 
-Kills Slashdot's Advertisements.
-
-=over 4
-
-I<This rewrite rule is B<DISABLED> due to weird behavior with fragments.>
+Kills Slashdot's Advertisements.  (This one is disabled due to weird behavior
+with fragments.)
 
 =cut
 	# /. sanitation
@@ -1170,7 +1145,7 @@ I<This rewrite rule is B<DISABLED> due to weird behavior with fragments.>
 
 =item Obvious Google Tips Annihilator
 
-Kills some Google tips which are obvious anyway to any ELinks user.
+Kills some irritating Google tips.
 
 =cut
 	# yes, I heard you the first time
@@ -1196,8 +1171,7 @@ Wipes out SourceForge's Ads.
 
 =item Gmail's Experience
 
-Gmail has obviously never met ELinks for it to suggest another browser for a
-better Gmail experience.
+Gmail has obviously never met ELinks...
 
 =cut
 	# Gmail has obviously never met ELinks
@@ -1234,16 +1208,20 @@ content-type:text/html.
 
 
 
-=head1 SMART PROXY USAGE
+=head1 PROXY FOR HOOK
 
 The Perl hooks are asked whether to use a proxy for a given URL (or what proxy
 to actually use).  You can use it if you don't want to use a proxy for certain
 Intranet servers but you need to use it in order to get to the Internet, or if
-you want to use some anonymizer for access to certain naughty sites.
+you want to use some anonymizer for access to certain sites.
+
+=over
 
 I<Developer's usage>: The function I<proxy_for_hook> is called when the hook is
 triggered, taking the target URL as its only argument.  It returns the proxy
 URL, empty string to use no proxy or I<undef> to use the default proxy URL.
+
+=back
 
 =cut
 ################################################################################
@@ -1269,15 +1247,19 @@ Prevents proxy usage for local files and C<http://localhost>.
 
 
 
-=head1 ON-QUIT ACTIONS
+=head1 QUIT HOOK
 
 The Perl hooks can also perform various actions when ELinks quits.  These can
 be things like retouching the just saved "information files", or doing some fun
 stuff.
 
+=over
+
 I<Developer's usage>: The function I<quit_hook> is called when the hook is
 triggered, taking no arguments nor returning anything.  ('cause, you know, what
 would be the point?)
+
+=back
 
 =cut
 ################################################################################
@@ -1312,7 +1294,7 @@ I<bookmarks.folder_state>.
 
 =item Words of Wisdom
 
-A few words of wisdom from ELinks the Sage.  (Prints a fortune. ;-)
+A few words of wisdom from ELinks the Sage.
 
 =cut
 	# words of wisdom from ELinks the Sage

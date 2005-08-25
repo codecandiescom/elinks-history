@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.128 2005/08/25 14:05:22 rrowan Exp $
+# $Id: hooks.pl,v 1.129 2005/08/25 14:46:58 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -166,8 +166,6 @@ sub goto_url_hook
 			next unless (m/^<dd>(.*)<br \/>(.*)<\/dd><\/dl>$/);
 			$login    = $1;
 			$password = $2;
-			#$login    = <FILE> if $. eq 5;
-			#$password = <FILE> if $. eq 6;
 		}
 			$login    =~ s/(^\s*|\n|\s*$)//g if $login;
 			$password =~ s/(^\s*|\n|\s*$)//g if $password;
@@ -176,16 +174,17 @@ sub goto_url_hook
 		return $bugmenot unless $message =~ /[a-z]+/ and $message !~ /404/;
 		unless ($message =~ s/.*(No accounts found\.).*/${1}/)
 		{
-			return $bugmenot if not $login or not $password;
-			$message = "Login: " . $login . "\nPassword: " . $password;
+			if ($login and $password)
+			{
+				$message = "Login: " . $login . "\nPassword: " . $password;
+			}
+			else
+			{
+				$message = 'No accounts found';
+			}
 		}
-		#open FILE, ">$tempfile" or return $bugmenot;
-			#print (FILE $message);
-		#close FILE;
-		#system('sleep 5 && rm -f ' . $tempfile . ' &');
-		#return $tempfile;
 		system('elinks -remote "infoBox\(' . $message . ')" >/dev/null 2>&1 &');
-		return $current_url;
+		return $current_url; #FIXME
 #		return;
 	}
 
@@ -993,7 +992,7 @@ Send the current URL to the application specified by the configuration variable
 		if ($external)
 		{
 			system($external . ' "' . $current_url . '" 2>/dev/null &');
-			return $current_url;
+			return $current_url; #FIXME
 			#return;
 		}
 		else
@@ -1001,7 +1000,7 @@ Send the current URL to the application specified by the configuration variable
 			if (loadrc("external"))
 			{
 				system(loadrc("external") . ' "' . $current_url . '" 2>/dev/null &');
-				return $current_url;
+				return $current_url; #FIXME
 				#return;
 			}
 		}

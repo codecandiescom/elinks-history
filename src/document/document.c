@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.99 2005/07/27 23:38:33 jonas Exp $ */
+/* $Id: document.c,v 1.100 2005/08/25 13:01:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,6 @@ void
 done_document(struct document *document)
 {
 	struct cache_entry *cached;
-	int pos;
 
 	assert(document);
 	if_assert_failed return;
@@ -127,13 +126,18 @@ done_document(struct document *document)
 	if (document->frame_desc) free_frameset_desc(document->frame_desc);
 	if (document->refresh) done_document_refresh(document->refresh);
 
-	for (pos = 0; pos < document->nlinks; pos++) {
-		done_link_members(&document->links[pos]);
+	if (document->links) {
+		int pos;
+
+		for (pos = 0; pos < document->nlinks; pos++)
+			done_link_members(&document->links[pos]);
+
+		mem_free(document->links);
 	}
 
-	mem_free_if(document->links);
-
 	if (document->data) {
+		int pos;
+
 		for (pos = 0; pos < document->height; pos++)
 			mem_free_if(document->data[pos].chars);
 

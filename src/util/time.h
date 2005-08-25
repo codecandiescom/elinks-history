@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.45 2005/04/29 15:54:55 zas Exp $ */
+/* $Id: time.h,v 1.46 2005/08/25 15:08:00 zas Exp $ */
 
 #ifndef EL__UTIL_TIME_H
 #define EL__UTIL_TIME_H
@@ -10,6 +10,8 @@
 #include <time.h>
 #endif
 
+typedef long milliseconds_T;
+
 /* Is using atol() in this way acceptable? It seems
  * non-portable to me; time_t might not be a long. -- Miciah */
 #define str_to_time_t(s) ((time_t) atol(s))
@@ -19,11 +21,11 @@
  * unsigned fields. */
 typedef struct { long sec; long usec; } timeval_T;
 
-timeval_T *timeval_from_milliseconds(timeval_T *t, long milliseconds);
+timeval_T *timeval_from_milliseconds(timeval_T *t, milliseconds_T milliseconds);
 timeval_T *timeval_from_seconds(timeval_T *t, long seconds);
 timeval_T *timeval_from_double(timeval_T *t, double x);
 
-long timeval_to_milliseconds(timeval_T *t);
+milliseconds_T timeval_to_milliseconds(timeval_T *t);
 long timeval_to_seconds(timeval_T *t);
 
 int timeval_is_positive(timeval_T *t);

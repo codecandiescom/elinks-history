@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.299 2005/07/27 23:38:33 jonas Exp $ */
+/* $Id: connection.c,v 1.300 2005/08/25 15:08:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1089,11 +1089,11 @@ connection_timeout(struct connection *conn)
 static void
 connection_timeout_1(struct connection *conn)
 {
-	install_timer(&conn->timer,
-			(conn->unrestartable
+	install_timer(&conn->timer, (milliseconds_T)
+			((conn->unrestartable
 			 ? get_opt_int("connection.unrestartable_receive_timeout")
 			 : get_opt_int("connection.receive_timeout"))
-			* 500, (void (*)(void *)) connection_timeout, conn);
+			* 500), (void (*)(void *)) connection_timeout, conn);
 }
 
 void
@@ -1101,11 +1101,11 @@ set_connection_timeout(struct connection *conn)
 {
 	kill_timer(&conn->timer);
 
-	install_timer(&conn->timer,
-			(conn->unrestartable
+	install_timer(&conn->timer, (milliseconds_T)
+			((conn->unrestartable
 			 ? get_opt_int("connection.unrestartable_receive_timeout")
 			 : get_opt_int("connection.receive_timeout"))
-			* 500, (void (*)(void *)) connection_timeout_1, conn);
+			* 500), (void (*)(void *)) connection_timeout_1, conn);
 }
 
 

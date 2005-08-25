@@ -1,4 +1,4 @@
-/* $Id: timer.h,v 1.20 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: timer.h,v 1.21 2005/08/25 15:08:00 zas Exp $ */
 
 #ifndef EL__MAIN_TIMER_H
 #define EL__MAIN_TIMER_H
@@ -21,7 +21,7 @@ typedef struct timer * timer_id_T;
 
 int get_timers_count();
 void check_timers(timeval_T *last_time);
-void install_timer(timer_id_T *id, long delay_in_milliseconds, void (*)(void *), void *);
+void install_timer(timer_id_T *id, milliseconds_T delay, void (*)(void *), void *);
 void kill_timer(timer_id_T *id);
 int get_next_timer_time(timeval_T *t);
 

@@ -1,5 +1,5 @@
 /* Periodic saving module */
-/* $Id: timer.c,v 1.2 2005/06/13 00:43:27 jonas Exp $ */
+/* $Id: timer.c,v 1.3 2005/08/25 15:08:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "main/event.h"
 #include "main/module.h"
 #include "main/timer.h"
+#include "util/time.h"
 
 
 /* Timer for periodically saving configuration files to disk */
@@ -21,7 +22,7 @@ static void
 periodic_save_handler(void *xxx)
 {
 	static int periodic_save_event_id = EVENT_NONE;
-	int interval;
+	milliseconds_T interval;
 
 	if (get_cmd_opt_bool("anonymous")) return;
 
@@ -31,7 +32,7 @@ periodic_save_handler(void *xxx)
 	else
 		trigger_event(periodic_save_event_id);
 
-	interval = get_opt_int("infofiles.save_interval") * 1000;
+	interval = (milliseconds_T) (get_opt_int("infofiles.save_interval") * 1000);
 	if (!interval) return;
 
 	install_timer(&periodic_save_timer, interval, periodic_save_handler, NULL);

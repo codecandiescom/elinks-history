@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.31 2005/06/13 00:43:29 jonas Exp $ */
+/* $Id: timer.c,v 1.32 2005/08/25 15:08:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,8 +14,10 @@
 #include "terminal/event.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
+#include "util/time.h"
 #include "viewer/timer.h"
 
+#define COUNT_DOWN_DELAY	((milliseconds_T) 1000)
 
 static timer_id_T countdown = TIMER_ID_UNDEF;
 
@@ -34,7 +36,7 @@ count_down(void *xxx)
 
 	timer_duration--;
 	if (timer_duration) {
-		install_timer(&countdown, 1000, count_down, NULL);
+		install_timer(&countdown, COUNT_DOWN_DELAY, count_down, NULL);
 		return;
 	} else {
 		countdown = TIMER_ID_UNDEF;
@@ -64,7 +66,7 @@ reset_timer(void)
 	if (!get_opt_int("ui.timer.enable")) return;
 
 	timer_duration = get_opt_int("ui.timer.duration");
-	install_timer(&countdown, 1000, count_down, NULL);
+	install_timer(&countdown, COUNT_DOWN_DELAY, count_down, NULL);
 }
 
 static void

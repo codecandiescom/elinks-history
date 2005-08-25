@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.47 2005/06/14 12:25:20 jonas Exp $ */
+/* $Id: refresh.c,v 1.48 2005/08/25 15:08:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,7 @@ void
 start_document_refresh(struct document_refresh *refresh, struct session *ses)
 {
 	int minimum = get_opt_int("document.browse.minimum_refresh_time");
-	int time = int_max(1000 * refresh->seconds, minimum);
+	milliseconds_T time = (milliseconds_T) (int_max(1000 * refresh->seconds, minimum));
 	struct type_query *type_query;
 
 	/* FIXME: This is just a work-around for stopping more than one timer

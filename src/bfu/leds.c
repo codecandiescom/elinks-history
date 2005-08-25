@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.87 2005/06/14 12:25:19 jonas Exp $ */
+/* $Id: leds.c,v 1.88 2005/08/25 15:08:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,8 +28,10 @@
 #include "terminal/window.h"
 #include "util/color.h"
 #include "util/error.h"
+#include "util/time.h"
 #include "viewer/timer.h"
 
+#define LEDS_REFRESH_DELAY	((milliseconds_T) 100)
 
 /* Current leds allocation:
  * 0 - SSL connection indicator
@@ -231,7 +233,7 @@ draw_leds(struct session *ses)
 end:
 	/* Redraw each 100ms. */
 	if (!drawing && redraw_timer == TIMER_ID_UNDEF)
-		install_timer(&redraw_timer, 100, redraw_leds, NULL);
+		install_timer(&redraw_timer, LEDS_REFRESH_DELAY, redraw_leds, NULL);
 }
 
 /* Determine if leds redrawing is necessary. Returns non-zero if so. */
@@ -278,7 +280,7 @@ redraw_leds(void *xxx)
 		return;
 	}
 
-	install_timer(&redraw_timer, 100, redraw_leds, NULL);
+	install_timer(&redraw_timer, LEDS_REFRESH_DELAY, redraw_leds, NULL);
 
 	if (drawing) return;
 	drawing = 1;

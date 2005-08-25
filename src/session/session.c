@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.637 2005/08/04 12:53:10 jonas Exp $ */
+/* $Id: session.c,v 1.638 2005/08/25 15:08:00 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -166,8 +166,9 @@ add_session_info(struct session *ses, struct uri *uri, struct uri *referrer,
 	info->id = session_info_id++;
 	/* I don't know what a reasonable start up time for a new instance is
 	 * but it won't hurt to have a few seconds atleast. --jonas */
-	install_timer(&info->timer, 10000, (void (*)(void *)) session_info_timeout,
-			(void *) (long) info->id);
+	install_timer(&info->timer, (milliseconds_T) 10000,
+		      (void (*)(void *)) session_info_timeout,
+		      (void *) (long) info->id);
 
 	info->ses = ses;
 	info->task = task;
@@ -447,10 +448,11 @@ display_timer(struct session *ses)
 	timeval_now(&stop);
 	timeval_sub(&duration, &start, &stop);
 
-	t = timeval_to_milliseconds(&duration) * DISPLAY_TIME;
+	t = ((long) timeval_to_milliseconds(&duration)) * DISPLAY_TIME;
 	if (t < DISPLAY_TIME_MIN) t = DISPLAY_TIME_MIN;
-	install_timer(&ses->display_timer, t, (void (*)(void *)) display_timer,
-			ses);
+	install_timer(&ses->display_timer, (milliseconds_T) t,
+		      (void (*)(void *)) display_timer,
+		      ses);
 
 	load_frames(ses, ses->doc_view);
 	load_css_imports(ses, ses->doc_view);

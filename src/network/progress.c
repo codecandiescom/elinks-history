@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.31 2005/06/14 13:04:31 jonas Exp $ */
+/* $Id: progress.c,v 1.32 2005/08/25 15:08:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,9 +10,10 @@
 #include "network/progress.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/time.h"
 
-#define SPD_DISP_TIME			100	/* milliseconds */
-#define CURRENT_SPD_AFTER		100	/* milliseconds */
+#define SPD_DISP_TIME		((milliseconds_T) 100)
+#define CURRENT_SPD_AFTER	((milliseconds_T) 100)
 
 
 int
@@ -61,7 +62,7 @@ update_progress(struct progress *progress, off_t loaded, off_t size, off_t pos)
 	timeval_add_interval(&progress->elapsed, &elapsed);
 
 	timeval_add_interval(&progress->dis_b, &elapsed);
-	timeval_from_milliseconds(&dis_b_max, SPD_DISP_TIME * CURRENT_SPD_SEC);
+	timeval_from_milliseconds(&dis_b_max, (milliseconds_T) (((long) SPD_DISP_TIME) * CURRENT_SPD_SEC));
 	timeval_from_milliseconds(&dis_b_interval, SPD_DISP_TIME);
 
 	while (timeval_cmp(&progress->dis_b, &dis_b_max) >= 0) {
@@ -76,7 +77,7 @@ update_progress(struct progress *progress, off_t loaded, off_t size, off_t pos)
 
 	{
 		progress->average_speed = timeval_div_int(progress->loaded, &progress->elapsed);	/* FIXME: off_t */
-		progress->current_speed = progress->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000);
+		progress->current_speed = progress->cur_loaded / (CURRENT_SPD_SEC * ((long) SPD_DISP_TIME) / 1000);
 
 		progress->size = size;
 		progress->pos = pos;

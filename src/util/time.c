@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.45 2005/06/14 13:04:31 jonas Exp $ */
+/* $Id: time.c,v 1.46 2005/08/25 15:08:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,10 +124,12 @@ timeval_from_double(timeval_T *t, double x)
 }
 
 timeval_T *
-timeval_from_milliseconds(timeval_T *t, long milliseconds)
+timeval_from_milliseconds(timeval_T *t, milliseconds_T milliseconds)
 {
-	t->sec = milliseconds / 1000;
-	t->usec = (milliseconds % 1000) * 1000;
+	long ms = (long) milliseconds;
+	
+	t->sec = ms / 1000;
+	t->usec = (ms % 1000) * 1000;
 
 	return t;
 }
@@ -141,10 +143,10 @@ timeval_from_seconds(timeval_T *t, long seconds)
 	return t;
 }
 
-long
+milliseconds_T
 timeval_to_milliseconds(timeval_T *t)
 {
-	return t->sec * 1000L + t->usec / 1000L;
+	return (milliseconds_T) (t->sec * 1000L + t->usec / 1000L);
 }
 
 long

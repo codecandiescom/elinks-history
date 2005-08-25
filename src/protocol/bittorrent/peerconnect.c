@@ -1,5 +1,5 @@
 /* BitTorrent peer-wire connection management */
-/* $Id: peerconnect.c,v 1.3 2005/08/20 12:03:55 jonas Exp $ */
+/* $Id: peerconnect.c,v 1.4 2005/08/25 15:08:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "util/bitfield.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "util/time.h"
 
 
 /* Only one port is opened and shared between all running BitTorrent
@@ -117,10 +118,10 @@ bittorrent_peer_connection_timeout(struct bittorrent_peer_connection *peer)
 void
 set_bittorrent_peer_connection_timeout(struct bittorrent_peer_connection *peer)
 {
-	int timeout = get_opt_int("protocol.bittorrent.peerwire.timeout");
+	milliseconds_T timeout = (milliseconds_T) (get_opt_int("protocol.bittorrent.peerwire.timeout") * 1000);
 
 	kill_timer(&peer->timer);
-	install_timer(&peer->timer, timeout * 1000,
+	install_timer(&peer->timer, timeout,
 		      (void (*)(void *)) bittorrent_peer_connection_timeout,
 		      peer);
 }

@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.130 2005/08/25 18:26:58 rrowan Exp $
+# $Id: hooks.pl,v 1.131 2005/08/25 18:42:10 rrowan Exp $
 #
 # Copyleft by Russ Rowan (See the file "COPYING" for details.)
 #
@@ -737,7 +737,7 @@ B<deja>, B<gg>, B<groups>, B<gr>, B<nntp>, B<usenet>, B<nn>
 
 =item MirrorDot:
 
-B<md> or B<mirrordot>
+B<md> or B<mirrordot> <I<URL>>
 
 =cut
 	############################################################################
@@ -766,7 +766,7 @@ B<md> or B<mirrordot>
 
 =item Coral cache:
 
-B<cc>, B<coral>, or B<nyud> (requires URL)
+B<cc>, B<coral>, or B<nyud> <I<URL>>
 
 =cut
 	############################################################################
@@ -782,7 +782,7 @@ B<cc>, B<coral>, or B<nyud> (requires URL)
 
 =item AltaVista Babelfish:
 
-B<babelfish>, B<babel>, B<bf>, B<translate>, B<trans>, or B<b>
+B<babelfish>, B<babel>, B<bf>, B<translate>, B<trans>, or B<b> <I<from>> <I<to>>
 
 "babelfish german english" or "bf de en"
 
@@ -849,7 +849,7 @@ B<babelfish>, B<babel>, B<bf>, B<translate>, B<trans>, or B<b>
 
 =item W3C page validators:
 
-B<vhtml> or B<vcss> (current url or specified)
+B<vhtml> or B<vcss> <I<URL>> (or current url)
 
 =cut
 	############################################################################
@@ -918,7 +918,7 @@ There's no place like home...
 
 =item The Dialectizer:
 
-B<dia> <I<dialect>> (current url or specified)
+B<dia> <I<dialect>> <I<URL>> (or current url)
 
 Dialects: I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglatin>, or I<hacker>
 

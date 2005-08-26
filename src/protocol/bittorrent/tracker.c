@@ -1,5 +1,5 @@
 /* BitTorrent tracker HTTP protocol implementation */
-/* $Id: tracker.c,v 1.3 2005/08/25 15:08:00 zas Exp $ */
+/* $Id: tracker.c,v 1.4 2005/08/26 08:23:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,7 @@ set_bittorrent_tracker_interval(struct connection *conn)
 	if (interval <= 0)
 		interval = 60 * 5;
 
-	install_timer(&bittorrent->tracker.timer, (milliseconds_T) (interval * 1000),
+	install_timer(&bittorrent->tracker.timer, sec_to_ms(interval),
 		      (void (*)(void *)) do_send_bittorrent_tracker_request,
 		      conn);
 }

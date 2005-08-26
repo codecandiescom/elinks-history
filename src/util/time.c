@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.46 2005/08/25 15:08:00 zas Exp $ */
+/* $Id: time.c,v 1.47 2005/08/26 08:23:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "elinks.h"
 
 #include "osdep/osdep.h" /* For win32 gettimeofday() stub */
+#include "util/error.h"
 #include "util/time.h"
 
 /* Get the current time.
@@ -144,9 +145,44 @@ timeval_from_seconds(timeval_T *t, long seconds)
 }
 
 milliseconds_T
+sec_to_ms(long sec)
+{
+	assert(sec >= 0 && sec < LONG_MAX / 1000L);
+	if_assert_failed return (milliseconds_T) (LONG_MAX / 1000L);
+	
+	return (milliseconds_T) (sec * 1000L);
+}
+
+milliseconds_T
+add_ms_to_ms(milliseconds_T a, milliseconds_T b)
+{
+	long la = (long) a;
+	long lb = (long) b;
+	
+	assert(la >= 0 && lb >= 0 && lb < LONG_MAX - la);
+	if_assert_failed return (milliseconds_T) (LONG_MAX / 1000L);
+
+	return (milliseconds_T) (la + lb);
+}
+
+milliseconds_T
+mult_ms(milliseconds_T a, long lb)
+{
+	long la = (long) a;
+	
+	assert(la >= 0 && lb >= 0 && la < LONG_MAX / lb);
+	if_assert_failed return (milliseconds_T) (LONG_MAX / 1000L);
+
+	return (milliseconds_T) (la * lb);
+}
+
+milliseconds_T
 timeval_to_milliseconds(timeval_T *t)
 {
-	return (milliseconds_T) (t->sec * 1000L + t->usec / 1000L);
+	milliseconds_T a = sec_to_ms(t->sec);
+	milliseconds_T b = (milliseconds_T) (t->usec / 1000L);
+
+	return add_ms_to_ms(a, b);
 }
 
 long

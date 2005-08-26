@@ -1,5 +1,5 @@
 /* Internal "bittorrent" protocol implementation */
-/* $Id: connection.c,v 1.4 2005/08/25 15:08:00 zas Exp $ */
+/* $Id: connection.c,v 1.5 2005/08/26 08:23:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@ static void
 set_bittorrent_connection_timer(struct connection *conn)
 {
 	struct bittorrent_connection *bittorrent = conn->info;
-	milliseconds_T interval = (milliseconds_T) (get_opt_int("protocol.bittorrent.choke_interval") * 1000);
+	milliseconds_T interval = sec_to_ms(get_opt_int("protocol.bittorrent.choke_interval"));
 
 	install_timer(&bittorrent->timer, interval,
 		      (void (*)(void *)) update_bittorrent_connection_state,

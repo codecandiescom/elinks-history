@@ -1,5 +1,5 @@
 /* BitTorrent peer-wire connection management */
-/* $Id: peerconnect.c,v 1.4 2005/08/25 15:08:00 zas Exp $ */
+/* $Id: peerconnect.c,v 1.5 2005/08/26 08:23:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,7 @@ bittorrent_peer_connection_timeout(struct bittorrent_peer_connection *peer)
 void
 set_bittorrent_peer_connection_timeout(struct bittorrent_peer_connection *peer)
 {
-	milliseconds_T timeout = (milliseconds_T) (get_opt_int("protocol.bittorrent.peerwire.timeout") * 1000);
+	milliseconds_T timeout = sec_to_ms(get_opt_int("protocol.bittorrent.peerwire.timeout"));
 
 	kill_timer(&peer->timer);
 	install_timer(&peer->timer, timeout,

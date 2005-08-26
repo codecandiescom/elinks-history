@@ -1,5 +1,5 @@
 /* Periodic saving module */
-/* $Id: timer.c,v 1.3 2005/08/25 15:08:00 zas Exp $ */
+/* $Id: timer.c,v 1.4 2005/08/26 08:23:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ periodic_save_handler(void *xxx)
 	else
 		trigger_event(periodic_save_event_id);
 
-	interval = (milliseconds_T) (get_opt_int("infofiles.save_interval") * 1000);
+	interval = sec_to_ms(get_opt_int("infofiles.save_interval"));
 	if (!interval) return;
 
 	install_timer(&periodic_save_timer, interval, periodic_save_handler, NULL);

@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.46 2005/08/25 15:08:00 zas Exp $ */
+/* $Id: time.h,v 1.47 2005/08/26 08:23:47 zas Exp $ */
 
 #ifndef EL__UTIL_TIME_H
 #define EL__UTIL_TIME_H
@@ -11,7 +11,10 @@
 #endif
 
 typedef long milliseconds_T;
-
+#define MILLISECONDS_MAX ((milliseconds_T) (LONG_MAX / 1000L))
+#define ms_max(a, b) ((a) < (b) ? (b) : (a))
+#define ms_min(a, b) ((a) < (b) ? (a) : (b))
+			
 /* Is using atol() in this way acceptable? It seems
  * non-portable to me; time_t might not be a long. -- Miciah */
 #define str_to_time_t(s) ((time_t) atol(s))
@@ -24,6 +27,10 @@ typedef struct { long sec; long usec; } timeval_T;
 timeval_T *timeval_from_milliseconds(timeval_T *t, milliseconds_T milliseconds);
 timeval_T *timeval_from_seconds(timeval_T *t, long seconds);
 timeval_T *timeval_from_double(timeval_T *t, double x);
+
+milliseconds_T sec_to_ms(long sec);
+milliseconds_T add_ms_to_ms(milliseconds_T a, milliseconds_T b);
+milliseconds_T mult_ms(milliseconds_T a, long lb);
 
 milliseconds_T timeval_to_milliseconds(timeval_T *t);
 long timeval_to_seconds(timeval_T *t);

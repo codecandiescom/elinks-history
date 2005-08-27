@@ -1,3 +1,11 @@
+Sat Aug 27 04:22:35 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	Use |current_frame(ses)| instead of |ses->doc_view| in
+	add_link_info_to_string so that link information is shown in the
+	document-info box when the current document has frames.  
+
 Fri Aug 26 08:23:47 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: config/timer.c, document/refresh.c, network/progress.c,

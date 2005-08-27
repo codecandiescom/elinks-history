@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.123 2005/08/18 02:40:50 miciah Exp $ */
+/* $Id: document.c,v 1.124 2005/08/27 04:22:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ nowhere_box(struct terminal *term, unsigned char *title)
 static void
 add_link_info_to_string(struct string *msg, struct session *ses)
 {
-	struct document_view *doc_view = ses->doc_view;
+	struct document_view *doc_view = current_frame(ses);
 	struct terminal *term = ses->tab->term;
 	unsigned char *a;
 	struct link *link;

@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.47 2005/08/26 08:23:47 zas Exp $ */
+/* $Id: time.c,v 1.48 2005/09/02 09:49:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ timeval_T *
 timeval_from_milliseconds(timeval_T *t, milliseconds_T milliseconds)
 {
 	long ms = (long) milliseconds;
-	
+
 	t->sec = ms / 1000;
 	t->usec = (ms % 1000) * 1000;
 
@@ -149,7 +149,7 @@ sec_to_ms(long sec)
 {
 	assert(sec >= 0 && sec < LONG_MAX / 1000L);
 	if_assert_failed return (milliseconds_T) (LONG_MAX / 1000L);
-	
+
 	return (milliseconds_T) (sec * 1000L);
 }
 
@@ -158,7 +158,7 @@ add_ms_to_ms(milliseconds_T a, milliseconds_T b)
 {
 	long la = (long) a;
 	long lb = (long) b;
-	
+
 	assert(la >= 0 && lb >= 0 && lb < LONG_MAX - la);
 	if_assert_failed return (milliseconds_T) (LONG_MAX / 1000L);
 
@@ -169,7 +169,7 @@ milliseconds_T
 mult_ms(milliseconds_T a, long lb)
 {
 	long la = (long) a;
-	
+
 	assert(la >= 0 && lb >= 0 && la < LONG_MAX / lb);
 	if_assert_failed return (milliseconds_T) (LONG_MAX / 1000L);
 

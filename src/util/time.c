@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.48 2005/09/02 09:49:34 zas Exp $ */
+/* $Id: time.c,v 1.49 2005/09/02 09:52:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,9 +218,9 @@ timeval_cmp(timeval_T *t1, timeval_T *t2)
 }
 
 int
-timeval_div_int(int n, timeval_T *t)
+timeval_div_off_t(off_t n, timeval_T *t)
 {
-	longlong ln = 1000 * (longlong) n;
+	longlong ln = 1000 * (longlong) n;	/* FIXME: off_t -> longlong ??? Find a better way. --Zas */
 	longlong lsec = 1000 * (longlong) t->sec;
 	int lusec = t->usec / 1000;
 

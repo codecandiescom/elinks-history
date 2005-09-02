@@ -1,3 +1,21 @@
+Fri Sep  2 10:42:19 2005  Laurent Monin <zas@norz.org>:
+
+	* src/network/progress.c:
+
+	Last bits of last patch. Sorry.  
+
+Fri Sep  2 09:52:41 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	timeval_div_int() -> timeval_div_off_t().  
+
+Fri Sep  2 09:49:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/: time.c, time.h:
+
+	Drop trailing spaces.  
+
 Sat Aug 27 04:22:35 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/dialogs/document.c:

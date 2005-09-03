@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.133 2005/09/02 22:29:50 rrowan Exp $
+# $Id: hooks.pl,v 1.134 2005/09/03 20:49:16 rrowan Exp $
 #
 # Copyleft by Russ Rowan (See the file "COPYING" for details.)
 #
@@ -1002,6 +1002,37 @@ B<dict>, B<d>, B<def>, or B<define> <I<word>>
 			close FILE;
 		}
 		return $dict . $word;
+	}
+
+
+=item Google site search
+
+B<ss> <I<domain>> <I<string>>
+
+=over
+
+Use Google to search the current site or a specified site.  If a domain is not
+given, use the current one.
+
+=back
+
+=cut
+	############################################################################
+	# Google site search
+	if ($url =~ '^ss(| .*)$')
+	{
+		my ($site, $search) = $url =~ /^ss\s(.*)\s(.*)/;
+		unless ($site and $search)
+		{
+			($search) = $url =~ /^ss\s(.*)/;
+			$site = $current_url if $current_url and $current_url !~ '^file://';
+		}
+		if ($site and $search and $site ne 1 and $search ne 1)
+		{
+			return 'http://google.com/search?sitesearch=' . $site . '&q=' . $search;
+		}
+		return $current_url; #FIXME
+		#return;
 	}
 
 

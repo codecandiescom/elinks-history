@@ -1,5 +1,5 @@
 # Example ~/.elinks/hooks.pl
-# $Id: hooks.pl,v 1.134 2005/09/03 20:49:16 rrowan Exp $
+# $Id: hooks.pl,v 1.135 2005/09/03 20:56:58 rrowan Exp $
 #
 # Copyleft by Russ Rowan (See the file "COPYING" for details.)
 #
@@ -1036,6 +1036,11 @@ given, use the current one.
 	}
 
 
+=item Anything not a prefix, URL, or local file will be treated as a search
+using the search engine defined by the 'search' configuration option if
+'gotosearch' is set to some variation of 'yes'.
+
+=cut
 	############################################################################
 	# Anything not otherwise useful is a search
 	if ($current_url and loadrc("gotosearch") eq "yes")

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.58 2005/07/15 20:17:25 miciah Exp $ */
+/* $Id: options.h,v 1.59 2005/09/05 14:27:30 witekfl Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -102,6 +102,13 @@ struct document_options {
 	unsigned int invert_active_link:1;
 	color_T active_link_fg;
 	color_T active_link_bg;
+
+	/* Options related with IMG tag */
+	int filename_maxlen;
+	int label_maxlen;
+	int display_style;
+	int image_link_tagging;
+	unsigned int show_any_as_links:1;
 };
 
 /* Fills the structure with values from the option system. */

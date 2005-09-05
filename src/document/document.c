@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.100 2005/08/25 13:01:54 zas Exp $ */
+/* $Id: document.c,v 1.101 2005/09/05 15:23:49 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,6 +147,8 @@ done_document(struct document *document)
 	mem_free_if(document->lines1);
 	mem_free_if(document->lines2);
 	mem_free_if(document->options.framename);
+	mem_free(document->options.image_link_prefix);
+	mem_free(document->options.image_link_suffix);
 
 	while (!list_empty(document->forms)) {
 		done_form(document->forms.next);

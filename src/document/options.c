@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.68 2005/09/05 14:38:45 witekfl Exp $ */
+/* $Id: options.c,v 1.69 2005/09/05 15:23:49 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,6 +82,8 @@ init_document_options(struct document_options *doo)
 
 	doo->framename = "";
 
+	doo->image_link_prefix = "";
+	doo->image_link_suffix = "";
 	doo->filename_maxlen = get_opt_int("document.browse.images.filename_maxlen");
 	doo->label_maxlen = get_opt_int("document.browse.images.label_maxlen");
 	doo->display_style = get_opt_int("document.browse.images.display_style");
@@ -107,6 +109,8 @@ copy_opt(struct document_options *o1, struct document_options *o2)
 {
 	copy_struct(o1, o2);
 	o1->framename = stracpy(o2->framename);
+	o1->image_link_prefix = stracpy(get_opt_str("document.browse.images.image_link_prefix"));
+	o1->image_link_suffix = stracpy(get_opt_str("document.browse.images.image_link_suffix"));
 }
 
 

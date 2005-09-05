@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.108 2005/09/05 15:03:07 witekfl Exp $ */
+/* $Id: link.c,v 1.109 2005/09/05 15:23:49 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,8 +303,8 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 		int img_link_tag = html_context->options->image_link_tagging;
 
 		if (img_link_tag && (img_link_tag == 2 || add_brackets)) {
-			unsigned char *img_link_prefix = get_opt_str("document.browse.images.image_link_prefix");
-			unsigned char *img_link_suffix = get_opt_str("document.browse.images.image_link_suffix");
+			unsigned char *img_link_prefix = html_context->options->image_link_prefix;
+			unsigned char *img_link_suffix = html_context->options->image_link_suffix;
 			unsigned char *new_label = straconcat(img_link_prefix, label, img_link_suffix, NULL);
 
 			if (new_label) mem_free_set(&label, new_label);

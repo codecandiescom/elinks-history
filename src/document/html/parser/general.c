@@ -1,5 +1,5 @@
 /* General element handlers */
-/* $Id: general.c,v 1.17 2005/08/24 08:39:00 zas Exp $ */
+/* $Id: general.c,v 1.18 2005/09/05 14:14:35 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,7 +145,7 @@ html_apply_canvas_bgcolor(struct html_context *html_context)
 	}
 
 	if (html_context->has_link_lines
-	    && par_format.bgcolor != get_opt_color("document.colors.background")
+	    && par_format.bgcolor != html_context->options->default_bg
 	    && !search_html_stack(html_context, "BODY")) {
 		html_context->special_f(html_context, SP_COLOR_LINK_LINES);
 	}

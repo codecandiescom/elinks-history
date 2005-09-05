@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.104 2005/07/15 19:53:40 miciah Exp $ */
+/* $Id: link.c,v 1.105 2005/09/05 14:43:34 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,7 +217,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	unsigned char *src = NULL;
 	unsigned char *label = NULL;
 	unsigned char *usemap_attr;
-	int display_style = get_opt_int("document.browse.images.display_style");
+	int display_style = html_context->options->display_style;
 
 	/* Note about display_style:
 	 * 0     means always display IMG
@@ -304,7 +304,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	mem_free_set(&format.title, NULL);
 
 	if (label) {
-		int img_link_tag = get_opt_int("document.browse.images.image_link_tagging");
+		int img_link_tag = html_context->options->image_link_tagging;
 
 		if (img_link_tag && (img_link_tag == 2 || add_brackets)) {
 			unsigned char *img_link_prefix = get_opt_str("document.browse.images.image_link_prefix");
@@ -314,7 +314,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 			if (new_label) mem_free_set(&label, new_label);
 		}
 
-		if (!get_opt_bool("document.browse.images.show_any_as_links")) {
+		if (!html_context->options->show_any_as_links) {
 			put_image_label(a, label, html_context);
 
 		} else {

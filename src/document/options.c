@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.67 2005/07/15 20:17:25 miciah Exp $ */
+/* $Id: options.c,v 1.68 2005/09/05 14:38:45 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,6 +81,12 @@ init_document_options(struct document_options *doo)
 	doo->display_sups = get_opt_bool("document.html.display_sups");
 
 	doo->framename = "";
+
+	doo->filename_maxlen = get_opt_int("document.browse.images.filename_maxlen");
+	doo->label_maxlen = get_opt_int("document.browse.images.label_maxlen");
+	doo->display_style = get_opt_int("document.browse.images.display_style");
+	doo->image_link_tagging = get_opt_int("document.browse.images.image_link_tagging");
+	doo->show_any_as_links = get_opt_bool("document.browse.images.show_any_as_links");
 }
 
 int

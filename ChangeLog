@@ -1,3 +1,63 @@
+Mon Sep  5 15:23:49 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/: document.c, options.c, html/parser/link.c:
+
+	IMG tag prefix and suffix cached.  
+
+Mon Sep  5 15:20:47 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Typo.  
+
+Mon Sep  5 15:06:12 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/options.h:
+
+	Two more options for caching.  
+
+Mon Sep  5 15:03:07 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/link.c:
+
+	Simplification.  
+
+Mon Sep  5 14:51:55 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/link.c:
+
+	Caching options (continue).  
+
+Mon Sep  5 14:46:19 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/link.c:
+
+	Alphabet order.  
+
+Mon Sep  5 14:43:34 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/link.c:
+
+	Caching IMG part III.  
+
+Mon Sep  5 14:38:45 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/options.c:
+
+	Preparing for caching IMG part II.  
+
+Mon Sep  5 14:27:30 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/options.h:
+
+	Preparing for caching options related with IMG tag.  
+
+Mon Sep  5 14:14:35 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/general.c:
+
+	document.colors.background was already cached.  
+
 Sat Sep  3 20:56:58 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/hooks.pl:

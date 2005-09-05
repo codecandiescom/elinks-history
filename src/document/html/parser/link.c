@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.105 2005/09/05 14:43:34 witekfl Exp $ */
+/* $Id: link.c,v 1.106 2005/09/05 14:46:19 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,8 +23,8 @@
 #include "config/kbdbind.h"
 #include "document/html/frames.h"
 #include "document/html/parser/link.h"
-#include "document/html/parser/stack.h"
 #include "document/html/parser/parse.h"
+#include "document/html/parser/stack.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "globhist/globhist.h"

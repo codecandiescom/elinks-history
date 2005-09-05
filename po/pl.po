@@ -2331,7 +2331,7 @@ msgstr ""
 
 #: src/config/options.inc:215
 msgid "Maximum length for image filename"
-msgstr "Maksymalna d³ugo¶æ nazwy pliku obraza"
+msgstr "Maksymalna d³ugo¶æ nazwy pliku obrazka"
 
 #: src/config/options.inc:217
 msgid ""

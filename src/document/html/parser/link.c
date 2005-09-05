@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.106 2005/09/05 14:46:19 witekfl Exp $ */
+/* $Id: link.c,v 1.107 2005/09/05 14:51:55 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "document/html/parser/stack.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
+#include "document/options.h"
 #include "globhist/globhist.h"
 #include "mime/mime.h"
 #include "protocol/uri.h"
@@ -142,7 +143,7 @@ truncate_label(unsigned char *label, int max_len)
 
 /* Get image filename from its src attribute. */
 static unsigned char *
-get_image_filename_from_src(unsigned char *src)
+get_image_filename_from_src(struct document_options *opt, unsigned char *src)
 {
 	unsigned char *text = NULL;
 	unsigned char *start, *filename;
@@ -165,7 +166,7 @@ get_image_filename_from_src(unsigned char *src)
 		/* XXX: Due to a compatibility alias (added: 2004-12-15 in
 		 * 0.10pre3.CVS for document.browse.images.file_tags) this can
 		 * return a negative @max_len. */
-		int max_len = get_opt_int("document.browse.images.filename_maxlen");
+		int max_len = opt->filename_maxlen;
 
 		text = truncate_label(filename, max_len);
 		mem_free(filename);
@@ -177,14 +178,14 @@ get_image_filename_from_src(unsigned char *src)
 
 /* Returns an allocated string containing formatted @label. */
 static unsigned char *
-get_image_label(unsigned char *label)
+get_image_label(struct document_options *opt, unsigned char *label)
 {
 	unsigned char *formatted_label;
 	int max_len;
 
 	if (!label) return NULL;
 
-	max_len = get_opt_int("document.browse.images.label_maxlen");
+	max_len = opt->label_maxlen;
 	formatted_label = truncate_label(label, max_len);
 	mem_free(label);
 
@@ -284,18 +285,18 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 			label = stracpy("ISMAP");
 		} else {
 			if (display_style == 3)
-				label = get_image_filename_from_src(src);
+				label = get_image_filename_from_src(html_context->options, src);
 		}
 
 	} else {
-		label = get_image_label(label);
+		label = get_image_label(html_context->options, label);
 	}
 
 	if (!label || !*label) {
 		mem_free_set(&label, NULL);
 		add_brackets = 1;
 		if (display_style == 1)
-			label = get_image_filename_from_src(src);
+			label = get_image_filename_from_src(html_context->options, src);
 		if (!label || !*label)
 			mem_free_set(&label, stracpy("IMG"));
 	}

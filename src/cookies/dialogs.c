@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.87 2005/07/27 23:38:33 jonas Exp $ */
+/* $Id: dialogs.c,v 1.88 2005/09/06 13:38:45 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -420,7 +420,7 @@ static struct hierbox_browser_button cookie_buttons[] = {
 	{ N_("~Info"),		push_hierbox_info_button,	1 },
 	{ N_("~Add"),		push_add_button,		1 },
 	{ N_("~Edit"),		push_edit_button,		1 },
-	{ N_("~Delete"),		push_hierbox_delete_button,	1 },
+	{ N_("~Delete"),	push_hierbox_delete_button,	1 },
 	{ N_("~Clear"),		push_hierbox_clear_button,	1 },
 	{ N_("Sa~ve"),		push_save_button,		0 },
 };

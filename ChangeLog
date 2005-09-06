@@ -1,3 +1,36 @@
+Tue Sep  6 17:59:51 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/parse.c:
+
+	Drop prev_html. prev_html is equal to name - 1 for start_element or
+	name - 2 for end_element.  
+
+Tue Sep  6 17:48:33 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/parse.c:
+
+	Drop unused parameter endingtag.  
+
+Tue Sep  6 14:16:48 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: dialogs/menu.c, protocol/protocol.c, protocol/protocol.h,
+	session/session.c, session/task.c, viewer/dump/dump.c:
+
+	Calling get_user_program for every link was expensive.  Try user
+	protocol first when following a link instead. Not tested at all.  
+
+Tue Sep  6 13:46:22 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/: general.c, parse.c:
+
+	Simplification.  
+
+Tue Sep  6 13:38:45 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/cookies/dialogs.c:
+
+	Code aligned.  
+
 Mon Sep  5 15:23:49 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/document/: document.c, options.c, html/parser/link.c:

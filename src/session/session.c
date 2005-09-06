@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.638 2005/08/25 15:08:00 zas Exp $ */
+/* $Id: session.c,v 1.639 2005/09/06 14:16:48 witekfl Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -665,7 +665,7 @@ request_additional_file(struct session *ses, unsigned char *name, struct uri *ur
 	 * (normally the foreach() right below catches them all). Anyway,
 	 * having <frame src="mailto:foo"> would be just weird, wouldn't it?
 	 * --pasky */
-	if (get_protocol_external_handler(uri->protocol)) {
+	if (get_protocol_external_handler(ses->tab->term, uri)) {
 		return NULL;
 	}
 

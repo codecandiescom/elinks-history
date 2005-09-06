@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.99 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: protocol.c,v 1.100 2005/09/06 14:16:48 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "session/session.h"
+#include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -94,13 +95,6 @@ get_protocol(unsigned char *name, int namelen)
 	int start, end;
 	enum protocol protocol;
 
-	/* First check if this isn't some custom (protocol.user) protocol. It
-	 * has higher precedence than builtin handlers. */
-	/* TODO: In order to fully give higher precedence to user chosen
-	 *	 protocols we have to get some terminal to pass along. */
-	if (get_user_program(NULL, name, namelen))
-		return PROTOCOL_USER;
-
 	/* Almost dichotomic search is used here */
 	/* Starting at the HTTP entry which is the most common that will make
 	 * file and NNTP the next entries checked and amongst the third checks
@@ -134,6 +128,14 @@ get_protocol(unsigned char *name, int namelen)
 
 		protocol = (start + end) / 2;
 	}
+	/* Custom (protocol.user) protocol has higher precedence than builtin
+	 * handlers, but we will check for it when following a link.
+	 * Calling get_user_program for every link is too expensive. --witekfl */
+	/* TODO: In order to fully give higher precedence to user chosen
+	 *	 protocols we have to get some terminal to pass along. */
+
+	if (get_user_program(NULL, name, namelen))
+		return PROTOCOL_USER;
 
 	return PROTOCOL_UNKNOWN;
 }
@@ -235,15 +237,18 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 }
 
 protocol_external_handler_T *
-get_protocol_external_handler(enum protocol protocol)
+get_protocol_external_handler(struct terminal *term, struct uri *uri)
 {
-	assert(VALID_PROTOCOL(protocol));
+	unsigned char *prog;
+
+	assert(uri && VALID_PROTOCOL(uri->protocol));
 	if_assert_failed return NULL;
 
-	if (protocol == PROTOCOL_USER)
+	prog = get_user_program(term, struri(uri), uri->protocollen);
+	if (prog && *prog)
 		return user_protocol_handler;
 
-	if (!protocol_backends[protocol].handler)
+	if (!protocol_backends[uri->protocol].handler)
 		return generic_external_protocol_handler;
 
 	return NULL;

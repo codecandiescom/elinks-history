@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.41 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: protocol.h,v 1.42 2005/09/06 14:16:48 witekfl Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -7,6 +7,7 @@
 
 struct connection;
 struct session;
+struct terminal;
 struct uri;
 
 enum protocol {
@@ -49,7 +50,7 @@ int get_protocol_free_syntax(enum protocol protocol);
 int get_protocol_need_ssl(enum protocol protocol);
 
 protocol_handler_T *get_protocol_handler(enum protocol protocol);
-protocol_external_handler_T *get_protocol_external_handler(enum protocol protocol);
+protocol_external_handler_T *get_protocol_external_handler(struct terminal *, struct uri *);
 
 /* Resolves the given protocol @name with length @namelen to a known protocol,
  * PROTOCOL_UNKOWN or PROTOCOL_INVALID if no protocol part could be identified.

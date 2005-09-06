@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.182 2005/07/21 14:32:59 jonas Exp $ */
+/* $Id: task.c,v 1.183 2005/09/06 14:16:48 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,7 +428,7 @@ do_redirect(struct session *ses, struct download **download_p, struct cache_entr
 		protocol_external_handler_T *fn;
 		struct uri *uri = cached->redirect;
 
-		fn = get_protocol_external_handler(uri->protocol);
+		fn = get_protocol_external_handler(ses->tab->term, uri);
 		if (fn) {
 			fn(ses, uri);
 			*download_p = NULL;
@@ -562,7 +562,7 @@ do_follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 		return;
 	}
 
-	external_handler = get_protocol_external_handler(uri->protocol);
+	external_handler = get_protocol_external_handler(ses->tab->term, uri);
 	if (external_handler) {
 		external_handler(ses, uri);
 		return;

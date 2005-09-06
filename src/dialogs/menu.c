@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.406 2005/07/21 14:32:59 jonas Exp $ */
+/* $Id: menu.c,v 1.407 2005/09/06 14:16:48 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -553,7 +553,7 @@ query_file(struct session *ses, struct uri *uri, void *data,
 		return;
 	}
 
-	if (get_protocol_external_handler(uri->protocol)) {
+	if (get_protocol_external_handler(ses->tab->term, uri)) {
 		print_error_dialog(ses, S_EXTERNAL_PROTOCOL, uri, PRI_CANCEL);
 		return;
 	}

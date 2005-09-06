@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.186 2005/09/06 13:46:23 witekfl Exp $ */
+/* $Id: parse.c,v 1.187 2005/09/06 17:48:33 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -742,7 +742,7 @@ ng:;
 
 static unsigned char *
 start_element(struct element_info *ei,
-              unsigned char *name, int namelen, int endingtag,
+              unsigned char *name, int namelen,
               unsigned char *html, unsigned char *prev_html,
               unsigned char *eof, unsigned char *attr,
               struct html_context *html_context)
@@ -906,7 +906,7 @@ start_element(struct element_info *ei,
 
 static unsigned char *
 end_element(struct element_info *ei,
-            unsigned char *name, int namelen, int endingtag,
+            unsigned char *name, int namelen,
             unsigned char *html, unsigned char *prev_html,
             unsigned char *eof, unsigned char *attr,
             struct html_context *html_context)
@@ -999,9 +999,9 @@ process_element(unsigned char *name, int namelen, int endingtag,
 	if (!ei) return html;
 
 	if (!endingtag) {
-		return start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, html_context);
+		return start_element(ei, name, namelen, html, prev_html, eof, attr, html_context);
 	} else {
-		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, html_context);
+		return end_element(ei, name, namelen, html, prev_html, eof, attr, html_context);
 	}
 }
 

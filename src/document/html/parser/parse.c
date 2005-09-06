@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.185 2005/08/12 13:44:54 witekfl Exp $ */
+/* $Id: parse.c,v 1.186 2005/09/06 13:46:23 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -794,7 +794,7 @@ start_element(struct element_info *ei,
 
 	/* Support for <meta refresh="..."> inside <body>. (bug 700) */
 	if (ei->func == html_meta && html_context->was_body) {
-		html_handle_body_meta(html_context, name, eof);
+		html_handle_body_meta(html_context, prev_html, eof);
 		html_context->was_body = 0;
 	}
 

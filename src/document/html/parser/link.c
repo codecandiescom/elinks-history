@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.113 2005/09/07 12:18:39 zas Exp $ */
+/* $Id: link.c,v 1.114 2005/09/07 12:21:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -824,36 +824,32 @@ html_link(struct html_context *html_context, unsigned char *a)
 
 	if (link_display == 1) goto put_link_line;	/* Only title */
 
+#define APPEND(what) do { \
+		add_to_string(&text, first ? " (" : ", "); \
+		add_to_string(&text, (what)); \
+		first = 0; \
+	} while (0)
+
 	if (name_neq_title) {
-		add_to_string(&text, first ? " (" : ", ");
-		add_to_string(&text, name);
-		first = 0;
+		APPEND(name);
 	}
 
 	if (link_display >= 3 && link.hreflang) {
-		add_to_string(&text, first ? " (" : ", ");
-		add_to_string(&text, link.hreflang);
-		first = 0;
+		APPEND(link.hreflang);
 	}
 
 	if (link_display >= 4 && link.content_type) {
-		add_to_string(&text, first ? " (" : ", ");
-		add_to_string(&text, link.content_type);
-		first = 0;
+		APPEND(link.content_type);
 	}
 
 	if (link.lang && link.type == LT_ALTERNATE_LANG &&
 	    (link_display < 3 || (link.hreflang &&
 				  strcasecmp(link.hreflang, link.lang)))) {
-		add_to_string(&text, first ? " (" : ", ");
-		add_to_string(&text, link.lang);
-		first = 0;
+		APPEND(link.lang);
 	}
 
 	if (link.media) {
-		add_to_string(&text, first ? " (" : ", ");
-		add_to_string(&text, link.media);
-		first = 0;
+		APPEND(link.media);
 	}
 
 	if (!first) add_char_to_string(&text, ')');

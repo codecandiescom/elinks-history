@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.103 2005/09/07 20:12:48 zas Exp $ */
+/* $Id: document.c,v 1.104 2005/09/07 23:18:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,21 +213,19 @@ get_document_css_magic(struct document *document)
 void
 update_cached_document_options(void)
 {
-	color_T active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
-	color_T active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");
-	int color_active_link = get_opt_bool("document.browse.links.active_link.enable_color");
-	int invert_active_link = get_opt_bool("document.browse.links.active_link.invert");
-	int underline_active_link = get_opt_bool("document.browse.links.active_link.underline");
-	int bold_active_link = get_opt_bool("document.browse.links.active_link.bold");
 	struct document *document;
+	struct active_link_options active_link;
+
+	memset(&active_link, 0, sizeof(active_link));	/* Safer. */
+	active_link.fg = get_opt_color("document.browse.links.active_link.colors.text");
+	active_link.bg = get_opt_color("document.browse.links.active_link.colors.background");
+	active_link.color = get_opt_bool("document.browse.links.active_link.enable_color");
+	active_link.invert = get_opt_bool("document.browse.links.active_link.invert");
+	active_link.underline = get_opt_bool("document.browse.links.active_link.underline");
+	active_link.bold = get_opt_bool("document.browse.links.active_link.bold");
 
 	foreach (document, format_cache) {
-		document->options.active_link_fg = active_link_fg;
-		document->options.active_link_bg = active_link_bg;
-		document->options.color_active_link = color_active_link;
-		document->options.invert_active_link = invert_active_link;
-		document->options.underline_active_link = underline_active_link;
-		document->options.bold_active_link = bold_active_link;
+		copy_struct(&document->options.active_link, &active_link);
 	}
 }
 

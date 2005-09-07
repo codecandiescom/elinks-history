@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.62 2005/09/07 20:12:48 zas Exp $ */
+/* $Id: options.h,v 1.63 2005/09/07 23:18:04 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -8,6 +8,16 @@
 #include "util/box.h"
 
 struct session;
+
+/* Active link coloring options */
+struct active_link_options {
+	unsigned int color:1;
+	unsigned int underline:1;
+	unsigned int bold:1;
+	unsigned int invert:1;
+	color_T fg;
+	color_T bg;
+};
 
 /* This mostly acts as a option cache so rendering will be faster. However it
  * is also used to validate and invalidate documents in the format cache as to
@@ -96,12 +106,7 @@ struct document_options {
 	/* Active link coloring */
 	/* This is mostly here to make use of this option cache so link
 	 * drawing is faster. --jonas */
-	unsigned int color_active_link:1;
-	unsigned int underline_active_link:1;
-	unsigned int bold_active_link:1;
-	unsigned int invert_active_link:1;
-	color_T active_link_fg;
-	color_T active_link_bg;
+	struct active_link_options active_link;
 
 	/* Options related with IMG tag */
 	struct {

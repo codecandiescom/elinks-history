@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.329 2005/07/27 23:38:33 jonas Exp $ */
+/* $Id: link.c,v 1.330 2005/09/07 23:18:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,21 +163,21 @@ init_link_drawing(struct document_view *doc_view, struct link *link, int invert)
 	color_flags = (doc_opts->color_flags | COLOR_DECREASE_LIGHTNESS);
 	color_mode = doc_opts->color_mode;
 
-	if (doc_opts->underline_active_link)
+	if (doc_opts->active_link.underline)
 		template->attr |= SCREEN_ATTR_UNDERLINE;
 
-	if (doc_opts->bold_active_link)
+	if (doc_opts->active_link.bold)
 		template->attr |= SCREEN_ATTR_BOLD;
 
-	if (doc_opts->color_active_link) {
-		colors.foreground = doc_opts->active_link_fg;
-		colors.background = doc_opts->active_link_bg;
+	if (doc_opts->active_link.color) {
+		colors.foreground = doc_opts->active_link.fg;
+		colors.background = doc_opts->active_link.bg;
 	} else {
 		colors.foreground = link->color.foreground;
 		colors.background = link->color.background;
 	}
 
-	if (doc_opts->invert_active_link && invert) {
+	if (invert && doc_opts->active_link.invert) {
 		swap_values(color_T, colors.foreground, colors.background);
 
 		/* Highlight text-input form-fields correctly if contrast

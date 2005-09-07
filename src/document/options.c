@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.71 2005/09/07 20:12:48 zas Exp $ */
+/* $Id: options.c,v 1.72 2005/09/07 23:18:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,8 +46,8 @@ init_document_options(struct document_options *doo)
 #endif
 	doo->default_image_link = get_opt_color("document.colors.image");
 
-	doo->active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
-	doo->active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");
+	doo->active_link.fg = get_opt_color("document.browse.links.active_link.colors.text");
+	doo->active_link.bg = get_opt_color("document.browse.links.active_link.colors.background");
 
 	if (get_opt_bool("document.colors.increase_contrast"))
 		doo->color_flags |= COLOR_INCREASE_CONTRAST;
@@ -68,10 +68,10 @@ init_document_options(struct document_options *doo)
 	doo->use_tabindex = get_opt_bool("document.browse.links.use_tabindex");
 	doo->links_numbering = get_opt_bool("document.browse.links.numbering");
 
-	doo->color_active_link = get_opt_bool("document.browse.links.active_link.enable_color");
-	doo->invert_active_link = get_opt_bool("document.browse.links.active_link.invert");
-	doo->underline_active_link = get_opt_bool("document.browse.links.active_link.underline");
-	doo->bold_active_link = get_opt_bool("document.browse.links.active_link.bold");
+	doo->active_link.color = get_opt_bool("document.browse.links.active_link.enable_color");
+	doo->active_link.invert = get_opt_bool("document.browse.links.active_link.invert");
+	doo->active_link.underline = get_opt_bool("document.browse.links.active_link.underline");
+	doo->active_link.bold = get_opt_bool("document.browse.links.active_link.bold");
 
 	doo->table_order = get_opt_bool("document.browse.table_move_order");
 	doo->tables = get_opt_bool("document.html.display_tables");

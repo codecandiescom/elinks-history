@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.110 2005/09/07 08:31:06 zas Exp $ */
+/* $Id: link.c,v 1.111 2005/09/07 09:33:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,7 +213,8 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	unsigned char *src = NULL;
 	unsigned char *label = NULL;
 	unsigned char *usemap_attr;
-	int display_style = html_context->options->image_link.display_style;
+	struct document_options *options = html_context->options;
+	int display_style = options->image_link.display_style;
 
 	/* Note about display_style:
 	 * 0     means always display IMG
@@ -221,7 +222,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	 * 2     means display alt/title attribute if possible, IMG if not
 	 * 3     means display alt/title attribute if possible, filename if not */
 
-	usemap_attr = get_attr_val(a, "usemap", html_context->options);
+	usemap_attr = get_attr_val(a, "usemap", options);
 	if (usemap_attr) {
 		unsigned char *joined_urls = join_urls(html_context->base_href,
 						       usemap_attr);
@@ -241,13 +242,13 @@ html_img_do(unsigned char *a, unsigned char *object_src,
  	}
 
 	ismap = format.link
-	        && has_attr(a, "ismap", html_context->options)
+	        && has_attr(a, "ismap", options)
 	        && !usemap;
 
 	if (display_style == 2 || display_style == 3) {
-		label = get_attr_val(a, "alt", html_context->options);
+		label = get_attr_val(a, "alt", options);
 		if (!label)
-			label = get_attr_val(a, "title", html_context->options);
+			label = get_attr_val(a, "title", options);
 
 		/* Little hack to preserve rendering of [   ], in directories listing,
 		 * but we still want to drop extra spaces in alt or title attribute
@@ -256,8 +257,8 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	}
 
 	src = null_or_stracpy(object_src);
-	if (!src) src = get_url_val(a, "src", html_context->options);
-	if (!src) src = get_url_val(a, "dynsrc", html_context->options);
+	if (!src) src = get_url_val(a, "src", options);
+	if (!src) src = get_url_val(a, "dynsrc", options);
 
 	/* If we have no label yet (no title or alt), so
 	 * just use default ones, or image filename. */
@@ -280,18 +281,18 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 			label = stracpy("ISMAP");
 		} else {
 			if (display_style == 3)
-				label = get_image_filename_from_src(html_context->options->image_link.filename_maxlen, src);
+				label = get_image_filename_from_src(options->image_link.filename_maxlen, src);
 		}
 
 	} else {
-		label = get_image_label(html_context->options->image_link.label_maxlen, label);
+		label = get_image_label(options->image_link.label_maxlen, label);
 	}
 
 	if (!label || !*label) {
 		mem_free_set(&label, NULL);
 		add_brackets = 1;
 		if (display_style == 1)
-			label = get_image_filename_from_src(html_context->options->image_link.filename_maxlen, src);
+			label = get_image_filename_from_src(options->image_link.filename_maxlen, src);
 		if (!label || !*label)
 			mem_free_set(&label, stracpy("IMG"));
 	}
@@ -300,17 +301,17 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	mem_free_set(&format.title, NULL);
 
 	if (label) {
-		int img_link_tag = html_context->options->image_link.tagging;
+		int img_link_tag = options->image_link.tagging;
 
 		if (img_link_tag && (img_link_tag == 2 || add_brackets)) {
-			unsigned char *img_link_prefix = html_context->options->image_link.prefix;
-			unsigned char *img_link_suffix = html_context->options->image_link.suffix;
+			unsigned char *img_link_prefix = options->image_link.prefix;
+			unsigned char *img_link_suffix = options->image_link.suffix;
 			unsigned char *new_label = straconcat(img_link_prefix, label, img_link_suffix, NULL);
 
 			if (new_label) mem_free_set(&label, new_label);
 		}
 
-		if (!html_context->options->image_link.show_any_as_links) {
+		if (!options->image_link.show_any_as_links) {
 			put_image_label(a, label, html_context);
 
 		} else {
@@ -318,8 +319,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 				format.image = join_urls(html_context->base_href, src);
 			}
 
-			format.title = get_attr_val(a, "title",
-			                           html_context->options);
+			format.title = get_attr_val(a, "title", options);
 
 			if (ismap) {
 				unsigned char *new_link;

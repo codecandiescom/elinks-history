@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.114 2005/09/07 12:21:48 zas Exp $ */
+/* $Id: link.c,v 1.115 2005/09/07 12:55:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -775,8 +775,6 @@ html_link(struct html_context *html_context, unsigned char *a)
 	int link_display = html_context->options->meta_link_display;
 	unsigned char *name;
 	struct hlink link;
-	static unsigned char link_rel_string[] = "Link: ";
-	static unsigned char link_rev_string[] = "Reverse link: ";
 	struct string text;
 	int name_neq_title = 0;
 	int first = 1;
@@ -855,17 +853,23 @@ html_link(struct html_context *html_context, unsigned char *a)
 	if (!first) add_char_to_string(&text, ')');
 
 put_link_line:
-	if (text.length)
-		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
-			      text.source, link.href, html_context->base_target,
-			      html_context);
-	else
-		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
-			      name, link.href, html_context->base_target,
-			      html_context);
+	{
+		unsigned char *prefix = (link.direction == LD_REL)
+					? "Link: " : "Reverse link: ";
 
-	if (text.source) done_string(&text);
+		if (text.length)
+			put_link_line(prefix,
+				      text.source, link.href,
+				      html_context->base_target,
+				      html_context);
+		else
+			put_link_line(prefix,
+				      name, link.href,
+				      html_context->base_target,
+				      html_context);
 
+		if (text.source) done_string(&text);
+	}
 free_and_return:
 	html_link_clear(&link);
 }

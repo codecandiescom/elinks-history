@@ -1,3 +1,58 @@
+Wed Sep  7 20:12:48 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/: document.c, options.c, options.h:
+
+	Introduce done_document_options().  
+
+Wed Sep  7 12:58:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_link(): undef APPEND macro.  
+
+Wed Sep  7 12:57:51 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_link(): simplify code.  
+
+Wed Sep  7 12:55:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_link(): drop @link_re(l|v)_string variables and simplify code.  
+
+Wed Sep  7 12:21:48 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_link(): use a macro.  
+
+Wed Sep  7 12:18:39 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	Rename label |only_title| to more appropriate |put_link_line|.  
+
+Wed Sep  7 11:57:08 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	Shorten lines a bit using a local variable, missed one.  
+
+Wed Sep  7 09:33:42 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	Shorten lines a bit using a local variable.  
+
+Wed Sep  7 08:31:06 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/: document.c, options.c, options.h,
+	html/parser/link.c:
+
+	Move options related to IMG tag to their own struct.  
+
 Tue Sep  6 17:59:51 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/document/html/parser/parse.c:

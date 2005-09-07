@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.112 2005/09/07 11:57:08 zas Exp $ */
+/* $Id: link.c,v 1.113 2005/09/07 12:18:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -822,7 +822,7 @@ html_link(struct html_context *html_context, unsigned char *a)
 	} else
 		add_to_string(&text, name);
 
-	if (link_display == 1) goto only_title;
+	if (link_display == 1) goto put_link_line;	/* Only title */
 
 	if (name_neq_title) {
 		add_to_string(&text, first ? " (" : ", ");
@@ -858,7 +858,7 @@ html_link(struct html_context *html_context, unsigned char *a)
 
 	if (!first) add_char_to_string(&text, ')');
 
-only_title:
+put_link_line:
 	if (text.length)
 		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
 			      text.source, link.href, html_context->base_target,

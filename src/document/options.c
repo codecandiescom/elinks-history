@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.69 2005/09/05 15:23:49 witekfl Exp $ */
+/* $Id: options.c,v 1.70 2005/09/07 08:31:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,13 +82,13 @@ init_document_options(struct document_options *doo)
 
 	doo->framename = "";
 
-	doo->image_link_prefix = "";
-	doo->image_link_suffix = "";
-	doo->filename_maxlen = get_opt_int("document.browse.images.filename_maxlen");
-	doo->label_maxlen = get_opt_int("document.browse.images.label_maxlen");
-	doo->display_style = get_opt_int("document.browse.images.display_style");
-	doo->image_link_tagging = get_opt_int("document.browse.images.image_link_tagging");
-	doo->show_any_as_links = get_opt_bool("document.browse.images.show_any_as_links");
+	doo->image_link.prefix = "";
+	doo->image_link.suffix = "";
+	doo->image_link.filename_maxlen = get_opt_int("document.browse.images.filename_maxlen");
+	doo->image_link.label_maxlen = get_opt_int("document.browse.images.label_maxlen");
+	doo->image_link.display_style = get_opt_int("document.browse.images.display_style");
+	doo->image_link.tagging = get_opt_int("document.browse.images.image_link_tagging");
+	doo->image_link.show_any_as_links = get_opt_bool("document.browse.images.show_any_as_links");
 }
 
 int
@@ -109,8 +109,8 @@ copy_opt(struct document_options *o1, struct document_options *o2)
 {
 	copy_struct(o1, o2);
 	o1->framename = stracpy(o2->framename);
-	o1->image_link_prefix = stracpy(get_opt_str("document.browse.images.image_link_prefix"));
-	o1->image_link_suffix = stracpy(get_opt_str("document.browse.images.image_link_suffix"));
+	o1->image_link.prefix = stracpy(get_opt_str("document.browse.images.image_link_prefix"));
+	o1->image_link.suffix = stracpy(get_opt_str("document.browse.images.image_link_suffix"));
 }
 
 

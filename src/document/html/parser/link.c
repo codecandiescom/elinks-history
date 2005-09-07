@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.109 2005/09/05 15:23:49 witekfl Exp $ */
+/* $Id: link.c,v 1.110 2005/09/07 08:31:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,7 +213,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	unsigned char *src = NULL;
 	unsigned char *label = NULL;
 	unsigned char *usemap_attr;
-	int display_style = html_context->options->display_style;
+	int display_style = html_context->options->image_link.display_style;
 
 	/* Note about display_style:
 	 * 0     means always display IMG
@@ -280,18 +280,18 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 			label = stracpy("ISMAP");
 		} else {
 			if (display_style == 3)
-				label = get_image_filename_from_src(html_context->options->filename_maxlen, src);
+				label = get_image_filename_from_src(html_context->options->image_link.filename_maxlen, src);
 		}
 
 	} else {
-		label = get_image_label(html_context->options->label_maxlen, label);
+		label = get_image_label(html_context->options->image_link.label_maxlen, label);
 	}
 
 	if (!label || !*label) {
 		mem_free_set(&label, NULL);
 		add_brackets = 1;
 		if (display_style == 1)
-			label = get_image_filename_from_src(html_context->options->filename_maxlen, src);
+			label = get_image_filename_from_src(html_context->options->image_link.filename_maxlen, src);
 		if (!label || !*label)
 			mem_free_set(&label, stracpy("IMG"));
 	}
@@ -300,17 +300,17 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 	mem_free_set(&format.title, NULL);
 
 	if (label) {
-		int img_link_tag = html_context->options->image_link_tagging;
+		int img_link_tag = html_context->options->image_link.tagging;
 
 		if (img_link_tag && (img_link_tag == 2 || add_brackets)) {
-			unsigned char *img_link_prefix = html_context->options->image_link_prefix;
-			unsigned char *img_link_suffix = html_context->options->image_link_suffix;
+			unsigned char *img_link_prefix = html_context->options->image_link.prefix;
+			unsigned char *img_link_suffix = html_context->options->image_link.suffix;
 			unsigned char *new_label = straconcat(img_link_prefix, label, img_link_suffix, NULL);
 
 			if (new_label) mem_free_set(&label, new_label);
 		}
 
-		if (!html_context->options->show_any_as_links) {
+		if (!html_context->options->image_link.show_any_as_links) {
 			put_image_label(a, label, html_context);
 
 		} else {

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.115 2005/09/07 12:55:34 zas Exp $ */
+/* $Id: link.c,v 1.116 2005/09/07 12:57:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -856,20 +856,15 @@ put_link_line:
 	{
 		unsigned char *prefix = (link.direction == LD_REL)
 					? "Link: " : "Reverse link: ";
+		unsigned char *link_name = (text.length)
+					   ? text.source : name;
 
-		if (text.length)
-			put_link_line(prefix,
-				      text.source, link.href,
-				      html_context->base_target,
-				      html_context);
-		else
-			put_link_line(prefix,
-				      name, link.href,
-				      html_context->base_target,
-				      html_context);
+		put_link_line(prefix, link_name, link.href,
+			      html_context->base_target, html_context);
 
 		if (text.source) done_string(&text);
 	}
+
 free_and_return:
 	html_link_clear(&link);
 }

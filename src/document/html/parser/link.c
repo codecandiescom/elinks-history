@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.111 2005/09/07 09:33:42 zas Exp $ */
+/* $Id: link.c,v 1.112 2005/09/07 11:57:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,7 +267,7 @@ html_img_do(unsigned char *a, unsigned char *object_src,
 		/* Do we want to display images with no alt/title and with no
 		 * link on them ?
 		 * If not, just exit now. */
-		if (!html_context->options->images && !format.link) {
+		if (!options->images && !format.link) {
 			mem_free_if(src);
 			if (usemap) kill_html_stack_item(html_context, &html_top);
 			return;

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.61 2005/09/07 08:31:06 zas Exp $ */
+/* $Id: options.h,v 1.62 2005/09/07 20:12:48 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -117,6 +117,9 @@ struct document_options {
 
 /* Fills the structure with values from the option system. */
 void init_document_options(struct document_options *doo);
+
+/* Free allocated document options. */
+void done_document_options(struct document_options *options);
 
 /* Copies the values of one struct @from to the other @to.
  * Note that the framename is dynamically allocated. */

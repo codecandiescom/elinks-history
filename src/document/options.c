@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.70 2005/09/07 08:31:06 zas Exp $ */
+/* $Id: options.c,v 1.71 2005/09/07 20:12:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,6 +113,13 @@ copy_opt(struct document_options *o1, struct document_options *o2)
 	o1->image_link.suffix = stracpy(get_opt_str("document.browse.images.image_link_suffix"));
 }
 
+void
+done_document_options(struct document_options *options)
+{
+	mem_free_if(options->framename);
+	mem_free(options->image_link.prefix);
+	mem_free(options->image_link.suffix);
+}
 
 void
 toggle_document_option(struct session *ses, unsigned char *option_name)

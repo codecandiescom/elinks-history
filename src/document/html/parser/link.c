@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.116 2005/09/07 12:57:51 zas Exp $ */
+/* $Id: link.c,v 1.117 2005/09/07 12:58:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -849,6 +849,8 @@ html_link(struct html_context *html_context, unsigned char *a)
 	if (link.media) {
 		APPEND(link.media);
 	}
+
+#undef APPEND
 
 	if (!first) add_char_to_string(&text, ')');
 

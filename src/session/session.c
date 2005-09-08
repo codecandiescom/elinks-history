@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.639 2005/09/06 14:16:48 witekfl Exp $ */
+/* $Id: session.c,v 1.640 2005/09/08 13:42:13 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1362,4 +1362,14 @@ struct link *
 get_current_session_link(struct session *ses)
 {
 	return get_current_link_in_view(current_frame(ses));
+}
+
+int
+eat_kbd_repeat_count(struct session *ses)
+{
+	int count = ses->kbdprefix.repeat_count;
+
+	ses->kbdprefix.repeat_count = 0;
+
+	return count;
 }

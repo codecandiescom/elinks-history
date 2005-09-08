@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.704 2005/09/08 12:58:22 zas Exp $ */
+/* $Id: view.c,v 1.705 2005/09/08 13:42:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,10 +111,8 @@ enum frame_event_status
 move_page_down(struct session *ses, struct document_view *doc_view)
 {
 	enum frame_event_status status;
-	int count;
+	int count = eat_kbd_repeat_count(ses);
 
-	count = ses->kbdprefix.repeat_count;
-	ses->kbdprefix.repeat_count = 0;
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	do {
@@ -155,10 +153,8 @@ enum frame_event_status
 move_page_up(struct session *ses, struct document_view *doc_view)
 {
 	enum frame_event_status status;
-	int count;
+	int count = eat_kbd_repeat_count(ses);
 
-	count = ses->kbdprefix.repeat_count;
-	ses->kbdprefix.repeat_count = 0;
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	do {
@@ -190,8 +186,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 		wraparound = get_opt_bool("document.browse.links.wraparound");
 	}
 
-	count = ses->kbdprefix.repeat_count;
-	ses->kbdprefix.repeat_count = 0;
+	count = eat_kbd_repeat_count(ses);
 
 	do {
 		int current_link = doc_view->vs->current_link;
@@ -248,8 +243,7 @@ move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, in
 
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 
-	count = ses->kbdprefix.repeat_count;
-	ses->kbdprefix.repeat_count = 0;
+	count = eat_kbd_repeat_count(ses);
 
 	do {
 		int current_link = doc_view->vs->current_link;
@@ -340,9 +334,7 @@ horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps
 enum frame_event_status
 scroll_up(struct session *ses, struct document_view *doc_view)
 {
-	int steps = ses->kbdprefix.repeat_count;
-
-	ses->kbdprefix.repeat_count = 0;
+	int steps = eat_kbd_repeat_count(ses);
 
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
@@ -353,9 +345,7 @@ scroll_up(struct session *ses, struct document_view *doc_view)
 enum frame_event_status
 scroll_down(struct session *ses, struct document_view *doc_view)
 {
-	int steps = ses->kbdprefix.repeat_count;
-
-	ses->kbdprefix.repeat_count = 0;
+	int steps = eat_kbd_repeat_count(ses);
 
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
@@ -366,9 +356,7 @@ scroll_down(struct session *ses, struct document_view *doc_view)
 enum frame_event_status
 scroll_left(struct session *ses, struct document_view *doc_view)
 {
-	int steps = ses->kbdprefix.repeat_count;
-
-	ses->kbdprefix.repeat_count = 0;
+	int steps = eat_kbd_repeat_count(ses);
 
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.horizontal_step");
@@ -379,9 +367,7 @@ scroll_left(struct session *ses, struct document_view *doc_view)
 enum frame_event_status
 scroll_right(struct session *ses, struct document_view *doc_view)
 {
-	int steps = ses->kbdprefix.repeat_count;
-
-	ses->kbdprefix.repeat_count = 0;
+	int steps = eat_kbd_repeat_count(ses);
 
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.horizontal_step");
@@ -574,10 +560,8 @@ enum frame_event_status
 move_cursor_rel(struct session *ses, struct document_view *view,
 	        int rx, int ry)
 {
-	int count = ses->kbdprefix.repeat_count;
+	int count = eat_kbd_repeat_count(ses);
 	int x, y;
-
-	ses->kbdprefix.repeat_count = 0;
 
 	int_lower_bound(&count, 1);
 
@@ -641,11 +625,9 @@ copy_current_link_to_clipboard(struct session *ses,
 int
 try_jump_to_link_number(struct session *ses, struct document_view *doc_view)
 {
-	int link_number = ses->kbdprefix.repeat_count - 1;
+	int link_number = eat_kbd_repeat_count(ses) - 1;
 
 	if (link_number < 0) return 1;
-
-	ses->kbdprefix.repeat_count = 0;
 
 	if (!doc_view) return 0;
 

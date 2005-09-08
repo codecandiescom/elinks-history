@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.178 2005/08/04 12:53:10 jonas Exp $ */
+/* $Id: session.h,v 1.179 2005/09/08 13:42:13 zas Exp $ */
 
 #ifndef EL__SESSION_SESSION_H
 #define EL__SESSION_SESSION_H
@@ -258,5 +258,8 @@ void add_questions_entry(void (*callback)(struct session *, void *), void *data)
 void check_questions_queue(struct session *ses);
 
 unsigned char *get_homepage_url(void);
+
+/* Returns current keyboard repeat count and reset it. */
+int eat_kbd_repeat_count(struct session *ses);
 
 #endif

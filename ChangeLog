@@ -1,3 +1,58 @@
+Thu Sep  8 16:00:19 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, session/session.c:
+
+	Use milliseconds_T instead of long.  
+
+Thu Sep  8 15:45:41 2005  Laurent Monin <zas@norz.org>:
+
+	* src/session/download.c:
+
+	common_download_do(): init_file_download() sets all fields to zero
+	so simplify.  
+
+Thu Sep  8 14:05:24 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Sep  8 14:04:09 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: config/timer.c, config/urlhist.c, dialogs/exmode.c,
+	viewer/text/search.c:
+
+	Let translate modules names.  
+
+Thu Sep  8 13:42:13 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: session/session.c, session/session.h, terminal/tab.c,
+	viewer/action.c, viewer/text/view.c:
+
+	Introduce eat_kbd_repeat_count() and simplify code.  
+
+Thu Sep  8 12:58:22 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	move_link(): we need at least 2 links to make wraparound useful.  
+
+Thu Sep  8 09:20:33 2005  Laurent Monin <zas@norz.org>:
+
+	* src/util/memory.h:
+
+	mem_align_alloc__(): use size_t type for @mask too, it may fix a
+	potential issue when sizeof(int) < sizeof(size_t), in
+	ALIGN_MEMORY_SIZE() calculations.  
+
+Wed Sep  7 23:18:04 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: document/document.c, document/options.c,
+	document/options.h, viewer/text/link.c:
+
+	Move active link colors options to their own struct and simplify
+	code.  
+
 Wed Sep  7 20:12:48 2005  Laurent Monin <zas@norz.org>:
 
 	* src/document/: document.c, options.c, options.h:

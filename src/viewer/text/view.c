@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.703 2005/08/24 08:52:58 zas Exp $ */
+/* $Id: view.c,v 1.704 2005/09/08 12:58:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,12 +181,11 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 
-	if (doc_view->document->nlinks == 0) {
-		/* There are no links, therefore the only sensible value for
-		 * wraparound_bound is -1 (no link selected). */
+	if (doc_view->document->nlinks < 2) {
+		/* Wraparound only makes sense with more than one link. */
 		wraparound_bound = -1;
 	} else {
-		/* We only bother this option is there's some links
+		/* We only bother this option if there's some links
 		 * in document. */
 		wraparound = get_opt_bool("document.browse.links.wraparound");
 	}

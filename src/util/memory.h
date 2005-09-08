@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.32 2005/05/10 02:56:46 jonas Exp $ */
+/* $Id: memory.h,v 1.33 2005/09/08 09:20:33 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -116,7 +116,7 @@ mem_align_alloc__(
 #ifdef DEBUG_MEMLEAK
 		  unsigned char *file, int line,
 #endif
-		  void **ptr, size_t old, size_t new, size_t objsize, int mask)
+		  void **ptr, size_t old, size_t new, size_t objsize, size_t mask)
 {
 	size_t newsize = ALIGN_MEMORY_SIZE(new, mask);
 	size_t oldsize = ALIGN_MEMORY_SIZE(old, mask);

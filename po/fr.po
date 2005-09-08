@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-08-24 10:53+0200\n"
-"PO-Revision-Date: 2005-08-24 11:02+0200\n"
+"POT-Creation-Date: 2005-09-08 16:04+0200\n"
+"PO-Revision-Date: 2005-09-08 16:02+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,9 +33,9 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/bfu/msgbox.c:190 src/config/dialogs.c:57 src/config/dialogs.c:394
 #: src/cookies/dialogs.c:355 src/dialogs/edit.c:98 src/dialogs/info.c:134
 #: src/dialogs/options.c:209 src/dialogs/options.c:289 src/mime/dialogs.c:130
-#: src/protocol/auth/dialogs.c:111 src/protocol/protocol.c:230
+#: src/protocol/auth/dialogs.c:111 src/protocol/protocol.c:232
 #: src/scripting/lua/core.c:378 src/scripting/lua/core.c:458
-#: src/session/session.c:796 src/viewer/text/search.c:1594
+#: src/session/session.c:798 src/viewer/text/search.c:1594
 msgid "~OK"
 msgstr "~OK"
 
@@ -76,14 +76,14 @@ msgstr "Supprimer les items marqués ?"
 #: src/bfu/hierbox.c:726 src/bfu/hierbox.c:762 src/bfu/hierbox.c:783
 #: src/bfu/hierbox.c:854 src/config/dialogs.c:835 src/dialogs/menu.c:127
 #: src/formhist/formhist.c:419 src/mime/dialogs.c:70 src/session/task.c:273
-#: src/terminal/tab.c:191 src/terminal/tab.c:227
+#: src/terminal/tab.c:190 src/terminal/tab.c:226
 msgid "~Yes"
 msgstr "~Oui"
 
 #: src/bfu/hierbox.c:727 src/bfu/hierbox.c:763 src/bfu/hierbox.c:784
 #: src/bfu/hierbox.c:855 src/config/dialogs.c:836 src/dialogs/menu.c:128
 #: src/formhist/formhist.c:420 src/mime/dialogs.c:71 src/session/task.c:274
-#: src/terminal/tab.c:192 src/terminal/tab.c:228
+#: src/terminal/tab.c:191 src/terminal/tab.c:227
 msgid "~No"
 msgstr "~Non"
 
@@ -169,30 +169,30 @@ msgstr "Chaîne vide non autorisée"
 msgid "~Cancel"
 msgstr "~Annuler"
 
-#: src/bfu/leds.c:73
+#: src/bfu/leds.c:75
 msgid "Clock"
 msgstr "Horloge"
 
-#: src/bfu/leds.c:74
+#: src/bfu/leds.c:76
 msgid "Digital clock in the status bar."
 msgstr "Horloge digitale dans la barre de status."
 
-#: src/bfu/leds.c:76 src/bfu/leds.c:93 src/config/options.inc:1120
+#: src/bfu/leds.c:78 src/bfu/leds.c:95 src/config/options.inc:1120
 #: src/config/options.inc:1127 src/ecmascript/ecmascript.c:41
 #: src/globhist/globhist.c:64 src/mime/backend/mailcap.c:94
 #: src/mime/backend/mimetypes.c:53 src/network/ssl/ssl.c:82
 msgid "Enable"
 msgstr "Activation"
 
-#: src/bfu/leds.c:78
+#: src/bfu/leds.c:80
 msgid "Whether to display a digital clock in the status bar."
 msgstr "Afficher l'horloge digitale dans la barre de status."
 
-#: src/bfu/leds.c:80
+#: src/bfu/leds.c:82
 msgid "Format"
 msgstr "Format"
 
-#: src/bfu/leds.c:82
+#: src/bfu/leds.c:84
 msgid ""
 "Format string for the digital clock. See the strftime(3)\n"
 "manpage for details."
@@ -200,15 +200,15 @@ msgstr ""
 "Chaîne de formatage pour l'horloge digitale.\n"
 "Voir la page de manuel de strftime(3) pour plus de détails."
 
-#: src/bfu/leds.c:89
+#: src/bfu/leds.c:91
 msgid "LEDs"
 msgstr "LEDs"
 
-#: src/bfu/leds.c:91
+#: src/bfu/leds.c:93
 msgid "LEDs (visual indicators) options."
 msgstr "Options concernant les LEDs (indicateurs visuels)."
 
-#: src/bfu/leds.c:95
+#: src/bfu/leds.c:97
 msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
@@ -217,11 +217,11 @@ msgstr ""
 "Ces indicateurs visuels informent de différents états."
 
 #. name:
-#: src/bfu/leds.c:301 src/bfu/leds.c:343
+#: src/bfu/leds.c:303 src/bfu/leds.c:345
 msgid "LED indicators"
 msgstr "Indicateurs LED"
 
-#: src/bfu/leds.c:302
+#: src/bfu/leds.c:304
 msgid ""
 "What the different LEDs indicate:\n"
 "\n"
@@ -1058,8 +1058,8 @@ msgstr "Envoyer le formulaire"
 msgid "Submit form and reload"
 msgstr "Envoyer le formulaire et recharger"
 
-#: src/config/actions-main.inc:99 src/terminal/tab.c:188
-#: src/terminal/tab.c:224
+#: src/config/actions-main.inc:99 src/terminal/tab.c:187
+#: src/terminal/tab.c:223
 msgid "Close tab"
 msgstr "Fermer l'onglet"
 
@@ -1783,8 +1783,8 @@ msgid "Description"
 msgstr "Description"
 
 #: src/config/dialogs.c:323 src/protocol/bittorrent/dialogs.c:595
-#: src/protocol/protocol.c:224 src/session/session.c:282
-#: src/session/session.c:950 src/viewer/text/textarea.c:363
+#: src/protocol/protocol.c:226 src/session/session.c:283
+#: src/session/session.c:952 src/viewer/text/textarea.c:363
 #: src/viewer/text/textarea.c:370
 msgid "Error"
 msgstr "Erreur"
@@ -4286,6 +4286,16 @@ msgid "Folder"
 msgstr "Dossier"
 
 #. name:
+#: src/config/timer.c:74
+msgid "Periodic Saving"
+msgstr "Sauvegarde périodique"
+
+#. name:
+#: src/config/urlhist.c:62
+msgid "Goto URL History"
+msgstr "Historique Aller à"
+
+#. name:
 #: src/cookies/cookies.c:81 src/cookies/cookies.c:825
 msgid "Cookies"
 msgstr "Cookies"
@@ -4624,6 +4634,11 @@ msgstr "~Effacer"
 #: src/dialogs/download.c:489
 msgid "Download manager"
 msgstr "Gestionnaire de téléchargements"
+
+#. name:
+#: src/dialogs/exmode.c:150
+msgid "Exmode"
+msgstr "Exmode"
 
 #: src/dialogs/info.c:42
 msgid "About"
@@ -7064,7 +7079,7 @@ msgid_plural "%u unavailable"
 msgstr[0] "%u indisponible"
 msgstr[1] "%u indisponibles"
 
-#: src/protocol/bittorrent/dialogs.c:580 src/session/session.c:273
+#: src/protocol/bittorrent/dialogs.c:580 src/session/session.c:274
 #, c-format
 msgid "Unable to retrieve %s"
 msgstr "Incapable de récupérer %s"
@@ -7527,25 +7542,25 @@ msgstr ""
 "Toutes les entrées possibles peuvent être lues dans le dialogue\n"
 "Info. En-têtes."
 
-#: src/protocol/protocol.c:226
+#: src/protocol/protocol.c:228
 #, c-format
 msgid "This version of ELinks does not contain %s protocol support"
 msgstr ""
 "Cette version de ELinks ne contient pas le support pour le protocole %s"
 
-#: src/protocol/protocol.c:254
+#: src/protocol/protocol.c:259
 msgid "Protocols"
 msgstr "Protocoles"
 
-#: src/protocol/protocol.c:256
+#: src/protocol/protocol.c:261
 msgid "Protocol specific options."
 msgstr "Options des protocoles."
 
-#: src/protocol/protocol.c:258
+#: src/protocol/protocol.c:263
 msgid "No-proxy domains"
 msgstr "Domaines ignorés en ce qui concerne les proxys"
 
-#: src/protocol/protocol.c:260
+#: src/protocol/protocol.c:265
 msgid ""
 "Comma separated list of domains for which the proxy (HTTP/FTP)\n"
 "should be disabled. Optionally, a port can be specified for some\n"
@@ -7558,7 +7573,7 @@ msgstr ""
 "NO_PROXY sera utilisé."
 
 #. name:
-#: src/protocol/protocol.c:296
+#: src/protocol/protocol.c:301
 msgid "Protocol"
 msgstr "Protocole"
 
@@ -7872,11 +7887,11 @@ msgstr "Le fichier sera ouvert avec le programme '%s'."
 msgid "~Open"
 msgstr "~Ouvrir"
 
-#: src/session/session.c:747 src/session/session.c:765 src/session/task.c:270
+#: src/session/session.c:749 src/session/session.c:767 src/session/task.c:270
 msgid "Warning"
 msgstr "Avertissement"
 
-#: src/session/session.c:748
+#: src/session/session.c:750
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -7895,7 +7910,7 @@ msgstr ""
 "défaut sera utilisée. Si vous n'avez aucune idée de quoi nous parlons alors "
 "faites juste ça. Toutes nos excuses pour ce désagrément."
 
-#: src/session/session.c:766
+#: src/session/session.c:768
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -7916,11 +7931,11 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/session/session.c:791
+#: src/session/session.c:793
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: src/session/session.c:792
+#: src/session/session.c:794
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -7996,15 +8011,15 @@ msgstr "Mauvais évènement %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évènement: %d (%s)"
 
-#: src/terminal/kbd.c:1080
+#: src/terminal/kbd.c:1081
 msgid "Too many bytes read from the itrm!"
 msgstr "Trop d'octets lus en provenance de itrm!"
 
-#: src/terminal/tab.c:189
+#: src/terminal/tab.c:188
 msgid "Do you really want to close the current tab?"
 msgstr "Êtes-vous sûr de vouloir fermer l'onglet courant ?"
 
-#: src/terminal/tab.c:225
+#: src/terminal/tab.c:224
 msgid "Do you really want to close all except the current tab?"
 msgstr "Êtes-vous sûr de vouloir fermer tout sauf l'onglet courant ?"
 
@@ -8255,6 +8270,11 @@ msgstr "Ignorer la casse"
 msgid "Search backward"
 msgstr "Chercher en arrière"
 
+#. name:
+#: src/viewer/text/search.c:1655
+msgid "Search History"
+msgstr "Historique des recherches"
+
 #: src/viewer/text/textarea.c:364
 msgid "You cannot launch an external editor in the anonymous mode."
 msgstr "Vous ne pouvez utiliser un éditeur externe en mode anonyme."
@@ -8263,23 +8283,18 @@ msgstr "Vous ne pouvez utiliser un éditeur externe en mode anonyme."
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:735
+#: src/viewer/text/view.c:716
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:735
+#: src/viewer/text/view.c:716
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1307
+#: src/viewer/text/view.c:1288
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1308
+#: src/viewer/text/view.c:1289
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid "%d byte"
-#~ msgid_plural "%d bytes"
-#~ msgstr[0] "%d octet"
-#~ msgstr[1] "%d octets"

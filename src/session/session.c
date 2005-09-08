@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.640 2005/09/08 13:42:13 zas Exp $ */
+/* $Id: session.c,v 1.641 2005/09/08 16:00:19 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -441,16 +441,16 @@ void
 display_timer(struct session *ses)
 {
 	timeval_T start, stop, duration;
-	long t;
+	milliseconds_T t;
 
 	timeval_now(&start);
 	draw_formatted(ses, 3);
 	timeval_now(&stop);
 	timeval_sub(&duration, &start, &stop);
 
-	t = ((long) timeval_to_milliseconds(&duration)) * DISPLAY_TIME;
+	t = mult_ms(timeval_to_milliseconds(&duration), DISPLAY_TIME);
 	if (t < DISPLAY_TIME_MIN) t = DISPLAY_TIME_MIN;
-	install_timer(&ses->display_timer, (milliseconds_T) t,
+	install_timer(&ses->display_timer, t,
 		      (void (*)(void *)) display_timer,
 		      ses);
 

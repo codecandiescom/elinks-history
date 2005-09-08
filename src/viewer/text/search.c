@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.359 2005/06/26 09:46:22 miciah Exp $ */
+/* $Id: search.c,v 1.360 2005/09/08 14:04:09 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1652,7 +1652,7 @@ done_search_history(struct module *module)
 }
 
 struct module search_history_module = struct_module(
-	/* name: */		"Search History",
+	/* name: */		N_("Search History"),
 	/* options: */		NULL,
 	/* hooks: */		search_history_hooks,
 	/* submodules: */	NULL,

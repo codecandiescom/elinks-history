@@ -1,5 +1,5 @@
 /* Periodic saving module */
-/* $Id: timer.c,v 1.4 2005/08/26 08:23:47 zas Exp $ */
+/* $Id: timer.c,v 1.5 2005/09/08 14:04:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "config/options.h"
 #include "config/timer.h"
+#include "intl/gettext/libintl.h"
 #include "main/event.h"
 #include "main/module.h"
 #include "main/timer.h"
@@ -70,7 +71,7 @@ done_timer(struct module *module)
 }
 
 struct module periodic_saving_module = struct_module(
-	/* name: */		"Periodic Saving",
+	/* name: */		N_("Periodic Saving"),
 	/* options: */		NULL,
 	/* hooks: */		NULL,
 	/* submodules: */	NULL,

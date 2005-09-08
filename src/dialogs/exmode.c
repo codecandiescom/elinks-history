@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.61 2005/07/17 07:35:25 miciah Exp $ */
+/* $Id: exmode.c,v 1.62 2005/09/08 14:04:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,7 +147,7 @@ done_exmode(struct module *module)
 }
 
 struct module exmode_module = struct_module(
-	/* name: */		"Exmode",
+	/* name: */		N_("Exmode"),
 	/* options: */		NULL,
 	/* hooks: */		NULL,
 	/* submodules: */	NULL,

@@ -1,5 +1,5 @@
 /* Downloads progression stuff. */
-/* $Id: progress.c,v 1.34 2005/09/02 10:42:19 zas Exp $ */
+/* $Id: progress.c,v 1.35 2005/09/09 07:27:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,19 +75,17 @@ update_progress(struct progress *progress, off_t loaded, off_t size, off_t pos)
 	progress->data_in_secs[CURRENT_SPD_SEC - 1] += bytes_delta;
 	progress->cur_loaded += bytes_delta;
 
-	{
-		progress->average_speed = timeval_div_off_t(progress->loaded, &progress->elapsed);
-		progress->current_speed = progress->cur_loaded / (CURRENT_SPD_SEC * ((long) SPD_DISP_TIME) / 1000);
+	progress->current_speed = progress->cur_loaded / (CURRENT_SPD_SEC * ((long) SPD_DISP_TIME) / 1000);
 
-		progress->size = size;
-		progress->pos = pos;
-		if (progress->size != -1 && progress->size < progress->pos)
-			progress->size = progress->pos;
+	progress->pos = pos;
+	progress->size = size;
+	if (progress->size != -1 && progress->size < progress->pos)
+		progress->size = progress->pos;
 
-		if (progress->average_speed)	/* Division by zero risk */
-			timeval_from_seconds(&progress->estimated_time,
-					   (progress->size - progress->pos) / progress->average_speed);
-	}
+	progress->average_speed = timeval_div_off_t(progress->loaded, &progress->elapsed);
+	if (progress->average_speed)	/* Division by zero risk */
+		timeval_from_seconds(&progress->estimated_time,
+				   (progress->size - progress->pos) / progress->average_speed);
 
 	install_timer(&progress->timer, SPD_DISP_TIME, progress->timer_func, progress->timer_func_data);
 }

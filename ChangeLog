@@ -1,3 +1,15 @@
+Fri Sep  9 15:40:06 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	count_items(): move variable declaration where it is used.  
+
+Fri Sep  9 07:27:48 2005  Laurent Monin <zas@norz.org>:
+
+	* src/network/progress.c:
+
+	update_progress(): reduce indentation and reorganize code a bit.  
+
 Thu Sep  8 16:00:19 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: setup.h, session/session.c:

@@ -92,3 +92,10 @@ Neuromancer > Sure, it may not compile, but we have PDF docs.  Sweet.
 %
 [Miciah] Are chr, uchar, LLONG, and LDOUBLE beneficial?
 [fonseca] begone spawn of darkness
+%
+fonseca > I think it'll take no more than 5 hours to release 0.10.6
+ Miciah > Yay!
+fonseca > The other releases has taken 2 hours, to go through the backlog. But this one is a bit harder.
+fonseca > Not all is in the elinks-cvs mailbox.
+arcatan > I'm going to quote that when you have hacked 10 hours
+fonseca > And I'm going to quote that when I've done it in 3 hours. ;)

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.87 2005/09/13 23:18:31 zas Exp $ */
+/* $Id: color.c,v 1.88 2005/09/13 23:20:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ get_color(color_T color, struct rgb *palette, int level)
 	static struct rgb_cache_entry cache[RGB_HASH_SIZE];
 	struct rgb_cache_entry *rgb_cache = &cache[HASH_RGB(color, level)];
 
-	/* Uninialized cache entries have level = 0. */
+	/* Uninitialized cache entries have level set to zero. */
 	if (rgb_cache->level == 0
 	    || rgb_cache->level != level
 	    || rgb_cache->rgb != color) {

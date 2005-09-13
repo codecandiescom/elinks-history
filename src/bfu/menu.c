@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.301 2005/09/09 15:40:06 zas Exp $ */
+/* $Id: menu.c,v 1.302 2005/09/13 09:22:58 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -84,7 +84,7 @@ free_menu_items(struct menu_item *items)
 {
 	struct menu_item *item;
 
-	if (!items) return;
+	if (!items || !(items->flags & FREE_ANY)) return;
 
 	/* Note that flags & FREE_DATA applies only when menu is aborted;
 	 * it is zeroed when some menu field is selected. */
@@ -115,7 +115,7 @@ do_menu_selected(struct terminal *term, struct menu_item *items,
 #endif
 		refresh_hotkeys(term, menu);
 		add_window(term, menu_handler, menu);
-	} else if (items->flags & FREE_ANY) {
+	} else {
 		free_menu_items(items);
 	}
 }
@@ -882,9 +882,7 @@ menu_handler(struct window *win, struct term_event *ev)
 			break;
 
 		case EVENT_ABORT:
-			if (menu->items->flags & FREE_ANY)
-				free_menu_items(menu->items);
-
+			free_menu_items(menu->items);
 			break;
 	}
 }

@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.32 2005/09/13 12:06:09 miciah Exp $ */
+/* $Id: window.c,v 1.33 2005/09/13 14:28:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@ redraw_from_window(struct window *win)
 {
 	struct terminal *term = win->term;
 	struct term_event ev;
-	struct window *end = (void *) &term->windows;
+	struct window *end = (struct window *) &term->windows;
 
 	if (term->redrawing != 0) return;
 

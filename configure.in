@@ -1294,6 +1294,7 @@ AC_OUTPUT([ \
  src/document/sgml/Makefile \
  src/document/sgml/html/Makefile \
  src/ecmascript/Makefile \
+ src/ecmascript/spidermonkey/Makefile \
  src/encoding/Makefile \
  src/formhist/Makefile \
  src/globhist/Makefile \

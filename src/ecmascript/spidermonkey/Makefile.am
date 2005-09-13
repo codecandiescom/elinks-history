@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.3 2005/09/13 22:20:04 pasky Exp $
+## $Id: Makefile.am,v 1.4 2005/09/13 22:28:06 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -15,6 +15,8 @@ INCLUDES += $(SPIDERMONKEY_CFLAGS)
 noinst_LIBRARIES = libbackend.a
 
 libbackend_a_SOURCES = \
+ document.c \
+ document.h \
  form.c \
  form.h \
  location.c \

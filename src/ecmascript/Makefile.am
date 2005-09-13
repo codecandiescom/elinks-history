@@ -1,7 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.4 2005/09/13 17:35:23 pasky Exp $
+## $Id: Makefile.am,v 1.5 2005/09/13 21:52:31 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
+
+SUBDIRS=spidermonkey
 
 INCLUDES += $(SPIDERMONKEY_CFLAGS)
 

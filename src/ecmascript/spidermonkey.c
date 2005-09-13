@@ -1,29 +1,17 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.219 2005/07/21 15:24:43 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.220 2005/09/13 16:30:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-/* For wild SpiderMonkey installations. */
-#ifdef CONFIG_BEOS
-#define XP_BEOS
-#elif CONFIG_OS2
-#define XP_OS2
-#elif CONFIG_RISCOS
-#error Out of luck, buddy!
-#elif CONFIG_UNIX
-#define XP_UNIX
-#elif CONFIG_WIN32
-#define XP_WIN
-#endif
-
-#include <jsapi.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "elinks.h"
+
+#include "ecmascript/spidermonkey/util.h"
 
 #include "bfu/dialog.h"
 #include "cache/cache.h"
@@ -65,72 +53,6 @@
 
 
 /*** Classes */
-
-static void
-string_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string)
-{
-	if (!string) {
-		*vp = JSVAL_NULL;
-	} else {
-		*vp = STRING_TO_JSVAL(JS_NewStringCopyZ(ctx, string));
-	}
-}
-
-static void
-astring_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string)
-{
-	string_to_jsval(ctx, vp, string);
-	mem_free_if(string);
-}
-
-static void
-int_to_jsval(JSContext *ctx, jsval *vp, int number)
-{
-	*vp = INT_TO_JSVAL(number);
-}
-
-static void
-object_to_jsval(JSContext *ctx, jsval *vp, JSObject *object)
-{
-	*vp = OBJECT_TO_JSVAL(object);
-}
-
-static void
-boolean_to_jsval(JSContext *ctx, jsval *vp, int boolean)
-{
-	*vp = BOOLEAN_TO_JSVAL(boolean);
-}
-
-static void
-undef_to_jsval(JSContext *ctx, jsval *vp)
-{
-	*vp = JSVAL_NULL;
-}
-
-
-static int
-jsval_to_boolean(JSContext *ctx, jsval *vp)
-{
-	jsval val;
-
-	if (JS_ConvertValue(ctx, *vp, JSTYPE_BOOLEAN, &val) == JS_FALSE) {
-		return JS_FALSE;
-	}
-
-	return JSVAL_TO_BOOLEAN(val);
-}
-
-static unsigned char *
-jsval_to_string(JSContext *ctx, jsval *vp)
-{
-	jsval val;
-
-	if (JS_ConvertValue(ctx, *vp, JSTYPE_STRING, &val) == JS_FALSE) {
-		return "";
-	}
-
-	return empty_string_or_(JS_GetStringBytes(JS_ValueToString(ctx, val)));
-}
 
 static JSBool window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 static JSBool window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);

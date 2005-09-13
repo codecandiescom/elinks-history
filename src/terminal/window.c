@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.27 2005/05/17 12:56:58 zas Exp $ */
+/* $Id: window.c,v 1.28 2005/09/13 10:26:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,10 +108,9 @@ delete_window_ev(struct window *win, struct term_event *ev)
 	/* If next is a tab send it to the current tab */
 	if (w->type == WINDOW_TAB) {
 		w = get_current_tab(w->term);
-		if (w) w->handler(w, ev);
-	} else {
-		w->handler(w, ev);
 	}
+
+	if (w) w->handler(w, ev);
 }
 
 void

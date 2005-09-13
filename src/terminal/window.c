@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.29 2005/09/13 10:31:11 zas Exp $ */
+/* $Id: window.c,v 1.30 2005/09/13 10:34:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ get_parent_ptr(struct window *win, int *x, int *y)
 struct ewd {
 	void (*fn)(void *);
 	void *data;
-	int b;
+	unsigned int called_once:1;
 };
 
 static void
@@ -143,7 +143,7 @@ empty_window_handler(struct window *win, struct term_event *ev)
 	void (*fn)(void *) = ewd->fn;
 	void *data = ewd->data;
 
-	if (ewd->b) return;
+	if (ewd->called_once) return;
 
 	switch (ev->ev) {
 		case EVENT_INIT:
@@ -160,7 +160,7 @@ empty_window_handler(struct window *win, struct term_event *ev)
 			break;
 	}
 
-	ewd->b = 1;
+	ewd->called_once = 1;
 	delete_window(win);
 	fn(data);
 	term_send_event(term, ev);
@@ -174,6 +174,6 @@ add_empty_window(struct terminal *term, void (*fn)(void *), void *data)
 	if (!ewd) return;
 	ewd->fn = fn;
 	ewd->data = data;
-	ewd->b = 0;
+	ewd->called_once = 0;
 	add_window(term, empty_window_handler, ewd);
 }

@@ -1,4 +1,4 @@
-/* $Id: util.h,v 1.1 2005/09/13 16:30:48 pasky Exp $ */
+/* $Id: util.h,v 1.2 2005/09/13 21:52:38 pasky Exp $ */
 
 #ifndef EL__ECMASCRIPT_SPIDERMONKEY_UTIL_H
 #define EL__ECMASCRIPT_SPIDERMONKEY_UTIL_H
@@ -17,16 +17,18 @@
 #endif
 
 #include <jsapi.h>
+#include "util/memory.h"
+#include "util/string.h"
 
-void string_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string);
-void astring_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string);
-void int_to_jsval(JSContext *ctx, jsval *vp, int number);
-void object_to_jsval(JSContext *ctx, jsval *vp, JSObject *object);
-void boolean_to_jsval(JSContext *ctx, jsval *vp, int boolean);
-void undef_to_jsval(JSContext *ctx, jsval *vp);
+static void string_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string);
+static void astring_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string);
+static void int_to_jsval(JSContext *ctx, jsval *vp, int number);
+static void object_to_jsval(JSContext *ctx, jsval *vp, JSObject *object);
+static void boolean_to_jsval(JSContext *ctx, jsval *vp, int boolean);
+static void undef_to_jsval(JSContext *ctx, jsval *vp);
 
-int jsval_to_boolean(JSContext *ctx, jsval *vp);
-unsigned char *jsval_to_string(JSContext *ctx, jsval *vp);
+static int jsval_to_boolean(JSContext *ctx, jsval *vp);
+static unsigned char *jsval_to_string(JSContext *ctx, jsval *vp);
 
 
 

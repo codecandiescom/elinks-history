@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.47 2005/05/16 23:24:20 zas Exp $ */
+/* $Id: terminal.h,v 1.48 2005/09/13 12:33:05 zas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -85,14 +85,14 @@ struct terminal {
 	/* This is the screen. See terminal/screen.h */
 	struct terminal_screen *screen;
 
-	/* Indicates the master terminal, that is the terminal under
-	 * supervision of the master ELinks instance (the one doing all the
-	 * work and even maintaining these structures ;-). */
-	int master;
-
 	/* These are pipes for communication with the ELinks instance owning
 	 * this terminal. */
 	int fdin, fdout;
+
+	/* This indicates that the terminal is blocked, that is nothing should
+	 * be drawn on it etc. Typically an external program is running on it
+	 * right now. This is a file descriptor. */
+	int blocked;
 
 	/* Terminal dimensions. */
 	int width, height;
@@ -100,12 +100,12 @@ struct terminal {
 	/* Indicates whether we are currently in the process of redrawing the
 	 * stuff being displayed on the terminal. It is typically used to
 	 * prevent redrawing inside of redrawing. */
-	int redrawing;
+	unsigned int redrawing:2;
 
-	/* This indicates that the terminal is blocked, that is nothing should
-	 * be drawn on it etc. Typically an external program is running on it
-	 * right now. */
-	int blocked;
+	/* Indicates the master terminal, that is the terminal under
+	 * supervision of the master ELinks instance (the one doing all the
+	 * work and even maintaining these structures ;-). */
+	unsigned int master:1;
 
 	/* The current tab number. */
 	int current_tab;

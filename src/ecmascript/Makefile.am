@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.6 2005/09/13 22:12:48 pasky Exp $
+## $Id: Makefile.am,v 1.7 2005/09/13 22:20:04 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -10,6 +10,7 @@ INCLUDES += $(SPIDERMONKEY_CFLAGS)
 noinst_LIBRARIES = libecmascript.a
 libecmascript_a_LIBADD = \
  spidermonkey/form.o \
+ spidermonkey/location.o \
  spidermonkey/window.o
 libecmascript_a_SOURCES = \
  ecmascript.c \

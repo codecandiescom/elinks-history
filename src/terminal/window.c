@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.33 2005/09/13 14:28:25 zas Exp $ */
+/* $Id: window.c,v 1.34 2005/09/13 14:50:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,15 +22,15 @@ redraw_from_window(struct window *win)
 	struct term_event ev;
 	struct window *end = (struct window *) &term->windows;
 
-	if (term->redrawing != 0) return;
+	if (term->redrawing != TREDRAW_READY) return;
 
 	set_redraw_term_event(&ev, term->width, term->height);
-	term->redrawing = 1;
+	term->redrawing = TREDRAW_BUSY;
 	for (win = win->prev; win != end; win = win->prev) {
 		if (!inactive_tab(win))
 			win->handler(win, &ev);
 	}
-	term->redrawing = 0;
+	term->redrawing = TREDRAW_READY;
 }
 
 void
@@ -39,17 +39,17 @@ redraw_below_window(struct window *win)
 	struct terminal *term = win->term;
 	struct term_event ev;
 	struct window *end = win;
-	int tr = term->redrawing;
+	enum term_redrawing_state saved_redraw_state = term->redrawing;
 
-	if (term->redrawing > 1) return;
+	if (term->redrawing == TREDRAW_DELAYED) return;
 
 	set_redraw_term_event(&ev, term->width, term->height);
-	term->redrawing = 2;
+	term->redrawing = TREDRAW_DELAYED;
 	for (win = term->windows.prev; win != end; win = win->prev) {
 		if (!inactive_tab(win))
 			win->handler(win, &ev);
 	}
-	term->redrawing = tr;
+	term->redrawing = saved_redraw_state;
 }
 
 void

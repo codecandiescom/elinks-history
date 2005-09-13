@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.90 2005/07/27 23:38:33 jonas Exp $ */
+/* $Id: event.c,v 1.91 2005/09/13 14:50:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ term_send_event(struct terminal *term, struct term_event *ev)
 		if (!term->screen->image) break;
 
 		clear_terminal(term);
-		term->redrawing = 2;
+		term->redrawing = TREDRAW_DELAYED;
 		/* Note that you do NOT want to ever go and create new
 		 * window inside EVENT_INIT handler (it'll get second
 		 * EVENT_INIT here). Perhaps the best thing you could do
@@ -105,7 +105,7 @@ term_send_event(struct terminal *term, struct term_event *ev)
 				if (!inactive_tab(win))
 					win->handler(win, ev);
 		}
-		term->redrawing = 0;
+		term->redrawing = TREDRAW_READY;
 		break;
 
 	case EVENT_MOUSE:

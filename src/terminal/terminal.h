@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.48 2005/09/13 12:33:05 zas Exp $ */
+/* $Id: terminal.h,v 1.49 2005/09/13 14:50:47 zas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -44,6 +44,11 @@ enum term_env_type {
 	ENV_ANY = ~0,
 };
 
+enum term_redrawing_state {
+	TREDRAW_READY = 0,	/* Can redraw */
+	TREDRAW_BUSY = 1,	/* Redrawing already in progress */
+	TREDRAW_DELAYED = 2,	/* Do not redraw for now */
+};
 
 /* This is one of the axis of ELinks' user interaction. {struct terminal}
  * defines the terminal ELinks is running on --- each ELinks instance has
@@ -100,7 +105,7 @@ struct terminal {
 	/* Indicates whether we are currently in the process of redrawing the
 	 * stuff being displayed on the terminal. It is typically used to
 	 * prevent redrawing inside of redrawing. */
-	unsigned int redrawing:2;
+	enum term_redrawing_state redrawing;
 
 	/* Indicates the master terminal, that is the terminal under
 	 * supervision of the master ELinks instance (the one doing all the

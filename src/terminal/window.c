@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.31 2005/09/13 10:37:17 zas Exp $ */
+/* $Id: window.c,v 1.32 2005/09/13 12:06:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ get_parent_ptr(struct window *win, int *x, int *y)
 {
 	struct window *parent = win->next;
 
-	if (parent->type)
+	if (parent->type == WINDOW_TAB)
 		parent = get_tab_by_number(win->term, win->term->current_tab);
 
 	if (parent) {

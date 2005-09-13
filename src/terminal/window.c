@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.28 2005/09/13 10:26:34 zas Exp $ */
+/* $Id: window.c,v 1.29 2005/09/13 10:31:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,9 +52,8 @@ redraw_below_window(struct window *win)
 	term->redrawing = tr;
 }
 
-static void
-add_window_at_pos(struct terminal *term, window_handler_T handler,
-		  void *data, struct window *at)
+void
+add_window(struct terminal *term, window_handler_T handler, void *data)
 {
 	struct term_event ev;
 	struct window *win = mem_calloc(1, sizeof(*win));
@@ -68,15 +67,9 @@ add_window_at_pos(struct terminal *term, window_handler_T handler,
 	win->data = data; /* freed later in delete_window() */
 	win->term = term;
 	win->type = WINDOW_NORMAL;
-	add_at_pos(at, win);
+	add_at_pos((struct window *) &term->windows, win);
 	set_init_term_event(&ev, term->width, term->height);
 	win->handler(win, &ev);
-}
-
-void
-add_window(struct terminal *term, window_handler_T handler, void *data)
-{
-	add_window_at_pos(term, handler, data, (struct window *) &term->windows);
 }
 
 void

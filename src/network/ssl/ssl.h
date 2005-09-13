@@ -1,4 +1,4 @@
-/* $Id: ssl.h,v 1.25 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: ssl.h,v 1.26 2005/09/13 16:44:10 pasky Exp $ */
 
 #ifndef EL__NETWORK_SSL_SSL_H
 #define EL__NETWORK_SSL_SSL_H
@@ -26,7 +26,7 @@ unsigned char *get_ssl_connection_cipher(struct socket *socket);
 #ifdef CONFIG_OPENSSL
 #define	ssl_t	SSL
 #elif defined(CONFIG_GNUTLS)
-#define	ssl_t	GNUTLS_STATE
+#define	ssl_t	gnutls_session_t
 #endif
 
 #endif /* CONFIG_SSL */

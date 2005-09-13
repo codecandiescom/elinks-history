@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.60 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: ssl.c,v 1.61 2005/09/13 16:44:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,6 @@
 #include <openssl/rand.h>
 #elif defined(CONFIG_GNUTLS)
 #include <gnutls/gnutls.h>
-#include <gnutls/compat4.h> /* FIXME: this should be removed after upgrading GNUTLS code! */
 #else
 #error "Huh?! You have SSL enabled, but not OPENSSL nor GNUTLS!! And then you want exactly *what* from me?"
 #endif
@@ -106,8 +105,8 @@ static struct module openssl_module = struct_module(
 
 #elif defined(CONFIG_GNUTLS)
 
-GNUTLS_ANON_CLIENT_CREDENTIALS anon_cred = NULL;
-GNUTLS_CERTIFICATE_CLIENT_CREDENTIALS xcred = NULL;
+gnutls_anon_client_credentials_t anon_cred = NULL;
+gnutls_certificate_credentials_t xcred = NULL;
 
 const static int protocol_priority[16] = {
 	GNUTLS_TLS1, GNUTLS_SSL3, 0
@@ -133,12 +132,12 @@ init_gnutls(struct module *module)
 	if (ret < 0)
 		INTERNAL("GNUTLS init failed: %s", gnutls_strerror(ret));
 
-	ret = gnutls_anon_allocate_client_sc(&anon_cred);
+	ret = gnutls_anon_allocate_client_credentials(&anon_cred);
 	if (ret < 0)
 		INTERNAL("GNUTLS anon credentials alloc failed: %s",
 			 gnutls_strerror(ret));
 
-	ret = gnutls_certificate_allocate_sc(&xcred);
+	ret = gnutls_certificate_allocate_credentials(&xcred);
 	if (ret < 0)
 		INTERNAL("GNUTLS X509 credentials alloc failed: %s",
 			 gnutls_strerror(ret));
@@ -149,8 +148,8 @@ init_gnutls(struct module *module)
 static void
 done_gnutls(struct module *module)
 {
-	if (xcred) gnutls_certificate_free_sc(xcred);
-	if (anon_cred) gnutls_anon_free_client_sc(anon_cred);
+	if (xcred) gnutls_certificate_free_credentials(xcred);
+	if (anon_cred) gnutls_anon_free_client_credentials(anon_cred);
 	gnutls_global_deinit();
 }
 
@@ -210,7 +209,7 @@ init_ssl_connection(struct socket *socket)
 	if (!socket->ssl) return S_SSL_ERROR;
 #elif defined(CONFIG_GNUTLS)
 	const unsigned char server_name[] = "localhost";
-	ssl_t *state = mem_alloc(sizeof(GNUTLS_STATE));
+	ssl_t *state = mem_alloc(sizeof(ssl_t));
 
 	if (!state) return S_SSL_ERROR;
 
@@ -241,7 +240,7 @@ init_ssl_connection(struct socket *socket)
 	gnutls_protocol_set_priority(*state, protocol_priority);
 	gnutls_mac_set_priority(*state, mac_priority);
 	gnutls_certificate_type_set_priority(*state, cert_type_priority);
-	gnutls_set_server_name(*state, GNUTLS_NAME_DNS, server_name,
+	gnutls_server_name_set(*state, GNUTLS_NAME_DNS, server_name,
 			       sizeof(server_name) - 1);
 
 	socket->ssl = state;
@@ -285,7 +284,7 @@ get_ssl_connection_cipher(struct socket *socket)
 		gnutls_kx_get_name(gnutls_kx_get(*ssl)),
 		gnutls_cipher_get_name(gnutls_cipher_get(*ssl)),
 		gnutls_mac_get_name(gnutls_mac_get(*ssl)),
-		gnutls_cert_type_get_name(gnutls_cert_type_get(*ssl)),
+		gnutls_certificate_type_get_name(gnutls_certificate_type_get(*ssl)),
 		gnutls_compression_get_name(gnutls_compression_get(*ssl)));
 #endif
 

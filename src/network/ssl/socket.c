@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.127 2005/06/13 00:43:28 jonas Exp $ */
+/* $Id: socket.c,v 1.128 2005/09/13 16:44:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,6 @@
 #include <openssl/ssl.h>
 #elif defined(CONFIG_GNUTLS)
 #include <gnutls/gnutls.h>
-#include <gnutls/compat4.h> /* FIXME: this should be removed after upgrading GNUTLS code! */
 #else
 #error "Huh?! You have SSL enabled, but not OPENSSL nor GNUTLS!! And then you want exactly *what* from me?"
 #endif
@@ -138,7 +137,7 @@ ssl_set_no_tls(struct socket *socket)
 			0
 		};
 
-		gnutls_cert_type_set_priority(*((ssl_t *) socket->ssl), cert_type_priority);
+		gnutls_certificate_type_set_priority(*((ssl_t *) socket->ssl), cert_type_priority);
 	}
 
 	gnutls_dh_set_prime_bits(*((ssl_t *) socket->ssl), 1024);

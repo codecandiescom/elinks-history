@@ -1,3 +1,312 @@
+Wed Sep 14 22:52:56 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: Makefile.am, spidermonkey.c,
+	spidermonkey/Makefile.am:
+
+	Put unibar js classes to sm/unibar.*.  
+
+Wed Sep 14 22:24:33 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Introduce [un]handle_itrm_stdin() to make code a bit more readable.  
+
+Wed Sep 14 15:59:47 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Sep 14 15:48:54 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Reword the increase_contrast option description to indicate that 
+	enabling, not disabling, the option increases contrast. Thanks to
+	calmar for reporting the error.  
+
+Wed Sep 14 15:43:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/stat.h:
+
+	Normalise the osdep/stat.h header.  
+
+Wed Sep 14 15:37:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/encoding.c:
+
+	Revert (1.45 -> 1.46) which was fixing try_encoding_extensions(),
+	and use a simpler fix which resets the filename string properly.  
+
+Wed Sep 14 15:23:15 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: network/connection.c, network/connection.h,
+	protocol/http/http.c:
+
+	Move decompress_shutdown() from protocol/http to
+	shutdown_connection_stream() in network/connection. It reduces code
+	redundancy.  
+
+Wed Sep 14 12:50:15 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/Makefile.am:
+
+	Make compilation of mouse.c conditionnal.  
+
+Wed Sep 14 12:49:40 2005  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey/.cvsignore:
+
+	Add .cvsignore to directory.  
+
+Wed Sep 14 12:48:02 2005  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey/: document.c, form.c, location.c,
+	window.c:
+
+	Fix missing #include.  
+
+Wed Sep 14 12:36:05 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/action.c:
+
+	Wrap toggle_mouse() call in #ifdef/#endif.  
+
+Wed Sep 14 12:32:49 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: Makefile.am, kbd.c, kbd.h, mouse.c, mouse.h:
+
+	Move mouse-related code from kbd.c to mouse.c.  
+
+Wed Sep 14 10:36:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	free_trm() -> free_itrm().  
+
+Wed Sep 14 10:34:37 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Rename queue_event() to itrm_queue_event(), and write_ev_queue() to
+	itrm_queue_write().  
+
+Wed Sep 14 10:22:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Group all mouse-related code.  
+
+Wed Sep 14 10:04:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: Makefile.am, itrm.h, kbd.c:
+
+	Move stuff from kbd.c to new itrm.h.  
+
+Wed Sep 14 09:51:07 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	IN_BUF_SIZE -> ITRM_IN_QUEUE_SIZE, OUT_BUF_SIZE ->
+	ITRM_OUT_QUEUE_SIZE.  
+
+Wed Sep 14 09:44:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	struct itrm kqueue -> in.queue.data, qlen -> in.queue.len, ev_queue
+	-> out.queue.data, eqlen -> out.queue.len.  
+
+Wed Sep 14 09:35:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	struct itrm ctl_in -> in.ctl.  
+
+Wed Sep 14 09:34:25 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	struct itrm sock_out -> out.sock.  
+
+Wed Sep 14 09:33:08 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	struct itrm sock_in -> in.sock.  
+
+Wed Sep 14 09:31:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	struct itrm std_out -> out.std.  
+
+Wed Sep 14 09:30:04 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	struct itrm std_in -> in.std.  
+
+Wed Sep 14 09:27:38 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Introduce structs itrm_queue,itrm_in,itrm_out and add new fields to
+	struct itrm. To be continued...  
+
+Wed Sep 14 09:21:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Allocate/free @kqueue field of struct itrm. Will ease some changes.  
+
+Tue Sep 13 23:20:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/color.c:
+
+	get_color(): fix comment.  
+
+Tue Sep 13 23:18:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/color.c:
+
+	get_color(): drop assertm() and check @level value only in debug
+	mode.  
+
+Tue Sep 13 23:01:19 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/color.c:
+
+	get_color(): initialize @min_dist with a value that make sense.  
+
+Tue Sep 13 22:28:05 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: Makefile.am, spidermonkey.c,
+	spidermonkey/Makefile.am, spidermonkey/document.c,
+	spidermonkey/document.h:
+
+	Moved the document class to sm/document.*.  
+
+Tue Sep 13 22:20:04 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: Makefile.am, spidermonkey.c,
+	spidermonkey/Makefile.am, spidermonkey/location.c,
+	spidermonkey/location.h:
+
+	Split the history and location classes to sm/location.*.  
+
+Tue Sep 13 22:12:48 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: Makefile.am, spidermonkey.c,
+	spidermonkey/Makefile.am, spidermonkey/form.c, spidermonkey/form.h:
+
+	Split ECMAScript classes input, form and forms SM implementation to
+	a separate file.  
+
+Tue Sep 13 21:52:38 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: spidermonkey.c, spidermonkey/util.h:
+
+	Compilation fixes.  
+
+Tue Sep 13 21:52:31 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/Makefile.am:
+
+	Recurse to the spidermonkey/ subdir.  
+
+Tue Sep 13 21:52:02 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey/window.h:
+
+	Fix wrong include name.  
+
+Tue Sep 13 17:35:22 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/ecmascript/Makefile.am,
+	src/ecmascript/spidermonkey.c,
+	src/ecmascript/spidermonkey/Makefile.am,
+	src/ecmascript/spidermonkey/window.c,
+	src/ecmascript/spidermonkey/window.h:
+
+	Move the window spidermonkey class to a separate file. *Silence* 
+
+Tue Sep 13 16:44:10 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/network/ssl/: socket.c, ssl.c, ssl.h:
+
+	Update GNUTLS support to gnutls-1.2. Seems to work.  
+
+Tue Sep 13 16:30:46 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: spidermonkey.c, spidermonkey/util.h:
+
+	Factor out some commonish stuff from ecmascript/spideromnkey.c to
+	e/sm/base.h. Eventually, I'll split all sm.c to e/sm/. Tum dum.  
+
+Tue Sep 13 14:50:47 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: event.c, terminal.h, window.c:
+
+	Introduce enum term_redrawing_state as an attempt to clarify things
+	a bit. Rename local @tr to @saved_redraw_state.  
+
+Tue Sep 13 14:28:25 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/window.c:
+
+	redraw_from_window(): cast to struct window * directly.  
+
+Tue Sep 13 12:33:05 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/terminal.h:
+
+	struct terminal: re-order fields, and use bitfields where
+	applicable.  
+
+Tue Sep 13 12:06:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/window.c:
+
+	In get_parent_ptr, test for WINDOW_TAB explicitely rather than
+	relying on it to be the only possible non-zero value.  
+
+Tue Sep 13 10:37:17 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/window.c:
+
+	Drop dead code.  
+
+Tue Sep 13 10:34:27 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/window.c:
+
+	struct ewd: int b ->  unsigned int called_once:1.  
+
+Tue Sep 13 10:31:11 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/window.c:
+
+	Merge add_window_at_pos() and add_window().  
+
+Tue Sep 13 10:26:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/window.c:
+
+	delete_window_ev(): minor simplification.  
+
+Tue Sep 13 09:22:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Move menu items flag test to free_menu_items().  
+
+Mon Sep 12 12:04:49 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/elinks.fortune:
+
+	Something funny.  
+
 Fri Sep  9 15:40:06 2005  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/menu.c:
@@ -27754,16 +28063,16 @@ Sun Sep 19 17:21:26 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
+	* AUTHORS:
+
+	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
+
+Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
 	* src/util/memory.c:
 
 	Fix mmap() usage on FreeBSD filed as bug 501. Patch by Lewis
 	Collard.  
-
-Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
-
-	* AUTHORS:
-
-	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
 
 Sun Sep 19 09:56:02 2004  Petr Baudis <pasky@ucw.cz>:
 
@@ -50496,21 +50805,9 @@ Sun Feb 22 21:53:19 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Feb 22 18:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/document/sgml/html/.vimrc:
+	* src/document/sgml/html/attribute.inc:
 
-	file .vimrc was initially added on branch ECMASCRIPT.  
-
-Sun Feb 22 18:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
-
-	* src/document/sgml/html/Makefile.am:
-
-	file Makefile.am was initially added on branch ECMASCRIPT.  
-
-Sun Feb 22 18:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
-
-	* src/document/sgml/html/html.h:
-
-	file html.h was initially added on branch ECMASCRIPT.  
+	file attribute.inc was initially added on branch ECMASCRIPT.  
 
 Sun Feb 22 18:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
@@ -50520,21 +50817,33 @@ Sun Feb 22 18:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Feb 22 18:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
+	* src/document/sgml/html/element.inc:
+
+	file element.inc was initially added on branch ECMASCRIPT.  
+
+Sun Feb 22 18:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/html/html.h:
+
+	file html.h was initially added on branch ECMASCRIPT.  
+
+Sun Feb 22 18:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
 	* src/document/sgml/html/html.c:
 
 	file html.c was initially added on branch ECMASCRIPT.  
 
 Sun Feb 22 18:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/document/sgml/html/attribute.inc:
+	* src/document/sgml/html/.vimrc:
 
-	file attribute.inc was initially added on branch ECMASCRIPT.  
+	file .vimrc was initially added on branch ECMASCRIPT.  
 
 Sun Feb 22 18:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/document/sgml/html/element.inc:
+	* src/document/sgml/html/Makefile.am:
 
-	file element.inc was initially added on branch ECMASCRIPT.  
+	file Makefile.am was initially added on branch ECMASCRIPT.  
 
 Sun Feb 22 13:30:21 2004  Laurent Monin <zas@norz.org>:
 
@@ -50550,15 +50859,15 @@ Sat Feb 21 06:29:27 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 Fri Feb 20 17:08:26 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/document/sgml/.vimrc:
-
-	file .vimrc was initially added on branch ECMASCRIPT.  
-
-Fri Feb 20 17:08:26 2004  Jonas Fonseca <fonseca@diku.dk>:
-
 	* src/document/sgml/.cvsignore:
 
 	file .cvsignore was initially added on branch ECMASCRIPT.  
+
+Fri Feb 20 17:08:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/.vimrc:
+
+	file .vimrc was initially added on branch ECMASCRIPT.  
 
 Fri Feb 20 16:32:15 2004  Jonas Fonseca <fonseca@diku.dk>:
 
@@ -50789,15 +51098,9 @@ Sat Feb 14 00:53:04 2004  Laurent Monin <zas@norz.org>:
 
 Fri Feb 13 20:38:16 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/document/sgml/Makefile.am:
+	* src/document/sgml/scanner.c:
 
-	file Makefile.am was initially added on branch ECMASCRIPT.  
-
-Fri Feb 13 20:38:16 2004  Jonas Fonseca <fonseca@diku.dk>:
-
-	* src/document/sgml/parser.c:
-
-	file parser.c was initially added on branch ECMASCRIPT.  
+	file scanner.c was initially added on branch ECMASCRIPT.  
 
 Fri Feb 13 20:38:16 2004  Jonas Fonseca <fonseca@diku.dk>:
 
@@ -50813,9 +51116,15 @@ Fri Feb 13 20:38:16 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Feb 13 20:38:16 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/document/sgml/scanner.c:
+	* src/document/sgml/Makefile.am:
 
-	file scanner.c was initially added on branch ECMASCRIPT.  
+	file Makefile.am was initially added on branch ECMASCRIPT.  
+
+Fri Feb 13 20:38:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/parser.c:
+
+	file parser.c was initially added on branch ECMASCRIPT.  
 
 Fri Feb 13 20:33:31 2004  Laurent Monin <zas@norz.org>:
 
@@ -50940,15 +51249,15 @@ Wed Feb 11 09:53:31 2004  Laurent Monin <zas@norz.org>:
 
 Wed Feb 11 00:35:37 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/document/dom/Makefile.am:
-
-	file Makefile.am was initially added on branch ECMASCRIPT.  
-
-Wed Feb 11 00:35:37 2004  Jonas Fonseca <fonseca@diku.dk>:
-
 	* src/document/dom/node.h:
 
 	file node.h was initially added on branch ECMASCRIPT.  
+
+Wed Feb 11 00:35:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/Makefile.am:
+
+	file Makefile.am was initially added on branch ECMASCRIPT.  
 
 Tue Feb 10 23:40:50 2004  Jonas Fonseca <fonseca@diku.dk>:
 
@@ -51100,15 +51409,15 @@ Sun Feb  8 17:37:27 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Feb  8 13:55:41 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
-	* src/ecmascript/.vimrc:
-
-	file .vimrc was initially added on branch ECMASCRIPT.  
-
-Sun Feb  8 13:55:41 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
-
 	* src/ecmascript/.cvsignore:
 
 	file .cvsignore was initially added on branch ECMASCRIPT.  
+
+Sun Feb  8 13:55:41 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/ecmascript/.vimrc:
+
+	file .vimrc was initially added on branch ECMASCRIPT.  
 
 Sun Feb  8 13:54:17 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
@@ -51154,15 +51463,15 @@ Sun Feb  8 06:10:16 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 Sun Feb  8 06:07:56 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
-	* src/document/dom/.vimrc:
-
-	file .vimrc was initially added on branch ECMASCRIPT.  
-
-Sun Feb  8 06:07:56 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
-
 	* src/document/dom/.cvsignore:
 
 	file .cvsignore was initially added on branch ECMASCRIPT.  
+
+Sun Feb  8 06:07:56 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/dom/.vimrc:
+
+	file .vimrc was initially added on branch ECMASCRIPT.  
 
 Sun Feb  8 00:17:09 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 

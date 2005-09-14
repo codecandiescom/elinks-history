@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.167 2005/09/14 09:44:29 zas Exp $ */
+/* $Id: kbd.c,v 1.168 2005/09/14 09:51:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,8 +38,8 @@
 #include "util/time.h"
 
 
-#define OUT_BUF_SIZE	16384
-#define IN_BUF_SIZE	16
+#define ITRM_OUT_QUEUE_SIZE	16384
+#define ITRM_IN_QUEUE_SIZE	16
 #define TW_BUTT_LEFT	1
 #define TW_BUTT_MIDDLE	2
 #define TW_BUTT_RIGHT	4
@@ -347,7 +347,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm = mem_calloc(1, sizeof(*itrm));
 	if (!itrm) return;
 
-	itrm->in.queue.data = mem_calloc(1, IN_BUF_SIZE);
+	itrm->in.queue.data = mem_calloc(1, ITRM_IN_QUEUE_SIZE);
 	if (!itrm->in.queue.data) {
 		mem_free(itrm);
 		return;
@@ -561,9 +561,9 @@ in_sock(struct itrm *itrm)
 	char ch;
 	int fg;
 	ssize_t bytes_read, i, p;
-	unsigned char buf[OUT_BUF_SIZE];
+	unsigned char buf[ITRM_OUT_QUEUE_SIZE];
 
-	bytes_read = safe_read(itrm->in.sock, buf, OUT_BUF_SIZE);
+	bytes_read = safe_read(itrm->in.sock, buf, ITRM_OUT_QUEUE_SIZE);
 	if (bytes_read <= 0) goto free_and_return;
 
 qwerty:
@@ -578,8 +578,8 @@ has_nul_byte:
 	if (i) safe_hard_write(itrm->out.std, buf, i);
 
 	i++;
-	assert(OUT_BUF_SIZE - i > 0);
-	memmove(buf, buf + i, OUT_BUF_SIZE - i);
+	assert(ITRM_OUT_QUEUE_SIZE - i > 0);
+	memmove(buf, buf + i, ITRM_OUT_QUEUE_SIZE - i);
 	bytes_read -= i;
 	p = 0;
 
@@ -667,8 +667,8 @@ has_nul_byte:
 nasty_thing:
 	done_string(&path);
 	done_string(&delete);
-	assert(OUT_BUF_SIZE - p > 0);
-	memmove(buf, buf + p, OUT_BUF_SIZE - p);
+	assert(ITRM_OUT_QUEUE_SIZE - p > 0);
+	memmove(buf, buf + p, ITRM_OUT_QUEUE_SIZE - p);
 	bytes_read -= p;
 
 	goto qwerty;
@@ -1054,7 +1054,7 @@ process_queue(struct itrm *itrm)
 		memmove(itrm->in.queue.data, itrm->in.queue.data + el, itrm->in.queue.len);
 
 end:
-	if (itrm->in.queue.len < IN_BUF_SIZE)
+	if (itrm->in.queue.len < ITRM_IN_QUEUE_SIZE)
 		set_handlers(itrm->in.std, (select_handler_T) in_kbd, NULL,
 			     (select_handler_T) free_trm, itrm);
 	return el;
@@ -1076,7 +1076,7 @@ in_kbd(struct itrm *itrm)
 
 	kill_timer(&itrm->timer);
 
-	if (itrm->in.queue.len >= IN_BUF_SIZE) {
+	if (itrm->in.queue.len >= ITRM_IN_QUEUE_SIZE) {
 		set_handlers(itrm->in.std, NULL, NULL,
 			     (select_handler_T) free_trm, itrm);
 		while (process_queue(itrm));
@@ -1084,16 +1084,16 @@ in_kbd(struct itrm *itrm)
 	}
 
 	r = safe_read(itrm->in.std, itrm->in.queue.data + itrm->in.queue.len,
-		      IN_BUF_SIZE - itrm->in.queue.len);
+		      ITRM_IN_QUEUE_SIZE - itrm->in.queue.len);
 	if (r <= 0) {
 		free_trm(itrm);
 		return;
 	}
 
 	itrm->in.queue.len += r;
-	if (itrm->in.queue.len > IN_BUF_SIZE) {
+	if (itrm->in.queue.len > ITRM_IN_QUEUE_SIZE) {
 		ERROR(gettext("Too many bytes read from the itrm!"));
-		itrm->in.queue.len = IN_BUF_SIZE;
+		itrm->in.queue.len = ITRM_IN_QUEUE_SIZE;
 	}
 
 	while (process_queue(itrm));

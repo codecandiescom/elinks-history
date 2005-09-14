@@ -1,7 +1,10 @@
-/* $Id: mouse.h,v 1.5 2005/05/17 15:01:34 zas Exp $ */
+/* $Id: mouse.h,v 1.6 2005/09/14 12:32:49 zas Exp $ */
 
 #ifndef EL__TERMINAL_MOUSE_H
 #define EL__TERMINAL_MOUSE_H
+
+struct term_event;
+struct itrm;
 
 /* The mouse reporting button byte looks like:
  *
@@ -109,5 +112,13 @@ struct term_event_mouse {
 	(mouse_)->y = (y_); \
 	(mouse_)->button = (button_); \
 } while (0)
+
+void send_mouse_init_sequence(int h);
+void send_mouse_done_sequence(int h);
+void disable_mouse(void);
+void enable_mouse(void);
+void toggle_mouse(void);
+int decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev, int el, int v);
+
 
 #endif

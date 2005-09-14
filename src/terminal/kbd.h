@@ -1,7 +1,11 @@
-/* $Id: kbd.h,v 1.13 2005/07/20 20:00:57 miciah Exp $ */
+/* $Id: kbd.h,v 1.14 2005/09/14 12:32:49 zas Exp $ */
 
 #ifndef EL__TERMINAL_KBD_H
 #define EL__TERMINAL_KBD_H
+
+struct itrm;
+
+struct itrm *ditrm;
 
 struct term_event_keyboard {
 	int key;
@@ -49,10 +53,10 @@ void
 handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	   void *init_string, int init_len, int remote);
 
+void itrm_queue_event(struct itrm *itrm, unsigned char *data, int len);
 void block_itrm(int);
 int unblock_itrm(int);
 void free_all_itrms(void);
-void toggle_mouse(void);
 void resize_terminal(void);
 void dispatch_special(unsigned char *);
 void kbd_ctrl_c(void);

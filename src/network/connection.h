@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.133 2005/07/11 10:59:04 jonas Exp $ */
+/* $Id: connection.h,v 1.134 2005/09/14 15:23:15 zas Exp $ */
 
 #ifndef EL__NETWORK_CONNECTION_H
 #define EL__NETWORK_CONNECTION_H
@@ -98,6 +98,8 @@ void abort_all_connections(void);
 void abort_background_connections(void);
 
 void set_connection_timeout(struct connection *);
+
+void shutdown_connection_stream(struct connection *conn);
 
 /* Initiates a connection to get the given @uri. */
 /* Note that stat's data _MUST_ be struct file_download * if start > 0! Yes,

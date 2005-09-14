@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.448 2005/06/14 12:25:21 jonas Exp $ */
+/* $Id: http.c,v 1.449 2005/09/14 15:23:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,8 +227,6 @@ struct module http_protocol_module = struct_module(
 	/* done: */		done_http
 );
 
-
-static void decompress_shutdown(struct connection *);
 
 static void
 done_http()
@@ -471,7 +469,7 @@ static void
 http_end_request(struct connection *conn, enum connection_state state,
 		 int notrunc)
 {
-	decompress_shutdown(conn);
+	shutdown_connection_stream(conn);
 
 	if (state == S_OK && conn->cached) {
 		normalize_cache_entry(conn->cached, !notrunc ? conn->from : -1);
@@ -1035,21 +1033,8 @@ decompress_data(struct connection *conn, unsigned char *data, int len,
 		}
 	} while (!(!len && did_read != to_read));
 
-	decompress_shutdown(conn);
+	shutdown_connection_stream(conn);
 	return output;
-}
-
-/* FIXME: Unfortunately, we duplicate this in free_connection_data(). */
-static void
-decompress_shutdown(struct connection *conn)
-{
-	if (conn->stream) {
-		close_encoded(conn->stream);
-		conn->stream = NULL;
-	}
-	if (conn->stream_pipes[1] >= 0)
-		close(conn->stream_pipes[1]);
-	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
 }
 
 static int

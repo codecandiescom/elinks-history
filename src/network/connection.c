@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.300 2005/08/25 15:08:00 zas Exp $ */
+/* $Id: connection.c,v 1.301 2005/09/14 15:23:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -365,6 +365,18 @@ set_connection_state(struct connection *conn, enum connection_state state)
 	if (is_in_progress_state(state)) notify_connection_callbacks(conn);
 }
 
+void
+shutdown_connection_stream(struct connection *conn)
+{
+	if (conn->stream) {
+		close_encoded(conn->stream);
+		conn->stream = NULL;
+	}
+	if (conn->stream_pipes[1] >= 0)
+		close(conn->stream_pipes[1]);
+	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
+}
+
 static void
 free_connection_data(struct connection *conn)
 {
@@ -388,14 +400,7 @@ free_connection_data(struct connection *conn)
 	done_socket(conn->socket);
 	done_socket(conn->data_socket);
 
-	/* XXX: See also protocol/http/http.c:decompress_shutdown(). */
-	if (conn->stream) {
-		close_encoded(conn->stream);
-		conn->stream = NULL;
-	}
-	if (conn->stream_pipes[1] >= 0)
-		close(conn->stream_pipes[1]);
-	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
+	shutdown_connection_stream(conn);
 
 	if (conn->cgi_pipes[0] >= 0)
 		close(conn->cgi_pipes[0]);

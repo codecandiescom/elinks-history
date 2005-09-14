@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.168 2005/09/14 09:51:07 zas Exp $ */
+/* $Id: kbd.c,v 1.169 2005/09/14 10:04:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "terminal/hardio.h"
+#include "terminal/itrm.h"
 #include "terminal/kbd.h"
 #include "terminal/mouse.h"
 #include "terminal/terminal.h"
@@ -38,44 +39,12 @@
 #include "util/time.h"
 
 
-#define ITRM_OUT_QUEUE_SIZE	16384
-#define ITRM_IN_QUEUE_SIZE	16
+/* TODO: move stuff from here to itrm.{c,h} and mouse.{c,h} */
+
+
 #define TW_BUTT_LEFT	1
 #define TW_BUTT_MIDDLE	2
 #define TW_BUTT_RIGHT	4
-
-struct itrm_queue {
-	unsigned char *data;
-	int len;
-};
-
-struct itrm_in {
-	int std;
-	int sock;
-	int ctl;
-	struct itrm_queue queue;
-};
-
-struct itrm_out {
-	int std;
-	int sock;
-	struct itrm_queue queue;
-};
-
-struct itrm {
-	struct itrm_in in;		/* Input */
-	struct itrm_out out;		/* Output */
-
-	timer_id_T timer;		/* ESC timeout timer */
-	struct termios t;		/* For restoring original attributes */
-	void *mouse_h;			/* Mouse handle */
-	unsigned char *orig_title;	/* For restoring window title */
-
-	unsigned int blocked:1;		/* Whether it was blocked */
-	unsigned int altscreen:1;	/* Whether to use alternate screen */
-	unsigned int touched_title:1;	/* Whether the term title was changed */
-	unsigned int remote:1;		/* Whether it is a remote session */
-};
 
 
 static struct itrm *ditrm = NULL;

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.13 2004/06/14 02:21:03 jonas Exp $
+## $Id: Makefile.am,v 1.14 2005/09/14 10:04:54 zas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -15,6 +15,7 @@ libterminal_a_SOURCES = \
  event.h \
  hardio.c \
  hardio.h \
+ itrm.h \
  kbd.c \
  kbd.h \
  key.inc \

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.161 2005/09/14 09:27:38 zas Exp $ */
+/* $Id: kbd.c,v 1.162 2005/09/14 09:30:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,6 @@ struct itrm {
 	struct itrm_in in;
 	struct itrm_out out;
 	
-	int std_in;
 	int std_out;
 	int sock_in;
 	int sock_out;
@@ -368,7 +367,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	}
 
 	ditrm = itrm;
-	itrm->std_in = std_in;
+	itrm->in.std = std_in;
 	itrm->std_out = std_out;
 	itrm->sock_in = sock_in;
 	itrm->sock_out = sock_out;
@@ -429,7 +428,7 @@ unblock_itrm(int fd)
 	itrm->blocked = 0;
 	send_init_sequence(itrm->std_out, itrm->altscreen);
 
-	set_handlers(itrm->std_in, (select_handler_T) in_kbd, NULL,
+	set_handlers(itrm->in.std, (select_handler_T) in_kbd, NULL,
 		     (select_handler_T) free_trm, itrm);
 
 	resume_mouse(itrm->mouse_h);
@@ -453,7 +452,7 @@ block_itrm(int fd)
 	unhandle_terminal_resize(itrm->ctl_in);
 	send_done_sequence(itrm->std_out, itrm->altscreen);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
-	set_handlers(itrm->std_in, NULL, NULL,
+	set_handlers(itrm->in.std, NULL, NULL,
 		     (select_handler_T) free_trm, itrm);
 	suspend_mouse(itrm->mouse_h);
 }
@@ -488,7 +487,7 @@ free_trm(struct itrm *itrm)
 
 	mem_free_set(&itrm->orig_title, NULL);
 
-	clear_handlers(itrm->std_in);
+	clear_handlers(itrm->in.std);
 	clear_handlers(itrm->sock_in);
 	clear_handlers(itrm->std_out);
 	clear_handlers(itrm->sock_out);
@@ -699,7 +698,7 @@ kbd_timeout(struct itrm *itrm)
 
 	itrm->timer = TIMER_ID_UNDEF;
 
-	if (can_read(itrm->std_in)) {
+	if (can_read(itrm->in.std)) {
 		in_kbd(itrm);
 		return;
 	}
@@ -1069,7 +1068,7 @@ process_queue(struct itrm *itrm)
 
 end:
 	if (itrm->qlen < IN_BUF_SIZE)
-		set_handlers(itrm->std_in, (select_handler_T) in_kbd, NULL,
+		set_handlers(itrm->in.std, (select_handler_T) in_kbd, NULL,
 			     (select_handler_T) free_trm, itrm);
 	return el;
 
@@ -1086,18 +1085,18 @@ in_kbd(struct itrm *itrm)
 {
 	int r;
 
-	if (!can_read(itrm->std_in)) return;
+	if (!can_read(itrm->in.std)) return;
 
 	kill_timer(&itrm->timer);
 
 	if (itrm->qlen >= IN_BUF_SIZE) {
-		set_handlers(itrm->std_in, NULL, NULL,
+		set_handlers(itrm->in.std, NULL, NULL,
 			     (select_handler_T) free_trm, itrm);
 		while (process_queue(itrm));
 		return;
 	}
 
-	r = safe_read(itrm->std_in, itrm->kqueue + itrm->qlen,
+	r = safe_read(itrm->in.std, itrm->kqueue + itrm->qlen,
 		      IN_BUF_SIZE - itrm->qlen);
 	if (r <= 0) {
 		free_trm(itrm);

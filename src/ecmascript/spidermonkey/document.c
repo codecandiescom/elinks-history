@@ -1,5 +1,5 @@
 /* The SpiderMonkey document object implementation. */
-/* $Id: document.c,v 1.1 2005/09/13 22:28:50 pasky Exp $ */
+/* $Id: document.c,v 1.2 2005/09/14 12:48:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,7 @@
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
+#include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/draw.h"
 #include "viewer/text/form.h"

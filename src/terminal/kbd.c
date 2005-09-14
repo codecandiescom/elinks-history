@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.162 2005/09/14 09:30:04 zas Exp $ */
+/* $Id: kbd.c,v 1.163 2005/09/14 09:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,6 @@ struct itrm {
 	struct itrm_in in;
 	struct itrm_out out;
 	
-	int std_out;
 	int sock_in;
 	int sock_out;
 	int ctl_in;
@@ -292,7 +291,7 @@ resize_terminal(void)
 	struct term_event ev;
 	int width, height;
 
-	get_terminal_size(ditrm->std_out, &width, &height);
+	get_terminal_size(ditrm->out.std, &width, &height);
 	set_resize_term_event(&ev, width, height);
 	queue_event(ditrm, (char *) &ev, sizeof(ev));
 }
@@ -368,7 +367,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 	ditrm = itrm;
 	itrm->in.std = std_in;
-	itrm->std_out = std_out;
+	itrm->out.std = std_out;
 	itrm->sock_in = sock_in;
 	itrm->sock_out = sock_out;
 	itrm->ctl_in = ctl_in;
@@ -426,7 +425,7 @@ unblock_itrm(int fd)
 
 	if (itrm->ctl_in >= 0 && setraw(itrm->ctl_in, NULL)) return -1;
 	itrm->blocked = 0;
-	send_init_sequence(itrm->std_out, itrm->altscreen);
+	send_init_sequence(itrm->out.std, itrm->altscreen);
 
 	set_handlers(itrm->in.std, (select_handler_T) in_kbd, NULL,
 		     (select_handler_T) free_trm, itrm);
@@ -450,7 +449,7 @@ block_itrm(int fd)
 	itrm->blocked = 1;
 	block_stdin();
 	unhandle_terminal_resize(itrm->ctl_in);
-	send_done_sequence(itrm->std_out, itrm->altscreen);
+	send_done_sequence(itrm->out.std, itrm->altscreen);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 	set_handlers(itrm->in.std, NULL, NULL,
 		     (select_handler_T) free_trm, itrm);
@@ -481,7 +480,7 @@ free_trm(struct itrm *itrm)
 
 		unhandle_terminal_resize(itrm->ctl_in);
 		disable_mouse();
-		send_done_sequence(itrm->std_out,itrm->altscreen);
+		send_done_sequence(itrm->out.std, itrm->altscreen);
 		tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 	}
 
@@ -489,7 +488,7 @@ free_trm(struct itrm *itrm)
 
 	clear_handlers(itrm->in.std);
 	clear_handlers(itrm->sock_in);
-	clear_handlers(itrm->std_out);
+	clear_handlers(itrm->out.std);
 	clear_handlers(itrm->sock_out);
 
 	kill_timer(&itrm->timer);
@@ -584,11 +583,11 @@ qwerty:
 		if (!buf[i])
 			goto has_nul_byte;
 
-	safe_hard_write(itrm->std_out, buf, bytes_read);
+	safe_hard_write(itrm->out.std, buf, bytes_read);
 	return;
 
 has_nul_byte:
-	if (i) safe_hard_write(itrm->std_out, buf, i);
+	if (i) safe_hard_write(itrm->out.std, buf, i);
 
 	i++;
 	assert(OUT_BUF_SIZE - i > 0);

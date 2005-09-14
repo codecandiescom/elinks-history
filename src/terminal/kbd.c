@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.163 2005/09/14 09:31:44 zas Exp $ */
+/* $Id: kbd.c,v 1.164 2005/09/14 09:33:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,6 @@ struct itrm {
 	struct itrm_in in;
 	struct itrm_out out;
 	
-	int sock_in;
 	int sock_out;
 	int ctl_in;
 
@@ -368,7 +367,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	ditrm = itrm;
 	itrm->in.std = std_in;
 	itrm->out.std = std_out;
-	itrm->sock_in = sock_in;
+	itrm->in.sock = sock_in;
 	itrm->sock_out = sock_out;
 	itrm->ctl_in = ctl_in;
 	itrm->timer = TIMER_ID_UNDEF;
@@ -487,7 +486,7 @@ free_trm(struct itrm *itrm)
 	mem_free_set(&itrm->orig_title, NULL);
 
 	clear_handlers(itrm->in.std);
-	clear_handlers(itrm->sock_in);
+	clear_handlers(itrm->in.sock);
 	clear_handlers(itrm->out.std);
 	clear_handlers(itrm->sock_out);
 
@@ -575,7 +574,7 @@ in_sock(struct itrm *itrm)
 	ssize_t bytes_read, i, p;
 	unsigned char buf[OUT_BUF_SIZE];
 
-	bytes_read = safe_read(itrm->sock_in, buf, OUT_BUF_SIZE);
+	bytes_read = safe_read(itrm->in.sock, buf, OUT_BUF_SIZE);
 	if (bytes_read <= 0) goto free_and_return;
 
 qwerty:
@@ -600,7 +599,7 @@ has_nul_byte:
 									\
 		if (p < bytes_read)					\
 			cc = buf[p++];					\
-		else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0)	\
+		else if ((hard_read(itrm->in.sock, &cc, 1)) <= 0)	\
 			goto free_and_return;				\
 		xx = cc;						\
 	}

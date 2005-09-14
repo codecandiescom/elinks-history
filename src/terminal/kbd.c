@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.170 2005/09/14 10:22:29 zas Exp $ */
+/* $Id: kbd.c,v 1.171 2005/09/14 10:34:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ free_all_itrms(void)
 
 
 static void
-write_ev_queue(struct itrm *itrm)
+itrm_queue_write(struct itrm *itrm)
 {
 	int written;
 	int qlen = int_min(itrm->out.queue.len, 128);
@@ -93,7 +93,7 @@ write_ev_queue(struct itrm *itrm)
 
 
 static void
-queue_event(struct itrm *itrm, unsigned char *data, int len)
+itrm_queue_event(struct itrm *itrm, unsigned char *data, int len)
 {
 	int w = 0;
 
@@ -123,7 +123,7 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 		itrm->out.queue.len += left;
 		set_handlers(itrm->out.sock,
 			     get_handler(itrm->out.sock, SELECT_HANDLER_READ),
-			     (select_handler_T) write_ev_queue,
+			     (select_handler_T) itrm_queue_write,
 			     (select_handler_T) free_trm, itrm);
 	}
 }
@@ -136,7 +136,7 @@ kbd_ctrl_c(void)
 
 	if (!ditrm) return;
 	set_kbd_term_event(&ev, KBD_CTRL_C, KBD_MOD_NONE);
-	queue_event(ditrm, (unsigned char *) &ev, sizeof(ev));
+	itrm_queue_event(ditrm, (unsigned char *) &ev, sizeof(ev));
 }
 
 #define write_sequence(fd, seq) \
@@ -188,7 +188,7 @@ enable_mouse(void)
 	int h = get_output_handle(); /* XXX: Is this all right? -- Miciah */
 
 	send_mouse_init_sequence(h);
-	ditrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, ditrm);
+	ditrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) itrm_queue_event, ditrm);
 
 	mouse_enabled = 1;
 }
@@ -357,7 +357,7 @@ resize_terminal(void)
 
 	get_terminal_size(ditrm->out.std, &width, &height);
 	set_resize_term_event(&ev, width, height);
-	queue_event(ditrm, (char *) &ev, sizeof(ev));
+	itrm_queue_event(ditrm, (char *) &ev, sizeof(ev));
 }
 
 static void
@@ -467,8 +467,8 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		mem_free(ts);
 	}
 
-	queue_event(itrm, (char *) &info, TERMINAL_INFO_SIZE);
-	queue_event(itrm, (char *) init_string, init_len);
+	itrm_queue_event(itrm, (char *) &info, TERMINAL_INFO_SIZE);
+	itrm_queue_event(itrm, (char *) init_string, init_len);
 }
 
 
@@ -774,7 +774,7 @@ kbd_timeout(struct itrm *itrm)
 	if_assert_failed return;
 
 	set_kbd_term_event(&ev, KBD_ESC, KBD_MOD_NONE);
-	queue_event(itrm, (char *) &ev, sizeof(ev));
+	itrm_queue_event(itrm, (char *) &ev, sizeof(ev));
 
 	if (--itrm->in.queue.len)
 		memmove(itrm->in.queue.data, itrm->in.queue.data + 1, itrm->in.queue.len);
@@ -1027,7 +1027,7 @@ process_queue(struct itrm *itrm)
 	/* The call to decode_terminal_escape_sequence() might have changed the
 	 * keyboard event to a mouse event. */
 	if (ev.ev == EVENT_MOUSE || ev.info.keyboard.key != KBD_UNDEF)
-		queue_event(itrm, (char *) &ev, sizeof(ev));
+		itrm_queue_event(itrm, (char *) &ev, sizeof(ev));
 
 	if (itrm->in.queue.len)
 		memmove(itrm->in.queue.data, itrm->in.queue.data + el, itrm->in.queue.len);

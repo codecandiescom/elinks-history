@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.160 2005/09/14 09:21:34 zas Exp $ */
+/* $Id: kbd.c,v 1.161 2005/09/14 09:27:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,28 @@
 #define TW_BUTT_MIDDLE	2
 #define TW_BUTT_RIGHT	4
 
+struct itrm_queue {
+	unsigned char *data;
+	int len;
+};
+
+struct itrm_in {
+	int std;
+	int sock;
+	int ctl;
+	struct itrm_queue queue;
+};
+
+struct itrm_out {
+	int std;
+	int sock;
+	struct itrm_queue queue;
+};
+
 struct itrm {
+	struct itrm_in in;
+	struct itrm_out out;
+	
 	int std_in;
 	int std_out;
 	int sock_in;

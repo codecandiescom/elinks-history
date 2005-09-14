@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.166 2005/09/14 09:35:58 zas Exp $ */
+/* $Id: kbd.c,v 1.167 2005/09/14 09:44:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,16 +63,8 @@ struct itrm_out {
 };
 
 struct itrm {
-	struct itrm_in in;
-	struct itrm_out out;
-	
-	/* Input queue */
-	unsigned char *kqueue;
-	int qlen;
-
-	/* Output queue */
-	unsigned char *ev_queue;
-	int eqlen;
+	struct itrm_in in;		/* Input */
+	struct itrm_out out;		/* Output */
 
 	timer_id_T timer;		/* ESC timeout timer */
 	struct termios t;		/* For restoring original attributes */
@@ -111,28 +103,28 @@ static void
 write_ev_queue(struct itrm *itrm)
 {
 	int written;
-	int qlen = int_min(itrm->eqlen, 128);
+	int qlen = int_min(itrm->out.queue.len, 128);
 
 	assertm(qlen, "event queue empty");
 	if_assert_failed return;
 
-	written = safe_write(itrm->out.sock, itrm->ev_queue, qlen);
+	written = safe_write(itrm->out.sock, itrm->out.queue.data, qlen);
 	if (written <= 0) {
 		if (written < 0) free_trm(itrm); /* write error */
 		return;
 	}
 
-	itrm->eqlen -= written;
+	itrm->out.queue.len -= written;
 
-	if (itrm->eqlen == 0) {
+	if (itrm->out.queue.len == 0) {
 		set_handlers(itrm->out.sock,
 			     get_handler(itrm->out.sock, SELECT_HANDLER_READ),
 			     NULL,
 			     get_handler(itrm->out.sock, SELECT_HANDLER_ERROR),
 			     get_handler(itrm->out.sock, SELECT_HANDLER_DATA));
 	} else {
-		assert(itrm->eqlen > 0);
-		memmove(itrm->ev_queue, itrm->ev_queue + written, itrm->eqlen);
+		assert(itrm->out.queue.len > 0);
+		memmove(itrm->out.queue.data, itrm->out.queue.data + written, itrm->out.queue.len);
 	}
 }
 
@@ -144,7 +136,7 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 
 	if (!len) return;
 
-	if (!itrm->eqlen && can_write(itrm->out.sock)) {
+	if (!itrm->out.queue.len && can_write(itrm->out.sock)) {
 		w = safe_write(itrm->out.sock, data, len);
 		if (w <= 0 && HPUX_PIPE) {
 			/* free_trm(itrm); */
@@ -155,17 +147,17 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 
 	if (w < len) {
 		int left = len - w;
-		unsigned char *c = mem_realloc(itrm->ev_queue,
-					       itrm->eqlen + left);
+		unsigned char *c = mem_realloc(itrm->out.queue.data,
+					       itrm->out.queue.len + left);
 
 		if (!c) {
 			free_trm(itrm);
 			return;
 		}
 
-		itrm->ev_queue = c;
-		memcpy(itrm->ev_queue + itrm->eqlen, data + w, left);
-		itrm->eqlen += left;
+		itrm->out.queue.data = c;
+		memcpy(itrm->out.queue.data + itrm->out.queue.len, data + w, left);
+		itrm->out.queue.len += left;
 		set_handlers(itrm->out.sock,
 			     get_handler(itrm->out.sock, SELECT_HANDLER_READ),
 			     (select_handler_T) write_ev_queue,
@@ -355,8 +347,8 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm = mem_calloc(1, sizeof(*itrm));
 	if (!itrm) return;
 
-	itrm->kqueue = mem_calloc(1, IN_BUF_SIZE);
-	if (!itrm->kqueue) {
+	itrm->in.queue.data = mem_calloc(1, IN_BUF_SIZE);
+	if (!itrm->in.queue.data) {
 		mem_free(itrm);
 		return;
 	}
@@ -490,8 +482,8 @@ free_trm(struct itrm *itrm)
 	kill_timer(&itrm->timer);
 
 	if (itrm == ditrm) ditrm = NULL;
-	mem_free_if(itrm->ev_queue);
-	mem_free_if(itrm->kqueue);
+	mem_free_if(itrm->out.queue.data);
+	mem_free_if(itrm->in.queue.data);
 	mem_free(itrm);
 }
 
@@ -698,14 +690,14 @@ kbd_timeout(struct itrm *itrm)
 		return;
 	}
 
-	assertm(itrm->qlen, "timeout on empty queue");
+	assertm(itrm->in.queue.len, "timeout on empty queue");
 	if_assert_failed return;
 
 	set_kbd_term_event(&ev, KBD_ESC, KBD_MOD_NONE);
 	queue_event(itrm, (char *) &ev, sizeof(ev));
 
-	if (--itrm->qlen)
-		memmove(itrm->kqueue, itrm->kqueue + 1, itrm->qlen);
+	if (--itrm->in.queue.len)
+		memmove(itrm->in.queue.data, itrm->in.queue.data + 1, itrm->in.queue.len);
 
 	while (process_queue(itrm));
 }
@@ -746,8 +738,8 @@ decode_mouse_position(struct itrm *itrm, int from)
 {
 	int position;
 
-	position = (unsigned char) (itrm->kqueue[from]) - ' ' - 1
-		 + ((int) ((unsigned char) (itrm->kqueue[from + 1]) - ' ' - 1) << 7);
+	position = (unsigned char) (itrm->in.queue.data[from]) - ' ' - 1
+		 + ((int) ((unsigned char) (itrm->in.queue.data[from + 1]) - ' ' - 1) << 7);
 
 	return (position & (1 << 13)) ? 0 : position;
 }
@@ -764,20 +756,20 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 	static int xterm_button = -1;
 	struct term_event_mouse mouse;
 
-	if (itrm->qlen - el < 3)
+	if (itrm->in.queue.len - el < 3)
 		return -1;
 
 	if (v == 5) {
 		if (xterm_button == -1)
 			xterm_button = 0;
 
-		if (itrm->qlen - el < 5)
+		if (itrm->in.queue.len - el < 5)
 			return -1;
 
 		mouse.x = get_mouse_x_position(itrm, el);
 		mouse.y = get_mouse_y_position(itrm, el);
 
-		switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
+		switch ((itrm->in.queue.data[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
 		case TW_BUTT_LEFT:
 			mouse.button = B_LEFT | ((xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN);
 			break;
@@ -795,15 +787,15 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		/* default : Twin protocol error */
 		}
 
-		xterm_button = itrm->kqueue[el] - ' ';
+		xterm_button = itrm->in.queue.data[el] - ' ';
 		el += 5;
 
 	} else {
 		/* See terminal/mouse.h about details of the mouse reporting
 		 * protocol and {struct term_event_mouse->button} bitmask
 		 * structure. */
-		mouse.x = itrm->kqueue[el+1] - ' ' - 1;
-		mouse.y = itrm->kqueue[el+2] - ' ' - 1;
+		mouse.x = itrm->in.queue.data[el+1] - ' ' - 1;
+		mouse.y = itrm->in.queue.data[el+2] - ' ' - 1;
 
 		/* There are rumours arising from remnants of code dating to
 		 * the ancient Mikulas' times that bit 4 indicated B_DRAG.
@@ -811,14 +803,14 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		 * supposed to work and it conflicts with wheels. So I removed
 		 * the last remnants of the code as well. --pasky */
 
-		mouse.button = (itrm->kqueue[el] & 7) | B_DOWN;
+		mouse.button = (itrm->in.queue.data[el] & 7) | B_DOWN;
 		/* smartglasses1 - rxvt wheel: */
 		if (mouse.button == 3 && xterm_button != -1) {
 			mouse.button = xterm_button | B_UP;
 		}
 		/* xterm wheel: */
-		if ((itrm->kqueue[el] & 96) == 96) {
-			mouse.button = (itrm->kqueue[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
+		if ((itrm->in.queue.data[el] & 96) == 96) {
+			mouse.button = (itrm->in.queue.data[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
 		}
 
 		xterm_button = -1;
@@ -851,13 +843,13 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 	int v;
 	int el;
 
-	if (itrm->qlen < 3) return -1;
+	if (itrm->in.queue.len < 3) return -1;
 
-	if (itrm->kqueue[2] == '[') {
-		if (itrm->qlen >= 4
-		    && itrm->kqueue[3] >= 'A'
-		    && itrm->kqueue[3] <= 'L') {
-			kbd.key = KBD_F1 + itrm->kqueue[3] - 'A';
+	if (itrm->in.queue.data[2] == '[') {
+		if (itrm->in.queue.len >= 4
+		    && itrm->in.queue.data[3] >= 'A'
+		    && itrm->in.queue.data[3] <= 'L') {
+			kbd.key = KBD_F1 + itrm->in.queue.data[3] - 'A';
 			copy_struct(&ev->info.keyboard, &kbd);
 			return 4;
 		}
@@ -865,9 +857,9 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 		return -1;
 	}
 
-	el = get_esc_code(itrm->kqueue, itrm->qlen, &c, &v);
+	el = get_esc_code(itrm->in.queue.data, itrm->in.queue.len, &c, &v);
 #ifdef DEBUG_ITRM_QUEUE
-	fprintf(stderr, "esc code: %c v=%d c=%c el=%d\n", itrm->kqueue[1], v, c, el);
+	fprintf(stderr, "esc code: %c v=%d c=%c el=%d\n", itrm->in.queue.data[1], v, c, el);
 	fflush(stderr);
 #endif
 
@@ -988,7 +980,7 @@ process_queue(struct itrm *itrm)
 	struct term_event ev;
 	int el = 0;
 
-	if (!itrm->qlen) goto end;
+	if (!itrm->in.queue.len) goto end;
 
 	set_kbd_term_event(&ev, KBD_UNDEF, KBD_MOD_NONE);
 
@@ -997,22 +989,22 @@ process_queue(struct itrm *itrm)
 		int i;
 
 		/* Dump current queue in a readable form to stderr. */
-		for (i = 0; i < itrm->qlen; i++)
-			if (itrm->kqueue[i] == ASCII_ESC)
+		for (i = 0; i < itrm->in.queue.len; i++)
+			if (itrm->in.queue.data[i] == ASCII_ESC)
 				fprintf(stderr, "ESC ");
-			else if (isprint(itrm->kqueue[i]) && !isspace(itrm->kqueue[i]))
-				fprintf(stderr, "%c ", itrm->kqueue[i]);
+			else if (isprint(itrm->in.queue.data[i]) && !isspace(itrm->in.queue.data[i]))
+				fprintf(stderr, "%c ", itrm->in.queue.data[i]);
 			else
-				fprintf(stderr, "0x%02x ", itrm->kqueue[i]);
+				fprintf(stderr, "0x%02x ", itrm->in.queue.data[i]);
 
 		fprintf(stderr, "\n");
 		fflush(stderr);
 	}
 #endif /* DEBUG_ITRM_QUEUE */
 
-	if (itrm->kqueue[0] == ASCII_ESC) {
-		if (itrm->qlen < 2) goto ret;
-		if (itrm->kqueue[1] == '[' || itrm->kqueue[1] == 'O') {
+	if (itrm->in.queue.data[0] == ASCII_ESC) {
+		if (itrm->in.queue.len < 2) goto ret;
+		if (itrm->in.queue.data[1] == '[' || itrm->in.queue.data[1] == 'O') {
 			el = decode_terminal_escape_sequence(itrm, &ev);
 
 			if (el == -1) goto ret;
@@ -1020,49 +1012,49 @@ process_queue(struct itrm *itrm)
 		} else {
 			el = 2;
 
-			if (itrm->kqueue[1] == ASCII_ESC) {
-				if (itrm->qlen >= 3 &&
-				    (itrm->kqueue[2] == '[' ||
-				     itrm->kqueue[2] == 'O')) {
+			if (itrm->in.queue.data[1] == ASCII_ESC) {
+				if (itrm->in.queue.len >= 3 &&
+				    (itrm->in.queue.data[2] == '[' ||
+				     itrm->in.queue.data[2] == 'O')) {
 					el = 1;
 				}
 
 				set_kbd_event(&ev, KBD_ESC, KBD_MOD_NONE);
 
 			} else {
-				set_kbd_event(&ev, itrm->kqueue[1], KBD_MOD_ALT);
+				set_kbd_event(&ev, itrm->in.queue.data[1], KBD_MOD_ALT);
 			}
 		}
 
-	} else if (itrm->kqueue[0] == 0) {
+	} else if (itrm->in.queue.data[0] == 0) {
 		static const struct term_event_keyboard os2xtd[256] = {
 #include "terminal/key.inc"
 		};
 
-		if (itrm->qlen < 2) goto ret;
-		copy_struct(&ev.info.keyboard, &os2xtd[itrm->kqueue[1]]);
+		if (itrm->in.queue.len < 2) goto ret;
+		copy_struct(&ev.info.keyboard, &os2xtd[itrm->in.queue.data[1]]);
 		el = 2;
 
 	} else {
 		el = 1;
-		set_kbd_event(&ev, itrm->kqueue[0], 0);
+		set_kbd_event(&ev, itrm->in.queue.data[0], 0);
 	}
 
-	assertm(itrm->qlen >= el, "event queue underflow");
-	if_assert_failed { itrm->qlen = el; }
+	assertm(itrm->in.queue.len >= el, "event queue underflow");
+	if_assert_failed { itrm->in.queue.len = el; }
 
-	itrm->qlen -= el;
+	itrm->in.queue.len -= el;
 
 	/* The call to decode_terminal_escape_sequence() might have changed the
 	 * keyboard event to a mouse event. */
 	if (ev.ev == EVENT_MOUSE || ev.info.keyboard.key != KBD_UNDEF)
 		queue_event(itrm, (char *) &ev, sizeof(ev));
 
-	if (itrm->qlen)
-		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
+	if (itrm->in.queue.len)
+		memmove(itrm->in.queue.data, itrm->in.queue.data + el, itrm->in.queue.len);
 
 end:
-	if (itrm->qlen < IN_BUF_SIZE)
+	if (itrm->in.queue.len < IN_BUF_SIZE)
 		set_handlers(itrm->in.std, (select_handler_T) in_kbd, NULL,
 			     (select_handler_T) free_trm, itrm);
 	return el;
@@ -1084,24 +1076,24 @@ in_kbd(struct itrm *itrm)
 
 	kill_timer(&itrm->timer);
 
-	if (itrm->qlen >= IN_BUF_SIZE) {
+	if (itrm->in.queue.len >= IN_BUF_SIZE) {
 		set_handlers(itrm->in.std, NULL, NULL,
 			     (select_handler_T) free_trm, itrm);
 		while (process_queue(itrm));
 		return;
 	}
 
-	r = safe_read(itrm->in.std, itrm->kqueue + itrm->qlen,
-		      IN_BUF_SIZE - itrm->qlen);
+	r = safe_read(itrm->in.std, itrm->in.queue.data + itrm->in.queue.len,
+		      IN_BUF_SIZE - itrm->in.queue.len);
 	if (r <= 0) {
 		free_trm(itrm);
 		return;
 	}
 
-	itrm->qlen += r;
-	if (itrm->qlen > IN_BUF_SIZE) {
+	itrm->in.queue.len += r;
+	if (itrm->in.queue.len > IN_BUF_SIZE) {
 		ERROR(gettext("Too many bytes read from the itrm!"));
-		itrm->qlen = IN_BUF_SIZE;
+		itrm->in.queue.len = IN_BUF_SIZE;
 	}
 
 	while (process_queue(itrm));

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.165 2005/09/14 09:34:25 zas Exp $ */
+/* $Id: kbd.c,v 1.166 2005/09/14 09:35:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,8 +66,6 @@ struct itrm {
 	struct itrm_in in;
 	struct itrm_out out;
 	
-	int ctl_in;
-
 	/* Input queue */
 	unsigned char *kqueue;
 	int qlen;
@@ -368,7 +366,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm->out.std = std_out;
 	itrm->in.sock = sock_in;
 	itrm->out.sock = sock_out;
-	itrm->ctl_in = ctl_in;
+	itrm->in.ctl = ctl_in;
 	itrm->timer = TIMER_ID_UNDEF;
 	itrm->remote = !!remote;
 
@@ -421,7 +419,7 @@ unblock_itrm(int fd)
 
 	if (!itrm) return -1;
 
-	if (itrm->ctl_in >= 0 && setraw(itrm->ctl_in, NULL)) return -1;
+	if (itrm->in.ctl >= 0 && setraw(itrm->in.ctl, NULL)) return -1;
 	itrm->blocked = 0;
 	send_init_sequence(itrm->out.std, itrm->altscreen);
 
@@ -430,7 +428,7 @@ unblock_itrm(int fd)
 
 	resume_mouse(itrm->mouse_h);
 
-	handle_terminal_resize(itrm->ctl_in, resize_terminal);
+	handle_terminal_resize(itrm->in.ctl, resize_terminal);
 	unblock_stdin();
 
 	return 0;
@@ -446,9 +444,9 @@ block_itrm(int fd)
 
 	itrm->blocked = 1;
 	block_stdin();
-	unhandle_terminal_resize(itrm->ctl_in);
+	unhandle_terminal_resize(itrm->in.ctl);
 	send_done_sequence(itrm->out.std, itrm->altscreen);
-	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
+	tcsetattr(itrm->in.ctl, TCSANOW, &itrm->t);
 	set_handlers(itrm->in.std, NULL, NULL,
 		     (select_handler_T) free_trm, itrm);
 	suspend_mouse(itrm->mouse_h);
@@ -476,10 +474,10 @@ free_trm(struct itrm *itrm)
 		}
 
 
-		unhandle_terminal_resize(itrm->ctl_in);
+		unhandle_terminal_resize(itrm->in.ctl);
 		disable_mouse();
 		send_done_sequence(itrm->out.std, itrm->altscreen);
-		tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
+		tcsetattr(itrm->in.ctl, TCSANOW, &itrm->t);
 	}
 
 	mem_free_set(&itrm->orig_title, NULL);
@@ -650,13 +648,13 @@ has_nul_byte:
 		memcpy(param + 1, path.source, path_len + 1);
 		memcpy(param + 1 + path_len + 1, delete.source, del_len + 1);
 
-		if (fg == 1) block_itrm(itrm->ctl_in);
+		if (fg == 1) block_itrm(itrm->in.ctl);
 
 		blockh = start_thread((void (*)(void *, int)) exec_thread,
 				      param, param_len);
 		if (blockh == -1) {
 			if (fg == 1)
-				unblock_itrm(itrm->ctl_in);
+				unblock_itrm(itrm->in.ctl);
 			mem_free(param);
 			goto nasty_thing;
 		}
@@ -667,7 +665,7 @@ has_nul_byte:
 			set_handlers(blockh, (select_handler_T) unblock_itrm_x,
 				     NULL, (select_handler_T) unblock_itrm_x,
 				     (void *) (long) blockh);
-			/* block_itrm(itrm->ctl_in); */
+			/* block_itrm(itrm->in.ctl); */
 		} else {
 			set_handlers(blockh, close_handle, NULL, close_handle,
 				     (void *) (long) blockh);

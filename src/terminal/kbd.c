@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.164 2005/09/14 09:33:08 zas Exp $ */
+/* $Id: kbd.c,v 1.165 2005/09/14 09:34:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,6 @@ struct itrm {
 	struct itrm_in in;
 	struct itrm_out out;
 	
-	int sock_out;
 	int ctl_in;
 
 	/* Input queue */
@@ -119,7 +118,7 @@ write_ev_queue(struct itrm *itrm)
 	assertm(qlen, "event queue empty");
 	if_assert_failed return;
 
-	written = safe_write(itrm->sock_out, itrm->ev_queue, qlen);
+	written = safe_write(itrm->out.sock, itrm->ev_queue, qlen);
 	if (written <= 0) {
 		if (written < 0) free_trm(itrm); /* write error */
 		return;
@@ -128,11 +127,11 @@ write_ev_queue(struct itrm *itrm)
 	itrm->eqlen -= written;
 
 	if (itrm->eqlen == 0) {
-		set_handlers(itrm->sock_out,
-			     get_handler(itrm->sock_out, SELECT_HANDLER_READ),
+		set_handlers(itrm->out.sock,
+			     get_handler(itrm->out.sock, SELECT_HANDLER_READ),
 			     NULL,
-			     get_handler(itrm->sock_out, SELECT_HANDLER_ERROR),
-			     get_handler(itrm->sock_out, SELECT_HANDLER_DATA));
+			     get_handler(itrm->out.sock, SELECT_HANDLER_ERROR),
+			     get_handler(itrm->out.sock, SELECT_HANDLER_DATA));
 	} else {
 		assert(itrm->eqlen > 0);
 		memmove(itrm->ev_queue, itrm->ev_queue + written, itrm->eqlen);
@@ -147,8 +146,8 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 
 	if (!len) return;
 
-	if (!itrm->eqlen && can_write(itrm->sock_out)) {
-		w = safe_write(itrm->sock_out, data, len);
+	if (!itrm->eqlen && can_write(itrm->out.sock)) {
+		w = safe_write(itrm->out.sock, data, len);
 		if (w <= 0 && HPUX_PIPE) {
 			/* free_trm(itrm); */
 			register_bottom_half(free_trm, itrm);
@@ -169,8 +168,8 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 		itrm->ev_queue = c;
 		memcpy(itrm->ev_queue + itrm->eqlen, data + w, left);
 		itrm->eqlen += left;
-		set_handlers(itrm->sock_out,
-			     get_handler(itrm->sock_out, SELECT_HANDLER_READ),
+		set_handlers(itrm->out.sock,
+			     get_handler(itrm->out.sock, SELECT_HANDLER_READ),
 			     (select_handler_T) write_ev_queue,
 			     (select_handler_T) free_trm, itrm);
 	}
@@ -368,7 +367,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm->in.std = std_in;
 	itrm->out.std = std_out;
 	itrm->in.sock = sock_in;
-	itrm->sock_out = sock_out;
+	itrm->out.sock = sock_out;
 	itrm->ctl_in = ctl_in;
 	itrm->timer = TIMER_ID_UNDEF;
 	itrm->remote = !!remote;
@@ -488,7 +487,7 @@ free_trm(struct itrm *itrm)
 	clear_handlers(itrm->in.std);
 	clear_handlers(itrm->in.sock);
 	clear_handlers(itrm->out.std);
-	clear_handlers(itrm->sock_out);
+	clear_handlers(itrm->out.sock);
 
 	kill_timer(&itrm->timer);
 

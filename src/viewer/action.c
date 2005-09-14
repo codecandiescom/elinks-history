@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.161 2005/09/08 13:42:13 zas Exp $ */
+/* $Id: action.c,v 1.162 2005/09/14 12:36:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -557,7 +557,9 @@ do_action(struct session *ses, enum main_action action_id, int verbose)
 			break;
 
 		case ACT_MAIN_TOGGLE_MOUSE:
+#ifdef CONFIG_MOUSE
 			toggle_mouse();
+#endif
 			break;
 
 		case ACT_MAIN_TOGGLE_NUMBERED_LINKS:

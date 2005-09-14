@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.173 2005/09/14 12:32:49 zas Exp $ */
+/* $Id: kbd.c,v 1.174 2005/09/14 22:24:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,6 +47,8 @@ static void free_itrm(struct itrm *);
 static void in_kbd(struct itrm *);
 static void in_sock(struct itrm *);
 static int process_queue(struct itrm *);
+static void handle_itrm_stdin(struct itrm *);
+static void unhandle_itrm_stdin(struct itrm *);
 
 int
 is_blocked(void)
@@ -287,8 +289,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 #endif
 	}
 
-	set_handlers(std_in, (select_handler_T) in_kbd,
-		     NULL, (select_handler_T) free_itrm, itrm);
+	handle_itrm_stdin(itrm);
 
 	if (sock_in != std_out)
 		set_handlers(sock_in, (select_handler_T) in_sock,
@@ -328,9 +329,7 @@ unblock_itrm(int fd)
 	itrm->blocked = 0;
 	send_init_sequence(itrm->out.std, itrm->altscreen);
 
-	set_handlers(itrm->in.std, (select_handler_T) in_kbd, NULL,
-		     (select_handler_T) free_itrm, itrm);
-
+	handle_itrm_stdin(itrm);
 	resume_mouse(itrm->mouse_h);
 
 	handle_terminal_resize(itrm->in.ctl, resize_terminal);
@@ -352,8 +351,7 @@ block_itrm(int fd)
 	unhandle_terminal_resize(itrm->in.ctl);
 	send_done_sequence(itrm->out.std, itrm->altscreen);
 	tcsetattr(itrm->in.ctl, TCSANOW, &itrm->t);
-	set_handlers(itrm->in.std, NULL, NULL,
-		     (select_handler_T) free_itrm, itrm);
+	unhandle_itrm_stdin(itrm);
 	suspend_mouse(itrm->mouse_h);
 }
 
@@ -869,8 +867,8 @@ process_queue(struct itrm *itrm)
 
 end:
 	if (itrm->in.queue.len < ITRM_IN_QUEUE_SIZE)
-		set_handlers(itrm->in.std, (select_handler_T) in_kbd, NULL,
-			     (select_handler_T) free_itrm, itrm);
+		handle_itrm_stdin(itrm);
+
 	return el;
 
 ret:
@@ -891,8 +889,7 @@ in_kbd(struct itrm *itrm)
 	kill_timer(&itrm->timer);
 
 	if (itrm->in.queue.len >= ITRM_IN_QUEUE_SIZE) {
-		set_handlers(itrm->in.std, NULL, NULL,
-			     (select_handler_T) free_itrm, itrm);
+		unhandle_itrm_stdin(itrm);
 		while (process_queue(itrm));
 		return;
 	}
@@ -911,4 +908,18 @@ in_kbd(struct itrm *itrm)
 	}
 
 	while (process_queue(itrm));
+}
+
+static void
+handle_itrm_stdin(struct itrm *itrm)
+{
+	set_handlers(itrm->in.std, (select_handler_T) in_kbd, NULL,
+		     (select_handler_T) free_itrm, itrm);
+}
+
+static void
+unhandle_itrm_stdin(struct itrm *itrm)
+{
+	set_handlers(itrm->in.std, (select_handler_T) NULL, NULL,
+		     (select_handler_T) free_itrm, itrm);
 }

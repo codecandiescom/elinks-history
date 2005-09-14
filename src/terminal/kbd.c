@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.159 2005/08/25 15:08:00 zas Exp $ */
+/* $Id: kbd.c,v 1.160 2005/09/14 09:21:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,7 @@ struct itrm {
 	int ctl_in;
 
 	/* Input queue */
-	unsigned char kqueue[IN_BUF_SIZE];
+	unsigned char *kqueue;
 	int qlen;
 
 	/* Output queue */
@@ -340,6 +340,12 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm = mem_calloc(1, sizeof(*itrm));
 	if (!itrm) return;
 
+	itrm->kqueue = mem_calloc(1, IN_BUF_SIZE);
+	if (!itrm->kqueue) {
+		mem_free(itrm);
+		return;
+	}
+
 	ditrm = itrm;
 	itrm->std_in = std_in;
 	itrm->std_out = std_out;
@@ -470,6 +476,7 @@ free_trm(struct itrm *itrm)
 
 	if (itrm == ditrm) ditrm = NULL;
 	mem_free_if(itrm->ev_queue);
+	mem_free_if(itrm->kqueue);
 	mem_free(itrm);
 }
 

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.171 2005/09/14 10:34:37 zas Exp $ */
+/* $Id: kbd.c,v 1.172 2005/09/14 10:36:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@
 
 static struct itrm *ditrm = NULL;
 
-static void free_trm(struct itrm *);
+static void free_itrm(struct itrm *);
 static void in_kbd(struct itrm *);
 static void in_sock(struct itrm *);
 static int process_queue(struct itrm *);
@@ -58,7 +58,7 @@ is_blocked(void)
 void
 free_all_itrms(void)
 {
-	if (ditrm) free_trm(ditrm);
+	if (ditrm) free_itrm(ditrm);
 }
 
 
@@ -73,7 +73,7 @@ itrm_queue_write(struct itrm *itrm)
 
 	written = safe_write(itrm->out.sock, itrm->out.queue.data, qlen);
 	if (written <= 0) {
-		if (written < 0) free_trm(itrm); /* write error */
+		if (written < 0) free_itrm(itrm); /* write error */
 		return;
 	}
 
@@ -102,8 +102,8 @@ itrm_queue_event(struct itrm *itrm, unsigned char *data, int len)
 	if (!itrm->out.queue.len && can_write(itrm->out.sock)) {
 		w = safe_write(itrm->out.sock, data, len);
 		if (w <= 0 && HPUX_PIPE) {
-			/* free_trm(itrm); */
-			register_bottom_half(free_trm, itrm);
+			/* free_itrm(itrm); */
+			register_bottom_half(free_itrm, itrm);
 			return;
 		}
 	}
@@ -114,7 +114,7 @@ itrm_queue_event(struct itrm *itrm, unsigned char *data, int len)
 					       itrm->out.queue.len + left);
 
 		if (!c) {
-			free_trm(itrm);
+			free_itrm(itrm);
 			return;
 		}
 
@@ -124,7 +124,7 @@ itrm_queue_event(struct itrm *itrm, unsigned char *data, int len)
 		set_handlers(itrm->out.sock,
 			     get_handler(itrm->out.sock, SELECT_HANDLER_READ),
 			     (select_handler_T) itrm_queue_write,
-			     (select_handler_T) free_trm, itrm);
+			     (select_handler_T) free_itrm, itrm);
 	}
 }
 
@@ -453,11 +453,11 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	}
 
 	set_handlers(std_in, (select_handler_T) in_kbd,
-		     NULL, (select_handler_T) free_trm, itrm);
+		     NULL, (select_handler_T) free_itrm, itrm);
 
 	if (sock_in != std_out)
 		set_handlers(sock_in, (select_handler_T) in_sock,
-			     NULL, (select_handler_T) free_trm, itrm);
+			     NULL, (select_handler_T) free_itrm, itrm);
 
 	get_terminal_name(info.name);
 
@@ -494,7 +494,7 @@ unblock_itrm(int fd)
 	send_init_sequence(itrm->out.std, itrm->altscreen);
 
 	set_handlers(itrm->in.std, (select_handler_T) in_kbd, NULL,
-		     (select_handler_T) free_trm, itrm);
+		     (select_handler_T) free_itrm, itrm);
 
 	resume_mouse(itrm->mouse_h);
 
@@ -518,13 +518,13 @@ block_itrm(int fd)
 	send_done_sequence(itrm->out.std, itrm->altscreen);
 	tcsetattr(itrm->in.ctl, TCSANOW, &itrm->t);
 	set_handlers(itrm->in.std, NULL, NULL,
-		     (select_handler_T) free_trm, itrm);
+		     (select_handler_T) free_itrm, itrm);
 	suspend_mouse(itrm->mouse_h);
 }
 
 
 static void
-free_trm(struct itrm *itrm)
+free_itrm(struct itrm *itrm)
 {
 	if (!itrm) return;
 
@@ -754,7 +754,7 @@ nasty_thing:
 	goto qwerty;
 
 free_and_return:
-	free_trm(itrm);
+	free_itrm(itrm);
 }
 
 
@@ -1035,7 +1035,7 @@ process_queue(struct itrm *itrm)
 end:
 	if (itrm->in.queue.len < ITRM_IN_QUEUE_SIZE)
 		set_handlers(itrm->in.std, (select_handler_T) in_kbd, NULL,
-			     (select_handler_T) free_trm, itrm);
+			     (select_handler_T) free_itrm, itrm);
 	return el;
 
 ret:
@@ -1057,7 +1057,7 @@ in_kbd(struct itrm *itrm)
 
 	if (itrm->in.queue.len >= ITRM_IN_QUEUE_SIZE) {
 		set_handlers(itrm->in.std, NULL, NULL,
-			     (select_handler_T) free_trm, itrm);
+			     (select_handler_T) free_itrm, itrm);
 		while (process_queue(itrm));
 		return;
 	}
@@ -1065,7 +1065,7 @@ in_kbd(struct itrm *itrm)
 	r = safe_read(itrm->in.std, itrm->in.queue.data + itrm->in.queue.len,
 		      ITRM_IN_QUEUE_SIZE - itrm->in.queue.len);
 	if (r <= 0) {
-		free_trm(itrm);
+		free_itrm(itrm);
 		return;
 	}
 

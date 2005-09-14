@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.4 2005/09/13 22:28:06 pasky Exp $
+## $Id: Makefile.am,v 1.5 2005/09/14 22:52:56 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -22,5 +22,7 @@ libbackend_a_SOURCES = \
  location.c \
  location.h \
  util.h \
+ unibar.c \
+ unibar.h \
  window.c \
  window.h

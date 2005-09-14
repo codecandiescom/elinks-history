@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.225 2005/09/13 22:28:05 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.226 2005/09/14 22:52:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "ecmascript/spidermonkey/document.h"
 #include "ecmascript/spidermonkey/form.h"
 #include "ecmascript/spidermonkey/location.h"
+#include "ecmascript/spidermonkey/unibar.h"
 #include "ecmascript/spidermonkey/window.h"
 #include "intl/gettext/libintl.h"
 #include "main/select.h"
@@ -59,105 +60,6 @@
 /*** Classes */
 
 
-
-
-static JSBool unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
-static JSBool unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
-
-static const JSClass menubar_class = {
-	"menubar",
-	JSCLASS_HAS_PRIVATE,
-	JS_PropertyStub, JS_PropertyStub,
-	unibar_get_property, unibar_set_property,
-	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
-};
-static const JSClass statusbar_class = {
-	"statusbar",
-	JSCLASS_HAS_PRIVATE,
-	JS_PropertyStub, JS_PropertyStub,
-	unibar_get_property, unibar_set_property,
-	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
-};
-
-enum unibar_prop { JSP_UNIBAR_VISIBLE };
-static const JSPropertySpec unibar_props[] = {
-	{ "visible",	JSP_UNIBAR_VISIBLE,	JSPROP_ENUMERATE },
-	{ NULL }
-};
-
-
-static JSBool
-unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
-{
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
-	struct document_view *doc_view = vs->doc_view;
-	struct session_status *status = &doc_view->session->status;
-	unsigned char *bar = JS_GetPrivate(ctx, obj);
-
-	if (!JSVAL_IS_INT(id))
-		return JS_TRUE;
-
-	switch (JSVAL_TO_INT(id)) {
-	case JSP_UNIBAR_VISIBLE:
-#define unibar_fetch(bar) \
-	boolean_to_jsval(ctx, vp, status->force_show_##bar##_bar >= 0 \
-	          ? status->force_show_##bar##_bar \
-	          : status->show_##bar##_bar)
-		switch (*bar) {
-		case 's':
-			unibar_fetch(status);
-			break;
-		case 't':
-			unibar_fetch(title);
-			break;
-		default:
-			boolean_to_jsval(ctx, vp, 0);
-			break;
-		}
-#undef unibar_fetch
-		break;
-	default:
-		INTERNAL("Invalid ID %d in unibar_get_property().", JSVAL_TO_INT(id));
-		break;
-	}
-
-	return JS_TRUE;
-}
-
-static JSBool
-unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
-{
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
-	struct document_view *doc_view = vs->doc_view;
-	struct session_status *status = &doc_view->session->status;
-	unsigned char *bar = JS_GetPrivate(ctx, obj);
-
-	if (!JSVAL_IS_INT(id))
-		return JS_TRUE;
-
-	switch (JSVAL_TO_INT(id)) {
-	case JSP_UNIBAR_VISIBLE:
-		switch (*bar) {
-		case 's':
-			status->force_show_status_bar = jsval_to_boolean(ctx, vp);
-			break;
-		case 't':
-			status->force_show_title_bar = jsval_to_boolean(ctx, vp);
-			break;
-		default:
-			break;
-		}
-		register_bottom_half(update_status, NULL);
-		break;
-	default:
-		INTERNAL("Invalid ID %d in unibar_set_property().", JSVAL_TO_INT(id));
-		return JS_TRUE;
-	}
-
-	return JS_TRUE;
-}
 
 
 static JSBool navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);

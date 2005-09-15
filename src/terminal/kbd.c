@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.175 2005/09/15 12:24:00 zas Exp $ */
+/* $Id: kbd.c,v 1.176 2005/09/15 12:34:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,6 @@ itrm_queue_event(struct itrm *itrm, unsigned char *data, int len)
 	if (!itrm->out.queue.len && can_write(itrm->out.sock)) {
 		w = safe_write(itrm->out.sock, data, len);
 		if (w <= 0 && HPUX_PIPE) {
-			/* free_itrm(itrm); */
 			register_bottom_half(free_itrm, itrm);
 			return;
 		}
@@ -570,7 +569,7 @@ has_nul_byte:
 			set_handlers(blockh, (select_handler_T) unblock_itrm_x,
 				     NULL, (select_handler_T) unblock_itrm_x,
 				     (void *) (long) blockh);
-			/* block_itrm(itrm->in.ctl); */
+
 		} else {
 			set_handlers(blockh, close_handle, NULL, close_handle,
 				     (void *) (long) blockh);

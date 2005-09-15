@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.352 2005/08/03 23:02:59 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.353 2005/09/15 11:51:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,7 +397,7 @@ add_keystroke_to_string(struct string *str, struct term_event_keyboard *kbd,
 	if (!key_string) {
 		key_string = key_buffer + 1;
 		*key_string = (unsigned char) kbd->key;
-		if (kbd->key == '\\' && escape)
+		if (escape && strchr("'\"\\", kbd->key))
 			key_string--;
 	}
 

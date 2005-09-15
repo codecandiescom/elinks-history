@@ -71,8 +71,8 @@ Separators can be inserted as well, using *Add separator* button, or by
 entering a special bookmark with "-" as title and no url.
 
 
-Searching needle in the haycock
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Searching for a needle in the haystack
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Of course, you can search in the bookmarks. Just use the *Find* button	- for
 convenience, you have the current document's URL and title pre-filled there,
@@ -222,5 +222,5 @@ TODO list. So be sure to tell us if you would like this process to be
 simplified rather sooner than later.
 
 ///////////////////////////////////////////////////////////////////////////////
-$Id: bookmarks.txt,v 1.20 2005/05/24 18:21:45 jonas Exp $
+$Id: bookmarks.txt,v 1.21 2005/09/15 11:24:54 jonas Exp $
 ///////////////////////////////////////////////////////////////////////////////
